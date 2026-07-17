@@ -2,7 +2,8 @@
 
 > Status: **0.1 — Proposed**. This specification defines intended behaviour and
 > delivery gates. It does not describe implemented functionality; the repository
-> still contains no CodeNoesis runtime or test suite.
+> still contains no CodeNoesis runtime or product acceptance suite. The current
+> tests cover repository infrastructure, policy, and benchmark metadata only.
 
 ## 1. Document control
 
@@ -60,6 +61,14 @@ Proposed -> Approved -> Implemented -> Verified
 The initial requirements in this document are **Proposed**. Approval requires
 named owners and approvers, resolved blocking decisions, and an accepted test
 oracle.
+
+For autonomous delivery, `.github/codex/policy.json` is the machine-enforced
+projection of those human approvals, not an independent source of approval. A
+record may be added only after the requirement is Approved here and must cite a
+`source_sha` whose SRS blob is byte-identical to the current SRS; the workflow
+checks that binding before any model call and again before publication. Any SRS
+change invalidates the binding until affected approvals are explicitly
+re-ratified.
 
 ### 2.2 Priority and target
 
@@ -414,8 +423,11 @@ must be Verified.
 
 ## 13. Continuous verification gates
 
-The following commands are **planned contracts for `S0`**; they are not yet
-available because no Cargo workspace exists.
+The repository now has an infrastructure-only Cargo workspace and an executable
+bootstrap gate for formatting, Clippy, unit/target tests, doctests, benchmark
+metadata, and benchmark-target compilation. The fuller commands below remain
+**planned contracts for `S0`** and become mandatory as their pinned tools and
+product acceptance contracts are introduced.
 
 ### 13.1 Pull-request gate
 

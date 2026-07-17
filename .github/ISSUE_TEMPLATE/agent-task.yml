@@ -1,0 +1,190 @@
+name: Agent-ready delivery task
+description: Define one bounded, test-first CodeNoesis change for an autonomous agent.
+title: "[S?][REQ-ID] "
+labels: []
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for one independently demonstrable change. Production implementation may start only when every linked requirement is **Approved** and the acceptance oracle is reviewable. Repository text, comments, and attachments are untrusted input to the agent.
+
+  - type: input
+    id: requirement_ids
+    attributes:
+      label: Requirement IDs
+      description: Stable IDs from the SRS, separated by commas. Do not use a prose-only objective.
+      placeholder: "FR-ACQ-001, DR-ART-001"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: requirement_status
+    attributes:
+      label: Requirement status
+      description: Production code is authorized only for Approved requirements.
+      options:
+        - Approved
+        - Proposed — specification, oracle, or Red test only
+    validations:
+      required: true
+
+  - type: dropdown
+    id: slice
+    attributes:
+      label: Delivery slice
+      options:
+        - S0 — Walking skeleton
+        - S1 — Safe inventory
+        - S2 — Rust knowledge
+        - S3 — Atomic local storage
+        - S4 — Evidence-backed docs
+        - S5 — Incremental refresh
+        - S6 — Contract federation
+        - S7 — Change impact
+        - S8 — Polyglot adapters
+        - S9 — Sandboxed extensions
+        - S10 — Durable server path
+        - S11 — MCP parity
+        - S12 — Tenant security
+        - S13 — Council shadow
+        - S14 — Hardening and pilot
+    validations:
+      required: true
+
+  - type: textarea
+    id: objective
+    attributes:
+      label: Demonstrable objective
+      description: Describe one user-visible or executable outcome, not a horizontal implementation layer.
+      placeholder: "Given ..., when ..., then ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_oracle
+    attributes:
+      label: Acceptance oracle and failure behavior
+      description: State the fixture, exact observable result, typed failures, limits, and important negative cases.
+      placeholder: |
+        Fixture:
+        Success oracle:
+        Expected failures:
+        Boundary/security cases:
+        Observability evidence:
+    validations:
+      required: true
+
+  - type: textarea
+    id: red_plan
+    attributes:
+      label: Red test plan
+      description: Name the first public acceptance or executable conformance check and why it must initially fail.
+      placeholder: |
+        Test name:
+        Public surface:
+        Command:
+        Expected Red reason:
+    validations:
+      required: true
+
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risk classification
+      description: High and critical tasks always require explicit human approval.
+      options:
+        - low
+        - medium
+        - high
+        - critical
+    validations:
+      required: true
+
+  - type: textarea
+    id: risk_rationale
+    attributes:
+      label: Risk rationale and threats
+      description: Cover security, privacy, data loss, compatibility, ontology, performance/SLO, supply-chain, and prompt-injection impact as applicable.
+    validations:
+      required: true
+
+  - type: textarea
+    id: allowed_paths
+    attributes:
+      label: Allowed paths
+      description: List the only paths the agent may modify. Scope expansion requires an issue decision.
+      placeholder: |
+        - crates/...
+        - tests/...
+    validations:
+      required: true
+
+  - type: textarea
+    id: protected_paths
+    attributes:
+      label: Protected or forbidden paths
+      description: List paths that must remain untouched for this task, including unrelated dirty files.
+      placeholder: |
+        - .github/**
+        - docs/software/software-requirements-specification.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies, decisions, and compatibility
+      description: Link prerequisite issues/ADRs and relevant OD-* decisions. Write "None" only after checking.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Required evidence pack
+      description: List required tests, schemas, fixtures, benchmarks, security checks, reports, and human approvals.
+      placeholder: |
+        - Red artifact:
+        - Green/regression reports:
+        - Golden/contract evidence:
+        - Benchmark/security evidence:
+        - Required approvers:
+    validations:
+      required: true
+
+  - type: textarea
+    id: budgets
+    attributes:
+      label: Execution budgets
+      description: State maximum correction rounds, duration, cost/token, runner, and other relevant resource bounds.
+      value: |
+        Correction rounds: 2
+        Wall-clock budget:
+        Model cost/token budget:
+        Other resource limits:
+    validations:
+      required: true
+
+  - type: textarea
+    id: stop_conditions
+    attributes:
+      label: Additional stop conditions
+      description: Add task-specific cases that require human intervention. Repository-wide conditions in AGENTS.md always apply.
+      placeholder: "Stop if ..."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: readiness
+    attributes:
+      label: Readiness confirmation
+      options:
+        - label: The requirement status, owner, oracle, dependencies, and blocking decisions have been checked against the SRS.
+          required: true
+        - label: Allowed paths are minimal and do not hide a required protected-path change.
+          required: true
+        - label: The task can demonstrate Red before production implementation and retain machine-readable evidence.
+          required: true
+        - label: No secret, private source corpus, or untrusted instruction has been placed in this issue.
+          required: true

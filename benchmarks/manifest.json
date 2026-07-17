@@ -1,0 +1,20 @@
+{
+  "$schema": "./manifest.schema.json",
+  "schema_version": 1,
+  "status": "scaffold",
+  "requirements": [
+    "NFR-PER-001",
+    "NFR-PER-002"
+  ],
+  "report_required_fields": [
+    "cache_state",
+    "concurrency",
+    "corpus_version",
+    "enabled_extractors",
+    "host",
+    "percentile_method",
+    "repetitions",
+    "success_rate"
+  ],
+  "suites": []
+}

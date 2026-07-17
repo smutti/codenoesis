@@ -1,0 +1,16 @@
+# Repository defaults for interactive Codex sessions.
+# GitHub Actions select an explicit permission profile for each automation job.
+
+model = "gpt-5.6"
+model_reasoning_effort = "ultra"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "disabled"
+
+[sandbox_workspace_write]
+network_access = false
+
+[agents]
+max_threads = 4
+max_depth = 1
+job_max_runtime_seconds = 1800

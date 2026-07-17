@@ -1,0 +1,10 @@
+[package]
+name = "xtask"
+version = "0.0.0"
+description = "Repository maintenance entry point; not part of the CodeNoesis product"
+edition.workspace = true
+publish = false
+rust-version.workspace = true
+
+[lints]
+workspace = true

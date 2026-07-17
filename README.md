@@ -6,7 +6,10 @@ CodeNoesis is an early-stage project exploring how to turn software repositories
 
 ## Status
 
-**Project inception.** The problem space, architecture, research hypotheses, and evaluation strategy are being defined. There is no working implementation or stable public interface yet.
+**Project inception.** The problem space, architecture, research hypotheses,
+and evaluation strategy are being defined. A pinned, infrastructure-only Rust
+workspace now verifies CI and benchmark metadata, but there is no CodeNoesis
+product implementation or stable public interface yet.
 
 ## Two development tracks
 
@@ -53,4 +56,8 @@ This map describes the intended structure and will be introduced incrementally a
 
 ## Contributing
 
-The project is not yet ready for implementation contributions. For now, contributions should focus on clearly scoped proposals, references, testable hypotheses, architecture decisions, and review of the two track documents.
+Start with [CONTRIBUTING.md](CONTRIBUTING.md) and the repository
+[agent instructions](AGENTS.md). Product implementation must be tied to an
+approved requirement, one vertical slice, a reviewable acceptance oracle, and
+captured Red evidence. Specification, fixture, benchmark, and research work can
+proceed independently when its status is explicit.

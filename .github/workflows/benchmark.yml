@@ -1,0 +1,90 @@
+name: Benchmark integrity
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/benchmark.yml"
+      - "Cargo.lock"
+      - "**/Cargo.toml"
+      - "**/*.rs"
+      - "benchmarks/**"
+      - "rust-toolchain.toml"
+      - "scripts/**"
+  schedule:
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: benchmark-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  CARGO_INCREMENTAL: "0"
+  CARGO_TERM_COLOR: never
+
+jobs:
+  contract:
+    name: Validate benchmark contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out source
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - name: Test validator
+        run: python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+
+      - name: Validate benchmark assets
+        run: python3 scripts/validate_benchmark_assets.py
+
+      - name: Report manifest state
+        run: |
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(Path("benchmarks/manifest.json").read_text(encoding="utf-8"))
+          print("### Benchmark contract")
+          print(f"Validated `{len(manifest['suites'])}` suite(s); status is `{manifest['status']}`.")
+          if manifest["status"] == "scaffold":
+              print("No performance claim is made until a reviewed executable suite and corpus are added.")
+          PY
+
+  compile:
+    name: Compile Rust benchmark targets
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - name: Record pinned toolchain
+        run: |
+          rustc --version --verbose
+          cargo --version --verbose
+
+      - name: Compile without measuring
+        run: cargo bench --workspace --all-features --no-run --locked
+
+  benchmark-policy-gate:
+    name: Benchmark policy gate
+    needs: [contract, compile]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions: {}
+    steps:
+      - name: Enforce benchmark contract jobs
+        env:
+          COMPILE_RESULT: ${{ needs.compile.result }}
+          CONTRACT_RESULT: ${{ needs.contract.result }}
+        run: |
+          set -euo pipefail
+          test "$CONTRACT_RESULT" = "success"
+          test "$COMPILE_RESULT" = "success"

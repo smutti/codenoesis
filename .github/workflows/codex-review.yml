@@ -1,0 +1,435 @@
+name: Codex - read-only PR review
+
+on:
+  pull_request_target:
+    types: [opened, edited, synchronize, reopened, converted_to_draft, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number to review
+        required: true
+        type: number
+
+permissions: {}
+
+concurrency:
+  group: codex-review-pr-${{ inputs.pr_number || github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    name: Resolve trusted review target
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+      statuses: write
+    outputs:
+      candidate: ${{ steps.pr.outputs.candidate }}
+      pr_number: ${{ steps.pr.outputs.pr_number }}
+      head_sha: ${{ steps.pr.outputs.head_sha }}
+      base_sha: ${{ steps.pr.outputs.base_sha }}
+      reason: ${{ steps.pr.outputs.reason }}
+    steps:
+      - name: Resolve pull request
+        id: pr
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        env:
+          AUTOMATION_ENABLED: ${{ vars.CODEX_AUTOMATION_ENABLED }}
+          REQUESTED_PR: ${{ inputs.pr_number || github.event.pull_request.number }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          PUBLISHER_BOT_LOGIN: ${{ vars.CODEX_PUBLISHER_BOT_LOGIN }}
+        with:
+          script: |
+            const raw = process.env.REQUESTED_PR;
+            if (!/^\d+$/.test(raw ?? "")) {
+              core.setFailed("A numeric pull request number is required.");
+              return;
+            }
+
+            const number = Number(raw);
+            const automationEnabled = process.env.AUTOMATION_ENABLED === "true";
+            const publisherLogin = process.env.PUBLISHER_BOT_LOGIN?.trim() ?? "";
+            if (
+              automationEnabled &&
+              !/^[A-Za-z0-9][A-Za-z0-9-]{0,99}$/.test(publisherLogin)
+            ) {
+              core.setFailed(
+                "CODEX_PUBLISHER_BOT_LOGIN must identify the configured publisher App when automation is enabled."
+              );
+              return;
+            }
+
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: number,
+            });
+
+            const sameRepository = pr.head.repo?.full_name ===
+              `${context.repo.owner}/${context.repo.repo}`;
+            const targetsDefault = pr.base.ref === process.env.DEFAULT_BRANCH;
+            const publisherBot = publisherLogin ? `${publisherLogin}[bot]` : null;
+            const machineBranch = /^codex\/issue-\d+-\d+-\d+$/.test(pr.head.ref);
+            const publisherAuthValid = pr.user?.login === publisherBot;
+            const supportedAuthor = machineBranch
+              ? publisherAuthValid
+              : pr.user?.type !== "Bot" || publisherAuthValid;
+            const candidate =
+              sameRepository &&
+              targetsDefault &&
+              supportedAuthor &&
+              !pr.draft &&
+              pr.state === "open";
+            const reason = candidate
+              ? "candidate"
+              : !sameRepository
+                ? "fork"
+                : !targetsDefault
+                  ? "non_default_base"
+                  : !supportedAuthor
+                    ? "unsupported_bot"
+                    : pr.draft
+                      ? "draft"
+                      : "not_open";
+
+            core.setOutput("candidate", String(candidate));
+            core.setOutput("reason", reason);
+            core.setOutput("pr_number", String(number));
+            core.setOutput("head_sha", pr.head.sha);
+            core.setOutput("base_sha", pr.base.sha);
+
+            if (automationEnabled && machineBranch && !publisherAuthValid) {
+              core.setFailed(
+                "A reserved Codex proposal branch is not owned by the configured publisher App."
+              );
+            }
+
+            if (!sameRepository) {
+              core.notice("Fork pull requests are excluded from key-bearing review jobs.");
+            } else if (!targetsDefault) {
+              core.notice("AI review applies only to pull requests targeting the default branch.");
+            } else if (!supportedAuthor) {
+              core.notice("Bot-authored pull requests other than the publisher App use human review and deterministic CI only.");
+            } else if (pr.draft) {
+              core.notice("Draft pull requests are reviewed after they become ready.");
+            }
+
+      - name: Mark immutable head review as pending
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        env:
+          HEAD_SHA: ${{ steps.pr.outputs.head_sha }}
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: process.env.HEAD_SHA,
+              state: "pending",
+              context: "Codex review policy gate",
+              description: "Trusted review policy is evaluating this commit",
+              target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+            });
+
+  inspect:
+    name: Inspect immutable PR scope
+    needs: prepare
+    if: needs.prepare.outputs.candidate == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      eligible: ${{ steps.scope.outputs.eligible }}
+      reason: ${{ steps.scope.outputs.reason }}
+    steps:
+      - name: Check out trusted base for policy
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        with:
+          ref: ${{ needs.prepare.outputs.base_sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Copy trusted scope policy outside the checkout
+        run: |
+          set -euo pipefail
+          install -m 0600 .github/codex/policy.json "$RUNNER_TEMP/codex-policy.json"
+          install -m 0700 .github/codex/scripts/codex_policy.py "$RUNNER_TEMP/codex-policy.py"
+
+      - name: Check out immutable pull-request head
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        with:
+          ref: ${{ needs.prepare.outputs.head_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Classify immutable changed paths
+        id: scope
+        env:
+          BASE_SHA: ${{ needs.prepare.outputs.base_sha }}
+          HEAD_SHA: ${{ needs.prepare.outputs.head_sha }}
+        run: |
+          set -euo pipefail
+          git cat-file -e "$BASE_SHA^{commit}"
+          test "$(git rev-parse HEAD)" = "$HEAD_SHA"
+          git merge-base --is-ancestor "$BASE_SHA" "$HEAD_SHA"
+          git diff --name-only -z --no-renames "$BASE_SHA"...HEAD \
+            > "$RUNNER_TEMP/codex-review-paths"
+          python3 "$RUNNER_TEMP/codex-policy.py" classify-review \
+            --policy "$RUNNER_TEMP/codex-policy.json" \
+            --changed-paths-file "$RUNNER_TEMP/codex-review-paths" \
+            > "$RUNNER_TEMP/codex-review-scope.json"
+          echo "eligible=$(jq -r '.eligible' "$RUNNER_TEMP/codex-review-scope.json")" \
+            >> "$GITHUB_OUTPUT"
+          echo "reason=$(jq -c '.reasons' "$RUNNER_TEMP/codex-review-scope.json")" \
+            >> "$GITHUB_OUTPUT"
+
+  review:
+    name: Generate structured review
+    needs: [prepare, inspect]
+    if: needs.inspect.outputs.eligible == 'true' && vars.CODEX_AUTOMATION_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: codex-model
+    permissions:
+      contents: read
+    steps:
+      - name: Check out trusted base for automation inputs
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        with:
+          ref: ${{ needs.prepare.outputs.base_sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Copy trusted prompt and schema outside the checkout
+        run: |
+          set -euo pipefail
+          install -m 0600 .github/codex/prompts/review.md \
+            "$RUNNER_TEMP/codex-review-prompt.md"
+          install -m 0600 .github/codex/schemas/review-output.schema.json \
+            "$RUNNER_TEMP/codex-review-output.schema.json"
+
+      - name: Check out immutable pull-request head
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        with:
+          ref: ${{ needs.prepare.outputs.head_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify immutable review commits
+        env:
+          BASE_SHA: ${{ needs.prepare.outputs.base_sha }}
+          HEAD_SHA: ${{ needs.prepare.outputs.head_sha }}
+        run: |
+          set -euo pipefail
+          git cat-file -e "$BASE_SHA^{commit}"
+          test "$(git rev-parse HEAD)" = "$HEAD_SHA"
+          git merge-base --is-ancestor "$BASE_SHA" "$HEAD_SHA"
+
+      - name: Run Codex in read-only mode
+        id: codex
+        uses: openai/codex-action@52fe01ec70a42f454c9d2ebd47598f9fd6893d56 # v1.11
+        env:
+          CODEX_REVIEW_BASE_SHA: ${{ needs.prepare.outputs.base_sha }}
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: ${{ runner.temp }}/codex-review-prompt.md
+          output-schema-file: ${{ runner.temp }}/codex-review-output.schema.json
+          output-file: ${{ runner.temp }}/codex-review.json
+          codex-version: "0.144.5"
+          model: gpt-5.6
+          effort: ultra
+          permission-profile: ":read-only"
+          safety-strategy: drop-sudo
+          codex-args: '["--ephemeral"]'
+          allow-bot-users: github-actions,${{ vars.CODEX_PUBLISHER_BOT_LOGIN }}
+
+      - name: Upload immutable review evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: codex-review-${{ needs.prepare.outputs.pr_number }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/codex-review.json
+          if-no-files-found: error
+          retention-days: 14
+
+  codex-review-gate:
+    name: Codex review orchestrator
+    needs: [prepare, inspect, review]
+    if: ${{ always() && !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+      statuses: write
+    steps:
+      - name: Classify review preflight
+        id: preflight
+        env:
+          AUTOMATION_ENABLED: ${{ vars.CODEX_AUTOMATION_ENABLED }}
+          CANDIDATE: ${{ needs.prepare.outputs.candidate }}
+          ELIGIBLE: ${{ needs.inspect.outputs.eligible }}
+          INSPECT_RESULT: ${{ needs.inspect.result }}
+          PREPARE_RESULT: ${{ needs.prepare.result }}
+          PREPARE_REASON: ${{ needs.prepare.outputs.reason }}
+          REVIEW_RESULT: ${{ needs.review.result }}
+        run: |
+          set -euo pipefail
+          state=pending
+          reason="AI review is pending"
+          review_ready=false
+          if [ "$PREPARE_RESULT" != "success" ]; then
+            state=failure
+            reason="Trusted review target could not be resolved"
+          elif [ "$CANDIDATE" != "true" ]; then
+            if [ "$PREPARE_REASON" = "draft" ]; then
+              state=pending
+              reason="AI review waits until the pull request is ready"
+            else
+              state=success
+              reason="AI review not applicable; human ownership remains required"
+            fi
+          elif [ "$INSPECT_RESULT" != "success" ]; then
+            state=failure
+            reason="Immutable pull-request scope could not be inspected"
+          elif [ "$ELIGIBLE" != "true" ]; then
+            state=success
+            reason="Protected or oversized scope requires human review"
+          elif [ "$AUTOMATION_ENABLED" != "true" ]; then
+            state=success
+            reason="AI review disabled by repository kill switch"
+          elif [ "$REVIEW_RESULT" != "success" ]; then
+            state=failure
+            reason="Required read-only AI review did not complete"
+          else
+            review_ready=true
+          fi
+          {
+            echo "state=$state"
+            echo "reason=$reason"
+            echo "review_ready=$review_ready"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Check out trusted review renderer
+        id: trusted_checkout
+        if: steps.preflight.outputs.review_ready == 'true'
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        with:
+          ref: ${{ needs.prepare.outputs.base_sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Download review evidence
+        id: evidence
+        if: steps.preflight.outputs.review_ready == 'true'
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          name: codex-review-${{ needs.prepare.outputs.pr_number }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: evidence
+
+      - name: Validate and render inert review comment
+        id: render
+        if: steps.preflight.outputs.review_ready == 'true'
+        run: |
+          set -euo pipefail
+          python3 .github/codex/scripts/render_review.py \
+            evidence/codex-review.json review-comment.md
+
+      - name: Post review comment
+        id: comment
+        if: steps.preflight.outputs.review_ready == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ needs.prepare.outputs.pr_number }}
+        run: gh pr comment "$PR_NUMBER" --body-file review-comment.md
+
+      - name: Evaluate validated review verdict
+        id: verdict
+        if: steps.preflight.outputs.review_ready == 'true' && steps.render.outcome == 'success' && steps.comment.outcome == 'success'
+        run: |
+          set -euo pipefail
+          review=evidence/codex-review.json
+          verdict=$(jq -r '.verdict' "$review")
+          blocking=$(jq '[.findings[] | select(.severity == "P0" or .severity == "P1")] | length' "$review")
+          if [ "$verdict" != "pass" ] || [ "$blocking" -gt 0 ]; then
+            {
+              echo "state=failure"
+              echo "reason=Codex review requires changes or human review"
+            } >> "$GITHUB_OUTPUT"
+          else
+            {
+              echo "state=success"
+              echo "reason=Static AI review passed without P0 or P1 findings"
+            } >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Resolve final policy state
+        id: final
+        if: always()
+        env:
+          PREFLIGHT_OUTCOME: ${{ steps.preflight.outcome }}
+          PREFLIGHT_REASON: ${{ steps.preflight.outputs.reason }}
+          PREFLIGHT_STATE: ${{ steps.preflight.outputs.state }}
+          REVIEW_READY: ${{ steps.preflight.outputs.review_ready }}
+          CHECKOUT_OUTCOME: ${{ steps.trusted_checkout.outcome }}
+          EVIDENCE_OUTCOME: ${{ steps.evidence.outcome }}
+          RENDER_OUTCOME: ${{ steps.render.outcome }}
+          COMMENT_OUTCOME: ${{ steps.comment.outcome }}
+          VERDICT_OUTCOME: ${{ steps.verdict.outcome }}
+          VERDICT_REASON: ${{ steps.verdict.outputs.reason }}
+          VERDICT_STATE: ${{ steps.verdict.outputs.state }}
+        run: |
+          set -euo pipefail
+          state="$PREFLIGHT_STATE"
+          reason="$PREFLIGHT_REASON"
+          if [ "$PREFLIGHT_OUTCOME" != "success" ]; then
+            state=failure
+            reason="Review preflight failed unexpectedly"
+          elif [ "$REVIEW_READY" = "true" ]; then
+            if [ "$CHECKOUT_OUTCOME" != "success" ] || \
+               [ "$EVIDENCE_OUTCOME" != "success" ] || \
+               [ "$RENDER_OUTCOME" != "success" ] || \
+               [ "$COMMENT_OUTCOME" != "success" ] || \
+               [ "$VERDICT_OUTCOME" != "success" ]; then
+              state=failure
+              reason="Review evidence could not be validated and published"
+            else
+              state="$VERDICT_STATE"
+              reason="$VERDICT_REASON"
+            fi
+          fi
+          {
+            echo "state=$state"
+            echo "reason=$reason"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Publish policy status on immutable pull-request head
+        if: always()
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        env:
+          HEAD_SHA: ${{ needs.prepare.outputs.head_sha || github.event.pull_request.head.sha }}
+          POLICY_REASON: ${{ steps.final.outputs.reason || 'Review policy failed unexpectedly' }}
+          POLICY_STATE: ${{ steps.final.outputs.state || 'failure' }}
+        with:
+          script: |
+            if (!/^[0-9a-f]{40}$/.test(process.env.HEAD_SHA ?? "")) {
+              core.setFailed("Cannot publish review policy status without an immutable head SHA.");
+              return;
+            }
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: process.env.HEAD_SHA,
+              state: process.env.POLICY_STATE,
+              context: "Codex review policy gate",
+              description: process.env.POLICY_REASON.slice(0, 140),
+              target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+            });
+
+      - name: Fail workflow for blocking policy state
+        if: always() && steps.final.outputs.state == 'failure'
+        run: |
+          echo "${{ steps.final.outputs.reason }}" >&2
+          exit 1

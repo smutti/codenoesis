@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/smutti/codenoesis/blob/main/.github/codex/policy.schema.json",
+  "title": "CodeNoesis trusted Codex policy",
+  "description": "Deterministic authorization, protected-path, and review-scope policy.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "version",
+    "limits",
+    "hard_protected_patterns",
+    "approved_requirements"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "./policy.schema.json"
+    },
+    "version": {
+      "const": 1
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proposal_max_files",
+        "review_max_files"
+      ],
+      "properties": {
+        "proposal_max_files": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "review_max_files": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        }
+      }
+    },
+    "hard_protected_patterns": {
+      "type": "array",
+      "minItems": 13,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "allOf": [
+        {
+          "contains": {
+            "const": ".github/**"
+          }
+        },
+        {
+          "contains": {
+            "const": ".codex/**"
+          }
+        },
+        {
+          "contains": {
+            "const": "AGENTS.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "**/AGENTS.md"
+          }
+        },
+        {
+          "contains": {
+            "const": ".gitmodules"
+          }
+        },
+        {
+          "contains": {
+            "const": ".gitattributes"
+          }
+        },
+        {
+          "contains": {
+            "const": "docs/software/software-requirements-specification.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "docs/software/architecture.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "docs/software/autonomous-development.md"
+          }
+        },
+        {
+          "contains": {
+            "const": "benchmarks/manifest.json"
+          }
+        },
+        {
+          "contains": {
+            "const": "benchmarks/manifest.schema.json"
+          }
+        },
+        {
+          "contains": {
+            "const": "benchmarks/baselines/**"
+          }
+        },
+        {
+          "contains": {
+            "const": "benchmarks/results/baselines/**"
+          }
+        }
+      ]
+    },
+    "approved_requirements": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/approval"
+      }
+    }
+  },
+  "$defs": {
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "slice",
+        "approved_by",
+        "approved_at",
+        "source_sha",
+        "approval_reference"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-[0-9]{3}$"
+        },
+        "slice": {
+          "type": "string",
+          "enum": [
+            "S0",
+            "S1",
+            "S2",
+            "S3",
+            "S4",
+            "S5",
+            "S6",
+            "S7",
+            "S8",
+            "S9",
+            "S10",
+            "S11",
+            "S12",
+            "S13",
+            "S14"
+          ]
+        },
+        "approved_by": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "approved_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source_sha": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"
+        },
+        "approval_reference": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Codex issue implementation proposal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "merge_readiness",
+    "summary",
+    "changed_files",
+    "validation",
+    "risks",
+    "blockers"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "no_change", "blocked"]
+    },
+    "merge_readiness": {
+      "type": "string",
+      "const": "proposal_only"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+    },
+    "changed_files": {
+      "type": "array",
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "validation": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["phase", "command", "outcome", "exit_code", "evidence"],
+        "properties": {
+          "phase": {
+            "type": "string",
+            "enum": ["red", "green", "regression", "other"]
+          },
+          "command": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "outcome": {
+            "type": "string",
+            "enum": ["passed", "failed", "not_run"]
+          },
+          "exit_code": {
+            "type": ["integer", "null"]
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          }
+        }
+      }
+    },
+    "risks": {
+      "type": "array",
+      "maxItems": 30,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "maxItems": 30,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"status": {"const": "proposed"}},
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "changed_files": {"minItems": 1},
+          "blockers": {"maxItems": 0},
+          "validation": {
+            "allOf": [
+              {
+                "contains": {
+                  "type": "object",
+                  "properties": {
+                    "phase": {"const": "red"},
+                    "outcome": {"const": "failed"},
+                    "exit_code": {"type": "integer", "minimum": 1}
+                  },
+                  "required": ["phase", "outcome", "exit_code"]
+                }
+              },
+              {
+                "contains": {
+                  "type": "object",
+                  "properties": {
+                    "phase": {"enum": ["green", "regression"]},
+                    "outcome": {"const": "passed"},
+                    "exit_code": {"const": 0}
+                  },
+                  "required": ["phase", "outcome", "exit_code"]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"status": {"enum": ["no_change", "blocked"]}},
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {"changed_files": {"maxItems": 0}}
+      }
+    },
+    {
+      "if": {
+        "properties": {"status": {"const": "blocked"}},
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {"blockers": {"minItems": 1}}
+      }
+    }
+  ]
+}

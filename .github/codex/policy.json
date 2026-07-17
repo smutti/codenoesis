@@ -1,0 +1,24 @@
+{
+  "$schema": "./policy.schema.json",
+  "version": 1,
+  "limits": {
+    "proposal_max_files": 80,
+    "review_max_files": 80
+  },
+  "hard_protected_patterns": [
+    ".github/**",
+    ".codex/**",
+    "AGENTS.md",
+    "**/AGENTS.md",
+    ".gitmodules",
+    ".gitattributes",
+    "docs/software/software-requirements-specification.md",
+    "docs/software/architecture.md",
+    "docs/software/autonomous-development.md",
+    "benchmarks/manifest.json",
+    "benchmarks/manifest.schema.json",
+    "benchmarks/baselines/**",
+    "benchmarks/results/baselines/**"
+  ],
+  "approved_requirements": []
+}

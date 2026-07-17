@@ -1,6 +1,8 @@
 # CodeNoesis Software
 
-> Status: **design baseline — planned**. No CodeNoesis runtime, crate, API, database schema, or deployment described here has been implemented yet.
+> Status: **design baseline — planned**. An infrastructure-only Rust workspace
+> exists for repository verification, but no CodeNoesis product runtime, product
+> crate, API, database schema, or deployment described here has been implemented.
 
 CodeNoesis is planned as a production-grade repository intelligence platform. It will analyze polyglot source repositories, build an evidence-backed knowledge graph, generate maintainable technical documentation, federate knowledge across projects, and explain the likely impact of software changes.
 
