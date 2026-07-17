@@ -10,6 +10,10 @@ system to be built: the Rust architecture, runtime boundaries, data contracts,
 repository-analysis pipeline, public interfaces, security model, operations,
 and delivery roadmap.
 
+The [Software Requirements Specification](software/software-requirements-specification.md)
+turns that design into traceable requirements, acceptance evidence, TDD gates,
+and incremental vertical slices.
+
 Software decisions must optimize for correctness, maintainability, performance,
 and safe operation on untrusted repositories. Experimental techniques enter
 the production path only after they meet explicit evaluation and reliability

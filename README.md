@@ -33,6 +33,7 @@ docs/
 ├── software/
 │   ├── README.md
 │   ├── architecture.md
+│   ├── software-requirements-specification.md
 │   ├── data-model.md
 │   ├── interfaces.md
 │   ├── operations.md

@@ -6,6 +6,10 @@ CodeNoesis is planned as a production-grade repository intelligence platform. It
 
 This directory records the engineering track. Experimental hypotheses, novel inference techniques, and publication-oriented work belong in the separate [research track](../research/README.md).
 
+The normative product requirements, verification model, TDD policy, and
+incremental vertical-slice plan are defined in the
+[Software Requirements Specification](software-requirements-specification.md).
+
 ## Product goals
 
 The planned system will:
@@ -76,6 +80,10 @@ The modular monolith keeps transactional behavior and deployment understandable 
 | Hardening and pilot | Fuzzing, fault injection, performance, restore exercises, 3–5 repository pilot, `1.0` gate | 5–7 weeks |
 
 The estimate assumes four Rust engineers plus part-time platform and security support. It is a planning assumption, not a delivery commitment.
+
+The phase table remains a macro planning view. Implementation order and release
+eligibility are governed by the smaller, demonstrable slices in the
+[Software Requirements Specification](software-requirements-specification.md#12-incremental-delivery-plan).
 
 ## Production-readiness exit criteria
 
