@@ -260,7 +260,7 @@ jobs:
             });
 
       - name: Check out default branch without persisted credentials
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
@@ -484,7 +484,7 @@ jobs:
           printf '%s  %s\n' "$expected_sha" codex.patch | sha256sum -c -
 
       - name: Check out immutable proposal base
-        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           ref: ${{ needs.generate-proposal.outputs.base_sha }}
           fetch-depth: 0
