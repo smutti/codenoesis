@@ -40,7 +40,7 @@ jobs:
     steps:
       - name: Load and validate untrusted issue context
         id: issue
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           ISSUE_NUMBER: ${{ inputs.issue_number }}
         with:
@@ -572,7 +572,7 @@ jobs:
           PY
 
       - name: Revalidate unchanged issue immediately before publication
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           EXPECTED_BODY_SHA256: ${{ needs.generate-proposal.outputs.issue_body_sha256 }}
           EXPECTED_UPDATED_AT: ${{ needs.generate-proposal.outputs.issue_updated_at }}
