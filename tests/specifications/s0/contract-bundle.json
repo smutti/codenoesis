@@ -2,8 +2,12 @@
   "schema_version": "codenoesis.contract-bundle/v1",
   "files": [
     {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
       "path": "docs/software/decisions/0001-s0-walking-skeleton-contract.md",
-      "sha256": "606282988e27fdf99b271a36b79477263a3e0102d1aec88fac3349d947348803"
+      "sha256": "7a3d495d99c9c23cd9e190cba9c653fc8d712f1c79f55b28344041d61366b550"
     },
     {
       "path": "docs/software/decisions/README.md",
@@ -11,15 +15,11 @@
     },
     {
       "path": "scripts/tests/test_s0_contract.py",
-      "sha256": "bd57c63f6b07ab31b4a777c89086d332c97133d06e21bb099759d2cd82ee244b"
-    },
-    {
-      "path": "tests/fixtures/s0/one-file-v1/LICENSE",
-      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      "sha256": "70c35254c259e53cd8f7363b77dca1b2b01921f1bd21b452e2445f71080a9aaf"
     },
     {
       "path": "tests/fixtures/s0/one-file-v1/README.md",
-      "sha256": "7afd6b9eaad494d0b965daf873b0dab008ff2e98d94541a78620ff680b97f707"
+      "sha256": "8467e1070c97849f1c81cb56a843abce1c44d32a50ace4ab5139442bbb673c4a"
     },
     {
       "path": "tests/fixtures/s0/one-file-v1/commit-a/main.rs",
@@ -51,7 +51,7 @@
     },
     {
       "path": "tests/fixtures/s0/one-file-v1/manifest.json",
-      "sha256": "baa440287d430816dde6dd31d50db98c706be62e19ae1b65d16d32cbfccb5205"
+      "sha256": "f989864066e33c0233650af7642f497cf7de57e875b2225f9eaf7e1b162ca667"
     },
     {
       "path": "tests/specifications/s0/codenoesis-error-v1.schema.json",
@@ -74,5 +74,5 @@
       "sha256": "5664635f8ad76dff5421f5eeb1f20ffdf0450203d8cb9c692606c026a39ee1ad"
     }
   ],
-  "bundle_sha256": "0b1bc1541947322381924267a853ffa6cf995112fdfd1d2f69f5a4933e1b0e57"
+  "bundle_sha256": "d049ea8338d5c48393410b1c2c71bd430e531d7ebe76551cc181ccb40936ee9e"
 }

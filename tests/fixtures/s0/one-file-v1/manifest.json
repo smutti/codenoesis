@@ -6,8 +6,8 @@
     "description": "Original source authored for the CodeNoesis S0 acceptance contract.",
     "third_party_material": false,
     "license_spdx": "Apache-2.0",
-    "license_file": "LICENSE",
-    "license_scope": "tests/fixtures/s0/one-file-v1 only",
+    "license_file": "../../../../LICENSE",
+    "license_scope": "entire repository",
     "copyright_holder": "CodeNoesis contributors"
   },
   "repository": {

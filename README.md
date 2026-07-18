@@ -61,3 +61,7 @@ Start with [CONTRIBUTING.md](CONTRIBUTING.md) and the repository
 approved requirement, one vertical slice, a reviewable acceptance oracle, and
 captured Red evidence. Specification, fixture, benchmark, and research work can
 proceed independently when its status is explicit.
+
+## License
+
+CodeNoesis is licensed under the [Apache License, Version 2.0](LICENSE).

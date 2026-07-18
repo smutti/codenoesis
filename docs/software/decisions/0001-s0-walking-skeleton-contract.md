@@ -7,7 +7,7 @@
 | Scope | `S0 — Walking skeleton` only |
 | Product owner | Andrea Moretti — project governance persona represented by [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the single-maintainer bootstrap model |
-| Fixture permission | Apache License 2.0, scoped to the synthetic fixture by its [LICENSE](../../../tests/fixtures/s0/one-file-v1/LICENSE) file |
+| Repository license | Apache License 2.0 under the repository-wide root [LICENSE](../../../LICENSE) file |
 | Approval reference | PR [#8](https://github.com/smutti/codenoesis/pull/8); approval becomes authoritative when `@smutti` manually merges the final protected head |
 | Requirements | `DR-ART-001/002`, `FR-ACQ-001`, `FR-CLI-003`, `NFR-DET-001`, `NFR-MNT-001`, `NFR-SEC-005`, `NFR-TST-001/002` |
 | Issue | [#6](https://github.com/smutti/codenoesis/issues/6) |
@@ -408,7 +408,7 @@ contract.
    fixture, and oracle while representing the disclosed Andrea Moretti product
    governance persona. No independent human reviewer is claimed.
 2. This final ratification commit records the accountable actor, single-
-   maintainer governance model, Apache-2.0 fixture permission, SRS requirements
+   maintainer governance model, repository-wide Apache-2.0 license, SRS requirements
    as `Approved`, this record as `Accepted`, and the machine oracle as
    `approved`.
 3. The active `main-production` ruleset requires the pull request, strict CI and

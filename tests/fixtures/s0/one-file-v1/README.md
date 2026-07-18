@@ -1,10 +1,9 @@
 # S0 one-file Git fixture
 
 This is a synthetic, first-party fixture for the S0 acquisition contract. It
-contains no copied third-party source or confidential data. Every artifact in
-this fixture directory is licensed under the Apache License, Version 2.0; see
-[`LICENSE`](LICENSE). This fixture-scoped grant does not declare a license for
-the rest of the CodeNoesis repository.
+contains no copied third-party source or confidential data. The entire
+CodeNoesis repository, including this fixture, is licensed under the
+[Apache License, Version 2.0](../../../../LICENSE).
 
 The committed fixture contains source seeds and a manifest, not a nested
 `.git` directory. The future acceptance harness materializes a fresh temporary

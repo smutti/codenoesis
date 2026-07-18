@@ -50,11 +50,11 @@ S0_TEST_ORDER = (
 S0_TESTS = set(S0_TEST_ORDER)
 
 S0_BUNDLE_FILES = {
+    "LICENSE",
     "docs/software/decisions/README.md",
     "docs/software/decisions/0001-s0-walking-skeleton-contract.md",
     "scripts/tests/test_s0_contract.py",
     "tests/fixtures/s0/one-file-v1/README.md",
-    "tests/fixtures/s0/one-file-v1/LICENSE",
     "tests/fixtures/s0/one-file-v1/commit-a/main.rs",
     "tests/fixtures/s0/one-file-v1/commit-b/main.rs",
     "tests/fixtures/s0/one-file-v1/expected-error-not-git.json",
@@ -461,15 +461,15 @@ class S0ContractTests(unittest.TestCase):
         repository = manifest["repository"]
         provenance = manifest["provenance"]
         self.assertEqual(provenance["license_spdx"], "Apache-2.0")
-        self.assertEqual(provenance["license_file"], "LICENSE")
-        self.assertEqual(
-            provenance["license_scope"], "tests/fixtures/s0/one-file-v1 only"
-        )
-        fixture_license = (FIXTURE_ROOT / provenance["license_file"]).read_text(
-            encoding="utf-8"
-        )
-        self.assertIn("Apache License", fixture_license)
-        self.assertIn("Version 2.0, January 2004", fixture_license)
+        self.assertEqual(provenance["license_file"], "../../../../LICENSE")
+        self.assertEqual(provenance["license_scope"], "entire repository")
+        repository_license_path = (
+            FIXTURE_ROOT / provenance["license_file"]
+        ).resolve()
+        self.assertEqual(repository_license_path, ROOT / "LICENSE")
+        repository_license = repository_license_path.read_text(encoding="utf-8")
+        self.assertIn("Apache License", repository_license)
+        self.assertIn("Version 2.0, January 2004", repository_license)
         isolation = manifest["derived_variants"]["isolation"]
         self.assertFalse(isolation["committed_tree_changes"])
         self.assertEqual(

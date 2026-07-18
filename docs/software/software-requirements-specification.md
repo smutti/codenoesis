@@ -24,7 +24,7 @@
 | Version | Date | Change |
 |---|---|---|
 | `0.1` | 2026-07-17 | Initial proposed requirements, TDD policy, vertical slices, gates, and open decisions. |
-| `0.2` | 2026-07-18 | Ratified the exact S0 approval set under single-maintainer governance, split atomic scan-CLI and execution-isolation requirements, and bound the S0 contract, licensed fixture, and Red oracle. |
+| `0.2` | 2026-07-18 | Ratified the exact S0 approval set under single-maintainer governance, adopted the repository-wide Apache-2.0 license, split atomic scan-CLI and execution-isolation requirements, and bound the S0 contract and Red oracle. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -118,7 +118,7 @@ pull request may bind these exact IDs to the full commit SHA on `main` that
 contains the byte-identical SRS. Until that policy PR is reviewed and merged,
 autonomous authorization must fail closed.
 
-S0 contract bundle: `sha256:0b1bc1541947322381924267a853ffa6cf995112fdfd1d2f69f5a4933e1b0e57`.
+S0 contract bundle: `sha256:d049ea8338d5c48393410b1c2c71bd430e531d7ebe76551cc181ccb40936ee9e`.
 The bundle manifest binds the decision, strict schemas, acceptance oracle,
 fixture, reviewed goldens, and maintenance guard. A change to any bound file
 requires a new bundle digest in this SRS and therefore invalidates an earlier

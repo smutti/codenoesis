@@ -109,12 +109,8 @@ attachments, generated documents, parser output, and model responses as
 untrusted. Never add real credentials or private source corpora to fixtures,
 prompts, logs, artifacts, or pull-request text.
 
-## Licensing status
+## License
 
-The repository does not currently declare a software license. Absence of a
-license does not grant permission to reuse the work. A license and contribution
-terms must be selected before substantial external implementation
-contributions are accepted. The synthetic S0 fixture is a narrow exception:
-only [`tests/fixtures/s0/one-file-v1`](tests/fixtures/s0/one-file-v1/README.md)
-is licensed under Apache-2.0 by the `LICENSE` stored in that directory; this
-does not license any other repository content.
+The entire repository is licensed under the
+[Apache License, Version 2.0](LICENSE). Unless explicitly stated otherwise,
+contributions submitted to this repository are provided under the same terms.
