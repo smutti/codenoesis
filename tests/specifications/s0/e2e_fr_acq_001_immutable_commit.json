@@ -1,0 +1,324 @@
+{
+  "schema_version": "codenoesis.acceptance-specification/v1",
+  "status": "proposed_for_human_ratification",
+  "test_id": "e2e_fr_acq_001_immutable_commit",
+  "slice": "S0",
+  "requirements": [
+    "DR-ART-001",
+    "DR-ART-002",
+    "FR-ACQ-001",
+    "FR-CLI-003",
+    "NFR-DET-001",
+    "NFR-MNT-001",
+    "NFR-SEC-005",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "decision": "docs/software/decisions/0001-s0-walking-skeleton-contract.md",
+  "fixture": "tests/fixtures/s0/one-file-v1/manifest.json",
+  "security_policy": "tests/specifications/s0/seccomp-capability-deny-v1.json",
+  "schemas": {
+    "snapshot": "tests/specifications/s0/repository-snapshot-v1.schema.json",
+    "error": "tests/specifications/s0/codenoesis-error-v1.schema.json",
+    "evidence": "tests/specifications/s0/evidence-manifest-v1.schema.json"
+  },
+  "goldens": {
+    "semantic_a": "tests/fixtures/s0/one-file-v1/expected-semantic-a.json",
+    "semantic_a_jcs": "tests/fixtures/s0/one-file-v1/expected-semantic-a.jcs",
+    "snapshot_a": "tests/fixtures/s0/one-file-v1/expected-snapshot-a.json",
+    "snapshot_a_jcs": "tests/fixtures/s0/one-file-v1/expected-snapshot-a.jcs",
+    "not_git_error": "tests/fixtures/s0/one-file-v1/expected-error-not-git.json"
+  },
+  "contract_constants": {
+    "repository_identity_pattern": "^urn:codenoesis:[a-z0-9][a-z0-9._:-]{0,254}$",
+    "revision_pattern": "^(?:[0-9a-f]{40}|refs/heads/main)$",
+    "supported_tree_shape": "exactly one root-level 100644 file with path ^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$",
+    "snapshot_schema_version": "codenoesis.repository-snapshot/v1",
+    "snapshot_hash_algorithm": "blake3-256",
+    "snapshot_hash_domain": "codenoesis.repository-snapshot.semantic.v1",
+    "configuration_schema_version": "codenoesis.configuration/v1",
+    "configuration_profile": "standard-local-s0",
+    "configuration_hash_domain": "codenoesis.configuration.semantic.v1",
+    "canonicalization": "RFC8785",
+    "error_schema_version": "codenoesis.error/v1"
+  },
+  "observer_contract": {
+    "schema_version": "codenoesis.s0-observer/v1",
+    "platform": "linux",
+    "boundary": "after the initial noesis image load until subject exit",
+    "network_namespace": "fresh namespace with no interface up and no route for the complete boundary",
+    "inherited_descriptors": "only 0, 1, and 2, each verified non-socket",
+    "seccomp_policy_sha256": "5664635f8ad76dff5421f5eeb1f20ffdf0450203d8cb9c692606c026a39ee1ad",
+    "forbidden_process_syscalls": ["execve", "execveat", "fork", "vfork", "clone3"],
+    "conditional_process_syscalls": {
+      "clone": "forbidden unless decoded flags include CLONE_THREAD"
+    },
+    "forbidden_network_syscalls": [
+      "socket",
+      "socketpair",
+      "socketcall",
+      "connect",
+      "bind",
+      "listen",
+      "accept",
+      "accept4",
+      "sendto",
+      "sendmsg",
+      "sendmmsg",
+      "recvfrom",
+      "recvmsg",
+      "recvmmsg",
+      "shutdown"
+    ],
+    "forbidden_async_io_syscalls": ["io_uring_setup", "io_uring_enter", "io_uring_register"],
+    "enforcement": "seccomp default-deny for the listed process, network, and async-I/O paths plus audit",
+    "required_event_fields": ["syscall", "pid", "tid", "decoded_arguments", "result"],
+    "required_launch_evidence": [
+      "network namespace has no interface up",
+      "network namespace has no route",
+      "only file descriptors 0, 1, and 2 are inherited",
+      "no inherited descriptor is a socket",
+      "seccomp profile digest matches the reviewed profile"
+    ],
+    "self_test": "before product evidence, generate one architecture-qualified isolated probe for every syscall and conditional branch in the ratified seccomp policy; every applicable deny probe must return EPERM and a matching observer event, allowed clone-with-CLONE_THREAD must not match the deny rule, and every not_exposed result requires both libseccomp-resolution and direct-ENOSYS evidence"
+  },
+  "public_command": [
+    "noesis",
+    "scan",
+    "--repository",
+    "{repository_path}",
+    "--repository-id",
+    "urn:codenoesis:fixture:s0-one-file-v1",
+    "--revision",
+    "{revision}",
+    "--format",
+    "json"
+  ],
+  "stream_contract": {
+    "success": {
+      "exit_code": 0,
+      "stdout": "one RepositorySnapshotV1 JSON document followed by one LF",
+      "stderr": "empty"
+    },
+    "invalid_invocation": {
+      "exit_code": 2,
+      "stdout": "empty",
+      "stderr": "one CodeNoesisErrorV1 JSON document followed by one LF"
+    },
+    "acquisition_failure": {
+      "exit_code": 10,
+      "stdout": "empty",
+      "stderr": "one CodeNoesisErrorV1 JSON document followed by one LF"
+    },
+    "unexpected_internal_failure": {
+      "exit_code": 70,
+      "stdout": "empty",
+      "stderr": "one CodeNoesisErrorV1 JSON document followed by one LF"
+    }
+  },
+  "expected_red": {
+    "test_command": "cargo test --test e2e_fr_acq_001_immutable_commit",
+    "precondition": "The future TDD branch contains the black-box harness and a minimal noesis surface.",
+    "runner_expected_exit": "nonzero because the acceptance assertion fails",
+    "subject_observed_exit_code": 70,
+    "subject_observed_stderr_marker": "S0_NOT_IMPLEMENTED",
+    "subject_marker_lifecycle": "test-only Red stub marker; it is not a public CodeNoesisErrorV1 code",
+    "subject_expected_exit_code": 0,
+    "expected_artifact": "codenoesis.repository-snapshot/v1",
+    "accepted_reason": "The public product behavior is deliberately absent before implementation.",
+    "rejected_reasons": [
+      "compilation failure",
+      "missing test target",
+      "missing or corrupt fixture",
+      "network or dependency outage",
+      "timing race",
+      "unexpected panic"
+    ]
+  },
+  "error_codes": {
+    "input.invalid_repository_identity": 2,
+    "input.invalid_revision": 2,
+    "acquisition.not_git_repository": 10,
+    "acquisition.revision_not_found": 10,
+    "acquisition.revision_not_commit": 10,
+    "acquisition.object_missing": 10,
+    "acquisition.repository_inconsistent": 10,
+    "acquisition.unsupported_repository_shape": 10
+  },
+  "budgets": {
+    "fixture_files_per_revision": 1,
+    "fixture_repository_bytes": 4096,
+    "single_scan_seconds": 5,
+    "acceptance_suite_seconds": 180,
+    "combined_output_bytes": 1048576,
+    "temporary_disk_bytes_per_test": 33554432,
+    "peak_resident_memory_bytes_target": 268435456,
+    "determinism_replays": 50,
+    "parallel_shuffled_repetitions": 10,
+    "retained_logs_bytes": 10485760,
+    "evidence_manifest_bytes": 1048576,
+    "minimum_evidence_retention_days": 90,
+    "autonomous_correction_rounds": 2,
+    "autonomous_implementation_seconds": 3600
+  },
+  "scenarios": [
+    {
+      "id": "snapshot_from_explicit_commit_a",
+      "test_name": "e2e_fr_acq_001_immutable_commit",
+      "requirements": ["DR-ART-001", "FR-ACQ-001", "FR-CLI-003"],
+      "verification": ["E2E", "CONF"],
+      "arrange": "Materialize fixture commit A in a fresh local SHA-1 worktree.",
+      "act": "Run the public command with the full commit A OID.",
+      "assert": [
+        "Exit is 0, stderr is empty, and stdout is one strict RepositorySnapshotV1 JSON document.",
+        "Repository identity, object format, commit OID, and tree OID equal the reviewed fixture values.",
+        "The adapter verifies the complete supported commit-to-tree-to-blob closure before output.",
+        "Recomputed RFC 8785 semantic bytes and domain-separated BLAKE3-256 equal the artifact hash.",
+        "No absolute path, hostname, user name, or volatile value appears under semantic."
+      ]
+    },
+    {
+      "id": "ref_moves_after_binding",
+      "test_name": "it_fr_acq_001_ref_move_after_binding_keeps_original_commit",
+      "requirements": ["FR-ACQ-001"],
+      "verification": ["IT"],
+      "arrange": "Use the real local Git adapter and object database to bind refs/heads/main while it names A, then have the harness move the real ref to B.",
+      "act": "Complete verification from the already returned BoundRevision.",
+      "assert": [
+        "The bound commit and tree remain A.",
+        "A new binding resolves B.",
+        "The real adapter does not reread the ref while consuming the first binding; a fake cannot substitute for this test."
+      ]
+    },
+    {
+      "id": "non_git_input",
+      "test_name": "e2e_fr_acq_001_non_git_returns_typed_error",
+      "requirements": ["FR-ACQ-001", "FR-CLI-003"],
+      "verification": ["E2E"],
+      "arrange": "Create a plain directory containing the fixture source but no Git metadata.",
+      "act": "Run the public command against that directory.",
+      "assert": [
+        "Exit is 10 and stdout is empty.",
+        "Stderr is one strict CodeNoesisErrorV1 with code acquisition.not_git_repository.",
+        "No partial snapshot or absolute path is emitted."
+      ]
+    },
+    {
+      "id": "referenced_object_missing",
+      "test_name": "e2e_fr_acq_001_missing_object_returns_typed_error",
+      "requirements": ["FR-ACQ-001", "FR-CLI-003"],
+      "verification": ["E2E"],
+      "arrange": "Materialize A, remove its referenced blob object, and retain the commit and tree.",
+      "act": "Scan the full A commit OID.",
+      "assert": [
+        "Exit is 10 with acquisition.object_missing.",
+        "Context identifies the missing full OID, expected kind, and referring tree OID.",
+        "No partial snapshot is emitted."
+      ]
+    },
+    {
+      "id": "object_hash_inconsistent",
+      "test_name": "e2e_fr_acq_001_inconsistent_object_returns_typed_error",
+      "requirements": ["FR-ACQ-001", "FR-CLI-003"],
+      "verification": ["E2E"],
+      "arrange": "Materialize A and replace one referenced loose object with validly framed content whose SHA-1 differs from its filename.",
+      "act": "Scan the full A commit OID.",
+      "assert": [
+        "Exit is 10 with acquisition.repository_inconsistent.",
+        "The error does not expose raw object content or a local path.",
+        "No partial snapshot is emitted."
+      ]
+    },
+    {
+      "id": "required_versions_and_strict_schema",
+      "test_name": "conf_dr_art_001_repository_snapshot_v1",
+      "requirements": ["DR-ART-001"],
+      "verification": ["CONF"],
+      "arrange": "Start from the reviewed successful artifact and generate one mutation per required or unknown property.",
+      "act": "Validate every mutation against RepositorySnapshotV1.",
+      "assert": [
+        "Every missing mandatory version field is rejected.",
+        "Every unknown field is rejected.",
+        "The reviewed artifact is accepted."
+      ]
+    },
+    {
+      "id": "volatile_envelope_preserves_semantics",
+      "test_name": "pt_dr_art_002_volatile_envelope_preserves_semantic_hash",
+      "requirements": ["DR-ART-002", "NFR-DET-001"],
+      "verification": ["PT", "GT"],
+      "arrange": "Generate at least 50 distinct clock, job, correlation, and temporary-path envelopes for the same semantic input.",
+      "act": "Run isolated scans and canonicalize each semantic object independently.",
+      "assert": [
+        "All semantic canonical bytes and semantic hashes are byte-identical.",
+        "Differences in the full artifact occur only under envelope.",
+        "With envelope ports fixed, the complete stdout bytes are identical."
+      ]
+    },
+    {
+      "id": "semantic_permutation_and_schedule_invariant",
+      "test_name": "pt_nfr_det_001_permutation_and_schedule_invariant",
+      "requirements": ["DR-ART-002", "NFR-DET-001"],
+      "verification": ["PT"],
+      "arrange": "Construct the reviewed commit-A semantic value through generated field insertion permutations and recorded completion schedules.",
+      "act": "Canonicalize and hash every construction independently.",
+      "assert": [
+        "Every construction equals expected-semantic-a.jcs byte for byte.",
+        "Every construction has snapshot digest b673624a329f43fd84852bbdeefd66326a7fcb1c03fdb626e2de6bfedff11997.",
+        "The property runner records the seed and rejects any order- or schedule-dependent result."
+      ]
+    },
+    {
+      "id": "architecture_fitness",
+      "test_name": "conf_nfr_mnt_001_dependency_rules",
+      "requirements": ["NFR-MNT-001"],
+      "verification": ["CONF"],
+      "arrange": "Read Cargo metadata and every first-party manifest for the minimal S0 workspace.",
+      "act": "Evaluate the ratified inward dependency graph, lint inheritance, and unsafe policy.",
+      "assert": [
+        "No forbidden outward dependency edge exists.",
+        "Every first-party crate inherits unsafe_code = forbid.",
+        "Introducing a seeded forbidden edge makes the check fail."
+      ]
+    },
+    {
+      "id": "traceability_is_machine_linked",
+      "test_name": "conf_nfr_tst_001_requires_fixture_oracle_evidence_links",
+      "requirements": ["NFR-TST-001"],
+      "verification": ["CONF"],
+      "arrange": "Load the approved requirement register, immutable oracle-bundle digest, and an instance of tests/specifications/s0/evidence-manifest-v1.schema.json.",
+      "act": "Remove each requirement, fixture, oracle, Red, Green, or evidence reference in turn.",
+      "assert": [
+        "Every missing link, wrong oracle-bundle digest, stale commit, or malformed evidence state is rejected.",
+        "Implemented and Verified states cannot be declared without required Green evidence."
+      ]
+    },
+    {
+      "id": "parallel_and_order_independent",
+      "test_name": "pt_nfr_tst_002_replays_are_parallel_and_order_independent",
+      "requirements": ["NFR-TST-002", "NFR-DET-001"],
+      "verification": ["PT", "CONF"],
+      "arrange": "Materialize isolated repositories and record the shuffle seed.",
+      "act": "Run the required scenarios in parallel and in 10 shuffled orders without retry-to-green.",
+      "assert": [
+        "All canonical results and typed failures match the serial oracle.",
+        "No test shares mutable repository, clock, output, or environment state."
+      ]
+    },
+    {
+      "id": "no_target_process_or_network",
+      "test_name": "sec_nfr_sec_005_scan_launches_no_child_and_opens_no_network",
+      "requirements": ["NFR-SEC-005"],
+      "verification": ["SEC", "E2E"],
+      "arrange": "Materialize A, apply the manifest's isolation variant, create a fresh Linux network namespace with no interface up or route, close every inherited descriptor above 2, verify 0/1/2 are non-sockets, compile the ratified seccomp policy, and generate an isolated deny-and-audit probe for every named syscall and conditional branch before entering the monitored product boundary.",
+      "act": "Run a successful scan inside the monitored boundary.",
+      "assert": [
+        "After the initial noesis image load there is no execve, execveat, fork, vfork, or clone3, and no clone lacking CLONE_THREAD; the sentinel remains absent.",
+        "No socket, socketpair, socketcall, connect, bind, listen, accept, send, receive, shutdown, or io_uring syscall can create or use a network channel; every listed attempt is denied and audited.",
+        "The seccomp self-test report covers every policy rule on the selected architecture; a missing result, unexpected allow, or unproved not_exposed result fails the gate.",
+        "The namespace has no interface up or route for the full boundary, only non-socket descriptors 0/1/2 are inherited, and no DNS, resolver broker, credential broker, or remote Git operation is attempted.",
+        "The successful artifact still matches the semantic oracle."
+      ]
+    }
+  ]
+}

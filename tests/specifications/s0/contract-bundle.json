@@ -1,0 +1,74 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "docs/software/decisions/0001-s0-walking-skeleton-contract.md",
+      "sha256": "4d2abd334524ad47aa93db959f77e96a6427747ce5bc79f0c0a573102cbc10c6"
+    },
+    {
+      "path": "docs/software/decisions/README.md",
+      "sha256": "e654c5be2a00429158d9a44ebbde9fcbd10b29a020909918d7a71a5b0f2552c1"
+    },
+    {
+      "path": "scripts/tests/test_s0_contract.py",
+      "sha256": "1042f91374b69cabdb265387d626f486b6758813852b4a3eb5d316032edb73e8"
+    },
+    {
+      "path": "tests/fixtures/s0/one-file-v1/README.md",
+      "sha256": "805b0fd1dc7c32c8468dbe26d49d07ff3ead9aa52b7553e8d2db6485bd45faac"
+    },
+    {
+      "path": "tests/fixtures/s0/one-file-v1/commit-a/main.rs",
+      "sha256": "ee54963dd71aa0a4288ecbad2cf17d9aad5fb5401dc75dbba9ca2338a3c778a7"
+    },
+    {
+      "path": "tests/fixtures/s0/one-file-v1/commit-b/main.rs",
+      "sha256": "741373f82f1e9e547c8bff0f130cd3189abe907cde228e5bc76ca05be2a12cd6"
+    },
+    {
+      "path": "tests/fixtures/s0/one-file-v1/expected-error-not-git.json",
+      "sha256": "f881e6f1615191998508bc5231645f324e25c871c46a82b69ae1c24e9a12bff9"
+    },
+    {
+      "path": "tests/fixtures/s0/one-file-v1/expected-semantic-a.jcs",
+      "sha256": "a515e94056e2dc7b214f8caaf8fde6a5a5e8507d2ab9b2d9fa152dfad28dfbee"
+    },
+    {
+      "path": "tests/fixtures/s0/one-file-v1/expected-semantic-a.json",
+      "sha256": "153af243c13f4c242d4f5b0e8b870f64c8472894364e86576c74818bc543a309"
+    },
+    {
+      "path": "tests/fixtures/s0/one-file-v1/expected-snapshot-a.jcs",
+      "sha256": "1e3f25f5a18d38f4a0be809f0e23595b33387dbb72ac913e72aa04769e68ed66"
+    },
+    {
+      "path": "tests/fixtures/s0/one-file-v1/expected-snapshot-a.json",
+      "sha256": "9655101fb64b87f8fbc50df3e1dfc092e38d585158b4b6e32b33b429b7eeb73d"
+    },
+    {
+      "path": "tests/fixtures/s0/one-file-v1/manifest.json",
+      "sha256": "0ee4e7762a19e20d851e427f5eec4dd1fb5ed82d8be64c8db4540c1f35322579"
+    },
+    {
+      "path": "tests/specifications/s0/codenoesis-error-v1.schema.json",
+      "sha256": "876660111d8bcde4a6f41b4175d6cf2cc5ee64b7fd61f15e0b0149edc20e134b"
+    },
+    {
+      "path": "tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json",
+      "sha256": "8f90e3956573cbdfeaa66d898eb9a32509b1cc89ff59701a939d479e18d945c6"
+    },
+    {
+      "path": "tests/specifications/s0/evidence-manifest-v1.schema.json",
+      "sha256": "5e3746d5d97a170959b87f24a1eeb9f3422d50b1d5f4ccdb0763cb30502f8743"
+    },
+    {
+      "path": "tests/specifications/s0/repository-snapshot-v1.schema.json",
+      "sha256": "b2bb6a24f83c9012ea4c076af2a7b3a44cea07adc0331aec2708374033242711"
+    },
+    {
+      "path": "tests/specifications/s0/seccomp-capability-deny-v1.json",
+      "sha256": "5664635f8ad76dff5421f5eeb1f20ffdf0450203d8cb9c692606c026a39ee1ad"
+    }
+  ],
+  "bundle_sha256": "f07142ce4c3dab76e54e655829695460b83eeab9a9b0860b0523d4c2d6ddca24"
+}

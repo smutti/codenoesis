@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:repository-snapshot:v1",
+  "title": "RepositorySnapshotV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "semantic_hash", "semantic", "envelope"],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.repository-snapshot/v1"
+    },
+    "semantic_hash": {
+      "$ref": "#/$defs/blake3_hash"
+    },
+    "semantic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "configuration",
+        "pipeline_version",
+        "ontology_version",
+        "extractor_contract_version",
+        "extractor_versions",
+        "evidence_lineage_version"
+      ],
+      "properties": {
+        "repository": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "contract_version",
+            "identity_schema_version",
+            "identity",
+            "vcs",
+            "object_format",
+            "commit_oid",
+            "tree_oid"
+          ],
+          "properties": {
+            "contract_version": {
+              "const": "codenoesis.repository/v1"
+            },
+            "identity_schema_version": {
+              "const": "codenoesis.repository-identity/v1"
+            },
+            "identity": {
+              "type": "string",
+              "pattern": "^urn:codenoesis:[a-z0-9][a-z0-9._:-]{0,254}$"
+            },
+            "vcs": {
+              "const": "git"
+            },
+            "object_format": {
+              "const": "sha1"
+            },
+            "commit_oid": {
+              "$ref": "#/$defs/git_sha1"
+            },
+            "tree_oid": {
+              "$ref": "#/$defs/git_sha1"
+            }
+          }
+        },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["schema_version", "profile", "semantic_hash"],
+          "properties": {
+            "schema_version": {
+              "const": "codenoesis.configuration/v1"
+            },
+            "profile": {
+              "const": "standard-local-s0"
+            },
+            "semantic_hash": {
+              "$ref": "#/$defs/blake3_hash"
+            }
+          }
+        },
+        "pipeline_version": {
+          "const": "codenoesis.pipeline/s0-v1"
+        },
+        "ontology_version": {
+          "const": "codenoesis.ontology/none-v1"
+        },
+        "extractor_contract_version": {
+          "const": "codenoesis.extraction/v1"
+        },
+        "extractor_versions": {
+          "type": "array",
+          "maxItems": 0
+        },
+        "evidence_lineage_version": {
+          "const": "codenoesis.evidence-lineage/v1"
+        }
+      }
+    },
+    "envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["created_at", "job_id", "correlation_id"],
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,9})?Z$"
+        },
+        "job_id": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            }
+          ]
+        },
+        "correlation_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "blake3_hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {
+          "const": "blake3-256"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "git_sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    }
+  }
+}
