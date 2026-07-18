@@ -1,0 +1,84 @@
+{
+  "schema_version": "codenoesis.fixture.git/v1",
+  "fixture_id": "s0-one-file-v1",
+  "provenance": {
+    "kind": "synthetic_first_party",
+    "description": "Original source authored for the CodeNoesis S0 acceptance contract.",
+    "third_party_material": false,
+    "license_spdx": "Apache-2.0",
+    "license_file": "../../../../LICENSE",
+    "license_scope": "entire repository",
+    "copyright_holder": "CodeNoesis contributors"
+  },
+  "repository": {
+    "identity": "urn:codenoesis:fixture:s0-one-file-v1",
+    "object_format": "sha1",
+    "default_ref": "refs/heads/main",
+    "file_path": "main.rs",
+    "file_mode": "100644",
+    "author_name": "CodeNoesis Fixture",
+    "author_email": "fixture@codenoesis.invalid",
+    "timezone": "+0000",
+    "materialization": {
+      "global_git_config": "disabled",
+      "hooks": "disabled",
+      "core.autocrlf": "false",
+      "core.filemode": "true"
+    }
+  },
+  "derived_variants": {
+    "isolation": {
+      "base_commit": "A",
+      "committed_tree_changes": false,
+      "post_materialization_steps": [
+        {
+          "kind": "write_executable_file",
+          "path": ".git/hooks/post-checkout",
+          "mode": "100755",
+          "content_utf8": "#!/bin/sh\nprintf 'executed\\n' > \"$CODENOESIS_SENTINEL\"\n"
+        },
+        {
+          "kind": "set_local_git_config",
+          "key": "remote.origin.url",
+          "value": "https://127.0.0.1:9/codenoesis-sentinel.git"
+        }
+      ],
+      "expected_sentinel": "absent",
+      "expected_ipv4_or_ipv6_socket_syscalls": 0,
+      "expected_post_start_process_exec_syscalls": 0
+    }
+  },
+  "oracles": {
+    "configuration_hash": "4811a917bebed264f49382d65825686ad5ca506ce39bc51385e547b0c7ced1c0",
+    "snapshot_a_hash": "b673624a329f43fd84852bbdeefd66326a7fcb1c03fdb626e2de6bfedff11997",
+    "semantic_a": "expected-semantic-a.json",
+    "semantic_a_jcs": "expected-semantic-a.jcs",
+    "snapshot_a": "expected-snapshot-a.json",
+    "snapshot_a_jcs": "expected-snapshot-a.jcs",
+    "not_git_error": "expected-error-not-git.json"
+  },
+  "commits": [
+    {
+      "label": "A",
+      "source": "commit-a/main.rs",
+      "timestamp": 946684800,
+      "message": "fixture: commit A\n",
+      "parent": null,
+      "source_sha256": "ee54963dd71aa0a4288ecbad2cf17d9aad5fb5401dc75dbba9ca2338a3c778a7",
+      "blob_oid": "b367ffda48249ca59f89ebe73a63a2cc053ebf38",
+      "tree_oid": "892c4a33b5529ba6b6651fc26765957f11f7ba9e",
+      "commit_oid": "6d4152a7787ac82eedf3f9fc5df408dfdf6e412f"
+    },
+    {
+      "label": "B",
+      "source": "commit-b/main.rs",
+      "timestamp": 946684801,
+      "message": "fixture: commit B\n",
+      "parent": "A",
+      "source_sha256": "741373f82f1e9e547c8bff0f130cd3189abe907cde228e5bc76ca05be2a12cd6",
+      "blob_oid": "ce8d9f907ed475bcd9b859ddabb81c848da05d34",
+      "tree_oid": "db1a3df9256411212c5013e6e00dcaa090bd5451",
+      "commit_oid": "3217e5245913eef0f8046e9d1a60a410ec0ada97"
+    }
+  ]
+}

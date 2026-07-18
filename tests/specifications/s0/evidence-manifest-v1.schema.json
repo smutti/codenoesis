@@ -1,0 +1,298 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:test-evidence:v1",
+  "title": "CodeNoesis S0 test evidence manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "slice",
+    "status",
+    "requirements",
+    "oracle_bundle_sha256",
+    "base_sha",
+    "head_sha",
+    "red",
+    "green",
+    "environment"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.test-evidence/v1"
+    },
+    "slice": {
+      "const": "S0"
+    },
+    "status": {
+      "enum": ["red_observed", "green", "verified"]
+    },
+    "requirements": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "DR-ART-001",
+          "DR-ART-002",
+          "FR-ACQ-001",
+          "FR-CLI-003",
+          "NFR-DET-001",
+          "NFR-MNT-001",
+          "NFR-SEC-005",
+          "NFR-TST-001",
+          "NFR-TST-002"
+        ]
+      }
+    },
+    "oracle_bundle_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "base_sha": {
+      "$ref": "#/$defs/git_sha1"
+    },
+    "head_sha": {
+      "$ref": "#/$defs/git_sha1"
+    },
+    "red": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "test_id",
+        "command",
+        "runner_exit_code",
+        "subject_exit_code",
+        "expected_failure",
+        "observed_failure",
+        "pre_implementation_sha",
+        "observed_at",
+        "log_artifact"
+      ],
+      "properties": {
+        "test_id": {"const": "e2e_fr_acq_001_immutable_commit"},
+        "command": {"type": "string", "minLength": 1, "maxLength": 512},
+        "runner_exit_code": {"type": "integer", "minimum": 1, "maximum": 255},
+        "subject_exit_code": {"const": 70},
+        "expected_failure": {"type": "string", "minLength": 1, "maxLength": 512},
+        "observed_failure": {"type": "string", "minLength": 1, "maxLength": 512},
+        "pre_implementation_sha": {"$ref": "#/$defs/git_sha1"},
+        "observed_at": {"$ref": "#/$defs/rfc3339_utc"},
+        "log_artifact": {"$ref": "#/$defs/github_actions_artifact"}
+      }
+    },
+    "green": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["commands", "test_results", "observed_at", "report_artifact"],
+          "properties": {
+            "commands": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["command", "exit_code"],
+                "properties": {
+                  "command": {"type": "string", "minLength": 1, "maxLength": 512},
+                  "exit_code": {"const": 0}
+                }
+              }
+            },
+            "test_results": {
+              "type": "array",
+              "minItems": 12,
+              "maxItems": 12,
+              "prefixItems": [
+                {
+                  "allOf": [
+                    {"$ref": "#/$defs/passed_test_result"},
+                    {"properties": {"test_name": {"const": "e2e_fr_acq_001_immutable_commit"}}}
+                  ]
+                },
+                {
+                  "allOf": [
+                    {"$ref": "#/$defs/passed_test_result"},
+                    {"properties": {"test_name": {"const": "it_fr_acq_001_ref_move_after_binding_keeps_original_commit"}}}
+                  ]
+                },
+                {
+                  "allOf": [
+                    {"$ref": "#/$defs/passed_test_result"},
+                    {"properties": {"test_name": {"const": "e2e_fr_acq_001_non_git_returns_typed_error"}}}
+                  ]
+                },
+                {
+                  "allOf": [
+                    {"$ref": "#/$defs/passed_test_result"},
+                    {"properties": {"test_name": {"const": "e2e_fr_acq_001_missing_object_returns_typed_error"}}}
+                  ]
+                },
+                {
+                  "allOf": [
+                    {"$ref": "#/$defs/passed_test_result"},
+                    {"properties": {"test_name": {"const": "e2e_fr_acq_001_inconsistent_object_returns_typed_error"}}}
+                  ]
+                },
+                {
+                  "allOf": [
+                    {"$ref": "#/$defs/passed_test_result"},
+                    {"properties": {"test_name": {"const": "conf_dr_art_001_repository_snapshot_v1"}}}
+                  ]
+                },
+                {
+                  "allOf": [
+                    {"$ref": "#/$defs/passed_test_result"},
+                    {"properties": {"test_name": {"const": "pt_dr_art_002_volatile_envelope_preserves_semantic_hash"}}}
+                  ]
+                },
+                {
+                  "allOf": [
+                    {"$ref": "#/$defs/passed_test_result"},
+                    {"properties": {"test_name": {"const": "pt_nfr_det_001_permutation_and_schedule_invariant"}}}
+                  ]
+                },
+                {
+                  "allOf": [
+                    {"$ref": "#/$defs/passed_test_result"},
+                    {"properties": {"test_name": {"const": "conf_nfr_mnt_001_dependency_rules"}}}
+                  ]
+                },
+                {
+                  "allOf": [
+                    {"$ref": "#/$defs/passed_test_result"},
+                    {"properties": {"test_name": {"const": "conf_nfr_tst_001_requires_fixture_oracle_evidence_links"}}}
+                  ]
+                },
+                {
+                  "allOf": [
+                    {"$ref": "#/$defs/passed_test_result"},
+                    {"properties": {"test_name": {"const": "pt_nfr_tst_002_replays_are_parallel_and_order_independent"}}}
+                  ]
+                },
+                {
+                  "allOf": [
+                    {"$ref": "#/$defs/passed_test_result"},
+                    {"properties": {"test_name": {"const": "sec_nfr_sec_005_scan_launches_no_child_and_opens_no_network"}}}
+                  ]
+                }
+              ],
+              "items": false
+            },
+            "observed_at": {"$ref": "#/$defs/rfc3339_utc"},
+            "report_artifact": {"$ref": "#/$defs/github_actions_artifact"}
+          }
+        }
+      ]
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "os",
+        "architecture",
+        "rustc",
+        "cargo",
+        "features",
+        "observer",
+        "network_namespace",
+        "seccomp_profile_sha256",
+        "seccomp_self_test_report",
+        "inherited_file_descriptors",
+        "inherited_socket_descriptors"
+      ],
+      "properties": {
+        "os": {"type": "string", "minLength": 1, "maxLength": 128},
+        "architecture": {"type": "string", "minLength": 1, "maxLength": 128},
+        "rustc": {"type": "string", "minLength": 1, "maxLength": 256},
+        "cargo": {"type": "string", "minLength": 1, "maxLength": 256},
+        "observer": {"type": "string", "minLength": 1, "maxLength": 256},
+        "network_namespace": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["interfaces_up", "routes"],
+          "properties": {
+            "interfaces_up": {"type": "array", "maxItems": 0},
+            "routes": {"type": "array", "maxItems": 0}
+          }
+        },
+        "seccomp_profile_sha256": {
+          "const": "5664635f8ad76dff5421f5eeb1f20ffdf0450203d8cb9c692606c026a39ee1ad"
+        },
+        "seccomp_self_test_report": {"$ref": "#/$defs/github_actions_artifact"},
+        "inherited_file_descriptors": {"const": [0, 1, 2]},
+        "inherited_socket_descriptors": {"type": "array", "maxItems": 0},
+        "features": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 128}
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "red_observed"}}},
+      "then": {"properties": {"green": {"type": "null"}}}
+    },
+    {
+      "if": {"properties": {"status": {"enum": ["green", "verified"]}}},
+      "then": {"properties": {"green": {"type": "object"}}}
+    }
+  ],
+  "$defs": {
+    "github_actions_artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "repository",
+        "run_id",
+        "artifact_id",
+        "path",
+        "sha256",
+        "retention_until"
+      ],
+      "properties": {
+        "provider": {"const": "github_actions"},
+        "repository": {"const": "smutti/codenoesis"},
+        "run_id": {"type": "integer", "minimum": 1},
+        "artifact_id": {"type": "integer", "minimum": 1},
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+        },
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "retention_until": {"$ref": "#/$defs/rfc3339_utc"}
+      }
+    },
+    "passed_test_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["test_name", "status", "runner_exit_code", "result_artifact"],
+      "properties": {
+        "test_name": {"type": "string"},
+        "status": {"const": "passed"},
+        "runner_exit_code": {"const": 0},
+        "result_artifact": {"$ref": "#/$defs/github_actions_artifact"}
+      }
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "git_sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "rfc3339_utc": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,9})?Z$"
+    }
+  }
+}

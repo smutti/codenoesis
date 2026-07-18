@@ -1,0 +1,83 @@
+{
+  "schema_version": "codenoesis.seccomp-capability-deny/v1",
+  "platform": "linux",
+  "architectures": ["SCMP_ARCH_X86_64", "SCMP_ARCH_AARCH64"],
+  "no_new_privileges": true,
+  "default_action": {
+    "action": "SCMP_ACT_ALLOW",
+    "rationale": "S0 denies process and network capability paths explicitly; general syscall minimization is a later hardening slice."
+  },
+  "deny_action": {
+    "action": "SCMP_ACT_ERRNO",
+    "errno": 1,
+    "errno_name": "EPERM"
+  },
+  "rules": [
+    {
+      "id": "child_image_or_process",
+      "syscalls": ["execve", "execveat", "fork", "vfork"],
+      "condition": {"operator": "always"}
+    },
+    {
+      "id": "clone_without_thread",
+      "syscalls": ["clone"],
+      "condition": {
+        "operator": "masked_equal",
+        "argument_index": 0,
+        "mask": 65536,
+        "value": 0,
+        "symbol": "CLONE_THREAD"
+      }
+    },
+    {
+      "id": "clone3",
+      "syscalls": ["clone3"],
+      "condition": {
+        "operator": "always",
+        "rationale": "Classic seccomp cannot inspect clone3's pointed-to flags; S0 therefore denies clone3 rather than risk child creation."
+      }
+    },
+    {
+      "id": "socket_creation",
+      "syscalls": ["socket", "socketpair", "socketcall"],
+      "condition": {"operator": "always"}
+    },
+    {
+      "id": "network_channel_io",
+      "syscalls": [
+        "connect",
+        "bind",
+        "listen",
+        "accept",
+        "accept4",
+        "sendto",
+        "sendmsg",
+        "sendmmsg",
+        "recvfrom",
+        "recvmsg",
+        "recvmmsg",
+        "shutdown"
+      ],
+      "condition": {"operator": "always"}
+    },
+    {
+      "id": "async_io_bypass",
+      "syscalls": ["io_uring_setup", "io_uring_enter", "io_uring_register"],
+      "condition": {"operator": "always"}
+    }
+  ],
+  "compilation_contract": {
+    "rule_source": "this RFC 8785 canonical JSON document",
+    "unknown_architecture": "fail",
+    "unknown_syscall": "record_not_exposed_only_when libseccomp and a direct ENOSYS probe agree for the selected architecture; otherwise fail",
+    "observer": "record every attempted denied syscall and decoded arguments independently of seccomp enforcement"
+  },
+  "self_test_contract": {
+    "coverage": "one isolated probe for every syscall named by every rule on the selected architecture",
+    "conditional_rule_coverage": "clone is probed once without CLONE_THREAD and once with CLONE_THREAD; the former must be denied and the latter must not be denied by this rule",
+    "preopened_resources": "network-I/O and io_uring operation probes receive resources created before the filter is installed",
+    "expected_denied_result": "EPERM plus a matching observer event",
+    "not_exposed_result": "an explicit architecture-qualified not_exposed record with libseccomp resolution and direct ENOSYS evidence",
+    "missing_result": "fail"
+  }
+}

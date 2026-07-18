@@ -11,6 +11,8 @@ This directory records the engineering track. Experimental hypotheses, novel inf
 The normative product requirements, verification model, TDD policy, and
 incremental vertical-slice plan are defined in the
 [Software Requirements Specification](software-requirements-specification.md).
+Detailed semantics accepted or proposed for ratification are indexed in the
+[software decision records](decisions/README.md).
 
 ## Product goals
 

@@ -1,0 +1,8 @@
+{
+  "schema_version": "codenoesis.error/v1",
+  "code": "acquisition.not_git_repository",
+  "stage": "acquisition",
+  "message": "not a supported Git worktree",
+  "retryable": false,
+  "context": {}
+}

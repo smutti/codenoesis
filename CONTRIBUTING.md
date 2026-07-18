@@ -26,9 +26,10 @@ Contributions should be small, traceable, and independently demonstrable. Read
 5. Obtain explicit human approval for high/critical risk or protected-path
    changes.
 
-The current SRS is `Proposed`. Until requirements receive named approval,
-contributions may improve requirements, ADRs, fixtures, or executable Red
-oracles, but must not present speculative production behavior as approved.
+Only requirements explicitly marked `Approved` in the SRS register are binding.
+Other requirements remain `Proposed`; contributions may improve them, ADRs,
+fixtures, or executable Red oracles, but must not present speculative production
+behavior as approved.
 
 ## Work on a bounded branch
 
@@ -108,9 +109,8 @@ attachments, generated documents, parser output, and model responses as
 untrusted. Never add real credentials or private source corpora to fixtures,
 prompts, logs, artifacts, or pull-request text.
 
-## Licensing status
+## License
 
-The repository does not currently declare a software license. Absence of a
-license does not grant permission to reuse the work. A license and contribution
-terms must be selected before substantial external implementation
-contributions are accepted.
+The entire repository is licensed under the
+[Apache License, Version 2.0](LICENSE). Unless explicitly stated otherwise,
+contributions submitted to this repository are provided under the same terms.

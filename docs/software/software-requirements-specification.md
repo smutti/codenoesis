@@ -1,20 +1,21 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.1 — Proposed**. This specification defines intended behaviour and
-> delivery gates. It does not describe implemented functionality; the repository
-> still contains no CodeNoesis runtime or product acceptance suite. The current
-> tests cover repository infrastructure, policy, and benchmark metadata only.
+> Status: **0.2 — S0 ratified for protected merge**. This specification defines
+> intended behaviour and delivery gates. It does not describe implemented
+> functionality; the repository still contains no CodeNoesis runtime or product
+> acceptance suite. The current tests cover repository infrastructure, policy,
+> benchmark metadata, and the machine-readable S0 acceptance specification only.
 
 ## 1. Document control
 
 | Field | Value |
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
-| Version | `0.1` |
-| Status | Proposed |
-| Date | 2026-07-17 |
-| Product owner | To be assigned by project governance |
-| Technical approvers | To be assigned by project governance |
+| Version | `0.2` |
+| Status | S0 Approved by the accountable single maintainer; authoritative on `main` only after the protected manual squash merge of PR [#8](https://github.com/smutti/codenoesis/pull/8) |
+| Date | 2026-07-18 |
+| Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
+| Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
 | Delivery method | Incremental outside-in test-driven development |
 
@@ -23,6 +24,7 @@
 | Version | Date | Change |
 |---|---|---|
 | `0.1` | 2026-07-17 | Initial proposed requirements, TDD policy, vertical slices, gates, and open decisions. |
+| `0.2` | 2026-07-18 | Ratified the exact S0 approval set under single-maintainer governance, adopted the repository-wide Apache-2.0 license, split atomic scan-CLI and execution-isolation requirements, and bound the S0 contract and Red oracle. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -58,9 +60,11 @@ Proposed -> Approved -> Implemented -> Verified
 - **Deferred:** intentionally moved out of its target release with rationale.
 - **Rejected:** retained for traceability but no longer part of the product.
 
-The initial requirements in this document are **Proposed**. Approval requires
-named owners and approvers, resolved blocking decisions, and an accepted test
-oracle.
+Requirements remain **Proposed** unless an explicit register marks them
+**Approved**. Approval requires accountable ownership, resolved blocking
+decisions, and an accepted test oracle. In the current single-maintainer
+bootstrap, the same disclosed GitHub actor may hold product and technical
+accountability; this does not create a fictional separation of duties.
 
 For autonomous delivery, `.github/codex/policy.json` is the machine-enforced
 projection of those human approvals, not an independent source of approval. A
@@ -70,7 +74,66 @@ checks that binding before any model call and again before publication. Any SRS
 change invalidates the binding until affected approvals are explicitly
 re-ratified.
 
-### 2.2 Priority and target
+### 2.2 S0 ratification register
+
+The following is the exact Approved set for **S0 — Walking skeleton**. Andrea
+Moretti is a transparent governance persona represented by `@smutti`; `@smutti`
+is also the sole human maintainer and technical approver. The repository does
+not claim independent human review that does not exist. Approval becomes
+authoritative only when `@smutti` manually squash-merges the exact final head of
+PR [#8](https://github.com/smutti/codenoesis/pull/8) after every mandatory gate
+is green. Authorship alone is not approval: `@smutti`'s later manual protected
+merge is the approval event. A model, authoring agent, or policy file cannot
+perform that merge or independently grant approval.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| `DR-ART-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 contract decision](decisions/0001-s0-walking-skeleton-contract.md) |
+| `DR-ART-002` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 contract decision](decisions/0001-s0-walking-skeleton-contract.md) |
+| `FR-ACQ-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 contract decision](decisions/0001-s0-walking-skeleton-contract.md) |
+| `FR-CLI-003` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json) |
+| `NFR-DET-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 contract decision](decisions/0001-s0-walking-skeleton-contract.md) |
+| `NFR-MNT-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json) |
+| `NFR-SEC-005` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json) |
+| `NFR-TST-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json) |
+| `NFR-TST-002` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json) |
+
+`FR-CLI-003` and `NFR-SEC-005` close two traceability gaps in the original
+seven-ID proposal: S0 exposes `noesis scan` and its exit gate promises zero
+child-process execution and zero analysis-stage network access. New atomic IDs
+avoid silently changing the broader Proposed meanings of `FR-CLI-001` and
+`NFR-SEC-001`. `FR-EXT-006` remains Proposed for the extraction stage, and
+`NFR-PRV-001` remains Proposed for broader data egress policy; neither
+substitutes for the narrower S0 guarantee. Expansion from seven to nine IDs is
+itself part of the protected human ratification decision.
+
+`NFR-MNT-001` is also made atomic for the S0 first-party architecture gate.
+The previously combined transitive dependency `unsafe` exception reporting is
+retained as Proposed `NFR-MNT-002`; it is not silently discarded or treated as
+S0 evidence.
+
+The approved-requirement registry in `.github/codex/policy.json` MUST remain
+empty in this pull request. After ratification is merged, a separate protected
+pull request may bind these exact IDs to the full commit SHA on `main` that
+contains the byte-identical SRS. Until that policy PR is reviewed and merged,
+autonomous authorization must fail closed.
+
+S0 contract bundle: `sha256:d049ea8338d5c48393410b1c2c71bd430e531d7ebe76551cc181ccb40936ee9e`.
+The bundle manifest binds the decision, strict schemas, acceptance oracle,
+fixture, reviewed goldens, and maintenance guard. A change to any bound file
+requires a new bundle digest in this SRS and therefore invalidates an earlier
+policy `source_sha`.
+
+The `main-production` ruleset documents the single-maintainer bootstrap by
+requiring zero external approvals and no Code Owner review while there is only
+one write-capable human. Compensating controls remain mandatory: pull request,
+strict up-to-date CI and benchmark policy gates, CodeQL and code-quality gates,
+resolved review threads, linear history, squash-only merge, no bypass actor, and
+a manual merge by `@smutti`. The authoring agent must leave PR #8 unmerged. When
+a second write-capable maintainer joins, the approval count and Code Owner
+review MUST be restored before the next protected governance ratification.
+
+### 2.3 Priority and target
 
 | Priority | Meaning |
 |---|---|
@@ -78,7 +141,7 @@ re-ratified.
 | `P1` | Required before production-grade `1.0`. |
 | `P2` | Candidate for post-`1.0`; it must not complicate the baseline prematurely. |
 
-### 2.3 Verification classes
+### 2.4 Verification classes
 
 | Code | Verification evidence |
 |---|---|
@@ -267,6 +330,7 @@ cannot replace their verification.
 | `FR-QRY-002` | P1 | `0.2` | Graph traversal MUST enforce configurable depth, result, time, and resource limits with cycle handling. | Cyclic and adversarial queries terminate within the configured bound without starving unrelated work. `PT`, `PERF`, `SEC` |
 | `FR-CLI-001` | P0 | `0.1` | The CLI MUST provide local `scan`, `docs`, and `query` journeys with human-readable and versioned JSON output. | One black-box fixture completes scan -> docs -> query without network access. `E2E`, `CONF` |
 | `FR-CLI-002` | P1 | `1.0` | Approved CLI commands MUST have stable exit codes, error codes, configuration precedence, and local/remote capability behaviour. | Golden compatibility tests cover output schema, error catalog, precedence, and server parity. `CONF`, `E2E` |
+| `FR-CLI-003` | P0 | `0.1` | The S0 CLI MUST provide a local `noesis scan` JSON journey that accepts an explicit repository identity and revision and emits either `RepositorySnapshotV1` or `CodeNoesisErrorV1` with the ratified S0 stream and exit semantics. | S0 black-box tests validate success, non-Git input, missing and inconsistent objects, schema, stdout/stderr separation, and exit status. `E2E`, `CONF` |
 | `FR-API-001` | P1 | `0.4` | The REST API MUST expose approved `/api/v1` resources using versioned schemas, RFC 9457 Problem Details, correlation IDs, and idempotency keys. | Contract tests validate success, error, retry, and duplicate-submission cases. `CONF`, `E2E` |
 | `FR-API-002` | P1 | `0.4` | Long-running REST operations MUST return a durable job identity and MUST expose bounded status and event retrieval. | Submit, disconnect, reconnect, retry, and event-resume scenarios retain one logical job. `E2E`, `FT` |
 | `FR-MCP-001` | P1 | `0.4` | MCP tools and resources MUST invoke the same application use cases and authorization policies as CLI/REST. | Transport conformance proves semantic parity and absence of transport business logic. `CT`, `E2E` |
@@ -307,6 +371,7 @@ cannot replace their verification.
 | `NFR-SEC-002` | P1 | Server authorization and storage MUST satisfy `INV-TEN-001` across database, objects, FTS, caches, jobs, events, logs, metrics, and model requests. | Randomized multi-tenant operations and explicit attack cases find no cross-tenant data. `SEC`, `PERF` |
 | `NFR-SEC-003` | P1 | Secrets MUST use an external secret manager, MUST be redacted from observable output, and MUST be scoped to the stage that requires them. | Canary secrets never appear in persisted artifacts, logs, traces, metrics, errors, or model payloads. `SEC` |
 | `NFR-SEC-004` | P1 | A release MUST have no known exploitable Critical vulnerability. High-risk exceptions require owner, expiry, rationale, and compensating control. | Dependency, container, binary, and configuration reports plus the exception register are release artifacts. `SEC`, `CONF` |
+| `NFR-SEC-005` | P0 | From S0 `noesis` process start until exit, a standard local scan MUST launch no child process and MUST have no direct or brokered network channel. Fixture setup and the test harness are outside this monitored boundary. | A Linux black-box run combines an empty network namespace, non-socket-only inherited standard descriptors, and the ratified deny-and-audit seccomp policy for process, socket/network, and `io_uring` paths. Generated probes cover every policy syscall and conditional branch on the selected architecture; missing, unexpectedly allowed, or unproved `not_exposed` results fail. `SEC`, `E2E` |
 | `NFR-PRV-001` | P0 | Source, evidence, and derived knowledge MUST NOT leave the local system or configured workspace unless an authorized user explicitly enables an allowlisted destination. | Network capture in default/off mode records zero external content-bearing calls. `SEC`, `E2E` |
 | `NFR-PRV-002` | P1 | Data classification, retention, export, deletion, legal hold, residency, and backup expiry MUST be explicit per deployment policy. | Lifecycle conformance tests exercise creation through purge and backup expiration. `SEC`, `DR` |
 
@@ -318,7 +383,8 @@ cannot replace their verification.
 | `NFR-OPS-001` | P1 | Server processes MUST expose liveness, readiness, startup, and graceful-drain behaviour with documented alerts and runbooks. | Dependency loss, shutdown, queue drain, and stuck-worker scenarios produce approved health transitions and alerts. `FT`, `E2E` |
 | `NFR-CMP-001` | P1 | Public JSON, REST, MCP, WIT, configuration, ontology, and artifact changes MUST be classified for compatibility and versioned before merge. | Compatibility tests block an unapproved breaking fixture. `CONF` |
 | `NFR-PORT-001` | P1 | The supported CLI and server platform matrix MUST state the guarantee available on each OS/architecture rather than implying identical sandbox capabilities. | Release tests run on every supported tier and verify its declared capability set. `CONF`, `SEC` |
-| `NFR-MNT-001` | P0 | Crate dependencies MUST follow the approved inward dependency rules; first-party `unsafe` is forbidden unless isolated and explicitly reviewed. | An architecture fitness test rejects forbidden dependencies and the supply-chain gate reports `unsafe` exceptions. `CONF` |
+| `NFR-MNT-001` | P0 | First-party crate dependencies MUST follow the approved inward dependency rules and first-party `unsafe` MUST remain forbidden. | An architecture fitness test rejects forbidden dependency edges, missing lint inheritance, and any first-party allowance of `unsafe`. `CONF` |
+| `NFR-MNT-002` | P1 | Transitive dependency `unsafe` use MUST be inventoried; every accepted exception MUST record package identity, scope, rationale, owner, review evidence, and expiry. | The supply-chain gate rejects an unregistered or expired exception and publishes the reviewed inventory. `CONF`, `SEC` |
 | `NFR-SUP-001` | P1 | Releases MUST produce a locked dependency graph, license/advisory evidence, SBOM, signed artifacts, and verifiable build provenance. | Consumers can verify artifact identity, signature, SBOM association, and provenance against source. `CONF`, `SEC` |
 | `NFR-TST-001` | P0 | Every Approved behavioural requirement MUST have a failing acceptance test before production implementation; every other Approved requirement MUST have an appropriate failing executable check. All requirements MUST retain a requirement-test-evidence link. | CI rejects an Implemented or Verified requirement with missing or non-green required evidence. `CONF` |
 | `NFR-TST-002` | P0 | Required tests MUST be deterministic and parallel-safe. A retry MUST NOT convert a flaky test into acceptable release evidence. | Repeated shuffled execution detects no order dependency; quarantine requires an issue and cannot cover a release-blocking requirement. `PT`, `CONF` |
@@ -375,7 +441,7 @@ Writing a unit test after the implementation does not satisfy this policy.
 | Failure/security | Crash points, retry, duplicate jobs, malicious repositories, tenant isolation, provider outage. |
 | Non-functional | Fuzz, mutation, load, performance, migration, restore, and platform conformance. |
 
-Coverage is a diagnostic, not proof of correctness. The initial ratification
+Coverage is a diagnostic, not proof of correctness. The initial project
 target is at least 80% line coverage across first-party workspace code and 90%
 for domain/application crates, excluding generated code with an explicit rule.
 Critical invariants additionally require property tests and mutation analysis;
@@ -391,7 +457,7 @@ crate tree is not scaffolded upfront.
 
 | Slice | Demonstrable outcome | Primary requirements | First black-box test | Exit gate |
 |---|---|---|---|---|
-| `S0` Walking skeleton | `noesis scan` of a one-file local Git fixture emits a versioned `RepositorySnapshotV1` JSON envelope. | `DR-ART-001/002`, `FR-ACQ-001`, `NFR-DET-001`, `NFR-MNT-001`, `NFR-TST-*` | Assert commit, schema, semantic hash, and typed failure for non-Git input. | Pinned toolchain and CI; same input is canonical-byte-identical; no analysis network/process execution. |
+| `S0` Walking skeleton | `noesis scan` of a one-file local Git fixture emits a versioned `RepositorySnapshotV1` JSON envelope. | `DR-ART-001/002`, `FR-ACQ-001`, `FR-CLI-003`, `NFR-DET-001`, `NFR-MNT-001`, `NFR-SEC-005`, `NFR-TST-*` | Assert commit, schema, semantic hash, typed acquisition failures, and CLI exit semantics. | Pinned toolchain and CI; the same semantic input is canonical-payload-byte-identical while volatile envelopes may differ; no analysis network/process execution. |
 | `S1` Safe inventory | Snapshot contains supported files, language and manifest inventory, evidence, diagnostics, and coverage gaps. | `FR-ACQ-002`, `FR-INV-001`, `DR-EVD-001`, `NFR-SEC-001` | Scan a reviewed repository plus traversal, symlink, oversized, and sentinel-script fixtures. | All evidence resolves; every limit has a typed boundary case; nothing escapes the root. |
 | `S2` Rust knowledge | A Rust fixture produces reviewed entities and relations in a validated graph. | `FR-EXT-001/002`, `FR-KNW-001/002/003`, `DR-IDN-001` | Compare a Rust repository to a hand-authored graph oracle. | Stable IDs; malformed/Unicode coverage; invariants property-tested and fuzz target seeded. |
 | `S3` Atomic local storage | SQLite/CAS persists and publishes one immutable snapshot across restart and faults. | `FR-STO-001`, `FR-SNP-001`, `INV-SNP-001` | Scan, kill at each failpoint, restart, and query the visible head. | Fake/SQLite and fake/filesystem contracts green; no partial head; retry idempotent. |
@@ -489,6 +555,21 @@ property test: pt_dr_idn_001_insertion_order_is_irrelevant
 evidence record: <CI run>/<artifact hash>/<test report>
 ```
 
+For S0, the ratified contract fixes the following public evidence names:
+
+```text
+black-box test: e2e_fr_acq_001_immutable_commit
+branch-move integration test: it_fr_acq_001_ref_move_after_binding_keeps_original_commit
+artifact conformance test: conf_dr_art_001_repository_snapshot_v1
+envelope property test: pt_dr_art_002_volatile_envelope_preserves_semantic_hash
+isolation security test: sec_nfr_sec_005_scan_launches_no_child_and_opens_no_network
+```
+
+The machine-readable scenario set and execution budgets are in the
+[S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json).
+That file is the ratified oracle, not a product test implementation and
+not Green evidence.
+
 Test source, fixture, oracle, CI evidence, and requirement status must be
 machine-linkable. A comment containing an ID is not sufficient if CI cannot
 detect a missing or stale link.
@@ -497,9 +578,9 @@ detect a missing or stale link.
 
 | Capability | Requirement families | Slice | Principal evidence |
 |---|---|---|---|
-| Contracts and deterministic skeleton | `DR-ART`, `DR-IDN`, `NFR-DET`, `NFR-TST` | `S0` | Schema, replay, black-box CLI |
-| Safe repository understanding | `FR-ACQ`, `FR-INV`, `FR-EXT`, `FR-KNW` | `S1`–`S2` | Malicious corpus, golden graph, property/fuzz |
-| Atomic local knowledge | `FR-STO-001`, `FR-SNP`, `FR-DOC`, `FR-QRY-001` | `S3`–`S4` | Contract, failpoint, CLI E2E |
+| Contracts and deterministic skeleton | `DR-ART`, `FR-ACQ-001`, `FR-CLI-003`, `NFR-DET`, `NFR-MNT-001`, `NFR-SEC-005`, `NFR-TST` | `S0` | Schema, replay, black-box CLI, process/network denial |
+| Safe repository understanding | `FR-ACQ-002/003`, `FR-INV`, `FR-EXT`, `FR-KNW` | `S1`–`S2` | Malicious corpus, golden graph, property/fuzz |
+| Atomic local knowledge | `FR-STO-001`, `FR-SNP`, `FR-DOC`, `FR-QRY-001`, `FR-CLI-001` | `S3`–`S4` | Contract, failpoint, CLI E2E |
 | Change and ecosystem reasoning | `FR-INC`, `FR-FED`, `FR-IMP` | `S5`–`S7` | Cold/incremental equivalence, provider/client/decoy |
 | Polyglot and extension boundary | `FR-EXT-003/005`, `FR-PLG` | `S8`–`S9` | Adapter contract, golden/differential, sandbox |
 | Server platform | `FR-STO-002`, `FR-JOB`, `FR-API`, `FR-MCP`, `FR-AUT` | `S10`–`S12` | Storage contracts, crash, conformance, tenant attacks |
@@ -545,7 +626,7 @@ implementation choices.
 |---|---|---|
 | `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. | Approval of `S1`, `S7`, `S9`, `S10`, `S13` limits |
 | `OD-ONT-001` | Ontology v1 required properties, cardinalities, state transitions, and versioning policy. | `S2` |
-| `OD-GIT-001` | Supported Git protocols, local/remote identity, LFS, shallow history, submodule, symlink, and history-rewrite semantics. | Remote `FR-ACQ-*` |
+| `OD-GIT-001` | Residual Git decisions after the S0 local subset: remote protocols and identity resolution, SHA-256, LFS, shallow and bare repositories, alternates, submodules, symlinks, and history-rewrite semantics. | Remote and post-S0 `FR-ACQ-*` |
 | `OD-CMP-001` | Compatibility rules and oracles for OpenAPI, AsyncAPI, GraphQL, Protobuf, events, and behavioural evidence. | `S6`–`S7` |
 | `OD-API-001` | REST/MCP payload schemas, error catalog, cancellation, pagination, event resume, and deprecation window. | `S10`–`S11` |
 | `OD-AUT-001` | Complete role-action-resource matrix and privileged break-glass policy. | `S12` |
@@ -557,6 +638,13 @@ implementation choices.
 An open decision may be resolved by an approved ADR, schema, policy, benchmark
 contract, or decision table. It must then be linked from the affected
 requirements and represented in tests.
+
+The [S0 contract decision](decisions/0001-s0-walking-skeleton-contract.md)
+resolves only the local, explicit-identity, SHA-1 worktree subset needed by
+`FR-ACQ-001` in S0. `OD-GIT-001` remains open for remote protocols, SHA-256,
+LFS, submodules, shallow and bare repositories, symlink policy, and history
+rewrite semantics; those deferred cases do not block the constrained S0
+contract.
 
 ## 17. Change control
 

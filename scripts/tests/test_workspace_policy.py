@@ -11,7 +11,9 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class WorkspacePolicyTests(unittest.TestCase):
-    def test_every_workspace_package_inherits_lints_and_rust_version(self) -> None:
+    def test_every_workspace_package_inherits_lints_rust_version_and_license(
+        self,
+    ) -> None:
         completed = subprocess.run(
             [
                 "cargo",
@@ -51,7 +53,13 @@ class WorkspacePolicyTests(unittest.TestCase):
                     r"(?m)^rust-version\.workspace\s*=\s*true\s*(?:#.*)?$",
                     f"{manifest_path} must inherit the pinned workspace rust-version",
                 )
+                self.assertRegex(
+                    package_section.group(1),  # type: ignore[union-attr]
+                    r"(?m)^license\.workspace\s*=\s*true\s*(?:#.*)?$",
+                    f"{manifest_path} must inherit the repository license",
+                )
                 self.assertEqual(package["rust_version"], "1.97.1")
+                self.assertEqual(package["license"], "Apache-2.0")
 
 
 if __name__ == "__main__":
