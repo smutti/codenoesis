@@ -68,13 +68,17 @@ Initial autonomy policy:
 
 1. Push the disabled workflows and let `CI` and `Benchmark integrity` complete
    on `main`; exercise `Codex review policy gate` on a synthetic test PR.
-2. Protect `main` with a ruleset that requires a pull request, one approval,
-   Code Owner review, stale-approval dismissal, approval of the latest push,
-   conversation resolution, linear history, and the
-   exact stable checks `CI policy gate`, `Benchmark policy gate`, and
-   `Codex review policy gate`, with strict up-to-date-before-merge checking.
-   Block force pushes and deletions. Do not enable
-   merge queue until these workflows explicitly support `merge_group`.
+2. Protect `main` with a ruleset that requires a pull request, conversation
+   resolution, linear history, squash-only merge, CodeQL/code-quality gates,
+   and the exact stable checks `CI policy gate` and `Benchmark policy gate`,
+   with strict up-to-date-before-merge checking. Block force pushes and
+   deletions. The current single-maintainer bootstrap sets required approvals to
+   zero and disables Code Owner review because `@smutti` cannot approve a pull
+   request created by the same account; the manual merge remains exclusively
+   human and the AI review remains advisory. When a second write-capable human
+   joins, restore one approval and Code Owner review before the next protected
+   governance change. Do not enable merge queue until these workflows
+   explicitly support `merge_group`.
 3. Keep repository administrators and the publisher App out of every bypass
    list. Protect release tags matching `v*` as well.
 4. Create the two branch-restricted environments, then create and install the
@@ -95,5 +99,8 @@ uninstall the publisher App from this repository, revoke/delete its private
 key, and rotate the model key if disclosure is suspected. Retain the affected
 run IDs and artifacts for incident review.
 
-Do not make the AI review the sole approval. Required human ownership and the
-deterministic checks remain independent gates even when automation is enabled.
+Do not treat AI review as human approval. In the disclosed single-maintainer
+bootstrap, `@smutti` retains the manual merge decision and deterministic checks
+remain independent gates even when automation is enabled. Automation never
+merges. Restore independent human approval as soon as a second write-capable
+maintainer is available.

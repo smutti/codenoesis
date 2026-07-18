@@ -1,10 +1,10 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.2 — Proposed S0 ratification**. This specification defines intended
-> behaviour and delivery gates. It does not describe implemented functionality;
-> the repository still contains no CodeNoesis runtime or product acceptance
-> suite. The current tests cover repository infrastructure, policy, benchmark
-> metadata, and the machine-readable S0 acceptance specification only.
+> Status: **0.2 — S0 ratified for protected merge**. This specification defines
+> intended behaviour and delivery gates. It does not describe implemented
+> functionality; the repository still contains no CodeNoesis runtime or product
+> acceptance suite. The current tests cover repository infrastructure, policy,
+> benchmark metadata, and the machine-readable S0 acceptance specification only.
 
 ## 1. Document control
 
@@ -12,10 +12,10 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.2` |
-| Status | Proposed S0 ratification; no requirement is Approved until the protected ratification pull request receives explicit human approval and is merged |
+| Status | S0 Approved by the accountable single maintainer; authoritative on `main` only after the protected manual squash merge of PR [#8](https://github.com/smutti/codenoesis/pull/8) |
 | Date | 2026-07-18 |
-| Product owner | Unassigned; must be named in the ratification review before merge |
-| Technical approver | A named human other than the authoring agent, to be recorded in the ratification review before merge |
+| Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
+| Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
 | Delivery method | Incremental outside-in test-driven development |
 
@@ -24,7 +24,7 @@
 | Version | Date | Change |
 |---|---|---|
 | `0.1` | 2026-07-17 | Initial proposed requirements, TDD policy, vertical slices, gates, and open decisions. |
-| `0.2` | 2026-07-18 | Proposed the exact S0 approval set, split atomic scan-CLI and execution-isolation requirements, and linked the S0 contract and Red oracle for owner review. |
+| `0.2` | 2026-07-18 | Ratified the exact S0 approval set under single-maintainer governance, split atomic scan-CLI and execution-isolation requirements, and bound the S0 contract, licensed fixture, and Red oracle. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -60,9 +60,11 @@ Proposed -> Approved -> Implemented -> Verified
 - **Deferred:** intentionally moved out of its target release with rationale.
 - **Rejected:** retained for traceability but no longer part of the product.
 
-The initial requirements in this document are **Proposed**. Approval requires
-named owners and approvers, resolved blocking decisions, and an accepted test
-oracle.
+Requirements remain **Proposed** unless an explicit register marks them
+**Approved**. Approval requires accountable ownership, resolved blocking
+decisions, and an accepted test oracle. In the current single-maintainer
+bootstrap, the same disclosed GitHub actor may hold product and technical
+accountability; this does not create a fictional separation of duties.
 
 For autonomous delivery, `.github/codex/policy.json` is the machine-enforced
 projection of those human approvals, not an independent source of approval. A
@@ -74,23 +76,27 @@ re-ratified.
 
 ### 2.2 S0 ratification register
 
-The following is the exact candidate set for **S0 — Walking skeleton**. Every
-entry remains `Proposed` on this branch. The set moves atomically to `Approved`
-only when a named product owner and technical approver explicitly accept the
-protected SRS pull request and that pull request is merged. A model, authoring
-agent, commit author, or policy file cannot provide that approval.
+The following is the exact Approved set for **S0 — Walking skeleton**. Andrea
+Moretti is a transparent governance persona represented by `@smutti`; `@smutti`
+is also the sole human maintainer and technical approver. The repository does
+not claim independent human review that does not exist. Approval becomes
+authoritative only when `@smutti` manually squash-merges the exact final head of
+PR [#8](https://github.com/smutti/codenoesis/pull/8) after every mandatory gate
+is green. Authorship alone is not approval: `@smutti`'s later manual protected
+merge is the approval event. A model, authoring agent, or policy file cannot
+perform that merge or independently grant approval.
 
 | Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
 |---|---|---|---|---|---|---|---|
-| `DR-ART-001` | Proposed | Approved | Unassigned | Unassigned | Pending protected review | `S0` | [S0 contract decision](decisions/0001-s0-walking-skeleton-contract.md) |
-| `DR-ART-002` | Proposed | Approved | Unassigned | Unassigned | Pending protected review | `S0` | [S0 contract decision](decisions/0001-s0-walking-skeleton-contract.md) |
-| `FR-ACQ-001` | Proposed | Approved | Unassigned | Unassigned | Pending protected review | `S0` | [S0 contract decision](decisions/0001-s0-walking-skeleton-contract.md) |
-| `FR-CLI-003` | Proposed | Approved | Unassigned | Unassigned | Pending protected review | `S0` | [S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json) |
-| `NFR-DET-001` | Proposed | Approved | Unassigned | Unassigned | Pending protected review | `S0` | [S0 contract decision](decisions/0001-s0-walking-skeleton-contract.md) |
-| `NFR-MNT-001` | Proposed | Approved | Unassigned | Unassigned | Pending protected review | `S0` | [S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json) |
-| `NFR-SEC-005` | Proposed | Approved | Unassigned | Unassigned | Pending protected review | `S0` | [S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json) |
-| `NFR-TST-001` | Proposed | Approved | Unassigned | Unassigned | Pending protected review | `S0` | [S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json) |
-| `NFR-TST-002` | Proposed | Approved | Unassigned | Unassigned | Pending protected review | `S0` | [S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json) |
+| `DR-ART-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 contract decision](decisions/0001-s0-walking-skeleton-contract.md) |
+| `DR-ART-002` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 contract decision](decisions/0001-s0-walking-skeleton-contract.md) |
+| `FR-ACQ-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 contract decision](decisions/0001-s0-walking-skeleton-contract.md) |
+| `FR-CLI-003` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json) |
+| `NFR-DET-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 contract decision](decisions/0001-s0-walking-skeleton-contract.md) |
+| `NFR-MNT-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json) |
+| `NFR-SEC-005` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json) |
+| `NFR-TST-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json) |
+| `NFR-TST-002` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #8 protected merge record](https://github.com/smutti/codenoesis/pull/8) | `S0` | [S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json) |
 
 `FR-CLI-003` and `NFR-SEC-005` close two traceability gaps in the original
 seven-ID proposal: S0 exposes `noesis scan` and its exit gate promises zero
@@ -109,23 +115,23 @@ S0 evidence.
 The approved-requirement registry in `.github/codex/policy.json` MUST remain
 empty in this pull request. After ratification is merged, a separate protected
 pull request may bind these exact IDs to the full commit SHA on `main` that
-contains the byte-identical SRS. Until both reviews complete, autonomous
-authorization must fail closed.
+contains the byte-identical SRS. Until that policy PR is reviewed and merged,
+autonomous authorization must fail closed.
 
-S0 contract bundle: `sha256:f07142ce4c3dab76e54e655829695460b83eeab9a9b0860b0523d4c2d6ddca24`.
+S0 contract bundle: `sha256:0b1bc1541947322381924267a853ffa6cf995112fdfd1d2f69f5a4933e1b0e57`.
 The bundle manifest binds the decision, strict schemas, acceptance oracle,
 fixture, reviewed goldens, and maintenance guard. A change to any bound file
 requires a new bundle digest in this SRS and therefore invalidates an earlier
 policy `source_sha`.
 
-Before merge, the selected humans must add a final ratification commit that
-replaces every `Unassigned` and pending reference, changes the current states to
-`Approved`, changes Decision 0001 to `Accepted`, and changes the acceptance
-specification status to `approved`. The required reviewers must then approve
-that exact final commit; an approval on an earlier Proposed revision is stale.
-That commit must also update the SRS header and document-control status, the
-decision index, all lifecycle prose that describes the S0 set as Proposed, the
-fixture license/permission record, and the maintenance guard's allowed status.
+The `main-production` ruleset documents the single-maintainer bootstrap by
+requiring zero external approvals and no Code Owner review while there is only
+one write-capable human. Compensating controls remain mandatory: pull request,
+strict up-to-date CI and benchmark policy gates, CodeQL and code-quality gates,
+resolved review threads, linear history, squash-only merge, no bypass actor, and
+a manual merge by `@smutti`. The authoring agent must leave PR #8 unmerged. When
+a second write-capable maintainer joins, the approval count and Code Owner
+review MUST be restored before the next protected governance ratification.
 
 ### 2.3 Priority and target
 
@@ -435,7 +441,7 @@ Writing a unit test after the implementation does not satisfy this policy.
 | Failure/security | Crash points, retry, duplicate jobs, malicious repositories, tenant isolation, provider outage. |
 | Non-functional | Fuzz, mutation, load, performance, migration, restore, and platform conformance. |
 
-Coverage is a diagnostic, not proof of correctness. The initial ratification
+Coverage is a diagnostic, not proof of correctness. The initial project
 target is at least 80% line coverage across first-party workspace code and 90%
 for domain/application crates, excluding generated code with an explicit rule.
 Critical invariants additionally require property tests and mutation analysis;
@@ -549,7 +555,7 @@ property test: pt_dr_idn_001_insertion_order_is_irrelevant
 evidence record: <CI run>/<artifact hash>/<test report>
 ```
 
-For S0, the ratification candidate fixes the following public evidence names:
+For S0, the ratified contract fixes the following public evidence names:
 
 ```text
 black-box test: e2e_fr_acq_001_immutable_commit
@@ -561,7 +567,7 @@ isolation security test: sec_nfr_sec_005_scan_launches_no_child_and_opens_no_net
 
 The machine-readable scenario set and execution budgets are in the
 [S0 acceptance specification](../../tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json).
-That file is a ratified oracle proposal, not a product test implementation and
+That file is the ratified oracle, not a product test implementation and
 not Green evidence.
 
 Test source, fixture, oracle, CI evidence, and requirement status must be
@@ -638,7 +644,7 @@ resolves only the local, explicit-identity, SHA-1 worktree subset needed by
 `FR-ACQ-001` in S0. `OD-GIT-001` remains open for remote protocols, SHA-256,
 LFS, submodules, shallow and bare repositories, symlink policy, and history
 rewrite semantics; those deferred cases do not block the constrained S0
-ratification candidate.
+contract.
 
 ## 17. Change control
 

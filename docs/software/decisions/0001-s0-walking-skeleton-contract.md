@@ -2,20 +2,21 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed for human ratification |
+| Status | Accepted; authoritative after the protected manual merge of PR [#8](https://github.com/smutti/codenoesis/pull/8) |
 | Date | 2026-07-18 |
 | Scope | `S0 — Walking skeleton` only |
-| Product owner | Unassigned; must be named before merge |
-| Technical approver | Must be named in the protected ratification review |
-| Fixture permission | Unresolved; the owner must record a license or explicit test-use permission before merge |
+| Product owner | Andrea Moretti — project governance persona represented by [`@smutti`](https://github.com/smutti), not a separate natural person |
+| Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the single-maintainer bootstrap model |
+| Fixture permission | Apache License 2.0, scoped to the synthetic fixture by its [LICENSE](../../../tests/fixtures/s0/one-file-v1/LICENSE) file |
+| Approval reference | PR [#8](https://github.com/smutti/codenoesis/pull/8); approval becomes authoritative when `@smutti` manually merges the final protected head |
 | Requirements | `DR-ART-001/002`, `FR-ACQ-001`, `FR-CLI-003`, `NFR-DET-001`, `NFR-MNT-001`, `NFR-SEC-005`, `NFR-TST-001/002` |
 | Issue | [#6](https://github.com/smutti/codenoesis/issues/6) |
 
-This record contains no production implementation authority. It becomes an
-accepted decision only after a final ratification commit names the humans,
-records immutable approval references, changes this status to `Accepted`, and
-is itself approved and merged through the protected SRS/decision pull request.
-The authoring agent cannot supply that approval.
+This record contains no production implementation authority. The disclosed
+single-maintainer decision accepts the contract, but it becomes authoritative
+on `main` only when `@smutti` manually squash-merges the final protected head of
+PR #8 after all mandatory checks are green. The authoring agent never merges.
+It cannot substitute an automated approval for the accountable human act.
 
 ## Context
 
@@ -403,25 +404,33 @@ contract.
 
 ## Ratification and policy binding sequence
 
-1. A human product owner and technical approver review this record, the SRS
-   register, fixture, and oracle. The authoring agent does not approve or merge.
-2. A final ratification commit records their identities and immutable approval
-   references and changes the SRS requirements to `Approved`, this record to
-   `Accepted`, and the machine oracle to `approved`. The humans approve that
-   exact final commit; any prior review is stale.
-3. The protected ratification PR is merged. Its resulting full commit SHA on
-   `main` is the authoritative SRS source SHA; a PR head SHA is not sufficient.
-4. A separate critical control-plane PR makes autonomous authorization verify
+1. The sole human maintainer `@smutti` reviews this record, the SRS register,
+   fixture, and oracle while representing the disclosed Andrea Moretti product
+   governance persona. No independent human reviewer is claimed.
+2. This final ratification commit records the accountable actor, single-
+   maintainer governance model, Apache-2.0 fixture permission, SRS requirements
+   as `Approved`, this record as `Accepted`, and the machine oracle as
+   `approved`.
+3. The active `main-production` ruleset requires the pull request, strict CI and
+   benchmark gates, CodeQL/code quality, resolved threads, linear history, and
+   squash-only merge, with no bypass actor. Its approval count is zero only for
+   the documented single-maintainer bootstrap.
+4. `@smutti` manually merges PR #8 after the exact final head is green. The
+   resulting full commit SHA on `main` and protected merge event are the
+   authoritative approval reference; a PR head SHA is not sufficient. The
+   authoring agent never merges.
+5. A separate critical control-plane PR makes autonomous authorization verify
    the SRS-declared contract-bundle digest before any model call. CI validation
    in this proposal is defense in depth but does not replace that preflight gate.
-5. A separate protected PR updates only the approved-requirement policy binding
-   for the exact S0 IDs, using that source SHA and immutable human-review links.
-6. Policy tests prove authorization succeeds for every bound S0 ID and fails
+6. A separate protected PR updates only the approved-requirement policy binding
+   for the exact S0 IDs, using that source SHA and immutable protected merge/PR
+   references.
+7. Policy tests prove authorization succeeds for every bound S0 ID and fails
    for unregistered IDs, stale SRS or bundle bytes, a non-ancestor SHA, or the
    wrong slice.
-7. Only after all protected merges may an agent-ready implementation issue be
+8. Only after all protected merges may an agent-ready implementation issue be
    created.
    `CODEX_AUTOMATION_ENABLED` remains off until its separate promotion gate.
 
-Until step 3, every requirement in this record remains Proposed. Until step 5,
-the policy registry remains empty and autonomous execution remains denied.
+Until step 4, this accepted content is not authoritative on `main`. Until step
+6, the policy registry remains empty and autonomous execution remains denied.

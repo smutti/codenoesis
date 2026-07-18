@@ -54,6 +54,7 @@ S0_BUNDLE_FILES = {
     "docs/software/decisions/0001-s0-walking-skeleton-contract.md",
     "scripts/tests/test_s0_contract.py",
     "tests/fixtures/s0/one-file-v1/README.md",
+    "tests/fixtures/s0/one-file-v1/LICENSE",
     "tests/fixtures/s0/one-file-v1/commit-a/main.rs",
     "tests/fixtures/s0/one-file-v1/commit-b/main.rs",
     "tests/fixtures/s0/one-file-v1/expected-error-not-git.json",
@@ -248,6 +249,28 @@ class S0ContractTests(unittest.TestCase):
         else:
             self.fail(f'unsupported S0 contract status: {spec["status"]}')
 
+        ratification = spec["ratification"]
+        self.assertEqual(
+            ratification,
+            {
+                "governance_model": "single_maintainer_bootstrap",
+                "product_owner_persona": "Andrea Moretti",
+                "persona_is_natural_person": False,
+                "accountable_github_actor": "smutti",
+                "technical_approver": "smutti",
+                "approval_reference": "https://github.com/smutti/codenoesis/pull/8",
+                "effective_on": "protected_squash_merge_by_accountable_actor",
+                "required_external_approvals": 0,
+                "agent_merge_allowed": False,
+            },
+        )
+        self.assertIn("Andrea Moretti", srs)
+        self.assertIn("single-maintainer bootstrap", srs)
+        self.assertNotIn("Pending protected review", register)
+        decision = (ROOT / spec["decision"]).read_text(encoding="utf-8")
+        self.assertIn("| Status | Accepted;", decision)
+        self.assertIn("The authoring agent never merges.", decision)
+
         policy = load_json(POLICY_PATH)
         policy_ids = {
             requirement["id"] for requirement in policy["approved_requirements"]
@@ -436,6 +459,17 @@ class S0ContractTests(unittest.TestCase):
     def test_fixture_sources_reproduce_reviewed_git_object_identities(self) -> None:
         manifest = load_json(FIXTURE_ROOT / "manifest.json")
         repository = manifest["repository"]
+        provenance = manifest["provenance"]
+        self.assertEqual(provenance["license_spdx"], "Apache-2.0")
+        self.assertEqual(provenance["license_file"], "LICENSE")
+        self.assertEqual(
+            provenance["license_scope"], "tests/fixtures/s0/one-file-v1 only"
+        )
+        fixture_license = (FIXTURE_ROOT / provenance["license_file"]).read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("Apache License", fixture_license)
+        self.assertIn("Version 2.0, January 2004", fixture_license)
         isolation = manifest["derived_variants"]["isolation"]
         self.assertFalse(isolation["committed_tree_changes"])
         self.assertEqual(

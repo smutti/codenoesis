@@ -1,6 +1,17 @@
 {
   "schema_version": "codenoesis.acceptance-specification/v1",
-  "status": "proposed_for_human_ratification",
+  "status": "approved",
+  "ratification": {
+    "governance_model": "single_maintainer_bootstrap",
+    "product_owner_persona": "Andrea Moretti",
+    "persona_is_natural_person": false,
+    "accountable_github_actor": "smutti",
+    "technical_approver": "smutti",
+    "approval_reference": "https://github.com/smutti/codenoesis/pull/8",
+    "effective_on": "protected_squash_merge_by_accountable_actor",
+    "required_external_approvals": 0,
+    "agent_merge_allowed": false
+  },
   "test_id": "e2e_fr_acq_001_immutable_commit",
   "slice": "S0",
   "requirements": [

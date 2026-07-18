@@ -5,7 +5,10 @@
     "kind": "synthetic_first_party",
     "description": "Original source authored for the CodeNoesis S0 acceptance contract.",
     "third_party_material": false,
-    "repository_license_status": "not_yet_declared"
+    "license_spdx": "Apache-2.0",
+    "license_file": "LICENSE",
+    "license_scope": "tests/fixtures/s0/one-file-v1 only",
+    "copyright_holder": "CodeNoesis contributors"
   },
   "repository": {
     "identity": "urn:codenoesis:fixture:s0-one-file-v1",

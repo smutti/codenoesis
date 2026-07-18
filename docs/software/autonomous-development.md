@@ -17,6 +17,14 @@ security gate, approve its own work, or release into production.
 The target is a closed-loop pull-request factory, not one unbounded agent
 working directly on `main`.
 
+The current repository has one write-capable human, `@smutti`. Its bootstrap
+ruleset therefore requires no external PR approval and makes no claim of human
+separation of duties. High/critical changes still require the accountable
+maintainer's manual protected merge after deterministic gates; no agent,
+publisher, Council, or administrator bypass may merge. When a second
+write-capable human joins, one required approval and Code Owner review must be
+restored before the next protected governance decision.
+
 The diagram below is the promotion target. The implemented A1 subset has one
 proposal attempt, a draft PR, deterministic CI/benchmark-contract checks, and
 one static AI reviewer. Autofix, multi-seat Council aggregation, label

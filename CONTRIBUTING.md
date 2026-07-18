@@ -26,9 +26,10 @@ Contributions should be small, traceable, and independently demonstrable. Read
 5. Obtain explicit human approval for high/critical risk or protected-path
    changes.
 
-The current SRS is `Proposed`. Until requirements receive named approval,
-contributions may improve requirements, ADRs, fixtures, or executable Red
-oracles, but must not present speculative production behavior as approved.
+Only requirements explicitly marked `Approved` in the SRS register are binding.
+Other requirements remain `Proposed`; contributions may improve them, ADRs,
+fixtures, or executable Red oracles, but must not present speculative production
+behavior as approved.
 
 ## Work on a bounded branch
 
@@ -113,4 +114,7 @@ prompts, logs, artifacts, or pull-request text.
 The repository does not currently declare a software license. Absence of a
 license does not grant permission to reuse the work. A license and contribution
 terms must be selected before substantial external implementation
-contributions are accepted.
+contributions are accepted. The synthetic S0 fixture is a narrow exception:
+only [`tests/fixtures/s0/one-file-v1`](tests/fixtures/s0/one-file-v1/README.md)
+is licensed under Apache-2.0 by the `LICENSE` stored in that directory; this
+does not license any other repository content.

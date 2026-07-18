@@ -3,19 +3,23 @@
   "files": [
     {
       "path": "docs/software/decisions/0001-s0-walking-skeleton-contract.md",
-      "sha256": "4d2abd334524ad47aa93db959f77e96a6427747ce5bc79f0c0a573102cbc10c6"
+      "sha256": "606282988e27fdf99b271a36b79477263a3e0102d1aec88fac3349d947348803"
     },
     {
       "path": "docs/software/decisions/README.md",
-      "sha256": "e654c5be2a00429158d9a44ebbde9fcbd10b29a020909918d7a71a5b0f2552c1"
+      "sha256": "77ed3a1d795bc372f2780110c5a2651166b28b4a52c75f3b29917348bfbb583a"
     },
     {
       "path": "scripts/tests/test_s0_contract.py",
-      "sha256": "1042f91374b69cabdb265387d626f486b6758813852b4a3eb5d316032edb73e8"
+      "sha256": "bd57c63f6b07ab31b4a777c89086d332c97133d06e21bb099759d2cd82ee244b"
+    },
+    {
+      "path": "tests/fixtures/s0/one-file-v1/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
     },
     {
       "path": "tests/fixtures/s0/one-file-v1/README.md",
-      "sha256": "805b0fd1dc7c32c8468dbe26d49d07ff3ead9aa52b7553e8d2db6485bd45faac"
+      "sha256": "7afd6b9eaad494d0b965daf873b0dab008ff2e98d94541a78620ff680b97f707"
     },
     {
       "path": "tests/fixtures/s0/one-file-v1/commit-a/main.rs",
@@ -47,7 +51,7 @@
     },
     {
       "path": "tests/fixtures/s0/one-file-v1/manifest.json",
-      "sha256": "0ee4e7762a19e20d851e427f5eec4dd1fb5ed82d8be64c8db4540c1f35322579"
+      "sha256": "baa440287d430816dde6dd31d50db98c706be62e19ae1b65d16d32cbfccb5205"
     },
     {
       "path": "tests/specifications/s0/codenoesis-error-v1.schema.json",
@@ -55,7 +59,7 @@
     },
     {
       "path": "tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json",
-      "sha256": "8f90e3956573cbdfeaa66d898eb9a32509b1cc89ff59701a939d479e18d945c6"
+      "sha256": "14a31122c350eb838af1fd32d04de552ca76e9c75b0b6f0e733a8e6c2d80dbd5"
     },
     {
       "path": "tests/specifications/s0/evidence-manifest-v1.schema.json",
@@ -70,5 +74,5 @@
       "sha256": "5664635f8ad76dff5421f5eeb1f20ffdf0450203d8cb9c692606c026a39ee1ad"
     }
   ],
-  "bundle_sha256": "f07142ce4c3dab76e54e655829695460b83eeab9a9b0860b0523d4c2d6ddca24"
+  "bundle_sha256": "0b1bc1541947322381924267a853ffa6cf995112fdfd1d2f69f5a4933e1b0e57"
 }
