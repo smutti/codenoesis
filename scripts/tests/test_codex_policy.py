@@ -14,6 +14,19 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 MODULE_PATH = REPOSITORY_ROOT / ".github/codex/scripts/codex_policy.py"
 POLICY_PATH = REPOSITORY_ROOT / ".github/codex/policy.json"
 SCHEMA_PATH = REPOSITORY_ROOT / ".github/codex/policy.schema.json"
+APPROVED_S0_REQUIREMENTS = (
+    "DR-ART-001",
+    "DR-ART-002",
+    "FR-ACQ-001",
+    "FR-CLI-003",
+    "NFR-DET-001",
+    "NFR-MNT-001",
+    "NFR-SEC-005",
+    "NFR-TST-001",
+    "NFR-TST-002",
+)
+S0_APPROVAL_SOURCE_SHA = "7dd9a0e0b97cad007dfc21f18c8f3c29b43140c1"
+S0_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/8"
 
 SPEC = importlib.util.spec_from_file_location("codex_policy", MODULE_PATH)
 if SPEC is None or SPEC.loader is None:  # pragma: no cover - import contract
@@ -45,7 +58,18 @@ class PolicyValidationTests(PolicyFixture):
         schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
 
         self.assertEqual(1, self.policy["version"])
-        self.assertEqual([], self.policy["approved_requirements"])
+        approvals = self.policy["approved_requirements"]
+        self.assertEqual(
+            list(APPROVED_S0_REQUIREMENTS),
+            [approval_record["id"] for approval_record in approvals],
+        )
+        for approval_record in approvals:
+            self.assertEqual("S0", approval_record["slice"])
+            self.assertEqual("github:smutti", approval_record["approved_by"])
+            self.assertEqual(S0_APPROVAL_SOURCE_SHA, approval_record["source_sha"])
+            self.assertEqual(
+                S0_APPROVAL_REFERENCE, approval_record["approval_reference"]
+            )
         self.assertEqual(
             "https://json-schema.org/draft/2020-12/schema", schema["$schema"]
         )
@@ -208,6 +232,8 @@ class AuthorizationTests(PolicyFixture):
         )
 
     def test_missing_approval_is_denied(self) -> None:
+        self.policy["approved_requirements"] = []
+
         with self.assertRaises(codex_policy.AuthorizationError) as raised:
             codex_policy.authorize_requirements(
                 self.policy, ["FR-ACQ-001"], "S0"
@@ -499,7 +525,9 @@ class CommandLineTests(PolicyFixture):
         self.assertEqual(0, result.returncode, result.stderr)
         payload = json.loads(result.stdout)
         self.assertEqual("valid", payload["status"])
-        self.assertEqual(0, payload["approved_requirement_count"])
+        self.assertEqual(
+            len(APPROVED_S0_REQUIREMENTS), payload["approved_requirement_count"]
+        )
 
     def test_authorization_denial_has_stable_exit_code_and_json_error(self) -> None:
         result = self.run_cli(
@@ -509,7 +537,7 @@ class CommandLineTests(PolicyFixture):
             "--slice",
             "S0",
             "--requirement-id",
-            "FR-ACQ-001",
+            "FR-INV-001",
         )
 
         self.assertEqual(4, result.returncode)
