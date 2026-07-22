@@ -25,8 +25,9 @@ APPROVED_S0_REQUIREMENTS = (
     "NFR-TST-001",
     "NFR-TST-002",
 )
-S0_APPROVAL_SOURCE_SHA = "7dd9a0e0b97cad007dfc21f18c8f3c29b43140c1"
-S0_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/8"
+S0_APPROVED_AT = "2026-07-22T19:41:36Z"
+S0_APPROVAL_SOURCE_SHA = "a9c718504d126f9c3b398aed3714c132243d3d3c"
+S0_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/12"
 
 SPEC = importlib.util.spec_from_file_location("codex_policy", MODULE_PATH)
 if SPEC is None or SPEC.loader is None:  # pragma: no cover - import contract
@@ -70,6 +71,7 @@ class PolicyValidationTests(PolicyFixture):
             self.assertEqual(
                 S0_APPROVAL_REFERENCE, approval_record["approval_reference"]
             )
+            self.assertEqual(S0_APPROVED_AT, approval_record["approved_at"])
         self.assertEqual(
             "https://json-schema.org/draft/2020-12/schema", schema["$schema"]
         )
