@@ -10,7 +10,8 @@
 | Repository license | Apache License 2.0 under the repository-wide root [LICENSE](../../../LICENSE) file |
 | Approval reference | PR [#8](https://github.com/smutti/codenoesis/pull/8); approval becomes authoritative when `@smutti` manually merges the final protected head |
 | Requirements | `DR-ART-001/002`, `FR-ACQ-001`, `FR-CLI-003`, `NFR-DET-001`, `NFR-MNT-001`, `NFR-SEC-005`, `NFR-TST-001/002` |
-| Issue | [#6](https://github.com/smutti/codenoesis/issues/6) |
+| Issue | [#6](https://github.com/smutti/codenoesis/issues/6); strict internal-failure correction [#11](https://github.com/smutti/codenoesis/issues/11) |
+| Amendment approval | `@smutti` explicitly approved `internal.unexpected` on 2026-07-22; the correction becomes authoritative only after its protected manual merge |
 
 This record contains no production implementation authority. The disclosed
 single-maintainer decision accepts the contract, but it becomes authoritative
@@ -53,8 +54,9 @@ noesis scan \
 - Invalid invocation returns exit `2` and a `CodeNoesisErrorV1` on stderr.
 - A typed acquisition failure returns exit `10`, no stdout, and exactly one
   `CodeNoesisErrorV1` followed by one LF on stderr.
-- An unexpected internal failure returns exit `70`; it must not emit a partial
-  snapshot.
+- An unexpected internal failure returns exit `70`, no stdout, and exactly one
+  strict `CodeNoesisErrorV1` followed by one LF on stderr; it must not emit a
+  partial snapshot.
 - Human-readable output, remote sources, configuration precedence, and the full
   long-term CLI compatibility policy remain outside S0.
 
@@ -226,6 +228,7 @@ The stable S0 codes are:
 | `acquisition.object_missing` | A referenced commit, tree, or blob is absent |
 | `acquisition.repository_inconsistent` | Decompression, object framing, type, or hash verification fails |
 | `acquisition.unsupported_repository_shape` | A valid repository uses a Git feature outside the S0 subset |
+| `internal.unexpected` | An unexpected failure prevents completion outside the typed input and acquisition catalog |
 
 The exact strict error schema is
 [`codenoesis-error-v1.schema.json`](../../../tests/specifications/s0/codenoesis-error-v1.schema.json),
@@ -236,6 +239,13 @@ The machine contract is the code plus typed context, not the human message.
 omitted, and unknown fields are rejected. It must not contain an absolute path,
 hostname, environment value, secret, or raw untrusted content. All acquisition
 failures are non-retryable in S0 and produce no artifact.
+
+The strict `internal.unexpected` form uses stage `internal`, the generic message
+`unexpected internal failure`, `retryable: false`, and an empty context object.
+It must not expose the underlying internal error, an absolute path, raw
+untrusted content, environment state, or a secret. Existing input and
+acquisition failures retain their ratified exit codes and may not be relabeled
+as internal failures.
 
 ### Zero target process and zero analysis network
 
