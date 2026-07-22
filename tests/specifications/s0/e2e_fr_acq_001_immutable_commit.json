@@ -154,7 +154,8 @@
     "acquisition.revision_not_commit": 10,
     "acquisition.object_missing": 10,
     "acquisition.repository_inconsistent": 10,
-    "acquisition.unsupported_repository_shape": 10
+    "acquisition.unsupported_repository_shape": 10,
+    "internal.unexpected": 70
   },
   "budgets": {
     "fixture_files_per_revision": 1,

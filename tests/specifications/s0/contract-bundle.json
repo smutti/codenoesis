@@ -7,7 +7,7 @@
     },
     {
       "path": "docs/software/decisions/0001-s0-walking-skeleton-contract.md",
-      "sha256": "7a3d495d99c9c23cd9e190cba9c653fc8d712f1c79f55b28344041d61366b550"
+      "sha256": "4008b22f57fd11fb21d20999988950e9fe2ff50bc13b23856f2d0b5922a511db"
     },
     {
       "path": "docs/software/decisions/README.md",
@@ -15,7 +15,7 @@
     },
     {
       "path": "scripts/tests/test_s0_contract.py",
-      "sha256": "70c35254c259e53cd8f7363b77dca1b2b01921f1bd21b452e2445f71080a9aaf"
+      "sha256": "d7af1a9c5e41eb5908cd4081ceefcf316d036c3637e57afc46cc1b1a56f6c133"
     },
     {
       "path": "tests/fixtures/s0/one-file-v1/README.md",
@@ -55,11 +55,11 @@
     },
     {
       "path": "tests/specifications/s0/codenoesis-error-v1.schema.json",
-      "sha256": "876660111d8bcde4a6f41b4175d6cf2cc5ee64b7fd61f15e0b0149edc20e134b"
+      "sha256": "9747cd1309442bad5c7b1e9f9211827474b5697ec4f0ff262c6598332cc9d03e"
     },
     {
       "path": "tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json",
-      "sha256": "14a31122c350eb838af1fd32d04de552ca76e9c75b0b6f0e733a8e6c2d80dbd5"
+      "sha256": "ff8d5893adb6a8a9bd2c1ffcb558edb19480f60f411a2ffb94545123ab673c44"
     },
     {
       "path": "tests/specifications/s0/evidence-manifest-v1.schema.json",
@@ -74,5 +74,5 @@
       "sha256": "5664635f8ad76dff5421f5eeb1f20ffdf0450203d8cb9c692606c026a39ee1ad"
     }
   ],
-  "bundle_sha256": "d049ea8338d5c48393410b1c2c71bd430e531d7ebe76551cc181ccb40936ee9e"
+  "bundle_sha256": "978a7128498d54a6c4a6b3fec11d195e37d2f67e179d2babb5320668c4e44811"
 }

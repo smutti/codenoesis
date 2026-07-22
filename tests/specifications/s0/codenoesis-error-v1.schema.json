@@ -18,11 +18,12 @@
         "acquisition.revision_not_commit",
         "acquisition.object_missing",
         "acquisition.repository_inconsistent",
-        "acquisition.unsupported_repository_shape"
+        "acquisition.unsupported_repository_shape",
+        "internal.unexpected"
       ]
     },
     "stage": {
-      "enum": ["input", "acquisition"]
+      "enum": ["input", "acquisition", "internal"]
     },
     "message": {
       "type": "string",
@@ -165,6 +166,17 @@
             "required": ["feature"],
             "maxProperties": 1
           }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"code": {"const": "internal.unexpected"}}
+      },
+      "then": {
+        "properties": {
+          "stage": {"const": "internal"},
+          "context": {"maxProperties": 0}
         }
       }
     }
