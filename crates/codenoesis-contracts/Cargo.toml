@@ -1,0 +1,16 @@
+[package]
+name = "codenoesis-contracts"
+version = "0.1.0"
+description = "Versioned CodeNoesis boundary contracts"
+edition.workspace = true
+license.workspace = true
+publish = false
+rust-version.workspace = true
+
+[dependencies]
+blake3.workspace = true
+codenoesis-domain.workspace = true
+serde_json.workspace = true
+
+[lints]
+workspace = true

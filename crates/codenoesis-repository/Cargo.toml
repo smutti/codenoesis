@@ -1,0 +1,17 @@
+[package]
+name = "codenoesis-repository"
+version = "0.1.0"
+description = "In-process local Git repository adapter for CodeNoesis"
+edition.workspace = true
+license.workspace = true
+publish = false
+rust-version.workspace = true
+
+[dependencies]
+codenoesis-domain.workspace = true
+codenoesis-ports.workspace = true
+flate2.workspace = true
+sha1.workspace = true
+
+[lints]
+workspace = true

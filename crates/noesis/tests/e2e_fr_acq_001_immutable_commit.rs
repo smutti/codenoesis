@@ -1,165 +1,24 @@
+mod support;
+
 use std::fs;
-use std::io::Write;
-use std::path::{Path, PathBuf};
-use std::process::{Command, Output, Stdio};
-use std::sync::atomic::{AtomicU64, Ordering};
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::process::Command;
 
-const COMMIT_A_OID: &str = "6d4152a7787ac82eedf3f9fc5df408dfdf6e412f";
-const TREE_A_OID: &str = "892c4a33b5529ba6b6651fc26765957f11f7ba9e";
-const BLOB_A_OID: &str = "b367ffda48249ca59f89ebe73a63a2cc053ebf38";
-const REPOSITORY_ID: &str = "urn:codenoesis:fixture:s0-one-file-v1";
-static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
+use codenoesis_contracts::{RepositorySnapshotV1, SnapshotEnvelopeV1};
+use codenoesis_domain::{RepositoryIdentity, Revision};
+use codenoesis_ports::RepositoryAcquirer;
+use codenoesis_repository::LocalGitRepository;
+use serde_json::{Value, json};
 
-struct MaterializedRepository {
-    root: PathBuf,
-    worktree: PathBuf,
-}
-
-impl MaterializedRepository {
-    fn commit_a() -> Self {
-        let root = unique_temp_root();
-        let worktree = root.join("repository");
-        let template = root.join("template");
-        let global_config = root.join("global.gitconfig");
-        fs::create_dir_all(&template).expect("create empty Git template directory");
-        fs::write(&global_config, []).expect("create empty global Git configuration");
-
-        let mut init = git_command(&global_config);
-        init.args(["init", "--quiet", "--initial-branch=main"])
-            .arg(format!("--template={}", template.display()))
-            .arg(&worktree);
-        successful_output(init, None);
-
-        let source = fs::read(fixture_root().join("commit-a/main.rs"))
-            .expect("read the reviewed commit-A source fixture");
-        fs::write(worktree.join("main.rs"), &source).expect("write the materialized worktree file");
-
-        let mut hash_blob = git_command(&global_config);
-        hash_blob
-            .arg("-C")
-            .arg(&worktree)
-            .args(["hash-object", "-w", "--stdin"]);
-        let blob_oid = stdout_line(successful_output(hash_blob, Some(&source)));
-        assert_eq!(blob_oid, BLOB_A_OID, "fixture blob identity changed");
-
-        let tree_input = format!("100644 blob {blob_oid}\tmain.rs\n");
-        let mut make_tree = git_command(&global_config);
-        make_tree.arg("-C").arg(&worktree).arg("mktree");
-        let tree_oid = stdout_line(successful_output(make_tree, Some(tree_input.as_bytes())));
-        assert_eq!(tree_oid, TREE_A_OID, "fixture tree identity changed");
-
-        let mut make_commit = git_command(&global_config);
-        make_commit
-            .arg("-C")
-            .arg(&worktree)
-            .args(["commit-tree", &tree_oid, "-F", "-"])
-            .env("GIT_AUTHOR_NAME", "CodeNoesis Fixture")
-            .env("GIT_AUTHOR_EMAIL", "fixture@codenoesis.invalid")
-            .env("GIT_AUTHOR_DATE", "946684800 +0000")
-            .env("GIT_COMMITTER_NAME", "CodeNoesis Fixture")
-            .env("GIT_COMMITTER_EMAIL", "fixture@codenoesis.invalid")
-            .env("GIT_COMMITTER_DATE", "946684800 +0000");
-        let commit_oid = stdout_line(successful_output(make_commit, Some(b"fixture: commit A\n")));
-        assert_eq!(commit_oid, COMMIT_A_OID, "fixture commit identity changed");
-
-        let mut update_ref = git_command(&global_config);
-        update_ref
-            .arg("-C")
-            .arg(&worktree)
-            .args(["update-ref", "refs/heads/main", &commit_oid]);
-        successful_output(update_ref, None);
-
-        Self { root, worktree }
-    }
-}
-
-impl Drop for MaterializedRepository {
-    fn drop(&mut self) {
-        let _ = fs::remove_dir_all(&self.root);
-    }
-}
-
-fn fixture_root() -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/s0/one-file-v1")
-}
-
-fn unique_temp_root() -> PathBuf {
-    let sequence = TEMP_SEQUENCE.fetch_add(1, Ordering::Relaxed);
-    let timestamp = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .expect("system clock must be after the Unix epoch")
-        .as_nanos();
-    let root = std::env::temp_dir().join(format!(
-        "codenoesis-s0-{}-{timestamp}-{sequence}",
-        std::process::id()
-    ));
-    fs::create_dir(&root).expect("create isolated S0 fixture root");
-    root
-}
-
-fn git_command(global_config: &Path) -> Command {
-    let mut command = Command::new("git");
-    command
-        .env("GIT_CONFIG_NOSYSTEM", "1")
-        .env("GIT_CONFIG_GLOBAL", global_config)
-        .env("GIT_TERMINAL_PROMPT", "0")
-        .env_remove("GIT_DIR")
-        .env_remove("GIT_WORK_TREE");
-    command
-}
-
-fn successful_output(mut command: Command, input: Option<&[u8]>) -> Output {
-    let invocation = format!("{command:?}");
-    command.stdout(Stdio::piped()).stderr(Stdio::piped());
-    if input.is_some() {
-        command.stdin(Stdio::piped());
-    }
-
-    let mut child = command.spawn().expect("launch fixture Git command");
-    if let Some(content) = input {
-        child
-            .stdin
-            .take()
-            .expect("fixture Git command stdin")
-            .write_all(content)
-            .expect("write fixture Git command stdin");
-    }
-    let output = child
-        .wait_with_output()
-        .expect("wait for fixture Git command");
-    assert!(
-        output.status.success(),
-        "fixture command failed: {invocation}; stdout={:?}; stderr={:?}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
-    );
-    output
-}
-
-fn stdout_line(output: Output) -> String {
-    String::from_utf8(output.stdout)
-        .expect("fixture Git output must be UTF-8")
-        .trim_end_matches(['\r', '\n'])
-        .to_owned()
-}
+use support::{
+    BLOB_A_OID, BLOB_B_OID, COMMIT_A_OID, COMMIT_B_OID, MaterializedRepository, REPOSITORY_ID,
+    TREE_A_OID, TREE_B_OID, assert_acquisition_error, fixture_root, parse_single_document, scan,
+    unique_temp_root,
+};
 
 #[test]
 fn e2e_fr_acq_001_immutable_commit() {
     let repository = MaterializedRepository::commit_a();
-    let output = Command::new(env!("CARGO_BIN_EXE_noesis"))
-        .args(["scan", "--repository"])
-        .arg(&repository.worktree)
-        .args([
-            "--repository-id",
-            REPOSITORY_ID,
-            "--revision",
-            COMMIT_A_OID,
-            "--format",
-            "json",
-        ])
-        .output()
-        .expect("launch noesis scan");
+    let output = scan(&repository.worktree, COMMIT_A_OID);
 
     assert_eq!(
         output.status.code(),
@@ -170,10 +29,269 @@ fn e2e_fr_acq_001_immutable_commit() {
         String::from_utf8_lossy(&output.stderr)
     );
     assert!(output.stderr.is_empty(), "successful stderr must be empty");
-    assert!(output.stdout.ends_with(b"\n"), "stdout must end in one LF");
+    let snapshot = parse_single_document(&output.stdout);
+    assert_eq!(
+        serde_json::to_vec(&snapshot).expect("serialize parsed snapshot"),
+        output.stdout[..output.stdout.len() - 1],
+        "stdout must use canonical key order"
+    );
+    let expected_semantic: Value = serde_json::from_slice(
+        &fs::read(fixture_root().join("expected-semantic-a.json"))
+            .expect("read reviewed semantic golden"),
+    )
+    .expect("parse reviewed semantic golden");
+    assert_eq!(snapshot["semantic"], expected_semantic);
+    assert_eq!(
+        snapshot["semantic_hash"],
+        json!({
+            "algorithm": "blake3-256",
+            "value": "b673624a329f43fd84852bbdeefd66326a7fcb1c03fdb626e2de6bfedff11997"
+        })
+    );
+    assert_eq!(
+        snapshot["schema_version"],
+        "codenoesis.repository-snapshot/v1"
+    );
     assert!(
-        String::from_utf8_lossy(&output.stdout)
-            .contains("\"schema_version\":\"codenoesis.repository-snapshot/v1\""),
-        "stdout must contain RepositorySnapshotV1"
+        !snapshot["semantic"].to_string().contains(
+            repository
+                .worktree
+                .to_str()
+                .expect("fixture path must be UTF-8")
+        )
+    );
+}
+
+#[test]
+fn it_fr_acq_001_ref_move_after_binding_keeps_original_commit() {
+    let repository = MaterializedRepository::commit_a();
+    let adapter = LocalGitRepository::new();
+    let identity = RepositoryIdentity::parse(REPOSITORY_ID).expect("approved repository identity");
+    let bound_a = adapter
+        .bind(
+            repository.worktree.as_os_str(),
+            identity.clone(),
+            Revision::Main,
+        )
+        .expect("bind main while it names commit A");
+
+    repository.update_main(COMMIT_B_OID);
+    let snapshot_a = RepositorySnapshotV1::from_bound_revision(
+        &bound_a,
+        SnapshotEnvelopeV1::new(
+            "2000-01-01T00:00:00Z".to_owned(),
+            None,
+            "s0-golden-a".to_owned(),
+        ),
+    );
+    assert_eq!(
+        snapshot_a.value()["semantic"]["repository"]["commit_oid"],
+        COMMIT_A_OID
+    );
+    assert_eq!(
+        snapshot_a.value()["semantic"]["repository"]["tree_oid"],
+        TREE_A_OID
+    );
+
+    let bound_b = adapter
+        .bind(repository.worktree.as_os_str(), identity, Revision::Main)
+        .expect("a new binding resolves commit B");
+    assert_eq!(bound_b.commit_oid().as_str(), COMMIT_B_OID);
+    assert_eq!(bound_b.tree_oid().as_str(), TREE_B_OID);
+}
+
+#[test]
+fn e2e_fr_acq_001_non_git_returns_typed_error() {
+    let root = unique_temp_root();
+    let plain_directory = root.join("plain-directory");
+    fs::create_dir(&plain_directory).expect("create plain source directory");
+    fs::copy(
+        fixture_root().join("commit-a/main.rs"),
+        plain_directory.join("main.rs"),
+    )
+    .expect("copy source into plain directory");
+
+    let output = scan(&plain_directory, COMMIT_A_OID);
+    let expected: Value = serde_json::from_slice(
+        &fs::read(fixture_root().join("expected-error-not-git.json"))
+            .expect("read reviewed non-Git error"),
+    )
+    .expect("parse reviewed non-Git error");
+    assert_acquisition_error(&output, &expected);
+    assert!(
+        !String::from_utf8_lossy(&output.stderr).contains(
+            plain_directory
+                .to_str()
+                .expect("fixture path must be UTF-8")
+        )
+    );
+    fs::remove_dir_all(root).expect("remove plain source fixture");
+}
+
+#[test]
+fn e2e_fr_acq_001_missing_object_returns_typed_error() {
+    let repository = MaterializedRepository::commit_a();
+    fs::remove_file(repository.object_path(BLOB_A_OID)).expect("remove referenced blob object");
+
+    let output = scan(&repository.worktree, COMMIT_A_OID);
+    assert_acquisition_error(
+        &output,
+        &json!({
+            "schema_version": "codenoesis.error/v1",
+            "code": "acquisition.object_missing",
+            "stage": "acquisition",
+            "message": "referenced Git object is missing",
+            "retryable": false,
+            "context": {
+                "object_oid": BLOB_A_OID,
+                "expected_kind": "blob",
+                "referenced_by": TREE_A_OID
+            }
+        }),
+    );
+}
+
+#[test]
+fn e2e_fr_acq_001_inconsistent_object_returns_typed_error() {
+    let repository = MaterializedRepository::commit_a();
+    fs::remove_file(repository.object_path(BLOB_A_OID))
+        .expect("remove original blob A before corruption");
+    fs::copy(
+        repository.object_path(BLOB_B_OID),
+        repository.object_path(BLOB_A_OID),
+    )
+    .expect("replace blob A with validly framed blob B bytes");
+
+    let output = scan(&repository.worktree, COMMIT_A_OID);
+    assert_acquisition_error(
+        &output,
+        &json!({
+            "schema_version": "codenoesis.error/v1",
+            "code": "acquisition.repository_inconsistent",
+            "stage": "acquisition",
+            "message": "Git repository is inconsistent",
+            "retryable": false,
+            "context": {
+                "object_oid": BLOB_A_OID,
+                "expected_kind": "blob"
+            }
+        }),
+    );
+}
+
+#[test]
+fn e2e_fr_cli_003_invalid_identity_returns_strict_error() {
+    let repository = MaterializedRepository::commit_a();
+    let output = Command::new(env!("CARGO_BIN_EXE_noesis"))
+        .args(["scan", "--repository"])
+        .arg(&repository.worktree)
+        .args([
+            "--repository-id",
+            "https://example.invalid/repository",
+            "--revision",
+            COMMIT_A_OID,
+            "--format",
+            "json",
+        ])
+        .output()
+        .expect("scan with invalid repository identity");
+    assert_eq!(output.status.code(), Some(2));
+    assert!(output.stdout.is_empty());
+    assert_eq!(
+        parse_single_document(&output.stderr),
+        json!({
+            "schema_version": "codenoesis.error/v1",
+            "code": "input.invalid_repository_identity",
+            "stage": "input",
+            "message": "invalid repository identity",
+            "retryable": false,
+            "context": {}
+        })
+    );
+}
+
+#[test]
+fn e2e_fr_cli_003_invalid_revision_returns_strict_error() {
+    let repository = MaterializedRepository::commit_a();
+    let output = scan(&repository.worktree, "HEAD");
+    assert_eq!(output.status.code(), Some(2));
+    assert!(output.stdout.is_empty());
+    assert_eq!(
+        parse_single_document(&output.stderr),
+        json!({
+            "schema_version": "codenoesis.error/v1",
+            "code": "input.invalid_revision",
+            "stage": "input",
+            "message": "invalid revision",
+            "retryable": false,
+            "context": {}
+        })
+    );
+}
+
+#[test]
+fn e2e_fr_acq_001_revision_not_found_returns_typed_error() {
+    let repository = MaterializedRepository::commit_a();
+    let missing = "0000000000000000000000000000000000000000";
+    let output = scan(&repository.worktree, missing);
+    assert_acquisition_error(
+        &output,
+        &json!({
+            "schema_version": "codenoesis.error/v1",
+            "code": "acquisition.revision_not_found",
+            "stage": "acquisition",
+            "message": "revision not found",
+            "retryable": false,
+            "context": {"revision": missing}
+        }),
+    );
+}
+
+#[test]
+fn e2e_fr_acq_001_revision_not_commit_returns_typed_error() {
+    let repository = MaterializedRepository::commit_a();
+    let output = scan(&repository.worktree, TREE_A_OID);
+    assert_acquisition_error(
+        &output,
+        &json!({
+            "schema_version": "codenoesis.error/v1",
+            "code": "acquisition.revision_not_commit",
+            "stage": "acquisition",
+            "message": "revision does not name a commit",
+            "retryable": false,
+            "context": {
+                "object_oid": TREE_A_OID,
+                "actual_kind": "tree"
+            }
+        }),
+    );
+}
+
+#[test]
+fn e2e_fr_acq_001_unexpected_failure_is_strict_internal() {
+    let repository = MaterializedRepository::commit_a();
+    fs::write(repository.worktree.join(".git/config"), [0xff])
+        .expect("install invalid repository configuration bytes");
+    let output = scan(&repository.worktree, COMMIT_A_OID);
+    assert_eq!(output.status.code(), Some(70));
+    assert!(output.stdout.is_empty());
+    assert_eq!(
+        parse_single_document(&output.stderr),
+        json!({
+            "schema_version": "codenoesis.error/v1",
+            "code": "internal.unexpected",
+            "stage": "internal",
+            "message": "unexpected internal failure",
+            "retryable": false,
+            "context": {}
+        })
+    );
+    assert!(
+        !String::from_utf8_lossy(&output.stderr).contains(
+            repository
+                .worktree
+                .to_str()
+                .expect("fixture path must be UTF-8")
+        )
     );
 }

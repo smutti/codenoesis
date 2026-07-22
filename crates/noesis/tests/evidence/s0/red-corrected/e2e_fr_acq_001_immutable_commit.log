@@ -1,0 +1,26 @@
+command: cargo test --test e2e_fr_acq_001_immutable_commit
+pre_implementation_sha: 962f070
+   Compiling noesis v0.1.0 (/private/tmp/codenoesis-s0-red.V6rA0e/worktree/crates/noesis)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.61s
+     Running tests/e2e_fr_acq_001_immutable_commit.rs (target/debug/deps/e2e_fr_acq_001_immutable_commit-996f08fd24ff24bd)
+
+running 1 test
+test e2e_fr_acq_001_immutable_commit ... FAILED
+
+failures:
+
+---- e2e_fr_acq_001_immutable_commit stdout ----
+
+thread 'e2e_fr_acq_001_immutable_commit' (3652536) panicked at crates/noesis/tests/e2e_fr_acq_001_immutable_commit.rs:164:5:
+assertion `left == right` failed: expected subject exit 0 with RepositorySnapshotV1; observed subject exit Some(70); stdout=""; stderr="S0_NOT_IMPLEMENTED\n"
+  left: Some(70)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    e2e_fr_acq_001_immutable_commit
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.29s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_acq_001_immutable_commit`

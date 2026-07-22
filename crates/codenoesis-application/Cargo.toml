@@ -1,0 +1,16 @@
+[package]
+name = "codenoesis-application"
+version = "0.1.0"
+description = "CodeNoesis application services"
+edition.workspace = true
+license.workspace = true
+publish = false
+rust-version.workspace = true
+
+[dependencies]
+codenoesis-contracts.workspace = true
+codenoesis-domain.workspace = true
+codenoesis-ports.workspace = true
+
+[lints]
+workspace = true

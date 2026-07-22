@@ -7,5 +7,21 @@ license.workspace = true
 publish = false
 rust-version.workspace = true
 
+[dependencies]
+codenoesis-application.workspace = true
+codenoesis-contracts.workspace = true
+codenoesis-domain.workspace = true
+codenoesis-repository.workspace = true
+
+[target.'cfg(target_os = "linux")'.dependencies]
+libc.workspace = true
+seccompiler.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+codenoesis-ports.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+
 [lints]
 workspace = true
