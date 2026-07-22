@@ -14,7 +14,7 @@ use sha2::{Digest, Sha256};
 
 use support::{
     BLOB_A_OID, BLOB_B_OID, COMMIT_A_OID, MaterializedRepository, parse_single_document, read_json,
-    repository_root, scan, unique_temp_root,
+    read_repository_text, repository_root, scan, unique_temp_root,
 };
 
 #[test]
@@ -92,7 +92,8 @@ fn conf_nfr_mnt_001_dependency_rules() {
         let manifest_path = package["manifest_path"]
             .as_str()
             .expect("package manifest path");
-        let manifest = fs::read_to_string(manifest_path).expect("read first-party manifest");
+        let manifest = String::from_utf8(read_repository_text(manifest_path))
+            .expect("first-party manifest must be UTF-8");
         assert!(manifest.contains("[lints]\nworkspace = true"));
     }
     assert!(architecture_is_valid(&actual, &expected));
@@ -104,7 +105,8 @@ fn conf_nfr_mnt_001_dependency_rules() {
         .insert("codenoesis-contracts");
     assert!(!architecture_is_valid(&seeded_forbidden_edge, &expected));
 
-    let workspace = fs::read_to_string(root.join("Cargo.toml")).expect("read workspace manifest");
+    let workspace = String::from_utf8(read_repository_text(root.join("Cargo.toml")))
+        .expect("workspace manifest must be UTF-8");
     assert!(workspace.contains("unsafe_code = \"forbid\""));
 }
 
@@ -179,7 +181,7 @@ fn conf_nfr_tst_001_requires_fixture_oracle_evidence_links() {
     let log_path = observation["red"]["log"]["path"]
         .as_str()
         .expect("Red log path");
-    let log = fs::read(root.join(log_path)).expect("read immutable Red log");
+    let log = read_repository_text(root.join(log_path));
     let log_sha256 = format!("{:x}", Sha256::digest(log));
     assert_eq!(
         observation["red"]["log"]["sha256"]
@@ -256,9 +258,9 @@ fn sec_nfr_sec_005_scan_launches_no_child_and_opens_no_network() {
     );
     assert!(!sentinel.exists(), "target-controlled hook executed");
 
-    let policy =
-        fs::read(repository_root().join("tests/specifications/s0/seccomp-capability-deny-v1.json"))
-            .expect("read ratified seccomp policy");
+    let policy = read_repository_text(
+        repository_root().join("tests/specifications/s0/seccomp-capability-deny-v1.json"),
+    );
     assert_eq!(
         format!("{:x}", Sha256::digest(policy)),
         "5664635f8ad76dff5421f5eeb1f20ffdf0450203d8cb9c692606c026a39ee1ad"
@@ -305,6 +307,7 @@ ip -json route show table all >"$2"
 unexpected=""
 observed=""
 for descriptor in /proc/$$/fd/*; do
+  test -e "$descriptor" || continue
   number=${descriptor##*/}
   observed="${observed}${number}
 "

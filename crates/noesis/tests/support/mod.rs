@@ -42,8 +42,7 @@ impl MaterializedRepository {
             .arg(&worktree);
         successful_output(init, None);
 
-        let source = fs::read(fixture_root().join("commit-a/main.rs"))
-            .expect("read the reviewed commit-A source fixture");
+        let source = read_repository_text(fixture_root().join("commit-a/main.rs"));
         fs::write(worktree.join("main.rs"), &source).expect("write the materialized worktree file");
 
         let mut hash_blob = git_command(&global_config);
@@ -74,8 +73,7 @@ impl MaterializedRepository {
         let commit_oid = stdout_line(successful_output(make_commit, Some(b"fixture: commit A\n")));
         assert_eq!(commit_oid, COMMIT_A_OID, "fixture commit identity changed");
 
-        let source_b = fs::read(fixture_root().join("commit-b/main.rs"))
-            .expect("read the reviewed commit-B source fixture");
+        let source_b = read_repository_text(fixture_root().join("commit-b/main.rs"));
         let mut hash_blob_b = git_command(&global_config);
         hash_blob_b
             .arg("-C")
@@ -178,6 +176,19 @@ impl Drop for MaterializedRepository {
 
 pub fn fixture_root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/s0/one-file-v1")
+}
+
+pub fn read_repository_text(path: impl AsRef<Path>) -> Vec<u8> {
+    let path = path.as_ref();
+    let text = fs::read_to_string(path)
+        .unwrap_or_else(|error| panic!("read repository text {}: {error}", path.display()));
+    let normalized = text.replace("\r\n", "\n");
+    assert!(
+        !normalized.contains('\r'),
+        "repository text contains a bare carriage return: {}",
+        path.display()
+    );
+    normalized.into_bytes()
 }
 
 pub fn unique_temp_root() -> PathBuf {
