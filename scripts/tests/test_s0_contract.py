@@ -396,6 +396,43 @@ class S0ContractTests(unittest.TestCase):
         )
         self.assertIn("seccomp_self_test_report", environment["required"])
 
+    def test_internal_failure_has_strict_error_contract(self) -> None:
+        spec = load_json(SPEC_PATH)
+        error_schema = load_json(ROOT / spec["schemas"]["error"])
+
+        self.assertEqual(
+            spec["stream_contract"]["unexpected_internal_failure"],
+            {
+                "exit_code": 70,
+                "stdout": "empty",
+                "stderr": "one CodeNoesisErrorV1 JSON document followed by one LF",
+            },
+        )
+        self.assertEqual(spec["error_codes"].get("internal.unexpected"), 70)
+        self.assertEqual(
+            set(error_schema["properties"]["code"]["enum"]),
+            set(spec["error_codes"]),
+        )
+        self.assertEqual(
+            set(error_schema["properties"]["stage"]["enum"]),
+            {"input", "acquisition", "internal"},
+        )
+
+        internal_rules = [
+            rule
+            for rule in error_schema["allOf"]
+            if rule["if"]["properties"]["code"].get("const")
+            == "internal.unexpected"
+        ]
+        self.assertEqual(len(internal_rules), 1)
+        internal_properties = internal_rules[0]["then"]["properties"]
+        self.assertEqual(internal_properties["stage"], {"const": "internal"})
+        self.assertEqual(internal_properties["context"], {"maxProperties": 0})
+
+        decision = (ROOT / spec["decision"]).read_text(encoding="utf-8")
+        self.assertIn("| `internal.unexpected` |", decision)
+        self.assertIn("must not expose the underlying internal error", decision)
+
     def test_independent_blake3_oracle_matches_public_vectors(self) -> None:
         self.assertEqual(
             blake3_256(b""),
