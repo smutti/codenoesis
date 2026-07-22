@@ -1,0 +1,66 @@
+{
+  "schema_version": "codenoesis.local-test-observation/v1",
+  "slice": "S0",
+  "issue": "https://github.com/smutti/codenoesis/issues/9",
+  "status": "local_green_linux_normative_pending",
+  "verified": false,
+  "requirements": [
+    "DR-ART-001",
+    "DR-ART-002",
+    "FR-ACQ-001",
+    "FR-CLI-003",
+    "NFR-DET-001",
+    "NFR-MNT-001",
+    "NFR-SEC-005",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "oracle_bundle_sha256": "978a7128498d54a6c4a6b3fec11d195e37d2f67e179d2babb5320668c4e44811",
+  "base_sha": "f9500c6d9b285f9e3a9dd65f2d43efbe65717a05",
+  "pre_implementation_sha": "962f070adf7bdb682b0636e91153ed1177aec8b8",
+  "implementation_sha": "802b90d2bb0c69aa81dfc894276294ba4c64ab32",
+  "observed_at": "2026-07-22T20:20:21Z",
+  "ordered_results": [
+    {"test_name": "e2e_fr_acq_001_immutable_commit", "status": "passed"},
+    {"test_name": "it_fr_acq_001_ref_move_after_binding_keeps_original_commit", "status": "passed"},
+    {"test_name": "e2e_fr_acq_001_non_git_returns_typed_error", "status": "passed"},
+    {"test_name": "e2e_fr_acq_001_missing_object_returns_typed_error", "status": "passed"},
+    {"test_name": "e2e_fr_acq_001_inconsistent_object_returns_typed_error", "status": "passed"},
+    {"test_name": "conf_dr_art_001_repository_snapshot_v1", "status": "passed"},
+    {"test_name": "pt_dr_art_002_volatile_envelope_preserves_semantic_hash", "status": "passed"},
+    {"test_name": "pt_nfr_det_001_permutation_and_schedule_invariant", "status": "passed"},
+    {"test_name": "conf_nfr_mnt_001_dependency_rules", "status": "passed"},
+    {"test_name": "conf_nfr_tst_001_requires_fixture_oracle_evidence_links", "status": "passed"},
+    {"test_name": "pt_nfr_tst_002_replays_are_parallel_and_order_independent", "status": "passed"},
+    {
+      "test_name": "sec_nfr_sec_005_scan_launches_no_child_and_opens_no_network",
+      "status": "portable_smoke_passed_normative_linux_pending"
+    }
+  ],
+  "commands": [
+    {"command": "actionlint -no-color", "exit_code": 0},
+    {"command": "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json", "exit_code": 0},
+    {"command": "cargo fmt --all --check", "exit_code": 0},
+    {"command": "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings", "exit_code": 0},
+    {"command": "cargo test --workspace --all-targets --all-features --locked", "exit_code": 0},
+    {"command": "cargo test --workspace --doc --all-features --locked", "exit_code": 0},
+    {"command": "python3 -m unittest discover -s scripts/tests -p 'test_*.py'", "exit_code": 0},
+    {"command": "python3 scripts/validate_benchmark_assets.py", "exit_code": 0},
+    {"command": "cargo bench --workspace --all-features --no-run --locked", "exit_code": 0},
+    {"command": "cargo clippy -p noesis --all-targets --all-features --target x86_64-unknown-linux-gnu -- -D warnings", "exit_code": 0},
+    {"command": "cargo clippy -p noesis --all-targets --all-features --target aarch64-unknown-linux-gnu -- -D warnings", "exit_code": 0}
+  ],
+  "environment": {
+    "os": "Darwin 26.4.1",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "features": "all"
+  },
+  "github_actions_artifacts": null,
+  "limitations": [
+    "The normative Linux network-namespace, descriptor, seccomp-load, and syscall-audit branch was cross-compiled but not executed on this Darwin host.",
+    "No immutable GitHub Actions artifact locator or 90-day retention evidence exists yet.",
+    "This local observation must not be used to claim the requirements are Verified."
+  ]
+}

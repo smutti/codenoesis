@@ -117,6 +117,8 @@ fn conf_nfr_tst_001_requires_fixture_oracle_evidence_links() {
     let observation = read_json(
         &root.join("crates/noesis/tests/evidence/s0/red-observation-corrected-contract.json"),
     );
+    let green =
+        read_json(&root.join("crates/noesis/tests/evidence/s0/green-observation-local.json"));
 
     assert_eq!(observation["slice"], specification["slice"]);
     assert_eq!(observation["requirements"], specification["requirements"]);
@@ -128,6 +130,27 @@ fn conf_nfr_tst_001_requires_fixture_oracle_evidence_links() {
     assert_eq!(
         observation["pre_implementation_sha"],
         "962f070adf7bdb682b0636e91153ed1177aec8b8"
+    );
+    assert_eq!(green["requirements"], specification["requirements"]);
+    assert_eq!(green["oracle_bundle_sha256"], bundle["bundle_sha256"]);
+    assert_eq!(green["verified"], false);
+    assert_eq!(
+        green["implementation_sha"],
+        "802b90d2bb0c69aa81dfc894276294ba4c64ab32"
+    );
+    assert_eq!(
+        green["ordered_results"]
+            .as_array()
+            .expect("ordered Green results")
+            .iter()
+            .map(|result| result["test_name"].as_str().expect("Green test name"))
+            .collect::<Vec<_>>(),
+        specification["scenarios"]
+            .as_array()
+            .expect("ordered specification scenarios")
+            .iter()
+            .map(|scenario| scenario["test_name"].as_str().expect("scenario test name"))
+            .collect::<Vec<_>>()
     );
 
     for relative_path in [
@@ -145,6 +168,7 @@ fn conf_nfr_tst_001_requires_fixture_oracle_evidence_links() {
         observation["supersedes_local_observation"]
             .as_str()
             .expect("superseded observation path"),
+        "crates/noesis/tests/evidence/s0/green-observation-local.json",
     ] {
         assert!(
             root.join(relative_path).is_file(),
