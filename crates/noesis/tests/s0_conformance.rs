@@ -303,21 +303,27 @@ set -eu
 ip -json link show >"$1"
 ip -json route show table all >"$2"
 unexpected=""
+observed=""
 for descriptor in /proc/$$/fd/*; do
   number=${descriptor##*/}
+  observed="${observed}${number}
+"
   case "$number" in
     0|1|2) ;;
     *) unexpected="$unexpected $number" ;;
   esac
 done
-test -z "$unexpected"
+printf '%s' "$observed" >"$3"
+if test -n "$unexpected"; then
+  printf 'unexpected inherited descriptors:%s\n' "$unexpected" >&2
+  exit 93
+fi
 for number in 0 1 2; do
   target=$(readlink "/proc/$$/fd/$number")
   case "$target" in
     socket:*) exit 92 ;;
   esac
 done
-printf '0\n1\n2\n' >"$3"
 export CODENOESIS_SENTINEL="$4"
 shift 4
 exec "$@"
@@ -353,15 +359,34 @@ exec "$@"
     let output = command
         .output()
         .expect("run monitored scan in an empty Linux network namespace");
-    assert!(
-        output.status.success(),
-        "Linux monitor failed: stdout={:?}; stderr={:?}",
-        String::from_utf8_lossy(&output.stdout),
-        String::from_utf8_lossy(&output.stderr)
-    );
+    assert_linux_monitor_succeeded(&output, &links, &routes, &descriptors, &trace);
 
     assert_linux_monitor_evidence(&links, &routes, &descriptors, &trace);
     output
+}
+
+#[cfg(target_os = "linux")]
+fn assert_linux_monitor_succeeded(
+    output: &Output,
+    links: &Path,
+    routes: &Path,
+    descriptors: &Path,
+    trace: &Path,
+) {
+    let diagnostic = |path: &Path| {
+        fs::read_to_string(path).unwrap_or_else(|error| format!("unavailable: {error}"))
+    };
+    let descriptor_diagnostic = diagnostic(descriptors);
+    let link_diagnostic = diagnostic(links);
+    let route_diagnostic = diagnostic(routes);
+    let trace_diagnostic = diagnostic(trace);
+    assert!(
+        output.status.success(),
+        "Linux monitor failed: status={:?}; stdout={:?}; stderr={:?}; descriptors={descriptor_diagnostic:?}; links={link_diagnostic:?}; routes={route_diagnostic:?}; trace={trace_diagnostic:?}",
+        output.status,
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
 }
 
 #[cfg(target_os = "linux")]

@@ -275,13 +275,27 @@ mod tests {
             .join(name)
     }
 
+    fn reviewed_jcs_body(name: &str) -> Vec<u8> {
+        let mut bytes = fs::read(fixture_path(name)).expect("read reviewed JCS golden");
+        if bytes.ends_with(b"\r\n") {
+            bytes.truncate(bytes.len() - 2);
+        } else {
+            assert_eq!(bytes.pop(), Some(b'\n'), "golden must end in one newline");
+        }
+        assert!(
+            !bytes.contains(&b'\r') && !bytes.contains(&b'\n'),
+            "golden body must be one canonical JSON line"
+        );
+        bytes
+    }
+
     #[test]
     fn conf_dr_art_001_repository_snapshot_v1() {
         let actual = snapshot(fixed_envelope())
             .canonical_stdout()
             .expect("serialize fixed snapshot");
-        let expected = fs::read(fixture_path("expected-snapshot-a.jcs"))
-            .expect("read reviewed snapshot golden");
+        let mut expected = reviewed_jcs_body("expected-snapshot-a.jcs");
+        expected.push(b'\n');
         assert_eq!(actual, expected);
 
         let value: Value = serde_json::from_slice(&actual).expect("parse generated snapshot");
@@ -371,9 +385,7 @@ mod tests {
 
     #[test]
     fn pt_nfr_det_001_permutation_and_schedule_invariant() {
-        let mut expected =
-            fs::read(fixture_path("expected-semantic-a.jcs")).expect("read reviewed semantic JCS");
-        assert_eq!(expected.pop(), Some(b'\n'));
+        let expected = reviewed_jcs_body("expected-semantic-a.jcs");
 
         for seed in 0..50 {
             let semantic = permuted_semantic(seed);
