@@ -1,0 +1,106 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "docs/software/decisions/0002-s1-safe-inventory-contract.md",
+      "sha256": "1d069e37a0188dd7f7ac5149cbac56de6c7902e0e465e32fcf9ebb85f94d13d4"
+    },
+    {
+      "path": "scripts/tests/test_s1_contract.py",
+      "sha256": "cce9135af3a220b2683d9c21ec20653cfbd7439e7b024c0b448bc969fe855068"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/README.md",
+      "sha256": "0d440d70a3e5f0e83237624bda0caac4bfe5b15a903fca2524d28476071224ff"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/expected-error-file-limit.json",
+      "sha256": "e60abfd93cb40bcf18e8765ad5613d236102dd55fc67cc2c584b80e6516b6c40"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/expected-error-symlink.json",
+      "sha256": "99dada4e5ea336865d71da8572b7034c9acd2065dc0e97424353e2133347f162"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/expected-semantic-a.jcs",
+      "sha256": "2ee3a48d9664d516336d122392c79d2d84bbc8779eaa9e2ef14d2a3d3250a847"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/expected-semantic-a.json",
+      "sha256": "51f82567a6415eb11eabd31ebeec3aa51a3e5d30f893b7648ba6187f3e54c8d2"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/expected-snapshot-a.jcs",
+      "sha256": "4785cb3d6bee1cffc6c5d6961238327b0afc500eca0208f86aead25e3eb65447"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/expected-snapshot-a.json",
+      "sha256": "22da71a1bfe86b4eff7a6483455a04b8e70c9ed6bbc67fdbd7c28a8a0a460e7d"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/manifest.json",
+      "sha256": "746b2820505d831af60029b66e5bba1d4afc54e10d8984a53c249ce784bfe5ae"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/revision-a/.github/CODEOWNERS",
+      "sha256": "392475d48a7c017c7bb6115e4dcfec85ce4a62f0dd0d50a63db307a3ed296084"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/revision-a/Cargo.toml",
+      "sha256": "e714e223b84fd7f7d6807066f4efa0a3f134e04e2f37f09ce90ee1d617e9c9c7"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/revision-a/README.md",
+      "sha256": "369ebbc5e7b5d148832492f3f0c00ebed4a895cfbf0548e629a3d7fdf10ca83a"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/revision-a/api/openapi.yaml",
+      "sha256": "fda763f0293d2d613ea82a2d615eb13d32749587d02f08fbebf8ad7819556af0"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/revision-a/assets/payload.bin",
+      "sha256": "716a8eb801b615a9d0b8051b3c1433b9db4fe70772d8ae0d4743c469d4994ef7"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/revision-a/build.rs",
+      "sha256": "6c761ae859b7fd620b448430ddd288db76b8b93c580851c52dcf4f226c2670ab"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/revision-a/rustfmt.toml",
+      "sha256": "a72f230180ccfaf10db0b4e339b9d9066d2a678174b3da29cd9c905ee92f2cc3"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/revision-a/src/lib.rs",
+      "sha256": "ff0a4d55fe70c3a546a8f0215485eab19e6c8147f26a82499d0b4a37c0983e21"
+    },
+    {
+      "path": "tests/fixtures/s1/safe-inventory-v1/revision-a/tools/sentinel.sh",
+      "sha256": "0549bcfb618cd670373465e6b299a790a9ec5f1247de46ed2ee94520c57097b6"
+    },
+    {
+      "path": "tests/specifications/s0/seccomp-capability-deny-v1.json",
+      "sha256": "5664635f8ad76dff5421f5eeb1f20ffdf0450203d8cb9c692606c026a39ee1ad"
+    },
+    {
+      "path": "tests/specifications/s1/codenoesis-error-v2.schema.json",
+      "sha256": "2c635a24d69468afa2a8b020158a63aa3c0b334d4c611818181e284d1b705169"
+    },
+    {
+      "path": "tests/specifications/s1/e2e_fr_inv_001_safe_inventory.json",
+      "sha256": "238e7a9b05aa6c0676e1eb833aa1c4ac3986c313ede9bb42a29deab85ee6d74d"
+    },
+    {
+      "path": "tests/specifications/s1/repository-snapshot-v2.schema.json",
+      "sha256": "5966490a135505fa5d5028f5b2e549e89baf4056af6e698b31b0eac1b3a153f0"
+    },
+    {
+      "path": "tests/specifications/s1/source-evidence-v1.schema.json",
+      "sha256": "f9831d7e2b1c303bb2153a02856ba168c97cad3f8aecb140a1093b9c348aa08b"
+    }
+  ],
+  "bundle_sha256": "93c199a7a6a9a672cedaf74ce5197302e57620c663aceb8d27809b9074120255"
+}
