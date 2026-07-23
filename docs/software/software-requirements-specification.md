@@ -1,19 +1,19 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.2 — S0 ratified for protected merge**. This specification defines
-> intended behaviour and delivery gates. It does not describe implemented
-> functionality; the repository still contains no CodeNoesis runtime or product
-> acceptance suite. The current tests cover repository infrastructure, policy,
-> benchmark metadata, and the machine-readable S0 acceptance specification only.
+> Status: **0.3 — S0 implemented; S1 ratified for protected merge**. The S0
+> runtime and product suite exist on `main`, but CodeNoesis does not claim S0
+> `Verified` without the complete immutable retention evidence. This revision
+> approves the S1 contract, fixture, limits, security oracle, and Red condition;
+> it contains no S1 production implementation.
 
 ## 1. Document control
 
 | Field | Value |
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
-| Version | `0.2` |
-| Status | S0 Approved by the accountable single maintainer; authoritative on `main` only after the protected manual squash merge of PR [#8](https://github.com/smutti/codenoesis/pull/8) |
-| Date | 2026-07-18 |
+| Version | `0.3` |
+| Status | S0 remains Approved and implemented; S1 becomes Approved only when the accountable single maintainer manually squash-merges protected PR [#17](https://github.com/smutti/codenoesis/pull/17) |
+| Date | 2026-07-23 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -25,6 +25,7 @@
 |---|---|---|
 | `0.1` | 2026-07-17 | Initial proposed requirements, TDD policy, vertical slices, gates, and open decisions. |
 | `0.2` | 2026-07-18 | Ratified the exact S0 approval set under single-maintainer governance, adopted the repository-wide Apache-2.0 license, split atomic scan-CLI and execution-isolation requirements, and bound the S0 contract and Red oracle. |
+| `0.3` | 2026-07-23 | Recorded the implemented-but-not-Verified S0 state and ratified the exact S1 safe-inventory requirement set, explicit compatibility profile, limits, evidence model, malicious fixture, filesystem-security oracle, and expected Red. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -140,6 +141,44 @@ review MUST be restored before the next protected governance ratification.
 | `P0` | Required for the reliable local product delivered by `0.1`. |
 | `P1` | Required before production-grade `1.0`. |
 | `P2` | Candidate for post-`1.0`; it must not complicate the baseline prematurely. |
+
+### 2.3.1 S1 ratification register
+
+The following is the exact Approved set for **S1 — Safe inventory**. Approval
+becomes authoritative only when `@smutti` manually squash-merges the exact
+protected head of PR [#17](https://github.com/smutti/codenoesis/pull/17).
+The authoring agent does not approve or merge. This high-risk decision fixes
+public artifact and error schemas, source-evidence semantics, untrusted-tree
+policy, filesystem confinement, and numeric limits.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| `DR-EVD-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #17 protected merge record](https://github.com/smutti/codenoesis/pull/17) | `S1` | [S1 contract decision](decisions/0002-s1-safe-inventory-contract.md) |
+| `FR-ACQ-002` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #17 protected merge record](https://github.com/smutti/codenoesis/pull/17) | `S1` | [S1 contract decision](decisions/0002-s1-safe-inventory-contract.md) |
+| `FR-INV-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #17 protected merge record](https://github.com/smutti/codenoesis/pull/17) | `S1` | [S1 acceptance specification](../../tests/specifications/s1/e2e_fr_inv_001_safe_inventory.json) |
+| `NFR-SEC-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #17 protected merge record](https://github.com/smutti/codenoesis/pull/17) | `S1` | [S1 acceptance specification](../../tests/specifications/s1/e2e_fr_inv_001_safe_inventory.json) |
+
+S1 is an explicit compatibility profile:
+`--profile standard-local-s1` emits `RepositorySnapshotV2` or
+`CodeNoesisErrorV2`. The approved S0 invocation without that option retains its
+V1 artifact and error behavior. Repository shape, extensions, environment, and
+implicit configuration cannot select a contract version.
+
+The fixed profile resolves `OD-LIM-001` only for S1. It rejects symlinks,
+gitlinks, external Git directories, and packed object databases; the explicit
+packed-object deferral made after S0 remains binding. Semantic parsing and
+ontology construction begin in later slices.
+
+The policy registry is intentionally unchanged in this ratification change. A
+separate protected change may bind these exact four IDs to the full commit on
+`main` containing the byte-identical SRS. Until that change is reviewed and
+merged, autonomous S1 authorization fails closed.
+
+S1 contract bundle: `sha256:1a0c6222699d683238e36aef0f77d40a02db469a6c394a812c0e8aa7a1398867`.
+The bundle binds the decision, strict schemas, machine oracle, synthetic
+fixture, reviewed goldens, inherited S0 security policy, and independent
+maintenance guard. Any bound-byte change requires a new digest and renewed
+human review.
 
 ### 2.4 Verification classes
 
@@ -570,6 +609,21 @@ The machine-readable scenario set and execution budgets are in the
 That file is the ratified oracle, not a product test implementation and
 not Green evidence.
 
+For S1, the ratified public evidence names include:
+
+```text
+black-box test: e2e_fr_inv_001_safe_inventory
+limit property test: pt_fr_acq_002_limits_have_max_and_plus_one
+source-evidence conformance: conf_dr_evd_001_source_evidence_resolves
+filesystem security test: sec_nfr_sec_001_scan_stays_inside_repository_root
+sentinel security test: sec_nfr_sec_001_sentinel_scripts_never_execute
+```
+
+The complete ordered S1 scenario set, inherited S0 regressions, budgets, Red
+condition, and evidence requirements are in the
+[S1 acceptance specification](../../tests/specifications/s1/e2e_fr_inv_001_safe_inventory.json).
+That file is a protected oracle, not Green or Verified evidence.
+
 Test source, fixture, oracle, CI evidence, and requirement status must be
 machine-linkable. A comment containing an ID is not sufficient if CI cannot
 detect a missing or stale link.
@@ -624,9 +678,9 @@ implementation choices.
 
 | ID | Decision required | Blocks |
 |---|---|---|
-| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. | Approval of `S1`, `S7`, `S9`, `S10`, `S13` limits |
+| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset only. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
 | `OD-ONT-001` | Ontology v1 required properties, cardinalities, state transitions, and versioning policy. | `S2` |
-| `OD-GIT-001` | Residual Git decisions after the S0 local subset: remote protocols and identity resolution, SHA-256, LFS, shallow and bare repositories, alternates, submodules, symlinks, and history-rewrite semantics. | Remote and post-S0 `FR-ACQ-*` |
+| `OD-GIT-001` | Residual Git decisions after the local S0/S1 subsets: remote protocols and identity resolution, packed objects, SHA-256, LFS, shallow and bare repositories, alternates, supported submodule/symlink semantics, and history rewrite. S1 rejects rather than traverses symlinks and gitlinks. | Remote and post-S1 `FR-ACQ-*` |
 | `OD-CMP-001` | Compatibility rules and oracles for OpenAPI, AsyncAPI, GraphQL, Protobuf, events, and behavioural evidence. | `S6`–`S7` |
 | `OD-API-001` | REST/MCP payload schemas, error catalog, cancellation, pagination, event resume, and deprecation window. | `S10`–`S11` |
 | `OD-AUT-001` | Complete role-action-resource matrix and privileged break-glass policy. | `S12` |
@@ -640,11 +694,12 @@ contract, or decision table. It must then be linked from the affected
 requirements and represented in tests.
 
 The [S0 contract decision](decisions/0001-s0-walking-skeleton-contract.md)
-resolves only the local, explicit-identity, SHA-1 worktree subset needed by
-`FR-ACQ-001` in S0. `OD-GIT-001` remains open for remote protocols, SHA-256,
-LFS, submodules, shallow and bare repositories, symlink policy, and history
-rewrite semantics; those deferred cases do not block the constrained S0
-contract.
+resolves the one-file local binding. The
+[S1 contract decision](decisions/0002-s1-safe-inventory-contract.md) extends
+only the verified loose-object tree subset and fixes rejection semantics for
+symlinks, gitlinks, and external Git directories. `OD-GIT-001` remains open for
+supported traversal or materialization of those features and for every other
+listed advanced or remote case.
 
 ## 17. Change control
 

@@ -1,0 +1,402 @@
+{
+  "schema_version": "codenoesis.fixture.git/v2",
+  "fixture_id": "s1-safe-inventory-v1",
+  "provenance": {
+    "kind": "synthetic_first_party",
+    "description": "Original source and malicious-input recipes authored for the CodeNoesis S1 acceptance contract.",
+    "third_party_material": false,
+    "license_spdx": "Apache-2.0",
+    "license_file": "../../../../LICENSE",
+    "license_scope": "entire repository",
+    "copyright_holder": "CodeNoesis contributors"
+  },
+  "repository": {
+    "identity": "urn:codenoesis:fixture:s1-safe-inventory-v1",
+    "object_format": "sha1",
+    "default_ref": "refs/heads/main",
+    "source_root": "revision-a",
+    "author_name": "CodeNoesis Fixture",
+    "author_email": "fixture@codenoesis.invalid",
+    "timestamp": 978307200,
+    "timezone": "+0000",
+    "message": "fixture: S1 revision A\n",
+    "materialization": {
+      "object_storage": "loose",
+      "global_git_config": "disabled",
+      "hooks": "disabled",
+      "core.autocrlf": "false",
+      "core.filemode": "true",
+      "checkout_required": false
+    }
+  },
+  "revision": {
+    "label": "A",
+    "commit_oid": "a72b34a03936b70511bd72bd4fa0d37a5a593386",
+    "tree_oid": "2a77b46a6a4a7645b7ec63831ce7e46bd7921904",
+    "commit_payload_sha256": "2dc26f7a372975d7b8e0ccc6c1ff7f86a3f2d43a69ffd119bd1603a5b46acb06",
+    "files": [
+      {
+        "path": ".github/CODEOWNERS",
+        "mode": "100644",
+        "source_sha256": "392475d48a7c017c7bb6115e4dcfec85ce4a62f0dd0d50a63db307a3ed296084",
+        "byte_length": 22,
+        "blob_oid": "e2d63062cf5b70d85dfa800ba4acadc7b3a78262"
+      },
+      {
+        "path": "Cargo.toml",
+        "mode": "100644",
+        "source_sha256": "e714e223b84fd7f7d6807066f4efa0a3f134e04e2f37f09ce90ee1d617e9c9c7",
+        "byte_length": 93,
+        "blob_oid": "f2c75744ba1623ebd2bf64e8dda36fdb0fa86ab6"
+      },
+      {
+        "path": "README.md",
+        "mode": "100644",
+        "source_sha256": "369ebbc5e7b5d148832492f3f0c00ebed4a895cfbf0548e629a3d7fdf10ca83a",
+        "byte_length": 93,
+        "blob_oid": "bea61f8462cb66bab5eb5dbdc74b8054d0c0f116"
+      },
+      {
+        "path": "api/openapi.yaml",
+        "mode": "100644",
+        "source_sha256": "fda763f0293d2d613ea82a2d615eb13d32749587d02f08fbebf8ad7819556af0",
+        "byte_length": 80,
+        "blob_oid": "c55d01ab6f19f6d6d6ee6e81d40a65d73733c995"
+      },
+      {
+        "path": "assets/payload.bin",
+        "mode": "100644",
+        "source_sha256": "716a8eb801b615a9d0b8051b3c1433b9db4fe70772d8ae0d4743c469d4994ef7",
+        "byte_length": 38,
+        "blob_oid": "de75dc54dee262791dc95eca71814a74aae4bbce"
+      },
+      {
+        "path": "build.rs",
+        "mode": "100644",
+        "source_sha256": "6c761ae859b7fd620b448430ddd288db76b8b93c580851c52dcf4f226c2670ab",
+        "byte_length": 71,
+        "blob_oid": "0ef4746c8ff5e7e129364c7c88be39742ac195e2"
+      },
+      {
+        "path": "rustfmt.toml",
+        "mode": "100644",
+        "source_sha256": "a72f230180ccfaf10db0b4e339b9d9066d2a678174b3da29cd9c905ee92f2cc3",
+        "byte_length": 33,
+        "blob_oid": "ed49ca7b3d9a10e8bc0c7337d85ff497e83cc3bf"
+      },
+      {
+        "path": "src/lib.rs",
+        "mode": "100644",
+        "source_sha256": "ff0a4d55fe70c3a546a8f0215485eab19e6c8147f26a82499d0b4a37c0983e21",
+        "byte_length": 34,
+        "blob_oid": "432593368f9028b66c60c5f011dd54949c10ca81"
+      },
+      {
+        "path": "tools/sentinel.sh",
+        "mode": "100755",
+        "source_sha256": "0549bcfb618cd670373465e6b299a790a9ec5f1247de46ed2ee94520c57097b6",
+        "byte_length": 67,
+        "blob_oid": "9e02753a1d6a2f3d6825bb6e7107cecb1ad7e1c6"
+      }
+    ],
+    "trees": [
+      {
+        "path": "",
+        "entry_count": 9,
+        "payload_bytes": 310,
+        "tree_oid": "2a77b46a6a4a7645b7ec63831ce7e46bd7921904"
+      },
+      {
+        "path": ".github",
+        "entry_count": 1,
+        "payload_bytes": 38,
+        "tree_oid": "5f093732bf441a06ff1af692b108674a9e585f31"
+      },
+      {
+        "path": "api",
+        "entry_count": 1,
+        "payload_bytes": 40,
+        "tree_oid": "b6aef728b9c98d60001c3c02ed8b18a907a0e266"
+      },
+      {
+        "path": "assets",
+        "entry_count": 1,
+        "payload_bytes": 39,
+        "tree_oid": "5507e3f2d1cb90e4751ab11bb1896d46c9ec1840"
+      },
+      {
+        "path": "src",
+        "entry_count": 1,
+        "payload_bytes": 34,
+        "tree_oid": "f41cdbd8214aeb85cd9b1eb07d45308fed184f9d"
+      },
+      {
+        "path": "tools",
+        "entry_count": 1,
+        "payload_bytes": 39,
+        "tree_oid": "197d47856ba9946649aa3999766a77ea8537703a"
+      }
+    ]
+  },
+  "expected_inventory": {
+    "directory_count": 5,
+    "regular_file_count": 9,
+    "total_file_bytes": 531,
+    "supported_file_count": 8,
+    "unsupported_file_count": 1,
+    "languages": {
+      "rust": ["build.rs", "src/lib.rs"],
+      "shell": ["tools/sentinel.sh"]
+    },
+    "manifests": {
+      "cargo": ["Cargo.toml"]
+    },
+    "contracts": {
+      "openapi": ["api/openapi.yaml"]
+    },
+    "configurations": {
+      "rustfmt": ["rustfmt.toml"]
+    },
+    "ownership": {
+      "github-codeowners": [".github/CODEOWNERS"]
+    },
+    "unsupported_content": ["assets/payload.bin"],
+    "sentinels": ["build.rs", "tools/sentinel.sh"],
+    "coverage_gap_count": 7
+  },
+  "derived_variants": {
+    "traversal": {
+      "timestamp": 978307201,
+      "message": "fixture: S1 traversal\n",
+      "entry": {
+        "mode": "100644",
+        "name_utf8": "..",
+        "content_utf8": "outside\n",
+        "blob_oid": "06d10a57a75dc0d5d1fd0fb2df7ec6fbe9c6ddaa"
+      },
+      "tree_oid": "ea634ab609ef56e15b767dde57f22b1fac30cee7",
+      "commit_oid": "65068ecfe754607d23d2e7efe6d5619aca64c7c7",
+      "expected_error": {
+        "code": "acquisition.path_invalid",
+        "context": {
+          "reason": "dot_component"
+        }
+      }
+    },
+    "symlink_escape": {
+      "timestamp": 978307202,
+      "message": "fixture: S1 symlink_escape\n",
+      "entry": {
+        "mode": "120000",
+        "name_utf8": "escape",
+        "target_utf8": "../outside-sentinel",
+        "blob_oid": "e6d8ca6033a7357250f66a9df966a29504a33579"
+      },
+      "tree_oid": "bd686e43a7cc45c408ed2df94e29621c88fe5a68",
+      "commit_oid": "5db07d07ce15c78e21d477598ab46a2f189520bc",
+      "expected_error": {
+        "code": "acquisition.entry_policy_violation",
+        "context": {
+          "entry": "symlink",
+          "path": "escape"
+        }
+      }
+    },
+    "symlink_loop": {
+      "timestamp": 978307203,
+      "message": "fixture: S1 symlink_loop\n",
+      "entry": {
+        "mode": "120000",
+        "name_utf8": "loop",
+        "target_utf8": "loop",
+        "blob_oid": "3475c52b99b490c75d41846d6bc2ca13d5748044"
+      },
+      "tree_oid": "a288d49787b960bf3bac08372fd514fb73d29b1b",
+      "commit_oid": "d60db7bfdb392c56d9ca04e23bc781ecc529b775",
+      "expected_error": {
+        "code": "acquisition.entry_policy_violation",
+        "context": {
+          "entry": "symlink",
+          "path": "loop"
+        }
+      }
+    },
+    "gitlink": {
+      "timestamp": 978307204,
+      "message": "fixture: S1 gitlink\n",
+      "entry": {
+        "mode": "160000",
+        "name_utf8": "vendor",
+        "commit_oid": "1111111111111111111111111111111111111111"
+      },
+      "tree_oid": "535b883084a107924f2c3a8e9c0731e5c2459946",
+      "commit_oid": "53833f243be61158b99f862915f9ace009962aa7",
+      "expected_error": {
+        "code": "acquisition.entry_policy_violation",
+        "context": {
+          "entry": "gitlink",
+          "path": "vendor"
+        }
+      }
+    },
+    "single_file_at_limit": {
+      "timestamp": 978307205,
+      "message": "fixture: S1 file bytes 4194304\n",
+      "generator": {
+        "path": "oversized.bin",
+        "mode": "100644",
+        "repeat_byte_hex": "61",
+        "byte_length": 4194304
+      },
+      "blob_oid": "e32d5a9747f1e4bb06757725c1bb347d5e5b04da",
+      "tree_oid": "c16764bdde430cc6512fc3b7b4e4b7dd83e797b2",
+      "commit_oid": "529cf9c6d307151fb01d2f7499641d207c371761",
+      "expected": "success"
+    },
+    "single_file_over_limit": {
+      "timestamp": 978307206,
+      "message": "fixture: S1 file bytes 4194305\n",
+      "generator": {
+        "path": "oversized.bin",
+        "mode": "100644",
+        "repeat_byte_hex": "61",
+        "byte_length": 4194305
+      },
+      "blob_oid": "d67fcb8ab2ad693a0b65d6ec0559ffe487b2e721",
+      "tree_oid": "2cad2243340438456423a8af3ba9eb3451154157",
+      "commit_oid": "e02e36b7c78758b78e810af34198410633006968",
+      "expected_error": {
+        "code": "acquisition.limit_exceeded",
+        "context": {
+          "limit": "single_file_bytes",
+          "maximum": 4194304,
+          "observed": 4194305
+        }
+      }
+    },
+    "isolation": {
+      "base_commit": "A",
+      "committed_tree_changes": false,
+      "outside_canary": {
+        "relative_to_repository_parent": "outside-sentinel",
+        "content_utf8": "must-not-be-read-or-changed\n"
+      },
+      "post_materialization_steps": [
+        {
+          "kind": "set_environment",
+          "key": "CODENOESIS_SENTINEL",
+          "value": "{outside_canary_path}"
+        },
+        {
+          "kind": "write_executable_file",
+          "path": ".git/hooks/post-checkout",
+          "mode": "100755",
+          "content_utf8": "#!/bin/sh\nprintf 'hook-executed\\n' > \"$CODENOESIS_SENTINEL\"\n"
+        },
+        {
+          "kind": "set_local_git_config",
+          "key": "remote.origin.url",
+          "value": "https://127.0.0.1:9/codenoesis-sentinel.git"
+        }
+      ],
+      "expected_sentinel": "absent",
+      "expected_outside_canary_sha256": "9c874676ae9cbb8ed472853ae3e7fb3f5db162c4384cc5f9800c2b5eec612f8f",
+      "expected_ipv4_or_ipv6_socket_syscalls": 0,
+      "expected_post_start_process_exec_syscalls": 0,
+      "expected_outside_root_filesystem_events": 0
+    }
+  },
+  "limit_cases": [
+    {
+      "limit": "regular_files",
+      "maximum": 20000,
+      "max_recipe": "generate 20000 root-level 100644 one-byte blobs with fixed-width hexadecimal names",
+      "plus_one_recipe": "append the lexically last 20001st one-byte file"
+    },
+    {
+      "limit": "tree_entries",
+      "maximum": 25000,
+      "max_recipe": "generate 20000 one-byte files and 5000 root-level references to the canonical empty tree",
+      "plus_one_recipe": "append the lexically last 5001st empty-tree reference"
+    },
+    {
+      "limit": "cumulative_file_bytes",
+      "maximum": 268435456,
+      "max_recipe": "generate 64 regular files of 4194304 repeated bytes",
+      "plus_one_recipe": "append one lexically last one-byte regular file"
+    },
+    {
+      "limit": "single_file_bytes",
+      "maximum": 4194304,
+      "max_recipe": "derived_variants.single_file_at_limit",
+      "plus_one_recipe": "derived_variants.single_file_over_limit"
+    },
+    {
+      "limit": "path_bytes",
+      "maximum": 1024,
+      "max_recipe": "generate one ASCII path of exactly 1024 bytes using components no longer than 255 bytes and depth no greater than 32",
+      "plus_one_recipe": "extend the final component by one ASCII byte"
+    },
+    {
+      "limit": "path_component_bytes",
+      "maximum": 255,
+      "max_recipe": "generate one root-level ASCII name of exactly 255 bytes",
+      "plus_one_recipe": "extend that name by one ASCII byte"
+    },
+    {
+      "limit": "recursion_depth",
+      "maximum": 32,
+      "max_recipe": "generate 31 one-byte directories and one one-byte file",
+      "plus_one_recipe": "insert one additional one-byte directory before the file"
+    },
+    {
+      "limit": "canonical_output_bytes",
+      "maximum": 33554432,
+      "max_recipe": "use deterministic path-length tuning to make canonical stdout including LF exactly 33554432 bytes",
+      "plus_one_recipe": "extend the lexically last unsupported path by one byte while all input limits remain valid"
+    },
+    {
+      "limit": "scan_wall_milliseconds",
+      "maximum": 60000,
+      "max_recipe": "inject a monotonic test clock ending at exactly 60000 milliseconds",
+      "plus_one_recipe": "inject the same operation schedule ending at 60001 milliseconds"
+    }
+  ],
+  "attack_recipes": [
+    {
+      "id": "declared_blob_bomb",
+      "generator": "loose zlib object declaring blob size 4194305 with repeated byte 61",
+      "expected": "acquisition.limit_exceeded single_file_bytes before full allocation"
+    },
+    {
+      "id": "tree_fanout_bomb",
+      "generator": "shared subtree references expanded by path until the 25001st entry",
+      "expected": "acquisition.limit_exceeded tree_entries without traversing later entries"
+    },
+    {
+      "id": "archive_bomb",
+      "generator": "valid small ZIP containing a high-ratio repeated payload under an unsupported path",
+      "expected": "one unsupported file; archive bytes are never expanded"
+    },
+    {
+      "id": "malformed_utf8",
+      "generator": "bounded .rs blob containing invalid UTF-8 at the final byte",
+      "expected": "Rust path recognition with binary_or_unknown content and explicit extraction gap"
+    },
+    {
+      "id": "openapi_signature_stress",
+      "generator": "bounded openapi.yaml beginning openapi: followed by deeply nested malformed YAML-like text",
+      "expected": "OpenAPI recognition only; no YAML parsing"
+    }
+  ],
+  "oracles": {
+    "configuration_hash": "e1ec700bfa58726d372c6f412080684c4d47121d056e99934b61d646ed301675",
+    "snapshot_a_hash": "236b231c3154f9be56130ddc8dfb39bb482af10330f7c6757597ad22c006e9e7",
+    "semantic_a": "expected-semantic-a.json",
+    "semantic_a_jcs": "expected-semantic-a.jcs",
+    "snapshot_a": "expected-snapshot-a.json",
+    "snapshot_a_jcs": "expected-snapshot-a.jcs",
+    "symlink_error": "expected-error-symlink.json",
+    "file_limit_error": "expected-error-file-limit.json"
+  }
+}
