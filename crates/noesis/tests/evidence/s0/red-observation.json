@@ -1,0 +1,42 @@
+{
+  "schema_version": "codenoesis.local-test-observation/v1",
+  "evidence_manifest_schema": "tests/specifications/s0/evidence-manifest-v1.schema.json",
+  "slice": "S0",
+  "status": "red_observed",
+  "requirements": [
+    "DR-ART-001",
+    "DR-ART-002",
+    "FR-ACQ-001",
+    "FR-CLI-003",
+    "NFR-DET-001",
+    "NFR-MNT-001",
+    "NFR-SEC-005",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "oracle_bundle_sha256": "d049ea8338d5c48393410b1c2c71bd430e531d7ebe76551cc181ccb40936ee9e",
+  "base_sha": "4a92d29b88363ef06437a698835c65d605039d44",
+  "pre_implementation_sha": "d5fdc8a2f9b599cc7bcf45dd976a109a5ae25dfc",
+  "red": {
+    "test_id": "e2e_fr_acq_001_immutable_commit",
+    "command": "cargo test --test e2e_fr_acq_001_immutable_commit",
+    "runner_exit_code": 101,
+    "subject_exit_code": 70,
+    "expected_failure": "The harness expects exit 0 and RepositorySnapshotV1 while the product behavior is deliberately absent.",
+    "observed_failure": "The subject exited 70 with test-only stderr marker S0_NOT_IMPLEMENTED; the acceptance assertion failed.",
+    "observed_at": "2026-07-22T05:47:51Z",
+    "log": {
+      "path": "crates/noesis/tests/evidence/s0/red/e2e_fr_acq_001_immutable_commit.log",
+      "sha256": "eb7761a8d84a2a692811259582919d9ddf91c3ff0d809898ec4eac2f55146c69"
+    }
+  },
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "features": []
+  },
+  "github_actions_artifact": null,
+  "limitation": "This local observation is not an EvidenceManifestV1 instance because no immutable GitHub Actions artifact locator exists yet; it must not be used to claim Verified."
+}
