@@ -7,11 +7,11 @@
     },
     {
       "path": "docs/software/decisions/0002-s1-safe-inventory-contract.md",
-      "sha256": "1d069e37a0188dd7f7ac5149cbac56de6c7902e0e465e32fcf9ebb85f94d13d4"
+      "sha256": "1edea24f3e8b9fa938e945df844aed01e15723c84c1b8c88bc81e29f774f76db"
     },
     {
       "path": "scripts/tests/test_s1_contract.py",
-      "sha256": "cce9135af3a220b2683d9c21ec20653cfbd7439e7b024c0b448bc969fe855068"
+      "sha256": "426ed2e801448880f5da3d31402f4b363e50130d6d70fb0abf43b9e3c12e0fa3"
     },
     {
       "path": "tests/fixtures/s1/safe-inventory-v1/README.md",
@@ -91,7 +91,7 @@
     },
     {
       "path": "tests/specifications/s1/e2e_fr_inv_001_safe_inventory.json",
-      "sha256": "238e7a9b05aa6c0676e1eb833aa1c4ac3986c313ede9bb42a29deab85ee6d74d"
+      "sha256": "25ea508afca9655652862ce3d4304b162d0b221d07fc48ea0674174e97aa320d"
     },
     {
       "path": "tests/specifications/s1/repository-snapshot-v2.schema.json",
@@ -102,5 +102,5 @@
       "sha256": "f9831d7e2b1c303bb2153a02856ba168c97cad3f8aecb140a1093b9c348aa08b"
     }
   ],
-  "bundle_sha256": "93c199a7a6a9a672cedaf74ce5197302e57620c663aceb8d27809b9074120255"
+  "bundle_sha256": "1a0c6222699d683238e36aef0f77d40a02db469a6c394a812c0e8aa7a1398867"
 }

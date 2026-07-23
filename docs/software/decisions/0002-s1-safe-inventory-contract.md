@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Accepted; authoritative only after the accountable actor manually merges the protected ratification pull request that closes [#16](https://github.com/smutti/codenoesis/issues/16) |
+| Status | Accepted; authoritative only after the accountable actor manually merges protected PR [#17](https://github.com/smutti/codenoesis/pull/17) |
 | Date | 2026-07-23 |
 | Scope | `S1 — Safe inventory` only |
 | Product owner | Andrea Moretti — project governance persona represented by [`@smutti`](https://github.com/smutti), not a separate natural person |
@@ -10,6 +10,7 @@
 | Risk | High: public artifacts, evidence semantics, untrusted repository traversal, filesystem confinement, and numeric limits |
 | Requirements | `DR-EVD-001`, `FR-ACQ-002`, `FR-INV-001`, `NFR-SEC-001` |
 | Issue | [#16](https://github.com/smutti/codenoesis/issues/16) |
+| Approval reference | PR [#17](https://github.com/smutti/codenoesis/pull/17); effective only on protected manual merge by `@smutti` |
 
 This record approves no production implementation by itself. It becomes
 authoritative only through the protected manual merge by `@smutti`; the

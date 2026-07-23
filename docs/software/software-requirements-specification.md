@@ -12,7 +12,7 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.3` |
-| Status | S0 remains Approved and implemented; S1 becomes Approved only when the accountable single maintainer manually squash-merges the protected ratification change that closes issue [#16](https://github.com/smutti/codenoesis/issues/16) |
+| Status | S0 remains Approved and implemented; S1 becomes Approved only when the accountable single maintainer manually squash-merges protected PR [#17](https://github.com/smutti/codenoesis/pull/17) |
 | Date | 2026-07-23 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
@@ -146,18 +146,17 @@ review MUST be restored before the next protected governance ratification.
 
 The following is the exact Approved set for **S1 — Safe inventory**. Approval
 becomes authoritative only when `@smutti` manually squash-merges the exact
-protected ratification head that closes issue
-[#16](https://github.com/smutti/codenoesis/issues/16). The authoring agent does
-not approve or merge. This high-risk decision fixes public artifact and error
-schemas, source-evidence semantics, untrusted-tree policy, filesystem
-confinement, and numeric limits.
+protected head of PR [#17](https://github.com/smutti/codenoesis/pull/17).
+The authoring agent does not approve or merge. This high-risk decision fixes
+public artifact and error schemas, source-evidence semantics, untrusted-tree
+policy, filesystem confinement, and numeric limits.
 
 | Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
 |---|---|---|---|---|---|---|---|
-| `DR-EVD-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [Protected S1 ratification tracked by #16](https://github.com/smutti/codenoesis/issues/16) | `S1` | [S1 contract decision](decisions/0002-s1-safe-inventory-contract.md) |
-| `FR-ACQ-002` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [Protected S1 ratification tracked by #16](https://github.com/smutti/codenoesis/issues/16) | `S1` | [S1 contract decision](decisions/0002-s1-safe-inventory-contract.md) |
-| `FR-INV-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [Protected S1 ratification tracked by #16](https://github.com/smutti/codenoesis/issues/16) | `S1` | [S1 acceptance specification](../../tests/specifications/s1/e2e_fr_inv_001_safe_inventory.json) |
-| `NFR-SEC-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [Protected S1 ratification tracked by #16](https://github.com/smutti/codenoesis/issues/16) | `S1` | [S1 acceptance specification](../../tests/specifications/s1/e2e_fr_inv_001_safe_inventory.json) |
+| `DR-EVD-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #17 protected merge record](https://github.com/smutti/codenoesis/pull/17) | `S1` | [S1 contract decision](decisions/0002-s1-safe-inventory-contract.md) |
+| `FR-ACQ-002` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #17 protected merge record](https://github.com/smutti/codenoesis/pull/17) | `S1` | [S1 contract decision](decisions/0002-s1-safe-inventory-contract.md) |
+| `FR-INV-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #17 protected merge record](https://github.com/smutti/codenoesis/pull/17) | `S1` | [S1 acceptance specification](../../tests/specifications/s1/e2e_fr_inv_001_safe_inventory.json) |
+| `NFR-SEC-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #17 protected merge record](https://github.com/smutti/codenoesis/pull/17) | `S1` | [S1 acceptance specification](../../tests/specifications/s1/e2e_fr_inv_001_safe_inventory.json) |
 
 S1 is an explicit compatibility profile:
 `--profile standard-local-s1` emits `RepositorySnapshotV2` or
@@ -175,7 +174,7 @@ separate protected change may bind these exact four IDs to the full commit on
 `main` containing the byte-identical SRS. Until that change is reviewed and
 merged, autonomous S1 authorization fails closed.
 
-S1 contract bundle: `sha256:93c199a7a6a9a672cedaf74ce5197302e57620c663aceb8d27809b9074120255`.
+S1 contract bundle: `sha256:1a0c6222699d683238e36aef0f77d40a02db469a6c394a812c0e8aa7a1398867`.
 The bundle binds the decision, strict schemas, machine oracle, synthetic
 fixture, reviewed goldens, inherited S0 security policy, and independent
 maintenance guard. Any bound-byte change requires a new digest and renewed
