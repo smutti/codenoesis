@@ -25,9 +25,21 @@ APPROVED_S0_REQUIREMENTS = (
     "NFR-TST-001",
     "NFR-TST-002",
 )
+APPROVED_S1_REQUIREMENTS = (
+    "DR-EVD-001",
+    "FR-ACQ-002",
+    "FR-INV-001",
+    "NFR-SEC-001",
+)
+APPROVED_REQUIREMENTS = tuple(
+    sorted(APPROVED_S0_REQUIREMENTS + APPROVED_S1_REQUIREMENTS)
+)
 S0_APPROVED_AT = "2026-07-22T19:41:36Z"
 S0_APPROVAL_SOURCE_SHA = "a9c718504d126f9c3b398aed3714c132243d3d3c"
 S0_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/12"
+S1_APPROVED_AT = "2026-07-23T18:42:06Z"
+S1_APPROVAL_SOURCE_SHA = "88abc745ab26a6a65615e5ead46076e18a02d9e1"
+S1_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/17"
 
 SPEC = importlib.util.spec_from_file_location("codex_policy", MODULE_PATH)
 if SPEC is None or SPEC.loader is None:  # pragma: no cover - import contract
@@ -61,17 +73,30 @@ class PolicyValidationTests(PolicyFixture):
         self.assertEqual(1, self.policy["version"])
         approvals = self.policy["approved_requirements"]
         self.assertEqual(
-            list(APPROVED_S0_REQUIREMENTS),
+            list(APPROVED_REQUIREMENTS),
             [approval_record["id"] for approval_record in approvals],
         )
         for approval_record in approvals:
-            self.assertEqual("S0", approval_record["slice"])
             self.assertEqual("github:smutti", approval_record["approved_by"])
-            self.assertEqual(S0_APPROVAL_SOURCE_SHA, approval_record["source_sha"])
-            self.assertEqual(
-                S0_APPROVAL_REFERENCE, approval_record["approval_reference"]
-            )
-            self.assertEqual(S0_APPROVED_AT, approval_record["approved_at"])
+            if approval_record["id"] in APPROVED_S0_REQUIREMENTS:
+                self.assertEqual("S0", approval_record["slice"])
+                self.assertEqual(
+                    S0_APPROVAL_SOURCE_SHA, approval_record["source_sha"]
+                )
+                self.assertEqual(
+                    S0_APPROVAL_REFERENCE, approval_record["approval_reference"]
+                )
+                self.assertEqual(S0_APPROVED_AT, approval_record["approved_at"])
+            else:
+                self.assertIn(approval_record["id"], APPROVED_S1_REQUIREMENTS)
+                self.assertEqual("S1", approval_record["slice"])
+                self.assertEqual(
+                    S1_APPROVAL_SOURCE_SHA, approval_record["source_sha"]
+                )
+                self.assertEqual(
+                    S1_APPROVAL_REFERENCE, approval_record["approval_reference"]
+                )
+                self.assertEqual(S1_APPROVED_AT, approval_record["approved_at"])
         self.assertEqual(
             "https://json-schema.org/draft/2020-12/schema", schema["$schema"]
         )
@@ -218,6 +243,24 @@ class GlobSemanticsTests(unittest.TestCase):
 
 
 class AuthorizationTests(PolicyFixture):
+    def test_repository_policy_authorizes_exact_ratified_s1_set(self) -> None:
+        result = codex_policy.authorize_requirements(
+            self.policy, list(APPROVED_S1_REQUIREMENTS), "S1"
+        )
+
+        self.assertTrue(result["authorized"])
+        self.assertEqual("S1", result["delivery_slice"])
+        self.assertEqual(
+            list(APPROVED_S1_REQUIREMENTS), result["requirement_ids"]
+        )
+        self.assertEqual(
+            list(APPROVED_S1_REQUIREMENTS),
+            [record["id"] for record in result["approval_records"]],
+        )
+        for record in result["approval_records"]:
+            self.assertEqual(S1_APPROVAL_SOURCE_SHA, record["source_sha"])
+            self.assertEqual(S1_APPROVAL_REFERENCE, record["approval_reference"])
+
     def test_exact_approved_ids_for_one_slice_are_authorized(self) -> None:
         self.policy["approved_requirements"] = [
             approval("FR-ACQ-001", "S0"),
@@ -528,7 +571,7 @@ class CommandLineTests(PolicyFixture):
         payload = json.loads(result.stdout)
         self.assertEqual("valid", payload["status"])
         self.assertEqual(
-            len(APPROVED_S0_REQUIREMENTS), payload["approved_requirement_count"]
+            len(APPROVED_REQUIREMENTS), payload["approved_requirement_count"]
         )
 
     def test_authorization_denial_has_stable_exit_code_and_json_error(self) -> None:
@@ -537,9 +580,9 @@ class CommandLineTests(PolicyFixture):
             "--policy",
             str(POLICY_PATH),
             "--slice",
-            "S0",
+            "S1",
             "--requirement-id",
-            "FR-INV-001",
+            "FR-INV-002",
         )
 
         self.assertEqual(4, result.returncode)
