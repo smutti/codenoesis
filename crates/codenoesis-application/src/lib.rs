@@ -1,10 +1,12 @@
-//! Application orchestration for the `CodeNoesis` S0 slice.
+//! Application orchestration for the `CodeNoesis` S0 and S1 slices.
 
 use std::ffi::OsString;
 
-use codenoesis_contracts::{RepositorySnapshotV1, SnapshotEnvelopeV1};
-use codenoesis_domain::{AcquisitionError, RepositoryError, RepositoryIdentity, Revision};
-use codenoesis_ports::RepositoryAcquirer;
+use codenoesis_contracts::{RepositorySnapshotV1, RepositorySnapshotV2, SnapshotEnvelopeV1};
+use codenoesis_domain::{
+    AcquisitionError, RepositoryError, RepositoryIdentity, RepositoryInventory, Revision,
+};
+use codenoesis_ports::{RepositoryAcquirer, SafeRepositoryAcquirer};
 
 pub struct ScanRequest {
     repository: OsString,
@@ -64,6 +66,31 @@ where
             })?;
         Ok(RepositorySnapshotV1::from_bound_revision(
             &bound,
+            request.envelope,
+        ))
+    }
+}
+
+impl<A> ScanService<A>
+where
+    A: SafeRepositoryAcquirer,
+{
+    /// Executes an S1 safe-inventory scan from one immutable repository binding.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed acquisition or policy failure, or a redacted internal failure.
+    pub fn scan_s1(&self, request: ScanRequest) -> Result<RepositorySnapshotV2, ScanError> {
+        let acquired = self
+            .acquirer
+            .acquire_inventory(&request.repository, request.identity, request.revision)
+            .map_err(|error| match error {
+                RepositoryError::Acquisition(acquisition) => ScanError::Acquisition(acquisition),
+                RepositoryError::Unexpected => ScanError::Internal,
+            })?;
+        let inventory = RepositoryInventory::classify(acquired);
+        Ok(RepositorySnapshotV2::from_inventory(
+            &inventory,
             request.envelope,
         ))
     }

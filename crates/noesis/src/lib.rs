@@ -1,5 +1,10 @@
 //! Composition support for the `CodeNoesis` command-line interface.
 
+use std::ffi::OsStr;
+
+#[cfg(target_os = "linux")]
+mod filesystem_sandbox;
+
 #[cfg(all(
     target_os = "linux",
     any(target_arch = "x86_64", target_arch = "aarch64")
@@ -43,6 +48,30 @@ pub const fn install_s0_security_boundary() -> Result<(), SecurityBoundaryError>
 /// control on non-Linux systems.
 #[cfg(not(target_os = "linux"))]
 pub const fn install_s0_security_boundary() -> Result<(), SecurityBoundaryError> {
+    Ok(())
+}
+
+/// Installs the S1 read-only repository-root filesystem boundary on Linux.
+///
+/// # Errors
+///
+/// Returns an opaque error when Landlock is unavailable or cannot fully enforce
+/// the approved filesystem rights.
+#[cfg(target_os = "linux")]
+pub fn install_s1_filesystem_boundary(repository: &OsStr) -> Result<(), SecurityBoundaryError> {
+    filesystem_sandbox::install(repository)
+}
+
+/// Confirms that normative S1 filesystem confinement is Linux-only.
+///
+/// # Errors
+///
+/// This portability implementation is infallible and installs no substitute
+/// control on non-Linux systems.
+#[cfg(not(target_os = "linux"))]
+pub const fn install_s1_filesystem_boundary(
+    _repository: &OsStr,
+) -> Result<(), SecurityBoundaryError> {
     Ok(())
 }
 

@@ -2,37 +2,61 @@
 
 use std::env;
 use std::ffi::{OsStr, OsString};
+use std::fs;
 use std::io::{self, Write};
 use std::process::ExitCode;
 use std::sync::atomic::{AtomicU64, Ordering};
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
 use codenoesis_application::{ScanError, ScanRequest, ScanService};
-use codenoesis_contracts::{CodeNoesisErrorV1, SnapshotEnvelopeV1};
-use codenoesis_domain::{InputError, RepositoryIdentity, Revision};
+use codenoesis_contracts::{
+    CodeNoesisErrorV1, CodeNoesisErrorV2, RepositorySnapshotV2Error, SnapshotEnvelopeV1,
+};
+use codenoesis_domain::{
+    InputError, LimitKind, RepositoryIdentity, Revision, STANDARD_LOCAL_S1_LIMITS, limit_exceeded,
+};
 use codenoesis_repository::LocalGitRepository;
 
 static CORRELATION_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 fn main() -> ExitCode {
     if noesis::install_s0_security_boundary().is_err() {
-        return emit_internal_error();
+        return emit_internal_error_v1();
     }
-    match run(env::args_os()) {
+    let arguments = env::args_os().collect::<Vec<_>>();
+    let s1_requested = arguments
+        .iter()
+        .any(|argument| argument == OsStr::new("--profile"));
+    let result = if s1_requested {
+        run_s1(arguments)
+    } else {
+        run_s0(arguments)
+    };
+    match result {
         Ok(stdout) => match io::stdout().lock().write_all(&stdout) {
             Ok(()) => ExitCode::SUCCESS,
-            Err(_) => emit_internal_error(),
+            Err(_) if s1_requested => emit_internal_error_v2(),
+            Err(_) => emit_internal_error_v1(),
         },
-        Err(Failure::Input(error)) => emit_error(&CodeNoesisErrorV1::from_input(error), 2),
-        Err(Failure::Scan(ScanError::Acquisition(error))) => {
-            emit_error(&CodeNoesisErrorV1::from_acquisition(&error), 10)
+        Err(Failure::Input(error)) if s1_requested => {
+            emit_error_v2(&CodeNoesisErrorV2::from_input(error), 2)
         }
-        Err(Failure::Scan(ScanError::Internal) | Failure::Internal) => emit_internal_error(),
+        Err(Failure::Input(error)) => emit_error_v1(&CodeNoesisErrorV1::from_input(error), 2),
+        Err(Failure::Scan(ScanError::Acquisition(error))) if s1_requested => {
+            emit_error_v2(&CodeNoesisErrorV2::from_acquisition(&error), 10)
+        }
+        Err(Failure::Scan(ScanError::Acquisition(error))) => {
+            emit_error_v1(&CodeNoesisErrorV1::from_acquisition(&error), 10)
+        }
+        Err(Failure::Scan(ScanError::Internal) | Failure::Internal) if s1_requested => {
+            emit_internal_error_v2()
+        }
+        Err(Failure::Scan(ScanError::Internal) | Failure::Internal) => emit_internal_error_v1(),
     }
 }
 
-fn run(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
-    let invocation = Invocation::parse(arguments)?;
+fn run_s0(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
+    let invocation = Invocation::parse(arguments, false).map_err(Failure::Input)?;
     let envelope = current_envelope().ok_or(Failure::Internal)?;
     let request = ScanRequest::new(
         invocation.repository,
@@ -47,11 +71,63 @@ fn run(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure
         .map_err(|_| Failure::Internal)
 }
 
-fn emit_internal_error() -> ExitCode {
-    emit_error(&CodeNoesisErrorV1::internal(), 70)
+fn run_s1(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
+    let invocation = Invocation::parse(arguments, true).map_err(Failure::Input)?;
+    let started_at = Instant::now();
+    if s1_boundary_applies(&invocation.repository)
+        && noesis::install_s1_filesystem_boundary(&invocation.repository).is_err()
+    {
+        return Err(Failure::Internal);
+    }
+    let envelope = current_envelope().ok_or(Failure::Internal)?;
+    let request = ScanRequest::new(
+        invocation.repository,
+        invocation.identity,
+        invocation.revision,
+        envelope,
+    );
+    let stdout = ScanService::new(LocalGitRepository::new())
+        .scan_s1(request)
+        .map_err(Failure::Scan)?
+        .canonical_stdout()
+        .map_err(|error| match error {
+            RepositorySnapshotV2Error::LimitExceeded(error) => {
+                Failure::Scan(ScanError::Acquisition(error))
+            }
+            RepositorySnapshotV2Error::Serialization(_)
+            | RepositorySnapshotV2Error::OutputLengthOverflow => Failure::Internal,
+        })?;
+    let elapsed = u64::try_from(started_at.elapsed().as_millis()).map_err(|_| Failure::Internal)?;
+    if elapsed > STANDARD_LOCAL_S1_LIMITS.scan_wall_milliseconds {
+        return Err(Failure::Scan(ScanError::Acquisition(limit_exceeded(
+            LimitKind::ScanWallMilliseconds,
+            elapsed,
+        ))));
+    }
+    Ok(stdout)
 }
 
-fn emit_error(error: &CodeNoesisErrorV1, code: u8) -> ExitCode {
+fn s1_boundary_applies(repository: &OsStr) -> bool {
+    fs::symlink_metadata(repository)
+        .is_ok_and(|metadata| metadata.is_dir() && !metadata.file_type().is_symlink())
+}
+
+fn emit_internal_error_v1() -> ExitCode {
+    emit_error_v1(&CodeNoesisErrorV1::internal(), 70)
+}
+
+fn emit_internal_error_v2() -> ExitCode {
+    emit_error_v2(&CodeNoesisErrorV2::internal(), 70)
+}
+
+fn emit_error_v1(error: &CodeNoesisErrorV1, code: u8) -> ExitCode {
+    if let Ok(bytes) = error.canonical_stderr() {
+        let _ = io::stderr().lock().write_all(&bytes);
+    }
+    ExitCode::from(code)
+}
+
+fn emit_error_v2(error: &CodeNoesisErrorV2, code: u8) -> ExitCode {
     if let Ok(bytes) = error.canonical_stderr() {
         let _ = io::stderr().lock().write_all(&bytes);
     }
@@ -71,20 +147,28 @@ struct Invocation {
 }
 
 impl Invocation {
-    fn parse(arguments: impl IntoIterator<Item = OsString>) -> Result<Self, Failure> {
+    fn parse(
+        arguments: impl IntoIterator<Item = OsString>,
+        require_s1_profile: bool,
+    ) -> Result<Self, InputError> {
         let mut arguments = arguments.into_iter();
         let _program = arguments.next();
         if arguments.next().as_deref() != Some(OsStr::new("scan")) {
-            return Err(Failure::Input(InputError::InvalidRevision));
+            return Err(InputError::InvalidRevision);
         }
         let mut repository = None;
         let mut identity = None;
         let mut revision = None;
+        let mut profile = None;
         let mut format = None;
         while let Some(flag) = arguments.next() {
-            let value = arguments
-                .next()
-                .ok_or(Failure::Input(InputError::InvalidRevision))?;
+            let value = arguments.next().ok_or_else(|| {
+                if flag == OsStr::new("--profile") {
+                    InputError::InvalidProfile
+                } else {
+                    InputError::InvalidRevision
+                }
+            })?;
             match flag.to_str() {
                 Some("--repository") if repository.is_none() => repository = Some(value),
                 Some("--repository-id") if identity.is_none() => {
@@ -93,19 +177,29 @@ impl Invocation {
                 Some("--revision") if revision.is_none() => {
                     revision = value.to_str().map(str::to_owned);
                 }
+                Some("--profile") if profile.is_none() => {
+                    profile = value.to_str().map(str::to_owned);
+                }
                 Some("--format") if format.is_none() => format = value.to_str().map(str::to_owned),
-                _ => return Err(Failure::Input(InputError::InvalidRevision)),
+                _ => return Err(InputError::InvalidRevision),
             }
         }
-        let repository = repository.ok_or(Failure::Input(InputError::InvalidRevision))?;
+        let repository = repository.ok_or(InputError::InvalidRevision)?;
         let identity = identity
-            .ok_or(Failure::Input(InputError::InvalidRepositoryIdentity))
-            .and_then(|value| RepositoryIdentity::parse(&value).map_err(Failure::Input))?;
+            .ok_or(InputError::InvalidRepositoryIdentity)
+            .and_then(|value| RepositoryIdentity::parse(&value))?;
         let revision = revision
-            .ok_or(Failure::Input(InputError::InvalidRevision))
-            .and_then(|value| Revision::parse(&value).map_err(Failure::Input))?;
+            .ok_or(InputError::InvalidRevision)
+            .and_then(|value| Revision::parse(&value))?;
+        if require_s1_profile {
+            if profile.as_deref() != Some("standard-local-s1") {
+                return Err(InputError::InvalidProfile);
+            }
+        } else if profile.is_some() {
+            return Err(InputError::InvalidRevision);
+        }
         if format.as_deref() != Some("json") {
-            return Err(Failure::Input(InputError::InvalidRevision));
+            return Err(InputError::InvalidRevision);
         }
         Ok(Self {
             repository,
