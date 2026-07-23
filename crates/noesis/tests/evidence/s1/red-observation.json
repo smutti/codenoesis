@@ -1,0 +1,52 @@
+{
+  "schema_version": "codenoesis.local-test-observation/v1",
+  "slice": "S1",
+  "status": "red_observed",
+  "requirements": [
+    "DR-EVD-001",
+    "FR-ACQ-002",
+    "FR-INV-001",
+    "NFR-SEC-001"
+  ],
+  "oracle_bundle_sha256": "1a0c6222699d683238e36aef0f77d40a02db469a6c394a812c0e8aa7a1398867",
+  "base_sha": "15e976bd11e3d2a42c191cf4373b22e6ffc1702f",
+  "pre_implementation_sha": "b6f0ac8373542d6c6652a286643300d933f75dbe",
+  "policy": {
+    "version": 1,
+    "source_sha": "88abc745ab26a6a65615e5ead46076e18a02d9e1",
+    "approval_reference": "https://github.com/smutti/codenoesis/pull/17",
+    "binding_merge": "https://github.com/smutti/codenoesis/pull/19"
+  },
+  "red": {
+    "test_id": "e2e_fr_inv_001_safe_inventory",
+    "command": "cargo test --test e2e_fr_inv_001_safe_inventory",
+    "runner_exit_code": 101,
+    "subject_exit_code": 2,
+    "subject_stderr_schema": "codenoesis.error/v1",
+    "subject_stderr_code": "input.invalid_revision",
+    "expected_failure": "The harness expects exit 0 and RepositorySnapshotV2 while merged S0 does not recognize --profile standard-local-s1.",
+    "observed_failure": "The fixture materialized to the ratified commit, the subject returned the approved S0 invalid-profile precursor, and the acceptance assertion failed.",
+    "observed_at": "2026-07-23T18:59:05Z",
+    "issue_comment": "https://github.com/smutti/codenoesis/issues/20#issuecomment-5062238914",
+    "log": {
+      "path": "crates/noesis/tests/evidence/s1/red/e2e_fr_inv_001_safe_inventory.log",
+      "sha256": "fe803def4247c5a5a7b4f925e427b4d9f57256563dce7defe91b467ff028dbb4"
+    }
+  },
+  "rejected_attempts": [
+    {
+      "reason": "The harness emitted an invalid git mktree line before launching the subject, so the failure was not accepted as Red.",
+      "runner_exit_code": 101,
+      "log_sha256": "a7bb76a426d29140098de7bc88a92d68f56555c21be7f64714844099e60275ca"
+    }
+  ],
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "features": []
+  },
+  "github_actions_artifact": null,
+  "limitation": "This local observation is not immutable retained CI evidence and must not be used to claim Verified."
+}
