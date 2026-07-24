@@ -2,7 +2,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
 
-use super::{git_command, stdout_line, successful_output, unique_temp_root};
+use super::{git_command, read_repository_text, stdout_line, successful_output, unique_temp_root};
 
 pub const COMMIT_A_OID: &str = "a72b34a03936b70511bd72bd4fa0d37a5a593386";
 pub const REPOSITORY_ID: &str = "urn:codenoesis:fixture:s1-safe-inventory-v1";
@@ -78,8 +78,7 @@ impl MaterializedRepository {
         successful_output(init, None);
 
         for (path, _, expected_oid) in FILES {
-            let bytes = fs::read(fixture_root().join("revision-a").join(path))
-                .unwrap_or_else(|error| panic!("read S1 fixture source {path}: {error}"));
+            let bytes = read_fixture_source(path);
             let mut hash_blob = git_command(&global_config);
             hash_blob
                 .arg("-C")
@@ -408,6 +407,15 @@ impl Drop for MaterializedRepository {
 
 pub fn fixture_root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/s1/safe-inventory-v1")
+}
+
+fn read_fixture_source(path: &str) -> Vec<u8> {
+    let source = fixture_root().join("revision-a").join(path);
+    if path == "assets/payload.bin" {
+        fs::read(&source).unwrap_or_else(|error| panic!("read S1 fixture source {path}: {error}"))
+    } else {
+        read_repository_text(source)
+    }
 }
 
 pub fn scan(repository: &Path, revision: &str) -> Output {
