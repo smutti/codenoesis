@@ -1,0 +1,361 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:error:v3",
+  "title": "CodeNoesisErrorV3 S2 subset",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v3"
+    },
+    "code": {
+      "enum": [
+        "input.invalid_repository_identity",
+        "input.invalid_revision",
+        "input.invalid_profile",
+        "acquisition.not_git_repository",
+        "acquisition.revision_not_found",
+        "acquisition.revision_not_commit",
+        "acquisition.object_missing",
+        "acquisition.repository_inconsistent",
+        "acquisition.unsupported_repository_shape",
+        "acquisition.path_invalid",
+        "acquisition.root_policy_violation",
+        "acquisition.entry_policy_violation",
+        "acquisition.limit_exceeded",
+        "extraction.invalid_utf8",
+        "extraction.unsupported_crate_shape",
+        "extraction.parser_cancelled",
+        "extraction.malformed_syntax",
+        "extraction.normalization_collision",
+        "extraction.contract_invalid",
+        "extraction.limit_exceeded",
+        "graph.invalid_entity",
+        "graph.invalid_relationship",
+        "graph.dangling_reference",
+        "graph.cardinality_violation",
+        "graph.invalid_claim_state",
+        "graph.invalid_claim_transition",
+        "graph.invalid_derivation",
+        "graph.limit_exceeded",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {
+      "enum": ["input", "acquisition", "extraction", "graph", "internal"]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[^\\r\\n]+$"
+    },
+    "retryable": {
+      "const": false
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 8,
+      "properties": {
+        "revision": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{40}|refs/heads/main)$"
+        },
+        "object_oid": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "expected_kind": {
+          "enum": ["commit", "tree", "blob"]
+        },
+        "actual_kind": {
+          "enum": ["tag", "tree", "blob"]
+        },
+        "referenced_by": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "feature": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "policy": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "entry": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "path": {
+          "$ref": "#/$defs/canonical_relative_path"
+        },
+        "span": {
+          "$ref": "#/$defs/byte_span"
+        },
+        "first_span": {
+          "$ref": "#/$defs/byte_span"
+        },
+        "second_span": {
+          "$ref": "#/$defs/byte_span"
+        },
+        "kind": {
+          "$ref": "#/$defs/entity_kind"
+        },
+        "canonical_identity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "pattern": "^[^\\r\\n\\u0000]+$"
+        },
+        "relationship_kind": {
+          "enum": ["CONTAINS", "DEFINES", "IMPLEMENTS", "IMPORTS"]
+        },
+        "entity_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "source_entity_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "target_entity_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "claim_id": {
+          "$ref": "#/$defs/claim_id"
+        },
+        "rule_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[a-z0-9][a-z0-9._:/-]*$"
+        },
+        "limit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "maximum": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967296
+        },
+        "observed": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4294967296
+        },
+        "from_state": {
+          "$ref": "#/$defs/claim_state"
+        },
+        "to_state": {
+          "$ref": "#/$defs/claim_state"
+        },
+        "cardinality": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-z][a-z0-9_]*$"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "enum": [
+              "input.invalid_repository_identity",
+              "input.invalid_revision",
+              "input.invalid_profile"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "input"
+          },
+          "context": {
+            "maxProperties": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^acquisition\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^extraction\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^graph\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "graph"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.normalization_collision"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "kind",
+              "canonical_identity",
+              "path",
+              "first_span",
+              "second_span"
+            ],
+            "minProperties": 5,
+            "maxProperties": 5
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "internal.unexpected"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "internal"
+          },
+          "context": {
+            "maxProperties": 0
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "canonical_relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^[^/\\\\\\u0000-\\u001f\\u007f]+(?:/[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    },
+    "byte_span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unit", "start", "end"],
+      "properties": {
+        "unit": {
+          "const": "byte"
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4194304
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4194304
+        }
+      }
+    },
+    "entity_kind": {
+      "enum": [
+        "rust.crate",
+        "rust.enum",
+        "rust.function",
+        "rust.method",
+        "rust.module",
+        "rust.struct",
+        "rust.symbol_reference",
+        "rust.trait",
+        "rust.type_alias",
+        "source.file"
+      ]
+    },
+    "claim_state": {
+      "enum": [
+        "candidate",
+        "confirmed",
+        "derived_fact",
+        "deterministic_fact",
+        "rejected",
+        "reviewed_inference",
+        "superseded"
+      ]
+    },
+    "entity_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:entity:blake3:[0-9a-f]{64}$"
+    },
+    "claim_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:claim:blake3:[0-9a-f]{64}$"
+    }
+  }
+}

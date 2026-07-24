@@ -1,0 +1,78 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "docs/software/decisions/0003-s2-rust-knowledge-contract.md",
+      "sha256": "dff08acaae828890e8fb603afb70af42735249d01e53b2812f6db8e7971c8543"
+    },
+    {
+      "path": "scripts/tests/test_s2_contract.py",
+      "sha256": "5ddd9c562bfcbe46605422f2b0e7958aa7d3050f6730a9a02811ea9ad859a3bd"
+    },
+    {
+      "path": "tests/fixtures/s2/rust-knowledge-v1/README.md",
+      "sha256": "324d7a1f6544cc8b894aaee169361ada68c00f276509046369a2a4e7c37ac02c"
+    },
+    {
+      "path": "tests/fixtures/s2/rust-knowledge-v1/expected-error-nfc-collision.json",
+      "sha256": "d110a2fdef29925d2b1d8066c7f7060937445a1380eeaaa02244695691156500"
+    },
+    {
+      "path": "tests/fixtures/s2/rust-knowledge-v1/expected-extraction-a.json",
+      "sha256": "14ed753603285e3884d887a6e2a7b5cb8d019cbe280c5637c5421bf1cce6ffec"
+    },
+    {
+      "path": "tests/fixtures/s2/rust-knowledge-v1/expected-graph-a.json",
+      "sha256": "4a77d18cd357a6b194bd919672b0c597eaa2f258f39a6e4f64259f7799ac5ed8"
+    },
+    {
+      "path": "tests/fixtures/s2/rust-knowledge-v1/manifest.json",
+      "sha256": "a0bce18344e1cd68722a7132dfbababad9fdee4583b39fc85212ef7bc553ac9e"
+    },
+    {
+      "path": "tests/fixtures/s2/rust-knowledge-v1/revision-a/Cargo.toml",
+      "sha256": "dc36cc10826c43e0d5308c48ffe30474062b4b3cfaa6e19560221242a735b542"
+    },
+    {
+      "path": "tests/fixtures/s2/rust-knowledge-v1/revision-a/src/lib.rs",
+      "sha256": "91232acb38ea9e4b646650c7023ce610412b69df3d487b881fece794892c601a"
+    },
+    {
+      "path": "tests/specifications/s1/contract-bundle.json",
+      "sha256": "5e626841c94d7fb5c01a812ebbca62f583b85d2365546ce94ba9ed2b479d74a7"
+    },
+    {
+      "path": "tests/specifications/s2/codenoesis-error-v3.schema.json",
+      "sha256": "49a15eb20e40200213d5b7f5a19047a96674cbd7ffbd384d3e33ae9d2d98a90c"
+    },
+    {
+      "path": "tests/specifications/s2/e2e_fr_ext_002_rust_knowledge.json",
+      "sha256": "1884a900293db8f261bec07d99bc1316c51972fffea4590595d329ae20e4c955"
+    },
+    {
+      "path": "tests/specifications/s2/extraction-chunk-v1.schema.json",
+      "sha256": "7647c0c30f9f73fccd22b1af8ad469ec1058ad35dbe57cf7745cc816759809dc"
+    },
+    {
+      "path": "tests/specifications/s2/knowledge-graph-v1.schema.json",
+      "sha256": "8ffdea3ce4d956cb6cc41c6ed98ba6ebbe784be038502d097738f896f285a701"
+    },
+    {
+      "path": "tests/specifications/s2/repository-snapshot-v3.schema.json",
+      "sha256": "0a48926796505fa013ce5428c1ae045eaacecab7cd29da08e21b5662918e19f3"
+    },
+    {
+      "path": "tests/specifications/s2/rust-ontology-v1.json",
+      "sha256": "3dfe85c7426a45555e9112fd76a5d15c958503574fecffadbf90c82e167f08cd"
+    },
+    {
+      "path": "tests/specifications/s2/source-evidence-v2.schema.json",
+      "sha256": "f700e525c6b8343aba6051e1908a97b64a4f5fe232f91a71a8c4778cfd1e4c55"
+    }
+  ],
+  "bundle_sha256": "d3db9d776c1e6214ff9326a65285a3a1b7f9ad1fdb08db79da7883c9ffe12686"
+}

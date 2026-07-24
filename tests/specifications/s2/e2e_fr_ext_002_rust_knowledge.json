@@ -1,0 +1,557 @@
+{
+  "schema_version": "codenoesis.acceptance-specification/v1",
+  "status": "approved",
+  "ratification": {
+    "governance_model": "single_maintainer_bootstrap",
+    "product_owner_persona": "Andrea Moretti",
+    "persona_is_natural_person": false,
+    "accountable_github_actor": "smutti",
+    "technical_approver": "smutti",
+    "approval_reference": "pending protected pull request for https://github.com/smutti/codenoesis/issues/22",
+    "effective_on": "protected_squash_merge_by_accountable_actor",
+    "required_external_approvals": 0,
+    "agent_merge_allowed": false
+  },
+  "test_id": "e2e_fr_ext_002_rust_knowledge",
+  "slice": "S2",
+  "requirements": [
+    "DR-IDN-001",
+    "FR-EXT-001",
+    "FR-EXT-002",
+    "FR-KNW-001",
+    "FR-KNW-002",
+    "FR-KNW-003"
+  ],
+  "inherited_regressions": [
+    "e2e_fr_acq_001_immutable_commit",
+    "it_fr_acq_001_ref_move_after_binding_keeps_original_commit",
+    "e2e_fr_acq_001_non_git_returns_typed_error",
+    "e2e_fr_acq_001_missing_object_returns_typed_error",
+    "e2e_fr_acq_001_inconsistent_object_returns_typed_error",
+    "conf_dr_art_001_repository_snapshot_v1",
+    "pt_dr_art_002_volatile_envelope_preserves_semantic_hash",
+    "pt_nfr_det_001_permutation_and_schedule_invariant",
+    "conf_nfr_mnt_001_dependency_rules",
+    "conf_nfr_tst_001_requires_fixture_oracle_evidence_links",
+    "pt_nfr_tst_002_replays_are_parallel_and_order_independent",
+    "sec_nfr_sec_005_scan_launches_no_child_and_opens_no_network",
+    "e2e_fr_inv_001_safe_inventory",
+    "e2e_fr_acq_002_traversal_rejected",
+    "e2e_fr_acq_002_symlink_rejected",
+    "e2e_fr_acq_002_gitlink_rejected",
+    "pt_fr_acq_002_limits_have_max_and_plus_one",
+    "conf_dr_evd_001_source_evidence_resolves",
+    "gt_fr_inv_001_exact_inventory_and_coverage_gaps",
+    "pt_fr_inv_001_inventory_is_order_invariant",
+    "sec_nfr_sec_001_scan_stays_inside_repository_root",
+    "sec_nfr_sec_001_sentinel_scripts_never_execute",
+    "sec_nfr_sec_001_bombs_and_parser_inputs_are_bounded",
+    "conf_fr_inv_001_repository_snapshot_v2_and_error_v2"
+  ],
+  "decision": "docs/software/decisions/0003-s2-rust-knowledge-contract.md",
+  "fixture": "tests/fixtures/s2/rust-knowledge-v1/manifest.json",
+  "ontology": "tests/specifications/s2/rust-ontology-v1.json",
+  "schemas": {
+    "snapshot": "tests/specifications/s2/repository-snapshot-v3.schema.json",
+    "extraction_chunk": "tests/specifications/s2/extraction-chunk-v1.schema.json",
+    "knowledge_graph": "tests/specifications/s2/knowledge-graph-v1.schema.json",
+    "source_evidence": "tests/specifications/s2/source-evidence-v2.schema.json",
+    "error": "tests/specifications/s2/codenoesis-error-v3.schema.json"
+  },
+  "goldens": {
+    "extraction_a": "tests/fixtures/s2/rust-knowledge-v1/expected-extraction-a.json",
+    "graph_a": "tests/fixtures/s2/rust-knowledge-v1/expected-graph-a.json",
+    "nfc_collision_error": "tests/fixtures/s2/rust-knowledge-v1/expected-error-nfc-collision.json"
+  },
+  "contract_constants": {
+    "repository_identity": "urn:codenoesis:fixture:s2-rust-knowledge-v1",
+    "repository_commit": "d77c36ec27d878cee6d5d85d761de2b70284cd55",
+    "snapshot_schema_version": "codenoesis.repository-snapshot/v3",
+    "snapshot_hash_algorithm": "blake3-256",
+    "snapshot_hash_domain": "codenoesis.repository-snapshot.semantic.v3",
+    "configuration_schema_version": "codenoesis.configuration/v1",
+    "configuration_profile": "standard-local-s2",
+    "pipeline_version": "codenoesis.pipeline/s2-v1",
+    "ontology_version": "codenoesis.ontology/rust/v1",
+    "extraction_schema_version": "codenoesis.extraction-chunk/v1",
+    "extraction_hash_domain": "codenoesis.extraction-chunk.semantic.v1",
+    "extraction_chunk_id": "urn:codenoesis:extraction-chunk:blake3:bede00dd7856de4d2f45d762ef2541317559b1d7babf967d3e7be8974e171d89",
+    "extraction_hash": "b5292b7e345e873cdb4a226ebd4672a69a63c029491471ac8c6172b3e5bbe043",
+    "graph_schema_version": "codenoesis.knowledge-graph/v1",
+    "graph_hash_domain": "codenoesis.knowledge-graph.semantic.v1",
+    "graph_hash": "75511bc1b6f4852945406f0222ff5e11b6139431d644d83a12c527b923c257cd",
+    "source_evidence_schema_version": "codenoesis.source-evidence/v2",
+    "extractor_version": "codenoesis.rust-tree-sitter/s2-v1",
+    "rule_version": "codenoesis.rule.rust-file-containment/s2-v1",
+    "canonicalization": "RFC8785",
+    "error_schema_version": "codenoesis.error/v3"
+  },
+  "public_command": [
+    "noesis",
+    "scan",
+    "--repository",
+    "{repository_path}",
+    "--repository-id",
+    "urn:codenoesis:fixture:s2-rust-knowledge-v1",
+    "--revision",
+    "{revision}",
+    "--profile",
+    "standard-local-s2",
+    "--format",
+    "json"
+  ],
+  "stream_contract": {
+    "success": {
+      "exit_code": 0,
+      "stdout": "one RepositorySnapshotV3 JSON document followed by one LF",
+      "stderr": "empty"
+    },
+    "invalid_s2_invocation": {
+      "exit_code": 2,
+      "stdout": "empty",
+      "stderr": "one CodeNoesisErrorV3 JSON document followed by one LF"
+    },
+    "acquisition_failure": {
+      "exit_code": 10,
+      "stdout": "empty",
+      "stderr": "one CodeNoesisErrorV3 JSON document followed by one LF"
+    },
+    "extraction_or_graph_failure": {
+      "exit_code": 11,
+      "stdout": "empty",
+      "stderr": "one CodeNoesisErrorV3 JSON document followed by one LF"
+    },
+    "unexpected_internal_failure": {
+      "exit_code": 70,
+      "stdout": "empty",
+      "stderr": "one CodeNoesisErrorV3 JSON document followed by one LF"
+    }
+  },
+  "compatibility_contract": {
+    "s0_invocation": "The approved S0 command without --profile keeps RepositorySnapshotV1 and CodeNoesisErrorV1 behavior.",
+    "s1_invocation": "The explicit --profile standard-local-s1 command keeps RepositorySnapshotV2 and CodeNoesisErrorV2 behavior.",
+    "s2_invocation": "Only the explicit --profile standard-local-s2 command selects RepositorySnapshotV3 and CodeNoesisErrorV3.",
+    "forbidden_dispatch": [
+      "repository shape",
+      "source extension",
+      "parse success",
+      "environment variable",
+      "implicit configuration"
+    ]
+  },
+  "extraction_contract": {
+    "input": "bounded committed UTF-8 .rs blobs from the approved S1 inventory",
+    "crate_shape": "exactly one src/lib.rs library root with inline modules for the S2 fixture",
+    "parser": "pinned in-process Tree-sitter Rust adapter",
+    "output": "one ordered ExtractionChunkV1 per eligible Rust blob",
+    "chunk_claim_state": "deterministic_fact only",
+    "eligible_relationships": ["DEFINES", "IMPLEMENTS", "IMPORTS"],
+    "forbidden_capabilities": [
+      "dirty worktree reads",
+      "Git execution",
+      "Cargo or rustc execution",
+      "build scripts",
+      "procedural macros",
+      "target binaries",
+      "plugins or sidecars",
+      "model providers",
+      "network access"
+    ]
+  },
+  "graph_contract": {
+    "entity_kinds": [
+      "rust.crate",
+      "rust.enum",
+      "rust.function",
+      "rust.method",
+      "rust.module",
+      "rust.struct",
+      "rust.symbol_reference",
+      "rust.trait",
+      "rust.type_alias",
+      "source.file"
+    ],
+    "relationship_kinds": ["CONTAINS", "DEFINES", "IMPLEMENTS", "IMPORTS"],
+    "fixture_counts": {
+      "entities": 11,
+      "relationships": 15,
+      "claims": 26,
+      "deterministic_fact": 25,
+      "derived_fact": 1,
+      "evidence": 13,
+      "diagnostics": 0,
+      "coverage_gaps": 3
+    },
+    "publication": "all-or-nothing after schema, identity, endpoint, cardinality, reachability, claim, derivation, ordering, and hash validation",
+    "ordering": {
+      "entities": "entity_id unsigned UTF-8 byte order",
+      "relationships": "relationship_id unsigned UTF-8 byte order",
+      "claims": "claim_id unsigned UTF-8 byte order",
+      "evidence": "path bytes, start, end, evidence_id",
+      "diagnostics_and_gaps": "path bytes, start, end, code"
+    }
+  },
+  "identity_contract": {
+    "hash_algorithm": "blake3-256",
+    "identifier_normalization": "Unicode NFC",
+    "path_normalization": "none; preserve approved S1 UTF-8 bytes",
+    "entity_preimage": [
+      "codenoesis.entity-id/v1",
+      "repository_identity",
+      "rust",
+      "entity_kind",
+      "canonical_identity"
+    ],
+    "relationship_preimage": [
+      "codenoesis.relationship-id/v1",
+      "repository_identity",
+      "ontology_version",
+      "relationship_kind",
+      "source_entity_id",
+      "target_entity_id"
+    ],
+    "claim_preimage": [
+      "codenoesis.claim-id/v1",
+      "repository_identity",
+      "ontology_version",
+      "subject_kind",
+      "subject_id"
+    ],
+    "extraction_chunk_preimage": [
+      "codenoesis.extraction-chunk-id/v1",
+      "repository_identity",
+      "immutable_commit_oid",
+      "blob_oid",
+      "canonical_relative_path",
+      "extractor_version"
+    ],
+    "excluded_from_stable_ids": [
+      "commit_oid",
+      "blob_oid",
+      "source_offset",
+      "parser_node_id",
+      "insertion_order",
+      "scheduler_order",
+      "storage_sequence",
+      "claim_state"
+    ],
+    "collision_behavior": "typed extraction.normalization_collision with no ordinal repair or partial publication"
+  },
+  "claim_contract": {
+    "states": [
+      "candidate",
+      "confirmed",
+      "derived_fact",
+      "deterministic_fact",
+      "rejected",
+      "reviewed_inference",
+      "superseded"
+    ],
+    "allowed_transitions": [
+      ["candidate", "confirmed"],
+      ["candidate", "rejected"],
+      ["candidate", "reviewed_inference"],
+      ["candidate", "superseded"],
+      ["confirmed", "superseded"],
+      ["derived_fact", "superseded"],
+      ["deterministic_fact", "superseded"],
+      ["rejected", "superseded"],
+      ["reviewed_inference", "confirmed"],
+      ["reviewed_inference", "rejected"],
+      ["reviewed_inference", "superseded"]
+    ],
+    "same_state_is_transition": false,
+    "terminal_state": "superseded",
+    "parser_output_state": "deterministic_fact",
+    "rule_output_state": "derived_fact",
+    "model_output_state": "candidate",
+    "model_forbidden_states": ["confirmed", "deterministic_fact"],
+    "fixture_rule": {
+      "version": "codenoesis.rule.rust-file-containment/s2-v1",
+      "inputs": ["rust.crate claim", "source.file claim"],
+      "output": "CONTAINS relationship claim",
+      "state": "derived_fact"
+    }
+  },
+  "malformed_and_unicode_contract": {
+    "malformed_recovery": "emit only subjects whose complete supporting spans are disjoint from every bounded ERROR or MISSING region",
+    "malformed_reporting": "one extraction.malformed_syntax diagnostic and malformed_syntax_excluded gap per ordered region",
+    "unsafe_recovery": "typed extraction.malformed_syntax with no partial snapshot",
+    "source_spelling": "preserved in display_name and exact byte evidence",
+    "identity_spelling": "NFC normalized per identifier component",
+    "collision": "typed extraction.normalization_collision",
+    "unresolved_symbol": "rust.symbol_reference with resolution unresolved and an explicit coverage gap; never a guessed internal link"
+  },
+  "expected_red": {
+    "test_command": "cargo test --test e2e_fr_ext_002_rust_knowledge",
+    "precondition": "The future TDD branch contains the black-box S2 harness and reviewed fixture while production remains at merged S1 behavior.",
+    "runner_expected_exit": "nonzero because the acceptance assertion fails",
+    "subject_observed_exit_code": 2,
+    "subject_observed_stderr_schema": "codenoesis.error/v2",
+    "subject_observed_stderr_code": "input.invalid_profile",
+    "subject_expected_exit_code": 0,
+    "expected_artifact": "codenoesis.repository-snapshot/v3",
+    "accepted_reason": "Merged S1 recognizes --profile but rejects standard-local-s2, so the approved S2 public behavior is absent.",
+    "rejected_reasons": [
+      "compilation failure",
+      "missing test target",
+      "missing or corrupt fixture",
+      "schema harness failure",
+      "dependency or network outage",
+      "parser crash",
+      "timing race",
+      "unexpected panic",
+      "a modified S2 oracle"
+    ]
+  },
+  "error_codes": {
+    "input.invalid_repository_identity": 2,
+    "input.invalid_revision": 2,
+    "input.invalid_profile": 2,
+    "acquisition.not_git_repository": 10,
+    "acquisition.revision_not_found": 10,
+    "acquisition.revision_not_commit": 10,
+    "acquisition.object_missing": 10,
+    "acquisition.repository_inconsistent": 10,
+    "acquisition.unsupported_repository_shape": 10,
+    "acquisition.path_invalid": 10,
+    "acquisition.root_policy_violation": 10,
+    "acquisition.entry_policy_violation": 10,
+    "acquisition.limit_exceeded": 10,
+    "extraction.invalid_utf8": 11,
+    "extraction.unsupported_crate_shape": 11,
+    "extraction.parser_cancelled": 11,
+    "extraction.malformed_syntax": 11,
+    "extraction.normalization_collision": 11,
+    "extraction.contract_invalid": 11,
+    "extraction.limit_exceeded": 11,
+    "graph.invalid_entity": 11,
+    "graph.invalid_relationship": 11,
+    "graph.dangling_reference": 11,
+    "graph.cardinality_violation": 11,
+    "graph.invalid_claim_state": 11,
+    "graph.invalid_claim_transition": 11,
+    "graph.invalid_derivation": 11,
+    "graph.limit_exceeded": 11,
+    "internal.unexpected": 70
+  },
+  "scenarios": [
+    {
+      "id": "reviewed_rust_snapshot",
+      "test_name": "e2e_fr_ext_002_rust_knowledge",
+      "requirements": [
+        "DR-IDN-001",
+        "FR-EXT-001",
+        "FR-EXT-002",
+        "FR-KNW-001",
+        "FR-KNW-003"
+      ],
+      "verification": ["E2E", "GT"],
+      "arrange": "Materialize fixture revision A as verified loose SHA-1 objects under the inherited S1 boundary.",
+      "act": "Run the exact public S2 command with the full commit OID.",
+      "assert": [
+        "Exit is 0, stderr is empty, and stdout is one strict RepositorySnapshotV3 plus LF.",
+        "The inherited inventory, extraction chunk, graph, counts, ordering, IDs, claims, evidence, gaps, and hashes equal the reviewed oracle.",
+        "No absolute path, worktree content, volatile value, or unsupported semantic assertion enters the canonical graph."
+      ]
+    },
+    {
+      "id": "extraction_chunk_is_strict",
+      "test_name": "conf_fr_ext_001_extraction_chunk_v1",
+      "requirements": ["FR-EXT-001"],
+      "verification": ["CT", "CONF"],
+      "arrange": "Start from the valid reviewed extraction chunk and independently mutate each field, type, identity, span, order, reference, and claim.",
+      "act": "Validate the strict schema and cross-document extraction invariants.",
+      "assert": [
+        "The reviewed chunk passes.",
+        "Every missing, unknown, duplicate, dangling, out-of-range, derived-state, or forbidden-relationship mutation fails before graph ingestion.",
+        "No rejected chunk contributes a partial entity or relationship."
+      ]
+    },
+    {
+      "id": "hand_reviewed_graph_matches",
+      "test_name": "gt_fr_ext_002_reviewed_rust_graph",
+      "requirements": ["FR-EXT-002", "FR-KNW-001"],
+      "verification": ["GT"],
+      "arrange": "Load the exact source bytes, ontology table, and expected graph A.",
+      "act": "Extract and normalize the supported Rust surface.",
+      "assert": [
+        "All eleven entities, fifteen relationships, twenty-six claims, thirteen evidence records, and three coverage gaps match exactly.",
+        "The graph includes the inline module, types, functions, imports, trait implementation, and Unicode function without fields, variants, calls, or guessed links.",
+        "The graph semantic hash is 75511bc1b6f4852945406f0222ff5e11b6139431d644d83a12c527b923c257cd."
+      ]
+    },
+    {
+      "id": "malformed_syntax_is_explicit",
+      "test_name": "gt_fr_ext_002_malformed_syntax_is_explicit",
+      "requirements": ["FR-EXT-001", "FR-EXT-002"],
+      "verification": ["GT", "FZ"],
+      "arrange": "Generate the manifest's reviewed section-sign token insertion.",
+      "act": "Parse with bounded Tree-sitter recovery.",
+      "assert": [
+        "The exact malformed byte span produces one stable diagnostic and one coverage gap.",
+        "Only complete subjects disjoint from the malformed region may remain.",
+        "No node, relationship, or evidence span is invented from the malformed region."
+      ]
+    },
+    {
+      "id": "unicode_collision_fails_closed",
+      "test_name": "gt_dr_idn_001_unicode_normalization_collision",
+      "requirements": ["DR-IDN-001", "FR-EXT-002"],
+      "verification": ["GT", "E2E"],
+      "arrange": "Append the canonically equivalent decomposed cafe-plus-combining-acute function from the manifest.",
+      "act": "Normalize identifier components to NFC before identity construction.",
+      "assert": [
+        "Exit is 11 with the reviewed CodeNoesisErrorV3 extraction.normalization_collision.",
+        "Both exact source spans and the one normalized identity are reported without source excerpts.",
+        "No ordinal, byte offset, source order, or partial graph resolves the collision."
+      ]
+    },
+    {
+      "id": "stable_ids_ignore_incidental_order",
+      "test_name": "pt_dr_idn_001_stable_ids_ignore_order_and_revision",
+      "requirements": ["DR-IDN-001"],
+      "verification": ["PT"],
+      "arrange": "Generate at least fifty entity, relationship, chunk, map-insertion, evidence-discovery, scheduler, and unrelated-commit permutations.",
+      "act": "Recompute every canonical preimage and BLAKE3 identifier independently.",
+      "assert": [
+        "All entity, relationship, and claim IDs equal the reviewed golden.",
+        "An unrelated commit or source-offset change preserves symbol IDs while evidence remains revision-specific.",
+        "Changing repository identity, kind, normalized symbol identity, relationship endpoint, or ontology version changes the applicable ID."
+      ]
+    },
+    {
+      "id": "graph_invariants_reject_mutations",
+      "test_name": "pt_fr_knw_001_graph_invariants",
+      "requirements": ["FR-KNW-001"],
+      "verification": ["PT"],
+      "arrange": "Mutate the valid graph across kind/property matrices, endpoints, duplicate tuples, cardinalities, reachability, cycles, claims, evidence, ordering, and hashes.",
+      "act": "Validate each generated graph.",
+      "assert": [
+        "The reviewed graph passes and every non-equivalent invalid mutation returns its stable graph error.",
+        "Exactly one crate, one file container, one declaration owner, endpoint closure, claim uniqueness, and DEFINES reachability always hold.",
+        "Validation order selects one deterministic first failure."
+      ]
+    },
+    {
+      "id": "claim_state_machine_is_closed",
+      "test_name": "pt_fr_knw_002_claim_state_machine",
+      "requirements": ["FR-KNW-002"],
+      "verification": ["PT"],
+      "arrange": "Enumerate every ordered pair over the seven claim states plus same-state requests and each origin policy.",
+      "act": "Apply the approved transition and origin model.",
+      "assert": [
+        "Exactly the eleven listed transitions pass.",
+        "Same-state requests and every unlisted transition fail with graph.invalid_claim_transition.",
+        "Parser, rule, model, Council, and confirmation origins cannot emit a forbidden state."
+      ]
+    },
+    {
+      "id": "deterministic_rule_replays",
+      "test_name": "pt_fr_knw_003_rule_provenance_replays",
+      "requirements": ["FR-KNW-003"],
+      "verification": ["UT", "PT"],
+      "arrange": "Load the crate and source-file claims in both orders and mutate rule version, inputs, evidence, cycles, and input states.",
+      "act": "Run codenoesis.rule.rust-file-containment/s2-v1.",
+      "assert": [
+        "The exact derived CONTAINS claim and ID replay from the same inputs.",
+        "The output retains the rule version, both input claim IDs, and supporting evidence.",
+        "Missing, duplicate, cyclic, dangling, or state-incompatible dependencies fail with graph.invalid_derivation."
+      ]
+    },
+    {
+      "id": "extraction_contract_fuzz_seed",
+      "test_name": "fz_fr_ext_001_extraction_contract_seed_corpus",
+      "requirements": ["FR-EXT-001", "FR-KNW-001"],
+      "verification": ["FZ", "CT"],
+      "arrange": "Seed structured mutations from every valid and invalid extraction, graph, claim, evidence, malformed, and Unicode oracle case.",
+      "act": "Fuzz decoding and validation under inherited S1 resource ceilings.",
+      "assert": [
+        "No panic, hang, unbounded allocation, partial publication, or accepted invalid contract occurs.",
+        "Every retained failure records seed, digest, stable outcome, and minimized reproducer.",
+        "Seed corpus changes require human review of semantic meaning."
+      ]
+    },
+    {
+      "id": "rust_parser_fuzz_seed",
+      "test_name": "fz_fr_ext_002_rust_parser_seed_corpus",
+      "requirements": ["FR-EXT-002"],
+      "verification": ["FZ"],
+      "arrange": "Seed valid source, malformed token, Unicode collision, nesting, token amplification, and unsupported syntax cases.",
+      "act": "Parse bounded committed bytes without invoking repository tooling.",
+      "assert": [
+        "Every input terminates inside inherited wall, CPU, RSS, output, and file limits.",
+        "Malformed or unsupported syntax is typed or explicitly covered and never fabricated as resolved meaning.",
+        "No crash or nondeterministic semantic output occurs."
+      ]
+    },
+    {
+      "id": "target_never_executes",
+      "test_name": "sec_fr_ext_002_target_never_executes",
+      "requirements": ["FR-EXT-002"],
+      "verification": ["SEC", "E2E"],
+      "arrange": "Use inherited S0/S1 process, network, filesystem, and sentinel observers while scanning the fixture and generated parser cases.",
+      "act": "Run the complete S2 public path.",
+      "assert": [
+        "Zero child process, exec, network, outside-root, dirty-worktree, or repository-controlled code event occurs.",
+        "Cargo.toml is inventoried but Cargo, rustc, build scripts, and procedural macros are never invoked.",
+        "Observer self-tests and inherited sentinels remain Green."
+      ]
+    },
+    {
+      "id": "snapshot_and_error_contracts_are_strict",
+      "test_name": "conf_fr_ext_001_snapshot_v3_and_error_v3",
+      "requirements": ["FR-EXT-001", "FR-KNW-001", "FR-KNW-002"],
+      "verification": ["CONF"],
+      "arrange": "Start from the reviewed graph and collision error, construct the V3 snapshot, and generate one-field and cross-reference mutations.",
+      "act": "Validate schemas, compatibility dispatch, semantic hashes, errors, and graph invariants.",
+      "assert": [
+        "Reviewed documents pass and every missing, unknown, reordered, dangling, out-of-range, incompatible-version, or wrong-hash mutation fails.",
+        "S0 and S1 commands remain byte-compatible with their approved fixtures.",
+        "No error leaks absolute paths, source excerpts, environment data, or partial artifacts."
+      ]
+    }
+  ],
+  "evidence_contract": {
+    "red": "Retain the first expected failing runner log before production changes, with base and pre-implementation SHAs, runner and subject exits, V2 stderr code, command, environment, SHA-256, and immutable artifact locator.",
+    "green": "Retain one ordered passing result for every S2 scenario and inherited S0/S1 regression, with command, exit status, report digest, and immutable artifact locator.",
+    "identity": "Retain independent preimages and BLAKE3 results for every reviewed entity, relationship, claim, graph, chunk, configuration, and snapshot hash.",
+    "parser": "Retain grammar and adapter versions, valid/malformed/Unicode outputs, fuzz seeds and minimized reproducers, cancellation and resource reports.",
+    "security": "Retain inherited process/network/filesystem observer self-tests, traces, root identity, denied and unresolved counts, sentinel result, and resource report.",
+    "environment": [
+      "OS and architecture",
+      "pinned Rust toolchain",
+      "enabled features",
+      "Tree-sitter Rust crate and grammar versions",
+      "filesystem and Landlock capability",
+      "network namespace and seccomp profile digest",
+      "inherited descriptor audit",
+      "agent and model identity",
+      "policy version",
+      "run identifier",
+      "duration and cost"
+    ],
+    "retention": "Every required log, report, seed, and reproducer remains retrievable and digest-valid for at least 90 days.",
+    "verification_rule": "Local evidence may support review but cannot set Verified without immutable retained CI artifacts for the exact head."
+  },
+  "deferred": [
+    "multiple crate roots, binaries, workspaces, examples, tests, and benches",
+    "out-of-line module and Cargo feature/configuration-world resolution",
+    "fields, variants, constants, statics, generics, lifetimes, macros, closures, and expressions",
+    "glob imports, aliases, re-exports, extern prelude, and compiler-grade name or type resolution",
+    "inherent implementations, anonymous targets, calls, reads, writes, and data flow",
+    "macro expansion, procedural macros, Cargo or rustc execution, and trusted build profiles",
+    "SCIP and cross-language entities",
+    "persistence, queries, documents, federation, impact, interfaces, plugins, and models",
+    "ontology evolution beyond codenoesis.ontology/rust/v1"
+  ],
+  "stop_conditions": [
+    "The protected contract differs from the approved bundle.",
+    "The first Red is absent or fails for a reason other than standard-local-s2 being rejected by merged S1.",
+    "A stable identity, normalization collision, endpoint matrix, cardinality, transition, derivation, malformed span, or first-failure rule is ambiguous.",
+    "Any supported fixture behavior requires Cargo, rustc, macro expansion, target execution, network, dirty-worktree access, or compiler-grade guessing.",
+    "A parser case cannot terminate inside inherited S1 boundaries or deterministic recovery cannot be established.",
+    "S0 or S1 regressions fail or their public dispatch changes.",
+    "The task exceeds its allowed paths, high-risk scope, resource budget, or two bounded correction attempts."
+  ]
+}
