@@ -250,10 +250,7 @@ class S2ContractTests(unittest.TestCase):
                 "persona_is_natural_person": False,
                 "accountable_github_actor": "smutti",
                 "technical_approver": "smutti",
-                "approval_reference": (
-                    "pending protected pull request for "
-                    "https://github.com/smutti/codenoesis/issues/22"
-                ),
+                "approval_reference": "https://github.com/smutti/codenoesis/pull/23",
                 "effective_on": "protected_squash_merge_by_accountable_actor",
                 "required_external_approvals": 0,
                 "agent_merge_allowed": False,

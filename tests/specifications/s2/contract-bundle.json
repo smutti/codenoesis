@@ -7,11 +7,11 @@
     },
     {
       "path": "docs/software/decisions/0003-s2-rust-knowledge-contract.md",
-      "sha256": "dff08acaae828890e8fb603afb70af42735249d01e53b2812f6db8e7971c8543"
+      "sha256": "4d47e6336f943874ddf758b18e3e068ee51d7c3d7b67edfb9d5f59184c5c2ed9"
     },
     {
       "path": "scripts/tests/test_s2_contract.py",
-      "sha256": "5ddd9c562bfcbe46605422f2b0e7958aa7d3050f6730a9a02811ea9ad859a3bd"
+      "sha256": "659fdeaf5961611d42b9c817b23a9168ebbc9a75a8a3d9b684e3a9b3dd9333ca"
     },
     {
       "path": "tests/fixtures/s2/rust-knowledge-v1/README.md",
@@ -51,7 +51,7 @@
     },
     {
       "path": "tests/specifications/s2/e2e_fr_ext_002_rust_knowledge.json",
-      "sha256": "1884a900293db8f261bec07d99bc1316c51972fffea4590595d329ae20e4c955"
+      "sha256": "b42d9a0451572aaf5f607e9c4c82ca456f3c83e9d2a14a1cb634bfaf3abc83de"
     },
     {
       "path": "tests/specifications/s2/extraction-chunk-v1.schema.json",
@@ -74,5 +74,5 @@
       "sha256": "f700e525c6b8343aba6051e1908a97b64a4f5fe232f91a71a8c4778cfd1e4c55"
     }
   ],
-  "bundle_sha256": "d3db9d776c1e6214ff9326a65285a3a1b7f9ad1fdb08db79da7883c9ffe12686"
+  "bundle_sha256": "d105957b00335ece563ae2783543aa112916d71131cfb23a0ebcaa14d7f57c9f"
 }

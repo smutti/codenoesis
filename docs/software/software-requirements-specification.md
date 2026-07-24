@@ -13,7 +13,7 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.4` |
-| Status | S0 and S1 remain Approved and implemented but not Verified; S2 becomes Approved only when the accountable single maintainer manually squash-merges the protected ratification pull request for issue [#22](https://github.com/smutti/codenoesis/issues/22) |
+| Status | S0 and S1 remain Approved and implemented but not Verified; S2 becomes Approved only when the accountable single maintainer manually squash-merges protected PR [#23](https://github.com/smutti/codenoesis/pull/23) |
 | Date | 2026-07-24 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
@@ -203,20 +203,20 @@ human review.
 
 The following is the exact target Approved set for **S2 — Rust knowledge**.
 Approval becomes authoritative only when `@smutti` manually squash-merges the
-exact protected head of the ratification pull request for issue
-[#22](https://github.com/smutti/codenoesis/issues/22). The authoring agent does
+exact protected head of PR
+[#23](https://github.com/smutti/codenoesis/pull/23). The authoring agent does
 not approve or merge. This high-risk decision fixes public artifact and error
 schemas, ontology properties and cardinalities, stable identity, claim states,
 deterministic-rule provenance, parser recovery, and untrusted-source behavior.
 
 | Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
 |---|---|---|---|---|---|---|---|
-| `DR-IDN-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | Pending protected merge for issue [#22](https://github.com/smutti/codenoesis/issues/22) | `S2` | [S2 contract decision](decisions/0003-s2-rust-knowledge-contract.md) |
-| `FR-EXT-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | Pending protected merge for issue [#22](https://github.com/smutti/codenoesis/issues/22) | `S2` | [S2 acceptance specification](../../tests/specifications/s2/e2e_fr_ext_002_rust_knowledge.json) |
-| `FR-EXT-002` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | Pending protected merge for issue [#22](https://github.com/smutti/codenoesis/issues/22) | `S2` | [S2 acceptance specification](../../tests/specifications/s2/e2e_fr_ext_002_rust_knowledge.json) |
-| `FR-KNW-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | Pending protected merge for issue [#22](https://github.com/smutti/codenoesis/issues/22) | `S2` | [Rust ontology v1](../../tests/specifications/s2/rust-ontology-v1.json) |
-| `FR-KNW-002` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | Pending protected merge for issue [#22](https://github.com/smutti/codenoesis/issues/22) | `S2` | [Rust ontology v1](../../tests/specifications/s2/rust-ontology-v1.json) |
-| `FR-KNW-003` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | Pending protected merge for issue [#22](https://github.com/smutti/codenoesis/issues/22) | `S2` | [S2 contract decision](decisions/0003-s2-rust-knowledge-contract.md) |
+| `DR-IDN-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #23 protected merge record](https://github.com/smutti/codenoesis/pull/23) | `S2` | [S2 contract decision](decisions/0003-s2-rust-knowledge-contract.md) |
+| `FR-EXT-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #23 protected merge record](https://github.com/smutti/codenoesis/pull/23) | `S2` | [S2 acceptance specification](../../tests/specifications/s2/e2e_fr_ext_002_rust_knowledge.json) |
+| `FR-EXT-002` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #23 protected merge record](https://github.com/smutti/codenoesis/pull/23) | `S2` | [S2 acceptance specification](../../tests/specifications/s2/e2e_fr_ext_002_rust_knowledge.json) |
+| `FR-KNW-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #23 protected merge record](https://github.com/smutti/codenoesis/pull/23) | `S2` | [Rust ontology v1](../../tests/specifications/s2/rust-ontology-v1.json) |
+| `FR-KNW-002` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #23 protected merge record](https://github.com/smutti/codenoesis/pull/23) | `S2` | [Rust ontology v1](../../tests/specifications/s2/rust-ontology-v1.json) |
+| `FR-KNW-003` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #23 protected merge record](https://github.com/smutti/codenoesis/pull/23) | `S2` | [S2 contract decision](decisions/0003-s2-rust-knowledge-contract.md) |
 
 S2 is selected only by `--profile standard-local-s2` and emits
 `RepositorySnapshotV3` or `CodeNoesisErrorV3`. The approved S0 invocation
@@ -243,7 +243,7 @@ separate protected change may bind exactly these six IDs to the full commit on
 `main` containing the byte-identical SRS. Until that change is reviewed and
 merged, autonomous S2 authorization fails closed.
 
-S2 contract bundle: `sha256:d3db9d776c1e6214ff9326a65285a3a1b7f9ad1fdb08db79da7883c9ffe12686`.
+S2 contract bundle: `sha256:d105957b00335ece563ae2783543aa112916d71131cfb23a0ebcaa14d7f57c9f`.
 The bundle binds the decision, strict schemas, ontology table, machine oracle,
 synthetic fixture, reviewed extraction/graph/error goldens, inherited S1
 bundle, and independent maintenance guard. Any bound-byte change requires a

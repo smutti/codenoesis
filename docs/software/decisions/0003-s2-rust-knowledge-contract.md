@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Accepted; authoritative only after the accountable actor manually merges the protected ratification pull request for issue [#22](https://github.com/smutti/codenoesis/issues/22) |
+| Status | Accepted; authoritative only after the accountable actor manually merges protected PR [#23](https://github.com/smutti/codenoesis/pull/23) |
 | Date | 2026-07-24 |
 | Scope | `S2 — Rust knowledge` only |
 | Product owner | Andrea Moretti — project governance persona represented by [`@smutti`](https://github.com/smutti), not a separate natural person |
@@ -10,7 +10,7 @@
 | Risk | High: public artifacts, ontology, stable identity, claim semantics, parser recovery, and untrusted source input |
 | Requirements | `DR-IDN-001`, `FR-EXT-001`, `FR-EXT-002`, `FR-KNW-001`, `FR-KNW-002`, `FR-KNW-003` |
 | Issue | [#22](https://github.com/smutti/codenoesis/issues/22) |
-| Approval reference | Pending protected pull request; effective only on manual merge by `@smutti` |
+| Approval reference | PR [#23](https://github.com/smutti/codenoesis/pull/23); effective only on protected manual merge by `@smutti` |
 
 This record proposes no production implementation by itself. It becomes
 authoritative only through a protected manual merge by `@smutti`; the authoring
