@@ -2,7 +2,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
 
-use super::{git_command, read_repository_text, stdout_line, successful_output, unique_temp_root};
+use super::{git_command, stdout_line, successful_output, unique_temp_root};
 
 pub const COMMIT_A_OID: &str = "a72b34a03936b70511bd72bd4fa0d37a5a593386";
 pub const REPOSITORY_ID: &str = "urn:codenoesis:fixture:s1-safe-inventory-v1";
@@ -79,12 +79,13 @@ impl MaterializedRepository {
 
         for (path, _, expected_oid) in FILES {
             let bytes = read_fixture_source(path);
-            let mut hash_blob = git_command(&global_config);
-            hash_blob
-                .arg("-C")
-                .arg(&worktree)
-                .args(["hash-object", "-w", "--stdin"]);
-            let observed_oid = stdout_line(successful_output(hash_blob, Some(&bytes)));
+            let raw_oid = hash_blob(&worktree, &global_config, &bytes, false);
+            let canonical_bytes = if raw_oid == expected_oid {
+                bytes
+            } else {
+                normalize_checkout_crlf(bytes)
+            };
+            let observed_oid = hash_blob(&worktree, &global_config, &canonical_bytes, true);
             assert_eq!(
                 observed_oid, expected_oid,
                 "S1 fixture blob identity changed for {path}"
@@ -411,11 +412,29 @@ pub fn fixture_root() -> PathBuf {
 
 fn read_fixture_source(path: &str) -> Vec<u8> {
     let source = fixture_root().join("revision-a").join(path);
-    if path == "assets/payload.bin" {
-        fs::read(&source).unwrap_or_else(|error| panic!("read S1 fixture source {path}: {error}"))
-    } else {
-        read_repository_text(source)
+    fs::read(&source).unwrap_or_else(|error| panic!("read S1 fixture source {path}: {error}"))
+}
+
+fn hash_blob(worktree: &Path, global_config: &Path, bytes: &[u8], write: bool) -> String {
+    let mut command = git_command(global_config);
+    command.arg("-C").arg(worktree).arg("hash-object");
+    if write {
+        command.arg("-w");
     }
+    command.arg("--stdin");
+    stdout_line(successful_output(command, Some(bytes)))
+}
+
+fn normalize_checkout_crlf(bytes: Vec<u8>) -> Vec<u8> {
+    let mut normalized = Vec::with_capacity(bytes.len());
+    let mut bytes = bytes.into_iter().peekable();
+    while let Some(byte) = bytes.next() {
+        if byte == b'\r' && bytes.peek() == Some(&b'\n') {
+            continue;
+        }
+        normalized.push(byte);
+    }
+    normalized
 }
 
 pub fn scan(repository: &Path, revision: &str) -> Output {
