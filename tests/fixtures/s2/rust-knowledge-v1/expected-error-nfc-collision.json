@@ -1,0 +1,22 @@
+{
+  "schema_version": "codenoesis.error/v3",
+  "code": "extraction.normalization_collision",
+  "stage": "extraction",
+  "message": "Rust identifier normalization collision",
+  "retryable": false,
+  "context": {
+    "kind": "rust.function",
+    "canonical_identity": "crate::café_label",
+    "path": "src/lib.rs",
+    "first_span": {
+      "unit": "byte",
+      "start": 555,
+      "end": 607
+    },
+    "second_span": {
+      "unit": "byte",
+      "start": 631,
+      "end": 655
+    }
+  }
+}

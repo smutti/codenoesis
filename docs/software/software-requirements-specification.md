@@ -1,19 +1,20 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.3 — S0 implemented; S1 ratified for protected merge**. The S0
-> runtime and product suite exist on `main`, but CodeNoesis does not claim S0
-> `Verified` without the complete immutable retention evidence. This revision
-> approves the S1 contract, fixture, limits, security oracle, and Red condition;
-> it contains no S1 production implementation.
+> Status: **0.4 — S0 and S1 implemented; S2 ratified for protected merge**.
+> The S0/S1 runtime and product suites exist on `main`, but CodeNoesis claims
+> neither slice `Verified` without complete immutable retention evidence. This
+> revision proposes the exact S2 Rust ontology, identity, extraction, graph,
+> claim, fixture, and Red contracts; it contains no S2 production
+> implementation.
 
 ## 1. Document control
 
 | Field | Value |
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
-| Version | `0.3` |
-| Status | S0 remains Approved and implemented; S1 becomes Approved only when the accountable single maintainer manually squash-merges protected PR [#17](https://github.com/smutti/codenoesis/pull/17) |
-| Date | 2026-07-23 |
+| Version | `0.4` |
+| Status | S0 and S1 remain Approved and implemented but not Verified; S2 becomes Approved only when the accountable single maintainer manually squash-merges protected PR [#23](https://github.com/smutti/codenoesis/pull/23) |
+| Date | 2026-07-24 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -26,6 +27,7 @@
 | `0.1` | 2026-07-17 | Initial proposed requirements, TDD policy, vertical slices, gates, and open decisions. |
 | `0.2` | 2026-07-18 | Ratified the exact S0 approval set under single-maintainer governance, adopted the repository-wide Apache-2.0 license, split atomic scan-CLI and execution-isolation requirements, and bound the S0 contract and Red oracle. |
 | `0.3` | 2026-07-23 | Recorded the implemented-but-not-Verified S0 state and ratified the exact S1 safe-inventory requirement set, explicit compatibility profile, limits, evidence model, malicious fixture, filesystem-security oracle, and expected Red. |
+| `0.4` | 2026-07-24 | Recorded the implemented-but-not-Verified S1 state and proposed the exact S2 Rust ontology, stable identities, extraction and graph contracts, claim states and deterministic rule, malformed/Unicode semantics, reviewed fixture, and expected Red. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -196,6 +198,56 @@ human review.
 | `PERF` | Reproducible benchmark or load test against a versioned corpus. |
 | `DR` | Migration, backup, restore, or rollback exercise. |
 | `CONF` | Schema, protocol, platform, or compatibility conformance test. |
+
+### 2.5 S2 ratification register
+
+The following is the exact target Approved set for **S2 — Rust knowledge**.
+Approval becomes authoritative only when `@smutti` manually squash-merges the
+exact protected head of PR
+[#23](https://github.com/smutti/codenoesis/pull/23). The authoring agent does
+not approve or merge. This high-risk decision fixes public artifact and error
+schemas, ontology properties and cardinalities, stable identity, claim states,
+deterministic-rule provenance, parser recovery, and untrusted-source behavior.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| `DR-IDN-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #23 protected merge record](https://github.com/smutti/codenoesis/pull/23) | `S2` | [S2 contract decision](decisions/0003-s2-rust-knowledge-contract.md) |
+| `FR-EXT-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #23 protected merge record](https://github.com/smutti/codenoesis/pull/23) | `S2` | [S2 acceptance specification](../../tests/specifications/s2/e2e_fr_ext_002_rust_knowledge.json) |
+| `FR-EXT-002` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #23 protected merge record](https://github.com/smutti/codenoesis/pull/23) | `S2` | [S2 acceptance specification](../../tests/specifications/s2/e2e_fr_ext_002_rust_knowledge.json) |
+| `FR-KNW-001` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #23 protected merge record](https://github.com/smutti/codenoesis/pull/23) | `S2` | [Rust ontology v1](../../tests/specifications/s2/rust-ontology-v1.json) |
+| `FR-KNW-002` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #23 protected merge record](https://github.com/smutti/codenoesis/pull/23) | `S2` | [Rust ontology v1](../../tests/specifications/s2/rust-ontology-v1.json) |
+| `FR-KNW-003` | Approved | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #23 protected merge record](https://github.com/smutti/codenoesis/pull/23) | `S2` | [S2 contract decision](decisions/0003-s2-rust-knowledge-contract.md) |
+
+S2 is selected only by `--profile standard-local-s2` and emits
+`RepositorySnapshotV3` or `CodeNoesisErrorV3`. The approved S0 invocation
+without a profile and the approved `standard-local-s1` invocation retain their
+V1 and V2 behavior. Repository shape, source extension, parse success,
+environment, and implicit configuration cannot select a contract version.
+
+Ontology `codenoesis.ontology/rust/v1` contains exactly ten entity kinds and
+four structural relationship kinds for the bounded fixture. It fixes required
+properties, endpoint matrices, cardinalities, NFC identifier normalization,
+domain-separated BLAKE3 entity/relationship/claim IDs, seven distinct claim
+states, eleven allowed transitions, immutable ontology versioning, and one
+versioned deterministic file-containment rule. Malformed and unsupported
+syntax remains diagnostic or typed rather than inferred as truth.
+
+S2 inherits the approved S1 repository, file, output, wall, CPU, RSS,
+temporary-disk, filesystem, process, and network boundaries. `FR-EXT-006`
+remains Proposed: its broader future standard-extraction policy is not silently
+approved here. The narrower S2 no-execution behavior follows directly from
+`FR-EXT-002` and preserved S0/S1 safety contracts.
+
+The policy registry is intentionally unchanged in this ratification change. A
+separate protected change may bind exactly these six IDs to the full commit on
+`main` containing the byte-identical SRS. Until that change is reviewed and
+merged, autonomous S2 authorization fails closed.
+
+S2 contract bundle: `sha256:d105957b00335ece563ae2783543aa112916d71131cfb23a0ebcaa14d7f57c9f`.
+The bundle binds the decision, strict schemas, ontology table, machine oracle,
+synthetic fixture, reviewed extraction/graph/error goldens, inherited S1
+bundle, and independent maintenance guard. Any bound-byte change requires a
+new digest and renewed human review.
 
 ## 3. Product intent and success definition
 
@@ -624,6 +676,26 @@ condition, and evidence requirements are in the
 [S1 acceptance specification](../../tests/specifications/s1/e2e_fr_inv_001_safe_inventory.json).
 That file is a protected oracle, not Green or Verified evidence.
 
+For S2, the proposed public evidence names include:
+
+```text
+black-box test: e2e_fr_ext_002_rust_knowledge
+extractor conformance: conf_fr_ext_001_extraction_chunk_v1
+reviewed graph golden: gt_fr_ext_002_reviewed_rust_graph
+stable-ID property test: pt_dr_idn_001_stable_ids_ignore_order_and_revision
+graph invariant property test: pt_fr_knw_001_graph_invariants
+claim-state model test: pt_fr_knw_002_claim_state_machine
+rule provenance property test: pt_fr_knw_003_rule_provenance_replays
+parser fuzz seed: fz_fr_ext_002_rust_parser_seed_corpus
+```
+
+The complete ordered S2 scenario set, inherited S0/S1 regressions, ontology,
+identity preimages, malformed/Unicode outcomes, Red condition, and evidence
+requirements are in the
+[S2 acceptance specification](../../tests/specifications/s2/e2e_fr_ext_002_rust_knowledge.json).
+That protected oracle becomes binding only through the manual ratification
+merge; it is not Red, Green, or Verified evidence by itself.
+
 Test source, fixture, oracle, CI evidence, and requirement status must be
 machine-linkable. A comment containing an ID is not sufficient if CI cannot
 detect a missing or stale link.
@@ -679,7 +751,7 @@ implementation choices.
 | ID | Decision required | Blocks |
 |---|---|---|
 | `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset only. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
-| `OD-ONT-001` | Ontology v1 required properties, cardinalities, state transitions, and versioning policy. | `S2` |
+| `OD-ONT-001` | Decision 0003 resolves required properties, cardinalities, state transitions, normalization, stable identity, and immutable versioning for `codenoesis.ontology/rust/v1` only when its protected S2 ratification revision is manually merged. Cross-language and post-S2 ontology evolution remains open. | `S8` and later ontology evolution |
 | `OD-GIT-001` | Residual Git decisions after the local S0/S1 subsets: remote protocols and identity resolution, packed objects, SHA-256, LFS, shallow and bare repositories, alternates, supported submodule/symlink semantics, and history rewrite. S1 rejects rather than traverses symlinks and gitlinks. | Remote and post-S1 `FR-ACQ-*` |
 | `OD-CMP-001` | Compatibility rules and oracles for OpenAPI, AsyncAPI, GraphQL, Protobuf, events, and behavioural evidence. | `S6`–`S7` |
 | `OD-API-001` | REST/MCP payload schemas, error catalog, cancellation, pagination, event resume, and deprecation window. | `S10`–`S11` |
@@ -699,7 +771,11 @@ resolves the one-file local binding. The
 only the verified loose-object tree subset and fixes rejection semantics for
 symlinks, gitlinks, and external Git directories. `OD-GIT-001` remains open for
 supported traversal or materialization of those features and for every other
-listed advanced or remote case.
+listed advanced or remote case. The
+[S2 contract decision](decisions/0003-s2-rust-knowledge-contract.md) resolves
+`OD-ONT-001` only for the bounded Rust v1 ontology and only after its protected
+manual merge; future language adapters or semantic expansion require another
+versioned decision.
 
 ## 17. Change control
 

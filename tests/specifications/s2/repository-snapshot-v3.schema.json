@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:repository-snapshot:v3",
+  "title": "RepositorySnapshotV3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "semantic_hash", "semantic", "envelope"],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.repository-snapshot/v3"
+    },
+    "semantic_hash": {
+      "$ref": "#/$defs/semantic_hash"
+    },
+    "semantic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "configuration",
+        "pipeline_version",
+        "ontology_version",
+        "extractor_contract_version",
+        "extractor_versions",
+        "evidence_lineage_version",
+        "inventory",
+        "extraction_chunks",
+        "knowledge_graph"
+      ],
+      "properties": {
+        "repository": {
+          "$ref": "#/$defs/repository"
+        },
+        "configuration": {
+          "$ref": "#/$defs/configuration"
+        },
+        "pipeline_version": {
+          "const": "codenoesis.pipeline/s2-v1"
+        },
+        "ontology_version": {
+          "const": "codenoesis.ontology/rust/v1"
+        },
+        "extractor_contract_version": {
+          "const": "codenoesis.extraction-chunk/v1"
+        },
+        "extractor_versions": {
+          "const": [
+            "codenoesis.inventory-classifier/s1-v1",
+            "codenoesis.rust-tree-sitter/s2-v1"
+          ]
+        },
+        "evidence_lineage_version": {
+          "const": "codenoesis.evidence-lineage/v2"
+        },
+        "inventory": {
+          "$ref": "urn:codenoesis:schema:repository-snapshot:v2#/$defs/inventory"
+        },
+        "extraction_chunks": {
+          "type": "array",
+          "maxItems": 20000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:codenoesis:schema:extraction-chunk:v1"
+          }
+        },
+        "knowledge_graph": {
+          "$ref": "urn:codenoesis:schema:knowledge-graph:v1"
+        }
+      }
+    },
+    "envelope": {
+      "$ref": "#/$defs/envelope"
+    }
+  },
+  "$defs": {
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_version",
+        "identity_schema_version",
+        "identity",
+        "vcs",
+        "object_format",
+        "commit_oid",
+        "tree_oid"
+      ],
+      "properties": {
+        "contract_version": {
+          "const": "codenoesis.repository/v1"
+        },
+        "identity_schema_version": {
+          "const": "codenoesis.repository-identity/v1"
+        },
+        "identity": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:[a-z0-9][a-z0-9._:-]{0,254}$"
+        },
+        "vcs": {
+          "const": "git"
+        },
+        "object_format": {
+          "const": "sha1"
+        },
+        "commit_oid": {
+          "$ref": "#/$defs/git_sha1"
+        },
+        "tree_oid": {
+          "$ref": "#/$defs/git_sha1"
+        }
+      }
+    },
+    "configuration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "profile", "semantic_hash"],
+      "properties": {
+        "schema_version": {
+          "const": "codenoesis.configuration/v1"
+        },
+        "profile": {
+          "const": "standard-local-s2"
+        },
+        "semantic_hash": {
+          "$ref": "#/$defs/blake3_hash"
+        }
+      }
+    },
+    "semantic_hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "domain", "value"],
+      "properties": {
+        "algorithm": {
+          "const": "blake3-256"
+        },
+        "domain": {
+          "const": "codenoesis.repository-snapshot.semantic.v3"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "blake3_hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {
+          "const": "blake3-256"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["created_at", "job_id", "correlation_id"],
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "job_id": {
+          "type": "string",
+          "pattern": "^job-[0-9a-f]{16}$"
+        },
+        "correlation_id": {
+          "type": "string",
+          "pattern": "^corr-[0-9a-f]{16}$"
+        }
+      }
+    },
+    "git_sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    }
+  }
+}
