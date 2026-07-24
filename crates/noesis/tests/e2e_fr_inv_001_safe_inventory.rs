@@ -7,10 +7,10 @@ use std::thread;
 
 use serde_json::{Value, json};
 
-use support::parse_single_document;
 use support::s1::{
     COMMIT_A_OID, MaterializedRepository, REPOSITORY_ID, fixture_root, scan, scan_command,
 };
+use support::{parse_single_document, read_repository_text};
 
 #[test]
 fn e2e_fr_inv_001_safe_inventory() {
@@ -246,7 +246,7 @@ fn gt_fr_inv_001_exact_inventory_and_coverage_gaps() {
 fn pt_fr_inv_001_public_inventory_is_replay_and_schedule_invariant() {
     let repository = MaterializedRepository::revision_a();
     let mut expected_semantic =
-        fs::read(fixture_root().join("expected-semantic-a.jcs")).expect("read semantic JCS");
+        read_repository_text(fixture_root().join("expected-semantic-a.jcs"));
     assert_eq!(expected_semantic.pop(), Some(b'\n'));
 
     for seed in 0..50 {
