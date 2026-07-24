@@ -3,6 +3,8 @@
     reason = "shared integration-test support is compiled once per test target"
 )]
 
+pub mod s1;
+
 use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};

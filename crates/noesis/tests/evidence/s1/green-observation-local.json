@@ -1,0 +1,92 @@
+{
+  "schema_version": "codenoesis.s1-local-green-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/20",
+  "slice": "S1",
+  "requirements": [
+    "DR-EVD-001",
+    "FR-ACQ-002",
+    "FR-INV-001",
+    "NFR-SEC-001"
+  ],
+  "risk": "high",
+  "observed_at": "2026-07-23T19:41:13Z",
+  "commits": {
+    "base": "15e976bd11e3d2a42c191cf4373b22e6ffc1702f",
+    "test_first": "b6f0ac8373542d6c6652a286643300d933f75dbe",
+    "red_evidence": "61b63d2a15b5d268da4f4cf0b0e32f44e6423b29"
+  },
+  "contracts": {
+    "bundle_sha256": "1a0c6222699d683238e36aef0f77d40a02db469a6c394a812c0e8aa7a1398867",
+    "acceptance_specification_sha256": "25ea508afca9655652862ce3d4304b162d0b221d07fc48ea0674174e97aa320d",
+    "seccomp_profile_sha256": "5664635f8ad76dff5421f5eeb1f20ffdf0450203d8cb9c692606c026a39ee1ad"
+  },
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "features": "all workspace features for the bootstrap gate; default features for ordered scenarios",
+    "policy_version": 1,
+    "agent": "OpenAI Codex",
+    "model": "not exposed by runtime",
+    "run_identifier": "issue-20-local-green-20260723T194113Z",
+    "duration": "not measured as one aggregate",
+    "cost": "not exposed by runtime"
+  },
+  "ordered_scenarios": {
+    "status": "partial_local_green",
+    "passed_local": 11,
+    "linux_runtime_not_run": [
+      "sec_nfr_sec_001_scan_stays_inside_repository_root"
+    ],
+    "linux_compile_command": "cargo check --target aarch64-unknown-linux-gnu -p noesis --test sec_nfr_sec_001_filesystem_boundary --locked",
+    "linux_compile_exit": 0,
+    "local_log_sha256": "6053a58985b23f68cca43c728fae80716ebcf1b56e7f418b5bedcf1d92a4fb2d",
+    "local_log_retention": "ephemeral local review aid; immutable Linux CI evidence is still required"
+  },
+  "bootstrap_gate": {
+    "status": "passed",
+    "commands": [
+      "actionlint -no-color",
+      "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+      "cargo fmt --all --check",
+      "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "cargo test --workspace --all-targets --all-features --locked",
+      "cargo test --workspace --doc --all-features --locked",
+      "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "python3 scripts/validate_benchmark_assets.py",
+      "cargo bench --workspace --all-features --no-run --locked"
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "local_log_sha256": "b6005f68a8a0f370840015830c48e85d3863cf570a065a432cbd9f1ee64c7f8a",
+    "local_log_retention": "ephemeral local review aid; immutable CI evidence is still required"
+  },
+  "determinism": {
+    "sequential_replays": 50,
+    "parallel_shuffled_repetitions": 10,
+    "result": "passed"
+  },
+  "resource_review_aid": {
+    "focused_acceptance_elapsed_seconds": 4.93,
+    "focused_acceptance_maximum_resident_set_bytes": 179863552,
+    "cpu_ceiling_evidence": "not collected per subject process",
+    "temporary_disk_evidence": "not collected per subject process"
+  },
+  "implementation_patch_sha256_before_this_observation": "2c35b3c0f927c9bbd705ed58aa6c6623b3ccf7a19d597f843b12aaaf33da768a",
+  "verification_state": "not_verified",
+  "known_limitations": [
+    "Normative Linux Landlock runtime and observer evidence is not available on this Darwin host.",
+    "PID-scoped filesystem observation, network namespace evidence, descriptor audit, and immutable retention are still required from CI.",
+    "Local logs are review aids and are not claimed as retained verification artifacts."
+  ]
+}
