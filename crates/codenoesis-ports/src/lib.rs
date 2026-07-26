@@ -1,8 +1,13 @@
-//! Inward-owned ports for the `CodeNoesis` S0 and S1 acquisition slices.
+//! Inward-owned ports for the `CodeNoesis` S0 through S3 slices.
 
+use std::collections::BTreeSet;
 use std::ffi::OsStr;
 
 use codenoesis_domain::knowledge::{KnowledgeError, RustKnowledge};
+use codenoesis_domain::storage::{
+    ArtifactId, LocalSnapshotHead, PublicationCandidate, PublicationEvent, PublicationResult,
+    SnapshotId, StorageError, StoredArtifact, SweepResult,
+};
 use codenoesis_domain::{
     AcquiredRepository, BoundRevision, RepositoryError, RepositoryIdentity, RepositoryInventory,
     Revision,
@@ -44,4 +49,104 @@ pub trait RustKnowledgeExtractor {
     /// Returns a typed extraction, ontology, or graph failure without partial
     /// publication.
     fn extract(&self, inventory: &RepositoryInventory) -> Result<RustKnowledge, KnowledgeError>;
+}
+
+pub trait PublicationObserver {
+    /// Observes one exact S3 publication boundary occurrence.
+    ///
+    /// # Errors
+    ///
+    /// Returns a publication error when the observer cannot record the
+    /// boundary. Production uses [`NoopPublicationObserver`].
+    fn observe(&mut self, event: &PublicationEvent) -> Result<(), StorageError>;
+}
+
+pub struct NoopPublicationObserver;
+
+impl PublicationObserver for NoopPublicationObserver {
+    fn observe(&mut self, _event: &PublicationEvent) -> Result<(), StorageError> {
+        Ok(())
+    }
+}
+
+pub trait ArtifactStore {
+    /// Stages one immutable exact-byte artifact.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed content, path, or durability failure.
+    fn stage(
+        &mut self,
+        artifact: &StoredArtifact,
+        observer: &mut dyn PublicationObserver,
+    ) -> Result<(), StorageError>;
+
+    /// Reads and verifies one immutable exact-byte artifact.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed missing or corrupt object failure.
+    fn read(&self, artifact_id: &ArtifactId, byte_length: u64) -> Result<Vec<u8>, StorageError>;
+
+    /// Removes only abandoned temporary files and objects absent from the
+    /// supplied stable reachability view and the per-object recheck.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed storage failure without deleting a rechecked reachable
+    /// object.
+    fn sweep(
+        &mut self,
+        reachable: &BTreeSet<ArtifactId>,
+        recheck: &mut dyn FnMut(&ArtifactId) -> Result<bool, StorageError>,
+    ) -> Result<SweepResult, StorageError>;
+}
+
+pub trait MetadataStore {
+    /// Returns the current snapshot identifier without changing store state.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed schema, contention, or metadata-integrity failure.
+    fn current_head_id(
+        &self,
+        repository_identity: &RepositoryIdentity,
+    ) -> Result<Option<SnapshotId>, StorageError>;
+
+    /// Atomically inserts immutable rows and compare/sets the visible head.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed contention, conflict, schema, metadata, or publication
+    /// failure.
+    fn publish(
+        &mut self,
+        candidate: &PublicationCandidate,
+        expected_head: Option<&SnapshotId>,
+        observer: &mut dyn PublicationObserver,
+    ) -> Result<PublicationResult, StorageError>;
+
+    /// Loads one complete metadata head in a stable read transaction.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed schema or metadata-integrity failure.
+    fn load_head(
+        &self,
+        repository_identity: &RepositoryIdentity,
+    ) -> Result<Option<LocalSnapshotHead>, StorageError>;
+
+    /// Returns one stable committed set of every referenced artifact.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed metadata-integrity failure.
+    fn referenced_artifacts(&self) -> Result<BTreeSet<ArtifactId>, StorageError>;
+
+    /// Rechecks whether one artifact is currently referenced.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed metadata-integrity failure.
+    fn is_artifact_referenced(&self, artifact_id: &ArtifactId) -> Result<bool, StorageError>;
 }
