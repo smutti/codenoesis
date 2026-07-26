@@ -31,8 +31,20 @@ APPROVED_S1_REQUIREMENTS = (
     "FR-INV-001",
     "NFR-SEC-001",
 )
+APPROVED_S2_REQUIREMENTS = (
+    "DR-IDN-001",
+    "FR-EXT-001",
+    "FR-EXT-002",
+    "FR-KNW-001",
+    "FR-KNW-002",
+    "FR-KNW-003",
+)
 APPROVED_REQUIREMENTS = tuple(
-    sorted(APPROVED_S0_REQUIREMENTS + APPROVED_S1_REQUIREMENTS)
+    sorted(
+        APPROVED_S0_REQUIREMENTS
+        + APPROVED_S1_REQUIREMENTS
+        + APPROVED_S2_REQUIREMENTS
+    )
 )
 S0_APPROVED_AT = "2026-07-22T19:41:36Z"
 S0_APPROVAL_SOURCE_SHA = "a9c718504d126f9c3b398aed3714c132243d3d3c"
@@ -40,6 +52,9 @@ S0_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/12"
 S1_APPROVED_AT = "2026-07-23T18:42:06Z"
 S1_APPROVAL_SOURCE_SHA = "88abc745ab26a6a65615e5ead46076e18a02d9e1"
 S1_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/17"
+S2_APPROVED_AT = "2026-07-24T19:29:34Z"
+S2_APPROVAL_SOURCE_SHA = "6675f81410ce79e6d5b8a8085502f5331ea61d75"
+S2_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/23"
 
 SPEC = importlib.util.spec_from_file_location("codex_policy", MODULE_PATH)
 if SPEC is None or SPEC.loader is None:  # pragma: no cover - import contract
@@ -87,7 +102,7 @@ class PolicyValidationTests(PolicyFixture):
                     S0_APPROVAL_REFERENCE, approval_record["approval_reference"]
                 )
                 self.assertEqual(S0_APPROVED_AT, approval_record["approved_at"])
-            else:
+            elif approval_record["id"] in APPROVED_S1_REQUIREMENTS:
                 self.assertIn(approval_record["id"], APPROVED_S1_REQUIREMENTS)
                 self.assertEqual("S1", approval_record["slice"])
                 self.assertEqual(
@@ -97,6 +112,16 @@ class PolicyValidationTests(PolicyFixture):
                     S1_APPROVAL_REFERENCE, approval_record["approval_reference"]
                 )
                 self.assertEqual(S1_APPROVED_AT, approval_record["approved_at"])
+            else:
+                self.assertIn(approval_record["id"], APPROVED_S2_REQUIREMENTS)
+                self.assertEqual("S2", approval_record["slice"])
+                self.assertEqual(
+                    S2_APPROVAL_SOURCE_SHA, approval_record["source_sha"]
+                )
+                self.assertEqual(
+                    S2_APPROVAL_REFERENCE, approval_record["approval_reference"]
+                )
+                self.assertEqual(S2_APPROVED_AT, approval_record["approved_at"])
         self.assertEqual(
             "https://json-schema.org/draft/2020-12/schema", schema["$schema"]
         )
@@ -243,6 +268,26 @@ class GlobSemanticsTests(unittest.TestCase):
 
 
 class AuthorizationTests(PolicyFixture):
+    def test_dr_idn_001_fr_ext_001_fr_ext_002_fr_knw_001_fr_knw_002_fr_knw_003_exact_s2_authorization(
+        self,
+    ) -> None:
+        result = codex_policy.authorize_requirements(
+            self.policy, list(APPROVED_S2_REQUIREMENTS), "S2"
+        )
+
+        self.assertTrue(result["authorized"])
+        self.assertEqual("S2", result["delivery_slice"])
+        self.assertEqual(
+            list(APPROVED_S2_REQUIREMENTS), result["requirement_ids"]
+        )
+        self.assertEqual(
+            list(APPROVED_S2_REQUIREMENTS),
+            [record["id"] for record in result["approval_records"]],
+        )
+        for record in result["approval_records"]:
+            self.assertEqual(S2_APPROVAL_SOURCE_SHA, record["source_sha"])
+            self.assertEqual(S2_APPROVAL_REFERENCE, record["approval_reference"])
+
     def test_repository_policy_authorizes_exact_ratified_s1_set(self) -> None:
         result = codex_policy.authorize_requirements(
             self.policy, list(APPROVED_S1_REQUIREMENTS), "S1"
@@ -574,15 +619,17 @@ class CommandLineTests(PolicyFixture):
             len(APPROVED_REQUIREMENTS), payload["approved_requirement_count"]
         )
 
-    def test_authorization_denial_has_stable_exit_code_and_json_error(self) -> None:
+    def test_fr_ext_003_authorization_denial_has_stable_exit_code_and_json_error(
+        self,
+    ) -> None:
         result = self.run_cli(
             "authorize",
             "--policy",
             str(POLICY_PATH),
             "--slice",
-            "S1",
+            "S2",
             "--requirement-id",
-            "FR-INV-002",
+            "FR-EXT-003",
         )
 
         self.assertEqual(4, result.returncode)
