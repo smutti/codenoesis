@@ -1,0 +1,222 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:local-snapshot-head:v1",
+  "title": "LocalSnapshotHeadV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "repository_identity",
+    "snapshot_id",
+    "commit_oid",
+    "snapshot_schema_version",
+    "semantic_hash",
+    "graph_semantic_hash",
+    "generation",
+    "artifacts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.local-snapshot-head/v1"
+    },
+    "repository_identity": {
+      "$ref": "#/$defs/repository_identity"
+    },
+    "snapshot_id": {
+      "$ref": "#/$defs/snapshot_id"
+    },
+    "commit_oid": {
+      "$ref": "#/$defs/git_sha1"
+    },
+    "snapshot_schema_version": {
+      "const": "codenoesis.repository-snapshot/v3"
+    },
+    "semantic_hash": {
+      "$ref": "#/$defs/snapshot_semantic_hash"
+    },
+    "graph_semantic_hash": {
+      "$ref": "#/$defs/graph_semantic_hash"
+    },
+    "generation": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9223372036854775807
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 20002,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/artifact"
+      },
+      "allOf": [
+        {
+          "contains": {
+            "properties": {
+              "role": {
+                "const": "snapshot_semantic"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "role": {
+                "const": "knowledge_graph"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "repository_identity": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:[a-z0-9][a-z0-9._:-]{0,254}$"
+    },
+    "snapshot_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:snapshot:blake3:[0-9a-f]{64}$"
+    },
+    "artifact_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:artifact:blake3:[0-9a-f]{64}$"
+    },
+    "git_sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "blake3": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "snapshot_semantic_hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "domain",
+        "value"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "blake3-256"
+        },
+        "domain": {
+          "const": "codenoesis.repository-snapshot.semantic.v3"
+        },
+        "value": {
+          "$ref": "#/$defs/blake3"
+        }
+      }
+    },
+    "graph_semantic_hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "domain",
+        "value"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "blake3-256"
+        },
+        "domain": {
+          "const": "codenoesis.knowledge-graph.semantic.v1"
+        },
+        "value": {
+          "$ref": "#/$defs/blake3"
+        }
+      }
+    },
+    "artifact_semantic_hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "domain",
+        "value"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "blake3-256"
+        },
+        "domain": {
+          "enum": [
+            "codenoesis.repository-snapshot.semantic.v3",
+            "codenoesis.knowledge-graph.semantic.v1",
+            "codenoesis.extraction-chunk.semantic.v1"
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/blake3"
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "ordinal",
+        "artifact_id",
+        "byte_length",
+        "semantic_hash"
+      ],
+      "properties": {
+        "role": {
+          "enum": [
+            "snapshot_semantic",
+            "knowledge_graph",
+            "extraction_chunk"
+          ]
+        },
+        "ordinal": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 19999
+        },
+        "artifact_id": {
+          "$ref": "#/$defs/artifact_id"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 33554432
+        },
+        "semantic_hash": {
+          "$ref": "#/$defs/artifact_semantic_hash"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "role": {
+                "enum": [
+                  "snapshot_semantic",
+                  "knowledge_graph"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "ordinal": {
+                "const": 0
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

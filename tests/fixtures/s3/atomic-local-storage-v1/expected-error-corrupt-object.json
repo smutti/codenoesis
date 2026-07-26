@@ -1,0 +1,13 @@
+{
+  "schema_version": "codenoesis.error/v4",
+  "code": "storage.corrupt_object",
+  "stage": "storage",
+  "message": "A head-referenced content object failed integrity validation.",
+  "retryable": false,
+  "context": {
+    "component": "cas",
+    "artifact_id": "urn:codenoesis:artifact:blake3:73fb647037047b3c48bf40745075ea7e7f4531c4b5fdb5cfde8f52b194adf7b7",
+    "expected_hash": "73fb647037047b3c48bf40745075ea7e7f4531c4b5fdb5cfde8f52b194adf7b7",
+    "observed_hash": "f31cac42a212a3a14a2fce941300537f5e83199f49a1468c60327b54a2e33a19"
+  }
+}

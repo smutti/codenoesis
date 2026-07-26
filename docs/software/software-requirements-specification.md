@@ -1,20 +1,20 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.4 — S0 and S1 implemented; S2 ratified for protected merge**.
-> The S0/S1 runtime and product suites exist on `main`, but CodeNoesis claims
-> neither slice `Verified` without complete immutable retention evidence. This
-> revision proposes the exact S2 Rust ontology, identity, extraction, graph,
-> claim, fixture, and Red contracts; it contains no S2 production
-> implementation.
+> Status: **0.5 — S0 through S2 implemented; S3 ratified for protected merge**.
+> The S0–S2 runtime and product suites exist on `main`, but CodeNoesis claims
+> no slice `Verified` without complete immutable retention evidence. This
+> revision proposes the exact S3 SQLite, filesystem-CAS, atomic publication,
+> crash recovery, corruption, cleanup, fixture, and Red contracts; it contains
+> no S3 production implementation.
 
 ## 1. Document control
 
 | Field | Value |
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
-| Version | `0.4` |
-| Status | S0 and S1 remain Approved and implemented but not Verified; S2 becomes Approved only when the accountable single maintainer manually squash-merges protected PR [#23](https://github.com/smutti/codenoesis/pull/23) |
-| Date | 2026-07-24 |
+| Version | `0.5` |
+| Status | S0 through S2 remain Approved and implemented but not Verified; S3 becomes Approved only when the accountable single maintainer manually squash-merges protected PR [#29](https://github.com/smutti/codenoesis/pull/29) |
+| Date | 2026-07-26 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -28,6 +28,7 @@
 | `0.2` | 2026-07-18 | Ratified the exact S0 approval set under single-maintainer governance, adopted the repository-wide Apache-2.0 license, split atomic scan-CLI and execution-isolation requirements, and bound the S0 contract and Red oracle. |
 | `0.3` | 2026-07-23 | Recorded the implemented-but-not-Verified S0 state and ratified the exact S1 safe-inventory requirement set, explicit compatibility profile, limits, evidence model, malicious fixture, filesystem-security oracle, and expected Red. |
 | `0.4` | 2026-07-24 | Recorded the implemented-but-not-Verified S1 state and proposed the exact S2 Rust ontology, stable identities, extraction and graph contracts, claim states and deterministic rule, malformed/Unicode semantics, reviewed fixture, and expected Red. |
+| `0.5` | 2026-07-26 | Recorded the implemented-but-not-Verified S2 state and proposed the exact S3 snapshot/artifact identities, SQLite/CAS contract, atomic head transition, crash/retry/corruption/cleanup semantics, reviewed fixture, and expected Red. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -248,6 +249,67 @@ The bundle binds the decision, strict schemas, ontology table, machine oracle,
 synthetic fixture, reviewed extraction/graph/error goldens, inherited S1
 bundle, and independent maintenance guard. Any bound-byte change requires a
 new digest and renewed human review.
+
+### 2.6 S3 ratification register
+
+The following is the exact target Approved set for
+**S3 — Atomic local storage**. Approval becomes authoritative only when
+`@smutti` manually squash-merges the exact protected head of PR
+[#29](https://github.com/smutti/codenoesis/pull/29). The authoring agent does
+not approve or merge. This high-risk decision fixes local snapshot and artifact
+identity, fresh SQLite schema, filesystem-CAS layout and durability protocol,
+atomic visible-head publication, failpoint outcomes, retry, corruption,
+cleanup, path safety, public storage errors, and platform evidence claims.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| `FR-SNP-001` | Proposed | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #29 protected merge record](https://github.com/smutti/codenoesis/pull/29) | `S3` | [S3 contract decision](decisions/0004-s3-atomic-local-storage-contract.md) |
+| `FR-STO-001` | Proposed | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #29 protected merge record](https://github.com/smutti/codenoesis/pull/29) | `S3` | [S3 acceptance specification](../../tests/specifications/s3/e2e_fr_sto_001_atomic_local_storage.json) |
+| `INV-SNP-001` | Proposed | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #29 protected merge record](https://github.com/smutti/codenoesis/pull/29) | `S3` | [S3 failpoint matrix](../../tests/specifications/s3/publication-failpoints-v1.json) |
+| `NFR-REL-001` | Proposed | Approved | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #29 protected merge record](https://github.com/smutti/codenoesis/pull/29) | `S3` | [S3 failpoint matrix](../../tests/specifications/s3/publication-failpoints-v1.json) |
+
+S3 is selected only by `--profile standard-local-s3` with one explicit
+`--store` root. Successful stdout remains the approved
+`RepositorySnapshotV3`; storage location and operational publication state do
+not enter its semantic hash. S3 uses strict `CodeNoesisErrorV4` for its new
+input, store, integrity, and publication failures. S0, S1, and S2 invocations
+remain byte-compatible and perform no store write.
+
+The local project key is canonical repository identity. Snapshot IDs derive
+from the V3 semantic hash. Exact RFC 8785 snapshot-semantic, graph, and
+extraction bytes receive domain-separated BLAKE3 artifact IDs and are staged in
+the filesystem CAS before SQLite references them.
+
+SQLite schema `codenoesis.local-store/v1` uses WAL, `synchronous=FULL`, foreign
+keys, trusted schema off, and one immediate writer. Snapshot, artifact, graph,
+claim, evidence, extraction, diagnostic, and coverage rows are immutable.
+`project_heads` is the only mutable table. One SQLite commit is the visibility
+point: readers observe the previous complete head or the new complete head,
+never an uncommitted or cross-snapshot mixture.
+
+The exact eight-boundary failpoint matrix covers every canonical CAS artifact
+occurrence plus each metadata transition for first publication and A-to-B
+replacement, external process termination, restart, complete head validation,
+retry, and orphan sweep. Pre-commit termination retains no head or A;
+post-commit termination exposes A or B. Duplicate publication is idempotent,
+reachable corruption fails closed without fallback, and cleanup never deletes
+an object referenced by a committed snapshot.
+
+Process-crash/restart behavior is required on Linux, macOS, and Windows.
+Power-loss durability is claimed only when evidence names successful SQLite,
+file, atomic-move, and parent-directory durability primitives for the tested
+platform and filesystem. Unsupported durability fails before publication.
+
+The policy registry is intentionally unchanged in this ratification change. A
+separate protected change may bind exactly these four IDs to the full commit on
+`main` containing the byte-identical SRS. Until that change is reviewed and
+merged, autonomous S3 implementation authorization fails closed.
+
+S3 contract bundle: `sha256:9d210e8509cca1a3398bb21c36763d5289a35427bad4fe51a25d518f8da7ff6b`.
+The bundle binds decision 0004, the independent maintenance guard, inherited
+S2 bundle, strict DDL and schemas, machine oracle, two-revision fixture,
+reviewed semantic/head/error/recovery goldens, and failpoint matrix. Any bound
+byte change requires a new digest and renewed human review.
 
 ## 3. Product intent and success definition
 
@@ -752,6 +814,7 @@ implementation choices.
 |---|---|---|
 | `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset only. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
 | `OD-ONT-001` | Decision 0003 resolves required properties, cardinalities, state transitions, normalization, stable identity, and immutable versioning for `codenoesis.ontology/rust/v1` only when its protected S2 ratification revision is manually merged. Cross-language and post-S2 ontology evolution remains open. | `S8` and later ontology evolution |
+| `OD-STO-001` | Decision 0004 resolves fresh single-writer local SQLite/CAS identity, publication, restart, corruption, and cleanup semantics for `codenoesis.local-store/v1` only when its protected S3 ratification revision is manually merged. Migration, repair, deletion, backup/restore, multi-writer, and server storage remain open. | Post-S3 storage evolution and `S10` |
 | `OD-GIT-001` | Residual Git decisions after the local S0/S1 subsets: remote protocols and identity resolution, packed objects, SHA-256, LFS, shallow and bare repositories, alternates, supported submodule/symlink semantics, and history rewrite. S1 rejects rather than traverses symlinks and gitlinks. | Remote and post-S1 `FR-ACQ-*` |
 | `OD-CMP-001` | Compatibility rules and oracles for OpenAPI, AsyncAPI, GraphQL, Protobuf, events, and behavioural evidence. | `S6`–`S7` |
 | `OD-API-001` | REST/MCP payload schemas, error catalog, cancellation, pagination, event resume, and deprecation window. | `S10`–`S11` |
@@ -775,7 +838,11 @@ listed advanced or remote case. The
 [S2 contract decision](decisions/0003-s2-rust-knowledge-contract.md) resolves
 `OD-ONT-001` only for the bounded Rust v1 ontology and only after its protected
 manual merge; future language adapters or semantic expansion require another
-versioned decision.
+versioned decision. The
+[S3 contract decision](decisions/0004-s3-atomic-local-storage-contract.md)
+resolves `OD-STO-001` only for a fresh local v1 store with one application
+writer; every migration, repair, deletion, restore, multi-writer, and server
+profile decision remains open.
 
 ## 17. Change control
 
