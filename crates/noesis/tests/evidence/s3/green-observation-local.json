@@ -16,7 +16,13 @@
     "red_evidence": "bf69993abe3b8316567986c3b5f120406865c3e1",
     "domain_and_ports": "612a7db91bd8bf9df306be02e59cbdceb3ce89cf",
     "implementation": "d978d86a969dcc4a5144cc23af6bdfd23e0cd360",
-    "implementation_tested": "6faeb3a0a441992d7707f6c58dfb6144447f2990"
+    "implementation_tested": "6faeb3a0a441992d7707f6c58dfb6144447f2990",
+    "local_green_evidence": "935964665e9d7e90c6cef1523630f020087d77d2",
+    "windows_directory_write_attempt": "57798b1b902058010c9565a1c0d3e6dddf12bda1",
+    "windows_directory_write_attempt_revert": "8196fbbe5b411bf576873ba88bdf2183709e7f20",
+    "windows_write_through_publication": "04d92eddd0c4e910169d6e0f2289d79b7c9c62f2",
+    "windows_sqlite_sync": "381c7130f429784515b41cd4c8ac9809bd5fee17",
+    "final_candidate_tested": "381c7130f429784515b41cd4c8ac9809bd5fee17"
   },
   "contracts": {
     "bundle_sha256": "6269996ebfa117f30bf5b7e8eee56fce5806acdd342ad9d7dfea109c25725605",
@@ -32,7 +38,11 @@
     "libsqlite3_sys": "0.38.1",
     "bundled_sqlite": "3.53.2",
     "tempfile": "3.27.0",
-    "tempfile_default_features": true
+    "tempfile_default_features": true,
+    "atomicwrites": "0.4.4",
+    "atomicwrites_target": "cfg(windows)",
+    "atomicwrites_license": "MIT",
+    "atomicwrites_lock_checksum_sha256": "3ef1bb8d1b645fe38d51dfc331d720fb5fc2c94b440c76cc79c80ff265ca33e3"
   },
   "environment": {
     "os": "Darwin 25.5.0",
@@ -115,8 +125,11 @@
     "missing_object_result": "storage.missing_object without repair",
     "corrupt_object_result": "reviewed storage.corrupt_object golden",
     "file_sync_primitive": "std::fs::File::sync_all on the temporary object",
-    "atomic_move_primitive": "tempfile persist_noclobber using rustix renameat_with NOREPLACE with hard-link fallback",
-    "parent_sync_primitive": "std::fs::File::sync_all on the containing directory",
+    "atomic_move_primitive": "tempfile persist_noclobber using rustix renameat_with NOREPLACE with hard-link fallback on Unix",
+    "parent_sync_primitive": "std::fs::File::sync_all on the containing directory on Unix",
+    "windows_atomic_move_primitive": "atomicwrites::move_atomic using MoveFileExW with MOVEFILE_WRITE_THROUGH and without MOVEFILE_REPLACE_EXISTING",
+    "windows_parent_durability_primitive": "the write-through move completes publication; no successful Windows directory-handle flush is claimed",
+    "windows_sqlite_sync_primitive": "OpenOptions read+write followed by File::sync_all, which invokes FlushFileBuffers",
     "sqlite_visibility_primitive": "one FULL-synchronous WAL commit"
   },
   "security": {
@@ -128,7 +141,7 @@
     "target_remote_network_canary": "passed",
     "portable_write_confinement": "passed",
     "linux_landlock_compile_or_runtime": "not run: local aarch64 Linux cross-check lacked aarch64-linux-gnu-gcc for bundled SQLite and Tree-sitter C sources",
-    "windows_runtime": "not run",
+    "windows_runtime": "passed on exact-head GitHub-hosted windows-latest CI with all workspace targets and features",
     "rusqlite_load_extension_feature": false,
     "bundled_sqlite_reports_enable_load_extension": true,
     "extension_loading_exposure": "not exposed by selected safe rusqlite features; first-party unsafe is forbidden"
@@ -181,6 +194,107 @@
     "local_log_bytes": 12146,
     "local_log_retention": "ephemeral local review aid; immutable exact-head CI evidence is still required"
   },
+  "final_candidate_local_gate": {
+    "status": "passed",
+    "tested_head": "381c7130f429784515b41cd4c8ac9809bd5fee17",
+    "commands": [
+      "actionlint -no-color",
+      "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+      "cargo fmt --all --check",
+      "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "cargo test --workspace --all-targets --all-features --locked",
+      "cargo test --workspace --doc --all-features --locked",
+      "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "python3 scripts/validate_benchmark_assets.py",
+      "cargo bench --workspace --all-features --no-run --locked"
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "adapter_contract_tests_passed": 2,
+    "s3_process_tests_passed": 12,
+    "local_log_sha256": "76a6d36c9e3f27d3d84fde4ed143099062853d16114335ed189f719afbd12768",
+    "local_log_bytes": 13672,
+    "local_log_retention": "ephemeral local review aid; immutable exact-head CI evidence is still required"
+  },
+  "subsequent_ci_corrections": {
+    "directory_handle_write_attempt": {
+      "commit": "57798b1b902058010c9565a1c0d3e6dddf12bda1",
+      "result": "ineffective_on_windows",
+      "revert_commit": "8196fbbe5b411bf576873ba88bdf2183709e7f20",
+      "pr_comment": "https://github.com/smutti/codenoesis/pull/35#issuecomment-5084955593"
+    },
+    "write_through_publication": {
+      "authorization": "https://github.com/smutti/codenoesis/issues/32#issuecomment-5084989291",
+      "commit": "04d92eddd0c4e910169d6e0f2289d79b7c9c62f2",
+      "dependency": "atomicwrites 0.4.4",
+      "primitive": "MoveFileExW with MOVEFILE_WRITE_THROUGH and no replacement flag",
+      "ci_result": {
+        "status": "failed",
+        "run_url": "https://github.com/smutti/codenoesis/actions/runs/30216609488",
+        "failed_job": "Test (windows-latest)",
+        "failure_boundary": "LocalStore::open while syncing metadata.sqlite3 through a read-only handle",
+        "downloaded_failed_log_sha256": "5bbf06a912ea6a49f3f71008d600dda5b86cf70402666897709a69dff83c0a48"
+      }
+    },
+    "sqlite_sync": {
+      "authorization": "https://github.com/smutti/codenoesis/issues/32#issuecomment-5085019984",
+      "commit": "381c7130f429784515b41cd4c8ac9809bd5fee17",
+      "allowed_paths": [
+        "crates/codenoesis-store-local/src/sqlite.rs"
+      ],
+      "primitive": "OpenOptions read+write before File::sync_all on Windows",
+      "ci_result": {
+        "status": "passed",
+        "run_url": "https://github.com/smutti/codenoesis/actions/runs/30216814660",
+        "head_sha": "381c7130f429784515b41cd4c8ac9809bd5fee17",
+        "created_at": "2026-07-26T19:25:24Z",
+        "completed_at": "2026-07-26T19:27:40Z",
+        "jobs": [
+          {
+            "name": "Test (macos-latest)",
+            "status": "passed",
+            "url": "https://github.com/smutti/codenoesis/actions/runs/30216814660/job/89832357102"
+          },
+          {
+            "name": "Test (ubuntu-latest)",
+            "status": "passed",
+            "url": "https://github.com/smutti/codenoesis/actions/runs/30216814660/job/89832357107"
+          },
+          {
+            "name": "Test (windows-latest)",
+            "status": "passed",
+            "url": "https://github.com/smutti/codenoesis/actions/runs/30216814660/job/89832357137"
+          },
+          {
+            "name": "Rust quality gate",
+            "status": "passed",
+            "url": "https://github.com/smutti/codenoesis/actions/runs/30216814660/job/89832357115"
+          },
+          {
+            "name": "CI policy gate",
+            "status": "passed",
+            "url": "https://github.com/smutti/codenoesis/actions/runs/30216814660/job/89832555999"
+          }
+        ],
+        "downloaded_run_log_sha256": "a31d115772d7f57f6183e99e5ef8b2b625504bb138914f3ae91280128e9afd12",
+        "downloaded_run_log_bytes": 281859,
+        "downloaded_windows_job_log_sha256": "f03838b5f9e70411920771ad61ca08071e95c6799b10d4227bb5f12f4e40dd44",
+        "downloaded_windows_job_log_bytes": 63146,
+        "downloaded_log_retention": "ephemeral local review aid copied from GitHub Actions logs",
+        "workflow_artifact_count": 0,
+        "verification_effect": "cross-platform runtime confirmation only; no immutable retained artifact was published"
+      }
+    }
+  },
   "scope": {
     "implementation_patch_sha256_before_this_observation": "9208b31b75dcbc58fa18bd84df8bc11fc3c0d41fad41f8dc88fc8a442d13cc6d",
     "forbidden_paths_changed": [],
@@ -199,15 +313,18 @@
     "ratification": "https://github.com/smutti/codenoesis/pull/29",
     "policy_binding": "https://github.com/smutti/codenoesis/pull/31",
     "expected_red_correction": "https://github.com/smutti/codenoesis/pull/34",
-    "implementation_authorization": "https://github.com/smutti/codenoesis/issues/32"
+    "implementation_authorization": "https://github.com/smutti/codenoesis/issues/32",
+    "windows_write_through_dependency": "https://github.com/smutti/codenoesis/issues/32#issuecomment-5084989291",
+    "windows_sqlite_extra_round": "https://github.com/smutti/codenoesis/issues/32#issuecomment-5085019984"
   },
   "verification_state": "not_verified",
   "known_limitations": [
-    "Normative Linux Landlock runtime and Windows process-crash evidence are unavailable on this Darwin host.",
+    "Normative Linux Landlock runtime remains unavailable on this Darwin host; local Windows evidence is unavailable, while the exact-head hosted Windows job passed all workspace targets and features.",
     "The Linux cross-check was environment-blocked before Rust type checking because the required cross C compiler was absent.",
     "Power-loss durability is not claimed; the local evidence establishes process-crash behavior and names the successful APFS durability primitives.",
     "CPU ceilings and exact peak temporary-disk bytes were not measured per subject process.",
     "Local logs are digest-addressed review aids but are not retained immutable CI artifacts.",
+    "The successful exact-head CI workflow uploaded zero artifacts; downloaded Actions logs remain local review aids.",
     "Independent human review and manual merge remain required.",
     "Verified requires digest-valid immutable CI artifacts for the final pull-request head retained for at least 90 days."
   ]
