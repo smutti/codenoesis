@@ -1,5 +1,4 @@
 use std::collections::BTreeSet;
-use std::fs::File;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
@@ -218,10 +217,22 @@ fn initialize(database: &Path) -> Result<(), StorageError> {
         .execute_batch("PRAGMA wal_checkpoint(TRUNCATE);")
         .map_err(map_sqlite)?;
     drop(connection);
-    File::open(database)
-        .and_then(|file| file.sync_all())
-        .map_err(|_| StorageError::PublicationFailed)?;
+    sync_database(database).map_err(|_| StorageError::PublicationFailed)?;
     sync_directory(database.parent().ok_or(StorageError::PublicationFailed)?)
+}
+
+#[cfg(windows)]
+fn sync_database(database: &Path) -> std::io::Result<()> {
+    std::fs::OpenOptions::new()
+        .read(true)
+        .write(true)
+        .open(database)?
+        .sync_all()
+}
+
+#[cfg(not(windows))]
+fn sync_database(database: &Path) -> std::io::Result<()> {
+    std::fs::File::open(database)?.sync_all()
 }
 
 fn open_existing(database: &Path) -> Result<Connection, StorageError> {
