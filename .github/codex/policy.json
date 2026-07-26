@@ -46,6 +46,14 @@
       "approval_reference": "https://github.com/smutti/codenoesis/pull/17"
     },
     {
+      "id": "DR-IDN-001",
+      "slice": "S2",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-24T19:29:34Z",
+      "source_sha": "6675f81410ce79e6d5b8a8085502f5331ea61d75",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/23"
+    },
+    {
       "id": "FR-ACQ-001",
       "slice": "S0",
       "approved_by": "github:smutti",
@@ -70,12 +78,52 @@
       "approval_reference": "https://github.com/smutti/codenoesis/pull/12"
     },
     {
+      "id": "FR-EXT-001",
+      "slice": "S2",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-24T19:29:34Z",
+      "source_sha": "6675f81410ce79e6d5b8a8085502f5331ea61d75",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/23"
+    },
+    {
+      "id": "FR-EXT-002",
+      "slice": "S2",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-24T19:29:34Z",
+      "source_sha": "6675f81410ce79e6d5b8a8085502f5331ea61d75",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/23"
+    },
+    {
       "id": "FR-INV-001",
       "slice": "S1",
       "approved_by": "github:smutti",
       "approved_at": "2026-07-23T18:42:06Z",
       "source_sha": "88abc745ab26a6a65615e5ead46076e18a02d9e1",
       "approval_reference": "https://github.com/smutti/codenoesis/pull/17"
+    },
+    {
+      "id": "FR-KNW-001",
+      "slice": "S2",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-24T19:29:34Z",
+      "source_sha": "6675f81410ce79e6d5b8a8085502f5331ea61d75",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/23"
+    },
+    {
+      "id": "FR-KNW-002",
+      "slice": "S2",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-24T19:29:34Z",
+      "source_sha": "6675f81410ce79e6d5b8a8085502f5331ea61d75",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/23"
+    },
+    {
+      "id": "FR-KNW-003",
+      "slice": "S2",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-24T19:29:34Z",
+      "source_sha": "6675f81410ce79e6d5b8a8085502f5331ea61d75",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/23"
     },
     {
       "id": "NFR-DET-001",
