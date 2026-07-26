@@ -7,11 +7,11 @@
     },
     {
       "path": "docs/software/decisions/0004-s3-atomic-local-storage-contract.md",
-      "sha256": "4deb567dfde9a5ff4486efa628a00d9ba271f913db33c6232a33f995ae70ff40"
+      "sha256": "63a2e43acad542f76d4075935a0cbba7c95314b812a78f10c215e09d3d898dc4"
     },
     {
       "path": "scripts/tests/test_s3_contract.py",
-      "sha256": "02b5918d4c1274831259f4e9e49a30b568d5432e125e91fb41c47afbbcb84cf2"
+      "sha256": "c2155400d95ff3216c7e8ceb65c7db0b1acf93f6db263a814aa10b4f39bd1128"
     },
     {
       "path": "tests/fixtures/s3/atomic-local-storage-v1/README.md",
@@ -63,7 +63,7 @@
     },
     {
       "path": "tests/specifications/s3/e2e_fr_sto_001_atomic_local_storage.json",
-      "sha256": "00415f877dc0f94cd29f3b06a908875597339c5dd673a983e017233e8ec4975d"
+      "sha256": "06a97d28d0643a5527c777d1d913e866c899e633314c5b8eb60de296f438669c"
     },
     {
       "path": "tests/specifications/s3/local-snapshot-head-v1.schema.json",
@@ -82,5 +82,5 @@
       "sha256": "ebf01f32c40b7b98f730c9c611fdad0b99d7648c2cd6c445c1c417d86189313d"
     }
   ],
-  "bundle_sha256": "9d210e8509cca1a3398bb21c36763d5289a35427bad4fe51a25d518f8da7ff6b"
+  "bundle_sha256": "6269996ebfa117f30bf5b7e8eee56fce5806acdd342ad9d7dfea109c25725605"
 }

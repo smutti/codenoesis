@@ -305,7 +305,7 @@ separate protected change may bind exactly these four IDs to the full commit on
 `main` containing the byte-identical SRS. Until that change is reviewed and
 merged, autonomous S3 implementation authorization fails closed.
 
-S3 contract bundle: `sha256:9d210e8509cca1a3398bb21c36763d5289a35427bad4fe51a25d518f8da7ff6b`.
+S3 contract bundle: `sha256:6269996ebfa117f30bf5b7e8eee56fce5806acdd342ad9d7dfea109c25725605`.
 The bundle binds decision 0004, the independent maintenance guard, inherited
 S2 bundle, strict DDL and schemas, machine oracle, two-revision fixture,
 reviewed semantic/head/error/recovery goldens, and failpoint matrix. Any bound

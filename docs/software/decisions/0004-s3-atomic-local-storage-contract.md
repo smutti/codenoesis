@@ -423,11 +423,12 @@ The first implementation test is `e2e_fr_sto_001_atomic_local_storage`, run by:
 cargo test --test e2e_fr_sto_001_atomic_local_storage
 ```
 
-Before S3 production changes, merged S2 routes an unknown explicit profile to
-the S1 parser and returns exit `2`, empty stdout, and
-`CodeNoesisErrorV2/input.invalid_profile` for `standard-local-s3`. The S3
-harness expects exit `0`, empty stderr, reviewed V3 stdout, and a complete
-persisted head after restart; therefore it is Red for missing S3 behavior.
+Before S3 production changes, merged S2 parses the complete future S3
+invocation before profile validation. The unknown `--store` pair therefore
+returns exit `2`, empty stdout, and
+`CodeNoesisErrorV2/input.invalid_revision`. The S3 harness expects exit `0`,
+empty stderr, reviewed V3 stdout, and a complete persisted head after restart;
+therefore it is Red for missing S3 behavior.
 
 Compilation failure, missing or corrupt fixture, schema or DDL failure,
 dependency or network outage, probe failure outside a named boundary, timeout,
