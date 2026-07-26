@@ -162,6 +162,11 @@ fn ft_fr_snp_001_publication_failpoint_matrix() {
         run_failpoint_case(&repository, target, false);
         run_failpoint_case(&repository, target, true);
     }
+    let observed_bytes = directory_bytes(&repository.root);
+    assert!(
+        observed_bytes <= 67_108_864,
+        "S3 crash fixture used {observed_bytes} bytes"
+    );
 }
 
 #[test]
@@ -747,6 +752,24 @@ fn object_files(store: &Path) -> Vec<PathBuf> {
                 .map(|object| object.expect("read object entry").path())
         })
         .collect()
+}
+
+fn directory_bytes(root: &Path) -> u64 {
+    fs::read_dir(root)
+        .expect("read resource-measurement root")
+        .map(|entry| {
+            let entry = entry.expect("read resource-measurement entry");
+            let metadata =
+                fs::symlink_metadata(entry.path()).expect("measure resource entry metadata");
+            if metadata.is_dir() && !metadata.file_type().is_symlink() {
+                directory_bytes(&entry.path())
+            } else if metadata.is_file() {
+                metadata.len()
+            } else {
+                0
+            }
+        })
+        .sum()
 }
 
 fn count_rows(connection: &Connection, table: &str) -> i64 {
