@@ -102,7 +102,14 @@ pub fn fixture_root() -> PathBuf {
 }
 
 pub fn scan(repository: &Path, store: &Path, revision: &str) -> Output {
-    Command::new(env!("CARGO_BIN_EXE_noesis"))
+    scan_command(repository, store, revision)
+        .output()
+        .expect("launch S3 noesis scan")
+}
+
+pub fn scan_command(repository: &Path, store: &Path, revision: &str) -> Command {
+    let mut command = Command::new(env!("CARGO_BIN_EXE_noesis"));
+    command
         .args(["scan", "--repository"])
         .arg(repository)
         .args([
@@ -115,9 +122,8 @@ pub fn scan(repository: &Path, store: &Path, revision: &str) -> Output {
             "--store",
         ])
         .arg(store)
-        .args(["--format", "json"])
-        .output()
-        .expect("launch S3 noesis scan")
+        .args(["--format", "json"]);
+    command
 }
 
 fn hash_blob(worktree: &Path, global_config: &Path, bytes: &[u8]) -> String {

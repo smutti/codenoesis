@@ -78,6 +78,27 @@ impl PublicationService {
         let expected_head = metadata_store
             .current_head_id(&candidate.snapshot.repository_identity)
             .map_err(ScanError::Storage)?;
+        if expected_head.as_ref() == Some(&candidate.snapshot.snapshot_id) {
+            let current = Self::load_head(
+                &candidate.snapshot.repository_identity,
+                artifact_store,
+                metadata_store,
+            )?
+            .ok_or_else(|| {
+                ScanError::Storage(StorageError::CorruptMetadata {
+                    component: codenoesis_domain::storage::StorageComponent::Head,
+                    reason: "current_head_missing",
+                    snapshot_id: Some(candidate.snapshot.snapshot_id.to_string()),
+                })
+            })?;
+            if current.snapshot_id != candidate.snapshot.snapshot_id {
+                return Err(ScanError::Storage(StorageError::CorruptMetadata {
+                    component: codenoesis_domain::storage::StorageComponent::Head,
+                    reason: "current_head_mismatch",
+                    snapshot_id: Some(candidate.snapshot.snapshot_id.to_string()),
+                }));
+            }
+        }
         for artifact in &candidate.artifacts {
             artifact_store
                 .stage(artifact, observer)

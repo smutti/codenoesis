@@ -75,5 +75,33 @@ pub const fn install_s1_filesystem_boundary(
     Ok(())
 }
 
+/// Installs the S3 read-only repository and writable-store boundary on Linux.
+///
+/// # Errors
+///
+/// Returns an opaque error when Landlock is unavailable or cannot fully
+/// enforce the approved filesystem rights.
+#[cfg(target_os = "linux")]
+pub fn install_s3_filesystem_boundary(
+    repository: &OsStr,
+    store: &OsStr,
+) -> Result<(), SecurityBoundaryError> {
+    filesystem_sandbox::install_with_store(repository, store)
+}
+
+/// Confirms that normative S3 filesystem confinement is Linux-only.
+///
+/// # Errors
+///
+/// This portability implementation is infallible and installs no substitute
+/// control on non-Linux systems.
+#[cfg(not(target_os = "linux"))]
+pub const fn install_s3_filesystem_boundary(
+    _repository: &OsStr,
+    _store: &OsStr,
+) -> Result<(), SecurityBoundaryError> {
+    Ok(())
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct SecurityBoundaryError;

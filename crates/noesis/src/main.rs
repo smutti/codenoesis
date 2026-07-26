@@ -8,10 +8,10 @@ use std::process::ExitCode;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
-use codenoesis_application::{ScanError, ScanRequest, ScanService};
+use codenoesis_application::{PublicationService, ScanError, ScanRequest, ScanService};
 use codenoesis_contracts::{
-    CodeNoesisErrorV1, CodeNoesisErrorV2, CodeNoesisErrorV3, RepositorySnapshotV2Error,
-    RepositorySnapshotV3Error, SnapshotEnvelopeV1,
+    CodeNoesisErrorV1, CodeNoesisErrorV2, CodeNoesisErrorV3, CodeNoesisErrorV4,
+    RepositorySnapshotV2Error, RepositorySnapshotV3, RepositorySnapshotV3Error, SnapshotEnvelopeV1,
 };
 use codenoesis_domain::AcquisitionError;
 use codenoesis_domain::knowledge::KnowledgeError;
@@ -19,7 +19,9 @@ use codenoesis_domain::{
     InputError, LimitKind, RepositoryIdentity, Revision, STANDARD_LOCAL_S1_LIMITS, limit_exceeded,
 };
 use codenoesis_lang_rust::TreeSitterRustExtractor;
+use codenoesis_ports::NoopPublicationObserver;
 use codenoesis_repository::LocalGitRepository;
+use codenoesis_store_local::{LocalStore, ensure_store_root_for_boundary};
 
 static CORRELATION_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
@@ -31,8 +33,11 @@ fn main() -> ExitCode {
     let profiled = arguments
         .iter()
         .any(|argument| argument == OsStr::new("--profile"));
+    let s3_requested = requested_profile(&arguments, "standard-local-s3");
     let s2_requested = requested_profile(&arguments, "standard-local-s2");
-    let result = if s2_requested {
+    let result = if s3_requested {
+        run_s3(arguments)
+    } else if s2_requested {
         run_s2(arguments)
     } else if profiled {
         run_s1(arguments)
@@ -42,10 +47,14 @@ fn main() -> ExitCode {
     match result {
         Ok(stdout) => match io::stdout().lock().write_all(&stdout) {
             Ok(()) => ExitCode::SUCCESS,
+            Err(_) if s3_requested => emit_internal_error_v4(),
             Err(_) if s2_requested => emit_internal_error_v3(),
             Err(_) if profiled => emit_internal_error_v2(),
             Err(_) => emit_internal_error_v1(),
         },
+        Err(Failure::Input(error)) if s3_requested => {
+            emit_error_v4(&CodeNoesisErrorV4::from_input(error), 2)
+        }
         Err(Failure::Input(error)) if s2_requested => {
             emit_error_v3(&CodeNoesisErrorV3::from_input(error), 2)
         }
@@ -53,6 +62,9 @@ fn main() -> ExitCode {
             emit_error_v2(&CodeNoesisErrorV2::from_input(error), 2)
         }
         Err(Failure::Input(error)) => emit_error_v1(&CodeNoesisErrorV1::from_input(error), 2),
+        Err(Failure::Scan(ScanError::Acquisition(error))) if s3_requested => {
+            emit_error_v4(&CodeNoesisErrorV4::from_acquisition(&error), 10)
+        }
         Err(Failure::Scan(ScanError::Acquisition(error))) if s2_requested => {
             emit_error_v3(&CodeNoesisErrorV3::from_acquisition(&error), 10)
         }
@@ -62,10 +74,23 @@ fn main() -> ExitCode {
         Err(Failure::Scan(ScanError::Acquisition(error))) => {
             emit_error_v1(&CodeNoesisErrorV1::from_acquisition(&error), 10)
         }
+        Err(Failure::Scan(ScanError::Knowledge(error))) if s3_requested => {
+            emit_error_v4(&CodeNoesisErrorV4::from_knowledge(&error), 11)
+        }
         Err(Failure::Scan(ScanError::Knowledge(error))) if s2_requested => {
             emit_error_v3(&CodeNoesisErrorV3::from_knowledge(&error), 11)
         }
-        Err(Failure::Scan(ScanError::Knowledge(_))) if profiled => emit_internal_error_v2(),
+        Err(Failure::Scan(ScanError::Storage(error))) if s3_requested => {
+            emit_error_v4(&CodeNoesisErrorV4::from_storage(&error), 12)
+        }
+        Err(Failure::Scan(ScanError::Storage(_))) if s2_requested => emit_internal_error_v3(),
+        Err(Failure::Scan(ScanError::Knowledge(_) | ScanError::Storage(_))) if profiled => {
+            emit_internal_error_v2()
+        }
+        Err(Failure::Scan(ScanError::Storage(_))) => emit_internal_error_v1(),
+        Err(Failure::Scan(ScanError::Internal) | Failure::Internal) if s3_requested => {
+            emit_internal_error_v4()
+        }
         Err(Failure::Scan(ScanError::Internal) | Failure::Internal) if s2_requested => {
             emit_internal_error_v3()
         }
@@ -175,12 +200,88 @@ fn run_s2(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
     Ok(stdout)
 }
 
-fn requested_profile(arguments: &[OsString], expected: &str) -> bool {
-    arguments.get(2..).is_some_and(|arguments| {
-        arguments
-            .chunks_exact(2)
-            .any(|pair| pair[0] == OsStr::new("--profile") && pair[1] == OsStr::new(expected))
+fn run_s3(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
+    let invocation =
+        Invocation::parse(arguments, Some("standard-local-s3")).map_err(Failure::Input)?;
+    let store = invocation
+        .store
+        .clone()
+        .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
+    let repository = invocation.repository.clone();
+    let store_preparation = ensure_store_root_for_boundary(
+        std::path::Path::new(&repository),
+        std::path::Path::new(&store),
+    );
+    let boundary_result = if store_preparation.is_ok() {
+        noesis::install_s3_filesystem_boundary(&repository, &store)
+    } else if s1_boundary_applies(&repository) {
+        noesis::install_s1_filesystem_boundary(&repository)
+    } else {
+        Ok(())
+    };
+    if boundary_result.is_err() {
+        return Err(Failure::Internal);
+    }
+    let started_at = Instant::now();
+    let envelope = current_envelope().ok_or(Failure::Internal)?;
+    let request = ScanRequest::new(
+        invocation.repository,
+        invocation.identity,
+        invocation.revision,
+        envelope,
+    );
+    let snapshot = ScanService::new(LocalGitRepository::new())
+        .scan_s2(request, &TreeSitterRustExtractor::new())
+        .map_err(Failure::Scan)?;
+    enforce_scan_deadline(started_at)?;
+    store_preparation.map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    let mut local_store = LocalStore::open(
+        std::path::Path::new(&repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    PublicationService::publish(
+        &snapshot,
+        &mut local_store.artifacts,
+        &mut local_store.metadata,
+        &mut NoopPublicationObserver,
+    )
+    .map_err(Failure::Scan)?;
+    serialize_v3(&snapshot)
+}
+
+fn serialize_v3(snapshot: &RepositorySnapshotV3) -> Result<Vec<u8>, Failure> {
+    snapshot.canonical_stdout().map_err(|error| match error {
+        RepositorySnapshotV3Error::LimitExceeded(AcquisitionError::LimitExceeded {
+            limit,
+            maximum,
+            observed,
+        }) => Failure::Scan(ScanError::Knowledge(KnowledgeError::GraphLimitExceeded {
+            limit: limit.as_str(),
+            maximum,
+            observed,
+        })),
+        RepositorySnapshotV3Error::LimitExceeded(_)
+        | RepositorySnapshotV3Error::Serialization(_)
+        | RepositorySnapshotV3Error::OutputLengthOverflow => Failure::Internal,
     })
+}
+
+fn enforce_scan_deadline(started_at: Instant) -> Result<(), Failure> {
+    let elapsed = u64::try_from(started_at.elapsed().as_millis()).map_err(|_| Failure::Internal)?;
+    if elapsed > STANDARD_LOCAL_S1_LIMITS.scan_wall_milliseconds {
+        return Err(Failure::Scan(ScanError::Acquisition(limit_exceeded(
+            LimitKind::ScanWallMilliseconds,
+            elapsed,
+        ))));
+    }
+    Ok(())
+}
+
+fn requested_profile(arguments: &[OsString], expected: &str) -> bool {
+    arguments
+        .windows(2)
+        .any(|pair| pair[0] == OsStr::new("--profile") && pair[1] == OsStr::new(expected))
 }
 
 fn s1_boundary_applies(repository: &OsStr) -> bool {
@@ -198,6 +299,10 @@ fn emit_internal_error_v2() -> ExitCode {
 
 fn emit_internal_error_v3() -> ExitCode {
     emit_error_v3(&CodeNoesisErrorV3::internal(), 70)
+}
+
+fn emit_internal_error_v4() -> ExitCode {
+    emit_error_v4(&CodeNoesisErrorV4::internal(), 70)
 }
 
 fn emit_error_v1(error: &CodeNoesisErrorV1, code: u8) -> ExitCode {
@@ -221,6 +326,13 @@ fn emit_error_v3(error: &CodeNoesisErrorV3, code: u8) -> ExitCode {
     ExitCode::from(code)
 }
 
+fn emit_error_v4(error: &CodeNoesisErrorV4, code: u8) -> ExitCode {
+    if let Ok(bytes) = error.canonical_stderr() {
+        let _ = io::stderr().lock().write_all(&bytes);
+    }
+    ExitCode::from(code)
+}
+
 enum Failure {
     Input(InputError),
     Scan(ScanError),
@@ -231,6 +343,7 @@ struct Invocation {
     repository: OsString,
     identity: RepositoryIdentity,
     revision: Revision,
+    store: Option<OsString>,
 }
 
 impl Invocation {
@@ -248,10 +361,13 @@ impl Invocation {
         let mut revision = None;
         let mut profile = None;
         let mut format = None;
+        let mut store = None;
         while let Some(flag) = arguments.next() {
             let value = arguments.next().ok_or_else(|| {
                 if flag == OsStr::new("--profile") {
                     InputError::InvalidProfile
+                } else if flag == OsStr::new("--store") {
+                    InputError::InvalidStoreRoot
                 } else {
                     InputError::InvalidRevision
                 }
@@ -267,6 +383,7 @@ impl Invocation {
                 Some("--profile") if profile.is_none() => {
                     profile = value.to_str().map(str::to_owned);
                 }
+                Some("--store") if store.is_none() => store = Some(value),
                 Some("--format") if format.is_none() => format = value.to_str().map(str::to_owned),
                 _ => return Err(InputError::InvalidRevision),
             }
@@ -288,10 +405,21 @@ impl Invocation {
         if format.as_deref() != Some("json") {
             return Err(InputError::InvalidRevision);
         }
+        if required_profile == Some("standard-local-s3") {
+            if store
+                .as_ref()
+                .is_none_or(|value| value.as_os_str().is_empty())
+            {
+                return Err(InputError::InvalidStoreRoot);
+            }
+        } else if store.is_some() {
+            return Err(InputError::InvalidRevision);
+        }
         Ok(Self {
             repository,
             identity,
             revision,
+            store,
         })
     }
 }
