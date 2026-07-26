@@ -15,6 +15,7 @@ const SRC_TREE_OID: &str = "3e711cceb17eaaa7707805aaf79fc342d9026c83";
 pub struct MaterializedRepository {
     pub root: PathBuf,
     pub worktree: PathBuf,
+    global_config: PathBuf,
 }
 
 impl MaterializedRepository {
@@ -78,7 +79,79 @@ impl MaterializedRepository {
             .args(["update-ref", "refs/heads/main", COMMIT_A_OID]);
         successful_output(update_ref, None);
 
-        Self { root, worktree }
+        Self {
+            root,
+            worktree,
+            global_config,
+        }
+    }
+
+    pub fn malformed_commit(&self) -> String {
+        let source = String::from_utf8(read_repository_text(
+            fixture_root().join("revision-a/src/lib.rs"),
+        ))
+        .expect("S2 source is UTF-8");
+        let malformed = source.replacen("pub fn café_label", "\n§\npub fn café_label", 1);
+        self.write_source_variant(
+            malformed.as_bytes(),
+            "1784851201 +0000",
+            b"fixture: S2 malformed syntax\n",
+        )
+    }
+
+    pub fn nfc_collision_commit(&self) -> String {
+        let source = String::from_utf8(read_repository_text(
+            fixture_root().join("revision-a/src/lib.rs"),
+        ))
+        .expect("S2 source is UTF-8");
+        let collision = format!("{source}\npub fn cafe\u{301}_label() {{}}\n");
+        self.write_source_variant(
+            collision.as_bytes(),
+            "1784851202 +0000",
+            b"fixture: S2 NFC collision\n",
+        )
+    }
+
+    pub fn write_dirty_worktree_decoy(&self) {
+        let source = self.worktree.join("src/lib.rs");
+        fs::create_dir_all(source.parent().expect("dirty source parent"))
+            .expect("create dirty source directory");
+        fs::write(
+            source,
+            "compile_error!(\"dirty worktree must not be parsed\");\n",
+        )
+        .expect("write dirty worktree decoy");
+        fs::write(
+            self.worktree.join("build.rs"),
+            "panic!(\"target build script must not execute\");\n",
+        )
+        .expect("write dirty build-script decoy");
+    }
+
+    fn write_source_variant(&self, source: &[u8], timestamp: &str, message: &[u8]) -> String {
+        let source_oid = hash_blob(&self.worktree, &self.global_config, source);
+        let source_tree = write_tree(
+            &self.worktree,
+            &self.global_config,
+            &format!("100644 blob {source_oid}\tlib.rs\n"),
+        );
+        let root_tree = write_tree(
+            &self.worktree,
+            &self.global_config,
+            &format!("100644 blob {CARGO_BLOB_OID}\tCargo.toml\n040000 tree {source_tree}\tsrc\n"),
+        );
+        let mut make_commit = git_command(&self.global_config);
+        make_commit
+            .arg("-C")
+            .arg(&self.worktree)
+            .args(["commit-tree", &root_tree, "-p", COMMIT_A_OID, "-F", "-"])
+            .env("GIT_AUTHOR_NAME", "CodeNoesis Fixture")
+            .env("GIT_AUTHOR_EMAIL", "fixture@codenoesis.invalid")
+            .env("GIT_AUTHOR_DATE", timestamp)
+            .env("GIT_COMMITTER_NAME", "CodeNoesis Fixture")
+            .env("GIT_COMMITTER_EMAIL", "fixture@codenoesis.invalid")
+            .env("GIT_COMMITTER_DATE", timestamp);
+        stdout_line(successful_output(make_commit, Some(message)))
     }
 }
 

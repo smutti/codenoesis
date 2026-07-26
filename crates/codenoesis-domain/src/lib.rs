@@ -1,4 +1,6 @@
-//! Domain values for the `CodeNoesis` S0 and S1 acquisition slices.
+//! Domain values for the `CodeNoesis` S0 through S2 slices.
+
+pub mod knowledge;
 
 use std::error::Error;
 use std::fmt::{self, Display, Formatter};
@@ -425,6 +427,7 @@ pub struct InventoryFile {
     recognized_kind: Option<RecognizedInventoryKind>,
     sentinel: bool,
     unsupported: bool,
+    bytes: Vec<u8>,
 }
 
 impl InventoryFile {
@@ -486,6 +489,11 @@ impl InventoryFile {
     #[must_use]
     pub const fn is_unsupported(&self) -> bool {
         self.unsupported
+    }
+
+    #[must_use]
+    pub fn bytes(&self) -> &[u8] {
+        &self.bytes
     }
 }
 
@@ -613,6 +621,7 @@ fn classify_file(index: usize, file: AcquiredFile) -> InventoryFile {
         recognized_kind,
         sentinel,
         unsupported,
+        bytes: file.bytes,
     }
 }
 

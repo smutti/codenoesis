@@ -1,12 +1,15 @@
-//! Application orchestration for the `CodeNoesis` S0 and S1 slices.
+//! Application orchestration for the `CodeNoesis` S0 through S2 slices.
 
 use std::ffi::OsString;
 
-use codenoesis_contracts::{RepositorySnapshotV1, RepositorySnapshotV2, SnapshotEnvelopeV1};
+use codenoesis_contracts::{
+    RepositorySnapshotV1, RepositorySnapshotV2, RepositorySnapshotV3, SnapshotEnvelopeV1,
+};
+use codenoesis_domain::knowledge::KnowledgeError;
 use codenoesis_domain::{
     AcquisitionError, RepositoryError, RepositoryIdentity, RepositoryInventory, Revision,
 };
-use codenoesis_ports::{RepositoryAcquirer, SafeRepositoryAcquirer};
+use codenoesis_ports::{RepositoryAcquirer, RustKnowledgeExtractor, SafeRepositoryAcquirer};
 
 pub struct ScanRequest {
     repository: OsString,
@@ -35,6 +38,7 @@ impl ScanRequest {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ScanError {
     Acquisition(AcquisitionError),
+    Knowledge(KnowledgeError),
     Internal,
 }
 
@@ -91,6 +95,39 @@ where
         let inventory = RepositoryInventory::classify(acquired);
         Ok(RepositorySnapshotV2::from_inventory(
             &inventory,
+            request.envelope,
+        ))
+    }
+
+    /// Executes an S2 Rust-knowledge scan over the approved S1 acquisition.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed acquisition, extraction, ontology, or graph failure, or
+    /// a redacted internal failure.
+    pub fn scan_s2<E>(
+        &self,
+        request: ScanRequest,
+        extractor: &E,
+    ) -> Result<RepositorySnapshotV3, ScanError>
+    where
+        E: RustKnowledgeExtractor,
+    {
+        let acquired = self
+            .acquirer
+            .acquire_inventory(&request.repository, request.identity, request.revision)
+            .map_err(|error| match error {
+                RepositoryError::Acquisition(acquisition) => ScanError::Acquisition(acquisition),
+                RepositoryError::Unexpected => ScanError::Internal,
+            })?;
+        let inventory = RepositoryInventory::classify(acquired);
+        let knowledge = extractor
+            .extract(&inventory)
+            .map_err(ScanError::Knowledge)?;
+        knowledge.validate().map_err(ScanError::Knowledge)?;
+        Ok(RepositorySnapshotV3::from_inventory_and_knowledge(
+            &inventory,
+            &knowledge,
             request.envelope,
         ))
     }

@@ -2,8 +2,10 @@
 
 use std::ffi::OsStr;
 
+use codenoesis_domain::knowledge::{KnowledgeError, RustKnowledge};
 use codenoesis_domain::{
-    AcquiredRepository, BoundRevision, RepositoryError, RepositoryIdentity, Revision,
+    AcquiredRepository, BoundRevision, RepositoryError, RepositoryIdentity, RepositoryInventory,
+    Revision,
 };
 
 pub trait RepositoryAcquirer {
@@ -32,4 +34,14 @@ pub trait SafeRepositoryAcquirer {
         identity: RepositoryIdentity,
         revision: Revision,
     ) -> Result<AcquiredRepository, RepositoryError>;
+}
+
+pub trait RustKnowledgeExtractor {
+    /// Extracts and validates the approved S2 Rust knowledge subset.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed extraction, ontology, or graph failure without partial
+    /// publication.
+    fn extract(&self, inventory: &RepositoryInventory) -> Result<RustKnowledge, KnowledgeError>;
 }
