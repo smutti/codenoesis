@@ -1,4 +1,4 @@
-use std::fs::{self, File};
+use std::fs;
 use std::io::Write;
 use std::path::{Component, Path, PathBuf};
 
@@ -28,7 +28,7 @@ pub fn prepare(
         }
         classify_existing_root(&root)?
     } else {
-        fs::create_dir(&root).map_err(|_| StorageError::PublicationFailed)?;
+        create_directory_noclobber(&root).map_err(|_| StorageError::PublicationFailed)?;
         sync_directory(root.parent().ok_or_else(|| unsafe_path("missing_parent"))?)?;
         true
     };
@@ -70,7 +70,7 @@ pub fn ensure_root(
         return Err(unsafe_path("repository_overlap"));
     }
     if !root.exists() {
-        fs::create_dir(&root).map_err(|_| StorageError::PublicationFailed)?;
+        create_directory_noclobber(&root).map_err(|_| StorageError::PublicationFailed)?;
         sync_directory(root.parent().ok_or_else(|| unsafe_path("missing_parent"))?)?;
     }
     Ok(root)
@@ -83,14 +83,19 @@ pub fn write_marker(prepared: &PreparedStore) -> Result<(), StorageError> {
         .write_all(MARKER_BYTES)
         .and_then(|()| marker.as_file().sync_all())
         .map_err(|_| StorageError::PublicationFailed)?;
-    marker
-        .persist_noclobber(prepared.root.join("store.json"))
+    persist_noclobber(marker, &prepared.root.join("store.json"))
         .map_err(|_| StorageError::PublicationFailed)?;
     sync_directory(&prepared.root)
 }
 
+#[cfg(windows)]
+pub fn sync_directory(_directory: &Path) -> Result<(), StorageError> {
+    Ok(())
+}
+
+#[cfg(not(windows))]
 pub fn sync_directory(directory: &Path) -> Result<(), StorageError> {
-    open_directory(directory)
+    std::fs::File::open(directory)
         .and_then(|file| file.sync_all())
         .map_err(|_| StorageError::PublicationFailed)
 }
@@ -186,9 +191,43 @@ fn classify_existing_root(root: &Path) -> Result<bool, StorageError> {
 }
 
 fn create_directory(path: &Path) -> Result<(), StorageError> {
-    fs::create_dir(path).map_err(|_| StorageError::PublicationFailed)?;
+    create_directory_noclobber(path).map_err(|_| StorageError::PublicationFailed)?;
     let parent = path.parent().ok_or_else(|| unsafe_path("missing_parent"))?;
     sync_directory(parent)
+}
+
+pub(crate) fn create_directory_noclobber(path: &Path) -> std::io::Result<()> {
+    #[cfg(windows)]
+    {
+        let parent = path
+            .parent()
+            .ok_or_else(|| std::io::Error::other("directory has no parent"))?;
+        let temporary = tempfile::Builder::new()
+            .prefix(".codenoesis-directory-")
+            .tempdir_in(parent)?;
+        atomicwrites::move_atomic(temporary.path(), path)
+    }
+    #[cfg(not(windows))]
+    {
+        fs::create_dir(path)
+    }
+}
+
+pub(crate) fn persist_noclobber(
+    temporary: NamedTempFile,
+    destination: &Path,
+) -> std::io::Result<()> {
+    #[cfg(windows)]
+    {
+        atomicwrites::move_atomic(temporary.path(), destination)
+    }
+    #[cfg(not(windows))]
+    {
+        temporary
+            .persist_noclobber(destination)
+            .map(drop)
+            .map_err(|error| error.error)
+    }
 }
 
 fn verify_store_directory(path: &Path) -> Result<(), StorageError> {
@@ -201,30 +240,6 @@ fn verify_store_directory(path: &Path) -> Result<(), StorageError> {
 
 fn unsafe_path(reason: &'static str) -> StorageError {
     StorageError::UnsafePath { reason }
-}
-
-#[cfg(unix)]
-fn open_directory(directory: &Path) -> std::io::Result<File> {
-    File::open(directory)
-}
-
-#[cfg(windows)]
-fn open_directory(directory: &Path) -> std::io::Result<File> {
-    use std::fs::OpenOptions;
-    use std::os::windows::fs::OpenOptionsExt;
-
-    const FILE_FLAG_BACKUP_SEMANTICS: u32 = 0x0200_0000;
-    OpenOptions::new()
-        .read(true)
-        .custom_flags(FILE_FLAG_BACKUP_SEMANTICS)
-        .open(directory)
-}
-
-#[cfg(not(any(unix, windows)))]
-fn open_directory(directory: &Path) -> std::io::Result<File> {
-    use std::fs::OpenOptions;
-
-    OpenOptions::new().read(true).open(directory)
 }
 
 #[cfg(unix)]

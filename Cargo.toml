@@ -13,6 +13,7 @@ members = [
 resolver = "3"
 
 [workspace.dependencies]
+atomicwrites = "=0.4.4"
 blake3 = { version = "1", features = ["pure"] }
 codenoesis-application = { path = "crates/codenoesis-application" }
 codenoesis-contracts = { path = "crates/codenoesis-contracts" }

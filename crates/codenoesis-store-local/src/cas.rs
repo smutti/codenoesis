@@ -9,7 +9,9 @@ use codenoesis_domain::storage::{
 use codenoesis_ports::{ArtifactStore, PublicationObserver};
 use tempfile::NamedTempFile;
 
-use crate::path::{is_unsafe_metadata, sync_directory};
+use crate::path::{
+    create_directory_noclobber, is_unsafe_metadata, persist_noclobber, sync_directory,
+};
 
 pub struct FilesystemCas {
     root: PathBuf,
@@ -40,7 +42,7 @@ impl FilesystemCas {
 
     fn ensure_shard(&self, artifact_id: &ArtifactId) -> Result<PathBuf, StorageError> {
         let shard = self.objects_blake3.join(&artifact_id.digest()[..2]);
-        match fs::create_dir(&shard) {
+        match create_directory_noclobber(&shard) {
             Ok(()) => {
                 sync_directory(&self.objects_blake3)?;
                 sync_directory(&shard)?;
@@ -205,9 +207,9 @@ impl ArtifactStore for FilesystemCas {
             &artifact.artifact_id,
             Some(artifact.byte_length()),
         )?;
-        match temporary.persist_noclobber(&final_path) {
-            Ok(_) => {}
-            Err(error) if error.error.kind() == std::io::ErrorKind::AlreadyExists => {
+        match persist_noclobber(temporary, &final_path) {
+            Ok(()) => {}
+            Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => {
                 Self::verify_path(
                     &final_path,
                     &artifact.artifact_id,
