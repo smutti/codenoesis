@@ -296,6 +296,7 @@ class S3ContractTests(unittest.TestCase):
             self.assertTrue((ROOT / path).is_file(), path)
 
     def test_expected_red_is_exact_and_rejects_false_red(self) -> None:
+        self.maxDiff = None
         expected_red = load_json(SPEC_PATH)["expected_red"]
         self.assertEqual(
             expected_red,
@@ -313,14 +314,14 @@ class S3ContractTests(unittest.TestCase):
                 ),
                 "subject_observed_exit_code": 2,
                 "subject_observed_stderr_schema": "codenoesis.error/v2",
-                "subject_observed_stderr_code": "input.invalid_profile",
+                "subject_observed_stderr_code": "input.invalid_revision",
                 "subject_expected_exit_code": 0,
                 "expected_artifact": "codenoesis.repository-snapshot/v3",
                 "expected_head": "codenoesis.local-snapshot-head/v1",
                 "accepted_reason": (
-                    "Merged S2 routes an unknown explicit profile through the "
-                    "S1 parser and rejects standard-local-s3, so no durable "
-                    "head can exist."
+                    "Merged S2 parses the full S3 invocation before profile "
+                    "validation and rejects the unknown --store pair as "
+                    "input.invalid_revision, so no durable head can exist."
                 ),
                 "rejected_reasons": [
                     "compilation failure",
