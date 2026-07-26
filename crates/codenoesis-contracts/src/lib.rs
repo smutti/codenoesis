@@ -1,8 +1,14 @@
-//! Versioned JSON contracts for the `CodeNoesis` S0 and S1 slices.
+//! Versioned JSON contracts for the `CodeNoesis` S0 through S2 slices.
 
 use std::collections::BTreeMap;
 use std::io::{self, Write};
 
+use codenoesis_domain::knowledge::{
+    ByteSpan, CONTAINMENT_RULE_VERSION, ClaimDerivation, CoverageGap, EXTRACTOR_VERSION,
+    ExtractionChunk, ExtractionCoverage, ExtractionDiagnostic, KnowledgeClaim, KnowledgeEntity,
+    KnowledgeError, KnowledgeGraph, KnowledgeRelationship, ONTOLOGY_VERSION, RustKnowledge,
+    SourceEvidence,
+};
 use codenoesis_domain::{
     AcquisitionError, BoundRevision, InputError, InventoryFile, InventoryLanguage, LimitKind,
     RecognizedInventoryKind, RepositoryInventory, STANDARD_LOCAL_S1_LIMITS, limit_exceeded,
@@ -12,6 +18,9 @@ use serde_json::{Value, json};
 const CONFIGURATION_HASH_DOMAIN: &[u8] = b"codenoesis.configuration.semantic.v1";
 const SNAPSHOT_HASH_DOMAIN: &[u8] = b"codenoesis.repository-snapshot.semantic.v1";
 const SNAPSHOT_V2_HASH_DOMAIN: &[u8] = b"codenoesis.repository-snapshot.semantic.v2";
+const SNAPSHOT_V3_HASH_DOMAIN: &[u8] = b"codenoesis.repository-snapshot.semantic.v3";
+const EXTRACTION_HASH_DOMAIN: &[u8] = b"codenoesis.extraction-chunk.semantic.v1";
+const GRAPH_HASH_DOMAIN: &[u8] = b"codenoesis.knowledge-graph.semantic.v1";
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SnapshotEnvelopeV1 {
@@ -217,6 +226,121 @@ impl RepositorySnapshotV2 {
     /// Returns a serialization error if the internal JSON value cannot be encoded.
     pub fn canonical_semantic(&self) -> Result<Vec<u8>, serde_json::Error> {
         serde_json::to_vec(&self.value["semantic"])
+    }
+
+    #[must_use]
+    pub const fn value(&self) -> &Value {
+        &self.value
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct RepositorySnapshotV3 {
+    value: Value,
+}
+
+#[derive(Debug)]
+pub enum RepositorySnapshotV3Error {
+    Serialization(serde_json::Error),
+    LimitExceeded(AcquisitionError),
+    OutputLengthOverflow,
+}
+
+impl RepositorySnapshotV3 {
+    #[must_use]
+    pub fn from_inventory_and_knowledge(
+        inventory: &RepositoryInventory,
+        knowledge: &RustKnowledge,
+        envelope: SnapshotEnvelopeV1,
+    ) -> Self {
+        let SnapshotEnvelopeV1 {
+            created_at,
+            job_id,
+            correlation_id,
+        } = envelope;
+        let configuration_semantic = json!({"profile": "standard-local-s2"});
+        let configuration_hash = semantic_hash(CONFIGURATION_HASH_DOMAIN, &configuration_semantic);
+        let bound = inventory.bound_revision();
+        let extraction_chunks = knowledge
+            .extraction_chunks
+            .iter()
+            .map(extraction_chunk_value)
+            .collect::<Vec<_>>();
+        let graph = knowledge_graph_value(&knowledge.graph);
+        let semantic = json!({
+            "repository": {
+                "contract_version": "codenoesis.repository/v1",
+                "identity_schema_version": "codenoesis.repository-identity/v1",
+                "identity": bound.repository_identity().as_str(),
+                "vcs": "git",
+                "object_format": "sha1",
+                "commit_oid": bound.commit_oid().as_str(),
+                "tree_oid": bound.tree_oid().as_str()
+            },
+            "configuration": {
+                "schema_version": "codenoesis.configuration/v1",
+                "profile": "standard-local-s2",
+                "semantic_hash": {
+                    "algorithm": "blake3-256",
+                    "value": configuration_hash
+                }
+            },
+            "pipeline_version": "codenoesis.pipeline/s2-v1",
+            "ontology_version": ONTOLOGY_VERSION,
+            "extractor_contract_version": "codenoesis.extraction-chunk/v1",
+            "extractor_versions": [
+                "codenoesis.inventory-classifier/s1-v1",
+                EXTRACTOR_VERSION
+            ],
+            "evidence_lineage_version": "codenoesis.evidence-lineage/v2",
+            "inventory": inventory_value(inventory),
+            "extraction_chunks": extraction_chunks,
+            "knowledge_graph": graph
+        });
+        let snapshot_hash = semantic_hash(SNAPSHOT_V3_HASH_DOMAIN, &semantic);
+        Self {
+            value: json!({
+                "schema_version": "codenoesis.repository-snapshot/v3",
+                "semantic_hash": {
+                    "algorithm": "blake3-256",
+                    "value": snapshot_hash
+                },
+                "semantic": semantic,
+                "envelope": {
+                    "created_at": created_at,
+                    "job_id": job_id,
+                    "correlation_id": correlation_id
+                }
+            }),
+        }
+    }
+
+    /// Serializes the complete S2 snapshot and enforces the inherited output
+    /// limit.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed output-limit or serialization failure.
+    pub fn canonical_stdout(&self) -> Result<Vec<u8>, RepositorySnapshotV3Error> {
+        let maximum = usize::try_from(STANDARD_LOCAL_S1_LIMITS.canonical_output_bytes)
+            .map_err(|_| RepositorySnapshotV3Error::OutputLengthOverflow)?;
+        let body_maximum = maximum
+            .checked_sub(1)
+            .ok_or(RepositorySnapshotV3Error::OutputLengthOverflow)?;
+        let mut writer = LimitedVecWriter::new(body_maximum);
+        let result = serde_json::to_writer(&mut writer, &self.value);
+        if writer.overflowed() {
+            return Err(RepositorySnapshotV3Error::LimitExceeded(limit_exceeded(
+                LimitKind::CanonicalOutputBytes,
+                STANDARD_LOCAL_S1_LIMITS
+                    .canonical_output_bytes
+                    .saturating_add(1),
+            )));
+        }
+        result.map_err(RepositorySnapshotV3Error::Serialization)?;
+        let mut bytes = writer.into_inner();
+        bytes.push(b'\n');
+        Ok(bytes)
     }
 
     #[must_use]
@@ -485,6 +609,478 @@ impl CodeNoesisErrorV2 {
         bytes.push(b'\n');
         Ok(bytes)
     }
+}
+
+#[derive(Clone, Debug)]
+pub struct CodeNoesisErrorV3 {
+    value: Value,
+}
+
+impl CodeNoesisErrorV3 {
+    #[must_use]
+    pub fn from_input(error: InputError) -> Self {
+        let code = match error {
+            InputError::InvalidRepositoryIdentity => "input.invalid_repository_identity",
+            InputError::InvalidRevision => "input.invalid_revision",
+            InputError::InvalidProfile => "input.invalid_profile",
+        };
+        Self::new(code, "input", &error.to_string(), &json!({}))
+    }
+
+    #[must_use]
+    pub fn from_acquisition(error: &AcquisitionError) -> Self {
+        match error {
+            AcquisitionError::NotGitRepository => Self::new(
+                "acquisition.not_git_repository",
+                "acquisition",
+                &error.to_string(),
+                &json!({}),
+            ),
+            AcquisitionError::RevisionNotFound { revision } => Self::new(
+                "acquisition.revision_not_found",
+                "acquisition",
+                &error.to_string(),
+                &json!({"revision": revision.as_str()}),
+            ),
+            AcquisitionError::RevisionNotCommit {
+                object_oid,
+                actual_kind,
+            } => Self::new(
+                "acquisition.revision_not_commit",
+                "acquisition",
+                &error.to_string(),
+                &json!({
+                    "object_oid": object_oid.as_str(),
+                    "actual_kind": actual_kind.as_str()
+                }),
+            ),
+            AcquisitionError::ObjectMissing {
+                object_oid,
+                expected_kind,
+                referenced_by,
+            } => Self::new(
+                "acquisition.object_missing",
+                "acquisition",
+                &error.to_string(),
+                &json!({
+                    "object_oid": object_oid.as_str(),
+                    "expected_kind": expected_kind.as_str(),
+                    "referenced_by": referenced_by.as_str()
+                }),
+            ),
+            AcquisitionError::RepositoryInconsistent {
+                object_oid,
+                expected_kind,
+            } => Self::new(
+                "acquisition.repository_inconsistent",
+                "acquisition",
+                &error.to_string(),
+                &json!({
+                    "object_oid": object_oid.as_str(),
+                    "expected_kind": expected_kind.as_str()
+                }),
+            ),
+            AcquisitionError::UnsupportedRepositoryShape { feature } => Self::new(
+                "acquisition.unsupported_repository_shape",
+                "acquisition",
+                &error.to_string(),
+                &json!({"feature": feature.as_str()}),
+            ),
+            AcquisitionError::PathInvalid { reason } => Self::new(
+                "acquisition.path_invalid",
+                "acquisition",
+                &error.to_string(),
+                &json!({"reason": reason.as_str()}),
+            ),
+            AcquisitionError::RootPolicyViolation { policy } => Self::new(
+                "acquisition.root_policy_violation",
+                "acquisition",
+                &error.to_string(),
+                &json!({"policy": policy.as_str()}),
+            ),
+            AcquisitionError::EntryPolicyViolation { path, entry } => Self::new(
+                "acquisition.entry_policy_violation",
+                "acquisition",
+                &error.to_string(),
+                &json!({"entry": entry.as_str(), "path": path}),
+            ),
+            AcquisitionError::LimitExceeded {
+                limit,
+                maximum,
+                observed,
+            } => Self::new(
+                "acquisition.limit_exceeded",
+                "acquisition",
+                &error.to_string(),
+                &json!({
+                    "limit": limit.as_str(),
+                    "maximum": maximum,
+                    "observed": observed
+                }),
+            ),
+        }
+    }
+
+    #[must_use]
+    pub fn from_knowledge(error: &KnowledgeError) -> Self {
+        extraction_knowledge_error(error).unwrap_or_else(|| graph_knowledge_error(error))
+    }
+
+    #[must_use]
+    pub fn internal() -> Self {
+        Self::new(
+            "internal.unexpected",
+            "internal",
+            "unexpected internal failure",
+            &json!({}),
+        )
+    }
+
+    fn new(code: &str, stage: &str, message: &str, context: &Value) -> Self {
+        Self {
+            value: json!({
+                "schema_version": "codenoesis.error/v3",
+                "code": code,
+                "stage": stage,
+                "message": message,
+                "retryable": false,
+                "context": context
+            }),
+        }
+    }
+
+    /// Serializes one strict S2 error document followed by one LF.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error only if the internally constructed JSON cannot be serialized.
+    pub fn canonical_stderr(&self) -> Result<Vec<u8>, serde_json::Error> {
+        let mut bytes = serde_json::to_vec(&self.value)?;
+        bytes.push(b'\n');
+        Ok(bytes)
+    }
+}
+
+fn extraction_knowledge_error(error: &KnowledgeError) -> Option<CodeNoesisErrorV3> {
+    let value = match error {
+        KnowledgeError::InvalidUtf8 { path } => CodeNoesisErrorV3::new(
+            "extraction.invalid_utf8",
+            "extraction",
+            &error.to_string(),
+            &json!({"path": path}),
+        ),
+        KnowledgeError::UnsupportedCrateShape => CodeNoesisErrorV3::new(
+            "extraction.unsupported_crate_shape",
+            "extraction",
+            &error.to_string(),
+            &json!({}),
+        ),
+        KnowledgeError::ParserCancelled { path } => CodeNoesisErrorV3::new(
+            "extraction.parser_cancelled",
+            "extraction",
+            &error.to_string(),
+            &json!({"path": path}),
+        ),
+        KnowledgeError::MalformedSyntax { path, span } => CodeNoesisErrorV3::new(
+            "extraction.malformed_syntax",
+            "extraction",
+            &error.to_string(),
+            &json!({"path": path, "span": span_value(*span)}),
+        ),
+        KnowledgeError::NormalizationCollision {
+            kind,
+            canonical_identity,
+            path,
+            first_span,
+            second_span,
+        } => CodeNoesisErrorV3::new(
+            "extraction.normalization_collision",
+            "extraction",
+            &error.to_string(),
+            &json!({
+                "kind": kind.as_str(),
+                "canonical_identity": canonical_identity,
+                "path": path,
+                "first_span": span_value(*first_span),
+                "second_span": span_value(*second_span)
+            }),
+        ),
+        KnowledgeError::ContractInvalid => CodeNoesisErrorV3::new(
+            "extraction.contract_invalid",
+            "extraction",
+            &error.to_string(),
+            &json!({}),
+        ),
+        KnowledgeError::LimitExceeded {
+            limit,
+            maximum,
+            observed,
+        } => CodeNoesisErrorV3::new(
+            "extraction.limit_exceeded",
+            "extraction",
+            &error.to_string(),
+            &json!({
+                "limit": limit,
+                "maximum": maximum,
+                "observed": observed
+            }),
+        ),
+        KnowledgeError::InvalidEntity { .. }
+        | KnowledgeError::InvalidRelationship { .. }
+        | KnowledgeError::DanglingReference { .. }
+        | KnowledgeError::CardinalityViolation { .. }
+        | KnowledgeError::InvalidClaimState { .. }
+        | KnowledgeError::InvalidDerivation { .. }
+        | KnowledgeError::GraphLimitExceeded { .. } => return None,
+    };
+    Some(value)
+}
+
+fn graph_knowledge_error(error: &KnowledgeError) -> CodeNoesisErrorV3 {
+    match error {
+        KnowledgeError::InvalidEntity { entity_id } => CodeNoesisErrorV3::new(
+            "graph.invalid_entity",
+            "graph",
+            &error.to_string(),
+            &json!({"entity_id": entity_id}),
+        ),
+        KnowledgeError::InvalidRelationship { relationship_id } => CodeNoesisErrorV3::new(
+            "graph.invalid_relationship",
+            "graph",
+            &error.to_string(),
+            &json!({"reason": "invalid_relationship_id", "canonical_identity": relationship_id}),
+        ),
+        KnowledgeError::DanglingReference { reference_id } => CodeNoesisErrorV3::new(
+            "graph.dangling_reference",
+            "graph",
+            &error.to_string(),
+            &json!({"canonical_identity": reference_id}),
+        ),
+        KnowledgeError::CardinalityViolation { subject_id } => CodeNoesisErrorV3::new(
+            "graph.cardinality_violation",
+            "graph",
+            &error.to_string(),
+            &json!({"cardinality": "invalid_count", "canonical_identity": subject_id}),
+        ),
+        KnowledgeError::InvalidClaimState { claim_id } => CodeNoesisErrorV3::new(
+            "graph.invalid_claim_state",
+            "graph",
+            &error.to_string(),
+            &json!({"claim_id": claim_id}),
+        ),
+        KnowledgeError::InvalidDerivation { claim_id } => CodeNoesisErrorV3::new(
+            "graph.invalid_derivation",
+            "graph",
+            &error.to_string(),
+            &json!({"claim_id": claim_id, "rule_version": CONTAINMENT_RULE_VERSION}),
+        ),
+        KnowledgeError::GraphLimitExceeded {
+            limit,
+            maximum,
+            observed,
+        } => CodeNoesisErrorV3::new(
+            "graph.limit_exceeded",
+            "graph",
+            &error.to_string(),
+            &json!({
+                "limit": limit,
+                "maximum": maximum,
+                "observed": observed
+            }),
+        ),
+        KnowledgeError::InvalidUtf8 { .. }
+        | KnowledgeError::UnsupportedCrateShape
+        | KnowledgeError::ParserCancelled { .. }
+        | KnowledgeError::MalformedSyntax { .. }
+        | KnowledgeError::NormalizationCollision { .. }
+        | KnowledgeError::ContractInvalid
+        | KnowledgeError::LimitExceeded { .. } => {
+            unreachable!("extraction errors are dispatched before graph errors")
+        }
+    }
+}
+
+fn extraction_chunk_value(chunk: &ExtractionChunk) -> Value {
+    let mut value = json!({
+        "schema_version": "codenoesis.extraction-chunk/v1",
+        "chunk_id": chunk.chunk_id,
+        "ontology_version": ONTOLOGY_VERSION,
+        "extractor_version": EXTRACTOR_VERSION,
+        "repository": {
+            "identity": chunk.repository_identity,
+            "object_format": "sha1",
+            "commit_oid": chunk.commit_oid
+        },
+        "source": {
+            "blob_oid": chunk.blob_oid,
+            "path": chunk.path,
+            "byte_length": chunk.byte_length
+        },
+        "entities": chunk.entities.iter().map(knowledge_entity_value).collect::<Vec<_>>(),
+        "relationships": chunk.relationships.iter().map(knowledge_relationship_value).collect::<Vec<_>>(),
+        "claims": chunk.claims.iter().map(knowledge_claim_value).collect::<Vec<_>>(),
+        "evidence": chunk.evidence.iter().map(source_evidence_value).collect::<Vec<_>>(),
+        "diagnostics": chunk.diagnostics.iter().map(diagnostic_value).collect::<Vec<_>>(),
+        "coverage": coverage_value(&chunk.coverage)
+    });
+    let hash = semantic_hash(EXTRACTION_HASH_DOMAIN, &value);
+    value
+        .as_object_mut()
+        .expect("extraction value is an object")
+        .insert(
+            "semantic_hash".to_owned(),
+            json!({
+                "algorithm": "blake3-256",
+                "domain": "codenoesis.extraction-chunk.semantic.v1",
+                "value": hash
+            }),
+        );
+    value
+}
+
+fn knowledge_graph_value(graph: &KnowledgeGraph) -> Value {
+    let mut value = json!({
+        "schema_version": "codenoesis.knowledge-graph/v1",
+        "ontology_version": ONTOLOGY_VERSION,
+        "repository": {
+            "identity": graph.repository_identity,
+            "object_format": "sha1",
+            "commit_oid": graph.commit_oid
+        },
+        "extractor_versions": [EXTRACTOR_VERSION],
+        "entities": graph.entities.iter().map(knowledge_entity_value).collect::<Vec<_>>(),
+        "relationships": graph.relationships.iter().map(knowledge_relationship_value).collect::<Vec<_>>(),
+        "claims": graph.claims.iter().map(knowledge_claim_value).collect::<Vec<_>>(),
+        "evidence": graph.evidence.iter().map(source_evidence_value).collect::<Vec<_>>(),
+        "diagnostics": graph.diagnostics.iter().map(diagnostic_value).collect::<Vec<_>>(),
+        "coverage": coverage_value(&graph.coverage)
+    });
+    let hash = semantic_hash(GRAPH_HASH_DOMAIN, &value);
+    value
+        .as_object_mut()
+        .expect("graph value is an object")
+        .insert(
+            "semantic_hash".to_owned(),
+            json!({
+                "algorithm": "blake3-256",
+                "domain": "codenoesis.knowledge-graph.semantic.v1",
+                "value": hash
+            }),
+        );
+    value
+}
+
+fn knowledge_entity_value(entity: &KnowledgeEntity) -> Value {
+    json!({
+        "entity_id": entity.entity_id,
+        "kind": entity.kind.as_str(),
+        "canonical_identity": entity.canonical_identity,
+        "display_name": entity.display_name,
+        "language": "rust",
+        "properties": entity.properties,
+        "evidence_ids": entity.evidence_ids,
+        "claim_id": entity.claim_id
+    })
+}
+
+fn knowledge_relationship_value(relationship: &KnowledgeRelationship) -> Value {
+    json!({
+        "relationship_id": relationship.relationship_id,
+        "kind": relationship.kind.as_str(),
+        "source_entity_id": relationship.source_entity_id,
+        "target_entity_id": relationship.target_entity_id,
+        "evidence_ids": relationship.evidence_ids,
+        "claim_id": relationship.claim_id
+    })
+}
+
+fn knowledge_claim_value(claim: &KnowledgeClaim) -> Value {
+    let derivation = match &claim.derivation {
+        ClaimDerivation::Parser {
+            extractor_version,
+            evidence_ids,
+        } => json!({
+            "kind": "parser",
+            "extractor_version": extractor_version,
+            "evidence_ids": evidence_ids
+        }),
+        ClaimDerivation::DeterministicRule {
+            rule_version,
+            input_claim_ids,
+            evidence_ids,
+        } => json!({
+            "kind": "deterministic_rule",
+            "rule_version": rule_version,
+            "input_claim_ids": input_claim_ids,
+            "evidence_ids": evidence_ids
+        }),
+    };
+    json!({
+        "claim_id": claim.claim_id,
+        "subject_kind": claim.subject_kind.as_str(),
+        "subject_id": claim.subject_id,
+        "state": claim.state.as_str(),
+        "derivation": derivation
+    })
+}
+
+fn source_evidence_value(evidence: &SourceEvidence) -> Value {
+    json!({
+        "schema_version": "codenoesis.source-evidence/v2",
+        "evidence_id": evidence.evidence_id,
+        "repository": {
+            "identity": evidence.repository_identity,
+            "object_format": "sha1",
+            "commit_oid": evidence.commit_oid
+        },
+        "blob_oid": evidence.blob_oid,
+        "path": evidence.path,
+        "span": span_value(evidence.span),
+        "extractor": {
+            "id": "codenoesis.rust-tree-sitter",
+            "version": EXTRACTOR_VERSION
+        },
+        "syntax_kind": evidence.syntax_kind,
+        "derivation": "tree_sitter_concrete_syntax"
+    })
+}
+
+fn diagnostic_value(diagnostic: &ExtractionDiagnostic) -> Value {
+    json!({
+        "code": diagnostic.code,
+        "severity": diagnostic.severity,
+        "path": diagnostic.path,
+        "span": span_value(diagnostic.span)
+    })
+}
+
+fn coverage_value(coverage: &ExtractionCoverage) -> Value {
+    json!({
+        "status": if coverage.gaps.is_empty() {
+            "complete"
+        } else {
+            "partial"
+        },
+        "supported_capabilities": coverage.supported_capabilities,
+        "gaps": coverage.gaps.iter().map(coverage_gap_value).collect::<Vec<_>>()
+    })
+}
+
+fn coverage_gap_value(gap: &CoverageGap) -> Value {
+    json!({
+        "code": gap.code,
+        "path": gap.path,
+        "span": span_value(gap.span),
+        "evidence_id": gap.evidence_id
+    })
+}
+
+fn span_value(span: ByteSpan) -> Value {
+    json!({
+        "unit": "byte",
+        "start": span.start,
+        "end": span.end
+    })
 }
 
 fn inventory_value(inventory: &RepositoryInventory) -> Value {

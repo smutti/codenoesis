@@ -329,7 +329,7 @@ fn conf_fr_inv_001_repository_snapshot_v2_and_error_v2() {
             "--revision",
             COMMIT_A_OID,
             "--profile",
-            "standard-local-s2",
+            "standard-local-invalid",
             "--format",
             "json",
         ])

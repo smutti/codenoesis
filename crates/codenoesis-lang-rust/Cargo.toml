@@ -1,0 +1,18 @@
+[package]
+name = "codenoesis-lang-rust"
+version = "0.1.0"
+description = "Bounded Tree-sitter Rust adapter for CodeNoesis"
+edition.workspace = true
+license.workspace = true
+publish = false
+rust-version.workspace = true
+
+[dependencies]
+codenoesis-domain.workspace = true
+codenoesis-ports.workspace = true
+tree-sitter.workspace = true
+tree-sitter-rust.workspace = true
+unicode-normalization.workspace = true
+
+[lints]
+workspace = true

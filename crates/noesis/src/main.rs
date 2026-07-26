@@ -10,11 +10,15 @@ use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
 use codenoesis_application::{ScanError, ScanRequest, ScanService};
 use codenoesis_contracts::{
-    CodeNoesisErrorV1, CodeNoesisErrorV2, RepositorySnapshotV2Error, SnapshotEnvelopeV1,
+    CodeNoesisErrorV1, CodeNoesisErrorV2, CodeNoesisErrorV3, RepositorySnapshotV2Error,
+    RepositorySnapshotV3Error, SnapshotEnvelopeV1,
 };
+use codenoesis_domain::AcquisitionError;
+use codenoesis_domain::knowledge::KnowledgeError;
 use codenoesis_domain::{
     InputError, LimitKind, RepositoryIdentity, Revision, STANDARD_LOCAL_S1_LIMITS, limit_exceeded,
 };
+use codenoesis_lang_rust::TreeSitterRustExtractor;
 use codenoesis_repository::LocalGitRepository;
 
 static CORRELATION_SEQUENCE: AtomicU64 = AtomicU64::new(0);
@@ -24,10 +28,13 @@ fn main() -> ExitCode {
         return emit_internal_error_v1();
     }
     let arguments = env::args_os().collect::<Vec<_>>();
-    let s1_requested = arguments
+    let profiled = arguments
         .iter()
         .any(|argument| argument == OsStr::new("--profile"));
-    let result = if s1_requested {
+    let s2_requested = requested_profile(&arguments, "standard-local-s2");
+    let result = if s2_requested {
+        run_s2(arguments)
+    } else if profiled {
         run_s1(arguments)
     } else {
         run_s0(arguments)
@@ -35,28 +42,44 @@ fn main() -> ExitCode {
     match result {
         Ok(stdout) => match io::stdout().lock().write_all(&stdout) {
             Ok(()) => ExitCode::SUCCESS,
-            Err(_) if s1_requested => emit_internal_error_v2(),
+            Err(_) if s2_requested => emit_internal_error_v3(),
+            Err(_) if profiled => emit_internal_error_v2(),
             Err(_) => emit_internal_error_v1(),
         },
-        Err(Failure::Input(error)) if s1_requested => {
+        Err(Failure::Input(error)) if s2_requested => {
+            emit_error_v3(&CodeNoesisErrorV3::from_input(error), 2)
+        }
+        Err(Failure::Input(error)) if profiled => {
             emit_error_v2(&CodeNoesisErrorV2::from_input(error), 2)
         }
         Err(Failure::Input(error)) => emit_error_v1(&CodeNoesisErrorV1::from_input(error), 2),
-        Err(Failure::Scan(ScanError::Acquisition(error))) if s1_requested => {
+        Err(Failure::Scan(ScanError::Acquisition(error))) if s2_requested => {
+            emit_error_v3(&CodeNoesisErrorV3::from_acquisition(&error), 10)
+        }
+        Err(Failure::Scan(ScanError::Acquisition(error))) if profiled => {
             emit_error_v2(&CodeNoesisErrorV2::from_acquisition(&error), 10)
         }
         Err(Failure::Scan(ScanError::Acquisition(error))) => {
             emit_error_v1(&CodeNoesisErrorV1::from_acquisition(&error), 10)
         }
-        Err(Failure::Scan(ScanError::Internal) | Failure::Internal) if s1_requested => {
+        Err(Failure::Scan(ScanError::Knowledge(error))) if s2_requested => {
+            emit_error_v3(&CodeNoesisErrorV3::from_knowledge(&error), 11)
+        }
+        Err(Failure::Scan(ScanError::Knowledge(_))) if profiled => emit_internal_error_v2(),
+        Err(Failure::Scan(ScanError::Internal) | Failure::Internal) if s2_requested => {
+            emit_internal_error_v3()
+        }
+        Err(Failure::Scan(ScanError::Internal) | Failure::Internal) if profiled => {
             emit_internal_error_v2()
         }
-        Err(Failure::Scan(ScanError::Internal) | Failure::Internal) => emit_internal_error_v1(),
+        Err(Failure::Scan(ScanError::Knowledge(_) | ScanError::Internal) | Failure::Internal) => {
+            emit_internal_error_v1()
+        }
     }
 }
 
 fn run_s0(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
-    let invocation = Invocation::parse(arguments, false).map_err(Failure::Input)?;
+    let invocation = Invocation::parse(arguments, None).map_err(Failure::Input)?;
     let envelope = current_envelope().ok_or(Failure::Internal)?;
     let request = ScanRequest::new(
         invocation.repository,
@@ -72,7 +95,8 @@ fn run_s0(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
 }
 
 fn run_s1(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
-    let invocation = Invocation::parse(arguments, true).map_err(Failure::Input)?;
+    let invocation =
+        Invocation::parse(arguments, Some("standard-local-s1")).map_err(Failure::Input)?;
     let started_at = Instant::now();
     if s1_boundary_applies(&invocation.repository)
         && noesis::install_s1_filesystem_boundary(&invocation.repository).is_err()
@@ -107,6 +131,58 @@ fn run_s1(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
     Ok(stdout)
 }
 
+fn run_s2(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
+    let invocation =
+        Invocation::parse(arguments, Some("standard-local-s2")).map_err(Failure::Input)?;
+    let started_at = Instant::now();
+    if s1_boundary_applies(&invocation.repository)
+        && noesis::install_s1_filesystem_boundary(&invocation.repository).is_err()
+    {
+        return Err(Failure::Internal);
+    }
+    let envelope = current_envelope().ok_or(Failure::Internal)?;
+    let request = ScanRequest::new(
+        invocation.repository,
+        invocation.identity,
+        invocation.revision,
+        envelope,
+    );
+    let stdout = ScanService::new(LocalGitRepository::new())
+        .scan_s2(request, &TreeSitterRustExtractor::new())
+        .map_err(Failure::Scan)?
+        .canonical_stdout()
+        .map_err(|error| match error {
+            RepositorySnapshotV3Error::LimitExceeded(AcquisitionError::LimitExceeded {
+                limit,
+                maximum,
+                observed,
+            }) => Failure::Scan(ScanError::Knowledge(KnowledgeError::GraphLimitExceeded {
+                limit: limit.as_str(),
+                maximum,
+                observed,
+            })),
+            RepositorySnapshotV3Error::LimitExceeded(_)
+            | RepositorySnapshotV3Error::Serialization(_)
+            | RepositorySnapshotV3Error::OutputLengthOverflow => Failure::Internal,
+        })?;
+    let elapsed = u64::try_from(started_at.elapsed().as_millis()).map_err(|_| Failure::Internal)?;
+    if elapsed > STANDARD_LOCAL_S1_LIMITS.scan_wall_milliseconds {
+        return Err(Failure::Scan(ScanError::Acquisition(limit_exceeded(
+            LimitKind::ScanWallMilliseconds,
+            elapsed,
+        ))));
+    }
+    Ok(stdout)
+}
+
+fn requested_profile(arguments: &[OsString], expected: &str) -> bool {
+    arguments.get(2..).is_some_and(|arguments| {
+        arguments
+            .chunks_exact(2)
+            .any(|pair| pair[0] == OsStr::new("--profile") && pair[1] == OsStr::new(expected))
+    })
+}
+
 fn s1_boundary_applies(repository: &OsStr) -> bool {
     fs::symlink_metadata(repository)
         .is_ok_and(|metadata| metadata.is_dir() && !metadata.file_type().is_symlink())
@@ -120,6 +196,10 @@ fn emit_internal_error_v2() -> ExitCode {
     emit_error_v2(&CodeNoesisErrorV2::internal(), 70)
 }
 
+fn emit_internal_error_v3() -> ExitCode {
+    emit_error_v3(&CodeNoesisErrorV3::internal(), 70)
+}
+
 fn emit_error_v1(error: &CodeNoesisErrorV1, code: u8) -> ExitCode {
     if let Ok(bytes) = error.canonical_stderr() {
         let _ = io::stderr().lock().write_all(&bytes);
@@ -128,6 +208,13 @@ fn emit_error_v1(error: &CodeNoesisErrorV1, code: u8) -> ExitCode {
 }
 
 fn emit_error_v2(error: &CodeNoesisErrorV2, code: u8) -> ExitCode {
+    if let Ok(bytes) = error.canonical_stderr() {
+        let _ = io::stderr().lock().write_all(&bytes);
+    }
+    ExitCode::from(code)
+}
+
+fn emit_error_v3(error: &CodeNoesisErrorV3, code: u8) -> ExitCode {
     if let Ok(bytes) = error.canonical_stderr() {
         let _ = io::stderr().lock().write_all(&bytes);
     }
@@ -149,7 +236,7 @@ struct Invocation {
 impl Invocation {
     fn parse(
         arguments: impl IntoIterator<Item = OsString>,
-        require_s1_profile: bool,
+        required_profile: Option<&str>,
     ) -> Result<Self, InputError> {
         let mut arguments = arguments.into_iter();
         let _program = arguments.next();
@@ -191,8 +278,8 @@ impl Invocation {
         let revision = revision
             .ok_or(InputError::InvalidRevision)
             .and_then(|value| Revision::parse(&value))?;
-        if require_s1_profile {
-            if profile.as_deref() != Some("standard-local-s1") {
+        if let Some(required_profile) = required_profile {
+            if profile.as_deref() != Some(required_profile) {
                 return Err(InputError::InvalidProfile);
             }
         } else if profile.is_some() {

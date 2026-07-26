@@ -11,6 +11,7 @@ rust-version.workspace = true
 codenoesis-application.workspace = true
 codenoesis-contracts.workspace = true
 codenoesis-domain.workspace = true
+codenoesis-lang-rust.workspace = true
 codenoesis-repository.workspace = true
 
 [target.'cfg(target_os = "linux")'.dependencies]
