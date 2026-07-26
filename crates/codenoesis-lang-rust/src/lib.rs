@@ -1159,7 +1159,7 @@ mod tests {
         CONTAINMENT_RULE_VERSION, ClaimDerivation, ClaimState, KnowledgeGraph, stable_entity_id,
     };
 
-    const SOURCE: &str =
+    const SOURCE_FIXTURE: &str =
         include_str!("../../../tests/fixtures/s2/rust-knowledge-v1/revision-a/src/lib.rs");
     const REPOSITORY_ID: &str = "urn:codenoesis:fixture:s2-rust-knowledge-v1";
     const COMMIT_OID: &str = "d77c36ec27d878cee6d5d85d761de2b70284cd55";
@@ -1190,7 +1190,8 @@ mod tests {
 
     #[test]
     fn gt_dr_idn_001_unicode_normalization_collision() {
-        let collision = format!("{SOURCE}\npub fn cafe\u{301}_label() {{}}\n");
+        let source = canonical_source();
+        let collision = format!("{source}\npub fn cafe\u{301}_label() {{}}\n");
         let error = extract_source(
             REPOSITORY_ID,
             COMMIT_OID,
@@ -1220,7 +1221,8 @@ mod tests {
 
     #[test]
     fn gt_fr_ext_002_malformed_syntax_is_explicit() {
-        let malformed = SOURCE.replacen("pub fn café_label", "\n§\npub fn café_label", 1);
+        let malformed =
+            canonical_source().replacen("pub fn café_label", "\n§\npub fn café_label", 1);
         let knowledge = extract_source(
             REPOSITORY_ID,
             COMMIT_OID,
@@ -1495,8 +1497,9 @@ mod tests {
 
     #[test]
     fn fz_fr_ext_002_rust_parser_seed_corpus() {
-        let malformed = SOURCE.replacen("pub fn café_label", "\n§\npub fn café_label", 1);
-        let collision = format!("{SOURCE}\npub fn cafe\u{301}_label() {{}}\n");
+        let source = canonical_source();
+        let malformed = source.replacen("pub fn café_label", "\n§\npub fn café_label", 1);
+        let collision = format!("{source}\npub fn cafe\u{301}_label() {{}}\n");
         let unsupported = "pub const ANSWER: u8 = 42;\npub fn supported() {}\n".to_owned();
         let grouped_unresolved = "use crate::missing::{One, Two};\n".to_owned();
         let amplified = format!(
@@ -1514,7 +1517,7 @@ mod tests {
         }
 
         let seeds = [
-            ("valid", SOURCE.to_owned()),
+            ("valid", source),
             ("malformed", malformed),
             ("nfc_collision", collision),
             ("unsupported", unsupported),
@@ -1553,8 +1556,18 @@ mod tests {
     }
 
     fn reviewed_knowledge() -> RustKnowledge {
-        extract_source(REPOSITORY_ID, COMMIT_OID, BLOB_OID, "src/lib.rs", SOURCE)
+        let source = canonical_source();
+        extract_source(REPOSITORY_ID, COMMIT_OID, BLOB_OID, "src/lib.rs", &source)
             .expect("extract reviewed Rust fixture")
+    }
+
+    fn canonical_source() -> String {
+        let normalized = SOURCE_FIXTURE.replace("\r\n", "\n");
+        assert!(
+            !normalized.contains('\r'),
+            "reviewed Rust fixture contains a bare carriage return"
+        );
+        normalized
     }
 
     fn entity_id(graph: &KnowledgeGraph, kind: EntityKind) -> String {
