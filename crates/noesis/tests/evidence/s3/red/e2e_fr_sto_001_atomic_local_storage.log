@@ -1,0 +1,25 @@
+   Compiling noesis v0.1.0 (/Users/smutti/Documents/personal/codenoesis/crates/noesis)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.63s
+     Running tests/e2e_fr_sto_001_atomic_local_storage.rs (target/debug/deps/e2e_fr_sto_001_atomic_local_storage-f2052b6d7d486a0e)
+
+running 1 test
+test e2e_fr_sto_001_atomic_local_storage ... FAILED
+
+failures:
+
+---- e2e_fr_sto_001_atomic_local_storage stdout ----
+
+thread 'e2e_fr_sto_001_atomic_local_storage' (893118) panicked at crates/noesis/tests/e2e_fr_sto_001_atomic_local_storage.rs:13:5:
+assertion `left == right` failed: subject stderr: {"code":"input.invalid_revision","context":{},"message":"invalid revision","retryable":false,"schema_version":"codenoesis.error/v2","stage":"input"}
+
+  left: Some(2)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    e2e_fr_sto_001_atomic_local_storage
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.43s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_sto_001_atomic_local_storage`

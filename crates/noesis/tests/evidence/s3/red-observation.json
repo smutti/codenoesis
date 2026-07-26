@@ -1,0 +1,48 @@
+{
+  "schema_version": "codenoesis.local-test-observation/v1",
+  "slice": "S3",
+  "status": "red_observed",
+  "requirements": [
+    "FR-SNP-001",
+    "FR-STO-001",
+    "INV-SNP-001",
+    "NFR-REL-001"
+  ],
+  "oracle_bundle_sha256": "6269996ebfa117f30bf5b7e8eee56fce5806acdd342ad9d7dfea109c25725605",
+  "base_sha": "3a203314ce63c455b988c9959f083b2cd4ab63e5",
+  "pre_implementation_sha": "8c58b32f45002549ece38e9a360f636be083dec4",
+  "policy": {
+    "version": 1,
+    "source_sha": "3d14e4698563543b663de58fc4eea8740b724940",
+    "approval_reference": "https://github.com/smutti/codenoesis/pull/29",
+    "binding_merge": "https://github.com/smutti/codenoesis/pull/31",
+    "expected_red_correction": "https://github.com/smutti/codenoesis/pull/34"
+  },
+  "red": {
+    "test_id": "e2e_fr_sto_001_atomic_local_storage",
+    "command": "cargo test --test e2e_fr_sto_001_atomic_local_storage",
+    "runner_exit_code": 101,
+    "subject_exit_code": 2,
+    "subject_stderr_schema": "codenoesis.error/v2",
+    "subject_stderr_code": "input.invalid_revision",
+    "expected_failure": "The harness expects exit 0, RepositorySnapshotV3, and a durable local store while merged S2 rejects the unknown --store pair before profile validation.",
+    "observed_failure": "The reviewed A/B fixture materialized, the subject returned the approved corrected S2 precursor, and the acceptance assertion failed before any store was created.",
+    "observed_at": "2026-07-26T18:19:18Z",
+    "issue_comment": "https://github.com/smutti/codenoesis/issues/32#issuecomment-5084783981",
+    "log": {
+      "path": "crates/noesis/tests/evidence/s3/red/e2e_fr_sto_001_atomic_local_storage.log",
+      "sha256": "b54fcb8990a276903aed4a2cec106256c7d7bacc755809a341d03acf22d07622"
+    }
+  },
+  "rejected_attempts": [],
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "macos": "26.5.2",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "features": []
+  },
+  "github_actions_artifact": null,
+  "limitation": "This local observation is not immutable retained CI evidence and must not be used to claim Verified."
+}
