@@ -126,6 +126,30 @@
       "approval_reference": "https://github.com/smutti/codenoesis/pull/23"
     },
     {
+      "id": "FR-SNP-001",
+      "slice": "S3",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-26T15:31:01Z",
+      "source_sha": "3d14e4698563543b663de58fc4eea8740b724940",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/29"
+    },
+    {
+      "id": "FR-STO-001",
+      "slice": "S3",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-26T15:31:01Z",
+      "source_sha": "3d14e4698563543b663de58fc4eea8740b724940",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/29"
+    },
+    {
+      "id": "INV-SNP-001",
+      "slice": "S3",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-26T15:31:01Z",
+      "source_sha": "3d14e4698563543b663de58fc4eea8740b724940",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/29"
+    },
+    {
       "id": "NFR-DET-001",
       "slice": "S0",
       "approved_by": "github:smutti",
@@ -140,6 +164,14 @@
       "approved_at": "2026-07-22T19:41:36Z",
       "source_sha": "a9c718504d126f9c3b398aed3714c132243d3d3c",
       "approval_reference": "https://github.com/smutti/codenoesis/pull/12"
+    },
+    {
+      "id": "NFR-REL-001",
+      "slice": "S3",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-26T15:31:01Z",
+      "source_sha": "3d14e4698563543b663de58fc4eea8740b724940",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/29"
     },
     {
       "id": "NFR-SEC-001",
