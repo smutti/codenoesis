@@ -1,0 +1,86 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "docs/software/decisions/0004-s3-atomic-local-storage-contract.md",
+      "sha256": "4deb567dfde9a5ff4486efa628a00d9ba271f913db33c6232a33f995ae70ff40"
+    },
+    {
+      "path": "scripts/tests/test_s3_contract.py",
+      "sha256": "02b5918d4c1274831259f4e9e49a30b568d5432e125e91fb41c47afbbcb84cf2"
+    },
+    {
+      "path": "tests/fixtures/s3/atomic-local-storage-v1/README.md",
+      "sha256": "898d7ccaf6e7371c48c3f6517dd79c1694894f386a5fa697dacb47c321ee47e4"
+    },
+    {
+      "path": "tests/fixtures/s3/atomic-local-storage-v1/expected-error-corrupt-object.json",
+      "sha256": "f0bfda7f71eb48d5f008e77c6152ca91bfa060f6f285f8886d133591370d0592"
+    },
+    {
+      "path": "tests/fixtures/s3/atomic-local-storage-v1/expected-error-incompatible-schema.json",
+      "sha256": "8cdde627a22ca460ae3f8aaf3bf52a4070136cb3fa44da850ec8347f92a0744f"
+    },
+    {
+      "path": "tests/fixtures/s3/atomic-local-storage-v1/expected-error-unsafe-path.json",
+      "sha256": "d5e538f70503b818450445da6e476b11234abc39746309ef9c4aea8d25e840fc"
+    },
+    {
+      "path": "tests/fixtures/s3/atomic-local-storage-v1/expected-head-a.json",
+      "sha256": "2c66a208d06e4a3f1cdc634e224b28b2f294b2ad708d2dfff69b0e66a0638465"
+    },
+    {
+      "path": "tests/fixtures/s3/atomic-local-storage-v1/expected-head-b.json",
+      "sha256": "ca7049e19a06b8dded57d3a9a3529249bd59bbba2b9db04c8688b69b6779cabf"
+    },
+    {
+      "path": "tests/fixtures/s3/atomic-local-storage-v1/expected-recovery.json",
+      "sha256": "f65ff661f048de275c33f67df4c37381436a29c5cbe2cc720ba83ee9e01d39bb"
+    },
+    {
+      "path": "tests/fixtures/s3/atomic-local-storage-v1/manifest.json",
+      "sha256": "d152aaf550777b4bddf55f9af0fddd63374903e9175371d2c032723b40fdadc8"
+    },
+    {
+      "path": "tests/fixtures/s3/atomic-local-storage-v1/snapshot-semantic-a.json",
+      "sha256": "81a8e7ef34f8b1bf36c27fe0d2b48097111b32f89d683e8b5e94537edcf9efb6"
+    },
+    {
+      "path": "tests/fixtures/s3/atomic-local-storage-v1/snapshot-semantic-b.json",
+      "sha256": "0b3ce7ff7aeb70e77ee87e7c149cbbd5c0004d584d5aa215472905cb7562e509"
+    },
+    {
+      "path": "tests/specifications/s2/contract-bundle.json",
+      "sha256": "8b248e29407ce9e4ef591d3f483772da09a3405c96a427ecbdb12bbbf7fe0f71"
+    },
+    {
+      "path": "tests/specifications/s3/codenoesis-error-v4.schema.json",
+      "sha256": "d1edc9ed847f00395e527527834ec80ec6e5074167652920d02f5b0fafb65b9c"
+    },
+    {
+      "path": "tests/specifications/s3/e2e_fr_sto_001_atomic_local_storage.json",
+      "sha256": "00415f877dc0f94cd29f3b06a908875597339c5dd673a983e017233e8ec4975d"
+    },
+    {
+      "path": "tests/specifications/s3/local-snapshot-head-v1.schema.json",
+      "sha256": "a4097ffd5784d4eecb9431ddc3425a4a980df4046167b482fe6967db660bfd60"
+    },
+    {
+      "path": "tests/specifications/s3/local-store-contract-v1.json",
+      "sha256": "2c15b5e738e4eb48da60f65e78d149613ee9e5a7309d52ff39203bc4b30343f1"
+    },
+    {
+      "path": "tests/specifications/s3/local-store-v1.sql",
+      "sha256": "e286c56bf6828cc87ef0ca9ea91998f26ed76bcc4e8410ce4d344df89a92f0c8"
+    },
+    {
+      "path": "tests/specifications/s3/publication-failpoints-v1.json",
+      "sha256": "ebf01f32c40b7b98f730c9c611fdad0b99d7648c2cd6c445c1c417d86189313d"
+    }
+  ],
+  "bundle_sha256": "9d210e8509cca1a3398bb21c36763d5289a35427bad4fe51a25d518f8da7ff6b"
+}

@@ -8,7 +8,14 @@ import unittest
 from pathlib import Path
 from typing import Any
 
-from test_s1_contract import blake3_256, canonical_json, git_oid, load_json
+from test_s1_contract import (
+    INHERITED_S0_TESTS,
+    S1_TEST_ORDER,
+    blake3_256,
+    canonical_json,
+    git_oid,
+    load_json,
+)
 from test_s2_contract import S2_TEST_ORDER
 
 
@@ -26,6 +33,9 @@ ERROR_SCHEMA_PATH = SPEC_ROOT / "codenoesis-error-v4.schema.json"
 BUNDLE_PATH = SPEC_ROOT / "contract-bundle.json"
 SRS_PATH = ROOT / "docs" / "software" / "software-requirements-specification.md"
 S2_FIXTURE_ROOT = ROOT / "tests" / "fixtures" / "s2" / "rust-knowledge-v1"
+S2_ERROR_SCHEMA_PATH = (
+    ROOT / "tests" / "specifications" / "s2" / "codenoesis-error-v3.schema.json"
+)
 
 S3_REQUIREMENTS = {
     "FR-SNP-001",
@@ -77,10 +87,15 @@ SQLITE_TABLES = {
 
 IMMUTABLE_TABLES = SQLITE_TABLES - {"project_heads"}
 
+PROJECT_HEAD_TRIGGERS = {
+    "project_heads_forbid_delete",
+    "project_heads_validate_insert",
+    "project_heads_validate_update",
+}
+
 S3_BUNDLE_FILES = {
     "LICENSE",
     "docs/software/decisions/0004-s3-atomic-local-storage-contract.md",
-    "docs/software/decisions/README.md",
     "scripts/tests/test_s3_contract.py",
     "tests/fixtures/s3/atomic-local-storage-v1/README.md",
     "tests/fixtures/s3/atomic-local-storage-v1/expected-error-corrupt-object.json",
@@ -236,7 +251,8 @@ class S3ContractTests(unittest.TestCase):
         }
         self.assertEqual(traced, S3_REQUIREMENTS)
         self.assertEqual(
-            set(spec["inherited_regressions"]), set(S2_TEST_ORDER)
+            set(spec["inherited_regressions"]),
+            INHERITED_S0_TESTS | set(S1_TEST_ORDER) | set(S2_TEST_ORDER),
         )
         self.assertEqual(
             spec["public_command"],
@@ -387,11 +403,26 @@ class S3ContractTests(unittest.TestCase):
         )
         self.assertEqual(sqlite_contract["mutable_tables"], ["project_heads"])
         self.assertEqual(
-            contract["cas"]["required_roles"],
+            contract["cas"]["ordered_roles"],
             ["snapshot_semantic", "knowledge_graph", "extraction_chunk"],
         )
         self.assertEqual(
+            contract["cas"]["role_cardinality"],
+            {
+                "snapshot_semantic": {"minimum": 1, "maximum": 1},
+                "knowledge_graph": {"minimum": 1, "maximum": 1},
+                "extraction_chunk": {"minimum": 0, "maximum": 20000},
+            },
+        )
+        self.assertEqual(
             contract["publication"]["boundaries"], list(FAILPOINTS)
+        )
+        self.assertEqual(
+            contract["publication"]["boundary_occurrence"],
+            {
+                "cas": "every canonical artifact role and ordinal",
+                "sqlite": "once per publication",
+            },
         )
         self.assertEqual(
             contract["publication"]["commit_point"], "sqlite_after_commit"
@@ -441,6 +472,22 @@ class S3ContractTests(unittest.TestCase):
             self.assertEqual(
                 connection.execute("PRAGMA foreign_keys").fetchone()[0], 1
             )
+            self.assertEqual(
+                connection.execute("PRAGMA synchronous").fetchone()[0], 2
+            )
+            self.assertEqual(
+                connection.execute("PRAGMA trusted_schema").fetchone()[0], 0
+            )
+            self.assertEqual(
+                connection.execute("PRAGMA busy_timeout").fetchone()[0], 0
+            )
+            table_strictness = {
+                row[1]: row[5]
+                for row in connection.execute("PRAGMA table_list")
+                if row[1] in SQLITE_TABLES
+            }
+            self.assertEqual(set(table_strictness), SQLITE_TABLES)
+            self.assertEqual(set(table_strictness.values()), {1})
             triggers = {
                 row[0]
                 for row in connection.execute(
@@ -451,7 +498,7 @@ class S3ContractTests(unittest.TestCase):
                 f"{table}_forbid_{operation}"
                 for table in IMMUTABLE_TABLES
                 for operation in ("update", "delete")
-            }
+            } | PROJECT_HEAD_TRIGGERS
             self.assertEqual(triggers, expected_triggers)
             connection.execute(
                 "INSERT INTO store_metadata(key, value) VALUES (?, ?)",
@@ -461,6 +508,70 @@ class S3ContractTests(unittest.TestCase):
                 connection.execute(
                     "UPDATE store_metadata SET value = ? WHERE key = ?",
                     ("changed", "schema_version"),
+                )
+            snapshot_row = (
+                "urn:codenoesis:snapshot:blake3:" + "1" * 64,
+                "urn:codenoesis:fixture:s3-database-guard",
+                "1" * 40,
+                "codenoesis.repository-snapshot/v3",
+                "blake3-256",
+                "codenoesis.repository-snapshot.semantic.v3",
+                "1" * 64,
+                "2" * 64,
+            )
+            connection.execute(
+                "INSERT INTO snapshots VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                snapshot_row,
+            )
+            with self.assertRaises(sqlite3.IntegrityError):
+                connection.execute(
+                    "INSERT INTO project_heads VALUES (?, ?, ?)",
+                    (snapshot_row[1], snapshot_row[0], 2),
+                )
+            connection.execute(
+                "INSERT INTO project_heads VALUES (?, ?, ?)",
+                (snapshot_row[1], snapshot_row[0], 1),
+            )
+            connection.execute(
+                "UPDATE project_heads SET snapshot_id = ?, generation = ? "
+                "WHERE repository_identity = ?",
+                (snapshot_row[0], 1, snapshot_row[1]),
+            )
+            with self.assertRaises(sqlite3.IntegrityError):
+                connection.execute(
+                    "UPDATE project_heads SET generation = ? "
+                    "WHERE repository_identity = ?",
+                    (2, snapshot_row[1]),
+                )
+            replacement_row = (
+                "urn:codenoesis:snapshot:blake3:" + "3" * 64,
+                snapshot_row[1],
+                "2" * 40,
+                snapshot_row[3],
+                snapshot_row[4],
+                snapshot_row[5],
+                "3" * 64,
+                "4" * 64,
+            )
+            connection.execute(
+                "INSERT INTO snapshots VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                replacement_row,
+            )
+            with self.assertRaises(sqlite3.IntegrityError):
+                connection.execute(
+                    "UPDATE project_heads SET snapshot_id = ?, generation = ? "
+                    "WHERE repository_identity = ?",
+                    (replacement_row[0], 3, snapshot_row[1]),
+                )
+            connection.execute(
+                "UPDATE project_heads SET snapshot_id = ?, generation = ? "
+                "WHERE repository_identity = ?",
+                (replacement_row[0], 2, snapshot_row[1]),
+            )
+            with self.assertRaises(sqlite3.IntegrityError):
+                connection.execute(
+                    "DELETE FROM project_heads WHERE repository_identity = ?",
+                    (snapshot_row[1],),
                 )
             connection.close()
 
@@ -478,14 +589,38 @@ class S3ContractTests(unittest.TestCase):
             [boundary["order"] for boundary in boundaries],
             list(range(1, len(FAILPOINTS) + 1)),
         )
+        self.assertEqual(
+            [boundary["occurrence_scope"] for boundary in boundaries[:4]],
+            ["each_canonical_artifact"] * 4,
+        )
+        self.assertEqual(
+            [boundary["occurrence_scope"] for boundary in boundaries[4:]],
+            ["once_per_publication"] * 4,
+        )
+        self.assertEqual(
+            [
+                boundary["abandoned_temporary_possible"]
+                for boundary in boundaries
+            ],
+            [False, True, False, False, False, False, False, False],
+        )
+        self.assertEqual(
+            [
+                boundary["unreferenced_final_possible"]
+                for boundary in boundaries
+            ],
+            [True, True, True, True, True, True, True, False],
+        )
         for boundary in boundaries[:-1]:
             self.assertEqual(boundary["restart_first_publication_head"], None)
             self.assertEqual(boundary["restart_replacement_head"], "A")
-            self.assertEqual(boundary["retry_head"], "B")
+            self.assertEqual(boundary["retry_first_publication_head"], "A")
+            self.assertEqual(boundary["retry_replacement_head"], "B")
         committed = boundaries[-1]
         self.assertEqual(committed["restart_first_publication_head"], "A")
         self.assertEqual(committed["restart_replacement_head"], "B")
-        self.assertEqual(committed["retry_head"], "B")
+        self.assertEqual(committed["retry_first_publication_head"], "A")
+        self.assertEqual(committed["retry_replacement_head"], "B")
         self.assertEqual(
             matrix["injection"],
             {
@@ -499,6 +634,7 @@ class S3ContractTests(unittest.TestCase):
     def test_public_schemas_are_strict_closed_and_versioned(self) -> None:
         head_schema = load_json(HEAD_SCHEMA_PATH)
         error_schema = load_json(ERROR_SCHEMA_PATH)
+        inherited_error_schema = load_json(S2_ERROR_SCHEMA_PATH)
         self.assertEqual(
             head_schema["$id"],
             "urn:codenoesis:schema:local-snapshot-head:v1",
@@ -517,9 +653,38 @@ class S3ContractTests(unittest.TestCase):
             head_schema["properties"]["schema_version"]["const"],
             "codenoesis.local-snapshot-head/v1",
         )
+        artifact_list = head_schema["properties"]["artifacts"]
+        self.assertEqual(artifact_list["minItems"], 2)
+        self.assertTrue(artifact_list["uniqueItems"])
+        required_roles = [
+            constraint["contains"]["properties"]["role"]["const"]
+            for constraint in artifact_list["allOf"]
+        ]
+        self.assertEqual(
+            required_roles, ["snapshot_semantic", "knowledge_graph"]
+        )
+        self.assertTrue(
+            all(
+                constraint["minContains"] == 1
+                and constraint["maxContains"] == 1
+                for constraint in artifact_list["allOf"]
+            )
+        )
+        ordinal_rule = head_schema["$defs"]["artifact"]["allOf"][0]
+        self.assertEqual(
+            ordinal_rule["if"]["properties"]["role"]["enum"],
+            ["snapshot_semantic", "knowledge_graph"],
+        )
+        self.assertEqual(
+            ordinal_rule["then"]["properties"]["ordinal"]["const"], 0
+        )
         error_codes = set(error_schema["properties"]["code"]["enum"])
-        self.assertTrue(STORAGE_ERROR_CODES <= error_codes)
-        self.assertIn("internal.unexpected", error_codes)
+        inherited_error_codes = set(
+            inherited_error_schema["properties"]["code"]["enum"]
+        )
+        self.assertEqual(
+            error_codes, inherited_error_codes | STORAGE_ERROR_CODES
+        )
         self.assertEqual(
             error_schema["properties"]["schema_version"]["const"],
             "codenoesis.error/v4",
@@ -529,6 +694,46 @@ class S3ContractTests(unittest.TestCase):
             retryable_codes,
             {"publication.head_conflict", "storage.writer_busy"},
         )
+        input_rule = next(
+            rule
+            for rule in error_schema["allOf"]
+            if rule.get("if", {})
+            .get("properties", {})
+            .get("code", {})
+            .get("pattern")
+            == r"^input\."
+        )
+        self.assertEqual(
+            input_rule["then"]["properties"]["context"]["maxProperties"], 0
+        )
+        storage_contexts = {
+            "storage.corrupt_object": {
+                "component",
+                "artifact_id",
+                "expected_hash",
+                "observed_hash",
+            },
+            "storage.incompatible_schema": {
+                "component",
+                "expected_schema",
+                "observed_schema",
+            },
+            "storage.unsafe_path": {"component", "reason"},
+        }
+        for code, expected_fields in storage_contexts.items():
+            rule = next(
+                candidate
+                for candidate in error_schema["allOf"]
+                if candidate.get("if", {})
+                .get("properties", {})
+                .get("code", {})
+                .get("const")
+                == code
+            )
+            context = rule["then"]["properties"]["context"]
+            self.assertEqual(set(context["required"]), expected_fields)
+            self.assertEqual(context["minProperties"], len(expected_fields))
+            self.assertEqual(context["maxProperties"], len(expected_fields))
 
     def test_fixture_reproduces_revisions_and_canonical_head_artifacts(
         self,
@@ -570,12 +775,30 @@ class S3ContractTests(unittest.TestCase):
             self.assertEqual(revision["parent"], previous)
             previous = calculated
 
+        semantics_by_label = {}
+        heads_by_label = {}
+        head_required = set(load_json(HEAD_SCHEMA_PATH)["required"])
+        artifact_required = set(
+            load_json(HEAD_SCHEMA_PATH)["$defs"]["artifact"]["required"]
+        )
         for label, generation in (("a", 1), ("b", 2)):
             semantic = load_json(FIXTURE_ROOT / f"snapshot-semantic-{label}.json")
             head = load_json(FIXTURE_ROOT / f"expected-head-{label}.json")
+            semantics_by_label[label] = semantic
+            heads_by_label[label] = head
             revision = revisions[generation - 1]
             self.assertEqual(
                 semantic["repository"]["commit_oid"], revision["commit_oid"]
+            )
+            self.assertEqual(set(head), head_required)
+            self.assertEqual(
+                head["repository_identity"],
+                manifest["repository"]["identity"],
+            )
+            self.assertEqual(head["commit_oid"], revision["commit_oid"])
+            self.assertEqual(
+                head["snapshot_schema_version"],
+                "codenoesis.repository-snapshot/v3",
             )
             snapshot_digest = blake3_256(
                 b"codenoesis.repository-snapshot.semantic.v3\0"
@@ -591,6 +814,10 @@ class S3ContractTests(unittest.TestCase):
             )
             self.assertEqual(head["snapshot_id"], snapshot_id(snapshot_digest))
             self.assertEqual(head["generation"], generation)
+            self.assertEqual(
+                head["graph_semantic_hash"],
+                semantic["knowledge_graph"]["semantic_hash"],
+            )
             expected_artifacts = [
                 (
                     "snapshot_semantic",
@@ -622,6 +849,7 @@ class S3ContractTests(unittest.TestCase):
             ):
                 role, ordinal, document, document_hash = expected
                 content = canonical_json(document)
+                self.assertEqual(set(artifact), artifact_required)
                 self.assertEqual(artifact["role"], role)
                 self.assertEqual(artifact["ordinal"], ordinal)
                 self.assertEqual(artifact["artifact_id"], artifact_id(content))
@@ -642,6 +870,94 @@ class S3ContractTests(unittest.TestCase):
                     ),
                 )
 
+        semantic_a = semantics_by_label["a"]
+        semantic_b = semantics_by_label["b"]
+        head_a = heads_by_label["a"]
+        head_b = heads_by_label["b"]
+
+        def normalize_revision_fields(value: Any) -> Any:
+            if isinstance(value, list):
+                return [normalize_revision_fields(item) for item in value]
+            if not isinstance(value, dict):
+                return value
+            normalized = {
+                key: normalize_revision_fields(item)
+                for key, item in value.items()
+            }
+            if "commit_oid" in normalized:
+                normalized["commit_oid"] = "<commit>"
+            if "chunk_id" in normalized:
+                normalized["chunk_id"] = "<chunk>"
+            semantic_value = normalized.get("semantic_hash")
+            if isinstance(semantic_value, dict) and semantic_value.get(
+                "domain"
+            ) in {
+                "codenoesis.extraction-chunk.semantic.v1",
+                "codenoesis.knowledge-graph.semantic.v1",
+            }:
+                semantic_value["value"] = "<semantic>"
+            return normalized
+
+        self.assertEqual(
+            semantic_a["configuration"]["profile"], "standard-local-s2"
+        )
+        self.assertEqual(
+            semantic_a["configuration"], semantic_b["configuration"]
+        )
+        self.assertNotEqual(
+            semantic_a["repository"]["commit_oid"],
+            semantic_b["repository"]["commit_oid"],
+        )
+        self.assertEqual(
+            semantic_a["repository"]["tree_oid"],
+            semantic_b["repository"]["tree_oid"],
+        )
+        self.assertEqual(
+            semantic_a["inventory"]["files"],
+            semantic_b["inventory"]["files"],
+        )
+        self.assertEqual(
+            normalize_revision_fields(semantic_a),
+            normalize_revision_fields(semantic_b),
+        )
+        graph_a = semantic_a["knowledge_graph"]
+        graph_b = semantic_b["knowledge_graph"]
+        for collection, identity_key in (
+            ("entities", "entity_id"),
+            ("relationships", "relationship_id"),
+            ("claims", "claim_id"),
+        ):
+            self.assertEqual(
+                [item[identity_key] for item in graph_a[collection]],
+                [item[identity_key] for item in graph_b[collection]],
+            )
+        self.assertNotEqual(
+            head_a["semantic_hash"], head_b["semantic_hash"]
+        )
+        self.assertNotEqual(
+            graph_a["semantic_hash"], graph_b["semantic_hash"]
+        )
+        self.assertNotEqual(
+            [
+                chunk["chunk_id"]
+                for chunk in semantic_a["extraction_chunks"]
+            ],
+            [
+                chunk["chunk_id"]
+                for chunk in semantic_b["extraction_chunks"]
+            ],
+        )
+        self.assertNotEqual(
+            [
+                chunk["semantic_hash"]
+                for chunk in semantic_a["extraction_chunks"]
+            ],
+            [
+                chunk["semantic_hash"]
+                for chunk in semantic_b["extraction_chunks"]
+            ],
+        )
+
     def test_recovery_and_corruption_goldens_are_closed(self) -> None:
         recovery = load_json(FIXTURE_ROOT / "expected-recovery.json")
         matrix = load_json(FAILPOINT_PATH)
@@ -649,17 +965,33 @@ class S3ContractTests(unittest.TestCase):
             recovery["schema_version"], "codenoesis.recovery-oracle/v1"
         )
         self.assertEqual(
+            set(recovery),
+            {
+                "schema_version",
+                "boundary_occurrence_head_equivalence",
+                "failpoints",
+                "idempotency",
+                "cleanup",
+            },
+        )
+        self.assertTrue(recovery["boundary_occurrence_head_equivalence"])
+        self.assertEqual(
             recovery["failpoints"],
             [
                 {
                     "name": boundary["name"],
-                    "first_publication_head": boundary[
+                    "restart_first_publication_head": boundary[
                         "restart_first_publication_head"
                     ],
-                    "replacement_head": boundary[
+                    "restart_replacement_head": boundary[
                         "restart_replacement_head"
                     ],
-                    "retry_head": boundary["retry_head"],
+                    "retry_first_publication_head": boundary[
+                        "retry_first_publication_head"
+                    ],
+                    "retry_replacement_head": boundary[
+                        "retry_replacement_head"
+                    ],
                     "partial_head_visible": False,
                 }
                 for boundary in matrix["boundaries"]
@@ -695,10 +1027,28 @@ class S3ContractTests(unittest.TestCase):
                 FIXTURE_ROOT / "expected-error-unsafe-path.json"
             ),
         }
+        error_required = set(load_json(ERROR_SCHEMA_PATH)["required"])
+        expected_contexts = {
+            "storage.corrupt_object": {
+                "component",
+                "artifact_id",
+                "expected_hash",
+                "observed_hash",
+            },
+            "storage.incompatible_schema": {
+                "component",
+                "expected_schema",
+                "observed_schema",
+            },
+            "storage.unsafe_path": {"component", "reason"},
+        }
         for code, error in errors.items():
+            self.assertEqual(set(error), error_required)
             self.assertEqual(error["schema_version"], "codenoesis.error/v4")
             self.assertEqual(error["code"], code)
+            self.assertEqual(error["stage"], "storage")
             self.assertFalse(error["retryable"])
+            self.assertEqual(set(error["context"]), expected_contexts[code])
             self.assertNotIn(str(ROOT), canonical_json(error).decode())
             self.assertNotIn("store_path", error["context"])
 

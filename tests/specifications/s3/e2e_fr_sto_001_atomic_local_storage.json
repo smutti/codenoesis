@@ -1,0 +1,420 @@
+{
+  "schema_version": "codenoesis.acceptance/v1",
+  "status": "approved",
+  "slice": "S3",
+  "title": "Atomic local SQLite and filesystem-CAS publication",
+  "requirements": [
+    "FR-SNP-001",
+    "FR-STO-001",
+    "INV-SNP-001",
+    "NFR-REL-001"
+  ],
+  "ratification": {
+    "governance_model": "single_maintainer_bootstrap",
+    "product_owner_persona": "Andrea Moretti",
+    "persona_is_natural_person": false,
+    "accountable_github_actor": "smutti",
+    "technical_approver": "smutti",
+    "approval_reference": "https://github.com/smutti/codenoesis/pull/29",
+    "effective_on": "protected_squash_merge_by_accountable_actor",
+    "required_external_approvals": 0,
+    "agent_merge_allowed": false
+  },
+  "decision": "docs/software/decisions/0004-s3-atomic-local-storage-contract.md",
+  "fixture": "tests/fixtures/s3/atomic-local-storage-v1/manifest.json",
+  "inherited_contract_bundle": "tests/specifications/s2/contract-bundle.json",
+  "schemas": {
+    "error_v4": "tests/specifications/s3/codenoesis-error-v4.schema.json",
+    "head_v1": "tests/specifications/s3/local-snapshot-head-v1.schema.json"
+  },
+  "contracts": {
+    "ddl_v1": "tests/specifications/s3/local-store-v1.sql",
+    "failpoints_v1": "tests/specifications/s3/publication-failpoints-v1.json",
+    "store_v1": "tests/specifications/s3/local-store-contract-v1.json"
+  },
+  "goldens": {
+    "corrupt_object_error": "tests/fixtures/s3/atomic-local-storage-v1/expected-error-corrupt-object.json",
+    "head_a": "tests/fixtures/s3/atomic-local-storage-v1/expected-head-a.json",
+    "head_b": "tests/fixtures/s3/atomic-local-storage-v1/expected-head-b.json",
+    "incompatible_schema_error": "tests/fixtures/s3/atomic-local-storage-v1/expected-error-incompatible-schema.json",
+    "recovery": "tests/fixtures/s3/atomic-local-storage-v1/expected-recovery.json",
+    "snapshot_semantic_a": "tests/fixtures/s3/atomic-local-storage-v1/snapshot-semantic-a.json",
+    "snapshot_semantic_b": "tests/fixtures/s3/atomic-local-storage-v1/snapshot-semantic-b.json",
+    "unsafe_path_error": "tests/fixtures/s3/atomic-local-storage-v1/expected-error-unsafe-path.json"
+  },
+  "public_command": [
+    "noesis",
+    "scan",
+    "--repository",
+    "{repository_path}",
+    "--repository-id",
+    "urn:codenoesis:fixture:s3-atomic-local-storage-v1",
+    "--revision",
+    "{revision}",
+    "--profile",
+    "standard-local-s3",
+    "--store",
+    "{store_path}",
+    "--format",
+    "json"
+  ],
+  "semantic_analysis_profile": "standard-local-s2",
+  "head_probe": {
+    "kind": "test_only_process_probe",
+    "production_command": false,
+    "operation": "load_head",
+    "key": "repository_identity",
+    "result_contract": "codenoesis.local-snapshot-head/v1",
+    "failpoint_control": "injected_boundary_callback",
+    "termination": "external_process_termination"
+  },
+  "expected_red": {
+    "test_command": "cargo test --test e2e_fr_sto_001_atomic_local_storage",
+    "precondition": "The future TDD branch contains only the black-box S3 harness and reviewed storage fixture while production remains at merged S2 behavior.",
+    "runner_expected_exit": "nonzero because the acceptance assertion fails",
+    "subject_observed_exit_code": 2,
+    "subject_observed_stderr_schema": "codenoesis.error/v2",
+    "subject_observed_stderr_code": "input.invalid_profile",
+    "subject_expected_exit_code": 0,
+    "expected_artifact": "codenoesis.repository-snapshot/v3",
+    "expected_head": "codenoesis.local-snapshot-head/v1",
+    "accepted_reason": "Merged S2 routes an unknown explicit profile through the S1 parser and rejects standard-local-s3, so no durable head can exist.",
+    "rejected_reasons": [
+      "compilation failure",
+      "missing test target",
+      "missing or corrupt fixture",
+      "schema or DDL harness failure",
+      "dependency or network outage",
+      "probe failure outside a named boundary",
+      "timeout",
+      "timing race",
+      "unexpected panic",
+      "a modified S3 oracle"
+    ]
+  },
+  "exit_codes": {
+    "success": 0,
+    "input": 2,
+    "acquisition": 10,
+    "knowledge": 11,
+    "storage_or_publication": 12,
+    "internal": 70
+  },
+  "failure_precedence": [
+    "input and profile",
+    "acquisition",
+    "extraction and graph validation",
+    "store root, marker, schema, and path validation",
+    "CAS staging in canonical artifact order",
+    "SQLite publication transaction",
+    "visible-head validation",
+    "stdout serialization"
+  ],
+  "inherited_regressions": [
+    "conf_dr_art_001_repository_snapshot_v1",
+    "conf_nfr_mnt_001_dependency_rules",
+    "conf_nfr_tst_001_requires_fixture_oracle_evidence_links",
+    "e2e_fr_acq_001_immutable_commit",
+    "e2e_fr_acq_001_inconsistent_object_returns_typed_error",
+    "e2e_fr_acq_001_missing_object_returns_typed_error",
+    "e2e_fr_acq_001_non_git_returns_typed_error",
+    "it_fr_acq_001_ref_move_after_binding_keeps_original_commit",
+    "pt_dr_art_002_volatile_envelope_preserves_semantic_hash",
+    "pt_nfr_det_001_permutation_and_schedule_invariant",
+    "pt_nfr_tst_002_replays_are_parallel_and_order_independent",
+    "sec_nfr_sec_005_scan_launches_no_child_and_opens_no_network",
+    "e2e_fr_inv_001_safe_inventory",
+    "e2e_fr_acq_002_traversal_rejected",
+    "e2e_fr_acq_002_symlink_rejected",
+    "e2e_fr_acq_002_gitlink_rejected",
+    "pt_fr_acq_002_limits_have_max_and_plus_one",
+    "conf_dr_evd_001_source_evidence_resolves",
+    "gt_fr_inv_001_exact_inventory_and_coverage_gaps",
+    "pt_fr_inv_001_inventory_is_order_invariant",
+    "sec_nfr_sec_001_scan_stays_inside_repository_root",
+    "sec_nfr_sec_001_sentinel_scripts_never_execute",
+    "sec_nfr_sec_001_bombs_and_parser_inputs_are_bounded",
+    "conf_fr_inv_001_repository_snapshot_v2_and_error_v2",
+    "e2e_fr_ext_002_rust_knowledge",
+    "conf_fr_ext_001_extraction_chunk_v1",
+    "gt_fr_ext_002_reviewed_rust_graph",
+    "gt_fr_ext_002_malformed_syntax_is_explicit",
+    "gt_dr_idn_001_unicode_normalization_collision",
+    "pt_dr_idn_001_stable_ids_ignore_order_and_revision",
+    "pt_fr_knw_001_graph_invariants",
+    "pt_fr_knw_002_claim_state_machine",
+    "pt_fr_knw_003_rule_provenance_replays",
+    "fz_fr_ext_001_extraction_contract_seed_corpus",
+    "fz_fr_ext_002_rust_parser_seed_corpus",
+    "sec_fr_ext_002_target_never_executes",
+    "conf_fr_ext_001_snapshot_v3_and_error_v3"
+  ],
+  "scenarios": [
+    {
+      "id": "atomic_local_storage_journey",
+      "test_name": "e2e_fr_sto_001_atomic_local_storage",
+      "requirements": [
+        "FR-SNP-001",
+        "FR-STO-001",
+        "INV-SNP-001",
+        "NFR-REL-001"
+      ],
+      "verification": [
+        "E2E",
+        "FT",
+        "IT"
+      ],
+      "arrange": "Materialize the reviewed A/B Git history, an external empty store root, fixed repository identity, and independent process probe.",
+      "act": "Publish A, restart and read A, publish B, restart and read B, then retry B.",
+      "assert": [
+        "Each successful scan emits the unchanged reviewed RepositorySnapshotV3 and empty stderr.",
+        "Every restart returns one complete hash-valid reviewed LocalSnapshotHeadV1.",
+        "The B retry creates no duplicate immutable row or object and does not increase head generation."
+      ]
+    },
+    {
+      "id": "metadata_store_contract",
+      "test_name": "ct_fr_sto_001_metadata_store_parity",
+      "requirements": [
+        "FR-STO-001"
+      ],
+      "verification": [
+        "CT"
+      ],
+      "arrange": "Apply the same metadata contract vectors to the deterministic fake and real SQLite WAL adapter.",
+      "act": "Open, insert immutable snapshot rows, compare/set heads, read, contend, reopen, and inject typed failures.",
+      "assert": [
+        "Fake and SQLite expose the same domain results and failure precedence.",
+        "Only project_heads mutates; every other reviewed row rejects update and delete.",
+        "Unknown schema, foreign-key violation, writer contention, and metadata corruption fail closed."
+      ]
+    },
+    {
+      "id": "filesystem_cas_contract",
+      "test_name": "ct_fr_sto_001_cas_parity",
+      "requirements": [
+        "FR-STO-001"
+      ],
+      "verification": [
+        "CT"
+      ],
+      "arrange": "Apply the same exact-byte vectors to the deterministic fake and real filesystem CAS adapter.",
+      "act": "Stage new, existing-identical, short-write, mismatched-existing, missing, corrupted, and orphan objects.",
+      "assert": [
+        "Artifact IDs, lengths, reuse, and typed failures match the shared contract.",
+        "No final path exposes partial bytes and an existing object is never overwritten.",
+        "The real adapter writes only below the explicit store root."
+      ]
+    },
+    {
+      "id": "publication_failpoint_matrix",
+      "test_name": "ft_fr_snp_001_publication_failpoint_matrix",
+      "requirements": [
+        "FR-SNP-001",
+        "INV-SNP-001",
+        "NFR-REL-001"
+      ],
+      "verification": [
+        "FT",
+        "IT"
+      ],
+      "arrange": "For each ratified boundary occurrence, prepare both first publication and A-to-B replacement in fresh stores; exercise every canonical artifact occurrence for CAS boundaries.",
+      "act": "Terminate the probe externally at the exact boundary, restart, read, retry, sweep, and read again.",
+      "assert": [
+        "Pre-commit termination exposes none or A exactly as reviewed; post-commit termination exposes A or B exactly as reviewed.",
+        "No partial or mixed head is ever returned.",
+        "Every retry and sweep converges to the reviewed complete head without deleting reachable bytes."
+      ]
+    },
+    {
+      "id": "reader_visibility_model",
+      "test_name": "pt_inv_snp_001_reader_visibility",
+      "requirements": [
+        "INV-SNP-001"
+      ],
+      "verification": [
+        "PT"
+      ],
+      "arrange": "Generate bounded schedules of reader transactions around each publication transition.",
+      "act": "Interleave reads before begin, during immutable inserts, after uncommitted head update, and after commit.",
+      "assert": [
+        "Every reader observes exactly no head, A, or B according to transaction boundaries.",
+        "No schedule constructs a head from rows or objects belonging to different snapshots.",
+        "The model and both fake/real adapters agree."
+      ]
+    },
+    {
+      "id": "idempotent_retry_model",
+      "test_name": "pt_fr_snp_001_idempotent_retry",
+      "requirements": [
+        "FR-SNP-001",
+        "NFR-REL-001"
+      ],
+      "verification": [
+        "PT",
+        "FT"
+      ],
+      "arrange": "Generate duplicate and interrupted deliveries of the same repository identity and snapshot ID.",
+      "act": "Retry each sequence up to the reviewed count with no hidden adapter retry.",
+      "assert": [
+        "One semantic snapshot has one immutable row set and one artifact set.",
+        "Publishing the current head does not increment generation.",
+        "Conflicting expected heads fail retryably without overwriting a committed head."
+      ]
+    },
+    {
+      "id": "restart_preserves_head",
+      "test_name": "it_fr_sto_001_restart_preserves_head",
+      "requirements": [
+        "FR-STO-001",
+        "FR-SNP-001"
+      ],
+      "verification": [
+        "IT"
+      ],
+      "arrange": "Publish each reviewed head using the real SQLite and filesystem adapters.",
+      "act": "Drop every handle, start a new process, reopen the marker and schema, and load by repository identity.",
+      "assert": [
+        "The exact snapshot ID, commit, generation, ordered references, lengths, and hashes survive.",
+        "SQLite reports the ratified PRAGMAs and schema identity.",
+        "Reopen performs no migration, repair, network call, or repository read."
+      ]
+    },
+    {
+      "id": "corruption_fails_closed",
+      "test_name": "it_fr_sto_001_corruption_fails_closed",
+      "requirements": [
+        "FR-STO-001",
+        "INV-SNP-001"
+      ],
+      "verification": [
+        "IT",
+        "SEC"
+      ],
+      "arrange": "Create missing, byte-corrupt, wrong-length, wrong-digest, dangling-row, and invalid-schema variants from a reviewed store.",
+      "act": "Restart and load the visible head.",
+      "assert": [
+        "Every reachable corruption returns the reviewed typed V4 error with empty stdout.",
+        "The adapter never falls back to an older head or returns degraded success.",
+        "Public errors expose bounded identifiers and never absolute paths or object bytes."
+      ]
+    },
+    {
+      "id": "orphan_sweep_preserves_reachable",
+      "test_name": "ft_fr_snp_001_orphan_sweep_preserves_reachable",
+      "requirements": [
+        "FR-SNP-001",
+        "INV-SNP-001",
+        "NFR-REL-001"
+      ],
+      "verification": [
+        "FT",
+        "PT"
+      ],
+      "arrange": "Create reviewed pre-commit orphans, abandoned temporary files, decoy digest paths, and one complete B head.",
+      "act": "Run bounded sweep with schedule permutations and crash/restart around deletion.",
+      "assert": [
+        "Every head-reachable object is reverified and retained.",
+        "Only objects absent from a stable committed reachability view are deleted.",
+        "The B head remains complete and byte-identical after every schedule."
+      ]
+    },
+    {
+      "id": "store_root_confinement",
+      "test_name": "sec_fr_sto_001_store_root_confinement",
+      "requirements": [
+        "FR-STO-001"
+      ],
+      "verification": [
+        "SEC",
+        "E2E"
+      ],
+      "arrange": "Prepare overlap, symlink or reparse, unmarked nonempty, traversal, sibling-canary, repository-canary, and valid external-root cases.",
+      "act": "Open or initialize the store and attempt publication.",
+      "assert": [
+        "Unsafe roots fail before mutation with the reviewed redacted V4 error.",
+        "Valid publication changes only the marked store root.",
+        "Repository, sibling canaries, process count, and network observers remain unchanged."
+      ]
+    },
+    {
+      "id": "store_and_error_conformance",
+      "test_name": "conf_fr_sto_001_store_v1_and_error_v4",
+      "requirements": [
+        "FR-SNP-001",
+        "FR-STO-001"
+      ],
+      "verification": [
+        "CONF"
+      ],
+      "arrange": "Load the reviewed DDL, marker, head/error schemas, contract model, and one-field/cross-reference mutations.",
+      "act": "Execute DDL on a fresh database and validate every reviewed and mutated document.",
+      "assert": [
+        "The exact v1 schema, PRAGMAs, tables, foreign keys, immutability triggers, and one mutable head are present.",
+        "Missing, unknown, duplicate, reordered, dangling, wrong-version, wrong-hash, and out-of-range values fail.",
+        "V4 error stage and retryability are fixed by code."
+      ]
+    },
+    {
+      "id": "legacy_profiles_unchanged",
+      "test_name": "reg_fr_sto_001_legacy_profiles_unchanged",
+      "requirements": [
+        "FR-STO-001"
+      ],
+      "verification": [
+        "E2E",
+        "CONF"
+      ],
+      "arrange": "Run every inherited S0–S2 command and oracle without a store argument.",
+      "act": "Compare stdout, stderr, exit, schemas, semantic bytes, and zero-write observations.",
+      "assert": [
+        "S0/V1, S1/V2, and S2/V3 remain byte-compatible.",
+        "Legacy paths create no store and perform no new write.",
+        "Only the explicit standard-local-s3 profile may publish."
+      ]
+    }
+  ],
+  "evidence_contract": {
+    "red": "Retain the first expected failing runner log before production changes, with base and pre-implementation SHAs, runner and subject exits, V2 stderr code, absent store, command, environment, SHA-256, and immutable locator.",
+    "green": "Retain one ordered passing result for every S3 scenario and inherited S0–S2 regression, with command, exit, report digest, and immutable locator.",
+    "storage": "Retain SQLite version and compile options, PRAGMAs, schema digest, marker digest, row counts, head generations, CAS paths relative to the store, object lengths and digests, and fake/real parity.",
+    "faults": "Retain one first-run process trace per named boundary occurrence, exact artifact role and ordinal where applicable, observation signal, termination result, first-publication and replacement restart heads, both corresponding retry heads, sweep result, and raw log digest; retries never replace first evidence.",
+    "durability": "Retain OS, filesystem, file-sync, atomic-move, parent-sync, and SQLite-commit primitives and distinguish process-crash evidence from power-loss evidence.",
+    "security": "Retain root identities, symlink or reparse decisions, write-set audit, repository/sibling canary hashes, process and network observer self-tests, and redacted errors.",
+    "environment": [
+      "OS and architecture",
+      "filesystem type",
+      "pinned Rust toolchain",
+      "enabled features",
+      "SQLite library version and compile options",
+      "storage adapter and schema versions",
+      "process termination primitive",
+      "agent and model identity",
+      "policy version",
+      "run identifier",
+      "duration and cost"
+    ],
+    "retention": "Every required log, database copy, object manifest, report, and minimized reproducer remains retrievable and digest-valid for at least 90 days.",
+    "verification_rule": "Local evidence may support review but cannot set Verified without immutable exact-head CI artifacts and honest platform durability evidence."
+  },
+  "deferred": [
+    "public docs and general query CLI journeys",
+    "SQLite FTS5 and indexed graph querying",
+    "schema migration and upgrade chains",
+    "destructive repair, project deletion, and retention",
+    "automatic background garbage collection",
+    "backup, restore, and power-cut certification beyond named evidence",
+    "multiple concurrent writers and distributed coordination",
+    "PostgreSQL, S3-compatible storage, jobs, REST, MCP, and tenants",
+    "incremental refresh, documents, federation, impact, plugins, and models"
+  ],
+  "stop_conditions": [
+    "The protected contract differs from the approved S3 bundle.",
+    "The first product Red is absent or fails for a reason other than standard-local-s3 being rejected by merged S2.",
+    "Snapshot or artifact identity, SQLite transaction boundaries, CAS durability, head visibility, path safety, corruption, cleanup reachability, or failpoint outcome is ambiguous.",
+    "A platform adapter cannot name a successful file and parent durability primitive but claims durable staging.",
+    "A required case can pass only by retrying, repairing, falling back, skipping, or weakening the oracle.",
+    "S0–S2 regressions fail or their public dispatch changes.",
+    "The task exceeds its allowed paths, high-risk scope, resource budget, or two bounded correction attempts."
+  ]
+}

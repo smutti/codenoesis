@@ -1,0 +1,567 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:error:v4",
+  "title": "CodeNoesisErrorV4 S3 subset",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v4"
+    },
+    "code": {
+      "enum": [
+        "input.invalid_repository_identity",
+        "input.invalid_revision",
+        "input.invalid_profile",
+        "input.invalid_store_root",
+        "acquisition.not_git_repository",
+        "acquisition.revision_not_found",
+        "acquisition.revision_not_commit",
+        "acquisition.object_missing",
+        "acquisition.repository_inconsistent",
+        "acquisition.unsupported_repository_shape",
+        "acquisition.path_invalid",
+        "acquisition.root_policy_violation",
+        "acquisition.entry_policy_violation",
+        "acquisition.limit_exceeded",
+        "extraction.invalid_utf8",
+        "extraction.unsupported_crate_shape",
+        "extraction.parser_cancelled",
+        "extraction.malformed_syntax",
+        "extraction.normalization_collision",
+        "extraction.contract_invalid",
+        "extraction.limit_exceeded",
+        "graph.invalid_entity",
+        "graph.invalid_relationship",
+        "graph.dangling_reference",
+        "graph.cardinality_violation",
+        "graph.invalid_claim_state",
+        "graph.invalid_claim_transition",
+        "graph.invalid_derivation",
+        "graph.limit_exceeded",
+        "storage.unmarked_nonempty_root",
+        "storage.incompatible_schema",
+        "storage.writer_busy",
+        "storage.missing_object",
+        "storage.corrupt_object",
+        "storage.corrupt_metadata",
+        "storage.unsafe_path",
+        "publication.head_conflict",
+        "publication.failed",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "input",
+        "acquisition",
+        "extraction",
+        "graph",
+        "storage",
+        "publication",
+        "internal"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[^\\r\\n]+$"
+    },
+    "retryable": {
+      "type": "boolean"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 8,
+      "properties": {
+        "revision": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{40}|refs/heads/main)$"
+        },
+        "object_oid": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "expected_kind": {
+          "enum": [
+            "commit",
+            "tree",
+            "blob"
+          ]
+        },
+        "actual_kind": {
+          "enum": [
+            "tag",
+            "tree",
+            "blob"
+          ]
+        },
+        "referenced_by": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "feature": {
+          "$ref": "#/$defs/token"
+        },
+        "reason": {
+          "$ref": "#/$defs/token"
+        },
+        "policy": {
+          "$ref": "#/$defs/token"
+        },
+        "entry": {
+          "$ref": "#/$defs/token"
+        },
+        "path": {
+          "$ref": "#/$defs/canonical_relative_path"
+        },
+        "span": {
+          "$ref": "#/$defs/byte_span"
+        },
+        "first_span": {
+          "$ref": "#/$defs/byte_span"
+        },
+        "second_span": {
+          "$ref": "#/$defs/byte_span"
+        },
+        "kind": {
+          "$ref": "#/$defs/entity_kind"
+        },
+        "canonical_identity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "pattern": "^[^\\r\\n\\u0000]+$"
+        },
+        "relationship_kind": {
+          "enum": [
+            "CONTAINS",
+            "DEFINES",
+            "IMPLEMENTS",
+            "IMPORTS"
+          ]
+        },
+        "entity_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "source_entity_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "target_entity_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "claim_id": {
+          "$ref": "#/$defs/claim_id"
+        },
+        "rule_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[a-z0-9][a-z0-9._:/-]*$"
+        },
+        "limit": {
+          "$ref": "#/$defs/token"
+        },
+        "maximum": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967296
+        },
+        "observed": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4294967296
+        },
+        "from_state": {
+          "$ref": "#/$defs/claim_state"
+        },
+        "to_state": {
+          "$ref": "#/$defs/claim_state"
+        },
+        "cardinality": {
+          "$ref": "#/$defs/token"
+        },
+        "component": {
+          "enum": [
+            "marker",
+            "sqlite",
+            "cas",
+            "head"
+          ]
+        },
+        "artifact_id": {
+          "$ref": "#/$defs/artifact_id"
+        },
+        "snapshot_id": {
+          "$ref": "#/$defs/snapshot_id"
+        },
+        "expected_hash": {
+          "$ref": "#/$defs/blake3"
+        },
+        "observed_hash": {
+          "$ref": "#/$defs/blake3"
+        },
+        "expected_schema": {
+          "$ref": "#/$defs/version"
+        },
+        "observed_schema": {
+          "$ref": "#/$defs/version"
+        },
+        "expected_head": {
+          "$ref": "#/$defs/optional_snapshot_id"
+        },
+        "actual_head": {
+          "$ref": "#/$defs/optional_snapshot_id"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "$ref": "#/$defs/retryable_codes"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "retryable": {
+            "const": true
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "retryable": {
+            "const": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^input\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "input"
+          },
+          "context": {
+            "maxProperties": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^acquisition\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^extraction\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^graph\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "graph"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^storage\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "storage"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^publication\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "publication"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.normalization_collision"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "kind",
+              "canonical_identity",
+              "path",
+              "first_span",
+              "second_span"
+            ],
+            "minProperties": 5,
+            "maxProperties": 5
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "storage.corrupt_object"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "component",
+              "artifact_id",
+              "expected_hash",
+              "observed_hash"
+            ],
+            "minProperties": 4,
+            "maxProperties": 4
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "storage.incompatible_schema"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "component",
+              "expected_schema",
+              "observed_schema"
+            ],
+            "minProperties": 3,
+            "maxProperties": 3
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "storage.unsafe_path"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "component",
+              "reason"
+            ],
+            "minProperties": 2,
+            "maxProperties": 2
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "internal.unexpected"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "internal"
+          },
+          "context": {
+            "maxProperties": 0
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "retryable_codes": {
+      "enum": [
+        "publication.head_conflict",
+        "storage.writer_busy"
+      ]
+    },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z0-9][a-z0-9._/-]*$"
+    },
+    "canonical_relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^[^/\\\\\\u0000-\\u001f\\u007f]+(?:/[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    },
+    "byte_span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unit",
+        "start",
+        "end"
+      ],
+      "properties": {
+        "unit": {
+          "const": "byte"
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4194304
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4194304
+        }
+      }
+    },
+    "entity_kind": {
+      "enum": [
+        "rust.crate",
+        "rust.enum",
+        "rust.function",
+        "rust.method",
+        "rust.module",
+        "rust.struct",
+        "rust.symbol_reference",
+        "rust.trait",
+        "rust.type_alias",
+        "source.file"
+      ]
+    },
+    "claim_state": {
+      "enum": [
+        "candidate",
+        "confirmed",
+        "derived_fact",
+        "deterministic_fact",
+        "rejected",
+        "reviewed_inference",
+        "superseded"
+      ]
+    },
+    "entity_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:entity:blake3:[0-9a-f]{64}$"
+    },
+    "claim_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:claim:blake3:[0-9a-f]{64}$"
+    },
+    "snapshot_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:snapshot:blake3:[0-9a-f]{64}$"
+    },
+    "optional_snapshot_id": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/snapshot_id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "artifact_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:artifact:blake3:[0-9a-f]{64}$"
+    },
+    "blake3": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

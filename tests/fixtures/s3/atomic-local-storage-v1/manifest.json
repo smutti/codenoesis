@@ -1,0 +1,86 @@
+{
+  "schema_version": "codenoesis.fixture.git/v4",
+  "fixture_id": "s3-atomic-local-storage-v1",
+  "provenance": {
+    "kind": "synthetic_first_party",
+    "description": "Original two-revision publication, restart, corruption, and cleanup fixture authored for the CodeNoesis S3 contract.",
+    "third_party_material": false,
+    "license_spdx": "Apache-2.0",
+    "license_file": "../../../../LICENSE",
+    "license_scope": "entire repository",
+    "copyright_holder": "CodeNoesis contributors"
+  },
+  "repository": {
+    "identity": "urn:codenoesis:fixture:s3-atomic-local-storage-v1",
+    "object_format": "sha1",
+    "default_ref": "refs/heads/main",
+    "source_fixture": "tests/fixtures/s2/rust-knowledge-v1",
+    "tree_oid": "262d3054a4d054b2c90fbbb5f1d0f347f680b635",
+    "materialization": {
+      "object_storage": "loose",
+      "global_git_config": "disabled",
+      "hooks": "disabled",
+      "core.autocrlf": "false",
+      "core.filemode": "true",
+      "checkout_required": false
+    }
+  },
+  "revisions": [
+    {
+      "label": "A",
+      "parent": null,
+      "timestamp": 1784851200,
+      "timezone": "+0000",
+      "message": "CodeNoesis S2 Rust knowledge fixture revision A\n",
+      "commit_oid": "d77c36ec27d878cee6d5d85d761de2b70284cd55",
+      "commit_payload_sha256": "e713952097cda2c190515c6df7ceecae8ca960766afd26c66e60e47603c5538d"
+    },
+    {
+      "label": "B",
+      "parent": "d77c36ec27d878cee6d5d85d761de2b70284cd55",
+      "timestamp": 1784851300,
+      "timezone": "+0000",
+      "message": "CodeNoesis S3 atomic storage fixture revision B\n",
+      "commit_oid": "3679fcc445b7e4b0e324a314f04fed23867d283f",
+      "commit_payload_sha256": "8f794b5e16c4dc804fbc060bc9f0d0465eda1b7c26bd6f0427a0e70c5274aa38"
+    }
+  ],
+  "semantic_goldens": {
+    "A": "snapshot-semantic-a.json",
+    "B": "snapshot-semantic-b.json",
+    "analysis_profile": "standard-local-s2",
+    "snapshot_schema_version": "codenoesis.repository-snapshot/v3"
+  },
+  "head_goldens": {
+    "A": "expected-head-a.json",
+    "B": "expected-head-b.json",
+    "contract_version": "codenoesis.local-snapshot-head/v1"
+  },
+  "store": {
+    "schema_version": "codenoesis.local-store/v1",
+    "marker_version": "codenoesis.local-store-marker/v1",
+    "cas_layout_version": "codenoesis.filesystem-cas/v1",
+    "database_file": "metadata.sqlite3",
+    "objects_directory": "objects",
+    "temporary_directory": "tmp",
+    "store_outside_repository": true
+  },
+  "generated_variants": {
+    "corrupt_object": {
+      "base_head": "B",
+      "operation": "replace byte zero from 0x7b to 0x5b without renaming the knowledge_graph digest path",
+      "expected_error": "expected-error-corrupt-object.json"
+    },
+    "incompatible_schema": {
+      "base_head": "B",
+      "operation": "set_sqlite_user_version_to_2",
+      "expected_error": "expected-error-incompatible-schema.json"
+    },
+    "unsafe_path": {
+      "base_head": null,
+      "operation": "place_store_below_repository_root",
+      "expected_error": "expected-error-unsafe-path.json"
+    }
+  },
+  "recovery_oracle": "expected-recovery.json"
+}
