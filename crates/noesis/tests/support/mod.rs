@@ -4,6 +4,7 @@
 )]
 
 pub mod s1;
+pub mod s2;
 
 use std::fs;
 use std::io::Write;
