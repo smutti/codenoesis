@@ -1,0 +1,214 @@
+{
+  "schema_version": "codenoesis.s3-local-green-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/32",
+  "slice": "S3",
+  "requirements": [
+    "FR-SNP-001",
+    "FR-STO-001",
+    "INV-SNP-001",
+    "NFR-REL-001"
+  ],
+  "risk": "high",
+  "observed_at": "2026-07-26T18:57:40Z",
+  "commits": {
+    "base": "3a203314ce63c455b988c9959f083b2cd4ab63e5",
+    "test_first": "8c58b32f45002549ece38e9a360f636be083dec4",
+    "red_evidence": "bf69993abe3b8316567986c3b5f120406865c3e1",
+    "domain_and_ports": "612a7db91bd8bf9df306be02e59cbdceb3ce89cf",
+    "implementation": "d978d86a969dcc4a5144cc23af6bdfd23e0cd360",
+    "implementation_tested": "6faeb3a0a441992d7707f6c58dfb6144447f2990"
+  },
+  "contracts": {
+    "bundle_sha256": "6269996ebfa117f30bf5b7e8eee56fce5806acdd342ad9d7dfea109c25725605",
+    "bundle_file_sha256": "2dfad97b8a502197b161d7ca6de04c62db784b46b661ab886d1fa416d085f985",
+    "acceptance_specification_sha256": "06a97d28d0643a5527c777d1d913e866c899e633314c5b8eb60de296f438669c",
+    "ddl_sha256": "e286c56bf6828cc87ef0ca9ea91998f26ed76bcc4e8410ce4d344df89a92f0c8"
+  },
+  "dependencies": {
+    "rusqlite": "0.40.1",
+    "rusqlite_features": [
+      "bundled"
+    ],
+    "libsqlite3_sys": "0.38.1",
+    "bundled_sqlite": "3.53.2",
+    "tempfile": "3.27.0",
+    "tempfile_default_features": true
+  },
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "macos": "26.5.2 (25F84)",
+    "architecture": "arm64",
+    "filesystem": "APFS, local, journaled, solid-state",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "toolchain_file_sha256": "279d77167cec5426fa80f457cd066dc74a360fbe4e2816f4f3fa01487a918fdc",
+    "features": "all workspace features for the bootstrap gate; default features for focused S3 scenarios",
+    "policy_version": 1,
+    "policy_sha256": "b2e983ec81fd0775a274a9de4c240cd28f1df08b4dad998de43c156770c9dd5d",
+    "policy_source_commit": "3d14e4698563543b663de58fc4eea8740b724940",
+    "agent": "OpenAI Codex",
+    "model": "not exposed by runtime",
+    "run_identifier": "issue-32-local-green-20260726T185723Z",
+    "cost": "not exposed by runtime"
+  },
+  "ordered_scenarios": {
+    "status": "passed_on_darwin",
+    "passed": 12,
+    "tests": [
+      "e2e_fr_sto_001_atomic_local_storage",
+      "ct_fr_sto_001_metadata_store_parity",
+      "ct_fr_sto_001_cas_parity",
+      "ft_fr_snp_001_publication_failpoint_matrix",
+      "pt_inv_snp_001_reader_visibility",
+      "pt_fr_snp_001_idempotent_retry",
+      "it_fr_sto_001_restart_preserves_head",
+      "it_fr_sto_001_corruption_fails_closed",
+      "ft_fr_snp_001_orphan_sweep_preserves_reachable",
+      "sec_fr_sto_001_store_root_confinement",
+      "conf_fr_sto_001_store_v1_and_error_v4",
+      "reg_fr_sto_001_legacy_profiles_unchanged"
+    ],
+    "process_suite_command": "cargo test --test e2e_fr_sto_001_atomic_local_storage --locked -- --test-threads=1",
+    "process_suite_exit": 0,
+    "process_suite_tests_passed": 12,
+    "process_suite_scenario_tests": 10,
+    "process_suite_probe_helpers": 2,
+    "adapter_contract_command": "cargo test -p codenoesis-store-local --test s3_contract --locked",
+    "adapter_contract_exit": 0,
+    "adapter_contract_tests_passed": 2,
+    "focused_log_sha256": "9d943af4018e19fdfcd78d460dad0a63262b533918b4d6ac3dd74049842bb3ec",
+    "focused_log_bytes": 1674,
+    "focused_log_retention": "ephemeral local review aid; immutable exact-head CI evidence is still required"
+  },
+  "publication_and_recovery": {
+    "cas_boundary_occurrences_per_publication": 12,
+    "sqlite_boundary_occurrences_per_publication": 4,
+    "externally_terminated_probe_runs": 32,
+    "first_publication_variants": 16,
+    "replacement_variants": 16,
+    "termination_primitive": "std::process::Child::kill, SIGKILL on Darwin",
+    "restart_probe": "new test process loading and hash-validating every head artifact",
+    "pre_commit_visibility": "none or A as reviewed",
+    "post_commit_visibility": "A or B as reviewed",
+    "partial_heads_observed": 0,
+    "same_snapshot_repetitions": 100,
+    "same_snapshot_generation_delta": 0,
+    "reader_boundary_observations": 16,
+    "hidden_adapter_retries": 0,
+    "orphan_sweep_rechecks_each_final_object": true,
+    "reachable_objects_deleted": 0
+  },
+  "storage": {
+    "sqlite_version": "3.53.2",
+    "sqlite_compile_options_log_sha256": "c9af6e69f687eb719d9561dc33b9d0b7acdccaf871f6879dfa1f2287b935db5b",
+    "sqlite_compile_options_log_bytes": 1843,
+    "journal_mode": "wal",
+    "synchronous": "FULL",
+    "foreign_keys": true,
+    "trusted_schema": false,
+    "busy_timeout_milliseconds": 0,
+    "writer_transaction": "BEGIN IMMEDIATE",
+    "writer_contention_result": "storage.writer_busy with no retry",
+    "schema_drift_result": "storage.corrupt_metadata",
+    "unknown_user_version_result": "storage.incompatible_schema",
+    "foreign_key_corruption_result": "storage.corrupt_metadata",
+    "missing_object_result": "storage.missing_object without repair",
+    "corrupt_object_result": "reviewed storage.corrupt_object golden",
+    "file_sync_primitive": "std::fs::File::sync_all on the temporary object",
+    "atomic_move_primitive": "tempfile persist_noclobber using rustix renameat_with NOREPLACE with hard-link fallback",
+    "parent_sync_primitive": "std::fs::File::sync_all on the containing directory",
+    "sqlite_visibility_primitive": "one FULL-synchronous WAL commit"
+  },
+  "security": {
+    "first_party_unsafe_occurrences": 0,
+    "store_root_overlap_rejected": true,
+    "unmarked_nonempty_root_rejected": true,
+    "symlink_or_reparse_components_rejected": true,
+    "target_hook_canary": "passed",
+    "target_remote_network_canary": "passed",
+    "portable_write_confinement": "passed",
+    "linux_landlock_compile_or_runtime": "not run: local aarch64 Linux cross-check lacked aarch64-linux-gnu-gcc for bundled SQLite and Tree-sitter C sources",
+    "windows_runtime": "not run",
+    "rusqlite_load_extension_feature": false,
+    "bundled_sqlite_reports_enable_load_extension": true,
+    "extension_loading_exposure": "not exposed by selected safe rusqlite features; first-party unsafe is forbidden"
+  },
+  "resources": {
+    "focused_elapsed_seconds": 16.33,
+    "focused_maximum_resident_set_bytes": 48889856,
+    "rss_ceiling_bytes": 536870912,
+    "scan_wall_ceiling_milliseconds": 60000,
+    "canonical_output_ceiling_bytes": 33554432,
+    "temporary_disk_ceiling_bytes": 67108864,
+    "temporary_disk_enforcement": "the complete 32-run crash fixture asserts its retained tree remains at or below the ceiling",
+    "cpu_ceiling_evidence": "not collected per subject process"
+  },
+  "inherited_regressions": {
+    "status": "passed_on_darwin",
+    "rust_tests_passed": 74,
+    "rust_tests_failed": 0,
+    "python_tests_passed": 111,
+    "python_tests_failed": 0
+  },
+  "bootstrap_gate": {
+    "status": "passed",
+    "tested_head": "6faeb3a0a441992d7707f6c58dfb6144447f2990",
+    "started_at": "2026-07-26T18:57:23Z",
+    "finished_at": "2026-07-26T18:57:40Z",
+    "commands": [
+      "actionlint -no-color",
+      "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+      "cargo fmt --all --check",
+      "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "cargo test --workspace --all-targets --all-features --locked",
+      "cargo test --workspace --doc --all-features --locked",
+      "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "python3 scripts/validate_benchmark_assets.py",
+      "cargo bench --workspace --all-features --no-run --locked"
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "local_log_sha256": "e27eab3ebdd6b8af9feb6dba6fc8a94521b1c4d60debe71a83b576edb9cfbbf6",
+    "local_log_bytes": 12146,
+    "local_log_retention": "ephemeral local review aid; immutable exact-head CI evidence is still required"
+  },
+  "scope": {
+    "implementation_patch_sha256_before_this_observation": "9208b31b75dcbc58fa18bd84df8bc11fc3c0d41fad41f8dc88fc8a442d13cc6d",
+    "forbidden_paths_changed": [],
+    "actual_changed_paths": [
+      "Cargo.toml",
+      "Cargo.lock",
+      "crates/codenoesis-domain/**",
+      "crates/codenoesis-contracts/**",
+      "crates/codenoesis-ports/**",
+      "crates/codenoesis-application/**",
+      "crates/codenoesis-store-local/**",
+      "crates/noesis/**"
+    ]
+  },
+  "human_approvals": {
+    "ratification": "https://github.com/smutti/codenoesis/pull/29",
+    "policy_binding": "https://github.com/smutti/codenoesis/pull/31",
+    "expected_red_correction": "https://github.com/smutti/codenoesis/pull/34",
+    "implementation_authorization": "https://github.com/smutti/codenoesis/issues/32"
+  },
+  "verification_state": "not_verified",
+  "known_limitations": [
+    "Normative Linux Landlock runtime and Windows process-crash evidence are unavailable on this Darwin host.",
+    "The Linux cross-check was environment-blocked before Rust type checking because the required cross C compiler was absent.",
+    "Power-loss durability is not claimed; the local evidence establishes process-crash behavior and names the successful APFS durability primitives.",
+    "CPU ceilings and exact peak temporary-disk bytes were not measured per subject process.",
+    "Local logs are digest-addressed review aids but are not retained immutable CI artifacts.",
+    "Independent human review and manual merge remain required.",
+    "Verified requires digest-valid immutable CI artifacts for the final pull-request head retained for at least 90 days."
+  ]
+}
