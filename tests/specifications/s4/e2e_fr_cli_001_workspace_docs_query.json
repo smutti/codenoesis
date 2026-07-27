@@ -24,7 +24,8 @@
   },
   "contracts": {
     "ontology": "tests/specifications/s4/rust-ontology-v2.json",
-    "docs_output": "tests/specifications/s4/docs-output-contract-v1.json"
+    "docs_output": "tests/specifications/s4/docs-output-contract-v1.json",
+    "semantic_hashes": "tests/specifications/s4/semantic-hash-contract-v1.json"
   },
   "goldens": {
     "graph_summary": "tests/fixtures/s4/workspace-docs-v1/expected-graph-summary.json",
@@ -37,7 +38,8 @@
     "query_document": "tests/fixtures/s4/workspace-docs-v1/expected-query-document.json",
     "unknown_id_error": "tests/fixtures/s4/workspace-docs-v1/expected-error-unknown-id.json",
     "unmarked_output_error": "tests/fixtures/s4/workspace-docs-v1/expected-error-unmarked-output.json",
-    "unsupported_workspace_error": "tests/fixtures/s4/workspace-docs-v1/expected-error-unsupported-workspace.json"
+    "unsupported_workspace_error": "tests/fixtures/s4/workspace-docs-v1/expected-error-unsupported-workspace.json",
+    "snapshot_semantic": "tests/fixtures/s4/workspace-docs-v1/expected-snapshot-semantic.json"
   },
   "ratification": {
     "governance_model": "single_maintainer_bootstrap",

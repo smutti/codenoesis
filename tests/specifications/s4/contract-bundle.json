@@ -7,11 +7,11 @@
     },
     {
       "path": "docs/software/decisions/0005-s4-workspace-docs-query-contract.md",
-      "sha256": "530b9125a6f9e1bbd816478cc63f8579c2e8cf987481d3349625649481809f4c"
+      "sha256": "c07ed8eda9efb0ce1ce79e96e8d08091fdb69be3f17f0b61a64afa4e7ae2c794"
     },
     {
       "path": "scripts/tests/test_s4_contract.py",
-      "sha256": "40032db3af80105b78c9f107f40f2a9474282c0145cbb3f872658d3ed959f158"
+      "sha256": "b6abfcd43fc4490ce498c9e2325af6877a6abe3a521126ac8f13db1d80ae154f"
     },
     {
       "path": "tests/fixtures/s4/workspace-docs-v1/README.md",
@@ -35,7 +35,7 @@
     },
     {
       "path": "tests/fixtures/s4/workspace-docs-v1/expected-documentation-manifest.json",
-      "sha256": "68d17579bdf5182dee04170177a6187bb28ddfcf488623d97bdfcc1a4c95ee68"
+      "sha256": "b6bfec4df3befe22c8e5a9c3f4b82067d1e39afb02f3ae8abbefb938b6f83331"
     },
     {
       "path": "tests/fixtures/s4/workspace-docs-v1/expected-error-unknown-id.json",
@@ -51,15 +51,19 @@
     },
     {
       "path": "tests/fixtures/s4/workspace-docs-v1/expected-graph-summary.json",
-      "sha256": "100b95246145532fe6f2e62e8924c4b1eaa014a55dd87feedc562ee88b46cb0e"
+      "sha256": "1e3752070a2a26a62fbb00311cfa8b3539e2bd9c0fa246a4902892e9d92ae0dc"
     },
     {
       "path": "tests/fixtures/s4/workspace-docs-v1/expected-query-document.json",
-      "sha256": "b0c21a00dfc559fc0b878512ddfa166f57498579f1c9721a4ff9ece9154f1c8d"
+      "sha256": "12ed7aae4f0aad09bb910d9e198155a971a5bf70f0356fd6ecd589207613e7e1"
     },
     {
       "path": "tests/fixtures/s4/workspace-docs-v1/expected-query-entity.json",
-      "sha256": "511bab8b45ce6c6ff1860e88415060b2a13c1bedbe0d9de05a14eeee41211fed"
+      "sha256": "0b7f203835c7cfd447d46595860bb1a2aed89023470e9c1bb8f343da6deb64b1"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/expected-snapshot-semantic.json",
+      "sha256": "c73d2d33b7308fca52e3fd3a7252502d19dd629a6a7be4b0e957c0effe105ccb"
     },
     {
       "path": "tests/fixtures/s4/workspace-docs-v1/manifest.json",
@@ -111,7 +115,7 @@
     },
     {
       "path": "tests/specifications/s4/e2e_fr_cli_001_workspace_docs_query.json",
-      "sha256": "fc94fa9e22c70140350b84ff7725ed4c50a90ff8cf49fce8065e04bfd6b24717"
+      "sha256": "8bbca0c0618e58ad49628de83ce61537463becb39693ef8cec1ef1f70abc3641"
     },
     {
       "path": "tests/specifications/s4/extraction-chunk-v2.schema.json",
@@ -132,7 +136,11 @@
     {
       "path": "tests/specifications/s4/rust-ontology-v2.json",
       "sha256": "10d5a5ba797c1226f5b46377cfed9f61bbd1723a75944c0e87caa4b5877a9342"
+    },
+    {
+      "path": "tests/specifications/s4/semantic-hash-contract-v1.json",
+      "sha256": "973553cc3c408a6ca821225e00627a03aa27b9c3ea41c2322e60874512848d4c"
     }
   ],
-  "bundle_sha256": "020fae1759726d1b7e827823921e535ee125aaa359ad1565c822efdacc688c96"
+  "bundle_sha256": "3efb380fb058a5831123a0f990676575da04e60998cada8987f034675b61f12e"
 }

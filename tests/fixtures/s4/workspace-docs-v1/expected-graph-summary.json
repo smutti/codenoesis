@@ -4,8 +4,14 @@
   "commit_oid": "c09d8c24e4704036c31b4f42e2f4df6e4acd347f",
   "snapshot_schema_version": "codenoesis.repository-snapshot/v4",
   "ontology_version": "codenoesis.ontology/rust/v2",
-  "semantic_hash": "ad5b5c4c98a20007b31d8484168709fd87c677de429cce513b678e4299d71157",
-  "snapshot_id": "urn:codenoesis:snapshot:blake3:e05a3a400542454482466e63f59e9de5df660b06418a7de50459cb630dfcb2be",
+  "semantic_hash": "6ed66dd0d5bf2451087fcb17c254048084d9d0f1bd2ea51062d46a38d1defe31",
+  "snapshot_id": "urn:codenoesis:snapshot:blake3:832888db94f6bf06da375a1cfc055a7c9b80d624b0596a1e45d1f9c646af9b8f",
+  "graph_semantic_hash": "87052fa7112e5a0f7fc9ce075b5d78e1a051e666d2ca0a1446c0ca20f0a57df2",
+  "extraction_chunk_semantic_hashes": [
+    "2f02d8ea27481b49a2457016aeba06e7eccad9758387c534c0d66ec03ef11dce",
+    "846a06f881313afc7402807ad1fd43912a55f3c86dad45b612242d8f3c03cc78",
+    "31b7394b72daa8e2dd5d4fcc11a43f34bc34abeb44e8f498d0eadbb0f7cbd915"
+  ],
   "counts": {
     "crate": 2,
     "source_file": 3,

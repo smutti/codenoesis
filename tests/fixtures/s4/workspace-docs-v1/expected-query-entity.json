@@ -1,7 +1,7 @@
 {
   "schema_version": "codenoesis.local-query-result/v1",
   "repository_identity": "urn:codenoesis:fixture:s4-workspace-docs-v1",
-  "snapshot_id": "urn:codenoesis:snapshot:blake3:e05a3a400542454482466e63f59e9de5df660b06418a7de50459cb630dfcb2be",
+  "snapshot_id": "urn:codenoesis:snapshot:blake3:832888db94f6bf06da375a1cfc055a7c9b80d624b0596a1e45d1f9c646af9b8f",
   "requested_id": "urn:codenoesis:entity:blake3:18bd97153a41f322136e8f93573877bfc1a2f43fabc6564b789e979a6cffcafa",
   "result_kind": "entity",
   "entity": {

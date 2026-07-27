@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import hashlib
 import copy
+import hashlib
 import re
 import unittest
 from pathlib import Path
@@ -179,6 +179,21 @@ class S4ContractTests(unittest.TestCase):
         )
 
         semantic = load_json(SNAPSHOT_SEMANTIC_PATH)
+        self.assertEqual(
+            set(semantic),
+            {
+                "repository",
+                "configuration",
+                "pipeline_version",
+                "ontology_version",
+                "extractor_contract_version",
+                "extractor_versions",
+                "evidence_lineage_version",
+                "inventory",
+                "extraction_chunks",
+                "knowledge_graph",
+            },
+        )
         graph = semantic["knowledge_graph"]
         graph_payload = {
             key: value
@@ -222,6 +237,112 @@ class S4ContractTests(unittest.TestCase):
             [snapshot_hash],
         )
         self.assertEqual(summary["snapshot_id"], snapshot_id)
+        for field, count_key in (
+            ("entities", "entities"),
+            ("relationships", "relationships"),
+            ("claims", "claims"),
+            ("evidence", "evidence"),
+            ("diagnostics", "diagnostics"),
+            ("coverage", "coverage_gaps"),
+        ):
+            self.assertEqual(len(graph[field]), summary["counts"][count_key])
+
+        for field in (
+            "entities",
+            "relationships",
+            "claims",
+            "evidence",
+            "coverage",
+        ):
+            identifiers = [item["id"] for item in graph[field]]
+            self.assertEqual(identifiers, sorted(identifiers))
+            self.assertEqual(len(identifiers), len(set(identifiers)))
+
+        entities = {item["id"]: item for item in graph["entities"]}
+        relationships = {
+            item["id"]: item for item in graph["relationships"]
+        }
+        evidence = {item["id"]: item for item in graph["evidence"]}
+        claims = {
+            (item["subject_kind"], item["subject_id"]): item
+            for item in graph["claims"]
+        }
+        self.assertEqual(
+            set(claims),
+            {("entity", item) for item in entities}
+            | {("relationship", item) for item in relationships},
+        )
+        for item in relationships.values():
+            self.assertEqual(
+                item["id"],
+                relationship_id(item["kind"], item["source"], item["target"]),
+            )
+            self.assertIn(item["source"], entities)
+            self.assertIn(item["target"], entities)
+            self.assertTrue(item["evidence_ids"])
+            self.assertTrue(
+                all(value in evidence for value in item["evidence_ids"])
+            )
+        for item in claims.values():
+            self.assertEqual(
+                item["id"],
+                stable_id(
+                    "codenoesis.claim-id/v2",
+                    [
+                        item["subject_kind"],
+                        item["subject_id"],
+                        item["state"],
+                    ],
+                ),
+            )
+            self.assertTrue(
+                all(value in evidence for value in item["evidence_ids"])
+            )
+        for item in evidence.values():
+            self.assertEqual(
+                item["id"],
+                stable_id(
+                    "codenoesis.evidence-id/v2",
+                    [
+                        summary["repository_identity"],
+                        summary["commit_oid"],
+                        item["blob_oid"],
+                        item["path"],
+                        str(item["start_byte"]),
+                        str(item["end_byte"]),
+                    ],
+                ),
+            )
+        for item in graph["coverage"]:
+            self.assertEqual(len(item["evidence_ids"]), 1)
+            self.assertEqual(
+                item["id"],
+                stable_id(
+                    "codenoesis.coverage-gap-id/v2",
+                    [
+                        summary["repository_identity"],
+                        summary["commit_oid"],
+                        item["capability"],
+                        item["evidence_ids"][0],
+                    ],
+                ),
+            )
+            self.assertIn(item["evidence_ids"][0], evidence)
+
+        for field in ("entities", "relationships", "claims"):
+            graph_ids = {item["id"] for item in graph[field]}
+            chunk_ids = [
+                item["id"]
+                for chunk in semantic["extraction_chunks"]
+                for item in chunk[field]
+            ]
+            self.assertEqual(len(chunk_ids), len(set(chunk_ids)))
+            self.assertEqual(set(chunk_ids), graph_ids)
+        chunk_paths = [
+            entities[chunk["source_file_id"]]["properties"]["path"]
+            for chunk in semantic["extraction_chunks"]
+        ]
+        self.assertEqual(chunk_paths, sorted(chunk_paths))
 
         manifest = load_json(
             FIXTURE_ROOT / "expected-documentation-manifest.json"
@@ -231,6 +352,27 @@ class S4ContractTests(unittest.TestCase):
             snapshot_hash,
         )
         self.assertEqual(manifest["snapshot_id"], snapshot_id)
+        generation_inputs = []
+        for path in sorted((FIXTURE_ROOT / "expected-docs").rglob("*.md")):
+            relative = path.relative_to(
+                FIXTURE_ROOT / "expected-docs"
+            ).as_posix()
+            content = path.read_bytes()
+            generation_inputs.append(
+                [relative, blake3_256(content), len(content)]
+            )
+        self.assertEqual(
+            manifest["generation_hash"]["value"],
+            blake3_256(
+                canonical_json(
+                    [
+                        "codenoesis.documentation-generation/v1",
+                        snapshot_id,
+                        generation_inputs,
+                    ]
+                )
+            ),
+        )
         for fixture in (
             "expected-query-entity.json",
             "expected-query-document.json",
@@ -239,6 +381,16 @@ class S4ContractTests(unittest.TestCase):
                 load_json(FIXTURE_ROOT / fixture)["snapshot_id"],
                 snapshot_id,
             )
+        specification = load_json(SPEC_PATH)
+        self.assertEqual(
+            specification["contracts"]["semantic_hashes"],
+            "tests/specifications/s4/semantic-hash-contract-v1.json",
+        )
+        self.assertEqual(
+            specification["goldens"]["snapshot_semantic"],
+            "tests/fixtures/s4/workspace-docs-v1/"
+            "expected-snapshot-semantic.json",
+        )
 
         changed_graph = copy.deepcopy(graph_payload)
         changed_graph["diagnostics"][0]["message"] += " changed"
