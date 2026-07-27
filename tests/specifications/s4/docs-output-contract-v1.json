@@ -1,0 +1,91 @@
+{
+  "schema_version": "codenoesis.docs-output-contract/v1",
+  "status": "approved",
+  "marker": {
+    "schema_version": "codenoesis.generated-docs-marker/v1",
+    "file": ".codenoesis-generated.json"
+  },
+  "owned_paths": [
+    "manifest.json",
+    "overview.md",
+    "modules/*.md"
+  ],
+  "publication": {
+    "temporary_location": ".tmp/<generation-id>/",
+    "file_preparation": [
+      "exclusive_create",
+      "complete_write",
+      "file_sync",
+      "blake3_verify"
+    ],
+    "commit_point": "manifest",
+    "pre_commit_visible_generation": "previous_or_none",
+    "post_commit_visible_generation": "complete_new",
+    "reader_validation": "manifest_then_every_listed_file"
+  },
+  "identity": {
+    "algorithm": "blake3-256",
+    "canonicalization": "RFC8785",
+    "document_domain": "codenoesis.document-id/v1",
+    "statement_domain": "codenoesis.statement-id/v1",
+    "generation_domain": "codenoesis.documentation-generation/v1",
+    "document_inputs": [
+      "repository_identity",
+      "document_kind",
+      "stable_subject_id",
+      "renderer_version"
+    ],
+    "statement_inputs": [
+      "document_id",
+      "statement_kind",
+      "stable_subject_id",
+      "ordinal_within_kind"
+    ],
+    "forbidden_inputs": [
+      "envelope",
+      "output_root",
+      "storage_sequence",
+      "timestamp"
+    ]
+  },
+  "rendering": {
+    "renderer_version": "codenoesis.renderer/markdown-v1",
+    "documents": [
+      "overview.md",
+      "modules/<stable-slug>.md"
+    ],
+    "line_endings": "LF",
+    "encoding": "UTF-8",
+    "active_html": false,
+    "source_derived_links": false,
+    "material_statement_marker": "<!-- statement:<statement-id> -->",
+    "unsupported_label": "Unsupported"
+  },
+  "statement_grounding": {
+    "required_truth_states": [
+      "deterministic_fact",
+      "derived_fact",
+      "unsupported"
+    ],
+    "evidence_or_coverage": "exactly_one_nonempty",
+    "dangling_reference": "reject_generation",
+    "missing_material_marker": "reject_generation"
+  },
+  "limits": {
+    "documents": 2001,
+    "bytes_per_document": 1048576,
+    "total_bytes": 33554432,
+    "statements": 200000,
+    "query_result_bytes": 4194304
+  },
+  "allow_unowned_file_deletion": false,
+  "allow_symlink_or_reparse_traversal": false,
+  "allow_nonempty_unmarked_root": false,
+  "errors": [
+    "docs.unmarked_nonempty_root",
+    "docs.unsafe_path",
+    "docs.snapshot_mismatch",
+    "docs.corrupt_generation",
+    "docs.failed"
+  ]
+}

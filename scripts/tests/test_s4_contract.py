@@ -75,6 +75,7 @@ S4_BUNDLE_FILES = {
     "tests/fixtures/s4/workspace-docs-v1/manifest.json",
     "tests/fixtures/s4/workspace-docs-v1/revision-a/Cargo.toml",
     "tests/fixtures/s4/workspace-docs-v1/revision-a/crates/app/Cargo.toml",
+    "tests/fixtures/s4/workspace-docs-v1/revision-a/crates/app/build.rs",
     "tests/fixtures/s4/workspace-docs-v1/revision-a/crates/app/src/main.rs",
     "tests/fixtures/s4/workspace-docs-v1/revision-a/crates/model/Cargo.toml",
     "tests/fixtures/s4/workspace-docs-v1/revision-a/crates/model/src/item.rs",
@@ -103,7 +104,8 @@ SCHEMA_PATHS = (
 
 def stable_id(domain: str, preimage: list[str]) -> str:
     digest = blake3_256(canonical_json([domain, *preimage]))
-    return f"urn:codenoesis:{domain.split('.')[1]}:blake3:{digest}"
+    kind = domain.split(".", 1)[1].split("-id", 1)[0]
+    return f"urn:codenoesis:{kind}:blake3:{digest}"
 
 
 def relationship_id(kind: str, source: str, target: str) -> str:
@@ -187,7 +189,7 @@ class S4ContractTests(unittest.TestCase):
         )[0]
         registered = re.findall(
             r"^\| `([A-Z]+-[A-Z]+-\d{3})` \| "
-            r"(?:Proposed|Approved) \| Approved \|",
+            r"`(?:Proposed|Approved)` \| `Approved` \|",
             register,
             flags=re.MULTILINE,
         )
@@ -407,18 +409,57 @@ class S4ContractTests(unittest.TestCase):
     def test_query_and_error_goldens_are_typed_and_linked(self) -> None:
         entity = load_json(FIXTURE_ROOT / "expected-query-entity.json")
         document = load_json(FIXTURE_ROOT / "expected-query-document.json")
+        manifest = load_json(
+            FIXTURE_ROOT / "expected-documentation-manifest.json"
+        )
+        documents_by_id = {
+            item["document_id"]: item for item in manifest["documents"]
+        }
         self.assertEqual(
             entity["schema_version"], "codenoesis.local-query-result/v1"
         )
         self.assertEqual(entity["result_kind"], "entity")
+        self.assertEqual(entity["requested_id"], entity["entity"]["id"])
+        entity_schema = load_json(CHUNK_SCHEMA_PATH)["$defs"]["entity"]
+        self.assertEqual(
+            set(entity["entity"]),
+            set(entity_schema["required"]),
+        )
         self.assertEqual(len(entity["claims"]), 1)
         self.assertTrue(entity["evidence"])
-        self.assertTrue(entity["document_statements"])
+        self.assertEqual(
+            entity["claims"][0]["subject_id"],
+            entity["requested_id"],
+        )
+        self.assertEqual(
+            [item["id"] for item in entity["evidence"]],
+            entity["claims"][0]["evidence_ids"],
+        )
+        expected_links = [
+            {"document_id": source["document_id"], **statement}
+            for source in manifest["documents"]
+            for statement in source["statements"]
+            if entity["requested_id"] in statement["subject_ids"]
+        ]
+        self.assertEqual(entity["document_statements"], expected_links)
         self.assertEqual(
             document["schema_version"], "codenoesis.local-query-result/v1"
         )
         self.assertEqual(document["result_kind"], "document")
-        self.assertTrue(document["document"]["statements"])
+        self.assertEqual(document["requested_id"], document["document"]["document_id"])
+        source_document = documents_by_id[document["requested_id"]]
+        self.assertEqual(
+            document["document"],
+            {
+                key: value
+                for key, value in source_document.items()
+                if key != "statements"
+            },
+        )
+        self.assertEqual(
+            document["document_statements"],
+            source_document["statements"],
+        )
         for name, code in [
             ("expected-error-unknown-id.json", "query.not_found"),
             (
@@ -456,6 +497,33 @@ class S4ContractTests(unittest.TestCase):
                 schema["properties"]["schema_version"]["const"],
                 expected_ids[path],
             )
+        query_schema = load_json(QUERY_SCHEMA_PATH)
+        self.assertNotIn("record", query_schema["$defs"])
+        self.assertTrue(
+            all(
+                definition["additionalProperties"] is False
+                for definition in query_schema["$defs"].values()
+            )
+        )
+        self.assertEqual(
+            query_schema["properties"]["entity"]["oneOf"][1]["$ref"],
+            "extraction-chunk-v2.schema.json#/$defs/entity",
+        )
+        self.assertEqual(
+            query_schema["properties"]["claims"]["items"]["$ref"],
+            "extraction-chunk-v2.schema.json#/$defs/claim",
+        )
+        self.assertEqual(
+            query_schema["properties"]["evidence"]["items"]["$ref"],
+            "extraction-chunk-v2.schema.json#/$defs/evidence",
+        )
+        self.assertEqual(
+            {
+                condition["if"]["properties"]["result_kind"]["const"]
+                for condition in query_schema["allOf"]
+            },
+            {"entity", "claim", "evidence", "document"},
+        )
         contract = load_json(DOCS_CONTRACT_PATH)
         self.assertEqual(
             contract["schema_version"], "codenoesis.docs-output-contract/v1"

@@ -1,0 +1,111 @@
+{
+  "schema_version": "codenoesis.s4-graph-summary/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-workspace-docs-v1",
+  "commit_oid": "c09d8c24e4704036c31b4f42e2f4df6e4acd347f",
+  "snapshot_schema_version": "codenoesis.repository-snapshot/v4",
+  "ontology_version": "codenoesis.ontology/rust/v2",
+  "semantic_hash": "ad5b5c4c98a20007b31d8484168709fd87c677de429cce513b678e4299d71157",
+  "snapshot_id": "urn:codenoesis:snapshot:blake3:e05a3a400542454482466e63f59e9de5df660b06418a7de50459cb630dfcb2be",
+  "counts": {
+    "crate": 2,
+    "source_file": 3,
+    "module": 3,
+    "struct": 1,
+    "function": 2,
+    "symbol_reference": 1,
+    "entities": 12,
+    "relationships": 12,
+    "claims": 24,
+    "evidence": 6,
+    "diagnostics": 1,
+    "coverage_gaps": 2
+  },
+  "unresolved_cross_crate_uses": 1,
+  "identity_examples": {
+    "entities": [
+      {
+        "label": "app crate",
+        "preimage": [
+          "urn:codenoesis:fixture:s4-workspace-docs-v1",
+          "crate",
+          "crates/app/Cargo.toml",
+          "workspace-app",
+          "bin",
+          "workspace-app"
+        ],
+        "id": "urn:codenoesis:entity:blake3:132051ffa07f458603fba5f45f92ed10196e0d7aa3a6d64de0f89b40dad11889"
+      },
+      {
+        "label": "model crate",
+        "preimage": [
+          "urn:codenoesis:fixture:s4-workspace-docs-v1",
+          "crate",
+          "crates/model/Cargo.toml",
+          "workspace-model",
+          "lib",
+          "workspace_model"
+        ],
+        "id": "urn:codenoesis:entity:blake3:eaa0d43cb6168c2102dfbcd6c70f5a655a6415f92af26ef2c3a3a5937cf3c749"
+      },
+      {
+        "label": "model item module",
+        "preimage": [
+          "urn:codenoesis:fixture:s4-workspace-docs-v1",
+          "module",
+          "urn:codenoesis:entity:blake3:eaa0d43cb6168c2102dfbcd6c70f5a655a6415f92af26ef2c3a3a5937cf3c749",
+          "crate::item"
+        ],
+        "id": "urn:codenoesis:entity:blake3:5f37308937c6af04439ee35bea02e1a2db12b08da4c3633bf49ee5dc767d11fb"
+      },
+      {
+        "label": "Item struct",
+        "preimage": [
+          "urn:codenoesis:fixture:s4-workspace-docs-v1",
+          "struct",
+          "urn:codenoesis:entity:blake3:eaa0d43cb6168c2102dfbcd6c70f5a655a6415f92af26ef2c3a3a5937cf3c749",
+          "crate::item",
+          "Item"
+        ],
+        "id": "urn:codenoesis:entity:blake3:18bd97153a41f322136e8f93573877bfc1a2f43fabc6564b789e979a6cffcafa"
+      }
+    ],
+    "relationships": [
+      {
+        "kind": "CONTAINS",
+        "source": "urn:codenoesis:entity:blake3:eaa0d43cb6168c2102dfbcd6c70f5a655a6415f92af26ef2c3a3a5937cf3c749",
+        "target": "urn:codenoesis:entity:blake3:89f8c62935b56d751488f15a4b2e5ed048057347a568de526e7e5d89b2309ad3",
+        "id": "urn:codenoesis:relationship:blake3:a7358445dead64d160b9d6deb0ef883b9eb3090287074ea931543f50b38d7b3f"
+      },
+      {
+        "kind": "DEFINES",
+        "source": "urn:codenoesis:entity:blake3:7098e3ab64bcb1c805b7480f9b684412a47025f42a2c9bd17eb791684115b40d",
+        "target": "urn:codenoesis:entity:blake3:5f37308937c6af04439ee35bea02e1a2db12b08da4c3633bf49ee5dc767d11fb",
+        "id": "urn:codenoesis:relationship:blake3:8450f5e4e28d9724a9732d2d4dd1097ca4607aac538ee33149475179f0fc650f"
+      },
+      {
+        "kind": "DEFINES",
+        "source": "urn:codenoesis:entity:blake3:5f37308937c6af04439ee35bea02e1a2db12b08da4c3633bf49ee5dc767d11fb",
+        "target": "urn:codenoesis:entity:blake3:18bd97153a41f322136e8f93573877bfc1a2f43fabc6564b789e979a6cffcafa",
+        "id": "urn:codenoesis:relationship:blake3:de15b2640647ce1c2f4385e4b7751d105637c37a6f285025768c790ef56be02c"
+      },
+      {
+        "kind": "IMPORTS",
+        "source": "urn:codenoesis:entity:blake3:e4dd4ddc22c8a7f30f1b60a0b341ce7ed0795f9e543bb28ae0374a553e7b05bf",
+        "target": "urn:codenoesis:entity:blake3:412f1590e7760290650f3338178fc89fa46251f79bb2b6c4cf5812aa8c25864e",
+        "id": "urn:codenoesis:relationship:blake3:0d99f028c2a72ff44291fe1bbfe0e347c45b41fb8fcb82642d0d29a7c39f7b4f"
+      }
+    ]
+  },
+  "evidence": {
+    "root_manifest": "urn:codenoesis:evidence:blake3:979975cac39fa47e410793fe5a2e8468755385c131f18f3015d116d1d12963fb",
+    "model_manifest": "urn:codenoesis:evidence:blake3:06dce7b642435de15fcff9aef1073a62a537f0d19d12d0960a3057903658227b",
+    "app_manifest": "urn:codenoesis:evidence:blake3:1ddd0d0df851034a3ca4bc3a3900826afe9215e1a40e1ef92766a43dbdbc20ed",
+    "model_lib": "urn:codenoesis:evidence:blake3:54124ece97396bbbf001b625d582d8199324b813bc0528706d79c05a96246fdf",
+    "model_item": "urn:codenoesis:evidence:blake3:61b8a6522478347afc01fe4ec2fa0576fdc7a8bb1383a59e7c5bf70bd8715bd4",
+    "app_main": "urn:codenoesis:evidence:blake3:b44a006688626d7ad04a05d573e56a117aedd09cc6fd408bdce7016c2f2df208"
+  },
+  "coverage": {
+    "cross_crate_resolution": "urn:codenoesis:coverage-gap:blake3:486b8aa2df505a26a606604f068bccb31f6ed2b9af75ef8fa24c7834abd626a4",
+    "build_script_execution": "urn:codenoesis:coverage-gap:blake3:32cc1e918899469d85c69b3b80b9ec3862cf94cea2b3617189eef2afb68bce5d"
+  }
+}
