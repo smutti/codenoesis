@@ -46,8 +46,10 @@ fn conf_nfr_mnt_001_dependency_rules() {
         "codenoesis-application",
         "codenoesis-contracts",
         "codenoesis-domain",
+        "codenoesis-lang-rust",
         "codenoesis-ports",
         "codenoesis-repository",
+        "codenoesis-store-local",
         "noesis",
         "xtask",
     ]);
@@ -65,9 +67,17 @@ fn conf_nfr_mnt_001_dependency_rules() {
             BTreeSet::from(["codenoesis-domain"]),
         ),
         ("codenoesis-domain", BTreeSet::new()),
+        (
+            "codenoesis-lang-rust",
+            BTreeSet::from(["codenoesis-domain", "codenoesis-ports"]),
+        ),
         ("codenoesis-ports", BTreeSet::from(["codenoesis-domain"])),
         (
             "codenoesis-repository",
+            BTreeSet::from(["codenoesis-domain", "codenoesis-ports"]),
+        ),
+        (
+            "codenoesis-store-local",
             BTreeSet::from(["codenoesis-domain", "codenoesis-ports"]),
         ),
         (
@@ -76,8 +86,10 @@ fn conf_nfr_mnt_001_dependency_rules() {
                 "codenoesis-application",
                 "codenoesis-contracts",
                 "codenoesis-domain",
+                "codenoesis-lang-rust",
                 "codenoesis-ports",
                 "codenoesis-repository",
+                "codenoesis-store-local",
             ]),
         ),
         ("xtask", BTreeSet::new()),

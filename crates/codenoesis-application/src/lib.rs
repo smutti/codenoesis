@@ -1,15 +1,20 @@
-//! Application orchestration for the `CodeNoesis` S0 through S2 slices.
+//! Application orchestration for the `CodeNoesis` S0 through S3 slices.
 
 use std::ffi::OsString;
 
 use codenoesis_contracts::{
     RepositorySnapshotV1, RepositorySnapshotV2, RepositorySnapshotV3, SnapshotEnvelopeV1,
+    validate_head_artifact,
 };
 use codenoesis_domain::knowledge::KnowledgeError;
+use codenoesis_domain::storage::{LocalSnapshotHead, StorageError, SweepResult};
 use codenoesis_domain::{
     AcquisitionError, RepositoryError, RepositoryIdentity, RepositoryInventory, Revision,
 };
-use codenoesis_ports::{RepositoryAcquirer, RustKnowledgeExtractor, SafeRepositoryAcquirer};
+use codenoesis_ports::{
+    ArtifactStore, MetadataStore, PublicationObserver, RepositoryAcquirer, RustKnowledgeExtractor,
+    SafeRepositoryAcquirer,
+};
 
 pub struct ScanRequest {
     repository: OsString,
@@ -39,11 +44,141 @@ impl ScanRequest {
 pub enum ScanError {
     Acquisition(AcquisitionError),
     Knowledge(KnowledgeError),
+    Storage(StorageError),
     Internal,
 }
 
 pub struct ScanService<A> {
     acquirer: A,
+}
+
+pub struct PublicationService;
+
+impl PublicationService {
+    /// Stages every exact-byte artifact, atomically compare/sets metadata, and
+    /// validates the complete visible head before returning.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed storage/publication failure or a redacted internal
+    /// contract failure.
+    pub fn publish<C, M>(
+        snapshot: &RepositorySnapshotV3,
+        artifact_store: &mut C,
+        metadata_store: &mut M,
+        observer: &mut dyn PublicationObserver,
+    ) -> Result<LocalSnapshotHead, ScanError>
+    where
+        C: ArtifactStore,
+        M: MetadataStore,
+    {
+        let candidate = snapshot
+            .publication_candidate()
+            .map_err(|_| ScanError::Internal)?;
+        let expected_head = metadata_store
+            .current_head_id(&candidate.snapshot.repository_identity)
+            .map_err(ScanError::Storage)?;
+        if expected_head.as_ref() == Some(&candidate.snapshot.snapshot_id) {
+            let current = Self::load_head(
+                &candidate.snapshot.repository_identity,
+                artifact_store,
+                metadata_store,
+            )?
+            .ok_or_else(|| {
+                ScanError::Storage(StorageError::CorruptMetadata {
+                    component: codenoesis_domain::storage::StorageComponent::Head,
+                    reason: "current_head_missing",
+                    snapshot_id: Some(candidate.snapshot.snapshot_id.to_string()),
+                })
+            })?;
+            if current.snapshot_id != candidate.snapshot.snapshot_id {
+                return Err(ScanError::Storage(StorageError::CorruptMetadata {
+                    component: codenoesis_domain::storage::StorageComponent::Head,
+                    reason: "current_head_mismatch",
+                    snapshot_id: Some(candidate.snapshot.snapshot_id.to_string()),
+                }));
+            }
+        }
+        for artifact in &candidate.artifacts {
+            artifact_store
+                .stage(artifact, observer)
+                .map_err(ScanError::Storage)?;
+        }
+        let published = metadata_store
+            .publish(&candidate, expected_head.as_ref(), observer)
+            .map_err(ScanError::Storage)?;
+        let head = Self::load_head(
+            &candidate.snapshot.repository_identity,
+            artifact_store,
+            metadata_store,
+        )?
+        .ok_or_else(|| {
+            ScanError::Storage(StorageError::CorruptMetadata {
+                component: codenoesis_domain::storage::StorageComponent::Head,
+                reason: "published_head_missing",
+                snapshot_id: Some(candidate.snapshot.snapshot_id.to_string()),
+            })
+        })?;
+        if head != published.head || head.snapshot_id != candidate.snapshot.snapshot_id {
+            return Err(ScanError::Storage(StorageError::CorruptMetadata {
+                component: codenoesis_domain::storage::StorageComponent::Head,
+                reason: "published_head_mismatch",
+                snapshot_id: Some(candidate.snapshot.snapshot_id.to_string()),
+            }));
+        }
+        Ok(head)
+    }
+
+    /// Loads and verifies one complete visible head and every referenced
+    /// immutable artifact.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed metadata or content-integrity failure.
+    pub fn load_head<C, M>(
+        repository_identity: &RepositoryIdentity,
+        artifact_store: &C,
+        metadata_store: &M,
+    ) -> Result<Option<LocalSnapshotHead>, ScanError>
+    where
+        C: ArtifactStore,
+        M: MetadataStore,
+    {
+        let Some(head) = metadata_store
+            .load_head(repository_identity)
+            .map_err(ScanError::Storage)?
+        else {
+            return Ok(None);
+        };
+        for reference in &head.artifacts {
+            let bytes = artifact_store
+                .read(&reference.artifact_id, reference.byte_length)
+                .map_err(ScanError::Storage)?;
+            validate_head_artifact(reference, &bytes).map_err(ScanError::Storage)?;
+        }
+        Ok(Some(head))
+    }
+
+    /// Sweeps only temporary and final objects proven unreachable by a stable
+    /// metadata view and a per-object recheck.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed metadata or filesystem failure.
+    pub fn sweep<C, M>(artifact_store: &mut C, metadata_store: &M) -> Result<SweepResult, ScanError>
+    where
+        C: ArtifactStore,
+        M: MetadataStore,
+    {
+        let reachable = metadata_store
+            .referenced_artifacts()
+            .map_err(ScanError::Storage)?;
+        artifact_store
+            .sweep(&reachable, &mut |artifact_id| {
+                metadata_store.is_artifact_referenced(artifact_id)
+            })
+            .map_err(ScanError::Storage)
+    }
 }
 
 impl<A> ScanService<A>

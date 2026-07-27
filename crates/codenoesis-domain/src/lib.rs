@@ -1,6 +1,7 @@
-//! Domain values for the `CodeNoesis` S0 through S2 slices.
+//! Domain values for the `CodeNoesis` S0 through S3 slices.
 
 pub mod knowledge;
+pub mod storage;
 
 use std::error::Error;
 use std::fmt::{self, Display, Formatter};
@@ -634,6 +635,7 @@ pub enum InputError {
     InvalidRepositoryIdentity,
     InvalidRevision,
     InvalidProfile,
+    InvalidStoreRoot,
 }
 
 impl Display for InputError {
@@ -642,6 +644,7 @@ impl Display for InputError {
             Self::InvalidRepositoryIdentity => "invalid repository identity",
             Self::InvalidRevision => "invalid revision",
             Self::InvalidProfile => "invalid profile",
+            Self::InvalidStoreRoot => "invalid store root",
         })
     }
 }
