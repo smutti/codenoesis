@@ -45,12 +45,22 @@ APPROVED_S3_REQUIREMENTS = (
     "INV-SNP-001",
     "NFR-REL-001",
 )
+APPROVED_S4_REQUIREMENTS = (
+    "DR-IDN-002",
+    "FR-CLI-001",
+    "FR-DOC-001",
+    "FR-DOC-002",
+    "FR-DOC-003",
+    "FR-EXT-007",
+    "FR-QRY-001",
+)
 APPROVED_REQUIREMENTS = tuple(
     sorted(
         APPROVED_S0_REQUIREMENTS
         + APPROVED_S1_REQUIREMENTS
         + APPROVED_S2_REQUIREMENTS
         + APPROVED_S3_REQUIREMENTS
+        + APPROVED_S4_REQUIREMENTS
     )
 )
 S0_APPROVED_AT = "2026-07-22T19:41:36Z"
@@ -65,6 +75,9 @@ S2_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/23"
 S3_APPROVED_AT = "2026-07-26T15:31:01Z"
 S3_APPROVAL_SOURCE_SHA = "3d14e4698563543b663de58fc4eea8740b724940"
 S3_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/29"
+S4_APPROVED_AT = "2026-07-27T08:33:41Z"
+S4_APPROVAL_SOURCE_SHA = "09f9da0e3461a7b0fb76326b73cf634199ebc465"
+S4_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/42"
 
 SPEC = importlib.util.spec_from_file_location("codex_policy", MODULE_PATH)
 if SPEC is None or SPEC.loader is None:  # pragma: no cover - import contract
@@ -132,7 +145,7 @@ class PolicyValidationTests(PolicyFixture):
                     S2_APPROVAL_REFERENCE, approval_record["approval_reference"]
                 )
                 self.assertEqual(S2_APPROVED_AT, approval_record["approved_at"])
-            else:
+            elif approval_record["id"] in APPROVED_S3_REQUIREMENTS:
                 self.assertIn(approval_record["id"], APPROVED_S3_REQUIREMENTS)
                 self.assertEqual("S3", approval_record["slice"])
                 self.assertEqual(
@@ -142,6 +155,16 @@ class PolicyValidationTests(PolicyFixture):
                     S3_APPROVAL_REFERENCE, approval_record["approval_reference"]
                 )
                 self.assertEqual(S3_APPROVED_AT, approval_record["approved_at"])
+            else:
+                self.assertIn(approval_record["id"], APPROVED_S4_REQUIREMENTS)
+                self.assertEqual("S4", approval_record["slice"])
+                self.assertEqual(
+                    S4_APPROVAL_SOURCE_SHA, approval_record["source_sha"]
+                )
+                self.assertEqual(
+                    S4_APPROVAL_REFERENCE, approval_record["approval_reference"]
+                )
+                self.assertEqual(S4_APPROVED_AT, approval_record["approved_at"])
         self.assertEqual(
             "https://json-schema.org/draft/2020-12/schema", schema["$schema"]
         )
@@ -288,6 +311,26 @@ class GlobSemanticsTests(unittest.TestCase):
 
 
 class AuthorizationTests(PolicyFixture):
+    def test_dr_idn_002_fr_cli_001_fr_doc_001_fr_doc_002_fr_doc_003_fr_ext_007_fr_qry_001_exact_s4_authorization(
+        self,
+    ) -> None:
+        result = codex_policy.authorize_requirements(
+            self.policy, list(APPROVED_S4_REQUIREMENTS), "S4"
+        )
+
+        self.assertTrue(result["authorized"])
+        self.assertEqual("S4", result["delivery_slice"])
+        self.assertEqual(
+            list(APPROVED_S4_REQUIREMENTS), result["requirement_ids"]
+        )
+        self.assertEqual(
+            list(APPROVED_S4_REQUIREMENTS),
+            [record["id"] for record in result["approval_records"]],
+        )
+        for record in result["approval_records"]:
+            self.assertEqual(S4_APPROVAL_SOURCE_SHA, record["source_sha"])
+            self.assertEqual(S4_APPROVAL_REFERENCE, record["approval_reference"])
+
     def test_fr_snp_001_fr_sto_001_inv_snp_001_nfr_rel_001_exact_s3_authorization(
         self,
     ) -> None:
@@ -659,7 +702,7 @@ class CommandLineTests(PolicyFixture):
             len(APPROVED_REQUIREMENTS), payload["approved_requirement_count"]
         )
 
-    def test_fr_sto_002_authorization_denial_has_stable_exit_code_and_json_error(
+    def test_fr_doc_004_authorization_denial_has_stable_exit_code_and_json_error(
         self,
     ) -> None:
         result = self.run_cli(
@@ -667,9 +710,9 @@ class CommandLineTests(PolicyFixture):
             "--policy",
             str(POLICY_PATH),
             "--slice",
-            "S3",
+            "S4",
             "--requirement-id",
-            "FR-STO-002",
+            "FR-DOC-004",
         )
 
         self.assertEqual(4, result.returncode)

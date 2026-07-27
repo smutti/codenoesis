@@ -54,6 +54,14 @@
       "approval_reference": "https://github.com/smutti/codenoesis/pull/23"
     },
     {
+      "id": "DR-IDN-002",
+      "slice": "S4",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-27T08:33:41Z",
+      "source_sha": "09f9da0e3461a7b0fb76326b73cf634199ebc465",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/42"
+    },
+    {
       "id": "FR-ACQ-001",
       "slice": "S0",
       "approved_by": "github:smutti",
@@ -70,12 +78,44 @@
       "approval_reference": "https://github.com/smutti/codenoesis/pull/17"
     },
     {
+      "id": "FR-CLI-001",
+      "slice": "S4",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-27T08:33:41Z",
+      "source_sha": "09f9da0e3461a7b0fb76326b73cf634199ebc465",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/42"
+    },
+    {
       "id": "FR-CLI-003",
       "slice": "S0",
       "approved_by": "github:smutti",
       "approved_at": "2026-07-22T19:41:36Z",
       "source_sha": "a9c718504d126f9c3b398aed3714c132243d3d3c",
       "approval_reference": "https://github.com/smutti/codenoesis/pull/12"
+    },
+    {
+      "id": "FR-DOC-001",
+      "slice": "S4",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-27T08:33:41Z",
+      "source_sha": "09f9da0e3461a7b0fb76326b73cf634199ebc465",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/42"
+    },
+    {
+      "id": "FR-DOC-002",
+      "slice": "S4",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-27T08:33:41Z",
+      "source_sha": "09f9da0e3461a7b0fb76326b73cf634199ebc465",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/42"
+    },
+    {
+      "id": "FR-DOC-003",
+      "slice": "S4",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-27T08:33:41Z",
+      "source_sha": "09f9da0e3461a7b0fb76326b73cf634199ebc465",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/42"
     },
     {
       "id": "FR-EXT-001",
@@ -92,6 +132,14 @@
       "approved_at": "2026-07-24T19:29:34Z",
       "source_sha": "6675f81410ce79e6d5b8a8085502f5331ea61d75",
       "approval_reference": "https://github.com/smutti/codenoesis/pull/23"
+    },
+    {
+      "id": "FR-EXT-007",
+      "slice": "S4",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-27T08:33:41Z",
+      "source_sha": "09f9da0e3461a7b0fb76326b73cf634199ebc465",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/42"
     },
     {
       "id": "FR-INV-001",
@@ -124,6 +172,14 @@
       "approved_at": "2026-07-24T19:29:34Z",
       "source_sha": "6675f81410ce79e6d5b8a8085502f5331ea61d75",
       "approval_reference": "https://github.com/smutti/codenoesis/pull/23"
+    },
+    {
+      "id": "FR-QRY-001",
+      "slice": "S4",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-27T08:33:41Z",
+      "source_sha": "09f9da0e3461a7b0fb76326b73cf634199ebc465",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/42"
     },
     {
       "id": "FR-SNP-001",
