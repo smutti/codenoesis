@@ -33,9 +33,11 @@ fn main() -> ExitCode {
     let profiled = arguments
         .iter()
         .any(|argument| argument == OsStr::new("--profile"));
+    let s4_requested = requested_profile(&arguments, "standard-local-s4");
     let s3_requested = requested_profile(&arguments, "standard-local-s3");
+    let s3_error_lineage = s3_requested || s4_requested;
     let s2_requested = requested_profile(&arguments, "standard-local-s2");
-    let result = if s3_requested {
+    let result = if s3_error_lineage {
         run_s3(arguments)
     } else if s2_requested {
         run_s2(arguments)
@@ -47,12 +49,12 @@ fn main() -> ExitCode {
     match result {
         Ok(stdout) => match io::stdout().lock().write_all(&stdout) {
             Ok(()) => ExitCode::SUCCESS,
-            Err(_) if s3_requested => emit_internal_error_v4(),
+            Err(_) if s3_error_lineage => emit_internal_error_v4(),
             Err(_) if s2_requested => emit_internal_error_v3(),
             Err(_) if profiled => emit_internal_error_v2(),
             Err(_) => emit_internal_error_v1(),
         },
-        Err(Failure::Input(error)) if s3_requested => {
+        Err(Failure::Input(error)) if s3_error_lineage => {
             emit_error_v4(&CodeNoesisErrorV4::from_input(error), 2)
         }
         Err(Failure::Input(error)) if s2_requested => {
@@ -62,7 +64,7 @@ fn main() -> ExitCode {
             emit_error_v2(&CodeNoesisErrorV2::from_input(error), 2)
         }
         Err(Failure::Input(error)) => emit_error_v1(&CodeNoesisErrorV1::from_input(error), 2),
-        Err(Failure::Scan(ScanError::Acquisition(error))) if s3_requested => {
+        Err(Failure::Scan(ScanError::Acquisition(error))) if s3_error_lineage => {
             emit_error_v4(&CodeNoesisErrorV4::from_acquisition(&error), 10)
         }
         Err(Failure::Scan(ScanError::Acquisition(error))) if s2_requested => {
@@ -74,13 +76,13 @@ fn main() -> ExitCode {
         Err(Failure::Scan(ScanError::Acquisition(error))) => {
             emit_error_v1(&CodeNoesisErrorV1::from_acquisition(&error), 10)
         }
-        Err(Failure::Scan(ScanError::Knowledge(error))) if s3_requested => {
+        Err(Failure::Scan(ScanError::Knowledge(error))) if s3_error_lineage => {
             emit_error_v4(&CodeNoesisErrorV4::from_knowledge(&error), 11)
         }
         Err(Failure::Scan(ScanError::Knowledge(error))) if s2_requested => {
             emit_error_v3(&CodeNoesisErrorV3::from_knowledge(&error), 11)
         }
-        Err(Failure::Scan(ScanError::Storage(error))) if s3_requested => {
+        Err(Failure::Scan(ScanError::Storage(error))) if s3_error_lineage => {
             emit_error_v4(&CodeNoesisErrorV4::from_storage(&error), 12)
         }
         Err(Failure::Scan(ScanError::Storage(_))) if s2_requested => emit_internal_error_v3(),
@@ -88,7 +90,7 @@ fn main() -> ExitCode {
             emit_internal_error_v2()
         }
         Err(Failure::Scan(ScanError::Storage(_))) => emit_internal_error_v1(),
-        Err(Failure::Scan(ScanError::Internal) | Failure::Internal) if s3_requested => {
+        Err(Failure::Scan(ScanError::Internal) | Failure::Internal) if s3_error_lineage => {
             emit_internal_error_v4()
         }
         Err(Failure::Scan(ScanError::Internal) | Failure::Internal) if s2_requested => {
