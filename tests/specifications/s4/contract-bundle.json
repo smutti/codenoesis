@@ -1,0 +1,138 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "docs/software/decisions/0005-s4-workspace-docs-query-contract.md",
+      "sha256": "530b9125a6f9e1bbd816478cc63f8579c2e8cf987481d3349625649481809f4c"
+    },
+    {
+      "path": "scripts/tests/test_s4_contract.py",
+      "sha256": "40032db3af80105b78c9f107f40f2a9474282c0145cbb3f872658d3ed959f158"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/README.md",
+      "sha256": "d65e039878b6f613aa7d4f91cdb69ff50973cd151c03a8580461a26394675f20"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/expected-docs/modules/app.md",
+      "sha256": "90b4225a6316f34e22e84f2467dbc06db1437295589e2ca26616eebe7538a275"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/expected-docs/modules/model-item.md",
+      "sha256": "635da5c511497423f81a99a2baecd055bca3e10879f676c478c36dcbe3017089"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/expected-docs/modules/model.md",
+      "sha256": "a13c97982bf73f5544f23b13b52a9df602de53b9f5ca26d99bf5b9c405b0a9eb"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/expected-docs/overview.md",
+      "sha256": "2b15b6a6415e0bc32fe27acf8c9aaa9389d5307a7d1f4b4f67d5240342fb2e78"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/expected-documentation-manifest.json",
+      "sha256": "68d17579bdf5182dee04170177a6187bb28ddfcf488623d97bdfcc1a4c95ee68"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/expected-error-unknown-id.json",
+      "sha256": "ed1f03336bfa70a3564f3fba503fe300d72a8308838b1a1a633e12cfa15b88b3"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/expected-error-unmarked-output.json",
+      "sha256": "f5ce08af57c290565db97aae19c600a4e41e665a07166c9a1491a60c96b92218"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/expected-error-unsupported-workspace.json",
+      "sha256": "ee9d54949c09df1966a585b60bb71f993ce43a0dcc140fad411336d39aa79f1a"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/expected-graph-summary.json",
+      "sha256": "100b95246145532fe6f2e62e8924c4b1eaa014a55dd87feedc562ee88b46cb0e"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/expected-query-document.json",
+      "sha256": "b0c21a00dfc559fc0b878512ddfa166f57498579f1c9721a4ff9ece9154f1c8d"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/expected-query-entity.json",
+      "sha256": "511bab8b45ce6c6ff1860e88415060b2a13c1bedbe0d9de05a14eeee41211fed"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/manifest.json",
+      "sha256": "30412ae89b05f8e08bb07de35a1b7fd1ab6c47c35695e10aa2ba323228d8d98d"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/revision-a/Cargo.toml",
+      "sha256": "4d268e7f38954aad6288525c0df9120442a3ff036da2967eb73af3866cf23378"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/revision-a/crates/app/Cargo.toml",
+      "sha256": "ec155ee0ebc739a31b2b226da6ccbedb6be03b597414f79b3565f1ea70ff2bc5"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/revision-a/crates/app/build.rs",
+      "sha256": "2fecc7205a6441a0ba98fe7373bdcf2b2f4df63ed610aec79367b73492cd6751"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/revision-a/crates/app/src/main.rs",
+      "sha256": "3d8a2c88c2d9b7c1fe836d4f0ac27844f5f475916cab7af2199b7a531d9976d1"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/revision-a/crates/model/Cargo.toml",
+      "sha256": "ab9a1ee43fae4a45092d7923fddbd88b284e829a385d68650a05f0463b7f9c19"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/revision-a/crates/model/src/item.rs",
+      "sha256": "48aed2dc18300ae778c0f88d75e703f42271626071685103770a3cb95c2870fa"
+    },
+    {
+      "path": "tests/fixtures/s4/workspace-docs-v1/revision-a/crates/model/src/lib.rs",
+      "sha256": "d3eea21f10f0ff42bab73aaac68c9fce8589d1a88fbb3d24c6d90b77abece3ef"
+    },
+    {
+      "path": "tests/specifications/s3/contract-bundle.json",
+      "sha256": "2dfad97b8a502197b161d7ca6de04c62db784b46b661ab886d1fa416d085f985"
+    },
+    {
+      "path": "tests/specifications/s4/codenoesis-error-v5.schema.json",
+      "sha256": "45a9e0ef9aa7ee84d2ccb17d333aa38e303778844362e7f9df64d21c432803ec"
+    },
+    {
+      "path": "tests/specifications/s4/docs-output-contract-v1.json",
+      "sha256": "be40a1baa96865955c52f2f5bde2719423e3f37999a5fecfba0288e7681f8ff0"
+    },
+    {
+      "path": "tests/specifications/s4/documentation-manifest-v1.schema.json",
+      "sha256": "13fc4500b8a63669f4e99e99e797f039421589c8b5caf9dcc7d4051792729943"
+    },
+    {
+      "path": "tests/specifications/s4/e2e_fr_cli_001_workspace_docs_query.json",
+      "sha256": "fc94fa9e22c70140350b84ff7725ed4c50a90ff8cf49fce8065e04bfd6b24717"
+    },
+    {
+      "path": "tests/specifications/s4/extraction-chunk-v2.schema.json",
+      "sha256": "0f37c1e29273a11e2aa5dabdaf4ee36d87f84ad953fe2b21908f83c61b1d516d"
+    },
+    {
+      "path": "tests/specifications/s4/knowledge-graph-v2.schema.json",
+      "sha256": "f43f7c731ceb619128ebb269136914552bc0654edd02cb354b006e782f88dd84"
+    },
+    {
+      "path": "tests/specifications/s4/local-query-result-v1.schema.json",
+      "sha256": "f2808d10af0b6e4dfe3a2fd43307cef51bd473abf146d76da915c652d072c013"
+    },
+    {
+      "path": "tests/specifications/s4/repository-snapshot-v4.schema.json",
+      "sha256": "780aac39c919f0abce00e069ad4269c518d1cd6704c60e813acb0e7d48658bb0"
+    },
+    {
+      "path": "tests/specifications/s4/rust-ontology-v2.json",
+      "sha256": "10d5a5ba797c1226f5b46377cfed9f61bbd1723a75944c0e87caa4b5877a9342"
+    }
+  ],
+  "bundle_sha256": "020fae1759726d1b7e827823921e535ee125aaa359ad1565c822efdacc688c96"
+}

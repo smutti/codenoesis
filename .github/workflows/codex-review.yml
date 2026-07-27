@@ -145,7 +145,7 @@ jobs:
       reason: ${{ steps.scope.outputs.reason }}
     steps:
       - name: Check out trusted base for policy
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ needs.prepare.outputs.base_sha }}
           fetch-depth: 1
@@ -158,7 +158,7 @@ jobs:
           install -m 0700 .github/codex/scripts/codex_policy.py "$RUNNER_TEMP/codex-policy.py"
 
       - name: Check out immutable pull-request head
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ needs.prepare.outputs.head_sha }}
           fetch-depth: 0
@@ -196,7 +196,7 @@ jobs:
       contents: read
     steps:
       - name: Check out trusted base for automation inputs
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ needs.prepare.outputs.base_sha }}
           fetch-depth: 1
@@ -211,7 +211,7 @@ jobs:
             "$RUNNER_TEMP/codex-review-output.schema.json"
 
       - name: Check out immutable pull-request head
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ needs.prepare.outputs.head_sha }}
           fetch-depth: 0
@@ -246,7 +246,7 @@ jobs:
           allow-bot-users: github-actions,${{ vars.CODEX_PUBLISHER_BOT_LOGIN }}
 
       - name: Upload immutable review evidence
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: codex-review-${{ needs.prepare.outputs.pr_number }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/codex-review.json
@@ -315,7 +315,7 @@ jobs:
       - name: Check out trusted review renderer
         id: trusted_checkout
         if: steps.preflight.outputs.review_ready == 'true'
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ needs.prepare.outputs.base_sha }}
           fetch-depth: 1
@@ -324,7 +324,7 @@ jobs:
       - name: Download review evidence
         id: evidence
         if: steps.preflight.outputs.review_ready == 'true'
-        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: codex-review-${{ needs.prepare.outputs.pr_number }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: evidence

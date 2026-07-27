@@ -1,0 +1,8 @@
+{
+  "schema_version": "codenoesis.error/v5",
+  "code": "docs.unmarked_nonempty_root",
+  "stage": "docs",
+  "message": "unmarked nonempty generated-document root",
+  "retryable": false,
+  "context": {}
+}

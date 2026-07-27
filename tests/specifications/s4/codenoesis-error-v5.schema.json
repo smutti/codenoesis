@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/codenoesis-error-v5.schema.json",
+  "title": "CodeNoesisErrorV5",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v5"
+    },
+    "code": {
+      "enum": [
+        "input.invalid_output_root",
+        "input.invalid_documents_root",
+        "input.invalid_query_id",
+        "extraction.unsupported_workspace",
+        "extraction.ambiguous_module",
+        "docs.unmarked_nonempty_root",
+        "docs.unsafe_path",
+        "docs.snapshot_mismatch",
+        "docs.corrupt_generation",
+        "docs.failed",
+        "query.not_found",
+        "query.snapshot_mismatch",
+        "query.corrupt_documents",
+        "query.result_limit_exceeded"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "input",
+        "extraction",
+        "docs",
+        "query"
+      ]
+    },
+    "message": {
+      "enum": [
+        "invalid output root",
+        "invalid documents root",
+        "invalid query id",
+        "unsupported workspace",
+        "ambiguous module",
+        "unmarked nonempty generated-document root",
+        "unsafe generated-document path",
+        "snapshot mismatch",
+        "corrupt generated documents",
+        "documentation generation failed",
+        "query target not found",
+        "query result limit exceeded"
+      ]
+    },
+    "retryable": {
+      "const": false
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 0
+    }
+  }
+}
