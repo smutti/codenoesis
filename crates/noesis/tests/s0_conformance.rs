@@ -17,6 +17,17 @@ use support::{
     read_repository_text, repository_root, scan, unique_temp_root,
 };
 
+fn encode_lower_hex(bytes: &[u8]) -> String {
+    const DIGITS: &[u8; 16] = b"0123456789abcdef";
+
+    let mut encoded = String::with_capacity(bytes.len() * 2);
+    for &byte in bytes {
+        encoded.push(char::from(DIGITS[usize::from(byte >> 4)]));
+        encoded.push(char::from(DIGITS[usize::from(byte & 0x0f)]));
+    }
+    encoded
+}
+
 #[test]
 fn conf_nfr_mnt_001_dependency_rules() {
     let root = repository_root();
@@ -182,7 +193,8 @@ fn conf_nfr_tst_001_requires_fixture_oracle_evidence_links() {
         .as_str()
         .expect("Red log path");
     let log = read_repository_text(root.join(log_path));
-    let log_sha256 = format!("{:x}", Sha256::digest(log));
+    let digest = Sha256::digest(log);
+    let log_sha256 = encode_lower_hex(digest.as_slice());
     assert_eq!(
         observation["red"]["log"]["sha256"]
             .as_str()
@@ -262,7 +274,7 @@ fn sec_nfr_sec_005_scan_launches_no_child_and_opens_no_network() {
         repository_root().join("tests/specifications/s0/seccomp-capability-deny-v1.json"),
     );
     assert_eq!(
-        format!("{:x}", Sha256::digest(policy)),
+        encode_lower_hex(Sha256::digest(policy).as_slice()),
         "5664635f8ad76dff5421f5eeb1f20ffdf0450203d8cb9c692606c026a39ee1ad"
     );
 }
