@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import copy
 import re
 import unittest
 from pathlib import Path
@@ -31,6 +32,8 @@ SNAPSHOT_SCHEMA_PATH = SPEC_ROOT / "repository-snapshot-v4.schema.json"
 CHUNK_SCHEMA_PATH = SPEC_ROOT / "extraction-chunk-v2.schema.json"
 GRAPH_SCHEMA_PATH = SPEC_ROOT / "knowledge-graph-v2.schema.json"
 ERROR_SCHEMA_PATH = SPEC_ROOT / "codenoesis-error-v5.schema.json"
+HASH_CONTRACT_PATH = SPEC_ROOT / "semantic-hash-contract-v1.json"
+SNAPSHOT_SEMANTIC_PATH = FIXTURE_ROOT / "expected-snapshot-semantic.json"
 SRS_PATH = ROOT / "docs" / "software" / "software-requirements-specification.md"
 
 S4_REQUIREMENTS = {
@@ -72,6 +75,7 @@ S4_BUNDLE_FILES = {
     "tests/fixtures/s4/workspace-docs-v1/expected-graph-summary.json",
     "tests/fixtures/s4/workspace-docs-v1/expected-query-document.json",
     "tests/fixtures/s4/workspace-docs-v1/expected-query-entity.json",
+    "tests/fixtures/s4/workspace-docs-v1/expected-snapshot-semantic.json",
     "tests/fixtures/s4/workspace-docs-v1/manifest.json",
     "tests/fixtures/s4/workspace-docs-v1/revision-a/Cargo.toml",
     "tests/fixtures/s4/workspace-docs-v1/revision-a/crates/app/Cargo.toml",
@@ -90,6 +94,7 @@ S4_BUNDLE_FILES = {
     "tests/specifications/s4/local-query-result-v1.schema.json",
     "tests/specifications/s4/repository-snapshot-v4.schema.json",
     "tests/specifications/s4/rust-ontology-v2.json",
+    "tests/specifications/s4/semantic-hash-contract-v1.json",
 }
 
 SCHEMA_PATHS = (
@@ -117,6 +122,10 @@ def relationship_id(kind: str, source: str, target: str) -> str:
     return f"urn:codenoesis:relationship:blake3:{digest}"
 
 
+def semantic_hash(domain: str, payload: Any) -> str:
+    return blake3_256(domain.encode() + b"\0" + canonical_json(payload))
+
+
 def git_tree_oid(entries: list[dict[str, str]]) -> str:
     payload = b"".join(
         entry["mode"].encode()
@@ -130,6 +139,128 @@ def git_tree_oid(entries: list[dict[str, str]]) -> str:
 
 
 class S4ContractTests(unittest.TestCase):
+    def test_v4_semantic_hash_contract_is_content_complete(self) -> None:
+        self.assertTrue(
+            HASH_CONTRACT_PATH.is_file(),
+            "S4 semantic-hash contract must be ratified before implementation",
+        )
+        self.assertTrue(
+            SNAPSHOT_SEMANTIC_PATH.is_file(),
+            "complete reviewed S4 snapshot semantic payload must exist",
+        )
+
+        contract = load_json(HASH_CONTRACT_PATH)
+        self.assertEqual(
+            contract,
+            {
+                "schema_version": "codenoesis.semantic-hash-contract/v1",
+                "algorithm": "blake3-256",
+                "canonicalization": "RFC8785",
+                "domain_separator_hex": "00",
+                "hashes": {
+                    "snapshot": {
+                        "domain": "codenoesis.repository-snapshot.semantic.v4",
+                        "payload": "RepositorySnapshotV4.semantic",
+                    },
+                    "knowledge_graph": {
+                        "domain": "codenoesis.knowledge-graph.semantic.v2",
+                        "payload": (
+                            "KnowledgeGraphV2 without semantic_hash"
+                        ),
+                    },
+                    "extraction_chunk": {
+                        "domain": "codenoesis.extraction-chunk.semantic.v2",
+                        "payload": (
+                            "ExtractionChunkV2 without semantic_hash"
+                        ),
+                    },
+                },
+            },
+        )
+
+        semantic = load_json(SNAPSHOT_SEMANTIC_PATH)
+        graph = semantic["knowledge_graph"]
+        graph_payload = {
+            key: value
+            for key, value in graph.items()
+            if key != "semantic_hash"
+        }
+        graph_hash = semantic_hash(
+            contract["hashes"]["knowledge_graph"]["domain"],
+            graph_payload,
+        )
+        self.assertEqual(graph["semantic_hash"]["value"], graph_hash)
+
+        chunk_domain = contract["hashes"]["extraction_chunk"]["domain"]
+        for chunk in semantic["extraction_chunks"]:
+            chunk_payload = {
+                key: value
+                for key, value in chunk.items()
+                if key != "semantic_hash"
+            }
+            self.assertEqual(
+                chunk["semantic_hash"]["value"],
+                semantic_hash(chunk_domain, chunk_payload),
+            )
+
+        snapshot_hash = semantic_hash(
+            contract["hashes"]["snapshot"]["domain"],
+            semantic,
+        )
+        summary = load_json(FIXTURE_ROOT / "expected-graph-summary.json")
+        self.assertEqual(summary["semantic_hash"], snapshot_hash)
+        self.assertEqual(summary["graph_semantic_hash"], graph_hash)
+        self.assertEqual(
+            summary["extraction_chunk_semantic_hashes"],
+            [
+                chunk["semantic_hash"]["value"]
+                for chunk in semantic["extraction_chunks"]
+            ],
+        )
+        snapshot_id = stable_id(
+            "codenoesis.snapshot-id/v1",
+            [snapshot_hash],
+        )
+        self.assertEqual(summary["snapshot_id"], snapshot_id)
+
+        manifest = load_json(
+            FIXTURE_ROOT / "expected-documentation-manifest.json"
+        )
+        self.assertEqual(
+            manifest["snapshot_semantic_hash"]["value"],
+            snapshot_hash,
+        )
+        self.assertEqual(manifest["snapshot_id"], snapshot_id)
+        for fixture in (
+            "expected-query-entity.json",
+            "expected-query-document.json",
+        ):
+            self.assertEqual(
+                load_json(FIXTURE_ROOT / fixture)["snapshot_id"],
+                snapshot_id,
+            )
+
+        changed_graph = copy.deepcopy(graph_payload)
+        changed_graph["diagnostics"][0]["message"] += " changed"
+        self.assertNotEqual(
+            semantic_hash(
+                contract["hashes"]["knowledge_graph"]["domain"],
+                changed_graph,
+            ),
+            graph_hash,
+        )
+        changed_semantic = copy.deepcopy(semantic)
+        changed_semantic["knowledge_graph"]["diagnostics"][0]["message"] += (
+            " changed"
+        )
+        self.assertNotEqual(
+            semantic_hash(
+                contract["hashes"]["snapshot"]["domain"],
+                changed_semantic,
+            ),
+            snapshot_hash,
+        )
+
     def test_contract_bundle_binds_every_s4_ratification_artifact(self) -> None:
         manifest = load_json(BUNDLE_PATH)
         self.assertEqual(
