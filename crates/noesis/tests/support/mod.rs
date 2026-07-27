@@ -6,6 +6,7 @@
 pub mod s1;
 pub mod s2;
 pub mod s3;
+pub mod s4;
 
 use std::fs;
 use std::io::Write;
