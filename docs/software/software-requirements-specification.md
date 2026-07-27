@@ -1,20 +1,20 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.5 — S0 through S2 implemented; S3 ratified for protected merge**.
+> Status: **0.6 — S0 through S2 implemented; S3 ratified; S4 proposed for protected merge**.
 > The S0–S2 runtime and product suites exist on `main`, but CodeNoesis claims
-> no slice `Verified` without complete immutable retention evidence. This
-> revision proposes the exact S3 SQLite, filesystem-CAS, atomic publication,
-> crash recovery, corruption, cleanup, fixture, and Red contracts; it contains
-> no S3 production implementation.
+> no slice `Verified` without complete immutable retention evidence. S3
+> production implementation is reviewed separately in PR #35. This revision
+> proposes the exact S4 Rust-workspace, documentation, exact-ID query, fixture,
+> and Red contracts; it contains no S4 production implementation.
 
 ## 1. Document control
 
 | Field | Value |
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
-| Version | `0.5` |
-| Status | S0 through S2 remain Approved and implemented but not Verified; S3 becomes Approved only when the accountable single maintainer manually squash-merges protected PR [#29](https://github.com/smutti/codenoesis/pull/29) |
-| Date | 2026-07-26 |
+| Version | `0.6` |
+| Status | S0 through S2 remain Approved and implemented but not Verified; S3 is Approved with production reviewed separately in [PR #35](https://github.com/smutti/codenoesis/pull/35); S4 becomes Approved only when the accountable single maintainer manually squash-merges protected PR [#42](https://github.com/smutti/codenoesis/pull/42) |
+| Date | 2026-07-27 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -29,6 +29,7 @@
 | `0.3` | 2026-07-23 | Recorded the implemented-but-not-Verified S0 state and ratified the exact S1 safe-inventory requirement set, explicit compatibility profile, limits, evidence model, malicious fixture, filesystem-security oracle, and expected Red. |
 | `0.4` | 2026-07-24 | Recorded the implemented-but-not-Verified S1 state and proposed the exact S2 Rust ontology, stable identities, extraction and graph contracts, claim states and deterministic rule, malformed/Unicode semantics, reviewed fixture, and expected Red. |
 | `0.5` | 2026-07-26 | Recorded the implemented-but-not-Verified S2 state and proposed the exact S3 snapshot/artifact identities, SQLite/CAS contract, atomic head transition, crash/retry/corruption/cleanup semantics, reviewed fixture, and expected Red. |
+| `0.6` | 2026-07-27 | Recorded the Approved S3 contract and proposed the exact S4 literal Rust-workspace profile, ontology v2 identities, V4 graph/snapshot contracts, evidence-backed Markdown bundle, exact-ID query, output-root safety, reviewed fixture, and expected Red. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -311,6 +312,65 @@ S2 bundle, strict DDL and schemas, machine oracle, two-revision fixture,
 reviewed semantic/head/error/recovery goldens, and failpoint matrix. Any bound
 byte change requires a new digest and renewed human review.
 
+### 2.7 S4 ratification register
+
+The following is the exact target Approved set for
+**S4 — Evidence-backed workspace docs**. Approval becomes authoritative only
+when `@smutti` manually squash-merges the exact protected head of PR
+[#42](https://github.com/smutti/codenoesis/pull/42). The authoring agent does
+not approve or merge. This high-risk decision fixes a bounded literal-member
+Rust workspace profile, ontology v2 multi-crate and out-of-line module
+identity, V4 snapshot/graph contracts, deterministic evidence-backed Markdown,
+marker-owned output publication, exact-ID local query, public errors, and
+resource ceilings.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| `DR-IDN-002` | `Proposed` | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #42 protected merge record](https://github.com/smutti/codenoesis/pull/42) | `S4` | [S4 contract decision](decisions/0005-s4-workspace-docs-query-contract.md) |
+| `FR-EXT-007` | `Proposed` | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #42 protected merge record](https://github.com/smutti/codenoesis/pull/42) | `S4` | [S4 acceptance specification](../../tests/specifications/s4/e2e_fr_cli_001_workspace_docs_query.json) |
+| `FR-DOC-001` | `Proposed` | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #42 protected merge record](https://github.com/smutti/codenoesis/pull/42) | `S4` | [S4 docs output contract](../../tests/specifications/s4/docs-output-contract-v1.json) |
+| `FR-DOC-002` | `Proposed` | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #42 protected merge record](https://github.com/smutti/codenoesis/pull/42) | `S4` | [S4 documentation manifest schema](../../tests/specifications/s4/documentation-manifest-v1.schema.json) |
+| `FR-DOC-003` | `Proposed` | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #42 protected merge record](https://github.com/smutti/codenoesis/pull/42) | `S4` | [S4 docs output contract](../../tests/specifications/s4/docs-output-contract-v1.json) |
+| `FR-QRY-001` | `Proposed` | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #42 protected merge record](https://github.com/smutti/codenoesis/pull/42) | `S4` | [S4 query result schema](../../tests/specifications/s4/local-query-result-v1.schema.json) |
+| `FR-CLI-001` | `Proposed` | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #42 protected merge record](https://github.com/smutti/codenoesis/pull/42) | `S4` | [S4 acceptance specification](../../tests/specifications/s4/e2e_fr_cli_001_workspace_docs_query.json) |
+
+S4 scan is selected only by `--profile standard-local-s4` with one explicit
+store. It emits `RepositorySnapshotV4` with `KnowledgeGraphV2` and immutable
+`codenoesis.ontology/rust/v2`. The profile accepts only committed UTF-8 root
+manifests with literal workspace members, bounded conventional or explicit
+library/binary roots, literal path dependencies, and unambiguous inline or
+out-of-line modules. Cargo, rustc, build scripts, target code, network, macros,
+feature worlds, and compiler-grade resolution remain forbidden or explicit
+coverage gaps.
+
+`noesis docs` reads one validated stored S4 head and atomically publishes a
+marker-owned `DocumentationManifestV1`, `overview.md`, and one module page per
+resolved module beneath an explicit output root. Every material statement
+resolves through the manifest to source evidence or a visible unsupported
+coverage state. The generator never adopts, overwrites, follows, or deletes
+unowned content.
+
+`noesis query` performs exact stable-ID lookup only. It returns a typed
+`LocalQueryResultV1` for an entity, claim, evidence item, or generated document
+bound to the same snapshot. Unknown IDs fail with `query.not_found`; traversal,
+fuzzy search, and inferred answers remain deferred.
+
+S0–S3 profiles and ontology v1 remain byte-compatible. S4 reuses the approved
+fresh `codenoesis.local-store/v1` publication semantics without a migration or
+new artifact role. If V4 cannot be represented without changing S3 meaning,
+implementation stops for a separate storage decision.
+
+The policy registry is intentionally unchanged in this ratification change. A
+separate protected change may bind exactly these seven IDs to the full commit
+on `main` containing the byte-identical SRS. Until that change is reviewed and
+merged, autonomous S4 implementation authorization fails closed.
+
+S4 contract bundle: `sha256:020fae1759726d1b7e827823921e535ee125aaa359ad1565c822efdacc688c96`.
+The bundle binds decision 0005, the independent maintenance guard, inherited
+S3 bundle, strict schemas, ontology v2, machine oracle, two-member workspace,
+reviewed documentation/query/error goldens, and source/build sentinels. Any
+bound-byte change requires a new digest and renewed human review.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,
@@ -415,6 +475,7 @@ cannot replace their verification.
 | `DR-ART-001` | P0 | `0.1` | Public artifacts MUST contain schema, repository, configuration, pipeline, ontology, extractor, and evidence-lineage versions. | Schema tests reject missing or unknown mandatory fields. `CONF` |
 | `DR-ART-002` | P0 | `0.1` | Canonical semantic content MUST be separated from volatile envelope metadata. Creation time, job ID, and correlation ID MUST NOT change the semantic hash. | Replays with different clocks and job IDs produce the same semantic hash and distinct envelopes. `PT` |
 | `DR-IDN-001` | P0 | `0.1` | Stable IDs MUST derive from canonical project identity, language, symbol identity, and versioned normalization rules rather than storage sequence numbers. | Randomized insertion and file ordering do not change IDs. `PT` |
+| `DR-IDN-002` | P0 | `0.1` | Rust workspace crate, source-file, module, symbol, relationship, document, and statement IDs MUST derive from canonical repository identity, manifest/target identity, module path, subject identity, and immutable versioned normalization rather than member order, output location, commit, or storage sequence. | Reordered members/files and changed envelopes/output roots retain reviewed IDs while canonical collisions fail closed. `PT`, `GT` |
 | `DR-EVD-001` | P0 | `0.1` | Source evidence MUST identify repository, revision or blob, path, byte or line span, extractor, and derivation. | Invalid repository, blob, path, span, or derivation prevents publication. `GT`, `E2E` |
 | `DR-CMP-001` | P1 | `1.0` | Runtime readers MUST support the current and immediately previous public schema. The migrator MUST support a tested chain from the two most recent GA releases. | Versioned fixtures prove `N-1` reads and staged `N-2 -> N-1 -> N` migration. `CONF`, `DR` |
 | `DR-DEL-001` | P1 | `1.0` | Project deletion MUST remove database references, search entries, unshared artifacts, and credentials according to a declared retention policy. | A purge verification finds no online data reachable by project or tenant identity; backup expiry is separately evidenced. `SEC`, `DR` |
@@ -441,6 +502,7 @@ cannot replace their verification.
 | `FR-EXT-004` | P1 | `0.2` | Approved OpenAPI, AsyncAPI, GraphQL, and Protocol Buffers contracts MUST be extracted into canonical service and operation identities. | Contract fixtures produce exact service, endpoint, event, schema, and version relationships. `GT` |
 | `FR-EXT-005` | P1 | `0.3` | The system MUST accept optional validated SCIP artifacts and preserve their provenance and precedence over syntax-only heuristics. | Conflicting syntax and SCIP fixtures retain both evidence items and select the compiler-grade relation by policy. `GT`, `CT` |
 | `FR-EXT-006` | P0 | `0.1` | A standard extraction stage MUST NOT spawn target processes or use network access. Trusted build/index execution MUST require a separate explicit profile. | Sentinel build scripts never execute in standard mode; process and network attempts are denied and audited. `SEC`, `E2E` |
+| `FR-EXT-007` | P0 | `0.1` | The S4 standard profile MUST extract bounded literal-member Rust workspaces, conventional or explicit library/binary roots, and unambiguous inline/out-of-line modules from committed UTF-8 files without evaluating Cargo or target code. | A reviewed two-member workspace matches ontology v2 identities and graph counts; globs, ambiguous modules, build execution, and unsupported worlds fail or remain explicit coverage. `GT`, `SEC`, `E2E` |
 
 ### 9.3 Knowledge graph, claims, and snapshots
 
@@ -813,7 +875,7 @@ implementation choices.
 | ID | Decision required | Blocks |
 |---|---|---|
 | `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset only. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
-| `OD-ONT-001` | Decision 0003 resolves required properties, cardinalities, state transitions, normalization, stable identity, and immutable versioning for `codenoesis.ontology/rust/v1` only when its protected S2 ratification revision is manually merged. Cross-language and post-S2 ontology evolution remains open. | `S8` and later ontology evolution |
+| `OD-ONT-001` | Decision 0003 resolves the bounded single-crate `codenoesis.ontology/rust/v1`. Decision 0005 resolves multi-crate cardinality and unambiguous out-of-line module identity for `codenoesis.ontology/rust/v2` only when its protected S4 ratification revision is manually merged. Cross-language, compiler-grade, and later ontology evolution remain open. | `S8` and later ontology evolution |
 | `OD-STO-001` | Decision 0004 resolves fresh single-writer local SQLite/CAS identity, publication, restart, corruption, and cleanup semantics for `codenoesis.local-store/v1` only when its protected S3 ratification revision is manually merged. Migration, repair, deletion, backup/restore, multi-writer, and server storage remain open. | Post-S3 storage evolution and `S10` |
 | `OD-GIT-001` | Residual Git decisions after the local S0/S1 subsets: remote protocols and identity resolution, packed objects, SHA-256, LFS, shallow and bare repositories, alternates, supported submodule/symlink semantics, and history rewrite. S1 rejects rather than traverses symlinks and gitlinks. | Remote and post-S1 `FR-ACQ-*` |
 | `OD-CMP-001` | Compatibility rules and oracles for OpenAPI, AsyncAPI, GraphQL, Protobuf, events, and behavioural evidence. | `S6`–`S7` |
@@ -842,7 +904,11 @@ versioned decision. The
 [S3 contract decision](decisions/0004-s3-atomic-local-storage-contract.md)
 resolves `OD-STO-001` only for a fresh local v1 store with one application
 writer; every migration, repair, deletion, restore, multi-writer, and server
-profile decision remains open.
+profile decision remains open. The
+[S4 contract decision](decisions/0005-s4-workspace-docs-query-contract.md)
+resolves the bounded Rust ontology v2, generated Markdown, and exact-ID local
+query semantics only for the explicit S4 profile; Cargo evaluation, compiler
+resolution, traversal/search, and later documentation formats remain open.
 
 ## 17. Change control
 

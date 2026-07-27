@@ -1,0 +1,8 @@
+{
+  "schema_version": "codenoesis.error/v5",
+  "code": "query.not_found",
+  "stage": "query",
+  "message": "query target not found",
+  "retryable": false,
+  "context": {}
+}

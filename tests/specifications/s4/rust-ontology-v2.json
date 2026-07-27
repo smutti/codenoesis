@@ -1,0 +1,297 @@
+{
+  "schema_version": "codenoesis.rust-ontology/v2",
+  "ontology_version": "codenoesis.ontology/rust/v2",
+  "status": "approved",
+  "inherits": "codenoesis.ontology/rust/v1",
+  "normalization": "NFC",
+  "identity": {
+    "algorithm": "blake3-256",
+    "canonicalization": "RFC8785",
+    "entity_domain": "codenoesis.entity-id/rust/v2",
+    "relationship_domain": "codenoesis.relationship-id/rust/v2",
+    "claim_domain": "codenoesis.claim-id/v2",
+    "evidence_domain": "codenoesis.evidence-id/v2",
+    "coverage_gap_domain": "codenoesis.coverage-gap-id/v2",
+    "entity_prefix": "urn:codenoesis:entity:blake3:",
+    "relationship_prefix": "urn:codenoesis:relationship:blake3:",
+    "claim_prefix": "urn:codenoesis:claim:blake3:",
+    "evidence_prefix": "urn:codenoesis:evidence:blake3:",
+    "coverage_gap_prefix": "urn:codenoesis:coverage-gap:blake3:",
+    "crate_preimage": [
+      "repository_identity",
+      "crate",
+      "manifest_relative_path",
+      "package_name",
+      "target_kind",
+      "target_name"
+    ],
+    "source_file_preimage": [
+      "repository_identity",
+      "source_file",
+      "crate_id",
+      "source_relative_path"
+    ],
+    "module_preimage": [
+      "repository_identity",
+      "module",
+      "crate_id",
+      "canonical_module_path"
+    ],
+    "declaration_preimage": [
+      "repository_identity",
+      "entity_kind",
+      "crate_id",
+      "canonical_module_path",
+      "declaration_name"
+    ],
+    "forbidden_inputs": [
+      "commit_oid",
+      "envelope",
+      "file_order",
+      "member_order",
+      "output_root",
+      "scheduler_order",
+      "source_offset",
+      "storage_sequence"
+    ]
+  },
+  "workspace": {
+    "member_source": "literal_root_workspace_members",
+    "minimum_crates": 1,
+    "maximum_crates": 200,
+    "supported_targets": [
+      "lib",
+      "bin"
+    ],
+    "supported_manifest_values": [
+      "literal_string",
+      "literal_string_array",
+      "literal_path_dependency"
+    ],
+    "rejected": [
+      "external_git_dependency_resolution",
+      "external_registry_resolution",
+      "generated_manifest",
+      "member_glob",
+      "target_specific_dependency_world",
+      "workspace_exclude_interaction"
+    ]
+  },
+  "module_resolution": {
+    "supported": [
+      "inline",
+      "name.rs",
+      "name/mod.rs"
+    ],
+    "rejected": [
+      "ambiguous_files",
+      "cfg_selected_module",
+      "include_macro",
+      "path_attribute"
+    ],
+    "missing_declared_module": "coverage_gap",
+    "cross_crate_use": "unresolved_symbol_reference"
+  },
+  "entity_kinds": [
+    {
+      "kind": "rust.crate",
+      "required_properties": [
+        "manifest_path",
+        "package_name",
+        "target_kind",
+        "target_name"
+      ]
+    },
+    {
+      "kind": "source.file",
+      "required_properties": [
+        "crate_id",
+        "path",
+        "blob_oid"
+      ]
+    },
+    {
+      "kind": "rust.module",
+      "required_properties": [
+        "crate_id",
+        "module_path",
+        "source_file_id"
+      ]
+    },
+    {
+      "kind": "rust.struct",
+      "required_properties": [
+        "crate_id",
+        "module_path",
+        "name",
+        "visibility"
+      ]
+    },
+    {
+      "kind": "rust.enum",
+      "required_properties": [
+        "crate_id",
+        "module_path",
+        "name",
+        "visibility"
+      ]
+    },
+    {
+      "kind": "rust.trait",
+      "required_properties": [
+        "crate_id",
+        "module_path",
+        "name",
+        "visibility"
+      ]
+    },
+    {
+      "kind": "rust.type_alias",
+      "required_properties": [
+        "crate_id",
+        "module_path",
+        "name",
+        "visibility"
+      ]
+    },
+    {
+      "kind": "rust.function",
+      "required_properties": [
+        "crate_id",
+        "module_path",
+        "name",
+        "visibility"
+      ]
+    },
+    {
+      "kind": "rust.method",
+      "required_properties": [
+        "crate_id",
+        "module_path",
+        "name",
+        "visibility"
+      ]
+    },
+    {
+      "kind": "rust.symbol_reference",
+      "required_properties": [
+        "crate_id",
+        "module_path",
+        "spelling",
+        "resolution_state"
+      ]
+    }
+  ],
+  "relationship_kinds": {
+    "CONTAINS": [
+      [
+        "rust.crate",
+        "source.file"
+      ]
+    ],
+    "DEFINES": [
+      [
+        "source.file",
+        "rust.module"
+      ],
+      [
+        "rust.module",
+        "rust.module"
+      ],
+      [
+        "rust.module",
+        "rust.struct"
+      ],
+      [
+        "rust.module",
+        "rust.enum"
+      ],
+      [
+        "rust.module",
+        "rust.trait"
+      ],
+      [
+        "rust.module",
+        "rust.type_alias"
+      ],
+      [
+        "rust.module",
+        "rust.function"
+      ],
+      [
+        "rust.module",
+        "rust.method"
+      ]
+    ],
+    "IMPORTS": [
+      [
+        "rust.module",
+        "rust.module"
+      ],
+      [
+        "rust.module",
+        "rust.struct"
+      ],
+      [
+        "rust.module",
+        "rust.enum"
+      ],
+      [
+        "rust.module",
+        "rust.trait"
+      ],
+      [
+        "rust.module",
+        "rust.type_alias"
+      ],
+      [
+        "rust.module",
+        "rust.function"
+      ],
+      [
+        "rust.module",
+        "rust.symbol_reference"
+      ]
+    ],
+    "IMPLEMENTS": [
+      [
+        "rust.struct",
+        "rust.trait"
+      ],
+      [
+        "rust.enum",
+        "rust.trait"
+      ]
+    ]
+  },
+  "cardinality": {
+    "crate_source_file": "every source.file has exactly one incoming CONTAINS from rust.crate",
+    "target_root_module": "every rust.crate has exactly one root rust.module",
+    "module_source_file": "every rust.module has exactly one defining source.file",
+    "module_lexical_owner": "every non-root rust.module has exactly one incoming DEFINES from rust.module",
+    "declaration_owner": "every declaration has exactly one incoming DEFINES from rust.module",
+    "claim_subject": "every entity and relationship has exactly one claim",
+    "evidence_resolution": "every relationship and material parser claim has at least one resolving evidence item"
+  },
+  "claim_states": [
+    "deterministic_fact",
+    "derived_fact",
+    "candidate",
+    "reviewed_inference",
+    "confirmed",
+    "rejected",
+    "superseded"
+  ],
+  "unsupported": [
+    "build_script_execution",
+    "call_graph",
+    "cargo_execution",
+    "cfg_worlds",
+    "compiler_resolution",
+    "data_flow",
+    "macro_expansion",
+    "procedural_macros",
+    "rustc_execution",
+    "target_execution"
+  ]
+}
