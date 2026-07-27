@@ -1011,7 +1011,8 @@ fn read_object_capped(
     if observed_size != body_size {
         return Err(ReadObjectError::Invalid);
     }
-    let actual_oid = format!("{:x}", hasher.finalize());
+    let digest = hasher.finalize();
+    let actual_oid = encode_lower_hex(digest.as_slice());
     if actual_oid != object_id.as_str() {
         return Err(ReadObjectError::Invalid);
     }
@@ -1020,6 +1021,17 @@ fn read_object_capped(
         body_prefix,
         body_size,
     }))
+}
+
+fn encode_lower_hex(bytes: &[u8]) -> String {
+    const DIGITS: &[u8; 16] = b"0123456789abcdef";
+
+    let mut encoded = String::with_capacity(bytes.len() * 2);
+    for &byte in bytes {
+        encoded.push(char::from(DIGITS[usize::from(byte >> 4)]));
+        encoded.push(char::from(DIGITS[usize::from(byte & 0x0f)]));
+    }
+    encoded
 }
 
 fn loose_object_path(git_dir: &Path, object_id: &ObjectId) -> PathBuf {
