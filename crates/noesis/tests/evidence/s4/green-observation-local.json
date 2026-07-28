@@ -1,0 +1,205 @@
+{
+  "schema_version": "codenoesis.s4-local-green-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/47",
+  "decision": "docs/software/decisions/0005-s4-workspace-docs-query-contract.md",
+  "slice": "S4",
+  "requirement_status": "Approved",
+  "requirements": [
+    "DR-IDN-002",
+    "FR-CLI-001",
+    "FR-DOC-001",
+    "FR-DOC-002",
+    "FR-DOC-003",
+    "FR-EXT-007",
+    "FR-QRY-001"
+  ],
+  "risk": "high",
+  "observed_at": "2026-07-28T10:09:53Z",
+  "commits": {
+    "required_base": "3897fd8ebfbb42336534888724c7ad9db8fe0e31",
+    "test_first": "593aff702b766dcc3dab8b57be68c29fc716bd10",
+    "red_precondition_correction": "9c6a0d5c06e6126807a765c89e56b9ab7818b046",
+    "implementation_baseline": "66e53387680b64ded45480499d2a023927c1b0b3",
+    "implementation_tested": "69546875781b29303b046d68a3371dd4fbf74639"
+  },
+  "authorization": {
+    "human_resume": "https://github.com/smutti/codenoesis/issues/47#issuecomment-5101637182",
+    "ratification_merge": "09f9da0e3461a7b0fb76326b73cf634199ebc465",
+    "hash_amendment_merge": "032639668811cceb111d030f8f4f7d851954137c",
+    "policy_binding_merge": "3897fd8ebfbb42336534888724c7ad9db8fe0e31",
+    "manual_review_and_merge_required": true
+  },
+  "contracts": {
+    "bundle_sha256": "3efb380fb058a5831123a0f990676575da04e60998cada8987f034675b61f12e",
+    "bundle_file_sha256": "be199ebbeb9cb35c2e6a68c5b9d847f86fe131efd007b0d09d9fd28390c91437",
+    "acceptance_specification_sha256": "8bbca0c0618e58ad49628de83ce61537463becb39693ef8cec1ef1f70abc3641",
+    "semantic_hash_contract_sha256": "973553cc3c408a6ca821225e00627a03aa27b9c3ea41c2322e60874512848d4c",
+    "ontology_sha256": "10d5a5ba797c1226f5b46377cfed9f61bbd1723a75944c0e87caa4b5877a9342",
+    "fixture_manifest_sha256": "30412ae89b05f8e08bb07de35a1b7fd1ab6c47c35695e10aa2ba323228d8d98d",
+    "snapshot_semantic_sha256": "c73d2d33b7308fca52e3fd3a7252502d19dd629a6a7be4b0e957c0effe105ccb",
+    "documentation_manifest_sha256": "b6bfec4df3befe22c8e5a9c3f4b82067d1e39afb02f3ae8abbefb938b6f83331",
+    "query_entity_sha256": "0b7f203835c7cfd447d46595860bb1a2aed89023470e9c1bb8f343da6deb64b1",
+    "query_document_sha256": "12ed7aae4f0aad09bb910d9e198155a971a5bf70f0356fd6ecd589207613e7e1",
+    "local_store_v1_ddl_sha256": "e286c56bf6828cc87ef0ca9ea91998f26ed76bcc4e8410ce4d344df89a92f0c",
+    "protected_contracts_changed": false,
+    "local_store_ddl_changed": false,
+    "artifact_roles_changed": false
+  },
+  "reviewed_outputs": {
+    "fixture_commit": "c09d8c24e4704036c31b4f42e2f4df6e4acd347f",
+    "fixture_tree": "8f9e36122bec5caac5dc0f739ea7ab4c830bd356",
+    "snapshot_semantic_hash": "6ed66dd0d5bf2451087fcb17c254048084d9d0f1bd2ea51062d46a38d1defe31",
+    "snapshot_id": "urn:codenoesis:snapshot:blake3:832888db94f6bf06da375a1cfc055a7c9b80d624b0596a1e45d1f9c646af9b8f",
+    "graph_semantic_hash": "87052fa7112e5a0f7fc9ce075b5d78e1a051e666d2ca0a1446c0ca20f0a57df2",
+    "extraction_chunk_hashes": [
+      "2f02d8ea27481b49a2457016aeba06e7eccad9758387c534c0d66ec03ef11dce",
+      "846a06f881313afc7402807ad1fd43912a55f3c86dad45b612242d8f3c03cc78",
+      "31b7394b72daa8e2dd5d4fcc11a43f34bc34abeb44e8f498d0eadbb0f7cbd915"
+    ],
+    "markdown_sha256": {
+      "overview.md": "2b15b6a6415e0bc32fe27acf8c9aaa9389d5307a7d1f4b4f67d5240342fb2e78",
+      "modules/app.md": "90b4225a6316f34e22e84f2467dbc06db1437295589e2ca26616eebe7538a275",
+      "modules/model-item.md": "635da5c511497423f81a99a2baecd055bca3e10879f676c478c36dcbe3017089",
+      "modules/model.md": "a13c97982bf73f5544f23b13b52a9df602de53b9f5ca26d99bf5b9c405b0a9eb"
+    }
+  },
+  "dependencies": {
+    "new_direct_dependencies": [
+      {
+        "crate": "toml",
+        "requirement": "=1.1.3+spec-1.1.0",
+        "resolved": "1.1.3+spec-1.1.0",
+        "license": "MIT OR Apache-2.0",
+        "lock_checksum": "53c96ecdfa941c8fc4fcaed14f99ada8ebed502eef533015095a07e3301d4c3c",
+        "runtime_purpose": "Parse the bounded committed TOML subset without Cargo evaluation."
+      }
+    ],
+    "other_new_direct_dependencies": 0
+  },
+  "focused_tests": {
+    "domain_identity_tests_passed": 2,
+    "workspace_extractor_tests_passed": 5,
+    "contract_tests_passed": 6,
+    "generated_docs_security_and_recovery_tests_passed": 10,
+    "cli_traversal_parser_tests_passed": 2,
+    "store_ancestor_symlink_tests_passed": 1,
+    "black_box_acceptance_tests_passed": 1,
+    "stored_artifact_cross_binding": "passed",
+    "max_and_plus_one": [
+      "workspace crates",
+      "documents per generation",
+      "bytes per document",
+      "query result bytes"
+    ],
+    "additional_red_observations": {
+      "docs_security_log_sha256": "01d947f3d9c6e180ff593fb5afeea312a22b13213cbb6dd6a57d0d6cbbccdd68",
+      "stored_binding_log_sha256": "93dab9d3de62d86492a75ed980bbb4ebf0e9de9223cc9d6592c7250408196619",
+      "retention": "ephemeral local review aids; only the official product Red is retained in-repository"
+    }
+  },
+  "security": {
+    "first_party_unsafe_occurrences": 0,
+    "cargo_rustc_target_or_build_script_execution": false,
+    "build_script_panic_sentinel_remained_inert": true,
+    "output_store_overlap_rejected_before_creation": true,
+    "unmarked_nonempty_output_unchanged": true,
+    "symlink_or_reparse_components_rejected": true,
+    "traversal_rejected_during_argument_parsing": true,
+    "unknown_owned_paths_rejected": true,
+    "manifest_is_sole_generation_commit_point": true,
+    "abandoned_precommit_generation_resumes_without_overwrite": true,
+    "corrupt_complete_generation_fails_closed": true,
+    "loaded_snapshot_graph_and_chunks_match_head_references": true,
+    "linux_seccomp_and_landlock_runtime": "not run locally; exact-head Linux CI required",
+    "darwin_portable_path_checks": "passed"
+  },
+  "actual_changed_paths": [
+    "Cargo.lock",
+    "crates/codenoesis-application/src/lib.rs",
+    "crates/codenoesis-application/src/s4.rs",
+    "crates/codenoesis-contracts/src/lib.rs",
+    "crates/codenoesis-contracts/src/s4.rs",
+    "crates/codenoesis-contracts/tests/s4_contracts.rs",
+    "crates/codenoesis-domain/src/lib.rs",
+    "crates/codenoesis-domain/src/s4.rs",
+    "crates/codenoesis-domain/src/storage.rs",
+    "crates/codenoesis-domain/tests/s4_workspace_docs_query.rs",
+    "crates/codenoesis-lang-rust/Cargo.toml",
+    "crates/codenoesis-lang-rust/src/lib.rs",
+    "crates/codenoesis-lang-rust/src/workspace.rs",
+    "crates/codenoesis-lang-rust/tests/s4_workspace.rs",
+    "crates/codenoesis-ports/src/lib.rs",
+    "crates/codenoesis-store-local/src/lib.rs",
+    "crates/codenoesis-store-local/src/path.rs",
+    "crates/codenoesis-store-local/src/sqlite.rs",
+    "crates/noesis/Cargo.toml",
+    "crates/noesis/src/filesystem_sandbox.rs",
+    "crates/noesis/src/generated_docs.rs",
+    "crates/noesis/src/lib.rs",
+    "crates/noesis/src/main.rs",
+    "crates/noesis/tests/e2e_fr_cli_001_workspace_docs_query.rs",
+    "crates/noesis/tests/evidence/s4/green-observation-local.json",
+    "crates/noesis/tests/evidence/s4/red-observation.json",
+    "crates/noesis/tests/evidence/s4/red/e2e_fr_cli_001_workspace_docs_query.log",
+    "crates/noesis/tests/support/mod.rs",
+    "crates/noesis/tests/support/s4.rs"
+  ],
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "macos": "26.5.2 (25F84)",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "toolchain_file_sha256": "279d77167cec5426fa80f457cd066dc74a360fbe4e2816f4f3fa01487a918fdc",
+    "features": "all workspace features for the bootstrap gate; default features for focused S4 scenarios",
+    "policy_version": 1,
+    "policy_sha256": "3bdc1b20300df2aefd799356a41b3e8e652f87e8094744fb279e42a0d2560c6f",
+    "agent": "OpenAI Codex",
+    "model": "not exposed by runtime",
+    "run_identifier": "issue-47-local-green-20260728T100925Z",
+    "implementation_duration": "not exposed by runtime",
+    "cost": "not exposed by runtime"
+  },
+  "bootstrap_gate": {
+    "status": "passed",
+    "tested_head": "69546875781b29303b046d68a3371dd4fbf74639",
+    "started_at": "2026-07-28T10:09:25Z",
+    "finished_at": "2026-07-28T10:09:53Z",
+    "commands": [
+      "actionlint -no-color",
+      "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+      "cargo fmt --all --check",
+      "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "cargo test --workspace --all-targets --all-features --locked",
+      "cargo test --workspace --doc --all-features --locked",
+      "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "python3 scripts/validate_benchmark_assets.py",
+      "cargo bench --workspace --all-features --no-run --locked"
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "rust_tests_passed": 101,
+    "python_tests_passed": 121,
+    "benchmarks_compiled": true,
+    "local_log_sha256": "64cfcd9e086a47b7842b7d33073b82082d52905f8daa3b86400d9e9ff20fe837",
+    "local_log_bytes": 17263,
+    "local_log_retention": "ephemeral local review aid; immutable exact-head CI evidence is still required"
+  },
+  "known_limitations": [
+    "Exact-head Linux, macOS, and Windows CI have not yet run for this implementation commit.",
+    "Exact-head benchmark-integrity and CodeQL results are not yet available.",
+    "The local Darwin run does not exercise Linux seccomp or Landlock.",
+    "The local observation is evidence for review, not a claim that the requirements are Verified."
+  ],
+  "unresolved_decisions": [],
+  "dissent": []
+}
