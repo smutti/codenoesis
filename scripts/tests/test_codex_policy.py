@@ -75,9 +75,9 @@ S2_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/23"
 S3_APPROVED_AT = "2026-07-26T15:31:01Z"
 S3_APPROVAL_SOURCE_SHA = "3d14e4698563543b663de58fc4eea8740b724940"
 S3_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/29"
-S4_APPROVED_AT = "2026-07-27T08:33:41Z"
-S4_APPROVAL_SOURCE_SHA = "09f9da0e3461a7b0fb76326b73cf634199ebc465"
-S4_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/42"
+S4_APPROVED_AT = "2026-07-28T06:57:03Z"
+S4_APPROVAL_SOURCE_SHA = "032639668811cceb111d030f8f4f7d851954137c"
+S4_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/49"
 
 SPEC = importlib.util.spec_from_file_location("codex_policy", MODULE_PATH)
 if SPEC is None or SPEC.loader is None:  # pragma: no cover - import contract
