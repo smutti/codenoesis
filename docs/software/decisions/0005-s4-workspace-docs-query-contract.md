@@ -2,11 +2,12 @@
 
 | Field | Value |
 |---|---|
-| Status | Accepted; effective only on protected squash merge of PR #42 by `@smutti` |
+| Status | Accepted; content-complete hash amendment effective only on protected squash merge of PR #49 by `@smutti` |
 | Date | 2026-07-27 |
 | Deciders | Andrea Moretti governance persona, represented by accountable actor `@smutti` |
 | Technical approver | `@smutti` |
 | Issue | [#41](https://github.com/smutti/codenoesis/issues/41) |
+| Integrity amendment | [Issue #48](https://github.com/smutti/codenoesis/issues/48), [PR #49](https://github.com/smutti/codenoesis/pull/49) |
 | Slice | `S4 — Evidence-backed workspace docs` |
 | Requirements | `DR-IDN-002`, `FR-EXT-007`, `FR-DOC-001`, `FR-DOC-002`, `FR-DOC-003`, `FR-QRY-001`, `FR-CLI-001` |
 | Risk | High |
@@ -237,6 +238,39 @@ Public forms are:
 - `urn:codenoesis:evidence:blake3:<digest>`;
 - `urn:codenoesis:coverage-gap:blake3:<digest>`.
 
+Claim, evidence, and coverage-gap preimages are respectively:
+
+```json
+[
+  "codenoesis.claim-id/v2",
+  "<subject-kind>",
+  "<subject-id>",
+  "<claim-state>"
+]
+```
+
+```json
+[
+  "codenoesis.evidence-id/v2",
+  "<repository-identity>",
+  "<commit-oid>",
+  "<blob-oid>",
+  "<repository-relative-path>",
+  "<start-byte-as-decimal-string>",
+  "<end-byte-as-decimal-string>"
+]
+```
+
+```json
+[
+  "codenoesis.coverage-gap-id/v2",
+  "<repository-identity>",
+  "<commit-oid>",
+  "<capability>",
+  "<evidence-id>"
+]
+```
+
 Insertion order, member order, file order, commit OID, source offsets,
 timestamps, storage IDs, and scheduler order never enter crate, module, or
 declaration identity. Commit/blob/span remain part of evidence identity.
@@ -248,6 +282,39 @@ Canonical collisions fail closed.
 versioned V2 extraction and graph contracts. Its semantic configuration names
 `standard-local-s4`; operational store/docs paths never enter semantic
 identity.
+
+Every S4 semantic digest uses BLAKE3-256 over the UTF-8 domain bytes, one
+`0x00` separator byte, and the RFC 8785 canonical JSON payload:
+
+- snapshot domain `codenoesis.repository-snapshot.semantic.v4` covers the
+  complete `RepositorySnapshotV4.semantic` object;
+- graph domain `codenoesis.knowledge-graph.semantic.v2` covers the complete
+  `KnowledgeGraphV2` object with only its `semantic_hash` member omitted;
+- extraction domain `codenoesis.extraction-chunk.semantic.v2` covers the
+  complete `ExtractionChunkV2` object with only its `semantic_hash` member
+  omitted.
+
+The machine-readable
+`tests/specifications/s4/semantic-hash-contract-v1.json` and complete reviewed
+`tests/fixtures/s4/workspace-docs-v1/expected-snapshot-semantic.json` payload
+are normative. Graph entity, relationship, claim, evidence, and coverage
+collections are stable-ID sorted. Diagnostics are code/evidence sorted.
+Extraction chunks are source-path byte sorted; their entity, relationship,
+claim, evidence, and coverage collections use the same stable-ID ordering.
+Ordered evidence lists retain derivation order.
+
+For the reviewed fixture the corrected graph hash is
+`87052fa7112e5a0f7fc9ce075b5d78e1a051e666d2ca0a1446c0ca20f0a57df2`,
+the source-path-ordered chunk hashes are
+`2f02d8ea27481b49a2457016aeba06e7eccad9758387c534c0d66ec03ef11dce`,
+`846a06f881313afc7402807ad1fd43912a55f3c86dad45b612242d8f3c03cc78`,
+and `31b7394b72daa8e2dd5d4fcc11a43f34bc34abeb44e8f498d0eadbb0f7cbd915`.
+The resulting snapshot semantic hash is
+`6ed66dd0d5bf2451087fcb17c254048084d9d0f1bd2ea51062d46a38d1defe31`
+and its existing v1 snapshot-ID derivation yields
+`urn:codenoesis:snapshot:blake3:832888db94f6bf06da375a1cfc055a7c9b80d624b0596a1e45d1f9c646af9b8f`.
+Changing any material nested field changes its enclosing digest and the
+snapshot digest. Envelope fields remain excluded.
 
 Canonical S4 artifact roles remain exactly those approved by S3:
 
@@ -471,12 +538,19 @@ versioned and does not require a local-store schema migration.
 
 ## Approval and separation
 
-This ADR is Proposed in authored form and becomes Accepted only through the
-protected manual squash merge of PR #42 by `@smutti`. A separate policy-binding change
-must bind the resulting `main` SRS commit before autonomous production
-implementation is Ready.
+The original ADR became Accepted through the protected manual squash merge of
+PR #42 by `@smutti`. Its separate policy-binding change bound the resulting
+`main` SRS commit before autonomous production implementation became Ready.
+
+The content-complete hash amendment was explicitly authorized by `@smutti`
+after issue #47 demonstrated that the original fixture digest used an
+undocumented summary preimage. The amendment becomes effective only through
+protected manual squash merge of PR #49. A separate protected policy-binding
+change must then bind the resulting `main` commit before S4 implementation
+resumes.
 
 The authoring agent must not approve or merge this decision. Independent human
-review must inspect the fixture, identities, ontology, document bytes,
-statement evidence, query results, error behavior, limits, and compatibility
-without inheriting the authoring agent's conclusions as facts.
+review must inspect the fixture, identities, ontology, semantic hash
+preimages, complete snapshot payload, document bytes, statement evidence,
+query results, error behavior, limits, and compatibility without inheriting
+the authoring agent's conclusions as facts.

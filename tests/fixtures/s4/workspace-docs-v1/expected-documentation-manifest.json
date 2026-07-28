@@ -1,15 +1,15 @@
 {
   "schema_version": "codenoesis.documentation-manifest/v1",
   "repository_identity": "urn:codenoesis:fixture:s4-workspace-docs-v1",
-  "snapshot_id": "urn:codenoesis:snapshot:blake3:e05a3a400542454482466e63f59e9de5df660b06418a7de50459cb630dfcb2be",
+  "snapshot_id": "urn:codenoesis:snapshot:blake3:832888db94f6bf06da375a1cfc055a7c9b80d624b0596a1e45d1f9c646af9b8f",
   "snapshot_semantic_hash": {
     "algorithm": "blake3-256",
-    "value": "ad5b5c4c98a20007b31d8484168709fd87c677de429cce513b678e4299d71157"
+    "value": "6ed66dd0d5bf2451087fcb17c254048084d9d0f1bd2ea51062d46a38d1defe31"
   },
   "renderer_version": "codenoesis.renderer/markdown-v1",
   "generation_hash": {
     "algorithm": "blake3-256",
-    "value": "9245b72e939dea9ea3bc5c15132f0179401d35953acedda8e29a4a89b8355b0c"
+    "value": "77a6432484cda9c45f4e71eb310c4de13d8aacdc0d962dc00aa33394153a42ea"
   },
   "documents": [
     {
