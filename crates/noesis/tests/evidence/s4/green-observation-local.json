@@ -20,10 +20,12 @@
     "test_first": "593aff702b766dcc3dab8b57be68c29fc716bd10",
     "red_precondition_correction": "9c6a0d5c06e6126807a765c89e56b9ab7818b046",
     "implementation_baseline": "66e53387680b64ded45480499d2a023927c1b0b3",
-    "implementation_tested": "69546875781b29303b046d68a3371dd4fbf74639"
+    "implementation_tested": "69546875781b29303b046d68a3371dd4fbf74639",
+    "windows_lf_correction_tested": "91a998afb4e32e9fcd84a356e81aaeeaea6b80d2"
   },
   "authorization": {
     "human_resume": "https://github.com/smutti/codenoesis/issues/47#issuecomment-5101637182",
+    "windows_lf_checkout_correction": "https://github.com/smutti/codenoesis/pull/52#issuecomment-5106694867",
     "ratification_merge": "09f9da0e3461a7b0fb76326b73cf634199ebc465",
     "hash_amendment_merge": "032639668811cceb111d030f8f4f7d851954137c",
     "policy_binding_merge": "3897fd8ebfbb42336534888724c7ad9db8fe0e31",
@@ -114,6 +116,7 @@
     "darwin_portable_path_checks": "passed"
   },
   "actual_changed_paths": [
+    ".gitattributes",
     "Cargo.lock",
     "crates/codenoesis-application/src/lib.rs",
     "crates/codenoesis-application/src/s4.rs",
@@ -194,9 +197,54 @@
     "local_log_bytes": 17263,
     "local_log_retention": "ephemeral local review aid; immutable exact-head CI evidence is still required"
   },
+  "windows_lf_correction_gate": {
+    "status": "passed",
+    "tested_head": "91a998afb4e32e9fcd84a356e81aaeeaea6b80d2",
+    "started_at": "2026-07-28T16:11:26Z",
+    "finished_at": "2026-07-28T16:11:46Z",
+    "root_cause": "Git checkout converted protected Markdown goldens from ratified LF bytes to CRLF on Windows.",
+    "changed_path": ".gitattributes",
+    "ratified_golden_bytes_changed": false,
+    "attribute_rules": [
+      "tests/fixtures/s4/workspace-docs-v1/expected-docs/overview.md text eol=lf",
+      "tests/fixtures/s4/workspace-docs-v1/expected-docs/modules/*.md text eol=lf"
+    ],
+    "checkout_simulation": "git -c core.autocrlf=true checkout-index",
+    "checkout_simulation_result": "overview.md and modules/app.md contained LF only",
+    "focused_command": "cargo test -p codenoesis-contracts --test s4_contracts --locked",
+    "focused_tests_passed": 6,
+    "bootstrap_commands": [
+      "actionlint -no-color",
+      "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+      "cargo fmt --all --check",
+      "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "cargo test --workspace --all-targets --all-features --locked",
+      "cargo test --workspace --doc --all-features --locked",
+      "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "python3 scripts/validate_benchmark_assets.py",
+      "cargo bench --workspace --all-features --no-run --locked"
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "rust_tests_passed": 101,
+    "python_tests_passed": 121,
+    "benchmarks_compiled": true,
+    "local_log_sha256": "140fa802159ea18cece55663ea1ab27f5e0db8413b321c9dc225bef380e0cc81",
+    "local_log_bytes": 15329,
+    "local_log_retention": "ephemeral local review aid; immutable exact-head CI evidence is still required"
+  },
   "known_limitations": [
-    "Exact-head Linux, macOS, and Windows CI have not yet run for this implementation commit.",
-    "Exact-head benchmark-integrity and CodeQL results are not yet available.",
+    "Exact-head Linux, macOS, Windows, benchmark-integrity, and CodeQL CI have not yet run for commit 91a998afb4e32e9fcd84a356e81aaeeaea6b80d2.",
+    "Previous head ca18262ab4fb7e083756e662963aff8ff0999085 passed every exact-head check except Windows; Windows failed only because Git checked out the ratified Markdown goldens as CRLF.",
     "The local Darwin run does not exercise Linux seccomp or Landlock.",
     "The local observation is evidence for review, not a claim that the requirements are Verified."
   ],
