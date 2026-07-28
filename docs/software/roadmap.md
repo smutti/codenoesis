@@ -47,18 +47,25 @@ This lane expands CodeNoesis from the deliberately narrow S4 fixture profile
 to reusable classes of real-world Rust repositories:
 
 - ordinary full clones backed by packed Git object databases;
+- repositories with explicit Git submodule/gitlink boundaries that must remain
+  safe when nested repositories are absent or supplied separately;
 - virtual and non-virtual Cargo workspaces, including root packages, the `"."`
-  member, multiple targets, features, dependencies, and build metadata;
+  member, exclusions, multiple targets, features, target-specific
+  dependencies, patches, and build metadata;
 - large modular codebases that use attributes, macros, conditional
   compilation, framework conventions, and generated-code boundaries.
 
-[Lekton](https://github.com/dghilardi/lekton), pinned at commit
-[`7a4d1a4a30468f4c18ce158a9b825680b00f4820`](https://github.com/dghilardi/lekton/commit/7a4d1a4a30468f4c18ce158a9b825680b00f4820),
-is the first proposed public corpus entry because it exposes all three classes.
-It is a validation case, not a source of product semantics. No ontology kind,
-extractor rule, error, or interface may contain repository-specific meaning.
-At least one structurally independent public Rust repository must join the
-pilot before CodeNoesis advertises generic real-world compatibility.
+### Initial public corpus candidates
+
+| Repository | Pinned revision | Observed license | Independent structural role |
+|---|---|---|---|
+| [Lekton](https://github.com/dghilardi/lekton) | [`7a4d1a4a30468f4c18ce158a9b825680b00f4820`](https://github.com/dghilardi/lekton/commit/7a4d1a4a30468f4c18ce158a9b825680b00f4820) | `AGPL-3.0-or-later` | Root package explicitly listed as `"."`, a separate CLI member, library and multiple binaries, features, build dependencies, and a build script in a modular web/server application. |
+| [RustDesk](https://github.com/rustdesk/rustdesk) | [`d412d198720aa56f6cfed2dfad262e8fb1322fb7`](https://github.com/rustdesk/rustdesk/commit/d412d198720aa56f6cfed2dfad262e8fb1322fb7) | `AGPL-3.0` | Implicit root package plus workspace members and exclusions, library and multiple binaries, a build script, target-specific and Git/path dependencies, patches, one gitlink member, and substantial Rust/Dart/native/mobile source. |
+
+Both repositories are validation cases, not sources of product semantics. No
+ontology kind, extractor rule, error, or interface may contain
+repository-specific meaning. A corpus entry may be replaced by another
+repository that exercises the same approved capability contract.
 
 External corpus source MUST NOT be copied into this repository merely for
 convenience. Each corpus descriptor must pin repository URL, commit, observed
@@ -73,24 +80,25 @@ used only by separately reproducible pilot runs.
 |---|---|---|---|---|
 | `R0` | Reproducible public corpus baseline | Record pinned public revisions, licenses, repository statistics, structural capabilities, current CodeNoesis failure sequences, and minimal synthetic shape fixtures. | Corpus, fixture, oracle, and licensing review. | Machine-readable descriptors reproduce each generic failure and capability without vendoring an external repository; corpus entries remain replaceable. |
 | `R1` | Read-only packed Git acquisition | Read normal packed SHA-1 object databases directly and safely without invoking Git. | Resolve the packed-object subset of `OD-GIT-001`; approve acquisition errors, bounds, corruption behavior, and security oracle. | Packed and equivalent loose fixtures produce byte-identical semantic input; malformed indexes, packs, deltas, traversal attempts, alternates, and limit-plus-one cases fail with typed errors; the scan launches no process and opens no network channel. |
-| `R2` | Real Cargo root-package workspace | Accept a root manifest containing both `[workspace]` and `[package]`, including the `"."` member, conventional and explicit library/binary targets, and multiple member manifests. | Versioned extraction/profile decision under `FR-EXT-*` and the unresolved post-S4 ontology boundary. | Project-owned virtual and non-virtual workspace fixtures reach the existing S4 graph/docs/query journey deterministically while Cargo, `rustc`, build scripts, proc macros, dependencies, and target code remain unexecuted. |
-| `R3` | Manifest facts and feature coverage | Represent package metadata, target declarations, registry/path dependencies, feature declarations, optional dependencies, `required-features`, and build-script presence without claiming an active Cargo resolution. | Approve entity/property identities, claim states, compatibility, limits, and ontology version. | Every supported manifest fact resolves to bytes; ignored or unsupported fields are explicit diagnostics or coverage gaps; no dependency is fetched and no feature world is guessed. |
-| `R4` | Rust semantic depth at real-world scale | Exercise existing enum, trait, named implementation, and method extraction on independent repositories; add only approved missing concepts such as fields, variants, constants/statics, attributes, components, services, configuration, and endpoint declarations. | New versioned Rust ontology decision resolving the relevant part of `OD-ONT-001`; high-risk golden review. | Reviewed generic fixtures and sampled facts from multiple corpus entries cover every new entity/relation, malformed syntax, stable IDs, graph invariants, evidence resolution, and deterministic replay. |
-| `R5` | Honest framework and macro handling | Extract deterministic syntax-level declarations through framework-neutral capability contracts where source form is sufficient, while preserving unresolved `cfg`, attribute-macro, declarative-macro, and proc-macro meaning as coverage gaps. | Framework capability contract and explicit distinction between declaration, candidate, and resolved runtime behavior. | Fixtures from at least two framework styles find reviewed declarations, reject designed decoys, never infer expanded code, and never label a syntactic declaration as observed runtime behavior. |
-| `R6` | Optional compiler-grade enrichment | Import version-bound SCIP or rust-analyzer evidence for cross-crate names, types, traits, calls, and macro products when deterministic syntax is insufficient. | Compiler-index schema and trust decision; generation belongs behind an explicit sandboxed profile compatible with `S9`. | Imported indexes are source/revision/toolchain bound and validated before facts are promoted; stale, malformed, mismatched, or incomplete indexes fail or remain explicit gaps. Standard local scans still execute nothing. |
-| `R7` | Portable graph export and local explorer | Export a versioned, evidence-preserving projection and open a read-only local graph explorer for entities, relations, claims, gaps, and source evidence. | Public export compatibility decision; viewer security and size limits. The canonical snapshot remains authoritative. | Reimport validates identity and evidence without loss; filters and bounded traversal cannot mutate the snapshot; unsupported projections remain non-canonical. This is not a full product authoring GUI. |
-| `R8` | Multi-repository pilot and publication evidence | Run scan, docs, query, export, and explorer against structurally independent pinned public repositories and publish a reproducible evaluation package. | Product evidence remains under `docs/software/`; conference hypotheses and analysis remain under `docs/research/`. | Repeated runs are deterministic; per-repository and aggregate graph/coverage counts, unresolved constructs, timings, resource usage, environment, tool versions, failure cases, and known limitations are retained in machine-readable form. |
+| `R2` | Safe gitlink and submodule boundary | Represent committed gitlinks and declared submodule metadata as external repository boundaries without fetching or traversing them implicitly. An explicitly supplied nested repository remains a separately acquired, revision-bound project. | Resolve the gitlink/submodule subset of `OD-GIT-001` and its later federation relationship; approve missing, malformed, mismatched, recursive, and limit behavior. | Root analysis remains deterministic with an absent submodule; a supplied nested repository must match the committed gitlink SHA; `.gitmodules` never grants network or filesystem authority; malformed or escaping declarations fail with typed evidence. |
+| `R3` | Real Cargo root-package workspace | Accept virtual and non-virtual root manifests, including implicit root members, an explicit `"."` member, literal members/exclusions, conventional and explicit library/binary targets, and multiple member manifests. A gitlink member remains an external workspace boundary rather than an implicitly traversed crate. | Versioned extraction/profile decision under `FR-EXT-*` and the unresolved post-S4 ontology boundary. | Project-owned fixtures cover virtual roots, implicit and explicit root packages, exclusions, and external gitlink members while reaching the existing S4 graph/docs/query journey deterministically; Cargo, `rustc`, build scripts, proc macros, dependencies, and target code remain unexecuted. |
+| `R4` | Manifest facts and feature coverage | Represent package metadata, target declarations, registry/path/Git dependencies, target-specific dependency tables, feature declarations, optional dependencies, `required-features`, patch declarations, and build-script presence without claiming an active Cargo resolution. | Approve entity/property identities, claim states, compatibility, limits, and ontology version. | Every supported manifest fact resolves to bytes; ignored or unsupported fields are explicit diagnostics or coverage gaps; no dependency is fetched, no patch is applied, and no feature or target world is guessed. |
+| `R5` | Rust semantic depth at real-world scale | Exercise existing enum, trait, named implementation, and method extraction on independent repositories; add only approved missing concepts such as fields, variants, constants/statics, attributes, components, services, configuration, and endpoint declarations. | New versioned Rust ontology decision resolving the relevant part of `OD-ONT-001`; high-risk golden review. | Reviewed generic fixtures and sampled facts from multiple corpus entries cover every new entity/relation, malformed syntax, stable IDs, graph invariants, evidence resolution, and deterministic replay. |
+| `R6` | Honest framework and macro handling | Extract deterministic syntax-level declarations through framework-neutral capability contracts where source form is sufficient, while preserving unresolved `cfg`, attribute-macro, declarative-macro, and proc-macro meaning as coverage gaps. | Framework capability contract and explicit distinction between declaration, candidate, and resolved runtime behavior. | Fixtures from at least two framework styles find reviewed declarations, reject designed decoys, never infer expanded code, and never label a syntactic declaration as observed runtime behavior. |
+| `R7` | Optional compiler-grade enrichment | Import version-bound SCIP or rust-analyzer evidence for cross-crate names, types, traits, calls, and macro products when deterministic syntax is insufficient. | Compiler-index schema and trust decision; generation belongs behind an explicit sandboxed profile compatible with `S9`. | Imported indexes are source/revision/toolchain bound and validated before facts are promoted; stale, malformed, mismatched, or incomplete indexes fail or remain explicit gaps. Standard local scans still execute nothing. |
+| `R8` | Portable graph export and local explorer | Export a versioned, evidence-preserving projection and open a read-only local graph explorer for entities, relations, claims, gaps, and source evidence. | Public export compatibility decision; viewer security and size limits. The canonical snapshot remains authoritative. | Reimport validates identity and evidence without loss; filters and bounded traversal cannot mutate the snapshot; unsupported projections remain non-canonical. This is not a full product authoring GUI. |
+| `R9` | Multi-repository pilot and publication evidence | Run scan, docs, query, export, and explorer against structurally independent pinned public repositories and publish a reproducible evaluation package. | Product evidence remains under `docs/software/`; conference hypotheses and analysis remain under `docs/research/`. | Repeated runs are deterministic; per-repository and aggregate graph/coverage counts, unresolved constructs, timings, resource usage, environment, tool versions, failure cases, and known limitations are retained in machine-readable form. |
 
 ### Earliest useful real-world checkpoint
 
-`R1` and `R2` are the minimum path to analyzing ordinary packed clones with
-common virtual or non-virtual Cargo workspace layouts. At that checkpoint
-CodeNoesis should create and query a partial but honest ontology and generate
-evidence-backed documentation. `R3`–`R7` increase semantic coverage and make
-the graph easier to inspect; they are not permitted to hide unsupported
-meaning.
+`R1`–`R3` are the minimum path to analyzing ordinary packed clones with safe
+gitlink boundaries and common virtual or non-virtual Cargo workspace layouts.
+At that checkpoint CodeNoesis should create and query a partial but honest
+ontology and generate evidence-backed documentation. `R4`–`R8` increase
+semantic coverage and make the graph easier to inspect; they are not permitted
+to hide unsupported meaning.
 
-The existing `S5` slice is incremental refresh, so none of `R1`–`R7` may be
+The existing `S5` slice is incremental refresh, so none of `R1`–`R8` may be
 silently folded into `S5`. Governance must either amend the delivery plan with
 bounded post-S4 compatibility slices or assign each behavior to an existing
 future slice without changing that slice's approved meaning.
@@ -103,6 +111,9 @@ repositories demonstrate:
 
 - acquisition from a normal full clone without repacking or manually
   materializing loose objects;
+- safe representation of gitlinks as external boundaries, with no implicit
+  submodule fetch and exact revision matching when a nested repository is
+  explicitly supplied;
 - recognition of virtual and non-virtual workspaces, root/member packages,
   library and binary targets, source modules, and declared feature/build
   metadata across the advertised profile;
@@ -161,11 +172,12 @@ The recommended execution order is:
 1. approve and retain `R0` baseline evidence;
 2. specify, Red-test, implement, and independently review `R1`;
 3. specify, Red-test, implement, and independently review `R2`;
-4. run the first partial S4 journey on one replaceable corpus entry;
-5. deliver `R3`–`R5` as separate ontology/framework objectives;
-6. add `R6` only after the sandbox and index trust boundary is approved;
-7. deliver `R7`, then execute `R8` on at least two independent repositories;
-8. continue the polyglot lane one approved adapter at a time.
+4. specify, Red-test, implement, and independently review `R3`;
+5. run the first partial S4 journey on one replaceable corpus entry;
+6. deliver `R4`–`R6` as separate manifest/ontology/framework objectives;
+7. add `R7` only after the sandbox and index trust boundary is approved;
+8. deliver `R8`, then execute `R9` on at least two independent repositories;
+9. continue the polyglot lane one approved adapter at a time.
 
 Each implementation pull request keeps one behavioral objective and includes
 the required issue, requirement status, slice, risk, paths, base/head SHAs,
