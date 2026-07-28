@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import hashlib
 import re
 import unittest
@@ -31,6 +32,8 @@ SNAPSHOT_SCHEMA_PATH = SPEC_ROOT / "repository-snapshot-v4.schema.json"
 CHUNK_SCHEMA_PATH = SPEC_ROOT / "extraction-chunk-v2.schema.json"
 GRAPH_SCHEMA_PATH = SPEC_ROOT / "knowledge-graph-v2.schema.json"
 ERROR_SCHEMA_PATH = SPEC_ROOT / "codenoesis-error-v5.schema.json"
+HASH_CONTRACT_PATH = SPEC_ROOT / "semantic-hash-contract-v1.json"
+SNAPSHOT_SEMANTIC_PATH = FIXTURE_ROOT / "expected-snapshot-semantic.json"
 SRS_PATH = ROOT / "docs" / "software" / "software-requirements-specification.md"
 
 S4_REQUIREMENTS = {
@@ -72,6 +75,7 @@ S4_BUNDLE_FILES = {
     "tests/fixtures/s4/workspace-docs-v1/expected-graph-summary.json",
     "tests/fixtures/s4/workspace-docs-v1/expected-query-document.json",
     "tests/fixtures/s4/workspace-docs-v1/expected-query-entity.json",
+    "tests/fixtures/s4/workspace-docs-v1/expected-snapshot-semantic.json",
     "tests/fixtures/s4/workspace-docs-v1/manifest.json",
     "tests/fixtures/s4/workspace-docs-v1/revision-a/Cargo.toml",
     "tests/fixtures/s4/workspace-docs-v1/revision-a/crates/app/Cargo.toml",
@@ -90,6 +94,7 @@ S4_BUNDLE_FILES = {
     "tests/specifications/s4/local-query-result-v1.schema.json",
     "tests/specifications/s4/repository-snapshot-v4.schema.json",
     "tests/specifications/s4/rust-ontology-v2.json",
+    "tests/specifications/s4/semantic-hash-contract-v1.json",
 }
 
 SCHEMA_PATHS = (
@@ -117,6 +122,10 @@ def relationship_id(kind: str, source: str, target: str) -> str:
     return f"urn:codenoesis:relationship:blake3:{digest}"
 
 
+def semantic_hash(domain: str, payload: Any) -> str:
+    return blake3_256(domain.encode() + b"\0" + canonical_json(payload))
+
+
 def git_tree_oid(entries: list[dict[str, str]]) -> str:
     payload = b"".join(
         entry["mode"].encode()
@@ -130,6 +139,280 @@ def git_tree_oid(entries: list[dict[str, str]]) -> str:
 
 
 class S4ContractTests(unittest.TestCase):
+    def test_v4_semantic_hash_contract_is_content_complete(self) -> None:
+        self.assertTrue(
+            HASH_CONTRACT_PATH.is_file(),
+            "S4 semantic-hash contract must be ratified before implementation",
+        )
+        self.assertTrue(
+            SNAPSHOT_SEMANTIC_PATH.is_file(),
+            "complete reviewed S4 snapshot semantic payload must exist",
+        )
+
+        contract = load_json(HASH_CONTRACT_PATH)
+        self.assertEqual(
+            contract,
+            {
+                "schema_version": "codenoesis.semantic-hash-contract/v1",
+                "algorithm": "blake3-256",
+                "canonicalization": "RFC8785",
+                "domain_separator_hex": "00",
+                "hashes": {
+                    "snapshot": {
+                        "domain": "codenoesis.repository-snapshot.semantic.v4",
+                        "payload": "RepositorySnapshotV4.semantic",
+                    },
+                    "knowledge_graph": {
+                        "domain": "codenoesis.knowledge-graph.semantic.v2",
+                        "payload": (
+                            "KnowledgeGraphV2 without semantic_hash"
+                        ),
+                    },
+                    "extraction_chunk": {
+                        "domain": "codenoesis.extraction-chunk.semantic.v2",
+                        "payload": (
+                            "ExtractionChunkV2 without semantic_hash"
+                        ),
+                    },
+                },
+            },
+        )
+
+        semantic = load_json(SNAPSHOT_SEMANTIC_PATH)
+        self.assertEqual(
+            set(semantic),
+            {
+                "repository",
+                "configuration",
+                "pipeline_version",
+                "ontology_version",
+                "extractor_contract_version",
+                "extractor_versions",
+                "evidence_lineage_version",
+                "inventory",
+                "extraction_chunks",
+                "knowledge_graph",
+            },
+        )
+        graph = semantic["knowledge_graph"]
+        graph_payload = {
+            key: value
+            for key, value in graph.items()
+            if key != "semantic_hash"
+        }
+        graph_hash = semantic_hash(
+            contract["hashes"]["knowledge_graph"]["domain"],
+            graph_payload,
+        )
+        self.assertEqual(graph["semantic_hash"]["value"], graph_hash)
+
+        chunk_domain = contract["hashes"]["extraction_chunk"]["domain"]
+        for chunk in semantic["extraction_chunks"]:
+            chunk_payload = {
+                key: value
+                for key, value in chunk.items()
+                if key != "semantic_hash"
+            }
+            self.assertEqual(
+                chunk["semantic_hash"]["value"],
+                semantic_hash(chunk_domain, chunk_payload),
+            )
+
+        snapshot_hash = semantic_hash(
+            contract["hashes"]["snapshot"]["domain"],
+            semantic,
+        )
+        summary = load_json(FIXTURE_ROOT / "expected-graph-summary.json")
+        self.assertEqual(summary["semantic_hash"], snapshot_hash)
+        self.assertEqual(summary["graph_semantic_hash"], graph_hash)
+        self.assertEqual(
+            summary["extraction_chunk_semantic_hashes"],
+            [
+                chunk["semantic_hash"]["value"]
+                for chunk in semantic["extraction_chunks"]
+            ],
+        )
+        snapshot_id = stable_id(
+            "codenoesis.snapshot-id/v1",
+            [snapshot_hash],
+        )
+        self.assertEqual(summary["snapshot_id"], snapshot_id)
+        for field, count_key in (
+            ("entities", "entities"),
+            ("relationships", "relationships"),
+            ("claims", "claims"),
+            ("evidence", "evidence"),
+            ("diagnostics", "diagnostics"),
+            ("coverage", "coverage_gaps"),
+        ):
+            self.assertEqual(len(graph[field]), summary["counts"][count_key])
+
+        for field in (
+            "entities",
+            "relationships",
+            "claims",
+            "evidence",
+            "coverage",
+        ):
+            identifiers = [item["id"] for item in graph[field]]
+            self.assertEqual(identifiers, sorted(identifiers))
+            self.assertEqual(len(identifiers), len(set(identifiers)))
+
+        entities = {item["id"]: item for item in graph["entities"]}
+        relationships = {
+            item["id"]: item for item in graph["relationships"]
+        }
+        evidence = {item["id"]: item for item in graph["evidence"]}
+        claims = {
+            (item["subject_kind"], item["subject_id"]): item
+            for item in graph["claims"]
+        }
+        self.assertEqual(
+            set(claims),
+            {("entity", item) for item in entities}
+            | {("relationship", item) for item in relationships},
+        )
+        for item in relationships.values():
+            self.assertEqual(
+                item["id"],
+                relationship_id(item["kind"], item["source"], item["target"]),
+            )
+            self.assertIn(item["source"], entities)
+            self.assertIn(item["target"], entities)
+            self.assertTrue(item["evidence_ids"])
+            self.assertTrue(
+                all(value in evidence for value in item["evidence_ids"])
+            )
+        for item in claims.values():
+            self.assertEqual(
+                item["id"],
+                stable_id(
+                    "codenoesis.claim-id/v2",
+                    [
+                        item["subject_kind"],
+                        item["subject_id"],
+                        item["state"],
+                    ],
+                ),
+            )
+            self.assertTrue(
+                all(value in evidence for value in item["evidence_ids"])
+            )
+        for item in evidence.values():
+            self.assertEqual(
+                item["id"],
+                stable_id(
+                    "codenoesis.evidence-id/v2",
+                    [
+                        summary["repository_identity"],
+                        summary["commit_oid"],
+                        item["blob_oid"],
+                        item["path"],
+                        str(item["start_byte"]),
+                        str(item["end_byte"]),
+                    ],
+                ),
+            )
+        for item in graph["coverage"]:
+            self.assertEqual(len(item["evidence_ids"]), 1)
+            self.assertEqual(
+                item["id"],
+                stable_id(
+                    "codenoesis.coverage-gap-id/v2",
+                    [
+                        summary["repository_identity"],
+                        summary["commit_oid"],
+                        item["capability"],
+                        item["evidence_ids"][0],
+                    ],
+                ),
+            )
+            self.assertIn(item["evidence_ids"][0], evidence)
+
+        for field in ("entities", "relationships", "claims"):
+            graph_ids = {item["id"] for item in graph[field]}
+            chunk_ids = [
+                item["id"]
+                for chunk in semantic["extraction_chunks"]
+                for item in chunk[field]
+            ]
+            self.assertEqual(len(chunk_ids), len(set(chunk_ids)))
+            self.assertEqual(set(chunk_ids), graph_ids)
+        chunk_paths = [
+            entities[chunk["source_file_id"]]["properties"]["path"]
+            for chunk in semantic["extraction_chunks"]
+        ]
+        self.assertEqual(chunk_paths, sorted(chunk_paths))
+
+        manifest = load_json(
+            FIXTURE_ROOT / "expected-documentation-manifest.json"
+        )
+        self.assertEqual(
+            manifest["snapshot_semantic_hash"]["value"],
+            snapshot_hash,
+        )
+        self.assertEqual(manifest["snapshot_id"], snapshot_id)
+        generation_inputs = []
+        for path in sorted((FIXTURE_ROOT / "expected-docs").rglob("*.md")):
+            relative = path.relative_to(
+                FIXTURE_ROOT / "expected-docs"
+            ).as_posix()
+            content = path.read_bytes()
+            generation_inputs.append(
+                [relative, blake3_256(content), len(content)]
+            )
+        self.assertEqual(
+            manifest["generation_hash"]["value"],
+            blake3_256(
+                canonical_json(
+                    [
+                        "codenoesis.documentation-generation/v1",
+                        snapshot_id,
+                        generation_inputs,
+                    ]
+                )
+            ),
+        )
+        for fixture in (
+            "expected-query-entity.json",
+            "expected-query-document.json",
+        ):
+            self.assertEqual(
+                load_json(FIXTURE_ROOT / fixture)["snapshot_id"],
+                snapshot_id,
+            )
+        specification = load_json(SPEC_PATH)
+        self.assertEqual(
+            specification["contracts"]["semantic_hashes"],
+            "tests/specifications/s4/semantic-hash-contract-v1.json",
+        )
+        self.assertEqual(
+            specification["goldens"]["snapshot_semantic"],
+            "tests/fixtures/s4/workspace-docs-v1/"
+            "expected-snapshot-semantic.json",
+        )
+
+        changed_graph = copy.deepcopy(graph_payload)
+        changed_graph["diagnostics"][0]["message"] += " changed"
+        self.assertNotEqual(
+            semantic_hash(
+                contract["hashes"]["knowledge_graph"]["domain"],
+                changed_graph,
+            ),
+            graph_hash,
+        )
+        changed_semantic = copy.deepcopy(semantic)
+        changed_semantic["knowledge_graph"]["diagnostics"][0]["message"] += (
+            " changed"
+        )
+        self.assertNotEqual(
+            semantic_hash(
+                contract["hashes"]["snapshot"]["domain"],
+                changed_semantic,
+            ),
+            snapshot_hash,
+        )
+
     def test_contract_bundle_binds_every_s4_ratification_artifact(self) -> None:
         manifest = load_json(BUNDLE_PATH)
         self.assertEqual(
