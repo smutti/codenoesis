@@ -1,4 +1,6 @@
-//! Application orchestration for the `CodeNoesis` S0 through S3 slices.
+//! Application orchestration for the `CodeNoesis` S0 through S4 slices.
+
+mod s4;
 
 use std::ffi::OsString;
 
@@ -7,7 +9,10 @@ use codenoesis_contracts::{
     validate_head_artifact,
 };
 use codenoesis_domain::knowledge::KnowledgeError;
-use codenoesis_domain::storage::{LocalSnapshotHead, StorageError, SweepResult};
+use codenoesis_domain::s4::WorkspaceError;
+use codenoesis_domain::storage::{
+    LocalSnapshotHead, PublicationCandidate, StorageError, SweepResult,
+};
 use codenoesis_domain::{
     AcquisitionError, RepositoryError, RepositoryIdentity, RepositoryInventory, Revision,
 };
@@ -44,6 +49,7 @@ impl ScanRequest {
 pub enum ScanError {
     Acquisition(AcquisitionError),
     Knowledge(KnowledgeError),
+    Workspace(WorkspaceError),
     Storage(StorageError),
     Internal,
 }
@@ -75,6 +81,19 @@ impl PublicationService {
         let candidate = snapshot
             .publication_candidate()
             .map_err(|_| ScanError::Internal)?;
+        Self::publish_candidate(&candidate, artifact_store, metadata_store, observer)
+    }
+
+    fn publish_candidate<C, M>(
+        candidate: &PublicationCandidate,
+        artifact_store: &mut C,
+        metadata_store: &mut M,
+        observer: &mut dyn PublicationObserver,
+    ) -> Result<LocalSnapshotHead, ScanError>
+    where
+        C: ArtifactStore,
+        M: MetadataStore,
+    {
         let expected_head = metadata_store
             .current_head_id(&candidate.snapshot.repository_identity)
             .map_err(ScanError::Storage)?;
@@ -105,7 +124,7 @@ impl PublicationService {
                 .map_err(ScanError::Storage)?;
         }
         let published = metadata_store
-            .publish(&candidate, expected_head.as_ref(), observer)
+            .publish(candidate, expected_head.as_ref(), observer)
             .map_err(ScanError::Storage)?;
         let head = Self::load_head(
             &candidate.snapshot.repository_identity,

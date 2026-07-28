@@ -1,0 +1,21 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s
+     Running tests/e2e_fr_cli_001_workspace_docs_query.rs (target/debug/deps/e2e_fr_cli_001_workspace_docs_query-f1823c222a67a534)
+
+running 1 test
+test e2e_fr_cli_001_workspace_docs_query ... FAILED
+
+failures:
+
+---- e2e_fr_cli_001_workspace_docs_query stdout ----
+
+thread 'e2e_fr_cli_001_workspace_docs_query' (2659984) panicked at crates/noesis/tests/e2e_fr_cli_001_workspace_docs_query.rs:97:5:
+expected S4 scan success; observed the approved unsupported-profile Red
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    e2e_fr_cli_001_workspace_docs_query
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.66s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_cli_001_workspace_docs_query`

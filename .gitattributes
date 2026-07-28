@@ -1,0 +1,2 @@
+tests/fixtures/s4/workspace-docs-v1/expected-docs/overview.md text eol=lf
+tests/fixtures/s4/workspace-docs-v1/expected-docs/modules/*.md text eol=lf

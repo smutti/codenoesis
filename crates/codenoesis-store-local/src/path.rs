@@ -56,6 +56,32 @@ pub fn prepare(
     })
 }
 
+pub fn prepare_existing(requested_store_root: &Path) -> Result<PreparedStore, StorageError> {
+    let absolute = absolute_without_parent_components(requested_store_root)?;
+    let trusted_ancestor = filesystem_namespace_anchor(&absolute)?;
+    if !absolute.exists() {
+        return Err(unsafe_path("store_root"));
+    }
+    verify_no_unsafe_components(&absolute, &trusted_ancestor)?;
+    let root = fs::canonicalize(&absolute).map_err(|_| unsafe_path("store_root"))?;
+    if classify_existing_root(&root)? {
+        return Err(StorageError::UnmarkedNonemptyRoot);
+    }
+    let objects = root.join("objects");
+    let objects_blake3 = objects.join("blake3");
+    let temporary = root.join("tmp");
+    verify_store_directory(&objects)?;
+    verify_store_directory(&objects_blake3)?;
+    verify_store_directory(&temporary)?;
+    Ok(PreparedStore {
+        database: root.join("metadata.sqlite3"),
+        root,
+        objects_blake3,
+        temporary,
+        fresh: false,
+    })
+}
+
 pub fn ensure_root(
     repository_root: &Path,
     requested_store_root: &Path,
@@ -165,6 +191,25 @@ fn common_ancestor(left: &Path, right: &Path) -> PathBuf {
     common
 }
 
+fn filesystem_namespace_anchor(path: &Path) -> Result<PathBuf, StorageError> {
+    let mut anchor = PathBuf::new();
+    let mut rooted = false;
+    for component in path.components() {
+        match component {
+            Component::Prefix(_) | Component::RootDir => {
+                anchor.push(component.as_os_str());
+                rooted = true;
+            }
+            Component::Normal(_) if rooted => {
+                anchor.push(component.as_os_str());
+                return Ok(anchor);
+            }
+            _ => return Err(unsafe_path("invalid_store_root")),
+        }
+    }
+    Err(unsafe_path("invalid_store_root"))
+}
+
 fn classify_existing_root(root: &Path) -> Result<bool, StorageError> {
     let mut entries = fs::read_dir(root).map_err(|_| StorageError::PublicationFailed)?;
     if entries.next().is_none() {
@@ -245,6 +290,30 @@ fn unsafe_path(reason: &'static str) -> StorageError {
 #[cfg(unix)]
 pub(crate) fn is_unsafe_metadata(metadata: &fs::Metadata) -> bool {
     metadata.file_type().is_symlink()
+}
+
+#[cfg(all(test, unix))]
+mod tests {
+    use std::os::unix::fs::symlink;
+
+    use super::*;
+
+    #[test]
+    fn sec_fr_doc_003_existing_store_ancestor_symlink_is_rejected() {
+        let temporary = tempfile::tempdir().expect("temporary root");
+        let actual = temporary.path().join("actual");
+        let linked = temporary.path().join("linked");
+        fs::create_dir(&actual).expect("actual ancestor");
+        fs::create_dir(actual.join("store")).expect("store root");
+        symlink(&actual, &linked).expect("linked ancestor");
+
+        assert!(matches!(
+            prepare_existing(&linked.join("store")),
+            Err(StorageError::UnsafePath {
+                reason: "unsafe_path_component"
+            })
+        ));
+    }
 }
 
 #[cfg(windows)]

@@ -1,5 +1,9 @@
 //! Versioned JSON contracts for the `CodeNoesis` S0 through S3 slices.
 
+mod s4;
+
+pub use s4::*;
+
 use std::collections::BTreeMap;
 use std::error::Error;
 use std::fmt::{self, Display, Formatter};
@@ -14,8 +18,8 @@ use codenoesis_domain::knowledge::{
 use codenoesis_domain::storage::{
     ArtifactReference, ArtifactRole, ClaimRow, EntityRow, EvidenceRow, ExtractionRow,
     LocalSnapshotHead, OrdinalRow, PublicationCandidate, RelationshipRow,
-    SNAPSHOT_HASH_DOMAIN as STORED_SNAPSHOT_HASH_DOMAIN, SemanticHash as StoredSemanticHash,
-    SnapshotId, SnapshotRecord, StorageComponent, StorageError, StoredArtifact,
+    SemanticHash as StoredSemanticHash, SnapshotId, SnapshotRecord, StorageComponent, StorageError,
+    StoredArtifact,
 };
 use codenoesis_domain::{
     AcquisitionError, BoundRevision, InputError, InventoryFile, InventoryLanguage, LimitKind,
@@ -503,6 +507,23 @@ pub fn validate_head_artifact(
 }
 
 fn publication_candidate(value: &Value) -> Result<PublicationCandidate, PublicationCandidateError> {
+    let snapshot_schema_version = required_str(value, "schema_version", "snapshot.schema_version")?;
+    let snapshot_hash_domain =
+        codenoesis_domain::storage::snapshot_hash_domain(snapshot_schema_version).ok_or(
+            PublicationCandidateError::InvalidContract("snapshot.schema_version"),
+        )?;
+    let graph_hash_domain = codenoesis_domain::storage::graph_hash_domain(snapshot_schema_version)
+        .ok_or(PublicationCandidateError::InvalidContract(
+            "snapshot.schema_version",
+        ))?;
+    let extraction_hash_domain =
+        codenoesis_domain::storage::extraction_hash_domain(snapshot_schema_version).ok_or(
+            PublicationCandidateError::InvalidContract("snapshot.schema_version"),
+        )?;
+    let embedded_domains_required =
+        snapshot_schema_version == codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION;
+    let v4_contract =
+        snapshot_schema_version == codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V4;
     let semantic = required_field(value, "semantic", "semantic")?;
     let repository = required_field(semantic, "repository", "semantic.repository")?;
     let repository_identity =
@@ -524,22 +545,29 @@ fn publication_candidate(value: &Value) -> Result<PublicationCandidate, Publicat
     let snapshot_id = SnapshotId::from_semantic_hash(snapshot_hash)
         .map_err(PublicationCandidateError::Storage)?;
     let graph = required_field(semantic, "knowledge_graph", "semantic.knowledge_graph")?;
-    let graph_hash = stored_semantic_hash(graph, "knowledge_graph.semantic_hash")?;
-    let (artifacts, extraction_chunks) =
-        publication_artifacts(semantic, graph, snapshot_hash, &graph_hash)?;
-    let rows = publication_graph_rows(graph)?;
+    let graph_hash = stored_semantic_hash(
+        graph,
+        "knowledge_graph.semantic_hash",
+        graph_hash_domain,
+        embedded_domains_required,
+    )?;
+    let (artifacts, extraction_chunks) = publication_artifacts(
+        semantic,
+        graph,
+        snapshot_hash,
+        snapshot_hash_domain,
+        &graph_hash,
+        extraction_hash_domain,
+        embedded_domains_required,
+    )?;
+    let rows = publication_graph_rows(graph, v4_contract)?;
     let candidate = PublicationCandidate {
         snapshot: SnapshotRecord {
             snapshot_id,
             repository_identity,
             commit_oid,
-            snapshot_schema_version: required_str(
-                value,
-                "schema_version",
-                "snapshot.schema_version",
-            )?
-            .to_owned(),
-            semantic_hash: StoredSemanticHash::blake3(STORED_SNAPSHOT_HASH_DOMAIN, snapshot_hash),
+            snapshot_schema_version: snapshot_schema_version.to_owned(),
+            semantic_hash: StoredSemanticHash::blake3(snapshot_hash_domain, snapshot_hash),
             graph_semantic_hash: graph_hash,
         },
         artifacts,
@@ -561,7 +589,10 @@ fn publication_artifacts(
     semantic: &Value,
     graph: &Value,
     snapshot_hash: &str,
+    snapshot_hash_domain: &str,
     graph_hash: &StoredSemanticHash,
+    extraction_hash_domain: &str,
+    embedded_domains_required: bool,
 ) -> Result<(Vec<StoredArtifact>, Vec<ExtractionRow>), PublicationCandidateError> {
     let snapshot_bytes =
         serde_json::to_vec(semantic).map_err(PublicationCandidateError::Serialization)?;
@@ -572,7 +603,7 @@ fn publication_artifacts(
             ArtifactRole::SnapshotSemantic,
             0,
             snapshot_bytes,
-            StoredSemanticHash::blake3(STORED_SNAPSHOT_HASH_DOMAIN, snapshot_hash),
+            StoredSemanticHash::blake3(snapshot_hash_domain, snapshot_hash),
         ),
         StoredArtifact::new(
             ArtifactRole::KnowledgeGraph,
@@ -594,11 +625,21 @@ fn publication_artifacts(
             ArtifactRole::ExtractionChunk,
             ordinal,
             bytes.clone(),
-            stored_semantic_hash(chunk, "extraction_chunk.semantic_hash")?,
+            stored_semantic_hash(
+                chunk,
+                "extraction_chunk.semantic_hash",
+                extraction_hash_domain,
+                embedded_domains_required,
+            )?,
         );
+        let chunk_id_field = if embedded_domains_required {
+            "chunk_id"
+        } else {
+            "source_file_id"
+        };
         extraction_rows.push(ExtractionRow {
             ordinal,
-            chunk_id: required_str(chunk, "chunk_id", "extraction_chunk.chunk_id")?.to_owned(),
+            chunk_id: required_str(chunk, chunk_id_field, "extraction_chunk.chunk_id")?.to_owned(),
             artifact_id: artifact.artifact_id.clone(),
             canonical_json: bytes,
         });
@@ -616,12 +657,29 @@ struct GraphRows {
     coverage_gaps: Vec<OrdinalRow>,
 }
 
-fn publication_graph_rows(graph: &Value) -> Result<GraphRows, PublicationCandidateError> {
+fn publication_graph_rows(
+    graph: &Value,
+    v4_contract: bool,
+) -> Result<GraphRows, PublicationCandidateError> {
+    let entity_id_field = if v4_contract { "id" } else { "entity_id" };
+    let relationship_id_field = if v4_contract { "id" } else { "relationship_id" };
+    let relationship_source_field = if v4_contract {
+        "source"
+    } else {
+        "source_entity_id"
+    };
+    let relationship_target_field = if v4_contract {
+        "target"
+    } else {
+        "target_entity_id"
+    };
+    let claim_id_field = if v4_contract { "id" } else { "claim_id" };
+    let evidence_id_field = if v4_contract { "id" } else { "evidence_id" };
     let entities = canonical_rows(
         required_array(graph, "entities", "knowledge_graph.entities")?,
         |entity, canonical_json| {
             Ok(EntityRow {
-                entity_id: required_str(entity, "entity_id", "entity.entity_id")?.to_owned(),
+                entity_id: required_str(entity, entity_id_field, "entity.entity_id")?.to_owned(),
                 canonical_json,
             })
         },
@@ -632,19 +690,19 @@ fn publication_graph_rows(graph: &Value) -> Result<GraphRows, PublicationCandida
             Ok(RelationshipRow {
                 relationship_id: required_str(
                     relationship,
-                    "relationship_id",
+                    relationship_id_field,
                     "relationship.relationship_id",
                 )?
                 .to_owned(),
                 source_entity_id: required_str(
                     relationship,
-                    "source_entity_id",
+                    relationship_source_field,
                     "relationship.source_entity_id",
                 )?
                 .to_owned(),
                 target_entity_id: required_str(
                     relationship,
-                    "target_entity_id",
+                    relationship_target_field,
                     "relationship.target_entity_id",
                 )?
                 .to_owned(),
@@ -656,7 +714,7 @@ fn publication_graph_rows(graph: &Value) -> Result<GraphRows, PublicationCandida
         required_array(graph, "claims", "knowledge_graph.claims")?,
         |claim, canonical_json| {
             Ok(ClaimRow {
-                claim_id: required_str(claim, "claim_id", "claim.claim_id")?.to_owned(),
+                claim_id: required_str(claim, claim_id_field, "claim.claim_id")?.to_owned(),
                 subject_kind: required_str(claim, "subject_kind", "claim.subject_kind")?.to_owned(),
                 subject_id: required_str(claim, "subject_id", "claim.subject_id")?.to_owned(),
                 canonical_json,
@@ -667,7 +725,7 @@ fn publication_graph_rows(graph: &Value) -> Result<GraphRows, PublicationCandida
         required_array(graph, "evidence", "knowledge_graph.evidence")?,
         |evidence, canonical_json| {
             Ok(EvidenceRow {
-                evidence_id: required_str(evidence, "evidence_id", "evidence.evidence_id")?
+                evidence_id: required_str(evidence, evidence_id_field, "evidence.evidence_id")?
                     .to_owned(),
                 canonical_json,
             })
@@ -678,12 +736,20 @@ fn publication_graph_rows(graph: &Value) -> Result<GraphRows, PublicationCandida
         "diagnostics",
         "knowledge_graph.diagnostics",
     )?)?;
-    let coverage = required_field(graph, "coverage", "knowledge_graph.coverage")?;
-    let coverage_gaps = ordinal_rows(required_array(
-        coverage,
-        "gaps",
-        "knowledge_graph.coverage.gaps",
-    )?)?;
+    let coverage_gaps = if v4_contract {
+        ordinal_rows(required_array(
+            graph,
+            "coverage",
+            "knowledge_graph.coverage",
+        )?)?
+    } else {
+        let coverage = required_field(graph, "coverage", "knowledge_graph.coverage")?;
+        ordinal_rows(required_array(
+            coverage,
+            "gaps",
+            "knowledge_graph.coverage.gaps",
+        )?)?
+    };
     Ok(GraphRows {
         entities,
         relationships,
@@ -728,11 +794,21 @@ fn required_array<'a>(
 fn stored_semantic_hash(
     value: &Value,
     field: &'static str,
+    expected_domain: &str,
+    embedded_domain_required: bool,
 ) -> Result<StoredSemanticHash, PublicationCandidateError> {
     let hash = required_field(value, "semantic_hash", field)?;
+    let domain = match hash.get("domain") {
+        Some(domain) => domain
+            .as_str()
+            .filter(|domain| *domain == expected_domain)
+            .ok_or(PublicationCandidateError::InvalidContract(field))?,
+        None if !embedded_domain_required => expected_domain,
+        None => return Err(PublicationCandidateError::InvalidContract(field)),
+    };
     Ok(StoredSemanticHash {
         algorithm: required_str(hash, "algorithm", field)?.to_owned(),
-        domain: required_str(hash, "domain", field)?.to_owned(),
+        domain: domain.to_owned(),
         value: required_str(hash, "value", field)?.to_owned(),
     })
 }
