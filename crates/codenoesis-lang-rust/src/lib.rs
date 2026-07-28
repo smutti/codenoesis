@@ -14,6 +14,10 @@ use codenoesis_ports::RustKnowledgeExtractor;
 use tree_sitter::{Node, Parser};
 use unicode_normalization::UnicodeNormalization as _;
 
+mod workspace;
+
+pub use workspace::TreeSitterRustWorkspaceExtractor;
+
 #[derive(Clone, Copy, Debug, Default)]
 pub struct TreeSitterRustExtractor;
 

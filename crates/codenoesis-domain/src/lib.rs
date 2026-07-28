@@ -1,6 +1,7 @@
-//! Domain values for the `CodeNoesis` S0 through S3 slices.
+//! Domain values for the `CodeNoesis` S0 through S4 slices.
 
 pub mod knowledge;
+pub mod s4;
 pub mod storage;
 
 use std::error::Error;

@@ -29,6 +29,7 @@ pub struct MaterializedRepository {
 }
 
 impl MaterializedRepository {
+    #[allow(clippy::too_many_lines)]
     pub fn revision_a() -> Self {
         let root = unique_temp_root();
         let worktree = root.join("repository");

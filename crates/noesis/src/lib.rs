@@ -2,6 +2,8 @@
 
 use std::ffi::OsStr;
 
+pub mod generated_docs;
+
 #[cfg(target_os = "linux")]
 mod filesystem_sandbox;
 
@@ -99,6 +101,60 @@ pub fn install_s3_filesystem_boundary(
 pub const fn install_s3_filesystem_boundary(
     _repository: &OsStr,
     _store: &OsStr,
+) -> Result<(), SecurityBoundaryError> {
+    Ok(())
+}
+
+/// Installs the S4 read-only store and writable generated-docs boundary.
+///
+/// # Errors
+///
+/// Returns an opaque error when Linux Landlock cannot fully enforce the
+/// approved rights.
+#[cfg(target_os = "linux")]
+pub fn install_s4_docs_filesystem_boundary(
+    store: &OsStr,
+    documents: &OsStr,
+) -> Result<(), SecurityBoundaryError> {
+    filesystem_sandbox::install_with_documents(store, documents, true)
+}
+
+/// Confirms that normative S4 filesystem confinement is Linux-only.
+///
+/// # Errors
+///
+/// This portability implementation is infallible.
+#[cfg(not(target_os = "linux"))]
+pub const fn install_s4_docs_filesystem_boundary(
+    _store: &OsStr,
+    _documents: &OsStr,
+) -> Result<(), SecurityBoundaryError> {
+    Ok(())
+}
+
+/// Installs the S4 read-only store and generated-docs query boundary.
+///
+/// # Errors
+///
+/// Returns an opaque error when Linux Landlock cannot fully enforce the
+/// approved rights.
+#[cfg(target_os = "linux")]
+pub fn install_s4_query_filesystem_boundary(
+    store: &OsStr,
+    documents: &OsStr,
+) -> Result<(), SecurityBoundaryError> {
+    filesystem_sandbox::install_with_documents(store, documents, false)
+}
+
+/// Confirms that normative S4 filesystem confinement is Linux-only.
+///
+/// # Errors
+///
+/// This portability implementation is infallible.
+#[cfg(not(target_os = "linux"))]
+pub const fn install_s4_query_filesystem_boundary(
+    _store: &OsStr,
+    _documents: &OsStr,
 ) -> Result<(), SecurityBoundaryError> {
     Ok(())
 }

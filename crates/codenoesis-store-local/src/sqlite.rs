@@ -3,10 +3,10 @@ use std::path::{Path, PathBuf};
 use std::time::Duration;
 
 use codenoesis_domain::storage::{
-    ArtifactId, ArtifactReference, ArtifactRole, FILESYSTEM_CAS_VERSION, GRAPH_HASH_DOMAIN,
+    ArtifactId, ArtifactReference, ArtifactRole, FILESYSTEM_CAS_VERSION,
     LOCAL_STORE_SCHEMA_VERSION, LocalSnapshotHead, PublicationBoundary, PublicationCandidate,
-    PublicationEvent, PublicationResult, SNAPSHOT_HASH_DOMAIN, SNAPSHOT_SCHEMA_VERSION,
-    SemanticHash, SnapshotId, StorageComponent, StorageError,
+    PublicationEvent, PublicationResult, SemanticHash, SnapshotId, StorageComponent, StorageError,
+    extraction_hash_domain, graph_hash_domain, snapshot_hash_domain,
 };
 use codenoesis_domain::{ObjectId, RepositoryIdentity};
 use codenoesis_ports::{MetadataStore, PublicationObserver};
@@ -918,10 +918,13 @@ fn load_snapshot_head(
         .optional()
         .map_err(map_sqlite)?
         .ok_or_else(|| corrupt("head_snapshot_missing", Some(snapshot_id.to_string())))?;
+    let snapshot_domain = snapshot_hash_domain(&row.2);
+    let graph_domain = graph_hash_domain(&row.2);
     if row.0 != repository_identity.as_str()
-        || row.2 != SNAPSHOT_SCHEMA_VERSION
+        || snapshot_domain.is_none()
+        || graph_domain.is_none()
         || row.3 != "blake3-256"
-        || row.4 != SNAPSHOT_HASH_DOMAIN
+        || Some(row.4.as_str()) != snapshot_domain
         || !is_blake3_hex(&row.5)
         || !is_blake3_hex(&row.6)
         || SnapshotId::from_semantic_hash(&row.5)? != *snapshot_id
@@ -938,8 +941,14 @@ fn load_snapshot_head(
         snapshot_id: snapshot_id.clone(),
         commit_oid,
         snapshot_schema_version: row.2,
-        semantic_hash: SemanticHash::blake3(SNAPSHOT_HASH_DOMAIN, &row.5),
-        graph_semantic_hash: SemanticHash::blake3(GRAPH_HASH_DOMAIN, &row.6),
+        semantic_hash: SemanticHash::blake3(
+            snapshot_domain.expect("validated snapshot hash domain"),
+            &row.5,
+        ),
+        graph_semantic_hash: SemanticHash::blake3(
+            graph_domain.expect("validated graph hash domain"),
+            &row.6,
+        ),
         generation,
         artifacts: Vec::new(),
     })
@@ -1015,6 +1024,13 @@ fn load_artifact_references(
 
 fn validate_artifact_references(head: &LocalSnapshotHead) -> Result<(), StorageError> {
     let mut extraction_ordinal = 0_u32;
+    let expected_extraction_domain = extraction_hash_domain(&head.snapshot_schema_version)
+        .ok_or_else(|| {
+            corrupt(
+                "invalid_snapshot_metadata",
+                Some(head.snapshot_id.to_string()),
+            )
+        })?;
     for (position, reference) in head.artifacts.iter().enumerate() {
         let valid = match (position, reference.role, reference.ordinal) {
             (0, ArtifactRole::SnapshotSemantic, 0) => reference.semantic_hash == head.semantic_hash,
@@ -1024,8 +1040,7 @@ fn validate_artifact_references(head: &LocalSnapshotHead) -> Result<(), StorageE
             (_, ArtifactRole::ExtractionChunk, ordinal) if ordinal == extraction_ordinal => {
                 extraction_ordinal = extraction_ordinal.saturating_add(1);
                 reference.semantic_hash.algorithm == "blake3-256"
-                    && reference.semantic_hash.domain
-                        == codenoesis_domain::storage::EXTRACTION_HASH_DOMAIN
+                    && reference.semantic_hash.domain == expected_extraction_domain
             }
             _ => false,
         };

@@ -37,6 +37,24 @@ impl LocalStore {
             metadata,
         })
     }
+
+    /// Opens an existing exact v1 store for a restart-only reader.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed path, marker, schema, or metadata failure.
+    pub fn open_existing(store_root: &Path) -> Result<Self, StorageError> {
+        let prepared = path::prepare_existing(store_root)?;
+        let metadata = SqliteMetadataStore::open(&prepared.database, false)?;
+        Ok(Self {
+            artifacts: FilesystemCas::new(
+                prepared.root,
+                prepared.objects_blake3,
+                prepared.temporary,
+            ),
+            metadata,
+        })
+    }
 }
 
 /// Verifies the explicit roots and creates only an absent empty store leaf so

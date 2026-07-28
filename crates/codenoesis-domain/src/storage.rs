@@ -11,6 +11,10 @@ pub const SNAPSHOT_SCHEMA_VERSION: &str = "codenoesis.repository-snapshot/v3";
 pub const SNAPSHOT_HASH_DOMAIN: &str = "codenoesis.repository-snapshot.semantic.v3";
 pub const GRAPH_HASH_DOMAIN: &str = "codenoesis.knowledge-graph.semantic.v1";
 pub const EXTRACTION_HASH_DOMAIN: &str = "codenoesis.extraction-chunk.semantic.v1";
+pub const SNAPSHOT_SCHEMA_VERSION_V4: &str = "codenoesis.repository-snapshot/v4";
+pub const SNAPSHOT_HASH_DOMAIN_V4: &str = "codenoesis.repository-snapshot.semantic.v4";
+pub const GRAPH_HASH_DOMAIN_V2: &str = "codenoesis.knowledge-graph.semantic.v2";
+pub const EXTRACTION_HASH_DOMAIN_V2: &str = "codenoesis.extraction-chunk.semantic.v2";
 
 const SNAPSHOT_ID_PREFIX: &str = "urn:codenoesis:snapshot:blake3:";
 const ARTIFACT_ID_PREFIX: &str = "urn:codenoesis:artifact:blake3:";
@@ -350,11 +354,24 @@ impl PublicationCandidate {
     ///
     /// Returns a typed metadata or object-integrity error.
     pub fn validate(&self) -> Result<(), StorageError> {
-        if self.snapshot.snapshot_schema_version != SNAPSHOT_SCHEMA_VERSION
-            || self.snapshot.semantic_hash.algorithm != "blake3-256"
-            || self.snapshot.semantic_hash.domain != SNAPSHOT_HASH_DOMAIN
+        let Some(snapshot_hash_domain) =
+            snapshot_hash_domain(&self.snapshot.snapshot_schema_version)
+        else {
+            return Err(corrupt_candidate("invalid_snapshot_metadata"));
+        };
+        let Some(graph_hash_domain) = graph_hash_domain(&self.snapshot.snapshot_schema_version)
+        else {
+            return Err(corrupt_candidate("invalid_snapshot_metadata"));
+        };
+        let Some(extraction_hash_domain) =
+            extraction_hash_domain(&self.snapshot.snapshot_schema_version)
+        else {
+            return Err(corrupt_candidate("invalid_snapshot_metadata"));
+        };
+        if self.snapshot.semantic_hash.algorithm != "blake3-256"
+            || self.snapshot.semantic_hash.domain != snapshot_hash_domain
             || self.snapshot.graph_semantic_hash.algorithm != "blake3-256"
-            || self.snapshot.graph_semantic_hash.domain != GRAPH_HASH_DOMAIN
+            || self.snapshot.graph_semantic_hash.domain != graph_hash_domain
             || SnapshotId::from_semantic_hash(&self.snapshot.semantic_hash.value)?
                 != self.snapshot.snapshot_id
         {
@@ -385,9 +402,23 @@ impl PublicationCandidate {
             }
             previous = Some(order);
             match artifact.role {
-                ArtifactRole::SnapshotSemantic if artifact.ordinal == 0 => snapshot_count += 1,
-                ArtifactRole::KnowledgeGraph if artifact.ordinal == 0 => graph_count += 1,
-                ArtifactRole::ExtractionChunk if artifact.ordinal == extraction_ordinal => {
+                ArtifactRole::SnapshotSemantic
+                    if artifact.ordinal == 0
+                        && artifact.semantic_hash == self.snapshot.semantic_hash =>
+                {
+                    snapshot_count += 1;
+                }
+                ArtifactRole::KnowledgeGraph
+                    if artifact.ordinal == 0
+                        && artifact.semantic_hash == self.snapshot.graph_semantic_hash =>
+                {
+                    graph_count += 1;
+                }
+                ArtifactRole::ExtractionChunk
+                    if artifact.ordinal == extraction_ordinal
+                        && artifact.semantic_hash.algorithm == "blake3-256"
+                        && artifact.semantic_hash.domain == extraction_hash_domain =>
+                {
                     extraction_ordinal += 1;
                 }
                 _ => return Err(corrupt_candidate("invalid_artifact_ordinal")),
@@ -405,6 +436,33 @@ impl PublicationCandidate {
     #[must_use]
     pub fn artifact_references(&self) -> Vec<ArtifactReference> {
         self.artifacts.iter().map(ArtifactReference::from).collect()
+    }
+}
+
+#[must_use]
+pub fn snapshot_hash_domain(snapshot_schema_version: &str) -> Option<&'static str> {
+    match snapshot_schema_version {
+        SNAPSHOT_SCHEMA_VERSION => Some(SNAPSHOT_HASH_DOMAIN),
+        SNAPSHOT_SCHEMA_VERSION_V4 => Some(SNAPSHOT_HASH_DOMAIN_V4),
+        _ => None,
+    }
+}
+
+#[must_use]
+pub fn graph_hash_domain(snapshot_schema_version: &str) -> Option<&'static str> {
+    match snapshot_schema_version {
+        SNAPSHOT_SCHEMA_VERSION => Some(GRAPH_HASH_DOMAIN),
+        SNAPSHOT_SCHEMA_VERSION_V4 => Some(GRAPH_HASH_DOMAIN_V2),
+        _ => None,
+    }
+}
+
+#[must_use]
+pub fn extraction_hash_domain(snapshot_schema_version: &str) -> Option<&'static str> {
+    match snapshot_schema_version {
+        SNAPSHOT_SCHEMA_VERSION => Some(EXTRACTION_HASH_DOMAIN),
+        SNAPSHOT_SCHEMA_VERSION_V4 => Some(EXTRACTION_HASH_DOMAIN_V2),
+        _ => None,
     }
 }
 

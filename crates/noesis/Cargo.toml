@@ -15,12 +15,12 @@ codenoesis-lang-rust.workspace = true
 codenoesis-ports.workspace = true
 codenoesis-repository.workspace = true
 codenoesis-store-local.workspace = true
+serde_json.workspace = true
 
 [target.'cfg(target_os = "linux")'.dependencies]
 landlock.workspace = true
 libc.workspace = true
 seccompiler.workspace = true
-serde_json.workspace = true
 
 [dev-dependencies]
 rusqlite.workspace = true

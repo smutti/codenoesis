@@ -1,9 +1,10 @@
-//! Inward-owned ports for the `CodeNoesis` S0 through S3 slices.
+//! Inward-owned ports for the `CodeNoesis` S0 through S4 slices.
 
 use std::collections::BTreeSet;
 use std::ffi::OsStr;
 
 use codenoesis_domain::knowledge::{KnowledgeError, RustKnowledge};
+use codenoesis_domain::s4::{RustWorkspaceKnowledge, WorkspaceError};
 use codenoesis_domain::storage::{
     ArtifactId, LocalSnapshotHead, PublicationCandidate, PublicationEvent, PublicationResult,
     SnapshotId, StorageError, StoredArtifact, SweepResult,
@@ -49,6 +50,19 @@ pub trait RustKnowledgeExtractor {
     /// Returns a typed extraction, ontology, or graph failure without partial
     /// publication.
     fn extract(&self, inventory: &RepositoryInventory) -> Result<RustKnowledge, KnowledgeError>;
+}
+
+pub trait RustWorkspaceExtractor {
+    /// Extracts the approved deterministic S4 Cargo-workspace subset.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed workspace, parser, ontology, or graph failure without
+    /// executing Cargo, rustc, build scripts, or repository code.
+    fn extract_workspace(
+        &self,
+        inventory: &RepositoryInventory,
+    ) -> Result<RustWorkspaceKnowledge, WorkspaceError>;
 }
 
 pub trait PublicationObserver {
