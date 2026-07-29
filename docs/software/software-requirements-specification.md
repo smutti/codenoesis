@@ -1,20 +1,20 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.7 — S0 through S3 implemented; S4 ratified; semantic-hash amendment proposed**.
-> The S0–S3 runtime and product suites exist on `main`, but CodeNoesis claims
+> Status: **0.8 — S0 through S4 implemented but not Verified**.
+> The S0–S4 runtime and product suites exist on `main`, but CodeNoesis claims
 > no slice `Verified` without complete immutable retention evidence. S4 was
-> ratified through PR #42 and policy-bound through PR #46. This revision
-> corrects the S4 semantic-hash preimages and complete fixture payload before
-> S4 production implementation resumes.
+> ratified through PR #42, amended through PR #49, rebound through PR #51, and
+> implemented through PR #52. This revision records lifecycle state only and
+> changes no approved requirement, contract, oracle, or runtime behavior.
 
 ## 1. Document control
 
 | Field | Value |
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
-| Version | `0.7` |
-| Status | S0 through S3 remain Approved and implemented but not Verified; S4 is Approved through protected PR [#42](https://github.com/smutti/codenoesis/pull/42), while its content-complete semantic-hash amendment becomes effective only when the accountable single maintainer manually squash-merges protected PR [#49](https://github.com/smutti/codenoesis/pull/49) |
-| Date | 2026-07-27 |
+| Version | `0.8` |
+| Status | S0 through S4 are Approved and Implemented but not Verified. S4 was ratified through protected PR [#42](https://github.com/smutti/codenoesis/pull/42), amended through PR [#49](https://github.com/smutti/codenoesis/pull/49), policy-bound through PR [#51](https://github.com/smutti/codenoesis/pull/51), and implemented through PR [#52](https://github.com/smutti/codenoesis/pull/52). Verification remains withheld pending complete immutable retention evidence. |
+| Date | 2026-07-28 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -31,6 +31,7 @@
 | `0.5` | 2026-07-26 | Recorded the implemented-but-not-Verified S2 state and proposed the exact S3 snapshot/artifact identities, SQLite/CAS contract, atomic head transition, crash/retry/corruption/cleanup semantics, reviewed fixture, and expected Red. |
 | `0.6` | 2026-07-27 | Recorded the Approved S3 contract and proposed the exact S4 literal Rust-workspace profile, ontology v2 identities, V4 graph/snapshot contracts, evidence-backed Markdown bundle, exact-ID query, output-root safety, reviewed fixture, and expected Red. |
 | `0.7` | 2026-07-27 | Corrected S4 snapshot, graph, and extraction semantic hashes to cover their complete RFC 8785 payloads; added the reviewed full fixture semantic payload and regenerated every transitive snapshot/docs/query binding. |
+| `0.8` | 2026-07-28 | Recorded the protected S4 semantic-hash amendment, policy rebind, and production implementation merges from PRs #49, #51, and #52. S0 through S4 are Implemented but remain unverified pending complete immutable retention evidence; no approved behavior or oracle changed. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -335,6 +336,12 @@ resource ceilings.
 | `FR-QRY-001` | `Proposed` | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #42 protected merge record](https://github.com/smutti/codenoesis/pull/42) | `S4` | [S4 query result schema](../../tests/specifications/s4/local-query-result-v1.schema.json) |
 | `FR-CLI-001` | `Proposed` | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #42 protected merge record](https://github.com/smutti/codenoesis/pull/42) | `S4` | [S4 acceptance specification](../../tests/specifications/s4/e2e_fr_cli_001_workspace_docs_query.json) |
 
+The table preserves the lifecycle transition presented for protected
+ratification. Following the protected merges of PRs #49, #51, and #52, all
+seven listed requirements are Approved and Implemented but not Verified.
+Implementation evidence does not substitute for the complete immutable
+retention evidence required for verification.
+
 S4 scan is selected only by `--profile standard-local-s4` with one explicit
 store. It emits `RepositorySnapshotV4` with `KnowledgeGraphV2` and immutable
 `codenoesis.ontology/rust/v2`. The profile accepts only committed UTF-8 root
@@ -369,10 +376,12 @@ The machine-readable hash contract and full reviewed fixture semantic payload
 are bound into the S4 contract bundle. Any material nested change must change
 its enclosing digest and the snapshot identity.
 
-The policy registry is intentionally unchanged in this amendment. A separate
-protected change must bind exactly these seven IDs to the full commit on
-`main` containing the byte-identical SRS. Until that change is reviewed and
-merged, autonomous S4 implementation authorization fails closed.
+The content-complete amendment was rebound through protected PR #51 before the
+production implementation in PR #52. This status-only revision changes the SRS
+blob without changing approved S4 meaning, so the machine policy source
+binding must fail closed until a separate protected rebind is reviewed and
+merged. This pull request does not authorize autonomous post-S4 production
+implementation.
 
 S4 contract bundle: `sha256:3efb380fb058a5831123a0f990676575da04e60998cada8987f034675b61f12e`.
 The bundle binds decision 0005, the independent maintenance guard, inherited
