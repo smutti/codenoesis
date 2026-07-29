@@ -62,6 +62,14 @@
       "approval_reference": "https://github.com/smutti/codenoesis/pull/55"
     },
     {
+      "id": "DR-SEM-001",
+      "slice": "S7",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T15:39:07Z",
+      "source_sha": "d5991a0680db4392f4cad1a016cc7022d9cced77",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/63"
+    },
+    {
       "id": "FR-ACQ-001",
       "slice": "S0",
       "approved_by": "github:smutti",
@@ -140,6 +148,22 @@
       "approved_at": "2026-07-29T10:33:49Z",
       "source_sha": "bfc21f574a7e99f5b236d70065def61b472ba12f",
       "approval_reference": "https://github.com/smutti/codenoesis/pull/55"
+    },
+    {
+      "id": "FR-IMP-004",
+      "slice": "S7",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T15:39:07Z",
+      "source_sha": "d5991a0680db4392f4cad1a016cc7022d9cced77",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/63"
+    },
+    {
+      "id": "FR-IMP-005",
+      "slice": "S7",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T15:39:07Z",
+      "source_sha": "d5991a0680db4392f4cad1a016cc7022d9cced77",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/63"
     },
     {
       "id": "FR-INV-001",
