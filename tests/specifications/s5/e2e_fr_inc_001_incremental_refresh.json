@@ -2,6 +2,7 @@
   "schema_version": "codenoesis.acceptance-specification/v1",
   "issue": "https://github.com/smutti/codenoesis/issues/66",
   "approval_pull_request": "https://github.com/smutti/codenoesis/pull/67",
+  "bootstrap_correction_pull_request": "TBD",
   "requirements": [
     {
       "id": "INV-INC-001",
@@ -72,8 +73,13 @@
     "test_name": "e2e_fr_inc_001_incremental_refresh",
     "command": "cargo test -p noesis --test e2e_fr_inc_001_incremental_refresh --locked -- --exact e2e_fr_inc_001_incremental_refresh",
     "precondition": "This governance package and a separate policy binding are merged, then the black-box acceptance harness is added before production implementation.",
-    "expected_failure": "The current local runtime can create the S4 baseline, but standard-local-s5 refresh is unsupported, no IncrementalRefreshReportV1 is emitted, and the target head is not published.",
-    "accepted_error_code": "input.invalid_profile",
+    "expected_failure": "The current local runtime can create the S4 baseline, but the refresh command is not yet recognized; the exact invocation returns ErrorV2 input.invalid_revision, emits no report, creates no store, and publishes no target head.",
+    "accepted_error_code": "input.invalid_revision",
+    "accepted_error_schema": "codenoesis.error/v2",
+    "accepted_exit": 2,
+    "accepted_stdout": "empty",
+    "accepted_store_created": false,
+    "accepted_head_published": false,
     "rejected_failures": [
       "compilation failure",
       "missing or changed fixture",
@@ -87,7 +93,7 @@
       "cold-equivalence oracle weakened or regenerated"
     ],
     "run_in_governance_change": false,
-    "reason_not_run": "Every S5 requirement remains Proposed and unbound until protected human merge and a separate policy change; governance may not fabricate behavioral Red evidence."
+    "reason_not_run": "The original governance package preceded protected requirement and policy binding; the corrected bootstrap observation is executed only by the first implementation issue."
   },
   "cache_contract": {
     "schema_version": "codenoesis.analysis-cache-entry/v1",

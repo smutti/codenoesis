@@ -7,11 +7,11 @@
     },
     {
       "path": "docs/software/decisions/0008-s5-incremental-refresh-contract.md",
-      "sha256": "7207185b71240b00ffe66d20d317faa4a8be284a647fbc6e14fd047a76983068"
+      "sha256": "553ddddda5f021fe14759b137d46896274b28e48e55ed1af37e0d047fd174f3a"
     },
     {
       "path": "scripts/tests/test_s5_incremental_refresh_contract.py",
-      "sha256": "e4b627a105fbe7f4efede237e196100179512363174638dcec7141ab86fc7798"
+      "sha256": "0ff2357fda0a8040d54ce42a0562ca63c7e9f989a488fb40d0b94f66b61c6c71"
     },
     {
       "path": "tests/fixtures/s5/incremental-refresh-v1/README.md",
@@ -99,7 +99,7 @@
     },
     {
       "path": "tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json",
-      "sha256": "92a0bec03987d1fe7a5c22effee52dadc81f3b8f14b91ab5eb48dbad05ec8800"
+      "sha256": "321ec056b2aaecc7f88a081fbbc9190e7bf53f031c4054b5a662745b1c1f63fe"
     },
     {
       "path": "tests/specifications/s5/incremental-refresh-report-v1.schema.json",
@@ -110,5 +110,5 @@
       "sha256": "96e59f42c65be8e62bf7142c348442375cffe038bc548dd21849ef4691cf78c1"
     }
   ],
-  "bundle_sha256": "dd50107f00f7b4dae811fe844e24dff9f20c9b242aacc04bc683e3b4d525f0d1"
+  "bundle_sha256": "54307290dbeb1be2e41e4fedd910731e14fba08f395d05eaa2825a4cc92ad474"
 }

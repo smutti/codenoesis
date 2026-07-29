@@ -10,6 +10,7 @@
 | Slice | `S5 — Incremental refresh` |
 | Risk | High: cache authority, invalidation, public snapshot semantics, atomic publication, public report/error contracts, and protected oracle |
 | Scope | Governance only; production implementation, policy binding, workflows, dependencies, and accepted S0–S4 artifacts are excluded |
+| Bootstrap correction | protected bootstrap correction pull request `TBD` |
 
 ## Context
 
@@ -343,12 +344,15 @@ cargo test -p noesis --test e2e_fr_inc_001_incremental_refresh --locked -- --exa
 ```
 
 It must first be observed Red because the current runtime can create the S4
-baseline but does not support `standard-local-s5`, emit the report, or publish
-the target. Compilation failure, missing fixture, schema failure, panic,
-timeout, target execution, two cold scans mislabeled as reuse, stale public
-chunk reuse, or a weakened equivalence oracle is not acceptable Red evidence.
-No production Red runs in this governance package while the requirements are
-Proposed and unbound.
+baseline but does not yet recognize the `refresh` command. The exact invocation
+therefore exits `2`, emits ErrorV2 `input.invalid_revision` on stderr, emits no
+stdout, creates no store, and publishes no target head. This is a bootstrap-only
+observation; every implemented S5 failure still uses the strict
+`CodeNoesisErrorV7` contract. Compilation failure, missing fixture, schema
+failure, panic, timeout, target execution, two cold scans mislabeled as reuse,
+stale public chunk reuse, or a weakened equivalence oracle is not acceptable
+Red evidence. No production Red runs in this governance package while the
+requirements are Proposed and unbound.
 
 ## Implementation constraints
 
