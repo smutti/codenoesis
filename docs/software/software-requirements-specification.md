@@ -461,16 +461,17 @@ lineage. Any bound-byte change requires a new digest and renewed human review.
 The following is the exact target Approved set for the bounded
 **S7 — Change impact implementation-aware compatibility contract**. Approval
 becomes authoritative only when `@smutti` manually squash-merges the exact
-protected head of PR `TBD`. The authoring agent does not approve or merge.
+protected head of [PR #63](https://github.com/smutti/codenoesis/pull/63). The
+authoring agent does not approve or merge.
 This high-risk decision fixes the three-view semantic model, stable identities,
 direction-aware classifier, strict public report, limits, project-owned
 provider/client/decoy fixture, explicit unknown behavior, and future Red.
 
 | Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
 |---|---|---|---|---|---|---|---|
-| `DR-SEM-001` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | PR `TBD` protected merge record | `S7` | [S7 implementation-aware compatibility decision](decisions/0007-s7-implementation-aware-api-compatibility-contract.md) and [report schema](../../tests/specifications/s7/semantic-compatibility-report-v1.schema.json) |
-| `FR-IMP-004` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | PR `TBD` protected merge record | `S7` | [S7 machine oracle](../../tests/specifications/s7/e2e_fr_imp_004_implementation_aware_api_diff.json) and [reviewed fixture](../../tests/fixtures/s7/implementation-aware-api-v1/README.md) |
-| `FR-IMP-005` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | PR `TBD` protected merge record | `S7` | [S7 rule catalog](../../tests/specifications/s7/compatibility-rule-catalog-v1.json) and [reviewed report](../../tests/fixtures/s7/implementation-aware-api-v1/expected-semantic-compatibility-report.json) |
+| `DR-SEM-001` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #63 protected merge record](https://github.com/smutti/codenoesis/pull/63) | `S7` | [S7 implementation-aware compatibility decision](decisions/0007-s7-implementation-aware-api-compatibility-contract.md) and [report schema](../../tests/specifications/s7/semantic-compatibility-report-v1.schema.json) |
+| `FR-IMP-004` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #63 protected merge record](https://github.com/smutti/codenoesis/pull/63) | `S7` | [S7 machine oracle](../../tests/specifications/s7/e2e_fr_imp_004_implementation_aware_api_diff.json) and [reviewed fixture](../../tests/fixtures/s7/implementation-aware-api-v1/README.md) |
+| `FR-IMP-005` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #63 protected merge record](https://github.com/smutti/codenoesis/pull/63) | `S7` | [S7 rule catalog](../../tests/specifications/s7/compatibility-rule-catalog-v1.json) and [reviewed report](../../tests/fixtures/s7/implementation-aware-api-v1/expected-semantic-compatibility-report.json) |
 
 This additive contract does not silently approve or redefine the broader
 `FR-IMP-001`, `FR-IMP-002`, or `FR-IMP-003` requirements. It partially resolves
@@ -502,7 +503,7 @@ unchanged in this ratification change; a separate protected policy PR may bind
 only these three IDs to the exact merged SRS.
 
 S7 implementation-aware compatibility contract bundle:
-`sha256:f1e594e50a2dc3ac688e4fb0711c806e3adcedbd287d4b32562738681af87432`.
+`sha256:08dabb5b4895adfa5f531a9364a8f02ba39a2548b05ac7b4af08e26b4d4d044a`.
 The bundle binds Decision 0007, the independent governance guard,
 strict report schema, rule catalog, machine oracle, project-owned source
 fixture, manifest, and reviewed report. Any bound-byte change requires a new

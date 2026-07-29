@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed; becomes Accepted only after protected manual merge of PR `TBD` |
+| Status | Proposed; becomes Accepted only after protected manual merge of [PR #63](https://github.com/smutti/codenoesis/pull/63) |
 | Date | 2026-07-29 |
 | Deciders | Andrea Moretti (`@smutti` persona), with protected manual merge by `@smutti` as the approval event |
 | Issue | [#62](https://github.com/smutti/codenoesis/issues/62) |

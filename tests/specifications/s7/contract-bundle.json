@@ -7,11 +7,11 @@
     },
     {
       "path": "docs/software/decisions/0007-s7-implementation-aware-api-compatibility-contract.md",
-      "sha256": "f19e3f73b5b28a5c022be7f0d793b5ce3aee8656c810f293b68801af777b8ba6"
+      "sha256": "3858fcee11d6a5d0da39d832d2a6163c8aec237e362687207109658f4bfb8b9d"
     },
     {
       "path": "scripts/tests/test_s7_implementation_aware_api_contract.py",
-      "sha256": "859578b786ced3983235285fdb38e127d5f9056ae143a8af07f50a1c995dd96a"
+      "sha256": "a6cf5faa203958f9d05ada4c9e9a4b6450173e5e0cf54fc3913a0425685081ff"
     },
     {
       "path": "tests/fixtures/s7/implementation-aware-api-v1/README.md",
@@ -59,12 +59,12 @@
     },
     {
       "path": "tests/specifications/s7/e2e_fr_imp_004_implementation_aware_api_diff.json",
-      "sha256": "6187d6f5408c49935bacd29bff545bad787d318835fca3b37328020252a1fcb3"
+      "sha256": "d17072db81a456d8ca94b64094f5f09c9fc99004d27458fc8237e911d7386af4"
     },
     {
       "path": "tests/specifications/s7/semantic-compatibility-report-v1.schema.json",
       "sha256": "3f8b6847ef688fc8ec5e3b8b5ec888efff1498bf7a6a2ef46890fa90238d3b79"
     }
   ],
-  "bundle_sha256": "f1e594e50a2dc3ac688e4fb0711c806e3adcedbd287d4b32562738681af87432"
+  "bundle_sha256": "08dabb5b4895adfa5f531a9364a8f02ba39a2548b05ac7b4af08e26b4d4d044a"
 }

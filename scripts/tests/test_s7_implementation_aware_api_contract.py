@@ -950,13 +950,12 @@ class S7ImplementationAwareApiContractTests(unittest.TestCase):
             "https://github.com/smutti/codenoesis/issues/62",
         )
         approval = acceptance["approval_pull_request"]
-        self.assertTrue(
-            approval == "TBD"
-            or re.fullmatch(
-                r"https://github\.com/smutti/codenoesis/pull/[1-9][0-9]*",
-                approval,
-            )
+        self.assertEqual(
+            approval,
+            "https://github.com/smutti/codenoesis/pull/63",
         )
+        self.assertIn(approval, SRS_PATH.read_text(encoding="utf-8"))
+        self.assertIn(approval, DECISION_PATH.read_text(encoding="utf-8"))
         self.assertEqual(
             acceptance["analysis_profile"],
             "implementation-aware-http-json/v1",

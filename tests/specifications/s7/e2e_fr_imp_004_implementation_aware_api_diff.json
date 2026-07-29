@@ -1,7 +1,7 @@
 {
   "schema_version": "codenoesis.acceptance-specification/v1",
   "issue": "https://github.com/smutti/codenoesis/issues/62",
-  "approval_pull_request": "TBD",
+  "approval_pull_request": "https://github.com/smutti/codenoesis/pull/63",
   "requirements": [
     {
       "id": "DR-SEM-001",
