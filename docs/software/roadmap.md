@@ -1,7 +1,7 @@
 # CodeNoesis Delivery Roadmap
 
 > Status: **Proposed planning companion — not implementation authority**.
-> Last updated: **2026-07-28**.
+> Last updated: **2026-07-29**.
 
 This roadmap sequences product and validation work without changing the
 normative meaning or approval status of the
@@ -12,8 +12,8 @@ requirement IDs, one approved delivery slice, acceptance oracle, expected Red
 failure, risk classification, allowed paths, evidence, and human approvals
 before production implementation starts.
 
-Roadmap identifiers such as `R1` and `P1` are planning identifiers, not SRS
-slice or requirement IDs. They must not be used to bypass the approved
+Roadmap identifiers such as `R1`, `P1`, and `G1` are planning identifiers, not
+SRS slice or requirement IDs. They must not be used to bypass the approved
 `S0`–`S14` delivery and governance process.
 
 ## Current product baseline
@@ -134,6 +134,105 @@ pilot metadata, not proof that an ontology fact is true and not a prerequisite
 for a static CodeNoesis scan. CodeNoesis must report what it can establish from
 approved inputs without executing or repairing a target repository.
 
+## Production-readiness model
+
+Production readiness is a continuous delivery constraint, not work deferred
+until `S14`. Each earlier slice must preserve its applicable security,
+compatibility, operability, evidence, and rollback properties even when the
+complete server and release gates are not yet available.
+
+CodeNoesis has two distinct candidate general-availability gates:
+
+| Gate | User-visible outcome | Required scope | Candidate exit condition |
+|---|---|---|---|
+| Local GA | A supported, signed `noesis` distribution analyzes declared local repository profiles with deterministic evidence, bounded resource use, documented platform guarantees, recoverable local state, and no target execution or analysis network access. | Verified applicable `S0`–`S4` behavior, the advertised subset of `R0`–`R9` and `P1`–`P5`, plus applicable `G0`–`G9` controls. | Installation, upgrade, rollback, compatibility, backup/export, security, performance, support, and pilot evidence are Green for every advertised local capability and platform. |
+| Server GA | A supported multi-user deployment provides durable jobs, REST/MCP parity, tenant isolation, governed intelligence, recovery, observability, and signed release operations. | Local GA plus Verified applicable `S5`–`S14` behavior and all server-applicable `G0`–`G9` controls. | SLO, tenant, privacy, migration, restore, chaos, supply-chain, incident, and multi-repository pilot gates pass on the exact release artifacts. |
+
+An optional adapter, compiler index, framework capability, interface, or
+deployment profile does not block a smaller GA scope when it is explicitly
+excluded from the support matrix. Anything advertised as supported must pass
+the same applicable readiness gates; experimental availability is not GA.
+
+## Production-readiness lane
+
+The SRS already defines many production requirements, especially across
+`S9`–`S14`, but the following planning lane makes their delivery order and
+evidence explicit. A row that identifies a missing requirement or decision
+must update the SRS or architecture through a separate protected governance
+package before implementation.
+
+| Order | Planning item | Outcome | Existing SRS mapping | Candidate acceptance gate |
+|---|---|---|---|---|
+| `G0` | Release profiles and support matrix | Define Local GA and Server GA capabilities, supported operating systems/architectures, sandbox tiers, deployment profiles, excluded experimental features, owners, and support windows. | `NFR-PORT-001`, `OD-SBX-001`, `S9`, `S14` | Every release artifact and document names one profile and exact capability set; unsupported combinations fail before work starts. |
+| `G1` | Distribution and configuration | Produce installable CLI and server artifacts with versioned configuration schemas, deterministic defaults, secret references, startup validation, installation, upgrade, uninstall, and rollback procedures. | `NFR-CMP-001`, `NFR-SEC-003`, `NFR-SUP-001`, `S10`, `S14`; installation and release-channel semantics require an approved requirement. | Clean install, invalid configuration, secret rotation, upgrade, rollback, and uninstall scenarios pass on every supported profile without hidden state or secret leakage. |
+| `G2` | Compatibility and migration | Classify JSON, configuration, ontology, artifact, database, REST, MCP, WIT, and plugin changes; support the declared read/write window, explicit migrations, downgrade refusal, and rollback or rebuild paths. | `NFR-CMP-001`, `OD-STO-001`, `OD-API-001`, `S10`, `S11`, `S14` | Compatibility fixtures block unapproved breaks; migration from at least two releases and rollback/rebuild drills preserve or explicitly reject state without partial publication. |
+| `G3` | Data lifecycle and disaster recovery | Define classification, retention, export, deletion, legal hold, residency, backup expiry, consistency, RPO, RTO, restore, and search/index reconstruction. | `NFR-DR-001`, `NFR-PRV-002`, `OD-DAT-001`, `S10`, `S12`, `S14` | Lifecycle conformance and complete restore exercises validate snapshot heads, objects, indexes, audit continuity, purge deadlines, and backup expiry. |
+| `G4` | Runtime resilience and flow control | Bound queues and concurrency; implement idempotency, leases, retries, cancellation, backpressure, graceful drain, dependency-loss behavior, failover, and overload shedding. | `INV-BND-001`, `INV-STO-001`, `FR-JOB-001`, `NFR-REL-002`, `NFR-OPS-001`, `S10`, `S14` | Duplicate, crash, timeout, saturation, restart, dependency outage, and drain scenarios preserve the last valid state and recover within approved limits. |
+| `G5` | Security, privacy, and tenancy | Maintain threat models, least privilege, secret isolation, authorization, tenant separation, sandboxing, network policy, rate limits, abuse controls, audit integrity, vulnerability exceptions, and privacy allowlists. | `INV-TEN-001`, `NFR-SEC-*`, `NFR-PRV-*`, `OD-AUT-001`, `OD-SBX-001`, `S9`, `S12`–`S14` | Malicious repository, cross-tenant, credential-canary, privilege, sandbox escape, denial-of-service, audit tamper, and external-transfer suites remain Green. |
+| `G6` | Observability and operations | Define privacy-safe logs, metrics, traces, correlation, SLIs, SLOs, error budgets, health transitions, alerts, dashboards, runbooks, on-call ownership, and incident exercises. | `NFR-OBS-001`, `NFR-OPS-001`, `OD-SLO-001`, `S10`–`S14`; incident-response service levels require an approved policy or requirement. | Success, failure, retry, cancellation, dependency loss, stuck work, and incident drills produce actionable signals without source, secret, or tenant leakage. |
+| `G7` | Performance and capacity | Publish reference corpora, cold/warm definitions, concurrency, cache state, ceilings, p50/p95/p99 methods, capacity models, load, soak, stress, and chaos evidence. | `NFR-PER-001/002`, `OD-LIM-001`, `OD-SLO-001`, `S14` | Exact release artifacts meet ratified latency, throughput, availability, resource, recovery, and success-rate thresholds with no discarded failures. |
+| `G8` | Supply chain and release integrity | Lock dependencies, inventory transitive `unsafe`, enforce license/advisory policy, generate SBOMs, sign binaries and images, attach provenance, verify reproducibility where claimed, and time-bound exceptions. | `NFR-MNT-002`, `NFR-SEC-004`, `NFR-SUP-001`, `S14` | Consumers verify source-to-artifact identity, signatures, SBOM association, provenance, dependency policy, and absence of unaccepted exploitable Critical/High findings. |
+| `G9` | Pilot, release, and support | Run staged internal/public pilots, canary and rollback exercises, operational handoff, known-limit review, support and vulnerability-response processes, deprecation/EOL policy, and final GA decision. | `S14`; support, vulnerability-response, release-channel, and EOL commitments require approved policy or requirements. | Independent reviewers approve the exact release evidence pack; pilot exit criteria, rollback, incident response, residual risk, ownership, and support commitments are explicit. |
+
+### Production-readiness sequencing
+
+- `G0` starts before the next public compatibility or interface contract.
+- `G1`, `G2`, `G5`, and `G8` apply to Local GA rather than waiting for the
+  server path.
+- `G3`, `G4`, and `G6` grow with `S10` and must be exercised before Server GA.
+- `G7` begins with every benchmarkable slice and becomes contractual only
+  after `OD-LIM-001` and `OD-SLO-001` are approved.
+- `G9` is the final release decision, not a substitute for any missing Green
+  gate.
+
+## Delivery package policy
+
+The fastest safe unit is one review objective, not one file, requirement, or
+commit. Related artifacts may be reviewed together when they establish one
+coherent behavior and share the same risk boundary.
+
+### Default high-risk capability package
+
+Use three pull requests instead of spreading one capability over many small
+administrative changes:
+
+1. **Governance package:** one capability's requirement IDs, SRS update, ADR,
+   threat model, schemas, fixture/oracle specification, limits, failure
+   behavior, traceability, expected Red, and explicit approval. It contains no
+   production implementation.
+2. **Policy-binding package:** the minimal machine-policy projection of the
+   merged governance source. It changes no requirement, oracle, workflow, or
+   production behavior and remains independently reviewable.
+3. **Implementation package:** the retained Red observation, minimum production
+   code, focused domain/contract/security tests, Green and regression evidence,
+   operational documentation, and traceability for exactly one behavioral
+   objective.
+
+When requirements and policy are already approved and no protected contract
+changes, a low- or medium-risk behavior may use one implementation pull request
+containing the complete Red-to-Green journey and evidence.
+
+### Mandatory separation
+
+Never bundle these merely to reduce pull-request count:
+
+- policy/workflow/agent-control changes with the behavior they authorize or
+  judge;
+- unrelated capabilities or more than one behavioral implementation
+  objective;
+- dependency upgrades, formatter churn, generated refreshes, or cleanup with a
+  product behavior unless the approved objective cannot build without the
+  exact change;
+- production code with a still-Proposed requirement or an oracle whose meaning
+  has not received human review;
+- ontology, schema, migration, authorization, sandbox, release, or secret
+  changes that cross different risk owners or rollback boundaries.
+
+Independent packages may proceed in parallel when their files, decisions, and
+review evidence do not depend on one another. Stacked pull requests must name
+their base and merge order; evidence from an unmerged dependency is not treated
+as evidence on `main`.
+
 ## Polyglot adapter lane
 
 The normative SRS currently assigns Java, JavaScript/TypeScript, and C/C++ to
@@ -183,4 +282,6 @@ Each implementation pull request keeps one behavioral objective and includes
 the required issue, requirement status, slice, risk, paths, base/head SHAs,
 expected Red, Green/regression commands, deterministic environment, fixture,
 oracle, traceability, limitations, and human approvals. No pilot or conference
-claim upgrades a product requirement or marks a slice Verified by itself.
+claim upgrades a product requirement or marks a slice Verified by itself. The
+delivery package policy above reduces administrative pull requests without
+weakening this behavioral boundary.
