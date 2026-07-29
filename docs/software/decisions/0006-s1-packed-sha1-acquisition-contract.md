@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Accepted; authoritative only after the accountable actor manually merges protected PR [#TBD](https://github.com/smutti/codenoesis/pull/TBD) |
+| Status | Accepted; authoritative only after the accountable actor manually merges protected PR [#61](https://github.com/smutti/codenoesis/pull/61) |
 | Date | 2026-07-29 |
 | Scope | `S1 — Safe inventory` compatibility extension only; roadmap `R0` and `R1` |
 | Product owner | Andrea Moretti — project governance persona represented by [`@smutti`](https://github.com/smutti), not a separate natural person |
@@ -10,7 +10,7 @@
 | Risk | High: public acquisition/error behavior, untrusted binary parsing, integrity, filesystem races, numeric limits, and security evidence |
 | Requirement | `FR-ACQ-004` |
 | Issue | [#60](https://github.com/smutti/codenoesis/issues/60) |
-| Approval reference | PR [#TBD](https://github.com/smutti/codenoesis/pull/TBD); effective only on protected manual merge by `@smutti` |
+| Approval reference | PR [#61](https://github.com/smutti/codenoesis/pull/61); effective only on protected manual merge by `@smutti` |
 
 This record approves no production implementation by itself. It becomes
 authoritative only through the protected manual merge by `@smutti`; the

@@ -398,7 +398,7 @@ The following is the exact target Approved set for an explicit
 `R1`. `R0` and `R1` remain planning identifiers, not delivery slices.
 Approval becomes authoritative only when `@smutti` manually squash-merges the
 exact protected head of PR
-[#TBD](https://github.com/smutti/codenoesis/pull/TBD). The authoring agent does
+[#61](https://github.com/smutti/codenoesis/pull/61). The authoring agent does
 not approve or merge. This high-risk decision fixes an operational selector,
 the bounded local pack v2/index v2 SHA-1 subset, ErrorV6, corruption and race
 behavior, numeric limits, a project-owned fixture, and a replaceable public
@@ -406,7 +406,7 @@ corpus descriptor.
 
 | Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
 |---|---|---|---|---|---|---|---|
-| `FR-ACQ-004` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #TBD protected merge record](https://github.com/smutti/codenoesis/pull/TBD) | `S1` | [Packed SHA-1 acquisition decision](decisions/0006-s1-packed-sha1-acquisition-contract.md) and [machine oracle](../../tests/specifications/s1/e2e_fr_acq_004_packed_sha1.json) |
+| `FR-ACQ-004` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #61 protected merge record](https://github.com/smutti/codenoesis/pull/61) | `S1` | [Packed SHA-1 acquisition decision](decisions/0006-s1-packed-sha1-acquisition-contract.md) and [machine oracle](../../tests/specifications/s1/e2e_fr_acq_004_packed_sha1.json) |
 
 The existing S1 contract remains immutable:
 `standard-local-s1` without a new acquisition selector still accepts only
@@ -450,7 +450,7 @@ separate protected change may bind only `FR-ACQ-004` to the full commit on
 `main` containing the byte-identical SRS. Until that policy PR is reviewed and
 merged, autonomous implementation authorization fails closed.
 
-S1 packed SHA-1 contract bundle: `sha256:78d1e418ab50a56f819b5e00272a7376002ed48f8d8eef207185ca1782575de1`.
+S1 packed SHA-1 contract bundle: `sha256:08602c21b06e0e0cea754312fb8c9f5d28db36ae31e9e646df669b2c129826df`.
 The separate bundle binds Decision 0006, the independent maintenance guard,
 strict ErrorV6 and corpus schemas, machine oracle, synthetic fixture,
 replaceable public corpus descriptor, and the unchanged S1/S4 contract

@@ -7,7 +7,7 @@
     },
     {
       "path": "docs/software/decisions/0006-s1-packed-sha1-acquisition-contract.md",
-      "sha256": "bcf692234fb6c7d99e08f8b03ffef02a5d110bced17f1b98cec4f2be080ff905"
+      "sha256": "bb1ec2eaa0ee9fbc451e4ffdb25c5dbc946435de69e3a4e79f63ceb96971709c"
     },
     {
       "path": "scripts/tests/test_s1_packed_contract.py",
@@ -39,12 +39,12 @@
     },
     {
       "path": "tests/specifications/s1/e2e_fr_acq_004_packed_sha1.json",
-      "sha256": "24b55d77c6e0cd90d9aa78dcf251c2975cbb506159dcfad53ee83e7295335c1e"
+      "sha256": "41ade77f2e0c806c0586f6234c830f932286c18a9419f21ef5f9689a41a5338d"
     },
     {
       "path": "tests/specifications/s4/contract-bundle.json",
       "sha256": "be199ebbeb9cb35c2e6a68c5b9d847f86fe131efd007b0d09d9fd28390c91437"
     }
   ],
-  "bundle_sha256": "78d1e418ab50a56f819b5e00272a7376002ed48f8d8eef207185ca1782575de1"
+  "bundle_sha256": "08602c21b06e0e0cea754312fb8c9f5d28db36ae31e9e646df669b2c129826df"
 }
