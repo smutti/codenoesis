@@ -1,0 +1,353 @@
+{
+  "schema_version": "codenoesis.acceptance-specification/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/66",
+  "approval_pull_request": "TBD",
+  "requirements": [
+    {
+      "id": "INV-INC-001",
+      "current_state": "Proposed",
+      "target_state": "Approved"
+    },
+    {
+      "id": "FR-INC-001",
+      "current_state": "Proposed",
+      "target_state": "Approved"
+    },
+    {
+      "id": "FR-INC-002",
+      "current_state": "Proposed",
+      "target_state": "Approved"
+    },
+    {
+      "id": "FR-INC-003",
+      "current_state": "Proposed",
+      "target_state": "Approved"
+    },
+    {
+      "id": "FR-CLI-004",
+      "current_state": "Proposed",
+      "target_state": "Approved"
+    }
+  ],
+  "slice": "S5",
+  "risk": {
+    "level": "high",
+    "rationale": "Cache authority, invalidation correctness, commit-bound evidence rematerialization, public report and error schemas, snapshot equivalence, and atomic head publication"
+  },
+  "runtime_implementation_authorized": false,
+  "operation": {
+    "command": "noesis refresh --repository <path> --repository-id <id> --revision <rev> --store <path> --profile standard-local-s5",
+    "success_artifact": "IncrementalRefreshReportV1",
+    "failure_artifact": "CodeNoesisErrorV7",
+    "success_stream": "stdout",
+    "failure_stream": "stderr",
+    "success_exit": 0,
+    "target_semantic_profile": "standard-local-s4"
+  },
+  "dependencies": {
+    "approved": [
+      "S3 atomic local publication",
+      "S4 RepositorySnapshotV4, ExtractionChunkV2, KnowledgeGraphV2, DocumentationManifestV1, docs, and exact query contracts",
+      "DR-ART-001",
+      "DR-ART-002",
+      "INV-SNP-001",
+      "NFR-DET-001"
+    ],
+    "must_remain_byte_compatible": [
+      "tests/specifications/s4/contract-bundle.json",
+      "every file bound by the accepted S4 contract bundle"
+    ]
+  },
+  "fixture": {
+    "root": "tests/fixtures/s5/incremental-refresh-v1",
+    "manifest": "tests/fixtures/s5/incremental-refresh-v1/manifest.json",
+    "cold_summary": "tests/fixtures/s5/incremental-refresh-v1/expected-cold-artifacts.json",
+    "expected_report": "tests/fixtures/s5/incremental-refresh-v1/expected-incremental-refresh-report.json",
+    "report_schema": "tests/specifications/s5/incremental-refresh-report-v1.schema.json",
+    "cache_schema": "tests/specifications/s5/analysis-cache-entry-v1.schema.json",
+    "error_schema": "tests/specifications/s5/codenoesis-error-v7.schema.json",
+    "rule_catalog": "tests/specifications/s5/incremental-rule-catalog-v1.json"
+  },
+  "expected_red": {
+    "test_name": "e2e_fr_inc_001_incremental_refresh",
+    "command": "cargo test -p noesis --test e2e_fr_inc_001_incremental_refresh --locked -- --exact e2e_fr_inc_001_incremental_refresh",
+    "precondition": "This governance package and a separate policy binding are merged, then the black-box acceptance harness is added before production implementation.",
+    "expected_failure": "The current local runtime can create the S4 baseline, but standard-local-s5 refresh is unsupported, no IncrementalRefreshReportV1 is emitted, and the target head is not published.",
+    "accepted_error_code": "input.invalid_profile",
+    "rejected_failures": [
+      "compilation failure",
+      "missing or changed fixture",
+      "schema or oracle failure",
+      "panic",
+      "timeout",
+      "Git, Cargo, rustc, build, target, hook, plugin, network, model, or Council execution",
+      "two cold scans mislabeled as incremental reuse",
+      "baseline public chunk bytes copied with stale commit evidence",
+      "changed-source evidence retaining the baseline blob or span",
+      "cold-equivalence oracle weakened or regenerated"
+    ],
+    "run_in_governance_change": false,
+    "reason_not_run": "Every S5 requirement remains Proposed and unbound until protected human merge and a separate policy change; governance may not fabricate behavioral Red evidence."
+  },
+  "cache_contract": {
+    "schema_version": "codenoesis.analysis-cache-entry/v1",
+    "identity_domain": "codenoesis.analysis-cache-entry-id/rust-workspace/v1",
+    "payload_hash_domain": "codenoesis.analysis-cache-payload/rust-workspace/v1",
+    "required_key_inputs": [
+      "repository_identity",
+      "source_file_id",
+      "canonical_source_path",
+      "source_blob_oid",
+      "crate_id",
+      "canonical_module_path",
+      "cache_schema",
+      "language_extractor",
+      "workspace_mapper",
+      "normalization",
+      "ontology",
+      "extraction_contract",
+      "semantic_profile",
+      "dependency_rules"
+    ],
+    "excluded_inputs": [
+      "commit_oid",
+      "tree_oid",
+      "snapshot_id",
+      "public_evidence_id",
+      "public_claim_id",
+      "public_relationship_id",
+      "public_chunk_hash",
+      "public_document_id",
+      "job_id",
+      "clock",
+      "correlation_id",
+      "volatile_envelope"
+    ],
+    "hit_requires": [
+      "exact recomputed cache entry identity",
+      "closed current schema validation",
+      "exact recomputed payload hash",
+      "exact repository, ownership, path, blob, and version fields"
+    ],
+    "missing_entry": "recompute",
+    "corrupt_current_entry": "incremental.cache_corrupt",
+    "authoritative_without_public_rematerialization": false
+  },
+  "oracle": {
+    "repository_identity": "urn:codenoesis:fixture:s5-incremental-refresh-v1",
+    "baseline_commit_oid": "2106dc8bf32867e519b89ef6d73ce2afdced170d",
+    "target_commit_oid": "c2408412192e61249403bfa1dbc2dce7db0364cc",
+    "changed_paths": [
+      {
+        "path": "crates/model/src/item.rs",
+        "change_kind": "modified"
+      }
+    ],
+    "selected_rule": "INC-RULE-004",
+    "selected_outcome": "partial_analysis",
+    "analysis": {
+      "baseline_entries": 3,
+      "target_entries": 3,
+      "cache_hits": 2,
+      "cache_misses": 1,
+      "invalidated_entries": 1,
+      "recomputed_entries": 1,
+      "parser_invocations": 1
+    },
+    "public_materialization": {
+      "target_chunks": 3,
+      "rematerialized_chunks": 3,
+      "baseline_chunk_bytes_copied": 0,
+      "document_manifest_entries_rematerialized": 4,
+      "markdown_documents_with_changed_bytes": 3,
+      "all_target_evidence_commit_bound": true,
+      "future_federation_link_count": 0
+    },
+    "target": {
+      "snapshot_semantic_hash": "5526646a790a72eb6efd0824a28d727ecfdc9d9a409519f6f8a550ddeee34131",
+      "graph_semantic_hash": "2dfc8c43e3f950a9ea526b51c7cacafff58179242d105c24de9521906d6f7f59",
+      "documentation_generation_hash": "3aa97344bc07e32378f62fa5b24f3469f6d919d69093fd0575b371d9e92be7b2",
+      "incremental_bytes_equal_cold_bytes": true
+    },
+    "report": {
+      "semantic_hash": "698ae3084d8d6e586080039f017476b357c473759b65423a73a4525e2cc94e40",
+      "subject_id_occurrences_across_set_fields": 79,
+      "set_order": "UTF-8 byte ascending with duplicates rejected",
+      "volatile_execution_measurements_in_semantic_report": false
+    },
+    "no_change": {
+      "condition": "requested immutable commit already equals the validated visible commit and every compatible version input matches",
+      "equal_tree_under_different_commit_is_no_change": false,
+      "head_advances": false
+    }
+  },
+  "rebuild_matrix": {
+    "full_rebuild": [
+      "language extractor version",
+      "workspace mapper version",
+      "normalization version",
+      "ontology version",
+      "extraction contract version",
+      "semantic profile",
+      "dependency rule version",
+      "cache schema version",
+      "snapshot schema version",
+      "public schema version"
+    ],
+    "full_workspace_analysis": [
+      "source add",
+      "source delete",
+      "rename represented as delete plus add",
+      "crate root change",
+      "module declaration change",
+      "manifest change",
+      "target change",
+      "workspace membership change",
+      "workspace definition change",
+      "ownership change",
+      "unsupported mapping",
+      "ambiguous mapping",
+      "unclassified extraction input"
+    ],
+    "partial_analysis": [
+      "modified already-mapped non-root Rust source with stable repository, path, source, crate, module, and versions"
+    ],
+    "inventory_only": [
+      "inventory change with no extraction or mapping input change"
+    ],
+    "no_change": [
+      "exact requested commit already visible with matching versions"
+    ]
+  },
+  "failure_oracles": {
+    "baseline_missing": "incremental.baseline_missing",
+    "baseline_repository_mismatch": "incremental.baseline_repository_mismatch",
+    "baseline_incompatible": "incremental.baseline_incompatible",
+    "cache_corrupt": "incremental.cache_corrupt",
+    "limit_exceeded": "incremental.limit_exceeded",
+    "cold_equivalence_failed": "incremental.cold_equivalence_failed",
+    "concurrent_head_movement": "publication.head_conflict",
+    "partial_head_visible": false,
+    "automatic_oracle_repair": false
+  },
+  "limits": {
+    "changed_paths": 100000,
+    "analysis_entries": 100000,
+    "dependency_edges": 1000000,
+    "report_subject_ids": 1000000,
+    "report_bytes": 16777216,
+    "refresh_wall_milliseconds": 60000
+  },
+  "determinism": {
+    "changed_path_order": "path UTF-8 byte ascending",
+    "cache_entry_set_order": "identity UTF-8 byte ascending",
+    "chunk_record_order": "source_file_id UTF-8 byte ascending",
+    "document_record_order": "document_id UTF-8 byte ascending",
+    "invalidation_set_order": "identity UTF-8 byte ascending",
+    "replay": "50 sequential repetitions plus 10 shuffled parallel schedules are canonical-byte-identical",
+    "randomized_sequences": "incremental target semantic bytes equal clean target semantic bytes after every supported edit"
+  },
+  "tests": [
+    {
+      "id": "e2e_fr_inc_001_incremental_refresh",
+      "requirements": [
+        "FR-INC-001",
+        "FR-CLI-004"
+      ],
+      "oracle": "The CLI refreshes A to B, emits the exact report, atomically advances the head once, and does not execute untrusted code."
+    },
+    {
+      "id": "pt_inv_inc_001_cold_equivalence",
+      "requirements": [
+        "INV-INC-001",
+        "FR-INC-003"
+      ],
+      "oracle": "Incremental target snapshot, graph, chunks, document projection, and generated Markdown bytes equal an independent clean target result."
+    },
+    {
+      "id": "gt_fr_inc_001_exact_invalidation",
+      "requirements": [
+        "FR-INC-001"
+      ],
+      "oracle": "The exact reviewed invalidated, added, removed, retained-count, cache, chunk, document, and empty federation-link sets are emitted."
+    },
+    {
+      "id": "pt_fr_inc_002_version_rebuild_matrix",
+      "requirements": [
+        "FR-INC-002"
+      ],
+      "oracle": "Every maximum-compatible version change selects the exact full rebuild reason and incompatible cache bytes are never reused."
+    },
+    {
+      "id": "pt_fr_inc_003_revision_neutral_cache",
+      "requirements": [
+        "FR-INC-003"
+      ],
+      "oracle": "Only the changed source is parsed; exact unchanged cache entries are reused and contain no revision-bound public identities."
+    },
+    {
+      "id": "conf_fr_cli_004_report_error_v7",
+      "requirements": [
+        "FR-CLI-004"
+      ],
+      "oracle": "Success and every fixed failure validate against closed report or ErrorV7 schemas with exact stream and exit behavior."
+    },
+    {
+      "id": "ft_fr_cli_004_atomic_head",
+      "requirements": [
+        "FR-CLI-004",
+        "INV-INC-001"
+      ],
+      "oracle": "Every failpoint exposes the complete baseline or complete target; concurrent movement fails with no partial head."
+    },
+    {
+      "id": "sec_fr_inc_001_no_target_execution",
+      "requirements": [
+        "FR-INC-001"
+      ],
+      "oracle": "Git, Cargo, rustc, build, target, hook, plugin, network, model, and Council sentinels remain untouched."
+    },
+    {
+      "id": "pt_fr_inc_003_randomized_edit_sequences",
+      "requirements": [
+        "FR-INC-003",
+        "INV-INC-001"
+      ],
+      "oracle": "Supported randomized edit and schedule sequences preserve exact cold equivalence, ordering, cache-key, and head invariants."
+    },
+    {
+      "id": "reg_fr_cli_004_s4_contract_unchanged",
+      "requirements": [
+        "FR-CLI-004"
+      ],
+      "oracle": "The accepted S4 contract bundle and every file it binds remain byte-identical."
+    }
+  ],
+  "allowed_paths": [
+    "docs/software/software-requirements-specification.md",
+    "docs/software/decisions/0008-s5-incremental-refresh-contract.md",
+    "tests/specifications/s5",
+    "tests/fixtures/s5/incremental-refresh-v1",
+    "scripts/tests/test_s5_incremental_refresh_contract.py"
+  ],
+  "forbidden": [
+    "production Rust code",
+    "dependency manifests",
+    "workflow, policy, agent, architecture, or roadmap files",
+    "existing accepted decisions, schemas, fixtures, goldens, or contract bundles",
+    "target, build, compiler, package-manager, hook, plugin, network, model, or Council execution",
+    "commit-bound public identity inside AnalysisCacheEntryV1",
+    "baseline public chunk bytes reused for another target commit",
+    "cold scan mislabeled as incremental reuse",
+    "automatic golden or oracle refresh"
+  ],
+  "stop_conditions": [
+    "cold equivalence, cache authority, rematerialization, invalidation closure, no-change, or head semantics are ambiguous",
+    "a cache hit can cross repository, source ownership, path, blob, extractor, normalization, ontology, extraction contract, semantic profile, dependency rule, or cache-schema boundaries",
+    "reused analysis can retain commit-bound public evidence or another public identity",
+    "the fixture requires target, build, process, network, plugin, model, or Council execution",
+    "an accepted S4 artifact or production, policy, workflow, dependency, architecture, roadmap, benchmark, or release path must change",
+    "a fixed limit, typed failure, stream, exit, or report meaning cannot be enforced",
+    "the task exceeds the allowed paths or high-risk classification"
+  ]
+}

@@ -1,12 +1,12 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9 — S0 through S4 implemented; S7 implementation-aware
-> compatibility proposed for protected ratification**.
+> Status: **0.9 — S0 through S4 implemented; S5 deterministic incremental
+> refresh proposed for protected ratification**.
 > The S0–S4 runtime and product suites exist on `main`, but CodeNoesis claims
 > no slice `Verified` without complete immutable retention evidence. This
-> revision proposes `DR-SEM-001`, `FR-IMP-004`, `FR-IMP-005`, and one bounded
-> implementation-aware HTTP/JSON compatibility contract. It changes no
-> existing accepted profile or production runtime.
+> revision proposes `INV-INC-001`, `FR-INC-001`, `FR-INC-002`, `FR-INC-003`,
+> `FR-CLI-004`, and one bounded local Rust-workspace refresh contract. It
+> changes no existing accepted profile or production runtime.
 
 ## 1. Document control
 
@@ -14,7 +14,7 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S4 are Approved and Implemented but not Verified. `DR-SEM-001`, `FR-IMP-004`, and `FR-IMP-005` are Proposed for protected S7 ratification; they authorize no implementation until the governance merge, separate policy binding, and prerequisite slices/capabilities are complete. |
+| Status | S0 through S4 are Approved and Implemented but not Verified. `INV-INC-001`, `FR-INC-001`, `FR-INC-002`, `FR-INC-003`, and `FR-CLI-004` are Proposed for protected S5 ratification; they authorize no implementation until the governance merge and separate policy binding are complete. |
 | Date | 2026-07-29 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
@@ -509,6 +509,87 @@ strict report schema, rule catalog, machine oracle, project-owned source
 fixture, manifest, and reviewed report. Any bound-byte change requires a new
 digest and renewed human review.
 
+### 2.10 S5 deterministic incremental refresh ratification register
+
+The following is the exact target Approved set for the bounded
+**S5 — Incremental refresh** contract. Approval becomes authoritative only when
+`@smutti` manually merges the exact protected head of the pull request bound
+before review. The authoring agent does not approve or merge. This high-risk
+decision fixes the local refresh operation, revision-neutral analysis cache,
+conservative rule catalog, commit-bound public rematerialization, strict
+report/error artifacts, limits, project-owned two-revision fixture, exact
+invalidation oracle, atomic publication behavior, and future Red.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| `INV-INC-001` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | protected pull request `TBD` | `S5` | [S5 incremental refresh decision](decisions/0008-s5-incremental-refresh-contract.md) and [reviewed cold artifacts](../../tests/fixtures/s5/incremental-refresh-v1/expected-cold-artifacts.json) |
+| `FR-INC-001` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | protected pull request `TBD` | `S5` | [S5 rule catalog](../../tests/specifications/s5/incremental-rule-catalog-v1.json) and [reviewed report](../../tests/fixtures/s5/incremental-refresh-v1/expected-incremental-refresh-report.json) |
+| `FR-INC-002` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | protected pull request `TBD` | `S5` | [S5 rule catalog](../../tests/specifications/s5/incremental-rule-catalog-v1.json) and [machine oracle](../../tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json) |
+| `FR-INC-003` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | protected pull request `TBD` | `S5` | [Analysis cache schema](../../tests/specifications/s5/analysis-cache-entry-v1.schema.json) and [machine oracle](../../tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json) |
+| `FR-CLI-004` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | protected pull request `TBD` | `S5` | [Refresh report schema](../../tests/specifications/s5/incremental-refresh-report-v1.schema.json), [ErrorV7 schema](../../tests/specifications/s5/codenoesis-error-v7.schema.json), and [machine oracle](../../tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json) |
+
+`standard-local-s5` selects a local refresh use case over one validated visible
+S4 head and one independently bound immutable target commit. The target remains
+the accepted `standard-local-s4` semantic profile and
+`RepositorySnapshotV4`; no S4 public schema, identity, storage, documentation,
+or query contract changes.
+
+The internal `AnalysisCacheEntryV1` key binds repository identity, stable
+source ownership and module mapping, canonical path, blob, cache schema,
+extractors, normalization, ontology, extraction contract, semantic profile,
+and dependency-rule version. It excludes commit and volatile envelope values.
+Its payload contains only revision-neutral observations and source-relative
+spans, with no public evidence, claim, relationship, chunk, snapshot,
+document, statement, commit, or report identity. A cache entry is never
+authoritative until target public artifacts are completely rematerialized,
+validated, and atomically published.
+
+Accepted S4 evidence identity includes the immutable commit. Therefore every
+non-no-op target rematerializes target inventory evidence, source evidence,
+all public chunks, graph, snapshot, documentation projection, and refresh
+report even when source analysis is reused. An equal tree under a different
+commit is not a no-op. `no_change` applies only when the exact requested commit
+is already the validated visible head and every compatible version input
+matches.
+
+The versioned rule precedence is `error > full_rebuild >
+full_workspace_analysis > partial_analysis > inventory_only > no_change`.
+Only a modified already-mapped non-root Rust source with unchanged repository,
+path, source, crate, module, and version inputs may select partial analysis.
+Source add/delete, deterministic delete-plus-add rename, root/module,
+manifest/target/workspace/ownership, unsupported, ambiguous, or fallback
+changes select full-workspace analysis. Extractor, mapper, normalization,
+ontology, extraction contract, semantic profile, dependency rule, cache
+schema, snapshot schema, or public schema changes select a full rebuild.
+
+The reviewed fixture proves two exact cache hits, one invalidated and
+recomputed source analysis entry, one parser invocation, all three public
+chunks rematerialized, four document manifest entries rematerialized, three
+changed Markdown documents, exact public invalidation sets, and target
+snapshot, graph, chunk, and document bytes equal to a reviewed clean target
+result. It executes no Git process, Cargo, compiler, build script, target,
+hook, plugin, network, model provider, or Council.
+
+No S5 production behavior is authorized by this register. After protected
+governance merge and a separate policy binding, the first production Red is
+the exact `e2e_fr_inc_001_incremental_refresh` command in the machine oracle.
+The current runtime must fail behaviorally because `standard-local-s5` is
+unsupported; compilation, fixture, schema, panic, timeout, execution, fake
+reuse, stale public chunk, or weakened cold-equivalence failures are rejected.
+
+The policy registry is intentionally unchanged in this ratification change. A
+separate protected policy pull request may bind only these five IDs to the
+exact merged SRS. Until that binding is reviewed and merged, autonomous
+implementation authorization fails closed.
+
+S5 deterministic incremental refresh contract bundle:
+`sha256:9763957db208d2516415738d529af1da02159523db672973e8aca902549d1a36`.
+The bundle binds Decision 0008, the independent maintenance guard, inherited
+S4 bundle, strict cache/report/error schemas, rule catalog, machine oracle,
+project-owned two-revision fixture, exact Git objects, reviewed cold summaries,
+and reviewed refresh report. Any bound-byte change requires a new digest and
+renewed human review.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,
@@ -598,7 +679,7 @@ migration, restore, performance, and security gates.
 | `INV-SNP-001` | P0 | A reader MUST observe either the previous complete snapshot or the new complete snapshot, never a partial mixture. | `FT`, `IT` |
 | `INV-IDN-001` | P0 | Equivalent repository content, configuration, ontology, and pipeline versions MUST produce the same semantic identifiers and hashes. | `PT`, `GT` |
 | `INV-MDL-001` | P0 | An LLM or Council verdict MUST NOT create `deterministic_fact` or `confirmed` state directly. | `UT`, `PT`, `E2E` |
-| `INV-INC-001` | P1 | Incremental refresh and a clean scan of the same target state MUST produce semantically equivalent canonical graphs and documents. | `PT`, `GT` |
+| `INV-INC-001` | P1 | Incremental refresh and a clean scan of the same immutable target under the same accepted versions MUST produce byte-identical canonical snapshot, graph, chunk, and generated-document semantic content. A revision-neutral cache entry MUST NOT become authoritative without complete target rematerialization and validation. | `PT`, `GT`, `E2E` |
 | `INV-STO-001` | P1 | Storage adapters MUST expose the same domain-observable behaviour for the shared contract. | `CT`, `IT` |
 | `INV-BND-001` | P1 | Repository processing, graph traversal, jobs, plugins, and model calls MUST terminate at configured bounds with typed outcomes. | `PT`, `SEC`, `FT` |
 | `INV-TEN-001` | P1 | A workspace actor MUST NOT observe another workspace through data, search, cache, events, errors, logs, metrics, or timing-sensitive bulk operations. | `SEC`, `IT`, `PERF` |
@@ -668,9 +749,9 @@ cannot replace their verification.
 
 | ID | Pri. | Target | Normative requirement | Acceptance evidence |
 |---|---:|---:|---|---|
-| `FR-INC-001` | P1 | `0.2` | Incremental refresh MUST derive its invalidation set from repository changes and versioned dependency rules. | A changed file invalidates exactly the expected entities, relations, claims, documents, and federation links in the golden oracle. `GT`, `PT` |
-| `FR-INC-002` | P1 | `0.2` | Extractor, normalization, ontology, public schema, or relevant build-profile changes MUST trigger an explicitly classified rebuild. | Each version change selects the documented rebuild scope and never reuses incompatible artifacts. `PT`, `E2E` |
-| `FR-INC-003` | P1 | `0.2` | Incremental and cold results MUST satisfy `INV-INC-001`; unaffected semantic identities SHOULD retain IDs and hashes. | Random edit sequences compare incremental output with a clean oracle. `PT`, `GT` |
+| `FR-INC-001` | P1 | `0.2` | Local incremental refresh MUST compare the validated visible S4 head with one independently bound immutable target, derive exact sorted invalidation and analysis-reuse sets through `codenoesis.incremental-rules/rust-workspace-v1`, enforce fixed bounds, and publish no partial target. | The reviewed one-file edit selects exact partial analysis, cache, public rematerialization, invalidation, failure, and atomic-head outcomes. `GT`, `PT`, `FT`, `E2E` |
+| `FR-INC-002` | P1 | `0.2` | Extractor, workspace mapper, normalization, ontology, extraction contract, semantic profile, dependency rule, cache schema, snapshot schema, or public schema changes MUST trigger the exact classified rebuild scope and MUST NOT reuse incompatible bytes. | Maximum-compatible version matrices select the documented full rebuild reason; topology and ambiguous mapping cases conservatively select full-workspace analysis. `PT`, `E2E` |
+| `FR-INC-003` | P1 | `0.2` | Incremental and cold results MUST satisfy `INV-INC-001`. Exact compatible revision-neutral analysis entries SHOULD retain cache identities and payload hashes, while every commit-bound public target artifact MUST be rematerialized and unaffected stable public identities retain IDs only where the accepted S4 identity contract permits. | Random edit/order/schedule sequences prove parser reuse separately from public rematerialization and compare canonical target bytes with a clean oracle. `PT`, `GT` |
 | `FR-FED-001` | P1 | `0.2` | Cross-project identity MUST apply the approved authority order: explicit identity, package/SCIP identity, operation identity, event/schema identity, then heuristic candidate. | Provider, two clients, and plausible decoys produce the reviewed identity outcomes and evidence. `GT` |
 | `FR-FED-002` | P1 | `0.2` | Heuristic or conflicting matches MUST remain candidates until deterministic evidence, authorized human review, or governed policy confirms them. | A high-scoring heuristic cannot silently become `confirmed`. `PT`, `E2E` |
 | `FR-IMP-001` | P1 | `0.2` | Impact analysis MUST compare two provider revisions and classify approved contract changes as compatible, potentially breaking, breaking, or unresolved. | Versioned compatible and breaking fixtures match a ratified classifier oracle. `GT` |
@@ -688,6 +769,7 @@ cannot replace their verification.
 | `FR-CLI-001` | P0 | `0.1` | The CLI MUST provide local `scan`, `docs`, and `query` journeys with human-readable and versioned JSON output. | One black-box fixture completes scan -> docs -> query without network access. `E2E`, `CONF` |
 | `FR-CLI-002` | P1 | `1.0` | Approved CLI commands MUST have stable exit codes, error codes, configuration precedence, and local/remote capability behaviour. | Golden compatibility tests cover output schema, error catalog, precedence, and server parity. `CONF`, `E2E` |
 | `FR-CLI-003` | P0 | `0.1` | The S0 CLI MUST provide a local `noesis scan` JSON journey that accepts an explicit repository identity and revision and emits either `RepositorySnapshotV1` or `CodeNoesisErrorV1` with the ratified S0 stream and exit semantics. | S0 black-box tests validate success, non-Git input, missing and inconsistent objects, schema, stdout/stderr separation, and exit status. `E2E`, `CONF` |
+| `FR-CLI-004` | P1 | `0.2` | The local CLI MUST provide `noesis refresh` with explicit repository, repository identity, revision, store, and `standard-local-s5` profile inputs; success emits strict canonical `IncrementalRefreshReportV1` on stdout and failure emits strict `CodeNoesisErrorV7` on stderr without a partial head. | Black-box and conformance tests validate exact command parsing, streams, exits, report/error schemas, no-change retry, concurrent-head failure, limits, and S4 cold equivalence. `E2E`, `CONF`, `FT` |
 | `FR-API-001` | P1 | `0.4` | The REST API MUST expose approved `/api/v1` resources using versioned schemas, RFC 9457 Problem Details, correlation IDs, and idempotency keys. | Contract tests validate success, error, retry, and duplicate-submission cases. `CONF`, `E2E` |
 | `FR-API-002` | P1 | `0.4` | Long-running REST operations MUST return a durable job identity and MUST expose bounded status and event retrieval. | Submit, disconnect, reconnect, retry, and event-resume scenarios retain one logical job. `E2E`, `FT` |
 | `FR-MCP-001` | P1 | `0.4` | MCP tools and resources MUST invoke the same application use cases and authorization policies as CLI/REST. | Transport conformance proves semantic parity and absence of transport business logic. `CT`, `E2E` |
@@ -819,7 +901,7 @@ crate tree is not scaffolded upfront.
 | `S2` Rust knowledge | A Rust fixture produces reviewed entities and relations in a validated graph. | `FR-EXT-001/002`, `FR-KNW-001/002/003`, `DR-IDN-001` | Compare a Rust repository to a hand-authored graph oracle. | Stable IDs; malformed/Unicode coverage; invariants property-tested and fuzz target seeded. |
 | `S3` Atomic local storage | SQLite/CAS persists and publishes one immutable snapshot across restart and faults. | `FR-STO-001`, `FR-SNP-001`, `INV-SNP-001` | Scan, kill at each failpoint, restart, and query the visible head. | Fake/SQLite and fake/filesystem contracts green; no partial head; retry idempotent. |
 | `S4` Evidence-backed docs | `noesis docs` creates deterministic overview/module views without touching manual files. | `FR-DOC-001/002/003`, `FR-QRY-001`, `FR-CLI-001` | Complete scan -> docs -> query through the CLI. | Every statement resolves or exposes uncertainty; output deterministic; manual checksums unchanged. |
-| `S5` Incremental refresh | One-file edits update only the dependency closure and equal a cold rebuild. | `FR-INC-*`, `INV-INC-001` | Apply randomized commits and compare refresh with a clean scan. | Semantic equivalence; unaffected IDs/hashes retained; invalidation metrics emitted. |
+| `S5` Incremental refresh | One mapped non-root Rust source edit reparses only that source, reuses exact revision-neutral analysis, rematerializes every commit-bound public target artifact, and equals a cold S4 target. | `FR-INC-*`, `FR-CLI-004`, `INV-INC-001` | Refresh the reviewed A→B fixture, observe parser/cache activity, and compare target snapshot plus documents with a clean target store. | Canonical target bytes equal; exact invalidation and cache sets emitted; all target evidence is commit-bound; atomic head and fixed failures proven; no target execution. |
 | `S6` Contract federation | OpenAPI provider, two clients, and a decoy form deterministic cross-project links. | `FR-EXT-004`, `FR-FED-*` | Federate versioned provider/client/decoy fixtures. | Known oracle links found, decoy rejected, heuristic links remain candidates. |
 | `S7` Change impact | A semantic API diff compares declared contract and approved provider implementation facts, then returns bounded affected client paths, evidence, and gaps. | `DR-SEM-001`, `FR-IMP-*`, `FR-QRY-002` | Compare two provider revisions with unchanged contract bytes, one strict client, one safe client, and one operation decoy. | Ratified direction-aware classifier matches the three-view oracle; implementation-only change remains visible; safe client and decoy are not mislabeled; unknown behavior remains a gap. |
 | `S8` Polyglot adapters | Add Java, JavaScript/TypeScript, and C/C++ one adapter at a time. | `FR-EXT-003/005` | Run the shared semantic capability fixture for each adapter. | Contract, golden, malformed, determinism, and differential suites green per language. |
@@ -1024,7 +1106,7 @@ implementation choices.
 
 | ID | Decision required | Blocks |
 |---|---|---|
-| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset when its protected ratification revision is manually merged. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
+| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0008 resolves the fixed S5 changed-path, analysis-entry, dependency-edge, report-subject, report-byte, and wall-time subset when its protected ratification revision is manually merged. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset when its protected ratification revision is manually merged. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
 | `OD-ONT-001` | Decision 0003 resolves the bounded single-crate `codenoesis.ontology/rust/v1`. Decision 0005 resolves multi-crate cardinality and unambiguous out-of-line module identity for `codenoesis.ontology/rust/v2` only when its protected S4 ratification revision is manually merged. Cross-language, compiler-grade, and later ontology evolution remain open. | `S8` and later ontology evolution |
 | `OD-STO-001` | Decision 0004 resolves fresh single-writer local SQLite/CAS identity, publication, restart, corruption, and cleanup semantics for `codenoesis.local-store/v1` only when its protected S3 ratification revision is manually merged. Migration, repair, deletion, backup/restore, multi-writer, and server storage remain open. | Post-S3 storage evolution and `S10` |
 | `OD-GIT-001` | Decision 0006 resolves the packed local SHA-1 subset only for the explicit `local-git-sha1-packed-v1` acquisition selector. Residual decisions cover remote protocols and identity resolution, SHA-256, LFS, shallow and bare repositories, alternates, promisor/partial clones, MIDX authority, supported submodule/symlink semantics, automatic repair, and history rewrite. Legacy S1 still rejects packed objects without the selector and rejects rather than traverses symlinks and gitlinks. | Remote and remaining post-S1 `FR-ACQ-*` |
@@ -1059,6 +1141,13 @@ profile decision remains open. The
 resolves the bounded Rust ontology v2, generated Markdown, and exact-ID local
 query semantics only for the explicit S4 profile; Cargo evaluation, compiler
 resolution, traversal/search, and later documentation formats remain open.
+The
+[S5 incremental refresh decision](decisions/0008-s5-incremental-refresh-contract.md)
+resolves only the revision-neutral Rust-workspace analysis cache,
+commit-bound S4 rematerialization, conservative invalidation catalog, local
+refresh report/error contract, and fixed S5 bounds after protected manual
+merge; cross-language invalidation, distributed cache, and S6/S7 incremental
+reasoning remain open.
 
 ## 17. Change control
 

@@ -1,0 +1,114 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "docs/software/decisions/0008-s5-incremental-refresh-contract.md",
+      "sha256": "248ff63755f508622be64ebf7ed9a36ecdb4e4099cf0891c051329ad08eaf684"
+    },
+    {
+      "path": "scripts/tests/test_s5_incremental_refresh_contract.py",
+      "sha256": "e4b627a105fbe7f4efede237e196100179512363174638dcec7141ab86fc7798"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/README.md",
+      "sha256": "a3fc31ee423810405834ae01bf0c5c9cdaae42a4a46b4cc80ff43f598a26bca4"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/expected-cold-artifacts.json",
+      "sha256": "b8353176e94c2c3121acb9397f64ba45359971c6c0b8cae76f5f68b9b9d115db"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/expected-incremental-refresh-report.json",
+      "sha256": "ea2cfa6e8ca8731fdd03e509479c8672a72af8453daa61563e75cd2bf707f4f0"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/manifest.json",
+      "sha256": "b8ac46a42db292ec68d0f43eb79ad23ea8f99c93ad17b0e6de4fd34111b44546"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/revision-a/Cargo.toml",
+      "sha256": "4d268e7f38954aad6288525c0df9120442a3ff036da2967eb73af3866cf23378"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/revision-a/crates/app/Cargo.toml",
+      "sha256": "ec155ee0ebc739a31b2b226da6ccbedb6be03b597414f79b3565f1ea70ff2bc5"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/revision-a/crates/app/build.rs",
+      "sha256": "f362e895a59d577ddd10d5a3470068f388f5c4d2c01db93960b4e3b3d6996095"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/revision-a/crates/app/src/main.rs",
+      "sha256": "3d8a2c88c2d9b7c1fe836d4f0ac27844f5f475916cab7af2199b7a531d9976d1"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/revision-a/crates/model/Cargo.toml",
+      "sha256": "ab9a1ee43fae4a45092d7923fddbd88b284e829a385d68650a05f0463b7f9c19"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/revision-a/crates/model/src/item.rs",
+      "sha256": "48aed2dc18300ae778c0f88d75e703f42271626071685103770a3cb95c2870fa"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/revision-a/crates/model/src/lib.rs",
+      "sha256": "d3eea21f10f0ff42bab73aaac68c9fce8589d1a88fbb3d24c6d90b77abece3ef"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/revision-b/Cargo.toml",
+      "sha256": "4d268e7f38954aad6288525c0df9120442a3ff036da2967eb73af3866cf23378"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/revision-b/crates/app/Cargo.toml",
+      "sha256": "ec155ee0ebc739a31b2b226da6ccbedb6be03b597414f79b3565f1ea70ff2bc5"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/revision-b/crates/app/build.rs",
+      "sha256": "f362e895a59d577ddd10d5a3470068f388f5c4d2c01db93960b4e3b3d6996095"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/revision-b/crates/app/src/main.rs",
+      "sha256": "3d8a2c88c2d9b7c1fe836d4f0ac27844f5f475916cab7af2199b7a531d9976d1"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/revision-b/crates/model/Cargo.toml",
+      "sha256": "ab9a1ee43fae4a45092d7923fddbd88b284e829a385d68650a05f0463b7f9c19"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/revision-b/crates/model/src/item.rs",
+      "sha256": "04400fa905a716eceb95cd4b3bf8e79b44ad444932301f0b2fc2a927840ad2b3"
+    },
+    {
+      "path": "tests/fixtures/s5/incremental-refresh-v1/revision-b/crates/model/src/lib.rs",
+      "sha256": "d3eea21f10f0ff42bab73aaac68c9fce8589d1a88fbb3d24c6d90b77abece3ef"
+    },
+    {
+      "path": "tests/specifications/s4/contract-bundle.json",
+      "sha256": "be199ebbeb9cb35c2e6a68c5b9d847f86fe131efd007b0d09d9fd28390c91437"
+    },
+    {
+      "path": "tests/specifications/s5/analysis-cache-entry-v1.schema.json",
+      "sha256": "080a753c4f7f29b5fd5d97b7f9cecb00d6b54948e93527a02514ea03499567bd"
+    },
+    {
+      "path": "tests/specifications/s5/codenoesis-error-v7.schema.json",
+      "sha256": "ab906eb08c1ba8caa947432ebfee5124ed9529fa39f6a16949723ec895235212"
+    },
+    {
+      "path": "tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json",
+      "sha256": "4e9861f115ae218411cfe36123ffec1150914a7d13b101bcde73666f1e288707"
+    },
+    {
+      "path": "tests/specifications/s5/incremental-refresh-report-v1.schema.json",
+      "sha256": "2e538b8a6161e84ddc612aec68017e6b9e9bbc51012db1152b9c7bf87aa81442"
+    },
+    {
+      "path": "tests/specifications/s5/incremental-rule-catalog-v1.json",
+      "sha256": "96e59f42c65be8e62bf7142c348442375cffe038bc548dd21849ef4691cf78c1"
+    }
+  ],
+  "bundle_sha256": "9763957db208d2516415738d529af1da02159523db672973e8aca902549d1a36"
+}
