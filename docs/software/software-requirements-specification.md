@@ -528,6 +528,11 @@ invalidation oracle, atomic publication behavior, and future Red.
 | `FR-INC-003` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #67 protected merge record](https://github.com/smutti/codenoesis/pull/67) | `S5` | [Analysis cache schema](../../tests/specifications/s5/analysis-cache-entry-v1.schema.json) and [machine oracle](../../tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json) |
 | `FR-CLI-004` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #67 protected merge record](https://github.com/smutti/codenoesis/pull/67) | `S5` | [Refresh report schema](../../tests/specifications/s5/incremental-refresh-report-v1.schema.json), [ErrorV7 schema](../../tests/specifications/s5/codenoesis-error-v7.schema.json), and [machine oracle](../../tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json) |
 
+Bootstrap Red observation correction:
+[PR #71 protected bootstrap correction](https://github.com/smutti/codenoesis/pull/71).
+This correction records the unchanged pre-S5 command boundary
+only; it does not alter final S5 success or `CodeNoesisErrorV7` behavior.
+
 `standard-local-s5` selects a local refresh use case over one validated visible
 S4 head and one independently bound immutable target commit. The target remains
 the accepted `standard-local-s4` semantic profile and
@@ -573,9 +578,12 @@ hook, plugin, network, model provider, or Council.
 No S5 production behavior is authorized by this register. After protected
 governance merge and a separate policy binding, the first production Red is
 the exact `e2e_fr_inc_001_incremental_refresh` command in the machine oracle.
-The current runtime must fail behaviorally because `standard-local-s5` is
-unsupported; compilation, fixture, schema, panic, timeout, execution, fake
-reuse, stale public chunk, or weakened cold-equivalence failures are rejected.
+Before S5 exists, the exact `refresh` invocation is not recognized and must
+exit `2` with ErrorV2 `input.invalid_revision` on stderr, empty stdout, no
+created store, and no published head. This is the accepted bootstrap Red only;
+the implemented S5 command retains strict `CodeNoesisErrorV7` failures.
+Compilation, fixture, schema, panic, timeout, execution, fake reuse, stale
+public chunk, or weakened cold-equivalence failures are rejected.
 
 The policy registry is intentionally unchanged in this ratification change. A
 separate protected policy pull request may bind only these five IDs to the
@@ -583,7 +591,7 @@ exact merged SRS. Until that binding is reviewed and merged, autonomous
 implementation authorization fails closed.
 
 S5 deterministic incremental refresh contract bundle:
-`sha256:dd50107f00f7b4dae811fe844e24dff9f20c9b242aacc04bc683e3b4d525f0d1`.
+`sha256:9e1725cfde7e20cd1f7c513b32f919eb7d2c3109a7a05427c515c89f360de6c8`.
 The bundle binds Decision 0008, the independent maintenance guard, inherited
 S4 bundle, strict cache/report/error schemas, rule catalog, machine oracle,
 project-owned two-revision fixture, exact Git objects, reviewed cold summaries,

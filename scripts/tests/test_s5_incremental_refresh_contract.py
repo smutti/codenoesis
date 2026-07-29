@@ -250,6 +250,25 @@ class S5IncrementalRefreshContractTests(unittest.TestCase):
             self.assertEqual(register.count(reference), 5)
             self.assertIn(approval, decision)
 
+        correction = acceptance["bootstrap_correction_pull_request"]
+        if correction == "TBD":
+            correction_reference = (
+                "protected bootstrap correction pull request `TBD`"
+            )
+        else:
+            match = re.fullmatch(
+                r"https://github\.com/smutti/codenoesis/pull/([1-9][0-9]*)",
+                correction,
+            )
+            self.assertIsNotNone(match)
+            pull_number = match.group(1)  # type: ignore[union-attr]
+            correction_reference = (
+                f"[PR #{pull_number} protected bootstrap correction]"
+                f"({correction})"
+            )
+        self.assertIn(correction_reference, register)
+        self.assertIn(correction_reference, decision)
+
         self.assertIn("Issue | [#66]", decision)
         self.assertIn(
             "Requirements | `INV-INC-001`, `FR-INC-001`, `FR-INC-002`, "
@@ -953,8 +972,15 @@ class S5IncrementalRefreshContractTests(unittest.TestCase):
             "e2e_fr_inc_001_incremental_refresh",
         )
         self.assertEqual(
-            expected_red["accepted_error_code"], "input.invalid_profile"
+            expected_red["accepted_error_code"], "input.invalid_revision"
         )
+        self.assertEqual(
+            expected_red["accepted_error_schema"], "codenoesis.error/v2"
+        )
+        self.assertEqual(expected_red["accepted_exit"], 2)
+        self.assertEqual(expected_red["accepted_stdout"], "empty")
+        self.assertFalse(expected_red["accepted_store_created"])
+        self.assertFalse(expected_red["accepted_head_published"])
         self.assertFalse(expected_red["run_in_governance_change"])
         self.assertIn(
             "two cold scans mislabeled as incremental reuse",
