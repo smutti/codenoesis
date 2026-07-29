@@ -10,7 +10,7 @@
 | Slice | `S5 — Incremental refresh` |
 | Risk | High: cache authority, invalidation, public snapshot semantics, atomic publication, public report/error contracts, and protected oracle |
 | Scope | Governance only; production implementation, policy binding, workflows, dependencies, and accepted S0–S4 artifacts are excluded |
-| Bootstrap correction | protected bootstrap correction pull request `TBD` |
+| Bootstrap correction | [PR #71 protected bootstrap correction](https://github.com/smutti/codenoesis/pull/71) |
 
 ## Context
 

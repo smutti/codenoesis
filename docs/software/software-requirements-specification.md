@@ -528,7 +528,8 @@ invalidation oracle, atomic publication behavior, and future Red.
 | `FR-INC-003` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #67 protected merge record](https://github.com/smutti/codenoesis/pull/67) | `S5` | [Analysis cache schema](../../tests/specifications/s5/analysis-cache-entry-v1.schema.json) and [machine oracle](../../tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json) |
 | `FR-CLI-004` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #67 protected merge record](https://github.com/smutti/codenoesis/pull/67) | `S5` | [Refresh report schema](../../tests/specifications/s5/incremental-refresh-report-v1.schema.json), [ErrorV7 schema](../../tests/specifications/s5/codenoesis-error-v7.schema.json), and [machine oracle](../../tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json) |
 
-Bootstrap Red observation correction: protected bootstrap correction pull request `TBD`.
+Bootstrap Red observation correction:
+[PR #71 protected bootstrap correction](https://github.com/smutti/codenoesis/pull/71).
 This correction records the unchanged pre-S5 command boundary
 only; it does not alter final S5 success or `CodeNoesisErrorV7` behavior.
 
@@ -590,7 +591,7 @@ exact merged SRS. Until that binding is reviewed and merged, autonomous
 implementation authorization fails closed.
 
 S5 deterministic incremental refresh contract bundle:
-`sha256:54307290dbeb1be2e41e4fedd910731e14fba08f395d05eaa2825a4cc92ad474`.
+`sha256:9e1725cfde7e20cd1f7c513b32f919eb7d2c3109a7a05427c515c89f360de6c8`.
 The bundle binds Decision 0008, the independent maintenance guard, inherited
 S4 bundle, strict cache/report/error schemas, rule catalog, machine oracle,
 project-owned two-revision fixture, exact Git objects, reviewed cold summaries,

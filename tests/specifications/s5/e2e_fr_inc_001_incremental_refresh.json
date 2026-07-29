@@ -2,7 +2,7 @@
   "schema_version": "codenoesis.acceptance-specification/v1",
   "issue": "https://github.com/smutti/codenoesis/issues/66",
   "approval_pull_request": "https://github.com/smutti/codenoesis/pull/67",
-  "bootstrap_correction_pull_request": "TBD",
+  "bootstrap_correction_pull_request": "https://github.com/smutti/codenoesis/pull/71",
   "requirements": [
     {
       "id": "INV-INC-001",
