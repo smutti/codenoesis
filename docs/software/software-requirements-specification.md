@@ -1,12 +1,12 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9 — S0 through S4 implemented; packed SHA-1 acquisition proposed
-> for protected ratification**.
+> Status: **0.9 — S0 through S4 implemented; S7 implementation-aware
+> compatibility proposed for protected ratification**.
 > The S0–S4 runtime and product suites exist on `main`, but CodeNoesis claims
 > no slice `Verified` without complete immutable retention evidence. This
-> revision proposes `FR-ACQ-004`, a replaceable public-corpus baseline, and one
-> explicit packed SHA-1 acquisition contract. It changes no existing accepted
-> profile or production runtime.
+> revision proposes `DR-SEM-001`, `FR-IMP-004`, `FR-IMP-005`, and one bounded
+> implementation-aware HTTP/JSON compatibility contract. It changes no
+> existing accepted profile or production runtime.
 
 ## 1. Document control
 
@@ -14,7 +14,7 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S4 are Approved and Implemented but not Verified. `FR-ACQ-004` is Proposed for protected ratification as an explicit S1 compatibility extension; it authorizes no implementation until the governance merge and separate policy binding are complete. |
+| Status | S0 through S4 are Approved and Implemented but not Verified. `DR-SEM-001`, `FR-IMP-004`, and `FR-IMP-005` are Proposed for protected S7 ratification; they authorize no implementation until the governance merge, separate policy binding, and prerequisite slices/capabilities are complete. |
 | Date | 2026-07-29 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
@@ -456,6 +456,59 @@ strict ErrorV6 and corpus schemas, machine oracle, synthetic fixture,
 replaceable public corpus descriptor, and the unchanged S1/S4 contract
 lineage. Any bound-byte change requires a new digest and renewed human review.
 
+### 2.9 S7 implementation-aware compatibility ratification register
+
+The following is the exact target Approved set for the bounded
+**S7 — Change impact implementation-aware compatibility contract**. Approval
+becomes authoritative only when `@smutti` manually squash-merges the exact
+protected head of [PR #63](https://github.com/smutti/codenoesis/pull/63). The
+authoring agent does not approve or merge.
+This high-risk decision fixes the three-view semantic model, stable identities,
+direction-aware classifier, strict public report, limits, project-owned
+provider/client/decoy fixture, explicit unknown behavior, and future Red.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| `DR-SEM-001` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #63 protected merge record](https://github.com/smutti/codenoesis/pull/63) | `S7` | [S7 implementation-aware compatibility decision](decisions/0007-s7-implementation-aware-api-compatibility-contract.md) and [report schema](../../tests/specifications/s7/semantic-compatibility-report-v1.schema.json) |
+| `FR-IMP-004` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #63 protected merge record](https://github.com/smutti/codenoesis/pull/63) | `S7` | [S7 machine oracle](../../tests/specifications/s7/e2e_fr_imp_004_implementation_aware_api_diff.json) and [reviewed fixture](../../tests/fixtures/s7/implementation-aware-api-v1/README.md) |
+| `FR-IMP-005` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #63 protected merge record](https://github.com/smutti/codenoesis/pull/63) | `S7` | [S7 rule catalog](../../tests/specifications/s7/compatibility-rule-catalog-v1.json) and [reviewed report](../../tests/fixtures/s7/implementation-aware-api-v1/expected-semantic-compatibility-report.json) |
+
+This additive contract does not silently approve or redefine the broader
+`FR-IMP-001`, `FR-IMP-002`, or `FR-IMP-003` requirements. It partially resolves
+`OD-CMP-001` only for the versioned
+`implementation-aware-http-json/v1` projection and its seven declared
+dimensions. Other contract formats, frameworks, dynamic behavior, observation
+profiles, and causal claims remain open.
+
+The contract compares immutable provider revisions even when their OpenAPI
+bytes are identical. Declared contract, provider implementation, client
+assumption, test observation, and runtime observation remain separate evidence
+views. Presence, nullability, declared default, applied default, request versus
+response direction, and deterministic versus candidate federation may not
+substitute for one another. Missing traces, source types alone, custom mappings,
+reflection, generated code, runtime configuration, or model output never
+silently establish behavior.
+
+The reviewed fixture proves an unchanged optional response field whose provider
+implementation changes from guaranteed present to may be absent. A
+deterministically linked strict client moves from latent
+`potentially_breaking` risk to `breaking`; a safe linked client remains
+`compatible`; a name-similar client for a different operation is rejected. A
+custom provider mapping remains `unresolved` with an exact coverage gap.
+
+No S7 runtime behavior is authorized by this register. The first production Red
+is blocked until S5, S6, and the exact OpenAPI, provider, and client source
+capability profiles are Approved and Implemented. The policy registry remains
+unchanged in this ratification change; a separate protected policy PR may bind
+only these three IDs to the exact merged SRS.
+
+S7 implementation-aware compatibility contract bundle:
+`sha256:08dabb5b4895adfa5f531a9364a8f02ba39a2548b05ac7b4af08e26b4d4d044a`.
+The bundle binds Decision 0007, the independent governance guard,
+strict report schema, rule catalog, machine oracle, project-owned source
+fixture, manifest, and reviewed report. Any bound-byte change requires a new
+digest and renewed human review.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,
@@ -471,8 +524,8 @@ The product succeeds when a user can:
 4. refresh that knowledge incrementally without changing the semantic result;
 5. connect providers and consumers across repositories using reviewable
    identity evidence;
-6. evaluate a change and retrieve affected clients, call sites, owners,
-   evidence paths, and coverage gaps;
+6. evaluate declared and implementation-derived change semantics and retrieve
+   affected clients, call sites, owners, evidence paths, and coverage gaps;
 7. operate the same use cases locally or through governed server interfaces;
 8. keep LLM and Council use optional, bounded, and unable to manufacture facts.
 
@@ -562,6 +615,7 @@ cannot replace their verification.
 | `DR-IDN-001` | P0 | `0.1` | Stable IDs MUST derive from canonical project identity, language, symbol identity, and versioned normalization rules rather than storage sequence numbers. | Randomized insertion and file ordering do not change IDs. `PT` |
 | `DR-IDN-002` | P0 | `0.1` | Rust workspace crate, source-file, module, symbol, relationship, document, and statement IDs MUST derive from canonical repository identity, manifest/target identity, module path, subject identity, and immutable versioned normalization rather than member order, output location, commit, or storage sequence. | Reordered members/files and changed envelopes/output roots retain reviewed IDs while canonical collisions fail closed. `PT`, `GT` |
 | `DR-EVD-001` | P0 | `0.1` | Source evidence MUST identify repository, revision or blob, path, byte or line span, extractor, and derivation. | Invalid repository, blob, path, span, or derivation prevents publication. `GT`, `E2E` |
+| `DR-SEM-001` | P1 | `0.2` | The implementation-aware HTTP/JSON compatibility projection MUST emit a closed, versioned, deterministic report that preserves contract, provider implementation, client assumption, observation, federation, rule, classification, evidence, and coverage-gap identities without conflating their claim states. | Schema, identity, reference, ordering, replay, and negative conformance tests validate `SemanticCompatibilityReportV1`; unknown fields, dangling evidence, duplicate IDs, unsorted sets, and invalid claim promotion fail closed. `CONF`, `PT`, `GT` |
 | `DR-CMP-001` | P1 | `1.0` | Runtime readers MUST support the current and immediately previous public schema. The migrator MUST support a tested chain from the two most recent GA releases. | Versioned fixtures prove `N-1` reads and staged `N-2 -> N-1 -> N` migration. `CONF`, `DR` |
 | `DR-DEL-001` | P1 | `1.0` | Project deletion MUST remove database references, search entries, unshared artifacts, and credentials according to a declared retention policy. | A purge verification finds no online data reachable by project or tenant identity; backup expiry is separately evidenced. `SEC`, `DR` |
 
@@ -622,6 +676,8 @@ cannot replace their verification.
 | `FR-IMP-001` | P1 | `0.2` | Impact analysis MUST compare two provider revisions and classify approved contract changes as compatible, potentially breaking, breaking, or unresolved. | Versioned compatible and breaking fixtures match a ratified classifier oracle. `GT` |
 | `FR-IMP-002` | P1 | `0.2` | An impact report MUST contain bounded affected repositories, call sites, owners, deployment units, evidence paths, claim states, and coverage gaps. | Known clients are returned, decoys are rejected, and every hop resolves to evidence. `GT`, `E2E` |
 | `FR-IMP-003` | P1 | `0.2` | The system MUST distinguish declared dependency, graph reachability, inferred exposure, observed impact, and unresolved impact. | Test fixtures cannot promote a reachable-only client to observed or causally supported impact. `PT`, `GT` |
+| `FR-IMP-004` | P1 | `0.2` | For each approved HTTP/JSON field capability, the system MUST reconcile declared contract semantics, provider implementation semantics, and deterministically linked client assumptions as separate evidence-backed views, including request/response direction and distinct presence, nullability, default, validation, value-set, status, and error dimensions. Unsupported control flow, framework behavior, codec behavior, configuration, or federation MUST remain `unresolved` with explicit coverage gaps. | A reviewed provider plus strict client, safe client, and operation decoy produces the exact three-view facts, latent mismatch, safe handling, decoy rejection, evidence spans, and custom-mapping gap without target, build, network, plugin, or model execution. `GT`, `E2E`, `SEC` |
+| `FR-IMP-005` | P1 | `0.2` | The system MUST compare two immutable provider revisions and emit approved semantic implementation deltas even when declared contract bytes are unchanged. It MUST classify and propagate impact only through versioned rules to deterministically linked client paths whose proven assumptions are violated; safe clients MUST remain unaffected and insufficient evidence MUST remain `unresolved`. | Byte-identical OpenAPI revisions plus `guaranteed_present -> may_be_absent` provider source produce a `breaking` strict-client result, a `compatible` safe-client result, a rejected decoy, and an unresolved custom mapping matching the ratified report oracle. `GT`, `PT`, `E2E` |
 
 ### 9.6 Query and public interfaces
 
@@ -765,7 +821,7 @@ crate tree is not scaffolded upfront.
 | `S4` Evidence-backed docs | `noesis docs` creates deterministic overview/module views without touching manual files. | `FR-DOC-001/002/003`, `FR-QRY-001`, `FR-CLI-001` | Complete scan -> docs -> query through the CLI. | Every statement resolves or exposes uncertainty; output deterministic; manual checksums unchanged. |
 | `S5` Incremental refresh | One-file edits update only the dependency closure and equal a cold rebuild. | `FR-INC-*`, `INV-INC-001` | Apply randomized commits and compare refresh with a clean scan. | Semantic equivalence; unaffected IDs/hashes retained; invalidation metrics emitted. |
 | `S6` Contract federation | OpenAPI provider, two clients, and a decoy form deterministic cross-project links. | `FR-EXT-004`, `FR-FED-*` | Federate versioned provider/client/decoy fixtures. | Known oracle links found, decoy rejected, heuristic links remain candidates. |
-| `S7` Change impact | A breaking API diff returns bounded affected clients, call sites, evidence, and gaps. | `FR-IMP-*`, `FR-QRY-002` | Compare compatible and breaking provider revisions. | Ratified classifier matches oracle; all hops resolve; reachability is not mislabeled as observed impact. |
+| `S7` Change impact | A semantic API diff compares declared contract and approved provider implementation facts, then returns bounded affected client paths, evidence, and gaps. | `DR-SEM-001`, `FR-IMP-*`, `FR-QRY-002` | Compare two provider revisions with unchanged contract bytes, one strict client, one safe client, and one operation decoy. | Ratified direction-aware classifier matches the three-view oracle; implementation-only change remains visible; safe client and decoy are not mislabeled; unknown behavior remains a gap. |
 | `S8` Polyglot adapters | Add Java, JavaScript/TypeScript, and C/C++ one adapter at a time. | `FR-EXT-003/005` | Run the shared semantic capability fixture for each adapter. | Contract, golden, malformed, determinism, and differential suites green per language. |
 | `S9` Sandboxed extensions | A WIT extractor runs with explicit capabilities and contained failure. | `FR-PLG-*`, `INV-BND-001` | Run valid, network, write, trap, timeout, OOM, and oversized plugins. | Every resource bound enforced; failure cannot change the published head. |
 | `S10` Durable server path | REST -> job -> worker -> PostgreSQL/object storage produces the same semantic snapshot as local mode. | `FR-STO-002`, `FR-JOB-001`, `FR-API-*`, `INV-STO-001` | Submit, observe, duplicate, interrupt, and recover one scan. | Shared storage contracts; lease/outbox/failpoint tests; local/server semantic parity. |
@@ -968,11 +1024,11 @@ implementation choices.
 
 | ID | Decision required | Blocks |
 |---|---|---|
-| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset only. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
+| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset when its protected ratification revision is manually merged. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
 | `OD-ONT-001` | Decision 0003 resolves the bounded single-crate `codenoesis.ontology/rust/v1`. Decision 0005 resolves multi-crate cardinality and unambiguous out-of-line module identity for `codenoesis.ontology/rust/v2` only when its protected S4 ratification revision is manually merged. Cross-language, compiler-grade, and later ontology evolution remain open. | `S8` and later ontology evolution |
 | `OD-STO-001` | Decision 0004 resolves fresh single-writer local SQLite/CAS identity, publication, restart, corruption, and cleanup semantics for `codenoesis.local-store/v1` only when its protected S3 ratification revision is manually merged. Migration, repair, deletion, backup/restore, multi-writer, and server storage remain open. | Post-S3 storage evolution and `S10` |
 | `OD-GIT-001` | Decision 0006 resolves the packed local SHA-1 subset only for the explicit `local-git-sha1-packed-v1` acquisition selector. Residual decisions cover remote protocols and identity resolution, SHA-256, LFS, shallow and bare repositories, alternates, promisor/partial clones, MIDX authority, supported submodule/symlink semantics, automatic repair, and history rewrite. Legacy S1 still rejects packed objects without the selector and rejects rather than traverses symlinks and gitlinks. | Remote and remaining post-S1 `FR-ACQ-*` |
-| `OD-CMP-001` | Compatibility rules and oracles for OpenAPI, AsyncAPI, GraphQL, Protobuf, events, and behavioural evidence. | `S6`–`S7` |
+| `OD-CMP-001` | Decision 0007 resolves only the `implementation-aware-http-json/v1` field-level projection, evidence separation, seven dimensions, classifier rules, and oracle when its protected ratification revision is manually merged. Residual decisions cover complete OpenAPI, AsyncAPI, GraphQL, Protobuf, events, framework-specific semantics, observation coverage, protocol behavior, and causal evidence. | Remaining `S6`–`S7` compatibility capabilities |
 | `OD-API-001` | REST/MCP payload schemas, error catalog, cancellation, pagination, event resume, and deprecation window. | `S10`–`S11` |
 | `OD-AUT-001` | Complete role-action-resource matrix and privileged break-glass policy. | `S12` |
 | `OD-SBX-001` | Supported OS/platform sandbox tiers and which guarantees require Linux isolation. | `S9`, release matrix |
