@@ -1,0 +1,602 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:public-corpus:v1",
+  "title": "CodeNoesis replaceable public corpus descriptor",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "corpus_id",
+    "corpus_version",
+    "status",
+    "observed_at",
+    "baseline_codenoesis_commit",
+    "observation_environment",
+    "observation_procedure",
+    "entries",
+    "authority"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.public-corpus/v1"
+    },
+    "corpus_id": {
+      "const": "real-world-rust"
+    },
+    "corpus_version": {
+      "const": "1"
+    },
+    "status": {
+      "const": "validation_only"
+    },
+    "observed_at": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "baseline_codenoesis_commit": {
+      "$ref": "#/$defs/sha1"
+    },
+    "observation_environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "os",
+        "architecture",
+        "git_version",
+        "network_purpose"
+      ],
+      "properties": {
+        "os": {
+          "type": "string",
+          "minLength": 1
+        },
+        "architecture": {
+          "type": "string",
+          "minLength": 1
+        },
+        "git_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "network_purpose": {
+          "const": "fixture_setup_and_public_corpus_observation_only"
+        }
+      }
+    },
+    "observation_procedure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "fresh_temporary_roots",
+        "sanitized_environment",
+        "ordered_steps",
+        "normalization"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "codenoesis.public-corpus-observation/v1"
+        },
+        "fresh_temporary_roots": {
+          "const": true
+        },
+        "sanitized_environment": {
+          "const": "unset Git directory, object, alternate, index, worktree, and injected-config variables; disable system and global Git config for every observation step"
+        },
+        "ordered_steps": {
+          "type": "array",
+          "minItems": 9,
+          "maxItems": 9,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/observation_step"
+          }
+        },
+        "normalization": {
+          "const": "entry normalized_log binds descriptor fields and retained raw command-output digests in fixed key order and is SHA-256 hashed as one canonical JSON line"
+        }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "prefixItems": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/entry"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "const": "lekton"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/entry"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "const": "rustdesk"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "items": false
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "external_source_vendored",
+        "repository_specific_product_semantics",
+        "product_truth_source",
+        "replacement_policy"
+      ],
+      "properties": {
+        "external_source_vendored": {
+          "const": false
+        },
+        "repository_specific_product_semantics": {
+          "const": false
+        },
+        "product_truth_source": {
+          "const": false
+        },
+        "replacement_policy": {
+          "const": "an entry may be replaced by a public repository satisfying the same generic capability set"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nonnegative": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "observation_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "commands",
+        "purpose"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "fresh_clone",
+            "verify_commit",
+            "verify_tree",
+            "tree_statistics",
+            "pack_headers_and_sizes",
+            "verify_pack",
+            "packed_baseline",
+            "materialize_loose_control",
+            "loose_baseline"
+          ]
+        },
+        "commands": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source",
+        "license",
+        "immutable_tree",
+        "full_clone_observation",
+        "baseline",
+        "reproduction",
+        "generic_capabilities",
+        "replaceability"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "lekton",
+            "rustdesk"
+          ]
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "vcs",
+            "repository_url",
+            "default_branch",
+            "pinned_commit",
+            "tree_oid",
+            "commit_date",
+            "object_format"
+          ],
+          "properties": {
+            "vcs": {
+              "const": "git"
+            },
+            "repository_url": {
+              "type": "string",
+              "pattern": "^https://github\\.com/"
+            },
+            "default_branch": {
+              "type": "string",
+              "minLength": 1
+            },
+            "pinned_commit": {
+              "$ref": "#/$defs/sha1"
+            },
+            "tree_oid": {
+              "$ref": "#/$defs/sha1"
+            },
+            "commit_date": {
+              "type": "string",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+            },
+            "object_format": {
+              "const": "sha1"
+            }
+          }
+        },
+        "license": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "observed_spdx",
+            "github_api_spdx",
+            "evidence",
+            "redistribution"
+          ],
+          "properties": {
+            "observed_spdx": {
+              "type": "string",
+              "minLength": 1
+            },
+            "github_api_spdx": {
+              "type": "string",
+              "minLength": 1
+            },
+            "evidence": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "path",
+                  "sha256"
+                ],
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sha256": {
+                    "$ref": "#/$defs/sha256"
+                  }
+                }
+              }
+            },
+            "redistribution": {
+              "const": "descriptor_only_no_external_source_vendored"
+            }
+          }
+        },
+        "immutable_tree": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "paths",
+            "blobs",
+            "trees",
+            "gitlinks",
+            "symlinks",
+            "declared_blob_bytes",
+            "cargo_manifests",
+            "rust_files"
+          ],
+          "properties": {
+            "paths": {
+              "$ref": "#/$defs/nonnegative"
+            },
+            "blobs": {
+              "$ref": "#/$defs/nonnegative"
+            },
+            "trees": {
+              "$ref": "#/$defs/nonnegative"
+            },
+            "gitlinks": {
+              "$ref": "#/$defs/nonnegative"
+            },
+            "symlinks": {
+              "$ref": "#/$defs/nonnegative"
+            },
+            "declared_blob_bytes": {
+              "$ref": "#/$defs/nonnegative"
+            },
+            "cargo_manifests": {
+              "$ref": "#/$defs/nonnegative"
+            },
+            "rust_files": {
+              "$ref": "#/$defs/nonnegative"
+            }
+          }
+        },
+        "full_clone_observation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "contextual_not_immutable",
+            "command",
+            "pack_count",
+            "pack_id",
+            "pack_bytes",
+            "index_bytes",
+            "pack_version",
+            "index_version",
+            "indexed_objects",
+            "delta_objects",
+            "maximum_delta_depth"
+          ],
+          "properties": {
+            "contextual_not_immutable": {
+              "const": true
+            },
+            "command": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "pack_count": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "pack_id": {
+              "$ref": "#/$defs/sha1"
+            },
+            "pack_bytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "index_bytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "pack_version": {
+              "const": 2
+            },
+            "index_version": {
+              "const": 2
+            },
+            "indexed_objects": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "delta_objects": {
+              "$ref": "#/$defs/nonnegative"
+            },
+            "maximum_delta_depth": {
+              "$ref": "#/$defs/nonnegative"
+            }
+          }
+        },
+        "baseline": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "command",
+            "current_packed_failure",
+            "loose_control",
+            "expected_next_roadmap_blocker"
+          ],
+          "properties": {
+            "command": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "current_packed_failure": {
+              "$ref": "#/$defs/outcome"
+            },
+            "loose_control": {
+              "$ref": "#/$defs/outcome"
+            },
+            "expected_next_roadmap_blocker": {
+              "enum": [
+                "R2",
+                "R3"
+              ]
+            }
+          }
+        },
+        "reproduction": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "procedure_version",
+            "raw_output_sha256",
+            "normalized_log",
+            "normalized_output_sha256"
+          ],
+          "properties": {
+            "procedure_version": {
+              "const": "codenoesis.public-corpus-observation/v1"
+            },
+            "raw_output_sha256": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "verify_commit_stdout",
+                "verify_tree_stdout",
+                "tree_statistics_stdout",
+                "pack_file",
+                "index_file",
+                "verify_pack_stdout",
+                "packed_baseline_stderr",
+                "loose_materialization_stdout",
+                "loose_baseline_stderr"
+              ],
+              "properties": {
+                "verify_commit_stdout": {
+                  "$ref": "#/$defs/sha256"
+                },
+                "verify_tree_stdout": {
+                  "$ref": "#/$defs/sha256"
+                },
+                "tree_statistics_stdout": {
+                  "$ref": "#/$defs/sha256"
+                },
+                "pack_file": {
+                  "$ref": "#/$defs/sha256"
+                },
+                "index_file": {
+                  "$ref": "#/$defs/sha256"
+                },
+                "verify_pack_stdout": {
+                  "$ref": "#/$defs/sha256"
+                },
+                "packed_baseline_stderr": {
+                  "$ref": "#/$defs/sha256"
+                },
+                "loose_materialization_stdout": {
+                  "$ref": "#/$defs/sha256"
+                },
+                "loose_baseline_stderr": {
+                  "$ref": "#/$defs/sha256"
+                }
+              }
+            },
+            "normalized_log": {
+              "type": "array",
+              "minItems": 20,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*=[^\\r\\n]+$"
+              }
+            },
+            "normalized_output_sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        },
+        "generic_capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          }
+        },
+        "replaceability": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "required_capabilities",
+            "repository_specific_semantics"
+          ],
+          "properties": {
+            "required_capabilities": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "repository_specific_semantics": {
+              "const": false
+            }
+          }
+        }
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observed",
+        "exit_code",
+        "stdout_bytes",
+        "stderr_schema",
+        "stderr_code",
+        "stderr_message",
+        "stderr_context",
+        "stderr_sha256"
+      ],
+      "properties": {
+        "observed": {
+          "const": true
+        },
+        "exit_code": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 255
+        },
+        "stdout_bytes": {
+          "const": 0
+        },
+        "stderr_schema": {
+          "type": "string",
+          "pattern": "^codenoesis\\.error/v[0-9]+$"
+        },
+        "stderr_code": {
+          "type": "string",
+          "pattern": "^[a-z]+(?:\\.[a-z_]+)+$"
+        },
+        "stderr_message": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^\\r\\n]+$"
+        },
+        "stderr_context": {
+          "type": "object"
+        },
+        "stderr_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  }
+}

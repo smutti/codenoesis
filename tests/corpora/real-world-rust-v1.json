@@ -1,0 +1,533 @@
+{
+  "schema_version": "codenoesis.public-corpus/v1",
+  "corpus_id": "real-world-rust",
+  "corpus_version": "1",
+  "status": "validation_only",
+  "observed_at": "2026-07-29",
+  "baseline_codenoesis_commit": "5c56f22d5cd39fa869b338ae78b8b6bee64b92f6",
+  "observation_environment": {
+    "os": "macOS",
+    "architecture": "arm64",
+    "git_version": "git version 2.50.1 (Apple Git-155)",
+    "network_purpose": "fixture_setup_and_public_corpus_observation_only"
+  },
+  "observation_procedure": {
+    "schema_version": "codenoesis.public-corpus-observation/v1",
+    "fresh_temporary_roots": true,
+    "sanitized_environment": "unset Git directory, object, alternate, index, worktree, and injected-config variables; disable system and global Git config for every observation step",
+    "ordered_steps": [
+      {
+        "id": "fresh_clone",
+        "commands": [
+          [
+            "git",
+            "clone",
+            "--no-checkout",
+            "{repository_url}",
+            "{repository_root}"
+          ]
+        ],
+        "purpose": "Create a normal non-shallow full clone in a fresh temporary root; network use ends when this step completes."
+      },
+      {
+        "id": "verify_commit",
+        "commands": [
+          [
+            "git",
+            "-C",
+            "{repository_root}",
+            "rev-parse",
+            "--verify",
+            "{pinned_commit}^{commit}"
+          ]
+        ],
+        "purpose": "Bind the observed revision to the exact pinned commit."
+      },
+      {
+        "id": "verify_tree",
+        "commands": [
+          [
+            "git",
+            "-C",
+            "{repository_root}",
+            "rev-parse",
+            "--verify",
+            "{pinned_commit}^{tree}"
+          ]
+        ],
+        "purpose": "Bind immutable tree statistics to the exact commit tree."
+      },
+      {
+        "id": "tree_statistics",
+        "commands": [
+          [
+            "git",
+            "-C",
+            "{repository_root}",
+            "ls-tree",
+            "-r",
+            "-t",
+            "-z",
+            "-l",
+            "{pinned_commit}^{tree}"
+          ]
+        ],
+        "purpose": "Parse NUL-delimited records by mode, kind, OID, declared blob size, and path; derive all immutable_tree counters without checkout."
+      },
+      {
+        "id": "pack_headers_and_sizes",
+        "commands": [
+          [
+            "wc",
+            "-c",
+            "{pack_path}",
+            "{index_path}"
+          ],
+          [
+            "od",
+            "-An",
+            "-tx1",
+            "-N12",
+            "{pack_path}"
+          ],
+          [
+            "od",
+            "-An",
+            "-tx1",
+            "-N8",
+            "{index_path}"
+          ]
+        ],
+        "purpose": "Record physical byte lengths plus pack and index signatures, versions, and pack object count."
+      },
+      {
+        "id": "verify_pack",
+        "commands": [
+          [
+            "git",
+            "-C",
+            "{pack_directory}",
+            "verify-pack",
+            "-v",
+            "{index_basename}"
+          ]
+        ],
+        "purpose": "Derive indexed object count, delta object count, and maximum delta-chain depth from the complete contextual clone pack."
+      },
+      {
+        "id": "packed_baseline",
+        "commands": [
+          [
+            "noesis",
+            "scan",
+            "--repository",
+            "{repository_root}",
+            "--repository-id",
+            "{repository_id}",
+            "--revision",
+            "{pinned_commit}",
+            "--profile",
+            "standard-local-s4",
+            "--store",
+            "{store_root}",
+            "--format",
+            "json"
+          ]
+        ],
+        "purpose": "Capture exit status, stdout byte count, and the canonical typed stderr line on the normal packed clone."
+      },
+      {
+        "id": "materialize_loose_control",
+        "commands": [
+          [
+            "sh",
+            "-ceu",
+            "repo=$1; pack=$2; index=$3; archive=$4; commit=$5; unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_CONFIG_COUNT; export GIT_CONFIG_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null; pack_dir=$repo/.git/objects/pack; test -f \"$pack\"; test -f \"$index\"; test \"$(find \"$pack_dir\" -type f -name '*.pack' -print | awk 'END {print NR + 0}')\" -eq 1; test \"$(find \"$pack_dir\" -type f -name '*.idx' -print | awk 'END {print NR + 0}')\" -eq 1; test ! -e \"$archive\"; mkdir -p \"$archive\"; base=${pack%.pack}; test ! -e \"$base.promisor\"; for sidecar in \"$base.pack\" \"$base.idx\" \"$base.rev\" \"$base.bitmap\" \"$base.mtimes\" \"$base.keep\"; do if test -f \"$sidecar\"; then mv \"$sidecar\" \"$archive\"/; fi; done; test \"$(find \"$pack_dir\" -type f \\( -name '*.pack' -o -name '*.idx' \\) -print | awk 'END {print NR + 0}')\" -eq 0; git -C \"$repo\" unpack-objects < \"$archive/$(basename \"$pack\")\"; test ! -e \"$repo/.git/objects/info/alternates\"; counts=$(git -C \"$repo\" count-objects -v); loose_objects=$(printf '%s\\n' \"$counts\" | awk '$1 == \"count:\" {print $2}'); in_pack=$(printf '%s\\n' \"$counts\" | awk '$1 == \"in-pack:\" {print $2}'); packs=$(printf '%s\\n' \"$counts\" | awk '$1 == \"packs:\" {print $2}'); test \"$loose_objects\" -gt 0; test \"$in_pack\" -eq 0; test \"$packs\" -eq 0; git -C \"$repo\" fsck --full --no-reflogs \"$commit\" >/dev/null 2>&1; actual_commit=$(git -C \"$repo\" rev-parse --verify \"$commit^{commit}\"); tree=$(git -C \"$repo\" rev-parse --verify \"$commit^{tree}\"); printf '{\"commit\":\"%s\",\"loose_objects\":%s,\"procedure_version\":\"codenoesis.public-corpus-observation/v1\",\"tree\":\"%s\"}\\n' \"$actual_commit\" \"$loose_objects\" \"$tree\"",
+            "codenoesis-loose-v1",
+            "{repository_root}",
+            "{pack_path}",
+            "{index_path}",
+            "{pack_archive_root}",
+            "{pinned_commit}"
+          ]
+        ],
+        "purpose": "Execute the exact fail-fast shell argv outside the monitored subject: sanitize Git authority, require one observed pair, archive all authoritative sidecars, prove zero remaining packs and alternates, unpack and fsck loose OIDs, then emit one canonical replay-output line."
+      },
+      {
+        "id": "loose_baseline",
+        "commands": [
+          [
+            "noesis",
+            "scan",
+            "--repository",
+            "{repository_root}",
+            "--repository-id",
+            "{repository_id}",
+            "--revision",
+            "{pinned_commit}",
+            "--profile",
+            "standard-local-s4",
+            "--store",
+            "{store_root}",
+            "--format",
+            "json"
+          ]
+        ],
+        "purpose": "Repeat the exact baseline command against the verified loose-only control and capture the next generic blocker."
+      }
+    ],
+    "normalization": "entry normalized_log binds descriptor fields and retained raw command-output digests in fixed key order and is SHA-256 hashed as one canonical JSON line"
+  },
+  "entries": [
+    {
+      "id": "lekton",
+      "source": {
+        "vcs": "git",
+        "repository_url": "https://github.com/dghilardi/lekton.git",
+        "default_branch": "main",
+        "pinned_commit": "7a4d1a4a30468f4c18ce158a9b825680b00f4820",
+        "tree_oid": "fa81df35c6fa32068d1707d0eacdc459258877c5",
+        "commit_date": "2026-07-22T19:59:41+02:00",
+        "object_format": "sha1"
+      },
+      "license": {
+        "observed_spdx": "AGPL-3.0-or-later",
+        "github_api_spdx": "AGPL-3.0",
+        "evidence": [
+          {
+            "path": "Cargo.toml",
+            "sha256": "8a501bc42254ae8fc0200b066c0a6ac2642fcb96d231b423e4a196465fca4396"
+          },
+          {
+            "path": "LICENSE",
+            "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0"
+          }
+        ],
+        "redistribution": "descriptor_only_no_external_source_vendored"
+      },
+      "immutable_tree": {
+        "paths": 377,
+        "blobs": 327,
+        "trees": 50,
+        "gitlinks": 0,
+        "symlinks": 0,
+        "declared_blob_bytes": 4123542,
+        "cargo_manifests": 2,
+        "rust_files": 198
+      },
+      "full_clone_observation": {
+        "contextual_not_immutable": true,
+        "command": [
+          "git",
+          "clone",
+          "--no-checkout",
+          "https://github.com/dghilardi/lekton.git",
+          "{repository_root}"
+        ],
+        "pack_count": 1,
+        "pack_id": "36dade03630e7d4fbfba1ec5885a4da0fba5c003",
+        "pack_bytes": 2973530,
+        "index_bytes": 178956,
+        "pack_version": 2,
+        "index_version": 2,
+        "indexed_objects": 6353,
+        "delta_objects": 4546,
+        "maximum_delta_depth": 38
+      },
+      "baseline": {
+        "command": [
+          "noesis",
+          "scan",
+          "--repository",
+          "{repository_root}",
+          "--repository-id",
+          "urn:codenoesis:corpus:lekton",
+          "--revision",
+          "7a4d1a4a30468f4c18ce158a9b825680b00f4820",
+          "--profile",
+          "standard-local-s4",
+          "--store",
+          "{store_root}",
+          "--format",
+          "json"
+        ],
+        "current_packed_failure": {
+          "observed": true,
+          "exit_code": 10,
+          "stdout_bytes": 0,
+          "stderr_schema": "codenoesis.error/v4",
+          "stderr_code": "acquisition.unsupported_repository_shape",
+          "stderr_message": "unsupported Git repository shape",
+          "stderr_context": {
+            "feature": "packed_object_database"
+          },
+          "stderr_sha256": "2aac2e0320c238113daad8b5203ce41a52873ef0c2fde5d9201ee91deb857ab6"
+        },
+        "loose_control": {
+          "observed": true,
+          "exit_code": 11,
+          "stdout_bytes": 0,
+          "stderr_schema": "codenoesis.error/v5",
+          "stderr_code": "extraction.unsupported_workspace",
+          "stderr_message": "unsupported workspace",
+          "stderr_context": {},
+          "stderr_sha256": "8552c3370ce6e9244b91dff2fb7ae6bbe692ad4f2b850f787a6a858eb7df9cbe"
+        },
+        "expected_next_roadmap_blocker": "R3"
+      },
+      "reproduction": {
+        "procedure_version": "codenoesis.public-corpus-observation/v1",
+        "raw_output_sha256": {
+          "verify_commit_stdout": "8869bf56c14b75069bfd80ebc66e543d6c208de781abd2d3fcca5eb1041c7b38",
+          "verify_tree_stdout": "5c364b5f368c47f30b17ca5e5664f3feb330a8791f64e1189c3fb8fdc2640df1",
+          "tree_statistics_stdout": "2ee93f3740e69cb68eb831ac7258cf2c18ef871534ba28d28a22fd0ed6c7b791",
+          "pack_file": "269c5a8e47e94e8e779d230c339f3018fbfbb38d55d8c4a98b3679c5f7ca03a3",
+          "index_file": "8a18d35775c06783b2e7933429fdd1689a21913b4c43a55079435bb7bacc62e2",
+          "verify_pack_stdout": "2273bd9ea2b1a75a657d24bdfea705fa90470c5c82d5cc076dcbe890dcfe575e",
+          "packed_baseline_stderr": "2aac2e0320c238113daad8b5203ce41a52873ef0c2fde5d9201ee91deb857ab6",
+          "loose_materialization_stdout": "43ba9ca6301101718bed9cb76a6c2dbe21c67d89615a3df15933d189febe7f0c",
+          "loose_baseline_stderr": "8552c3370ce6e9244b91dff2fb7ae6bbe692ad4f2b850f787a6a858eb7df9cbe"
+        },
+        "normalized_log": [
+          "procedure_version=codenoesis.public-corpus-observation/v1",
+          "repository_url=https://github.com/dghilardi/lekton.git",
+          "pinned_commit=7a4d1a4a30468f4c18ce158a9b825680b00f4820",
+          "tree_oid=fa81df35c6fa32068d1707d0eacdc459258877c5",
+          "commit_date=2026-07-22T19:59:41+02:00",
+          "object_format=sha1",
+          "paths=377",
+          "blobs=327",
+          "trees=50",
+          "gitlinks=0",
+          "symlinks=0",
+          "declared_blob_bytes=4123542",
+          "cargo_manifests=2",
+          "rust_files=198",
+          "license_evidence=Cargo.toml:8a501bc42254ae8fc0200b066c0a6ac2642fcb96d231b423e4a196465fca4396|LICENSE:0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+          "pack_count=1",
+          "pack_id=36dade03630e7d4fbfba1ec5885a4da0fba5c003",
+          "pack_bytes=2973530",
+          "index_bytes=178956",
+          "pack_version=2",
+          "index_version=2",
+          "indexed_objects=6353",
+          "delta_objects=4546",
+          "maximum_delta_depth=38",
+          "packed_exit_code=10",
+          "packed_stderr_schema=codenoesis.error/v4",
+          "packed_stderr_code=acquisition.unsupported_repository_shape",
+          "packed_stderr_message=unsupported Git repository shape",
+          "packed_stderr_context={\"feature\":\"packed_object_database\"}",
+          "packed_stderr_sha256=2aac2e0320c238113daad8b5203ce41a52873ef0c2fde5d9201ee91deb857ab6",
+          "loose_exit_code=11",
+          "loose_stderr_schema=codenoesis.error/v5",
+          "loose_stderr_code=extraction.unsupported_workspace",
+          "loose_stderr_message=unsupported workspace",
+          "loose_stderr_context={}",
+          "loose_stderr_sha256=8552c3370ce6e9244b91dff2fb7ae6bbe692ad4f2b850f787a6a858eb7df9cbe",
+          "raw_verify_commit_stdout_sha256=8869bf56c14b75069bfd80ebc66e543d6c208de781abd2d3fcca5eb1041c7b38",
+          "raw_verify_tree_stdout_sha256=5c364b5f368c47f30b17ca5e5664f3feb330a8791f64e1189c3fb8fdc2640df1",
+          "raw_tree_statistics_stdout_sha256=2ee93f3740e69cb68eb831ac7258cf2c18ef871534ba28d28a22fd0ed6c7b791",
+          "raw_pack_file_sha256=269c5a8e47e94e8e779d230c339f3018fbfbb38d55d8c4a98b3679c5f7ca03a3",
+          "raw_index_file_sha256=8a18d35775c06783b2e7933429fdd1689a21913b4c43a55079435bb7bacc62e2",
+          "raw_verify_pack_stdout_sha256=2273bd9ea2b1a75a657d24bdfea705fa90470c5c82d5cc076dcbe890dcfe575e",
+          "raw_packed_baseline_stderr_sha256=2aac2e0320c238113daad8b5203ce41a52873ef0c2fde5d9201ee91deb857ab6",
+          "raw_loose_materialization_stdout_sha256=43ba9ca6301101718bed9cb76a6c2dbe21c67d89615a3df15933d189febe7f0c",
+          "raw_loose_baseline_stderr_sha256=8552c3370ce6e9244b91dff2fb7ae6bbe692ad4f2b850f787a6a858eb7df9cbe"
+        ],
+        "normalized_output_sha256": "e387a6281571d180d5bdc50ed9552adcdd2f47ca6fa8d9033905d70c741db8ae"
+      },
+      "generic_capabilities": [
+        "cargo-root-package-workspace",
+        "multiple-binaries",
+        "normal-packed-sha1-clone",
+        "workspace-member-dot"
+      ],
+      "replaceability": {
+        "required_capabilities": [
+          "normal-packed-sha1-clone",
+          "cargo-root-package-workspace"
+        ],
+        "repository_specific_semantics": false
+      }
+    },
+    {
+      "id": "rustdesk",
+      "source": {
+        "vcs": "git",
+        "repository_url": "https://github.com/rustdesk/rustdesk.git",
+        "default_branch": "master",
+        "pinned_commit": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+        "tree_oid": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+        "commit_date": "2026-07-28T13:38:36+08:00",
+        "object_format": "sha1"
+      },
+      "license": {
+        "observed_spdx": "AGPL-3.0",
+        "github_api_spdx": "AGPL-3.0",
+        "evidence": [
+          {
+            "path": "LICENCE",
+            "sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef"
+          }
+        ],
+        "redistribution": "descriptor_only_no_external_source_vendored"
+      },
+      "immutable_tree": {
+        "paths": 1118,
+        "blobs": 940,
+        "trees": 177,
+        "gitlinks": 1,
+        "symlinks": 0,
+        "declared_blob_bytes": 15808673,
+        "cargo_manifests": 9,
+        "rust_files": 250
+      },
+      "full_clone_observation": {
+        "contextual_not_immutable": true,
+        "command": [
+          "git",
+          "clone",
+          "--no-checkout",
+          "https://github.com/rustdesk/rustdesk.git",
+          "{repository_root}"
+        ],
+        "pack_count": 1,
+        "pack_id": "8ad4f7bb67f183d4b1ffbe5d880c704e2558fed0",
+        "pack_bytes": 77579431,
+        "index_bytes": 2423660,
+        "pack_version": 2,
+        "index_version": 2,
+        "indexed_objects": 86521,
+        "delta_objects": 64793,
+        "maximum_delta_depth": 38
+      },
+      "baseline": {
+        "command": [
+          "noesis",
+          "scan",
+          "--repository",
+          "{repository_root}",
+          "--repository-id",
+          "urn:codenoesis:corpus:rustdesk",
+          "--revision",
+          "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+          "--profile",
+          "standard-local-s4",
+          "--store",
+          "{store_root}",
+          "--format",
+          "json"
+        ],
+        "current_packed_failure": {
+          "observed": true,
+          "exit_code": 10,
+          "stdout_bytes": 0,
+          "stderr_schema": "codenoesis.error/v4",
+          "stderr_code": "acquisition.unsupported_repository_shape",
+          "stderr_message": "unsupported Git repository shape",
+          "stderr_context": {
+            "feature": "packed_object_database"
+          },
+          "stderr_sha256": "2aac2e0320c238113daad8b5203ce41a52873ef0c2fde5d9201ee91deb857ab6"
+        },
+        "loose_control": {
+          "observed": true,
+          "exit_code": 10,
+          "stdout_bytes": 0,
+          "stderr_schema": "codenoesis.error/v4",
+          "stderr_code": "acquisition.entry_policy_violation",
+          "stderr_message": "repository entry violates the standard-local-s1 policy",
+          "stderr_context": {
+            "entry": "gitlink",
+            "path": "libs/hbb_common"
+          },
+          "stderr_sha256": "01571a9bc024268b284332b1778c1a66b2ff37312fe8d7ae7a779be5601cceab"
+        },
+        "expected_next_roadmap_blocker": "R2"
+      },
+      "reproduction": {
+        "procedure_version": "codenoesis.public-corpus-observation/v1",
+        "raw_output_sha256": {
+          "verify_commit_stdout": "9a44c10d9a9816c97d99d3ae2a6f3a2c81758b1cad1625da127cd9741465679d",
+          "verify_tree_stdout": "2708c79a462f7660d4d401699a1a603ca057836dfe8101df4823637d18fc2fea",
+          "tree_statistics_stdout": "8fd14a714c2011445abc267bdad50b79de416b4a56cb82651f1df66fca0c4460",
+          "pack_file": "9a3b0a0fbfbdaf0b982f60b3c22803893d8596ad4e59c74ba45af68bb5fc7df3",
+          "index_file": "17d47d88c70e0e40f2f5b8520b013ac15dca852e1e42971f8ab401139e532642",
+          "verify_pack_stdout": "d24a077f131fadd59e269c61e91a271223acd02a2d2bc53949415f8316b1049d",
+          "packed_baseline_stderr": "2aac2e0320c238113daad8b5203ce41a52873ef0c2fde5d9201ee91deb857ab6",
+          "loose_materialization_stdout": "bea77235254f82aa75db8c9fc317bbf264988cf6b294d6ec217886aceab0dced",
+          "loose_baseline_stderr": "01571a9bc024268b284332b1778c1a66b2ff37312fe8d7ae7a779be5601cceab"
+        },
+        "normalized_log": [
+          "procedure_version=codenoesis.public-corpus-observation/v1",
+          "repository_url=https://github.com/rustdesk/rustdesk.git",
+          "pinned_commit=d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+          "tree_oid=df8d4c292c9d256a445480eb878e507df3de1dc4",
+          "commit_date=2026-07-28T13:38:36+08:00",
+          "object_format=sha1",
+          "paths=1118",
+          "blobs=940",
+          "trees=177",
+          "gitlinks=1",
+          "symlinks=0",
+          "declared_blob_bytes=15808673",
+          "cargo_manifests=9",
+          "rust_files=250",
+          "license_evidence=LICENCE:8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+          "pack_count=1",
+          "pack_id=8ad4f7bb67f183d4b1ffbe5d880c704e2558fed0",
+          "pack_bytes=77579431",
+          "index_bytes=2423660",
+          "pack_version=2",
+          "index_version=2",
+          "indexed_objects=86521",
+          "delta_objects=64793",
+          "maximum_delta_depth=38",
+          "packed_exit_code=10",
+          "packed_stderr_schema=codenoesis.error/v4",
+          "packed_stderr_code=acquisition.unsupported_repository_shape",
+          "packed_stderr_message=unsupported Git repository shape",
+          "packed_stderr_context={\"feature\":\"packed_object_database\"}",
+          "packed_stderr_sha256=2aac2e0320c238113daad8b5203ce41a52873ef0c2fde5d9201ee91deb857ab6",
+          "loose_exit_code=10",
+          "loose_stderr_schema=codenoesis.error/v4",
+          "loose_stderr_code=acquisition.entry_policy_violation",
+          "loose_stderr_message=repository entry violates the standard-local-s1 policy",
+          "loose_stderr_context={\"entry\":\"gitlink\",\"path\":\"libs/hbb_common\"}",
+          "loose_stderr_sha256=01571a9bc024268b284332b1778c1a66b2ff37312fe8d7ae7a779be5601cceab",
+          "raw_verify_commit_stdout_sha256=9a44c10d9a9816c97d99d3ae2a6f3a2c81758b1cad1625da127cd9741465679d",
+          "raw_verify_tree_stdout_sha256=2708c79a462f7660d4d401699a1a603ca057836dfe8101df4823637d18fc2fea",
+          "raw_tree_statistics_stdout_sha256=8fd14a714c2011445abc267bdad50b79de416b4a56cb82651f1df66fca0c4460",
+          "raw_pack_file_sha256=9a3b0a0fbfbdaf0b982f60b3c22803893d8596ad4e59c74ba45af68bb5fc7df3",
+          "raw_index_file_sha256=17d47d88c70e0e40f2f5b8520b013ac15dca852e1e42971f8ab401139e532642",
+          "raw_verify_pack_stdout_sha256=d24a077f131fadd59e269c61e91a271223acd02a2d2bc53949415f8316b1049d",
+          "raw_packed_baseline_stderr_sha256=2aac2e0320c238113daad8b5203ce41a52873ef0c2fde5d9201ee91deb857ab6",
+          "raw_loose_materialization_stdout_sha256=bea77235254f82aa75db8c9fc317bbf264988cf6b294d6ec217886aceab0dced",
+          "raw_loose_baseline_stderr_sha256=01571a9bc024268b284332b1778c1a66b2ff37312fe8d7ae7a779be5601cceab"
+        ],
+        "normalized_output_sha256": "634028cdd1243baab912cac3c549033626d76eeb032c8779338637e68f31fa03"
+      },
+      "generic_capabilities": [
+        "cargo-root-package-workspace",
+        "gitlink-boundary",
+        "normal-packed-sha1-clone",
+        "polyglot-repository",
+        "target-specific-dependencies"
+      ],
+      "replaceability": {
+        "required_capabilities": [
+          "normal-packed-sha1-clone",
+          "gitlink-boundary"
+        ],
+        "repository_specific_semantics": false
+      }
+    }
+  ],
+  "authority": {
+    "external_source_vendored": false,
+    "repository_specific_product_semantics": false,
+    "product_truth_source": false,
+    "replacement_policy": "an entry may be replaced by a public repository satisfying the same generic capability set"
+  }
+}

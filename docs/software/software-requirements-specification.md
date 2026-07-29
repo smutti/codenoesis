@@ -1,20 +1,21 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.8 — S0 through S4 implemented but not Verified**.
+> Status: **0.9 — S0 through S4 implemented; packed SHA-1 acquisition proposed
+> for protected ratification**.
 > The S0–S4 runtime and product suites exist on `main`, but CodeNoesis claims
-> no slice `Verified` without complete immutable retention evidence. S4 was
-> ratified through PR #42, amended through PR #49, rebound through PR #51, and
-> implemented through PR #52. This revision records lifecycle state only and
-> changes no approved requirement, contract, oracle, or runtime behavior.
+> no slice `Verified` without complete immutable retention evidence. This
+> revision proposes `FR-ACQ-004`, a replaceable public-corpus baseline, and one
+> explicit packed SHA-1 acquisition contract. It changes no existing accepted
+> profile or production runtime.
 
 ## 1. Document control
 
 | Field | Value |
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
-| Version | `0.8` |
-| Status | S0 through S4 are Approved and Implemented but not Verified. S4 was ratified through protected PR [#42](https://github.com/smutti/codenoesis/pull/42), amended through PR [#49](https://github.com/smutti/codenoesis/pull/49), policy-bound through PR [#51](https://github.com/smutti/codenoesis/pull/51), and implemented through PR [#52](https://github.com/smutti/codenoesis/pull/52). Verification remains withheld pending complete immutable retention evidence. |
-| Date | 2026-07-28 |
+| Version | `0.9` |
+| Status | S0 through S4 are Approved and Implemented but not Verified. `FR-ACQ-004` is Proposed for protected ratification as an explicit S1 compatibility extension; it authorizes no implementation until the governance merge and separate policy binding are complete. |
+| Date | 2026-07-29 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -32,6 +33,7 @@
 | `0.6` | 2026-07-27 | Recorded the Approved S3 contract and proposed the exact S4 literal Rust-workspace profile, ontology v2 identities, V4 graph/snapshot contracts, evidence-backed Markdown bundle, exact-ID query, output-root safety, reviewed fixture, and expected Red. |
 | `0.7` | 2026-07-27 | Corrected S4 snapshot, graph, and extraction semantic hashes to cover their complete RFC 8785 payloads; added the reviewed full fixture semantic payload and regenerated every transitive snapshot/docs/query binding. |
 | `0.8` | 2026-07-28 | Recorded the protected S4 semantic-hash amendment, policy rebind, and production implementation merges from PRs #49, #51, and #52. S0 through S4 are Implemented but remain unverified pending complete immutable retention evidence; no approved behavior or oracle changed. |
+| `0.9` | 2026-07-29 | Proposed `FR-ACQ-004` and Decision 0006 for explicit read-only local pack v2/index v2 SHA-1 acquisition; fixed the ErrorV6, limits, security/race oracle, synthetic fixture, and replaceable Lekton/RustDesk corpus descriptor while preserving every accepted S0–S4 invocation. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -389,6 +391,71 @@ S3 bundle, strict schemas, ontology v2, machine oracle, two-member workspace,
 reviewed documentation/query/error goldens, and source/build sentinels. Any
 bound-byte change requires a new digest and renewed human review.
 
+### 2.8 S1 packed SHA-1 ratification register
+
+The following is the exact target Approved set for an explicit
+**S1 — Safe inventory compatibility extension** implementing roadmap `R0` and
+`R1`. `R0` and `R1` remain planning identifiers, not delivery slices.
+Approval becomes authoritative only when `@smutti` manually squash-merges the
+exact protected head of PR
+[#TBD](https://github.com/smutti/codenoesis/pull/TBD). The authoring agent does
+not approve or merge. This high-risk decision fixes an operational selector,
+the bounded local pack v2/index v2 SHA-1 subset, ErrorV6, corruption and race
+behavior, numeric limits, a project-owned fixture, and a replaceable public
+corpus descriptor.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| `FR-ACQ-004` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #TBD protected merge record](https://github.com/smutti/codenoesis/pull/TBD) | `S1` | [Packed SHA-1 acquisition decision](decisions/0006-s1-packed-sha1-acquisition-contract.md) and [machine oracle](../../tests/specifications/s1/e2e_fr_acq_004_packed_sha1.json) |
+
+The existing S1 contract remains immutable:
+`standard-local-s1` without a new acquisition selector still accepts only
+verified loose SHA-1 objects and rejects a packed object database. Packed
+acquisition is selected only by:
+
+```text
+--acquisition-profile local-git-sha1-packed-v1
+```
+
+on an otherwise valid `standard-local-s1`, `standard-local-s2`,
+`standard-local-s3`, or `standard-local-s4` scan. The selector is an explicit
+operational input. It is excluded from semantic configuration, hashes, and
+snapshot identity because loose and packed databases are physical
+representations of the same verified Git objects. Repository shape,
+environment, extensions, and implicit configuration cannot select it.
+
+The selected boundary accepts repository-local loose objects and paired pack
+v2/index v2 files, including bounded `OFS_DELTA` and local `REF_DELTA`
+resolution. It validates catalog pairing, index structure and checksum, pack
+header/count/trailer, CRC, zlib framing, delta programs, reconstructed
+type/size, collision-detecting SHA-1 identity, stable file handles, and every
+fixed limit. It invokes no Git process, network, hook, filter, credential
+helper, target code, alternate object database, or automatic repair.
+
+Input and acquisition failures under the selector use strict
+`CodeNoesisErrorV6`; later stage errors retain their accepted lineages. All
+legacy S0–S4 commands, artifacts, errors, semantic hashes, and the existing
+packed-rejection test remain byte-compatible.
+
+The project-owned packed fixture reuses the accepted S1 source bytes without
+changing its bundle. The public corpus descriptor pins Lekton and RustDesk
+revisions, trees, observed license evidence, immutable tree statistics,
+contextual full-clone pack observations, current typed failures, and their next
+generic roadmap blockers. External source is not vendored, neither repository
+defines product semantics, and either entry may be replaced by another public
+repository satisfying the same capability set.
+
+The policy registry is intentionally unchanged in this ratification change. A
+separate protected change may bind only `FR-ACQ-004` to the full commit on
+`main` containing the byte-identical SRS. Until that policy PR is reviewed and
+merged, autonomous implementation authorization fails closed.
+
+S1 packed SHA-1 contract bundle: `sha256:78d1e418ab50a56f819b5e00272a7376002ed48f8d8eef207185ca1782575de1`.
+The separate bundle binds Decision 0006, the independent maintenance guard,
+strict ErrorV6 and corpus schemas, machine oracle, synthetic fixture,
+replaceable public corpus descriptor, and the unchanged S1/S4 contract
+lineage. Any bound-byte change requires a new digest and renewed human review.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,
@@ -507,6 +574,7 @@ cannot replace their verification.
 | `FR-ACQ-001` | P0 | `0.1` | The system MUST bind an analysis to canonical repository identity and a verified immutable commit before extraction begins. | Moving a branch during a test does not change the bound commit; missing or inconsistent objects produce a typed failure. `IT` |
 | `FR-ACQ-002` | P0 | `0.1` | Local acquisition MUST enforce allowed roots, repository size, file count, file size, path, recursion, symlink, and submodule policy. | Boundary and `limit + 1` fixtures terminate without access outside the allowed root or partial publication. `SEC`, `PT` |
 | `FR-ACQ-003` | P1 | `1.0` | Remote acquisition MUST use short-lived read-only credentials confined to the acquisition process and MUST record source identity without persisting credentials. | Credential canaries do not appear in artifacts, logs, errors, or subsequent stages. `SEC`, `IT` |
+| `FR-ACQ-004` | P0 | `0.1` | An explicitly selected local acquisition profile MUST read the approved repository-local SHA-1 loose and pack v2/index v2 subset in process, verify collision-aware object and container integrity, enforce fixed catalog/pack/delta/race limits, and produce storage-representation-invariant semantic input without changing any legacy invocation. | Equivalent loose/base/`OFS_DELTA`/`REF_DELTA` fixtures produce byte-identical semantic payloads; malformed, corrupt, changing, unsupported, collision, and maximum-plus-one cases produce strict typed errors with no process, network, outside-root access, automatic repair, or partial publication. `E2E`, `GT`, `SEC`, `PT`, `FZ`, `FT`, `CONF` |
 | `FR-INV-001` | P0 | `0.1` | Inventory MUST report supported languages, manifests, contracts, configuration, ownership, extraction capabilities, and unsupported content. | A reviewed fixture produces the exact inventory and explicit coverage gaps. `GT` |
 | `FR-INV-002` | P1 | `1.0` | Inventory MUST record build target and configuration-world inputs that can affect extraction. | Two declared build profiles remain distinguishable and reproducible. `GT`, `PT` |
 
@@ -706,6 +774,14 @@ crate tree is not scaffolded upfront.
 | `S13` Council shadow | Council evaluates candidates without changing deterministic truth. | `FR-COU-*`, `INV-MDL-001`, `NFR-PRV-001` | Agreement, dissent, false citation, limit, and provider-outage scenarios. | Shadow only; citations checked; budgets enforced; baseline comparison published. |
 | `S14` Hardening and pilot | Signed release candidate passes corpus, fault, upgrade, restore, load, and pilot gates. | All `P1`, especially `NFR-PER-*`, `NFR-DR-001`, `NFR-SUP-001` | Execute the release acceptance suite on the exact signed artifacts. | SLO/DR/security/compatibility gates green; no unaccepted Critical/High; pilot report approved. |
 
+The `S1` row records the already Implemented base slice and is not reopened by
+`FR-ACQ-004`. The packed SHA-1 behavior is an additive S1 compatibility
+extension with its own lifecycle and oracle: it becomes Implemented only when
+the separate delivery change proves loose/packed semantic-byte equivalence,
+every fixed maximum and maximum-plus-one case, corruption and race behavior,
+and all inherited S0–S4 regressions. Until then S1 base remains Implemented
+while `FR-ACQ-004` remains independently Proposed or Approved.
+
 ### 12.1 Release map
 
 | Release | Included slices | User-visible outcome |
@@ -847,7 +923,7 @@ detect a missing or stale link.
 | Capability | Requirement families | Slice | Principal evidence |
 |---|---|---|---|
 | Contracts and deterministic skeleton | `DR-ART`, `FR-ACQ-001`, `FR-CLI-003`, `NFR-DET`, `NFR-MNT-001`, `NFR-SEC-005`, `NFR-TST` | `S0` | Schema, replay, black-box CLI, process/network denial |
-| Safe repository understanding | `FR-ACQ-002/003`, `FR-INV`, `FR-EXT`, `FR-KNW` | `S1`–`S2` | Malicious corpus, golden graph, property/fuzz |
+| Safe repository understanding | `FR-ACQ-002/003/004`, `FR-INV`, `FR-EXT`, `FR-KNW` | `S1`–`S2` | Malicious corpus, packed/loose equivalence, golden graph, property/fuzz |
 | Atomic local knowledge | `FR-STO-001`, `FR-SNP`, `FR-DOC`, `FR-QRY-001`, `FR-CLI-001` | `S3`–`S4` | Contract, failpoint, CLI E2E |
 | Change and ecosystem reasoning | `FR-INC`, `FR-FED`, `FR-IMP` | `S5`–`S7` | Cold/incremental equivalence, provider/client/decoy |
 | Polyglot and extension boundary | `FR-EXT-003/005`, `FR-PLG` | `S8`–`S9` | Adapter contract, golden/differential, sandbox |
@@ -895,7 +971,7 @@ implementation choices.
 | `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset only. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
 | `OD-ONT-001` | Decision 0003 resolves the bounded single-crate `codenoesis.ontology/rust/v1`. Decision 0005 resolves multi-crate cardinality and unambiguous out-of-line module identity for `codenoesis.ontology/rust/v2` only when its protected S4 ratification revision is manually merged. Cross-language, compiler-grade, and later ontology evolution remain open. | `S8` and later ontology evolution |
 | `OD-STO-001` | Decision 0004 resolves fresh single-writer local SQLite/CAS identity, publication, restart, corruption, and cleanup semantics for `codenoesis.local-store/v1` only when its protected S3 ratification revision is manually merged. Migration, repair, deletion, backup/restore, multi-writer, and server storage remain open. | Post-S3 storage evolution and `S10` |
-| `OD-GIT-001` | Residual Git decisions after the local S0/S1 subsets: remote protocols and identity resolution, packed objects, SHA-256, LFS, shallow and bare repositories, alternates, supported submodule/symlink semantics, and history rewrite. S1 rejects rather than traverses symlinks and gitlinks. | Remote and post-S1 `FR-ACQ-*` |
+| `OD-GIT-001` | Decision 0006 resolves the packed local SHA-1 subset only for the explicit `local-git-sha1-packed-v1` acquisition selector. Residual decisions cover remote protocols and identity resolution, SHA-256, LFS, shallow and bare repositories, alternates, promisor/partial clones, MIDX authority, supported submodule/symlink semantics, automatic repair, and history rewrite. Legacy S1 still rejects packed objects without the selector and rejects rather than traverses symlinks and gitlinks. | Remote and remaining post-S1 `FR-ACQ-*` |
 | `OD-CMP-001` | Compatibility rules and oracles for OpenAPI, AsyncAPI, GraphQL, Protobuf, events, and behavioural evidence. | `S6`–`S7` |
 | `OD-API-001` | REST/MCP payload schemas, error catalog, cancellation, pagination, event resume, and deprecation window. | `S10`–`S11` |
 | `OD-AUT-001` | Complete role-action-resource matrix and privileged break-glass policy. | `S12` |
