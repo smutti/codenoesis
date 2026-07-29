@@ -86,6 +86,14 @@
       "approval_reference": "https://github.com/smutti/codenoesis/pull/17"
     },
     {
+      "id": "FR-ACQ-004",
+      "slice": "S1",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T14:38:16Z",
+      "source_sha": "bc4569d06ab2f8c9baea197f129c3b4f1676cd18",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/61"
+    },
+    {
       "id": "FR-CLI-001",
       "slice": "S4",
       "approved_by": "github:smutti",
