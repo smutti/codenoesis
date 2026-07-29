@@ -1,0 +1,1149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:error:v6",
+  "title": "CodeNoesisErrorV6 packed SHA-1 acquisition subset",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v6"
+    },
+    "code": {
+      "enum": [
+        "input.invalid_repository_identity",
+        "input.invalid_revision",
+        "input.invalid_profile",
+        "input.invalid_acquisition_profile",
+        "acquisition.not_git_repository",
+        "acquisition.revision_not_found",
+        "acquisition.revision_not_commit",
+        "acquisition.object_missing",
+        "acquisition.repository_inconsistent",
+        "acquisition.unsupported_repository_shape",
+        "acquisition.path_invalid",
+        "acquisition.root_policy_violation",
+        "acquisition.entry_policy_violation",
+        "acquisition.limit_exceeded",
+        "acquisition.object_database_invalid",
+        "acquisition.object_database_changed",
+        "acquisition.object_database_unavailable",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "input",
+        "acquisition",
+        "internal"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[^\\r\\n]+$"
+    },
+    "retryable": {
+      "type": "boolean"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "revision": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{40}|refs/heads/main)$"
+        },
+        "object_oid": {
+          "$ref": "#/$defs/oid"
+        },
+        "expected_kind": {
+          "enum": [
+            "commit",
+            "tree",
+            "blob"
+          ]
+        },
+        "actual_kind": {
+          "enum": [
+            "tag",
+            "tree",
+            "blob"
+          ]
+        },
+        "referenced_by": {
+          "$ref": "#/$defs/oid"
+        },
+        "feature": {
+          "enum": [
+            "bare_repository",
+            "shallow_repository",
+            "sha256_object_format",
+            "alternate_object_database",
+            "replace_or_graft",
+            "lfs_materialization",
+            "packed_object_database",
+            "pack_version_unsupported",
+            "pack_index_version_unsupported",
+            "promisor_object_database",
+            "multi_pack_index_only"
+          ]
+        },
+        "reason": {
+          "enum": [
+            "non_utf8",
+            "empty_component",
+            "dot_component",
+            "backslash",
+            "control_character",
+            "catalog_entry",
+            "index_layout",
+            "index_fanout",
+            "index_object_order",
+            "index_offset",
+            "index_checksum",
+            "pack_header",
+            "pack_checksum",
+            "pack_index_mismatch",
+            "object_count",
+            "entry_header",
+            "entry_crc",
+            "zlib_stream",
+            "object_size",
+            "object_oid",
+            "sha1_collision",
+            "delta_base",
+            "delta_cycle",
+            "delta_program",
+            "duplicate_object_conflict"
+          ]
+        },
+        "policy": {
+          "enum": [
+            "repository_root_is_symlink",
+            "git_directory_not_contained",
+            "git_directory_is_symlink"
+          ]
+        },
+        "entry": {
+          "enum": [
+            "symlink",
+            "gitlink",
+            "special_file_mode"
+          ]
+        },
+        "path": {
+          "$ref": "#/$defs/canonical_relative_path"
+        },
+        "limit": {
+          "enum": [
+            "regular_files",
+            "tree_entries",
+            "cumulative_file_bytes",
+            "single_file_bytes",
+            "path_bytes",
+            "path_component_bytes",
+            "recursion_depth",
+            "canonical_output_bytes",
+            "scan_wall_milliseconds",
+            "pack_directory_entries",
+            "pack_pairs",
+            "single_pack_index_bytes",
+            "cumulative_pack_index_bytes",
+            "indexed_objects",
+            "single_pack_bytes",
+            "cumulative_verified_pack_bytes",
+            "compressed_entry_bytes",
+            "inflated_entry_bytes",
+            "cumulative_entry_inflate_bytes",
+            "delta_program_bytes",
+            "delta_depth",
+            "delta_instructions",
+            "delta_intermediate_bytes",
+            "cumulative_delta_work_bytes",
+            "object_locations",
+            "reconstructed_object_cache_bytes"
+          ]
+        },
+        "maximum": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8589934592
+        },
+        "observed": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8589934593
+        },
+        "component": {
+          "enum": [
+            "catalog",
+            "index",
+            "pack",
+            "entry",
+            "delta",
+            "object"
+          ]
+        },
+        "pack_id": {
+          "$ref": "#/$defs/oid"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.object_database_changed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "retryable": {
+            "const": true
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "retryable": {
+            "const": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "enum": [
+              "input.invalid_repository_identity",
+              "input.invalid_revision",
+              "input.invalid_profile",
+              "input.invalid_acquisition_profile"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "input"
+          },
+          "context": {
+            "maxProperties": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.not_git_repository"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          },
+          "context": {
+            "maxProperties": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.revision_not_found"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          },
+          "context": {
+            "required": [
+              "revision"
+            ],
+            "minProperties": 1,
+            "maxProperties": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.revision_not_commit"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          },
+          "context": {
+            "required": [
+              "object_oid",
+              "actual_kind"
+            ],
+            "minProperties": 2,
+            "maxProperties": 2
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.object_missing"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          },
+          "context": {
+            "required": [
+              "object_oid",
+              "expected_kind",
+              "referenced_by"
+            ],
+            "minProperties": 3,
+            "maxProperties": 3
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.repository_inconsistent"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          },
+          "context": {
+            "required": [
+              "object_oid",
+              "expected_kind"
+            ],
+            "minProperties": 2,
+            "maxProperties": 2
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.unsupported_repository_shape"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          },
+          "context": {
+            "required": [
+              "feature"
+            ],
+            "minProperties": 1,
+            "maxProperties": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.path_invalid"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          },
+          "context": {
+            "required": [
+              "reason"
+            ],
+            "minProperties": 1,
+            "maxProperties": 1,
+            "properties": {
+              "reason": {
+                "enum": [
+                  "non_utf8",
+                  "empty_component",
+                  "dot_component",
+                  "backslash",
+                  "control_character"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.root_policy_violation"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          },
+          "context": {
+            "required": [
+              "policy"
+            ],
+            "minProperties": 1,
+            "maxProperties": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.entry_policy_violation"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          },
+          "context": {
+            "required": [
+              "entry",
+              "path"
+            ],
+            "minProperties": 2,
+            "maxProperties": 2
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.limit_exceeded"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          },
+          "context": {
+            "$ref": "#/$defs/limit_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.object_database_invalid"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          },
+          "context": {
+            "$ref": "#/$defs/object_database_invalid_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "enum": [
+              "acquisition.object_database_changed",
+              "acquisition.object_database_unavailable"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          },
+          "context": {
+            "required": [
+              "component"
+            ],
+            "minProperties": 1,
+            "maxProperties": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "internal.unexpected"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "internal"
+          },
+          "context": {
+            "maxProperties": 0
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "limit_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "limit",
+        "maximum",
+        "observed"
+      ],
+      "minProperties": 3,
+      "maxProperties": 3,
+      "properties": {
+        "limit": {
+          "enum": [
+            "regular_files",
+            "tree_entries",
+            "cumulative_file_bytes",
+            "single_file_bytes",
+            "path_bytes",
+            "path_component_bytes",
+            "recursion_depth",
+            "canonical_output_bytes",
+            "scan_wall_milliseconds",
+            "pack_directory_entries",
+            "pack_pairs",
+            "single_pack_index_bytes",
+            "cumulative_pack_index_bytes",
+            "indexed_objects",
+            "single_pack_bytes",
+            "cumulative_verified_pack_bytes",
+            "compressed_entry_bytes",
+            "inflated_entry_bytes",
+            "cumulative_entry_inflate_bytes",
+            "delta_program_bytes",
+            "delta_depth",
+            "delta_instructions",
+            "delta_intermediate_bytes",
+            "cumulative_delta_work_bytes",
+            "object_locations",
+            "reconstructed_object_cache_bytes"
+          ]
+        },
+        "maximum": {
+          "type": "integer"
+        },
+        "observed": {
+          "type": "integer"
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "limit": {
+              "const": "regular_files"
+            },
+            "maximum": {
+              "const": 20000
+            },
+            "observed": {
+              "const": 20001
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "tree_entries"
+            },
+            "maximum": {
+              "const": 25000
+            },
+            "observed": {
+              "const": 25001
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "cumulative_file_bytes"
+            },
+            "maximum": {
+              "const": 268435456
+            },
+            "observed": {
+              "const": 268435457
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "single_file_bytes"
+            },
+            "maximum": {
+              "const": 4194304
+            },
+            "observed": {
+              "const": 4194305
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "path_bytes"
+            },
+            "maximum": {
+              "const": 1024
+            },
+            "observed": {
+              "const": 1025
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "path_component_bytes"
+            },
+            "maximum": {
+              "const": 255
+            },
+            "observed": {
+              "const": 256
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "recursion_depth"
+            },
+            "maximum": {
+              "const": 32
+            },
+            "observed": {
+              "const": 33
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "canonical_output_bytes"
+            },
+            "maximum": {
+              "const": 33554432
+            },
+            "observed": {
+              "const": 33554433
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "scan_wall_milliseconds"
+            },
+            "maximum": {
+              "const": 60000
+            },
+            "observed": {
+              "const": 60001
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "pack_directory_entries"
+            },
+            "maximum": {
+              "const": 512
+            },
+            "observed": {
+              "const": 513
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "pack_pairs"
+            },
+            "maximum": {
+              "const": 64
+            },
+            "observed": {
+              "const": 65
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "single_pack_index_bytes"
+            },
+            "maximum": {
+              "const": 134217728
+            },
+            "observed": {
+              "const": 134217729
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "cumulative_pack_index_bytes"
+            },
+            "maximum": {
+              "const": 268435456
+            },
+            "observed": {
+              "const": 268435457
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "indexed_objects"
+            },
+            "maximum": {
+              "const": 8000000
+            },
+            "observed": {
+              "const": 8000001
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "single_pack_bytes"
+            },
+            "maximum": {
+              "const": 4294967296
+            },
+            "observed": {
+              "const": 4294967297
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "cumulative_verified_pack_bytes"
+            },
+            "maximum": {
+              "const": 8589934592
+            },
+            "observed": {
+              "const": 8589934593
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "compressed_entry_bytes"
+            },
+            "maximum": {
+              "const": 67108864
+            },
+            "observed": {
+              "const": 67108865
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "inflated_entry_bytes"
+            },
+            "maximum": {
+              "const": 268435456
+            },
+            "observed": {
+              "const": 268435457
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "cumulative_entry_inflate_bytes"
+            },
+            "maximum": {
+              "const": 1073741824
+            },
+            "observed": {
+              "const": 1073741825
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "delta_program_bytes"
+            },
+            "maximum": {
+              "const": 33554432
+            },
+            "observed": {
+              "const": 33554433
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "delta_depth"
+            },
+            "maximum": {
+              "const": 50
+            },
+            "observed": {
+              "const": 51
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "delta_instructions"
+            },
+            "maximum": {
+              "const": 4194304
+            },
+            "observed": {
+              "const": 4194305
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "delta_intermediate_bytes"
+            },
+            "maximum": {
+              "const": 268435456
+            },
+            "observed": {
+              "const": 268435457
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "cumulative_delta_work_bytes"
+            },
+            "maximum": {
+              "const": 1073741824
+            },
+            "observed": {
+              "const": 1073741825
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "object_locations"
+            },
+            "maximum": {
+              "const": 8
+            },
+            "observed": {
+              "const": 9
+            }
+          }
+        },
+        {
+          "properties": {
+            "limit": {
+              "const": "reconstructed_object_cache_bytes"
+            },
+            "maximum": {
+              "const": 134217728
+            },
+            "observed": {
+              "const": 134217729
+            }
+          }
+        }
+      ]
+    },
+    "object_database_invalid_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "component",
+        "reason"
+      ],
+      "minProperties": 2,
+      "maxProperties": 4,
+      "properties": {
+        "component": {
+          "enum": [
+            "catalog",
+            "index",
+            "pack",
+            "entry",
+            "delta",
+            "object"
+          ]
+        },
+        "reason": {
+          "enum": [
+            "catalog_entry",
+            "index_layout",
+            "index_fanout",
+            "index_object_order",
+            "index_offset",
+            "index_checksum",
+            "pack_header",
+            "pack_checksum",
+            "pack_index_mismatch",
+            "object_count",
+            "entry_header",
+            "entry_crc",
+            "zlib_stream",
+            "object_size",
+            "object_oid",
+            "sha1_collision",
+            "delta_base",
+            "delta_cycle",
+            "delta_program",
+            "duplicate_object_conflict"
+          ]
+        },
+        "pack_id": {
+          "$ref": "#/$defs/oid"
+        },
+        "object_oid": {
+          "$ref": "#/$defs/oid"
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "component",
+            "reason"
+          ],
+          "maxProperties": 2,
+          "properties": {
+            "component": {
+              "const": "catalog"
+            },
+            "reason": {
+              "const": "catalog_entry"
+            }
+          }
+        },
+        {
+          "required": [
+            "component",
+            "reason",
+            "pack_id"
+          ],
+          "maxProperties": 3,
+          "properties": {
+            "component": {
+              "const": "index"
+            },
+            "reason": {
+              "enum": [
+                "index_layout",
+                "index_fanout",
+                "index_checksum",
+                "sha1_collision"
+              ]
+            }
+          }
+        },
+        {
+          "required": [
+            "component",
+            "reason",
+            "pack_id",
+            "object_oid"
+          ],
+          "maxProperties": 4,
+          "properties": {
+            "component": {
+              "const": "index"
+            },
+            "reason": {
+              "enum": [
+                "index_object_order",
+                "index_offset"
+              ]
+            }
+          }
+        },
+        {
+          "required": [
+            "component",
+            "reason",
+            "pack_id"
+          ],
+          "maxProperties": 3,
+          "properties": {
+            "component": {
+              "const": "pack"
+            },
+            "reason": {
+              "enum": [
+                "pack_header",
+                "pack_checksum",
+                "pack_index_mismatch",
+                "object_count",
+                "sha1_collision"
+              ]
+            }
+          }
+        },
+        {
+          "required": [
+            "component",
+            "reason",
+            "pack_id",
+            "object_oid"
+          ],
+          "maxProperties": 4,
+          "properties": {
+            "component": {
+              "const": "entry"
+            },
+            "reason": {
+              "enum": [
+                "entry_header",
+                "entry_crc",
+                "zlib_stream"
+              ]
+            }
+          }
+        },
+        {
+          "required": [
+            "component",
+            "reason",
+            "object_oid"
+          ],
+          "maxProperties": 3,
+          "properties": {
+            "component": {
+              "const": "object"
+            },
+            "reason": {
+              "enum": [
+                "object_size",
+                "object_oid",
+                "sha1_collision",
+                "duplicate_object_conflict"
+              ]
+            }
+          }
+        },
+        {
+          "required": [
+            "component",
+            "reason",
+            "pack_id",
+            "object_oid"
+          ],
+          "maxProperties": 4,
+          "properties": {
+            "component": {
+              "const": "delta"
+            },
+            "reason": {
+              "enum": [
+                "delta_base",
+                "delta_cycle",
+                "delta_program"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "oid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "canonical_relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^[^/\\\\\\u0000-\\u001f\\u007f]+(?:/[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    }
+  }
+}

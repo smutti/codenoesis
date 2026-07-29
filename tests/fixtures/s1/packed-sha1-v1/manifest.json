@@ -1,0 +1,307 @@
+{
+  "schema_version": "codenoesis.fixture.packed-sha1/v1",
+  "fixture_id": "s1-packed-sha1-v1",
+  "provenance": {
+    "kind": "synthetic_first_party",
+    "description": "Project-owned physical Git object-database variants and adversarial recipes for FR-ACQ-004.",
+    "third_party_material": false,
+    "license_spdx": "Apache-2.0",
+    "license_file": "../../../../LICENSE"
+  },
+  "source_fixture": {
+    "path": "tests/fixtures/s1/safe-inventory-v1",
+    "manifest": "tests/fixtures/s1/safe-inventory-v1/manifest.json",
+    "contract_bundle": "tests/specifications/s1/contract-bundle.json",
+    "contract_bundle_sha256": "1a0c6222699d683238e36aef0f77d40a02db469a6c394a812c0e8aa7a1398867",
+    "repository_identity": "urn:codenoesis:fixture:s1-safe-inventory-v1",
+    "commit_oid": "a72b34a03936b70511bd72bd4fa0d37a5a593386",
+    "tree_oid": "2a77b46a6a4a7645b7ec63831ce7e46bd7921904",
+    "object_format": "sha1"
+  },
+  "fixture_boundary": {
+    "setup_is_outside_monitored_subject": true,
+    "product_git_process_allowed": false,
+    "product_network_allowed": false,
+    "product_mmap_required": false,
+    "product_first_party_unsafe_allowed": false,
+    "generated_bulk_committed": false
+  },
+  "materializations": [
+    {
+      "id": "loose-control",
+      "object_storage": "loose",
+      "pack_version": null,
+      "index_version": null,
+      "delta_kind": "none",
+      "reachable_loose_fallback": true
+    },
+    {
+      "id": "packed-base-only",
+      "object_storage": "packed",
+      "pack_version": 2,
+      "index_version": 2,
+      "delta_kind": "none",
+      "reachable_loose_fallback": false
+    },
+    {
+      "id": "packed-ofs-delta",
+      "object_storage": "packed",
+      "pack_version": 2,
+      "index_version": 2,
+      "delta_kind": "ofs_delta",
+      "reachable_loose_fallback": false
+    },
+    {
+      "id": "packed-ref-delta",
+      "object_storage": "packed",
+      "pack_version": 2,
+      "index_version": 2,
+      "delta_kind": "ref_delta",
+      "reachable_loose_fallback": false
+    },
+    {
+      "id": "mixed-cross-pack-ref-delta",
+      "object_storage": "loose_and_multiple_packs",
+      "pack_version": 2,
+      "index_version": 2,
+      "delta_kind": "ref_delta_cross_pack_and_loose",
+      "reachable_loose_fallback": false
+    }
+  ],
+  "equivalence_oracle": {
+    "comparison": "RFC8785 bytes of RepositorySnapshotV2.semantic with the volatile envelope excluded",
+    "expected_semantic": "tests/fixtures/s1/safe-inventory-v1/expected-semantic-a.jcs",
+    "expected_snapshot_hash": "236b231c3154f9be56130ddc8dfb39bb482af10330f7c6757597ad22c006e9e7",
+    "same_repository_identity": true,
+    "same_commit_oid": true,
+    "same_tree_oid": true,
+    "same_inventory": true,
+    "same_source_evidence": true,
+    "acquisition_selector_excluded_from_semantic_identity": true
+  },
+  "catalog_cases": [
+    {
+      "id": "paired-pack-index",
+      "expected": "success"
+    },
+    {
+      "id": "multiple-pairs-permuted",
+      "expected": "same semantic bytes and error precedence"
+    },
+    {
+      "id": "duplicate-oid-equivalent",
+      "expected": "success after every reachable location reconstructs identical type and bytes"
+    },
+    {
+      "id": "duplicate-oid-conflict",
+      "expected_error": {
+        "code": "acquisition.object_database_invalid",
+        "component": "object",
+        "reason": "duplicate_object_conflict"
+      }
+    },
+    {
+      "id": "unpaired-or-transient-entry",
+      "expected_error": {
+        "code": "acquisition.object_database_changed",
+        "component": "catalog"
+      }
+    },
+    {
+      "id": "promisor-sidecar",
+      "expected_error": {
+        "code": "acquisition.unsupported_repository_shape",
+        "feature": "promisor_object_database"
+      }
+    },
+    {
+      "id": "bitmap-rev-mtimes-keep-sidecars",
+      "expected": "ignored as non-authoritative hints after safe regular-file validation"
+    },
+    {
+      "id": "unsafe-authoritative-entry",
+      "expected_error": {
+        "code": "acquisition.object_database_invalid",
+        "component": "catalog",
+        "reason": "catalog_entry"
+      }
+    },
+    {
+      "id": "midx-with-valid-pairs",
+      "expected": "MIDX ignored; paired v2 indexes remain authoritative"
+    },
+    {
+      "id": "midx-only",
+      "expected_error": {
+        "code": "acquisition.unsupported_repository_shape",
+        "feature": "multi_pack_index_only"
+      }
+    }
+  ],
+  "mutation_recipes": [
+    {
+      "id": "index-layout",
+      "component": "index",
+      "reason": "index_layout",
+      "mutation": "truncate or append one byte while preserving the original file name"
+    },
+    {
+      "id": "index-fanout",
+      "component": "index",
+      "reason": "index_fanout",
+      "mutation": "make one fanout entry decrease and recompute the index checksum"
+    },
+    {
+      "id": "index-object-order",
+      "component": "index",
+      "reason": "index_object_order",
+      "mutation": "swap two adjacent OIDs and corresponding rows, then recompute the index checksum"
+    },
+    {
+      "id": "index-offset",
+      "component": "index",
+      "reason": "index_offset",
+      "mutation": "point one 32-bit or large offset outside the pack entry region and recompute the index checksum"
+    },
+    {
+      "id": "index-checksum",
+      "component": "index",
+      "reason": "index_checksum",
+      "mutation": "flip one non-trailer byte without updating the index checksum"
+    },
+    {
+      "id": "index-sha1-collision",
+      "component": "index",
+      "reason": "sha1_collision",
+      "mutation": "feed a reviewed collision-detection vector through the complete index checksum boundary"
+    },
+    {
+      "id": "pack-header",
+      "component": "pack",
+      "reason": "pack_header",
+      "mutation": "change the pack signature or supported version and rebuild only outer fixture metadata"
+    },
+    {
+      "id": "object-count",
+      "component": "pack",
+      "reason": "object_count",
+      "mutation": "make the pack header count disagree with the complete index row count and rebuild outer checksums"
+    },
+    {
+      "id": "pack-checksum",
+      "component": "pack",
+      "reason": "pack_checksum",
+      "mutation": "flip one pack byte without updating the trailer"
+    },
+    {
+      "id": "pack-index-mismatch",
+      "component": "pack",
+      "reason": "pack_index_mismatch",
+      "mutation": "pair a valid index with a different valid pack"
+    },
+    {
+      "id": "pack-sha1-collision",
+      "component": "pack",
+      "reason": "sha1_collision",
+      "mutation": "feed a reviewed collision-detection vector through the complete pack checksum boundary"
+    },
+    {
+      "id": "entry-header",
+      "component": "entry",
+      "reason": "entry_header",
+      "mutation": "truncate a variable-length entry header"
+    },
+    {
+      "id": "entry-crc",
+      "component": "entry",
+      "reason": "entry_crc",
+      "mutation": "change compressed entry bytes and update the pack checksum but not index CRC"
+    },
+    {
+      "id": "zlib-stream",
+      "component": "entry",
+      "reason": "zlib_stream",
+      "mutation": "truncate, concatenate, or add trailing bytes to one compressed stream and rebuild outer checksums"
+    },
+    {
+      "id": "object-size",
+      "component": "object",
+      "reason": "object_size",
+      "mutation": "make declared and reconstructed sizes disagree"
+    },
+    {
+      "id": "object-oid",
+      "component": "object",
+      "reason": "object_oid",
+      "mutation": "reconstruct bytes that do not hash to the indexed OID"
+    },
+    {
+      "id": "sha1-collision",
+      "component": "object",
+      "reason": "sha1_collision",
+      "mutation": "feed a reviewed collision-detection test vector through the Git object hashing boundary"
+    },
+    {
+      "id": "delta-base",
+      "component": "delta",
+      "reason": "delta_base",
+      "mutation": "use an invalid OFS distance or missing local REF base"
+    },
+    {
+      "id": "delta-cycle",
+      "component": "delta",
+      "reason": "delta_cycle",
+      "mutation": "construct two REF deltas that resolve to each other"
+    },
+    {
+      "id": "delta-program",
+      "component": "delta",
+      "reason": "delta_program",
+      "mutation": "use opcode zero, truncated insert, out-of-range copy, or wrong result size"
+    }
+  ],
+  "limits": {
+    "pack_directory_entries": 512,
+    "pack_pairs": 64,
+    "single_pack_index_bytes": 134217728,
+    "cumulative_pack_index_bytes": 268435456,
+    "indexed_objects": 8000000,
+    "single_pack_bytes": 4294967296,
+    "cumulative_verified_pack_bytes": 8589934592,
+    "compressed_entry_bytes": 67108864,
+    "inflated_entry_bytes": 268435456,
+    "cumulative_entry_inflate_bytes": 1073741824,
+    "delta_program_bytes": 33554432,
+    "delta_depth": 50,
+    "delta_instructions": 4194304,
+    "delta_intermediate_bytes": 268435456,
+    "cumulative_delta_work_bytes": 1073741824,
+    "object_locations": 8,
+    "reconstructed_object_cache_bytes": 134217728
+  },
+  "limit_oracle": {
+    "every_limit_has_maximum_and_maximum_plus_one": true,
+    "bulk_cases_use_injected_bounded_readers_or_models": true,
+    "representative_real_bytes_are_still_required": true,
+    "public_maximum_matches_limit_token": true,
+    "public_observed_is_exactly_maximum_plus_one": true,
+    "legacy_s1_limits_remain_in_force": true,
+    "packed_limits_never_relax_inherited_limits": true,
+    "effective_limit_is_minimum_of_applicable_limits": true,
+    "regular_file_blob_limit_is_4194304_before_retained_semantic_reconstruction_or_allocation": true,
+    "discard_only_structural_inflate_has_separate_per_entry_and_cumulative_limits": true
+  },
+  "security_oracle": {
+    "read_root": "the accepted canonical repository root and its direct real .git directory only",
+    "pack_files_opened_once": true,
+    "memory_mapping": false,
+    "metadata_checked_before_and_after": true,
+    "concurrent_change_outcome": "stable success or acquisition.object_database_changed; never fallback, partial output, panic, or SIGBUS",
+    "automatic_retry_is_evidence": false,
+    "git_process_events": 0,
+    "network_events": 0,
+    "outside_root_events": 0,
+    "filesystem_write_events": 0,
+    "target_execution_events": 0
+  }
+}
