@@ -1,0 +1,660 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/semantic-compatibility-report-v1.schema.json",
+  "title": "CodeNoesis SemanticCompatibilityReportV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "analysis_profile",
+    "configuration_hash",
+    "pipeline_version",
+    "ontology_versions",
+    "extractor_versions",
+    "evidence_lineage_version",
+    "rule_catalog_version",
+    "provider",
+    "semantic_diffs",
+    "client_assessments",
+    "rejected_candidates",
+    "evidence",
+    "coverage_gaps"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.semantic-compatibility-report/v1"
+    },
+    "analysis_profile": {
+      "const": "implementation-aware-http-json/v1"
+    },
+    "configuration_hash": {
+      "type": "string",
+      "pattern": "^blake3:[0-9a-f]{64}$"
+    },
+    "pipeline_version": {
+      "type": "string",
+      "pattern": "^codenoesis\\.pipeline/[a-z0-9._-]+/v[1-9][0-9]*$"
+    },
+    "ontology_versions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^codenoesis\\.ontology/[a-z0-9._/-]+/v[1-9][0-9]*$"
+      }
+    },
+    "extractor_versions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/extractor_version"
+      }
+    },
+    "evidence_lineage_version": {
+      "type": "string",
+      "pattern": "^codenoesis\\.source-evidence/v[1-9][0-9]*$"
+    },
+    "rule_catalog_version": {
+      "const": "codenoesis.compatibility-rules/http-json/v1"
+    },
+    "provider": {
+      "$ref": "#/$defs/provider"
+    },
+    "semantic_diffs": {
+      "type": "array",
+      "maxItems": 200000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/semantic_diff"
+      }
+    },
+    "client_assessments": {
+      "type": "array",
+      "maxItems": 10000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/client_assessment"
+      }
+    },
+    "rejected_candidates": {
+      "type": "array",
+      "maxItems": 10000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/rejected_candidate"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 1000000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "coverage_gaps": {
+      "type": "array",
+      "maxItems": 200000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/coverage_gap"
+      }
+    }
+  },
+  "$defs": {
+    "identity": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:[a-z0-9][a-z0-9._:-]{0,254}$"
+    },
+    "hashed_identity": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:(service|operation|field|diff|client|call-site|evidence|coverage-gap):blake3:[0-9a-f]{64}$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "safe_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+    },
+    "claim_state": {
+      "enum": [
+        "deterministic_fact",
+        "derived_fact",
+        "candidate",
+        "reviewed_inference",
+        "confirmed",
+        "rejected",
+        "superseded"
+      ]
+    },
+    "classification": {
+      "enum": [
+        "compatible",
+        "potentially_breaking",
+        "breaking",
+        "unresolved"
+      ]
+    },
+    "dimension": {
+      "enum": [
+        "presence",
+        "nullability",
+        "default",
+        "validation",
+        "value_set",
+        "http_status",
+        "error_code"
+      ]
+    },
+    "declared_state": {
+      "enum": [
+        "required",
+        "optional",
+        "non_null",
+        "nullable",
+        "no_declared_default",
+        "declared_default",
+        "validation_open",
+        "validation_restricted",
+        "value_set_open",
+        "value_set_closed",
+        "status_supported",
+        "status_unsupported",
+        "error_supported",
+        "error_unsupported",
+        "unknown"
+      ]
+    },
+    "implementation_state": {
+      "enum": [
+        "guaranteed_present",
+        "may_be_absent",
+        "requires_input",
+        "accepts_absent",
+        "emits_non_null",
+        "may_emit_null",
+        "no_applied_default",
+        "applies_default",
+        "validation_open",
+        "validation_restricted",
+        "value_set_open",
+        "value_set_closed",
+        "status_supported",
+        "status_unsupported",
+        "error_supported",
+        "error_unsupported",
+        "unknown"
+      ]
+    },
+    "extractor_version": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^v[1-9][0-9]*$"
+        }
+      }
+    },
+    "revision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "revision",
+        "contract_sha256"
+      ],
+      "properties": {
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "contract_sha256": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "service_identity",
+        "repository_identity",
+        "baseline",
+        "target"
+      ],
+      "properties": {
+        "service_identity": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:service:blake3:[0-9a-f]{64}$"
+        },
+        "repository_identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "baseline": {
+          "$ref": "#/$defs/revision"
+        },
+        "target": {
+          "$ref": "#/$defs/revision"
+        }
+      }
+    },
+    "declared_view_delta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "before",
+        "after",
+        "delta",
+        "claim_state",
+        "evidence_ids"
+      ],
+      "properties": {
+        "before": {
+          "$ref": "#/$defs/declared_state"
+        },
+        "after": {
+          "$ref": "#/$defs/declared_state"
+        },
+        "delta": {
+          "enum": [
+            "unchanged",
+            "weakened",
+            "tightened",
+            "expanded",
+            "narrowed",
+            "changed",
+            "unresolved"
+          ]
+        },
+        "claim_state": {
+          "$ref": "#/$defs/claim_state"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/evidence_ids"
+        }
+      }
+    },
+    "implementation_view_delta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "before",
+        "after",
+        "delta",
+        "claim_state",
+        "evidence_ids"
+      ],
+      "properties": {
+        "before": {
+          "$ref": "#/$defs/implementation_state"
+        },
+        "after": {
+          "$ref": "#/$defs/implementation_state"
+        },
+        "delta": {
+          "enum": [
+            "unchanged",
+            "weakened",
+            "tightened",
+            "expanded",
+            "narrowed",
+            "changed",
+            "unresolved"
+          ]
+        },
+        "claim_state": {
+          "$ref": "#/$defs/claim_state"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/evidence_ids"
+        }
+      }
+    },
+    "semantic_diff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "operation_id",
+        "field_id",
+        "field_pointer",
+        "direction",
+        "dimension",
+        "contract",
+        "implementation",
+        "change_kind",
+        "classification",
+        "claim_state",
+        "rule_id",
+        "affected_client_ids",
+        "evidence_ids",
+        "coverage_gap_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:diff:blake3:[0-9a-f]{64}$"
+        },
+        "operation_id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:operation:blake3:[0-9a-f]{64}$"
+        },
+        "field_id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:field:blake3:[0-9a-f]{64}$"
+        },
+        "field_pointer": {
+          "type": "string",
+          "pattern": "^/(?:[^~/]|~0|~1)+(?:/(?:[^~/]|~0|~1)+)*$"
+        },
+        "direction": {
+          "enum": [
+            "request",
+            "response"
+          ]
+        },
+        "dimension": {
+          "$ref": "#/$defs/dimension"
+        },
+        "contract": {
+          "$ref": "#/$defs/declared_view_delta"
+        },
+        "implementation": {
+          "$ref": "#/$defs/implementation_view_delta"
+        },
+        "change_kind": {
+          "enum": [
+            "contract_changed",
+            "implementation_behavior_changed_without_contract_change",
+            "contract_implementation_contradiction",
+            "unresolved_implementation_semantics"
+          ]
+        },
+        "classification": {
+          "$ref": "#/$defs/classification"
+        },
+        "claim_state": {
+          "const": "derived_fact"
+        },
+        "rule_id": {
+          "type": "string",
+          "pattern": "^cmp\\.[a-z0-9.-]+/v[1-9][0-9]*$"
+        },
+        "affected_client_ids": {
+          "type": "array",
+          "maxItems": 10000,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^urn:codenoesis:client:blake3:[0-9a-f]{64}$"
+          }
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/evidence_ids"
+        },
+        "coverage_gap_ids": {
+          "$ref": "#/$defs/coverage_gap_ids"
+        }
+      }
+    },
+    "client_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "client_identity",
+        "repository_identity",
+        "operation_id",
+        "call_site_id",
+        "link_state",
+        "presence_assumption",
+        "assumption_claim_state",
+        "baseline_risk",
+        "target_impact",
+        "affected",
+        "rule_ids",
+        "evidence_ids",
+        "coverage_gap_ids"
+      ],
+      "properties": {
+        "client_identity": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:client:blake3:[0-9a-f]{64}$"
+        },
+        "repository_identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "operation_id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:operation:blake3:[0-9a-f]{64}$"
+        },
+        "call_site_id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:call-site:blake3:[0-9a-f]{64}$"
+        },
+        "link_state": {
+          "$ref": "#/$defs/claim_state"
+        },
+        "presence_assumption": {
+          "enum": [
+            "requires_present",
+            "handles_absent",
+            "unknown"
+          ]
+        },
+        "assumption_claim_state": {
+          "$ref": "#/$defs/claim_state"
+        },
+        "baseline_risk": {
+          "$ref": "#/$defs/classification"
+        },
+        "target_impact": {
+          "$ref": "#/$defs/classification"
+        },
+        "affected": {
+          "type": "boolean"
+        },
+        "rule_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^cmp\\.[a-z0-9.-]+/v[1-9][0-9]*$"
+          }
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/evidence_ids"
+        },
+        "coverage_gap_ids": {
+          "$ref": "#/$defs/coverage_gap_ids"
+        }
+      }
+    },
+    "rejected_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "client_identity",
+        "repository_identity",
+        "call_site_id",
+        "reason_code",
+        "evidence_ids"
+      ],
+      "properties": {
+        "client_identity": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:client:blake3:[0-9a-f]{64}$"
+        },
+        "repository_identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "call_site_id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:call-site:blake3:[0-9a-f]{64}$"
+        },
+        "reason_code": {
+          "enum": [
+            "operation_identity_mismatch",
+            "candidate_only",
+            "conflicting_identity"
+          ]
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/evidence_ids"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "repository_identity",
+        "revision",
+        "path",
+        "start_line",
+        "end_line",
+        "excerpt_sha256",
+        "source_kind",
+        "claim_state",
+        "capability_version"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:evidence:blake3:[0-9a-f]{64}$"
+        },
+        "repository_identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "path": {
+          "$ref": "#/$defs/safe_path"
+        },
+        "start_line": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000000
+        },
+        "end_line": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000000
+        },
+        "excerpt_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "source_kind": {
+          "enum": [
+            "declared_contract",
+            "provider_implementation",
+            "client_assumption",
+            "test_observation",
+            "runtime_observation"
+          ]
+        },
+        "claim_state": {
+          "$ref": "#/$defs/claim_state"
+        },
+        "capability_version": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._/-]+/v[1-9][0-9]*$"
+        }
+      }
+    },
+    "coverage_gap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "subject_id",
+        "dimension",
+        "reason_code",
+        "revisions",
+        "blocks_classification",
+        "evidence_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:coverage-gap:blake3:[0-9a-f]{64}$"
+        },
+        "subject_id": {
+          "$ref": "#/$defs/hashed_identity"
+        },
+        "dimension": {
+          "$ref": "#/$defs/dimension"
+        },
+        "reason_code": {
+          "enum": [
+            "unsupported_custom_provider_mapping",
+            "unsupported_control_flow",
+            "reflection",
+            "generated_code",
+            "runtime_configuration",
+            "custom_codec",
+            "insufficient_federation_evidence"
+          ]
+        },
+        "revisions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          }
+        },
+        "blocks_classification": {
+          "type": "boolean"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/evidence_ids"
+        }
+      }
+    },
+    "evidence_ids": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1000000,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^urn:codenoesis:evidence:blake3:[0-9a-f]{64}$"
+      }
+    },
+    "coverage_gap_ids": {
+      "type": "array",
+      "maxItems": 200000,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^urn:codenoesis:coverage-gap:blake3:[0-9a-f]{64}$"
+      }
+    }
+  }
+}

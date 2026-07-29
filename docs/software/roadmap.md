@@ -264,6 +264,50 @@ mobile, and shared multiplatform source-set boundaries in one adapter family.
 The final order remains a governance decision and may change without altering
 already-approved adapter contracts.
 
+## Implementation-aware API compatibility lane
+
+The `S6` and `S7` outcomes are not limited to comparing two interface files.
+The product must be able to keep declared API semantics, provider
+implementation semantics, and client implementation assumptions as separate
+evidence views, then explain a semantic change across immutable revisions.
+Planning identifiers `C0`–`C5` below are not delivery slices and do not
+authorize implementation.
+
+| Order | Planning item | Generic outcome | Governance dependency | Candidate acceptance gate |
+|---|---|---|---|---|
+| `C0` | Canonical contract semantics | Normalize approved request/response operation and field semantics, including presence, nullability, defaults, validation, value sets, status, and error identity, without treating one dimension as another. | Contract-format capability and stable operation/field identity; OpenAPI 3.1 HTTP/JSON is the first bounded candidate, not a universal API model. | Directional positive and negative fixtures resolve every normalized fact to exact contract bytes; unknown format features remain explicit gaps. |
+| `C1` | Provider implementation facts | Prove only supported validation and emission behavior from real provider source paths, preserving `guaranteed`, `may`, and `unknown` rather than extrapolating from signatures or one execution. | One approved language/framework/source capability at a time, with closed control-flow meaning and unsupported custom mapping behavior. | A direct unconditional output, a conditional output, and a custom/dynamic output produce reviewed `guaranteed_present`, `may_be_absent`, and `unknown` outcomes without build or target execution. |
+| `C2` | Client implementation assumptions | Recover what an actual linked decoder, validator, request builder, and use path requires or safely handles; a DTO type alone is insufficient. | One approved client language/framework capability at a time plus exact call-site and S6 operation federation. | Strict and safe clients with superficially similar models are distinguished by their real decode/use paths; custom codecs and runtime configuration remain gaps. |
+| `C3` | Three-view reconciliation | Compare declared contract, provider implementation, and client assumption facts without overwriting provenance or claim state. | `DR-SEM-001`, approved `C0`–`C2` capabilities, and deterministic S6 federation. | Contract/client mismatch, provider/contract contradiction, undocumented provider guarantee, safe client, and operation decoy match the reviewed oracle. |
+| `C4` | Semantic revision diff | Compare provider revisions even when contract bytes are unchanged and classify approved implementation deltas as compatible, potentially breaking, breaking, or unresolved for each linked client path. | `FR-IMP-004/005`, versioned classifier catalog, S5 revision comparison, and `C3`. | Removing an undocumented field-presence guarantee breaks only the strict linked client; safe client remains compatible, decoy is rejected, and unsupported behavior remains unresolved. |
+| `C5` | Extended behavioral evidence | Add separately governed contract formats, framework semantics, tests, traces, protocol/state behavior, side effects, and causal evidence without weakening the deterministic static baseline. | Per-capability ontology, sandbox, privacy, coverage, observation-world, and rule decisions. | Each advertised dimension has independent positive, hard-negative, decoy, insufficient-evidence, determinism, resource, and evidence-lineage gates. |
+
+The first implementation-aware checkpoint is `C0`–`C4` for one approved
+provider capability and one approved client capability. It is production-useful
+only when the support matrix names the exact format, language, framework,
+serializer/decoder behavior, and unsupported cases. The project-owned S7
+fixture may use representative Rust and Kotlin/KMP source, but neither language
+defines the generic contract and neither becomes broadly supported merely by
+appearing in an oracle.
+
+A semantic finding must expose:
+
+- baseline and target provider revision;
+- stable service, operation, field, client, and call-site identities;
+- request/response direction and semantic dimension;
+- separate declared and implementation before/after states;
+- client assumption and deterministic federation state;
+- exact classifier rule and claim state;
+- source evidence and explicit coverage gaps;
+- `compatible`, `potentially_breaking`, `breaking`, or `unresolved` outcome.
+
+Static analysis cannot prove arbitrary program equivalence. Reflection, custom
+codecs, generated behavior, unresolved calls, macro expansion, runtime
+configuration, or incomplete federation must fail open epistemically as
+`unresolved`, not fail open operationally by guessing. Tests and runtime traces
+may add bounded evidence later, but a missing observation never proves absence
+and an LLM never upgrades a candidate to a deterministic fact.
+
 ## Sequencing and evidence
 
 The recommended execution order is:
@@ -276,7 +320,9 @@ The recommended execution order is:
 6. deliver `R4`–`R6` as separate manifest/ontology/framework objectives;
 7. add `R7` only after the sandbox and index trust boundary is approved;
 8. deliver `R8`, then execute `R9` on at least two independent repositories;
-9. continue the polyglot lane one approved adapter at a time.
+9. continue the polyglot lane one approved adapter at a time;
+10. after S5/S6 prerequisites, deliver `C0`–`C4` as one capability and one
+    behavioral implementation objective at a time, then extend through `C5`.
 
 Each implementation pull request keeps one behavioral objective and includes
 the required issue, requirement status, slice, risk, paths, base/head SHAs,
