@@ -54,6 +54,13 @@ APPROVED_S4_REQUIREMENTS = (
     "FR-EXT-007",
     "FR-QRY-001",
 )
+APPROVED_S5_REQUIREMENTS = (
+    "FR-CLI-004",
+    "FR-INC-001",
+    "FR-INC-002",
+    "FR-INC-003",
+    "INV-INC-001",
+)
 APPROVED_S7_REQUIREMENTS = (
     "DR-SEM-001",
     "FR-IMP-004",
@@ -66,6 +73,7 @@ APPROVED_REQUIREMENTS = tuple(
         + APPROVED_S2_REQUIREMENTS
         + APPROVED_S3_REQUIREMENTS
         + APPROVED_S4_REQUIREMENTS
+        + APPROVED_S5_REQUIREMENTS
         + APPROVED_S7_REQUIREMENTS
     )
 )
@@ -84,6 +92,9 @@ S3_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/29"
 S4_APPROVED_AT = "2026-07-29T10:33:49Z"
 S4_APPROVAL_SOURCE_SHA = "bfc21f574a7e99f5b236d70065def61b472ba12f"
 S4_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/55"
+S5_APPROVED_AT = "2026-07-29T17:18:46Z"
+S5_APPROVAL_SOURCE_SHA = "88086c5a0f0436d140477dce4ed6974288b89e14"
+S5_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/67"
 S7_APPROVED_AT = "2026-07-29T15:39:07Z"
 S7_APPROVAL_SOURCE_SHA = "d5991a0680db4392f4cad1a016cc7022d9cced77"
 S7_APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/63"
@@ -174,6 +185,16 @@ class PolicyValidationTests(PolicyFixture):
                     S4_APPROVAL_REFERENCE, approval_record["approval_reference"]
                 )
                 self.assertEqual(S4_APPROVED_AT, approval_record["approved_at"])
+            elif approval_record["id"] in APPROVED_S5_REQUIREMENTS:
+                self.assertIn(approval_record["id"], APPROVED_S5_REQUIREMENTS)
+                self.assertEqual("S5", approval_record["slice"])
+                self.assertEqual(
+                    S5_APPROVAL_SOURCE_SHA, approval_record["source_sha"]
+                )
+                self.assertEqual(
+                    S5_APPROVAL_REFERENCE, approval_record["approval_reference"]
+                )
+                self.assertEqual(S5_APPROVED_AT, approval_record["approved_at"])
             else:
                 self.assertIn(approval_record["id"], APPROVED_S7_REQUIREMENTS)
                 self.assertEqual("S7", approval_record["slice"])
@@ -330,6 +351,26 @@ class GlobSemanticsTests(unittest.TestCase):
 
 
 class AuthorizationTests(PolicyFixture):
+    def test_fr_cli_004_fr_inc_001_fr_inc_002_fr_inc_003_inv_inc_001_exact_s5_authorization(
+        self,
+    ) -> None:
+        result = codex_policy.authorize_requirements(
+            self.policy, list(APPROVED_S5_REQUIREMENTS), "S5"
+        )
+
+        self.assertTrue(result["authorized"])
+        self.assertEqual("S5", result["delivery_slice"])
+        self.assertEqual(
+            list(APPROVED_S5_REQUIREMENTS), result["requirement_ids"]
+        )
+        self.assertEqual(
+            list(APPROVED_S5_REQUIREMENTS),
+            [record["id"] for record in result["approval_records"]],
+        )
+        for record in result["approval_records"]:
+            self.assertEqual(S5_APPROVAL_SOURCE_SHA, record["source_sha"])
+            self.assertEqual(S5_APPROVAL_REFERENCE, record["approval_reference"])
+
     def test_dr_sem_001_fr_imp_004_fr_imp_005_exact_s7_authorization(
         self,
     ) -> None:
@@ -769,6 +810,23 @@ class CommandLineTests(PolicyFixture):
             "S7",
             "--requirement-id",
             "FR-IMP-003",
+        )
+
+        self.assertEqual(4, result.returncode)
+        payload = json.loads(result.stderr)
+        self.assertEqual("authorization_denied", payload["error"]["code"])
+
+    def test_fr_inc_004_authorization_denial_has_stable_exit_code_and_json_error(
+        self,
+    ) -> None:
+        result = self.run_cli(
+            "authorize",
+            "--policy",
+            str(POLICY_PATH),
+            "--slice",
+            "S5",
+            "--requirement-id",
+            "FR-INC-004",
         )
 
         self.assertEqual(4, result.returncode)
