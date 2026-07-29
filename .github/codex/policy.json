@@ -102,6 +102,14 @@
       "approval_reference": "https://github.com/smutti/codenoesis/pull/12"
     },
     {
+      "id": "FR-CLI-004",
+      "slice": "S5",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T17:18:46Z",
+      "source_sha": "88086c5a0f0436d140477dce4ed6974288b89e14",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/67"
+    },
+    {
       "id": "FR-DOC-001",
       "slice": "S4",
       "approved_by": "github:smutti",
@@ -166,6 +174,30 @@
       "approval_reference": "https://github.com/smutti/codenoesis/pull/63"
     },
     {
+      "id": "FR-INC-001",
+      "slice": "S5",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T17:18:46Z",
+      "source_sha": "88086c5a0f0436d140477dce4ed6974288b89e14",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/67"
+    },
+    {
+      "id": "FR-INC-002",
+      "slice": "S5",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T17:18:46Z",
+      "source_sha": "88086c5a0f0436d140477dce4ed6974288b89e14",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/67"
+    },
+    {
+      "id": "FR-INC-003",
+      "slice": "S5",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T17:18:46Z",
+      "source_sha": "88086c5a0f0436d140477dce4ed6974288b89e14",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/67"
+    },
+    {
       "id": "FR-INV-001",
       "slice": "S1",
       "approved_by": "github:smutti",
@@ -220,6 +252,14 @@
       "approved_at": "2026-07-26T15:31:01Z",
       "source_sha": "3d14e4698563543b663de58fc4eea8740b724940",
       "approval_reference": "https://github.com/smutti/codenoesis/pull/29"
+    },
+    {
+      "id": "INV-INC-001",
+      "slice": "S5",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T17:18:46Z",
+      "source_sha": "88086c5a0f0436d140477dce4ed6974288b89e14",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/67"
     },
     {
       "id": "INV-SNP-001",
