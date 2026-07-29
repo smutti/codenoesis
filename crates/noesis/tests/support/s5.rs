@@ -142,10 +142,71 @@ impl MaterializedRepository {
     }
 
     pub fn refresh(&self) -> Output {
-        self.refresh_with_profile("standard-local-s5")
+        self.refresh_revision_with_profile(TARGET_COMMIT_OID, "standard-local-s5")
     }
 
     pub fn refresh_with_profile(&self, profile: &str) -> Output {
+        self.refresh_revision_with_profile(TARGET_COMMIT_OID, profile)
+    }
+
+    pub fn refresh_revision(&self, revision: &str) -> Output {
+        self.refresh_revision_with_profile(revision, "standard-local-s5")
+    }
+
+    pub fn cold_scan_revision(&self, revision: &str) -> Output {
+        self.scan(revision, &self.cold_store)
+    }
+
+    pub fn added_source_revision(&self) -> String {
+        let library =
+            self.write_git_blob(b"pub mod item;\npub mod added;\n\npub use item::Item;\n");
+        let added = self.write_git_blob(b"pub fn added() {}\n");
+        let mut read_tree = git_command(&self.global_config);
+        read_tree
+            .arg("-C")
+            .arg(&self.worktree)
+            .args(["read-tree", BASELINE_COMMIT_OID]);
+        successful_output(read_tree, None);
+        for (oid, path) in [
+            (library.as_str(), "crates/model/src/lib.rs"),
+            (added.as_str(), "crates/model/src/added.rs"),
+        ] {
+            let mut update_index = git_command(&self.global_config);
+            update_index
+                .arg("-C")
+                .arg(&self.worktree)
+                .args(["update-index", "--add", "--cacheinfo"])
+                .arg(format!("100644,{oid},{path}"));
+            successful_output(update_index, None);
+        }
+        let mut write_tree = git_command(&self.global_config);
+        write_tree.arg("-C").arg(&self.worktree).arg("write-tree");
+        let tree_oid = stdout_line(successful_output(write_tree, None));
+        let mut commit = git_command(&self.global_config);
+        commit
+            .arg("-C")
+            .arg(&self.worktree)
+            .args([
+                "commit-tree",
+                &tree_oid,
+                "-p",
+                BASELINE_COMMIT_OID,
+                "-F",
+                "-",
+            ])
+            .env("GIT_AUTHOR_NAME", "CodeNoesis Fixture")
+            .env("GIT_AUTHOR_EMAIL", "fixture@codenoesis.invalid")
+            .env("GIT_AUTHOR_DATE", "946684803 +0000")
+            .env("GIT_COMMITTER_NAME", "CodeNoesis Fixture")
+            .env("GIT_COMMITTER_EMAIL", "fixture@codenoesis.invalid")
+            .env("GIT_COMMITTER_DATE", "946684803 +0000");
+        stdout_line(successful_output(
+            commit,
+            Some(b"fixture: add mapped source\n"),
+        ))
+    }
+
+    fn refresh_revision_with_profile(&self, revision: &str, profile: &str) -> Output {
         let mut command = self.noesis_command();
         command
             .args(["refresh", "--repository"])
@@ -154,7 +215,7 @@ impl MaterializedRepository {
                 "--repository-id",
                 REPOSITORY_ID,
                 "--revision",
-                TARGET_COMMIT_OID,
+                revision,
                 "--store",
             ])
             .arg(&self.store)

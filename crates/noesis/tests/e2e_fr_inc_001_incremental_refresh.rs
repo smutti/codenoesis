@@ -247,6 +247,51 @@ fn e2e_fr_inc_002_incompatible_cache_selects_full_rebuild() {
 }
 
 #[test]
+fn e2e_fr_inc_002_source_add_selects_full_workspace() {
+    let repository = MaterializedRepository::two_revisions();
+    let baseline = repository.baseline_scan();
+    assert_success(&baseline, "S5 source-add baseline scan");
+    let target_commit = repository.added_source_revision();
+
+    let refresh = repository.refresh_revision(&target_commit);
+
+    assert_success(&refresh, "S5 source-add full-workspace refresh");
+    let report = parse_single_document(&refresh.stdout);
+    assert_eq!(report["rule"]["outcome"], "full_workspace_analysis");
+    assert_eq!(
+        report["rule"]["rule_ids"],
+        serde_json::json!(["INC-RULE-003"])
+    );
+    assert_eq!(report["metrics"]["changed_path_count"], 2);
+    assert_eq!(report["metrics"]["analysis_entry_count"], 4);
+    assert_eq!(report["metrics"]["cache_hit_count"], 0);
+    assert_eq!(report["metrics"]["cache_miss_count"], 4);
+    assert_eq!(report["metrics"]["rematerialized_chunk_count"], 4);
+    assert_eq!(
+        repository.stored_head(&repository.store).commit_oid,
+        target_commit
+    );
+
+    let cold = repository.cold_scan_revision(&target_commit);
+    assert_success(&cold, "S5 source-add cold target scan");
+    assert_eq!(
+        repository.stored_snapshot_semantic(&repository.store),
+        canonical_semantic_from_scan(&cold),
+        "S5 source-add incremental semantic differs from cold S4"
+    );
+    let incremental_docs = repository.docs(&repository.store, &repository.documents);
+    assert_success(&incremental_docs, "S5 source-add incremental docs");
+    let cold_docs = repository.docs(&repository.cold_store, &repository.cold_documents);
+    assert_success(&cold_docs, "S5 source-add cold docs");
+    assert_eq!(
+        owned_document_bytes(&repository.documents),
+        owned_document_bytes(&repository.cold_documents),
+        "S5 source-add documents differ from cold S4"
+    );
+    assert!(!repository.process_sentinel.exists());
+}
+
+#[test]
 fn e2e_fr_cli_004_non_s4_baseline_is_incompatible() {
     let repository = MaterializedRepository::two_revisions();
     let baseline = repository.baseline_s3_scan();

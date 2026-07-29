@@ -947,10 +947,8 @@ impl IncrementalRefreshReportV1 {
             .iter()
             .map(|change| change.path.clone())
             .collect::<Vec<_>>();
-        let changed_document_count = documents
-            .iter()
-            .filter(|document| document["content_changed"] == Value::Bool(true))
-            .count();
+        let changed_document_count =
+            changed_document_content_count(&baseline_documents, &target_documents)?;
         let invalidation_subject_count = identity_list_count(&invalidation)?;
         let analysis_subject_count = baseline_ids.len()
             + target_ids.len()
@@ -1259,74 +1257,91 @@ fn chunk_rematerialization(
         .iter()
         .map(|record| (record.source_file_id.as_str(), record.reused))
         .collect::<BTreeMap<_, _>>();
-    target_chunks
-        .iter()
-        .map(|(source_file_id, target_chunk)| {
-            let baseline_chunk = baseline_chunks
-                .get(source_file_id)
-                .ok_or(IncrementalRefreshReportError::InvalidBaseline)?;
-            let reused = actions
-                .get(source_file_id.as_str())
-                .copied()
-                .ok_or(IncrementalRefreshReportError::InvalidAnalysis)?;
-            Ok(json!({
-                "source_file_id": source_file_id,
-                "analysis_action": if reused { "reused" } else { "recomputed" },
-                "baseline_semantic_hash": {
-                    "algorithm": "blake3-256",
-                    "value": semantic_string(
-                        baseline_chunk,
-                        &["semantic_hash", "value"],
-                        IncrementalRefreshReportError::InvalidBaseline
-                    )?
-                },
-                "target_semantic_hash": {
-                    "algorithm": "blake3-256",
-                    "value": semantic_string(
-                        target_chunk,
-                        &["semantic_hash", "value"],
-                        IncrementalRefreshReportError::InvalidTarget
-                    )?
-                }
-            }))
-        })
-        .collect()
+    let mut rematerialized = Vec::new();
+    for (source_file_id, target_chunk) in target_chunks {
+        let Some(baseline_chunk) = baseline_chunks.get(&source_file_id) else {
+            continue;
+        };
+        let reused = actions
+            .get(source_file_id.as_str())
+            .copied()
+            .ok_or(IncrementalRefreshReportError::InvalidAnalysis)?;
+        rematerialized.push(json!({
+            "source_file_id": source_file_id,
+            "analysis_action": if reused { "reused" } else { "recomputed" },
+            "baseline_semantic_hash": {
+                "algorithm": "blake3-256",
+                "value": semantic_string(
+                    baseline_chunk,
+                    &["semantic_hash", "value"],
+                    IncrementalRefreshReportError::InvalidBaseline
+                )?
+            },
+            "target_semantic_hash": {
+                "algorithm": "blake3-256",
+                "value": semantic_string(
+                    &target_chunk,
+                    &["semantic_hash", "value"],
+                    IncrementalRefreshReportError::InvalidTarget
+                )?
+            }
+        }));
+    }
+    Ok(rematerialized)
 }
 
 fn document_rematerialization(
     baseline: &BTreeMap<String, Value>,
     target: &BTreeMap<String, Value>,
 ) -> Result<Vec<Value>, IncrementalRefreshReportError> {
+    let mut rematerialized = Vec::new();
+    for (document_id, target_document) in target {
+        let Some(baseline_document) = baseline.get(document_id) else {
+            continue;
+        };
+        let baseline_blake3 = semantic_string(
+            baseline_document,
+            &["blake3"],
+            IncrementalRefreshReportError::InvalidDocumentation,
+        )?;
+        let target_blake3 = semantic_string(
+            target_document,
+            &["blake3"],
+            IncrementalRefreshReportError::InvalidDocumentation,
+        )?;
+        rematerialized.push(json!({
+            "document_id": document_id,
+            "path": semantic_string(
+                target_document,
+                &["path"],
+                IncrementalRefreshReportError::InvalidDocumentation
+            )?,
+            "baseline_blake3": baseline_blake3,
+            "target_blake3": target_blake3,
+            "manifest_rematerialized": true,
+            "content_changed": baseline_blake3 != target_blake3
+        }));
+    }
+    Ok(rematerialized)
+}
+
+fn changed_document_content_count(
+    baseline: &BTreeMap<String, Value>,
+    target: &BTreeMap<String, Value>,
+) -> Result<usize, IncrementalRefreshReportError> {
     target
         .iter()
-        .map(|(document_id, target_document)| {
-            let baseline_document = baseline
-                .get(document_id)
-                .ok_or(IncrementalRefreshReportError::InvalidDocumentation)?;
-            let baseline_blake3 = semantic_string(
-                baseline_document,
+        .try_fold(0_usize, |count, (identity, document)| {
+            let target_hash = semantic_string(
+                document,
                 &["blake3"],
                 IncrementalRefreshReportError::InvalidDocumentation,
             )?;
-            let target_blake3 = semantic_string(
-                target_document,
-                &["blake3"],
-                IncrementalRefreshReportError::InvalidDocumentation,
-            )?;
-            Ok(json!({
-                "document_id": document_id,
-                "path": semantic_string(
-                    target_document,
-                    &["path"],
-                    IncrementalRefreshReportError::InvalidDocumentation
-                )?,
-                "baseline_blake3": baseline_blake3,
-                "target_blake3": target_blake3,
-                "manifest_rematerialized": true,
-                "content_changed": baseline_blake3 != target_blake3
-            }))
+            let changed = baseline.get(identity).is_none_or(|baseline| {
+                baseline.get("blake3").and_then(Value::as_str) != Some(target_hash.as_str())
+            });
+            Ok(count + usize::from(changed))
         })
-        .collect()
 }
 
 fn invalidation_value(
