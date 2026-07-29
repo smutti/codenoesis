@@ -1,5 +1,6 @@
 //! `CodeNoesis` command-line entry point.
 
+use std::collections::BTreeMap;
 use std::env;
 use std::ffi::{OsStr, OsString};
 use std::fs;
@@ -8,16 +9,27 @@ use std::process::ExitCode;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
-use codenoesis_application::{PublicationService, ScanError, ScanRequest, ScanService};
+use codenoesis_application::{
+    PublicationService, RefreshError, RefreshService, ScanError, ScanRequest, ScanService,
+};
 use codenoesis_contracts::{
-    CodeNoesisErrorV1, CodeNoesisErrorV2, CodeNoesisErrorV3, CodeNoesisErrorV4, CodeNoesisErrorV5,
-    DocumentationContractError, QueryContractError, RepositorySnapshotV2Error,
-    RepositorySnapshotV3, RepositorySnapshotV3Error, RepositorySnapshotV4,
-    RepositorySnapshotV4Error, SnapshotEnvelopeV1, generate_documentation_v1,
-    local_query_result_v1, validate_stored_snapshot_semantic_v4,
+    AnalysisCacheEntryV1, CodeNoesisErrorV1, CodeNoesisErrorV2, CodeNoesisErrorV3,
+    CodeNoesisErrorV4, CodeNoesisErrorV5, CodeNoesisErrorV7, DocumentationContractError,
+    IncrementalRefreshReportError, IncrementalRefreshReportInput, IncrementalRefreshReportV1,
+    QueryContractError, RepositorySnapshotV2Error, RepositorySnapshotV3, RepositorySnapshotV3Error,
+    RepositorySnapshotV4, RepositorySnapshotV4Error, SnapshotEnvelopeV1, ValidatedS4Head,
+    generate_documentation_v1, local_query_result_v1, validate_stored_snapshot_semantic_v4,
 };
 use codenoesis_domain::AcquisitionError;
 use codenoesis_domain::knowledge::KnowledgeError;
+use codenoesis_domain::s4::{
+    S4_ONTOLOGY_VERSION, S4_TREE_SITTER_EXTRACTOR_VERSION, S4_WORKSPACE_EXTRACTOR_VERSION,
+};
+use codenoesis_domain::s5::{
+    ANALYSIS_CACHE_SCHEMA_VERSION, AnalysisCacheEntry, DEPENDENCY_RULE_VERSION,
+    EXTRACTION_CONTRACT_VERSION, IncrementalRuleOutcome, MAX_ANALYSIS_ENTRIES,
+    MAX_REFRESH_WALL_MILLISECONDS, NORMALIZATION_VERSION, TARGET_SEMANTIC_PROFILE,
+};
 use codenoesis_domain::storage::{
     ArtifactRole, LocalSnapshotHead, SNAPSHOT_SCHEMA_VERSION_V4, StorageComponent, StorageError,
 };
@@ -25,7 +37,7 @@ use codenoesis_domain::{
     InputError, LimitKind, RepositoryIdentity, Revision, STANDARD_LOCAL_S1_LIMITS, limit_exceeded,
 };
 use codenoesis_lang_rust::{TreeSitterRustExtractor, TreeSitterRustWorkspaceExtractor};
-use codenoesis_ports::{ArtifactStore, NoopPublicationObserver};
+use codenoesis_ports::{AnalysisCacheStore, ArtifactStore, NoopPublicationObserver};
 use codenoesis_repository::LocalGitRepository;
 use codenoesis_store_local::{LocalStore, ensure_store_root_for_boundary};
 use noesis::generated_docs::{
@@ -36,6 +48,7 @@ use serde_json::Value;
 
 static CORRELATION_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
+#[allow(clippy::too_many_lines)]
 fn main() -> ExitCode {
     if noesis::install_s0_security_boundary().is_err() {
         return emit_internal_error_v1();
@@ -43,6 +56,7 @@ fn main() -> ExitCode {
     let arguments = env::args_os().collect::<Vec<_>>();
     let docs_requested = arguments.get(1).is_some_and(|value| value == "docs");
     let query_requested = arguments.get(1).is_some_and(|value| value == "query");
+    let refresh_requested = arguments.get(1).is_some_and(|value| value == "refresh");
     let profiled = arguments
         .iter()
         .any(|argument| argument == OsStr::new("--profile"));
@@ -51,7 +65,9 @@ fn main() -> ExitCode {
     let s4_error_lineage = s4_requested || docs_requested || query_requested;
     let s3_error_lineage = s3_requested || s4_error_lineage;
     let s2_requested = requested_profile(&arguments, "standard-local-s2");
-    let result = if docs_requested {
+    let result = if refresh_requested {
+        run_s5(arguments)
+    } else if docs_requested {
         run_docs(arguments)
     } else if query_requested {
         run_query(arguments)
@@ -69,11 +85,13 @@ fn main() -> ExitCode {
     match result {
         Ok(stdout) => match io::stdout().lock().write_all(&stdout) {
             Ok(()) => ExitCode::SUCCESS,
+            Err(_) if refresh_requested => emit_internal_error_v7(),
             Err(_) if s3_error_lineage => emit_internal_error_v4(),
             Err(_) if s2_requested => emit_internal_error_v3(),
             Err(_) if profiled => emit_internal_error_v2(),
             Err(_) => emit_internal_error_v1(),
         },
+        Err(Failure::S5(failure)) => emit_error_v7(&failure.error, failure.exit_code),
         Err(Failure::Input(error)) if s3_error_lineage => {
             emit_error_v4(&CodeNoesisErrorV4::from_input(error), 2)
         }
@@ -313,8 +331,8 @@ fn run_s4(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
         invocation.revision,
         envelope,
     );
-    let snapshot = ScanService::new(LocalGitRepository::new())
-        .scan_s4(request, &TreeSitterRustWorkspaceExtractor::new())
+    let scan = ScanService::new(LocalGitRepository::new())
+        .scan_s4_with_analysis(request, &TreeSitterRustWorkspaceExtractor::new())
         .map_err(Failure::Scan)?;
     enforce_scan_deadline(started_at)?;
     store_preparation.map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
@@ -324,13 +342,168 @@ fn run_s4(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
     )
     .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
     PublicationService::publish_v4(
-        &snapshot,
+        &scan.snapshot,
         &mut local_store.artifacts,
         &mut local_store.metadata,
         &mut NoopPublicationObserver,
     )
     .map_err(Failure::Scan)?;
-    serialize_v4(&snapshot)
+    for entry in &scan.analysis_cache_entries {
+        let contract = AnalysisCacheEntryV1::from_domain(entry);
+        if let Ok(bytes) = contract.canonical_bytes() {
+            let _ = local_store
+                .analysis_cache
+                .stage_entry(&entry.analysis_cache_entry_id, &bytes);
+        }
+    }
+    serialize_v4(&scan.snapshot)
+}
+
+#[allow(clippy::too_many_lines)]
+fn run_s5(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
+    let invocation = Invocation::parse_command(arguments, "refresh", Some("standard-local-s5"))
+        .map_err(s5_input_failure)?;
+    let store = invocation
+        .store
+        .clone()
+        .ok_or_else(|| s5_input_failure(InputError::InvalidStoreRoot))?;
+    let repository = invocation.repository.clone();
+    let repository_identity = invocation.identity.as_str().to_owned();
+    if fs::symlink_metadata(std::path::Path::new(&store))
+        .is_err_and(|error| error.kind() == std::io::ErrorKind::NotFound)
+    {
+        return Err(s5_failure(
+            CodeNoesisErrorV7::baseline_missing(&repository_identity),
+            15,
+        ));
+    }
+    let store_preparation = ensure_store_root_for_boundary(
+        std::path::Path::new(&repository),
+        std::path::Path::new(&store),
+    );
+    let boundary_result = if store_preparation.is_ok() {
+        noesis::install_s3_filesystem_boundary(&repository, &store)
+    } else if s1_boundary_applies(&repository) {
+        noesis::install_s1_filesystem_boundary(&repository)
+    } else {
+        Ok(())
+    };
+    if boundary_result.is_err() {
+        return Err(s5_internal_failure());
+    }
+    store_preparation.map_err(|error| s5_storage_failure(&error))?;
+    let started_at = Instant::now();
+    let mut local_store =
+        LocalStore::open_existing(std::path::Path::new(&store)).map_err(|error| {
+            if error == StorageError::UnmarkedNonemptyRoot {
+                s5_failure(
+                    CodeNoesisErrorV7::baseline_missing(&repository_identity),
+                    15,
+                )
+            } else {
+                s5_storage_failure(&error)
+            }
+        })?;
+    let baseline = load_s5_baseline(&local_store, &invocation.identity, &repository_identity)?;
+    let cache = load_s5_analysis_cache(&local_store, &baseline)?;
+    enforce_refresh_deadline(started_at)?;
+
+    let baseline_documentation = generate_documentation_v1(
+        baseline.semantic(),
+        baseline.head().snapshot_id.as_str(),
+        &baseline.head().semantic_hash.value,
+    )
+    .map_err(|_| {
+        s5_failure(
+            CodeNoesisErrorV7::baseline_incompatible(
+                SNAPSHOT_SCHEMA_VERSION_V4,
+                &baseline.head().snapshot_schema_version,
+            ),
+            15,
+        )
+    })?;
+    let envelope = current_envelope().ok_or_else(s5_internal_failure)?;
+    let request = ScanRequest::new(
+        invocation.repository,
+        invocation.identity,
+        invocation.revision,
+        envelope,
+    );
+    let plan = RefreshService::new(LocalGitRepository::new())
+        .plan(
+            request,
+            &baseline,
+            &cache.entries,
+            baseline.supports_current_s5_versions() && cache.versions_compatible,
+            &TreeSitterRustWorkspaceExtractor::new(),
+        )
+        .map_err(|error| s5_refresh_failure(error, &baseline, &repository_identity))?;
+    enforce_refresh_deadline(started_at)?;
+
+    let target_candidate = plan
+        .target_snapshot
+        .publication_candidate()
+        .map_err(|_| s5_internal_failure())?;
+    let target_semantic = plan
+        .target_snapshot
+        .value()
+        .get("semantic")
+        .ok_or_else(s5_internal_failure)?;
+    let target_documentation = generate_documentation_v1(
+        target_semantic,
+        target_candidate.snapshot.snapshot_id.as_str(),
+        &target_candidate.snapshot.semantic_hash.value,
+    )
+    .map_err(|_| {
+        s5_failure(
+            CodeNoesisErrorV7::cold_equivalence_failed(
+                "documentation",
+                &target_candidate.snapshot.semantic_hash.value,
+                "invalid",
+            ),
+            15,
+        )
+    })?;
+    let report = IncrementalRefreshReportV1::new(&IncrementalRefreshReportInput {
+        baseline: &baseline,
+        target: &plan.target_snapshot,
+        baseline_documentation: &baseline_documentation,
+        target_documentation: &target_documentation,
+        changed_paths: &plan.changed_paths,
+        baseline_cache_entries: &plan.baseline_cache_entries,
+        target_extraction: &plan.target_extraction,
+        rule: plan.rule,
+    })
+    .map_err(|error| {
+        s5_report_failure(
+            error,
+            &baseline,
+            &target_candidate.snapshot.semantic_hash.value,
+        )
+    })?;
+    let stdout = report
+        .canonical_stdout()
+        .map_err(|_| s5_internal_failure())?;
+    enforce_refresh_deadline(started_at)?;
+
+    if plan.rule == IncrementalRuleOutcome::NoChange {
+        return Ok(stdout);
+    }
+    stage_s5_analysis_cache(
+        &mut local_store,
+        &plan.baseline_cache_entries,
+        &plan.target_extraction.cache_entries,
+    )?;
+    enforce_refresh_deadline(started_at)?;
+    PublicationService::publish_v4_expected(
+        &plan.target_snapshot,
+        &baseline.head().snapshot_id,
+        &mut local_store.artifacts,
+        &mut local_store.metadata,
+        &mut NoopPublicationObserver,
+    )
+    .map_err(s5_scan_failure)?;
+    Ok(stdout)
 }
 
 fn run_docs(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
@@ -438,6 +611,13 @@ fn load_s4_snapshot(
 ) -> Result<LoadedS4Snapshot, LoadS4Error> {
     let local_store = LocalStore::open_existing(std::path::Path::new(store))
         .map_err(|error| LoadS4Error::Scan(ScanError::Storage(error)))?;
+    load_s4_snapshot_from_store(&local_store, identity)
+}
+
+fn load_s4_snapshot_from_store(
+    local_store: &LocalStore,
+    identity: &RepositoryIdentity,
+) -> Result<LoadedS4Snapshot, LoadS4Error> {
     let head =
         PublicationService::load_head(identity, &local_store.artifacts, &local_store.metadata)
             .map_err(LoadS4Error::Scan)?
@@ -485,6 +665,197 @@ fn load_s4_snapshot(
     Ok(LoadedS4Snapshot { head, semantic })
 }
 
+fn load_s5_baseline(
+    local_store: &LocalStore,
+    identity: &RepositoryIdentity,
+    repository_identity: &str,
+) -> Result<ValidatedS4Head, Failure> {
+    let loaded =
+        load_s4_snapshot_from_store(local_store, identity).map_err(|error| match error {
+            LoadS4Error::Scan(ScanError::Storage(StorageError::CorruptMetadata {
+                reason: "current_head_missing",
+                ..
+            })) => s5_failure(CodeNoesisErrorV7::baseline_missing(repository_identity), 15),
+            LoadS4Error::SnapshotMismatch => s5_failure(
+                CodeNoesisErrorV7::baseline_incompatible(SNAPSHOT_SCHEMA_VERSION_V4, "invalid"),
+                15,
+            ),
+            LoadS4Error::Scan(error) => s5_scan_failure(error),
+        })?;
+    if loaded.head.repository_identity != *identity {
+        return Err(s5_failure(
+            CodeNoesisErrorV7::baseline_repository_mismatch(
+                repository_identity,
+                loaded.head.repository_identity.as_str(),
+            ),
+            15,
+        ));
+    }
+    ValidatedS4Head::new(loaded.semantic, loaded.head).map_err(|error| s5_storage_failure(&error))
+}
+
+fn load_s5_analysis_cache(
+    local_store: &LocalStore,
+    baseline: &ValidatedS4Head,
+) -> Result<LoadedS5AnalysisCache, Failure> {
+    let stored = local_store.analysis_cache.load_entries().map_err(|error| {
+        s5_cache_storage_failure(&error, "analysis-cache/layout", "invalid", "invalid")
+    })?;
+    if stored.len() > MAX_ANALYSIS_ENTRIES {
+        return Err(s5_failure(
+            CodeNoesisErrorV7::limit_exceeded(
+                "analysis_entries",
+                MAX_ANALYSIS_ENTRIES as u64,
+                u64::try_from(stored.len()).unwrap_or(u64::MAX),
+            ),
+            15,
+        ));
+    }
+    let baseline_inventory = baseline
+        .inventory_blobs()
+        .map_err(|error| s5_storage_failure(&error))?
+        .into_iter()
+        .map(|file| (file.path, file.blob_oid))
+        .collect::<BTreeMap<_, _>>();
+    let mut entries = Vec::new();
+    let mut versions_compatible = true;
+    for (stored_id, bytes) in stored {
+        let expected_hash = stored_id
+            .strip_prefix("urn:codenoesis:analysis-cache-entry:blake3:")
+            .unwrap_or("invalid");
+        let path = format!("analysis-cache/{expected_hash}");
+        let raw = serde_json::from_slice::<Value>(&bytes)
+            .map_err(|_| s5_cache_failure(&path, expected_hash, "invalid"))?;
+        let observed_hash = raw
+            .get("payload_hash")
+            .and_then(Value::as_str)
+            .map_or_else(|| "invalid".to_owned(), str::to_owned);
+        if cache_versions_compatible(&raw) == Some(false) {
+            match cache_entry_matches_baseline(
+                &raw,
+                baseline.head().repository_identity.as_str(),
+                &baseline_inventory,
+            ) {
+                Some(true) => versions_compatible = false,
+                None if raw.get("schema_version").and_then(Value::as_str)
+                    == Some(ANALYSIS_CACHE_SCHEMA_VERSION) =>
+                {
+                    return Err(s5_cache_failure(&path, expected_hash, &observed_hash));
+                }
+                Some(false) | None => {}
+            }
+            continue;
+        }
+        let contract = AnalysisCacheEntryV1::parse(&bytes)
+            .map_err(|_| s5_cache_failure(&path, expected_hash, &observed_hash))?;
+        let entry = contract
+            .to_domain()
+            .map_err(|_| s5_cache_failure(&path, expected_hash, &observed_hash))?;
+        if entry.analysis_cache_entry_id != stored_id {
+            return Err(s5_cache_failure(
+                &path,
+                expected_hash,
+                entry
+                    .analysis_cache_entry_id
+                    .strip_prefix("urn:codenoesis:analysis-cache-entry:blake3:")
+                    .unwrap_or("invalid"),
+            ));
+        }
+        if entry.key.repository_identity == baseline.head().repository_identity.as_str()
+            && baseline_inventory
+                .get(&entry.key.canonical_source_path)
+                .is_some_and(|blob_oid| blob_oid == &entry.key.source_blob_oid)
+        {
+            entries.push(entry);
+        }
+    }
+    entries.sort_by(|left, right| {
+        left.analysis_cache_entry_id
+            .as_bytes()
+            .cmp(right.analysis_cache_entry_id.as_bytes())
+    });
+    if entries
+        .windows(2)
+        .any(|pair| pair[0].analysis_cache_entry_id == pair[1].analysis_cache_entry_id)
+    {
+        return Err(s5_cache_failure(
+            "analysis-cache/duplicate",
+            "invalid",
+            "invalid",
+        ));
+    }
+    Ok(LoadedS5AnalysisCache {
+        entries,
+        versions_compatible,
+    })
+}
+
+fn cache_versions_compatible(value: &Value) -> Option<bool> {
+    if value.get("schema_version")?.as_str()? != ANALYSIS_CACHE_SCHEMA_VERSION {
+        return Some(false);
+    }
+    let versions = value.get("versions")?;
+    Some(
+        versions.get("language_extractor")?.as_str()? == S4_TREE_SITTER_EXTRACTOR_VERSION
+            && versions.get("workspace_mapper")?.as_str()? == S4_WORKSPACE_EXTRACTOR_VERSION
+            && versions.get("normalization")?.as_str()? == NORMALIZATION_VERSION
+            && versions.get("ontology")?.as_str()? == S4_ONTOLOGY_VERSION
+            && versions.get("extraction_contract")?.as_str()? == EXTRACTION_CONTRACT_VERSION
+            && versions.get("semantic_profile")?.as_str()? == TARGET_SEMANTIC_PROFILE
+            && versions.get("dependency_rules")?.as_str()? == DEPENDENCY_RULE_VERSION,
+    )
+}
+
+fn cache_entry_matches_baseline(
+    value: &Value,
+    repository_identity: &str,
+    baseline_inventory: &BTreeMap<String, String>,
+) -> Option<bool> {
+    let source = value.get("source")?;
+    let path = source.get("path")?.as_str()?;
+    let blob_oid = source.get("blob_oid")?.as_str()?;
+    Some(
+        value.get("repository_identity")?.as_str()? == repository_identity
+            && baseline_inventory
+                .get(path)
+                .is_some_and(|baseline_blob| baseline_blob == blob_oid),
+    )
+}
+
+fn stage_s5_analysis_cache(
+    local_store: &mut LocalStore,
+    baseline_entries: &[AnalysisCacheEntry],
+    target_entries: &[AnalysisCacheEntry],
+) -> Result<(), Failure> {
+    let mut entries = BTreeMap::<String, &AnalysisCacheEntry>::new();
+    for entry in baseline_entries.iter().chain(target_entries) {
+        if entries
+            .insert(entry.analysis_cache_entry_id.clone(), entry)
+            .is_some_and(|existing| existing != entry)
+        {
+            return Err(s5_cache_failure(
+                "analysis-cache/conflict",
+                "invalid",
+                "invalid",
+            ));
+        }
+    }
+    for (entry_id, entry) in entries {
+        let digest = entry_id
+            .strip_prefix("urn:codenoesis:analysis-cache-entry:blake3:")
+            .unwrap_or("invalid");
+        let path = format!("analysis-cache/{digest}");
+        let bytes = AnalysisCacheEntryV1::from_domain(entry)
+            .canonical_bytes()
+            .map_err(|_| s5_internal_failure())?;
+        local_store
+            .analysis_cache
+            .stage_entry(&entry_id, &bytes)
+            .map_err(|error| s5_cache_storage_failure(&error, &path, digest, "invalid"))?;
+    }
+    Ok(())
+}
+
 fn serialize_v3(snapshot: &RepositorySnapshotV3) -> Result<Vec<u8>, Failure> {
     snapshot.canonical_stdout().map_err(|error| match error {
         RepositorySnapshotV3Error::LimitExceeded(AcquisitionError::LimitExceeded {
@@ -523,6 +894,153 @@ fn enforce_scan_deadline(started_at: Instant) -> Result<(), Failure> {
     Ok(())
 }
 
+fn enforce_refresh_deadline(started_at: Instant) -> Result<(), Failure> {
+    let elapsed =
+        u64::try_from(started_at.elapsed().as_millis()).map_err(|_| s5_internal_failure())?;
+    if elapsed > MAX_REFRESH_WALL_MILLISECONDS {
+        return Err(s5_failure(
+            CodeNoesisErrorV7::limit_exceeded(
+                "refresh_wall_milliseconds",
+                MAX_REFRESH_WALL_MILLISECONDS,
+                elapsed,
+            ),
+            15,
+        ));
+    }
+    Ok(())
+}
+
+fn s5_failure(error: CodeNoesisErrorV7, exit_code: u8) -> Failure {
+    Failure::S5(S5Failure { error, exit_code })
+}
+
+fn s5_input_failure(error: InputError) -> Failure {
+    s5_failure(CodeNoesisErrorV7::from_input(error), 2)
+}
+
+fn s5_storage_failure(error: &StorageError) -> Failure {
+    s5_failure(CodeNoesisErrorV7::from_storage(error), 12)
+}
+
+fn s5_scan_failure(error: ScanError) -> Failure {
+    match error {
+        ScanError::Acquisition(error) => {
+            s5_failure(CodeNoesisErrorV7::from_acquisition(&error), 10)
+        }
+        ScanError::Workspace(error) => s5_failure(CodeNoesisErrorV7::from_workspace(&error), 11),
+        ScanError::Storage(error) => s5_storage_failure(&error),
+        ScanError::Knowledge(_) | ScanError::Internal => s5_internal_failure(),
+    }
+}
+
+fn s5_refresh_failure(
+    error: RefreshError,
+    baseline: &ValidatedS4Head,
+    expected_repository_identity: &str,
+) -> Failure {
+    match error {
+        RefreshError::Acquisition(error) => {
+            s5_failure(CodeNoesisErrorV7::from_acquisition(&error), 10)
+        }
+        RefreshError::Workspace(error) => s5_failure(CodeNoesisErrorV7::from_workspace(&error), 11),
+        RefreshError::BaselineRepositoryMismatch => s5_failure(
+            CodeNoesisErrorV7::baseline_repository_mismatch(
+                expected_repository_identity,
+                baseline.head().repository_identity.as_str(),
+            ),
+            15,
+        ),
+        RefreshError::BaselineIncompatible => s5_failure(
+            CodeNoesisErrorV7::baseline_incompatible(
+                SNAPSHOT_SCHEMA_VERSION_V4,
+                &baseline.head().snapshot_schema_version,
+            ),
+            15,
+        ),
+        RefreshError::ColdEquivalenceFailed {
+            expected_hash,
+            observed_hash,
+        } => s5_failure(
+            CodeNoesisErrorV7::cold_equivalence_failed("snapshot", &expected_hash, &observed_hash),
+            15,
+        ),
+        RefreshError::LimitExceeded {
+            limit,
+            maximum,
+            observed,
+        } => s5_failure(
+            CodeNoesisErrorV7::limit_exceeded(limit, maximum, observed),
+            15,
+        ),
+        RefreshError::Internal => s5_internal_failure(),
+    }
+}
+
+fn s5_report_failure(
+    error: IncrementalRefreshReportError,
+    baseline: &ValidatedS4Head,
+    target_hash: &str,
+) -> Failure {
+    match error {
+        IncrementalRefreshReportError::InvalidBaseline => s5_failure(
+            CodeNoesisErrorV7::baseline_incompatible(
+                SNAPSHOT_SCHEMA_VERSION_V4,
+                &baseline.head().snapshot_schema_version,
+            ),
+            15,
+        ),
+        IncrementalRefreshReportError::InvalidTarget
+        | IncrementalRefreshReportError::InvalidDocumentation
+        | IncrementalRefreshReportError::InvalidAnalysis => s5_failure(
+            CodeNoesisErrorV7::cold_equivalence_failed("snapshot", target_hash, "invalid"),
+            15,
+        ),
+        IncrementalRefreshReportError::LimitExceeded {
+            limit,
+            maximum,
+            observed,
+        } => s5_failure(
+            CodeNoesisErrorV7::limit_exceeded(
+                limit,
+                u64::try_from(maximum).unwrap_or(u64::MAX),
+                u64::try_from(observed).unwrap_or(u64::MAX),
+            ),
+            15,
+        ),
+        IncrementalRefreshReportError::Serialization => s5_internal_failure(),
+    }
+}
+
+fn s5_cache_failure(path: &str, expected_hash: &str, observed_hash: &str) -> Failure {
+    s5_failure(
+        CodeNoesisErrorV7::cache_corrupt(path, expected_hash, observed_hash),
+        15,
+    )
+}
+
+fn s5_cache_storage_failure(
+    error: &StorageError,
+    path: &str,
+    expected_hash: &str,
+    observed_hash: &str,
+) -> Failure {
+    if matches!(
+        error,
+        StorageError::CorruptMetadata {
+            component: StorageComponent::Cas,
+            ..
+        }
+    ) {
+        s5_cache_failure(path, expected_hash, observed_hash)
+    } else {
+        s5_storage_failure(error)
+    }
+}
+
+fn s5_internal_failure() -> Failure {
+    s5_failure(CodeNoesisErrorV7::internal(), 70)
+}
+
 fn requested_profile(arguments: &[OsString], expected: &str) -> bool {
     arguments
         .windows(2)
@@ -548,6 +1066,10 @@ fn emit_internal_error_v3() -> ExitCode {
 
 fn emit_internal_error_v4() -> ExitCode {
     emit_error_v4(&CodeNoesisErrorV4::internal(), 70)
+}
+
+fn emit_internal_error_v7() -> ExitCode {
+    emit_error_v7(&CodeNoesisErrorV7::internal(), 70)
 }
 
 fn emit_error_v1(error: &CodeNoesisErrorV1, code: u8) -> ExitCode {
@@ -585,6 +1107,13 @@ fn emit_error_v5(error: &CodeNoesisErrorV5, code: u8) -> ExitCode {
     ExitCode::from(code)
 }
 
+fn emit_error_v7(error: &CodeNoesisErrorV7, code: u8) -> ExitCode {
+    if let Ok(bytes) = error.canonical_stderr() {
+        let _ = io::stderr().lock().write_all(&bytes);
+    }
+    ExitCode::from(code)
+}
+
 fn emit_docs_error(error: GeneratedDocsError) -> ExitCode {
     let error = match error {
         GeneratedDocsError::UnmarkedNonemptyRoot => {
@@ -613,10 +1142,16 @@ fn emit_query_error(error: QueryFailure) -> ExitCode {
 enum Failure {
     Input(InputError),
     S4Input(CodeNoesisErrorV5),
+    S5(S5Failure),
     Scan(ScanError),
     Docs(GeneratedDocsError),
     Query(QueryFailure),
     Internal,
+}
+
+struct S5Failure {
+    error: CodeNoesisErrorV7,
+    exit_code: u8,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -635,6 +1170,11 @@ enum LoadS4Error {
 struct LoadedS4Snapshot {
     head: LocalSnapshotHead,
     semantic: Value,
+}
+
+struct LoadedS5AnalysisCache {
+    entries: Vec<AnalysisCacheEntry>,
+    versions_compatible: bool,
 }
 
 struct DocsInvocation {
@@ -804,9 +1344,17 @@ impl Invocation {
         arguments: impl IntoIterator<Item = OsString>,
         required_profile: Option<&str>,
     ) -> Result<Self, InputError> {
+        Self::parse_command(arguments, "scan", required_profile)
+    }
+
+    fn parse_command(
+        arguments: impl IntoIterator<Item = OsString>,
+        command: &str,
+        required_profile: Option<&str>,
+    ) -> Result<Self, InputError> {
         let mut arguments = arguments.into_iter();
         let _program = arguments.next();
-        if arguments.next().as_deref() != Some(OsStr::new("scan")) {
+        if arguments.next().as_deref() != Some(OsStr::new(command)) {
             return Err(InputError::InvalidRevision);
         }
         let mut repository = None;
@@ -860,7 +1408,7 @@ impl Invocation {
         }
         if matches!(
             required_profile,
-            Some("standard-local-s3" | "standard-local-s4")
+            Some("standard-local-s3" | "standard-local-s4" | "standard-local-s5")
         ) {
             if store
                 .as_ref()

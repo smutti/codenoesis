@@ -1,0 +1,65 @@
+{
+  "schema_version": "codenoesis.local-test-observation/v1",
+  "slice": "S5",
+  "status": "red_observed",
+  "requirement_status": "Approved",
+  "requirements": [
+    "INV-INC-001",
+    "FR-INC-001",
+    "FR-INC-002",
+    "FR-INC-003",
+    "FR-CLI-004"
+  ],
+  "risk": "high",
+  "issue": "https://github.com/smutti/codenoesis/issues/72",
+  "authorization_comment": "https://github.com/smutti/codenoesis/issues/72#issuecomment-5122273691",
+  "oracle_bundle_sha256": "9e1725cfde7e20cd1f7c513b32f919eb7d2c3109a7a05427c515c89f360de6c8",
+  "base_sha": "03486d3672d0dc1aeed4718fdf781d1041f42cbd",
+  "test_first_sha": "6c164083540b1578828ad2c5d7a0638a822d45fc",
+  "policy": {
+    "version": 1,
+    "source_sha": "8616d59db94df7b29262c11542651b630fc035ff",
+    "sha256": "5a18325910b5c11ae66adfa594547a766c717492398abdf781b5286961d144c5",
+    "ratification": "https://github.com/smutti/codenoesis/pull/67",
+    "binding": "https://github.com/smutti/codenoesis/pull/69",
+    "bootstrap_correction": "https://github.com/smutti/codenoesis/pull/71"
+  },
+  "red": {
+    "test_id": "e2e_fr_inc_001_incremental_refresh",
+    "command": "cargo test -p noesis --test e2e_fr_inc_001_incremental_refresh --locked -- --exact e2e_fr_inc_001_incremental_refresh",
+    "runner_exit_code": 101,
+    "subject_exit_code": 2,
+    "subject_stdout": "empty",
+    "subject_stderr_schema": "codenoesis.error/v2",
+    "subject_stderr_code": "input.invalid_revision",
+    "baseline_commit_oid": "2106dc8bf32867e519b89ef6d73ce2afdced170d",
+    "baseline_generation_before": 1,
+    "baseline_head_unchanged": true,
+    "target_head_published": false,
+    "forbidden_process_sentinel_touched": false,
+    "expected_failure": "The black-box test must create the accepted S4 baseline, reach the exact unsupported refresh boundary, observe exit 2, empty stdout, strict ErrorV2 input.invalid_revision, and preserve the baseline head.",
+    "observed_failure": "The black-box test reached its explicit panic: expected S5 refresh success; observed the approved unrecognized-command Red.",
+    "recorded_issue_comment": "https://github.com/smutti/codenoesis/issues/72#issuecomment-5122324375",
+    "log": {
+      "path": "crates/noesis/tests/evidence/s5/red/e2e_fr_inc_001_incremental_refresh.log",
+      "sha256": "561dd6f7ab785219dac8b09e3376772e72098ed7307df28397cf57b4c839ce6d",
+      "bytes": 1204
+    }
+  },
+  "rejected_attempts": [
+    {
+      "reason": "The first harness run failed before subject invocation because the isolated Git hook directory was absent.",
+      "log_sha256": "f690abd1191954e0be90573701299fd551b1d339a4978cc6fcc05fa91bf04c",
+      "accepted_as_product_red": false
+    }
+  ],
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "macos": "26.5.2",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "features": []
+  },
+  "limitation": "This retained local Red is not exact-head CI evidence and must not be used to claim the requirements Verified."
+}

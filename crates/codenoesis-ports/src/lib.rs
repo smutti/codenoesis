@@ -5,6 +5,7 @@ use std::ffi::OsStr;
 
 use codenoesis_domain::knowledge::{KnowledgeError, RustKnowledge};
 use codenoesis_domain::s4::{RustWorkspaceKnowledge, WorkspaceError};
+use codenoesis_domain::s5::{AnalysisCacheEntry, IncrementalWorkspaceExtraction};
 use codenoesis_domain::storage::{
     ArtifactId, LocalSnapshotHead, PublicationCandidate, PublicationEvent, PublicationResult,
     SnapshotId, StorageError, StoredArtifact, SweepResult,
@@ -65,6 +66,21 @@ pub trait RustWorkspaceExtractor {
     ) -> Result<RustWorkspaceKnowledge, WorkspaceError>;
 }
 
+pub trait IncrementalRustWorkspaceExtractor {
+    /// Extracts S4 workspace knowledge while reusing only exact validated
+    /// revision-neutral source analyses.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed workspace, parser, ontology, or graph failure without
+    /// executing repository code or accepting an incompatible cache entry.
+    fn extract_workspace_incremental(
+        &self,
+        inventory: &RepositoryInventory,
+        cache_entries: &[AnalysisCacheEntry],
+    ) -> Result<IncrementalWorkspaceExtraction, WorkspaceError>;
+}
+
 pub trait PublicationObserver {
     /// Observes one exact S3 publication boundary occurrence.
     ///
@@ -114,6 +130,27 @@ pub trait ArtifactStore {
         reachable: &BTreeSet<ArtifactId>,
         recheck: &mut dyn FnMut(&ArtifactId) -> Result<bool, StorageError>,
     ) -> Result<SweepResult, StorageError>;
+}
+
+pub trait AnalysisCacheStore {
+    /// Stages one immutable current-schema analysis-cache entry by its exact
+    /// deterministic identity.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed path, durability, or conflicting-byte failure.
+    fn stage_entry(
+        &mut self,
+        analysis_cache_entry_id: &str,
+        bytes: &[u8],
+    ) -> Result<(), StorageError>;
+
+    /// Loads every immutable cache document in deterministic identity order.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed path or corrupt-layout failure.
+    fn load_entries(&self) -> Result<Vec<(String, Vec<u8>)>, StorageError>;
 }
 
 pub trait MetadataStore {

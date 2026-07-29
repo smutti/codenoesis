@@ -2,14 +2,20 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use codenoesis_domain::knowledge::{ClaimState, ClaimSubjectKind, EntityKind, RelationshipKind};
 use codenoesis_domain::s4::{
-    MAX_S4_WORKSPACE_CRATES, RustWorkspaceKnowledge, WorkspaceClaim, WorkspaceCoverageGap,
-    WorkspaceDiagnostic, WorkspaceEntity, WorkspaceError, WorkspaceEvidence,
+    MAX_S4_WORKSPACE_CRATES, RustWorkspaceKnowledge, S4_ONTOLOGY_VERSION,
+    S4_TREE_SITTER_EXTRACTOR_VERSION, S4_WORKSPACE_EXTRACTOR_VERSION, WorkspaceClaim,
+    WorkspaceCoverageGap, WorkspaceDiagnostic, WorkspaceEntity, WorkspaceError, WorkspaceEvidence,
     WorkspaceExtractionChunk, WorkspaceKnowledgeGraph, WorkspaceRelationship, WorkspaceVisibility,
+    workspace_source_file_id,
+};
+use codenoesis_domain::s5::{
+    AnalysisCacheEntry, AnalysisCacheKey, IncrementalWorkspaceExtraction,
+    RustDeclarationObservation, RustModuleObservation, RustSourceAnalysis, SourceAnalysisRecord,
 };
 use codenoesis_domain::{
     ContentKind, InventoryFile, RepositoryInventory, STANDARD_LOCAL_S1_LIMITS,
 };
-use codenoesis_ports::RustWorkspaceExtractor;
+use codenoesis_ports::{IncrementalRustWorkspaceExtractor, RustWorkspaceExtractor};
 use tree_sitter::{Node, Parser};
 use unicode_normalization::UnicodeNormalization as _;
 
@@ -29,6 +35,16 @@ impl RustWorkspaceExtractor for TreeSitterRustWorkspaceExtractor {
         inventory: &RepositoryInventory,
     ) -> Result<RustWorkspaceKnowledge, WorkspaceError> {
         WorkspaceBuilder::new(inventory)?.extract()
+    }
+}
+
+impl IncrementalRustWorkspaceExtractor for TreeSitterRustWorkspaceExtractor {
+    fn extract_workspace_incremental(
+        &self,
+        inventory: &RepositoryInventory,
+        cache_entries: &[AnalysisCacheEntry],
+    ) -> Result<IncrementalWorkspaceExtraction, WorkspaceError> {
+        WorkspaceBuilder::new(inventory)?.extract_incremental(cache_entries)
     }
 }
 
@@ -75,6 +91,12 @@ struct ParsedSource {
     modules: Vec<ModuleDeclaration>,
     imports: Vec<ImportDraft>,
     unsupported_construct: bool,
+}
+
+struct ResolvedAnalysis {
+    key: AnalysisCacheKey,
+    analysis: RustSourceAnalysis,
+    reused: bool,
 }
 
 #[derive(Clone)]
@@ -133,18 +155,52 @@ impl<'a> WorkspaceBuilder<'a> {
         })
     }
 
-    #[allow(clippy::too_many_lines)]
     fn extract(self) -> Result<RustWorkspaceKnowledge, WorkspaceError> {
+        self.extract_incremental(&[])
+            .map(|extraction| extraction.knowledge)
+    }
+
+    #[allow(clippy::too_many_lines)]
+    fn extract_incremental(
+        self,
+        cache_entries: &[AnalysisCacheEntry],
+    ) -> Result<IncrementalWorkspaceExtraction, WorkspaceError> {
+        if cache_entries
+            .iter()
+            .any(|entry| !entry.is_self_consistent())
+        {
+            return Err(WorkspaceError::ContractInvalid);
+        }
+        let cache_by_id = cache_entries
+            .iter()
+            .map(|entry| (entry.analysis_cache_entry_id.as_str(), entry))
+            .collect::<BTreeMap<_, _>>();
+        if cache_by_id.len() != cache_entries.len() {
+            return Err(WorkspaceError::ContractInvalid);
+        }
         let crates = self.parse_crates()?;
         let mut sources = Vec::new();
+        let mut analyses = BTreeMap::new();
+        let mut parser_invocation_count = 0_u64;
         for crate_draft in &crates {
-            self.collect_crate_sources(crate_draft, &mut sources)?;
+            self.collect_crate_sources(
+                crate_draft,
+                &cache_by_id,
+                &mut analyses,
+                &mut parser_invocation_count,
+                &mut sources,
+            )?;
         }
         sources.sort_by(|left, right| left.path.as_bytes().cmp(right.path.as_bytes()));
 
         let parsed = sources
             .iter()
-            .map(|source| parse_rust_source(&source.path, &source.source))
+            .map(|source| {
+                analyses
+                    .get(&source.path)
+                    .map(|resolved: &ResolvedAnalysis| parsed_from_analysis(&resolved.analysis))
+                    .ok_or(WorkspaceError::ContractInvalid)
+            })
             .collect::<Result<Vec<_>, _>>()?;
         let mut modules = Vec::new();
         for (source, parsed_source) in sources.iter().zip(&parsed) {
@@ -597,7 +653,42 @@ impl<'a> WorkspaceBuilder<'a> {
             graph,
         };
         knowledge.validate()?;
-        Ok(knowledge)
+        let mut cache_entries = analyses
+            .values()
+            .map(|resolved| {
+                AnalysisCacheEntry::new(resolved.key.clone(), resolved.analysis.clone())
+            })
+            .collect::<Vec<_>>();
+        cache_entries.sort_by(|left, right| {
+            left.analysis_cache_entry_id
+                .as_bytes()
+                .cmp(right.analysis_cache_entry_id.as_bytes())
+        });
+        let source_records = sources
+            .iter()
+            .map(|source| {
+                let resolved = analyses
+                    .get(&source.path)
+                    .ok_or(WorkspaceError::ContractInvalid)?;
+                Ok(SourceAnalysisRecord {
+                    path: source.path.clone(),
+                    source_file_id: workspace_source_file_id(
+                        self.repository_identity,
+                        &source.crate_id,
+                        &source.path,
+                    ),
+                    analysis_cache_entry_id: resolved.key.entry_id(),
+                    reused: resolved.reused,
+                    root: source.root,
+                })
+            })
+            .collect::<Result<Vec<_>, WorkspaceError>>()?;
+        Ok(IncrementalWorkspaceExtraction {
+            knowledge,
+            cache_entries,
+            source_records,
+            parser_invocation_count,
+        })
     }
 
     fn parse_crates(&self) -> Result<Vec<CrateDraft>, WorkspaceError> {
@@ -846,6 +937,9 @@ impl<'a> WorkspaceBuilder<'a> {
     fn collect_crate_sources(
         &self,
         crate_draft: &CrateDraft,
+        cache_entries: &BTreeMap<&str, &AnalysisCacheEntry>,
+        analyses: &mut BTreeMap<String, ResolvedAnalysis>,
+        parser_invocation_count: &mut u64,
         sources: &mut Vec<SourceDraft>,
     ) -> Result<(), WorkspaceError> {
         let root = self.source_draft(
@@ -863,7 +957,9 @@ impl<'a> WorkspaceBuilder<'a> {
             if !seen.insert(source.path.clone()) {
                 return Err(WorkspaceError::AmbiguousModule);
             }
-            let parsed = parse_rust_source(&source.path, &source.source)?;
+            let resolved =
+                self.resolve_analysis(&source, cache_entries, parser_invocation_count)?;
+            let parsed = parsed_from_analysis(&resolved.analysis);
             self.collect_out_of_line_sources(
                 crate_draft,
                 &source,
@@ -873,9 +969,53 @@ impl<'a> WorkspaceBuilder<'a> {
                 &module_children_directory(&source.path)?,
                 &mut pending,
             )?;
+            if analyses.insert(source.path.clone(), resolved).is_some() {
+                return Err(WorkspaceError::ContractInvalid);
+            }
             sources.push(source);
         }
         Ok(())
+    }
+
+    fn resolve_analysis(
+        &self,
+        source: &SourceDraft,
+        cache_entries: &BTreeMap<&str, &AnalysisCacheEntry>,
+        parser_invocation_count: &mut u64,
+    ) -> Result<ResolvedAnalysis, WorkspaceError> {
+        let key = AnalysisCacheKey {
+            repository_identity: self.repository_identity.to_owned(),
+            source_file_id: workspace_source_file_id(
+                self.repository_identity,
+                &source.crate_id,
+                &source.path,
+            ),
+            canonical_source_path: source.path.clone(),
+            source_blob_oid: source.evidence.blob_oid.clone(),
+            crate_id: source.crate_id.clone(),
+            canonical_module_path: source.module_path.clone(),
+            language_extractor: S4_TREE_SITTER_EXTRACTOR_VERSION.to_owned(),
+            workspace_mapper: S4_WORKSPACE_EXTRACTOR_VERSION.to_owned(),
+            ontology: S4_ONTOLOGY_VERSION.to_owned(),
+        };
+        let entry_id = key.entry_id();
+        if let Some(entry) = cache_entries.get(entry_id.as_str()) {
+            if entry.key != key || !entry.is_self_consistent() {
+                return Err(WorkspaceError::ContractInvalid);
+            }
+            return Ok(ResolvedAnalysis {
+                key,
+                analysis: entry.analysis.clone(),
+                reused: true,
+            });
+        }
+        let parsed = parse_rust_source(&source.path, &source.source)?;
+        *parser_invocation_count = parser_invocation_count.saturating_add(1);
+        Ok(ResolvedAnalysis {
+            key,
+            analysis: analysis_from_parsed(&parsed),
+            reused: false,
+        })
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -1292,6 +1432,74 @@ fn complete_evidence(
         file.blob_oid().as_str(),
         byte_length,
     ))
+}
+
+fn analysis_from_parsed(parsed: &ParsedSource) -> RustSourceAnalysis {
+    RustSourceAnalysis {
+        declarations: parsed
+            .declarations
+            .iter()
+            .map(|declaration| RustDeclarationObservation {
+                kind: declaration.kind,
+                name: declaration.name.clone(),
+                visibility: declaration.visibility,
+            })
+            .collect(),
+        modules: parsed
+            .modules
+            .iter()
+            .map(|module| RustModuleObservation {
+                name: module.name.clone(),
+                visibility: module.visibility,
+                body: module
+                    .body
+                    .as_deref()
+                    .map(analysis_from_parsed)
+                    .map(Box::new),
+            })
+            .collect(),
+        imports: parsed
+            .imports
+            .iter()
+            .map(|import| import.spelling.clone())
+            .collect(),
+        unsupported_construct: parsed.unsupported_construct,
+    }
+}
+
+fn parsed_from_analysis(analysis: &RustSourceAnalysis) -> ParsedSource {
+    ParsedSource {
+        declarations: analysis
+            .declarations
+            .iter()
+            .map(|declaration| DeclarationDraft {
+                kind: declaration.kind,
+                name: declaration.name.clone(),
+                visibility: declaration.visibility,
+            })
+            .collect(),
+        modules: analysis
+            .modules
+            .iter()
+            .map(|module| ModuleDeclaration {
+                name: module.name.clone(),
+                visibility: module.visibility,
+                body: module
+                    .body
+                    .as_deref()
+                    .map(parsed_from_analysis)
+                    .map(Box::new),
+            })
+            .collect(),
+        imports: analysis
+            .imports
+            .iter()
+            .map(|spelling| ImportDraft {
+                spelling: spelling.clone(),
+            })
+            .collect(),
+        unsupported_construct: analysis.unsupported_construct,
+    }
 }
 
 fn parse_rust_source(path: &str, source: &str) -> Result<ParsedSource, WorkspaceError> {
