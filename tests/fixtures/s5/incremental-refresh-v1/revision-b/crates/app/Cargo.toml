@@ -1,0 +1,12 @@
+[package]
+name = "workspace-app"
+version = "0.1.0"
+edition = "2024"
+build = "build.rs"
+
+[[bin]]
+name = "workspace-app"
+path = "src/main.rs"
+
+[dependencies]
+workspace-model = { path = "../model" }

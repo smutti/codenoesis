@@ -1,0 +1,8 @@
+[package]
+name = "workspace-model"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "workspace_model"
+path = "src/lib.rs"

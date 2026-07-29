@@ -1,0 +1,531 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:error:v7",
+  "title": "CodeNoesisErrorV7 incremental refresh subset",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v7"
+    },
+    "code": {
+      "enum": [
+        "input.invalid_repository_identity",
+        "input.invalid_revision",
+        "input.invalid_profile",
+        "input.invalid_store_root",
+        "acquisition.not_git_repository",
+        "acquisition.revision_not_found",
+        "acquisition.revision_not_commit",
+        "acquisition.object_missing",
+        "acquisition.repository_inconsistent",
+        "acquisition.unsupported_repository_shape",
+        "acquisition.path_invalid",
+        "acquisition.root_policy_violation",
+        "acquisition.entry_policy_violation",
+        "acquisition.limit_exceeded",
+        "extraction.invalid_utf8",
+        "extraction.unsupported_crate_shape",
+        "extraction.unsupported_workspace",
+        "extraction.ambiguous_module",
+        "extraction.parser_cancelled",
+        "extraction.malformed_syntax",
+        "extraction.normalization_collision",
+        "extraction.contract_invalid",
+        "extraction.limit_exceeded",
+        "graph.invalid_entity",
+        "graph.invalid_relationship",
+        "graph.dangling_reference",
+        "graph.cardinality_violation",
+        "graph.invalid_claim_state",
+        "graph.invalid_claim_transition",
+        "graph.invalid_derivation",
+        "graph.limit_exceeded",
+        "storage.unmarked_nonempty_root",
+        "storage.incompatible_schema",
+        "storage.writer_busy",
+        "storage.missing_object",
+        "storage.corrupt_object",
+        "storage.corrupt_metadata",
+        "storage.unsafe_path",
+        "publication.head_conflict",
+        "publication.failed",
+        "incremental.baseline_missing",
+        "incremental.baseline_repository_mismatch",
+        "incremental.baseline_incompatible",
+        "incremental.cache_corrupt",
+        "incremental.limit_exceeded",
+        "incremental.cold_equivalence_failed",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "input",
+        "acquisition",
+        "extraction",
+        "graph",
+        "storage",
+        "publication",
+        "incremental",
+        "internal"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[^\\r\\n]+$"
+    },
+    "retryable": {
+      "type": "boolean"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 8,
+      "properties": {
+        "revision": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{40}|refs/heads/main)$"
+        },
+        "object_oid": {
+          "$ref": "#/$defs/git_oid"
+        },
+        "path": {
+          "$ref": "#/$defs/safe_path"
+        },
+        "component": {
+          "enum": [
+            "baseline_head",
+            "baseline_snapshot",
+            "analysis_cache",
+            "changed_paths",
+            "analysis_entries",
+            "dependency_edges",
+            "report_subject_ids",
+            "report_bytes",
+            "refresh_wall_milliseconds",
+            "snapshot",
+            "graph",
+            "documentation"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "limit": {
+          "enum": [
+            "changed_paths",
+            "analysis_entries",
+            "dependency_edges",
+            "report_subject_ids",
+            "report_bytes",
+            "refresh_wall_milliseconds"
+          ]
+        },
+        "maximum": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16777217
+        },
+        "observed": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16777217
+        },
+        "expected_repository_identity": {
+          "$ref": "#/$defs/repository_identity"
+        },
+        "actual_repository_identity": {
+          "$ref": "#/$defs/repository_identity"
+        },
+        "expected_snapshot_id": {
+          "$ref": "#/$defs/snapshot_id"
+        },
+        "actual_snapshot_id": {
+          "$ref": "#/$defs/snapshot_id"
+        },
+        "expected_hash": {
+          "$ref": "#/$defs/digest"
+        },
+        "observed_hash": {
+          "$ref": "#/$defs/digest"
+        },
+        "expected_version": {
+          "$ref": "#/$defs/version"
+        },
+        "observed_version": {
+          "$ref": "#/$defs/version"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "enum": [
+              "publication.head_conflict",
+              "storage.writer_busy"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "retryable": {
+            "const": true
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "retryable": {
+            "const": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^input\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "input"
+          },
+          "context": {
+            "maxProperties": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^acquisition\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^extraction\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^graph\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "graph"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^storage\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "storage"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^publication\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "publication"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^incremental\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "incremental"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "incremental.baseline_missing"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "component",
+              "expected_repository_identity"
+            ],
+            "minProperties": 2,
+            "maxProperties": 2,
+            "properties": {
+              "component": {
+                "const": "baseline_head"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "incremental.baseline_repository_mismatch"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "component",
+              "expected_repository_identity",
+              "actual_repository_identity"
+            ],
+            "minProperties": 3,
+            "maxProperties": 3,
+            "properties": {
+              "component": {
+                "const": "baseline_head"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "incremental.baseline_incompatible"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "component",
+              "expected_version",
+              "observed_version"
+            ],
+            "minProperties": 3,
+            "maxProperties": 3,
+            "properties": {
+              "component": {
+                "const": "baseline_snapshot"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "incremental.cache_corrupt"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "component",
+              "path",
+              "expected_hash",
+              "observed_hash"
+            ],
+            "minProperties": 4,
+            "maxProperties": 4,
+            "properties": {
+              "component": {
+                "const": "analysis_cache"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "incremental.limit_exceeded"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "component",
+              "limit",
+              "maximum",
+              "observed"
+            ],
+            "minProperties": 4,
+            "maxProperties": 4
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "incremental.cold_equivalence_failed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "component",
+              "expected_hash",
+              "observed_hash"
+            ],
+            "minProperties": 3,
+            "maxProperties": 3,
+            "properties": {
+              "component": {
+                "enum": [
+                  "snapshot",
+                  "graph",
+                  "documentation"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "internal.unexpected"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "internal"
+          },
+          "context": {
+            "maxProperties": 0
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "git_oid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "snapshot_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:snapshot:blake3:[0-9a-f]{64}$"
+    },
+    "repository_identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "pattern": "^urn:codenoesis:[^\\r\\n\\u0000]+$"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[a-z0-9][a-z0-9._/-]*$"
+    },
+    "safe_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    }
+  }
+}

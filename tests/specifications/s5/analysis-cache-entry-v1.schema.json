@@ -1,0 +1,445 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/analysis-cache-entry-v1.schema.json",
+  "title": "CodeNoesis AnalysisCacheEntryV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "analysis_cache_entry_id",
+    "repository_identity",
+    "source",
+    "versions",
+    "observations",
+    "payload_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.analysis-cache-entry/v1"
+    },
+    "analysis_cache_entry_id": {
+      "$ref": "#/$defs/cache_entry_id"
+    },
+    "repository_identity": {
+      "$ref": "#/$defs/repository_identity"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "versions": {
+      "$ref": "#/$defs/versions"
+    },
+    "observations": {
+      "$ref": "#/$defs/observations"
+    },
+    "payload_hash": {
+      "$ref": "#/$defs/digest"
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "git_oid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "repository_identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "pattern": "^urn:codenoesis:[^\\r\\n\\u0000]+$"
+    },
+    "entity_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:entity:blake3:[0-9a-f]{64}$"
+    },
+    "cache_entry_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:analysis-cache-entry:blake3:[0-9a-f]{64}$"
+    },
+    "safe_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    },
+    "module_path": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 1024,
+      "pattern": "^crate(?:::[A-Za-z_][A-Za-z0-9_]*)*$"
+    },
+    "local_observation_key": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 512,
+      "pattern": "^obs:[a-z0-9][a-z0-9._:/#-]*$"
+    },
+    "local_span_key": {
+      "type": "string",
+      "minLength": 6,
+      "maxLength": 128,
+      "pattern": "^span:[0-9]+$"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_file_id",
+        "path",
+        "blob_oid",
+        "crate_id",
+        "module_path"
+      ],
+      "properties": {
+        "source_file_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "path": {
+          "$ref": "#/$defs/safe_path"
+        },
+        "blob_oid": {
+          "$ref": "#/$defs/git_oid"
+        },
+        "crate_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "module_path": {
+          "$ref": "#/$defs/module_path"
+        }
+      }
+    },
+    "versions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "language_extractor",
+        "workspace_mapper",
+        "normalization",
+        "ontology",
+        "extraction_contract",
+        "semantic_profile",
+        "dependency_rules"
+      ],
+      "properties": {
+        "language_extractor": {
+          "const": "codenoesis.rust-tree-sitter/s4-v1"
+        },
+        "workspace_mapper": {
+          "const": "codenoesis.rust-workspace/s4-v1"
+        },
+        "normalization": {
+          "const": "codenoesis.normalization/rust-workspace/v1"
+        },
+        "ontology": {
+          "const": "codenoesis.ontology/rust/v2"
+        },
+        "extraction_contract": {
+          "const": "codenoesis.extraction/v2"
+        },
+        "semantic_profile": {
+          "const": "standard-local-s4"
+        },
+        "dependency_rules": {
+          "const": "codenoesis.incremental-rules/rust-workspace-v1"
+        }
+      }
+    },
+    "observations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spans",
+        "entities",
+        "relationships",
+        "coverage",
+        "diagnostics"
+      ],
+      "properties": {
+        "spans": {
+          "type": "array",
+          "maxItems": 1000000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/span"
+          }
+        },
+        "entities": {
+          "type": "array",
+          "maxItems": 100000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/entity_observation"
+          }
+        },
+        "relationships": {
+          "type": "array",
+          "maxItems": 1000000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/relationship_observation"
+          }
+        },
+        "coverage": {
+          "type": "array",
+          "maxItems": 200000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/coverage_observation"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "maxItems": 100000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/diagnostic_observation"
+          }
+        }
+      }
+    },
+    "span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "span_key",
+        "start_byte",
+        "end_byte"
+      ],
+      "properties": {
+        "span_key": {
+          "$ref": "#/$defs/local_span_key"
+        },
+        "start_byte": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4194304
+        },
+        "end_byte": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4194304
+        }
+      }
+    },
+    "property": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "string",
+              "maxLength": 4096,
+              "pattern": "^[^\\r\\n\\u0000]*$"
+            },
+            {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "entity_observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observation_key",
+        "kind",
+        "name",
+        "module_path",
+        "visibility",
+        "properties",
+        "span_keys"
+      ],
+      "properties": {
+        "observation_key": {
+          "$ref": "#/$defs/local_observation_key"
+        },
+        "kind": {
+          "enum": [
+            "rust.enum",
+            "rust.function",
+            "rust.method",
+            "rust.module",
+            "rust.struct",
+            "rust.symbol_reference",
+            "rust.trait",
+            "rust.type_alias",
+            "source.file"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "pattern": "^[^\\r\\n\\u0000]+$"
+        },
+        "module_path": {
+          "$ref": "#/$defs/module_path"
+        },
+        "visibility": {
+          "enum": [
+            "private",
+            "public",
+            "restricted",
+            "not_applicable"
+          ]
+        },
+        "properties": {
+          "type": "array",
+          "maxItems": 128,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/property"
+          }
+        },
+        "span_keys": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/local_span_key"
+          }
+        }
+      }
+    },
+    "relationship_observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observation_key",
+        "kind",
+        "source_key",
+        "target_key",
+        "span_keys"
+      ],
+      "properties": {
+        "observation_key": {
+          "$ref": "#/$defs/local_observation_key"
+        },
+        "kind": {
+          "enum": [
+            "CONTAINS",
+            "DEFINES",
+            "IMPLEMENTS",
+            "IMPORTS"
+          ]
+        },
+        "source_key": {
+          "$ref": "#/$defs/local_observation_key"
+        },
+        "target_key": {
+          "$ref": "#/$defs/local_observation_key"
+        },
+        "span_keys": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/local_span_key"
+          }
+        }
+      }
+    },
+    "coverage_observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observation_key",
+        "capability",
+        "state",
+        "detail",
+        "span_keys"
+      ],
+      "properties": {
+        "observation_key": {
+          "$ref": "#/$defs/local_observation_key"
+        },
+        "capability": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[a-z][a-z0-9._/-]*$"
+        },
+        "state": {
+          "enum": [
+            "available",
+            "unknown",
+            "unsupported"
+          ]
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "pattern": "^[^\\r\\n\\u0000]+$"
+        },
+        "span_keys": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/local_span_key"
+          }
+        }
+      }
+    },
+    "diagnostic_observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observation_key",
+        "severity",
+        "code",
+        "span_keys"
+      ],
+      "properties": {
+        "observation_key": {
+          "$ref": "#/$defs/local_observation_key"
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[a-z][a-z0-9._/-]*$"
+        },
+        "span_keys": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/local_span_key"
+          }
+        }
+      }
+    }
+  }
+}

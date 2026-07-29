@@ -1,0 +1,160 @@
+{
+  "schema_version": "codenoesis.incremental-rule-catalog/v1",
+  "catalog_version": "codenoesis.incremental-rules/rust-workspace-v1",
+  "applies_to": {
+    "refresh_profile": "standard-local-s5",
+    "semantic_profile": "standard-local-s4",
+    "snapshot_schema": "codenoesis.repository-snapshot/v4",
+    "ontology_version": "codenoesis.ontology/rust/v2"
+  },
+  "outcome_precedence": [
+    "error",
+    "full_rebuild",
+    "full_workspace_analysis",
+    "partial_analysis",
+    "inventory_only",
+    "no_change"
+  ],
+  "rules": [
+    {
+      "id": "INC-RULE-001",
+      "priority": 1000,
+      "outcome": "error",
+      "when_any": [
+        "baseline_missing",
+        "baseline_repository_mismatch",
+        "baseline_incompatible_or_corrupt",
+        "current_cache_entry_corrupt",
+        "target_acquisition_failed",
+        "resource_limit_exceeded",
+        "publication_precondition_changed",
+        "cold_equivalence_failed"
+      ],
+      "reason": "invalid_or_unpublishable_refresh"
+    },
+    {
+      "id": "INC-RULE-002",
+      "priority": 900,
+      "outcome": "full_rebuild",
+      "when_any": [
+        "language_extractor_version_changed",
+        "workspace_mapper_version_changed",
+        "normalization_version_changed",
+        "ontology_version_changed",
+        "extraction_contract_version_changed",
+        "semantic_profile_changed",
+        "dependency_rule_version_changed",
+        "cache_schema_version_changed",
+        "snapshot_schema_version_changed",
+        "public_schema_version_changed"
+      ],
+      "reason": "version_boundary_changed"
+    },
+    {
+      "id": "INC-RULE-003",
+      "priority": 800,
+      "outcome": "full_workspace_analysis",
+      "when_any": [
+        "source_added",
+        "source_deleted",
+        "rename_as_delete_plus_add",
+        "crate_root_changed",
+        "module_declaration_changed",
+        "manifest_changed",
+        "target_changed",
+        "workspace_membership_changed",
+        "workspace_definition_changed",
+        "source_ownership_changed",
+        "source_mapping_unsupported",
+        "source_mapping_ambiguous",
+        "unclassified_extraction_input_changed"
+      ],
+      "reason": "workspace_dependency_closure_not_proven"
+    },
+    {
+      "id": "INC-RULE-004",
+      "priority": 700,
+      "outcome": "partial_analysis",
+      "when_all": [
+        "mapped_non_root_rust_source_modified",
+        "repository_identity_unchanged",
+        "source_identity_unchanged",
+        "source_path_unchanged",
+        "crate_ownership_unchanged",
+        "module_mapping_unchanged",
+        "all_cache_key_versions_match"
+      ],
+      "reason": "bounded_source_analysis_change"
+    },
+    {
+      "id": "INC-RULE-005",
+      "priority": 600,
+      "outcome": "inventory_only",
+      "when_all": [
+        "inventory_path_changed",
+        "no_extraction_input_changed",
+        "no_mapping_input_changed",
+        "all_cache_key_versions_match"
+      ],
+      "reason": "inventory_changed_without_analysis_change"
+    },
+    {
+      "id": "INC-RULE-006",
+      "priority": 500,
+      "outcome": "no_change",
+      "when_all": [
+        "requested_commit_equals_visible_commit",
+        "all_cache_key_versions_match",
+        "baseline_valid"
+      ],
+      "reason": "exact_target_already_visible"
+    },
+    {
+      "id": "INC-RULE-007",
+      "priority": 400,
+      "outcome": "full_workspace_analysis",
+      "when_any": [
+        "no_more_specific_rule_matched"
+      ],
+      "reason": "fail_closed_fallback"
+    }
+  ],
+  "partial_analysis_requirements": {
+    "change_kinds": [
+      "modified"
+    ],
+    "source_kinds": [
+      "mapped_non_root_rust_source"
+    ],
+    "required_stable_fields": [
+      "repository_identity",
+      "source_file_id",
+      "canonical_source_path",
+      "crate_id",
+      "canonical_module_path"
+    ],
+    "recomputed_set": "exactly the changed compatible source analysis entries",
+    "reused_set": "every other exact current cache hit",
+    "missing_entry": "recompute",
+    "corrupt_entry": "error"
+  },
+  "public_materialization": {
+    "applies_to_every_non_no_change_target": true,
+    "revision_bound_artifacts": [
+      "inventory_evidence",
+      "source_evidence",
+      "extraction_chunks",
+      "knowledge_graph",
+      "repository_snapshot",
+      "documentation_projection",
+      "incremental_refresh_report"
+    ],
+    "baseline_public_chunk_copy_permitted": false,
+    "target_evidence_commit_must_equal_target": true,
+    "changed_source_evidence_blob_must_equal_target": true
+  },
+  "rename_semantics": "delete_plus_add",
+  "multi_path_selection": "highest outcome_precedence across all matched rules",
+  "equal_tree_different_commit": "public_rematerialization_required",
+  "set_order": "UTF-8 byte ascending with duplicates rejected"
+}

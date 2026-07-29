@@ -1,0 +1,688 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/incremental-refresh-report-v1.schema.json",
+  "title": "CodeNoesis IncrementalRefreshReportV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "refresh_profile",
+    "target_semantic_profile",
+    "repository_identity",
+    "target_configuration_hash",
+    "versions",
+    "rule",
+    "baseline",
+    "target",
+    "changed_paths",
+    "analysis",
+    "inventory",
+    "public_rematerialization",
+    "invalidation",
+    "cold_equivalence",
+    "publication",
+    "metrics",
+    "semantic_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.incremental-refresh-report/v1"
+    },
+    "refresh_profile": {
+      "const": "standard-local-s5"
+    },
+    "target_semantic_profile": {
+      "const": "standard-local-s4"
+    },
+    "repository_identity": {
+      "$ref": "#/$defs/repository_identity"
+    },
+    "target_configuration_hash": {
+      "$ref": "#/$defs/hash"
+    },
+    "versions": {
+      "$ref": "#/$defs/versions"
+    },
+    "rule": {
+      "$ref": "#/$defs/rule_selection"
+    },
+    "baseline": {
+      "$ref": "#/$defs/revision_artifacts"
+    },
+    "target": {
+      "$ref": "#/$defs/revision_artifacts"
+    },
+    "changed_paths": {
+      "type": "array",
+      "maxItems": 100000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/changed_path"
+      }
+    },
+    "analysis": {
+      "$ref": "#/$defs/analysis"
+    },
+    "inventory": {
+      "$ref": "#/$defs/inventory"
+    },
+    "public_rematerialization": {
+      "$ref": "#/$defs/public_rematerialization"
+    },
+    "invalidation": {
+      "$ref": "#/$defs/invalidation"
+    },
+    "cold_equivalence": {
+      "$ref": "#/$defs/cold_equivalence"
+    },
+    "publication": {
+      "$ref": "#/$defs/publication"
+    },
+    "metrics": {
+      "$ref": "#/$defs/metrics"
+    },
+    "semantic_hash": {
+      "$ref": "#/$defs/hash"
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "git_oid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "value"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "blake3-256"
+        },
+        "value": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    },
+    "repository_identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "pattern": "^urn:codenoesis:[^\\r\\n\\u0000]+$"
+    },
+    "hashed_identity": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:[a-z0-9-]+:blake3:[0-9a-f]{64}$"
+    },
+    "snapshot_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:snapshot:blake3:[0-9a-f]{64}$"
+    },
+    "entity_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:entity:blake3:[0-9a-f]{64}$"
+    },
+    "cache_entry_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:analysis-cache-entry:blake3:[0-9a-f]{64}$"
+    },
+    "safe_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    },
+    "versions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cache_schema",
+        "language_extractor",
+        "workspace_mapper",
+        "normalization",
+        "ontology",
+        "extraction_contract",
+        "chunk_schema",
+        "graph_schema",
+        "snapshot_schema",
+        "pipeline",
+        "evidence_lineage",
+        "renderer",
+        "dependency_rules"
+      ],
+      "properties": {
+        "cache_schema": {
+          "const": "codenoesis.analysis-cache-entry/v1"
+        },
+        "language_extractor": {
+          "const": "codenoesis.rust-tree-sitter/s4-v1"
+        },
+        "workspace_mapper": {
+          "const": "codenoesis.rust-workspace/s4-v1"
+        },
+        "normalization": {
+          "const": "codenoesis.normalization/rust-workspace/v1"
+        },
+        "ontology": {
+          "const": "codenoesis.ontology/rust/v2"
+        },
+        "extraction_contract": {
+          "const": "codenoesis.extraction/v2"
+        },
+        "chunk_schema": {
+          "const": "codenoesis.extraction-chunk/v2"
+        },
+        "graph_schema": {
+          "const": "codenoesis.knowledge-graph/v2"
+        },
+        "snapshot_schema": {
+          "const": "codenoesis.repository-snapshot/v4"
+        },
+        "pipeline": {
+          "const": "codenoesis.pipeline/s4-v1"
+        },
+        "evidence_lineage": {
+          "const": "codenoesis.evidence-lineage/v2"
+        },
+        "renderer": {
+          "const": "codenoesis.renderer/markdown-v1"
+        },
+        "dependency_rules": {
+          "const": "codenoesis.incremental-rules/rust-workspace-v1"
+        }
+      }
+    },
+    "rule_selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "outcome",
+        "rule_ids",
+        "reasons"
+      ],
+      "properties": {
+        "outcome": {
+          "enum": [
+            "full_rebuild",
+            "full_workspace_analysis",
+            "partial_analysis",
+            "inventory_only",
+            "no_change"
+          ]
+        },
+        "rule_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 7,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^INC-RULE-[0-9]{3}$"
+          }
+        },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[a-z][a-z0-9_]*$"
+          }
+        }
+      }
+    },
+    "revision_artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commit_oid",
+        "tree_oid",
+        "snapshot_id",
+        "snapshot_semantic_hash",
+        "graph_semantic_hash",
+        "documentation_generation_hash"
+      ],
+      "properties": {
+        "commit_oid": {
+          "$ref": "#/$defs/git_oid"
+        },
+        "tree_oid": {
+          "$ref": "#/$defs/git_oid"
+        },
+        "snapshot_id": {
+          "$ref": "#/$defs/snapshot_id"
+        },
+        "snapshot_semantic_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "graph_semantic_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "documentation_generation_hash": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "nullable_git_oid": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/git_oid"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "changed_path": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "change_kind",
+        "baseline_blob_oid",
+        "target_blob_oid"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/safe_path"
+        },
+        "change_kind": {
+          "enum": [
+            "added",
+            "modified",
+            "deleted"
+          ]
+        },
+        "baseline_blob_oid": {
+          "$ref": "#/$defs/nullable_git_oid"
+        },
+        "target_blob_oid": {
+          "$ref": "#/$defs/nullable_git_oid"
+        }
+      }
+    },
+    "cache_entry_id_list": {
+      "type": "array",
+      "maxItems": 100000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/cache_entry_id"
+      }
+    },
+    "analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_entry_ids",
+        "target_entry_ids",
+        "reused_entry_ids",
+        "invalidated_entry_ids",
+        "recomputed_entry_ids"
+      ],
+      "properties": {
+        "baseline_entry_ids": {
+          "$ref": "#/$defs/cache_entry_id_list"
+        },
+        "target_entry_ids": {
+          "$ref": "#/$defs/cache_entry_id_list"
+        },
+        "reused_entry_ids": {
+          "$ref": "#/$defs/cache_entry_id_list"
+        },
+        "invalidated_entry_ids": {
+          "$ref": "#/$defs/cache_entry_id_list"
+        },
+        "recomputed_entry_ids": {
+          "$ref": "#/$defs/cache_entry_id_list"
+        }
+      }
+    },
+    "path_list": {
+      "type": "array",
+      "maxItems": 100000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/safe_path"
+      }
+    },
+    "inventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reused_classification_paths",
+        "reclassified_paths"
+      ],
+      "properties": {
+        "reused_classification_paths": {
+          "$ref": "#/$defs/path_list"
+        },
+        "reclassified_paths": {
+          "$ref": "#/$defs/path_list"
+        }
+      }
+    },
+    "chunk_rematerialization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_file_id",
+        "analysis_action",
+        "baseline_semantic_hash",
+        "target_semantic_hash"
+      ],
+      "properties": {
+        "source_file_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "analysis_action": {
+          "enum": [
+            "reused",
+            "recomputed"
+          ]
+        },
+        "baseline_semantic_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "target_semantic_hash": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "document_rematerialization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document_id",
+        "path",
+        "baseline_blake3",
+        "target_blake3",
+        "manifest_rematerialized",
+        "content_changed"
+      ],
+      "properties": {
+        "document_id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:document:blake3:[0-9a-f]{64}$"
+        },
+        "path": {
+          "$ref": "#/$defs/safe_path"
+        },
+        "baseline_blake3": {
+          "$ref": "#/$defs/digest"
+        },
+        "target_blake3": {
+          "$ref": "#/$defs/digest"
+        },
+        "manifest_rematerialized": {
+          "const": true
+        },
+        "content_changed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "public_rematerialization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "all_target_evidence_uses_target_commit",
+        "baseline_public_chunk_copy_permitted",
+        "chunks",
+        "documents"
+      ],
+      "properties": {
+        "all_target_evidence_uses_target_commit": {
+          "const": true
+        },
+        "baseline_public_chunk_copy_permitted": {
+          "const": false
+        },
+        "chunks": {
+          "type": "array",
+          "maxItems": 100000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/chunk_rematerialization"
+          }
+        },
+        "documents": {
+          "type": "array",
+          "maxItems": 100000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/document_rematerialization"
+          }
+        }
+      }
+    },
+    "identity_list": {
+      "type": "array",
+      "maxItems": 1000000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/hashed_identity"
+      }
+    },
+    "identity_delta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_count",
+        "target_count",
+        "retained_count",
+        "invalidated_ids",
+        "added_ids",
+        "removed_ids"
+      ],
+      "properties": {
+        "baseline_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "target_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "retained_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "invalidated_ids": {
+          "$ref": "#/$defs/identity_list"
+        },
+        "added_ids": {
+          "$ref": "#/$defs/identity_list"
+        },
+        "removed_ids": {
+          "$ref": "#/$defs/identity_list"
+        }
+      }
+    },
+    "invalidation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entities",
+        "relationships",
+        "claims",
+        "evidence",
+        "coverage_gaps",
+        "documents",
+        "federation_links"
+      ],
+      "properties": {
+        "entities": {
+          "$ref": "#/$defs/identity_delta"
+        },
+        "relationships": {
+          "$ref": "#/$defs/identity_delta"
+        },
+        "claims": {
+          "$ref": "#/$defs/identity_delta"
+        },
+        "evidence": {
+          "$ref": "#/$defs/identity_delta"
+        },
+        "coverage_gaps": {
+          "$ref": "#/$defs/identity_delta"
+        },
+        "documents": {
+          "$ref": "#/$defs/identity_delta"
+        },
+        "federation_links": {
+          "$ref": "#/$defs/identity_delta"
+        }
+      }
+    },
+    "hash_equivalence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "incremental",
+        "cold",
+        "equal"
+      ],
+      "properties": {
+        "incremental": {
+          "$ref": "#/$defs/hash"
+        },
+        "cold": {
+          "$ref": "#/$defs/hash"
+        },
+        "equal": {
+          "const": true
+        }
+      }
+    },
+    "cold_equivalence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "semantic_bytes_equal",
+        "snapshot",
+        "graph",
+        "documentation"
+      ],
+      "properties": {
+        "semantic_bytes_equal": {
+          "const": true
+        },
+        "snapshot": {
+          "$ref": "#/$defs/hash_equivalence"
+        },
+        "graph": {
+          "$ref": "#/$defs/hash_equivalence"
+        },
+        "documentation": {
+          "$ref": "#/$defs/hash_equivalence"
+        }
+      }
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "previous_head_snapshot_id",
+        "new_head_snapshot_id",
+        "head_advanced"
+      ],
+      "properties": {
+        "previous_head_snapshot_id": {
+          "$ref": "#/$defs/snapshot_id"
+        },
+        "new_head_snapshot_id": {
+          "$ref": "#/$defs/snapshot_id"
+        },
+        "head_advanced": {
+          "type": "boolean"
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "changed_path_count",
+        "analysis_entry_count",
+        "cache_hit_count",
+        "cache_miss_count",
+        "cache_invalidated_count",
+        "parser_invocation_count",
+        "dependency_edge_count",
+        "rematerialized_chunk_count",
+        "rematerialized_document_manifest_count",
+        "changed_document_content_count",
+        "report_subject_id_count"
+      ],
+      "properties": {
+        "changed_path_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "analysis_entry_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "cache_hit_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "cache_miss_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "cache_invalidated_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "parser_invocation_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "dependency_edge_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "rematerialized_chunk_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "rematerialized_document_manifest_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "changed_document_content_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "report_subject_id_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        }
+      }
+    }
+  }
+}
