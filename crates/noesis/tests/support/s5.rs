@@ -1,8 +1,10 @@
 use std::collections::BTreeMap;
+use std::fmt::Write as _;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
 
+use codenoesis_contracts::AnalysisCacheEntryV1;
 use rusqlite::Connection;
 use serde_json::Value;
 
@@ -108,11 +110,42 @@ impl MaterializedRepository {
         self.scan(BASELINE_COMMIT_OID, &self.store)
     }
 
+    pub fn baseline_s3_scan(&self) -> Output {
+        let cargo = b"[package]\nname = \"s5-incompatible-baseline\"\nversion = \"0.1.0\"\nedition = \"2024\"\n\n[lib]\npath = \"src/lib.rs\"\n";
+        let source = b"pub fn baseline_only() {}\n";
+        let cargo_oid = self.write_git_blob(cargo);
+        let source_oid = self.write_git_blob(source);
+        let src_tree = self.write_git_tree(&format!("100644 blob {source_oid}\tlib.rs\n"));
+        let root_tree = self.write_git_tree(&format!(
+            "100644 blob {cargo_oid}\tCargo.toml\n040000 tree {src_tree}\tsrc\n"
+        ));
+        let mut commit = git_command(&self.global_config);
+        commit
+            .arg("-C")
+            .arg(&self.worktree)
+            .args(["commit-tree", &root_tree, "-F", "-"])
+            .env("GIT_AUTHOR_NAME", "CodeNoesis Fixture")
+            .env("GIT_AUTHOR_EMAIL", "fixture@codenoesis.invalid")
+            .env("GIT_AUTHOR_DATE", "946684802 +0000")
+            .env("GIT_COMMITTER_NAME", "CodeNoesis Fixture")
+            .env("GIT_COMMITTER_EMAIL", "fixture@codenoesis.invalid")
+            .env("GIT_COMMITTER_DATE", "946684802 +0000");
+        let commit_oid = stdout_line(successful_output(
+            commit,
+            Some(b"fixture: incompatible S3 baseline\n"),
+        ));
+        self.scan_with_profile(&commit_oid, &self.store, "standard-local-s3")
+    }
+
     pub fn cold_target_scan(&self) -> Output {
         self.scan(TARGET_COMMIT_OID, &self.cold_store)
     }
 
     pub fn refresh(&self) -> Output {
+        self.refresh_with_profile("standard-local-s5")
+    }
+
+    pub fn refresh_with_profile(&self, profile: &str) -> Output {
         let mut command = self.noesis_command();
         command
             .args(["refresh", "--repository"])
@@ -125,7 +158,7 @@ impl MaterializedRepository {
                 "--store",
             ])
             .arg(&self.store)
-            .args(["--profile", "standard-local-s5", "--format", "json"]);
+            .args(["--profile", profile, "--format", "json"]);
         command.output().expect("launch S5 noesis refresh")
     }
 
@@ -141,6 +174,10 @@ impl MaterializedRepository {
     }
 
     pub fn stored_head(&self, store: &Path) -> StoredHead {
+        assert!(
+            store.starts_with(&self.root),
+            "S5 store escaped fixture root"
+        );
         let connection =
             Connection::open(store.join("metadata.sqlite3")).expect("open S5 metadata");
         connection
@@ -162,6 +199,10 @@ impl MaterializedRepository {
     }
 
     pub fn stored_snapshot_semantic(&self, store: &Path) -> Vec<u8> {
+        assert!(
+            store.starts_with(&self.root),
+            "S5 store escaped fixture root"
+        );
         let connection =
             Connection::open(store.join("metadata.sqlite3")).expect("open S5 metadata");
         let artifact_id = connection
@@ -188,7 +229,68 @@ impl MaterializedRepository {
         .expect("read S5 snapshot semantic bytes")
     }
 
+    pub fn corrupt_first_analysis_cache_entry(&self) {
+        fs::write(self.first_analysis_cache_entry_path(), b"{}")
+            .expect("corrupt S5 analysis-cache entry");
+    }
+
+    pub fn poison_first_analysis_cache_entry(&self) {
+        let path = self.first_analysis_cache_entry_path();
+        let bytes = fs::read(&path).expect("read S5 cache entry to poison");
+        let mut entry = AnalysisCacheEntryV1::parse(&bytes)
+            .expect("parse S5 cache entry to poison")
+            .to_domain()
+            .expect("convert S5 cache entry to poison");
+        entry.analysis.unsupported_construct = !entry.analysis.unsupported_construct;
+        let poisoned = AnalysisCacheEntryV1::from_domain(&entry)
+            .canonical_bytes()
+            .expect("serialize poisoned S5 cache entry");
+        fs::write(path, poisoned).expect("write poisoned S5 cache entry");
+    }
+
+    pub fn remove_analysis_cache(&self) {
+        fs::remove_dir_all(self.store.join("objects/analysis-cache-entry-v1"))
+            .expect("remove S5 analysis cache");
+    }
+
+    pub fn add_incompatible_analysis_cache_entry(&self) {
+        let digest = "d".repeat(64);
+        let path = self
+            .store
+            .join("objects/analysis-cache-entry-v1")
+            .join(&digest[..2])
+            .join(&digest[2..]);
+        fs::create_dir_all(path.parent().expect("S5 incompatible cache shard"))
+            .expect("create S5 incompatible cache shard");
+        let value = serde_json::json!({
+            "schema_version": "codenoesis.analysis-cache-entry/v1",
+            "repository_identity": REPOSITORY_ID,
+            "source": {
+                "path": "crates/app/src/main.rs",
+                "blob_oid": "7e6f91e233eff28c5511d686f7c46f67dd919505"
+            },
+            "versions": {
+                "language_extractor": "codenoesis.rust-tree-sitter/s4-v0",
+                "workspace_mapper": "codenoesis.rust-workspace/s4-v1",
+                "normalization": "codenoesis.normalization/rust-workspace/v1",
+                "ontology": "codenoesis.ontology/rust/v2",
+                "extraction_contract": "codenoesis.extraction/v2",
+                "semantic_profile": "standard-local-s4",
+                "dependency_rules": "codenoesis.incremental-rules/rust-workspace-v1"
+            }
+        });
+        fs::write(
+            path,
+            serde_json::to_vec(&value).expect("serialize S5 incompatible cache"),
+        )
+        .expect("write S5 incompatible cache");
+    }
+
     fn scan(&self, revision: &str, store: &Path) -> Output {
+        self.scan_with_profile(revision, store, "standard-local-s4")
+    }
+
+    fn scan_with_profile(&self, revision: &str, store: &Path, profile: &str) -> Output {
         let mut command = self.noesis_command();
         command
             .args(["scan", "--repository"])
@@ -199,12 +301,42 @@ impl MaterializedRepository {
                 "--revision",
                 revision,
                 "--profile",
-                "standard-local-s4",
+                profile,
                 "--store",
             ])
             .arg(store)
             .args(["--format", "json"]);
         command.output().expect("launch S5 fixture S4 scan")
+    }
+
+    fn first_analysis_cache_entry_path(&self) -> PathBuf {
+        let cache_root = self.store.join("objects/analysis-cache-entry-v1");
+        let mut shards = fs::read_dir(&cache_root)
+            .expect("read S5 analysis cache")
+            .map(|entry| entry.expect("read S5 analysis-cache shard"))
+            .collect::<Vec<_>>();
+        shards.sort_by_key(std::fs::DirEntry::file_name);
+        let mut entries = fs::read_dir(shards.first().expect("S5 analysis-cache shard").path())
+            .expect("read S5 analysis-cache shard")
+            .map(|entry| entry.expect("read S5 analysis-cache entry"))
+            .collect::<Vec<_>>();
+        entries.sort_by_key(std::fs::DirEntry::file_name);
+        entries.first().expect("S5 analysis-cache entry").path()
+    }
+
+    fn write_git_blob(&self, bytes: &[u8]) -> String {
+        let mut command = git_command(&self.global_config);
+        command
+            .arg("-C")
+            .arg(&self.worktree)
+            .args(["hash-object", "-w", "--stdin"]);
+        stdout_line(successful_output(command, Some(bytes)))
+    }
+
+    fn write_git_tree(&self, entries: &str) -> String {
+        let mut command = git_command(&self.global_config);
+        command.arg("-C").arg(&self.worktree).arg("mktree");
+        stdout_line(successful_output(command, Some(entries.as_bytes())))
     }
 
     fn noesis_command(&self) -> Command {
@@ -274,16 +406,18 @@ fn materialize_revision(worktree: &Path, global_config: &Path, revision: &Value)
             .as_array()
             .expect("S5 tree entries")
             .iter()
-            .map(|entry| {
+            .fold(String::new(), |mut entries, entry| {
                 let mode = entry["mode"].as_str().expect("S5 tree mode");
                 let kind = if mode == "040000" { "tree" } else { "blob" };
-                format!(
-                    "{mode} {kind} {}\t{}\n",
+                writeln!(
+                    entries,
+                    "{mode} {kind} {}\t{}",
                     entry["oid"].as_str().expect("S5 tree entry oid"),
                     entry["name"].as_str().expect("S5 tree entry name")
                 )
-            })
-            .collect::<String>();
+                .expect("write S5 tree entry");
+                entries
+            });
         let mut make_tree = git_command(global_config);
         make_tree.arg("-C").arg(worktree).arg("mktree");
         let observed = stdout_line(successful_output(make_tree, Some(entries.as_bytes())));

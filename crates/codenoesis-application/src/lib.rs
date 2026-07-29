@@ -1,6 +1,10 @@
 //! Application orchestration for the `CodeNoesis` S0 through S4 slices.
 
 mod s4;
+mod s5;
+
+pub use s4::S4ScanOutput;
+pub use s5::{RefreshError, RefreshPlan, RefreshService};
 
 use std::ffi::OsString;
 
@@ -97,7 +101,27 @@ impl PublicationService {
         let expected_head = metadata_store
             .current_head_id(&candidate.snapshot.repository_identity)
             .map_err(ScanError::Storage)?;
-        if expected_head.as_ref() == Some(&candidate.snapshot.snapshot_id) {
+        Self::publish_candidate_with_expected(
+            candidate,
+            expected_head.as_ref(),
+            artifact_store,
+            metadata_store,
+            observer,
+        )
+    }
+
+    fn publish_candidate_with_expected<C, M>(
+        candidate: &PublicationCandidate,
+        expected_head: Option<&codenoesis_domain::storage::SnapshotId>,
+        artifact_store: &mut C,
+        metadata_store: &mut M,
+        observer: &mut dyn PublicationObserver,
+    ) -> Result<LocalSnapshotHead, ScanError>
+    where
+        C: ArtifactStore,
+        M: MetadataStore,
+    {
+        if expected_head == Some(&candidate.snapshot.snapshot_id) {
             let current = Self::load_head(
                 &candidate.snapshot.repository_identity,
                 artifact_store,
@@ -124,7 +148,7 @@ impl PublicationService {
                 .map_err(ScanError::Storage)?;
         }
         let published = metadata_store
-            .publish(candidate, expected_head.as_ref(), observer)
+            .publish(candidate, expected_head, observer)
             .map_err(ScanError::Storage)?;
         let head = Self::load_head(
             &candidate.snapshot.repository_identity,

@@ -2,6 +2,7 @@
 
 pub mod knowledge;
 pub mod s4;
+pub mod s5;
 pub mod storage;
 
 use std::error::Error;

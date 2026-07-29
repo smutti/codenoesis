@@ -1,11 +1,13 @@
 //! Local `SQLite` and filesystem-CAS adapters for the S3 storage ports.
 
+mod cache;
 mod cas;
 mod path;
 mod sqlite;
 
 use std::path::Path;
 
+pub use cache::FilesystemAnalysisCache;
 pub use cas::FilesystemCas;
 pub use sqlite::{SqliteEvidence, SqliteMetadataStore};
 
@@ -13,6 +15,7 @@ use codenoesis_domain::storage::StorageError;
 
 pub struct LocalStore {
     pub artifacts: FilesystemCas,
+    pub analysis_cache: FilesystemAnalysisCache,
     pub metadata: SqliteMetadataStore,
 }
 
@@ -28,12 +31,17 @@ impl LocalStore {
         if prepared.fresh {
             path::write_marker(&prepared)?;
         }
+        let analysis_cache = FilesystemAnalysisCache::new(
+            prepared.root.join("objects/analysis-cache-entry-v1"),
+            prepared.temporary.clone(),
+        );
         Ok(Self {
             artifacts: FilesystemCas::new(
                 prepared.root,
                 prepared.objects_blake3,
                 prepared.temporary,
             ),
+            analysis_cache,
             metadata,
         })
     }
@@ -46,12 +54,17 @@ impl LocalStore {
     pub fn open_existing(store_root: &Path) -> Result<Self, StorageError> {
         let prepared = path::prepare_existing(store_root)?;
         let metadata = SqliteMetadataStore::open(&prepared.database, false)?;
+        let analysis_cache = FilesystemAnalysisCache::new(
+            prepared.root.join("objects/analysis-cache-entry-v1"),
+            prepared.temporary.clone(),
+        );
         Ok(Self {
             artifacts: FilesystemCas::new(
                 prepared.root,
                 prepared.objects_blake3,
                 prepared.temporary,
             ),
+            analysis_cache,
             metadata,
         })
     }

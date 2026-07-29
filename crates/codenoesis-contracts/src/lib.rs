@@ -1,8 +1,10 @@
 //! Versioned JSON contracts for the `CodeNoesis` S0 through S3 slices.
 
 mod s4;
+mod s5;
 
 pub use s4::*;
+pub use s5::*;
 
 use std::collections::BTreeMap;
 use std::error::Error;
