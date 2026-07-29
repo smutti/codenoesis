@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed; becomes Accepted only after protected manual merge of the bound pull request |
+| Status | Proposed; becomes Accepted only after protected manual merge of [PR #67](https://github.com/smutti/codenoesis/pull/67) |
 | Date | 2026-07-29 |
 | Deciders | Andrea Moretti (`@smutti` persona), with protected manual merge by `@smutti` as the approval event |
 | Issue | [#66](https://github.com/smutti/codenoesis/issues/66) |

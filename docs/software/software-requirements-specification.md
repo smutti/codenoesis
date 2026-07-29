@@ -522,11 +522,11 @@ invalidation oracle, atomic publication behavior, and future Red.
 
 | Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
 |---|---|---|---|---|---|---|---|
-| `INV-INC-001` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | protected pull request `TBD` | `S5` | [S5 incremental refresh decision](decisions/0008-s5-incremental-refresh-contract.md) and [reviewed cold artifacts](../../tests/fixtures/s5/incremental-refresh-v1/expected-cold-artifacts.json) |
-| `FR-INC-001` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | protected pull request `TBD` | `S5` | [S5 rule catalog](../../tests/specifications/s5/incremental-rule-catalog-v1.json) and [reviewed report](../../tests/fixtures/s5/incremental-refresh-v1/expected-incremental-refresh-report.json) |
-| `FR-INC-002` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | protected pull request `TBD` | `S5` | [S5 rule catalog](../../tests/specifications/s5/incremental-rule-catalog-v1.json) and [machine oracle](../../tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json) |
-| `FR-INC-003` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | protected pull request `TBD` | `S5` | [Analysis cache schema](../../tests/specifications/s5/analysis-cache-entry-v1.schema.json) and [machine oracle](../../tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json) |
-| `FR-CLI-004` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | protected pull request `TBD` | `S5` | [Refresh report schema](../../tests/specifications/s5/incremental-refresh-report-v1.schema.json), [ErrorV7 schema](../../tests/specifications/s5/codenoesis-error-v7.schema.json), and [machine oracle](../../tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json) |
+| `INV-INC-001` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #67 protected merge record](https://github.com/smutti/codenoesis/pull/67) | `S5` | [S5 incremental refresh decision](decisions/0008-s5-incremental-refresh-contract.md) and [reviewed cold artifacts](../../tests/fixtures/s5/incremental-refresh-v1/expected-cold-artifacts.json) |
+| `FR-INC-001` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #67 protected merge record](https://github.com/smutti/codenoesis/pull/67) | `S5` | [S5 rule catalog](../../tests/specifications/s5/incremental-rule-catalog-v1.json) and [reviewed report](../../tests/fixtures/s5/incremental-refresh-v1/expected-incremental-refresh-report.json) |
+| `FR-INC-002` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #67 protected merge record](https://github.com/smutti/codenoesis/pull/67) | `S5` | [S5 rule catalog](../../tests/specifications/s5/incremental-rule-catalog-v1.json) and [machine oracle](../../tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json) |
+| `FR-INC-003` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #67 protected merge record](https://github.com/smutti/codenoesis/pull/67) | `S5` | [Analysis cache schema](../../tests/specifications/s5/analysis-cache-entry-v1.schema.json) and [machine oracle](../../tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json) |
+| `FR-CLI-004` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #67 protected merge record](https://github.com/smutti/codenoesis/pull/67) | `S5` | [Refresh report schema](../../tests/specifications/s5/incremental-refresh-report-v1.schema.json), [ErrorV7 schema](../../tests/specifications/s5/codenoesis-error-v7.schema.json), and [machine oracle](../../tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json) |
 
 `standard-local-s5` selects a local refresh use case over one validated visible
 S4 head and one independently bound immutable target commit. The target remains
@@ -583,7 +583,7 @@ exact merged SRS. Until that binding is reviewed and merged, autonomous
 implementation authorization fails closed.
 
 S5 deterministic incremental refresh contract bundle:
-`sha256:9763957db208d2516415738d529af1da02159523db672973e8aca902549d1a36`.
+`sha256:dd50107f00f7b4dae811fe844e24dff9f20c9b242aacc04bc683e3b4d525f0d1`.
 The bundle binds Decision 0008, the independent maintenance guard, inherited
 S4 bundle, strict cache/report/error schemas, rule catalog, machine oracle,
 project-owned two-revision fixture, exact Git objects, reviewed cold summaries,
