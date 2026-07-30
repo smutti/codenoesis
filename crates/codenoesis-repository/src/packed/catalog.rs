@@ -13,6 +13,8 @@ use codenoesis_domain::s1_packed::{PackedComponent, STANDARD_LOCAL_PACKED_LIMITS
 use codenoesis_domain::{
     AcquisitionError, LimitKind, ObjectId, UnsupportedFeature, limit_exceeded,
 };
+#[cfg(windows)]
+use same_file::Handle as FileIdentity;
 
 use super::{changed, invalid_catalog, unavailable};
 
@@ -26,6 +28,8 @@ pub(super) struct TrackedFile {
     path: PathBuf,
     file: File,
     before: MetadataSnapshot,
+    #[cfg(windows)]
+    identity: FileIdentity,
 }
 
 impl TrackedFile {
@@ -81,10 +85,21 @@ impl TrackedFile {
         let Ok(path) = fs::symlink_metadata(&self.path) else {
             return false;
         };
+        #[cfg(windows)]
+        let identity_matches = self.path_identity_matches();
+        #[cfg(not(windows))]
+        let identity_matches = true;
         !path.file_type().is_symlink()
             && path.is_file()
             && self.before.matches(&handle)
             && self.before.matches(&path)
+            && identity_matches
+    }
+
+    #[cfg(windows)]
+    fn path_identity_matches(&self) -> bool {
+        FileIdentity::from_path(&self.path)
+            .is_ok_and(|path_identity| path_identity == self.identity)
     }
 }
 
@@ -271,10 +286,26 @@ fn open_tracked(path: PathBuf) -> Result<TrackedFile, AcquisitionError> {
     if !snapshot.matches(&handle) {
         return Err(changed(PackedComponent::Catalog));
     }
+    #[cfg(windows)]
+    let identity = FileIdentity::from_file(
+        file.try_clone()
+            .map_err(|_| unavailable(PackedComponent::Catalog))?,
+    )
+    .map_err(|_| unavailable(PackedComponent::Catalog))?;
+    #[cfg(windows)]
+    {
+        let path_identity =
+            FileIdentity::from_path(&path).map_err(|_| changed(PackedComponent::Catalog))?;
+        if path_identity != identity {
+            return Err(changed(PackedComponent::Catalog));
+        }
+    }
     Ok(TrackedFile {
         path,
         file,
         before: snapshot,
+        #[cfg(windows)]
+        identity,
     })
 }
 

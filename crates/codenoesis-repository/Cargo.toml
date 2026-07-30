@@ -15,5 +15,8 @@ flate2.workspace = true
 sha1.workspace = true
 sha1collisiondetection.workspace = true
 
+[target.'cfg(windows)'.dependencies]
+same-file.workspace = true
+
 [lints]
 workspace = true
