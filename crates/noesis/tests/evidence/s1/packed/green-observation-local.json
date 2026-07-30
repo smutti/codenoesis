@@ -8,12 +8,13 @@
     "FR-ACQ-004"
   ],
   "risk": "high",
-  "observed_at": "2026-07-30T09:02:43Z",
+  "observed_at": "2026-07-30T09:14:01Z",
   "commits": {
     "required_base": "763a1a0d07b857defdd6ae95b7ee07cdf8bde532",
     "test_first": "88b41bd293922be0bc33192986ef5614017d11d9",
     "retained_red_evidence": "25db8f3f681adafd2b0a6090577f6d33f25fbe99",
     "implementation_tested": "60f0021a1819af155564606ef66800315fd417e9",
+    "windows_portability_correction_tested": "a574db098efc1eba304a51fc5617e2e068a362b3",
     "final_evidence_commit": "resolved by Git history after this observation file is committed"
   },
   "authorization": {
@@ -195,13 +196,27 @@
   },
   "corrections": {
     "authorized_maximum_rounds": 5,
-    "bounded_product_correction_rounds_used": 2,
+    "bounded_product_correction_rounds_used": 3,
     "rounds": [
       "Compile and conformance consolidation while bringing the complete new target Green.",
-      "Preallocation hardening so inherited blob and packed body ceilings are charged before retained allocation."
+      "Preallocation hardening so inherited blob and packed body ceilings are charged before retained allocation.",
+      "Windows portability correction replacing unstable by-handle metadata methods with stable file attributes and timestamps while retaining the validated open handles."
     ],
     "repeated_deterministic_failure_after_two_fixes": false,
     "oracle_weakened_skipped_regenerated_or_retried": false
+  },
+  "windows_ci_correction": {
+    "failed_head": "4f0dacf0adbe023b914b9f09ba3dd9b6a76671b9",
+    "failed_check": "Test (windows-latest)",
+    "failed_job": "https://github.com/smutti/codenoesis/actions/runs/30529581178/job/90828457535",
+    "failure": "Rust E0658: MetadataExt volume_serial_number and file_index require the unstable windows_by_handle feature.",
+    "corrected_head": "a574db098efc1eba304a51fc5617e2e068a362b3",
+    "correction": "Use stable Windows file_attributes, creation_time, and last_write_time metadata together with the already retained and cryptographically validated file handles.",
+    "new_dependencies": 0,
+    "first_party_unsafe_added": 0,
+    "focused_race_test": "passed",
+    "cross_check_command": "cargo check --locked -p codenoesis-repository --target x86_64-pc-windows-msvc",
+    "cross_check_exit_code": 0
   },
   "actual_changed_paths": [
     "Cargo.lock",
@@ -254,9 +269,9 @@
   },
   "bootstrap_gate": {
     "status": "passed",
-    "tested_head": "60f0021a1819af155564606ef66800315fd417e9",
-    "started_at": "2026-07-30T08:58:57Z",
-    "finished_at": "2026-07-30T08:59:49Z",
+    "tested_head": "a574db098efc1eba304a51fc5617e2e068a362b3",
+    "started_at": "2026-07-30T09:13:18Z",
+    "finished_at": "2026-07-30T09:14:01Z",
     "commands": [
       "actionlint -no-color",
       "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
@@ -285,8 +300,10 @@
     "benchmarks_compiled": true,
     "benchmark_assets": "valid: status=scaffold, suites=0",
     "worktree_clean_after_implementation_gate": true,
-    "local_log_sha256": "5b2795c83bccdd38d6f9b3b1824c26012cc4b4d01a6e5e93806e19dc3ae3a3b2",
-    "local_log_bytes": 23578,
+    "additional_windows_cross_check": "cargo check --locked -p codenoesis-repository --target x86_64-pc-windows-msvc",
+    "additional_windows_cross_check_exit_code": 0,
+    "local_log_sha256": "8503bea86c01b927aaa2182e3f996610012185ccf467b9efc9daf9e6581071fc",
+    "local_log_bytes": 22263,
     "local_log_retention": "ephemeral local review aid; immutable exact-head CI evidence remains required"
   },
   "known_limitations": [
