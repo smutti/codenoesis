@@ -14,14 +14,16 @@ use codenoesis_application::{
 };
 use codenoesis_contracts::{
     AnalysisCacheEntryV1, CodeNoesisErrorV1, CodeNoesisErrorV2, CodeNoesisErrorV3,
-    CodeNoesisErrorV4, CodeNoesisErrorV5, CodeNoesisErrorV7, DocumentationContractError,
-    IncrementalRefreshReportError, IncrementalRefreshReportInput, IncrementalRefreshReportV1,
-    QueryContractError, RepositorySnapshotV2Error, RepositorySnapshotV3, RepositorySnapshotV3Error,
-    RepositorySnapshotV4, RepositorySnapshotV4Error, SnapshotEnvelopeV1, ValidatedS4Head,
-    generate_documentation_v1, local_query_result_v1, validate_stored_snapshot_semantic_v4,
+    CodeNoesisErrorV4, CodeNoesisErrorV5, CodeNoesisErrorV6, CodeNoesisErrorV7,
+    DocumentationContractError, IncrementalRefreshReportError, IncrementalRefreshReportInput,
+    IncrementalRefreshReportV1, QueryContractError, RepositorySnapshotV2Error,
+    RepositorySnapshotV3, RepositorySnapshotV3Error, RepositorySnapshotV4,
+    RepositorySnapshotV4Error, SnapshotEnvelopeV1, ValidatedS4Head, generate_documentation_v1,
+    local_query_result_v1, validate_stored_snapshot_semantic_v4,
 };
 use codenoesis_domain::AcquisitionError;
 use codenoesis_domain::knowledge::KnowledgeError;
+use codenoesis_domain::s1_packed::LOCAL_GIT_SHA1_PACKED_V1;
 use codenoesis_domain::s4::{
     S4_ONTOLOGY_VERSION, S4_TREE_SITTER_EXTRACTOR_VERSION, S4_WORKSPACE_EXTRACTOR_VERSION,
 };
@@ -60,6 +62,9 @@ fn main() -> ExitCode {
     let profiled = arguments
         .iter()
         .any(|argument| argument == OsStr::new("--profile"));
+    let packed_acquisition_requested = arguments
+        .iter()
+        .any(|argument| argument == OsStr::new("--acquisition-profile"));
     let s4_requested = requested_profile(&arguments, "standard-local-s4");
     let s3_requested = requested_profile(&arguments, "standard-local-s3");
     let s4_error_lineage = s4_requested || docs_requested || query_requested;
@@ -86,12 +91,17 @@ fn main() -> ExitCode {
         Ok(stdout) => match io::stdout().lock().write_all(&stdout) {
             Ok(()) => ExitCode::SUCCESS,
             Err(_) if refresh_requested => emit_internal_error_v7(),
+            Err(_) if packed_acquisition_requested => emit_internal_error_v6(),
             Err(_) if s3_error_lineage => emit_internal_error_v4(),
             Err(_) if s2_requested => emit_internal_error_v3(),
             Err(_) if profiled => emit_internal_error_v2(),
             Err(_) => emit_internal_error_v1(),
         },
+        Err(Failure::V6Input(error)) => emit_error_v6(&error, 2),
         Err(Failure::S5(failure)) => emit_error_v7(&failure.error, failure.exit_code),
+        Err(Failure::Input(error)) if packed_acquisition_requested => {
+            emit_error_v6(&CodeNoesisErrorV6::from_input(error), 2)
+        }
         Err(Failure::Input(error)) if s3_error_lineage => {
             emit_error_v4(&CodeNoesisErrorV4::from_input(error), 2)
         }
@@ -103,6 +113,9 @@ fn main() -> ExitCode {
         }
         Err(Failure::Input(error)) => emit_error_v1(&CodeNoesisErrorV1::from_input(error), 2),
         Err(Failure::S4Input(error)) => emit_error_v5(&error, 2),
+        Err(Failure::Scan(ScanError::Acquisition(error))) if packed_acquisition_requested => {
+            emit_error_v6(&CodeNoesisErrorV6::from_acquisition(&error), 10)
+        }
         Err(Failure::Scan(ScanError::Acquisition(error))) if s3_error_lineage => {
             emit_error_v4(&CodeNoesisErrorV4::from_acquisition(&error), 10)
         }
@@ -131,6 +144,11 @@ fn main() -> ExitCode {
         Err(Failure::Scan(
             ScanError::Knowledge(_) | ScanError::Workspace(_) | ScanError::Storage(_),
         )) if profiled => emit_internal_error_v2(),
+        Err(Failure::Scan(ScanError::Internal) | Failure::Internal)
+            if packed_acquisition_requested =>
+        {
+            emit_internal_error_v6()
+        }
         Err(Failure::Scan(ScanError::Internal) | Failure::Internal) if s3_error_lineage => {
             emit_internal_error_v4()
         }
@@ -155,7 +173,7 @@ fn main() -> ExitCode {
 }
 
 fn run_s0(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
-    let invocation = Invocation::parse(arguments, None).map_err(Failure::Input)?;
+    let invocation = Invocation::parse(arguments, None).map_err(invocation_failure)?;
     let envelope = current_envelope().ok_or(Failure::Internal)?;
     let request = ScanRequest::new(
         invocation.repository,
@@ -172,7 +190,8 @@ fn run_s0(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
 
 fn run_s1(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
     let invocation =
-        Invocation::parse(arguments, Some("standard-local-s1")).map_err(Failure::Input)?;
+        Invocation::parse(arguments, Some("standard-local-s1")).map_err(invocation_failure)?;
+    let repository_adapter = repository_adapter(invocation.packed_sha1);
     let started_at = Instant::now();
     if s1_boundary_applies(&invocation.repository)
         && noesis::install_s1_filesystem_boundary(&invocation.repository).is_err()
@@ -186,7 +205,7 @@ fn run_s1(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
         invocation.revision,
         envelope,
     );
-    let stdout = ScanService::new(LocalGitRepository::new())
+    let stdout = ScanService::new(repository_adapter)
         .scan_s1(request)
         .map_err(Failure::Scan)?
         .canonical_stdout()
@@ -209,7 +228,8 @@ fn run_s1(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
 
 fn run_s2(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
     let invocation =
-        Invocation::parse(arguments, Some("standard-local-s2")).map_err(Failure::Input)?;
+        Invocation::parse(arguments, Some("standard-local-s2")).map_err(invocation_failure)?;
+    let repository_adapter = repository_adapter(invocation.packed_sha1);
     let started_at = Instant::now();
     if s1_boundary_applies(&invocation.repository)
         && noesis::install_s1_filesystem_boundary(&invocation.repository).is_err()
@@ -223,7 +243,7 @@ fn run_s2(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
         invocation.revision,
         envelope,
     );
-    let stdout = ScanService::new(LocalGitRepository::new())
+    let stdout = ScanService::new(repository_adapter)
         .scan_s2(request, &TreeSitterRustExtractor::new())
         .map_err(Failure::Scan)?
         .canonical_stdout()
@@ -253,7 +273,8 @@ fn run_s2(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
 
 fn run_s3(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
     let invocation =
-        Invocation::parse(arguments, Some("standard-local-s3")).map_err(Failure::Input)?;
+        Invocation::parse(arguments, Some("standard-local-s3")).map_err(invocation_failure)?;
+    let repository_adapter = repository_adapter(invocation.packed_sha1);
     let store = invocation
         .store
         .clone()
@@ -281,7 +302,7 @@ fn run_s3(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
         invocation.revision,
         envelope,
     );
-    let snapshot = ScanService::new(LocalGitRepository::new())
+    let snapshot = ScanService::new(repository_adapter)
         .scan_s2(request, &TreeSitterRustExtractor::new())
         .map_err(Failure::Scan)?;
     enforce_scan_deadline(started_at)?;
@@ -303,7 +324,8 @@ fn run_s3(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
 
 fn run_s4(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
     let invocation =
-        Invocation::parse(arguments, Some("standard-local-s4")).map_err(Failure::Input)?;
+        Invocation::parse(arguments, Some("standard-local-s4")).map_err(invocation_failure)?;
+    let repository_adapter = repository_adapter(invocation.packed_sha1);
     let store = invocation
         .store
         .clone()
@@ -331,7 +353,7 @@ fn run_s4(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
         invocation.revision,
         envelope,
     );
-    let scan = ScanService::new(LocalGitRepository::new())
+    let scan = ScanService::new(repository_adapter)
         .scan_s4_with_analysis(request, &TreeSitterRustWorkspaceExtractor::new())
         .map_err(Failure::Scan)?;
     enforce_scan_deadline(started_at)?;
@@ -362,7 +384,7 @@ fn run_s4(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
 #[allow(clippy::too_many_lines)]
 fn run_s5(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
     let invocation = Invocation::parse_command(arguments, "refresh", Some("standard-local-s5"))
-        .map_err(s5_input_failure)?;
+        .map_err(s5_invocation_failure)?;
     let store = invocation
         .store
         .clone()
@@ -918,6 +940,32 @@ fn s5_input_failure(error: InputError) -> Failure {
     s5_failure(CodeNoesisErrorV7::from_input(error), 2)
 }
 
+fn invocation_failure(error: InvocationError) -> Failure {
+    match error {
+        InvocationError::Input(error) => Failure::Input(error),
+        InvocationError::InvalidAcquisitionProfile => {
+            Failure::V6Input(CodeNoesisErrorV6::invalid_acquisition_profile())
+        }
+    }
+}
+
+fn s5_invocation_failure(error: InvocationError) -> Failure {
+    match error {
+        InvocationError::Input(error) => s5_input_failure(error),
+        InvocationError::InvalidAcquisitionProfile => {
+            Failure::V6Input(CodeNoesisErrorV6::invalid_acquisition_profile())
+        }
+    }
+}
+
+fn repository_adapter(packed_sha1: bool) -> LocalGitRepository {
+    if packed_sha1 {
+        LocalGitRepository::new_packed_sha1()
+    } else {
+        LocalGitRepository::new()
+    }
+}
+
 fn s5_storage_failure(error: &StorageError) -> Failure {
     s5_failure(CodeNoesisErrorV7::from_storage(error), 12)
 }
@@ -1068,6 +1116,10 @@ fn emit_internal_error_v4() -> ExitCode {
     emit_error_v4(&CodeNoesisErrorV4::internal(), 70)
 }
 
+fn emit_internal_error_v6() -> ExitCode {
+    emit_error_v6(&CodeNoesisErrorV6::internal(), 70)
+}
+
 fn emit_internal_error_v7() -> ExitCode {
     emit_error_v7(&CodeNoesisErrorV7::internal(), 70)
 }
@@ -1107,6 +1159,16 @@ fn emit_error_v5(error: &CodeNoesisErrorV5, code: u8) -> ExitCode {
     ExitCode::from(code)
 }
 
+fn emit_error_v6(error: &CodeNoesisErrorV6, code: u8) -> ExitCode {
+    match error.canonical_stderr() {
+        Ok(stderr) => {
+            let _ = io::stderr().lock().write_all(&stderr);
+            ExitCode::from(code)
+        }
+        Err(_) => ExitCode::from(70),
+    }
+}
+
 fn emit_error_v7(error: &CodeNoesisErrorV7, code: u8) -> ExitCode {
     if let Ok(bytes) = error.canonical_stderr() {
         let _ = io::stderr().lock().write_all(&bytes);
@@ -1141,6 +1203,7 @@ fn emit_query_error(error: QueryFailure) -> ExitCode {
 
 enum Failure {
     Input(InputError),
+    V6Input(CodeNoesisErrorV6),
     S4Input(CodeNoesisErrorV5),
     S5(S5Failure),
     Scan(ScanError),
@@ -1337,25 +1400,39 @@ struct Invocation {
     identity: RepositoryIdentity,
     revision: Revision,
     store: Option<OsString>,
+    packed_sha1: bool,
+}
+
+#[derive(Clone, Copy)]
+enum InvocationError {
+    Input(InputError),
+    InvalidAcquisitionProfile,
+}
+
+impl From<InputError> for InvocationError {
+    fn from(error: InputError) -> Self {
+        Self::Input(error)
+    }
 }
 
 impl Invocation {
     fn parse(
         arguments: impl IntoIterator<Item = OsString>,
         required_profile: Option<&str>,
-    ) -> Result<Self, InputError> {
+    ) -> Result<Self, InvocationError> {
         Self::parse_command(arguments, "scan", required_profile)
     }
 
+    #[allow(clippy::too_many_lines)]
     fn parse_command(
         arguments: impl IntoIterator<Item = OsString>,
         command: &str,
         required_profile: Option<&str>,
-    ) -> Result<Self, InputError> {
+    ) -> Result<Self, InvocationError> {
         let mut arguments = arguments.into_iter();
         let _program = arguments.next();
         if arguments.next().as_deref() != Some(OsStr::new(command)) {
-            return Err(InputError::InvalidRevision);
+            return Err(InputError::InvalidRevision.into());
         }
         let mut repository = None;
         let mut identity = None;
@@ -1363,14 +1440,17 @@ impl Invocation {
         let mut profile = None;
         let mut format = None;
         let mut store = None;
+        let mut acquisition_profile = None;
         while let Some(flag) = arguments.next() {
             let value = arguments.next().ok_or_else(|| {
-                if flag == OsStr::new("--profile") {
-                    InputError::InvalidProfile
+                if flag == OsStr::new("--acquisition-profile") {
+                    InvocationError::InvalidAcquisitionProfile
+                } else if flag == OsStr::new("--profile") {
+                    InvocationError::Input(InputError::InvalidProfile)
                 } else if flag == OsStr::new("--store") {
-                    InputError::InvalidStoreRoot
+                    InvocationError::Input(InputError::InvalidStoreRoot)
                 } else {
-                    InputError::InvalidRevision
+                    InvocationError::Input(InputError::InvalidRevision)
                 }
             })?;
             match flag.to_str() {
@@ -1384,27 +1464,55 @@ impl Invocation {
                 Some("--profile") if profile.is_none() => {
                     profile = value.to_str().map(str::to_owned);
                 }
+                Some("--acquisition-profile") if acquisition_profile.is_none() => {
+                    let Some(value) = value.to_str() else {
+                        return Err(InvocationError::InvalidAcquisitionProfile);
+                    };
+                    acquisition_profile = Some(value.to_owned());
+                }
                 Some("--store") if store.is_none() => store = Some(value),
                 Some("--format") if format.is_none() => format = value.to_str().map(str::to_owned),
-                _ => return Err(InputError::InvalidRevision),
+                Some("--acquisition-profile") => {
+                    return Err(InvocationError::InvalidAcquisitionProfile);
+                }
+                _ => return Err(InputError::InvalidRevision.into()),
             }
         }
-        let repository = repository.ok_or(InputError::InvalidRevision)?;
+        let repository = repository.ok_or(InvocationError::Input(InputError::InvalidRevision))?;
         let identity = identity
             .ok_or(InputError::InvalidRepositoryIdentity)
-            .and_then(|value| RepositoryIdentity::parse(&value))?;
+            .and_then(|value| RepositoryIdentity::parse(&value))
+            .map_err(InvocationError::Input)?;
         let revision = revision
             .ok_or(InputError::InvalidRevision)
-            .and_then(|value| Revision::parse(&value))?;
+            .and_then(|value| Revision::parse(&value))
+            .map_err(InvocationError::Input)?;
         if let Some(required_profile) = required_profile {
             if profile.as_deref() != Some(required_profile) {
-                return Err(InputError::InvalidProfile);
+                return Err(InputError::InvalidProfile.into());
             }
         } else if profile.is_some() {
-            return Err(InputError::InvalidRevision);
+            return Err(InputError::InvalidRevision.into());
         }
+        let packed_sha1 = match acquisition_profile.as_deref() {
+            None => false,
+            Some(LOCAL_GIT_SHA1_PACKED_V1)
+                if matches!(
+                    required_profile,
+                    Some(
+                        "standard-local-s1"
+                            | "standard-local-s2"
+                            | "standard-local-s3"
+                            | "standard-local-s4"
+                    )
+                ) =>
+            {
+                true
+            }
+            Some(_) => return Err(InvocationError::InvalidAcquisitionProfile),
+        };
         if format.as_deref() != Some("json") {
-            return Err(InputError::InvalidRevision);
+            return Err(InputError::InvalidRevision.into());
         }
         if matches!(
             required_profile,
@@ -1414,16 +1522,17 @@ impl Invocation {
                 .as_ref()
                 .is_none_or(|value| value.as_os_str().is_empty())
             {
-                return Err(InputError::InvalidStoreRoot);
+                return Err(InputError::InvalidStoreRoot.into());
             }
         } else if store.is_some() {
-            return Err(InputError::InvalidRevision);
+            return Err(InputError::InvalidRevision.into());
         }
         Ok(Self {
             repository,
             identity,
             revision,
             store,
+            packed_sha1,
         })
     }
 }

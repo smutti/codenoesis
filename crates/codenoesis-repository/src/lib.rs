@@ -1,5 +1,7 @@
 //! In-process local Git adapter for the approved S0 and S1 repository subsets.
 
+mod packed;
+
 use std::collections::BTreeSet;
 use std::ffi::OsStr;
 use std::fs::{self, File};
@@ -21,12 +23,30 @@ const S1_INTERNAL_OBJECT_BYTES: usize = 33_554_432;
 const S1_INTERNAL_CONTROL_FILE_BYTES: u64 = 33_554_432;
 
 #[derive(Default)]
-pub struct LocalGitRepository;
+pub struct LocalGitRepository {
+    object_database: ObjectDatabaseMode,
+}
+
+#[derive(Clone, Copy, Default)]
+enum ObjectDatabaseMode {
+    #[default]
+    LooseOnly,
+    LocalGitSha1PackedV1,
+}
 
 impl LocalGitRepository {
     #[must_use]
     pub const fn new() -> Self {
-        Self
+        Self {
+            object_database: ObjectDatabaseMode::LooseOnly,
+        }
+    }
+
+    #[must_use]
+    pub const fn new_packed_sha1() -> Self {
+        Self {
+            object_database: ObjectDatabaseMode::LocalGitSha1PackedV1,
+        }
     }
 }
 
@@ -112,10 +132,20 @@ impl SafeRepositoryAcquirer for LocalGitRepository {
         let root = Path::new(repository);
         let git_dir = validate_s1_repository_root(root)?;
         validate_s1_repository_shape(&git_dir)?;
-        reject_packed_object_database(&git_dir)?;
+        let mut object_database = match self.object_database {
+            ObjectDatabaseMode::LooseOnly => {
+                reject_packed_object_database(&git_dir)?;
+                S1ObjectDatabase::LooseOnly {
+                    git_dir: git_dir.clone(),
+                }
+            }
+            ObjectDatabaseMode::LocalGitSha1PackedV1 => {
+                S1ObjectDatabase::Packed(packed::PackedObjectDatabase::open(&git_dir)?)
+            }
+        };
 
         let commit_oid = resolve_s1_revision(&git_dir, &revision)?;
-        let commit = required_s1_revision_object(&git_dir, &commit_oid, &revision)?;
+        let commit = required_s1_revision_object(&mut object_database, &commit_oid, &revision)?;
         if commit.kind != GitObjectKind::Commit {
             let actual_kind = match commit.kind {
                 GitObjectKind::Tag => ActualObjectKind::Tag,
@@ -136,7 +166,7 @@ impl SafeRepositoryAcquirer for LocalGitRepository {
             })
         })?;
         let tree = required_referenced_object_with_capture(
-            &git_dir,
+            &mut object_database,
             &tree_oid,
             ObjectKind::Tree,
             &commit_oid,
@@ -154,7 +184,8 @@ impl SafeRepositoryAcquirer for LocalGitRepository {
 
         let bound_revision = BoundRevision::new(identity, commit_oid.clone(), tree_oid.clone());
         let mut state = S1TraversalState::new();
-        traverse_tree_object(&git_dir, &tree_oid, &tree, "", 0, &mut state)?;
+        traverse_tree_object(&mut object_database, &tree_oid, &tree, "", 0, &mut state)?;
+        object_database.verify_unchanged()?;
         Ok(AcquiredRepository::new(
             bound_revision,
             state.directory_count,
@@ -322,7 +353,7 @@ impl S1TraversalState {
 }
 
 fn traverse_tree_object(
-    git_dir: &Path,
+    object_database: &mut S1ObjectDatabase,
     tree_oid: &ObjectId,
     tree: &GitObject,
     prefix: &str,
@@ -354,12 +385,12 @@ fn traverse_tree_object(
         match entry.mode.as_slice() {
             b"040000" | b"40000" => {
                 state.observe_entry(&path, tree_oid)?;
-                traverse_directory(git_dir, tree_oid, &entry, &path, depth, state)?;
+                traverse_directory(object_database, tree_oid, &entry, &path, depth, state)?;
             }
             b"100644" | b"100755" => {
                 state.observe_entry(&path, tree_oid)?;
                 state.observe_regular_path()?;
-                acquire_regular_file(git_dir, tree_oid, &entry, path, state)?;
+                acquire_regular_file(object_database, tree_oid, &entry, path, state)?;
             }
             b"120000" => return Err(entry_policy_error(path, EntryPolicy::Symlink)),
             b"160000" => return Err(entry_policy_error(path, EntryPolicy::Gitlink)),
@@ -370,7 +401,7 @@ fn traverse_tree_object(
 }
 
 fn traverse_directory(
-    git_dir: &Path,
+    object_database: &mut S1ObjectDatabase,
     parent_tree_oid: &ObjectId,
     entry: &RawTreeEntry,
     path: &str,
@@ -378,7 +409,7 @@ fn traverse_directory(
     state: &mut S1TraversalState,
 ) -> Result<(), RepositoryError> {
     let child = required_referenced_object_with_capture(
-        git_dir,
+        object_database,
         &entry.object_id,
         ObjectKind::Tree,
         parent_tree_oid,
@@ -397,18 +428,25 @@ fn traverse_directory(
         .directory_count
         .checked_add(1)
         .ok_or(RepositoryError::Unexpected)?;
-    traverse_tree_object(git_dir, &entry.object_id, &child, path, depth, state)
+    traverse_tree_object(
+        object_database,
+        &entry.object_id,
+        &child,
+        path,
+        depth,
+        state,
+    )
 }
 
 fn acquire_regular_file(
-    git_dir: &Path,
+    object_database: &mut S1ObjectDatabase,
     parent_tree_oid: &ObjectId,
     entry: &RawTreeEntry,
     path: String,
     state: &mut S1TraversalState,
 ) -> Result<(), RepositoryError> {
     let blob = required_referenced_object_with_capture(
-        git_dir,
+        object_database,
         &entry.object_id,
         ObjectKind::Blob,
         parent_tree_oid,
@@ -794,21 +832,16 @@ fn required_revision_object(
         Err(ReadObjectError::Io | ReadObjectError::LimitExceeded { .. }) => {
             Err(RepositoryError::Unexpected)
         }
+        Err(ReadObjectError::Acquisition(error)) => Err(error.into()),
     }
 }
 
 fn required_s1_revision_object(
-    git_dir: &Path,
+    object_database: &mut S1ObjectDatabase,
     object_id: &ObjectId,
     revision: &Revision,
 ) -> Result<GitObject, RepositoryError> {
-    match read_object_capped(
-        git_dir,
-        object_id,
-        Some(64),
-        None,
-        Some(S1_INTERNAL_OBJECT_BYTES),
-    ) {
+    match object_database.read_object(object_id, Some(64), None, Some(S1_INTERNAL_OBJECT_BYTES)) {
         Ok(Some(object)) => Ok(object),
         Ok(None) => Err(AcquisitionError::RevisionNotFound {
             revision: revision.clone(),
@@ -822,6 +855,7 @@ fn required_s1_revision_object(
         Err(ReadObjectError::Io | ReadObjectError::LimitExceeded { .. }) => {
             Err(RepositoryError::Unexpected)
         }
+        Err(ReadObjectError::Acquisition(error)) => Err(error.into()),
     }
 }
 
@@ -847,11 +881,12 @@ fn required_referenced_object(
         Err(ReadObjectError::Io | ReadObjectError::LimitExceeded { .. }) => {
             Err(RepositoryError::Unexpected)
         }
+        Err(ReadObjectError::Acquisition(error)) => Err(error.into()),
     }
 }
 
 fn required_referenced_object_with_capture(
-    git_dir: &Path,
+    object_database: &mut S1ObjectDatabase,
     object_id: &ObjectId,
     expected_kind: ObjectKind,
     referenced_by: &ObjectId,
@@ -859,12 +894,11 @@ fn required_referenced_object_with_capture(
     declared_body_limit: Option<DeclaredBodyLimit>,
     body_ceiling: usize,
 ) -> Result<GitObject, RepositoryError> {
-    match read_object_with_capture(
-        git_dir,
+    match object_database.read_object(
         object_id,
-        capture_limit,
+        Some(capture_limit),
         declared_body_limit,
-        body_ceiling,
+        Some(body_ceiling),
     ) {
         Ok(Some(object)) => Ok(object),
         Ok(None) => Err(AcquisitionError::ObjectMissing {
@@ -882,6 +916,7 @@ fn required_referenced_object_with_capture(
             Err(limit_exceeded(limit, observed).into())
         }
         Err(ReadObjectError::Io) => Err(RepositoryError::Unexpected),
+        Err(ReadObjectError::Acquisition(error)) => Err(error.into()),
     }
 }
 
@@ -903,12 +938,49 @@ enum ReadObjectError {
     Invalid,
     Io,
     LimitExceeded { limit: LimitKind, observed: u64 },
+    Acquisition(AcquisitionError),
+}
+
+enum S1ObjectDatabase {
+    LooseOnly { git_dir: PathBuf },
+    Packed(packed::PackedObjectDatabase),
+}
+
+impl S1ObjectDatabase {
+    fn read_object(
+        &mut self,
+        object_id: &ObjectId,
+        capture_limit: Option<usize>,
+        declared_body_limit: Option<DeclaredBodyLimit>,
+        body_ceiling: Option<usize>,
+    ) -> Result<Option<GitObject>, ReadObjectError> {
+        match self {
+            Self::LooseOnly { git_dir } => read_object_capped(
+                git_dir,
+                object_id,
+                capture_limit,
+                declared_body_limit,
+                body_ceiling,
+            ),
+            Self::Packed(database) => {
+                database.read_object(object_id, capture_limit, declared_body_limit, body_ceiling)
+            }
+        }
+    }
+
+    fn verify_unchanged(&self) -> Result<(), RepositoryError> {
+        match self {
+            Self::LooseOnly { .. } => Ok(()),
+            Self::Packed(database) => database.verify_unchanged(),
+        }
+    }
 }
 
 fn read_object(git_dir: &Path, object_id: &ObjectId) -> Result<Option<GitObject>, ReadObjectError> {
     read_object_capped(git_dir, object_id, None, None, None)
 }
 
+#[cfg(test)]
 fn read_object_with_capture(
     git_dir: &Path,
     object_id: &ObjectId,
