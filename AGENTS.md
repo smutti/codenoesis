@@ -51,6 +51,49 @@ Never expand allowed paths merely because a convenient refactor is nearby.
 Request a scope change in the issue. Preserve unrelated user changes in a dirty
 worktree.
 
+## Maintainer-supervised accelerated delivery
+
+A linked Ready issue may select this lane only after its requirements are
+`Approved` on `main` and the accountable maintainer explicitly authorizes the
+complete package. This is interactive, maintainer-supervised work, not
+unattended autonomous execution.
+
+For this lane, one explicit human authorization covers the complete package
+when the issue fixes:
+
+- exact Approved requirement IDs and one delivery slice;
+- one demonstrable public outcome and its expected Red;
+- risk, exact allowed and protected paths, and rollback boundary;
+- exact dependency name and version, when a dependency is required;
+- fixture or oracle, required evidence, correction budget, and stop conditions.
+
+Within that unchanged scope and risk, the agent may write the acceptance test,
+implement the complete vertical behavior, update focused tests and
+documentation, add the named dependency and resulting lockfile changes, run
+validation, publish or update the pull request, and address CI or review
+findings without asking for repeated permission.
+
+One coherent vertical outcome may satisfy multiple tightly related requirement
+IDs or sub-behaviors only when they share the same delivery slice, public
+acceptance journey, risk owner, rollback boundary, and versioned fixture or
+oracle. Unrelated capabilities remain separate.
+
+After the requirements are Approved, supervised interactive implementation may
+start from the authorized Ready issue without waiting for
+`.github/codex/policy.json`. That machine projection remains mandatory before
+unattended autonomous execution and may be prepared in parallel.
+
+The default budget is three correction rounds. The issue may set a bounded
+budget from one through five. A correction within the declared paths, behavior,
+dependencies, and risk does not require renewed approval. Stop for a human when
+the budget is exhausted or any of those boundaries changes.
+
+This lane never authorizes production work for a Proposed requirement, silent
+scope expansion, oracle weakening, a new unlisted dependency, a risk increase,
+secrets, destructive data or release actions, direct pushes to `main`,
+self-approval, self-merge, or a control-plane change in the product pull
+request it governs.
+
 ## Test-driven delivery
 
 Follow the outside-in loop in SRS section 11 for every behavior:
@@ -129,9 +172,12 @@ conclusions as facts.
 - Use `codex/<issue>-<slug>` for interactive agent work. The bounded GitHub
   publisher uses the auditable machine form
   `codex/issue-<issue>-<run>-<attempt>`.
-- Keep one behavioral objective per pull request.
-- Do not mix formatting churn, dependency upgrades, generated-output refreshes,
-  or unrelated cleanup into the requested change.
+- Keep one coherent vertical outcome per pull request. The accelerated lane may
+  include its tightly related requirement IDs and sub-behaviors under the
+  shared acceptance journey and risk boundary defined above.
+- Do not mix unrelated formatting churn, dependency upgrades, generated-output
+  refreshes, or cleanup into the requested change. An exact dependency named
+  and reviewed in the issue may accompany the behavior that requires it.
 - Do not commit secrets, credentials, source repositories used as private test
   data, or model prompts containing confidential content.
 - Do not modify workflow or agent policy in the same pull request as the
@@ -166,9 +212,11 @@ cargo llvm-cov nextest --workspace --fail-under-lines 80
 cargo deny check
 ```
 
-Run the smallest focused test first, then every relevant contract/integration
-suite, and finally the repository gate. A retry may diagnose flakiness but may
-not turn the original failure into acceptable evidence.
+During iteration, run the smallest focused test first and then the relevant
+contract or integration suites. Run the complete repository gate once on the
+final review head, and again only after a correction changes that head or
+invalidates the evidence. A retry may diagnose flakiness but may not turn the
+original failure into acceptable evidence.
 
 ## Required evidence pack
 
@@ -200,7 +248,7 @@ Stop editing and mark the task `human-required` when any of these occurs:
 - protected-path, secret, permission, release, destructive-data, or legal input
   is needed without explicit authorization;
 - evidence contradicts the requirement or architecture;
-- the same failure recurs after two bounded correction attempts;
+- the same failure recurs through the configured correction budget;
 - a deterministic gate is flaky, unavailable, or can pass only by weakening an
   oracle;
 - a critical reviewer finding, missing quorum, or unresolved security concern

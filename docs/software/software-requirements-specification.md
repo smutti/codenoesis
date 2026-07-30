@@ -83,6 +83,41 @@ checks that binding before any model call and again before publication. Any SRS
 change invalidates the binding until affected approvals are explicitly
 re-ratified.
 
+### 2.1.1 Maintainer-supervised accelerated delivery
+
+After requirements are `Approved` on `main`, one explicit human authorization
+may select a maintainer-supervised accelerated package in a linked Ready issue.
+The package MUST fix one delivery slice, one coherent vertical outcome, exact
+requirement IDs, risk and rollback boundary, allowed and protected paths, exact
+dependencies, acceptance oracle and expected Red, evidence, a bounded
+correction budget, and stop conditions.
+
+The package MAY include multiple tightly related requirement IDs or
+sub-behaviors in one implementation pull request only when they share the same
+public acceptance journey, risk owner, rollback boundary, and versioned fixture
+or oracle. An exact dependency and its lockfile update MAY accompany the
+behavior only when the issue names and reviews the dependency. Unrelated
+capabilities, upgrades, cleanup, and generated churn remain separate.
+
+Within unchanged scope and risk, that one explicit human authorization permits
+implementation, focused validation, documentation and evidence updates, pull
+request publication, and bounded correction without repeated authorization.
+The default is three correction rounds; the issue MAY set a value from one
+through five.
+
+This supervised interactive lane may proceed without waiting for the separate
+machine-policy projection. `.github/codex/policy.json` remains mandatory before
+unattended autonomous execution and may be prepared in parallel. The lane does
+not alter the requirement lifecycle, permit production work while a requirement
+is Proposed, weaken an oracle, broaden paths or risk, authorize a control-plane
+change in the product pull request it governs, or grant approval or merge
+authority to the authoring agent.
+
+This control-plane amendment is authorized by
+[#79](https://github.com/smutti/codenoesis/issues/79) and becomes effective only
+after its protected manual merge by `@smutti`. The authoring agent does not
+approve or merge that change.
+
 ### 2.2 S0 ratification register
 
 The following is the exact Approved set for **S0 — Walking skeleton**. Andrea
