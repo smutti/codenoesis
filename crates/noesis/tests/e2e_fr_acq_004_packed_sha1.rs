@@ -48,7 +48,7 @@ fn e2e_fr_acq_004_packed_sha1_equivalence() {
         serde_json::from_slice(&output.stdout).expect("parse packed RepositorySnapshotV2");
     let mut expected_semantic =
         fs::read(fixture_root().join("expected-semantic-a.jcs")).expect("read S1 semantic golden");
-    assert_eq!(expected_semantic.pop(), Some(b'\n'));
+    strip_checkout_line_ending(&mut expected_semantic);
     assert_eq!(
         serde_json::to_vec(&snapshot["semantic"]).expect("serialize packed semantic value"),
         expected_semantic
@@ -64,6 +64,13 @@ fn e2e_fr_acq_004_packed_sha1_equivalence() {
         snapshot["schema_version"],
         "codenoesis.repository-snapshot/v2"
     );
+}
+
+fn strip_checkout_line_ending(bytes: &mut Vec<u8>) {
+    assert_eq!(bytes.pop(), Some(b'\n'));
+    if bytes.last() == Some(&b'\r') {
+        bytes.pop();
+    }
 }
 
 #[test]
