@@ -1,0 +1,180 @@
+{
+  "schema_version": "codenoesis.s1-packed-pilot-observations/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/76",
+  "requirement": "FR-ACQ-004",
+  "slice": "S1",
+  "implementation_tested": "60f0021a1819af155564606ef66800315fd417e9",
+  "observed_at": "2026-07-30T09:02:43Z",
+  "public_corpus_descriptor": {
+    "path": "tests/corpora/real-world-rust-v1.json",
+    "sha256": "1d2edc9f858d612e76abb70e6dd255d28e88306a0e4874b0e8ea7351f4347f46"
+  },
+  "environment": {
+    "os": "macOS 26.5.2 (25F84)",
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "filesystem": "APFS",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "network_during_clone": true,
+    "network_during_subject_scan": false
+  },
+  "pilots": [
+    {
+      "id": "lekton",
+      "repository_url": "https://github.com/dghilardi/lekton.git",
+      "license_from_reviewed_descriptor": "AGPL-3.0-or-later",
+      "clone_command": [
+        "git",
+        "clone",
+        "--no-checkout",
+        "https://github.com/dghilardi/lekton.git",
+        "{temporary_repository_root}"
+      ],
+      "full_clone": true,
+      "pinned_commit": "7a4d1a4a30468f4c18ce158a9b825680b00f4820",
+      "pinned_tree": "fa81df35c6fa32068d1707d0eacdc459258877c5",
+      "object_format": "sha1",
+      "loose_objects": 0,
+      "objects_in_pack": 6353,
+      "pack_pairs": 1,
+      "pack_artifacts": [
+        {
+          "name": "pack-36dade03630e7d4fbfba1ec5885a4da0fba5c003.idx",
+          "bytes": 178956,
+          "sha256": "8a18d35775c06783b2e7933429fdd1689a21913b4c43a55079435bb7bacc62e2"
+        },
+        {
+          "name": "pack-36dade03630e7d4fbfba1ec5885a4da0fba5c003.pack",
+          "bytes": 2973530,
+          "sha256": "269c5a8e47e94e8e779d230c339f3018fbfbb38d55d8c4a98b3679c5f7ca03a3"
+        }
+      ],
+      "scan_command": [
+        "noesis",
+        "scan",
+        "--repository",
+        "{temporary_repository_root}",
+        "--repository-id",
+        "urn:codenoesis:corpus:lekton",
+        "--revision",
+        "7a4d1a4a30468f4c18ce158a9b825680b00f4820",
+        "--profile",
+        "standard-local-s4",
+        "--acquisition-profile",
+        "local-git-sha1-packed-v1",
+        "--store",
+        "{temporary_store_root}",
+        "--format",
+        "json"
+      ],
+      "exit_code": 11,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 169,
+      "stderr_sha256": "8552c3370ce6e9244b91dff2fb7ae6bbe692ad4f2b850f787a6a858eb7df9cbe",
+      "stderr": {
+        "schema_version": "codenoesis.error/v5",
+        "stage": "extraction",
+        "code": "extraction.unsupported_workspace",
+        "message": "unsupported workspace",
+        "retryable": false,
+        "context": {}
+      },
+      "timing_seconds": {
+        "real": 0.56,
+        "user": 0.51,
+        "system": 0.02
+      },
+      "store_files_after_failure": 0,
+      "observation": "Packed acquisition completed and preserved the accepted post-acquisition V5 failure at the generic R3 workspace blocker."
+    },
+    {
+      "id": "rustdesk",
+      "repository_url": "https://github.com/rustdesk/rustdesk.git",
+      "license_from_reviewed_descriptor": "AGPL-3.0",
+      "clone_command": [
+        "git",
+        "clone",
+        "--no-checkout",
+        "https://github.com/rustdesk/rustdesk.git",
+        "{temporary_repository_root}"
+      ],
+      "full_clone": true,
+      "clone_head_at_observation": "e0254d997e89377070291350398bb72db1e03f17",
+      "pinned_commit": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "pinned_tree": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+      "object_format": "sha1",
+      "loose_objects": 0,
+      "objects_in_pack": 86584,
+      "pack_pairs": 1,
+      "pack_artifacts": [
+        {
+          "name": "pack-23d340981bc5d82783c42ee9f39a928a4671453f.idx",
+          "bytes": 2425424,
+          "sha256": "5ad6efea995e750882b234be3d1ffcdf02bcf88ebe8d9ba2e5c7f89f93582ef4"
+        },
+        {
+          "name": "pack-23d340981bc5d82783c42ee9f39a928a4671453f.pack",
+          "bytes": 77621087,
+          "sha256": "6dfc4854b862a89752bd5ec4e06fe5bb10012b0a31e146e81b881f396b5ec97a"
+        }
+      ],
+      "scan_command": [
+        "noesis",
+        "scan",
+        "--repository",
+        "{temporary_repository_root}",
+        "--repository-id",
+        "urn:codenoesis:corpus:rustdesk",
+        "--revision",
+        "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+        "--profile",
+        "standard-local-s4",
+        "--acquisition-profile",
+        "local-git-sha1-packed-v1",
+        "--store",
+        "{temporary_store_root}",
+        "--format",
+        "json"
+      ],
+      "exit_code": 10,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 247,
+      "stderr_sha256": "deb3cb706930e675a59585329bffd702959272b1fc0f3e53b76967e8d01cf480",
+      "stderr": {
+        "schema_version": "codenoesis.error/v6",
+        "stage": "acquisition",
+        "code": "acquisition.entry_policy_violation",
+        "message": "repository entry violates the standard-local-s1 policy",
+        "retryable": false,
+        "context": {
+          "entry": "gitlink",
+          "path": "libs/hbb_common"
+        }
+      },
+      "timing_seconds": {
+        "real": 14.21,
+        "user": 13.83,
+        "system": 0.32
+      },
+      "store_files_after_failure": 0,
+      "observation": "Packed acquisition reached the pinned tree and preserved the generic R2 gitlink boundary failure without fetching or traversing the submodule."
+    }
+  ],
+  "authority": {
+    "external_source_vendored": false,
+    "external_source_committed_as_test_data": false,
+    "repository_specific_product_semantics": false,
+    "pilots_are_product_truth": false,
+    "subject_invoked_git": false,
+    "subject_opened_network": false,
+    "partial_publication": false
+  },
+  "limitations": [
+    "Clone pack bytes are contextual because public remote refs can advance; pinned commit and tree identities remain the reproducible semantic inputs.",
+    "The RustDesk default branch advanced after the reviewed descriptor, but the exact pinned commit and tree remained available and were scanned explicitly.",
+    "These local pilots exercise macOS arm64 only and do not replace exact-head cross-platform CI or independent review."
+  ]
+}

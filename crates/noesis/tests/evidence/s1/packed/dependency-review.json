@@ -1,0 +1,103 @@
+{
+  "schema_version": "codenoesis.s1-packed-dependency-review/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/76",
+  "requirement": "FR-ACQ-004",
+  "slice": "S1",
+  "risk": "high",
+  "observed_at": "2026-07-30T09:02:43Z",
+  "review_owner": "@smutti",
+  "exception_review_or_expiry": "2027-01-30",
+  "dependencies": [
+    {
+      "crate": "sha1collisiondetection",
+      "requirement": "=0.3.4",
+      "resolved": "0.3.4",
+      "default_features": false,
+      "active_features": [],
+      "license": "MIT",
+      "rust_version": "1.60",
+      "lock_checksum_and_crate_archive_sha256": "1f606421e4a6012877e893c399822a4ed4b089164c5969424e1b9d1e66e6964b",
+      "license_file_sha256": {
+        "LICENSE.txt": "9daac99c665ddc38fde6d7c91b9173c112d5e6c6e7e5f7d8bb8747c630efc83d"
+      },
+      "normal_transitive_graph": [
+        "sha1collisiondetection 0.3.4",
+        "generic-array 0.14.7",
+        "typenum 1.20.1"
+      ],
+      "build_transitive_graph": [
+        "generic-array 0.14.7",
+        "version_check 0.9.5"
+      ],
+      "reviewed_unsafe_source_occurrences": 5,
+      "unsafe_inventory": [
+        "lib/sha1.rs:11",
+        "lib/sha1.rs:46",
+        "lib/sha1.rs:52",
+        "lib/sha1.rs:58",
+        "lib/sha1.rs:1428"
+      ],
+      "runtime_purpose": "Collision-aware SHA-1 validation at object, index, and pack boundaries for the explicitly selected acquisition profile.",
+      "cargo_info_resolved_exact_version": true
+    },
+    {
+      "crate": "crc32fast",
+      "requirement": "=1.5.0",
+      "resolved": "1.5.0",
+      "default_features": true,
+      "active_features": [
+        "default",
+        "std"
+      ],
+      "license": "MIT OR Apache-2.0",
+      "rust_version": "1.63",
+      "lock_checksum_and_crate_archive_sha256": "9481c1c90cbf2ac953f07c8d4a58aa3945c425b7185c9154d67a65e4230da511",
+      "license_file_sha256": {
+        "LICENSE-APACHE": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+        "LICENSE-MIT": "61d383b05b87d78f94d2937e2580cce47226d17823c0430fbcad09596537efcf"
+      },
+      "normal_transitive_graph": [
+        "crc32fast 1.5.0",
+        "cfg-if 1.0.4"
+      ],
+      "already_locked_through": "flate2 1.1.9",
+      "reviewed_unsafe_source_occurrences": 6,
+      "unsafe_inventory": [
+        "src/specialized/aarch64.rs:34",
+        "src/specialized/aarch64.rs:52",
+        "src/specialized/pclmulqdq.rs:52",
+        "src/specialized/pclmulqdq.rs:78",
+        "src/specialized/pclmulqdq.rs:174",
+        "src/specialized/pclmulqdq.rs:180"
+      ],
+      "runtime_purpose": "Validate the CRC32 recorded for each Git pack index entry.",
+      "cargo_info_resolved_exact_version": true
+    }
+  ],
+  "advisory_review": {
+    "service": "OSV",
+    "queried_on": "2026-07-30",
+    "ecosystem": "crates.io",
+    "crc32fast_1_5_0_known_advisories": [],
+    "sha1collisiondetection_0_3_4_known_advisories": [],
+    "point_in_time_only": true
+  },
+  "scope": {
+    "other_new_direct_dependencies": 0,
+    "unauthorized_feature_changes": 0,
+    "first_party_unsafe_occurrences": 0,
+    "pre_release_sha1_checked_used": false,
+    "dependency_lock_tested_sha": "60f0021a1819af155564606ef66800315fd417e9"
+  },
+  "review_evidence": {
+    "cargo_tree_locked": "passed",
+    "cargo_info_exact_versions": "passed",
+    "cargo_clippy_workspace_all_targets_all_features_locked": "passed",
+    "cargo_test_workspace_all_targets_all_features_locked": "passed",
+    "cargo_bench_workspace_all_features_no_run_locked": "passed"
+  },
+  "limitations": [
+    "Advisory results are a point-in-time observation and not a permanent safety claim.",
+    "Exact-head CI, CodeQL, and independent supply-chain review remain required before merge."
+  ]
+}
