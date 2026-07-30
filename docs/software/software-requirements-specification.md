@@ -1,6 +1,6 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.10 — S0 through S5 implemented; S6 bounded OpenAPI federation
+> Status: **0.9 — S0 through S5 implemented; S6 bounded OpenAPI federation
 > proposed for protected ratification**.
 > The S0–S5 runtime and product suites exist on `main`, but CodeNoesis claims
 > no slice `Verified` without complete immutable retention evidence. This
@@ -14,7 +14,7 @@
 | Field | Value |
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
-| Version | `0.10` |
+| Version | `0.9` |
 | Status | S0 through S5 are Approved and Implemented but not Verified. The bounded OpenAPI 3.1.0 portion of `FR-EXT-004`, plus `FR-FED-001`, `FR-FED-002`, and `FR-CLI-005`, are Proposed for protected S6 ratification; they authorize no production implementation before the governance merge and a linked Ready implementation issue. |
 | Date | 2026-07-30 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
@@ -35,7 +35,7 @@
 | `0.7` | 2026-07-27 | Corrected S4 snapshot, graph, and extraction semantic hashes to cover their complete RFC 8785 payloads; added the reviewed full fixture semantic payload and regenerated every transitive snapshot/docs/query binding. |
 | `0.8` | 2026-07-28 | Recorded the protected S4 semantic-hash amendment, policy rebind, and production implementation merges from PRs #49, #51, and #52. S0 through S4 are Implemented but remain unverified pending complete immutable retention evidence; no approved behavior or oracle changed. |
 | `0.9` | 2026-07-29 | Proposed `FR-ACQ-004` and Decision 0006 for explicit read-only local pack v2/index v2 SHA-1 acquisition; fixed the ErrorV6, limits, security/race oracle, synthetic fixture, and replaceable Lekton/RustDesk corpus descriptor while preserving every accepted S0–S4 invocation. |
-| `0.10` | 2026-07-30 | Recorded the implemented S5 state and proposed Decision 0009 for bounded output-only OpenAPI 3.1.0 HTTP/JSON federation; fixed workspace/client/report/ErrorV8 contracts, source-neutral identities, authority states, restricted YAML, limits, security and determinism oracles, hostile fixtures, downstream S7 identity conformance, and the reviewed `yaml-rust2` implementation candidate. |
+| `0.9+s6` | 2026-07-30 | Amended the active `0.9` baseline to record the implemented S5 state and propose Decision 0009 for bounded output-only OpenAPI 3.1.0 HTTP/JSON federation; fixed workspace/client/report/ErrorV8 contracts, source-neutral identities, authority states, restricted YAML, limits, security and determinism oracles, hostile fixtures, downstream S7 identity conformance, and the reviewed `yaml-rust2` implementation candidate. The document-control version remains `0.9` until historical guards are version-aware. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -650,9 +650,9 @@ downstream S7 identity conformance, and the future production Red.
 | Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
 |---|---|---|---|---|---|---|---|
 | `FR-EXT-004` | `Proposed` (pending protected merge) | `Approved` for `codenoesis.contract-capability/openapi-3.1-http-json/v1` only | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81) | `S6` | [S6 OpenAPI federation decision](decisions/0009-s6-openapi-federation-contract.md), [workspace schema](../../tests/specifications/s6/federation-workspace-v1.schema.json), and [reviewed provider fixture](../../tests/fixtures/s6/openapi-federation-v1/README.md) |
-| `FR-FED-001` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81) | `S6` | [S6 federation rule catalog](../../tests/specifications/s6/openapi-federation-rule-catalog-v1.json) and [reviewed report](../../tests/fixtures/s6/openapi-federation-v1/expected-federation-report.json) |
-| `FR-FED-002` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81) | `S6` | [S6 federation rule catalog](../../tests/specifications/s6/openapi-federation-rule-catalog-v1.json) and [machine oracle](../../tests/specifications/s6/e2e_fr_fed_001_openapi_federation.json) |
-| `FR-CLI-005` | `Proposed` (pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81) | `S6` | [Federation report schema](../../tests/specifications/s6/federation-report-v1.schema.json), [ErrorV8 schema](../../tests/specifications/s6/codenoesis-error-v8.schema.json), and [machine oracle](../../tests/specifications/s6/e2e_fr_fed_001_openapi_federation.json) |
+| `FR-FED-001` | `Proposed` (pending protected merge) | `Approved` for `codenoesis.federation-rules/http-json/v1` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81) | `S6` | [S6 federation rule catalog](../../tests/specifications/s6/openapi-federation-rule-catalog-v1.json) and [reviewed report](../../tests/fixtures/s6/openapi-federation-v1/expected-federation-report.json) |
+| `FR-FED-002` | `Proposed` (pending protected merge) | `Approved` for `codenoesis.federation-rules/http-json/v1` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81) | `S6` | [S6 federation rule catalog](../../tests/specifications/s6/openapi-federation-rule-catalog-v1.json) and [machine oracle](../../tests/specifications/s6/e2e_fr_fed_001_openapi_federation.json) |
+| `FR-CLI-005` | `Proposed` (pending protected merge) | `Approved` for `standard-local-s6` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81) | `S6` | [Federation report schema](../../tests/specifications/s6/federation-report-v1.schema.json), [ErrorV8 schema](../../tests/specifications/s6/codenoesis-error-v8.schema.json), and [machine oracle](../../tests/specifications/s6/e2e_fr_fed_001_openapi_federation.json) |
 
 The capability-scoped approval of `FR-EXT-004` does not advertise or approve
 AsyncAPI, GraphQL, Protocol Buffers, other OpenAPI versions, external
