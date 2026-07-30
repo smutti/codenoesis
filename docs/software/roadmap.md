@@ -191,26 +191,42 @@ The fastest safe unit is one review objective, not one file, requirement, or
 commit. Related artifacts may be reviewed together when they establish one
 coherent behavior and share the same risk boundary.
 
-### Default high-risk capability package
+### Maintainer-supervised accelerated package
 
-Use three pull requests instead of spreading one capability over many small
-administrative changes:
+Use two pull requests for one high-risk capability instead of spreading it over
+many small administrative changes:
 
 1. **Governance package:** one capability's requirement IDs, SRS update, ADR,
    threat model, schemas, fixture/oracle specification, limits, failure
    behavior, traceability, expected Red, and explicit approval. It contains no
    production implementation.
-2. **Policy-binding package:** the minimal machine-policy projection of the
-   merged governance source. It changes no requirement, oracle, workflow, or
-   production behavior and remains independently reviewable.
-3. **Implementation package:** the retained Red observation, minimum production
+2. **Implementation package:** one coherent vertical outcome containing the
+   retained Red observation, exact reviewed dependencies, minimum production
    code, focused domain/contract/security tests, Green and regression evidence,
-   operational documentation, and traceability for exactly one behavioral
-   objective.
+   operational documentation, and traceability.
 
-When requirements and policy are already approved and no protected contract
-changes, a low- or medium-risk behavior may use one implementation pull request
-containing the complete Red-to-Green journey and evidence.
+After the governance merge makes the requirements Approved on `main`, one
+explicit human authorization in the Ready implementation issue covers the
+bounded package and corrections, and the machine-policy projection may proceed
+in parallel. It remains mandatory before unattended autonomous execution but
+does not block the maintainer-supervised interactive package.
+
+One implementation package may satisfy multiple tightly related requirement
+IDs or sub-behaviors only when they share the same slice, public acceptance
+journey, risk owner, rollback boundary, and versioned fixture or oracle. An
+exact named dependency and lockfile change may accompany the behavior; unrelated
+upgrades remain separate.
+
+### Unattended autonomous package
+
+Unattended autonomous execution retains the governance, machine-policy binding,
+and implementation sequence. The policy-binding package remains the minimal
+machine projection of merged governance and changes no requirement, oracle,
+workflow, or production behavior.
+
+When requirements are already Approved and no protected contract changes, a
+low- or medium-risk behavior may use one implementation pull request containing
+the complete Red-to-Green journey and evidence.
 
 ### Mandatory separation
 
@@ -220,9 +236,9 @@ Never bundle these merely to reduce pull-request count:
   judge;
 - unrelated capabilities or more than one behavioral implementation
   objective;
-- dependency upgrades, formatter churn, generated refreshes, or cleanup with a
-  product behavior unless the approved objective cannot build without the
-  exact change;
+- unrelated dependency upgrades, formatter churn, generated refreshes, or
+  cleanup with a product behavior; an exact dependency named and reviewed in
+  the Ready issue may accompany the objective that requires it;
 - production code with a still-Proposed requirement or an oracle whose meaning
   has not received human review;
 - ontology, schema, migration, authorization, sandbox, release, or secret
@@ -324,10 +340,10 @@ The recommended execution order is:
 10. after S5/S6 prerequisites, deliver `C0`–`C4` as one capability and one
     behavioral implementation objective at a time, then extend through `C5`.
 
-Each implementation pull request keeps one behavioral objective and includes
-the required issue, requirement status, slice, risk, paths, base/head SHAs,
-expected Red, Green/regression commands, deterministic environment, fixture,
-oracle, traceability, limitations, and human approvals. No pilot or conference
-claim upgrades a product requirement or marks a slice Verified by itself. The
-delivery package policy above reduces administrative pull requests without
-weakening this behavioral boundary.
+Each implementation pull request keeps one coherent vertical outcome under the
+delivery package policy and includes the required issue, requirement status,
+slice, risk, paths, base/head SHAs, expected Red, Green/regression commands,
+deterministic environment, fixture, oracle, traceability, limitations, and
+human approvals. No pilot or conference claim upgrades a product requirement
+or marks a slice Verified by itself. The delivery package policy above reduces
+administrative pull requests without weakening this vertical boundary.
