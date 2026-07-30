@@ -32,6 +32,11 @@ ACCEPTANCE_PATH = SPEC_ROOT / "e2e_fr_fed_001_openapi_federation.json"
 WORKSPACE_PATH = FIXTURE_ROOT / "workspace.json"
 MANIFEST_PATH = FIXTURE_ROOT / "manifest.json"
 REPORT_PATH = FIXTURE_ROOT / "expected-federation-report.json"
+PROVIDER_ONLY_WORKSPACE_PATH = FIXTURE_ROOT / "workspace-provider-only.json"
+PROVIDER_ONLY_REPORT_PATH = FIXTURE_ROOT / "expected-provider-only-report.json"
+UNSUPPORTED_REPORT_PATH = (
+    FIXTURE_ROOT / "expected-unsupported-semantics-report.json"
+)
 S7_MANIFEST_PATH = (
     ROOT
     / "tests"
@@ -104,6 +109,66 @@ EXPECTED_FAILURE_PRECEDENCE = [
     "report_validation",
     "internal",
 ]
+
+EXPECTED_COVERAGE_GAP_REASONS = [
+    "heuristic_requires_confirmation",
+    "heuristic_no_match",
+    "heuristic_ambiguous",
+    "unsupported_callbacks",
+    "unsupported_webhooks",
+    "unsupported_links",
+    "unsupported_security_semantics",
+    "unsupported_server_variables",
+    "unsupported_media_type",
+]
+
+EXPECTED_PROVIDER_EVIDENCE_IDENTITY = {
+    "domain": "codenoesis.federation-evidence-id/v1",
+    "line_numbering": "one_based_inclusive",
+    "yaml_selector_kind": "openapi_location_span",
+    "yaml_preimage": [
+        "repository_identity",
+        "revision",
+        "path",
+        "openapi_location",
+        "source_format",
+        "start_line_decimal",
+        "end_line_decimal",
+        "file_sha256",
+    ],
+    "json_selector_kind": "json_pointer",
+    "json_preimage": [
+        "repository_identity",
+        "revision",
+        "path",
+        "json_pointer",
+        "file_sha256",
+    ],
+}
+
+EXPECTED_HEURISTIC_MATCHING = {
+    "comparison": "exact_unicode_scalar_sequence",
+    "service_hint_source": "openapi_info_title",
+    "operation_hint_source": "operationId",
+    "unique_match": "candidate",
+    "no_match": "coverage_gap:heuristic_no_match",
+    "multiple_matches": "coverage_gap:heuristic_ambiguous",
+    "automatic_confirmation": False,
+}
+
+PUBLIC_COMMAND_BOUNDARIES = {
+    "workspace_manifest_bytes",
+    "repositories",
+    "contract_bytes_per_document",
+    "yaml_nesting_depth",
+    "local_ref_depth",
+    "path_items",
+    "operations",
+    "schemas",
+    "fields_per_operation",
+    "clients",
+    "report_bytes",
+}
 
 EXPECTED_RULES = [
     (10, "fed.explicit-operation.confirm/v1", "confirmed"),
@@ -332,6 +397,81 @@ def report_semantic_hash(report: dict[str, Any]) -> str:
 
 
 class S6OpenApiFederationContractTests(unittest.TestCase):
+    def test_implementation_contract_is_complete(self) -> None:
+        workspace_schema = load_json(WORKSPACE_SCHEMA_PATH)
+        report_schema = load_json(REPORT_SCHEMA_PATH)
+        rules = load_json(RULES_PATH)
+        acceptance = load_json(ACCEPTANCE_PATH)
+        decision = DECISION_PATH.read_text(encoding="utf-8")
+
+        self.assertEqual(
+            workspace_schema["properties"]["clients"]["minItems"],
+            0,
+            "Decision 0009 authorizes a provider-only workspace",
+        )
+        self.assertEqual(
+            report_schema["$defs"]["coverage_gap"]["properties"][
+                "reason_code"
+            ]["enum"],
+            EXPECTED_COVERAGE_GAP_REASONS,
+        )
+        self.assertEqual(
+            set(
+                report_schema["$defs"]["evidence"]["properties"]["kind"][
+                    "enum"
+                ]
+            ),
+            {
+                "openapi_yaml_span",
+                "openapi_json_pointer",
+                "workspace_json_pointer",
+            },
+        )
+        self.assertEqual(
+            rules["provider_evidence_identity"],
+            EXPECTED_PROVIDER_EVIDENCE_IDENTITY,
+        )
+        self.assertEqual(
+            rules["heuristic_matching"],
+            EXPECTED_HEURISTIC_MATCHING,
+        )
+        self.assertEqual(
+            acceptance["provider_evidence_identity"],
+            EXPECTED_PROVIDER_EVIDENCE_IDENTITY,
+        )
+        self.assertEqual(
+            acceptance["heuristic_matching"],
+            EXPECTED_HEURISTIC_MATCHING,
+        )
+        boundary_by_limit = {
+            item["limit"]: item for item in acceptance["boundary_matrix"]
+        }
+        for limit in EXPECTED_LIMITS:
+            expected_level = (
+                "public_command"
+                if limit in PUBLIC_COMMAND_BOUNDARIES
+                else "component_counter"
+            )
+            self.assertEqual(
+                boundary_by_limit[limit]["observation_level"],
+                expected_level,
+            )
+            self.assertEqual(
+                boundary_by_limit[limit]["counter_contract"],
+                "inclusive_charge_before_allocation_or_traversal",
+            )
+        self.assertTrue(PROVIDER_ONLY_WORKSPACE_PATH.is_file())
+        self.assertTrue(PROVIDER_ONLY_REPORT_PATH.is_file())
+        self.assertTrue(UNSUPPORTED_REPORT_PATH.is_file())
+        self.assertIn(
+            "exact Unicode scalar-sequence equality",
+            decision,
+        )
+        self.assertIn(
+            "component-counter conformance",
+            decision,
+        )
+
     def test_ratification_register_and_scope_are_exact(self) -> None:
         srs = SRS_PATH.read_text(encoding="utf-8")
         decision = DECISION_PATH.read_text(encoding="utf-8")
