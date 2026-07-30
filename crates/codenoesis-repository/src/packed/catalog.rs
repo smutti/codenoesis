@@ -99,9 +99,11 @@ struct MetadataSnapshot {
     #[cfg(unix)]
     inode: u64,
     #[cfg(windows)]
-    volume_serial_number: Option<u32>,
+    file_attributes: u32,
     #[cfg(windows)]
-    file_index: Option<u64>,
+    creation_time: u64,
+    #[cfg(windows)]
+    last_write_time: u64,
 }
 
 impl MetadataSnapshot {
@@ -116,9 +118,11 @@ impl MetadataSnapshot {
             #[cfg(unix)]
             inode: metadata.ino(),
             #[cfg(windows)]
-            volume_serial_number: metadata.volume_serial_number(),
+            file_attributes: metadata.file_attributes(),
             #[cfg(windows)]
-            file_index: metadata.file_index(),
+            creation_time: metadata.creation_time(),
+            #[cfg(windows)]
+            last_write_time: metadata.last_write_time(),
         }
     }
 
@@ -135,8 +139,9 @@ impl MetadataSnapshot {
                 }
                 #[cfg(windows)]
                 {
-                    self.volume_serial_number == metadata.volume_serial_number()
-                        && self.file_index == metadata.file_index()
+                    self.file_attributes == metadata.file_attributes()
+                        && self.creation_time == metadata.creation_time()
+                        && self.last_write_time == metadata.last_write_time()
                 }
                 #[cfg(not(any(unix, windows)))]
                 {
