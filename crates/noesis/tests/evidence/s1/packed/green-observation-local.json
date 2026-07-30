@@ -8,13 +8,14 @@
     "FR-ACQ-004"
   ],
   "risk": "high",
-  "observed_at": "2026-07-30T09:14:01Z",
+  "observed_at": "2026-07-30T09:23:44Z",
   "commits": {
     "required_base": "763a1a0d07b857defdd6ae95b7ee07cdf8bde532",
     "test_first": "88b41bd293922be0bc33192986ef5614017d11d9",
     "retained_red_evidence": "25db8f3f681adafd2b0a6090577f6d33f25fbe99",
     "implementation_tested": "60f0021a1819af155564606ef66800315fd417e9",
     "windows_portability_correction_tested": "a574db098efc1eba304a51fc5617e2e068a362b3",
+    "windows_checkout_correction_tested": "587b12d42c47bf35f50d615c088dd5afdc2169e5",
     "final_evidence_commit": "resolved by Git history after this observation file is committed"
   },
   "authorization": {
@@ -196,11 +197,12 @@
   },
   "corrections": {
     "authorized_maximum_rounds": 5,
-    "bounded_product_correction_rounds_used": 3,
+    "bounded_product_correction_rounds_used": 4,
     "rounds": [
       "Compile and conformance consolidation while bringing the complete new target Green.",
       "Preallocation hardening so inherited blob and packed body ceilings are charged before retained allocation.",
-      "Windows portability correction replacing unstable by-handle metadata methods with stable file attributes and timestamps while retaining the validated open handles."
+      "Windows portability correction replacing unstable by-handle metadata methods with stable file attributes and timestamps while retaining the validated open handles.",
+      "Windows checkout portability correction stripping exactly one terminal LF or CRLF transport ending before comparing the unchanged canonical semantic golden."
     ],
     "repeated_deterministic_failure_after_two_fixes": false,
     "oracle_weakened_skipped_regenerated_or_retried": false
@@ -217,6 +219,21 @@
     "focused_race_test": "passed",
     "cross_check_command": "cargo check --locked -p codenoesis-repository --target x86_64-pc-windows-msvc",
     "cross_check_exit_code": 0
+  },
+  "windows_checkout_correction": {
+    "failed_head": "d930cf63c6842e42b5fdec35711511166c43c082",
+    "failed_check": "Test (windows-latest)",
+    "failed_job": "https://github.com/smutti/codenoesis/actions/runs/30530004171/job/90829822680",
+    "failure": "The protected semantic golden was checked out with CRLF; the acceptance harness removed only LF and compared a remaining terminal CR against canonical JSON bytes.",
+    "corrected_head": "587b12d42c47bf35f50d615c088dd5afdc2169e5",
+    "correction": "Strip exactly one checkout transport line ending, accepting terminal LF or CRLF while rejecting a missing terminal LF, then compare the remaining bytes with the unchanged canonical semantic output.",
+    "protected_golden_changed": false,
+    "oracle_weakened": false,
+    "focused_test_command": "cargo test --locked -p noesis --test e2e_fr_acq_004_packed_sha1 e2e_fr_acq_004_packed_sha1_equivalence -- --exact",
+    "focused_test_exit_code": 0,
+    "ordered_acceptance_test_count": 15,
+    "ordered_acceptance_tests_passed": 15,
+    "windows_test_target_local_cross_check": "not available because the local macOS cross toolchain lacks the Windows C standard library headers required by existing tree-sitter and bundled SQLite build scripts; exact-head windows-latest CI is required"
   },
   "actual_changed_paths": [
     "Cargo.lock",
@@ -269,9 +286,9 @@
   },
   "bootstrap_gate": {
     "status": "passed",
-    "tested_head": "a574db098efc1eba304a51fc5617e2e068a362b3",
-    "started_at": "2026-07-30T09:13:18Z",
-    "finished_at": "2026-07-30T09:14:01Z",
+    "tested_head": "587b12d42c47bf35f50d615c088dd5afdc2169e5",
+    "started_at": "2026-07-30T09:23:09Z",
+    "finished_at": "2026-07-30T09:23:44Z",
     "commands": [
       "actionlint -no-color",
       "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
@@ -302,12 +319,12 @@
     "worktree_clean_after_implementation_gate": true,
     "additional_windows_cross_check": "cargo check --locked -p codenoesis-repository --target x86_64-pc-windows-msvc",
     "additional_windows_cross_check_exit_code": 0,
-    "local_log_sha256": "8503bea86c01b927aaa2182e3f996610012185ccf467b9efc9daf9e6581071fc",
-    "local_log_bytes": 22263,
+    "local_log_sha256": "cdc0a46278a86fb985ec163e369dfd00d9399294f01b9cbbd13c79e6663d531d",
+    "local_log_bytes": 20629,
     "local_log_retention": "ephemeral local review aid; immutable exact-head CI evidence remains required"
   },
   "known_limitations": [
-    "Exact-head Linux, macOS, Windows, CodeQL, and independent review have not yet run for the implementation pull request.",
+    "Exact corrected-head Linux, macOS, Windows, CodeQL, and independent review have not yet completed for the implementation pull request.",
     "The local Darwin run does not exercise Linux seccomp or Landlock observers.",
     "The repository benchmark suite remains an approved empty scaffold, so this change compiles benchmark targets but establishes no performance or SLO claim.",
     "The existing Cargo warning about SemVer metadata in the pinned toml dependency remains unchanged and is outside issue #76.",
