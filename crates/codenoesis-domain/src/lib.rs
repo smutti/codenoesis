@@ -1,6 +1,7 @@
 //! Domain values for the `CodeNoesis` S0 through S4 slices.
 
 pub mod knowledge;
+pub mod s1_packed;
 pub mod s4;
 pub mod s5;
 pub mod storage;
@@ -72,7 +73,7 @@ impl RepositoryIdentity {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, Hash)]
 pub struct ObjectId(String);
 
 impl ObjectId {
@@ -173,7 +174,7 @@ impl ActualObjectKind {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum UnsupportedFeature {
     BareRepository,
     ShallowRepository,
@@ -183,13 +184,23 @@ pub enum UnsupportedFeature {
     NonSingleRegularRootFile,
     LfsMaterialization,
     PackedObjectDatabase,
+    PackVersionUnsupported,
+    PackIndexVersionUnsupported,
+    PromisorObjectDatabase,
+    MultiPackIndexOnly,
     SubmoduleOrGitlink,
     Symlink,
+    PackedAcquisition(s1_packed::PackedAcquisitionError),
 }
 
 impl UnsupportedFeature {
     #[must_use]
-    pub const fn as_str(self) -> &'static str {
+    pub const fn packed_acquisition(error: s1_packed::PackedAcquisitionError) -> Self {
+        Self::PackedAcquisition(error)
+    }
+
+    #[must_use]
+    pub const fn as_str(&self) -> &'static str {
         match self {
             Self::BareRepository => "bare_repository",
             Self::ShallowRepository => "shallow_repository",
@@ -198,7 +209,11 @@ impl UnsupportedFeature {
             Self::ReplaceOrGraft => "replace_or_graft",
             Self::NonSingleRegularRootFile => "non_single_regular_root_file",
             Self::LfsMaterialization => "lfs_materialization",
-            Self::PackedObjectDatabase => "packed_object_database",
+            Self::PackedObjectDatabase | Self::PackedAcquisition(_) => "packed_object_database",
+            Self::PackVersionUnsupported => "pack_version_unsupported",
+            Self::PackIndexVersionUnsupported => "pack_index_version_unsupported",
+            Self::PromisorObjectDatabase => "promisor_object_database",
+            Self::MultiPackIndexOnly => "multi_pack_index_only",
             Self::SubmoduleOrGitlink => "submodule_or_gitlink",
             Self::Symlink => "symlink",
         }
@@ -784,6 +799,23 @@ pub enum LimitKind {
     RecursionDepth,
     CanonicalOutputBytes,
     ScanWallMilliseconds,
+    PackDirectoryEntries,
+    PackPairs,
+    SinglePackIndexBytes,
+    CumulativePackIndexBytes,
+    IndexedObjects,
+    SinglePackBytes,
+    CumulativeVerifiedPackBytes,
+    CompressedEntryBytes,
+    InflatedEntryBytes,
+    CumulativeEntryInflateBytes,
+    DeltaProgramBytes,
+    DeltaDepth,
+    DeltaInstructions,
+    DeltaIntermediateBytes,
+    CumulativeDeltaWorkBytes,
+    ObjectLocations,
+    ReconstructedObjectCacheBytes,
 }
 
 impl LimitKind {
@@ -799,6 +831,23 @@ impl LimitKind {
             Self::RecursionDepth => "recursion_depth",
             Self::CanonicalOutputBytes => "canonical_output_bytes",
             Self::ScanWallMilliseconds => "scan_wall_milliseconds",
+            Self::PackDirectoryEntries => "pack_directory_entries",
+            Self::PackPairs => "pack_pairs",
+            Self::SinglePackIndexBytes => "single_pack_index_bytes",
+            Self::CumulativePackIndexBytes => "cumulative_pack_index_bytes",
+            Self::IndexedObjects => "indexed_objects",
+            Self::SinglePackBytes => "single_pack_bytes",
+            Self::CumulativeVerifiedPackBytes => "cumulative_verified_pack_bytes",
+            Self::CompressedEntryBytes => "compressed_entry_bytes",
+            Self::InflatedEntryBytes => "inflated_entry_bytes",
+            Self::CumulativeEntryInflateBytes => "cumulative_entry_inflate_bytes",
+            Self::DeltaProgramBytes => "delta_program_bytes",
+            Self::DeltaDepth => "delta_depth",
+            Self::DeltaInstructions => "delta_instructions",
+            Self::DeltaIntermediateBytes => "delta_intermediate_bytes",
+            Self::CumulativeDeltaWorkBytes => "cumulative_delta_work_bytes",
+            Self::ObjectLocations => "object_locations",
+            Self::ReconstructedObjectCacheBytes => "reconstructed_object_cache_bytes",
         }
     }
 
@@ -814,6 +863,43 @@ impl LimitKind {
             Self::RecursionDepth => STANDARD_LOCAL_S1_LIMITS.recursion_depth,
             Self::CanonicalOutputBytes => STANDARD_LOCAL_S1_LIMITS.canonical_output_bytes,
             Self::ScanWallMilliseconds => STANDARD_LOCAL_S1_LIMITS.scan_wall_milliseconds,
+            Self::PackDirectoryEntries => {
+                s1_packed::STANDARD_LOCAL_PACKED_LIMITS.pack_directory_entries
+            }
+            Self::PackPairs => s1_packed::STANDARD_LOCAL_PACKED_LIMITS.pack_pairs,
+            Self::SinglePackIndexBytes => {
+                s1_packed::STANDARD_LOCAL_PACKED_LIMITS.single_pack_index_bytes
+            }
+            Self::CumulativePackIndexBytes => {
+                s1_packed::STANDARD_LOCAL_PACKED_LIMITS.cumulative_pack_index_bytes
+            }
+            Self::IndexedObjects => s1_packed::STANDARD_LOCAL_PACKED_LIMITS.indexed_objects,
+            Self::SinglePackBytes => s1_packed::STANDARD_LOCAL_PACKED_LIMITS.single_pack_bytes,
+            Self::CumulativeVerifiedPackBytes => {
+                s1_packed::STANDARD_LOCAL_PACKED_LIMITS.cumulative_verified_pack_bytes
+            }
+            Self::CompressedEntryBytes => {
+                s1_packed::STANDARD_LOCAL_PACKED_LIMITS.compressed_entry_bytes
+            }
+            Self::InflatedEntryBytes => {
+                s1_packed::STANDARD_LOCAL_PACKED_LIMITS.inflated_entry_bytes
+            }
+            Self::CumulativeEntryInflateBytes => {
+                s1_packed::STANDARD_LOCAL_PACKED_LIMITS.cumulative_entry_inflate_bytes
+            }
+            Self::DeltaProgramBytes => s1_packed::STANDARD_LOCAL_PACKED_LIMITS.delta_program_bytes,
+            Self::DeltaDepth => s1_packed::STANDARD_LOCAL_PACKED_LIMITS.delta_depth,
+            Self::DeltaInstructions => s1_packed::STANDARD_LOCAL_PACKED_LIMITS.delta_instructions,
+            Self::DeltaIntermediateBytes => {
+                s1_packed::STANDARD_LOCAL_PACKED_LIMITS.delta_intermediate_bytes
+            }
+            Self::CumulativeDeltaWorkBytes => {
+                s1_packed::STANDARD_LOCAL_PACKED_LIMITS.cumulative_delta_work_bytes
+            }
+            Self::ObjectLocations => s1_packed::STANDARD_LOCAL_PACKED_LIMITS.object_locations,
+            Self::ReconstructedObjectCacheBytes => {
+                s1_packed::STANDARD_LOCAL_PACKED_LIMITS.reconstructed_object_cache_bytes
+            }
         }
     }
 }
