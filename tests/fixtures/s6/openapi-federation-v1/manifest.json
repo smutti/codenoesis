@@ -1,0 +1,155 @@
+{
+  "schema_version": "codenoesis.s6-fixture-manifest/v1",
+  "fixture_identity": "urn:codenoesis:fixture:s6-openapi-federation-v1",
+  "analysis_profile": "standard-local-s6",
+  "contract_capability": "codenoesis.contract-capability/openapi-3.1-http-json/v1",
+  "workspace": {
+    "path": "workspace.json",
+    "sha256": "19e6851e3d29ebf86f69b76799641557426375af1c587e282baeeb36daed5616"
+  },
+  "provider": {
+    "repository_identity": "urn:codenoesis:fixture:s7-provider",
+    "revision": "fixture-provider-a",
+    "yaml": {
+      "path": "provider/openapi.yaml",
+      "sha256": "d6decc18d428316b209aa554ee028fe9db8761df515bf34b9e92c3a369f2de3d"
+    },
+    "json": {
+      "path": "provider/openapi.json",
+      "sha256": "f0f5f5231acb3ff5ff0cc1f699c38be1c6455bb84f8f0114419f7c4999216acc"
+    },
+    "normalized_identities": {
+      "service_id": "urn:codenoesis:service:blake3:509813cd6e049acb2c9de79cb9f0a1f385b355473512592a22d5f115ac9243cc",
+      "operation_id": "urn:codenoesis:operation:blake3:071cbb8fa33a959879d7d8a2bfbbac31e1fea4850c28fdb73227c605f5974923",
+      "schema_id": "urn:codenoesis:schema:blake3:d5ccc3bfeafd3668993d4a6f520231d62b47ca63dbac467b5ea1d23d13032c68",
+      "field_ids": {
+        "displayName": "urn:codenoesis:field:blake3:a4bef896d066ecb3441a6d9638cea00947075d62c66bad642455840a7ce4f0e7",
+        "id": "urn:codenoesis:field:blake3:18ccd66ca65b4c53a46dfb46b7f376985a376e24e6d1dd1d5614dedeca73d88c",
+        "nickname": "urn:codenoesis:field:blake3:a2b6cafe0db73cb016ffd790941c18fbab768923a5b8b4b671eb22459ec66301"
+      }
+    }
+  },
+  "clients": [
+    {
+      "role": "candidate",
+      "path": "clients/candidate/federation.json",
+      "sha256": "6f75df7740dcd40e0b8c1833743ac8a749720c7bea0d331f072382b53a0f3c54",
+      "expected_state": "candidate"
+    },
+    {
+      "role": "decoy",
+      "path": "clients/decoy/federation.json",
+      "sha256": "bbb171f8a3d6b7dc6defbc5ef3b585bc1439473a29309722916a45d1c9e846dd",
+      "expected_state": "rejected"
+    },
+    {
+      "role": "safe",
+      "path": "clients/safe/federation.json",
+      "sha256": "335f933c0967bacd3477578f1aa58b222047c7ad44a2b566ffb7107a9ddf6582",
+      "expected_state": "confirmed"
+    },
+    {
+      "role": "strict",
+      "path": "clients/strict/federation.json",
+      "sha256": "950f38701684536a3247a243cacae9885d3bb2840a04e482834cf753085a3508",
+      "expected_state": "confirmed"
+    }
+  ],
+  "expected": {
+    "report": {
+      "path": "expected-federation-report.json",
+      "sha256": "08e2f73c7c7c0c6fb2ac53cfd60070682892aa6ac56a4e631d48f828084a3ee6"
+    },
+    "errors": [
+      {
+        "scenario": "duplicate_key",
+        "path": "expected-error-duplicate-key.json",
+        "sha256": "f6cfe4010acf00ae88f1fb5198a004b427755ce4c418db39f3c9e0e71023713a"
+      },
+      {
+        "scenario": "identity_conflict",
+        "path": "expected-error-identity-conflict.json",
+        "sha256": "ef9f365c397a0bd71e372029df9860cfab74354b7d1cc30e66e9821e605c511c"
+      },
+      {
+        "scenario": "remote_ref",
+        "path": "expected-error-remote-ref.json",
+        "sha256": "76dbbf773bf3ef24043ea6865ab41f1c2ea2c5435011483750b161ddfa4e5ddf"
+      }
+    ]
+  },
+  "variants": [
+    {
+      "scenario": "alias",
+      "path": "variants/alias.yaml",
+      "sha256": "d49d6e29a571604a256f82b67dea1a66d1b0cc5c40f6d3c470313e8dbaff9325"
+    },
+    {
+      "scenario": "conflicting_authority",
+      "path": "variants/conflicting-client.json",
+      "sha256": "61f33b994b0b2f500ede08ad25bf3b20e15e6e74dc15fd6e84f428da94e00cd3"
+    },
+    {
+      "scenario": "custom_tag",
+      "path": "variants/custom-tag.yaml",
+      "sha256": "b8692f0ad3b3a03f2e2cb3242d8890c69291e8bfe0b99f5c2d09273e924acbb1"
+    },
+    {
+      "scenario": "duplicate_key",
+      "path": "variants/duplicate-key.yaml",
+      "sha256": "71013e143dca60ec1e053a331dadcf385bb846364f3b0d33365108d802197968"
+    },
+    {
+      "scenario": "malformed_yaml",
+      "path": "variants/malformed.yaml",
+      "sha256": "c6caef5dcf20eeba9bcb422d06f90eecd544922e6f1a6e2860dbf45fa02e0568"
+    },
+    {
+      "scenario": "merge_key",
+      "path": "variants/merge-key.yaml",
+      "sha256": "075b62576f3cceeb0abaa0030802a0fe7934e29c7a3b7e895a5b77b70e3e334f"
+    },
+    {
+      "scenario": "multiple_documents",
+      "path": "variants/multiple-documents.yaml",
+      "sha256": "4ead667b2c4fd6ab6c1f7d0f42e92f027032e3f527599b981a4cf0db5621b8d2"
+    },
+    {
+      "scenario": "reference_cycle",
+      "path": "variants/ref-cycle.yaml",
+      "sha256": "303d4a5ded8d67cc19f8447f7c9e5e4c6ff46c9211686c1d6f73393d93f3fd5a"
+    },
+    {
+      "scenario": "remote_ref",
+      "path": "variants/remote-ref.yaml",
+      "sha256": "aa6090cbe7a38d027be1f341d2b8f90de2bc4b8115a6c2b528cb7e02d21abb9b"
+    },
+    {
+      "scenario": "unsupported_openapi",
+      "path": "variants/unsupported-openapi.yaml",
+      "sha256": "3ffe5f05e3254dc8199533cfa58e061cb0e5e2d21e638157cab9fc9e2e5a9ddc"
+    }
+  ],
+  "downstream_s7_conformance": {
+    "manifest_path": "tests/fixtures/s7/implementation-aware-api-v1/manifest.json",
+    "manifest_sha256": "958948f2eb078ef53e1aebac5f9e7543411cb3ba7423e1ef2dc6c0e7ef2f69c0",
+    "bundle_path": "tests/specifications/s7/contract-bundle.json",
+    "bundle_file_sha256": "8185cbdc0eb33dc96cb5c932a1343460b7d1794b953a64190ff4fcc6783b0208",
+    "service_id": "urn:codenoesis:service:blake3:509813cd6e049acb2c9de79cb9f0a1f385b355473512592a22d5f115ac9243cc",
+    "operation_id": "urn:codenoesis:operation:blake3:071cbb8fa33a959879d7d8a2bfbbac31e1fea4850c28fdb73227c605f5974923",
+    "client_roles": [
+      "decoy",
+      "safe",
+      "strict"
+    ]
+  },
+  "sentinels": {
+    "path": "sentinel/should-not-run.sh",
+    "sha256": "6288ae2b70a634a8895dcde9426d2a2fb02001da9e2fa6fd1956d612b0cb77c6",
+    "target_process": false,
+    "network": false,
+    "filesystem_write": false,
+    "model_provider": false,
+    "heuristic_auto_confirmation": false
+  }
+}

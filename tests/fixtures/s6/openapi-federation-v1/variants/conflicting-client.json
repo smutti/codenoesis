@@ -1,0 +1,15 @@
+{
+  "schema_version": "codenoesis.federation-client-declaration/v1",
+  "role": "conflict",
+  "repository_identity": "urn:codenoesis:fixture:s7-client-strict",
+  "revision": "fixture-client-v1",
+  "source_path": "src/commonMain/kotlin/dev/codenoesis/fixture/StrictUsersClient.kt",
+  "symbol_identity": "getStrictUser",
+  "binding": {
+    "kind": "explicit_operation_identity",
+    "service_authority": "https://api.example.invalid",
+    "method": "GET",
+    "path_template": "/accounts/{id}",
+    "operation_id": "getAccount"
+  }
+}

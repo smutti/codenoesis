@@ -1,0 +1,13 @@
+{
+  "schema_version": "codenoesis.federation-client-declaration/v1",
+  "role": "candidate",
+  "repository_identity": "urn:codenoesis:fixture:s6-client-candidate",
+  "revision": "fixture-client-v1",
+  "source_path": "src/client/UserLookup.kt",
+  "symbol_identity": "lookupUser",
+  "binding": {
+    "kind": "heuristic_name",
+    "service_hint": "Fixture User Service",
+    "operation_hint": "getUser"
+  }
+}

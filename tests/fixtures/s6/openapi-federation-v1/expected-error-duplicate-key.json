@@ -1,0 +1,12 @@
+{
+  "schema_version": "codenoesis.error/v8",
+  "code": "contract.duplicate_key",
+  "stage": "contract",
+  "message": "duplicate YAML mapping key",
+  "retryable": false,
+  "context": {
+    "path": "variants/duplicate-key.yaml",
+    "component": "provider_contract",
+    "reason": "duplicate_mapping_key"
+  }
+}

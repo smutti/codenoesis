@@ -1,0 +1,9 @@
+openapi: 3.1.0
+info:
+  title: Alias
+  version: 1.0.0
+servers:
+  - url: https://api.example.invalid
+paths: &paths
+  /users/{id}: {}
+x-reused-paths: *paths

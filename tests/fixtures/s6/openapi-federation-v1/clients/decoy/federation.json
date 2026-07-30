@@ -1,0 +1,15 @@
+{
+  "schema_version": "codenoesis.federation-client-declaration/v1",
+  "role": "decoy",
+  "repository_identity": "urn:codenoesis:fixture:s7-client-decoy",
+  "revision": "fixture-client-v1",
+  "source_path": "src/commonMain/kotlin/dev/codenoesis/fixture/DecoyAccountClient.kt",
+  "symbol_identity": "getAccount",
+  "binding": {
+    "kind": "explicit_operation_identity",
+    "service_authority": "https://api.example.invalid",
+    "method": "GET",
+    "path_template": "/accounts/{id}",
+    "operation_id": "getAccount"
+  }
+}

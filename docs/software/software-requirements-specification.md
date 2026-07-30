@@ -1,12 +1,13 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9 — S0 through S4 implemented; S5 deterministic incremental
-> refresh proposed for protected ratification**.
-> The S0–S4 runtime and product suites exist on `main`, but CodeNoesis claims
+> Status: **0.9 — S0 through S5 implemented; S6 bounded OpenAPI federation
+> proposed for protected ratification**.
+> The S0–S5 runtime and product suites exist on `main`, but CodeNoesis claims
 > no slice `Verified` without complete immutable retention evidence. This
-> revision proposes `INV-INC-001`, `FR-INC-001`, `FR-INC-002`, `FR-INC-003`,
-> `FR-CLI-004`, and one bounded local Rust-workspace refresh contract. It
-> changes no existing accepted profile or production runtime.
+> revision proposes the OpenAPI 3.1.0 capability-scoped portion of
+> `FR-EXT-004`, plus `FR-FED-001`, `FR-FED-002`, `FR-CLI-005`, and one bounded
+> output-only federation contract. It changes no existing accepted profile,
+> storage contract, ontology, or production runtime.
 
 ## 1. Document control
 
@@ -14,8 +15,8 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S4 are Approved and Implemented but not Verified. `INV-INC-001`, `FR-INC-001`, `FR-INC-002`, `FR-INC-003`, and `FR-CLI-004` are Proposed for protected S5 ratification; they authorize no implementation until the governance merge and separate policy binding are complete. |
-| Date | 2026-07-29 |
+| Status | S0 through S5 are Approved and Implemented but not Verified. The bounded OpenAPI 3.1.0 portion of `FR-EXT-004`, plus `FR-FED-001`, `FR-FED-002`, and `FR-CLI-005`, are Proposed for protected S6 ratification; they authorize no production implementation before the governance merge and a linked Ready implementation issue. |
+| Date | 2026-07-30 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -34,6 +35,7 @@
 | `0.7` | 2026-07-27 | Corrected S4 snapshot, graph, and extraction semantic hashes to cover their complete RFC 8785 payloads; added the reviewed full fixture semantic payload and regenerated every transitive snapshot/docs/query binding. |
 | `0.8` | 2026-07-28 | Recorded the protected S4 semantic-hash amendment, policy rebind, and production implementation merges from PRs #49, #51, and #52. S0 through S4 are Implemented but remain unverified pending complete immutable retention evidence; no approved behavior or oracle changed. |
 | `0.9` | 2026-07-29 | Proposed `FR-ACQ-004` and Decision 0006 for explicit read-only local pack v2/index v2 SHA-1 acquisition; fixed the ErrorV6, limits, security/race oracle, synthetic fixture, and replaceable Lekton/RustDesk corpus descriptor while preserving every accepted S0–S4 invocation. |
+| `0.9+s6` | 2026-07-30 | Amended the active `0.9` baseline to record the implemented S5 state and propose Decision 0009 for bounded output-only OpenAPI 3.1.0 HTTP/JSON federation; fixed workspace/client/report/ErrorV8 contracts, source-neutral identities, authority states, restricted YAML, limits, security and determinism oracles, hostile fixtures, downstream S7 identity conformance, and the reviewed `yaml-rust2` implementation candidate. The document-control version remains `0.9` until historical guards are version-aware. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -633,6 +635,105 @@ project-owned two-revision fixture, exact Git objects, reviewed cold summaries,
 and reviewed refresh report. Any bound-byte change requires a new digest and
 renewed human review.
 
+### 2.11 S6 OpenAPI federation ratification register
+
+The following is the exact target Approved set for the bounded
+**S6 — Contract federation** capability. Approval becomes authoritative only
+when `@smutti` manually merges the exact protected head of
+[PR #81](https://github.com/smutti/codenoesis/pull/81). The authoring agent does
+not approve or merge. This high-risk decision fixes one output-only local CLI
+operation, OpenAPI 3.1.0 JSON/YAML normalization, stable cross-project
+identities, explicit and heuristic authority states, strict public artifacts,
+limits, a project-owned provider/client/decoy fixture, hostile inputs,
+downstream S7 identity conformance, and the future production Red.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| `FR-EXT-004` | `Proposed` (pending protected merge) | `Approved` for `codenoesis.contract-capability/openapi-3.1-http-json/v1` only | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81) | `S6` | [S6 OpenAPI federation decision](decisions/0009-s6-openapi-federation-contract.md), [workspace schema](../../tests/specifications/s6/federation-workspace-v1.schema.json), and [reviewed provider fixture](../../tests/fixtures/s6/openapi-federation-v1/README.md) |
+| `FR-FED-001` | `Proposed` (pending protected merge) | `Approved` for `codenoesis.federation-rules/http-json/v1` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81) | `S6` | [S6 federation rule catalog](../../tests/specifications/s6/openapi-federation-rule-catalog-v1.json) and [reviewed report](../../tests/fixtures/s6/openapi-federation-v1/expected-federation-report.json) |
+| `FR-FED-002` | `Proposed` (pending protected merge) | `Approved` for `codenoesis.federation-rules/http-json/v1` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81) | `S6` | [S6 federation rule catalog](../../tests/specifications/s6/openapi-federation-rule-catalog-v1.json) and [machine oracle](../../tests/specifications/s6/e2e_fr_fed_001_openapi_federation.json) |
+| `FR-CLI-005` | `Proposed` (pending protected merge) | `Approved` for `standard-local-s6` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81) | `S6` | [Federation report schema](../../tests/specifications/s6/federation-report-v1.schema.json), [ErrorV8 schema](../../tests/specifications/s6/codenoesis-error-v8.schema.json), and [machine oracle](../../tests/specifications/s6/e2e_fr_fed_001_openapi_federation.json) |
+
+The capability-scoped approval of `FR-EXT-004` does not advertise or approve
+AsyncAPI, GraphQL, Protocol Buffers, other OpenAPI versions, external
+references, or broader HTTP behavior. The approved capability is exactly
+`codenoesis.contract-capability/openapi-3.1-http-json/v1`, with exact OpenAPI
+`3.1.0`, `application/json`, bounded local JSON Pointer references, and the
+restricted single-document YAML subset in Decision 0009.
+
+The only operation is:
+
+```text
+noesis federate \
+  --workspace-manifest <path> \
+  --profile standard-local-s6 \
+  --format json
+```
+
+It reads only the explicit workspace manifest and its bound local roots.
+Success exits `0` and writes exactly one LF-terminated canonical
+`FederationReportV1` to stdout. Invalid invocation exits `2`; contract,
+federation, and limit failures exit `10`; unexpected internal failure exits
+`70`. Failure writes empty stdout and exactly one strict LF-terminated
+`CodeNoesisErrorV8` to stderr. The complete report is buffered, validated,
+size-checked, and written once. There is no `--store`, persistent mutation,
+partial stdout, or S3 head transition.
+
+The exact federation authority order is explicit workspace identity,
+package/SCIP identity, canonical operation identity, event/schema identity,
+then heuristic candidate. S6 exposes explicit workspace and canonical
+operation authority only. Package/SCIP and event/schema authority remain
+coverage gaps. A heuristic never becomes `confirmed` automatically, and
+conflicting authoritative evidence fails closed.
+
+The reviewed fixture proves two explicit confirmed clients, one explicit
+operation decoy rejection, and one name-only candidate with an unresolved
+coverage gap. Equivalent reviewed JSON and YAML provider contracts produce the
+same normalized service, operation, schema, field, client, call-site, and link
+identities and the same source-neutral semantic hash. Source paths, formats,
+byte digests, selectors, and evidence identities remain format-specific and
+truthful.
+
+The standard path executes no Git process, package manager, compiler, build
+script, target, hook, plugin, network client, model provider, or Council. It
+writes no filesystem content and uses no first-party `unsafe`. Duplicate YAML
+keys, aliases, anchors, merge keys, custom tags, multiple documents, remote
+references, local-reference cycles, malformed input, unsupported OpenAPI
+versions, outside-root paths, and identity conflicts fail with typed errors.
+
+Issue #78 reviewed and authorized only
+`yaml-rust2 = { version = "=0.11.0", default-features = false }` as the future
+implementation candidate. This governance package changes no manifest or
+lockfile. The Ready implementation issue must retain the exact dependency,
+checksum, transitive dependency, license, advisory, `unsafe`, marked-event,
+duplicate-key, allocation, depth, fuzz, and maximum-plus-one evidence. A
+second YAML or OpenAPI parser is a stop condition.
+
+No S6 production behavior is authorized before this governance merge. Under
+the maintainer-supervised accelerated lane, the merge may be followed by one
+linked Ready vertical implementation issue and one coherent implementation
+pull request. A separate machine-policy projection remains mandatory before
+unattended autonomous execution but need not delay explicitly supervised
+interactive implementation. Policy, workflow, agent instruction, and other
+control-plane changes remain outside the product pull request.
+
+Before S6 exists, the exact `federate` invocation reaches the accepted
+unrecognized-command boundary and exits `2` with the exact 149-byte ErrorV2
+`input.invalid_revision` document on stderr, SHA-256
+`6441e0037f864d2fae4a60e6355e4a85b26b00d5e4e24c59ffeb5fe9c6f3859f`,
+and empty stdout. The first implementation Red is the exact
+`e2e_fr_fed_001_openapi_federation` command in the machine oracle.
+Compilation, fixture, dependency, network, panic, timeout, target-execution,
+or hand-authored-output failures are rejected reasons.
+
+S6 bounded OpenAPI federation contract bundle:
+`sha256:be36354d5f03bc487dc7f95e7bb5d8d098fcd1561507e2a5ca291b513ba224ec`.
+The bundle binds Decision 0009, the independent governance guard, strict
+workspace/client/report/error schemas, rule catalog, machine oracle,
+project-owned fixture and hostile variants, reviewed outputs, and immutable S7
+identity dependencies. Any bound-byte change requires a new digest and renewed
+human review.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,
@@ -763,7 +864,7 @@ cannot replace their verification.
 | `FR-EXT-001` | P0 | `0.1` | Every extractor MUST emit a versioned common contract containing entities, relationships, evidence spans, diagnostics, and coverage. | Invalid types, identities, relationships, spans, or evidence are rejected before graph ingestion. `CT`, `FZ` |
 | `FR-EXT-002` | P0 | `0.1` | The first built-in language adapter MUST extract approved Rust modules, symbols, types, functions, imports, and relationships without executing the target. | Rust golden repositories match hand-reviewed oracles, including malformed and Unicode input. `GT`, `FZ` |
 | `FR-EXT-003` | P1 | `0.3` | C, C++, Java, JavaScript, and TypeScript adapters MUST each pass the shared extractor contract and a language-specific capability matrix. | Each adapter passes golden, malformed-input, determinism, and coverage-gap tests. `CT`, `GT`, `FZ` |
-| `FR-EXT-004` | P1 | `0.2` | Approved OpenAPI, AsyncAPI, GraphQL, and Protocol Buffers contracts MUST be extracted into canonical service and operation identities. | Contract fixtures produce exact service, endpoint, event, schema, and version relationships. `GT` |
+| `FR-EXT-004` | P1 | `0.2` | Each separately Approved OpenAPI, AsyncAPI, GraphQL, or Protocol Buffers capability MUST extract only its declared subset into canonical service, operation, schema, field, and version identities while unsupported semantics remain typed failures or coverage gaps. | Capability-scoped contract fixtures produce exact identities and relationships; equivalent approved encodings retain source-neutral semantics and truthful source evidence. `GT`, `CONF`, `FZ` |
 | `FR-EXT-005` | P1 | `0.3` | The system MUST accept optional validated SCIP artifacts and preserve their provenance and precedence over syntax-only heuristics. | Conflicting syntax and SCIP fixtures retain both evidence items and select the compiler-grade relation by policy. `GT`, `CT` |
 | `FR-EXT-006` | P0 | `0.1` | A standard extraction stage MUST NOT spawn target processes or use network access. Trusted build/index execution MUST require a separate explicit profile. | Sentinel build scripts never execute in standard mode; process and network attempts are denied and audited. `SEC`, `E2E` |
 | `FR-EXT-007` | P0 | `0.1` | The S4 standard profile MUST extract bounded literal-member Rust workspaces, conventional or explicit library/binary roots, and unambiguous inline/out-of-line modules from committed UTF-8 files without evaluating Cargo or target code. | A reviewed two-member workspace matches ontology v2 identities and graph counts; globs, ambiguous modules, build execution, and unsupported worlds fail or remain explicit coverage. `GT`, `SEC`, `E2E` |
@@ -813,6 +914,7 @@ cannot replace their verification.
 | `FR-CLI-002` | P1 | `1.0` | Approved CLI commands MUST have stable exit codes, error codes, configuration precedence, and local/remote capability behaviour. | Golden compatibility tests cover output schema, error catalog, precedence, and server parity. `CONF`, `E2E` |
 | `FR-CLI-003` | P0 | `0.1` | The S0 CLI MUST provide a local `noesis scan` JSON journey that accepts an explicit repository identity and revision and emits either `RepositorySnapshotV1` or `CodeNoesisErrorV1` with the ratified S0 stream and exit semantics. | S0 black-box tests validate success, non-Git input, missing and inconsistent objects, schema, stdout/stderr separation, and exit status. `E2E`, `CONF` |
 | `FR-CLI-004` | P1 | `0.2` | The local CLI MUST provide `noesis refresh` with explicit repository, repository identity, revision, store, and `standard-local-s5` profile inputs; success emits strict canonical `IncrementalRefreshReportV1` on stdout and failure emits strict `CodeNoesisErrorV7` on stderr without a partial head. | Black-box and conformance tests validate exact command parsing, streams, exits, report/error schemas, no-change retry, concurrent-head failure, limits, and S4 cold equivalence. `E2E`, `CONF`, `FT` |
+| `FR-CLI-005` | P1 | `0.2` | The local CLI MUST provide output-only `noesis federate` with one explicit workspace manifest, `standard-local-s6`, and JSON output; success MUST buffer and validate one canonical `FederationReportV1` before a single stdout write, while failure MUST emit one strict `CodeNoesisErrorV8` on stderr with no stdout, store, or partial artifact. | Black-box and conformance tests validate exact parsing, configuration authority, streams, exits, schemas, report size, no partial output, no persistent mutation, and unchanged S0–S5 commands. `E2E`, `CONF`, `SEC`, `FT` |
 | `FR-API-001` | P1 | `0.4` | The REST API MUST expose approved `/api/v1` resources using versioned schemas, RFC 9457 Problem Details, correlation IDs, and idempotency keys. | Contract tests validate success, error, retry, and duplicate-submission cases. `CONF`, `E2E` |
 | `FR-API-002` | P1 | `0.4` | Long-running REST operations MUST return a durable job identity and MUST expose bounded status and event retrieval. | Submit, disconnect, reconnect, retry, and event-resume scenarios retain one logical job. `E2E`, `FT` |
 | `FR-MCP-001` | P1 | `0.4` | MCP tools and resources MUST invoke the same application use cases and authorization policies as CLI/REST. | Transport conformance proves semantic parity and absence of transport business logic. `CT`, `E2E` |
@@ -945,7 +1047,7 @@ crate tree is not scaffolded upfront.
 | `S3` Atomic local storage | SQLite/CAS persists and publishes one immutable snapshot across restart and faults. | `FR-STO-001`, `FR-SNP-001`, `INV-SNP-001` | Scan, kill at each failpoint, restart, and query the visible head. | Fake/SQLite and fake/filesystem contracts green; no partial head; retry idempotent. |
 | `S4` Evidence-backed docs | `noesis docs` creates deterministic overview/module views without touching manual files. | `FR-DOC-001/002/003`, `FR-QRY-001`, `FR-CLI-001` | Complete scan -> docs -> query through the CLI. | Every statement resolves or exposes uncertainty; output deterministic; manual checksums unchanged. |
 | `S5` Incremental refresh | One mapped non-root Rust source edit reparses only that source, reuses exact revision-neutral analysis, rematerializes every commit-bound public target artifact, and equals a cold S4 target. | `FR-INC-*`, `FR-CLI-004`, `INV-INC-001` | Refresh the reviewed A→B fixture, observe parser/cache activity, and compare target snapshot plus documents with a clean target store. | Canonical target bytes equal; exact invalidation and cache sets emitted; all target evidence is commit-bound; atomic head and fixed failures proven; no target execution. |
-| `S6` Contract federation | OpenAPI provider, two clients, and a decoy form deterministic cross-project links. | `FR-EXT-004`, `FR-FED-*` | Federate versioned provider/client/decoy fixtures. | Known oracle links found, decoy rejected, heuristic links remain candidates. |
+| `S6` Contract federation | Output-only federation of one bounded OpenAPI 3.1.0 provider, two explicit clients, one operation decoy, and one heuristic candidate emits a deterministic source-neutral report. | `FR-EXT-004`, `FR-FED-*`, `FR-CLI-005` | Run `noesis federate` over the reviewed JSON/YAML provider and client catalog. | Two exact links confirmed; decoy rejected; heuristic remains candidate with a gap; JSON/YAML semantics agree; strict streams, limits, hostile-input failures, and no ambient authority proven. |
 | `S7` Change impact | A semantic API diff compares declared contract and approved provider implementation facts, then returns bounded affected client paths, evidence, and gaps. | `DR-SEM-001`, `FR-IMP-*`, `FR-QRY-002` | Compare two provider revisions with unchanged contract bytes, one strict client, one safe client, and one operation decoy. | Ratified direction-aware classifier matches the three-view oracle; implementation-only change remains visible; safe client and decoy are not mislabeled; unknown behavior remains a gap. |
 | `S8` Polyglot adapters | Add Java, JavaScript/TypeScript, and C/C++ one adapter at a time. | `FR-EXT-003/005` | Run the shared semantic capability fixture for each adapter. | Contract, golden, malformed, determinism, and differential suites green per language. |
 | `S9` Sandboxed extensions | A WIT extractor runs with explicit capabilities and contained failure. | `FR-PLG-*`, `INV-BND-001` | Run valid, network, write, trap, timeout, OOM, and oversized plugins. | Every resource bound enforced; failure cannot change the published head. |
@@ -1095,6 +1197,30 @@ requirements are in the
 That protected oracle becomes binding only through the manual ratification
 merge; it is not Red, Green, or Verified evidence by itself.
 
+For S6, the proposed public evidence names include:
+
+```text
+black-box test: e2e_fr_fed_001_openapi_federation
+encoding golden: gt_fr_ext_004_yaml_json_semantic_equivalence
+explicit-link golden: gt_fr_fed_001_explicit_clients_confirmed
+decoy hard negative: gt_fr_fed_001_operation_decoy_rejected
+heuristic-state property: pt_fr_fed_002_heuristic_never_auto_confirms
+authority conflict: conf_fr_fed_002_conflicting_authority_fails_closed
+YAML security: sec_fr_ext_004_duplicate_yaml_key_rejected
+limit property: pt_fr_fed_001_every_limit_has_max_and_plus_one
+ambient-authority security: sec_fr_fed_001_standard_s6_has_no_ambient_authority
+CLI conformance: conf_fr_cli_005_streams_exits_and_no_partial_output
+compatibility regression: conf_fr_cli_005_s0_s5_regression
+future production Red: red_e2e_fr_fed_001_pre_s6_command_boundary
+```
+
+The complete ordered S6 scenarios, fixed limits, identity domains,
+dependency-review constraints, determinism repetitions, security observers,
+accepted Red, required evidence, and stop conditions are in the
+[S6 acceptance specification](../../tests/specifications/s6/e2e_fr_fed_001_openapi_federation.json).
+That protected oracle becomes binding only through the manual ratification
+merge; it is not Red, Green, or Verified evidence by itself.
+
 Test source, fixture, oracle, CI evidence, and requirement status must be
 machine-linkable. A comment containing an ID is not sufficient if CI cannot
 detect a missing or stale link.
@@ -1106,7 +1232,7 @@ detect a missing or stale link.
 | Contracts and deterministic skeleton | `DR-ART`, `FR-ACQ-001`, `FR-CLI-003`, `NFR-DET`, `NFR-MNT-001`, `NFR-SEC-005`, `NFR-TST` | `S0` | Schema, replay, black-box CLI, process/network denial |
 | Safe repository understanding | `FR-ACQ-002/003/004`, `FR-INV`, `FR-EXT`, `FR-KNW` | `S1`–`S2` | Malicious corpus, packed/loose equivalence, golden graph, property/fuzz |
 | Atomic local knowledge | `FR-STO-001`, `FR-SNP`, `FR-DOC`, `FR-QRY-001`, `FR-CLI-001` | `S3`–`S4` | Contract, failpoint, CLI E2E |
-| Change and ecosystem reasoning | `FR-INC`, `FR-FED`, `FR-IMP` | `S5`–`S7` | Cold/incremental equivalence, provider/client/decoy |
+| Change and ecosystem reasoning | `FR-INC`, `FR-FED`, `FR-IMP`, `FR-CLI-004/005` | `S5`–`S7` | Cold/incremental equivalence, provider/client/decoy, strict output-only federation |
 | Polyglot and extension boundary | `FR-EXT-003/005`, `FR-PLG` | `S8`–`S9` | Adapter contract, golden/differential, sandbox |
 | Server platform | `FR-STO-002`, `FR-JOB`, `FR-API`, `FR-MCP`, `FR-AUT` | `S10`–`S12` | Storage contracts, crash, conformance, tenant attacks |
 | Governed intelligence | `FR-COU`, `INV-MDL`, `NFR-PRV` | `S13` | Council oracle, calibration, network capture |
@@ -1149,11 +1275,11 @@ implementation choices.
 
 | ID | Decision required | Blocks |
 |---|---|---|
-| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0008 resolves the fixed S5 changed-path, analysis-entry, dependency-edge, report-subject, report-byte, and wall-time subset when its protected ratification revision is manually merged. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset when its protected ratification revision is manually merged. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
+| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0008 resolves the fixed S5 changed-path, analysis-entry, dependency-edge, report-subject, report-byte, and wall-time subset. Decision 0009 resolves the fixed S6 manifest, repository, document, YAML/reference depth, semantic count, evidence, output, memory, and wall-time subset when its protected ratification revision is manually merged. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
 | `OD-ONT-001` | Decision 0003 resolves the bounded single-crate `codenoesis.ontology/rust/v1`. Decision 0005 resolves multi-crate cardinality and unambiguous out-of-line module identity for `codenoesis.ontology/rust/v2` only when its protected S4 ratification revision is manually merged. Cross-language, compiler-grade, and later ontology evolution remain open. | `S8` and later ontology evolution |
 | `OD-STO-001` | Decision 0004 resolves fresh single-writer local SQLite/CAS identity, publication, restart, corruption, and cleanup semantics for `codenoesis.local-store/v1` only when its protected S3 ratification revision is manually merged. Migration, repair, deletion, backup/restore, multi-writer, and server storage remain open. | Post-S3 storage evolution and `S10` |
 | `OD-GIT-001` | Decision 0006 resolves the packed local SHA-1 subset only for the explicit `local-git-sha1-packed-v1` acquisition selector. Residual decisions cover remote protocols and identity resolution, SHA-256, LFS, shallow and bare repositories, alternates, promisor/partial clones, MIDX authority, supported submodule/symlink semantics, automatic repair, and history rewrite. Legacy S1 still rejects packed objects without the selector and rejects rather than traverses symlinks and gitlinks. | Remote and remaining post-S1 `FR-ACQ-*` |
-| `OD-CMP-001` | Decision 0007 resolves only the `implementation-aware-http-json/v1` field-level projection, evidence separation, seven dimensions, classifier rules, and oracle when its protected ratification revision is manually merged. Residual decisions cover complete OpenAPI, AsyncAPI, GraphQL, Protobuf, events, framework-specific semantics, observation coverage, protocol behavior, and causal evidence. | Remaining `S6`–`S7` compatibility capabilities |
+| `OD-CMP-001` | Decision 0009 resolves only `codenoesis.contract-capability/openapi-3.1-http-json/v1`, deterministic provider/client operation federation, heuristic non-confirmation, and source-neutral S6 identities when its protected ratification revision is manually merged. Decision 0007 resolves only the `implementation-aware-http-json/v1` field-level projection, evidence separation, seven dimensions, classifier rules, and oracle. Residual decisions cover complete OpenAPI, AsyncAPI, GraphQL, Protobuf, events, package/SCIP and event/schema authority, framework-specific semantics, observation coverage, protocol behavior, and causal evidence. | Remaining `S6`–`S7` compatibility capabilities |
 | `OD-API-001` | REST/MCP payload schemas, error catalog, cancellation, pagination, event resume, and deprecation window. | `S10`–`S11` |
 | `OD-AUT-001` | Complete role-action-resource matrix and privileged break-glass policy. | `S12` |
 | `OD-SBX-001` | Supported OS/platform sandbox tiers and which guarantees require Linux isolation. | `S9`, release matrix |
@@ -1190,7 +1316,14 @@ resolves only the revision-neutral Rust-workspace analysis cache,
 commit-bound S4 rematerialization, conservative invalidation catalog, local
 refresh report/error contract, and fixed S5 bounds after protected manual
 merge; cross-language invalidation, distributed cache, and S6/S7 incremental
-reasoning remain open.
+reasoning remain open. The
+[S6 OpenAPI federation decision](decisions/0009-s6-openapi-federation-contract.md)
+resolves only the output-only `standard-local-s6` OpenAPI 3.1.0 HTTP/JSON
+capability, restricted JSON/YAML normalization, explicit operation authority,
+heuristic candidate state, source-neutral identities, strict artifacts, and
+fixed S6 bounds after protected manual merge; other contract formats,
+authority sources, language/framework extraction, persistence, and dynamic
+behavior remain open.
 
 ## 17. Change control
 
