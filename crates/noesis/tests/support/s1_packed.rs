@@ -485,13 +485,13 @@ pub fn retain_revision(repository: &MaterializedRepository, name: &str, revision
 pub fn materialize_duplicate_object_pack(
     repository: &MaterializedRepository,
     object_id: &str,
-    salt: u64,
+    duplicate_index: u64,
 ) -> PackedMaterialization {
     let global_config = repository
         .root
-        .join(format!("duplicate-location-{salt}.gitconfig"));
+        .join(format!("duplicate-location-{duplicate_index}.gitconfig"));
     fs::write(&global_config, []).expect("create duplicate-location Git configuration");
-    let payload = format!("duplicate-location-{salt}\n");
+    let payload = format!("duplicate-location-{duplicate_index}\n");
     let mut hash = git_command(&global_config);
     hash.arg("-C")
         .arg(&repository.worktree)

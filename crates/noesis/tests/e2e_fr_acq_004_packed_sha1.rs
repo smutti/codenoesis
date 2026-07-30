@@ -379,11 +379,11 @@ fn pt_fr_acq_004_limits_have_max_and_plus_one() {
 
     let locations_repository = MaterializedRepository::revision_a();
     let mut location_packs = Vec::new();
-    for salt in 0..7_u64 {
+    for duplicate_index in 0..7_u64 {
         location_packs.push(materialize_duplicate_object_pack(
             &locations_repository,
             COMMIT_A_OID,
-            salt,
+            duplicate_index,
         ));
     }
     let maximum_locations = scan_packed(&locations_repository.worktree, COMMIT_A_OID);
