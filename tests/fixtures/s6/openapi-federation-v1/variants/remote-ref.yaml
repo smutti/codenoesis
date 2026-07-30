@@ -1,0 +1,17 @@
+openapi: 3.1.0
+info:
+  title: Remote Reference
+  version: 1.0.0
+servers:
+  - url: https://api.example.invalid
+paths:
+  /users/{id}:
+    get:
+      operationId: getUser
+      responses:
+        "200":
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: "https://schemas.example.invalid/user.yaml#/User"

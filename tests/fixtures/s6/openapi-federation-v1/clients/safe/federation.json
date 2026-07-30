@@ -1,0 +1,15 @@
+{
+  "schema_version": "codenoesis.federation-client-declaration/v1",
+  "role": "safe",
+  "repository_identity": "urn:codenoesis:fixture:s7-client-safe",
+  "revision": "fixture-client-v1",
+  "source_path": "src/commonMain/kotlin/dev/codenoesis/fixture/SafeUsersClient.kt",
+  "symbol_identity": "getSafeUser",
+  "binding": {
+    "kind": "explicit_operation_identity",
+    "service_authority": "https://api.example.invalid",
+    "method": "GET",
+    "path_template": "/users/{id}",
+    "operation_id": "getUser"
+  }
+}

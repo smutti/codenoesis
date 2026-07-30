@@ -1,0 +1,12 @@
+{
+  "schema_version": "codenoesis.error/v8",
+  "code": "contract.remote_reference_forbidden",
+  "stage": "contract",
+  "message": "remote contract reference is forbidden",
+  "retryable": false,
+  "context": {
+    "path": "variants/remote-ref.yaml",
+    "component": "provider_contract",
+    "reason": "remote_reference"
+  }
+}
