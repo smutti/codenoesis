@@ -11,7 +11,7 @@
     },
     {
       "path": "scripts/tests/test_s6_openapi_federation_contract.py",
-      "sha256": "2d23bcc0b9b77f9d383ec3738811ebf0e18fdb976c265c650f5478d44022b8bc"
+      "sha256": "a4fef76c136f6434701193f816a75c2f851de81d43f276d401d20ee9349fc5c1"
     },
     {
       "path": "tests/fixtures/s6/openapi-federation-v1/README.md",
@@ -47,19 +47,19 @@
     },
     {
       "path": "tests/fixtures/s6/openapi-federation-v1/expected-federation-report.json",
-      "sha256": "4b69d578eaa164bbe492f71f6ddbb8ae3b201fcd50eb2e9ef6820a07a7da5dc8"
+      "sha256": "8bdda6c3661aa20eb5e6e130c7807ca6114eaf2f30cbbdc0c758d2e0ac22b58c"
     },
     {
       "path": "tests/fixtures/s6/openapi-federation-v1/expected-provider-only-report.json",
-      "sha256": "d6274e5a3786321f237fe17e644cab3e47f5a3fbfe5768813b632e69363fe5bb"
+      "sha256": "f4c24a42077ef88d8065682fda1703ffd6bf78f9d36aa7b07a9f41ffee2c026e"
     },
     {
       "path": "tests/fixtures/s6/openapi-federation-v1/expected-unsupported-semantics-report.json",
-      "sha256": "b107393f9ad8fdd22fc02b58b7453eb7616441b2569b0984fb0f956f126167d1"
+      "sha256": "720aeec751d12d056677d19d0fa607721e636eb62d922364a89030d855d97e8c"
     },
     {
       "path": "tests/fixtures/s6/openapi-federation-v1/manifest.json",
-      "sha256": "8ad9941853fe46463027378dc67415dff751f168ba1561f8147cd8d997e0d8c0"
+      "sha256": "84cdb7bb57e788516e22d4c0d261adb1fb0a00537e852479734f389721a5936c"
     },
     {
       "path": "tests/fixtures/s6/openapi-federation-v1/provider/openapi.json",
@@ -162,5 +162,5 @@
       "sha256": "8185cbdc0eb33dc96cb5c932a1343460b7d1794b953a64190ff4fcc6783b0208"
     }
   ],
-  "bundle_sha256": "037faf971458637f1e391bc9147e7ecd5a1b72b5c3941492cb9018492e589fe6"
+  "bundle_sha256": "6e89effe3227b8769500529cec84fda73992ae983658b7aa28f3ace5714f2ad3"
 }

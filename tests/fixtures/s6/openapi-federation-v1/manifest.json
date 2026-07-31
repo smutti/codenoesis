@@ -70,15 +70,15 @@
   "expected": {
     "report": {
       "path": "expected-federation-report.json",
-      "sha256": "4b69d578eaa164bbe492f71f6ddbb8ae3b201fcd50eb2e9ef6820a07a7da5dc8"
+      "sha256": "8bdda6c3661aa20eb5e6e130c7807ca6114eaf2f30cbbdc0c758d2e0ac22b58c"
     },
     "provider_only_report": {
       "path": "expected-provider-only-report.json",
-      "sha256": "d6274e5a3786321f237fe17e644cab3e47f5a3fbfe5768813b632e69363fe5bb"
+      "sha256": "f4c24a42077ef88d8065682fda1703ffd6bf78f9d36aa7b07a9f41ffee2c026e"
     },
     "unsupported_semantics_report": {
       "path": "expected-unsupported-semantics-report.json",
-      "sha256": "b107393f9ad8fdd22fc02b58b7453eb7616441b2569b0984fb0f956f126167d1"
+      "sha256": "720aeec751d12d056677d19d0fa607721e636eb62d922364a89030d855d97e8c"
     },
     "errors": [
       {
