@@ -726,6 +726,22 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
             srs,
         )
 
+    def test_success_report_goldens_are_canonical_stdout(self) -> None:
+        for report_path in (
+            REPORT_PATH,
+            PROVIDER_ONLY_REPORT_PATH,
+            UNSUPPORTED_REPORT_PATH,
+        ):
+            with self.subTest(report=report_path.name):
+                report = load_json(report_path)
+                expected = canonical_json(report) + b"\n"
+                observed = report_path.read_bytes()
+                self.assertEqual(
+                    observed,
+                    expected,
+                    f"{report_path} must be canonical JSON plus exactly one LF",
+                )
+
     def test_schemas_are_strict_closed_and_bounded(self) -> None:
         schemas = {
             WORKSPACE_SCHEMA_PATH: load_json(WORKSPACE_SCHEMA_PATH),
