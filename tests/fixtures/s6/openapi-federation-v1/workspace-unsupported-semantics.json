@@ -1,0 +1,41 @@
+{
+  "schema_version": "codenoesis.federation-workspace/v1",
+  "workspace_identity": "urn:codenoesis:fixture:s6-openapi-federation-v1",
+  "analysis_profile": "standard-local-s6",
+  "contract_capability": "codenoesis.contract-capability/openapi-3.1-http-json/v1",
+  "federation_rule_catalog": "codenoesis.federation-rules/http-json/v1",
+  "provider": {
+    "repository_identity": "urn:codenoesis:fixture:s7-provider",
+    "revision": "fixture-provider-a",
+    "root": "variants",
+    "contract_path": "unsupported-semantics.yaml",
+    "contract_sha256": "87817e54dc065a407b8d035df1c779e092a92286a534e3cb3a0a72b1572ec1ea",
+    "service_authority": "https://api.example.invalid"
+  },
+  "clients": [
+    {
+      "role": "candidate",
+      "root": "clients/candidate",
+      "declaration_path": "federation.json",
+      "declaration_sha256": "6f75df7740dcd40e0b8c1833743ac8a749720c7bea0d331f072382b53a0f3c54"
+    },
+    {
+      "role": "decoy",
+      "root": "clients/decoy",
+      "declaration_path": "federation.json",
+      "declaration_sha256": "bbb171f8a3d6b7dc6defbc5ef3b585bc1439473a29309722916a45d1c9e846dd"
+    },
+    {
+      "role": "safe",
+      "root": "clients/safe",
+      "declaration_path": "federation.json",
+      "declaration_sha256": "335f933c0967bacd3477578f1aa58b222047c7ad44a2b566ffb7107a9ddf6582"
+    },
+    {
+      "role": "strict",
+      "root": "clients/strict",
+      "declaration_path": "federation.json",
+      "declaration_sha256": "950f38701684536a3247a243cacae9885d3bb2840a04e482834cf753085a3508"
+    }
+  ]
+}

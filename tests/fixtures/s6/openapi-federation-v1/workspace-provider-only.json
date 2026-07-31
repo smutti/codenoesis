@@ -1,0 +1,16 @@
+{
+  "schema_version": "codenoesis.federation-workspace/v1",
+  "workspace_identity": "urn:codenoesis:fixture:s6-openapi-federation-v1",
+  "analysis_profile": "standard-local-s6",
+  "contract_capability": "codenoesis.contract-capability/openapi-3.1-http-json/v1",
+  "federation_rule_catalog": "codenoesis.federation-rules/http-json/v1",
+  "provider": {
+    "repository_identity": "urn:codenoesis:fixture:s7-provider",
+    "revision": "fixture-provider-a",
+    "root": "provider",
+    "contract_path": "openapi.yaml",
+    "contract_sha256": "d6decc18d428316b209aa554ee028fe9db8761df515bf34b9e92c3a369f2de3d",
+    "service_authority": "https://api.example.invalid"
+  },
+  "clients": []
+}
