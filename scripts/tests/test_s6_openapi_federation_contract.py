@@ -9,6 +9,10 @@ from pathlib import Path
 from typing import Any
 
 from test_s1_contract import blake3_256, canonical_json
+from test_s1_packed_contract import (
+    assert_supported_schema,
+    validate_schema_instance,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -34,6 +38,9 @@ MANIFEST_PATH = FIXTURE_ROOT / "manifest.json"
 REPORT_PATH = FIXTURE_ROOT / "expected-federation-report.json"
 PROVIDER_ONLY_WORKSPACE_PATH = FIXTURE_ROOT / "workspace-provider-only.json"
 PROVIDER_ONLY_REPORT_PATH = FIXTURE_ROOT / "expected-provider-only-report.json"
+UNSUPPORTED_WORKSPACE_PATH = (
+    FIXTURE_ROOT / "workspace-unsupported-semantics.json"
+)
 UNSUPPORTED_REPORT_PATH = (
     FIXTURE_ROOT / "expected-unsupported-semantics-report.json"
 )
@@ -122,6 +129,54 @@ EXPECTED_COVERAGE_GAP_REASONS = [
     "unsupported_media_type",
 ]
 
+EXPECTED_COVERAGE_GAP_RULES = [
+    {
+        "reason_code": "heuristic_requires_confirmation",
+        "subject": "candidate_id",
+        "evidence": "client_binding",
+    },
+    {
+        "reason_code": "heuristic_no_match",
+        "subject": "call_site_id",
+        "evidence": "client_binding",
+    },
+    {
+        "reason_code": "heuristic_ambiguous",
+        "subject": "call_site_id",
+        "evidence": "client_binding",
+    },
+    {
+        "reason_code": "unsupported_callbacks",
+        "subject": "operation_id",
+        "evidence": "openapi_location",
+    },
+    {
+        "reason_code": "unsupported_webhooks",
+        "subject": "service_id",
+        "evidence": "openapi_location",
+    },
+    {
+        "reason_code": "unsupported_links",
+        "subject": "operation_id",
+        "evidence": "openapi_location",
+    },
+    {
+        "reason_code": "unsupported_security_semantics",
+        "subject": "nearest_service_or_operation_id",
+        "evidence": "openapi_location",
+    },
+    {
+        "reason_code": "unsupported_server_variables",
+        "subject": "service_id",
+        "evidence": "openapi_location",
+    },
+    {
+        "reason_code": "unsupported_media_type",
+        "subject": "operation_id",
+        "evidence": "openapi_location",
+    },
+]
+
 EXPECTED_PROVIDER_EVIDENCE_IDENTITY = {
     "domain": "codenoesis.federation-evidence-id/v1",
     "line_numbering": "one_based_inclusive",
@@ -129,8 +184,8 @@ EXPECTED_PROVIDER_EVIDENCE_IDENTITY = {
     "yaml_preimage": [
         "repository_identity",
         "revision",
-        "path",
-        "openapi_location",
+        "normalized_path",
+        "normalized_openapi_location",
         "source_format",
         "start_line_decimal",
         "end_line_decimal",
@@ -140,9 +195,23 @@ EXPECTED_PROVIDER_EVIDENCE_IDENTITY = {
     "json_preimage": [
         "repository_identity",
         "revision",
-        "path",
-        "json_pointer",
+        "normalized_path",
+        "canonical_json_pointer",
         "file_sha256",
+    ],
+}
+
+EXPECTED_COVERAGE_GAP_IDENTITY = {
+    "domain": "codenoesis.federation-gap-id/v1",
+    "heuristic_preimage": [
+        "subject_id",
+        "reason_code",
+        "primary_evidence_id",
+    ],
+    "contract_preimage": [
+        "subject_id",
+        "reason_code",
+        "normalized_openapi_location",
     ],
 }
 
@@ -156,6 +225,13 @@ EXPECTED_HEURISTIC_MATCHING = {
     "automatic_confirmation": False,
 }
 
+EXPECTED_AUTHORITATIVE_SUBJECT_UNIQUENESS = {
+    "subject_key": ["client_id", "call_site_id"],
+    "identical_repetition": "federation.invalid_declaration",
+    "distinct_binding": "federation.identity_conflict",
+    "mixed_explicit_and_heuristic": "federation.identity_conflict",
+}
+
 PUBLIC_COMMAND_BOUNDARIES = {
     "workspace_manifest_bytes",
     "repositories",
@@ -166,8 +242,19 @@ PUBLIC_COMMAND_BOUNDARIES = {
     "operations",
     "schemas",
     "fields_per_operation",
-    "clients",
     "report_bytes",
+}
+
+EXPECTED_BOUNDARY_ACCOUNTING = {
+    "counter_contract": "inclusive_charge_before_allocation_or_traversal",
+    "public_command_limits": [
+        name for name in EXPECTED_LIMITS if name in PUBLIC_COMMAND_BOUNDARIES
+    ],
+    "component_counter_limits": [
+        name
+        for name in EXPECTED_LIMITS
+        if name not in PUBLIC_COMMAND_BOUNDARIES
+    ],
 }
 
 EXPECTED_RULES = [
@@ -201,6 +288,10 @@ EXPECTED_SCENARIOS = [
     "conf_fr_cli_005_streams_exits_and_no_partial_output",
     "conf_fr_cli_005_s0_s5_regression",
     "red_e2e_fr_fed_001_pre_s6_command_boundary",
+    "gt_fr_cli_005_provider_only_workspace",
+    "gt_fr_ext_004_unsupported_semantics_are_gaps",
+    "conf_fr_fed_001_provider_evidence_identity_is_reproducible",
+    "conf_fr_fed_002_heuristic_selection_is_exact",
 ]
 
 EXPECTED_VARIANTS = {
@@ -214,6 +305,7 @@ EXPECTED_VARIANTS = {
     "reference_cycle": "variants/ref-cycle.yaml",
     "remote_ref": "variants/remote-ref.yaml",
     "unsupported_openapi": "variants/unsupported-openapi.yaml",
+    "unsupported_semantics": "variants/unsupported-semantics.yaml",
 }
 
 EXPECTED_ERROR_GOLDENS = {
@@ -259,18 +351,24 @@ EXPECTED_CORE_IDENTITIES = {
 }
 
 EXPECTED_PROVIDER_EVIDENCE = {
-    (
-        5,
+    "#/servers/0/url": (
         6,
-    ): "urn:codenoesis:evidence:blake3:649dce60ffe264f21ba96bf3f95c0ac5a99c8936377ffc4ed102d1c0cae646e4",
-    (
-        8,
+        6,
+        "urn:codenoesis:evidence:blake3:"
+        "d8708d078fb5444808a5d4ebac01173630040d2c533cb818cb089dd7b44f4194",
+    ),
+    "#/paths/~1users~1{id}/get": (
+        9,
         17,
-    ): "urn:codenoesis:evidence:blake3:36e6771d66d0c86f9dee560713c4dfab20e4930a4d6fa093fb5076539c372dcf",
-    (
-        18,
+        "urn:codenoesis:evidence:blake3:"
+        "0eb6cb716e2451f7003c0437b339c93ba0c727bc40add79c7a6f7c99ad8e7990",
+    ),
+    "#/components/schemas/User": (
+        21,
         30,
-    ): "urn:codenoesis:evidence:blake3:7ad84b96363e0102c20212c0dbff3e8632232460df32744cbd8227a68d0de846",
+        "urn:codenoesis:evidence:blake3:"
+        "10d428fd450a9c5b68e5582a41f9220dcd675a1f5a118b851580bb37f01681c2",
+    ),
 }
 
 S6_BUNDLE_FILES = {
@@ -286,6 +384,8 @@ S6_BUNDLE_FILES = {
     "tests/fixtures/s6/openapi-federation-v1/expected-error-identity-conflict.json",
     "tests/fixtures/s6/openapi-federation-v1/expected-error-remote-ref.json",
     "tests/fixtures/s6/openapi-federation-v1/expected-federation-report.json",
+    "tests/fixtures/s6/openapi-federation-v1/expected-provider-only-report.json",
+    "tests/fixtures/s6/openapi-federation-v1/expected-unsupported-semantics-report.json",
     "tests/fixtures/s6/openapi-federation-v1/manifest.json",
     "tests/fixtures/s6/openapi-federation-v1/provider/openapi.json",
     "tests/fixtures/s6/openapi-federation-v1/provider/openapi.yaml",
@@ -300,6 +400,9 @@ S6_BUNDLE_FILES = {
     "tests/fixtures/s6/openapi-federation-v1/variants/ref-cycle.yaml",
     "tests/fixtures/s6/openapi-federation-v1/variants/remote-ref.yaml",
     "tests/fixtures/s6/openapi-federation-v1/variants/unsupported-openapi.yaml",
+    "tests/fixtures/s6/openapi-federation-v1/variants/unsupported-semantics.yaml",
+    "tests/fixtures/s6/openapi-federation-v1/workspace-provider-only.json",
+    "tests/fixtures/s6/openapi-federation-v1/workspace-unsupported-semantics.json",
     "tests/fixtures/s6/openapi-federation-v1/workspace.json",
     "tests/fixtures/s7/implementation-aware-api-v1/manifest.json",
     "tests/specifications/s6/codenoesis-error-v8.schema.json",
@@ -326,6 +429,21 @@ def load_json(path: Path) -> Any:
         path.read_text(encoding="utf-8"),
         object_pairs_hook=reject_duplicate_keys,
     )
+
+
+def validator_compatible_schema(value: Any) -> Any:
+    if isinstance(value, dict):
+        transformed = {
+            key: validator_compatible_schema(child)
+            for key, child in value.items()
+            if not (key == "type" and child == "null")
+        }
+        if value.get("type") == "null":
+            transformed["const"] = None
+        return transformed
+    if isinstance(value, list):
+        return [validator_compatible_schema(child) for child in value]
+    return value
 
 
 def sha256(path: Path) -> str:
@@ -436,12 +554,52 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
             EXPECTED_HEURISTIC_MATCHING,
         )
         self.assertEqual(
+            rules["coverage_gap_identity"],
+            EXPECTED_COVERAGE_GAP_IDENTITY,
+        )
+        self.assertEqual(
+            rules["authoritative_subject_uniqueness"],
+            EXPECTED_AUTHORITATIVE_SUBJECT_UNIQUENESS,
+        )
+        self.assertEqual(
+            rules["coverage_gap_rules"],
+            EXPECTED_COVERAGE_GAP_RULES,
+        )
+        self.assertEqual(
+            rules["boundary_accounting"],
+            EXPECTED_BOUNDARY_ACCOUNTING,
+        )
+        self.assertEqual(
+            next(
+                item
+                for item in rules["rules"]
+                if item["id"] == "fed.heuristic-name.candidate/v1"
+            )["requires"],
+            ["exact_unicode_scalar_sequence_match"],
+        )
+        self.assertEqual(
             acceptance["provider_evidence_identity"],
             EXPECTED_PROVIDER_EVIDENCE_IDENTITY,
         )
         self.assertEqual(
             acceptance["heuristic_matching"],
             EXPECTED_HEURISTIC_MATCHING,
+        )
+        self.assertEqual(
+            acceptance["coverage_gap_identity"],
+            EXPECTED_COVERAGE_GAP_IDENTITY,
+        )
+        self.assertEqual(
+            acceptance["authoritative_subject_uniqueness"],
+            EXPECTED_AUTHORITATIVE_SUBJECT_UNIQUENESS,
+        )
+        self.assertEqual(
+            acceptance["coverage_gap_rules"],
+            EXPECTED_COVERAGE_GAP_RULES,
+        )
+        self.assertEqual(
+            acceptance["boundary_accounting"],
+            EXPECTED_BOUNDARY_ACCOUNTING,
         )
         boundary_by_limit = {
             item["limit"]: item for item in acceptance["boundary_matrix"]
@@ -462,6 +620,7 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
             )
         self.assertTrue(PROVIDER_ONLY_WORKSPACE_PATH.is_file())
         self.assertTrue(PROVIDER_ONLY_REPORT_PATH.is_file())
+        self.assertTrue(UNSUPPORTED_WORKSPACE_PATH.is_file())
         self.assertTrue(UNSUPPORTED_REPORT_PATH.is_file())
         self.assertIn(
             "exact Unicode scalar-sequence equality",
@@ -485,7 +644,7 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
         )[0]
         rows = re.findall(
             r"^\| `(FR-[A-Z]+-\d{3})` \| "
-            r"`Proposed` \(pending protected merge\) \|",
+            r"`Approved`(?: [^|]+)? \| `Implemented` \|",
             register,
             flags=re.MULTILINE,
         )
@@ -502,6 +661,34 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
             acceptance["approval_pull_request"],
             "https://github.com/smutti/codenoesis/pull/81",
         )
+        self.assertEqual(
+            acceptance["governance_correction_issue"],
+            "https://github.com/smutti/codenoesis/issues/83",
+        )
+        self.assertEqual(
+            acceptance["governance_correction_pull_request"],
+            "https://github.com/smutti/codenoesis/pull/84",
+        )
+        self.assertEqual(
+            acceptance["implementation_issue"],
+            "https://github.com/smutti/codenoesis/issues/82",
+        )
+        self.assertEqual(
+            acceptance["governance_correction_authorization"],
+            {
+                "record": "https://github.com/smutti/codenoesis/issues/83",
+                "basis": (
+                    "https://github.com/smutti/codenoesis/issues/82"
+                    "#issuecomment-5135813783"
+                ),
+                "actor": "@smutti",
+                "date": "2026-07-30",
+                "statement": (
+                    "Autorizzo la correzione governance S6 descritta "
+                    "nel commento #82"
+                ),
+            },
+        )
         self.assertEqual(acceptance["correction_budget"], 3)
         self.assertEqual(
             [item["id"] for item in acceptance["requirements"]],
@@ -509,18 +696,25 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
         )
         self.assertTrue(
             all(
-                item["current_state"] == "Proposed"
-                and item["target_state"] == "Approved"
+                item["current_state"] == "Approved"
+                and item["target_state"] == "Implemented"
                 for item in acceptance["requirements"]
             )
         )
         self.assertEqual(acceptance["slice"], "S6")
         self.assertEqual(acceptance["risk"]["level"], "high")
-        self.assertFalse(acceptance["runtime_implementation_authorized"])
-        self.assertIn("Issue | [#78]", decision)
+        self.assertTrue(acceptance["runtime_implementation_authorized"])
+        self.assertEqual(
+            acceptance["runtime_authorization_effective_after"],
+            "protected manual merge of pull request #84",
+        )
+        self.assertIn("Issues | Ratification [#78]", decision)
         self.assertIn("PR #81", decision)
-        self.assertIn("Scope | Governance only", decision)
+        self.assertIn("PR #84", decision)
+        self.assertIn("Scope | Governance correction only", decision)
         self.assertIn("output-only", decision)
+        self.assertIn("implementation issue #82 may resume", decision)
+        self.assertIn("Issue #82 may resume", register)
         self.assertIn("There is no `--store`", register)
         self.assertIn(
             "| `FR-CLI-005` | P1 | `0.2` | The local CLI MUST provide "
@@ -539,6 +733,10 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
             REPORT_SCHEMA_PATH: load_json(REPORT_SCHEMA_PATH),
             ERROR_SCHEMA_PATH: load_json(ERROR_SCHEMA_PATH),
         }
+        validator_schemas = {
+            path: validator_compatible_schema(schema)
+            for path, schema in schemas.items()
+        }
         for path, schema in schemas.items():
             self.assertEqual(
                 schema["$schema"],
@@ -556,6 +754,8 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
                     item,
                     f"{path} contains an unbounded array schema",
                 )
+            validator_schema = validator_schemas[path]
+            assert_supported_schema(validator_schema, validator_schema)
 
         workspace_schema = schemas[WORKSPACE_SCHEMA_PATH]
         client_schema = schemas[CLIENT_SCHEMA_PATH]
@@ -564,8 +764,40 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
         workspace = load_json(WORKSPACE_PATH)
         report = load_json(REPORT_PATH)
 
-        self.assertEqual(set(workspace), set(workspace_schema["required"]))
-        self.assertEqual(set(report), set(report_schema["required"]))
+        for workspace_path in (
+            WORKSPACE_PATH,
+            PROVIDER_ONLY_WORKSPACE_PATH,
+            UNSUPPORTED_WORKSPACE_PATH,
+        ):
+            workspace_instance = load_json(workspace_path)
+            self.assertEqual(
+                set(workspace_instance),
+                set(workspace_schema["required"]),
+            )
+            validate_schema_instance(
+                validator_schemas[WORKSPACE_SCHEMA_PATH],
+                validator_schemas[WORKSPACE_SCHEMA_PATH],
+                workspace_instance,
+            )
+        self.assertEqual(
+            load_json(PROVIDER_ONLY_WORKSPACE_PATH)["clients"],
+            [],
+        )
+        for report_path in (
+            REPORT_PATH,
+            PROVIDER_ONLY_REPORT_PATH,
+            UNSUPPORTED_REPORT_PATH,
+        ):
+            report_instance = load_json(report_path)
+            self.assertEqual(
+                set(report_instance),
+                set(report_schema["required"]),
+            )
+            validate_schema_instance(
+                validator_schemas[REPORT_SCHEMA_PATH],
+                validator_schemas[REPORT_SCHEMA_PATH],
+                report_instance,
+            )
         self.assertEqual(
             workspace_schema["properties"]["analysis_profile"]["const"],
             "standard-local-s6",
@@ -598,6 +830,14 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
             EXPECTED_LIMITS["fields_per_operation"],
         )
         self.assertEqual(
+            workspace_schema["properties"]["clients"]["minItems"],
+            0,
+        )
+        self.assertEqual(
+            report_schema["$defs"]["openapi_location_span"]["required"],
+            ["kind", "location", "start_line", "end_line"],
+        )
+        self.assertEqual(
             client_schema["properties"]["schema_version"]["const"],
             "codenoesis.federation-client-declaration/v1",
         )
@@ -614,6 +854,19 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
             "federation.identity_conflict",
             error_schema["properties"]["code"]["enum"],
         )
+        manifest = load_json(MANIFEST_PATH)
+        for item in manifest["clients"]:
+            validate_schema_instance(
+                validator_schemas[CLIENT_SCHEMA_PATH],
+                validator_schemas[CLIENT_SCHEMA_PATH],
+                load_json(FIXTURE_ROOT / item["path"]),
+            )
+        for item in manifest["expected"]["errors"]:
+            validate_schema_instance(
+                validator_schemas[ERROR_SCHEMA_PATH],
+                validator_schemas[ERROR_SCHEMA_PATH],
+                load_json(FIXTURE_ROOT / item["path"]),
+            )
 
         for path in sorted(FIXTURE_ROOT.rglob("*.json")) + sorted(
             SPEC_ROOT.glob("*.json")
@@ -765,6 +1018,26 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
             workspace["contract_capability"],
             manifest["contract_capability"],
         )
+        workspace_variants = {
+            item["scenario"]: item for item in manifest["workspace_variants"]
+        }
+        self.assertEqual(
+            {
+                scenario: item["path"]
+                for scenario, item in workspace_variants.items()
+            },
+            {
+                "provider_only": "workspace-provider-only.json",
+                "unsupported_semantics": (
+                    "workspace-unsupported-semantics.json"
+                ),
+            },
+        )
+        for item in workspace_variants.values():
+            self.assertEqual(
+                sha256(FIXTURE_ROOT / item["path"]),
+                item["sha256"],
+            )
 
         provider = manifest["provider"]
         for representation in ("yaml", "json"):
@@ -838,10 +1111,16 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
 
         for item in manifest["expected"]["errors"]:
             self.assertEqual(sha256(FIXTURE_ROOT / item["path"]), item["sha256"])
-        self.assertEqual(
-            sha256(FIXTURE_ROOT / manifest["expected"]["report"]["path"]),
-            manifest["expected"]["report"]["sha256"],
-        )
+        for key in (
+            "report",
+            "provider_only_report",
+            "unsupported_semantics_report",
+        ):
+            expected_report = manifest["expected"][key]
+            self.assertEqual(
+                sha256(FIXTURE_ROOT / expected_report["path"]),
+                expected_report["sha256"],
+            )
         sentinel = manifest["sentinels"]
         self.assertEqual(sha256(FIXTURE_ROOT / sentinel["path"]), sentinel["sha256"])
         self.assertTrue(
@@ -1050,18 +1329,40 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
             path = FIXTURE_ROOT / item["path"]
             self.assertEqual(sha256(path), item["file_sha256"])
             selector = item["selector"]
-            if selector["kind"] == "line_span":
+            if selector["kind"] == "openapi_location_span":
                 lines = path.read_text(encoding="utf-8").splitlines()
                 self.assertLessEqual(selector["start_line"], selector["end_line"])
                 self.assertLessEqual(selector["end_line"], len(lines))
+                expected_start, expected_end, expected_id = (
+                    EXPECTED_PROVIDER_EVIDENCE[selector["location"]]
+                )
+                self.assertEqual(selector["start_line"], expected_start)
+                self.assertEqual(selector["end_line"], expected_end)
                 self.assertEqual(
                     item["evidence_id"],
-                    EXPECTED_PROVIDER_EVIDENCE[
-                        (selector["start_line"], selector["end_line"])
-                    ],
+                    expected_id,
+                )
+                self.assertEqual(
+                    item["evidence_id"],
+                    stable_id(
+                        "evidence",
+                        "codenoesis.federation-evidence-id/v1",
+                        [
+                            item["repository_identity"],
+                            item["revision"],
+                            item["path"],
+                            selector["location"],
+                            "yaml",
+                            str(selector["start_line"]),
+                            str(selector["end_line"]),
+                            item["file_sha256"],
+                        ],
+                    ),
                 )
             else:
-                self.assertEqual(selector["pointer"], "/binding")
+                self.assertEqual(selector["kind"], "json_pointer")
+                if item["kind"] == "workspace_json_pointer":
+                    self.assertEqual(selector["pointer"], "/binding")
                 self.assertEqual(
                     item["evidence_id"],
                     stable_id(
@@ -1076,6 +1377,43 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
                         ],
                     ),
                 )
+
+        provider_json = manifest["provider"]["json"]
+        json_provider_evidence = {
+            location.removeprefix("#"): stable_id(
+                "evidence",
+                "codenoesis.federation-evidence-id/v1",
+                [
+                    provider["repository_identity"],
+                    provider["revision"],
+                    provider_json["path"],
+                    location.removeprefix("#"),
+                    provider_json["sha256"],
+                ],
+            )
+            for location in EXPECTED_PROVIDER_EVIDENCE
+        }
+        self.assertEqual(
+            set(json_provider_evidence),
+            {
+                "/servers/0/url",
+                "/paths/~1users~1{id}/get",
+                "/components/schemas/User",
+            },
+        )
+        self.assertTrue(
+            set(json_provider_evidence.values()).isdisjoint(evidence_by_id)
+        )
+        json_projection = copy.deepcopy(report)
+        json_projection["provider"]["contract_path"] = provider_json["path"]
+        json_projection["provider"]["contract_sha256"] = provider_json[
+            "sha256"
+        ]
+        json_projection["provider"]["source_format"] = "json"
+        self.assertEqual(
+            report_semantic_hash(json_projection),
+            report["semantic_hash"],
+        )
 
         def inspect_references(value: Any) -> None:
             if isinstance(value, dict):
@@ -1138,6 +1476,207 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
             self.assertEqual(error["schema_version"], "codenoesis.error/v8")
             self.assertEqual((error["code"], error["stage"]), (code, stage))
             self.assertFalse(error["retryable"])
+
+    def test_provider_only_report_is_exact(self) -> None:
+        report = load_json(PROVIDER_ONLY_REPORT_PATH)
+        workspace = load_json(PROVIDER_ONLY_WORKSPACE_PATH)
+        base_report = load_json(REPORT_PATH)
+        report_schema = load_json(REPORT_SCHEMA_PATH)
+
+        self.assertEqual(set(report), set(report_schema["required"]))
+        self.assertEqual(workspace["clients"], [])
+        self.assertEqual(
+            report["workspace_identity"],
+            workspace["workspace_identity"],
+        )
+        self.assertEqual(report["provider"], base_report["provider"])
+        self.assertEqual(report["operations"], base_report["operations"])
+        for collection in (
+            "clients",
+            "confirmed_links",
+            "candidates",
+            "rejections",
+            "coverage_gaps",
+        ):
+            self.assertEqual(report[collection], [])
+        self.assertEqual(
+            report["evidence"],
+            [
+                item
+                for item in base_report["evidence"]
+                if item["kind"] == "openapi_yaml_span"
+            ],
+        )
+        self.assertEqual(report["limits"], EXPECTED_LIMITS)
+        self.assertEqual(
+            report["semantic_hash"],
+            "blake3:"
+            "22c8220cddd9122d7518db83e11595c32c24458f6f48618cd133711e16fb4ad4",
+        )
+        self.assertEqual(report["semantic_hash"], report_semantic_hash(report))
+
+    def test_unsupported_semantics_report_is_exact(self) -> None:
+        report = load_json(UNSUPPORTED_REPORT_PATH)
+        workspace = load_json(UNSUPPORTED_WORKSPACE_PATH)
+        base_report = load_json(REPORT_PATH)
+        report_schema = load_json(REPORT_SCHEMA_PATH)
+
+        self.assertEqual(set(report), set(report_schema["required"]))
+        self.assertEqual(
+            report["workspace_identity"],
+            workspace["workspace_identity"],
+        )
+        self.assertEqual(
+            report["provider"]["contract_path"],
+            "variants/unsupported-semantics.yaml",
+        )
+        self.assertEqual(
+            report["provider"]["contract_sha256"],
+            workspace["provider"]["contract_sha256"],
+        )
+        self.assertEqual(
+            report["provider"]["service_id"],
+            base_report["provider"]["service_id"],
+        )
+        self.assertEqual(
+            report["provider"]["service_authority"],
+            base_report["provider"]["service_authority"],
+        )
+
+        for collection in (
+            "operations",
+            "clients",
+            "confirmed_links",
+            "candidates",
+            "rejections",
+        ):
+            actual = copy.deepcopy(report[collection])
+            expected = copy.deepcopy(base_report[collection])
+            remove_evidence_references(actual)
+            remove_evidence_references(expected)
+            self.assertEqual(actual, expected)
+
+        evidence_by_id = {
+            item["evidence_id"]: item for item in report["evidence"]
+        }
+        for item in report["evidence"]:
+            selector = item["selector"]
+            if item["kind"] == "openapi_yaml_span":
+                self.assertEqual(selector["kind"], "openapi_location_span")
+                expected_id = stable_id(
+                    "evidence",
+                    "codenoesis.federation-evidence-id/v1",
+                    [
+                        item["repository_identity"],
+                        item["revision"],
+                        item["path"],
+                        selector["location"],
+                        "yaml",
+                        str(selector["start_line"]),
+                        str(selector["end_line"]),
+                        item["file_sha256"],
+                    ],
+                )
+            else:
+                self.assertEqual(item["kind"], "workspace_json_pointer")
+                self.assertEqual(selector["kind"], "json_pointer")
+                expected_id = stable_id(
+                    "evidence",
+                    "codenoesis.federation-evidence-id/v1",
+                    [
+                        item["repository_identity"],
+                        item["revision"],
+                        item["path"],
+                        selector["pointer"],
+                        item["file_sha256"],
+                    ],
+                )
+            self.assertEqual(item["evidence_id"], expected_id)
+            self.assertEqual(
+                sha256(FIXTURE_ROOT / item["path"]),
+                item["file_sha256"],
+            )
+
+        operation_id = EXPECTED_CORE_IDENTITIES["operation"]
+        service_id = EXPECTED_CORE_IDENTITIES["service"]
+        expected_contract_gaps = {
+            "unsupported_callbacks": (
+                operation_id,
+                "#/paths/~1users~1{id}/get/callbacks",
+            ),
+            "unsupported_webhooks": (service_id, "#/webhooks"),
+            "unsupported_links": (
+                operation_id,
+                "#/paths/~1users~1{id}/get/responses/200/links",
+            ),
+            "unsupported_security_semantics": (
+                service_id,
+                "#/security",
+            ),
+            "unsupported_server_variables": (
+                service_id,
+                "#/servers/0/variables",
+            ),
+            "unsupported_media_type": (
+                operation_id,
+                "#/paths/~1users~1{id}/get/responses/200/content/"
+                "application~1xml",
+            ),
+        }
+        gaps_by_reason = {
+            item["reason_code"]: item for item in report["coverage_gaps"]
+        }
+        self.assertEqual(
+            set(gaps_by_reason),
+            set(expected_contract_gaps) | {"heuristic_requires_confirmation"},
+        )
+        for reason, (subject_id, location) in expected_contract_gaps.items():
+            gap = gaps_by_reason[reason]
+            self.assertEqual(gap["subject_id"], subject_id)
+            self.assertEqual(len(gap["evidence_ids"]), 1)
+            evidence = evidence_by_id[gap["evidence_ids"][0]]
+            self.assertEqual(evidence["selector"]["location"], location)
+            self.assertEqual(
+                gap["coverage_gap_id"],
+                stable_id(
+                    "coverage-gap",
+                    "codenoesis.federation-gap-id/v1",
+                    [subject_id, reason, location],
+                ),
+            )
+
+        heuristic_gap = gaps_by_reason["heuristic_requires_confirmation"]
+        self.assertEqual(
+            heuristic_gap["coverage_gap_id"],
+            stable_id(
+                "coverage-gap",
+                "codenoesis.federation-gap-id/v1",
+                [
+                    heuristic_gap["subject_id"],
+                    heuristic_gap["reason_code"],
+                    heuristic_gap["evidence_ids"][0],
+                ],
+            ),
+        )
+        assert_sorted_unique(
+            self,
+            [item["evidence_id"] for item in report["evidence"]],
+            "unsupported evidence",
+        )
+        assert_sorted_unique(
+            self,
+            [
+                item["coverage_gap_id"]
+                for item in report["coverage_gaps"]
+            ],
+            "unsupported coverage gaps",
+        )
+        self.assertEqual(
+            report["semantic_hash"],
+            "blake3:"
+            "e78ccaa76a3601c2350bda6bbda4b11f2820cf293c97edd9051bcce28f1cd4bd",
+        )
+        self.assertEqual(report["semantic_hash"], report_semantic_hash(report))
 
     def test_s7_identity_alignment_and_acceptance_red_are_bound(self) -> None:
         manifest = load_json(MANIFEST_PATH)
@@ -1202,6 +1741,7 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
             "--exact e2e_fr_fed_001_openapi_federation",
         )
         self.assertEqual(red["subject_exit"], 2)
+        self.assertEqual(red["runner_exit"], 101)
         self.assertEqual(red["stdout_bytes"], 0)
         self.assertEqual(red["stderr_schema"], "codenoesis.error/v2")
         self.assertEqual(red["stderr_code"], "input.invalid_revision")
@@ -1212,7 +1752,7 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
         )
         self.assertFalse(red["store_or_artifact_created"])
         self.assertEqual(
-            acceptance["allowed_paths"],
+            acceptance["governance_source_paths"],
             [
                 "docs/software/software-requirements-specification.md",
                 "docs/software/decisions/0009-s6-openapi-federation-contract.md",
@@ -1223,11 +1763,15 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
         )
         self.assertIn(
             "automatic heuristic confirmation",
-            acceptance["forbidden"],
+            acceptance["implementation_forbidden"],
         )
         self.assertIn(
             "partial stdout or persistent publication",
-            acceptance["forbidden"],
+            acceptance["implementation_forbidden"],
+        )
+        self.assertEqual(
+            acceptance["implementation_scope"]["authority"],
+            "https://github.com/smutti/codenoesis/issues/82",
         )
         self.assertEqual(acceptance["determinism"]["replays"], 50)
         self.assertEqual(
@@ -1242,6 +1786,20 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
             acceptance["compatibility"]["persistent_store_change"]
         )
         self.assertFalse(acceptance["compatibility"]["ontology_change"])
+        self.assertFalse(
+            acceptance["compatibility"][
+                "accepted_s0_s5_s7_artifact_change"
+            ]
+        )
+        self.assertEqual(
+            acceptance["compatibility"]["existing_artifact_scope"],
+            (
+                "no accepted S0-S5 or S7 artifact changes; this pre-runtime "
+                "S6 correction changes only governed S6 selectors, evidence "
+                "IDs, schemas, oracles, fixtures, and bundle bytes while "
+                "retaining the base semantic hash"
+            ),
+        )
 
     def test_contract_bundle_binds_every_s6_artifact(self) -> None:
         bundle = load_json(BUNDLE_PATH)

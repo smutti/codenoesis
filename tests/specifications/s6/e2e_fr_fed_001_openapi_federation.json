@@ -2,31 +2,41 @@
   "schema_version": "codenoesis.acceptance-oracle/v1",
   "issue": "https://github.com/smutti/codenoesis/issues/78",
   "approval_pull_request": "https://github.com/smutti/codenoesis/pull/81",
+  "governance_correction_issue": "https://github.com/smutti/codenoesis/issues/83",
+  "governance_correction_pull_request": "https://github.com/smutti/codenoesis/pull/84",
+  "implementation_issue": "https://github.com/smutti/codenoesis/issues/82",
   "human_authorizations": [
     "https://github.com/smutti/codenoesis/issues/78#issuecomment-5131609031",
     "https://github.com/smutti/codenoesis/issues/78#issuecomment-5133952315",
     "https://github.com/smutti/codenoesis/issues/78#issuecomment-5135312628"
   ],
+  "governance_correction_authorization": {
+    "record": "https://github.com/smutti/codenoesis/issues/83",
+    "basis": "https://github.com/smutti/codenoesis/issues/82#issuecomment-5135813783",
+    "actor": "@smutti",
+    "date": "2026-07-30",
+    "statement": "Autorizzo la correzione governance S6 descritta nel commento #82"
+  },
   "requirements": [
     {
       "id": "FR-EXT-004",
-      "current_state": "Proposed",
-      "target_state": "Approved"
+      "current_state": "Approved",
+      "target_state": "Implemented"
     },
     {
       "id": "FR-FED-001",
-      "current_state": "Proposed",
-      "target_state": "Approved"
+      "current_state": "Approved",
+      "target_state": "Implemented"
     },
     {
       "id": "FR-FED-002",
-      "current_state": "Proposed",
-      "target_state": "Approved"
+      "current_state": "Approved",
+      "target_state": "Implemented"
     },
     {
       "id": "FR-CLI-005",
-      "current_state": "Proposed",
-      "target_state": "Approved"
+      "current_state": "Approved",
+      "target_state": "Implemented"
     }
   ],
   "slice": "S6",
@@ -34,7 +44,8 @@
     "level": "high",
     "reason": "public CLI and artifact contracts, untrusted OpenAPI and YAML parsing, cross-project authority, stable identities, heuristic epistemic state, bounded output, and downstream S7 correctness"
   },
-  "runtime_implementation_authorized": false,
+  "runtime_implementation_authorized": true,
+  "runtime_authorization_effective_after": "protected manual merge of pull request #84",
   "correction_budget": 3,
   "analysis_profile": "standard-local-s6",
   "contract_capability": "codenoesis.contract-capability/openapi-3.1-http-json/v1",
@@ -83,7 +94,9 @@
     "error_schema": "tests/specifications/s6/codenoesis-error-v8.schema.json",
     "rule_catalog": "tests/specifications/s6/openapi-federation-rule-catalog-v1.json",
     "fixture_manifest": "tests/fixtures/s6/openapi-federation-v1/manifest.json",
-    "reviewed_report": "tests/fixtures/s6/openapi-federation-v1/expected-federation-report.json"
+    "reviewed_report": "tests/fixtures/s6/openapi-federation-v1/expected-federation-report.json",
+    "provider_only_report": "tests/fixtures/s6/openapi-federation-v1/expected-provider-only-report.json",
+    "unsupported_semantics_report": "tests/fixtures/s6/openapi-federation-v1/expected-unsupported-semantics-report.json"
   },
   "supported_openapi_subset": {
     "versions": [
@@ -175,6 +188,145 @@
     "coverage_gap": "codenoesis.federation-gap-id/v1",
     "semantic_hash": "codenoesis.federation-report.semantic.v1"
   },
+  "provider_evidence_identity": {
+    "domain": "codenoesis.federation-evidence-id/v1",
+    "line_numbering": "one_based_inclusive",
+    "yaml_selector_kind": "openapi_location_span",
+    "yaml_preimage": [
+      "repository_identity",
+      "revision",
+      "normalized_path",
+      "normalized_openapi_location",
+      "source_format",
+      "start_line_decimal",
+      "end_line_decimal",
+      "file_sha256"
+    ],
+    "json_selector_kind": "json_pointer",
+    "json_preimage": [
+      "repository_identity",
+      "revision",
+      "normalized_path",
+      "canonical_json_pointer",
+      "file_sha256"
+    ]
+  },
+  "heuristic_matching": {
+    "comparison": "exact_unicode_scalar_sequence",
+    "service_hint_source": "openapi_info_title",
+    "operation_hint_source": "operationId",
+    "unique_match": "candidate",
+    "no_match": "coverage_gap:heuristic_no_match",
+    "multiple_matches": "coverage_gap:heuristic_ambiguous",
+    "automatic_confirmation": false
+  },
+  "coverage_gap_identity": {
+    "domain": "codenoesis.federation-gap-id/v1",
+    "heuristic_preimage": [
+      "subject_id",
+      "reason_code",
+      "primary_evidence_id"
+    ],
+    "contract_preimage": [
+      "subject_id",
+      "reason_code",
+      "normalized_openapi_location"
+    ]
+  },
+  "authoritative_subject_uniqueness": {
+    "subject_key": [
+      "client_id",
+      "call_site_id"
+    ],
+    "identical_repetition": "federation.invalid_declaration",
+    "distinct_binding": "federation.identity_conflict",
+    "mixed_explicit_and_heuristic": "federation.identity_conflict"
+  },
+  "coverage_gap_reasons": [
+    "heuristic_requires_confirmation",
+    "heuristic_no_match",
+    "heuristic_ambiguous",
+    "unsupported_callbacks",
+    "unsupported_webhooks",
+    "unsupported_links",
+    "unsupported_security_semantics",
+    "unsupported_server_variables",
+    "unsupported_media_type"
+  ],
+  "coverage_gap_rules": [
+    {
+      "reason_code": "heuristic_requires_confirmation",
+      "subject": "candidate_id",
+      "evidence": "client_binding"
+    },
+    {
+      "reason_code": "heuristic_no_match",
+      "subject": "call_site_id",
+      "evidence": "client_binding"
+    },
+    {
+      "reason_code": "heuristic_ambiguous",
+      "subject": "call_site_id",
+      "evidence": "client_binding"
+    },
+    {
+      "reason_code": "unsupported_callbacks",
+      "subject": "operation_id",
+      "evidence": "openapi_location"
+    },
+    {
+      "reason_code": "unsupported_webhooks",
+      "subject": "service_id",
+      "evidence": "openapi_location"
+    },
+    {
+      "reason_code": "unsupported_links",
+      "subject": "operation_id",
+      "evidence": "openapi_location"
+    },
+    {
+      "reason_code": "unsupported_security_semantics",
+      "subject": "nearest_service_or_operation_id",
+      "evidence": "openapi_location"
+    },
+    {
+      "reason_code": "unsupported_server_variables",
+      "subject": "service_id",
+      "evidence": "openapi_location"
+    },
+    {
+      "reason_code": "unsupported_media_type",
+      "subject": "operation_id",
+      "evidence": "openapi_location"
+    }
+  ],
+  "boundary_accounting": {
+    "counter_contract": "inclusive_charge_before_allocation_or_traversal",
+    "public_command_limits": [
+      "workspace_manifest_bytes",
+      "repositories",
+      "contract_bytes_per_document",
+      "yaml_nesting_depth",
+      "local_ref_depth",
+      "path_items",
+      "operations",
+      "schemas",
+      "fields_per_operation",
+      "report_bytes"
+    ],
+    "component_counter_limits": [
+      "contract_documents",
+      "clients",
+      "declarations",
+      "confirmed_links",
+      "candidates",
+      "rejections",
+      "evidence_items",
+      "coverage_gaps",
+      "memory_bytes",
+      "wall_milliseconds"
+    ]
+  },
   "limits": {
     "workspace_manifest_bytes": 8388608,
     "repositories": 128,
@@ -203,140 +355,180 @@
       "maximum": 8388608,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 8388609,
-      "failure_code": "federation.limit_exceeded"
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "repositories",
       "maximum": 128,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 129,
-      "failure_code": "federation.limit_exceeded"
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "contract_documents",
       "maximum": 256,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 257,
-      "failure_code": "contract.limit_exceeded"
+      "failure_code": "contract.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "contract_bytes_per_document",
       "maximum": 2097152,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 2097153,
-      "failure_code": "contract.limit_exceeded"
+      "failure_code": "contract.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "yaml_nesting_depth",
       "maximum": 32,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 33,
-      "failure_code": "contract.limit_exceeded"
+      "failure_code": "contract.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "local_ref_depth",
       "maximum": 16,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 17,
-      "failure_code": "contract.limit_exceeded"
+      "failure_code": "contract.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "path_items",
       "maximum": 10000,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 10001,
-      "failure_code": "contract.limit_exceeded"
+      "failure_code": "contract.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "operations",
       "maximum": 10000,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 10001,
-      "failure_code": "contract.limit_exceeded"
+      "failure_code": "contract.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "schemas",
       "maximum": 20000,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 20001,
-      "failure_code": "contract.limit_exceeded"
+      "failure_code": "contract.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "fields_per_operation",
       "maximum": 5000,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 5001,
-      "failure_code": "contract.limit_exceeded"
+      "failure_code": "contract.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "clients",
       "maximum": 10000,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 10001,
-      "failure_code": "federation.limit_exceeded"
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "declarations",
       "maximum": 100000,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 100001,
-      "failure_code": "federation.limit_exceeded"
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "confirmed_links",
       "maximum": 1000000,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 1000001,
-      "failure_code": "federation.limit_exceeded"
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "candidates",
       "maximum": 200000,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 200001,
-      "failure_code": "federation.limit_exceeded"
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "rejections",
       "maximum": 200000,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 200001,
-      "failure_code": "federation.limit_exceeded"
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "evidence_items",
       "maximum": 1000000,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 1000001,
-      "failure_code": "federation.limit_exceeded"
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "coverage_gaps",
       "maximum": 200000,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 200001,
-      "failure_code": "federation.limit_exceeded"
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "report_bytes",
       "maximum": 67108864,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 67108865,
-      "failure_code": "federation.limit_exceeded"
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "memory_bytes",
       "maximum": 536870912,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 536870913,
-      "failure_code": "federation.limit_exceeded"
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     },
     {
       "limit": "wall_milliseconds",
       "maximum": 60000,
       "maximum_outcome": "accepted when otherwise valid",
       "maximum_plus_one": 60001,
-      "failure_code": "federation.limit_exceeded"
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
     }
   ],
   "scenarios": [
@@ -503,6 +695,34 @@
       "kind": "future_red",
       "input": "exact public command against merged pre-S6 binary",
       "expected": "accepted Red record below"
+    },
+    {
+      "order": 23,
+      "id": "gt_fr_cli_005_provider_only_workspace",
+      "kind": "golden",
+      "input": "workspace-provider-only.json",
+      "expected": "exact reviewed provider-only FederationReportV1 with empty client and federation collections"
+    },
+    {
+      "order": 24,
+      "id": "gt_fr_ext_004_unsupported_semantics_are_gaps",
+      "kind": "golden",
+      "input": "workspace-unsupported-semantics.json",
+      "expected": "exact reviewed report with six typed unresolved OpenAPI coverage gaps and no loss of representable facts"
+    },
+    {
+      "order": 25,
+      "id": "conf_fr_fed_001_provider_evidence_identity_is_reproducible",
+      "kind": "conformance",
+      "input": "reviewed YAML and JSON provider selectors",
+      "expected": "every provider evidence ID is recomputed from the exact format-specific preimage contract"
+    },
+    {
+      "order": 26,
+      "id": "conf_fr_fed_002_heuristic_selection_is_exact",
+      "kind": "conformance",
+      "input": "unique, absent, and ambiguous exact service-title and operationId hint pairs",
+      "expected": "unique match remains candidate; absent and ambiguous matches remain typed unresolved gaps; none auto-confirm"
     }
   ],
   "determinism": {
@@ -536,14 +756,15 @@
     ],
     "persistent_store_change": false,
     "ontology_change": false,
-    "existing_artifact_change": false,
+    "accepted_s0_s5_s7_artifact_change": false,
+    "existing_artifact_scope": "no accepted S0-S5 or S7 artifact changes; this pre-runtime S6 correction changes only governed S6 selectors, evidence IDs, schemas, oracles, fixtures, and bundle bytes while retaining the base semantic hash",
     "downstream_s7": "service, operation, field, decoy, safe-client, and strict-client identities must equal the immutable S7 fixture; S6 does not prove S7 source behavior"
   },
   "expected_red": {
     "test_target": "e2e_fr_fed_001_openapi_federation",
     "command": "cargo test --locked -p noesis --test e2e_fr_fed_001_openapi_federation -- --exact e2e_fr_fed_001_openapi_federation",
     "base_behavior_probe": "target/debug/noesis federate --workspace-manifest /nonexistent --profile standard-local-s6 --format json",
-    "runner_exit": "nonzero",
+    "runner_exit": 101,
     "subject_exit": 2,
     "stdout_bytes": 0,
     "stderr_schema": "codenoesis.error/v2",
@@ -564,16 +785,24 @@
       "validation of hand-authored JSON without the public command"
     ]
   },
-  "allowed_paths": [
+  "governance_source_paths": [
     "docs/software/software-requirements-specification.md",
     "docs/software/decisions/0009-s6-openapi-federation-contract.md",
     "tests/specifications/s6",
     "tests/fixtures/s6/openapi-federation-v1",
     "scripts/tests/test_s6_openapi_federation_contract.py"
   ],
-  "forbidden": [
-    "production Rust code",
-    "dependency manifests or lockfiles",
+  "implementation_scope": {
+    "authority": "https://github.com/smutti/codenoesis/issues/82",
+    "effective_after": "protected manual merge of pull request #84",
+    "allowed_paths": "exact issue #82 allowlist",
+    "dependency_change": "yaml-rust2 =0.11.0 with default features disabled plus existing workspace dependencies only",
+    "correction_budget": 3,
+    "review": "independent human review and protected manual merge required"
+  },
+  "implementation_forbidden": [
+    "paths outside the exact issue #82 allowlist",
+    "a second YAML or OpenAPI parser",
     "workflow, policy, agent, architecture, or roadmap files",
     "ontology, schema migration, or persistent storage changes",
     "existing accepted S0 through S5 or S7 protected artifact bytes",

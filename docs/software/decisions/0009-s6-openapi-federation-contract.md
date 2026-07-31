@@ -2,15 +2,15 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed; becomes Accepted only after protected manual merge of [PR #81](https://github.com/smutti/codenoesis/pull/81) |
+| Status | Accepted by protected manual merge of [PR #81](https://github.com/smutti/codenoesis/pull/81); this implementation-completeness amendment becomes effective only after protected manual merge of [PR #84](https://github.com/smutti/codenoesis/pull/84) |
 | Date | 2026-07-30 |
 | Deciders | Andrea Moretti (`@smutti` persona), with protected manual merge by `@smutti` as the approval event |
-| Issue | [#78](https://github.com/smutti/codenoesis/issues/78) |
+| Issues | Ratification [#78](https://github.com/smutti/codenoesis/issues/78), blocked implementation [#82](https://github.com/smutti/codenoesis/issues/82), and governance correction [#83](https://github.com/smutti/codenoesis/issues/83) |
 | Requirements | `FR-EXT-004`, `FR-FED-001`, `FR-FED-002`, `FR-CLI-005` |
 | Slice | `S6 — Contract federation` |
 | Risk | High: untrusted OpenAPI and YAML input, public CLI and artifact contracts, cross-project authority, stable identities, heuristic epistemic state, bounded output, and downstream S7 correctness |
-| Scope | Governance only; production implementation, policy binding, workflows, architecture, dependency manifests, lockfiles, ontology, storage, and accepted S0–S5/S7 artifacts are excluded |
-| Human authorizations | [S6 package](https://github.com/smutti/codenoesis/issues/78#issuecomment-5131609031), [reviewed `yaml-rust2` replacement](https://github.com/smutti/codenoesis/issues/78#issuecomment-5133952315), and [output-only accelerated package](https://github.com/smutti/codenoesis/issues/78#issuecomment-5135312628) |
+| Scope | Governance correction only; production implementation, policy binding, workflows, architecture, dependency manifests, lockfiles, ontology, storage, and accepted S0–S5/S7 artifacts are excluded |
+| Human authorizations | [S6 package](https://github.com/smutti/codenoesis/issues/78#issuecomment-5131609031), [reviewed `yaml-rust2` replacement](https://github.com/smutti/codenoesis/issues/78#issuecomment-5133952315), [output-only accelerated package](https://github.com/smutti/codenoesis/issues/78#issuecomment-5135312628), and the explicit correction authorization recorded in [issue #83](https://github.com/smutti/codenoesis/issues/83) after the [implementation blocker](https://github.com/smutti/codenoesis/issues/82#issuecomment-5135813783) |
 
 ## Context
 
@@ -218,16 +218,48 @@ rejection:
 ["codenoesis.federation-rejection-id/v1", operation_candidate_id, client_id,
  call_site_id, reason_code]
 
-coverage gap:
+heuristic coverage gap:
 ["codenoesis.federation-gap-id/v1", subject_id, reason_code,
  primary_evidence_id]
+
+contract coverage gap:
+["codenoesis.federation-gap-id/v1", subject_id, reason_code,
+ normalized_openapi_location]
 ```
 
-Evidence identities bind repository identity, immutable revision, normalized
-path, exact source selector, and file SHA-256. A JSON declaration selector is
-its canonical JSON Pointer. A contract selector binds its normalized OpenAPI
-location and the truthful format-specific source span. Evidence is
-format-specific even when the represented contract fact is source-neutral.
+Evidence identities use the same stable-ID envelope. A workspace declaration
+or JSON OpenAPI evidence item has selector kind `json_pointer` and exact
+preimage:
+
+```text
+["codenoesis.federation-evidence-id/v1", repository_identity, revision,
+ normalized_path, canonical_json_pointer, file_sha256]
+```
+
+A YAML OpenAPI evidence item has kind `openapi_yaml_span`, selector kind
+`openapi_location_span`, and exact preimage:
+
+```text
+["codenoesis.federation-evidence-id/v1", repository_identity, revision,
+ normalized_path, normalized_openapi_location, "yaml",
+ start_line_decimal, end_line_decimal, file_sha256]
+```
+
+`canonical_json_pointer` is an RFC 6901 pointer. A normalized OpenAPI location
+is `#` followed by that pointer, with `~` escaped as `~0` and `/` as `~1`.
+Line numbers are one-based inclusive ASCII decimal without sign or leading
+zero. A keyed YAML member starts on the physical line containing its key and
+ends on the last physical line occupied by its syntactic value; a sequence
+member starts on its `-` line. A scalar occupies its syntactic lines. Blank
+lines and comments following the value are excluded. Parser markers must be
+checked against these rules rather than becoming authority themselves.
+
+Contract coverage-gap identity deliberately uses the normalized OpenAPI
+location rather than the format-specific evidence ID, so equivalent JSON and
+YAML input retains one source-neutral semantic identity. Heuristic gaps bind
+the client declaration evidence ID because the unresolved fact originates in
+that format-specific declaration. Evidence remains format-specific in both
+cases.
 
 No clock, machine path, traversal order, scheduling order, process identifier,
 workspace checkout location, or volatile run identifier enters a stable
@@ -261,7 +293,7 @@ The ordered rules are:
 | 10 | `fed.explicit-operation.confirm/v1` | Confirm an exact explicit service, operation, revision, client, and call-site binding; conflict is unresolved. |
 | 20 | `fed.operation-identity.confirm/v1` | Confirm an exact canonical service and operation identity with exact revision binding; conflict is unresolved. |
 | 30 | `fed.operation-decoy.reject/v1` | Reject an explicit operation identity absent from the provider. |
-| 40 | `fed.heuristic-name.candidate/v1` | Emit a candidate and coverage gap for bounded name similarity. |
+| 40 | `fed.heuristic-name.candidate/v1` | Apply the exact name rule below; one unique match emits a candidate and confirmation gap. |
 | 50 | `fed.conflict.unresolved/v1` | Preserve conflicting authoritative evidence as unresolved. |
 
 Explicit conflicting authority fails closed with
@@ -269,6 +301,35 @@ Explicit conflicting authority fails closed with
 score, model output, or arbitrary input order. Human review may authorize a
 future governed fact, but it cannot rewrite the provenance or epistemic state
 of the originating evidence.
+
+The v1 heuristic performs exact Unicode scalar-sequence equality. It applies
+no trimming, case folding, Unicode normalization, locale mapping,
+tokenization, edit distance, substring match, fuzzy score, or model
+interpretation. `service_hint` is compared with OpenAPI `info.title`, and
+`operation_hint` with `operationId`. Exactly one operation matching both
+values emits a `candidate` plus `heuristic_requires_confirmation`. Zero
+matches emit `heuristic_no_match`; more than one emits
+`heuristic_ambiguous`. The latter two gaps use the call-site identity as
+subject and emit no candidate. None of these outcomes confirms a link.
+
+For each `(client_id, call_site_id)`, an identical repeated declaration is
+`federation.invalid_declaration`; a distinct binding or a mixture of explicit
+and heuristic authority is `federation.identity_conflict`.
+
+Representable unsupported OpenAPI semantics emit these exact unresolved gaps:
+
+| OpenAPI semantics | Reason | Subject |
+|---|---|---|
+| callbacks | `unsupported_callbacks` | containing operation |
+| webhooks | `unsupported_webhooks` | service |
+| links | `unsupported_links` | containing operation |
+| root or operation security | `unsupported_security_semantics` | nearest service or operation |
+| server variables | `unsupported_server_variables` | service |
+| content outside `application/json` | `unsupported_media_type` | containing operation |
+
+Each gap binds the normalized OpenAPI location and truthful source evidence.
+The supported projection is retained; encountering one of these semantics
+does not discard otherwise representable provider facts.
 
 ### Public artifacts and canonical report
 
@@ -365,15 +426,29 @@ or fallback to a less authoritative parser is non-conforming.
 | Accounted memory bytes | 536,870,912 |
 | Wall milliseconds | 60,000 |
 
-Every maximum must be accepted when the input is otherwise valid. Every
-maximum plus one must return the exact `contract.limit_exceeded` or
-`federation.limit_exceeded` outcome named by the machine oracle, with empty
-stdout and no artifact.
+Every counter uses inclusive charge before allocation or traversal: charge
+the next unit, accept when the resulting total is at most the maximum, and
+return the exact `contract.limit_exceeded` or `federation.limit_exceeded`
+before allocation, traversal, or publication when it is greater. The report
+byte limit covers the final canonical document including LF. The wall limit
+includes input, parsing, normalization, federation, validation, hashing, and
+output preparation. Parallel scheduling cannot weaken a shared bound.
 
-Accounting starts before allocation or traversal. The report byte limit covers
-the final canonical document including LF. The wall limit includes input,
-parsing, normalization, federation, validation, hashing, and output
-preparation. Parallel scheduling cannot weaken a shared bound.
+Public-command max/max+1 conformance applies to workspace bytes,
+repositories, bytes per contract, YAML depth, local-reference depth, path
+items, operations, schemas, fields per operation, and report bytes.
+The public invocation must accept each maximum when otherwise valid and fail
+its maximum plus one with empty stdout and no artifact.
+
+The v1 public cardinality cannot independently reach every other configured
+capacity. Contract documents, clients, declarations, confirmed links,
+candidates, rejections, evidence items, coverage gaps, accounted memory, and
+wall time therefore require component-counter conformance through the same
+inward-owned counter contract, using deterministic constructed state and
+injected resource observations. In particular, the `repositories = 128`
+ceiling prevents a successful public report from independently reaching
+`clients = 10,000`. Such a test proves the counter boundary only; it does not
+claim that the public v1 workspace exposes that cardinality.
 
 ### Security and determinism
 
@@ -404,6 +479,10 @@ fixture contains:
 - strict and safe explicit clients that produce exactly two confirmed links;
 - one explicit operation decoy that is rejected;
 - one name-only client that remains a candidate with an unresolved gap;
+- one valid provider-only workspace with empty client and federation
+  collections;
+- one representable unsupported-semantics variant with exact callback,
+  webhook, link, security, server-variable, and media-type gaps;
 - hostile duplicate-key, alias, merge, custom-tag, multiple-document,
   remote-reference, reference-cycle, malformed, unsupported-version, and
   conflicting-authority variants;
@@ -447,11 +526,10 @@ framework behavior, compatibility classification, or causal impact.
 
 ## Delivery and separation
 
-This governance pull request contains no product runtime. After its protected
-manual merge, all four requirement IDs become Approved for this exact S6
-capability. Under the maintainer-supervised accelerated lane, one separately
-linked Ready implementation issue may authorize one coherent vertical
-implementation pull request containing:
+PR #81 made all four requirement IDs Approved for this exact S6 capability.
+This governance-correction pull request contains no product runtime. After its
+protected manual merge, Ready implementation issue #82 may resume one coherent
+vertical implementation pull request containing:
 
 - the public black-box Red retained before production edits;
 - the exact reviewed `yaml-rust2` manifest and lockfile change;
