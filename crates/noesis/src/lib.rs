@@ -1,6 +1,7 @@
 //! Composition support for the `CodeNoesis` command-line interface.
 
 use std::ffi::OsStr;
+use std::path::PathBuf;
 
 pub mod generated_docs;
 
@@ -73,6 +74,34 @@ pub fn install_s1_filesystem_boundary(repository: &OsStr) -> Result<(), Security
 #[cfg(not(target_os = "linux"))]
 pub const fn install_s1_filesystem_boundary(
     _repository: &OsStr,
+) -> Result<(), SecurityBoundaryError> {
+    Ok(())
+}
+
+/// Installs the S6 read-only manifest and repository-root boundary on Linux.
+///
+/// # Errors
+///
+/// Returns an opaque error when Landlock cannot fully confine all authorized
+/// input roots without granting filesystem writes.
+#[cfg(target_os = "linux")]
+pub fn install_s6_filesystem_boundary(
+    workspace_manifest: &OsStr,
+    repository_roots: &[PathBuf],
+) -> Result<(), SecurityBoundaryError> {
+    filesystem_sandbox::install_read_only_paths(workspace_manifest, repository_roots)
+}
+
+/// Confirms that normative S6 filesystem confinement is Linux-only.
+///
+/// # Errors
+///
+/// This portability implementation is infallible and installs no substitute
+/// control on non-Linux systems.
+#[cfg(not(target_os = "linux"))]
+pub const fn install_s6_filesystem_boundary(
+    _workspace_manifest: &OsStr,
+    _repository_roots: &[PathBuf],
 ) -> Result<(), SecurityBoundaryError> {
     Ok(())
 }

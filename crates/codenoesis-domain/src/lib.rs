@@ -4,6 +4,7 @@ pub mod knowledge;
 pub mod s1_packed;
 pub mod s4;
 pub mod s5;
+pub mod s6;
 pub mod storage;
 
 use std::error::Error;

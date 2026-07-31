@@ -1,5 +1,5 @@
 use std::ffi::OsStr;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use landlock::{
     ABI, Access, AccessFs, CompatLevel, Compatible, PathBeneath, PathFd, Ruleset, RulesetAttr,
@@ -24,6 +24,39 @@ pub(crate) fn install(repository: &OsStr) -> Result<(), SecurityBoundaryError> {
         .map_err(|_| SecurityBoundaryError)?
         .restrict_self()
         .map_err(|_| SecurityBoundaryError)?;
+    if status.ruleset != RulesetStatus::FullyEnforced || !status.no_new_privs {
+        return Err(SecurityBoundaryError);
+    }
+    Ok(())
+}
+
+pub(crate) fn install_read_only_paths(
+    workspace_manifest: &OsStr,
+    repository_roots: &[PathBuf],
+) -> Result<(), SecurityBoundaryError> {
+    let abi = ABI::V3;
+    let read_file = AccessFs::ReadFile;
+    let read_tree = read_file | AccessFs::ReadDir;
+    let mut ruleset = Ruleset::default()
+        .set_compatibility(CompatLevel::HardRequirement)
+        .handle_access(AccessFs::from_all(abi))
+        .map_err(|_| SecurityBoundaryError)?
+        .create()
+        .map_err(|_| SecurityBoundaryError)?
+        .add_rule(PathBeneath::new(
+            PathFd::new(Path::new(workspace_manifest)).map_err(|_| SecurityBoundaryError)?,
+            read_file,
+        ))
+        .map_err(|_| SecurityBoundaryError)?;
+    for root in repository_roots {
+        ruleset = ruleset
+            .add_rule(PathBeneath::new(
+                PathFd::new(root).map_err(|_| SecurityBoundaryError)?,
+                read_tree,
+            ))
+            .map_err(|_| SecurityBoundaryError)?;
+    }
+    let status = ruleset.restrict_self().map_err(|_| SecurityBoundaryError)?;
     if status.ruleset != RulesetStatus::FullyEnforced || !status.no_new_privs {
         return Err(SecurityBoundaryError);
     }

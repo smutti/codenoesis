@@ -1,10 +1,12 @@
-//! Application orchestration for the `CodeNoesis` S0 through S4 slices.
+//! Application orchestration for the `CodeNoesis` S0 through S6 slices.
 
 mod s4;
 mod s5;
+mod s6;
 
 pub use s4::S4ScanOutput;
 pub use s5::{RefreshError, RefreshPlan, RefreshService};
+pub use s6::{FederationRequest, FederationService, FederationServiceError};
 
 use std::ffi::OsString;
 

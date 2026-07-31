@@ -1,0 +1,94 @@
+{
+  "schema_version": "codenoesis.s6-traceability/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/82",
+  "slice": "S6",
+  "requirement_status": "Approved",
+  "requirements": [
+    {
+      "id": "FR-EXT-004",
+      "tests": [
+        "gt_fr_ext_004_yaml_json_semantic_projection_is_equivalent",
+        "sec_fr_ext_004_restricted_yaml_and_refs_fail_closed",
+        "gt_fr_ext_004_unsupported_semantics_become_exact_gaps",
+        "fz_fr_ext_004_malformed_contract_seeds_fail_closed",
+        "gt_fr_ext_004_unsupported_semantics_are_exact_gaps",
+        "gt_fr_ext_004_yaml_json_reports_are_semantically_equivalent",
+        "sec_fr_ext_004_hostile_contracts_fail_closed"
+      ],
+      "evidence": [
+        "tests/fixtures/s6/openapi-federation-v1/provider/openapi.yaml",
+        "tests/fixtures/s6/openapi-federation-v1/provider/openapi.json",
+        "tests/fixtures/s6/openapi-federation-v1/expected-unsupported-semantics-report.json",
+        "crates/noesis/tests/evidence/s6/dependency-review.json"
+      ]
+    },
+    {
+      "id": "FR-FED-001",
+      "tests": [
+        "e2e_fr_fed_001_openapi_federation",
+        "pt_fr_fed_001_reviewed_identity_preimages_are_exact",
+        "conf_fr_fed_001_yaml_evidence_preimage_is_reproducible",
+        "pt_fr_fed_001_every_counter_accepts_max_and_rejects_plus_one",
+        "pt_fr_fed_001_provider_collection_orders_are_invariant",
+        "sec_fr_fed_001_unsafe_workspace_paths_are_rejected_before_reads",
+        "sec_fr_fed_001_symlink_root_is_rejected_before_content_read",
+        "pt_fr_fed_001_fifty_input_orders_are_byte_identical",
+        "pt_fr_fed_001_ten_parallel_schedules_are_byte_identical",
+        "sec_fr_fed_001_standard_path_does_not_mutate_inputs",
+        "pt_fr_fed_001_public_limits_accept_max_and_reject_plus_one",
+        "sec_fr_fed_001_s6_reads_only_manifest_and_explicit_roots"
+      ],
+      "evidence": [
+        "tests/fixtures/s6/openapi-federation-v1/expected-federation-report.json",
+        "tests/specifications/s6/federation-report-v1.schema.json",
+        "tests/specifications/s6/openapi-federation-rule-catalog-v1.json"
+      ]
+    },
+    {
+      "id": "FR-FED-002",
+      "tests": [
+        "pt_fr_fed_001_conflicts_and_multi_call_sites_are_order_invariant",
+        "conf_fr_fed_002_conflicting_authority_fails_closed",
+        "conf_fr_fed_002_heuristic_selection_is_exact"
+      ],
+      "evidence": [
+        "tests/fixtures/s6/openapi-federation-v1/expected-federation-report.json",
+        "tests/fixtures/s6/openapi-federation-v1/expected-error-identity-conflict.json",
+        "tests/specifications/s6/openapi-federation-rule-catalog-v1.json"
+      ]
+    },
+    {
+      "id": "FR-CLI-005",
+      "tests": [
+        "conf_fr_cli_005_workspace_and_client_contracts_are_closed",
+        "conf_fr_cli_005_reviewed_error_values_are_exact",
+        "sec_fr_cli_005_logical_paths_are_bounded_and_platform_neutral",
+        "conf_fr_cli_005_application_buffers_one_validated_report",
+        "conf_fr_cli_005_application_rejects_unbound_input_cardinality",
+        "gt_fr_cli_005_provider_only_workspace_is_exact",
+        "conf_fr_cli_005_invocation_and_digest_fail_without_stdout",
+        "conf_fr_cli_005_stdout_failure_uses_internal_error_v8"
+      ],
+      "evidence": [
+        "tests/fixtures/s6/openapi-federation-v1/expected-provider-only-report.json",
+        "tests/specifications/s6/federation-workspace-v1.schema.json",
+        "tests/specifications/s6/federation-client-declaration-v1.schema.json",
+        "tests/specifications/s6/codenoesis-error-v8.schema.json"
+      ]
+    }
+  ],
+  "test_first": {
+    "commit": "6afb7a8fac35f9f9403ed7de9a89f0c40a27a389",
+    "observation": "crates/noesis/tests/evidence/s6/red-observation.json",
+    "log": "crates/noesis/tests/evidence/s6/red/e2e_fr_fed_001_openapi_federation.log"
+  },
+  "immutable_contract": {
+    "bundle_sha256": "64587eb20880f0beb17320abf6dd301d811fabdc248eb3f59268aebf7ca47081",
+    "acceptance_specification_sha256": "f5bd4ecd3244e17ab4e8ba76d7ddb8eed3ea083977039257345ae14fc928f2c6",
+    "base_report_sha256": "7a301b0eb5d0e5e702a647422e57f42e1611d9e1cac5aedb39be26c7f1064628",
+    "provider_only_report_sha256": "6d53dda7b209f2ca879f9a122f995ccf3ec17ee7fe86b7c611629e4f13f87d9a",
+    "unsupported_semantics_report_sha256": "720aeec751d12d056677d19d0fa607721e636eb62d922364a89030d855d97e8c",
+    "protected_contracts_changed": false
+  },
+  "review_constraint": "Local and CI evidence make the implementation reviewable but do not mark requirements Verified; independent human review and protected manual merge remain required."
+}

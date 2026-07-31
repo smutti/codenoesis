@@ -1,0 +1,123 @@
+{
+  "schema_version": "codenoesis.s6-dependency-review/v1",
+  "issue": 82,
+  "requirement_ids": [
+    "FR-EXT-004",
+    "FR-FED-001",
+    "FR-FED-002",
+    "FR-CLI-005"
+  ],
+  "reviewed_at_utc": "2026-07-31",
+  "direct_dependency": {
+    "name": "yaml-rust2",
+    "version": "0.11.0",
+    "requirement": "=0.11.0",
+    "default_features": false,
+    "active_features": [],
+    "checksum": "631a50d867fafb7093e709d75aaee9e0e0d5deb934021fcea25ac2fe09edc51e",
+    "license": "MIT OR Apache-2.0",
+    "rust_version": "1.65.0",
+    "build_script": false,
+    "unsafe_source_patterns": 0
+  },
+  "new_transitive_graph": [
+    "yaml-rust2 0.11.0 -> arraydeque 0.5.1",
+    "yaml-rust2 0.11.0 -> hashlink 0.11.1",
+    "hashlink 0.11.1 -> hashbrown 0.16.1",
+    "hashbrown 0.16.1 -> foldhash 0.2.0"
+  ],
+  "new_transitive_packages": [
+    {
+      "name": "arraydeque",
+      "version": "0.5.1",
+      "checksum": "7d902e3d592a523def97af8f317b08ce16b7ab854c1985a0c671e6f15cebc236",
+      "active_features": ["default", "std"],
+      "license_metadata": "MIT/Apache-2.0",
+      "rust_version": null,
+      "rust_version_observation": "not declared by the published manifest",
+      "build_script": false,
+      "unsafe_source_patterns": 72,
+      "unsafe_source_files": ["src/lib.rs"]
+    },
+    {
+      "name": "hashlink",
+      "version": "0.11.1",
+      "checksum": "824e001ac4f3012dd16a264bec811403a67ca9deb6c102fc5049b32c4574b35f",
+      "active_features": ["default"],
+      "license_metadata": "MIT OR Apache-2.0",
+      "rust_version": "1.65",
+      "build_script": false,
+      "unsafe_source_patterns": 78,
+      "unsafe_source_files": ["src/linked_hash_map.rs"]
+    },
+    {
+      "name": "hashbrown",
+      "version": "0.16.1",
+      "checksum": "841d1cc9bed7f9236f321df977030373f4a4163ae1a7dbfe1a51a2c1a51d9100",
+      "active_features": ["default-hasher"],
+      "license_metadata": "MIT OR Apache-2.0",
+      "rust_version": "1.65.0",
+      "build_script": false,
+      "unsafe_source_patterns": 333,
+      "unsafe_source_files": [
+        "src/control/bitmask.rs",
+        "src/control/group/generic.rs",
+        "src/control/group/lsx.rs",
+        "src/control/group/neon.rs",
+        "src/control/group/sse2.rs",
+        "src/control/tag.rs",
+        "src/external_trait_impls/rayon/map.rs",
+        "src/external_trait_impls/rayon/raw.rs",
+        "src/external_trait_impls/rayon/table.rs",
+        "src/map.rs",
+        "src/raw/alloc.rs",
+        "src/raw/mod.rs",
+        "src/raw_entry.rs",
+        "src/rustc_entry.rs",
+        "src/scopeguard.rs",
+        "src/set.rs",
+        "src/table.rs",
+        "src/util.rs"
+      ]
+    },
+    {
+      "name": "foldhash",
+      "version": "0.2.0",
+      "checksum": "77ce24cb58228fbb8aa041425bb1050850ac19177686ea6e0f41a70416f56fdb",
+      "active_features": [],
+      "license_metadata": "Zlib",
+      "rust_version": "1.60",
+      "build_script": false,
+      "unsafe_source_patterns": 10,
+      "unsafe_source_files": ["src/fast.rs", "src/lib.rs", "src/seed.rs"]
+    }
+  ],
+  "advisory_observation": {
+    "source": "https://api.osv.dev/v1/querybatch",
+    "ecosystem": "crates.io",
+    "query_sha256": "e458c728cf061f8aa9df825c1ab9ab78e27bb1840c7370a35d5b5c20079a1362",
+    "response_sha256": "75f196f26b823bd31225287828f28e3ce63dda93cce61d54965a97dd460b3faf",
+    "response": {
+      "results": [{}, {}, {}, {}, {}]
+    },
+    "vulnerabilities_observed": 0
+  },
+  "compatibility_observation": {
+    "repository_toolchain": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "host": "aarch64-apple-darwin",
+    "locked_build": "passed",
+    "undeclared_minimums": ["arraydeque 0.5.1"]
+  },
+  "commands": [
+    "cargo tree --locked -p codenoesis-contract-extractors -e normal",
+    "cargo tree --locked -p codenoesis-contract-extractors -e features",
+    "rg -n '\\bunsafe\\b' <new first-party S6 source paths>",
+    "rg -n 'unsafe\\s*\\{|unsafe\\s+fn|unsafe\\s+impl|unsafe\\s+trait' <registry-package>/src"
+  ],
+  "first_party_unsafe_observed": 0,
+  "limitations": [
+    "The advisory result is a point-in-time OSV observation, not a guarantee about future disclosures.",
+    "Unsafe counts conservatively inventory matching source constructs, including code behind inactive target or feature cfgs.",
+    "arraydeque 0.5.1 does not declare rust-version; compatibility is established only against the repository-pinned toolchain."
+  ]
+}
