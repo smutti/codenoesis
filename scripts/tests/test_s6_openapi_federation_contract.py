@@ -364,10 +364,10 @@ EXPECTED_PROVIDER_EVIDENCE = {
         "0eb6cb716e2451f7003c0437b339c93ba0c727bc40add79c7a6f7c99ad8e7990",
     ),
     "#/components/schemas/User": (
-        21,
+        20,
         30,
         "urn:codenoesis:evidence:blake3:"
-        "10d428fd450a9c5b68e5582a41f9220dcd675a1f5a118b851580bb37f01681c2",
+        "0a6b6bf4e9d8f7a29dc03198875383453e3fad10efed4a737856e8ac23d7dacd",
     ),
 }
 
@@ -741,6 +741,39 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
                     expected,
                     f"{report_path} must be canonical JSON plus exactly one LF",
                 )
+
+    def test_yaml_keyed_member_spans_start_on_physical_key_lines(self) -> None:
+        location = "#/components/schemas/User"
+        cases = (
+            (
+                FIXTURE_ROOT / "provider" / "openapi.yaml",
+                (REPORT_PATH, PROVIDER_ONLY_REPORT_PATH),
+            ),
+            (
+                FIXTURE_ROOT / "variants" / "unsupported-semantics.yaml",
+                (UNSUPPORTED_REPORT_PATH,),
+            ),
+        )
+        for source_path, report_paths in cases:
+            source_lines = source_path.read_text(encoding="utf-8").splitlines()
+            key_lines = [
+                line_number
+                for line_number, line in enumerate(source_lines, start=1)
+                if line.strip() == "User:"
+            ]
+            self.assertEqual(len(key_lines), 1, source_path)
+            key_line = key_lines[0]
+            for report_path in report_paths:
+                report = load_json(report_path)
+                matching = [
+                    item
+                    for item in report["evidence"]
+                    if item["kind"] == "openapi_yaml_span"
+                    and item["selector"]["location"] == location
+                ]
+                self.assertEqual(len(matching), 1, report_path)
+                selector = matching[0]["selector"]
+                self.assertEqual(selector["start_line"], key_line, report_path)
 
     def test_schemas_are_strict_closed_and_bounded(self) -> None:
         schemas = {
