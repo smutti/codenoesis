@@ -471,17 +471,24 @@
         }
       }
     },
-    "line_span": {
+    "openapi_location_span": {
       "type": "object",
       "additionalProperties": false,
       "required": [
         "kind",
+        "location",
         "start_line",
         "end_line"
       ],
       "properties": {
         "kind": {
-          "const": "line_span"
+          "const": "openapi_location_span"
+        },
+        "location": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^#/(?:[^~\\u0000\\r\\n]|~[01])+$"
         },
         "start_line": {
           "type": "integer",
@@ -531,7 +538,8 @@
         },
         "kind": {
           "enum": [
-            "openapi_line_span",
+            "openapi_yaml_span",
+            "openapi_json_pointer",
             "workspace_json_pointer"
           ]
         },
@@ -550,14 +558,51 @@
         "selector": {
           "oneOf": [
             {
-              "$ref": "#/$defs/line_span"
+              "$ref": "#/$defs/openapi_location_span"
             },
             {
               "$ref": "#/$defs/json_pointer"
             }
           ]
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "openapi_yaml_span"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "selector": {
+                "$ref": "#/$defs/openapi_location_span"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "openapi_json_pointer",
+                  "workspace_json_pointer"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "selector": {
+                "$ref": "#/$defs/json_pointer"
+              }
+            }
+          }
+        }
+      ]
     },
     "coverage_gap": {
       "type": "object",
@@ -577,7 +622,17 @@
           "$ref": "#/$defs/identity"
         },
         "reason_code": {
-          "const": "heuristic_requires_confirmation"
+          "enum": [
+            "heuristic_requires_confirmation",
+            "heuristic_no_match",
+            "heuristic_ambiguous",
+            "unsupported_callbacks",
+            "unsupported_webhooks",
+            "unsupported_links",
+            "unsupported_security_semantics",
+            "unsupported_server_variables",
+            "unsupported_media_type"
+          ]
         },
         "state": {
           "const": "unresolved"

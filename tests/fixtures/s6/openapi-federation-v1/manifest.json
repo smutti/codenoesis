@@ -7,6 +7,18 @@
     "path": "workspace.json",
     "sha256": "19e6851e3d29ebf86f69b76799641557426375af1c587e282baeeb36daed5616"
   },
+  "workspace_variants": [
+    {
+      "scenario": "provider_only",
+      "path": "workspace-provider-only.json",
+      "sha256": "c0feac3bba7f4d94b29f87c8ebee5c0969f21f79a488b6acf606cf891b649da7"
+    },
+    {
+      "scenario": "unsupported_semantics",
+      "path": "workspace-unsupported-semantics.json",
+      "sha256": "4ab517aee148770fac4afcfae2a41c1af1210819d7b713fc17a6a13040984e3d"
+    }
+  ],
   "provider": {
     "repository_identity": "urn:codenoesis:fixture:s7-provider",
     "revision": "fixture-provider-a",
@@ -58,7 +70,15 @@
   "expected": {
     "report": {
       "path": "expected-federation-report.json",
-      "sha256": "08e2f73c7c7c0c6fb2ac53cfd60070682892aa6ac56a4e631d48f828084a3ee6"
+      "sha256": "4b69d578eaa164bbe492f71f6ddbb8ae3b201fcd50eb2e9ef6820a07a7da5dc8"
+    },
+    "provider_only_report": {
+      "path": "expected-provider-only-report.json",
+      "sha256": "d6274e5a3786321f237fe17e644cab3e47f5a3fbfe5768813b632e69363fe5bb"
+    },
+    "unsupported_semantics_report": {
+      "path": "expected-unsupported-semantics-report.json",
+      "sha256": "b107393f9ad8fdd22fc02b58b7453eb7616441b2569b0984fb0f956f126167d1"
     },
     "errors": [
       {
@@ -128,6 +148,11 @@
       "scenario": "unsupported_openapi",
       "path": "variants/unsupported-openapi.yaml",
       "sha256": "3ffe5f05e3254dc8199533cfa58e061cb0e5e2d21e638157cab9fc9e2e5a9ddc"
+    },
+    {
+      "scenario": "unsupported_semantics",
+      "path": "variants/unsupported-semantics.yaml",
+      "sha256": "87817e54dc065a407b8d035df1c779e092a92286a534e3cb3a0a72b1572ec1ea"
     }
   ],
   "downstream_s7_conformance": {

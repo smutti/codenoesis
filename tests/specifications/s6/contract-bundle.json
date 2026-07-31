@@ -7,15 +7,15 @@
     },
     {
       "path": "docs/software/decisions/0009-s6-openapi-federation-contract.md",
-      "sha256": "4f58997ca0d31d6190c18c678b7358dd8092ec2a1a82f8d909b3ca707a2535bb"
+      "sha256": "7f7d490156e1f2f537334188ff94b372cd4994155a18c1d8db993f4e06891526"
     },
     {
       "path": "scripts/tests/test_s6_openapi_federation_contract.py",
-      "sha256": "b39ac0b22d5e56c8a56feded82c37cce892a76c4b99b9b8ed70c8146f655df6b"
+      "sha256": "2d23bcc0b9b77f9d383ec3738811ebf0e18fdb976c265c650f5478d44022b8bc"
     },
     {
       "path": "tests/fixtures/s6/openapi-federation-v1/README.md",
-      "sha256": "53cf5abb19c745ee3b08b681a9d65a812b4dbe0ebdf2b89aab332028bc4902ba"
+      "sha256": "63f8e42af49f2cf0c95aa0fea277be427518e6a2b4a0375a2c4c9cb615825ac7"
     },
     {
       "path": "tests/fixtures/s6/openapi-federation-v1/clients/candidate/federation.json",
@@ -47,11 +47,19 @@
     },
     {
       "path": "tests/fixtures/s6/openapi-federation-v1/expected-federation-report.json",
-      "sha256": "08e2f73c7c7c0c6fb2ac53cfd60070682892aa6ac56a4e631d48f828084a3ee6"
+      "sha256": "4b69d578eaa164bbe492f71f6ddbb8ae3b201fcd50eb2e9ef6820a07a7da5dc8"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/expected-provider-only-report.json",
+      "sha256": "d6274e5a3786321f237fe17e644cab3e47f5a3fbfe5768813b632e69363fe5bb"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/expected-unsupported-semantics-report.json",
+      "sha256": "b107393f9ad8fdd22fc02b58b7453eb7616441b2569b0984fb0f956f126167d1"
     },
     {
       "path": "tests/fixtures/s6/openapi-federation-v1/manifest.json",
-      "sha256": "6c6a0f4b9b5452e5f1a1429909cb0da721db6bcf84a8c3ff77c7e2a242fdb478"
+      "sha256": "8ad9941853fe46463027378dc67415dff751f168ba1561f8147cd8d997e0d8c0"
     },
     {
       "path": "tests/fixtures/s6/openapi-federation-v1/provider/openapi.json",
@@ -106,6 +114,18 @@
       "sha256": "3ffe5f05e3254dc8199533cfa58e061cb0e5e2d21e638157cab9fc9e2e5a9ddc"
     },
     {
+      "path": "tests/fixtures/s6/openapi-federation-v1/variants/unsupported-semantics.yaml",
+      "sha256": "87817e54dc065a407b8d035df1c779e092a92286a534e3cb3a0a72b1572ec1ea"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/workspace-provider-only.json",
+      "sha256": "c0feac3bba7f4d94b29f87c8ebee5c0969f21f79a488b6acf606cf891b649da7"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/workspace-unsupported-semantics.json",
+      "sha256": "4ab517aee148770fac4afcfae2a41c1af1210819d7b713fc17a6a13040984e3d"
+    },
+    {
       "path": "tests/fixtures/s6/openapi-federation-v1/workspace.json",
       "sha256": "19e6851e3d29ebf86f69b76799641557426375af1c587e282baeeb36daed5616"
     },
@@ -119,7 +139,7 @@
     },
     {
       "path": "tests/specifications/s6/e2e_fr_fed_001_openapi_federation.json",
-      "sha256": "a0ce39f3507847d9b7dd11a179ad06b3b81e2c961d98ee5df7ffbfdfaeab7cb2"
+      "sha256": "f5bd4ecd3244e17ab4e8ba76d7ddb8eed3ea083977039257345ae14fc928f2c6"
     },
     {
       "path": "tests/specifications/s6/federation-client-declaration-v1.schema.json",
@@ -127,20 +147,20 @@
     },
     {
       "path": "tests/specifications/s6/federation-report-v1.schema.json",
-      "sha256": "51e99ba00d0d8cca94cc66ba766b0e3e3795991c99a59fe8437dc6e8ea3b44f5"
+      "sha256": "19a522a58b8c0e3596ec698234da17f3666b0dc9a45ed54ddbe6bd1a48d4475d"
     },
     {
       "path": "tests/specifications/s6/federation-workspace-v1.schema.json",
-      "sha256": "78112e1c444f6fcc1fc8024e721ddce704ed09f9e3708583aa98d3b08c1db10d"
+      "sha256": "250ec8bd876b8e1ba9d04b2cfd1facc7faa1eaa0199586ecacc6f735ce942d0e"
     },
     {
       "path": "tests/specifications/s6/openapi-federation-rule-catalog-v1.json",
-      "sha256": "30991981f21c9e2b08c0349778971549e8c28b239a7ede4a71cf721939829277"
+      "sha256": "26397264aaf52765db7db04ceb8a6a427e9445e1d767bed6177a1acaea98bf2f"
     },
     {
       "path": "tests/specifications/s7/contract-bundle.json",
       "sha256": "8185cbdc0eb33dc96cb5c932a1343460b7d1794b953a64190ff4fcc6783b0208"
     }
   ],
-  "bundle_sha256": "be36354d5f03bc487dc7f95e7bb5d8d098fcd1561507e2a5ca291b513ba224ec"
+  "bundle_sha256": "037faf971458637f1e391bc9147e7ecd5a1b72b5c3941492cb9018492e589fe6"
 }

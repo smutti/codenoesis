@@ -1,0 +1,137 @@
+{
+  "schema_version": "codenoesis.federation-report/v1",
+  "analysis_profile": "standard-local-s6",
+  "contract_capability": "codenoesis.contract-capability/openapi-3.1-http-json/v1",
+  "federation_rule_catalog": "codenoesis.federation-rules/http-json/v1",
+  "workspace_identity": "urn:codenoesis:fixture:s6-openapi-federation-v1",
+  "provider": {
+    "repository_identity": "urn:codenoesis:fixture:s7-provider",
+    "revision": "fixture-provider-a",
+    "contract_path": "provider/openapi.yaml",
+    "contract_sha256": "d6decc18d428316b209aa554ee028fe9db8761df515bf34b9e92c3a369f2de3d",
+    "source_format": "yaml",
+    "service_id": "urn:codenoesis:service:blake3:509813cd6e049acb2c9de79cb9f0a1f385b355473512592a22d5f115ac9243cc",
+    "service_authority": "https://api.example.invalid",
+    "evidence_ids": [
+      "urn:codenoesis:evidence:blake3:0eb6cb716e2451f7003c0437b339c93ba0c727bc40add79c7a6f7c99ad8e7990",
+      "urn:codenoesis:evidence:blake3:10d428fd450a9c5b68e5582a41f9220dcd675a1f5a118b851580bb37f01681c2",
+      "urn:codenoesis:evidence:blake3:d8708d078fb5444808a5d4ebac01173630040d2c533cb818cb089dd7b44f4194"
+    ]
+  },
+  "operations": [
+    {
+      "operation_id": "urn:codenoesis:operation:blake3:071cbb8fa33a959879d7d8a2bfbbac31e1fea4850c28fdb73227c605f5974923",
+      "service_id": "urn:codenoesis:service:blake3:509813cd6e049acb2c9de79cb9f0a1f385b355473512592a22d5f115ac9243cc",
+      "method": "GET",
+      "path_template": "/users/{id}",
+      "explicit_operation_id": "getUser",
+      "response_status": "200",
+      "schema_id": "urn:codenoesis:schema:blake3:d5ccc3bfeafd3668993d4a6f520231d62b47ca63dbac467b5ea1d23d13032c68",
+      "fields": [
+        {
+          "field_id": "urn:codenoesis:field:blake3:18ccd66ca65b4c53a46dfb46b7f376985a376e24e6d1dd1d5614dedeca73d88c",
+          "json_pointer": "/id",
+          "required": true,
+          "type": "string",
+          "evidence_ids": [
+            "urn:codenoesis:evidence:blake3:10d428fd450a9c5b68e5582a41f9220dcd675a1f5a118b851580bb37f01681c2"
+          ]
+        },
+        {
+          "field_id": "urn:codenoesis:field:blake3:a2b6cafe0db73cb016ffd790941c18fbab768923a5b8b4b671eb22459ec66301",
+          "json_pointer": "/nickname",
+          "required": false,
+          "type": "string",
+          "evidence_ids": [
+            "urn:codenoesis:evidence:blake3:10d428fd450a9c5b68e5582a41f9220dcd675a1f5a118b851580bb37f01681c2"
+          ]
+        },
+        {
+          "field_id": "urn:codenoesis:field:blake3:a4bef896d066ecb3441a6d9638cea00947075d62c66bad642455840a7ce4f0e7",
+          "json_pointer": "/displayName",
+          "required": false,
+          "type": "string",
+          "evidence_ids": [
+            "urn:codenoesis:evidence:blake3:10d428fd450a9c5b68e5582a41f9220dcd675a1f5a118b851580bb37f01681c2"
+          ]
+        }
+      ],
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:0eb6cb716e2451f7003c0437b339c93ba0c727bc40add79c7a6f7c99ad8e7990",
+        "urn:codenoesis:evidence:blake3:10d428fd450a9c5b68e5582a41f9220dcd675a1f5a118b851580bb37f01681c2"
+      ]
+    }
+  ],
+  "clients": [],
+  "confirmed_links": [],
+  "candidates": [],
+  "rejections": [],
+  "evidence": [
+    {
+      "evidence_id": "urn:codenoesis:evidence:blake3:0eb6cb716e2451f7003c0437b339c93ba0c727bc40add79c7a6f7c99ad8e7990",
+      "kind": "openapi_yaml_span",
+      "repository_identity": "urn:codenoesis:fixture:s7-provider",
+      "revision": "fixture-provider-a",
+      "path": "provider/openapi.yaml",
+      "file_sha256": "d6decc18d428316b209aa554ee028fe9db8761df515bf34b9e92c3a369f2de3d",
+      "selector": {
+        "kind": "openapi_location_span",
+        "location": "#/paths/~1users~1{id}/get",
+        "start_line": 9,
+        "end_line": 17
+      }
+    },
+    {
+      "evidence_id": "urn:codenoesis:evidence:blake3:10d428fd450a9c5b68e5582a41f9220dcd675a1f5a118b851580bb37f01681c2",
+      "kind": "openapi_yaml_span",
+      "repository_identity": "urn:codenoesis:fixture:s7-provider",
+      "revision": "fixture-provider-a",
+      "path": "provider/openapi.yaml",
+      "file_sha256": "d6decc18d428316b209aa554ee028fe9db8761df515bf34b9e92c3a369f2de3d",
+      "selector": {
+        "kind": "openapi_location_span",
+        "location": "#/components/schemas/User",
+        "start_line": 21,
+        "end_line": 30
+      }
+    },
+    {
+      "evidence_id": "urn:codenoesis:evidence:blake3:d8708d078fb5444808a5d4ebac01173630040d2c533cb818cb089dd7b44f4194",
+      "kind": "openapi_yaml_span",
+      "repository_identity": "urn:codenoesis:fixture:s7-provider",
+      "revision": "fixture-provider-a",
+      "path": "provider/openapi.yaml",
+      "file_sha256": "d6decc18d428316b209aa554ee028fe9db8761df515bf34b9e92c3a369f2de3d",
+      "selector": {
+        "kind": "openapi_location_span",
+        "location": "#/servers/0/url",
+        "start_line": 6,
+        "end_line": 6
+      }
+    }
+  ],
+  "coverage_gaps": [],
+  "limits": {
+    "workspace_manifest_bytes": 8388608,
+    "repositories": 128,
+    "contract_documents": 256,
+    "contract_bytes_per_document": 2097152,
+    "yaml_nesting_depth": 32,
+    "local_ref_depth": 16,
+    "path_items": 10000,
+    "operations": 10000,
+    "schemas": 20000,
+    "fields_per_operation": 5000,
+    "clients": 10000,
+    "declarations": 100000,
+    "confirmed_links": 1000000,
+    "candidates": 200000,
+    "rejections": 200000,
+    "evidence_items": 1000000,
+    "coverage_gaps": 200000,
+    "report_bytes": 67108864,
+    "memory_bytes": 536870912,
+    "wall_milliseconds": 60000
+  },
+  "semantic_hash": "blake3:22c8220cddd9122d7518db83e11595c32c24458f6f48618cd133711e16fb4ad4"
+}

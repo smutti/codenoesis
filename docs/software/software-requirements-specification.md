@@ -1,13 +1,15 @@
 # CodeNoesis Software Requirements Specification
 
 > Status: **0.9 — S0 through S5 implemented; S6 bounded OpenAPI federation
-> proposed for protected ratification**.
+> Approved and implementation-completeness correction pending protected
+> merge**.
 > The S0–S5 runtime and product suites exist on `main`, but CodeNoesis claims
 > no slice `Verified` without complete immutable retention evidence. This
-> revision proposes the OpenAPI 3.1.0 capability-scoped portion of
-> `FR-EXT-004`, plus `FR-FED-001`, `FR-FED-002`, `FR-CLI-005`, and one bounded
-> output-only federation contract. It changes no existing accepted profile,
-> storage contract, ontology, or production runtime.
+> revision records PR #81 approval of the OpenAPI 3.1.0 capability-scoped
+> portion of `FR-EXT-004`, plus `FR-FED-001`, `FR-FED-002`, `FR-CLI-005`, and
+> corrects their implementation contract before issue #82 resumes. It changes
+> no existing accepted profile, storage contract, ontology, or production
+> runtime.
 
 ## 1. Document control
 
@@ -15,7 +17,7 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S5 are Approved and Implemented but not Verified. The bounded OpenAPI 3.1.0 portion of `FR-EXT-004`, plus `FR-FED-001`, `FR-FED-002`, and `FR-CLI-005`, are Proposed for protected S6 ratification; they authorize no production implementation before the governance merge and a linked Ready implementation issue. |
+| Status | S0 through S5 are Approved and Implemented but not Verified. The bounded OpenAPI 3.1.0 portion of `FR-EXT-004`, plus `FR-FED-001`, `FR-FED-002`, and `FR-CLI-005`, became Approved through protected PR #81. Production implementation issue #82 may resume only after protected merge of the implementation-completeness correction in PR #84. |
 | Date | 2026-07-30 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
@@ -36,6 +38,7 @@
 | `0.8` | 2026-07-28 | Recorded the protected S4 semantic-hash amendment, policy rebind, and production implementation merges from PRs #49, #51, and #52. S0 through S4 are Implemented but remain unverified pending complete immutable retention evidence; no approved behavior or oracle changed. |
 | `0.9` | 2026-07-29 | Proposed `FR-ACQ-004` and Decision 0006 for explicit read-only local pack v2/index v2 SHA-1 acquisition; fixed the ErrorV6, limits, security/race oracle, synthetic fixture, and replaceable Lekton/RustDesk corpus descriptor while preserving every accepted S0–S4 invocation. |
 | `0.9+s6` | 2026-07-30 | Amended the active `0.9` baseline to record the implemented S5 state and propose Decision 0009 for bounded output-only OpenAPI 3.1.0 HTTP/JSON federation; fixed workspace/client/report/ErrorV8 contracts, source-neutral identities, authority states, restricted YAML, limits, security and determinism oracles, hostile fixtures, downstream S7 identity conformance, and the reviewed `yaml-rust2` implementation candidate. The document-control version remains `0.9` until historical guards are version-aware. |
+| `0.9+s6.1` | 2026-07-31 | Recorded protected PR #81 approval and corrected the S6 implementation contract through issue #83 and PR #84: zero-client workspaces, typed unsupported-OpenAPI gaps, reproducible provider evidence and source-neutral gap identities, exact Unicode heuristic selection, and public-command versus component-counter boundary observations. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -637,22 +640,26 @@ renewed human review.
 
 ### 2.11 S6 OpenAPI federation ratification register
 
-The following is the exact target Approved set for the bounded
-**S6 — Contract federation** capability. Approval becomes authoritative only
-when `@smutti` manually merges the exact protected head of
-[PR #81](https://github.com/smutti/codenoesis/pull/81). The authoring agent does
-not approve or merge. This high-risk decision fixes one output-only local CLI
-operation, OpenAPI 3.1.0 JSON/YAML normalization, stable cross-project
+Protected manual merge of
+[PR #81](https://github.com/smutti/codenoesis/pull/81) made the following exact
+set Approved for the bounded **S6 — Contract federation** capability. Issue
+[#83](https://github.com/smutti/codenoesis/issues/83) corrects implementation
+ambiguities found before production edits in issue
+[#82](https://github.com/smutti/codenoesis/issues/82); its amendment becomes
+effective only when `@smutti` manually merges the exact protected head of
+[PR #84](https://github.com/smutti/codenoesis/pull/84). The authoring agent
+does not approve or merge. This high-risk decision fixes one output-only local
+CLI operation, OpenAPI 3.1.0 JSON/YAML normalization, stable cross-project
 identities, explicit and heuristic authority states, strict public artifacts,
 limits, a project-owned provider/client/decoy fixture, hostile inputs,
-downstream S7 identity conformance, and the future production Red.
+downstream S7 identity conformance, and the retained production Red.
 
 | Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
 |---|---|---|---|---|---|---|---|
-| `FR-EXT-004` | `Proposed` (pending protected merge) | `Approved` for `codenoesis.contract-capability/openapi-3.1-http-json/v1` only | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81) | `S6` | [S6 OpenAPI federation decision](decisions/0009-s6-openapi-federation-contract.md), [workspace schema](../../tests/specifications/s6/federation-workspace-v1.schema.json), and [reviewed provider fixture](../../tests/fixtures/s6/openapi-federation-v1/README.md) |
-| `FR-FED-001` | `Proposed` (pending protected merge) | `Approved` for `codenoesis.federation-rules/http-json/v1` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81) | `S6` | [S6 federation rule catalog](../../tests/specifications/s6/openapi-federation-rule-catalog-v1.json) and [reviewed report](../../tests/fixtures/s6/openapi-federation-v1/expected-federation-report.json) |
-| `FR-FED-002` | `Proposed` (pending protected merge) | `Approved` for `codenoesis.federation-rules/http-json/v1` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81) | `S6` | [S6 federation rule catalog](../../tests/specifications/s6/openapi-federation-rule-catalog-v1.json) and [machine oracle](../../tests/specifications/s6/e2e_fr_fed_001_openapi_federation.json) |
-| `FR-CLI-005` | `Proposed` (pending protected merge) | `Approved` for `standard-local-s6` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81) | `S6` | [Federation report schema](../../tests/specifications/s6/federation-report-v1.schema.json), [ErrorV8 schema](../../tests/specifications/s6/codenoesis-error-v8.schema.json), and [machine oracle](../../tests/specifications/s6/e2e_fr_fed_001_openapi_federation.json) |
+| `FR-EXT-004` | `Approved` for `codenoesis.contract-capability/openapi-3.1-http-json/v1` only | `Implemented` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81), corrected by [PR #84](https://github.com/smutti/codenoesis/pull/84) | `S6` | [S6 OpenAPI federation decision](decisions/0009-s6-openapi-federation-contract.md), [workspace schema](../../tests/specifications/s6/federation-workspace-v1.schema.json), and [reviewed provider fixture](../../tests/fixtures/s6/openapi-federation-v1/README.md) |
+| `FR-FED-001` | `Approved` for `codenoesis.federation-rules/http-json/v1` | `Implemented` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81), corrected by [PR #84](https://github.com/smutti/codenoesis/pull/84) | `S6` | [S6 federation rule catalog](../../tests/specifications/s6/openapi-federation-rule-catalog-v1.json) and [reviewed report](../../tests/fixtures/s6/openapi-federation-v1/expected-federation-report.json) |
+| `FR-FED-002` | `Approved` for `codenoesis.federation-rules/http-json/v1` | `Implemented` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81), corrected by [PR #84](https://github.com/smutti/codenoesis/pull/84) | `S6` | [S6 federation rule catalog](../../tests/specifications/s6/openapi-federation-rule-catalog-v1.json) and [machine oracle](../../tests/specifications/s6/e2e_fr_fed_001_openapi_federation.json) |
+| `FR-CLI-005` | `Approved` for `standard-local-s6` | `Implemented` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #81 protected merge record](https://github.com/smutti/codenoesis/pull/81), corrected by [PR #84](https://github.com/smutti/codenoesis/pull/84) | `S6` | [Federation report schema](../../tests/specifications/s6/federation-report-v1.schema.json), [ErrorV8 schema](../../tests/specifications/s6/codenoesis-error-v8.schema.json), and [machine oracle](../../tests/specifications/s6/e2e_fr_fed_001_openapi_federation.json) |
 
 The capability-scoped approval of `FR-EXT-004` does not advertise or approve
 AsyncAPI, GraphQL, Protocol Buffers, other OpenAPI versions, external
@@ -686,13 +693,29 @@ operation authority only. Package/SCIP and event/schema authority remain
 coverage gaps. A heuristic never becomes `confirmed` automatically, and
 conflicting authoritative evidence fails closed.
 
-The reviewed fixture proves two explicit confirmed clients, one explicit
-operation decoy rejection, and one name-only candidate with an unresolved
-coverage gap. Equivalent reviewed JSON and YAML provider contracts produce the
-same normalized service, operation, schema, field, client, call-site, and link
-identities and the same source-neutral semantic hash. Source paths, formats,
-byte digests, selectors, and evidence identities remain format-specific and
-truthful.
+Provider evidence uses reproducible format-specific selectors and exact
+stable-ID preimages from Decision 0009. YAML binds normalized OpenAPI location
+plus one-based inclusive source span; JSON and declarations bind canonical
+JSON Pointers. Contract coverage-gap identities bind subject, reason, and
+normalized OpenAPI location so equivalent JSON/YAML semantics remain
+source-neutral.
+
+The v1 heuristic applies exact Unicode scalar-sequence equality, without
+normalization, case folding, trimming, fuzzy scoring, or model
+interpretation, between client hints and OpenAPI `info.title` plus
+`operationId`. One matching operation remains a candidate with
+`heuristic_requires_confirmation`; zero and multiple matches produce
+`heuristic_no_match` and `heuristic_ambiguous`.
+
+The reviewed fixture proves a valid provider-only workspace, two explicit
+confirmed clients, one explicit operation decoy rejection, one name-only
+candidate with an unresolved coverage gap, and six exact typed gaps for
+representable callbacks, webhooks, links, security semantics, server
+variables, and non-JSON media. Equivalent reviewed JSON and YAML provider
+contracts produce the same normalized service, operation, schema, field,
+client, call-site, link, and contract-gap identities and the same
+source-neutral semantic hash. Source paths, formats, byte digests, selectors,
+and evidence identities remain format-specific and truthful.
 
 The standard path executes no Git process, package manager, compiler, build
 script, target, hook, plugin, network client, model provider, or Council. It
@@ -709,13 +732,21 @@ checksum, transitive dependency, license, advisory, `unsafe`, marked-event,
 duplicate-key, allocation, depth, fuzz, and maximum-plus-one evidence. A
 second YAML or OpenAPI parser is a stop condition.
 
-No S6 production behavior is authorized before this governance merge. Under
-the maintainer-supervised accelerated lane, the merge may be followed by one
-linked Ready vertical implementation issue and one coherent implementation
-pull request. A separate machine-policy projection remains mandatory before
-unattended autonomous execution but need not delay explicitly supervised
-interactive implementation. Policy, workflow, agent instruction, and other
-control-plane changes remain outside the product pull request.
+Every S6 resource uses inclusive charge before allocation or traversal.
+Workspace bytes, repositories, contract bytes, YAML and reference depth, path
+items, operations, schemas, fields, and report bytes require public command
+max/max+1 evidence. Clients and other capacities not independently reachable
+through the v1 workspace require component-counter conformance with
+deterministic constructed state and injected resource observations; this
+proves the shared counter boundary without claiming a public cardinality.
+
+Issue #82 may resume no S6 production edit before protected merge of PR #84.
+After that event, its retained public Red authorizes one coherent vertical
+implementation pull request under the maintainer-supervised accelerated lane.
+A separate machine-policy projection remains mandatory before unattended
+autonomous execution but need not delay explicitly supervised interactive
+implementation. Policy, workflow, agent instruction, and other control-plane
+changes remain outside the product pull request.
 
 Before S6 exists, the exact `federate` invocation reaches the accepted
 unrecognized-command boundary and exits `2` with the exact 149-byte ErrorV2
@@ -727,7 +758,7 @@ Compilation, fixture, dependency, network, panic, timeout, target-execution,
 or hand-authored-output failures are rejected reasons.
 
 S6 bounded OpenAPI federation contract bundle:
-`sha256:be36354d5f03bc487dc7f95e7bb5d8d098fcd1561507e2a5ca291b513ba224ec`.
+`sha256:037faf971458637f1e391bc9147e7ecd5a1b72b5c3941492cb9018492e589fe6`.
 The bundle binds Decision 0009, the independent governance guard, strict
 workspace/client/report/error schemas, rule catalog, machine oracle,
 project-owned fixture and hostile variants, reviewed outputs, and immutable S7
