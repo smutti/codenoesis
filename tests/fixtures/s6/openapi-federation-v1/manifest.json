@@ -70,11 +70,11 @@
   "expected": {
     "report": {
       "path": "expected-federation-report.json",
-      "sha256": "8bdda6c3661aa20eb5e6e130c7807ca6114eaf2f30cbbdc0c758d2e0ac22b58c"
+      "sha256": "7a301b0eb5d0e5e702a647422e57f42e1611d9e1cac5aedb39be26c7f1064628"
     },
     "provider_only_report": {
       "path": "expected-provider-only-report.json",
-      "sha256": "f4c24a42077ef88d8065682fda1703ffd6bf78f9d36aa7b07a9f41ffee2c026e"
+      "sha256": "6d53dda7b209f2ca879f9a122f995ccf3ec17ee7fe86b7c611629e4f13f87d9a"
     },
     "unsupported_semantics_report": {
       "path": "expected-unsupported-semantics-report.json",
