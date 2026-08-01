@@ -11,7 +11,7 @@
     },
     {
       "path": "scripts/tests/test_s6_openapi_federation_contract.py",
-      "sha256": "9f647e8cbc18399437d922121986f435ca9826f66e34304fb44fd342c7c42052"
+      "sha256": "23c8c331398a28f1d5f462e387f821eae2e11c5e81f3069ba2e84c07e8f18d42"
     },
     {
       "path": "tests/fixtures/s6/openapi-federation-v1/README.md",
@@ -162,5 +162,5 @@
       "sha256": "8185cbdc0eb33dc96cb5c932a1343460b7d1794b953a64190ff4fcc6783b0208"
     }
   ],
-  "bundle_sha256": "64587eb20880f0beb17320abf6dd301d811fabdc248eb3f59268aebf7ca47081"
+  "bundle_sha256": "cc8bb6a42abc23f51068c94641ace7775f4979108aa153a050bde93580d6db13"
 }
