@@ -177,6 +177,21 @@ EXPECTED_COVERAGE_GAP_RULES = [
     },
 ]
 
+S6_EXTRACTOR_MEMBER = "crates/codenoesis-contract-extractors"
+S6_EXTRACTOR_MANIFEST = f"{S6_EXTRACTOR_MEMBER}/Cargo.toml"
+S6_EXTRACTOR_WORKSPACE_DEPENDENCY = (
+    'codenoesis-contract-extractors = { path = '
+    '"crates/codenoesis-contract-extractors" }'
+)
+S6_YAML_ROOT_DEPENDENCY = (
+    'yaml-rust2 = { version = "=0.11.0", default-features = false }'
+)
+S6_YAML_EXTRACTOR_DEPENDENCY = "yaml-rust2.workspace = true"
+S6_PARSER_DEPENDENCY_PATTERN = re.compile(
+    r"(?:yaml|openapi)|^(?:oas3|serde[-_]norway|serde[-_]yml|utoipa)$",
+    re.IGNORECASE,
+)
+
 EXPECTED_PROVIDER_EVIDENCE_IDENTITY = {
     "domain": "codenoesis.federation-evidence-id/v1",
     "line_numbering": "one_based_inclusive",
@@ -428,6 +443,121 @@ def load_json(path: Path) -> Any:
     return json.loads(
         path.read_text(encoding="utf-8"),
         object_pairs_hook=reject_duplicate_keys,
+    )
+
+
+def toml_section(manifest: str, section: str) -> str:
+    match = re.search(
+        rf"(?ms)^\[{re.escape(section)}\]\s*$\n(.*?)(?=^\[|\Z)",
+        manifest,
+    )
+    return "" if match is None else match.group(1)
+
+
+def dependency_names(manifest: str) -> set[str]:
+    names: set[str] = set()
+    dependency_section = False
+    for raw_line in manifest.splitlines():
+        line = raw_line.strip()
+        if line.startswith("[") and line.endswith("]"):
+            section = line[1:-1]
+            dependency_section = (
+                section == "dependencies"
+                or section.endswith(".dependencies")
+                or section.endswith("-dependencies")
+            )
+            continue
+        if not dependency_section or not line or line.startswith("#"):
+            continue
+        declaration = re.match(
+            r'^(?:"([^"]+)"|([A-Za-z0-9_-]+))(?:\.workspace)?\s*=',
+            line,
+        )
+        if declaration is None:
+            continue
+        name = declaration.group(1) or declaration.group(2)
+        package = re.search(r'\bpackage\s*=\s*"([^"]+)"', line)
+        names.add(name if package is None else package.group(1))
+    return names
+
+
+def assert_s6_yaml_dependency_topology(
+    case: unittest.TestCase, manifests: dict[str, str]
+) -> None:
+    root = manifests["Cargo.toml"]
+    workspace = toml_section(root, "workspace")
+    member_pattern = re.compile(
+        rf'^\s*"{re.escape(S6_EXTRACTOR_MEMBER)}"\s*,?\s*$', re.MULTILINE
+    )
+    member_count = len(member_pattern.findall(workspace))
+    case.assertIn(member_count, {0, 1}, "extractor member must be unique")
+
+    alternate_parsers = sorted(
+        {
+            f"{path}:{name}"
+            for path, manifest in manifests.items()
+            for name in dependency_names(manifest)
+            if name != "yaml-rust2"
+            and S6_PARSER_DEPENDENCY_PATTERN.search(name) is not None
+        }
+    )
+    case.assertEqual(
+        alternate_parsers,
+        [],
+        "a second YAML/OpenAPI parser is forbidden",
+    )
+
+    extractor_present = S6_EXTRACTOR_MANIFEST in manifests
+    yaml_occurrences = sum(
+        manifest.count("yaml-rust2") for manifest in manifests.values()
+    )
+    if member_count == 0:
+        case.assertFalse(
+            extractor_present,
+            "an unregistered extractor crate is a partial implementation state",
+        )
+        case.assertNotIn(S6_EXTRACTOR_MEMBER, root)
+        case.assertEqual(yaml_occurrences, 0)
+        return
+
+    case.assertTrue(extractor_present, "the registered extractor manifest is missing")
+    workspace_dependencies = toml_section(root, "workspace.dependencies")
+    case.assertEqual(
+        [
+            line.strip()
+            for line in workspace_dependencies.splitlines()
+            if line.strip() == S6_EXTRACTOR_WORKSPACE_DEPENDENCY
+        ],
+        [S6_EXTRACTOR_WORKSPACE_DEPENDENCY],
+        "the extractor workspace dependency must be exact and unique",
+    )
+    case.assertEqual(
+        [
+            line.strip()
+            for line in workspace_dependencies.splitlines()
+            if line.strip() == S6_YAML_ROOT_DEPENDENCY
+        ],
+        [S6_YAML_ROOT_DEPENDENCY],
+        "the authorized root YAML dependency must be exact and unique",
+    )
+
+    consumers = sorted(
+        path
+        for path, manifest in manifests.items()
+        if any(
+            line.strip() == S6_YAML_EXTRACTOR_DEPENDENCY
+            for line in toml_section(manifest, "dependencies").splitlines()
+        )
+    )
+    case.assertEqual(
+        consumers,
+        [S6_EXTRACTOR_MANIFEST],
+        "only the focused extractor crate may consume yaml-rust2",
+    )
+    case.assertEqual(
+        yaml_occurrences,
+        2,
+        "the root declaration and focused consumer must be the only mentions",
     )
 
 
@@ -1040,11 +1170,85 @@ class S6OpenApiFederationContractTests(unittest.TestCase):
         )
         self.assertEqual(candidate["direct_unsafe_in_src"], 0)
         self.assertEqual(candidate["osv_vulnerabilities_observed_at_review"], 0)
-        manifests = "\n".join(
-            path.read_text(encoding="utf-8")
+        manifests = {
+            path.relative_to(ROOT).as_posix(): path.read_text(encoding="utf-8")
             for path in sorted(ROOT.glob("**/Cargo.toml"))
+        }
+        assert_s6_yaml_dependency_topology(self, manifests)
+
+    def test_yaml_parser_dependency_transition_is_exact(self) -> None:
+        baseline = {
+            "Cargo.toml": "[workspace]\nmembers = []\n",
+        }
+        implemented = {
+            "Cargo.toml": (
+                "[workspace]\n"
+                "members = [\n"
+                f'    "{S6_EXTRACTOR_MEMBER}",\n'
+                "]\n\n"
+                "[workspace.dependencies]\n"
+                f"{S6_EXTRACTOR_WORKSPACE_DEPENDENCY}\n"
+                f"{S6_YAML_ROOT_DEPENDENCY}\n"
+            ),
+            S6_EXTRACTOR_MANIFEST: (
+                "[package]\n"
+                'name = "codenoesis-contract-extractors"\n\n'
+                "[dependencies]\n"
+                f"{S6_YAML_EXTRACTOR_DEPENDENCY}\n"
+            ),
+        }
+
+        assert_s6_yaml_dependency_topology(self, baseline)
+        assert_s6_yaml_dependency_topology(self, implemented)
+
+        invalid_states: dict[str, dict[str, str]] = {}
+
+        missing_manifest = copy.deepcopy(implemented)
+        missing_manifest.pop(S6_EXTRACTOR_MANIFEST)
+        invalid_states["missing extractor manifest"] = missing_manifest
+
+        missing_consumer = copy.deepcopy(implemented)
+        missing_consumer[S6_EXTRACTOR_MANIFEST] = "[dependencies]\n"
+        invalid_states["missing extractor consumer"] = missing_consumer
+
+        missing_root_dependency = copy.deepcopy(implemented)
+        missing_root_dependency["Cargo.toml"] = missing_root_dependency[
+            "Cargo.toml"
+        ].replace(f"{S6_YAML_ROOT_DEPENDENCY}\n", "")
+        invalid_states["missing root dependency"] = missing_root_dependency
+
+        wrong_version = copy.deepcopy(implemented)
+        wrong_version["Cargo.toml"] = wrong_version["Cargo.toml"].replace(
+            'version = "=0.11.0"', 'version = "0.11"'
         )
-        self.assertNotIn("yaml-rust2", manifests)
+        invalid_states["wrong version"] = wrong_version
+
+        expanded_features = copy.deepcopy(implemented)
+        expanded_features["Cargo.toml"] = expanded_features[
+            "Cargo.toml"
+        ].replace("default-features = false", "default-features = true")
+        invalid_states["expanded default features"] = expanded_features
+
+        extra_consumer = copy.deepcopy(implemented)
+        extra_consumer["crates/other/Cargo.toml"] = (
+            "[dependencies]\nyaml-rust2.workspace = true\n"
+        )
+        invalid_states["extra consumer"] = extra_consumer
+
+        partial_wiring = copy.deepcopy(implemented)
+        partial_wiring["Cargo.toml"] = partial_wiring["Cargo.toml"].replace(
+            f'    "{S6_EXTRACTOR_MEMBER}",\n', ""
+        )
+        invalid_states["partial workspace wiring"] = partial_wiring
+
+        second_parser = copy.deepcopy(implemented)
+        second_parser[S6_EXTRACTOR_MANIFEST] += 'serde_yaml = "0.9"\n'
+        invalid_states["second parser"] = second_parser
+
+        for label, manifests in invalid_states.items():
+            with self.subTest(label=label):
+                with self.assertRaises(AssertionError):
+                    assert_s6_yaml_dependency_topology(self, manifests)
 
     def test_fixture_manifest_binds_every_input_and_hostile_variant(self) -> None:
         manifest = load_json(MANIFEST_PATH)
