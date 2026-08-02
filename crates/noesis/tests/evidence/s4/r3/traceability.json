@@ -1,0 +1,177 @@
+{
+  "schema_version": "codenoesis.s4-r3-traceability/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/98",
+  "slice": "S4",
+  "roadmap_capability": "R3",
+  "requirement_status": "Approved",
+  "requirements": [
+    {
+      "id": "FR-EXT-008",
+      "tests": [
+        "e2e_fr_ext_008_root_package_workspace",
+        "gt_fr_ext_008_root_membership_and_targets",
+        "conf_fr_ext_008_snapshot_v6_graph_v3_error_v10",
+        "pt_dr_idn_002_r3_preserves_v2_identity_domains",
+        "pt_fr_ext_008_limits_have_max_and_plus_one",
+        "pt_nfr_det_001_r3_permutation_and_schedule_invariant",
+        "sec_fr_ext_008_deferred_cargo_meaning_never_executes",
+        "sec_fr_ext_008_gitlink_member_stays_external",
+        "reg_fr_cli_001_r3_selector_absence_is_byte_identical",
+        "e2e_fr_doc_001_r3_coverage_is_documented",
+        "e2e_fr_qry_001_r3_exact_id_results"
+      ],
+      "additional_tests": [
+        "gt_fr_ext_008_invalid_manifests_fail_closed",
+        "sec_fr_ext_008_compiler_dependent_source_is_deferred",
+        "sec_fr_ext_008_gitlink_member_stays_external_in_application",
+        "conf_fr_ext_008_error_v10_and_r2_precedence",
+        "gt_fr_ext_008_public_root_variants"
+      ],
+      "evidence": [
+        "crates/noesis/tests/evidence/s4/r3/red-observation.json",
+        "crates/noesis/tests/evidence/s4/r3/red/e2e_fr_ext_008_root_package_workspace.log",
+        "crates/noesis/tests/evidence/s4/r3/implementation-observation-local.json",
+        "crates/noesis/tests/evidence/s4/r3/pilot-observations-local.json"
+      ]
+    }
+  ],
+  "ordered_acceptance_scenarios": [
+    {
+      "order": 1,
+      "outcome": "Strict RepositorySnapshotV6 for the approved implicit non-virtual fixture",
+      "status": "passed",
+      "tests": ["e2e_fr_ext_008_root_package_workspace"]
+    },
+    {
+      "order": 2,
+      "outcome": "Standalone, virtual, and non-virtual root variants under the explicit selector",
+      "status": "passed",
+      "tests": ["gt_fr_ext_008_public_root_variants", "gt_fr_ext_008_root_membership_and_targets"]
+    },
+    {
+      "order": 3,
+      "outcome": "Explicit dot root preserves implicit-root crate identities and provenance",
+      "status": "passed",
+      "tests": ["gt_fr_ext_008_root_membership_and_targets", "gt_fr_ext_008_public_root_variants"]
+    },
+    {
+      "order": 4,
+      "outcome": "Literal members and exclusions normalize, sort, deduplicate, and conflict deterministically",
+      "status": "passed",
+      "tests": ["gt_fr_ext_008_root_membership_and_targets", "gt_fr_ext_008_invalid_manifests_fail_closed"]
+    },
+    {
+      "order": 5,
+      "outcome": "Conventional and explicit Rust targets are deterministic and collisions fail closed",
+      "status": "passed",
+      "tests": ["gt_fr_ext_008_root_membership_and_targets", "gt_fr_ext_008_invalid_manifests_fail_closed"]
+    },
+    {
+      "order": 6,
+      "outcome": "Active package/source facts are separated from closed deferred Cargo capabilities",
+      "status": "passed",
+      "tests": ["sec_fr_ext_008_deferred_cargo_meaning_never_executes", "sec_fr_ext_008_compiler_dependent_source_is_deferred"]
+    },
+    {
+      "order": 7,
+      "outcome": "Cargo, rustc, build scripts, proc macros, targets, network, environment, and sentinels never execute",
+      "status": "passed",
+      "tests": ["sec_fr_ext_008_deferred_cargo_meaning_never_executes", "sec_nfr_sec_001_sentinel_scripts_never_execute"]
+    },
+    {
+      "order": 8,
+      "outcome": "R2 gitlink members remain external and inherited rejection wins without R2",
+      "status": "passed",
+      "tests": ["sec_fr_ext_008_gitlink_member_stays_external", "sec_fr_ext_008_gitlink_member_stays_external_in_application", "conf_fr_ext_008_error_v10_and_r2_precedence"]
+    },
+    {
+      "order": 9,
+      "outcome": "Malformed, non-UTF-8, escaping, glob, duplicate, missing, symlink, ambiguity, collision, and Unicode cases fail closed",
+      "status": "passed",
+      "tests": ["gt_fr_ext_008_invalid_manifests_fail_closed", "e2e_fr_acq_002_symlink_rejected", "sec_fr_acq_005_nested_symlink_escape_is_rejected"]
+    },
+    {
+      "order": 10,
+      "outcome": "Every reviewed R3 resource limit accepts maximum and rejects maximum plus one",
+      "status": "passed",
+      "tests": ["pt_fr_ext_008_limits_have_max_and_plus_one"]
+    },
+    {
+      "order": 11,
+      "outcome": "Fifty permutations and shuffled parallel replay preserve semantic output and identities",
+      "status": "passed",
+      "tests": ["pt_nfr_det_001_r3_permutation_and_schedule_invariant"]
+    },
+    {
+      "order": 12,
+      "outcome": "Ontology v3 preserves unchanged v2 entity and relationship identity domains",
+      "status": "passed",
+      "tests": ["pt_dr_idn_002_r3_preserves_v2_identity_domains"]
+    },
+    {
+      "order": 13,
+      "outcome": "ConfigurationV3, chunk v3, graph v3, snapshot V6, ErrorV10, pipeline, and extractor contracts are strict",
+      "status": "passed",
+      "tests": ["conf_fr_ext_008_snapshot_v6_graph_v3_error_v10", "conf_fr_ext_008_error_v10_and_r2_precedence"]
+    },
+    {
+      "order": 14,
+      "outcome": "V6 includes the canonical R2 projection if and only if R2 is selected",
+      "status": "passed",
+      "tests": ["e2e_fr_ext_008_root_package_workspace", "conf_fr_ext_008_error_v10_and_r2_precedence"]
+    },
+    {
+      "order": 15,
+      "outcome": "Atomic V6 publication reuses existing roles, marker, DDL, CAS, transaction, crash, and sweep semantics",
+      "status": "passed",
+      "tests": ["e2e_fr_ext_008_root_package_workspace", "ft_fr_snp_001_publication_failpoint_matrix", "it_fr_sto_001_corruption_fails_closed", "ft_fr_snp_001_orphan_sweep_preserves_reachable"]
+    },
+    {
+      "order": 16,
+      "outcome": "Restarted docs and exact-ID query expose entity, evidence, document, and coverage-gap truth",
+      "status": "passed",
+      "tests": ["e2e_fr_doc_001_r3_coverage_is_documented", "e2e_fr_qry_001_r3_exact_id_results"]
+    },
+    {
+      "order": 17,
+      "outcome": "Selector-absent V4/V5 behavior, publication, docs, and query remain byte-compatible",
+      "status": "passed",
+      "tests": ["reg_fr_cli_001_r3_selector_absence_is_byte_identical", "e2e_fr_cli_001_workspace_docs_query", "gt_fr_doc_001_deterministic_markdown"]
+    },
+    {
+      "order": 18,
+      "outcome": "Every inherited S0-S6 regression and accepted bundle guard remains green",
+      "status": "passed locally",
+      "evidence": ["bootstrap gate on 1e28129c0dd217422df605ed46043d6e05792597: 242 Rust tests and 193 Python tests"]
+    },
+    {
+      "order": 19,
+      "outcome": "Lekton exact-commit R1+R3 scan, docs, and query complete with root and CLI members while Cargo meaning remains gaps",
+      "status": "passed locally",
+      "evidence": ["crates/noesis/tests/evidence/s4/r3/pilot-observations-local.json"]
+    },
+    {
+      "order": 20,
+      "outcome": "RustDesk exact-commit R1+R2+R3 scan, docs, and query complete with sole external hbb_common boundary and no nested source authority",
+      "status": "passed locally",
+      "evidence": ["crates/noesis/tests/evidence/s4/r3/pilot-observations-local.json"]
+    }
+  ],
+  "inherited_security_and_failure_tests": [
+    "race_fr_acq_004_pack_replacement",
+    "e2e_fr_acq_002_symlinked_repository_root_is_rejected",
+    "e2e_fr_acq_002_symlinked_git_directory_is_rejected",
+    "sec_nfr_sec_001_git_control_symlink_is_not_followed",
+    "sec_nfr_sec_001_loose_object_symlink_is_not_followed",
+    "sec_fr_acq_005_nested_symlink_escape_is_rejected",
+    "it_fr_sto_001_corruption_fails_closed",
+    "ft_fr_snp_001_publication_failpoint_matrix",
+    "ft_fr_snp_001_orphan_sweep_preserves_reachable"
+  ],
+  "test_first": {
+    "commit": "90d8cc8913e7f516ac9e8b59fe83d4ed30073114",
+    "observation": "crates/noesis/tests/evidence/s4/r3/red-observation.json",
+    "log": "crates/noesis/tests/evidence/s4/r3/red/e2e_fr_ext_008_root_package_workspace.log"
+  },
+  "review_constraint": "Local and CI evidence make the implementation reviewable but do not mark FR-EXT-008 Verified; independent human review and protected manual merge remain required."
+}
