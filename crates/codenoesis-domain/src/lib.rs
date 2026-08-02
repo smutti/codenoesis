@@ -1,6 +1,7 @@
 //! Domain values for the `CodeNoesis` S0 through S4 slices.
 
 pub mod knowledge;
+pub mod s1_boundaries;
 pub mod s1_packed;
 pub mod s4;
 pub mod s5;
@@ -318,6 +319,11 @@ impl AcquiredRepository {
             directory_count,
             files,
         }
+    }
+
+    #[must_use]
+    pub const fn bound_revision(&self) -> &BoundRevision {
+        &self.bound_revision
     }
 }
 

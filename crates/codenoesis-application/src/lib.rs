@@ -1,9 +1,14 @@
 //! Application orchestration for the `CodeNoesis` S0 through S6 slices.
 
+mod s1_boundaries;
 mod s4;
 mod s5;
 mod s6;
 
+pub use s1_boundaries::{
+    BoundaryScanError, PreparedNestedRepositoryRoot, RepositoryBoundaryScanInput,
+    S4BoundaryScanOutput,
+};
 pub use s4::S4ScanOutput;
 pub use s5::{RefreshError, RefreshPlan, RefreshService};
 pub use s6::{FederationRequest, FederationService, FederationServiceError};
@@ -244,10 +249,7 @@ where
         let bound = self
             .acquirer
             .bind(&request.repository, request.identity, request.revision)
-            .map_err(|error| match error {
-                RepositoryError::Acquisition(acquisition) => ScanError::Acquisition(acquisition),
-                RepositoryError::Unexpected => ScanError::Internal,
-            })?;
+            .map_err(map_repository_error)?;
         Ok(RepositorySnapshotV1::from_bound_revision(
             &bound,
             request.envelope,
@@ -268,10 +270,7 @@ where
         let acquired = self
             .acquirer
             .acquire_inventory(&request.repository, request.identity, request.revision)
-            .map_err(|error| match error {
-                RepositoryError::Acquisition(acquisition) => ScanError::Acquisition(acquisition),
-                RepositoryError::Unexpected => ScanError::Internal,
-            })?;
+            .map_err(map_repository_error)?;
         let inventory = RepositoryInventory::classify(acquired);
         Ok(RepositorySnapshotV2::from_inventory(
             &inventory,
@@ -296,10 +295,7 @@ where
         let acquired = self
             .acquirer
             .acquire_inventory(&request.repository, request.identity, request.revision)
-            .map_err(|error| match error {
-                RepositoryError::Acquisition(acquisition) => ScanError::Acquisition(acquisition),
-                RepositoryError::Unexpected => ScanError::Internal,
-            })?;
+            .map_err(map_repository_error)?;
         let inventory = RepositoryInventory::classify(acquired);
         let knowledge = extractor
             .extract(&inventory)
@@ -310,5 +306,12 @@ where
             &knowledge,
             request.envelope,
         ))
+    }
+}
+
+pub(crate) fn map_repository_error(error: RepositoryError) -> ScanError {
+    match error {
+        RepositoryError::Acquisition(acquisition) => ScanError::Acquisition(acquisition),
+        RepositoryError::Unexpected => ScanError::Internal,
     }
 }

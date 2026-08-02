@@ -1,6 +1,7 @@
 //! `CodeNoesis` command-line entry point.
 
 mod federation;
+mod repository_boundaries;
 
 use std::collections::BTreeMap;
 use std::env;
@@ -12,19 +13,24 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
 use codenoesis_application::{
-    PublicationService, RefreshError, RefreshService, ScanError, ScanRequest, ScanService,
+    BoundaryScanError, PublicationService, RefreshError, RefreshService, ScanError, ScanRequest,
+    ScanService,
 };
 use codenoesis_contracts::{
-    AnalysisCacheEntryV1, CodeNoesisErrorV1, CodeNoesisErrorV2, CodeNoesisErrorV3,
-    CodeNoesisErrorV4, CodeNoesisErrorV5, CodeNoesisErrorV6, CodeNoesisErrorV7, CodeNoesisErrorV8,
-    DocumentationContractError, IncrementalRefreshReportError, IncrementalRefreshReportInput,
-    IncrementalRefreshReportV1, QueryContractError, RepositorySnapshotV2Error,
+    AnalysisCacheEntryV1, BoundaryManifestReason, CodeNoesisErrorV1, CodeNoesisErrorV2,
+    CodeNoesisErrorV3, CodeNoesisErrorV4, CodeNoesisErrorV5, CodeNoesisErrorV6, CodeNoesisErrorV7,
+    CodeNoesisErrorV8, CodeNoesisErrorV9, DocumentationContractError,
+    IncrementalRefreshReportError, IncrementalRefreshReportInput, IncrementalRefreshReportV1,
+    NestedRepositoryUnavailableReason, QueryContractError, RepositorySnapshotV2Error,
     RepositorySnapshotV3, RepositorySnapshotV3Error, RepositorySnapshotV4,
-    RepositorySnapshotV4Error, SnapshotEnvelopeV1, ValidatedS4Head, generate_documentation_v1,
-    local_query_result_v1, validate_stored_snapshot_semantic_v4,
+    RepositorySnapshotV4Error, RepositorySnapshotV5, RepositorySnapshotV5Error, SnapshotEnvelopeV1,
+    ValidatedS4Head, generate_documentation_v1, local_query_result_v1,
+    validate_stored_snapshot_semantic_v4, validate_stored_snapshot_semantic_v5,
 };
 use codenoesis_domain::AcquisitionError;
 use codenoesis_domain::knowledge::KnowledgeError;
+use codenoesis_domain::s1_boundaries::LOCAL_GITLINKS_V1;
+use codenoesis_domain::s1_boundaries::RepositoryBoundaryError;
 use codenoesis_domain::s1_packed::LOCAL_GIT_SHA1_PACKED_V1;
 use codenoesis_domain::s4::{
     S4_ONTOLOGY_VERSION, S4_TREE_SITTER_EXTRACTOR_VERSION, S4_WORKSPACE_EXTRACTOR_VERSION,
@@ -35,7 +41,8 @@ use codenoesis_domain::s5::{
     MAX_REFRESH_WALL_MILLISECONDS, NORMALIZATION_VERSION, TARGET_SEMANTIC_PROFILE,
 };
 use codenoesis_domain::storage::{
-    ArtifactRole, LocalSnapshotHead, SNAPSHOT_SCHEMA_VERSION_V4, StorageComponent, StorageError,
+    ArtifactRole, LocalSnapshotHead, SNAPSHOT_SCHEMA_VERSION_V4, SNAPSHOT_SCHEMA_VERSION_V5,
+    StorageComponent, StorageError,
 };
 use codenoesis_domain::{
     InputError, LimitKind, RepositoryIdentity, Revision, STANDARD_LOCAL_S1_LIMITS, limit_exceeded,
@@ -68,12 +75,16 @@ fn main() -> ExitCode {
     let packed_acquisition_requested = arguments
         .iter()
         .any(|argument| argument == OsStr::new("--acquisition-profile"));
+    let boundary_requested = option_requested(&arguments, "--repository-boundary-profile")
+        || option_requested(&arguments, "--repository-boundary-manifest");
     let s4_requested = requested_profile(&arguments, "standard-local-s4");
     let s3_requested = requested_profile(&arguments, "standard-local-s3");
     let s4_error_lineage = s4_requested || docs_requested || query_requested;
     let s3_error_lineage = s3_requested || s4_error_lineage;
     let s2_requested = requested_profile(&arguments, "standard-local-s2");
-    let result = if federation_requested {
+    let result = if boundary_requested {
+        run_s4(arguments)
+    } else if federation_requested {
         federation::run(arguments).map_err(Failure::S6)
     } else if refresh_requested {
         run_s5(arguments)
@@ -97,6 +108,7 @@ fn main() -> ExitCode {
             Ok(()) => ExitCode::SUCCESS,
             Err(_) if federation_requested => emit_internal_error_v8(),
             Err(_) if refresh_requested => emit_internal_error_v7(),
+            Err(_) if boundary_requested => emit_internal_error_v9(),
             Err(_) if packed_acquisition_requested => emit_internal_error_v6(),
             Err(_) if s3_error_lineage => emit_internal_error_v4(),
             Err(_) if s2_requested => emit_internal_error_v3(),
@@ -104,6 +116,7 @@ fn main() -> ExitCode {
             Err(_) => emit_internal_error_v1(),
         },
         Err(Failure::S6(failure)) => emit_error_v8(&failure.error, failure.exit_code),
+        Err(Failure::V9(failure)) => emit_error_v9(&failure.error, failure.exit_code),
         Err(Failure::V6Input(error)) => emit_error_v6(&error, 2),
         Err(Failure::S5(failure)) => emit_error_v7(&failure.error, failure.exit_code),
         Err(Failure::Input(error)) if packed_acquisition_requested => {
@@ -332,6 +345,9 @@ fn run_s3(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
 fn run_s4(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
     let invocation =
         Invocation::parse(arguments, Some("standard-local-s4")).map_err(invocation_failure)?;
+    if invocation.boundary_profile {
+        return run_s4_boundaries(invocation);
+    }
     let repository_adapter = repository_adapter(invocation.packed_sha1);
     let store = invocation
         .store
@@ -386,6 +402,112 @@ fn run_s4(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
         }
     }
     serialize_v4(&scan.snapshot)
+}
+
+fn run_s4_boundaries(invocation: Invocation) -> Result<Vec<u8>, Failure> {
+    let mut prepared = repository_boundaries::prepare(
+        invocation.boundary_manifest.as_deref(),
+        &invocation.identity,
+        &invocation.revision,
+    )
+    .map_err(repository_boundary_input_failure)?;
+    let repository_adapter = repository_adapter(invocation.packed_sha1);
+    let store = invocation
+        .store
+        .clone()
+        .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
+    let repository = invocation.repository.clone();
+    let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
+        .is_err_and(|error| error.kind() == std::io::ErrorKind::NotFound);
+    ensure_store_root_for_boundary(
+        std::path::Path::new(&repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    let mut rollback = EmptyStoreRollback::new(store.clone(), store_was_absent);
+    let canonical_store = fs::canonicalize(std::path::Path::new(&store)).map_err(|_| {
+        Failure::Scan(ScanError::Storage(StorageError::UnsafePath {
+            reason: "store_root",
+        }))
+    })?;
+    prepared.reject_overlaps(&canonical_store);
+    if let Ok(canonical_repository) = fs::canonicalize(std::path::Path::new(&repository)) {
+        prepared.reject_overlaps(&canonical_repository);
+    }
+    noesis::install_s1_boundaries_filesystem_boundary(
+        &repository,
+        &store,
+        prepared
+            .manifest_path
+            .as_deref()
+            .map(std::path::Path::as_os_str),
+        &prepared.nested_roots,
+    )
+    .map_err(|_| boundary_internal_failure())?;
+
+    let started_at = Instant::now();
+    let envelope = current_envelope().ok_or_else(boundary_internal_failure)?;
+    let request = ScanRequest::new(
+        invocation.repository,
+        invocation.identity,
+        invocation.revision,
+        envelope,
+    );
+    let scan = ScanService::new(repository_adapter)
+        .scan_s4_boundaries(
+            request,
+            prepared.scan_input,
+            &TreeSitterRustWorkspaceExtractor::new(),
+            &repository_boundaries::Sha256BoundaryHasher,
+        )
+        .map_err(boundary_scan_failure)?;
+    enforce_scan_deadline(started_at)?;
+    let stdout = serialize_v5(&scan.snapshot)?;
+    let mut local_store = LocalStore::open(
+        std::path::Path::new(&repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    PublicationService::publish_v5(
+        &scan.snapshot,
+        &mut local_store.artifacts,
+        &mut local_store.metadata,
+        &mut NoopPublicationObserver,
+    )
+    .map_err(Failure::Scan)?;
+    rollback.disarm();
+    for entry in &scan.analysis_cache_entries {
+        let contract = AnalysisCacheEntryV1::from_domain(entry);
+        if let Ok(bytes) = contract.canonical_bytes() {
+            let _ = local_store
+                .analysis_cache
+                .stage_entry(&entry.analysis_cache_entry_id, &bytes);
+        }
+    }
+    Ok(stdout)
+}
+
+struct EmptyStoreRollback {
+    path: OsString,
+    armed: bool,
+}
+
+impl EmptyStoreRollback {
+    const fn new(path: OsString, armed: bool) -> Self {
+        Self { path, armed }
+    }
+
+    fn disarm(&mut self) {
+        self.armed = false;
+    }
+}
+
+impl Drop for EmptyStoreRollback {
+    fn drop(&mut self) {
+        if self.armed {
+            let _ = fs::remove_dir(std::path::Path::new(&self.path));
+        }
+    }
 }
 
 #[allow(clippy::too_many_lines)]
@@ -657,7 +779,10 @@ fn load_s4_snapshot_from_store(
                     snapshot_id: None,
                 },
             )))?;
-    if head.snapshot_schema_version != SNAPSHOT_SCHEMA_VERSION_V4 {
+    if !matches!(
+        head.snapshot_schema_version.as_str(),
+        SNAPSHOT_SCHEMA_VERSION_V4 | SNAPSHOT_SCHEMA_VERSION_V5
+    ) {
         return Err(LoadS4Error::SnapshotMismatch);
     }
     let snapshot = head
@@ -682,8 +807,12 @@ fn load_s4_snapshot_from_store(
             snapshot_id: Some(head.snapshot_id.to_string()),
         }))
     })?;
-    validate_stored_snapshot_semantic_v4(&semantic, &head)
-        .map_err(|error| LoadS4Error::Scan(ScanError::Storage(error)))?;
+    match head.snapshot_schema_version.as_str() {
+        SNAPSHOT_SCHEMA_VERSION_V4 => validate_stored_snapshot_semantic_v4(&semantic, &head),
+        SNAPSHOT_SCHEMA_VERSION_V5 => validate_stored_snapshot_semantic_v5(&semantic, &head),
+        _ => return Err(LoadS4Error::SnapshotMismatch),
+    }
+    .map_err(|error| LoadS4Error::Scan(ScanError::Storage(error)))?;
     if semantic
         .pointer("/repository/identity")
         .and_then(Value::as_str)
@@ -711,6 +840,15 @@ fn load_s5_baseline(
             ),
             LoadS4Error::Scan(error) => s5_scan_failure(error),
         })?;
+    if loaded.head.snapshot_schema_version != SNAPSHOT_SCHEMA_VERSION_V4 {
+        return Err(s5_failure(
+            CodeNoesisErrorV7::baseline_incompatible(
+                SNAPSHOT_SCHEMA_VERSION_V4,
+                &loaded.head.snapshot_schema_version,
+            ),
+            15,
+        ));
+    }
     if loaded.head.repository_identity != *identity {
         return Err(s5_failure(
             CodeNoesisErrorV7::baseline_repository_mismatch(
@@ -912,6 +1050,17 @@ fn serialize_v4(snapshot: &RepositorySnapshotV4) -> Result<Vec<u8>, Failure> {
     })
 }
 
+fn serialize_v5(snapshot: &RepositorySnapshotV5) -> Result<Vec<u8>, Failure> {
+    snapshot.canonical_stdout().map_err(|error| match error {
+        RepositorySnapshotV5Error::Boundary(error) => boundary_error_failure(&error),
+        RepositorySnapshotV5Error::LimitExceeded(error) => {
+            Failure::Scan(ScanError::Acquisition(error))
+        }
+        RepositorySnapshotV5Error::Serialization(_)
+        | RepositorySnapshotV5Error::OutputLengthOverflow => boundary_internal_failure(),
+    })
+}
+
 fn enforce_scan_deadline(started_at: Instant) -> Result<(), Failure> {
     let elapsed = u64::try_from(started_at.elapsed().as_millis()).map_err(|_| Failure::Internal)?;
     if elapsed > STANDARD_LOCAL_S1_LIMITS.scan_wall_milliseconds {
@@ -953,6 +1102,12 @@ fn invocation_failure(error: InvocationError) -> Failure {
         InvocationError::InvalidAcquisitionProfile => {
             Failure::V6Input(CodeNoesisErrorV6::invalid_acquisition_profile())
         }
+        InvocationError::InvalidBoundaryProfile => {
+            boundary_failure(CodeNoesisErrorV9::invalid_profile(), 2)
+        }
+        InvocationError::InvalidBoundaryManifest(reason) => {
+            boundary_failure(CodeNoesisErrorV9::invalid_manifest(reason), 2)
+        }
     }
 }
 
@@ -962,7 +1117,73 @@ fn s5_invocation_failure(error: InvocationError) -> Failure {
         InvocationError::InvalidAcquisitionProfile => {
             Failure::V6Input(CodeNoesisErrorV6::invalid_acquisition_profile())
         }
+        InvocationError::InvalidBoundaryProfile => {
+            boundary_failure(CodeNoesisErrorV9::invalid_profile(), 2)
+        }
+        InvocationError::InvalidBoundaryManifest(reason) => {
+            boundary_failure(CodeNoesisErrorV9::invalid_manifest(reason), 2)
+        }
     }
+}
+
+fn repository_boundary_input_failure(
+    failure: repository_boundaries::RepositoryBoundaryFailure,
+) -> Failure {
+    boundary_failure(failure.error, failure.exit_code)
+}
+
+fn boundary_scan_failure(error: BoundaryScanError) -> Failure {
+    match error {
+        BoundaryScanError::Scan(ScanError::Internal) => boundary_internal_failure(),
+        BoundaryScanError::Scan(error) => Failure::Scan(error),
+        BoundaryScanError::Boundary(error) => boundary_error_failure(&error),
+        BoundaryScanError::InvalidManifest => boundary_failure(
+            CodeNoesisErrorV9::invalid_manifest(BoundaryManifestReason::SchemaInvalid),
+            2,
+        ),
+        BoundaryScanError::NestedMismatch {
+            path,
+            expected,
+            observed,
+        } => boundary_failure(
+            CodeNoesisErrorV9::nested_mismatch(&path, &expected, &observed),
+            10,
+        ),
+        BoundaryScanError::NestedUnavailable { path, error } => boundary_failure(
+            CodeNoesisErrorV9::nested_unavailable(
+                &path,
+                repository_boundaries::nested_reason(&error),
+            ),
+            10,
+        ),
+        BoundaryScanError::NestedChanged { path } => {
+            boundary_failure(CodeNoesisErrorV9::nested_changed(&path), 10)
+        }
+        BoundaryScanError::NestedPathUnavailable { path } => boundary_failure(
+            CodeNoesisErrorV9::nested_unavailable(
+                &path,
+                NestedRepositoryUnavailableReason::PathInvalid,
+            ),
+            10,
+        ),
+    }
+}
+
+fn boundary_error_failure(error: &RepositoryBoundaryError) -> Failure {
+    let exit_code = if error == &RepositoryBoundaryError::InvalidReport {
+        70
+    } else {
+        10
+    };
+    boundary_failure(CodeNoesisErrorV9::from_boundary(error), exit_code)
+}
+
+fn boundary_failure(error: CodeNoesisErrorV9, exit_code: u8) -> Failure {
+    Failure::V9(V9Failure { error, exit_code })
+}
+
+fn boundary_internal_failure() -> Failure {
+    boundary_failure(CodeNoesisErrorV9::internal(), 70)
 }
 
 fn repository_adapter(packed_sha1: bool) -> LocalGitRepository {
@@ -1102,6 +1323,14 @@ fn requested_profile(arguments: &[OsString], expected: &str) -> bool {
         .any(|pair| pair[0] == OsStr::new("--profile") && pair[1] == OsStr::new(expected))
 }
 
+fn option_requested(arguments: &[OsString], expected: &str) -> bool {
+    arguments
+        .get(2..)
+        .unwrap_or_default()
+        .chunks(2)
+        .any(|pair| pair.first().is_some_and(|flag| flag == expected))
+}
+
 fn s1_boundary_applies(repository: &OsStr) -> bool {
     fs::symlink_metadata(repository)
         .is_ok_and(|metadata| metadata.is_dir() && !metadata.file_type().is_symlink())
@@ -1133,6 +1362,10 @@ fn emit_internal_error_v7() -> ExitCode {
 
 fn emit_internal_error_v8() -> ExitCode {
     emit_error_v8(&CodeNoesisErrorV8::internal(), 70)
+}
+
+fn emit_internal_error_v9() -> ExitCode {
+    emit_error_v9(&CodeNoesisErrorV9::internal(), 70)
 }
 
 fn emit_error_v1(error: &CodeNoesisErrorV1, code: u8) -> ExitCode {
@@ -1198,6 +1431,17 @@ fn emit_error_v8(error: &CodeNoesisErrorV8, code: u8) -> ExitCode {
     }
 }
 
+fn emit_error_v9(error: &CodeNoesisErrorV9, code: u8) -> ExitCode {
+    let Ok(bytes) = error.canonical_stderr() else {
+        return ExitCode::from(70);
+    };
+    if io::stderr().lock().write_all(&bytes).is_ok() {
+        ExitCode::from(code)
+    } else {
+        ExitCode::from(70)
+    }
+}
+
 fn emit_docs_error(error: GeneratedDocsError) -> ExitCode {
     let error = match error {
         GeneratedDocsError::UnmarkedNonemptyRoot => {
@@ -1225,6 +1469,7 @@ fn emit_query_error(error: QueryFailure) -> ExitCode {
 
 enum Failure {
     S6(federation::FederationFailure),
+    V9(V9Failure),
     Input(InputError),
     V6Input(CodeNoesisErrorV6),
     S4Input(CodeNoesisErrorV5),
@@ -1233,6 +1478,11 @@ enum Failure {
     Docs(GeneratedDocsError),
     Query(QueryFailure),
     Internal,
+}
+
+struct V9Failure {
+    error: CodeNoesisErrorV9,
+    exit_code: u8,
 }
 
 struct S5Failure {
@@ -1424,12 +1674,16 @@ struct Invocation {
     revision: Revision,
     store: Option<OsString>,
     packed_sha1: bool,
+    boundary_profile: bool,
+    boundary_manifest: Option<OsString>,
 }
 
 #[derive(Clone, Copy)]
 enum InvocationError {
     Input(InputError),
     InvalidAcquisitionProfile,
+    InvalidBoundaryProfile,
+    InvalidBoundaryManifest(BoundaryManifestReason),
 }
 
 impl From<InputError> for InvocationError {
@@ -1452,10 +1706,18 @@ impl Invocation {
         command: &str,
         required_profile: Option<&str>,
     ) -> Result<Self, InvocationError> {
+        let arguments = arguments.into_iter().collect::<Vec<_>>();
+        let boundary_options_requested =
+            option_requested(&arguments, "--repository-boundary-profile")
+                || option_requested(&arguments, "--repository-boundary-manifest");
         let mut arguments = arguments.into_iter();
         let _program = arguments.next();
         if arguments.next().as_deref() != Some(OsStr::new(command)) {
-            return Err(InputError::InvalidRevision.into());
+            return Err(if boundary_options_requested {
+                InvocationError::InvalidBoundaryProfile
+            } else {
+                InputError::InvalidRevision.into()
+            });
         }
         let mut repository = None;
         let mut identity = None;
@@ -1464,10 +1726,18 @@ impl Invocation {
         let mut format = None;
         let mut store = None;
         let mut acquisition_profile = None;
+        let mut boundary_profile = None;
+        let mut boundary_manifest = None;
         while let Some(flag) = arguments.next() {
             let value = arguments.next().ok_or_else(|| {
                 if flag == OsStr::new("--acquisition-profile") {
                     InvocationError::InvalidAcquisitionProfile
+                } else if flag == OsStr::new("--repository-boundary-profile") {
+                    InvocationError::InvalidBoundaryProfile
+                } else if flag == OsStr::new("--repository-boundary-manifest") {
+                    InvocationError::InvalidBoundaryManifest(
+                        BoundaryManifestReason::ManifestUnavailable,
+                    )
                 } else if flag == OsStr::new("--profile") {
                     InvocationError::Input(InputError::InvalidProfile)
                 } else if flag == OsStr::new("--store") {
@@ -1493,10 +1763,27 @@ impl Invocation {
                     };
                     acquisition_profile = Some(value.to_owned());
                 }
+                Some("--repository-boundary-profile") if boundary_profile.is_none() => {
+                    let Some(value) = value.to_str() else {
+                        return Err(InvocationError::InvalidBoundaryProfile);
+                    };
+                    boundary_profile = Some(value.to_owned());
+                }
+                Some("--repository-boundary-manifest") if boundary_manifest.is_none() => {
+                    boundary_manifest = Some(value);
+                }
                 Some("--store") if store.is_none() => store = Some(value),
                 Some("--format") if format.is_none() => format = value.to_str().map(str::to_owned),
                 Some("--acquisition-profile") => {
                     return Err(InvocationError::InvalidAcquisitionProfile);
+                }
+                Some("--repository-boundary-profile") => {
+                    return Err(InvocationError::InvalidBoundaryProfile);
+                }
+                Some("--repository-boundary-manifest") => {
+                    return Err(InvocationError::InvalidBoundaryManifest(
+                        BoundaryManifestReason::SchemaInvalid,
+                    ));
                 }
                 _ => return Err(InputError::InvalidRevision.into()),
             }
@@ -1512,10 +1799,35 @@ impl Invocation {
             .map_err(InvocationError::Input)?;
         if let Some(required_profile) = required_profile {
             if profile.as_deref() != Some(required_profile) {
-                return Err(InputError::InvalidProfile.into());
+                return Err(if boundary_options_requested {
+                    InvocationError::InvalidBoundaryProfile
+                } else {
+                    InputError::InvalidProfile.into()
+                });
             }
         } else if profile.is_some() {
-            return Err(InputError::InvalidRevision.into());
+            return Err(if boundary_options_requested {
+                InvocationError::InvalidBoundaryProfile
+            } else {
+                InputError::InvalidRevision.into()
+            });
+        }
+        let boundary_profile = match boundary_profile.as_deref() {
+            None if boundary_manifest.is_none() => false,
+            Some(LOCAL_GITLINKS_V1)
+                if command == "scan" && required_profile == Some("standard-local-s4") =>
+            {
+                true
+            }
+            _ => return Err(InvocationError::InvalidBoundaryProfile),
+        };
+        if boundary_manifest
+            .as_ref()
+            .is_some_and(|value| value.is_empty())
+        {
+            return Err(InvocationError::InvalidBoundaryManifest(
+                BoundaryManifestReason::ManifestUnavailable,
+            ));
         }
         let packed_sha1 = match acquisition_profile.as_deref() {
             None => false,
@@ -1556,6 +1868,8 @@ impl Invocation {
             revision,
             store,
             packed_sha1,
+            boundary_profile,
+            boundary_manifest,
         })
     }
 }

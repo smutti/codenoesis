@@ -1,0 +1,232 @@
+{
+  "schema_version": "codenoesis.s1-gitlinks-rustdesk-pilot/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/94",
+  "requirement": "FR-ACQ-005",
+  "slice": "S1",
+  "roadmap_capability": "R2",
+  "risk": "high",
+  "observed_at": "2026-08-02T11:06:06Z",
+  "repository": {
+    "public_slug": "rustdesk/rustdesk",
+    "external_source_vendored": false,
+    "external_source_committed": false,
+    "raw_repository_url_retained": false,
+    "pinned_commit_oid": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+    "pinned_root_tree_oid": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+    "object_format": "sha1",
+    "full_object_database": true,
+    "shallow": false,
+    "worktree_materialized": false,
+    "nested_checkout_present_before_scan": false,
+    "nested_checkout_present_after_scan": false
+  },
+  "setup": {
+    "location": "ephemeral temporary directory outside the repository",
+    "network_during_setup": true,
+    "commands": [
+      "git init {temporary_repository_root}",
+      "git fetch --no-tags --depth=1 {approved_public_source_omitted} d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "git fetch --unshallow --no-tags {approved_public_source_omitted}",
+      "git update-ref HEAD d412d198720aa56f6cfed2dfad262e8fb1322fb7"
+    ],
+    "shallow_repository_control": {
+      "subject_exit_code": 10,
+      "error_schema": "codenoesis.error/v6",
+      "error_code": "acquisition.unsupported_repository_shape",
+      "error_feature": "shallow_repository",
+      "counted_as_valid_pilot_run": false
+    }
+  },
+  "object_database": {
+    "loose_objects": 0,
+    "objects_in_pack": 86347,
+    "pack_count": 2,
+    "pack_artifact_count": 6,
+    "pack_artifact_bytes": 71060717,
+    "pack_artifacts": [
+      {
+        "kind": "idx",
+        "bytes": 31928,
+        "sha256": "8435c472fd2e2621ec93d5fd16d316ed1566a67cfe52342639c0848d8d336e46"
+      },
+      {
+        "kind": "idx",
+        "bytes": 2387932,
+        "sha256": "86139c4e1e3d1b653e4c1bcf4b518e60e33d7b95091d4717da7db232d42a5834"
+      },
+      {
+        "kind": "pack",
+        "bytes": 6885870,
+        "sha256": "15315e99df1141e9a575e7011205e7399c78b95c975b62b515380a061eda9413"
+      },
+      {
+        "kind": "pack",
+        "bytes": 61409495,
+        "sha256": "725bd8fff7d07364101164ef5c46fb1c69b0cc0f8a6b2123a9ae4d7d35f25527"
+      },
+      {
+        "kind": "rev",
+        "bytes": 4460,
+        "sha256": "a99a9279976f7bd72c10af5be9f488be5ad2f6208763782f4429b2f6fbbbce64"
+      },
+      {
+        "kind": "rev",
+        "bytes": 341032,
+        "sha256": "bfd4bba29e7e8cdb78999bfbce286cf3f76ea2e3bdb151b912aff1f4144af6b8"
+      }
+    ],
+    "note": "Pack layout and bytes are contextual setup evidence; the pinned commit and tree are the stable semantic inputs."
+  },
+  "committed_gitmodules": {
+    "mode": "100644",
+    "object_type": "blob",
+    "blob_oid": "d80e69aa84a4c7f764eea191622a386878cf852d",
+    "bytes": 100,
+    "sha256": "0cbdb9cb5ecf1b8f977d5ebc91ef9a99fe02c256a12fe58eb32ee2e4ca52b2d6",
+    "section_count": 1,
+    "raw_source_retained": false,
+    "raw_url_retained": false,
+    "declarations": [
+      {
+        "declaration_id": "urn:codenoesis:gitmodules-declaration:sha256:47e4ae07b8882e5dff343e9aa8ca6e8c7715c78e57944f7889621da3d830599c",
+        "name_sha256": "d6fa95f1476bac33248cc3ba17950ae514fe1e3bd559d22457480d7fab9eec1d",
+        "path": "libs/hbb_common",
+        "url_kind": "https",
+        "url_sha256": "a368509517a1eb9faf1a7ab9d26e57b27dc16d6d8e910aecd97ef29f7051c9b5",
+        "unsupported_keys": [],
+        "evidence_id": "urn:codenoesis:boundary-evidence:sha256:f36fa9bf609251dd5315c3431803d197db731d85a98c17814fee6d0dd423ddd1",
+        "start_byte": 0,
+        "end_byte": 100
+      }
+    ]
+  },
+  "boundary_projection": {
+    "root_repository_identity": "urn:codenoesis:corpus:rustdesk",
+    "gitlink_count": 1,
+    "declaration_count": 1,
+    "evidence_count": 2,
+    "boundaries": [
+      {
+        "boundary_id": "urn:codenoesis:repository-boundary:sha256:123239d27cac3f6fcc68de49c2d0fec77d5b3107b2dcb4a793c4ef5c5faa84ae",
+        "path": "libs/hbb_common",
+        "containing_tree_oid": "c7041390104b9d59276e1e5c3388f2d281eb91b4",
+        "gitlink_oid": "69cea8dafee147848ae88702029f4bf7df7224c3",
+        "state": "declared_unbound",
+        "tree_evidence_id": "urn:codenoesis:boundary-evidence:sha256:1af5a2313a371fdc335252444f4d49ab21dd220634148e5e2d894155f67b0645"
+      }
+    ],
+    "coverage_gaps": [
+      {
+        "gap_id": "urn:codenoesis:boundary-gap:sha256:9b1dec0ce982bd8f86817baf98b58e176f983424e920427b725d67a999795b8b",
+        "code": "boundary.nested_repository_unbound",
+        "path": "libs/hbb_common",
+        "subject_id": "urn:codenoesis:repository-boundary:sha256:123239d27cac3f6fcc68de49c2d0fec77d5b3107b2dcb4a793c4ef5c5faa84ae"
+      }
+    ]
+  },
+  "scan": {
+    "command": [
+      "noesis",
+      "scan",
+      "--repository",
+      "{temporary_repository_root}",
+      "--repository-id",
+      "urn:codenoesis:corpus:rustdesk",
+      "--revision",
+      "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "--profile",
+      "standard-local-s4",
+      "--acquisition-profile",
+      "local-git-sha1-packed-v1",
+      "--repository-boundary-profile",
+      "local-gitlinks-v1",
+      "--store",
+      "{temporary_store_root}",
+      "--format",
+      "json"
+    ],
+    "repetitions": 2,
+    "exit_codes": [
+      11,
+      11
+    ],
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 169,
+    "stderr_sha256": "8552c3370ce6e9244b91dff2fb7ae6bbe692ad4f2b850f787a6a858eb7df9cbe",
+    "stderr": {
+      "schema_version": "codenoesis.error/v5",
+      "stage": "extraction",
+      "code": "extraction.unsupported_workspace",
+      "message": "unsupported workspace",
+      "retryable": false,
+      "context": {}
+    },
+    "stdout_byte_identical": true,
+    "stderr_byte_identical": true,
+    "store_files_after_each_failure": [
+      0,
+      0
+    ],
+    "timing_seconds": [
+      {
+        "real": 13.60,
+        "user": 13.24,
+        "system": 0.29
+      },
+      {
+        "real": 13.56,
+        "user": 13.23,
+        "system": 0.29
+      }
+    ],
+    "maximum_resident_set_bytes": [
+      67911680,
+      67371008
+    ],
+    "peak_memory_footprint_bytes": [
+      56181168,
+      55640496
+    ],
+    "block_output_operations": [
+      0,
+      0
+    ],
+    "messages_sent": [
+      0,
+      0
+    ],
+    "messages_received": [
+      0,
+      0
+    ],
+    "observation": "R2 acquisition and boundary projection completed and reached the inherited generic R3 workspace blocker without entering the nested checkout or partially publishing a store."
+  },
+  "authority": {
+    "network_during_subject_scan": false,
+    "subject_invoked_git_or_other_process": false,
+    "subject_wrote_repository": false,
+    "subject_opened_nested_checkout": false,
+    "subject_analyzed_nested_source": false,
+    "partial_publication": false,
+    "repository_specific_product_semantics": false,
+    "pilot_is_product_truth": false
+  },
+  "environment": {
+    "os": "macOS 26.5.2 (25F84)",
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "filesystem": "APFS",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "rustc_host": "aarch64-apple-darwin",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "python": "Python 3.9.6",
+    "git": "git version 2.50.1 (Apple Git-155)"
+  },
+  "limitations": [
+    "The public CLI correctly reaches the next inherited extraction blocker, so no V5 snapshot is published for this unsupported workspace; the R2 projection is retained as digest-and-identity observation from the same pinned immutable Git objects.",
+    "Local macOS does not enforce the Linux seccomp and Landlock profile; exact-head Linux CI remains required.",
+    "The local timing counters are contextual and are not a benchmark baseline.",
+    "This local pilot does not mark FR-ACQ-005 Verified and does not replace exact-head CI or independent human review."
+  ]
+}
