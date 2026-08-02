@@ -9,7 +9,7 @@
     "FR-EXT-008"
   ],
   "risk": "high",
-  "observed_at": "2026-08-02T18:13:22Z",
+  "observed_at": "2026-08-02T18:47:08Z",
   "commits": {
     "governance_merge": "04a6fbc0a28a65ad043ae7666ea6383c70cd0d00",
     "required_base": "04a6fbc0a28a65ad043ae7666ea6383c70cd0d00",
@@ -18,6 +18,7 @@
     "red_evidence": "39ce36d9ce74f86d6262a8df1afaab6107084905",
     "primary_implementation": "728e089d2093491106b8260972d7976486b07c13",
     "lint_correction_and_tested_head": "1e28129c0dd217422df605ed46043d6e05792597",
+    "linux_ci_store_atomicity_correction": "167675a97cc2cfe38d2dcc4ec70e78c72371b627",
     "final_pull_request_head": "recorded by the pull request and exact-head CI"
   },
   "authorization": {
@@ -109,6 +110,7 @@
   },
   "compatibility": {
     "selector_absent_error_v5_byte_identical": true,
+    "failed_scan_store_root_absent": true,
     "legacy_v4_v5_outputs_and_publication_unchanged": true,
     "legacy_documentation_and_query_bytes_unchanged": true,
     "r0_r1_r2_behavior_unchanged_without_selector": true,
@@ -118,6 +120,7 @@
     "first_party_unsafe_occurrences": 0,
     "cargo_rustc_build_script_proc_macro_target_execution": false,
     "runtime_network_or_dependency_fetch": false,
+    "confined_scan_worker": "The scan worker is created before the all-thread S0 seccomp filter, receives that filter, installs its own read-only S1/S6 Landlock boundary, exits before publication, and cannot mutate the delayed store root.",
     "nested_gitlink_source_authority": false,
     "generated_or_cfg_dependent_source_facts": "deferred as rust_unsupported_construct coverage",
     "duplicate_semantic_gap_ids": "canonicalized deterministically on the R3 path",
@@ -207,7 +210,7 @@
   },
   "bootstrap_gate": {
     "status": "passed",
-    "tested_head": "1e28129c0dd217422df605ed46043d6e05792597",
+    "tested_head": "167675a97cc2cfe38d2dcc4ec70e78c72371b627",
     "commands": [
       "actionlint -no-color",
       "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
@@ -230,30 +233,21 @@
       0,
       0
     ],
-    "duration_seconds_by_command": [
-      0,
-      0,
-      1,
-      0,
-      101,
-      1,
-      1,
-      0,
-      5
-    ],
+    "duration_seconds_by_command": "not separately captured for the correction gate",
     "rust_tests_passed": 242,
     "rust_doc_tests_passed": 0,
     "python_tests_passed": 193,
     "benchmarks_compiled": true,
     "benchmark_assets": "valid: status=scaffold, suites=0",
-    "exact_head_ci": "not run locally; pull-request Linux/macOS/Windows, CodeQL, and benchmark-integrity checks remain required"
+    "exact_head_ci": "The prior pull-request head failed only the Linux empty-store-root assertions. Exact-head CI for the correction remains required after publication."
   },
   "corrections": {
     "authorized_rounds": 5,
-    "rounds_used": 2,
+    "rounds_used": 3,
     "observations": [
       "Real-pilot compatibility deferred conditional declarations and missing generated modules, then canonicalized repeated semantic coverage IDs without weakening parser failures.",
-      "The all-target clippy gate required explicit structural lint annotations and reference-based parameters; focused tests and the full gate were rerun."
+      "The all-target clippy gate required explicit structural lint annotations and reference-based parameters; focused tests and the full gate were rerun.",
+      "Linux Landlock correctly denied removing an empty store root through its ungranted parent after a failed scan. The correction confines repository analysis in a pre-seccomp worker and delays store creation until successful analysis, preserving the absent-store oracle without granting parent authority or weakening the test. R3, inherited R2, four concurrent R3 replays, clippy, and the complete bootstrap gate passed on the correction commit."
     ],
     "same_deterministic_failure_repeated_after_fix": false
   },
