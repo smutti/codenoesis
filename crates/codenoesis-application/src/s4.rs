@@ -7,7 +7,7 @@ use codenoesis_ports::{
     RustWorkspaceExtractor, SafeRepositoryAcquirer,
 };
 
-use crate::{PublicationService, ScanError, ScanRequest, ScanService};
+use crate::{PublicationService, ScanError, ScanRequest, ScanService, map_repository_error};
 
 pub struct S4ScanOutput {
     pub snapshot: RepositorySnapshotV4,
@@ -34,12 +34,7 @@ where
         let acquired = self
             .acquirer
             .acquire_inventory(&request.repository, request.identity, request.revision)
-            .map_err(|error| match error {
-                codenoesis_domain::RepositoryError::Acquisition(acquisition) => {
-                    ScanError::Acquisition(acquisition)
-                }
-                codenoesis_domain::RepositoryError::Unexpected => ScanError::Internal,
-            })?;
+            .map_err(map_repository_error)?;
         let inventory = RepositoryInventory::classify(acquired);
         let knowledge = extractor
             .extract_workspace(&inventory)
@@ -69,12 +64,7 @@ where
         let acquired = self
             .acquirer
             .acquire_inventory(&request.repository, request.identity, request.revision)
-            .map_err(|error| match error {
-                codenoesis_domain::RepositoryError::Acquisition(acquisition) => {
-                    ScanError::Acquisition(acquisition)
-                }
-                codenoesis_domain::RepositoryError::Unexpected => ScanError::Internal,
-            })?;
+            .map_err(map_repository_error)?;
         let inventory = RepositoryInventory::classify(acquired);
         let extraction = extractor
             .extract_workspace_incremental(&inventory, &[])

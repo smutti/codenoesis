@@ -1,10 +1,12 @@
 //! Versioned JSON contracts for the `CodeNoesis` S0 through S3 slices.
 
+mod s1_boundaries;
 mod s1_packed;
 mod s4;
 mod s5;
 mod s6;
 
+pub use s1_boundaries::*;
 pub use s1_packed::*;
 pub use s4::*;
 pub use s5::*;
@@ -528,8 +530,11 @@ fn publication_candidate(value: &Value) -> Result<PublicationCandidate, Publicat
         )?;
     let embedded_domains_required =
         snapshot_schema_version == codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION;
-    let v4_contract =
-        snapshot_schema_version == codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V4;
+    let v4_contract = matches!(
+        snapshot_schema_version,
+        codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V4
+            | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V5
+    );
     let semantic = required_field(value, "semantic", "semantic")?;
     let repository = required_field(semantic, "repository", "semantic.repository")?;
     let repository_identity =

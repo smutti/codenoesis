@@ -1,0 +1,399 @@
+{
+  "schema_version": "codenoesis.s1-gitlinks-local-green-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/94",
+  "requirement_status": "Approved",
+  "requirements": [
+    "FR-ACQ-005"
+  ],
+  "slice": "S1",
+  "roadmap_capability": "R2",
+  "roadmap_checkpoint": "R0-R2",
+  "risk": "high",
+  "observed_at": "2026-08-02T11:06:06Z",
+  "commits": {
+    "required_base": "9a26567a3e98a107fe82252bb0f6da9b5f6a6945",
+    "pre_r2_runtime": "728244e2d05087da20c0c722879cb05510f9a988",
+    "test_first": "f542d893e888330a1bdb00315e00cac6e73746aa",
+    "retained_red_evidence": "b488cf94d01bdc590eabb473006de1a25b5b0123",
+    "initial_implementation": "637d7d49eefd055f47e0038b8e40c81fc1544952",
+    "ci_portability_correction": "resolved by Git history after this observation file is updated",
+    "implementation_and_evidence": "resolved by Git history after this observation file is committed"
+  },
+  "authorization": {
+    "complete_package": "https://github.com/smutti/codenoesis/issues/94#issuecomment-5156067236",
+    "limit_correction_128_gitlinks_256_sections": "https://github.com/smutti/codenoesis/issues/94#issuecomment-5156831373",
+    "automatic_ready_after_green_authorized": true,
+    "manual_independent_review_and_merge_required": true,
+    "authoring_agent_may_approve_or_merge": false,
+    "maximum_correction_rounds": 5
+  },
+  "contracts": {
+    "oracle_bundle_sha256": "2f59bb311b64b0f4f9d506266f05e9e52f4c0bf5af8926276ed371967690969b",
+    "decision_sha256": "81f7a9f18efc67fcc9904ba6cb52e4aa545a43974a930c69295d2e00c750eea7",
+    "acceptance_specification_sha256": "812e2f448784ba42076d98fb85428b06569df9695099c926db00ffad6ad2a4ba",
+    "boundary_input_schema_sha256": "a1c054442a1ec19cbdaf96918cd8d1f14e81b0aa64f72b824c25f43edab2e10b",
+    "boundary_schema_sha256": "b9f742f53baa43ac2b08fee142d7d83c5a65ac1e30621d5845d899f2861ae0f5",
+    "snapshot_v5_schema_sha256": "60cdc5b3e9dfcc8f5f2b2cfe0a36348efe4b6c0fded548b1b70f6eab1311c51e",
+    "error_v9_schema_sha256": "2a6d387ac9881b02366b36b43e3afaaa866994aea93b12f884b67a89ef25b6cd",
+    "bundle_file_sha256": "710a640fd6bf43ee87cc4a4c2eb159093dbb6c6654ba4baf5fcbc3adf8e5970e",
+    "synthetic_fixture_manifest_sha256": "ec83796222aaffeb47af0e0ebf47c7a24283007787f1a3e6f8870d8877d1f8e2",
+    "protected_contracts_changed": false,
+    "protected_goldens_changed": false,
+    "protected_corpora_changed": false,
+    "benchmark_baselines_changed": false,
+    "policy_or_workflow_changed": false
+  },
+  "scope": {
+    "declared_allowed_paths_only": true,
+    "protected_or_forbidden_paths_changed": false,
+    "dependency_manifest_or_lockfile_changed": false,
+    "schema_migration_or_store_ddl_changed": false,
+    "first_party_unsafe_occurrences": 0,
+    "actual_changed_paths": [
+      "crates/codenoesis-application/src/lib.rs",
+      "crates/codenoesis-application/src/s1_boundaries.rs",
+      "crates/codenoesis-application/src/s4.rs",
+      "crates/codenoesis-application/tests/s1_boundaries.rs",
+      "crates/codenoesis-contracts/src/lib.rs",
+      "crates/codenoesis-contracts/src/s1_boundaries.rs",
+      "crates/codenoesis-contracts/tests/s1_boundaries_contracts.rs",
+      "crates/codenoesis-domain/src/lib.rs",
+      "crates/codenoesis-domain/src/s1_boundaries.rs",
+      "crates/codenoesis-domain/src/storage.rs",
+      "crates/codenoesis-domain/tests/s1_boundaries.rs",
+      "crates/codenoesis-ports/src/lib.rs",
+      "crates/codenoesis-repository/src/lib.rs",
+      "crates/codenoesis-repository/tests/s1_boundaries.rs",
+      "crates/noesis/src/filesystem_sandbox.rs",
+      "crates/noesis/src/lib.rs",
+      "crates/noesis/src/main.rs",
+      "crates/noesis/src/repository_boundaries.rs",
+      "crates/noesis/tests/e2e_fr_acq_005_gitlink_boundaries.rs",
+      "crates/noesis/tests/evidence/s1/gitlinks/dependency-review.json",
+      "crates/noesis/tests/evidence/s1/gitlinks/green-observation-local.json",
+      "crates/noesis/tests/evidence/s1/gitlinks/pilot-rustdesk-local.json",
+      "crates/noesis/tests/evidence/s1/gitlinks/red-observation.json",
+      "crates/noesis/tests/evidence/s1/gitlinks/red/e2e_fr_acq_005_gitlink_boundaries.log",
+      "crates/noesis/tests/support/mod.rs",
+      "crates/noesis/tests/support/s1_boundaries.rs"
+    ]
+  },
+  "public_behavior": {
+    "scan_profile": "standard-local-s4",
+    "repository_boundary_selector": "local-gitlinks-v1",
+    "optional_manifest": "--repository-boundary-manifest",
+    "composes_with_root_acquisition_profile": "local-git-sha1-packed-v1",
+    "snapshot_schema": "codenoesis.repository-snapshot/v5",
+    "boundary_schema": "codenoesis.repository-boundaries/v1",
+    "new_error_schema": "codenoesis.error/v9",
+    "selector_absent_behavior_unchanged": true,
+    "root_inventory_extraction_graph_docs_query_semantics_unchanged": true,
+    "nested_repository_depth": 1,
+    "nested_source_analyzed": false,
+    "nested_semantics_merged_into_root": false
+  },
+  "red": {
+    "test_id": "e2e_fr_acq_005_gitlink_boundaries",
+    "command": "cargo test --locked -p noesis --test e2e_fr_acq_005_gitlink_boundaries -- e2e_fr_acq_005_gitlink_boundaries --exact",
+    "runner_exit_code": 101,
+    "subject_exit_code": 2,
+    "subject_stdout_bytes": 0,
+    "subject_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "subject_stderr_bytes": 149,
+    "subject_stderr_sha256": "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe",
+    "subject_stderr_schema": "codenoesis.error/v4",
+    "subject_stderr_code": "input.invalid_revision",
+    "expected_failure_observed": true,
+    "store_exists_after_subject": false,
+    "root_repository_opened": false,
+    "nested_repository_opened": false,
+    "processes_spawned": 0,
+    "network_attempts": 0,
+    "writes": 0,
+    "publications": 0,
+    "observation": "crates/noesis/tests/evidence/s1/gitlinks/red-observation.json",
+    "log": "crates/noesis/tests/evidence/s1/gitlinks/red/e2e_fr_acq_005_gitlink_boundaries.log",
+    "log_sha256": "50fe8ebf80ad380005f0aa41f1f4cd3fbafd9fb8e7bcbf2adb834ccf358b01f4",
+    "log_bytes": 1205
+  },
+  "focused_green": {
+    "started_at": "2026-08-02T11:05:26Z",
+    "finished_at": "2026-08-02T11:05:36Z",
+    "commands": [
+      "cargo test --locked -p codenoesis-domain --test s1_boundaries",
+      "cargo test --locked -p codenoesis-contracts --test s1_boundaries_contracts",
+      "cargo test --locked -p codenoesis-repository --lib",
+      "cargo test --locked -p codenoesis-repository --test s1_boundaries",
+      "cargo test --locked -p codenoesis-application --test s1_boundaries",
+      "cargo test --locked -p noesis --test e2e_fr_acq_005_gitlink_boundaries -- --test-threads=1"
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "domain_tests_passed": 10,
+    "contract_tests_passed": 8,
+    "repository_unit_tests_passed": 14,
+    "repository_boundary_tests_passed": 6,
+    "application_tests_passed": 4,
+    "public_e2e_tests_passed": 13,
+    "total_tests_passed": 55,
+    "local_log_sha256": "1615e9e0879f6f7f34111007386af74bfce05b3a63c641b8963fe30e9d0b52dd",
+    "local_log_bytes": 7582,
+    "local_log_retention": "ephemeral local review aid"
+  },
+  "public_e2e_tests": [
+    "e2e_fr_acq_005_gitlink_boundaries",
+    "sec_fr_acq_005_no_ambient_nested_authority",
+    "gt_fr_acq_005_explicit_nested_binding",
+    "conf_fr_acq_005_v5_store_docs_query",
+    "reg_fr_acq_004_packed_sha1_composes_with_r2",
+    "conf_fr_acq_005_selector_profile_matrix",
+    "conf_fr_acq_005_boundary_manifest_failures_are_side_effect_free",
+    "gt_fr_acq_005_nested_failure_precedence",
+    "sec_fr_acq_005_nested_symlink_escape_is_rejected",
+    "pt_fr_acq_005_public_limits_use_128_gitlinks_and_256_sections",
+    "pt_fr_acq_005_manifest_bytes_have_public_max_and_plus_one",
+    "pt_fr_acq_005_explicit_roots_have_public_max_and_plus_one",
+    "sec_fr_acq_005_url_canary_never_reaches_output_or_store"
+  ],
+  "reviewed_behavior": {
+    "exact_unbound_golden": true,
+    "ambient_nested_worktree_absent_present_semantics_identical": true,
+    "explicit_nested_loose_packed_equivalence": true,
+    "strict_selector_profile_matrix": true,
+    "strict_duplicate_member_json": true,
+    "restricted_committed_gitmodules_grammar": true,
+    "url_lexical_classification_and_digest_only_retention": true,
+    "declared_undeclared_orphan_unsupported_unbound_and_not_analyzed_gaps": true,
+    "deterministic_failure_precedence": true,
+    "input_permutations": 50,
+    "shuffled_parallel_replay": true,
+    "parser_seed_corpus": true,
+    "nested_replacement_race_returns_changed": true,
+    "canonical_v5_publication": true,
+    "v5_store_docs_exact_id_query": true,
+    "v4_reading_and_publication_compatible": true,
+    "partial_publication_on_failure": false
+  },
+  "fixed_limits": {
+    "boundary_manifest_bytes": {
+      "maximum": 262144,
+      "maximum_plus_one": 262145
+    },
+    "committed_gitmodules_bytes": {
+      "maximum": 1048576,
+      "maximum_plus_one": 1048577
+    },
+    "gitlinks": {
+      "maximum": 128,
+      "maximum_plus_one": 129
+    },
+    "gitmodules_sections": {
+      "maximum": 256,
+      "maximum_plus_one": 257
+    },
+    "gitmodules_keys_per_section": {
+      "maximum": 32,
+      "maximum_plus_one": 33
+    },
+    "explicit_nested_roots": {
+      "maximum": 32,
+      "maximum_plus_one": 33,
+      "derived_total_roots_at_maximum": 33
+    },
+    "explicit_nesting_depth": {
+      "maximum": 1,
+      "maximum_plus_one": 2
+    },
+    "canonical_boundary_report_bytes": {
+      "maximum": 1048576,
+      "maximum_plus_one": 1048577
+    },
+    "complete_snapshot_bytes": {
+      "inherited_maximum": 33554432
+    },
+    "all_have_successful_maximum_and_typed_capped_maximum_plus_one": true
+  },
+  "compatibility_regressions": {
+    "targeted_tests": [
+      "e2e_fr_acq_002_gitlink_rejected",
+      "e2e_fr_acq_004_packed_sha1_equivalence",
+      "reg_fr_acq_004_legacy_profiles_unchanged",
+      "e2e_fr_cli_001_workspace_docs_query",
+      "e2e_fr_inc_001_incremental_refresh",
+      "e2e_fr_fed_001_openapi_federation"
+    ],
+    "targeted_tests_passed": 6,
+    "workspace_all_targets_all_features_locked_passed": true,
+    "workspace_doc_tests_locked_passed": true,
+    "legacy_selector_absent_gitlink_rejection_unchanged": true,
+    "r0_corpus_guard_unchanged": true,
+    "r1_packed_bundle_guard_unchanged": true,
+    "s4_contract_bundle_guard_unchanged": true
+  },
+  "security": {
+    "first_party_unsafe_occurrences": 0,
+    "product_git_libgit2_gix_process_or_discovery": false,
+    "product_network_client": false,
+    "product_mmap": false,
+    "product_automatic_retry_or_repair": false,
+    "target_hook_filter_credential_build_or_plugin_execution": false,
+    "analyzed_repository_writes": false,
+    "implicit_nested_repository_open": false,
+    "nested_source_inventory_or_extraction": false,
+    "raw_url_or_credential_retained": false,
+    "credential_canary_absent_from_stdout_stderr_store": true,
+    "canonical_manifest_parent_and_nested_root_confinement": true,
+    "symlink_escape_rejected": true,
+    "windows_reparse_escape_rejected_by_adapter": true,
+    "pre_post_root_identity_and_object_stability": true,
+    "only_nested_repository_changed_retryable": true,
+    "failure_stdout_empty": true,
+    "linux_seccomp_and_landlock_runtime": "not run locally; exact-head Linux CI required",
+    "darwin_portable_boundary_checks": "passed"
+  },
+  "ci_correction_rounds": [
+    {
+      "round": 1,
+      "failed_head": "637d7d49eefd055f47e0038b8e40c81fc1544952",
+      "workflow_run": "https://github.com/smutti/codenoesis/actions/runs/30745377649",
+      "failures": [
+        {
+          "checks": [
+            "Rust quality gate",
+            "Test (ubuntu-latest)"
+          ],
+          "jobs": [
+            "https://github.com/smutti/codenoesis/actions/runs/30745377649/job/91489954026",
+            "https://github.com/smutti/codenoesis/actions/runs/30745377649/job/91489954051"
+          ],
+          "test": "sec_fr_acq_005_nested_symlink_escape_is_rejected",
+          "failure": "The test required the fresh store path to be absent. Linux Landlock correctly withholds RemoveDir authority on the store parent, so rollback can leave only the empty authorized boundary anchor while no local-store marker, artifact, metadata, or publication exists.",
+          "correction": "Assert the unchanged semantic oracle directly: the failed scan leaves the store absent or empty, with no partial local-store content. Parent-directory write authority was not broadened."
+        },
+        {
+          "checks": [
+            "Test (windows-latest)"
+          ],
+          "jobs": [
+            "https://github.com/smutti/codenoesis/actions/runs/30745377649/job/91489954030"
+          ],
+          "test": "race_fr_acq_005_nested_replacement_is_retryable_changed",
+          "failure": "Windows denied directory replacement while retained same-file handles were open, and the fixture panicked before evaluating the protected stable-or-Changed race oracle.",
+          "correction": "Accept either exact stable commit/tree binding when retained handles block replacement or retryable Changed when replacement succeeds; every other replacement error still fails the test."
+        }
+      ],
+      "product_behavior_changed": false,
+      "security_authority_broadened": false,
+      "oracle_weakened_skipped_regenerated_or_retried": false,
+      "local_validation": [
+        {
+          "command": "cargo fmt --all --check",
+          "exit_code": 0
+        },
+        {
+          "command": "cargo test --locked -p noesis --test e2e_fr_acq_005_gitlink_boundaries sec_fr_acq_005_nested_symlink_escape_is_rejected -- --exact",
+          "tests_passed": 1,
+          "exit_code": 0
+        },
+        {
+          "command": "cargo test --locked -p codenoesis-repository --lib",
+          "tests_passed": 14,
+          "exit_code": 0
+        },
+        {
+          "command": "cargo clippy --locked -p codenoesis-repository -p noesis --all-targets --all-features -- -D warnings",
+          "exit_code": 0
+        },
+        {
+          "command": "cargo check --locked --target x86_64-pc-windows-msvc -p codenoesis-repository --tests",
+          "exit_code": 0
+        }
+      ],
+      "exact_head_linux_and_windows_runtime_ci": "required"
+    }
+  ],
+  "dependency_review": "crates/noesis/tests/evidence/s1/gitlinks/dependency-review.json",
+  "pilot": "crates/noesis/tests/evidence/s1/gitlinks/pilot-rustdesk-local.json",
+  "verification": {
+    "focused_clippy": {
+      "command": "cargo clippy --locked -p codenoesis-domain -p codenoesis-contracts -p codenoesis-repository -p codenoesis-application -p noesis --all-targets --all-features -- -D warnings",
+      "exit_code": 0
+    },
+    "windows_repository_cross_check": {
+      "command": "cargo check --locked --target x86_64-pc-windows-msvc -p codenoesis-repository",
+      "observed_at": "2026-08-02T11:05:36Z",
+      "exit_code": 0
+    },
+    "complete_repository_gate_before_evidence_materialization": {
+      "observed_at": "2026-08-02T10:55:51Z",
+      "tested_tree_later_committed_as": "637d7d49eefd055f47e0038b8e40c81fc1544952",
+      "commands": [
+        "actionlint -no-color",
+        "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+        "cargo fmt --all --check",
+        "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+        "cargo test --workspace --all-targets --all-features --locked",
+        "cargo test --workspace --doc --all-features --locked",
+        "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+        "python3 scripts/validate_benchmark_assets.py",
+        "cargo bench --workspace --all-features --no-run --locked"
+      ],
+      "exit_codes": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "python_tests_passed": 180,
+      "benchmark_suite_count": 0,
+      "status": "passed"
+    },
+    "exact_final_tree_gate": "run after evidence materialization and bound by the pull request head and CI",
+    "exact_head_linux_macos_windows_ci": "required",
+    "exact_head_codeql": "required",
+    "independent_human_review": "required"
+  },
+  "policy": {
+    "version": 1,
+    "sha256": "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993",
+    "binding": "maintainer_supervised_interactive_lane",
+    "unattended_authorization": false
+  },
+  "environment": {
+    "os": "macOS 26.5.2 (25F84)",
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "filesystem": "APFS",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "rustc_host": "aarch64-apple-darwin",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "python": "Python 3.9.6",
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "actionlint": "1.7.12",
+    "features": "workspace all features"
+  },
+  "agent": {
+    "identity": "OpenAI Codex",
+    "model": "not exposed by the runtime",
+    "run_identifier": "not exposed by the runtime",
+    "duration": "not exposed by the runtime",
+    "cost": "not exposed by the runtime"
+  },
+  "limitations": [
+    "The local Windows repository crate cross-check passed, but the full noesis Windows cross-build requires CI because the local macOS toolchain lacks Windows C runtime headers used by existing tree-sitter and bundled SQLite build scripts.",
+    "A local aarch64 Linux cross-build was not run because the configured host lacks aarch64-linux-gnu-gcc; exact-head Linux CI remains the runtime authority for Landlock and seccomp.",
+    "Local and pilot evidence are review aids and do not mark FR-ACQ-005 Verified.",
+    "Exact-head CI, CodeQL, benchmark integrity, and independent human review remain mandatory before manual merge."
+  ]
+}

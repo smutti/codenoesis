@@ -1,0 +1,23 @@
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.3+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling noesis v0.1.0 (/Users/smutti/Documents/personal/codenoesis/crates/noesis)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.66s
+     Running tests/e2e_fr_acq_005_gitlink_boundaries.rs (target/debug/deps/e2e_fr_acq_005_gitlink_boundaries-45f8e2ed68178578)
+
+running 1 test
+test e2e_fr_acq_005_gitlink_boundaries ... FAILED
+
+failures:
+
+---- e2e_fr_acq_005_gitlink_boundaries stdout ----
+
+thread 'e2e_fr_acq_005_gitlink_boundaries' (8772398) panicked at crates/noesis/tests/e2e_fr_acq_005_gitlink_boundaries.rs:22:9:
+expected R2 RepositorySnapshotV5 success; observed approved pre-R2 selector rejection
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    e2e_fr_acq_005_gitlink_boundaries
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.63s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_acq_005_gitlink_boundaries`

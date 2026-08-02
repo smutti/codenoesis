@@ -1,0 +1,90 @@
+{
+  "schema_version": "codenoesis.local-test-observation/v1",
+  "slice": "S1",
+  "roadmap_capability": "R2",
+  "roadmap_checkpoint": "R0-R2",
+  "status": "red_observed",
+  "requirement_status": "Approved",
+  "requirements": [
+    "FR-ACQ-005"
+  ],
+  "risk": "high",
+  "issue": "https://github.com/smutti/codenoesis/issues/94",
+  "authorization_comment": "https://github.com/smutti/codenoesis/issues/94#issuecomment-5156067236",
+  "oracle_bundle_sha256": "2f59bb311b64b0f4f9d506266f05e9e52f4c0bf5af8926276ed371967690969b",
+  "reviewed_source_sha256": {
+    "decision": "81f7a9f18efc67fcc9904ba6cb52e4aa545a43974a930c69295d2e00c750eea7",
+    "acceptance_specification": "812e2f448784ba42076d98fb85428b06569df9695099c926db00ffad6ad2a4ba",
+    "boundary_input_schema": "a1c054442a1ec19cbdaf96918cd8d1f14e81b0aa64f72b824c25f43edab2e10b",
+    "boundary_schema": "b9f742f53baa43ac2b08fee142d7d83c5a65ac1e30621d5845d899f2861ae0f5",
+    "snapshot_v5_schema": "60cdc5b3e9dfcc8f5f2b2cfe0a36348efe4b6c0fded548b1b70f6eab1311c51e",
+    "error_v9_schema": "2a6d387ac9881b02366b36b43e3afaaa866994aea93b12f884b67a89ef25b6cd",
+    "bundle_file": "710a640fd6bf43ee87cc4a4c2eb159093dbb6c6654ba4baf5fcbc3adf8e5970e",
+    "fixture_manifest": "ec83796222aaffeb47af0e0ebf47c7a24283007787f1a3e6f8870d8877d1f8e2"
+  },
+  "base_sha": "9a26567a3e98a107fe82252bb0f6da9b5f6a6945",
+  "pre_r2_runtime_sha": "728244e2d05087da20c0c722879cb05510f9a988",
+  "test_first_sha": "f542d893e888330a1bdb00315e00cac6e73746aa",
+  "policy": {
+    "version": 1,
+    "sha256": "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993",
+    "binding": "maintainer_supervised_interactive_lane",
+    "unattended_authorization": false
+  },
+  "red": {
+    "test_id": "e2e_fr_acq_005_gitlink_boundaries",
+    "command": "cargo test --locked -p noesis --test e2e_fr_acq_005_gitlink_boundaries -- e2e_fr_acq_005_gitlink_boundaries --exact",
+    "runner_exit_code": 101,
+    "subject_exit_code": 2,
+    "subject_stdout": "empty",
+    "subject_stdout_bytes": 0,
+    "subject_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "subject_stderr": "{\"code\":\"input.invalid_revision\",\"context\":{},\"message\":\"invalid revision\",\"retryable\":false,\"schema_version\":\"codenoesis.error/v4\",\"stage\":\"input\"}\n",
+    "subject_stderr_bytes": 149,
+    "subject_stderr_sha256": "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe",
+    "expected_failure": "The exact synthetic root fixture reaches the unsupported local-gitlinks-v1 selector and the monitored pre-R2 subject returns exit 2, empty stdout, and strict LF-terminated ErrorV4 input.invalid_revision before acquisition.",
+    "observed_failure": "The harness validated every synthetic root object identity, then reached its explicit V5 success assertion after observing exactly the approved unrecognized-selector boundary.",
+    "fixture_observations": {
+      "setup_outside_monitored_subject": true,
+      "root_commit_oid": "e3a117e190a92585bcae4c49c775d310243107e7",
+      "root_tree_oid": "81f40228aa5c1e9dab33d6cc3d5d90f14aeb7d2e",
+      "gitmodules_blob_oid": "204d65a4ed6a58dd265349f8a1579a4522dc4f7d",
+      "gitlink_path": "external/nested-model",
+      "gitlink_oid": "6ecf94267842da776e35406a9ebcb85e058a3181",
+      "nested_worktree_present": false,
+      "store_exists_after_subject": false,
+      "root_repository_opened": false,
+      "nested_repository_opened": false,
+      "processes_spawned": 0,
+      "network_attempts": 0,
+      "target_executions": 0,
+      "writes": 0,
+      "publications": 0
+    },
+    "log": {
+      "path": "crates/noesis/tests/evidence/s1/gitlinks/red/e2e_fr_acq_005_gitlink_boundaries.log",
+      "sha256": "50fe8ebf80ad380005f0aa41f1f4cd3fbafd9fb8e7bcbf2adb834ccf358b01f4",
+      "bytes": 1205
+    }
+  },
+  "environment": {
+    "observed_at_utc": "2026-08-02T07:04:28Z",
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "macos": "26.5.2",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "python": "Python 3.9.6",
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "actionlint": "1.7.12",
+    "features": []
+  },
+  "agent": {
+    "identity": "OpenAI Codex",
+    "model": "not exposed by the runtime",
+    "run_identifier": "not exposed by the runtime",
+    "duration": "not exposed by the runtime",
+    "cost": "not exposed by the runtime"
+  },
+  "limitation": "This retained local Red is not exact-head CI evidence and must not be used to claim FR-ACQ-005 Verified. Repository-open and authority counters are inferred from the pre-acquisition CLI failure plus absent store and the harness boundary, not from an OS trace."
+}

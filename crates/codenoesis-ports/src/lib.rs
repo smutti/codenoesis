@@ -4,6 +4,10 @@ use std::collections::BTreeSet;
 use std::ffi::OsStr;
 
 use codenoesis_domain::knowledge::{KnowledgeError, RustKnowledge};
+use codenoesis_domain::s1_boundaries::{
+    AcquiredRepositoryBoundaries, NestedAcquisitionProfile, NestedRepositoryAcquisitionError,
+    RepositoryBoundaryAcquisitionError,
+};
 use codenoesis_domain::s4::{RustWorkspaceKnowledge, WorkspaceError};
 use codenoesis_domain::s5::{AnalysisCacheEntry, IncrementalWorkspaceExtraction};
 use codenoesis_domain::s6::{ContractError, OpenApiContractInput, ProviderContract};
@@ -42,6 +46,33 @@ pub trait SafeRepositoryAcquirer {
         identity: RepositoryIdentity,
         revision: Revision,
     ) -> Result<AcquiredRepository, RepositoryError>;
+}
+
+pub trait RepositoryBoundaryAcquirer {
+    /// Resolves the immutable root and collects gitlinks without entering them.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed root acquisition or boundary-limit failure.
+    fn acquire_inventory_with_boundaries(
+        &self,
+        repository: &OsStr,
+        identity: RepositoryIdentity,
+        revision: Revision,
+    ) -> Result<AcquiredRepositoryBoundaries, RepositoryBoundaryAcquisitionError>;
+
+    /// Binds one explicitly authorized depth-one nested repository only.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed repository or retained-root stability failure.
+    fn bind_nested_repository(
+        &self,
+        repository: &OsStr,
+        identity: RepositoryIdentity,
+        revision: Revision,
+        profile: NestedAcquisitionProfile,
+    ) -> Result<BoundRevision, NestedRepositoryAcquisitionError>;
 }
 
 pub trait RustKnowledgeExtractor {

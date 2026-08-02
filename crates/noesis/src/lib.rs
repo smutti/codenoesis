@@ -120,6 +120,37 @@ pub fn install_s3_filesystem_boundary(
     filesystem_sandbox::install_with_store(repository, store)
 }
 
+/// Installs the R2 read-only repository set and writable-store boundary.
+///
+/// # Errors
+///
+/// Returns an opaque error when Linux Landlock cannot enforce every exact
+/// authorized input root and the isolated store rights.
+#[cfg(target_os = "linux")]
+pub fn install_s1_boundaries_filesystem_boundary(
+    repository: &OsStr,
+    store: &OsStr,
+    manifest: Option<&OsStr>,
+    nested_roots: &[PathBuf],
+) -> Result<(), SecurityBoundaryError> {
+    filesystem_sandbox::install_with_store_and_roots(repository, store, manifest, nested_roots)
+}
+
+/// Confirms that normative R2 filesystem confinement is Linux-only.
+///
+/// # Errors
+///
+/// This portability implementation is infallible.
+#[cfg(not(target_os = "linux"))]
+pub const fn install_s1_boundaries_filesystem_boundary(
+    _repository: &OsStr,
+    _store: &OsStr,
+    _manifest: Option<&OsStr>,
+    _nested_roots: &[PathBuf],
+) -> Result<(), SecurityBoundaryError> {
+    Ok(())
+}
+
 /// Confirms that normative S3 filesystem confinement is Linux-only.
 ///
 /// # Errors

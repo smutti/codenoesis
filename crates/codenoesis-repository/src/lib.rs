@@ -9,13 +9,18 @@ use std::io::{self, Read};
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
+use codenoesis_domain::s1_boundaries::{
+    AcquiredGitlink, AcquiredGitmodules, AcquiredRepositoryBoundaries, BoundaryLimit,
+    MAX_GITMODULES_BYTES, NestedAcquisitionProfile, NestedRepositoryAcquisitionError,
+    RepositoryBoundaryAcquisitionError, boundary_limit_exceeded, check_boundary_limit,
+};
 use codenoesis_domain::{
     AcquiredFile, AcquiredRepository, AcquisitionError, ActualObjectKind, BoundRevision,
     EntryPolicy, LimitKind, ObjectId, ObjectKind, PathInvalidReason, RegularFileMode,
     RepositoryError, RepositoryIdentity, Revision, RootPolicy, STANDARD_LOCAL_S1_LIMITS,
     UnsupportedFeature, limit_exceeded,
 };
-use codenoesis_ports::{RepositoryAcquirer, SafeRepositoryAcquirer};
+use codenoesis_ports::{RepositoryAcquirer, RepositoryBoundaryAcquirer, SafeRepositoryAcquirer};
 use flate2::read::ZlibDecoder;
 use sha1::{Digest, Sha1};
 
@@ -129,23 +134,51 @@ impl SafeRepositoryAcquirer for LocalGitRepository {
         identity: RepositoryIdentity,
         revision: Revision,
     ) -> Result<AcquiredRepository, RepositoryError> {
+        self.acquire_inventory_internal(repository, identity, &revision, false)
+            .map(|result| result.repository)
+            .map_err(|error| match error {
+                RepositoryBoundaryAcquisitionError::Repository(error) => error,
+                RepositoryBoundaryAcquisitionError::Boundary(_) => RepositoryError::Unexpected,
+            })
+    }
+}
+
+impl RepositoryBoundaryAcquirer for LocalGitRepository {
+    fn acquire_inventory_with_boundaries(
+        &self,
+        repository: &OsStr,
+        identity: RepositoryIdentity,
+        revision: Revision,
+    ) -> Result<AcquiredRepositoryBoundaries, RepositoryBoundaryAcquisitionError> {
+        self.acquire_inventory_internal(repository, identity, &revision, true)
+    }
+
+    fn bind_nested_repository(
+        &self,
+        repository: &OsStr,
+        identity: RepositoryIdentity,
+        revision: Revision,
+        profile: NestedAcquisitionProfile,
+    ) -> Result<BoundRevision, NestedRepositoryAcquisitionError> {
+        bind_nested_repository(repository, identity, &revision, profile)
+    }
+}
+
+impl LocalGitRepository {
+    fn acquire_inventory_internal(
+        &self,
+        repository: &OsStr,
+        identity: RepositoryIdentity,
+        revision: &Revision,
+        collect_boundaries: bool,
+    ) -> Result<AcquiredRepositoryBoundaries, RepositoryBoundaryAcquisitionError> {
         let root = Path::new(repository);
         let git_dir = validate_s1_repository_root(root)?;
         validate_s1_repository_shape(&git_dir)?;
-        let mut object_database = match self.object_database {
-            ObjectDatabaseMode::LooseOnly => {
-                reject_packed_object_database(&git_dir)?;
-                S1ObjectDatabase::LooseOnly {
-                    git_dir: git_dir.clone(),
-                }
-            }
-            ObjectDatabaseMode::LocalGitSha1PackedV1 => {
-                S1ObjectDatabase::Packed(packed::PackedObjectDatabase::open(&git_dir)?)
-            }
-        };
+        let mut object_database = open_object_database(&git_dir, self.object_database)?;
 
-        let commit_oid = resolve_s1_revision(&git_dir, &revision)?;
-        let commit = required_s1_revision_object(&mut object_database, &commit_oid, &revision)?;
+        let commit_oid = resolve_s1_revision(&git_dir, revision)?;
+        let commit = required_s1_revision_object(&mut object_database, &commit_oid, revision)?;
         if commit.kind != GitObjectKind::Commit {
             let actual_kind = match commit.kind {
                 GitObjectKind::Tag => ActualObjectKind::Tag,
@@ -183,15 +216,217 @@ impl SafeRepositoryAcquirer for LocalGitRepository {
         }
 
         let bound_revision = BoundRevision::new(identity, commit_oid.clone(), tree_oid.clone());
-        let mut state = S1TraversalState::new();
+        let mut state = if collect_boundaries {
+            S1TraversalState::new_boundaries()
+        } else {
+            S1TraversalState::new()
+        };
         traverse_tree_object(&mut object_database, &tree_oid, &tree, "", 0, &mut state)?;
         object_database.verify_unchanged()?;
-        Ok(AcquiredRepository::new(
-            bound_revision,
-            state.directory_count,
-            state.files,
-        ))
+        let S1TraversalState {
+            directory_count,
+            files,
+            gitlinks,
+            gitmodules,
+            ..
+        } = state;
+        Ok(AcquiredRepositoryBoundaries {
+            repository: AcquiredRepository::new(bound_revision, directory_count, files),
+            gitlinks: gitlinks.unwrap_or_default(),
+            gitmodules,
+        })
     }
+}
+
+fn open_object_database(
+    git_dir: &Path,
+    mode: ObjectDatabaseMode,
+) -> Result<S1ObjectDatabase, RepositoryError> {
+    match mode {
+        ObjectDatabaseMode::LooseOnly => {
+            reject_packed_object_database(git_dir)?;
+            Ok(S1ObjectDatabase::LooseOnly {
+                git_dir: git_dir.to_owned(),
+            })
+        }
+        ObjectDatabaseMode::LocalGitSha1PackedV1 => Ok(S1ObjectDatabase::Packed(
+            packed::PackedObjectDatabase::open(git_dir)?,
+        )),
+    }
+}
+
+fn bind_nested_repository(
+    repository: &OsStr,
+    identity: RepositoryIdentity,
+    revision: &Revision,
+    profile: NestedAcquisitionProfile,
+) -> Result<BoundRevision, NestedRepositoryAcquisitionError> {
+    bind_nested_repository_with_observer(repository, identity, revision, profile, || {})
+}
+
+fn bind_nested_repository_with_observer(
+    repository: &OsStr,
+    identity: RepositoryIdentity,
+    revision: &Revision,
+    profile: NestedAcquisitionProfile,
+    before_final_stamp: impl FnOnce(),
+) -> Result<BoundRevision, NestedRepositoryAcquisitionError> {
+    let root = Path::new(repository);
+    reject_nested_reparse_points(root).map_err(NestedRepositoryAcquisitionError::Repository)?;
+    let git_dir =
+        validate_s1_repository_root(root).map_err(NestedRepositoryAcquisitionError::Repository)?;
+    validate_s1_repository_shape(&git_dir).map_err(NestedRepositoryAcquisitionError::Repository)?;
+    let before =
+        RepositoryRootStamp::capture(root).map_err(NestedRepositoryAcquisitionError::Repository)?;
+    let mode = match profile {
+        NestedAcquisitionProfile::VerifiedLooseSha1V1 => ObjectDatabaseMode::LooseOnly,
+        NestedAcquisitionProfile::LocalGitSha1PackedV1 => ObjectDatabaseMode::LocalGitSha1PackedV1,
+    };
+    let mut object_database =
+        open_object_database(&git_dir, mode).map_err(map_nested_repository_error)?;
+    let commit_oid =
+        resolve_s1_revision(&git_dir, revision).map_err(map_nested_repository_error)?;
+    let commit = required_s1_revision_object(&mut object_database, &commit_oid, revision)
+        .map_err(map_nested_repository_error)?;
+    if commit.kind != GitObjectKind::Commit {
+        let actual_kind = match commit.kind {
+            GitObjectKind::Tag => ActualObjectKind::Tag,
+            GitObjectKind::Tree => ActualObjectKind::Tree,
+            GitObjectKind::Blob => ActualObjectKind::Blob,
+            GitObjectKind::Commit => unreachable!(),
+        };
+        return Err(NestedRepositoryAcquisitionError::Repository(
+            AcquisitionError::RevisionNotCommit {
+                object_oid: commit_oid,
+                actual_kind,
+            }
+            .into(),
+        ));
+    }
+    let tree_oid = parse_commit_tree(&commit.body_prefix).ok_or_else(|| {
+        NestedRepositoryAcquisitionError::Repository(RepositoryError::from(
+            AcquisitionError::RepositoryInconsistent {
+                object_oid: commit_oid.clone(),
+                expected_kind: ObjectKind::Commit,
+            },
+        ))
+    })?;
+    let tree = required_referenced_object_with_capture(
+        &mut object_database,
+        &tree_oid,
+        ObjectKind::Tree,
+        &commit_oid,
+        s1_tree_capture_limit(),
+        None,
+        s1_tree_capture_limit(),
+    )
+    .map_err(map_nested_repository_error)?;
+    if tree.kind != GitObjectKind::Tree || tree.body_size != tree.body_prefix.len() {
+        return Err(NestedRepositoryAcquisitionError::Repository(
+            AcquisitionError::RepositoryInconsistent {
+                object_oid: tree_oid,
+                expected_kind: ObjectKind::Tree,
+            }
+            .into(),
+        ));
+    }
+    object_database
+        .verify_unchanged()
+        .map_err(map_nested_repository_error)?;
+    before_final_stamp();
+    let after = RepositoryRootStamp::capture(root)
+        .map_err(|_| NestedRepositoryAcquisitionError::Changed)?;
+    if before != after {
+        return Err(NestedRepositoryAcquisitionError::Changed);
+    }
+    Ok(BoundRevision::new(identity, commit_oid, tree_oid))
+}
+
+fn map_nested_repository_error(error: RepositoryError) -> NestedRepositoryAcquisitionError {
+    if matches!(
+        &error,
+        RepositoryError::Acquisition(AcquisitionError::UnsupportedRepositoryShape {
+            feature: UnsupportedFeature::PackedAcquisition(
+                codenoesis_domain::s1_packed::PackedAcquisitionError::Changed(_)
+            )
+        })
+    ) {
+        NestedRepositoryAcquisitionError::Changed
+    } else {
+        NestedRepositoryAcquisitionError::Repository(error)
+    }
+}
+
+#[derive(Eq, PartialEq)]
+struct RepositoryRootStamp {
+    canonical_root: PathBuf,
+    canonical_git: PathBuf,
+    root_identity: FileIdentity,
+    git_identity: FileIdentity,
+}
+
+impl RepositoryRootStamp {
+    fn capture(root: &Path) -> Result<Self, RepositoryError> {
+        let git = root.join(".git");
+        Ok(Self {
+            canonical_root: fs::canonicalize(root).map_err(|_| RepositoryError::Unexpected)?,
+            canonical_git: fs::canonicalize(&git).map_err(|_| RepositoryError::Unexpected)?,
+            root_identity: file_identity(root)?,
+            git_identity: file_identity(&git)?,
+        })
+    }
+}
+
+#[cfg(unix)]
+type FileIdentity = (u64, u64);
+
+#[cfg(unix)]
+fn file_identity(path: &Path) -> Result<FileIdentity, RepositoryError> {
+    use std::os::unix::fs::MetadataExt as _;
+
+    let metadata = fs::symlink_metadata(path).map_err(|_| RepositoryError::Unexpected)?;
+    Ok((metadata.dev(), metadata.ino()))
+}
+
+#[cfg(windows)]
+type FileIdentity = same_file::Handle;
+
+#[cfg(windows)]
+fn file_identity(path: &Path) -> Result<FileIdentity, RepositoryError> {
+    same_file::Handle::from_path(path).map_err(|_| RepositoryError::Unexpected)
+}
+
+#[cfg(not(any(unix, windows)))]
+type FileIdentity = (u64, Option<std::time::SystemTime>);
+
+#[cfg(not(any(unix, windows)))]
+fn file_identity(path: &Path) -> Result<FileIdentity, RepositoryError> {
+    let metadata = fs::symlink_metadata(path).map_err(|_| RepositoryError::Unexpected)?;
+    Ok((metadata.len(), metadata.modified().ok()))
+}
+
+#[cfg(windows)]
+fn reject_nested_reparse_points(root: &Path) -> Result<(), RepositoryError> {
+    use std::os::windows::fs::MetadataExt as _;
+
+    const FILE_ATTRIBUTE_REPARSE_POINT: u32 = 0x0000_0400;
+    for (path, policy) in [
+        (root, RootPolicy::RepositoryRootIsSymlink),
+        (&root.join(".git"), RootPolicy::GitDirectoryIsSymlink),
+    ] {
+        if let Ok(metadata) = fs::symlink_metadata(path)
+            && metadata.file_attributes() & FILE_ATTRIBUTE_REPARSE_POINT != 0
+        {
+            return Err(AcquisitionError::RootPolicyViolation { policy }.into());
+        }
+    }
+    Ok(())
+}
+
+#[cfg(not(windows))]
+#[allow(clippy::unnecessary_wraps)]
+fn reject_nested_reparse_points(_root: &Path) -> Result<(), RepositoryError> {
+    Ok(())
 }
 
 fn validate_s1_repository_root(root: &Path) -> Result<PathBuf, RepositoryError> {
@@ -282,6 +517,8 @@ struct S1TraversalState {
     directory_count: u64,
     canonical_paths: BTreeSet<String>,
     files: Vec<AcquiredFile>,
+    gitlinks: Option<Vec<AcquiredGitlink>>,
+    gitmodules: Option<AcquiredGitmodules>,
 }
 
 impl S1TraversalState {
@@ -294,7 +531,39 @@ impl S1TraversalState {
             directory_count: 0,
             canonical_paths: BTreeSet::new(),
             files: Vec::new(),
+            gitlinks: None,
+            gitmodules: None,
         }
+    }
+
+    fn new_boundaries() -> Self {
+        Self {
+            gitlinks: Some(Vec::new()),
+            ..Self::new()
+        }
+    }
+
+    fn collects_boundaries(&self) -> bool {
+        self.gitlinks.is_some()
+    }
+
+    fn observe_gitlink(
+        &mut self,
+        path: String,
+        containing_tree_oid: &ObjectId,
+        gitlink_oid: ObjectId,
+    ) -> Result<(), RepositoryBoundaryAcquisitionError> {
+        let gitlinks = self.gitlinks.as_mut().ok_or(RepositoryError::Unexpected)?;
+        check_boundary_limit(
+            BoundaryLimit::GitlinkEntries,
+            u64::try_from(gitlinks.len() + 1).unwrap_or(u64::MAX),
+        )?;
+        gitlinks.push(AcquiredGitlink {
+            path,
+            containing_tree_oid: containing_tree_oid.clone(),
+            gitlink_oid,
+        });
+        Ok(())
     }
 
     fn check_time(&self) -> Result<(), RepositoryError> {
@@ -359,7 +628,7 @@ fn traverse_tree_object(
     prefix: &str,
     parent_depth: u64,
     state: &mut S1TraversalState,
-) -> Result<(), RepositoryError> {
+) -> Result<(), RepositoryBoundaryAcquisitionError> {
     state.check_time()?;
     let mut entries = parse_tree_entries(&tree.body_prefix).ok_or_else(|| {
         RepositoryError::from(AcquisitionError::RepositoryInconsistent {
@@ -382,6 +651,21 @@ fn traverse_tree_object(
             .ok_or(RepositoryError::Unexpected)?;
         check_path_limits(&path, &entry.name, depth)?;
 
+        if state.collects_boundaries() && path == ".gitmodules" && entry.mode != b"100644" {
+            state.observe_entry(&path, tree_oid)?;
+            if entry.mode == b"160000" {
+                state.observe_gitlink(path.clone(), tree_oid, entry.object_id.clone())?;
+            }
+            state.gitmodules = Some(AcquiredGitmodules {
+                mode: std::str::from_utf8(&entry.mode)
+                    .unwrap_or("invalid")
+                    .to_owned(),
+                blob_oid: entry.object_id,
+                bytes: Vec::new(),
+            });
+            continue;
+        }
+
         match entry.mode.as_slice() {
             b"040000" | b"40000" => {
                 state.observe_entry(&path, tree_oid)?;
@@ -392,9 +676,13 @@ fn traverse_tree_object(
                 state.observe_regular_path()?;
                 acquire_regular_file(object_database, tree_oid, &entry, path, state)?;
             }
-            b"120000" => return Err(entry_policy_error(path, EntryPolicy::Symlink)),
-            b"160000" => return Err(entry_policy_error(path, EntryPolicy::Gitlink)),
-            _ => return Err(entry_policy_error(path, EntryPolicy::SpecialFileMode)),
+            b"120000" => return Err(entry_policy_error(path, EntryPolicy::Symlink).into()),
+            b"160000" if state.collects_boundaries() => {
+                state.observe_entry(&path, tree_oid)?;
+                state.observe_gitlink(path, tree_oid, entry.object_id)?;
+            }
+            b"160000" => return Err(entry_policy_error(path, EntryPolicy::Gitlink).into()),
+            _ => return Err(entry_policy_error(path, EntryPolicy::SpecialFileMode).into()),
         }
     }
     Ok(())
@@ -407,7 +695,7 @@ fn traverse_directory(
     path: &str,
     depth: u64,
     state: &mut S1TraversalState,
-) -> Result<(), RepositoryError> {
+) -> Result<(), RepositoryBoundaryAcquisitionError> {
     let child = required_referenced_object_with_capture(
         object_database,
         &entry.object_id,
@@ -444,15 +732,14 @@ fn acquire_regular_file(
     entry: &RawTreeEntry,
     path: String,
     state: &mut S1TraversalState,
-) -> Result<(), RepositoryError> {
-    let blob = required_referenced_object_with_capture(
+) -> Result<(), RepositoryBoundaryAcquisitionError> {
+    let boundary_gitmodules = state.collects_boundaries() && path == ".gitmodules";
+    let blob = required_regular_blob(
         object_database,
         &entry.object_id,
-        ObjectKind::Blob,
         parent_tree_oid,
-        s1_blob_capture_limit(),
-        Some(s1_blob_body_limit(state.cumulative_file_bytes)),
-        s1_blob_capture_limit(),
+        state.cumulative_file_bytes,
+        boundary_gitmodules,
     )?;
     if blob.kind != GitObjectKind::Blob {
         return Err(AcquisitionError::RepositoryInconsistent {
@@ -480,6 +767,13 @@ fn acquire_regular_file(
     } else {
         RegularFileMode::Regular
     };
+    if state.collects_boundaries() && path == ".gitmodules" {
+        state.gitmodules = Some(AcquiredGitmodules {
+            mode: mode.as_str().to_owned(),
+            blob_oid: entry.object_id.clone(),
+            bytes: blob.body_prefix.clone(),
+        });
+    }
     state.files.push(AcquiredFile::new(
         path,
         mode,
@@ -487,6 +781,57 @@ fn acquire_regular_file(
         blob.body_prefix,
     ));
     Ok(())
+}
+
+fn required_regular_blob(
+    object_database: &mut S1ObjectDatabase,
+    object_id: &ObjectId,
+    referenced_by: &ObjectId,
+    cumulative_file_bytes: u64,
+    boundary_gitmodules: bool,
+) -> Result<GitObject, RepositoryBoundaryAcquisitionError> {
+    let inherited = s1_blob_body_limit(cumulative_file_bytes);
+    let boundary_maximum =
+        usize::try_from(MAX_GITMODULES_BYTES).expect("R2 gitmodules-byte limit fits usize");
+    let boundary_limit_selected = boundary_gitmodules && boundary_maximum < inherited.body_maximum;
+    let declared_body_limit = if boundary_limit_selected {
+        DeclaredBodyLimit {
+            limit: LimitKind::SingleFileBytes,
+            body_maximum: boundary_maximum,
+            observed_offset: 0,
+        }
+    } else {
+        inherited
+    };
+    let capture_limit = declared_body_limit.body_maximum;
+    match object_database.read_object(
+        object_id,
+        Some(capture_limit),
+        Some(declared_body_limit),
+        Some(capture_limit),
+    ) {
+        Ok(Some(object)) => Ok(object),
+        Ok(None) => Err(AcquisitionError::ObjectMissing {
+            object_oid: object_id.clone(),
+            expected_kind: ObjectKind::Blob,
+            referenced_by: referenced_by.clone(),
+        }
+        .into()),
+        Err(ReadObjectError::Invalid) => Err(AcquisitionError::RepositoryInconsistent {
+            object_oid: object_id.clone(),
+            expected_kind: ObjectKind::Blob,
+        }
+        .into()),
+        Err(ReadObjectError::LimitExceeded { limit, observed }) if boundary_limit_selected => {
+            let _ = limit;
+            Err(boundary_limit_exceeded(BoundaryLimit::GitmodulesBytes, observed).into())
+        }
+        Err(ReadObjectError::LimitExceeded { limit, observed }) => {
+            Err(limit_exceeded(limit, observed).into())
+        }
+        Err(ReadObjectError::Io) => Err(RepositoryError::Unexpected.into()),
+        Err(ReadObjectError::Acquisition(error)) => Err(error.into()),
+    }
 }
 
 fn entry_policy_error(path: String, entry: EntryPolicy) -> RepositoryError {
@@ -1235,18 +1580,29 @@ fn unsupported_single_file() -> RepositoryError {
 mod tests {
     use std::fs;
     use std::io::Write as _;
-    use std::path::PathBuf;
+    use std::path::{Path, PathBuf};
+    use std::sync::atomic::{AtomicU64, Ordering};
     use std::time::{SystemTime, UNIX_EPOCH};
 
-    use codenoesis_domain::{AcquisitionError, LimitKind, PathInvalidReason, RepositoryError};
+    use codenoesis_domain::s1_boundaries::{
+        NestedAcquisitionProfile, NestedRepositoryAcquisitionError,
+    };
+    use codenoesis_domain::{
+        AcquisitionError, LimitKind, PathInvalidReason, RepositoryError, RepositoryIdentity,
+        Revision,
+    };
     use flate2::Compression;
     use flate2::write::ZlibEncoder;
+    use sha1::{Digest as _, Sha1};
 
     use super::{
-        ObjectId, ReadObjectError, S1TraversalState, STANDARD_LOCAL_S1_LIMITS, check_path_limits,
+        ObjectId, ReadObjectError, S1TraversalState, STANDARD_LOCAL_S1_LIMITS,
+        bind_nested_repository_with_observer, check_path_limits, encode_lower_hex,
         read_object_with_capture, s1_blob_body_limit, s1_blob_capture_limit,
         validate_s1_path_component,
     };
+
+    static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
     #[test]
     fn pt_fr_acq_002_path_boundaries_and_invalid_components_are_typed() {
@@ -1344,6 +1700,71 @@ mod tests {
         fs::remove_dir_all(root).expect("remove object test root");
     }
 
+    #[test]
+    fn race_fr_acq_005_nested_replacement_is_retryable_changed() {
+        let root = unique_test_root();
+        let displaced = root.with_extension("displaced");
+        let git_dir = root.join(".git");
+        fs::create_dir_all(git_dir.join("objects")).expect("create nested object database");
+        fs::write(
+            git_dir.join("config"),
+            b"[core]\nrepositoryformatversion = 0\nbare = false\n",
+        )
+        .expect("write nested config");
+        let tree_oid = write_loose_object(&git_dir, "tree", b"");
+        let commit_body = format!("tree {}\n\nR2 nested race fixture\n", tree_oid.as_str());
+        let commit_oid = write_loose_object(&git_dir, "commit", commit_body.as_bytes());
+        let expected_commit_oid = commit_oid.clone();
+        let expected_tree_oid = tree_oid.clone();
+        let replacement_root = root.clone();
+        let replacement_displaced = displaced.clone();
+        let mut replacement_blocked = false;
+        let result = bind_nested_repository_with_observer(
+            root.as_os_str(),
+            RepositoryIdentity::parse("urn:codenoesis:repository:nested-race").unwrap(),
+            &Revision::Commit(commit_oid),
+            NestedAcquisitionProfile::VerifiedLooseSha1V1,
+            || match fs::rename(&replacement_root, &replacement_displaced) {
+                Ok(()) => fs::create_dir(&replacement_root).expect("replace nested root"),
+                Err(error)
+                    if cfg!(windows) && error.kind() == std::io::ErrorKind::PermissionDenied =>
+                {
+                    replacement_blocked = true;
+                }
+                Err(error) => panic!("displace nested repository: {error}"),
+            },
+        );
+        if replacement_blocked {
+            let bound = result.expect("retained handles preserve stable nested binding");
+            assert_eq!(bound.commit_oid(), &expected_commit_oid);
+            assert_eq!(bound.tree_oid(), &expected_tree_oid);
+            assert!(!displaced.exists());
+        } else {
+            assert_eq!(result, Err(NestedRepositoryAcquisitionError::Changed));
+            fs::remove_dir_all(displaced).expect("remove displaced root");
+        }
+        fs::remove_dir_all(root).expect("remove replacement root");
+    }
+
+    fn write_loose_object(git_dir: &Path, kind: &str, body: &[u8]) -> ObjectId {
+        let mut framed = format!("{kind} {}\0", body.len()).into_bytes();
+        framed.extend_from_slice(body);
+        let digest = Sha1::digest(&framed);
+        let object_id = encode_lower_hex(digest.as_slice());
+        let object = ObjectId::parse_sha1(&object_id).expect("loose object ID");
+        let path = git_dir
+            .join("objects")
+            .join(&object_id[..2])
+            .join(&object_id[2..]);
+        fs::create_dir_all(path.parent().expect("loose object parent"))
+            .expect("create loose object fanout");
+        let mut encoder = ZlibEncoder::new(Vec::new(), Compression::default());
+        encoder.write_all(&framed).expect("compress loose object");
+        fs::write(path, encoder.finish().expect("finish loose object"))
+            .expect("write loose object");
+        object
+    }
+
     fn assert_limit(result: &Result<(), RepositoryError>, limit: LimitKind) {
         assert_eq!(
             result,
@@ -1372,8 +1793,9 @@ mod tests {
             .expect("clock after Unix epoch")
             .as_nanos();
         std::env::temp_dir().join(format!(
-            "codenoesis-repository-test-{}-{timestamp}",
-            std::process::id()
+            "codenoesis-repository-test-{}-{timestamp}-{}",
+            std::process::id(),
+            TEMP_SEQUENCE.fetch_add(1, Ordering::Relaxed)
         ))
     }
 }
