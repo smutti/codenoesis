@@ -6,6 +6,7 @@ use std::ffi::OsStr;
 use codenoesis_domain::knowledge::{KnowledgeError, RustKnowledge};
 use codenoesis_domain::s4::{RustWorkspaceKnowledge, WorkspaceError};
 use codenoesis_domain::s5::{AnalysisCacheEntry, IncrementalWorkspaceExtraction};
+use codenoesis_domain::s6::{ContractError, OpenApiContractInput, ProviderContract};
 use codenoesis_domain::storage::{
     ArtifactId, LocalSnapshotHead, PublicationCandidate, PublicationEvent, PublicationResult,
     SnapshotId, StorageError, StoredArtifact, SweepResult,
@@ -79,6 +80,16 @@ pub trait IncrementalRustWorkspaceExtractor {
         inventory: &RepositoryInventory,
         cache_entries: &[AnalysisCacheEntry],
     ) -> Result<IncrementalWorkspaceExtraction, WorkspaceError>;
+}
+
+pub trait OpenApiContractExtractor {
+    /// Parses and normalizes the approved bounded `OpenAPI` 3.1 HTTP/JSON subset.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed encoding, YAML, `OpenAPI`, reference, or contract-limit
+    /// failure without network access or partial output.
+    fn extract(&self, input: OpenApiContractInput<'_>) -> Result<ProviderContract, ContractError>;
 }
 
 pub trait PublicationObserver {

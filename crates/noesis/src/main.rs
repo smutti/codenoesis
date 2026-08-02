@@ -1,5 +1,7 @@
 //! `CodeNoesis` command-line entry point.
 
+mod federation;
+
 use std::collections::BTreeMap;
 use std::env;
 use std::ffi::{OsStr, OsString};
@@ -14,7 +16,7 @@ use codenoesis_application::{
 };
 use codenoesis_contracts::{
     AnalysisCacheEntryV1, CodeNoesisErrorV1, CodeNoesisErrorV2, CodeNoesisErrorV3,
-    CodeNoesisErrorV4, CodeNoesisErrorV5, CodeNoesisErrorV6, CodeNoesisErrorV7,
+    CodeNoesisErrorV4, CodeNoesisErrorV5, CodeNoesisErrorV6, CodeNoesisErrorV7, CodeNoesisErrorV8,
     DocumentationContractError, IncrementalRefreshReportError, IncrementalRefreshReportInput,
     IncrementalRefreshReportV1, QueryContractError, RepositorySnapshotV2Error,
     RepositorySnapshotV3, RepositorySnapshotV3Error, RepositorySnapshotV4,
@@ -56,6 +58,7 @@ fn main() -> ExitCode {
         return emit_internal_error_v1();
     }
     let arguments = env::args_os().collect::<Vec<_>>();
+    let federation_requested = federation::requested(&arguments);
     let docs_requested = arguments.get(1).is_some_and(|value| value == "docs");
     let query_requested = arguments.get(1).is_some_and(|value| value == "query");
     let refresh_requested = arguments.get(1).is_some_and(|value| value == "refresh");
@@ -70,7 +73,9 @@ fn main() -> ExitCode {
     let s4_error_lineage = s4_requested || docs_requested || query_requested;
     let s3_error_lineage = s3_requested || s4_error_lineage;
     let s2_requested = requested_profile(&arguments, "standard-local-s2");
-    let result = if refresh_requested {
+    let result = if federation_requested {
+        federation::run(arguments).map_err(Failure::S6)
+    } else if refresh_requested {
         run_s5(arguments)
     } else if docs_requested {
         run_docs(arguments)
@@ -90,6 +95,7 @@ fn main() -> ExitCode {
     match result {
         Ok(stdout) => match io::stdout().lock().write_all(&stdout) {
             Ok(()) => ExitCode::SUCCESS,
+            Err(_) if federation_requested => emit_internal_error_v8(),
             Err(_) if refresh_requested => emit_internal_error_v7(),
             Err(_) if packed_acquisition_requested => emit_internal_error_v6(),
             Err(_) if s3_error_lineage => emit_internal_error_v4(),
@@ -97,6 +103,7 @@ fn main() -> ExitCode {
             Err(_) if profiled => emit_internal_error_v2(),
             Err(_) => emit_internal_error_v1(),
         },
+        Err(Failure::S6(failure)) => emit_error_v8(&failure.error, failure.exit_code),
         Err(Failure::V6Input(error)) => emit_error_v6(&error, 2),
         Err(Failure::S5(failure)) => emit_error_v7(&failure.error, failure.exit_code),
         Err(Failure::Input(error)) if packed_acquisition_requested => {
@@ -1124,6 +1131,10 @@ fn emit_internal_error_v7() -> ExitCode {
     emit_error_v7(&CodeNoesisErrorV7::internal(), 70)
 }
 
+fn emit_internal_error_v8() -> ExitCode {
+    emit_error_v8(&CodeNoesisErrorV8::internal(), 70)
+}
+
 fn emit_error_v1(error: &CodeNoesisErrorV1, code: u8) -> ExitCode {
     if let Ok(bytes) = error.canonical_stderr() {
         let _ = io::stderr().lock().write_all(&bytes);
@@ -1176,6 +1187,17 @@ fn emit_error_v7(error: &CodeNoesisErrorV7, code: u8) -> ExitCode {
     ExitCode::from(code)
 }
 
+fn emit_error_v8(error: &CodeNoesisErrorV8, code: u8) -> ExitCode {
+    let Ok(bytes) = error.canonical_stderr() else {
+        return ExitCode::from(70);
+    };
+    if io::stderr().lock().write_all(&bytes).is_ok() {
+        ExitCode::from(code)
+    } else {
+        ExitCode::from(70)
+    }
+}
+
 fn emit_docs_error(error: GeneratedDocsError) -> ExitCode {
     let error = match error {
         GeneratedDocsError::UnmarkedNonemptyRoot => {
@@ -1202,6 +1224,7 @@ fn emit_query_error(error: QueryFailure) -> ExitCode {
 }
 
 enum Failure {
+    S6(federation::FederationFailure),
     Input(InputError),
     V6Input(CodeNoesisErrorV6),
     S4Input(CodeNoesisErrorV5),

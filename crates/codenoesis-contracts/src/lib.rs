@@ -3,10 +3,12 @@
 mod s1_packed;
 mod s4;
 mod s5;
+mod s6;
 
 pub use s1_packed::*;
 pub use s4::*;
 pub use s5::*;
+pub use s6::*;
 
 use std::collections::BTreeMap;
 use std::error::Error;

@@ -1,0 +1,37 @@
+{
+  "schema_version": "codenoesis.s6-red-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/82",
+  "slice": "S6",
+  "requirement_status": "Approved",
+  "requirements": [
+    "FR-EXT-004",
+    "FR-FED-001",
+    "FR-FED-002",
+    "FR-CLI-005"
+  ],
+  "test_first_commit": "6afb7a8fac35f9f9403ed7de9a89f0c40a27a389",
+  "command": "cargo test --locked -p noesis --test e2e_fr_fed_001_openapi_federation -- --exact e2e_fr_fed_001_openapi_federation",
+  "expected": {
+    "test_result": "failed only at the public acceptance assertion",
+    "subject_exit_code": 2,
+    "subject_stdout_bytes": 0,
+    "subject_stderr_bytes": 149,
+    "subject_stderr_sha256": "6441e0037f864d2fae4a60e6355e4a85b26b00d5e4e24c59ffeb5fe9c6f3859f",
+    "subject_error": "CodeNoesisErrorV2 input.invalid_revision",
+    "side_effects": "none"
+  },
+  "actual": {
+    "test_result": "failed at the expected acceptance assertion",
+    "assertion": "expected S6 federation success; observed the approved pre-S6 command-boundary Red",
+    "test_process_exit": "nonzero",
+    "subject_observation": "the test asserted the exact approved exit, streams, bytes, digest, and absence of side effects before reporting Red"
+  },
+  "retained_log": "crates/noesis/tests/evidence/s6/red/e2e_fr_fed_001_openapi_federation.log",
+  "retained_log_sha256": "683704805b1beb8718ef8a3b4a34fff83a90283422d8e30a2aa87fb6653ba56b",
+  "retained_log_bytes": 1201,
+  "accepted_after_governance_corrections": true,
+  "limitations": [
+    "The retained Cargo log contains the public assertion result; the subject-process byte observations are enforced by the committed test rather than duplicated as raw stderr in the log.",
+    "This Red establishes test-first delivery and does not verify the implemented requirement."
+  ]
+}
