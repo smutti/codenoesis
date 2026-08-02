@@ -758,7 +758,7 @@ Compilation, fixture, dependency, network, panic, timeout, target-execution,
 or hand-authored-output failures are rejected reasons.
 
 S6 bounded OpenAPI federation contract bundle:
-`sha256:64587eb20880f0beb17320abf6dd301d811fabdc248eb3f59268aebf7ca47081`.
+`sha256:cc8bb6a42abc23f51068c94641ace7775f4979108aa153a050bde93580d6db13`.
 The bundle binds Decision 0009, the independent governance guard, strict
 workspace/client/report/error schemas, rule catalog, machine oracle,
 project-owned fixture and hostile variants, reviewed outputs, and immutable S7
