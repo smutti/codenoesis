@@ -105,7 +105,7 @@ impl CodeNoesisErrorV10 {
         )
     }
 
-    /// Serializes one strict ErrorV10 followed by one LF.
+    /// Serializes one strict `ErrorV10` followed by one LF.
     ///
     /// # Errors
     ///
@@ -116,6 +116,7 @@ impl CodeNoesisErrorV10 {
         Ok(bytes)
     }
 
+    #[allow(clippy::needless_pass_by_value)]
     fn new(code: &str, stage: &str, message: &str, context: Value) -> Self {
         Self {
             value: json!({

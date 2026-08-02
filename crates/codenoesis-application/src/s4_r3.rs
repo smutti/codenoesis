@@ -53,7 +53,7 @@ where
             .map_err(map_repository_error)
             .map_err(RootPackageScanError::Scan)?;
         let inventory = RepositoryInventory::classify(acquired);
-        build_output(request.envelope, inventory, None, extractor)
+        build_output(request.envelope, &inventory, None, extractor)
     }
 }
 
@@ -101,7 +101,7 @@ where
             .map_err(BoundaryScanError::Boundary)
             .map_err(RootPackageScanError::Boundary)?;
         let inventory = RepositoryInventory::classify(acquired.repository);
-        build_output(request.envelope, inventory, Some(&report), extractor)
+        build_output(request.envelope, &inventory, Some(&report), extractor)
     }
 
     fn verify_nested_boundaries(
@@ -226,7 +226,7 @@ fn map_boundary_acquisition(error: RepositoryBoundaryAcquisitionError) -> Bounda
 
 fn build_output<E>(
     envelope: codenoesis_contracts::SnapshotEnvelopeV1,
-    inventory: RepositoryInventory,
+    inventory: &RepositoryInventory,
     boundaries: Option<&codenoesis_domain::s1_boundaries::RepositoryBoundaryReport>,
     extractor: &E,
 ) -> Result<S4R3ScanOutput, RootPackageScanError>
@@ -242,14 +242,14 @@ where
         })
         .collect::<Vec<_>>();
     let extraction = extractor
-        .extract_root_package_workspace_incremental(&inventory, &external_boundaries, &[])
+        .extract_root_package_workspace_incremental(inventory, &external_boundaries, &[])
         .map_err(RootPackageScanError::Workspace)?;
     extraction
         .knowledge
         .validate()
         .map_err(RootPackageScanError::Workspace)?;
     let snapshot = RepositorySnapshotV6::from_inventory_and_workspace(
-        &inventory,
+        inventory,
         &extraction.knowledge,
         boundaries,
         envelope,

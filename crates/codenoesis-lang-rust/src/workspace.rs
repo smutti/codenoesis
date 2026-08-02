@@ -190,7 +190,7 @@ impl<'a> WorkspaceBuilder<'a> {
         cache_entries: &[AnalysisCacheEntry],
     ) -> Result<IncrementalWorkspaceExtraction, WorkspaceError> {
         let crates = self.parse_crates()?;
-        self.extract_prepared(cache_entries, crates, None)
+        self.extract_prepared(cache_entries, &crates, None)
     }
 
     fn extract_root_package_incremental(
@@ -202,7 +202,7 @@ impl<'a> WorkspaceBuilder<'a> {
             .root_package_crates(&planned.plan)
             .map_err(RootPackageWorkspaceError::Source)?;
         let extraction = self
-            .extract_prepared(cache_entries, crates, Some(&planned.coverage))
+            .extract_prepared(cache_entries, &crates, Some(&planned.coverage))
             .map_err(RootPackageWorkspaceError::Source)?;
         let knowledge = RootPackageWorkspaceKnowledge {
             plan: planned.plan,
@@ -221,7 +221,7 @@ impl<'a> WorkspaceBuilder<'a> {
     fn extract_prepared(
         self,
         cache_entries: &[AnalysisCacheEntry],
-        crates: Vec<CrateDraft>,
+        crates: &[CrateDraft],
         r3_coverage: Option<&[PlannedCoverage]>,
     ) -> Result<IncrementalWorkspaceExtraction, WorkspaceError> {
         if cache_entries
@@ -241,7 +241,7 @@ impl<'a> WorkspaceBuilder<'a> {
         let mut analyses = BTreeMap::new();
         let mut parser_invocation_count = 0_u64;
         let tolerate_unsupported_rust = r3_coverage.is_some();
-        for crate_draft in &crates {
+        for crate_draft in crates {
             self.collect_crate_sources(
                 crate_draft,
                 &cache_by_id,
@@ -274,7 +274,7 @@ impl<'a> WorkspaceBuilder<'a> {
         let mut declarations_by_name = BTreeMap::<(String, String, String), Vec<String>>::new();
         let mut entity_source_paths = BTreeMap::<String, String>::new();
 
-        for crate_draft in &crates {
+        for crate_draft in crates {
             let crate_id = crate_draft.entity.id.clone();
             insert_unique(
                 &mut entity_evidence,
@@ -644,7 +644,7 @@ impl<'a> WorkspaceBuilder<'a> {
             }
         } else {
             let mut build_scripts = BTreeSet::new();
-            for crate_draft in &crates {
+            for crate_draft in crates {
                 if crate_draft.build_script
                     && build_scripts.insert(crate_draft.manifest_evidence.id.clone())
                 {
@@ -700,7 +700,7 @@ impl<'a> WorkspaceBuilder<'a> {
             claims.insert(claim.id.clone(), claim);
         }
 
-        let all_evidence = self.collect_evidence(&crates, &sources);
+        let all_evidence = self.collect_evidence(crates, &sources);
         let graph = WorkspaceKnowledgeGraph {
             repository_identity: self.repository_identity.to_owned(),
             commit_oid: self.commit_oid.to_owned(),
@@ -1715,6 +1715,7 @@ fn parse_rust_source(
     parse_rust_scope(tree.root_node(), source, path, 0, tolerate_unsupported_rust)
 }
 
+#[allow(clippy::too_many_lines)]
 fn parse_rust_scope(
     scope: Node<'_>,
     source: &str,

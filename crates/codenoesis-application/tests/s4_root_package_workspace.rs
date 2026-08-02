@@ -171,6 +171,7 @@ impl RootPackageWorkspaceExtractor for RecordingExtractor {
     }
 }
 
+#[allow(clippy::too_many_lines)]
 fn minimal_extraction(
     inventory: &RepositoryInventory,
     external: &ExternalWorkspaceBoundary,

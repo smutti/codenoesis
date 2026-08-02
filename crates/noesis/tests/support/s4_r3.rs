@@ -43,6 +43,7 @@ impl MaterializedRootPackageRepository {
         Self::materialize("member_exclude_conflict")
     }
 
+    #[allow(clippy::too_many_lines)]
     fn materialize(variant: &str) -> Self {
         let fixture = fixture_root();
         let fixture_manifest: Value = serde_json::from_slice(

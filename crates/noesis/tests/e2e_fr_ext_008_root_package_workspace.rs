@@ -214,6 +214,7 @@ fn gt_fr_ext_008_public_root_variants() {
     );
 }
 
+#[allow(clippy::needless_pass_by_value)]
 fn successful_json(output: std::process::Output, operation: &str) -> Value {
     assert!(
         output.status.success(),

@@ -273,7 +273,7 @@ impl<'a> Planner<'a> {
                     coverage.push(PlannedCoverage {
                         source_path: source_path.clone(),
                         manifest_path: package.manifest_path.clone(),
-                        capability: *capability,
+                        capability,
                     });
                 }
             }
@@ -381,6 +381,7 @@ impl<'a> Planner<'a> {
     }
 
     #[allow(clippy::too_many_arguments)]
+    #[allow(clippy::too_many_lines)]
     fn package_targets(
         &self,
         member_path: &str,

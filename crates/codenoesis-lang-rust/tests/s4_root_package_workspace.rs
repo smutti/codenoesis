@@ -1,4 +1,5 @@
 use std::collections::BTreeSet;
+use std::fmt::Write as _;
 use std::fs;
 use std::path::Path;
 use std::thread;
@@ -20,6 +21,7 @@ const COMMIT_OID: &str = "37eb6d1abf25891c52fbdf9b735973c441a8598b";
 const TREE_OID: &str = "8295d04a96f8c2af48cc7492a797080ea08cf2ea";
 
 #[test]
+#[allow(clippy::too_many_lines)]
 fn gt_fr_ext_008_root_membership_and_targets() {
     let implicit = extract_fixture("implicit").expect("extract implicit non-virtual workspace");
     assert_eq!(
@@ -749,12 +751,14 @@ fn target_inventory(binary_counts: &[usize]) -> RepositoryInventory {
         let package_name = format!("package-{package_index:03}");
         let mut manifest = format!("[package]\nname=\"{package_name}\"\nedition=\"2024\"\n");
         if package_index == 0 && !member_paths.is_empty() {
-            manifest.push_str(&format!("[workspace]\nmembers=[{members}]\n"));
+            writeln!(manifest, "[workspace]\nmembers=[{members}]").expect("write workspace");
         }
         for binary_index in 0..binary_count {
-            manifest.push_str(&format!(
-                "[[bin]]\nname=\"bin-{binary_index:03}\"\npath=\"src/bin/bin-{binary_index:03}.rs\"\n"
-            ));
+            writeln!(
+                manifest,
+                "[[bin]]\nname=\"bin-{binary_index:03}\"\npath=\"src/bin/bin-{binary_index:03}.rs\""
+            )
+            .expect("write binary target");
             files.push((
                 join_member(&member, &format!("src/bin/bin-{binary_index:03}.rs")),
                 b"fn main() {}\n".to_vec(),
@@ -852,6 +856,7 @@ fn inventory(
     ))
 }
 
+#[allow(clippy::needless_pass_by_value)]
 fn assert_limit(
     result: Result<
         codenoesis_domain::s4_r3::RootPackageWorkspaceExtraction,

@@ -103,6 +103,7 @@ pub struct RootPackageTarget {
 
 impl RootPackageTarget {
     #[must_use]
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         repository_identity: &str,
         member_path: String,
@@ -156,6 +157,7 @@ impl RootPackageWorkspacePlan {
     /// # Errors
     ///
     /// Returns a contract error when the plan does not satisfy the reviewed R3 model.
+    #[allow(clippy::too_many_lines)]
     pub fn validate(
         &self,
         knowledge: &RustWorkspaceKnowledge,
