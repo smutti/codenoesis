@@ -83,7 +83,7 @@
     "log": "crates/noesis/tests/evidence/s6/red/e2e_fr_fed_001_openapi_federation.log"
   },
   "immutable_contract": {
-    "bundle_sha256": "64587eb20880f0beb17320abf6dd301d811fabdc248eb3f59268aebf7ca47081",
+    "bundle_sha256": "cc8bb6a42abc23f51068c94641ace7775f4979108aa153a050bde93580d6db13",
     "acceptance_specification_sha256": "f5bd4ecd3244e17ab4e8ba76d7ddb8eed3ea083977039257345ae14fc928f2c6",
     "base_report_sha256": "7a301b0eb5d0e5e702a647422e57f42e1611d9e1cac5aedb39be26c7f1064628",
     "provider_only_report_sha256": "6d53dda7b209f2ca879f9a122f995ccf3ec17ee7fe86b7c611629e4f13f87d9a",

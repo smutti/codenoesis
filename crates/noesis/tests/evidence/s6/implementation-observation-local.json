@@ -15,18 +15,23 @@
     "corrected_required_base": "7906873e472321b2a097fb2a4408c9be475513ff",
     "test_first": "6afb7a8fac35f9f9403ed7de9a89f0c40a27a389",
     "corrected_base_integration": "bfd5ba6f6d6e1393ff96d4fa173d9fd6234760a2",
+    "dependency_guard_correction": "11fee19520bfbef08db60dc7c01a3249415173c3",
+    "final_governance_base_integration": "0903915820e280256c286445be56df0d404c4702",
     "implementation": "recorded by the implementation pull request"
   },
   "authorization": {
     "ready_issue": "https://github.com/smutti/codenoesis/issues/82",
     "resume_after_final_governance_correction": "https://github.com/smutti/codenoesis/issues/82#issuecomment-5144293315",
+    "dependency_guard_scope_expansion": "https://github.com/smutti/codenoesis/issues/89#issuecomment-5150712351",
     "governance_merge": "7906873e472321b2a097fb2a4408c9be475513ff",
+    "dependency_guard_merge": "11fee19520bfbef08db60dc7c01a3249415173c3",
     "automatic_ready_after_green_authorized": true,
     "manual_independent_review_and_merge_required": true
   },
   "contracts": {
-    "bundle_sha256": "64587eb20880f0beb17320abf6dd301d811fabdc248eb3f59268aebf7ca47081",
-    "bundle_file_sha256": "42cdbcb0ef24542f1b5181bbb1b0efd97ab1b806788bf4c8d22cea194aacac50",
+    "bundle_sha256": "cc8bb6a42abc23f51068c94641ace7775f4979108aa153a050bde93580d6db13",
+    "bundle_file_sha256": "9eda9022bae6ffc7518c03a106b13ddb75b74a27fa5364a543d2f96fbb0cd117",
+    "srs_sha256": "15a2f194c8cc8f68e21aee78c613c51273740bc686068282be38bf3b3861aa3c",
     "decision_sha256": "7f7d490156e1f2f537334188ff94b372cd4994155a18c1d8db993f4e06891526",
     "acceptance_specification_sha256": "f5bd4ecd3244e17ab4e8ba76d7ddb8eed3ea083977039257345ae14fc928f2c6",
     "report_schema_sha256": "19a522a58b8c0e3596ec698234da17f3666b0dc9a45ed54ddbe6bd1a48d4475d",
