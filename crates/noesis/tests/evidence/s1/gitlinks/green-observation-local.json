@@ -15,6 +15,8 @@
     "pre_r2_runtime": "728244e2d05087da20c0c722879cb05510f9a988",
     "test_first": "f542d893e888330a1bdb00315e00cac6e73746aa",
     "retained_red_evidence": "b488cf94d01bdc590eabb473006de1a25b5b0123",
+    "initial_implementation": "637d7d49eefd055f47e0038b8e40c81fc1544952",
+    "ci_portability_correction": "resolved by Git history after this observation file is updated",
     "implementation_and_evidence": "resolved by Git history after this observation file is committed"
   },
   "authorization": {
@@ -255,6 +257,67 @@
     "linux_seccomp_and_landlock_runtime": "not run locally; exact-head Linux CI required",
     "darwin_portable_boundary_checks": "passed"
   },
+  "ci_correction_rounds": [
+    {
+      "round": 1,
+      "failed_head": "637d7d49eefd055f47e0038b8e40c81fc1544952",
+      "workflow_run": "https://github.com/smutti/codenoesis/actions/runs/30745377649",
+      "failures": [
+        {
+          "checks": [
+            "Rust quality gate",
+            "Test (ubuntu-latest)"
+          ],
+          "jobs": [
+            "https://github.com/smutti/codenoesis/actions/runs/30745377649/job/91489954026",
+            "https://github.com/smutti/codenoesis/actions/runs/30745377649/job/91489954051"
+          ],
+          "test": "sec_fr_acq_005_nested_symlink_escape_is_rejected",
+          "failure": "The test required the fresh store path to be absent. Linux Landlock correctly withholds RemoveDir authority on the store parent, so rollback can leave only the empty authorized boundary anchor while no local-store marker, artifact, metadata, or publication exists.",
+          "correction": "Assert the unchanged semantic oracle directly: the failed scan leaves the store absent or empty, with no partial local-store content. Parent-directory write authority was not broadened."
+        },
+        {
+          "checks": [
+            "Test (windows-latest)"
+          ],
+          "jobs": [
+            "https://github.com/smutti/codenoesis/actions/runs/30745377649/job/91489954030"
+          ],
+          "test": "race_fr_acq_005_nested_replacement_is_retryable_changed",
+          "failure": "Windows denied directory replacement while retained same-file handles were open, and the fixture panicked before evaluating the protected stable-or-Changed race oracle.",
+          "correction": "Accept either exact stable commit/tree binding when retained handles block replacement or retryable Changed when replacement succeeds; every other replacement error still fails the test."
+        }
+      ],
+      "product_behavior_changed": false,
+      "security_authority_broadened": false,
+      "oracle_weakened_skipped_regenerated_or_retried": false,
+      "local_validation": [
+        {
+          "command": "cargo fmt --all --check",
+          "exit_code": 0
+        },
+        {
+          "command": "cargo test --locked -p noesis --test e2e_fr_acq_005_gitlink_boundaries sec_fr_acq_005_nested_symlink_escape_is_rejected -- --exact",
+          "tests_passed": 1,
+          "exit_code": 0
+        },
+        {
+          "command": "cargo test --locked -p codenoesis-repository --lib",
+          "tests_passed": 14,
+          "exit_code": 0
+        },
+        {
+          "command": "cargo clippy --locked -p codenoesis-repository -p noesis --all-targets --all-features -- -D warnings",
+          "exit_code": 0
+        },
+        {
+          "command": "cargo check --locked --target x86_64-pc-windows-msvc -p codenoesis-repository --tests",
+          "exit_code": 0
+        }
+      ],
+      "exact_head_linux_and_windows_runtime_ci": "required"
+    }
+  ],
   "dependency_review": "crates/noesis/tests/evidence/s1/gitlinks/dependency-review.json",
   "pilot": "crates/noesis/tests/evidence/s1/gitlinks/pilot-rustdesk-local.json",
   "verification": {
@@ -269,6 +332,7 @@
     },
     "complete_repository_gate_before_evidence_materialization": {
       "observed_at": "2026-08-02T10:55:51Z",
+      "tested_tree_later_committed_as": "637d7d49eefd055f47e0038b8e40c81fc1544952",
       "commands": [
         "actionlint -no-color",
         "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",

@@ -256,7 +256,7 @@ fn sec_fr_acq_005_nested_symlink_escape_is_rejected() {
         "acquisition.nested_repository_unavailable",
     );
     assert_eq!(error["context"]["reason"], "path_invalid");
-    assert!(!repository.base.store.exists());
+    assert_store_unpublished(&repository.base.store);
 }
 
 #[test]
@@ -431,6 +431,16 @@ fn assert_v9(output: Output, exit_code: i32, code: &str) -> Value {
     assert_eq!(error["schema_version"], "codenoesis.error/v9");
     assert_eq!(error["code"], code);
     error
+}
+
+fn assert_store_unpublished(store: &Path) {
+    match fs::read_dir(store) {
+        Ok(mut entries) => assert!(
+            entries.next().is_none(),
+            "failed scan left partial store content"
+        ),
+        Err(error) => assert_eq!(error.kind(), std::io::ErrorKind::NotFound),
+    }
 }
 
 fn raw_scan(

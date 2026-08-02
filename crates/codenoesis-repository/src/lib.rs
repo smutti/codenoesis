@@ -1714,22 +1714,36 @@ mod tests {
         let tree_oid = write_loose_object(&git_dir, "tree", b"");
         let commit_body = format!("tree {}\n\nR2 nested race fixture\n", tree_oid.as_str());
         let commit_oid = write_loose_object(&git_dir, "commit", commit_body.as_bytes());
+        let expected_commit_oid = commit_oid.clone();
+        let expected_tree_oid = tree_oid.clone();
         let replacement_root = root.clone();
         let replacement_displaced = displaced.clone();
+        let mut replacement_blocked = false;
         let result = bind_nested_repository_with_observer(
             root.as_os_str(),
             RepositoryIdentity::parse("urn:codenoesis:repository:nested-race").unwrap(),
             &Revision::Commit(commit_oid),
             NestedAcquisitionProfile::VerifiedLooseSha1V1,
-            move || {
-                fs::rename(&replacement_root, &replacement_displaced)
-                    .expect("displace nested repository");
-                fs::create_dir(&replacement_root).expect("replace nested root");
+            || match fs::rename(&replacement_root, &replacement_displaced) {
+                Ok(()) => fs::create_dir(&replacement_root).expect("replace nested root"),
+                Err(error)
+                    if cfg!(windows) && error.kind() == std::io::ErrorKind::PermissionDenied =>
+                {
+                    replacement_blocked = true;
+                }
+                Err(error) => panic!("displace nested repository: {error}"),
             },
         );
-        assert_eq!(result, Err(NestedRepositoryAcquisitionError::Changed));
+        if replacement_blocked {
+            let bound = result.expect("retained handles preserve stable nested binding");
+            assert_eq!(bound.commit_oid(), &expected_commit_oid);
+            assert_eq!(bound.tree_oid(), &expected_tree_oid);
+            assert!(!displaced.exists());
+        } else {
+            assert_eq!(result, Err(NestedRepositoryAcquisitionError::Changed));
+            fs::remove_dir_all(displaced).expect("remove displaced root");
+        }
         fs::remove_dir_all(root).expect("remove replacement root");
-        fs::remove_dir_all(displaced).expect("remove displaced root");
     }
 
     fn write_loose_object(git_dir: &Path, kind: &str, body: &[u8]) -> ObjectId {
