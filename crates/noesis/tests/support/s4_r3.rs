@@ -27,6 +27,22 @@ impl MaterializedRootPackageRepository {
         Self::materialize("implicit")
     }
 
+    pub fn explicit_dot() -> Self {
+        Self::materialize("explicit_dot")
+    }
+
+    pub fn standalone() -> Self {
+        Self::materialize("standalone")
+    }
+
+    pub fn virtual_workspace() -> Self {
+        Self::materialize("virtual")
+    }
+
+    pub fn member_exclude_conflict() -> Self {
+        Self::materialize("member_exclude_conflict")
+    }
+
     fn materialize(variant: &str) -> Self {
         let fixture = fixture_root();
         let fixture_manifest: Value = serde_json::from_slice(
@@ -150,19 +166,59 @@ impl MaterializedRootPackageRepository {
     }
 
     pub fn scan(&self) -> Output {
+        self.scan_with_profiles(Some("cargo-root-package-v1"), self.includes_boundary)
+    }
+
+    pub fn scan_without_boundary_profile(&self) -> Output {
+        self.scan_with_profiles(Some("cargo-root-package-v1"), false)
+    }
+
+    pub fn scan_legacy(&self) -> Output {
+        self.scan_with_profiles(None, self.includes_boundary)
+    }
+
+    pub fn scan_with_workspace_profile(&self, workspace_profile: &str) -> Output {
+        self.scan_with_profiles(Some(workspace_profile), self.includes_boundary)
+    }
+
+    pub fn docs(&self) -> Output {
+        Command::new(env!("CARGO_BIN_EXE_noesis"))
+            .args(["docs", "--store"])
+            .arg(&self.store)
+            .args(["--repository-id", REPOSITORY_ID, "--output"])
+            .arg(&self.documents)
+            .args(["--format", "json"])
+            .output()
+            .expect("launch R3 documentation subject")
+    }
+
+    pub fn query(&self, requested_id: &str) -> Output {
+        Command::new(env!("CARGO_BIN_EXE_noesis"))
+            .args(["query", "--store"])
+            .arg(&self.store)
+            .args(["--repository-id", REPOSITORY_ID, "--documents"])
+            .arg(&self.documents)
+            .args(["--id", requested_id, "--format", "json"])
+            .output()
+            .expect("launch R3 query subject")
+    }
+
+    fn scan_with_profiles(
+        &self,
+        workspace_profile: Option<&str>,
+        boundary_profile: bool,
+    ) -> Output {
         let mut command = Command::new(env!("CARGO_BIN_EXE_noesis"));
         command
             .args(["scan", "--repository"])
             .arg(&self.worktree)
             .args(["--repository-id", REPOSITORY_ID, "--revision"])
             .arg(&self.commit_oid)
-            .args([
-                "--profile",
-                "standard-local-s4",
-                "--workspace-profile",
-                "cargo-root-package-v1",
-            ]);
-        if self.includes_boundary {
+            .args(["--profile", "standard-local-s4"]);
+        if let Some(workspace_profile) = workspace_profile {
+            command.args(["--workspace-profile", workspace_profile]);
+        }
+        if boundary_profile {
             command.args(["--repository-boundary-profile", "local-gitlinks-v1"]);
         }
         command

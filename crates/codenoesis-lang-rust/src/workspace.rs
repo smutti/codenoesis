@@ -8,6 +8,10 @@ use codenoesis_domain::s4::{
     WorkspaceExtractionChunk, WorkspaceKnowledgeGraph, WorkspaceRelationship, WorkspaceVisibility,
     workspace_source_file_id,
 };
+use codenoesis_domain::s4_r3::{
+    ExternalWorkspaceBoundary, RootPackageWorkspaceError, RootPackageWorkspaceExtraction,
+    RootPackageWorkspaceKnowledge, RootPackageWorkspacePlan,
+};
 use codenoesis_domain::s5::{
     AnalysisCacheEntry, AnalysisCacheKey, IncrementalWorkspaceExtraction,
     RustDeclarationObservation, RustModuleObservation, RustSourceAnalysis, SourceAnalysisRecord,
@@ -15,9 +19,15 @@ use codenoesis_domain::s5::{
 use codenoesis_domain::{
     ContentKind, InventoryFile, RepositoryInventory, STANDARD_LOCAL_S1_LIMITS,
 };
-use codenoesis_ports::{IncrementalRustWorkspaceExtractor, RustWorkspaceExtractor};
+use codenoesis_ports::{
+    IncrementalRustWorkspaceExtractor, RootPackageWorkspaceExtractor, RustWorkspaceExtractor,
+};
 use tree_sitter::{Node, Parser};
 use unicode_normalization::UnicodeNormalization as _;
+
+use crate::root_package::{
+    PlannedCoverage, PlannedRootPackageWorkspace, plan_root_package_workspace,
+};
 
 #[derive(Clone, Copy, Debug, Default)]
 pub struct TreeSitterRustWorkspaceExtractor;
@@ -45,6 +55,20 @@ impl IncrementalRustWorkspaceExtractor for TreeSitterRustWorkspaceExtractor {
         cache_entries: &[AnalysisCacheEntry],
     ) -> Result<IncrementalWorkspaceExtraction, WorkspaceError> {
         WorkspaceBuilder::new(inventory)?.extract_incremental(cache_entries)
+    }
+}
+
+impl RootPackageWorkspaceExtractor for TreeSitterRustWorkspaceExtractor {
+    fn extract_root_package_workspace_incremental(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+        cache_entries: &[AnalysisCacheEntry],
+    ) -> Result<RootPackageWorkspaceExtraction, RootPackageWorkspaceError> {
+        let planned = plan_root_package_workspace(inventory, external_boundaries)?;
+        WorkspaceBuilder::new(inventory)
+            .map_err(RootPackageWorkspaceError::Source)?
+            .extract_root_package_incremental(cache_entries, planned)
     }
 }
 
@@ -165,6 +189,41 @@ impl<'a> WorkspaceBuilder<'a> {
         self,
         cache_entries: &[AnalysisCacheEntry],
     ) -> Result<IncrementalWorkspaceExtraction, WorkspaceError> {
+        let crates = self.parse_crates()?;
+        self.extract_prepared(cache_entries, crates, None)
+    }
+
+    fn extract_root_package_incremental(
+        self,
+        cache_entries: &[AnalysisCacheEntry],
+        planned: PlannedRootPackageWorkspace,
+    ) -> Result<RootPackageWorkspaceExtraction, RootPackageWorkspaceError> {
+        let crates = self
+            .root_package_crates(&planned.plan)
+            .map_err(RootPackageWorkspaceError::Source)?;
+        let extraction = self
+            .extract_prepared(cache_entries, crates, Some(&planned.coverage))
+            .map_err(RootPackageWorkspaceError::Source)?;
+        let knowledge = RootPackageWorkspaceKnowledge {
+            plan: planned.plan,
+            knowledge: extraction.knowledge,
+        };
+        knowledge.validate()?;
+        Ok(RootPackageWorkspaceExtraction {
+            knowledge,
+            cache_entries: Vec::new(),
+            source_records: extraction.source_records,
+            parser_invocation_count: extraction.parser_invocation_count,
+        })
+    }
+
+    #[allow(clippy::too_many_lines)]
+    fn extract_prepared(
+        self,
+        cache_entries: &[AnalysisCacheEntry],
+        crates: Vec<CrateDraft>,
+        r3_coverage: Option<&[PlannedCoverage]>,
+    ) -> Result<IncrementalWorkspaceExtraction, WorkspaceError> {
         if cache_entries
             .iter()
             .any(|entry| !entry.is_self_consistent())
@@ -178,10 +237,10 @@ impl<'a> WorkspaceBuilder<'a> {
         if cache_by_id.len() != cache_entries.len() {
             return Err(WorkspaceError::ContractInvalid);
         }
-        let crates = self.parse_crates()?;
         let mut sources = Vec::new();
         let mut analyses = BTreeMap::new();
         let mut parser_invocation_count = 0_u64;
+        let tolerate_unsupported_rust = r3_coverage.is_some();
         for crate_draft in &crates {
             self.collect_crate_sources(
                 crate_draft,
@@ -189,6 +248,7 @@ impl<'a> WorkspaceBuilder<'a> {
                 &mut analyses,
                 &mut parser_invocation_count,
                 &mut sources,
+                tolerate_unsupported_rust,
             )?;
         }
         sources.sort_by(|left, right| left.path.as_bytes().cmp(right.path.as_bytes()));
@@ -564,21 +624,44 @@ impl<'a> WorkspaceBuilder<'a> {
                 ));
             }
         }
-        let mut build_scripts = BTreeSet::new();
-        for crate_draft in &crates {
-            if crate_draft.build_script
-                && build_scripts.insert(crate_draft.manifest_evidence.id.clone())
-            {
+        if let Some(planned_coverage) = r3_coverage {
+            for planned in planned_coverage {
+                let manifest = self
+                    .files
+                    .get(planned.manifest_path.as_str())
+                    .copied()
+                    .ok_or(WorkspaceError::ContractInvalid)?;
+                let evidence = complete_evidence(self.inventory, manifest)?;
                 coverage.push((
-                    crate_draft.root_source_path.clone(),
+                    planned.source_path.clone(),
                     WorkspaceCoverageGap::unsupported(
                         self.repository_identity,
                         self.commit_oid,
-                        "build_script_execution_forbidden",
-                        &crate_draft.manifest_evidence.id,
+                        planned.capability,
+                        &evidence.id,
                     ),
                 ));
             }
+        } else {
+            let mut build_scripts = BTreeSet::new();
+            for crate_draft in &crates {
+                if crate_draft.build_script
+                    && build_scripts.insert(crate_draft.manifest_evidence.id.clone())
+                {
+                    coverage.push((
+                        crate_draft.root_source_path.clone(),
+                        WorkspaceCoverageGap::unsupported(
+                            self.repository_identity,
+                            self.commit_oid,
+                            "build_script_execution_forbidden",
+                            &crate_draft.manifest_evidence.id,
+                        ),
+                    ));
+                }
+            }
+        }
+        if r3_coverage.is_some() {
+            coverage = deduplicate_coverage(coverage)?;
         }
 
         relationship_drafts.sort_by(|left, right| {
@@ -689,6 +772,44 @@ impl<'a> WorkspaceBuilder<'a> {
             source_records,
             parser_invocation_count,
         })
+    }
+
+    fn root_package_crates(
+        &self,
+        plan: &RootPackageWorkspacePlan,
+    ) -> Result<Vec<CrateDraft>, WorkspaceError> {
+        plan.targets
+            .iter()
+            .map(|target| {
+                let manifest = self
+                    .files
+                    .get(target.manifest_path.as_str())
+                    .copied()
+                    .ok_or(WorkspaceError::ContractInvalid)?;
+                let mut entity = WorkspaceEntity::rust_crate(
+                    self.repository_identity,
+                    &target.manifest_path,
+                    &target.package_name,
+                    target.target_kind.as_str(),
+                    &target.target_name,
+                );
+                entity.properties.insert(
+                    "workspace_member_source".to_owned(),
+                    target.member_source.as_str().to_owned(),
+                );
+                entity.properties.insert(
+                    "workspace_root_shape".to_owned(),
+                    plan.root_shape.as_str().to_owned(),
+                );
+                Ok(CrateDraft {
+                    entity,
+                    manifest_evidence: complete_evidence(self.inventory, manifest)?,
+                    root_source_path: target.source_path.clone(),
+                    root_module_name: normalize_identifier(&target.target_name.replace('-', "_")),
+                    build_script: false,
+                })
+            })
+            .collect()
     }
 
     fn parse_crates(&self) -> Result<Vec<CrateDraft>, WorkspaceError> {
@@ -941,6 +1062,7 @@ impl<'a> WorkspaceBuilder<'a> {
         analyses: &mut BTreeMap<String, ResolvedAnalysis>,
         parser_invocation_count: &mut u64,
         sources: &mut Vec<SourceDraft>,
+        tolerate_unsupported_rust: bool,
     ) -> Result<(), WorkspaceError> {
         let root = self.source_draft(
             crate_draft,
@@ -957,8 +1079,12 @@ impl<'a> WorkspaceBuilder<'a> {
             if !seen.insert(source.path.clone()) {
                 return Err(WorkspaceError::AmbiguousModule);
             }
-            let resolved =
-                self.resolve_analysis(&source, cache_entries, parser_invocation_count)?;
+            let resolved = self.resolve_analysis(
+                &source,
+                cache_entries,
+                parser_invocation_count,
+                tolerate_unsupported_rust,
+            )?;
             let parsed = parsed_from_analysis(&resolved.analysis);
             self.collect_out_of_line_sources(
                 crate_draft,
@@ -982,6 +1108,7 @@ impl<'a> WorkspaceBuilder<'a> {
         source: &SourceDraft,
         cache_entries: &BTreeMap<&str, &AnalysisCacheEntry>,
         parser_invocation_count: &mut u64,
+        tolerate_unsupported_rust: bool,
     ) -> Result<ResolvedAnalysis, WorkspaceError> {
         let key = AnalysisCacheKey {
             repository_identity: self.repository_identity.to_owned(),
@@ -1003,19 +1130,59 @@ impl<'a> WorkspaceBuilder<'a> {
             if entry.key != key || !entry.is_self_consistent() {
                 return Err(WorkspaceError::ContractInvalid);
             }
-            return Ok(ResolvedAnalysis {
-                key,
-                analysis: entry.analysis.clone(),
-                reused: true,
-            });
+            if !tolerate_unsupported_rust || !entry.analysis.unsupported_construct {
+                let mut parsed = parsed_from_analysis(&entry.analysis);
+                if tolerate_unsupported_rust {
+                    self.defer_missing_modules(
+                        &mut parsed,
+                        &module_children_directory(&source.path)?,
+                    )?;
+                }
+                return Ok(ResolvedAnalysis {
+                    key,
+                    analysis: analysis_from_parsed(&parsed),
+                    reused: true,
+                });
+            }
         }
-        let parsed = parse_rust_source(&source.path, &source.source)?;
+        let mut parsed =
+            parse_rust_source(&source.path, &source.source, tolerate_unsupported_rust)?;
+        if tolerate_unsupported_rust {
+            self.defer_missing_modules(&mut parsed, &module_children_directory(&source.path)?)?;
+        }
         *parser_invocation_count = parser_invocation_count.saturating_add(1);
         Ok(ResolvedAnalysis {
             key,
             analysis: analysis_from_parsed(&parsed),
             reused: false,
         })
+    }
+
+    fn defer_missing_modules(
+        &self,
+        parsed: &mut ParsedSource,
+        children_directory: &str,
+    ) -> Result<(), WorkspaceError> {
+        let mut retained = Vec::with_capacity(parsed.modules.len());
+        for mut declaration in std::mem::take(&mut parsed.modules) {
+            if let Some(body) = declaration.body.as_mut() {
+                self.defer_missing_modules(
+                    body,
+                    &join_directory(children_directory, &declaration.name),
+                )?;
+                retained.push(declaration);
+                continue;
+            }
+            match self.resolve_module_source(children_directory, &declaration.name) {
+                Ok(_) => retained.push(declaration),
+                Err(WorkspaceError::UnsupportedWorkspace) => {
+                    parsed.unsupported_construct = true;
+                }
+                Err(error) => return Err(error),
+            }
+        }
+        parsed.modules = retained;
+        Ok(())
     }
 
     #[allow(clippy::too_many_arguments)]
@@ -1235,6 +1402,28 @@ fn insert_unique<K: Ord, V>(
     } else {
         Err(WorkspaceError::ContractInvalid)
     }
+}
+
+fn deduplicate_coverage(
+    values: Vec<(String, WorkspaceCoverageGap)>,
+) -> Result<Vec<(String, WorkspaceCoverageGap)>, WorkspaceError> {
+    let mut by_id = BTreeMap::<String, (String, WorkspaceCoverageGap)>::new();
+    for (path, gap) in values {
+        match by_id.entry(gap.id.clone()) {
+            std::collections::btree_map::Entry::Vacant(entry) => {
+                entry.insert((path, gap));
+            }
+            std::collections::btree_map::Entry::Occupied(mut entry) => {
+                if entry.get().1 != gap {
+                    return Err(WorkspaceError::ContractInvalid);
+                }
+                if path.as_bytes() < entry.get().0.as_bytes() {
+                    entry.get_mut().0 = path;
+                }
+            }
+        }
+    }
+    Ok(by_id.into_values().collect())
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -1502,7 +1691,11 @@ fn parsed_from_analysis(analysis: &RustSourceAnalysis) -> ParsedSource {
     }
 }
 
-fn parse_rust_source(path: &str, source: &str) -> Result<ParsedSource, WorkspaceError> {
+fn parse_rust_source(
+    path: &str,
+    source: &str,
+    tolerate_unsupported_rust: bool,
+) -> Result<ParsedSource, WorkspaceError> {
     let mut parser = Parser::new();
     parser
         .set_language(&tree_sitter_rust::LANGUAGE.into())
@@ -1519,7 +1712,7 @@ fn parse_rust_source(path: &str, source: &str) -> Result<ParsedSource, Workspace
             path: path.to_owned(),
         });
     }
-    parse_rust_scope(tree.root_node(), source, path, 0)
+    parse_rust_scope(tree.root_node(), source, path, 0, tolerate_unsupported_rust)
 }
 
 fn parse_rust_scope(
@@ -1527,6 +1720,7 @@ fn parse_rust_scope(
     source: &str,
     path: &str,
     depth: u64,
+    tolerate_unsupported_rust: bool,
 ) -> Result<ParsedSource, WorkspaceError> {
     if depth > STANDARD_LOCAL_S1_LIMITS.recursion_depth {
         return Err(WorkspaceError::LimitExceeded {
@@ -1542,7 +1736,28 @@ fn parse_rust_scope(
         unsupported_construct: false,
     };
     let mut cursor = scope.walk();
+    let mut pending_outer_attribute = false;
     for node in scope.named_children(&mut cursor) {
+        if tolerate_unsupported_rust && node.kind() == "attribute_item" {
+            parsed.unsupported_construct = true;
+            pending_outer_attribute |= node
+                .utf8_text(source.as_bytes())
+                .is_ok_and(|text| text.trim_start().starts_with("#["));
+            continue;
+        }
+        if matches!(node.kind(), "line_comment" | "block_comment") {
+            continue;
+        }
+        let attached_outer_attribute = tolerate_unsupported_rust
+            && node
+                .utf8_text(source.as_bytes())
+                .is_ok_and(|text| text.trim_start().starts_with("#["));
+        if tolerate_unsupported_rust && (pending_outer_attribute || attached_outer_attribute) {
+            parsed.unsupported_construct = true;
+            pending_outer_attribute = false;
+            continue;
+        }
+        pending_outer_attribute = false;
         match node.kind() {
             "struct_item" => {
                 parsed
@@ -1582,16 +1797,26 @@ fn parse_rust_scope(
                     visibility: visibility(node, source),
                     body: node
                         .child_by_field_name("body")
-                        .map(|body| parse_rust_scope(body, source, path, depth + 1).map(Box::new))
+                        .map(|body| {
+                            parse_rust_scope(
+                                body,
+                                source,
+                                path,
+                                depth + 1,
+                                tolerate_unsupported_rust,
+                            )
+                            .map(Box::new)
+                        })
                         .transpose()?,
                 });
             }
-            "use_declaration" => {
-                parsed.imports.push(ImportDraft {
-                    spelling: parse_import(node, source, path)?,
-                });
-            }
-            "line_comment" | "block_comment" => {}
+            "use_declaration" => match parse_import(node, source, path) {
+                Ok(spelling) => parsed.imports.push(ImportDraft { spelling }),
+                Err(WorkspaceError::UnsupportedWorkspace) if tolerate_unsupported_rust => {
+                    parsed.unsupported_construct = true;
+                }
+                Err(error) => return Err(error),
+            },
             _ => parsed.unsupported_construct = true,
         }
     }
@@ -1604,7 +1829,47 @@ fn parse_rust_scope(
     parsed
         .imports
         .sort_by(|left, right| left.spelling.as_bytes().cmp(right.spelling.as_bytes()));
+    if tolerate_unsupported_rust {
+        remove_ambiguous_observations(&mut parsed);
+    }
     Ok(parsed)
+}
+
+fn remove_ambiguous_observations(parsed: &mut ParsedSource) {
+    let mut declaration_counts = BTreeMap::new();
+    for declaration in &parsed.declarations {
+        *declaration_counts
+            .entry((declaration.kind, declaration.name.clone()))
+            .or_insert(0_usize) += 1;
+    }
+    let declaration_count = parsed.declarations.len();
+    parsed.declarations.retain(|declaration| {
+        declaration_counts.get(&(declaration.kind, declaration.name.clone())) == Some(&1)
+    });
+
+    let mut module_counts = BTreeMap::new();
+    for module in &parsed.modules {
+        *module_counts.entry(module.name.clone()).or_insert(0_usize) += 1;
+    }
+    let module_count = parsed.modules.len();
+    parsed
+        .modules
+        .retain(|module| module_counts.get(&module.name) == Some(&1));
+
+    let mut import_counts = BTreeMap::new();
+    for import in &parsed.imports {
+        *import_counts
+            .entry(import.spelling.clone())
+            .or_insert(0_usize) += 1;
+    }
+    let import_count = parsed.imports.len();
+    parsed
+        .imports
+        .retain(|import| import_counts.get(&import.spelling) == Some(&1));
+
+    parsed.unsupported_construct |= declaration_count != parsed.declarations.len()
+        || module_count != parsed.modules.len()
+        || import_count != parsed.imports.len();
 }
 
 fn declaration(

@@ -9,6 +9,7 @@ use codenoesis_domain::s4::{
     WorkspaceEntity, WorkspaceEvidence, WorkspaceExtractionChunk, WorkspaceKnowledgeGraph,
     WorkspaceRelationship,
 };
+use codenoesis_domain::s4_r3::R3_COVERAGE_CAPABILITIES;
 use codenoesis_domain::storage::{
     LocalSnapshotHead, PublicationCandidate, SNAPSHOT_SCHEMA_VERSION_V4, StorageComponent,
     StorageError,
@@ -245,12 +246,28 @@ pub fn generate_documentation_v1(
 ) -> Result<GeneratedDocumentationV1, DocumentationContractError> {
     let index = GraphIndex::new(semantic)?;
     let mut drafts = vec![overview_document(&index)?];
-    for module in index
+    let modules = index
         .entities
         .values()
         .filter(|entity| string_field(entity, "kind") == Ok("rust.module"))
-    {
-        drafts.push(module_document(&index, module)?);
+        .collect::<Vec<_>>();
+    let mut slug_counts = BTreeMap::<String, usize>::new();
+    for module in &modules {
+        *slug_counts
+            .entry(module_slug(string_field(module, "name")?)?)
+            .or_default() += 1;
+    }
+    for module in modules {
+        let slug = module_slug(string_field(module, "name")?)?;
+        let path = if slug_counts.get(&slug).copied() == Some(1) {
+            format!("modules/{slug}.md")
+        } else {
+            let digest = string_field(module, "id")?
+                .strip_prefix("urn:codenoesis:entity:blake3:")
+                .ok_or(DocumentationContractError::InvalidSnapshot)?;
+            format!("modules/{slug}-{digest}.md")
+        };
+        drafts.push(module_document(&index, module, path)?);
     }
     drafts.sort_by(|left, right| left.path.as_bytes().cmp(right.path.as_bytes()));
     if drafts.is_empty() || drafts.len() > MAX_DOCUMENTS {
@@ -780,7 +797,12 @@ fn overview_document(index: &GraphIndex) -> Result<DocumentDraft, DocumentationC
     let mut gaps = index
         .coverage
         .values()
-        .filter(|gap| string_field(gap, "capability") == Ok("compiler_cross_crate_use_resolution"))
+        .filter(|gap| {
+            string_field(gap, "capability").is_ok_and(|capability| {
+                capability == "compiler_cross_crate_use_resolution"
+                    || R3_COVERAGE_CAPABILITIES.contains(&capability)
+            })
+        })
         .collect::<Vec<_>>();
     gaps.sort_by(|left, right| {
         string_field(left, "id")
@@ -791,6 +813,7 @@ fn overview_document(index: &GraphIndex) -> Result<DocumentDraft, DocumentationC
         content.push_str("\n## Coverage\n\n");
         for (ordinal, gap) in gaps.into_iter().enumerate() {
             let id = string_field(gap, "id")?;
+            let capability = string_field(gap, "capability")?;
             let statement = statement_value(
                 &document_id,
                 "coverage_gap",
@@ -801,9 +824,14 @@ fn overview_document(index: &GraphIndex) -> Result<DocumentDraft, DocumentationC
                 Vec::new(),
                 vec![id.to_owned()],
             );
+            let message = if capability == "compiler_cross_crate_use_resolution" {
+                "compiler-grade cross-crate Rust use resolution is not available".to_owned()
+            } else {
+                format!("capability `{}` is deferred", markdown_code(capability))
+            };
             writeln!(
                 content,
-                "- Unsupported: compiler-grade cross-crate Rust use resolution is not available. {}",
+                "- Unsupported: {message}. {}",
                 statement_marker(&statement)?
             )
             .expect("writing Markdown to a String cannot fail");
@@ -824,6 +852,7 @@ fn overview_document(index: &GraphIndex) -> Result<DocumentDraft, DocumentationC
 fn module_document(
     index: &GraphIndex,
     module: &Value,
+    path: String,
 ) -> Result<DocumentDraft, DocumentationContractError> {
     let module_id = string_field(module, "id")?;
     let module_name = string_field(module, "name")?;
@@ -840,7 +869,6 @@ fn module_document(
         .pointer("/properties/path")
         .and_then(Value::as_str)
         .ok_or(DocumentationContractError::InvalidSnapshot)?;
-    let path = format!("modules/{}.md", module_slug(module_name)?);
     let document_id = document_id(&index.repository_identity, "module", module_id);
     let module_claim = index.claim("entity", module_id)?;
     let mut module_evidence = string_array(module_claim, "evidence_ids")?;
@@ -1228,7 +1256,11 @@ fn linked_statements(
                 .get("evidence_ids")
                 .and_then(Value::as_array)
                 .is_some_and(|ids| ids.iter().any(|id| id.as_str() == Some(requested_id)));
-            if references_subject || references_evidence {
+            let references_coverage = statement
+                .get("coverage_gap_ids")
+                .and_then(Value::as_array)
+                .is_some_and(|ids| ids.iter().any(|id| id.as_str() == Some(requested_id)));
+            if references_subject || references_evidence || references_coverage {
                 let mut value = statement
                     .as_object()
                     .cloned()
@@ -1425,7 +1457,7 @@ fn stored_snapshot_error(head: &LocalSnapshotHead, reason: &'static str) -> Stor
     }
 }
 
-fn extraction_chunk_value(chunk: &WorkspaceExtractionChunk) -> Value {
+pub(crate) fn extraction_chunk_value(chunk: &WorkspaceExtractionChunk) -> Value {
     let mut value = json!({
         "schema_version": "codenoesis.extraction-chunk/v2",
         "ontology_version": S4_ONTOLOGY_VERSION,
@@ -1450,7 +1482,7 @@ fn extraction_chunk_value(chunk: &WorkspaceExtractionChunk) -> Value {
     value
 }
 
-fn knowledge_graph_value(graph: &WorkspaceKnowledgeGraph) -> Value {
+pub(crate) fn knowledge_graph_value(graph: &WorkspaceKnowledgeGraph) -> Value {
     let mut value = json!({
         "schema_version": "codenoesis.knowledge-graph/v2",
         "ontology_version": S4_ONTOLOGY_VERSION,
@@ -1480,7 +1512,7 @@ fn knowledge_graph_value(graph: &WorkspaceKnowledgeGraph) -> Value {
     value
 }
 
-fn entity_value(entity: &WorkspaceEntity) -> Value {
+pub(crate) fn entity_value(entity: &WorkspaceEntity) -> Value {
     json!({
         "id": entity.id,
         "kind": entity.kind.as_str(),
@@ -1492,7 +1524,7 @@ fn entity_value(entity: &WorkspaceEntity) -> Value {
     })
 }
 
-fn relationship_value(relationship: &WorkspaceRelationship) -> Value {
+pub(crate) fn relationship_value(relationship: &WorkspaceRelationship) -> Value {
     json!({
         "id": relationship.id,
         "kind": relationship.kind.as_str(),
@@ -1502,7 +1534,7 @@ fn relationship_value(relationship: &WorkspaceRelationship) -> Value {
     })
 }
 
-fn claim_value(claim: &WorkspaceClaim) -> Value {
+pub(crate) fn claim_value(claim: &WorkspaceClaim) -> Value {
     json!({
         "id": claim.id,
         "subject_kind": claim.subject_kind.as_str(),
@@ -1512,7 +1544,7 @@ fn claim_value(claim: &WorkspaceClaim) -> Value {
     })
 }
 
-fn evidence_value(evidence: &WorkspaceEvidence) -> Value {
+pub(crate) fn evidence_value(evidence: &WorkspaceEvidence) -> Value {
     json!({
         "id": evidence.id,
         "path": evidence.path,
@@ -1522,7 +1554,7 @@ fn evidence_value(evidence: &WorkspaceEvidence) -> Value {
     })
 }
 
-fn diagnostic_value(diagnostic: &WorkspaceDiagnostic) -> Value {
+pub(crate) fn diagnostic_value(diagnostic: &WorkspaceDiagnostic) -> Value {
     json!({
         "code": diagnostic.code,
         "message": diagnostic.message,
@@ -1530,7 +1562,7 @@ fn diagnostic_value(diagnostic: &WorkspaceDiagnostic) -> Value {
     })
 }
 
-fn coverage_value(gap: &WorkspaceCoverageGap) -> Value {
+pub(crate) fn coverage_value(gap: &WorkspaceCoverageGap) -> Value {
     json!({
         "id": gap.id,
         "capability": gap.capability,
