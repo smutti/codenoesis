@@ -35,7 +35,7 @@ BOUND_GOLDEN_PATH = FIXTURE_ROOT / "expected-boundaries-bound.json"
 MATCHING_INPUT_PATH = FIXTURE_ROOT / "boundary-input-matching.json"
 MISMATCH_INPUT_PATH = FIXTURE_ROOT / "boundary-input-mismatch.json"
 
-APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/__PR_NUMBER__"
+APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/93"
 ISSUE_REFERENCE = "https://github.com/smutti/codenoesis/issues/92"
 REQUIREMENT = "FR-ACQ-005"
 ROOT_IDENTITY = "urn:codenoesis:fixture:s1-gitlink-boundary-v1"

@@ -7,11 +7,11 @@
     },
     {
       "path": "docs/software/decisions/0010-s1-gitlink-boundary-contract.md",
-      "sha256": "cf218cd8977143d9c2a444093352826b246a40768f1a2b2da160d7adfac409d3"
+      "sha256": "81f7a9f18efc67fcc9904ba6cb52e4aa545a43974a930c69295d2e00c750eea7"
     },
     {
       "path": "scripts/tests/test_s1_gitlink_contract.py",
-      "sha256": "bb984125318a03030f242be9c3803922fdbe18ce2677c518ac4b6b9b15edb78f"
+      "sha256": "5ec4cfc27c94e22f22df058a4d8542b7e00afdc8763751612b39fc39d94b4fc0"
     },
     {
       "path": "tests/corpora/real-world-rust-v1.json",
@@ -51,7 +51,7 @@
     },
     {
       "path": "tests/specifications/s1/e2e_fr_acq_005_gitlink_boundaries.json",
-      "sha256": "95f240882aa9e839b9ea0f461b7bdd9fbaf1b30720c88145ebef0474b7ad4bd9"
+      "sha256": "812e2f448784ba42076d98fb85428b06569df9695099c926db00ffad6ad2a4ba"
     },
     {
       "path": "tests/specifications/s1/external-repository-boundary-v1.schema.json",
@@ -74,5 +74,5 @@
       "sha256": "be199ebbeb9cb35c2e6a68c5b9d847f86fe131efd007b0d09d9fd28390c91437"
     }
   ],
-  "bundle_sha256": "eef91ed1653e02995421a5618af9339b792aab4a72a50fd3d278be4689852020"
+  "bundle_sha256": "2f59bb311b64b0f4f9d506266f05e9e52f4c0bf5af8926276ed371967690969b"
 }

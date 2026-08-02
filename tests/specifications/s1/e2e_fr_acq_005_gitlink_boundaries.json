@@ -10,7 +10,7 @@
     "authorization_statement": "Autorizzo issue #92",
     "authorization_date": "2026-08-02",
     "authorization_issue": "https://github.com/smutti/codenoesis/issues/92",
-    "approval_reference": "https://github.com/smutti/codenoesis/pull/__PR_NUMBER__",
+    "approval_reference": "https://github.com/smutti/codenoesis/pull/93",
     "effective_on": "protected_squash_merge_by_accountable_actor",
     "required_external_approvals": 0,
     "agent_merge_allowed": false

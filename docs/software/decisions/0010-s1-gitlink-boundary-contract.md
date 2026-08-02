@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Accepted; authoritative only after the accountable actor manually merges protected PR [#__PR_NUMBER__](https://github.com/smutti/codenoesis/pull/__PR_NUMBER__) |
+| Status | Accepted; authoritative only after the accountable actor manually merges protected PR [#93](https://github.com/smutti/codenoesis/pull/93) |
 | Date | 2026-08-02 |
 | Scope | `S1 — Safe inventory` compatibility extension only; roadmap `R2` and the inherited `R0-R2` checkpoint |
 | Product owner | Andrea Moretti — project governance persona represented by [`@smutti`](https://github.com/smutti), not a separate natural person |
@@ -11,7 +11,7 @@
 | Requirement | `FR-ACQ-005` |
 | Issue | [#92](https://github.com/smutti/codenoesis/issues/92) |
 | Authorization | `@smutti`: “Autorizzo issue #92” in the maintainer-supervised task on 2026-08-02 |
-| Approval reference | PR [#__PR_NUMBER__](https://github.com/smutti/codenoesis/pull/__PR_NUMBER__); effective only on protected manual merge by `@smutti` |
+| Approval reference | PR [#93](https://github.com/smutti/codenoesis/pull/93); effective only on protected manual merge by `@smutti` |
 
 This record approves no production implementation by itself. It becomes
 authoritative only through protected manual merge by `@smutti`; the

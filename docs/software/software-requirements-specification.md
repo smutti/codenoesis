@@ -15,7 +15,7 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S6 are Approved and Implemented but not Verified. `FR-ACQ-004` already implements roadmap R0/R1. `FR-ACQ-005` is Proposed and becomes Approved only after the accountable maintainer manually merges protected PR #__PR_NUMBER__. |
+| Status | S0 through S6 are Approved and Implemented but not Verified. `FR-ACQ-004` already implements roadmap R0/R1. `FR-ACQ-005` is Proposed and becomes Approved only after the accountable maintainer manually merges protected PR #93. |
 | Date | 2026-08-02 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
@@ -770,14 +770,14 @@ Issue [#92](https://github.com/smutti/codenoesis/issues/92) records explicit
 maintainer authorization for this high-risk governance package. The following
 single requirement becomes Approved only when `@smutti` manually merges the
 exact protected head of
-[PR #__PR_NUMBER__](https://github.com/smutti/codenoesis/pull/__PR_NUMBER__).
+[PR #93](https://github.com/smutti/codenoesis/pull/93).
 The authoring agent does not approve or merge. This approval targets exactly
 the **S1 — Safe inventory compatibility extension** and roadmap R2; it does
 not reopen or reimplement the merged R0/R1 behavior in `FR-ACQ-004`.
 
 | Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
 |---|---|---|---|---|---|---|---|
-| `FR-ACQ-005` | `Proposed` (authorized in issue #92; pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #__PR_NUMBER__ protected merge record](https://github.com/smutti/codenoesis/pull/__PR_NUMBER__) | `S1` | [Gitlink boundary decision](decisions/0010-s1-gitlink-boundary-contract.md), [RepositorySnapshotV5 schema](../../tests/specifications/s1/repository-snapshot-v5.schema.json), [ErrorV9 schema](../../tests/specifications/s1/codenoesis-error-v9.schema.json), [machine oracle](../../tests/specifications/s1/e2e_fr_acq_005_gitlink_boundaries.json), and [project-owned fixture](../../tests/fixtures/s1/gitlink-boundary-v1/README.md) |
+| `FR-ACQ-005` | `Proposed` (authorized in issue #92; pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #93 protected merge record](https://github.com/smutti/codenoesis/pull/93) | `S1` | [Gitlink boundary decision](decisions/0010-s1-gitlink-boundary-contract.md), [RepositorySnapshotV5 schema](../../tests/specifications/s1/repository-snapshot-v5.schema.json), [ErrorV9 schema](../../tests/specifications/s1/codenoesis-error-v9.schema.json), [machine oracle](../../tests/specifications/s1/e2e_fr_acq_005_gitlink_boundaries.json), and [project-owned fixture](../../tests/fixtures/s1/gitlink-boundary-v1/README.md) |
 
 R2 is selected only by
 `--repository-boundary-profile local-gitlinks-v1` on an otherwise valid
@@ -817,7 +817,7 @@ generic R2 blocker without fetching nested source or introducing
 repository-specific semantics.
 
 S1 safe gitlink boundary contract bundle:
-`sha256:eef91ed1653e02995421a5618af9339b792aab4a72a50fd3d278be4689852020`.
+`sha256:2f59bb311b64b0f4f9d506266f05e9e52f4c0bf5af8926276ed371967690969b`.
 The bundle binds Decision 0010, the independent governance guard, strict V5,
 boundary-input, boundary-report, and ErrorV9 schemas, machine oracle,
 project-owned synthetic fixture and exact Git identities, plus immutable R0/R1
