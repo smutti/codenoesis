@@ -1,0 +1,668 @@
+{
+  "schema_version": "codenoesis.acceptance-specification/v1",
+  "status": "approved",
+  "ratification": {
+    "governance_model": "single_maintainer_bootstrap",
+    "product_owner_persona": "Andrea Moretti",
+    "persona_is_natural_person": false,
+    "accountable_github_actor": "smutti",
+    "technical_approver": "smutti",
+    "authorization_statement": "Autorizzo issue #92",
+    "authorization_date": "2026-08-02",
+    "authorization_issue": "https://github.com/smutti/codenoesis/issues/92",
+    "approval_reference": "https://github.com/smutti/codenoesis/pull/__PR_NUMBER__",
+    "effective_on": "protected_squash_merge_by_accountable_actor",
+    "required_external_approvals": 0,
+    "agent_merge_allowed": false
+  },
+  "test_id": "e2e_fr_acq_005_gitlink_boundaries",
+  "slice": "S1",
+  "roadmap_checkpoint": "R0-R2",
+  "requirements": [
+    "FR-ACQ-005"
+  ],
+  "inherited_requirements": [
+    "DR-EVD-001",
+    "DR-IDN-002",
+    "FR-ACQ-001",
+    "FR-ACQ-002",
+    "FR-ACQ-004",
+    "FR-CLI-001",
+    "FR-DOC-001",
+    "FR-INV-001",
+    "FR-QRY-001",
+    "NFR-DET-001",
+    "NFR-MNT-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "decision": "docs/software/decisions/0010-s1-gitlink-boundary-contract.md",
+  "fixture": "tests/fixtures/s1/gitlink-boundary-v1/manifest.json",
+  "schemas": {
+    "snapshot": "tests/specifications/s1/repository-snapshot-v5.schema.json",
+    "boundaries": "tests/specifications/s1/external-repository-boundary-v1.schema.json",
+    "boundary_input": "tests/specifications/s1/repository-boundary-input-v1.schema.json",
+    "error": "tests/specifications/s1/codenoesis-error-v9.schema.json",
+    "inherited_inventory": "tests/specifications/s1/repository-snapshot-v2.schema.json#/$defs/inventory",
+    "inherited_extraction_chunk": "tests/specifications/s4/extraction-chunk-v2.schema.json",
+    "inherited_knowledge_graph": "tests/specifications/s4/knowledge-graph-v2.schema.json"
+  },
+  "inherited_contracts": {
+    "r0_r1_bundle": {
+      "path": "tests/specifications/s1/packed-sha1-contract-bundle.json",
+      "bundle_sha256": "08602c21b06e0e0cea754312fb8c9f5d28db36ae31e9e646df669b2c129826df"
+    },
+    "s4_bundle": {
+      "path": "tests/specifications/s4/contract-bundle.json",
+      "bundle_sha256": "3efb380fb058a5831123a0f990676575da04e60998cada8987f034675b61f12e"
+    },
+    "corpus": {
+      "path": "tests/corpora/real-world-rust-v1.json",
+      "sha256": "1d2edc9f858d612e76abb70e6dd255d28e88306a0e4874b0e8ea7351f4347f46",
+      "mutable_in_r2_governance": false
+    }
+  },
+  "selector_contract": {
+    "flag": "--repository-boundary-profile",
+    "value": "local-gitlinks-v1",
+    "kind": "explicit_semantic_input",
+    "valid_with_profiles": [
+      "standard-local-s4"
+    ],
+    "invalid_with_other_profiles": true,
+    "implicit_repository_shape_dispatch": false,
+    "included_in_configuration_semantic": true,
+    "included_in_semantic_hash": true,
+    "included_in_snapshot_identity": true,
+    "may_coexist_with_acquisition_profile": "local-git-sha1-packed-v1",
+    "legacy_absence_is_byte_identical": true
+  },
+  "boundary_input_contract": {
+    "flag": "--repository-boundary-manifest",
+    "optional": true,
+    "invalid_without_boundary_selector": true,
+    "path_kind": "operational_input_excluded_from_semantic_identity",
+    "repository_roots_relative_to": "manifest_parent_directory",
+    "duplicate_json_members": "reject",
+    "entry_order": "ascending unsigned UTF-8 bytes of boundary_path",
+    "duplicate_boundary_path": "input.invalid_repository_boundary_manifest duplicate_boundary_path",
+    "root_binding": "root repository identity and commit OID equal the public scan invocation",
+    "explicit_nesting_depth": 1,
+    "nested_acquisition_profile_is_semantic": false,
+    "equivalent_loose_packed_nested_semantics": true
+  },
+  "public_commands": {
+    "unbound": [
+      "noesis",
+      "scan",
+      "--repository",
+      "{repository_path}",
+      "--repository-id",
+      "urn:codenoesis:fixture:s1-gitlink-boundary-v1",
+      "--revision",
+      "e3a117e190a92585bcae4c49c775d310243107e7",
+      "--profile",
+      "standard-local-s4",
+      "--repository-boundary-profile",
+      "local-gitlinks-v1",
+      "--store",
+      "{store_path}",
+      "--format",
+      "json"
+    ],
+    "bound": [
+      "noesis",
+      "scan",
+      "--repository",
+      "{repository_path}",
+      "--repository-id",
+      "urn:codenoesis:fixture:s1-gitlink-boundary-v1",
+      "--revision",
+      "e3a117e190a92585bcae4c49c775d310243107e7",
+      "--profile",
+      "standard-local-s4",
+      "--repository-boundary-profile",
+      "local-gitlinks-v1",
+      "--repository-boundary-manifest",
+      "tests/fixtures/s1/gitlink-boundary-v1/boundary-input-matching.json",
+      "--store",
+      "{store_path}",
+      "--format",
+      "json"
+    ],
+    "packed_root": [
+      "noesis",
+      "scan",
+      "--repository",
+      "{repository_path}",
+      "--repository-id",
+      "{repository_id}",
+      "--revision",
+      "{full_sha1}",
+      "--profile",
+      "standard-local-s4",
+      "--acquisition-profile",
+      "local-git-sha1-packed-v1",
+      "--repository-boundary-profile",
+      "local-gitlinks-v1",
+      "--store",
+      "{store_path}",
+      "--format",
+      "json"
+    ]
+  },
+  "expected_red": {
+    "test_command": "cargo test --locked -p noesis --test e2e_fr_acq_005_gitlink_boundaries -- e2e_fr_acq_005_gitlink_boundaries --exact",
+    "required_base_commit": "728244e2d05087da20c0c722879cb05510f9a988",
+    "runner_expected_exit": "nonzero only because the acceptance assertion expects successful RepositorySnapshotV5 output",
+    "subject_observed_exit_code": 2,
+    "subject_observed_stdout_bytes": 0,
+    "subject_observed_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "subject_observed_stderr_schema": "codenoesis.error/v4",
+    "subject_observed_stderr_code": "input.invalid_revision",
+    "subject_observed_stderr_bytes": 149,
+    "subject_observed_stderr_utf8": "{\"code\":\"input.invalid_revision\",\"context\":{},\"message\":\"invalid revision\",\"retryable\":false,\"schema_version\":\"codenoesis.error/v4\",\"stage\":\"input\"}\n",
+    "subject_observed_stderr_sha256": "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe",
+    "subject_expected_exit_code": 0,
+    "subject_expected_snapshot": "codenoesis.repository-snapshot/v5",
+    "store_exists_after_subject": false,
+    "authority_observation": {
+      "root_repository_opened": false,
+      "nested_repository_opened": false,
+      "processes_spawned": 0,
+      "network_attempts": 0,
+      "target_executions": 0,
+      "writes": 0,
+      "publications": 0
+    },
+    "accepted_reason": "The merged pre-R2 CLI rejects the unrecognized explicit boundary selector before repository acquisition or store creation.",
+    "rejected_reasons": [
+      "compilation failure",
+      "missing test target",
+      "missing or malformed synthetic Git objects",
+      "changed acceptance oracle",
+      "legacy selector-absent gitlink acceptance",
+      "panic",
+      "timeout",
+      "dependency or network outage",
+      "any repository, store, process, network, target, or write side effect"
+    ]
+  },
+  "success_contract": {
+    "exit_code": 0,
+    "stdout": "one strict RFC 8785-compatible RepositorySnapshotV5 JSON document followed by one LF",
+    "stderr": "empty",
+    "publication": "existing local-store/v1 atomic snapshot role",
+    "docs_and_query": "existing S4 operations accept V5 and consume only the unchanged root graph/document semantics",
+    "nested_checkout_absent": "success with a typed unbound boundary",
+    "nested_checkout_present_without_manifest": "byte-identical to absent and never opened",
+    "nested_facts_in_root_ontology": false
+  },
+  "gitlink_contract": {
+    "mode": "160000",
+    "meaning": "external_repository_boundary",
+    "oid_meaning": "required nested commit OID",
+    "root_commit_bound_once": true,
+    "inventory_file": false,
+    "inventory_directory": false,
+    "extraction_input": false,
+    "root_graph_fact": false,
+    "implicit_worktree_open": false,
+    "ordering": "ascending unsigned UTF-8 bytes of canonical path"
+  },
+  "gitmodules_contract": {
+    "source": "only the exact root .gitmodules blob in the bound root commit",
+    "absence": "valid",
+    "required_mode_when_present": "100644",
+    "encoding": "UTF-8",
+    "line_endings": [
+      "LF",
+      "CRLF"
+    ],
+    "comments": "blank lines and lines whose first non-horizontal-whitespace byte is # or ;",
+    "section_pattern": "^\\[submodule \\\"[A-Za-z0-9._/-]{1,255}\\\"\\]$",
+    "key_pattern": "^[a-z][a-z0-9-]{0,63}$",
+    "assignment": "key = nonempty trimmed UTF-8 value inside a section",
+    "required_keys": [
+      "path",
+      "url"
+    ],
+    "unsupported_keys": "safe key plus SHA-256 of exact trimmed value and one typed coverage gap",
+    "forbidden_syntax": [
+      "invalid UTF-8",
+      "NUL or C0/DEL controls other than tab",
+      "bare CR",
+      "quoting or escapes in values",
+      "line continuation",
+      "interpolation",
+      "include or includeIf",
+      "unknown section form",
+      "inline comments",
+      "duplicate section",
+      "duplicate key",
+      "missing path or url",
+      "invalid or escaping path",
+      "ambiguous canonical path mapping"
+    ],
+    "url_projection": {
+      "emitted": [
+        "lexical kind",
+        "SHA-256 of exact trimmed UTF-8 bytes"
+      ],
+      "classification_order": [
+        "relative",
+        "absolute_path",
+        "file",
+        "ssh",
+        "https",
+        "http",
+        "git",
+        "scp_like",
+        "other"
+      ],
+      "classification_rules": {
+        "relative": "exact ASCII prefix ./ or ../",
+        "absolute_path": "exact ASCII prefix /",
+        "file": "exact lowercase ASCII prefix file:",
+        "ssh": "exact lowercase ASCII prefix ssh:",
+        "https": "exact lowercase ASCII prefix https:",
+        "http": "exact lowercase ASCII prefix http:",
+        "git": "exact lowercase ASCII prefix git:",
+        "scp_like": "^[^/@:\\x00-\\x20\\x7f]+@[^/:\\x00-\\x20\\x7f]+:.+$ over UTF-8 bytes",
+        "other": "all remaining values including uppercase or mixed-case schemes"
+      },
+      "raw_value_emitted": false,
+      "resolved": false,
+      "identity_authority": false,
+      "network_authority": false,
+      "credential_authority": false
+    }
+  },
+  "state_contract": {
+    "states": [
+      "declared_unbound",
+      "undeclared_unbound",
+      "explicitly_bound"
+    ],
+    "gap_codes": [
+      "boundary.nested_repository_unbound",
+      "boundary.gitmodules_declaration_missing",
+      "boundary.gitmodules_declaration_orphan",
+      "boundary.gitmodules_key_unsupported",
+      "boundary.nested_repository_not_analyzed"
+    ],
+    "missing_declaration": "undeclared_unbound with missing-declaration and unbound gaps",
+    "orphan_declaration": "successful declaration record with null boundary ID and orphan gap",
+    "unsupported_key": "successful digest-only projection with unsupported-key gap",
+    "explicit_binding": "identity, exact commit, and root tree only, with not-analyzed gap",
+    "implicit_recursion": false,
+    "cross_project_federation": false
+  },
+  "identity_contract": {
+    "algorithm": "sha256",
+    "field_separator_hex": "00",
+    "boundary": {
+      "domain": "codenoesis.repository-boundary/v1",
+      "fields": [
+        "root_repository_identity",
+        "root_commit_oid",
+        "canonical_path",
+        "gitlink_oid"
+      ],
+      "public_prefix": "urn:codenoesis:repository-boundary:sha256:"
+    },
+    "declaration": {
+      "domain": "codenoesis.gitmodules-declaration/v1",
+      "fields": [
+        "root_repository_identity",
+        "root_commit_oid",
+        "canonical_path",
+        "section_name_sha256"
+      ],
+      "public_prefix": "urn:codenoesis:gitmodules-declaration:sha256:"
+    },
+    "tree_evidence": {
+      "domain": "codenoesis.boundary-evidence.git-tree-entry/v1",
+      "fields": [
+        "root_repository_identity",
+        "root_commit_oid",
+        "containing_tree_oid",
+        "canonical_path",
+        "mode",
+        "object_oid"
+      ]
+    },
+    "declaration_evidence": {
+      "domain": "codenoesis.boundary-evidence.gitmodules/v1",
+      "fields": [
+        "root_repository_identity",
+        "root_commit_oid",
+        "gitmodules_blob_oid",
+        "start_byte",
+        "end_byte"
+      ]
+    },
+    "coverage_gap": {
+      "domain": "codenoesis.boundary-gap/v1",
+      "fields": [
+        "gap_code",
+        "subject_id"
+      ]
+    }
+  },
+  "snapshot_contract": {
+    "schema_version": "codenoesis.repository-snapshot/v5",
+    "configuration_schema_version": "codenoesis.configuration/v2",
+    "configuration_semantic": {
+      "profile": "standard-local-s4",
+      "repository_boundary_profile": "local-gitlinks-v1"
+    },
+    "configuration_hash_domain": "codenoesis.configuration.semantic.v2",
+    "snapshot_hash_domain": "codenoesis.repository-snapshot.semantic.v5",
+    "hash_algorithm": "blake3-256",
+    "canonicalization": "RFC8785",
+    "domain_separator_hex": "00",
+    "pipeline_version": "codenoesis.pipeline/s4-r2-v1",
+    "ontology_version": "codenoesis.ontology/rust/v2",
+    "extractor_contract_version": "codenoesis.extraction/v2",
+    "extractor_versions": [
+      "codenoesis.inventory-classifier/s1-v1",
+      "codenoesis.rust-tree-sitter/s4-v1",
+      "codenoesis.rust-workspace/s4-v1",
+      "codenoesis.git-boundary/s1-v1"
+    ],
+    "evidence_lineage_version": "codenoesis.evidence-lineage/v2",
+    "inventory_version": "codenoesis.inventory/v1",
+    "boundary_version": "codenoesis.repository-boundaries/v1",
+    "extraction_chunk_version": "codenoesis.extraction-chunk/v2",
+    "knowledge_graph_version": "codenoesis.knowledge-graph/v2",
+    "storage_role": "existing local-store/v1 snapshot role",
+    "migration_required": false
+  },
+  "ordering_contract": {
+    "boundaries": "canonical path",
+    "declarations": "canonical path then declaration ID",
+    "unsupported_keys": "key then value digest",
+    "coverage_gaps": "code then path then subject ID",
+    "evidence": "tree entry path, then declaration source start",
+    "comparison": "unsigned UTF-8 bytes",
+    "duplicate_ids": "reject"
+  },
+  "limits": {
+    "boundary_manifest_bytes": 262144,
+    "gitlink_entries": 128,
+    "gitmodules_bytes": 1048576,
+    "gitmodules_sections": 256,
+    "gitmodules_keys_per_section": 32,
+    "explicit_nested_repositories": 32,
+    "explicit_nesting_depth": 1,
+    "repository_roots": 33,
+    "boundary_report_bytes": 1048576,
+    "canonical_path_bytes": 1024,
+    "canonical_path_component_bytes": 255,
+    "canonical_snapshot_bytes": 33554432,
+    "scan_wall_milliseconds": 60000
+  },
+  "limit_contract": {
+    "maximum": "success",
+    "maximum_plus_one": "one CodeNoesisErrorV9 acquisition.repository_boundary_limit_exceeded",
+    "charge": "inclusive before allocation, open, traversal, or append",
+    "observed": "capped at maximum plus one",
+    "derived_invariants": {
+      "repository_roots": "one root plus at most 32 supplied nested roots; the nested maximum-plus-one fails before a 34th root opens"
+    },
+    "issue_92_candidate_replacement": "boundary_report_bytes is 1 MiB rather than 8 MiB so exact maximum and maximum-plus-one remain constructible under the bounded public input",
+    "partial_output": false,
+    "automatic_retry": false
+  },
+  "error_contract": {
+    "schema_version": "codenoesis.error/v9",
+    "input_exit": 2,
+    "acquisition_exit": 10,
+    "internal_exit": 70,
+    "retryable_codes": [
+      "acquisition.nested_repository_changed"
+    ],
+    "codes": [
+      "input.invalid_repository_boundary_profile",
+      "input.invalid_repository_boundary_manifest",
+      "acquisition.repository_boundary_metadata_invalid",
+      "acquisition.nested_repository_mismatch",
+      "acquisition.nested_repository_unavailable",
+      "acquisition.nested_repository_changed",
+      "acquisition.repository_boundary_limit_exceeded",
+      "internal.unexpected"
+    ],
+    "root_acquisition_lineage": "unchanged V6 when R1 selector is present, otherwise unchanged S4 lineage",
+    "post_boundary_lineage": "unchanged S4 extraction, graph, storage, publication, docs, and query lineage",
+    "stdout_on_failure": "empty",
+    "stderr_on_failure": "one strict RFC 8785 JSON document followed by one LF",
+    "forbidden_context": [
+      "absolute filesystem path",
+      "raw URL",
+      "source bytes",
+      "environment value",
+      "credential",
+      "secret"
+    ]
+  },
+  "failure_precedence": [
+    "CLI selector and option shape",
+    "boundary manifest open, parse, root binding, duplicates, count and depth",
+    "inherited root acquisition",
+    "gitlink count and path policy",
+    "committed gitmodules kind, bytes, decode, grammar, count and mapping",
+    "nested entries by canonical path: mismatch, open, acquisition, race",
+    "canonical boundary report bytes",
+    "inherited S4 extraction, graph, storage and publication"
+  ],
+  "security_contract": {
+    "untrusted_inputs": [
+      "root and nested repositories",
+      "Git objects and trees",
+      ".gitmodules bytes and URL values",
+      "boundary manifest",
+      "present worktree directories",
+      "generated adversarial fixture variants"
+    ],
+    "allowed_additional_reads": [
+      "mode 160000 entries in the already bound root tree",
+      "one bounded committed root .gitmodules blob",
+      "one explicitly named strict boundary manifest",
+      "at most 32 roots confined below the manifest directory"
+    ],
+    "forbidden": [
+      "implicit nested discovery or traversal",
+      "network or DNS",
+      "Git or other child process",
+      "URL resolution or file URL access",
+      "credential helper or Git configuration",
+      "hook, filter, shell, checkout, update, or repair",
+      "symlink or reparse traversal",
+      "outside-authorized-root read or any repository write",
+      "target, build script, plugin, model provider, or Council execution",
+      "first-party unsafe",
+      "raw credential-bearing URL retention"
+    ]
+  },
+  "test_order": [
+    "e2e_fr_acq_005_gitlink_boundaries",
+    "gt_fr_acq_005_exact_boundary_projection",
+    "gt_fr_acq_005_explicit_nested_binding",
+    "conf_fr_acq_005_boundary_input_v1",
+    "conf_fr_acq_005_gitmodules_subset",
+    "gt_fr_acq_005_boundary_states_and_gaps",
+    "sec_fr_acq_005_url_redaction",
+    "sec_fr_acq_005_no_ambient_nested_authority",
+    "conf_fr_acq_005_error_v9",
+    "race_fr_acq_005_nested_replacement",
+    "pt_fr_acq_005_limits_have_max_and_plus_one",
+    "pt_fr_acq_005_order_invariant",
+    "pt_fr_acq_005_parallel_replay",
+    "fz_fr_acq_005_gitmodules_seed_corpus",
+    "conf_fr_acq_005_v5_store_docs_query",
+    "reg_fr_acq_005_legacy_gitlink_rejection",
+    "reg_fr_acq_005_r0_r1_unchanged",
+    "reg_fr_acq_005_s0_s6_unchanged",
+    "pilot_fr_acq_005_rustdesk_progression"
+  ],
+  "scenarios": [
+    {
+      "test_name": "e2e_fr_acq_005_gitlink_boundaries",
+      "oracle": "absent nested checkout produces the exact unbound V5 boundary projection and successful root S4 publication",
+      "failure": "wrong exit, stream, schema, projection, graph, publication, or side effect"
+    },
+    {
+      "test_name": "gt_fr_acq_005_exact_boundary_projection",
+      "oracle": "mode, path, OID, declaration digests, identities, evidence, gaps, counts, and order match the reviewed golden",
+      "failure": "inferred file/directory/nested fact, dangling ID, raw URL, wrong hash, count, or order"
+    },
+    {
+      "test_name": "gt_fr_acq_005_explicit_nested_binding",
+      "oracle": "matching loose and packed nested roots bind the exact identity/commit/tree and produce byte-identical semantic output",
+      "failure": "worktree discovery, profile/path leakage, mismatched OID acceptance, nested analysis, or semantic divergence"
+    },
+    {
+      "test_name": "conf_fr_acq_005_boundary_input_v1",
+      "oracle": "strict duplicate-free root-bound flat JSON accepts only canonical unique depth-one entries",
+      "failure": "unknown member, escaping root, duplicate path/root, root mismatch, recursion, or over-count accepted"
+    },
+    {
+      "test_name": "conf_fr_acq_005_gitmodules_subset",
+      "oracle": "the exact bounded UTF-8 line grammar, path mapping, digest projection, and failure precedence replay",
+      "failure": "Git configuration behavior, unsupported syntax, duplicate, ambiguity, or unsafe entry accepted"
+    },
+    {
+      "test_name": "gt_fr_acq_005_boundary_states_and_gaps",
+      "oracle": "declared, undeclared, orphan, unsupported-key, bound, unbound, and not-analyzed states retain exact evidence-backed gaps",
+      "failure": "missing or inferred declaration, missing gap, wrong subject, or nested certainty"
+    },
+    {
+      "test_name": "sec_fr_acq_005_url_redaction",
+      "oracle": "credential/query/fragment canaries occur only as lexical kind and SHA-256 across output, errors, logs, traces, and evidence",
+      "failure": "raw, decoded, normalized, partially redacted, resolved, logged, or identity-bearing URL data"
+    },
+    {
+      "test_name": "sec_fr_acq_005_no_ambient_nested_authority",
+      "oracle": "absent and hostile present-but-unsupplied worktrees are byte-identical and produce zero nested opens/process/network/write/target activity",
+      "failure": "ambient path changes semantics or any forbidden capability is observed"
+    },
+    {
+      "test_name": "conf_fr_acq_005_error_v9",
+      "oracle": "every new failure matches its closed V9 code, stage, message, retryability, safe context, exit, and stream",
+      "failure": "unknown field, sensitive context, wrong precedence/exit/schema/retryability, partial stdout, or missing LF"
+    },
+    {
+      "test_name": "race_fr_acq_005_nested_replacement",
+      "oracle": "stable nested binding or one retryable changed result from retained safe handles, never mixed facts or automatic retry",
+      "failure": "outside-root access, stale/mixed success, panic, hidden retry, or partial publication"
+    },
+    {
+      "test_name": "pt_fr_acq_005_limits_have_max_and_plus_one",
+      "oracle": "every fixed R2 maximum succeeds and maximum-plus-one fails once with capped observation before excess work",
+      "failure": "off-by-one, uncapped count, excess allocation/open/traversal, partial output, or timeout"
+    },
+    {
+      "test_name": "pt_fr_acq_005_order_invariant",
+      "oracle": "50 tree/declaration/manifest permutations produce identical canonical semantics and error precedence",
+      "failure": "identity, ordering, bytes, hash, or selected failure depends on construction order"
+    },
+    {
+      "test_name": "pt_fr_acq_005_parallel_replay",
+      "oracle": "parallel and sequential replay produce identical semantic bytes, errors, and side-effect observations",
+      "failure": "scheduler-dependent bytes, race, leak, or flaky retry"
+    },
+    {
+      "test_name": "fz_fr_acq_005_gitmodules_seed_corpus",
+      "oracle": "reviewed valid and malformed grammar/URL/path seeds remain bounded, deterministic, panic-free, and sanitizer-clean",
+      "failure": "hang, panic, unbounded growth, inconsistent classification, leak, or parser disagreement"
+    },
+    {
+      "test_name": "conf_fr_acq_005_v5_store_docs_query",
+      "oracle": "V5 atomically publishes in local-store/v1 and root docs/query use unchanged S4 graph semantics after restart",
+      "failure": "migration, V4 regression, nested fact, corrupt head, docs/query mismatch, or manual-file mutation"
+    },
+    {
+      "test_name": "reg_fr_acq_005_legacy_gitlink_rejection",
+      "oracle": "the selector-absent S1 gitlink rejection remains byte-identical",
+      "failure": "implicit dispatch, changed error bytes/exit, traversal, or success"
+    },
+    {
+      "test_name": "reg_fr_acq_005_r0_r1_unchanged",
+      "oracle": "accepted corpus and packed-acquisition guard/bundle/digests remain exact and packed plus R2 composes",
+      "failure": "corpus rewrite, R1 semantic drift, pack regression, or selector coupling"
+    },
+    {
+      "test_name": "reg_fr_acq_005_s0_s6_unchanged",
+      "oracle": "every existing workspace test and accepted contract guard remains Green without golden regeneration",
+      "failure": "legacy profile, schema, artifact, ontology, error, store, docs, query, incremental, or federation drift"
+    },
+    {
+      "test_name": "pilot_fr_acq_005_rustdesk_progression",
+      "oracle": "the pinned non-vendored RustDesk run retains R0/R1 evidence, emits one exact unbound boundary, and reaches the next generic blocker",
+      "failure": "repository-specific rule, vendored source, raw URL, nested fetch, unpinned input, or retained R2 blocker"
+    }
+  ],
+  "inherited_regressions": [
+    "scripts/tests/test_s1_packed_contract.py",
+    "scripts/tests/test_s4_contract.py",
+    "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+    "cargo test --workspace --all-targets --all-features --locked",
+    "cargo test --workspace --doc --all-features --locked",
+    "e2e_fr_acq_002_gitlink_rejected",
+    "e2e_fr_acq_004_packed_sha1_equivalence",
+    "reg_fr_acq_004_legacy_profiles_unchanged",
+    "e2e_fr_cli_001_workspace_docs_query",
+    "e2e_fr_inc_001_incremental_refresh",
+    "e2e_fr_fed_001_openapi_federation"
+  ],
+  "rustdesk_pilot": {
+    "repository": "https://github.com/rustdesk/rustdesk",
+    "commit_oid": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+    "tree_oid": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+    "gitlink_count": 1,
+    "gitlink_path": "libs/hbb_common",
+    "gitlink_oid": "69cea8dafee147848ae88702029f4bf7df7224c3",
+    "gitmodules_blob_oid": "d80e69aa84a4c7f764eea191622a386878cf852d",
+    "before": "R2",
+    "after": "next generic independently governed blocker",
+    "vendored_source": false,
+    "raw_url_retained": false,
+    "repository_specific_semantics": false
+  },
+  "required_evidence": [
+    "issue, Approved requirement, S1 compatibility slice, high risk, allowed/protected paths, and explicit authorization",
+    "base/head commit and immutable Red log with command, exact stream bytes/digests, exit, and zero-authority observation",
+    "independently recomputed fixture blob/tree/commit OIDs and boundary/declaration/evidence/gap IDs",
+    "strict schema, golden, guard, bundle, and inherited bundle validation",
+    "maximum and maximum-plus-one observations for every R2 limit",
+    "malformed input, ordering, parallel replay, race, security, privacy/redaction, and no-side-effect reports",
+    "R0/R1 and every S0-S6 regression without accepted artifact regeneration",
+    "non-committed pinned RustDesk progression evidence without source or raw URL retention",
+    "OS, architecture, pinned Rust toolchain, features, configuration, agent/model identity, run ID, duration, and cost when available",
+    "known limitations, unresolved decisions, dissent, human approvals, and exact-head CI/review evidence"
+  ],
+  "implementation_constraints": {
+    "one_product_pull_request": true,
+    "one_delivery_slice": "S1",
+    "r0_r1_reimplemented": false,
+    "new_dependency_approved": false,
+    "first_party_unsafe_approved": false,
+    "golden_regeneration_allowed": false,
+    "network_allowed": false,
+    "target_execution_allowed": false,
+    "agent_self_approval_or_merge_allowed": false,
+    "default_correction_rounds": 3
+  },
+  "stop_conditions": [
+    "an accepted artifact must change in place",
+    "implicit discovery, traversal, URL resolution, network, process, write, target execution, or outside-root access is required",
+    "raw credential-bearing URL data cannot be excluded",
+    "a new dependency, architecture, policy/workflow, migration, first-party unsafe, or risk increase is required without approval",
+    "the RustDesk progression requires repository-specific semantics",
+    "evidence contradicts the decision or an oracle can pass only by weakening, regenerating, skipping, or retrying it",
+    "three correction rounds are exhausted"
+  ]
+}

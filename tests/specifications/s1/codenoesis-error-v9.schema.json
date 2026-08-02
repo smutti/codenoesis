@@ -1,0 +1,432 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:error:v9",
+  "title": "CodeNoesisErrorV9 repository boundary subset",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v9"
+    },
+    "code": {
+      "enum": [
+        "input.invalid_repository_boundary_profile",
+        "input.invalid_repository_boundary_manifest",
+        "acquisition.repository_boundary_metadata_invalid",
+        "acquisition.nested_repository_mismatch",
+        "acquisition.nested_repository_unavailable",
+        "acquisition.nested_repository_changed",
+        "acquisition.repository_boundary_limit_exceeded",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "input",
+        "acquisition",
+        "internal"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[^\\r\\n]+$"
+    },
+    "retryable": {
+      "type": "boolean"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 5,
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/canonical_relative_path"
+        },
+        "component": {
+          "enum": [
+            "boundary_manifest",
+            "gitmodules",
+            "nested_repository",
+            "boundary_report"
+          ]
+        },
+        "reason": {
+          "enum": [
+            "schema_invalid",
+            "manifest_unavailable",
+            "root_mismatch",
+            "duplicate_boundary_path",
+            "recursive_input",
+            "invalid_encoding",
+            "nul_or_control",
+            "bare_carriage_return",
+            "malformed_section",
+            "invalid_name",
+            "key_outside_section",
+            "duplicate_section",
+            "duplicate_key",
+            "required_key_missing",
+            "path_invalid",
+            "ambiguous_mapping",
+            "unsafe_entry_kind",
+            "not_git_repository",
+            "revision_not_found",
+            "revision_not_commit",
+            "object_missing",
+            "root_policy_violation",
+            "repository_inconsistent",
+            "unsupported_repository_shape",
+            "object_database_invalid",
+            "object_database_unavailable",
+            "object_limit_exceeded",
+            "entry_policy_violation",
+            "changed_during_binding"
+          ]
+        },
+        "limit": {
+          "enum": [
+            "boundary_manifest_bytes",
+            "gitlink_entries",
+            "gitmodules_bytes",
+            "gitmodules_sections",
+            "gitmodules_keys_per_section",
+            "explicit_nested_repositories",
+            "explicit_nesting_depth",
+            "boundary_report_bytes"
+          ]
+        },
+        "maximum": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1048576
+        },
+        "observed": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1048577
+        },
+        "expected_oid": {
+          "$ref": "#/$defs/git_sha1"
+        },
+        "observed_oid": {
+          "$ref": "#/$defs/git_sha1"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.nested_repository_changed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "retryable": {
+            "const": true
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "retryable": {
+            "const": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^input\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "input"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^acquisition\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "input.invalid_repository_boundary_profile"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "maxProperties": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "input.invalid_repository_boundary_manifest"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "component",
+              "reason"
+            ],
+            "minProperties": 2,
+            "maxProperties": 2,
+            "properties": {
+              "component": {
+                "const": "boundary_manifest"
+              },
+              "reason": {
+                "enum": [
+                  "schema_invalid",
+                  "manifest_unavailable",
+                  "root_mismatch",
+                  "duplicate_boundary_path",
+                  "recursive_input"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.repository_boundary_metadata_invalid"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "component",
+              "reason"
+            ],
+            "minProperties": 2,
+            "maxProperties": 3,
+            "properties": {
+              "component": {
+                "const": "gitmodules"
+              },
+              "reason": {
+                "enum": [
+                  "invalid_encoding",
+                  "nul_or_control",
+                  "bare_carriage_return",
+                  "malformed_section",
+                  "invalid_name",
+                  "key_outside_section",
+                  "duplicate_section",
+                  "duplicate_key",
+                  "required_key_missing",
+                  "path_invalid",
+                  "ambiguous_mapping",
+                  "unsafe_entry_kind"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.nested_repository_mismatch"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "component",
+              "path",
+              "expected_oid",
+              "observed_oid"
+            ],
+            "minProperties": 4,
+            "maxProperties": 4,
+            "properties": {
+              "component": {
+                "const": "nested_repository"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.nested_repository_unavailable"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "component",
+              "path",
+              "reason"
+            ],
+            "minProperties": 3,
+            "maxProperties": 3,
+            "properties": {
+              "component": {
+                "const": "nested_repository"
+              },
+              "reason": {
+                "enum": [
+                  "not_git_repository",
+                  "revision_not_found",
+                  "revision_not_commit",
+                  "object_missing",
+                  "root_policy_violation",
+                  "repository_inconsistent",
+                  "unsupported_repository_shape",
+                  "object_database_invalid",
+                  "object_database_unavailable",
+                  "object_limit_exceeded",
+                  "path_invalid",
+                  "entry_policy_violation"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.nested_repository_changed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "component",
+              "path",
+              "reason"
+            ],
+            "minProperties": 3,
+            "maxProperties": 3,
+            "properties": {
+              "component": {
+                "const": "nested_repository"
+              },
+              "reason": {
+                "const": "changed_during_binding"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "acquisition.repository_boundary_limit_exceeded"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "context": {
+            "required": [
+              "component",
+              "limit",
+              "maximum",
+              "observed"
+            ],
+            "minProperties": 4,
+            "maxProperties": 4
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "internal.unexpected"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "internal"
+          },
+          "context": {
+            "maxProperties": 0
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "canonical_relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!.*(?:^|/)(?:\\.|\\.\\.)(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    },
+    "git_sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    }
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "schema_version": "codenoesis.repository-boundaries/v1",
+  "profile": "local-gitlinks-v1",
+  "root_repository": {
+    "identity": "urn:codenoesis:fixture:s1-gitlink-boundary-v1",
+    "vcs": "git",
+    "object_format": "sha1",
+    "commit_oid": "e3a117e190a92585bcae4c49c775d310243107e7",
+    "tree_oid": "81f40228aa5c1e9dab33d6cc3d5d90f14aeb7d2e"
+  },
+  "summary": {
+    "boundary_count": 1,
+    "declaration_count": 1,
+    "bound_count": 1,
+    "unbound_count": 0,
+    "coverage_gap_count": 1
+  },
+  "boundaries": [
+    {
+      "boundary_id": "urn:codenoesis:repository-boundary:sha256:4b5bba2b581f27b81b0d2b1c159e6c4ee4a2a90ee9dd4e65d86a77e0ed6ee68f",
+      "path": "external/nested-model",
+      "gitlink_oid": "6ecf94267842da776e35406a9ebcb85e058a3181",
+      "state": "explicitly_bound",
+      "declaration_id": "urn:codenoesis:gitmodules-declaration:sha256:815c5c124b54ec5b10767416406977c8e32cff395fdb4ad5b896c05d12a29bcd",
+      "nested_repository": {
+        "identity": "urn:codenoesis:fixture:s1-gitlink-boundary-v1-nested-model",
+        "vcs": "git",
+        "object_format": "sha1",
+        "commit_oid": "6ecf94267842da776e35406a9ebcb85e058a3181",
+        "tree_oid": "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+      },
+      "evidence_ids": [
+        "urn:codenoesis:boundary-evidence:sha256:e8c3fcd03541fb660e33a31f7ccbb60c86e2210c194b1f500d410f310b94e632",
+        "urn:codenoesis:boundary-evidence:sha256:288311a1157bb3191a5184d2c560df5c1024ab03323289159b0b96922b376670"
+      ],
+      "coverage_gap_ids": [
+        "urn:codenoesis:boundary-gap:sha256:6494c2d482a8b1808f7b66efa8f5eedfc0e0551d87cabb54e8418d91166696f6"
+      ]
+    }
+  ],
+  "declarations": [
+    {
+      "declaration_id": "urn:codenoesis:gitmodules-declaration:sha256:815c5c124b54ec5b10767416406977c8e32cff395fdb4ad5b896c05d12a29bcd",
+      "name_sha256": "ca74540c1020f0302f0f371bc58ba168639ed864643b58da41e3bdf685972026",
+      "path": "external/nested-model",
+      "url_kind": "https",
+      "url_sha256": "ee59322d4d925cf16b2c1e2299b74e50597d9446dffbd2b5d1d0f69c34e01212",
+      "unsupported_keys": [],
+      "boundary_id": "urn:codenoesis:repository-boundary:sha256:4b5bba2b581f27b81b0d2b1c159e6c4ee4a2a90ee9dd4e65d86a77e0ed6ee68f",
+      "evidence_id": "urn:codenoesis:boundary-evidence:sha256:288311a1157bb3191a5184d2c560df5c1024ab03323289159b0b96922b376670"
+    }
+  ],
+  "coverage_gaps": [
+    {
+      "gap_id": "urn:codenoesis:boundary-gap:sha256:6494c2d482a8b1808f7b66efa8f5eedfc0e0551d87cabb54e8418d91166696f6",
+      "code": "boundary.nested_repository_not_analyzed",
+      "path": "external/nested-model",
+      "subject_id": "urn:codenoesis:repository-boundary:sha256:4b5bba2b581f27b81b0d2b1c159e6c4ee4a2a90ee9dd4e65d86a77e0ed6ee68f",
+      "evidence_ids": [
+        "urn:codenoesis:boundary-evidence:sha256:e8c3fcd03541fb660e33a31f7ccbb60c86e2210c194b1f500d410f310b94e632"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "urn:codenoesis:boundary-evidence:sha256:e8c3fcd03541fb660e33a31f7ccbb60c86e2210c194b1f500d410f310b94e632",
+      "kind": "git_tree_entry",
+      "repository": {
+        "identity": "urn:codenoesis:fixture:s1-gitlink-boundary-v1",
+        "commit_oid": "e3a117e190a92585bcae4c49c775d310243107e7"
+      },
+      "tree_oid": "3ee7026beba4578478d73788368adc793e975ca0",
+      "path": "external/nested-model",
+      "mode": "160000",
+      "object_oid": "6ecf94267842da776e35406a9ebcb85e058a3181"
+    },
+    {
+      "evidence_id": "urn:codenoesis:boundary-evidence:sha256:288311a1157bb3191a5184d2c560df5c1024ab03323289159b0b96922b376670",
+      "kind": "gitmodules_declaration",
+      "repository": {
+        "identity": "urn:codenoesis:fixture:s1-gitlink-boundary-v1",
+        "commit_oid": "e3a117e190a92585bcae4c49c775d310243107e7"
+      },
+      "blob_oid": "204d65a4ed6a58dd265349f8a1579a4522dc4f7d",
+      "path": ".gitmodules",
+      "span": {
+        "unit": "byte",
+        "start": 0,
+        "end": 116
+      }
+    }
+  ]
+}
