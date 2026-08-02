@@ -1,0 +1,191 @@
+{
+  "schema_version": "codenoesis.fixture.gitlink-boundary/v1",
+  "fixture_id": "s1-gitlink-boundary-v1",
+  "provenance": {
+    "kind": "synthetic_first_party",
+    "description": "Project-owned superproject overlay and bounded adversarial recipes for FR-ACQ-005.",
+    "third_party_material": false,
+    "license_spdx": "Apache-2.0",
+    "license_file": "../../../../LICENSE"
+  },
+  "inherited_contracts": {
+    "s4_source_fixture": "tests/fixtures/s4/workspace-docs-v1",
+    "s4_source_commit_oid": "c09d8c24e4704036c31b4f42e2f4df6e4acd347f",
+    "s4_source_tree_oid": "8f9e36122bec5caac5dc0f739ea7ab4c830bd356",
+    "s4_contract_bundle": "tests/specifications/s4/contract-bundle.json",
+    "s4_contract_bundle_sha256": "3efb380fb058a5831123a0f990676575da04e60998cada8987f034675b61f12e",
+    "r0_r1_contract_bundle": "tests/specifications/s1/packed-sha1-contract-bundle.json",
+    "r0_r1_contract_bundle_sha256": "08602c21b06e0e0cea754312fb8c9f5d28db36ae31e9e646df669b2c129826df"
+  },
+  "fixture_boundary": {
+    "setup_is_outside_monitored_subject": true,
+    "generated_repositories_committed": false,
+    "generated_bulk_committed": false,
+    "nested_source_committed": false,
+    "product_git_process_allowed": false,
+    "product_network_allowed": false,
+    "product_url_resolution_allowed": false,
+    "product_worktree_discovery_allowed": false,
+    "product_first_party_unsafe_allowed": false
+  },
+  "objects": {
+    "gitmodules": {
+      "path": "tests/fixtures/s1/gitlink-boundary-v1/revision-overlay/.gitmodules",
+      "byte_length": 116,
+      "sha256": "1f5b8be2b1398183bb02369231938556f9f02aba714cf1aa134b96bd0cdabab8",
+      "blob_oid": "204d65a4ed6a58dd265349f8a1579a4522dc4f7d"
+    },
+    "nested_repository": {
+      "repository_identity": "urn:codenoesis:fixture:s1-gitlink-boundary-v1-nested-model",
+      "tree_oid": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+      "commit_oid": "6ecf94267842da776e35406a9ebcb85e058a3181",
+      "commit_payload_utf8": "tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904\nauthor CodeNoesis Fixture <fixture@codenoesis.invalid> 1785628800 +0000\ncommitter CodeNoesis Fixture <fixture@codenoesis.invalid> 1785628800 +0000\n\nCodeNoesis R2 empty nested fixture\n"
+    },
+    "external_tree": {
+      "oid": "3ee7026beba4578478d73788368adc793e975ca0",
+      "entries": [
+        {
+          "mode": "160000",
+          "name": "nested-model",
+          "oid": "6ecf94267842da776e35406a9ebcb85e058a3181"
+        }
+      ]
+    },
+    "root_tree": {
+      "oid": "81f40228aa5c1e9dab33d6cc3d5d90f14aeb7d2e",
+      "entries": [
+        {
+          "mode": "100644",
+          "name": ".gitmodules",
+          "oid": "204d65a4ed6a58dd265349f8a1579a4522dc4f7d"
+        },
+        {
+          "mode": "100644",
+          "name": "Cargo.toml",
+          "oid": "9a61bc964dd0b80e54880d0a40471b50324b6e15"
+        },
+        {
+          "mode": "40000",
+          "name": "crates",
+          "oid": "3e03df22f6961d79f831318ae35e06fa026ad599"
+        },
+        {
+          "mode": "40000",
+          "name": "external",
+          "oid": "3ee7026beba4578478d73788368adc793e975ca0"
+        }
+      ]
+    },
+    "root_commit": {
+      "repository_identity": "urn:codenoesis:fixture:s1-gitlink-boundary-v1",
+      "oid": "e3a117e190a92585bcae4c49c775d310243107e7",
+      "payload_utf8": "tree 81f40228aa5c1e9dab33d6cc3d5d90f14aeb7d2e\nauthor CodeNoesis Fixture <fixture@codenoesis.invalid> 1785628800 +0000\ncommitter CodeNoesis Fixture <fixture@codenoesis.invalid> 1785628800 +0000\n\nCodeNoesis R2 gitlink boundary fixture\n"
+    }
+  },
+  "goldens": {
+    "unbound": "tests/fixtures/s1/gitlink-boundary-v1/expected-boundaries-unbound.json",
+    "bound": "tests/fixtures/s1/gitlink-boundary-v1/expected-boundaries-bound.json",
+    "matching_input": "tests/fixtures/s1/gitlink-boundary-v1/boundary-input-matching.json",
+    "mismatch_input": "tests/fixtures/s1/gitlink-boundary-v1/boundary-input-mismatch.json"
+  },
+  "variants": [
+    {
+      "id": "nested-absent",
+      "construction": "materialize only the root repository",
+      "expected": "exact unbound golden and successful root S4 analysis"
+    },
+    {
+      "id": "present-but-ignored",
+      "construction": "place any directory and sentinels at external/nested-model without a boundary manifest",
+      "expected": "byte-identical to nested-absent and no nested path open"
+    },
+    {
+      "id": "explicit-match",
+      "construction": "materialize the empty nested repository and use boundary-input-matching.json",
+      "expected": "exact bound golden"
+    },
+    {
+      "id": "explicit-mismatch",
+      "construction": "use boundary-input-mismatch.json",
+      "expected_error": "acquisition.nested_repository_mismatch"
+    },
+    {
+      "id": "missing-declaration",
+      "construction": "remove the .gitmodules tree entry without changing the gitlink",
+      "expected": "undeclared_unbound plus declaration-missing and unbound gaps"
+    },
+    {
+      "id": "orphan-declaration",
+      "construction": "add a second valid declaration whose canonical path has no gitlink",
+      "expected": "orphan declaration plus boundary.gitmodules_declaration_orphan gap"
+    },
+    {
+      "id": "unsupported-key",
+      "construction": "add branch = main to the primary declaration",
+      "expected": "digest-only unsupported key plus boundary.gitmodules_key_unsupported gap"
+    },
+    {
+      "id": "credential-canary",
+      "construction": "replace the benign URL with an in-memory credential, query, and fragment canary",
+      "expected": "only lexical URL kind and SHA-256 appear in outputs, logs, errors, identities, and retained evidence"
+    },
+    {
+      "id": "malformed-metadata",
+      "construction": "independently generate invalid UTF-8, NUL/control, bare CR, malformed section, invalid name, key-outside-section, missing-key, and unsafe-entry variants",
+      "expected_error": "acquisition.repository_boundary_metadata_invalid with the exact reason"
+    },
+    {
+      "id": "escaping-path",
+      "construction": "set path to an absolute, parent, backslash, empty-component, or over-limit path",
+      "expected_error": "acquisition.repository_boundary_metadata_invalid path_invalid"
+    },
+    {
+      "id": "duplicate-or-ambiguous",
+      "construction": "generate duplicate section, duplicate key, and two declarations for one canonical path",
+      "expected_error": "metadata-invalid duplicate_section, duplicate_key, or ambiguous_mapping"
+    },
+    {
+      "id": "recursive-input",
+      "construction": "add a nested_repositories member inside one nested repository entry",
+      "expected_error": "input.invalid_repository_boundary_manifest recursive_input"
+    },
+    {
+      "id": "nested-change-race",
+      "construction": "replace a separately supplied nested root or object between pre/post checks",
+      "expected_error": "retryable acquisition.nested_repository_changed without automatic retry"
+    },
+    {
+      "id": "limits",
+      "construction": "generate exact maximum and maximum-plus-one cases for every fixed R2 limit",
+      "expected": "maximum succeeds; maximum-plus-one is one capped typed boundary-limit error"
+    }
+  ],
+  "limits": {
+    "boundary_manifest_bytes": 262144,
+    "gitlink_entries": 128,
+    "gitmodules_bytes": 1048576,
+    "gitmodules_sections": 256,
+    "gitmodules_keys_per_section": 32,
+    "explicit_nested_repositories": 32,
+    "explicit_nesting_depth": 1,
+    "repository_roots": 33,
+    "boundary_report_bytes": 1048576,
+    "canonical_path_bytes": 1024,
+    "canonical_path_component_bytes": 255,
+    "scan_wall_milliseconds": 60000,
+    "canonical_snapshot_bytes": 33554432
+  },
+  "public_pilot_observation": {
+    "repository_id": "rustdesk",
+    "source": "https://github.com/rustdesk/rustdesk",
+    "commit_oid": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+    "tree_oid": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+    "gitlink_path": "libs/hbb_common",
+    "gitlink_oid": "69cea8dafee147848ae88702029f4bf7df7224c3",
+    "gitmodules_blob_oid": "d80e69aa84a4c7f764eea191622a386878cf852d",
+    "expected_before_r2": "R2",
+    "expected_after_r2": "the next generic independently governed blocker",
+    "vendored_source": false,
+    "repository_specific_semantics": false
+  }
+}

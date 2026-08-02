@@ -1,15 +1,13 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9 — S0 through S5 implemented; S6 bounded OpenAPI federation
-> Approved and implementation-completeness correction pending protected
-> merge**.
-> The S0–S5 runtime and product suites exist on `main`, but CodeNoesis claims
+> Status: **0.9 — S0 through S6 implemented; R2 safe gitlink boundary
+> proposed for protected ratification**.
+> The S0–S6 runtime and product suites exist on `main`, but CodeNoesis claims
 > no slice `Verified` without complete immutable retention evidence. This
-> revision records PR #81 approval of the OpenAPI 3.1.0 capability-scoped
-> portion of `FR-EXT-004`, plus `FR-FED-001`, `FR-FED-002`, `FR-CLI-005`, and
-> corrects their implementation contract before issue #82 resumes. It changes
-> no existing accepted profile, storage contract, ontology, or production
-> runtime.
+> revision proposes `FR-ACQ-005` and Decision 0010 for one explicit S1
+> compatibility profile that represents committed gitlinks without implicit
+> nested traversal, while retaining the implemented R0/R1 behavior and every
+> accepted S0–S6 invocation.
 
 ## 1. Document control
 
@@ -17,8 +15,8 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S5 are Approved and Implemented but not Verified. The bounded OpenAPI 3.1.0 portion of `FR-EXT-004`, plus `FR-FED-001`, `FR-FED-002`, and `FR-CLI-005`, became Approved through protected PR #81. Production implementation issue #82 may resume only after protected merge of the implementation-completeness correction in PR #84. |
-| Date | 2026-07-30 |
+| Status | S0 through S6 are Approved and Implemented but not Verified. `FR-ACQ-004` already implements roadmap R0/R1. `FR-ACQ-005` is Proposed and becomes Approved only after the accountable maintainer manually merges protected PR #93. |
+| Date | 2026-08-02 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -39,6 +37,7 @@
 | `0.9` | 2026-07-29 | Proposed `FR-ACQ-004` and Decision 0006 for explicit read-only local pack v2/index v2 SHA-1 acquisition; fixed the ErrorV6, limits, security/race oracle, synthetic fixture, and replaceable Lekton/RustDesk corpus descriptor while preserving every accepted S0–S4 invocation. |
 | `0.9+s6` | 2026-07-30 | Amended the active `0.9` baseline to record the implemented S5 state and propose Decision 0009 for bounded output-only OpenAPI 3.1.0 HTTP/JSON federation; fixed workspace/client/report/ErrorV8 contracts, source-neutral identities, authority states, restricted YAML, limits, security and determinism oracles, hostile fixtures, downstream S7 identity conformance, and the reviewed `yaml-rust2` implementation candidate. The document-control version remains `0.9` until historical guards are version-aware. |
 | `0.9+s6.1` | 2026-07-31 | Recorded protected PR #81 approval and corrected the S6 implementation contract through issue #83 and PR #84: zero-client workspaces, typed unsupported-OpenAPI gaps, reproducible provider evidence and source-neutral gap identities, exact Unicode heuristic selection, and public-command versus component-counter boundary observations. |
+| `0.9+r2` | 2026-08-02 | Proposed `FR-ACQ-005` and Decision 0010 for the explicit `local-gitlinks-v1` boundary profile; fixed RepositorySnapshotV5, ErrorV9, strict committed `.gitmodules` metadata, digest-only URL projection, explicit depth-one nested binding, limits, synthetic fixture, exact Red, R0/R1 regressions, and the non-vendored RustDesk R0-R2 checkpoint. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -765,6 +764,66 @@ project-owned fixture and hostile variants, reviewed outputs, and immutable S7
 identity dependencies. Any bound-byte change requires a new digest and renewed
 human review.
 
+### 2.12 S1 gitlink boundary ratification register
+
+Issue [#92](https://github.com/smutti/codenoesis/issues/92) records explicit
+maintainer authorization for this high-risk governance package. The following
+single requirement becomes Approved only when `@smutti` manually merges the
+exact protected head of
+[PR #93](https://github.com/smutti/codenoesis/pull/93).
+The authoring agent does not approve or merge. This approval targets exactly
+the **S1 — Safe inventory compatibility extension** and roadmap R2; it does
+not reopen or reimplement the merged R0/R1 behavior in `FR-ACQ-004`.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| `FR-ACQ-005` | `Proposed` (authorized in issue #92; pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #93 protected merge record](https://github.com/smutti/codenoesis/pull/93) | `S1` | [Gitlink boundary decision](decisions/0010-s1-gitlink-boundary-contract.md), [RepositorySnapshotV5 schema](../../tests/specifications/s1/repository-snapshot-v5.schema.json), [ErrorV9 schema](../../tests/specifications/s1/codenoesis-error-v9.schema.json), [machine oracle](../../tests/specifications/s1/e2e_fr_acq_005_gitlink_boundaries.json), and [project-owned fixture](../../tests/fixtures/s1/gitlink-boundary-v1/README.md) |
+
+R2 is selected only by
+`--repository-boundary-profile local-gitlinks-v1` on an otherwise valid
+`standard-local-s4` scan. It may coexist with the implemented R1
+`local-git-sha1-packed-v1` operational selector. Repository shape,
+`.gitmodules`, a present nested worktree, Git configuration, or a legacy error
+never selects it implicitly. Every invocation without the R2 selector remains
+byte-for-byte unchanged, including the accepted selector-absent gitlink
+rejection.
+
+The selected scan emits `RepositorySnapshotV5`. Mode `160000` entries become
+external repository boundaries with canonical path and committed nested commit
+OID; they never become files, traversable directories, or root ontology facts.
+The root committed `.gitmodules` blob is parsed only under the bounded grammar
+in Decision 0010. URLs are inert metadata represented only by lexical kind and
+SHA-256. Missing nested checkouts succeed with typed unbound states and gaps.
+
+An optional strict boundary manifest may explicitly supply at most 32 nested
+repositories below its confinement directory. Each is independently bound to
+the exact parent gitlink commit at depth one. Loose/packed physical storage and
+all input paths remain operational; only the verified nested identity, commit,
+and tree enter semantic output. Nested source is not analyzed or merged in R2.
+
+The primary preimplementation command fails before repository acquisition
+because the selector is unknown: exit `2`, empty stdout, no store, and the
+exact 149-byte LF-terminated ErrorV4 `input.invalid_revision` stderr with
+SHA-256
+`7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe`.
+That is the only accepted first product Red. Compilation, malformed fixture,
+legacy gitlink acceptance, panic, timeout, dependency outage, or side effects
+are rejected reasons.
+
+The accepted R0/R1 corpus and bundles remain immutable. A future product PR
+must retain those regressions, implement the complete R2 vertical behavior,
+and demonstrate a non-committed pinned RustDesk run that advances beyond the
+generic R2 blocker without fetching nested source or introducing
+repository-specific semantics.
+
+S1 safe gitlink boundary contract bundle:
+`sha256:2f59bb311b64b0f4f9d506266f05e9e52f4c0bf5af8926276ed371967690969b`.
+The bundle binds Decision 0010, the independent governance guard, strict V5,
+boundary-input, boundary-report, and ErrorV9 schemas, machine oracle,
+project-owned synthetic fixture and exact Git identities, plus immutable R0/R1
+and S4 bundle dependencies. Any bound-byte change requires a new digest and
+renewed human review.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,
@@ -885,6 +944,7 @@ cannot replace their verification.
 | `FR-ACQ-002` | P0 | `0.1` | Local acquisition MUST enforce allowed roots, repository size, file count, file size, path, recursion, symlink, and submodule policy. | Boundary and `limit + 1` fixtures terminate without access outside the allowed root or partial publication. `SEC`, `PT` |
 | `FR-ACQ-003` | P1 | `1.0` | Remote acquisition MUST use short-lived read-only credentials confined to the acquisition process and MUST record source identity without persisting credentials. | Credential canaries do not appear in artifacts, logs, errors, or subsequent stages. `SEC`, `IT` |
 | `FR-ACQ-004` | P0 | `0.1` | An explicitly selected local acquisition profile MUST read the approved repository-local SHA-1 loose and pack v2/index v2 subset in process, verify collision-aware object and container integrity, enforce fixed catalog/pack/delta/race limits, and produce storage-representation-invariant semantic input without changing any legacy invocation. | Equivalent loose/base/`OFS_DELTA`/`REF_DELTA` fixtures produce byte-identical semantic payloads; malformed, corrupt, changing, unsupported, collision, and maximum-plus-one cases produce strict typed errors with no process, network, outside-root access, automatic repair, or partial publication. `E2E`, `GT`, `SEC`, `PT`, `FZ`, `FT`, `CONF` |
+| `FR-ACQ-005` | P0 | `0.1` | An explicitly selected local repository-boundary profile MUST represent each mode `160000` entry in the bound root commit as a deterministic external boundary, parse only the approved bounded committed `.gitmodules` subset without granting URL authority, continue when nested worktrees are absent, and bind only explicitly supplied depth-one nested repositories whose independently acquired commit exactly equals the gitlink OID. | Exact unbound/bound boundary projections, RepositorySnapshotV5 semantics, malformed/escaping/duplicate/orphan/credential/race cases, every maximum and maximum-plus-one, 50 permutations, parallel replay, no ambient authority, selector-absent rejection, R0/R1 and S0-S6 regressions, and a non-vendored pinned RustDesk progression pass. `E2E`, `GT`, `SEC`, `PT`, `FZ`, `FT`, `CONF` |
 | `FR-INV-001` | P0 | `0.1` | Inventory MUST report supported languages, manifests, contracts, configuration, ownership, extraction capabilities, and unsupported content. | A reviewed fixture produces the exact inventory and explicit coverage gaps. `GT` |
 | `FR-INV-002` | P1 | `1.0` | Inventory MUST record build target and configuration-world inputs that can affect extraction. | Two declared build profiles remain distinguishable and reproducible. `GT`, `PT` |
 
@@ -1089,12 +1149,15 @@ crate tree is not scaffolded upfront.
 | `S14` Hardening and pilot | Signed release candidate passes corpus, fault, upgrade, restore, load, and pilot gates. | All `P1`, especially `NFR-PER-*`, `NFR-DR-001`, `NFR-SUP-001` | Execute the release acceptance suite on the exact signed artifacts. | SLO/DR/security/compatibility gates green; no unaccepted Critical/High; pilot report approved. |
 
 The `S1` row records the already Implemented base slice and is not reopened by
-`FR-ACQ-004`. The packed SHA-1 behavior is an additive S1 compatibility
-extension with its own lifecycle and oracle: it becomes Implemented only when
-the separate delivery change proves loose/packed semantic-byte equivalence,
-every fixed maximum and maximum-plus-one case, corruption and race behavior,
-and all inherited S0–S4 regressions. Until then S1 base remains Implemented
-while `FR-ACQ-004` remains independently Proposed or Approved.
+`FR-ACQ-004` or `FR-ACQ-005`. The packed SHA-1 R0/R1 behavior is an implemented
+additive compatibility extension with its own accepted oracle. The R2 gitlink
+boundary is a second additive S1 compatibility extension with one new V5
+snapshot selected only from `standard-local-s4`. It becomes Implemented only
+when a separate product change proves exact bound/unbound semantics, every
+fixed maximum and maximum-plus-one, privacy, race and no-authority behavior,
+V5 store/docs/query compatibility, the inherited R0/R1 guards, and every
+S0–S6 regression. The base slice remains Implemented while `FR-ACQ-005`
+remains independently Proposed or Approved.
 
 ### 12.1 Release map
 
@@ -1306,10 +1369,10 @@ implementation choices.
 
 | ID | Decision required | Blocks |
 |---|---|---|
-| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0008 resolves the fixed S5 changed-path, analysis-entry, dependency-edge, report-subject, report-byte, and wall-time subset. Decision 0009 resolves the fixed S6 manifest, repository, document, YAML/reference depth, semantic count, evidence, output, memory, and wall-time subset when its protected ratification revision is manually merged. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
+| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0010 resolves only the R2 gitlink, `.gitmodules`, explicit nested-root, depth, and boundary-output subset after protected merge. Decision 0008 resolves the fixed S5 changed-path, analysis-entry, dependency-edge, report-subject, report-byte, and wall-time subset. Decision 0009 resolves the fixed S6 manifest, repository, document, YAML/reference depth, semantic count, evidence, output, memory, and wall-time subset when its protected ratification revision is manually merged. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
 | `OD-ONT-001` | Decision 0003 resolves the bounded single-crate `codenoesis.ontology/rust/v1`. Decision 0005 resolves multi-crate cardinality and unambiguous out-of-line module identity for `codenoesis.ontology/rust/v2` only when its protected S4 ratification revision is manually merged. Cross-language, compiler-grade, and later ontology evolution remain open. | `S8` and later ontology evolution |
 | `OD-STO-001` | Decision 0004 resolves fresh single-writer local SQLite/CAS identity, publication, restart, corruption, and cleanup semantics for `codenoesis.local-store/v1` only when its protected S3 ratification revision is manually merged. Migration, repair, deletion, backup/restore, multi-writer, and server storage remain open. | Post-S3 storage evolution and `S10` |
-| `OD-GIT-001` | Decision 0006 resolves the packed local SHA-1 subset only for the explicit `local-git-sha1-packed-v1` acquisition selector. Residual decisions cover remote protocols and identity resolution, SHA-256, LFS, shallow and bare repositories, alternates, promisor/partial clones, MIDX authority, supported submodule/symlink semantics, automatic repair, and history rewrite. Legacy S1 still rejects packed objects without the selector and rejects rather than traverses symlinks and gitlinks. | Remote and remaining post-S1 `FR-ACQ-*` |
+| `OD-GIT-001` | Decision 0006 resolves the packed local SHA-1 subset only for the explicit `local-git-sha1-packed-v1` acquisition selector. After protected merge, Decision 0010 additionally resolves only the explicit `local-gitlinks-v1` representation of committed mode `160000` boundaries, bounded root `.gitmodules` metadata, and depth-one separately supplied local nested commit verification. Residual decisions cover remote protocols and identity resolution, SHA-256, LFS, shallow and bare repositories, alternates, promisor/partial clones, MIDX authority, symlinks, nested analysis/federation/recursion, complete Git configuration semantics, automatic repair, and history rewrite. Legacy invocations still reject packed objects without R1 and reject gitlinks without R2. | Remote and remaining post-S1 `FR-ACQ-*` |
 | `OD-CMP-001` | Decision 0009 resolves only `codenoesis.contract-capability/openapi-3.1-http-json/v1`, deterministic provider/client operation federation, heuristic non-confirmation, and source-neutral S6 identities when its protected ratification revision is manually merged. Decision 0007 resolves only the `implementation-aware-http-json/v1` field-level projection, evidence separation, seven dimensions, classifier rules, and oracle. Residual decisions cover complete OpenAPI, AsyncAPI, GraphQL, Protobuf, events, package/SCIP and event/schema authority, framework-specific semantics, observation coverage, protocol behavior, and causal evidence. | Remaining `S6`–`S7` compatibility capabilities |
 | `OD-API-001` | REST/MCP payload schemas, error catalog, cancellation, pagination, event resume, and deprecation window. | `S10`–`S11` |
 | `OD-AUT-001` | Complete role-action-resource matrix and privileged break-glass policy. | `S12` |
@@ -1326,9 +1389,12 @@ The [S0 contract decision](decisions/0001-s0-walking-skeleton-contract.md)
 resolves the one-file local binding. The
 [S1 contract decision](decisions/0002-s1-safe-inventory-contract.md) extends
 only the verified loose-object tree subset and fixes rejection semantics for
-symlinks, gitlinks, and external Git directories. `OD-GIT-001` remains open for
-supported traversal or materialization of those features and for every other
-listed advanced or remote case. The
+symlinks, gitlinks, and external Git directories. The
+[S1 gitlink boundary decision](decisions/0010-s1-gitlink-boundary-contract.md)
+resolves only explicit representation and separate depth-one local verification
+of gitlinks after its protected manual merge; it authorizes no traversal,
+nested analysis, URL authority, or federation. `OD-GIT-001` remains open for
+those semantics and every other listed advanced or remote case. The
 [S2 contract decision](decisions/0003-s2-rust-knowledge-contract.md) resolves
 `OD-ONT-001` only for the bounded Rust v1 ontology and only after its protected
 manual merge; future language adapters or semantic expansion require another

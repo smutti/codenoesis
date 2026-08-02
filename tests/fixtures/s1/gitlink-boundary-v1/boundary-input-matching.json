@@ -1,0 +1,16 @@
+{
+  "schema_version": "codenoesis.repository-boundary-input/v1",
+  "root": {
+    "repository_identity": "urn:codenoesis:fixture:s1-gitlink-boundary-v1",
+    "commit_oid": "e3a117e190a92585bcae4c49c775d310243107e7"
+  },
+  "nested_repositories": [
+    {
+      "boundary_path": "external/nested-model",
+      "repository_identity": "urn:codenoesis:fixture:s1-gitlink-boundary-v1-nested-model",
+      "repository_root": "generated/nested-model",
+      "revision": "6ecf94267842da776e35406a9ebcb85e058a3181",
+      "acquisition_profile": "verified-loose-sha1-v1"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+[submodule "nested-model"]
+	path = external/nested-model
+	url = https://example.invalid/codenoesis/nested-model.git
