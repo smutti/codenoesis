@@ -9,6 +9,9 @@ use codenoesis_domain::s1_boundaries::{
     RepositoryBoundaryAcquisitionError,
 };
 use codenoesis_domain::s4::{RustWorkspaceKnowledge, WorkspaceError};
+use codenoesis_domain::s4_r3::{
+    ExternalWorkspaceBoundary, RootPackageWorkspaceError, RootPackageWorkspaceExtraction,
+};
 use codenoesis_domain::s5::{AnalysisCacheEntry, IncrementalWorkspaceExtraction};
 use codenoesis_domain::s6::{ContractError, OpenApiContractInput, ProviderContract};
 use codenoesis_domain::storage::{
@@ -111,6 +114,21 @@ pub trait IncrementalRustWorkspaceExtractor {
         inventory: &RepositoryInventory,
         cache_entries: &[AnalysisCacheEntry],
     ) -> Result<IncrementalWorkspaceExtraction, WorkspaceError>;
+}
+
+pub trait RootPackageWorkspaceExtractor {
+    /// Extracts the explicit R3 root-package workspace profile while preserving v2 identities.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed member, manifest, target, source, ontology, or graph failure without
+    /// executing Cargo, rustc, build scripts, procedural macros, targets, or nested source.
+    fn extract_root_package_workspace_incremental(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+        cache_entries: &[AnalysisCacheEntry],
+    ) -> Result<RootPackageWorkspaceExtraction, RootPackageWorkspaceError>;
 }
 
 pub trait OpenApiContractExtractor {

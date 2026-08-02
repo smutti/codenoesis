@@ -10,22 +10,25 @@ use std::fs;
 use std::io::{self, Write};
 use std::process::ExitCode;
 use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::mpsc;
+use std::thread;
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
 use codenoesis_application::{
-    BoundaryScanError, PublicationService, RefreshError, RefreshService, ScanError, ScanRequest,
-    ScanService,
+    BoundaryScanError, PublicationService, RefreshError, RefreshService, RootPackageScanError,
+    ScanError, ScanRequest, ScanService,
 };
 use codenoesis_contracts::{
     AnalysisCacheEntryV1, BoundaryManifestReason, CodeNoesisErrorV1, CodeNoesisErrorV2,
     CodeNoesisErrorV3, CodeNoesisErrorV4, CodeNoesisErrorV5, CodeNoesisErrorV6, CodeNoesisErrorV7,
-    CodeNoesisErrorV8, CodeNoesisErrorV9, DocumentationContractError,
+    CodeNoesisErrorV8, CodeNoesisErrorV9, CodeNoesisErrorV10, DocumentationContractError,
     IncrementalRefreshReportError, IncrementalRefreshReportInput, IncrementalRefreshReportV1,
     NestedRepositoryUnavailableReason, QueryContractError, RepositorySnapshotV2Error,
     RepositorySnapshotV3, RepositorySnapshotV3Error, RepositorySnapshotV4,
-    RepositorySnapshotV4Error, RepositorySnapshotV5, RepositorySnapshotV5Error, SnapshotEnvelopeV1,
-    ValidatedS4Head, generate_documentation_v1, local_query_result_v1,
-    validate_stored_snapshot_semantic_v4, validate_stored_snapshot_semantic_v5,
+    RepositorySnapshotV4Error, RepositorySnapshotV5, RepositorySnapshotV5Error,
+    RepositorySnapshotV6, RepositorySnapshotV6Error, SnapshotEnvelopeV1, ValidatedS4Head,
+    generate_documentation_v1, local_query_result_v1, validate_stored_snapshot_semantic_v4,
+    validate_stored_snapshot_semantic_v5, validate_stored_snapshot_semantic_v6,
 };
 use codenoesis_domain::AcquisitionError;
 use codenoesis_domain::knowledge::KnowledgeError;
@@ -35,6 +38,7 @@ use codenoesis_domain::s1_packed::LOCAL_GIT_SHA1_PACKED_V1;
 use codenoesis_domain::s4::{
     S4_ONTOLOGY_VERSION, S4_TREE_SITTER_EXTRACTOR_VERSION, S4_WORKSPACE_EXTRACTOR_VERSION,
 };
+use codenoesis_domain::s4_r3::{R3_WORKSPACE_PROFILE, RootPackageWorkspaceError};
 use codenoesis_domain::s5::{
     ANALYSIS_CACHE_SCHEMA_VERSION, AnalysisCacheEntry, DEPENDENCY_RULE_VERSION,
     EXTRACTION_CONTRACT_VERSION, IncrementalRuleOutcome, MAX_ANALYSIS_ENTRIES,
@@ -42,7 +46,7 @@ use codenoesis_domain::s5::{
 };
 use codenoesis_domain::storage::{
     ArtifactRole, LocalSnapshotHead, SNAPSHOT_SCHEMA_VERSION_V4, SNAPSHOT_SCHEMA_VERSION_V5,
-    StorageComponent, StorageError,
+    SNAPSHOT_SCHEMA_VERSION_V6, StorageComponent, StorageError,
 };
 use codenoesis_domain::{
     InputError, LimitKind, RepositoryIdentity, Revision, STANDARD_LOCAL_S1_LIMITS, limit_exceeded,
@@ -59,11 +63,59 @@ use serde_json::Value;
 
 static CORRELATION_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
+type ScanJob = Box<dyn FnOnce() + Send + 'static>;
+
+struct ScanWorker {
+    sender: Option<mpsc::SyncSender<ScanJob>>,
+    handle: Option<thread::JoinHandle<()>>,
+}
+
+impl ScanWorker {
+    fn spawn() -> io::Result<Self> {
+        let (sender, receiver) = mpsc::sync_channel::<ScanJob>(0);
+        let handle = thread::Builder::new()
+            .name("codenoesis-confined-scan".to_owned())
+            .spawn(move || {
+                if let Ok(job) = receiver.recv() {
+                    job();
+                }
+            })?;
+        Ok(Self {
+            sender: Some(sender),
+            handle: Some(handle),
+        })
+    }
+
+    fn run<T, F>(&mut self, operation: F) -> Result<T, ()>
+    where
+        T: Send + 'static,
+        F: FnOnce() -> T + Send + 'static,
+    {
+        let sender = self.sender.take().ok_or(())?;
+        let (result_sender, result_receiver) = mpsc::sync_channel(0);
+        sender
+            .send(Box::new(move || {
+                let _ = result_sender.send(operation());
+            }))
+            .map_err(|_| ())?;
+        drop(sender);
+        let result = result_receiver.recv().map_err(|_| ())?;
+        self.handle.take().ok_or(())?.join().map_err(|_| ())?;
+        Ok(result)
+    }
+}
+
+impl Drop for ScanWorker {
+    fn drop(&mut self) {
+        self.sender.take();
+        if let Some(handle) = self.handle.take() {
+            let _ = handle.join();
+        }
+    }
+}
+
 #[allow(clippy::too_many_lines)]
 fn main() -> ExitCode {
-    if noesis::install_s0_security_boundary().is_err() {
-        return emit_internal_error_v1();
-    }
     let arguments = env::args_os().collect::<Vec<_>>();
     let federation_requested = federation::requested(&arguments);
     let docs_requested = arguments.get(1).is_some_and(|value| value == "docs");
@@ -77,13 +129,22 @@ fn main() -> ExitCode {
         .any(|argument| argument == OsStr::new("--acquisition-profile"));
     let boundary_requested = option_requested(&arguments, "--repository-boundary-profile")
         || option_requested(&arguments, "--repository-boundary-manifest");
+    let r3_requested = option_requested(&arguments, "--workspace-profile");
+    let mut scan_worker = if r3_requested || boundary_requested {
+        ScanWorker::spawn().ok()
+    } else {
+        None
+    };
+    if noesis::install_s0_security_boundary().is_err() {
+        return emit_internal_error_v1();
+    }
     let s4_requested = requested_profile(&arguments, "standard-local-s4");
     let s3_requested = requested_profile(&arguments, "standard-local-s3");
     let s4_error_lineage = s4_requested || docs_requested || query_requested;
     let s3_error_lineage = s3_requested || s4_error_lineage;
     let s2_requested = requested_profile(&arguments, "standard-local-s2");
-    let result = if boundary_requested {
-        run_s4(arguments)
+    let result = if r3_requested || boundary_requested {
+        run_s4(arguments, scan_worker.as_mut())
     } else if federation_requested {
         federation::run(arguments).map_err(Failure::S6)
     } else if refresh_requested {
@@ -93,7 +154,7 @@ fn main() -> ExitCode {
     } else if query_requested {
         run_query(arguments)
     } else if s4_requested {
-        run_s4(arguments)
+        run_s4(arguments, None)
     } else if s3_requested {
         run_s3(arguments)
     } else if s2_requested {
@@ -108,6 +169,7 @@ fn main() -> ExitCode {
             Ok(()) => ExitCode::SUCCESS,
             Err(_) if federation_requested => emit_internal_error_v8(),
             Err(_) if refresh_requested => emit_internal_error_v7(),
+            Err(_) if r3_requested => emit_internal_error_v10(),
             Err(_) if boundary_requested => emit_internal_error_v9(),
             Err(_) if packed_acquisition_requested => emit_internal_error_v6(),
             Err(_) if s3_error_lineage => emit_internal_error_v4(),
@@ -116,6 +178,7 @@ fn main() -> ExitCode {
             Err(_) => emit_internal_error_v1(),
         },
         Err(Failure::S6(failure)) => emit_error_v8(&failure.error, failure.exit_code),
+        Err(Failure::R3(failure)) => emit_error_v10(&failure.error, failure.exit_code),
         Err(Failure::V9(failure)) => emit_error_v9(&failure.error, failure.exit_code),
         Err(Failure::V6Input(error)) => emit_error_v6(&error, 2),
         Err(Failure::S5(failure)) => emit_error_v7(&failure.error, failure.exit_code),
@@ -342,11 +405,25 @@ fn run_s3(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
     serialize_v3(&snapshot)
 }
 
-fn run_s4(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
+fn run_s4(
+    arguments: impl IntoIterator<Item = OsString>,
+    scan_worker: Option<&mut ScanWorker>,
+) -> Result<Vec<u8>, Failure> {
     let invocation =
         Invocation::parse(arguments, Some("standard-local-s4")).map_err(invocation_failure)?;
+    if invocation.workspace_profile {
+        let scan_worker = scan_worker.ok_or_else(r3_internal_failure)?;
+        return if invocation.boundary_profile {
+            run_s4_r3_boundaries(invocation, scan_worker)
+        } else {
+            run_s4_r3(invocation, scan_worker)
+        };
+    }
     if invocation.boundary_profile {
-        return run_s4_boundaries(invocation);
+        return run_s4_boundaries(
+            invocation,
+            scan_worker.ok_or_else(boundary_internal_failure)?,
+        );
     }
     let repository_adapter = repository_adapter(invocation.packed_sha1);
     let store = invocation
@@ -404,67 +481,224 @@ fn run_s4(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
     serialize_v4(&scan.snapshot)
 }
 
-fn run_s4_boundaries(invocation: Invocation) -> Result<Vec<u8>, Failure> {
+fn run_s4_r3(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Vec<u8>, Failure> {
+    let store = invocation
+        .store
+        .clone()
+        .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
+    let repository = invocation.repository.clone();
+    let started_at = Instant::now();
+    let scan_repository = repository.clone();
+    let scan = run_confined_scan(
+        scan_worker,
+        repository.clone(),
+        None,
+        Vec::new(),
+        move || {
+            let envelope = current_envelope().ok_or_else(r3_internal_failure)?;
+            let request = ScanRequest::new(
+                invocation.repository,
+                invocation.identity,
+                invocation.revision,
+                envelope,
+            );
+            ScanService::new(repository_adapter(invocation.packed_sha1))
+                .scan_s4_r3(request, &TreeSitterRustWorkspaceExtractor::new())
+                .map_err(r3_scan_failure)
+        },
+    )
+    .map_err(|()| r3_internal_failure())??;
+    enforce_scan_deadline(started_at)?;
+    let stdout = serialize_v6(&scan.snapshot)?;
+    let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
+        .is_err_and(|error| error.kind() == std::io::ErrorKind::NotFound);
+    let mut rollback = EmptyStoreRollback::new(store.clone(), store_was_absent);
+    ensure_store_root_for_boundary(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    noesis::install_s3_filesystem_boundary(&scan_repository, &store)
+        .map_err(|_| r3_internal_failure())?;
+    let mut local_store = LocalStore::open(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    PublicationService::publish_v6(
+        &scan.snapshot,
+        &mut local_store.artifacts,
+        &mut local_store.metadata,
+        &mut NoopPublicationObserver,
+    )
+    .map_err(Failure::Scan)?;
+    rollback.disarm();
+    stage_analysis_cache_best_effort(&mut local_store, &scan.analysis_cache_entries);
+    Ok(stdout)
+}
+
+fn run_s4_r3_boundaries(
+    invocation: Invocation,
+    scan_worker: &mut ScanWorker,
+) -> Result<Vec<u8>, Failure> {
     let mut prepared = repository_boundaries::prepare(
         invocation.boundary_manifest.as_deref(),
         &invocation.identity,
         &invocation.revision,
     )
     .map_err(repository_boundary_input_failure)?;
-    let repository_adapter = repository_adapter(invocation.packed_sha1);
     let store = invocation
         .store
         .clone()
         .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
     let repository = invocation.repository.clone();
-    let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
-        .is_err_and(|error| error.kind() == std::io::ErrorKind::NotFound);
-    ensure_store_root_for_boundary(
-        std::path::Path::new(&repository),
-        std::path::Path::new(&store),
-    )
-    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
-    let mut rollback = EmptyStoreRollback::new(store.clone(), store_was_absent);
-    let canonical_store = fs::canonicalize(std::path::Path::new(&store)).map_err(|_| {
-        Failure::Scan(ScanError::Storage(StorageError::UnsafePath {
-            reason: "store_root",
-        }))
-    })?;
-    prepared.reject_overlaps(&canonical_store);
+    if let Some(canonical_store) = canonical_existing_or_absent_leaf(&store) {
+        prepared.reject_overlaps(&canonical_store);
+    }
     if let Ok(canonical_repository) = fs::canonicalize(std::path::Path::new(&repository)) {
         prepared.reject_overlaps(&canonical_repository);
     }
+    let manifest_path = prepared.manifest_path;
+    let nested_roots = prepared.nested_roots;
+    let started_at = Instant::now();
+    let scan_repository = repository.clone();
+    let scan = run_confined_scan(
+        scan_worker,
+        repository.clone(),
+        manifest_path.clone(),
+        nested_roots.clone(),
+        move || {
+            let envelope = current_envelope().ok_or_else(r3_internal_failure)?;
+            let request = ScanRequest::new(
+                invocation.repository,
+                invocation.identity,
+                invocation.revision,
+                envelope,
+            );
+            ScanService::new(repository_adapter(invocation.packed_sha1))
+                .scan_s4_r3_boundaries(
+                    request,
+                    prepared.scan_input,
+                    &TreeSitterRustWorkspaceExtractor::new(),
+                    &repository_boundaries::Sha256BoundaryHasher,
+                )
+                .map_err(r3_scan_failure)
+        },
+    )
+    .map_err(|()| r3_internal_failure())??;
+    enforce_scan_deadline(started_at)?;
+    let stdout = serialize_v6(&scan.snapshot)?;
+    let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
+        .is_err_and(|error| error.kind() == std::io::ErrorKind::NotFound);
+    let mut rollback = EmptyStoreRollback::new(store.clone(), store_was_absent);
+    ensure_store_root_for_boundary(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
     noesis::install_s1_boundaries_filesystem_boundary(
-        &repository,
+        &scan_repository,
         &store,
-        prepared
-            .manifest_path
-            .as_deref()
-            .map(std::path::Path::as_os_str),
-        &prepared.nested_roots,
+        manifest_path.as_deref().map(std::path::Path::as_os_str),
+        &nested_roots,
     )
     .map_err(|_| boundary_internal_failure())?;
+    let mut local_store = LocalStore::open(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    PublicationService::publish_v6(
+        &scan.snapshot,
+        &mut local_store.artifacts,
+        &mut local_store.metadata,
+        &mut NoopPublicationObserver,
+    )
+    .map_err(Failure::Scan)?;
+    rollback.disarm();
+    stage_analysis_cache_best_effort(&mut local_store, &scan.analysis_cache_entries);
+    Ok(stdout)
+}
 
+fn stage_analysis_cache_best_effort(local_store: &mut LocalStore, entries: &[AnalysisCacheEntry]) {
+    for entry in entries {
+        let contract = AnalysisCacheEntryV1::from_domain(entry);
+        if let Ok(bytes) = contract.canonical_bytes() {
+            let _ = local_store
+                .analysis_cache
+                .stage_entry(&entry.analysis_cache_entry_id, &bytes);
+        }
+    }
+}
+
+fn run_s4_boundaries(
+    invocation: Invocation,
+    scan_worker: &mut ScanWorker,
+) -> Result<Vec<u8>, Failure> {
+    let mut prepared = repository_boundaries::prepare(
+        invocation.boundary_manifest.as_deref(),
+        &invocation.identity,
+        &invocation.revision,
+    )
+    .map_err(repository_boundary_input_failure)?;
+    let store = invocation
+        .store
+        .clone()
+        .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
+    let repository = invocation.repository.clone();
+    if let Some(canonical_store) = canonical_existing_or_absent_leaf(&store) {
+        prepared.reject_overlaps(&canonical_store);
+    }
+    if let Ok(canonical_repository) = fs::canonicalize(std::path::Path::new(&repository)) {
+        prepared.reject_overlaps(&canonical_repository);
+    }
+    let manifest_path = prepared.manifest_path;
+    let nested_roots = prepared.nested_roots;
     let started_at = Instant::now();
-    let envelope = current_envelope().ok_or_else(boundary_internal_failure)?;
-    let request = ScanRequest::new(
-        invocation.repository,
-        invocation.identity,
-        invocation.revision,
-        envelope,
-    );
-    let scan = ScanService::new(repository_adapter)
-        .scan_s4_boundaries(
-            request,
-            prepared.scan_input,
-            &TreeSitterRustWorkspaceExtractor::new(),
-            &repository_boundaries::Sha256BoundaryHasher,
-        )
-        .map_err(boundary_scan_failure)?;
+    let scan_repository = repository.clone();
+    let scan = run_confined_scan(
+        scan_worker,
+        repository.clone(),
+        manifest_path.clone(),
+        nested_roots.clone(),
+        move || {
+            let envelope = current_envelope().ok_or_else(boundary_internal_failure)?;
+            let request = ScanRequest::new(
+                invocation.repository,
+                invocation.identity,
+                invocation.revision,
+                envelope,
+            );
+            ScanService::new(repository_adapter(invocation.packed_sha1))
+                .scan_s4_boundaries(
+                    request,
+                    prepared.scan_input,
+                    &TreeSitterRustWorkspaceExtractor::new(),
+                    &repository_boundaries::Sha256BoundaryHasher,
+                )
+                .map_err(boundary_scan_failure)
+        },
+    )
+    .map_err(|()| boundary_internal_failure())??;
     enforce_scan_deadline(started_at)?;
     let stdout = serialize_v5(&scan.snapshot)?;
+    let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
+        .is_err_and(|error| error.kind() == std::io::ErrorKind::NotFound);
+    let mut rollback = EmptyStoreRollback::new(store.clone(), store_was_absent);
+    ensure_store_root_for_boundary(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    noesis::install_s1_boundaries_filesystem_boundary(
+        &scan_repository,
+        &store,
+        manifest_path.as_deref().map(std::path::Path::as_os_str),
+        &nested_roots,
+    )
+    .map_err(|_| boundary_internal_failure())?;
     let mut local_store = LocalStore::open(
-        std::path::Path::new(&repository),
+        std::path::Path::new(&scan_repository),
         std::path::Path::new(&store),
     )
     .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
@@ -485,6 +719,49 @@ fn run_s4_boundaries(invocation: Invocation) -> Result<Vec<u8>, Failure> {
         }
     }
     Ok(stdout)
+}
+
+fn run_confined_scan<T, F>(
+    scan_worker: &mut ScanWorker,
+    repository: OsString,
+    manifest_path: Option<std::path::PathBuf>,
+    nested_roots: Vec<std::path::PathBuf>,
+    operation: F,
+) -> Result<T, ()>
+where
+    T: Send + 'static,
+    F: FnOnce() -> T + Send + 'static,
+{
+    scan_worker
+        .run(move || {
+            let boundary_installed = if let Some(manifest_path) = manifest_path {
+                let mut repository_roots = Vec::with_capacity(nested_roots.len() + 1);
+                repository_roots.push(std::path::PathBuf::from(&repository));
+                repository_roots.extend(nested_roots);
+                noesis::install_s6_filesystem_boundary(manifest_path.as_os_str(), &repository_roots)
+                    .is_ok()
+            } else if nested_roots.is_empty() && s1_boundary_applies(&repository) {
+                noesis::install_s1_filesystem_boundary(&repository).is_ok()
+            } else {
+                nested_roots.is_empty()
+            };
+            boundary_installed.then(operation)
+        })?
+        .ok_or(())
+}
+
+fn canonical_existing_or_absent_leaf(path: &OsStr) -> Option<std::path::PathBuf> {
+    let path = std::path::Path::new(path);
+    if path.exists() {
+        return fs::canonicalize(path).ok();
+    }
+    let absolute = if path.is_absolute() {
+        path.to_path_buf()
+    } else {
+        env::current_dir().ok()?.join(path)
+    };
+    let parent = fs::canonicalize(absolute.parent()?).ok()?;
+    Some(parent.join(absolute.file_name()?))
 }
 
 struct EmptyStoreRollback {
@@ -781,7 +1058,7 @@ fn load_s4_snapshot_from_store(
             )))?;
     if !matches!(
         head.snapshot_schema_version.as_str(),
-        SNAPSHOT_SCHEMA_VERSION_V4 | SNAPSHOT_SCHEMA_VERSION_V5
+        SNAPSHOT_SCHEMA_VERSION_V4 | SNAPSHOT_SCHEMA_VERSION_V5 | SNAPSHOT_SCHEMA_VERSION_V6
     ) {
         return Err(LoadS4Error::SnapshotMismatch);
     }
@@ -810,6 +1087,7 @@ fn load_s4_snapshot_from_store(
     match head.snapshot_schema_version.as_str() {
         SNAPSHOT_SCHEMA_VERSION_V4 => validate_stored_snapshot_semantic_v4(&semantic, &head),
         SNAPSHOT_SCHEMA_VERSION_V5 => validate_stored_snapshot_semantic_v5(&semantic, &head),
+        SNAPSHOT_SCHEMA_VERSION_V6 => validate_stored_snapshot_semantic_v6(&semantic, &head),
         _ => return Err(LoadS4Error::SnapshotMismatch),
     }
     .map_err(|error| LoadS4Error::Scan(ScanError::Storage(error)))?;
@@ -1061,6 +1339,17 @@ fn serialize_v5(snapshot: &RepositorySnapshotV5) -> Result<Vec<u8>, Failure> {
     })
 }
 
+fn serialize_v6(snapshot: &RepositorySnapshotV6) -> Result<Vec<u8>, Failure> {
+    snapshot.canonical_stdout().map_err(|error| match error {
+        RepositorySnapshotV6Error::LimitExceeded(error) => {
+            Failure::Scan(ScanError::Acquisition(error))
+        }
+        RepositorySnapshotV6Error::Serialization(_)
+        | RepositorySnapshotV6Error::ContractInvalid
+        | RepositorySnapshotV6Error::OutputLengthOverflow => r3_internal_failure(),
+    })
+}
+
 fn enforce_scan_deadline(started_at: Instant) -> Result<(), Failure> {
     let elapsed = u64::try_from(started_at.elapsed().as_millis()).map_err(|_| Failure::Internal)?;
     if elapsed > STANDARD_LOCAL_S1_LIMITS.scan_wall_milliseconds {
@@ -1102,6 +1391,9 @@ fn invocation_failure(error: InvocationError) -> Failure {
         InvocationError::InvalidAcquisitionProfile => {
             Failure::V6Input(CodeNoesisErrorV6::invalid_acquisition_profile())
         }
+        InvocationError::InvalidWorkspaceProfile => {
+            r3_failure(CodeNoesisErrorV10::invalid_workspace_profile(), 2)
+        }
         InvocationError::InvalidBoundaryProfile => {
             boundary_failure(CodeNoesisErrorV9::invalid_profile(), 2)
         }
@@ -1116,6 +1408,9 @@ fn s5_invocation_failure(error: InvocationError) -> Failure {
         InvocationError::Input(error) => s5_input_failure(error),
         InvocationError::InvalidAcquisitionProfile => {
             Failure::V6Input(CodeNoesisErrorV6::invalid_acquisition_profile())
+        }
+        InvocationError::InvalidWorkspaceProfile => {
+            r3_failure(CodeNoesisErrorV10::invalid_workspace_profile(), 2)
         }
         InvocationError::InvalidBoundaryProfile => {
             boundary_failure(CodeNoesisErrorV9::invalid_profile(), 2)
@@ -1167,6 +1462,27 @@ fn boundary_scan_failure(error: BoundaryScanError) -> Failure {
             10,
         ),
     }
+}
+
+fn r3_scan_failure(error: RootPackageScanError) -> Failure {
+    match error {
+        RootPackageScanError::Scan(ScanError::Internal) => r3_internal_failure(),
+        RootPackageScanError::Scan(error) => Failure::Scan(error),
+        RootPackageScanError::Workspace(RootPackageWorkspaceError::Source(error)) => {
+            Failure::Scan(ScanError::Workspace(error))
+        }
+        RootPackageScanError::Workspace(error) => CodeNoesisErrorV10::from_workspace(&error)
+            .map_or_else(r3_internal_failure, |error| r3_failure(error, 11)),
+        RootPackageScanError::Boundary(error) => boundary_scan_failure(error),
+    }
+}
+
+fn r3_failure(error: CodeNoesisErrorV10, exit_code: u8) -> Failure {
+    Failure::R3(R3Failure { error, exit_code })
+}
+
+fn r3_internal_failure() -> Failure {
+    r3_failure(CodeNoesisErrorV10::internal(), 70)
 }
 
 fn boundary_error_failure(error: &RepositoryBoundaryError) -> Failure {
@@ -1442,6 +1758,21 @@ fn emit_error_v9(error: &CodeNoesisErrorV9, code: u8) -> ExitCode {
     }
 }
 
+fn emit_error_v10(error: &CodeNoesisErrorV10, code: u8) -> ExitCode {
+    let Ok(bytes) = error.canonical_stderr() else {
+        return ExitCode::from(70);
+    };
+    if io::stderr().lock().write_all(&bytes).is_ok() {
+        ExitCode::from(code)
+    } else {
+        ExitCode::from(70)
+    }
+}
+
+fn emit_internal_error_v10() -> ExitCode {
+    emit_error_v10(&CodeNoesisErrorV10::internal(), 70)
+}
+
 fn emit_docs_error(error: GeneratedDocsError) -> ExitCode {
     let error = match error {
         GeneratedDocsError::UnmarkedNonemptyRoot => {
@@ -1469,6 +1800,7 @@ fn emit_query_error(error: QueryFailure) -> ExitCode {
 
 enum Failure {
     S6(federation::FederationFailure),
+    R3(R3Failure),
     V9(V9Failure),
     Input(InputError),
     V6Input(CodeNoesisErrorV6),
@@ -1478,6 +1810,11 @@ enum Failure {
     Docs(GeneratedDocsError),
     Query(QueryFailure),
     Internal,
+}
+
+struct R3Failure {
+    error: CodeNoesisErrorV10,
+    exit_code: u8,
 }
 
 struct V9Failure {
@@ -1674,6 +2011,7 @@ struct Invocation {
     revision: Revision,
     store: Option<OsString>,
     packed_sha1: bool,
+    workspace_profile: bool,
     boundary_profile: bool,
     boundary_manifest: Option<OsString>,
 }
@@ -1682,6 +2020,7 @@ struct Invocation {
 enum InvocationError {
     Input(InputError),
     InvalidAcquisitionProfile,
+    InvalidWorkspaceProfile,
     InvalidBoundaryProfile,
     InvalidBoundaryManifest(BoundaryManifestReason),
 }
@@ -1710,11 +2049,14 @@ impl Invocation {
         let boundary_options_requested =
             option_requested(&arguments, "--repository-boundary-profile")
                 || option_requested(&arguments, "--repository-boundary-manifest");
+        let workspace_option_requested = option_requested(&arguments, "--workspace-profile");
         let mut arguments = arguments.into_iter();
         let _program = arguments.next();
         if arguments.next().as_deref() != Some(OsStr::new(command)) {
             return Err(if boundary_options_requested {
                 InvocationError::InvalidBoundaryProfile
+            } else if workspace_option_requested {
+                InvocationError::InvalidWorkspaceProfile
             } else {
                 InputError::InvalidRevision.into()
             });
@@ -1726,12 +2068,15 @@ impl Invocation {
         let mut format = None;
         let mut store = None;
         let mut acquisition_profile = None;
+        let mut workspace_profile = None;
         let mut boundary_profile = None;
         let mut boundary_manifest = None;
         while let Some(flag) = arguments.next() {
             let value = arguments.next().ok_or_else(|| {
                 if flag == OsStr::new("--acquisition-profile") {
                     InvocationError::InvalidAcquisitionProfile
+                } else if flag == OsStr::new("--workspace-profile") {
+                    InvocationError::InvalidWorkspaceProfile
                 } else if flag == OsStr::new("--repository-boundary-profile") {
                     InvocationError::InvalidBoundaryProfile
                 } else if flag == OsStr::new("--repository-boundary-manifest") {
@@ -1763,6 +2108,12 @@ impl Invocation {
                     };
                     acquisition_profile = Some(value.to_owned());
                 }
+                Some("--workspace-profile") if workspace_profile.is_none() => {
+                    let Some(value) = value.to_str() else {
+                        return Err(InvocationError::InvalidWorkspaceProfile);
+                    };
+                    workspace_profile = Some(value.to_owned());
+                }
                 Some("--repository-boundary-profile") if boundary_profile.is_none() => {
                     let Some(value) = value.to_str() else {
                         return Err(InvocationError::InvalidBoundaryProfile);
@@ -1776,6 +2127,9 @@ impl Invocation {
                 Some("--format") if format.is_none() => format = value.to_str().map(str::to_owned),
                 Some("--acquisition-profile") => {
                     return Err(InvocationError::InvalidAcquisitionProfile);
+                }
+                Some("--workspace-profile") => {
+                    return Err(InvocationError::InvalidWorkspaceProfile);
                 }
                 Some("--repository-boundary-profile") => {
                     return Err(InvocationError::InvalidBoundaryProfile);
@@ -1801,6 +2155,8 @@ impl Invocation {
             if profile.as_deref() != Some(required_profile) {
                 return Err(if boundary_options_requested {
                     InvocationError::InvalidBoundaryProfile
+                } else if workspace_option_requested {
+                    InvocationError::InvalidWorkspaceProfile
                 } else {
                     InputError::InvalidProfile.into()
                 });
@@ -1808,6 +2164,8 @@ impl Invocation {
         } else if profile.is_some() {
             return Err(if boundary_options_requested {
                 InvocationError::InvalidBoundaryProfile
+            } else if workspace_option_requested {
+                InvocationError::InvalidWorkspaceProfile
             } else {
                 InputError::InvalidRevision.into()
             });
@@ -1820,6 +2178,15 @@ impl Invocation {
                 true
             }
             _ => return Err(InvocationError::InvalidBoundaryProfile),
+        };
+        let workspace_profile = match workspace_profile.as_deref() {
+            None => false,
+            Some(R3_WORKSPACE_PROFILE)
+                if command == "scan" && required_profile == Some("standard-local-s4") =>
+            {
+                true
+            }
+            _ => return Err(InvocationError::InvalidWorkspaceProfile),
         };
         if boundary_manifest
             .as_ref()
@@ -1868,6 +2235,7 @@ impl Invocation {
             revision,
             store,
             packed_sha1,
+            workspace_profile,
             boundary_profile,
             boundary_manifest,
         })
