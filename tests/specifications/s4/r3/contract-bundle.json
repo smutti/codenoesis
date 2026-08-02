@@ -1,0 +1,142 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "docs/software/decisions/0011-s4-root-package-workspace-contract.md",
+      "sha256": "3404d24fc353d786864ba8909a0ecfd43513e49b86c028033503961cdcdd3619"
+    },
+    {
+      "path": "scripts/tests/test_s4_root_package_contract.py",
+      "sha256": "044c1408552d546e18943f908e187058b20b07a4ecf35d17aeca8258be73ede9"
+    },
+    {
+      "path": "tests/corpora/real-world-rust-v1.json",
+      "sha256": "1d2edc9f858d612e76abb70e6dd255d28e88306a0e4874b0e8ea7351f4347f46"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/README.md",
+      "sha256": "1006903d66f6ec722142c5de1ed787fe572533b12e995191fdec29c2b6161206"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/expected-workspace-plan.json",
+      "sha256": "5d7c3366bb68a19f8e12cf37f5a533dbe91fba2849f391829ecd8f0c8360c40a"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/manifest.json",
+      "sha256": "cba5db2d74330a6d21a409a2b49c9e0258cc19b91fdc5744663f8f67783f9776"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/root-manifests/explicit-dot.toml",
+      "sha256": "19fcc776cfdbb826c9ceae2a74d03563046dfd298edf080343ddbb0de2a825d5"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/root-manifests/implicit.toml",
+      "sha256": "4e573b4edfa2a85e14a4b507e2505c66ba5b1ec9280f57fd9f4c52275ef255fb"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/root-manifests/member-exclude-conflict.toml",
+      "sha256": "6c2b0a3ee9c8ab432b7627d796dc6cd7b92eccd01c7056cacccecd3b590e9552"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/root-manifests/standalone.toml",
+      "sha256": "18b83028fab9b8c9873ebdbb654f316ba747a57bc1e5b79475ae464e64b7774e"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/root-manifests/virtual.toml",
+      "sha256": "63675a34d1c1977a88813433cf834562dc513fe6430b48d7fdf7419450a19435"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/shared-tree/.gitmodules",
+      "sha256": "5f08a68e5ba0d3f1caedfcf807ce71604ba49c5afd2d46ba6632e46a09cacb8f"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/shared-tree/build.rs",
+      "sha256": "9ccd53fdca5890cc6eb23bdbc5977d2b5398014415a7f1b6933e5eca1c9ef7d6"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/shared-tree/crates/cli/Cargo.toml",
+      "sha256": "33de1b9ce6ddb13903221e64262a61aabe402d40ccb5fae28befabf1bc5ae06f"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/shared-tree/crates/cli/src/bin/inspect/main.rs",
+      "sha256": "0f95bceafa07f997ce6ab31a87f8fa8b4e3378b480875fd0edf2652cf1ac7d9f"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/shared-tree/crates/cli/src/main.rs",
+      "sha256": "85fc69db5cf7c182dbcf3d5a7e7770664af6425c283a8b7e16fe9c14d6fc9d83"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/shared-tree/crates/macro-sentinel/Cargo.toml",
+      "sha256": "06608a728a2c64d83340338a42cf180b90174f045dcd80c5c281030fd9f5de5d"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/shared-tree/crates/macro-sentinel/src/lib.rs",
+      "sha256": "5feb6f8541705738801fd47022d375e4507c5625533a91cc6e90a2fe8cba60cd"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/shared-tree/src/bin/admin.rs",
+      "sha256": "914617d5743e5ec0ce230b4dbc64df10512cff1152d7be452ee8cf04214420cb"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/shared-tree/src/lib.rs",
+      "sha256": "1e73c3cc08f08267ca420354e7cfb8fbab13b321bbbf09d13420c533c997ed72"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/shared-tree/src/main.rs",
+      "sha256": "15dd71d96fc55a97cd1770f3fc7cb41497c99995a70cbe3dc521b123362ce311"
+    },
+    {
+      "path": "tests/fixtures/s4/root-package-workspace-v1/shared-tree/src/model.rs",
+      "sha256": "e8208d725645fee78351162e79dc9992728f4f4ac91786b3ea5803f150da30e5"
+    },
+    {
+      "path": "tests/specifications/s1/gitlink-boundary-contract-bundle.json",
+      "sha256": "710a640fd6bf43ee87cc4a4c2eb159093dbb6c6654ba4baf5fcbc3adf8e5970e"
+    },
+    {
+      "path": "tests/specifications/s4/contract-bundle.json",
+      "sha256": "be199ebbeb9cb35c2e6a68c5b9d847f86fe131efd007b0d09d9fd28390c91437"
+    },
+    {
+      "path": "tests/specifications/s4/r3/codenoesis-error-v10.schema.json",
+      "sha256": "ca7bd8010ae1b5002b129a7440d122a7d3725cef5dcd6aa016b1118fd5d3ba27"
+    },
+    {
+      "path": "tests/specifications/s4/r3/configuration-v3.schema.json",
+      "sha256": "5c7087bdde04eb288cad7c6c15564930e397e38e114b3c86745cdbad8f3fbc98"
+    },
+    {
+      "path": "tests/specifications/s4/r3/e2e_fr_ext_008_root_package_workspace.json",
+      "sha256": "c8323edf2b700b97118c74e2e565da82d8450769b892e0f9c1e2a42af95b20a6"
+    },
+    {
+      "path": "tests/specifications/s4/r3/extraction-chunk-v3.schema.json",
+      "sha256": "33b0113760fd1b08f7a9d30eec35a92681ec44dffe3fc1ad7f12ff61e3a66003"
+    },
+    {
+      "path": "tests/specifications/s4/r3/knowledge-graph-v3.schema.json",
+      "sha256": "4218e7afc0b779e2db65766df486a13fbaebfcdf111bcc7ef048d35dc523e0f6"
+    },
+    {
+      "path": "tests/specifications/s4/r3/repository-snapshot-v6.schema.json",
+      "sha256": "5319000cc13352c3086eb53e97cb16cfb203c00c7bd30412839f24567480f485"
+    },
+    {
+      "path": "tests/specifications/s4/r3/rust-ontology-v3.json",
+      "sha256": "ae86b71ac0a5940761b2799ba891f0f4de5cff06a6c87ff42dd0b30b69d1dc43"
+    },
+    {
+      "path": "tests/specifications/s4/r3/semantic-hash-contract-v2.json",
+      "sha256": "d39eca2a86cb3f7968ece7e9ac2df2b147eb849801a220d6b75c2bd062e7823b"
+    },
+    {
+      "path": "tests/specifications/s4/rust-ontology-v2.json",
+      "sha256": "10d5a5ba797c1226f5b46377cfed9f61bbd1723a75944c0e87caa4b5877a9342"
+    }
+  ],
+  "bundle_sha256": "0b99760da4e978fefa91468b5dbef1b59816e30b02d92c70c26a7df715ef509a"
+}

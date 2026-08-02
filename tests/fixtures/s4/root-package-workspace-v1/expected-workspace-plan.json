@@ -1,0 +1,153 @@
+{
+  "schema_version": "codenoesis.r3-workspace-plan/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-root-package-workspace-v1",
+  "variants": {
+    "implicit": {
+      "root_shape": "non_virtual_workspace",
+      "members": [
+        {
+          "path": ".",
+          "manifest_path": "Cargo.toml",
+          "member_source": "implicit_root_package",
+          "crate_ids": [
+            "urn:codenoesis:entity:blake3:6f20a1ab8dc60551d001178172368742238429b975c2740e41cce9975f04a4dd",
+            "urn:codenoesis:entity:blake3:7619b82a3299db9236b4a5fb8955f38c8ce8bb388391448ddc2df5dbbc8e7249",
+            "urn:codenoesis:entity:blake3:819b0a4083e3c4553c559735f1d0f2a07a1ad01fdeeaf180669d4e178564e0d5"
+          ],
+          "external_boundary": null
+        },
+        {
+          "path": "crates/cli",
+          "manifest_path": "crates/cli/Cargo.toml",
+          "member_source": "literal_member",
+          "crate_ids": [
+            "urn:codenoesis:entity:blake3:ae8f827c9b5e76a5cdf198c8ca6dd2e7b480068c75b0251972158d9f5f85b253",
+            "urn:codenoesis:entity:blake3:f6f2630c8a4b7f71c01be72c910bdbca56bae8c43bc8ff9e51489257801ba092"
+          ],
+          "external_boundary": null
+        },
+        {
+          "path": "crates/macro-sentinel",
+          "manifest_path": "crates/macro-sentinel/Cargo.toml",
+          "member_source": "literal_member",
+          "crate_ids": [
+            "urn:codenoesis:entity:blake3:e3ff23bf52b9bc47ecb50ffd231109e9f51c891444a3234c7678b8a0c37f2edd"
+          ],
+          "external_boundary": null
+        },
+        {
+          "path": "external/model",
+          "manifest_path": null,
+          "member_source": "literal_member",
+          "crate_ids": [],
+          "external_boundary": {
+            "profile": "local-gitlinks-v1",
+            "identity_domain": "codenoesis.repository-boundary/v1",
+            "identity_inputs": [
+              "repository_identity",
+              "materialized_commit_oid",
+              "path",
+              "gitlink_oid"
+            ],
+            "gitlink_oid": "6ecf94267842da776e35406a9ebcb85e058a3181",
+            "analyzed": false
+          }
+        }
+      ],
+      "excluded_paths": [
+        "excluded/legacy"
+      ]
+    },
+    "explicit_dot": {
+      "root_shape": "non_virtual_workspace",
+      "root_member_source": "explicit_root_member",
+      "root_crate_ids_equal_variant": "implicit"
+    },
+    "standalone": {
+      "root_shape": "standalone_root_package",
+      "member_paths": [
+        "."
+      ],
+      "root_member_source": "implicit_root_package"
+    },
+    "virtual": {
+      "root_shape": "virtual_workspace",
+      "member_paths": [
+        "crates/cli",
+        "crates/macro-sentinel",
+        "external/model"
+      ]
+    },
+    "member_exclude_conflict": {
+      "error_code": "extraction.workspace_member_conflict",
+      "path": "crates/cli"
+    }
+  },
+  "targets": [
+    {
+      "manifest_path": "Cargo.toml",
+      "package_name": "root-app",
+      "target_kind": "lib",
+      "target_name": "root_app",
+      "source_path": "src/lib.rs",
+      "crate_id": "urn:codenoesis:entity:blake3:6f20a1ab8dc60551d001178172368742238429b975c2740e41cce9975f04a4dd"
+    },
+    {
+      "manifest_path": "Cargo.toml",
+      "package_name": "root-app",
+      "target_kind": "bin",
+      "target_name": "root-admin",
+      "source_path": "src/bin/admin.rs",
+      "crate_id": "urn:codenoesis:entity:blake3:7619b82a3299db9236b4a5fb8955f38c8ce8bb388391448ddc2df5dbbc8e7249"
+    },
+    {
+      "manifest_path": "Cargo.toml",
+      "package_name": "root-app",
+      "target_kind": "bin",
+      "target_name": "root-app",
+      "source_path": "src/main.rs",
+      "crate_id": "urn:codenoesis:entity:blake3:819b0a4083e3c4553c559735f1d0f2a07a1ad01fdeeaf180669d4e178564e0d5"
+    },
+    {
+      "manifest_path": "crates/cli/Cargo.toml",
+      "package_name": "root-cli",
+      "target_kind": "bin",
+      "target_name": "inspect",
+      "source_path": "crates/cli/src/bin/inspect/main.rs",
+      "crate_id": "urn:codenoesis:entity:blake3:f6f2630c8a4b7f71c01be72c910bdbca56bae8c43bc8ff9e51489257801ba092"
+    },
+    {
+      "manifest_path": "crates/cli/Cargo.toml",
+      "package_name": "root-cli",
+      "target_kind": "bin",
+      "target_name": "root-cli",
+      "source_path": "crates/cli/src/main.rs",
+      "crate_id": "urn:codenoesis:entity:blake3:ae8f827c9b5e76a5cdf198c8ca6dd2e7b480068c75b0251972158d9f5f85b253"
+    },
+    {
+      "manifest_path": "crates/macro-sentinel/Cargo.toml",
+      "package_name": "macro-sentinel",
+      "target_kind": "lib",
+      "target_name": "macro_sentinel",
+      "source_path": "crates/macro-sentinel/src/lib.rs",
+      "crate_id": "urn:codenoesis:entity:blake3:e3ff23bf52b9bc47ecb50ffd231109e9f51c891444a3234c7678b8a0c37f2edd"
+    }
+  ],
+  "coverage_capabilities": [
+    "cargo.build_script_not_executed",
+    "cargo.dependencies_deferred",
+    "cargo.features_deferred",
+    "cargo.package_metadata_deferred",
+    "cargo.patch_deferred",
+    "cargo.proc_macro_not_executed",
+    "cargo.required_features_deferred",
+    "cargo.target_world_deferred",
+    "cargo.workspace_inheritance_deferred",
+    "workspace.external_gitlink_member_not_analyzed"
+  ],
+  "gitlink": {
+    "path": "external/model",
+    "commit_oid": "6ecf94267842da776e35406a9ebcb85e058a3181",
+    "analyzed": false
+  }
+}
