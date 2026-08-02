@@ -66,6 +66,7 @@
         "conf_fr_cli_005_application_buffers_one_validated_report",
         "conf_fr_cli_005_application_rejects_unbound_input_cardinality",
         "gt_fr_cli_005_provider_only_workspace_is_exact",
+        "conf_fr_cli_005_reviewed_fixture_materialization_is_platform_neutral",
         "conf_fr_cli_005_invocation_and_digest_fail_without_stdout",
         "conf_fr_cli_005_stdout_failure_uses_internal_error_v8"
       ],

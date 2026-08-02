@@ -10,13 +10,14 @@
     "FR-CLI-005"
   ],
   "risk": "high",
-  "observed_at": "2026-07-31T16:06:00Z",
+  "observed_at": "2026-08-02T05:17:46Z",
   "commits": {
     "corrected_required_base": "7906873e472321b2a097fb2a4408c9be475513ff",
     "test_first": "6afb7a8fac35f9f9403ed7de9a89f0c40a27a389",
     "corrected_base_integration": "bfd5ba6f6d6e1393ff96d4fa173d9fd6234760a2",
     "dependency_guard_correction": "11fee19520bfbef08db60dc7c01a3249415173c3",
     "final_governance_base_integration": "0903915820e280256c286445be56df0d404c4702",
+    "windows_line_ending_correction": "recorded by the implementation pull request",
     "implementation": "recorded by the implementation pull request"
   },
   "authorization": {
@@ -51,13 +52,14 @@
     "contract_tests_passed": 3,
     "extractor_tests_passed": 4,
     "application_tests_passed": 2,
-    "public_black_box_tests_passed": 15,
-    "total_focused_tests_passed": 29,
+    "public_black_box_tests_passed": 16,
+    "total_focused_tests_passed": 30,
     "targeted_all_features_clippy_passed": true,
     "pure_rust_s6_core_linux_cross_check_passed": true,
     "pure_rust_s6_core_windows_cross_check_passed": true,
     "reviewed_base_report_exact": true,
     "stdout_failure_maps_to_error_v8": true,
+    "reviewed_fixture_line_ending_regression_passed": true,
     "public_report_bytes_maximum": 67108864,
     "public_report_bytes_maximum_accepted": true,
     "public_report_bytes_maximum_plus_one_typed": true,
@@ -131,7 +133,7 @@
     "policy_sha256": "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993",
     "agent": "OpenAI Codex",
     "model": "not exposed by runtime",
-    "run_identifier": "issue-82-local-implementation-20260731T160600Z",
+    "run_identifier": "issue-82-local-correction-20260802T051746Z",
     "implementation_duration": "not exposed by runtime",
     "monetary_cost": "not exposed by runtime"
   },

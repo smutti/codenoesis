@@ -18,8 +18,7 @@ const REPORT_BYTES_MAXIMUM: u64 = 67_108_864;
 
 #[test]
 fn e2e_fr_fed_001_openapi_federation() {
-    let fixture = fixture_root();
-    let output = federate(&fixture.join("workspace.json"));
+    let output = federate_reviewed("workspace.json");
 
     assert_success_or_expected_red(&output);
     assert!(
@@ -28,8 +27,7 @@ fn e2e_fr_fed_001_openapi_federation() {
     );
     assert_eq!(
         output.stdout,
-        fs::read(fixture.join("expected-federation-report.json"))
-            .expect("read reviewed S6 federation report"),
+        read_reviewed_fixture(&fixture_root().join("expected-federation-report.json")),
         "S6 federation report differs from the reviewed artifact"
     );
 }
@@ -43,6 +41,36 @@ fn gt_fr_cli_005_provider_only_workspace_is_exact() {
 }
 
 #[test]
+fn conf_fr_cli_005_reviewed_fixture_materialization_is_platform_neutral() {
+    let canonical = read_reviewed_fixture(&fixture_root().join("provider/openapi.yaml"));
+    let mut windows = Vec::with_capacity(canonical.len() * 2);
+    for byte in &canonical {
+        if *byte == b'\n' {
+            windows.push(b'\r');
+        }
+        windows.push(*byte);
+    }
+
+    assert_eq!(
+        sha256_hex(&canonical),
+        "d6decc18d428316b209aa554ee028fe9db8761df515bf34b9e92c3a369f2de3d"
+    );
+    assert_eq!(
+        sha256_hex(&windows),
+        "3d82522b5069c63112c0748e7ee3f67e8d697db2000dc1d7bab693b7dde016de"
+    );
+    assert_eq!(
+        normalize_reviewed_fixture_bytes(&canonical),
+        Ok(canonical.clone())
+    );
+    assert_eq!(normalize_reviewed_fixture_bytes(&windows), Ok(canonical));
+    assert_eq!(
+        normalize_reviewed_fixture_bytes(b"invalid\rcarriage-return"),
+        Err("reviewed fixture contains a bare carriage return")
+    );
+}
+
+#[test]
 fn gt_fr_ext_004_unsupported_semantics_are_exact_gaps() {
     assert_reviewed_success(
         "workspace-unsupported-semantics.json",
@@ -52,13 +80,13 @@ fn gt_fr_ext_004_unsupported_semantics_are_exact_gaps() {
 
 #[test]
 fn gt_fr_ext_004_yaml_json_reports_are_semantically_equivalent() {
-    let yaml_output = federate(&fixture_root().join("workspace.json"));
+    let yaml_output = federate_reviewed("workspace.json");
     assert!(yaml_output.status.success());
     let mut workspace = read_json(&fixture_root().join("workspace.json"));
     workspace["provider"]["contract_path"] = json!("openapi.json");
-    workspace["provider"]["contract_sha256"] = json!(sha256_hex(
-        &fs::read(fixture_root().join("provider/openapi.json")).unwrap()
-    ));
+    workspace["provider"]["contract_sha256"] = json!(sha256_hex(&read_reviewed_fixture(
+        &fixture_root().join("provider/openapi.json")
+    )));
     let materialized = MaterializedWorkspace::with_inputs(&workspace);
     let json_output = federate(&materialized.manifest);
     assert!(json_output.status.success(), "{json_output:?}");
@@ -141,7 +169,7 @@ fn conf_fr_fed_002_conflicting_authority_fails_closed() {
         "root": "variants",
         "declaration_path": "conflicting-client.json",
         "declaration_sha256": sha256_hex(
-            &fs::read(fixture_root().join("variants/conflicting-client.json")).unwrap()
+            &read_reviewed_fixture(&fixture_root().join("variants/conflicting-client.json"))
         )
     }));
     let materialized = MaterializedWorkspace::with_inputs(&workspace);
@@ -155,7 +183,7 @@ fn conf_fr_fed_002_conflicting_authority_fails_closed() {
 
 #[test]
 fn conf_fr_fed_002_heuristic_selection_is_exact() {
-    let reviewed = federate(&fixture_root().join("workspace.json"));
+    let reviewed = federate_reviewed("workspace.json");
     assert_success(&reviewed);
     let reviewed: Value = serde_json::from_slice(&reviewed.stdout).unwrap();
     assert_eq!(reviewed["candidates"].as_array().unwrap().len(), 1);
@@ -164,7 +192,7 @@ fn conf_fr_fed_002_heuristic_selection_is_exact() {
         "heuristic_requires_confirmation"
     );
 
-    let provider = fs::read(fixture_root().join("provider/openapi.json")).unwrap();
+    let provider = read_reviewed_fixture(&fixture_root().join("provider/openapi.json"));
     let no_match = run_heuristic_case(&provider, "Missing Service", "getUser");
     assert_success(&no_match);
     let no_match: Value = serde_json::from_slice(&no_match.stdout).unwrap();
@@ -224,10 +252,10 @@ fn conf_fr_cli_005_invocation_and_digest_fail_without_stdout() {
 
 #[test]
 fn conf_fr_cli_005_stdout_failure_uses_internal_error_v8() {
-    let manifest = fixture_root().join("workspace-provider-only.json");
+    let materialized = materialize_reviewed_workspace("workspace-provider-only.json");
     let mut child = Command::new(env!("CARGO_BIN_EXE_noesis"))
         .args(["federate", "--workspace-manifest"])
-        .arg(&manifest)
+        .arg(&materialized.manifest)
         .args(["--profile", "standard-local-s6", "--format", "json"])
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
@@ -301,7 +329,7 @@ fn pt_fr_fed_001_fifty_input_orders_are_byte_identical() {
     let mut workspace = read_json(&fixture_root().join("workspace.json"));
     let clients = workspace["clients"].as_array().unwrap().clone();
     let materialized = MaterializedWorkspace::with_inputs(&workspace);
-    let expected = fs::read(fixture_root().join("expected-federation-report.json")).unwrap();
+    let expected = read_reviewed_fixture(&fixture_root().join("expected-federation-report.json"));
     for seed in 0..50_u64 {
         let mut permutation = clients.clone();
         shuffle(&mut permutation, seed);
@@ -317,7 +345,7 @@ fn pt_fr_fed_001_fifty_input_orders_are_byte_identical() {
 fn pt_fr_fed_001_ten_parallel_schedules_are_byte_identical() {
     let workspace = read_json(&fixture_root().join("workspace.json"));
     let materialized = MaterializedWorkspace::with_inputs(&workspace);
-    let expected = fs::read(fixture_root().join("expected-federation-report.json")).unwrap();
+    let expected = read_reviewed_fixture(&fixture_root().join("expected-federation-report.json"));
     let handles = (0..10)
         .map(|_| {
             let manifest = materialized.manifest.clone();
@@ -356,7 +384,7 @@ fn pt_fr_fed_001_public_limits_accept_max_and_reject_plus_one() {
 }
 
 fn assert_workspace_bytes_boundary() {
-    let provider = fs::read(fixture_root().join("provider/openapi.json")).unwrap();
+    let provider = read_reviewed_fixture(&fixture_root().join("provider/openapi.json"));
     let (materialized, workspace) = materialize_provider(
         &provider,
         "openapi.json",
@@ -379,7 +407,7 @@ fn assert_workspace_bytes_boundary() {
 }
 
 fn assert_repository_boundary() {
-    let provider = fs::read(fixture_root().join("provider/openapi.json")).unwrap();
+    let provider = read_reviewed_fixture(&fixture_root().join("provider/openapi.json"));
     let mut workspace = read_json(&fixture_root().join("workspace-provider-only.json"));
     workspace["provider"]["contract_path"] = json!("openapi.json");
     workspace["provider"]["contract_sha256"] = json!(sha256_hex(&provider));
@@ -411,7 +439,7 @@ fn assert_repository_boundary() {
 }
 
 fn assert_contract_bytes_boundary() {
-    let mut provider = fs::read(fixture_root().join("provider/openapi.json")).unwrap();
+    let mut provider = read_reviewed_fixture(&fixture_root().join("provider/openapi.json"));
     assert!(provider.len() < CONTRACT_BYTES_MAXIMUM);
     provider.resize(CONTRACT_BYTES_MAXIMUM, b' ');
     let (materialized, mut workspace) = materialize_provider(
@@ -578,7 +606,7 @@ fn boundary_client(index: usize) -> (Value, Vec<u8>) {
 }
 
 fn yaml_with_nested_mappings(nested_mappings: usize) -> Vec<u8> {
-    let mut yaml = fs::read(fixture_root().join("provider/openapi.yaml")).unwrap();
+    let mut yaml = read_reviewed_fixture(&fixture_root().join("provider/openapi.yaml"));
     if !yaml.ends_with(b"\n") {
         yaml.push(b'\n');
     }
@@ -809,6 +837,16 @@ fn federate(workspace_manifest: &Path) -> Output {
         .expect("launch S6 federation subject")
 }
 
+fn federate_reviewed(workspace_manifest: &str) -> Output {
+    let materialized = materialize_reviewed_workspace(workspace_manifest);
+    federate(&materialized.manifest)
+}
+
+fn materialize_reviewed_workspace(workspace_manifest: &str) -> MaterializedWorkspace {
+    let workspace = read_json(&fixture_root().join(workspace_manifest));
+    MaterializedWorkspace::with_inputs(&workspace)
+}
+
 fn federate_to_file(workspace_manifest: &Path, stdout: &Path) -> Output {
     Command::new(env!("CARGO_BIN_EXE_noesis"))
         .args(["federate", "--workspace-manifest"])
@@ -844,11 +882,13 @@ fn assert_success_or_expected_red(output: &Output) {
 }
 
 fn assert_reviewed_success(workspace: &str, expected: &str) {
-    let fixture = fixture_root();
-    let output = federate(&fixture.join(workspace));
+    let output = federate_reviewed(workspace);
     assert!(output.status.success(), "{output:?}");
     assert!(output.stderr.is_empty());
-    assert_eq!(output.stdout, fs::read(fixture.join(expected)).unwrap());
+    assert_eq!(
+        output.stdout,
+        read_reviewed_fixture(&fixture_root().join(expected))
+    );
 }
 
 fn assert_error(output: &Output, exit_code: i32, code: &str) -> Value {
@@ -875,7 +915,7 @@ fn provider_variant_workspace(file: &str) -> Value {
             "revision": "fixture-provider-a",
             "root": "variants",
             "contract_path": file,
-            "contract_sha256": sha256_hex(&fs::read(source).unwrap()),
+            "contract_sha256": sha256_hex(&read_reviewed_fixture(&source)),
             "service_authority": "https://api.example.invalid"
         },
         "clients": []
@@ -893,7 +933,11 @@ impl MaterializedWorkspace {
         for logical_path in workspace_input_paths(workspace) {
             let destination = materialized.root.join(&logical_path);
             fs::create_dir_all(destination.parent().unwrap()).unwrap();
-            fs::copy(fixture_root().join(&logical_path), destination).unwrap();
+            fs::write(
+                destination,
+                read_reviewed_fixture(&fixture_root().join(&logical_path)),
+            )
+            .unwrap();
         }
         materialized
     }
@@ -952,6 +996,30 @@ fn workspace_input_paths(workspace: &Value) -> Vec<String> {
 
 fn read_json(path: &Path) -> Value {
     serde_json::from_slice(&fs::read(path).unwrap()).unwrap()
+}
+
+fn read_reviewed_fixture(path: &Path) -> Vec<u8> {
+    let bytes = fs::read(path).unwrap();
+    normalize_reviewed_fixture_bytes(&bytes)
+        .unwrap_or_else(|reason| panic!("invalid reviewed fixture {}: {reason}", path.display()))
+}
+
+fn normalize_reviewed_fixture_bytes(bytes: &[u8]) -> Result<Vec<u8>, &'static str> {
+    let mut normalized = Vec::with_capacity(bytes.len());
+    let mut index = 0;
+    while index < bytes.len() {
+        if bytes[index] != b'\r' {
+            normalized.push(bytes[index]);
+            index += 1;
+            continue;
+        }
+        if bytes.get(index + 1) != Some(&b'\n') {
+            return Err("reviewed fixture contains a bare carriage return");
+        }
+        normalized.push(b'\n');
+        index += 2;
+    }
+    Ok(normalized)
 }
 
 fn remove_evidence_references(value: &mut Value) {
