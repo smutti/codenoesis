@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/extraction-chunk-v3.schema.json",
+  "title": "CodeNoesis ExtractionChunkV3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ontology_version",
+    "repository_identity",
+    "crate_id",
+    "source_file_id",
+    "workspace",
+    "semantic_hash",
+    "entities",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.extraction-chunk/v3"
+    },
+    "ontology_version": {
+      "const": "codenoesis.ontology/rust/v3"
+    },
+    "repository_identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "crate_id": {
+      "$ref": "../extraction-chunk-v2.schema.json#/$defs/entity_id"
+    },
+    "source_file_id": {
+      "$ref": "../extraction-chunk-v2.schema.json#/$defs/entity_id"
+    },
+    "workspace": {
+      "$ref": "#/$defs/workspace_binding"
+    },
+    "semantic_hash": {
+      "$ref": "../extraction-chunk-v2.schema.json#/$defs/hash"
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "$ref": "../extraction-chunk-v2.schema.json#/$defs/entity"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "$ref": "../extraction-chunk-v2.schema.json#/$defs/relationship"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "$ref": "../extraction-chunk-v2.schema.json#/$defs/claim"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "../extraction-chunk-v2.schema.json#/$defs/evidence"
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "$ref": "../extraction-chunk-v2.schema.json#/$defs/diagnostic"
+      }
+    },
+    "coverage": {
+      "type": "array",
+      "items": {
+        "$ref": "../extraction-chunk-v2.schema.json#/$defs/coverage"
+      }
+    }
+  },
+  "$defs": {
+    "workspace_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "root_shape",
+        "member_path",
+        "member_source",
+        "manifest_path",
+        "target_kind",
+        "target_name"
+      ],
+      "properties": {
+        "root_shape": {
+          "enum": [
+            "standalone_root_package",
+            "virtual_workspace",
+            "non_virtual_workspace"
+          ]
+        },
+        "member_path": {
+          "$ref": "#/$defs/member_path"
+        },
+        "member_source": {
+          "enum": [
+            "literal_member",
+            "implicit_root_package",
+            "explicit_root_member"
+          ]
+        },
+        "manifest_path": {
+          "$ref": "#/$defs/canonical_path"
+        },
+        "target_kind": {
+          "enum": [
+            "lib",
+            "bin"
+          ]
+        },
+        "target_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        }
+      }
+    },
+    "member_path": {
+      "oneOf": [
+        {
+          "const": "."
+        },
+        {
+          "$ref": "#/$defs/canonical_path"
+        }
+      ]
+    },
+    "canonical_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!.*(?:^|/)(?:\\.|\\.\\.)(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": "codenoesis.semantic-hash-contract/v2",
+  "algorithm": "blake3-256",
+  "canonicalization": "RFC8785",
+  "domain_separator_hex": "00",
+  "hashes": {
+    "configuration": {
+      "domain": "codenoesis.configuration.semantic.v3",
+      "payload": "ConfigurationV3 without semantic_hash"
+    },
+    "extraction_chunk": {
+      "domain": "codenoesis.extraction-chunk.semantic.v3",
+      "payload": "ExtractionChunkV3 without semantic_hash"
+    },
+    "knowledge_graph": {
+      "domain": "codenoesis.knowledge-graph.semantic.v3",
+      "payload": "KnowledgeGraphV3 without semantic_hash"
+    },
+    "snapshot": {
+      "domain": "codenoesis.repository-snapshot.semantic.v6",
+      "payload": "RepositorySnapshotV6.semantic"
+    }
+  }
+}

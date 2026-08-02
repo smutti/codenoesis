@@ -1,0 +1,320 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/codenoesis-error-v10.schema.json",
+  "title": "CodeNoesisErrorV10",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v10"
+    },
+    "code": {
+      "enum": [
+        "input.invalid_workspace_profile",
+        "extraction.invalid_workspace_manifest",
+        "extraction.workspace_member_conflict",
+        "extraction.workspace_target_conflict",
+        "extraction.root_package_limit_exceeded",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "input",
+        "extraction",
+        "internal"
+      ]
+    },
+    "message": {
+      "enum": [
+        "invalid workspace profile",
+        "invalid workspace manifest",
+        "conflicting workspace member",
+        "conflicting workspace target",
+        "root package workspace limit exceeded",
+        "internal error"
+      ]
+    },
+    "retryable": {
+      "const": false
+    },
+    "context": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/empty_context"
+        },
+        {
+          "$ref": "#/$defs/manifest_context"
+        },
+        {
+          "$ref": "#/$defs/path_context"
+        },
+        {
+          "$ref": "#/$defs/target_context"
+        },
+        {
+          "$ref": "#/$defs/limit_context"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "input.invalid_workspace_profile"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "input"
+          },
+          "message": {
+            "const": "invalid workspace profile"
+          },
+          "context": {
+            "$ref": "#/$defs/empty_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.invalid_workspace_manifest"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "message": {
+            "const": "invalid workspace manifest"
+          },
+          "context": {
+            "$ref": "#/$defs/manifest_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.workspace_member_conflict"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "message": {
+            "const": "conflicting workspace member"
+          },
+          "context": {
+            "$ref": "#/$defs/path_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.workspace_target_conflict"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "message": {
+            "const": "conflicting workspace target"
+          },
+          "context": {
+            "$ref": "#/$defs/target_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.root_package_limit_exceeded"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "message": {
+            "const": "root package workspace limit exceeded"
+          },
+          "context": {
+            "$ref": "#/$defs/limit_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "internal.unexpected"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "internal"
+          },
+          "message": {
+            "const": "internal error"
+          },
+          "context": {
+            "$ref": "#/$defs/empty_context"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "empty_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 0
+    },
+    "manifest_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reason",
+        "path"
+      ],
+      "properties": {
+        "reason": {
+          "enum": [
+            "malformed_toml",
+            "missing_root_manifest",
+            "unsupported_root_shape",
+            "unsupported_structural_key",
+            "invalid_member_path",
+            "invalid_exclusion_path",
+            "missing_member_manifest",
+            "invalid_package_manifest",
+            "invalid_target_path",
+            "missing_target_root",
+            "ambiguous_conventional_target",
+            "unicode_normalization_collision"
+          ]
+        },
+        "path": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/path"
+            }
+          ]
+        }
+      }
+    },
+    "path_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/path"
+        }
+      }
+    },
+    "target_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "target_kind",
+        "target_name"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "target_kind": {
+          "enum": [
+            "lib",
+            "bin"
+          ]
+        },
+        "target_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        }
+      }
+    },
+    "limit_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "limit",
+        "maximum",
+        "observed"
+      ],
+      "properties": {
+        "limit": {
+          "enum": [
+            "workspace_members",
+            "workspace_exclusions",
+            "package_manifests",
+            "workspace_crates",
+            "binary_roots_per_package",
+            "single_manifest_bytes"
+          ]
+        },
+        "maximum": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4194304
+        },
+        "observed": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 4194305
+        }
+      }
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?:Cargo\\.toml|[^/\\\\\\u0000-\\u001f\\u007f]+(?:/[^/\\\\\\u0000-\\u001f\\u007f]+)*)$"
+    }
+  }
+}
