@@ -28,6 +28,7 @@ ONTOLOGY_PATH = SPEC_ROOT / "rust-ontology-v4.json"
 ERROR_SCHEMA_PATH = SPEC_ROOT / "codenoesis-error-v11.schema.json"
 HASH_CONTRACT_PATH = SPEC_ROOT / "semantic-hash-contract-v3.json"
 RED_OBSERVATION_PATH = SPEC_ROOT / "red-observation.json"
+QUERY_V2_SCHEMA_PATH = SPEC_ROOT / "local-query-result-v2.schema.json"
 FIXTURE_ROOT = ROOT / "tests/fixtures/s4/cargo-manifest-facts-v1"
 FIXTURE_REPOSITORY = FIXTURE_ROOT / "repository"
 FIXTURE_MANIFEST_PATH = FIXTURE_ROOT / "manifest.json"
@@ -262,6 +263,19 @@ def assignment_keys(body: str) -> set[str]:
 
 
 class S4CargoManifestFactsGovernanceTests(unittest.TestCase):
+    def test_r4_exact_id_query_contract_is_complete(self) -> None:
+        chunk_schema = load_json(CHUNK_SCHEMA_PATH)
+        diagnostic = chunk_schema["$defs"]["diagnostic"]
+        self.assertIn(
+            "id",
+            diagnostic["properties"],
+            "R4 diagnostics lack stable exact-query identity",
+        )
+        self.assertTrue(
+            QUERY_V2_SCHEMA_PATH.is_file(),
+            "LocalQueryResultV2 contract is absent",
+        )
+
     def test_ratification_register_and_decision_are_exact(self) -> None:
         srs = SRS_PATH.read_text(encoding="utf-8")
         decision = DECISION_PATH.read_text(encoding="utf-8")
