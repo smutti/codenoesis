@@ -9,6 +9,8 @@ use sha2::{Digest as _, Sha256};
 use super::{git_command, read_repository_text, stdout_line, successful_output, unique_temp_root};
 
 pub const REPOSITORY_ID: &str = "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1";
+pub const FIXTURE_TREE_OID: &str = "c99449f6f0651e4f6398521e316f3500d0e508e7";
+pub const FIXTURE_COMMIT_OID: &str = "7b1fc9073552b5967b1620d1e082a1d45e1b380e";
 
 pub struct MaterializedCargoManifestRepository {
     pub root: PathBuf,
@@ -77,6 +79,7 @@ impl MaterializedCargoManifestRepository {
         let mut write_tree = git_command(&global_config);
         write_tree.arg("-C").arg(&worktree).arg("write-tree");
         let tree_oid = stdout_line(successful_output(write_tree, None));
+        assert_eq!(tree_oid, FIXTURE_TREE_OID, "R4 fixture tree changed");
         let mut make_commit = git_command(&global_config);
         make_commit
             .arg("-C")
@@ -92,6 +95,7 @@ impl MaterializedCargoManifestRepository {
             make_commit,
             Some(b"CodeNoesis R4 fixture\n"),
         ));
+        assert_eq!(commit_oid, FIXTURE_COMMIT_OID, "R4 fixture commit changed");
         let mut update_ref = git_command(&global_config);
         update_ref
             .arg("-C")
