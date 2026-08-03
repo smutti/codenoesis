@@ -7,11 +7,11 @@
     },
     {
       "path": "docs/software/decisions/0012-s4-cargo-manifest-facts-contract.md",
-      "sha256": "f25e083d5fa0e21fe7c8b326ad926773820a1c91c652698a05ae6eab66a4ed80"
+      "sha256": "6fa29d1f8e4e245db917a70b54db9dbb87997c3167ced64d208c224feb077845"
     },
     {
       "path": "scripts/tests/test_s4_cargo_manifest_facts_contract.py",
-      "sha256": "bbff81d01bf192c0509330e295a971ee115a131536a45b900ff9207929a03443"
+      "sha256": "bee027904eacd7c68c140c6cf9c102e972ae85ef33afe912af1b6c6c32b93bb5"
     },
     {
       "path": "tests/corpora/real-world-rust-v1.json",
@@ -79,7 +79,7 @@
     },
     {
       "path": "tests/specifications/s4/r4/e2e_fr_ext_009_cargo_manifest_facts.json",
-      "sha256": "9d21ff39241e721ea44a65b968897eadb7188c6d5d87a6a5e2418d6c6a00a41e"
+      "sha256": "ead9f09f47097a734594aa773656a74397efe397fd9316174d5f94b8763118f1"
     },
     {
       "path": "tests/specifications/s4/r4/extraction-chunk-v4.schema.json",
@@ -106,5 +106,5 @@
       "sha256": "1dc68c80cb628e6acee323cf47b708f58b89534166908880f502d3af76b9075a"
     }
   ],
-  "bundle_sha256": "fa6eb25dd877ecb2c9a2f366f23027573f5d35260a1a4ce9e0998ea775a79185"
+  "bundle_sha256": "e4af7183ec111eeee06d65d752884cee09d9e943e70fbd14a434d688f1dfa0a3"
 }

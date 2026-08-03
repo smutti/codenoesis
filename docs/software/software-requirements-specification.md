@@ -15,7 +15,7 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S6 and roadmap R0-R3 are Approved and Implemented but not Verified. `FR-EXT-009` is Proposed and becomes Approved only after the accountable maintainer manually merges protected PR #PULL_REQUEST. |
+| Status | S0 through S6 and roadmap R0-R3 are Approved and Implemented but not Verified. `FR-EXT-009` is Proposed and becomes Approved only after the accountable maintainer manually merges protected PR #103. |
 | Date | 2026-08-03 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
@@ -905,14 +905,14 @@ maintainer authorization
 [comment](https://github.com/smutti/codenoesis/issues/100#issuecomment-5163551187)
 govern this high-risk package. The following single requirement becomes
 Approved only when `@smutti` manually merges the exact protected head of
-[PR #PULL_REQUEST](https://github.com/smutti/codenoesis/pull/PULL_REQUEST).
+[PR #103](https://github.com/smutti/codenoesis/pull/103).
 The authoring agent does not approve or merge. This approval targets exactly
 the **S4 — Evidence-backed workspace docs compatibility extension** and roadmap
 R4. It does not broaden R3 or any selector-absent contract.
 
 | Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
 |---|---|---|---|---|---|---|---|
-| `FR-EXT-009` | `Proposed` (authorized in issue #100; pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #PULL_REQUEST protected merge record](https://github.com/smutti/codenoesis/pull/PULL_REQUEST) | `S4` | [Cargo manifest facts decision](decisions/0012-s4-cargo-manifest-facts-contract.md), [RepositorySnapshotV7 schema](../../tests/specifications/s4/r4/repository-snapshot-v7.schema.json), [Rust/Cargo ontology v4](../../tests/specifications/s4/r4/rust-ontology-v4.json), [ErrorV11 schema](../../tests/specifications/s4/r4/codenoesis-error-v11.schema.json), [machine oracle](../../tests/specifications/s4/r4/e2e_fr_ext_009_cargo_manifest_facts.json), and [project-owned fixture](../../tests/fixtures/s4/cargo-manifest-facts-v1/README.md) |
+| `FR-EXT-009` | `Proposed` (authorized in issue #100; pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #103 protected merge record](https://github.com/smutti/codenoesis/pull/103) | `S4` | [Cargo manifest facts decision](decisions/0012-s4-cargo-manifest-facts-contract.md), [RepositorySnapshotV7 schema](../../tests/specifications/s4/r4/repository-snapshot-v7.schema.json), [Rust/Cargo ontology v4](../../tests/specifications/s4/r4/rust-ontology-v4.json), [ErrorV11 schema](../../tests/specifications/s4/r4/codenoesis-error-v11.schema.json), [machine oracle](../../tests/specifications/s4/r4/e2e_fr_ext_009_cargo_manifest_facts.json), and [project-owned fixture](../../tests/fixtures/s4/cargo-manifest-facts-v1/README.md) |
 
 R4 is selected only by `--manifest-profile cargo-manifest-facts-v1` on an
 otherwise valid `standard-local-s4` scan that also explicitly selects
@@ -973,7 +973,7 @@ RustDesk pilot expectations are bound by the R4 contract bundle. Any bound-byte
 change requires a new digest and renewed human review.
 
 R4 Cargo manifest facts contract bundle:
-`sha256:fa6eb25dd877ecb2c9a2f366f23027573f5d35260a1a4ce9e0998ea775a79185`.
+`sha256:e4af7183ec111eeee06d65d752884cee09d9e943e70fbd14a434d688f1dfa0a3`.
 
 ## 3. Product intent and success definition
 

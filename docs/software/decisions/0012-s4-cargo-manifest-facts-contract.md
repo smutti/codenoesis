@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Status | Proposed; becomes Accepted only when `@smutti` manually merges the exact protected head of PR [#PULL_REQUEST](https://github.com/smutti/codenoesis/pull/PULL_REQUEST) |
+| Status | Proposed; becomes Accepted only when `@smutti` manually merges the exact protected head of PR [#103](https://github.com/smutti/codenoesis/pull/103) |
 | Date | 2026-08-03 |
 | Owners | Andrea Moretti (`@smutti` governance persona), accountable maintainer `@smutti` |
 | Scope | `S4 — Evidence-backed workspace docs compatibility extension` only; roadmap `R4` |

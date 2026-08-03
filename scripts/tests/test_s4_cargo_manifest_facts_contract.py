@@ -37,7 +37,7 @@ ISSUE_REFERENCE = "https://github.com/smutti/codenoesis/issues/100"
 AUTHORIZATION_REFERENCE = (
     "https://github.com/smutti/codenoesis/issues/100#issuecomment-5163551187"
 )
-APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/PULL_REQUEST"
+APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/103"
 REQUIRED_BASE = "ea51a8151749fc65e75dd7a10e550adc0b67d422"
 REPOSITORY_IDENTITY = "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1"
 

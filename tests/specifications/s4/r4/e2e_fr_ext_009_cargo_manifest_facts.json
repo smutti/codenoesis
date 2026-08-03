@@ -13,7 +13,7 @@
   "risk": "high",
   "required_base": "ea51a8151749fc65e75dd7a10e550adc0b67d422",
   "authorization": "https://github.com/smutti/codenoesis/issues/100#issuecomment-5163551187",
-  "approval": "https://github.com/smutti/codenoesis/pull/PULL_REQUEST",
+  "approval": "https://github.com/smutti/codenoesis/pull/103",
   "selector": {
     "flag": "--manifest-profile",
     "value": "cargo-manifest-facts-v1",
