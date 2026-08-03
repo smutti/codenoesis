@@ -1,0 +1,85 @@
+{
+  "schema_version": "codenoesis.r4-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+  "materialization": {
+    "repository_directory": "repository",
+    "root_manifest": "repository/Cargo.toml",
+    "workspace_member": "crates/app",
+    "deliberately_absent_paths": [
+      "repository/crates/shared",
+      "repository/vendor/custom"
+    ]
+  },
+  "files": [
+    {
+      "path": "repository/Cargo.toml",
+      "role": "root_manifest",
+      "mode": "100644",
+      "byte_length": 1317,
+      "sha256": "cb37eaeae8f7e63292832d73c9398330a1c0cfa30eee7a487a4c0ffa2d8eb9d9",
+      "git_blob_oid": "69ba91e42bc24201f35dddbe74fbac4ac029a290"
+    },
+    {
+      "path": "repository/README.md",
+      "role": "declared_metadata_file",
+      "mode": "100644",
+      "byte_length": 105,
+      "sha256": "9736b32ff66e34be6acf864c019d3761c35fecdfc127bcbd2be487246fb0b782",
+      "git_blob_oid": "af3999d46ab8bb426f99532ace2ca4162bda5181"
+    },
+    {
+      "path": "repository/crates/app/Cargo.toml",
+      "role": "package_manifest",
+      "mode": "100644",
+      "byte_length": 1597,
+      "sha256": "8242a736a70cc11b6556fad4d1ad3fd7c79ab2f0cefaf3e0bb68ab6901f78bae",
+      "git_blob_oid": "c9a7a7513824fa8ff7339e8fcde93b174f080890"
+    },
+    {
+      "path": "repository/crates/app/README.md",
+      "role": "non_authoritative_metadata_file",
+      "mode": "100644",
+      "byte_length": 131,
+      "sha256": "7f4f7b0314ec65d81dedfc100fa6cb9631e68fa06a39e8ad15508a7fb1432296",
+      "git_blob_oid": "8662ffb2455432929df573b71b4971e96ca53661"
+    },
+    {
+      "path": "repository/crates/app/build.rs",
+      "role": "execution_sentinel",
+      "mode": "100644",
+      "byte_length": 63,
+      "sha256": "4061f55539e2929d0a577f9bd50b03e6bc1a2304ec23c8070f0c5c5051c8835f",
+      "git_blob_oid": "71c512ae9f213a1d478d3a92befe755865ba81ba"
+    },
+    {
+      "path": "repository/crates/app/examples/demo.rs",
+      "role": "non_analyzed_execution_sentinel",
+      "mode": "100644",
+      "byte_length": 58,
+      "sha256": "b1d2ab9a58919bac4a5552d615220fad7d58b1650a7107876229308efcda86eb",
+      "git_blob_oid": "95ed7ad3c099ba852a4c1cda3f7236e9656f0252"
+    },
+    {
+      "path": "repository/crates/app/src/lib.rs",
+      "role": "rust_source",
+      "mode": "100644",
+      "byte_length": 66,
+      "sha256": "a314acd45b1610309050cb42977b31181346751cef498c5c8c605f73f2217d79",
+      "git_blob_oid": "c9e3ecc8d8db504669ff8eb007564ae543e285cc"
+    },
+    {
+      "path": "repository/crates/app/src/main.rs",
+      "role": "execution_sentinel",
+      "mode": "100644",
+      "byte_length": 57,
+      "sha256": "4547c96ca639919b2942a51400328601ac9a2e68ce125f2493e44a7f3c4be142",
+      "git_blob_oid": "aa650416a681250a160d8acb99bd5a85a2f0837f"
+    }
+  ],
+  "expected_plan": {
+    "path": "expected-manifest-facts.json",
+    "byte_length": 23175,
+    "sha256": "643f72b1ba5c2b7f14e518d4014f684e9837c6165ca6b1dbf86c6d0935ea5b09"
+  },
+  "external_source_vendored": false
+}

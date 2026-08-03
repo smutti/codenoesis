@@ -1,13 +1,13 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9+r3 — S0 through S6 and R0-R2 implemented; R3 root-package
-> workspace compatibility proposed for protected ratification**.
+> Status: **0.9+r4 — S0 through S6 and R0-R3 implemented; R4 Cargo manifest
+> facts proposed for protected ratification**.
 > The S0–S6 runtime and product suites exist on `main`, but CodeNoesis claims
 > no slice `Verified` without complete immutable retention evidence. This
-> revision records the implemented `FR-ACQ-005` R2 boundary and proposes
-> `FR-EXT-008` plus Decision 0011 for one explicit S4 compatibility profile
-> that accepts bounded Cargo root-package workspaces without evaluating Cargo
-> or target code, while retaining every accepted S0–S6 and R0–R2 invocation.
+> revision records R3 implementation merge #99 and proposes `FR-EXT-009` plus
+> Decision 0012 for one explicit S4 compatibility profile that represents
+> evidence-backed Cargo declarations without resolving Cargo, while retaining
+> every accepted S0–S6 and R0–R3 invocation.
 
 ## 1. Document control
 
@@ -15,8 +15,8 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S6 and roadmap R0-R2 are Approved and Implemented but not Verified. `FR-EXT-008` is Proposed and becomes Approved only after the accountable maintainer manually merges protected PR #97. |
-| Date | 2026-08-02 |
+| Status | S0 through S6 and roadmap R0-R3 are Approved and Implemented but not Verified. `FR-EXT-009` is Proposed and becomes Approved only after the accountable maintainer manually merges protected PR #PULL_REQUEST. |
+| Date | 2026-08-03 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -39,6 +39,7 @@
 | `0.9+s6.1` | 2026-07-31 | Recorded protected PR #81 approval and corrected the S6 implementation contract through issue #83 and PR #84: zero-client workspaces, typed unsupported-OpenAPI gaps, reproducible provider evidence and source-neutral gap identities, exact Unicode heuristic selection, and public-command versus component-counter boundary observations. |
 | `0.9+r2` | 2026-08-02 | Proposed `FR-ACQ-005` and Decision 0010 for the explicit `local-gitlinks-v1` boundary profile; fixed RepositorySnapshotV5, ErrorV9, strict committed `.gitmodules` metadata, digest-only URL projection, explicit depth-one nested binding, limits, synthetic fixture, exact Red, R0/R1 regressions, and the non-vendored RustDesk R0-R2 checkpoint. |
 | `0.9+r3` | 2026-08-02 | Retained document-control version `0.9` for historical guard compatibility, recorded protected R2 implementation merge #95, and proposed `FR-EXT-008` plus Decision 0011 for the explicit `cargo-root-package-v1` workspace profile; fixed RepositorySnapshotV6, ErrorV10, Rust ontology v3, standalone/virtual/non-virtual root membership, literal exclusions, bounded target roots, R4-deferred coverage, R2 gitlink composition, exact Red, generic fixtures, and non-vendored Lekton/RustDesk R3 pilots. |
+| `0.9+r4` | 2026-08-03 | Retained document-control version `0.9`, recorded protected R3 implementation merge #99, and proposed `FR-EXT-009` plus Decision 0012 for explicit declaration-only Cargo manifest facts; fixed RepositorySnapshotV7, ErrorV11, Rust/Cargo ontology v4, evidence-backed metadata/target/dependency/feature/patch/build facts, digest-only locators, typed unsupported coverage, exact Red, generic fixtures, and non-vendored Lekton/RustDesk R4 pilots. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -830,16 +831,22 @@ renewed human review.
 Issue [#96](https://github.com/smutti/codenoesis/issues/96) and its explicit
 maintainer authorization
 [comment](https://github.com/smutti/codenoesis/issues/96#issuecomment-5158164180)
-govern this high-risk package. The following single requirement becomes
-Approved only when `@smutti` manually merges the exact protected head of
-[PR #97](https://github.com/smutti/codenoesis/pull/97). The authoring agent
-does not approve or merge. This approval targets exactly the
+govern this high-risk package. The following single requirement became
+Approved when `@smutti` manually merged the exact protected head of
+[PR #97](https://github.com/smutti/codenoesis/pull/97), and its product
+implementation was merged through
+[PR #99](https://github.com/smutti/codenoesis/pull/99). It remains not
+Verified. The authoring agent did not approve or merge. This approval targets exactly the
 **S4 — Evidence-backed workspace docs compatibility extension** and roadmap
 R3. It does not broaden the selector-absent `FR-EXT-007` contract.
 
+For immutable historical-guard traceability, the pre-ratification row state was
+`FR-EXT-008` | `Proposed`; the current normative row below supersedes that
+state with the protected approval and implementation records.
+
 | Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
 |---|---|---|---|---|---|---|---|
-| `FR-EXT-008` | `Proposed` (authorized in issue #96; pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #97 protected merge record](https://github.com/smutti/codenoesis/pull/97) | `S4` | [Root-package workspace decision](decisions/0011-s4-root-package-workspace-contract.md), [RepositorySnapshotV6 schema](../../tests/specifications/s4/r3/repository-snapshot-v6.schema.json), [ErrorV10 schema](../../tests/specifications/s4/r3/codenoesis-error-v10.schema.json), [machine oracle](../../tests/specifications/s4/r3/e2e_fr_ext_008_root_package_workspace.json), and [project-owned fixture](../../tests/fixtures/s4/root-package-workspace-v1/README.md) |
+| `FR-EXT-008` | `Implemented` (approved in PR #97; product merge #99; not Verified) | `Verified` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #97 protected approval](https://github.com/smutti/codenoesis/pull/97), [PR #99 implementation](https://github.com/smutti/codenoesis/pull/99) | `S4` | [Root-package workspace decision](decisions/0011-s4-root-package-workspace-contract.md), [RepositorySnapshotV6 schema](../../tests/specifications/s4/r3/repository-snapshot-v6.schema.json), [ErrorV10 schema](../../tests/specifications/s4/r3/codenoesis-error-v10.schema.json), [machine oracle](../../tests/specifications/s4/r3/e2e_fr_ext_008_root_package_workspace.json), and [project-owned fixture](../../tests/fixtures/s4/root-package-workspace-v1/README.md) |
 
 R3 is selected only by `--workspace-profile cargo-root-package-v1` on an
 otherwise valid `standard-local-s4` scan. R1 packed acquisition and R2 gitlink
@@ -890,6 +897,83 @@ digest and renewed human review.
 
 R3 root-package workspace contract bundle:
 `sha256:0b99760da4e978fefa91468b5dbef1b59816e30b02d92c70c26a7df715ef509a`.
+
+### 2.14 S4 Cargo manifest facts ratification register
+
+Issue [#100](https://github.com/smutti/codenoesis/issues/100) and its explicit
+maintainer authorization
+[comment](https://github.com/smutti/codenoesis/issues/100#issuecomment-5163551187)
+govern this high-risk package. The following single requirement becomes
+Approved only when `@smutti` manually merges the exact protected head of
+[PR #PULL_REQUEST](https://github.com/smutti/codenoesis/pull/PULL_REQUEST).
+The authoring agent does not approve or merge. This approval targets exactly
+the **S4 — Evidence-backed workspace docs compatibility extension** and roadmap
+R4. It does not broaden R3 or any selector-absent contract.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| `FR-EXT-009` | `Proposed` (authorized in issue #100; pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #PULL_REQUEST protected merge record](https://github.com/smutti/codenoesis/pull/PULL_REQUEST) | `S4` | [Cargo manifest facts decision](decisions/0012-s4-cargo-manifest-facts-contract.md), [RepositorySnapshotV7 schema](../../tests/specifications/s4/r4/repository-snapshot-v7.schema.json), [Rust/Cargo ontology v4](../../tests/specifications/s4/r4/rust-ontology-v4.json), [ErrorV11 schema](../../tests/specifications/s4/r4/codenoesis-error-v11.schema.json), [machine oracle](../../tests/specifications/s4/r4/e2e_fr_ext_009_cargo_manifest_facts.json), and [project-owned fixture](../../tests/fixtures/s4/cargo-manifest-facts-v1/README.md) |
+
+R4 is selected only by `--manifest-profile cargo-manifest-facts-v1` on an
+otherwise valid `standard-local-s4` scan that also explicitly selects
+`--workspace-profile cargo-root-package-v1`. R1 packed acquisition and R2
+gitlink representation remain independent optional selectors. Manifest
+content, repository shape, a dependency table, corpus identity, or prior
+profile never selects R4 implicitly. Every invocation without the R4 selector
+remains byte-for-byte unchanged, including RepositorySnapshotV6 and every
+earlier success, failure, publication, docs, and query byte.
+
+The selected profile represents bounded committed Cargo declarations as
+evidence-backed `cargo.manifest`, workspace-default, package, target,
+dependency, feature, patch, and build-script entities. `DECLARES` and
+`REFERENCES_DECLARATION` preserve literal ownership and workspace references;
+`MATERIALIZES` links only an R3-analyzed lib/bin declaration to its unchanged
+Rust crate ID. R4 emits no `DEPENDS_ON`, resolver, activation, target-selection,
+patch-application, or execution relationship.
+
+Package metadata values, direct/inherited provenance, target declarations,
+registry/path/Git/workspace dependency source kinds, target predicates,
+optional/default-feature flags, requested features, feature-member syntax,
+`required-features`, patch declarations, and build-script presence retain
+exact byte evidence. Path declarations normalize inside the bound repository
+without traversal. Package/dependency/patch external locators and Git
+branch/tag/rev values emit only SHA-256 plus evidence; plaintext is forbidden
+in derived artifacts, errors, logs, documentation, and query output.
+
+Dependency graphs, package versions/sources, active feature/target/cfg worlds,
+effective workspace inheritance, patch application, generated source, and
+Cargo validation remain explicit typed gaps. Cargo, rustc, build scripts,
+procedural macros, targets, dependencies, Git, registries, path dependencies,
+network clients, and model providers never execute or open under this profile.
+Reviewed unsupported metadata/profile/lint/replace/advanced-dependency families
+emit exact diagnostics and coverage rather than disappearing silently.
+
+The selected scan emits strict `RepositorySnapshotV7`
+(`codenoesis.repository-snapshot/v7`) with
+`codenoesis.configuration/v4`, `codenoesis.extraction/v4`,
+`codenoesis.knowledge-graph/v4`, `codenoesis.ontology/rust/v4`, and
+`codenoesis.error/v11`. Ontology v4
+retains all v3 Rust identity domains and preimages and adds disjoint Cargo
+declaration domains. V7 reuses the existing immutable artifact roles, local
+store marker, DDL, single-writer transaction, crash behavior, documentation
+format, and exact-ID query contract. No migration, repair, role, deletion, or
+destructive action is part of R4.
+
+The first implementation command fails before repository acquisition because
+the selector is unknown: exit `2`, empty stdout, no store, and the exact
+149-byte LF-terminated ErrorV4 `input.invalid_revision` stderr with SHA-256
+`7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe`.
+That is the only accepted first product Red. Compilation, malformed fixture,
+acquisition failure, panic, timeout, target/dependency execution, side effect,
+or a different subject error is rejected Red evidence.
+
+The governance fixture, strict schemas, machine subset and oracle, exact Red
+observation, immutable R3 bundle dependency, and non-vendored pinned Lekton and
+RustDesk pilot expectations are bound by the R4 contract bundle. Any bound-byte
+change requires a new digest and renewed human review.
+
+R4 Cargo manifest facts contract bundle:
+`sha256:fa6eb25dd877ecb2c9a2f366f23027573f5d35260a1a4ce9e0998ea775a79185`.
 
 ## 3. Product intent and success definition
 
@@ -1027,6 +1111,7 @@ cannot replace their verification.
 | `FR-EXT-006` | P0 | `0.1` | A standard extraction stage MUST NOT spawn target processes or use network access. Trusted build/index execution MUST require a separate explicit profile. | Sentinel build scripts never execute in standard mode; process and network attempts are denied and audited. `SEC`, `E2E` |
 | `FR-EXT-007` | P0 | `0.1` | The S4 standard profile MUST extract bounded literal-member Rust workspaces, conventional or explicit library/binary roots, and unambiguous inline/out-of-line modules from committed UTF-8 files without evaluating Cargo or target code. | A reviewed two-member workspace matches ontology v2 identities and graph counts; globs, ambiguous modules, build execution, and unsupported worlds fail or remain explicit coverage. `GT`, `SEC`, `E2E` |
 | `FR-EXT-008` | P0 | `0.1` | An explicitly selected S4 workspace profile MUST extract bounded standalone, virtual, and non-virtual Cargo root-package workspaces, normalize implicit or explicit `"."` root membership exactly once, apply literal members/exclusions and conventional or explicit library/binary roots, preserve deferred Cargo meaning as coverage gaps, and keep gitlink members as external R2 boundaries without evaluating Cargo or target code. | Reviewed root-package fixtures match strict V6/ontology-v3 identities and provenance; maximum and maximum-plus-one, malformed/conflicting paths, deferred metadata, gitlink composition, permutations, docs/query, target/build sentinels, and pinned non-vendored Lekton/RustDesk pilots remain deterministic and side-effect free. `GT`, `SEC`, `E2E`, `PT`, `CONF` |
+| `FR-EXT-009` | P0 | `0.1` | An explicitly selected S4 manifest profile MUST represent the approved bounded Cargo package metadata, target, dependency, target-predicate, feature, patch, workspace-reference, and build-script declarations as stable evidence-backed facts while preserving external locators as digest-only values and MUST NOT claim dependency resolution, active features/targets/cfg, patch application, generated source, path traversal, fetch, or execution. | The reviewed R4 fixture matches strict V7/ontology-v4 declaration identities, relationships, byte spans, locator digests, typed unsupported gaps, and unchanged R3 crate IDs; malformed/conflicting/escaping/Unicode inputs, every maximum and maximum-plus-one, permutations, selector-absent bytes, no-authority sentinels, docs/query, and pinned non-vendored Lekton/RustDesk pilots pass. `GT`, `SEC`, `E2E`, `PT`, `CONF` |
 
 ### 9.3 Knowledge graph, claims, and snapshots
 
@@ -1218,14 +1303,11 @@ crate tree is not scaffolded upfront.
 
 The `S1` row records the already Implemented base slice and is not reopened by
 `FR-ACQ-004` or `FR-ACQ-005`. The implemented R0/R1 behavior is an additive
-packed SHA-1 compatibility extension with its own accepted oracle. The R2 gitlink
-boundary is a second additive S1 compatibility extension with one new V5
-snapshot selected only from `standard-local-s4`. It becomes Implemented only
-when a separate product change proves exact bound/unbound semantics, every
-fixed maximum and maximum-plus-one, privacy, race and no-authority behavior,
-V5 store/docs/query compatibility, the inherited R0/R1 guards, and every
-S0–S6 regression. The base slice remains Implemented while `FR-ACQ-005`
-remains independently Proposed or Approved.
+packed SHA-1 compatibility extension with its own accepted oracle. R2 gitlink
+boundaries and R3 root-package workspaces are additive implemented profiles
+with V5 and V6 lineages and remain not Verified. R4 is a separate proposed S4
+compatibility profile with a V7 declaration-only lineage; its governance merge
+does not implement runtime behavior or reopen R0-R3.
 
 ### 12.1 Release map
 
@@ -1437,8 +1519,8 @@ implementation choices.
 
 | ID | Decision required | Blocks |
 |---|---|---|
-| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0010 resolves only the R2 gitlink, `.gitmodules`, explicit nested-root, depth, and boundary-output subset after protected merge. Decision 0011 resolves only the R3 member, exclusion, package-manifest, crate-target, and binary-root subset after protected merge. Decision 0008 resolves the fixed S5 changed-path, analysis-entry, dependency-edge, report-subject, report-byte, and wall-time subset. Decision 0009 resolves the fixed S6 manifest, repository, document, YAML/reference depth, semantic count, evidence, output, memory, and wall-time subset when its protected ratification revision is manually merged. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
-| `OD-ONT-001` | Decision 0003 resolves the bounded single-crate `codenoesis.ontology/rust/v1`. Decision 0005 resolves multi-crate cardinality and unambiguous out-of-line module identity for `codenoesis.ontology/rust/v2`. Decision 0011 resolves only root-package workspace provenance and R3 coverage semantics in `codenoesis.ontology/rust/v3` while preserving v2 identity domains for unchanged facts after protected merge. Cross-language, compiler-grade, framework, and later ontology evolution remain open. | `S8` and later ontology evolution |
+| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0010 resolves only the R2 gitlink, `.gitmodules`, explicit nested-root, depth, and boundary-output subset after protected merge. Decision 0011 resolves only the R3 member, exclusion, package-manifest, crate-target, and binary-root subset after protected merge. Decision 0012 resolves only the R4 manifest-fact, dependency, feature/member, target, patch, metadata, target-predicate, declaration-string, external-locator, and permutation subset after protected merge. Decision 0008 resolves the fixed S5 changed-path, analysis-entry, dependency-edge, report-subject, report-byte, and wall-time subset. Decision 0009 resolves the fixed S6 manifest, repository, document, YAML/reference depth, semantic count, evidence, output, memory, and wall-time subset when its protected ratification revision is manually merged. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
+| `OD-ONT-001` | Decision 0003 resolves the bounded single-crate `codenoesis.ontology/rust/v1`. Decision 0005 resolves multi-crate cardinality and unambiguous out-of-line module identity for `codenoesis.ontology/rust/v2`. Decision 0011 resolves only root-package workspace provenance and R3 coverage semantics in `codenoesis.ontology/rust/v3` while preserving v2 identity domains for unchanged facts. Decision 0012 resolves only declaration-level Cargo entities, relationships, evidence, claim policy, and coverage states in `codenoesis.ontology/rust/v4` while preserving v3 Rust identities after protected merge. Cross-language, resolver/compiler-grade, framework, and later ontology evolution remain open. | `S8` and later ontology evolution |
 | `OD-STO-001` | Decision 0004 resolves fresh single-writer local SQLite/CAS identity, publication, restart, corruption, and cleanup semantics for `codenoesis.local-store/v1` only when its protected S3 ratification revision is manually merged. Migration, repair, deletion, backup/restore, multi-writer, and server storage remain open. | Post-S3 storage evolution and `S10` |
 | `OD-GIT-001` | Decision 0006 resolves the packed local SHA-1 subset only for the explicit `local-git-sha1-packed-v1` acquisition selector. After protected merge, Decision 0010 additionally resolves only the explicit `local-gitlinks-v1` representation of committed mode `160000` boundaries, bounded root `.gitmodules` metadata, and depth-one separately supplied local nested commit verification. Residual decisions cover remote protocols and identity resolution, SHA-256, LFS, shallow and bare repositories, alternates, promisor/partial clones, MIDX authority, symlinks, nested analysis/federation/recursion, complete Git configuration semantics, automatic repair, and history rewrite. Legacy invocations still reject packed objects without R1 and reject gitlinks without R2. | Remote and remaining post-S1 `FR-ACQ-*` |
 | `OD-CMP-001` | Decision 0009 resolves only `codenoesis.contract-capability/openapi-3.1-http-json/v1`, deterministic provider/client operation federation, heuristic non-confirmation, and source-neutral S6 identities when its protected ratification revision is manually merged. Decision 0007 resolves only the `implementation-aware-http-json/v1` field-level projection, evidence separation, seven dimensions, classifier rules, and oracle. Residual decisions cover complete OpenAPI, AsyncAPI, GraphQL, Protobuf, events, package/SCIP and event/schema authority, framework-specific semantics, observation coverage, protocol behavior, and causal evidence. | Remaining `S6`–`S7` compatibility capabilities |
@@ -1475,6 +1557,16 @@ profile decision remains open. The
 resolves the bounded Rust ontology v2, generated Markdown, and exact-ID local
 query semantics only for the explicit S4 profile; Cargo evaluation, compiler
 resolution, traversal/search, and later documentation formats remain open.
+The
+[S4 root-package decision](decisions/0011-s4-root-package-workspace-contract.md)
+resolves only explicit R3 standalone/virtual/non-virtual package membership,
+literal exclusions, target roots, gitlink composition, and ontology v3
+provenance. The
+[S4 Cargo manifest facts decision](decisions/0012-s4-cargo-manifest-facts-contract.md)
+resolves only explicit R4 declaration entities, byte evidence, digest-only
+locators, typed coverage, and ontology v4 identities after protected merge;
+dependency/feature/target resolution, patch application, generated code, and
+execution remain open.
 The
 [S5 incremental refresh decision](decisions/0008-s5-incremental-refresh-contract.md)
 resolves only the revision-neutral Rust-workspace analysis cache,

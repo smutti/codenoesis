@@ -1,0 +1,66 @@
+[package]
+name = "manifest-app"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+description.workspace = true
+documentation.workspace = true
+homepage.workspace = true
+repository.workspace = true
+license.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+publish.workspace = true
+include.workspace = true
+exclude.workspace = true
+default-run = "manifest-app"
+build = "build.rs"
+autobins = false
+autoexamples = false
+
+[lib]
+name = "manifest_app"
+path = "src/lib.rs"
+crate-type = ["rlib"]
+doctest = false
+proc-macro = true
+
+[[bin]]
+name = "manifest-app"
+path = "src/main.rs"
+required-features = ["cli"]
+test = false
+
+[[example]]
+name = "demo"
+path = "examples/demo.rs"
+required-features = ["local-feature"]
+harness = false
+
+[dependencies]
+serde = { workspace = true, optional = true, features = ["alloc"] }
+renamed = { package = "real-package", version = "^2.1", registry = "internal", default-features = false, features = ["api"] }
+local-util = { path = "../shared", version = "0.4" }
+remote-api = { git = "https://member-user:member-token@example.invalid/remote-api.git", tag = "v2.0.0" }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+nix = { version = "0.29", features = ["fs"] }
+
+[dev-dependencies]
+pretty_assertions = "1.4"
+
+[build-dependencies]
+cc = { version = "1.1", features = ["parallel"] }
+
+[features]
+default = ["cli"]
+cli = ["dep:serde", "serde?/std", "renamed/api", "local-feature"]
+local-feature = []
+
+[package.metadata.codenoesis-fixture]
+ignored = true
+
+[lints]
+workspace = true

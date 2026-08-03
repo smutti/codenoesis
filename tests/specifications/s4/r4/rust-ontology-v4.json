@@ -1,0 +1,323 @@
+{
+  "schema_version": "codenoesis.ontology-contract/v1",
+  "ontology_version": "codenoesis.ontology/rust/v4",
+  "extends": {
+    "ontology_version": "codenoesis.ontology/rust/v3",
+    "contract_path": "tests/specifications/s4/r3/rust-ontology-v3.json",
+    "contract_sha256": "ae86b71ac0a5940761b2799ba891f0f4de5cff06a6c87ff42dd0b30b69d1dc43"
+  },
+  "identity": {
+    "compatibility": "all v3 Rust domains and preimages are unchanged; R4 adds disjoint Cargo declaration domains",
+    "rust_entity_domain": "codenoesis.entity-id/rust/v2",
+    "rust_relationship_domain": "codenoesis.relationship-id/rust/v2",
+    "cargo_entity_domain": "codenoesis.entity-id/cargo-manifest/v1",
+    "cargo_relationship_domain": "codenoesis.relationship-id/cargo-manifest/v1",
+    "claim_domain": "codenoesis.claim-id/v2",
+    "evidence_domain": "codenoesis.evidence-id/v2",
+    "coverage_gap_domain": "codenoesis.coverage-gap-id/v3",
+    "manifest_preimage": [
+      "repository_identity",
+      "cargo.manifest",
+      "manifest_path"
+    ],
+    "workspace_package_defaults_preimage": [
+      "repository_identity",
+      "cargo.workspace_package_defaults",
+      "manifest_path"
+    ],
+    "package_preimage": [
+      "repository_identity",
+      "cargo.package",
+      "manifest_path",
+      "package_name"
+    ],
+    "target_preimage": [
+      "repository_identity",
+      "cargo.target",
+      "manifest_path",
+      "package_name",
+      "target_kind",
+      "target_name"
+    ],
+    "dependency_preimage": [
+      "repository_identity",
+      "cargo.dependency",
+      "manifest_path",
+      "owner_scope",
+      "dependency_kind",
+      "target_predicate_or_empty",
+      "declared_name"
+    ],
+    "feature_preimage": [
+      "repository_identity",
+      "cargo.feature",
+      "manifest_path",
+      "package_name",
+      "feature_name"
+    ],
+    "patch_preimage": [
+      "repository_identity",
+      "cargo.patch",
+      "manifest_path",
+      "source_selector_kind",
+      "source_selector_identity",
+      "declared_name"
+    ],
+    "build_script_preimage": [
+      "repository_identity",
+      "cargo.build_script",
+      "manifest_path",
+      "package_name"
+    ],
+    "cargo_relationship_preimage": [
+      "relationship_kind",
+      "source_entity_id",
+      "target_entity_id"
+    ],
+    "forbidden_inputs": [
+      "commit_oid",
+      "declaration_value",
+      "evidence_offset",
+      "external_locator_plaintext",
+      "feature_order",
+      "manifest_table_order",
+      "scheduler_order",
+      "storage_sequence"
+    ]
+  },
+  "inherited_entity_kinds": [
+    "rust.crate",
+    "source.file",
+    "rust.module",
+    "rust.struct",
+    "rust.enum",
+    "rust.trait",
+    "rust.type_alias",
+    "rust.function",
+    "rust.method",
+    "rust.symbol_reference"
+  ],
+  "cargo_entity_kinds": {
+    "cargo.manifest": [
+      "manifest_path",
+      "manifest_role",
+      "root_shape",
+      "package_table_present",
+      "workspace_table_present",
+      "evidence_id"
+    ],
+    "cargo.workspace_package_defaults": [
+      "manifest_id",
+      "manifest_path",
+      "metadata",
+      "evidence_id"
+    ],
+    "cargo.package": [
+      "manifest_id",
+      "manifest_path",
+      "package_name",
+      "metadata",
+      "evidence_id"
+    ],
+    "cargo.target": [
+      "manifest_id",
+      "package_id",
+      "manifest_path",
+      "target_kind",
+      "target_name",
+      "name_source",
+      "source_path",
+      "path_source",
+      "required_features",
+      "options",
+      "source_analysis_state",
+      "materialized_crate_id",
+      "evidence_id"
+    ],
+    "cargo.dependency": [
+      "manifest_id",
+      "owner_id",
+      "manifest_path",
+      "scope",
+      "dependency_kind",
+      "target_predicate",
+      "declared_name",
+      "package_name",
+      "source",
+      "optional",
+      "default_features",
+      "requested_features",
+      "evidence_id"
+    ],
+    "cargo.feature": [
+      "manifest_id",
+      "package_id",
+      "manifest_path",
+      "feature_name",
+      "members",
+      "evidence_id"
+    ],
+    "cargo.patch": [
+      "manifest_id",
+      "manifest_path",
+      "source_selector",
+      "declared_name",
+      "package_name",
+      "source",
+      "applied",
+      "evidence_id"
+    ],
+    "cargo.build_script": [
+      "manifest_id",
+      "package_id",
+      "manifest_path",
+      "selection",
+      "path",
+      "committed_present",
+      "executed",
+      "evidence_id"
+    ]
+  },
+  "cargo_relationship_kinds": {
+    "DECLARES": [
+      [
+        "cargo.manifest",
+        "cargo.workspace_package_defaults"
+      ],
+      [
+        "cargo.manifest",
+        "cargo.package"
+      ],
+      [
+        "cargo.manifest",
+        "cargo.dependency"
+      ],
+      [
+        "cargo.manifest",
+        "cargo.patch"
+      ],
+      [
+        "cargo.package",
+        "cargo.target"
+      ],
+      [
+        "cargo.package",
+        "cargo.dependency"
+      ],
+      [
+        "cargo.package",
+        "cargo.feature"
+      ],
+      [
+        "cargo.package",
+        "cargo.build_script"
+      ]
+    ],
+    "REFERENCES_DECLARATION": [
+      [
+        "cargo.package",
+        "cargo.workspace_package_defaults"
+      ],
+      [
+        "cargo.dependency",
+        "cargo.dependency"
+      ]
+    ],
+    "MATERIALIZES": [
+      [
+        "cargo.target",
+        "rust.crate"
+      ]
+    ]
+  },
+  "forbidden_relationship_kinds": [
+    "DEPENDS_ON",
+    "RESOLVES_TO",
+    "ACTIVATES",
+    "SELECTS_TARGET",
+    "APPLIES_PATCH",
+    "EXECUTES"
+  ],
+  "claim_policy": {
+    "literal_declaration_entities": "deterministic_fact",
+    "declaration_reference_relationships": "deterministic_fact",
+    "target_materialization_relationships": "derived_fact",
+    "conventional_or_absent_build_script": "derived_fact",
+    "forbidden_states_for_cargo_subjects": [
+      "candidate",
+      "reviewed_inference",
+      "confirmed",
+      "rejected",
+      "superseded"
+    ]
+  },
+  "evidence_policy": {
+    "required_for_every_cargo_entity": true,
+    "required_for_every_cargo_relationship": true,
+    "required_for_every_metadata_value": true,
+    "required_for_every_requested_feature": true,
+    "required_for_every_feature_member": true,
+    "span_unit": "UTF-8 byte offset in the committed manifest blob",
+    "locator_projection": "sha256 digest plus evidence span; plaintext is forbidden outside the bound source blob"
+  },
+  "coverage_capability_states": {
+    "cargo.active_features_not_resolved": "not_resolved",
+    "cargo.active_target_not_resolved": "not_resolved",
+    "cargo.build_script_not_executed": "not_executed",
+    "cargo.dependency_advanced_fields_unsupported": "unsupported",
+    "cargo.dependency_graph_not_resolved": "not_resolved",
+    "cargo.dependency_source_not_fetched": "not_fetched",
+    "cargo.external_locator_redacted": "redacted",
+    "cargo.generated_source_not_analyzed": "not_analyzed",
+    "cargo.lint_configuration_unsupported": "unsupported",
+    "cargo.package_file_selection_not_applied": "not_applied",
+    "cargo.package_metadata_table_unsupported": "unsupported",
+    "cargo.patch_not_applied": "not_applied",
+    "cargo.proc_macro_not_executed": "not_executed",
+    "cargo.profile_tables_unsupported": "unsupported",
+    "cargo.replace_table_unsupported": "unsupported",
+    "cargo.target_source_not_analyzed": "not_analyzed",
+    "cargo.workspace_inheritance_not_materialized": "not_resolved"
+  },
+  "cardinality": {
+    "manifest_entity": "exactly one cargo.manifest per analyzed Cargo.toml",
+    "package_entity": "zero or one cargo.package per analyzed manifest",
+    "declaration_owner": "every non-manifest Cargo entity has exactly one incoming DECLARES",
+    "workspace_reference": "an inherited package or dependency declaration has exactly one REFERENCES_DECLARATION target",
+    "target_materialization": "an R3-analyzed lib or bin declaration has exactly one MATERIALIZES edge; other declared targets have none",
+    "claim_subject": "every Cargo entity and Cargo relationship has exactly one claim",
+    "evidence_resolution": "every Cargo fact and relationship resolves to committed manifest or inventory evidence"
+  },
+  "limits": {
+    "manifest_fact_entities": 10000,
+    "dependencies_per_manifest": 256,
+    "features_per_manifest": 256,
+    "feature_members_per_feature": 128,
+    "targets_per_package": 128,
+    "patches_per_workspace": 256,
+    "metadata_fields_per_owner": 32,
+    "requested_features_per_declaration": 64,
+    "target_predicates_per_manifest": 128,
+    "declaration_string_bytes": 2048,
+    "external_locator_bytes": 4096,
+    "permutations": 50
+  },
+  "forbidden_authority": [
+    "cargo_execution",
+    "rustc_execution",
+    "build_script_execution",
+    "procedural_macro_execution",
+    "target_execution",
+    "dependency_resolution",
+    "dependency_fetch",
+    "registry_lookup",
+    "git_or_network_access",
+    "patch_application",
+    "path_dependency_traversal",
+    "cfg_evaluation",
+    "feature_activation",
+    "target_selection",
+    "generated_source_claim",
+    "external_locator_plaintext_projection"
+  ]
+}
