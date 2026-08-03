@@ -1,0 +1,110 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "docs/software/decisions/0012-s4-cargo-manifest-facts-contract.md",
+      "sha256": "6fa29d1f8e4e245db917a70b54db9dbb87997c3167ced64d208c224feb077845"
+    },
+    {
+      "path": "scripts/tests/test_s4_cargo_manifest_facts_contract.py",
+      "sha256": "bee027904eacd7c68c140c6cf9c102e972ae85ef33afe912af1b6c6c32b93bb5"
+    },
+    {
+      "path": "tests/corpora/real-world-rust-v1.json",
+      "sha256": "1d2edc9f858d612e76abb70e6dd255d28e88306a0e4874b0e8ea7351f4347f46"
+    },
+    {
+      "path": "tests/fixtures/s4/cargo-manifest-facts-v1/README.md",
+      "sha256": "f450332eec5a144bb3a5e3aad1a8bd1282ecaab11b41d565a425a470cf3a965e"
+    },
+    {
+      "path": "tests/fixtures/s4/cargo-manifest-facts-v1/expected-manifest-facts.json",
+      "sha256": "643f72b1ba5c2b7f14e518d4014f684e9837c6165ca6b1dbf86c6d0935ea5b09"
+    },
+    {
+      "path": "tests/fixtures/s4/cargo-manifest-facts-v1/manifest.json",
+      "sha256": "b9027ef07dd8ae9f8339ae1e8434abbe6c36874b73cb81e651d4e5230a4e0a72"
+    },
+    {
+      "path": "tests/fixtures/s4/cargo-manifest-facts-v1/repository/Cargo.toml",
+      "sha256": "cb37eaeae8f7e63292832d73c9398330a1c0cfa30eee7a487a4c0ffa2d8eb9d9"
+    },
+    {
+      "path": "tests/fixtures/s4/cargo-manifest-facts-v1/repository/README.md",
+      "sha256": "9736b32ff66e34be6acf864c019d3761c35fecdfc127bcbd2be487246fb0b782"
+    },
+    {
+      "path": "tests/fixtures/s4/cargo-manifest-facts-v1/repository/crates/app/Cargo.toml",
+      "sha256": "8242a736a70cc11b6556fad4d1ad3fd7c79ab2f0cefaf3e0bb68ab6901f78bae"
+    },
+    {
+      "path": "tests/fixtures/s4/cargo-manifest-facts-v1/repository/crates/app/README.md",
+      "sha256": "7f4f7b0314ec65d81dedfc100fa6cb9631e68fa06a39e8ad15508a7fb1432296"
+    },
+    {
+      "path": "tests/fixtures/s4/cargo-manifest-facts-v1/repository/crates/app/build.rs",
+      "sha256": "4061f55539e2929d0a577f9bd50b03e6bc1a2304ec23c8070f0c5c5051c8835f"
+    },
+    {
+      "path": "tests/fixtures/s4/cargo-manifest-facts-v1/repository/crates/app/examples/demo.rs",
+      "sha256": "b1d2ab9a58919bac4a5552d615220fad7d58b1650a7107876229308efcda86eb"
+    },
+    {
+      "path": "tests/fixtures/s4/cargo-manifest-facts-v1/repository/crates/app/src/lib.rs",
+      "sha256": "a314acd45b1610309050cb42977b31181346751cef498c5c8c605f73f2217d79"
+    },
+    {
+      "path": "tests/fixtures/s4/cargo-manifest-facts-v1/repository/crates/app/src/main.rs",
+      "sha256": "4547c96ca639919b2942a51400328601ac9a2e68ce125f2493e44a7f3c4be142"
+    },
+    {
+      "path": "tests/specifications/s4/r3/contract-bundle.json",
+      "sha256": "e4707cb401b2e2c8cbbd0fd06e0c3ec0221ef2558bb4b860cada4f9a5dd674a3"
+    },
+    {
+      "path": "tests/specifications/s4/r4/cargo-manifest-subset-v1.json",
+      "sha256": "23d0d13baabd4659f739be74d92073c7a6b03786f5e51ebaaf06d8750ea5e4fb"
+    },
+    {
+      "path": "tests/specifications/s4/r4/codenoesis-error-v11.schema.json",
+      "sha256": "e1dc0ab8f74596b5d0b95cab9161d7e09c9f6f90b6bd104e618de1e6032249aa"
+    },
+    {
+      "path": "tests/specifications/s4/r4/configuration-v4.schema.json",
+      "sha256": "b253d286e430693fbd91f16d85b4feef5cb5debbebaac5ebc0c290ab4054fcf1"
+    },
+    {
+      "path": "tests/specifications/s4/r4/e2e_fr_ext_009_cargo_manifest_facts.json",
+      "sha256": "ead9f09f47097a734594aa773656a74397efe397fd9316174d5f94b8763118f1"
+    },
+    {
+      "path": "tests/specifications/s4/r4/extraction-chunk-v4.schema.json",
+      "sha256": "41fd7ebe6b078a456e4e5204b622d6f984bd8583c1e423ce771b9cf26f2d8244"
+    },
+    {
+      "path": "tests/specifications/s4/r4/knowledge-graph-v4.schema.json",
+      "sha256": "8a0c1f085e3faf2c4fd7aebab53373a584b4e8d4239c3907934f07f6107a355c"
+    },
+    {
+      "path": "tests/specifications/s4/r4/red-observation.json",
+      "sha256": "c75df903d155367303e8fee486fe6cd484fc9972d410f31121a6d5b650e354e7"
+    },
+    {
+      "path": "tests/specifications/s4/r4/repository-snapshot-v7.schema.json",
+      "sha256": "213467b0ffeb3e57c3effab6abd495417547bad2ca6eb80f4e6300871835e6ae"
+    },
+    {
+      "path": "tests/specifications/s4/r4/rust-ontology-v4.json",
+      "sha256": "df24f5a9b0e035870601466820fd4ba84df5ea56a9c1159ae48ae0e2ebb85936"
+    },
+    {
+      "path": "tests/specifications/s4/r4/semantic-hash-contract-v3.json",
+      "sha256": "1dc68c80cb628e6acee323cf47b708f58b89534166908880f502d3af76b9075a"
+    }
+  ],
+  "bundle_sha256": "e4af7183ec111eeee06d65d752884cee09d9e943e70fbd14a434d688f1dfa0a3"
+}

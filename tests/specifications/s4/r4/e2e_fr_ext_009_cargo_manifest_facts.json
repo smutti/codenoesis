@@ -1,0 +1,192 @@
+{
+  "schema_version": "codenoesis.acceptance-specification/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/100",
+  "requirement_ids": [
+    "FR-EXT-009"
+  ],
+  "requirement_status": {
+    "current": "Proposed",
+    "target_after_protected_merge": "Approved"
+  },
+  "slice": "S4",
+  "roadmap_capability": "R4",
+  "risk": "high",
+  "required_base": "ea51a8151749fc65e75dd7a10e550adc0b67d422",
+  "authorization": "https://github.com/smutti/codenoesis/issues/100#issuecomment-5163551187",
+  "approval": "https://github.com/smutti/codenoesis/pull/103",
+  "selector": {
+    "flag": "--manifest-profile",
+    "value": "cargo-manifest-facts-v1",
+    "required_profile": "standard-local-s4",
+    "required_workspace_profile": "cargo-root-package-v1",
+    "implicit_selection": false,
+    "composes_with": [
+      "local-git-sha1-packed-v1",
+      "local-gitlinks-v1"
+    ]
+  },
+  "contracts": {
+    "decision": "docs/software/decisions/0012-s4-cargo-manifest-facts-contract.md",
+    "configuration": "tests/specifications/s4/r4/configuration-v4.schema.json",
+    "snapshot": "tests/specifications/s4/r4/repository-snapshot-v7.schema.json",
+    "extraction_chunk": "tests/specifications/s4/r4/extraction-chunk-v4.schema.json",
+    "knowledge_graph": "tests/specifications/s4/r4/knowledge-graph-v4.schema.json",
+    "ontology": "tests/specifications/s4/r4/rust-ontology-v4.json",
+    "manifest_subset": "tests/specifications/s4/r4/cargo-manifest-subset-v1.json",
+    "error": "tests/specifications/s4/r4/codenoesis-error-v11.schema.json",
+    "semantic_hashes": "tests/specifications/s4/r4/semantic-hash-contract-v3.json",
+    "red_observation": "tests/specifications/s4/r4/red-observation.json",
+    "fixture": "tests/fixtures/s4/cargo-manifest-facts-v1/manifest.json",
+    "expected_manifest_facts": "tests/fixtures/s4/cargo-manifest-facts-v1/expected-manifest-facts.json"
+  },
+  "first_red": {
+    "command": "cargo test --locked -p noesis --test e2e_fr_ext_009_cargo_manifest_facts -- e2e_fr_ext_009_cargo_manifest_facts --exact",
+    "cause": "unrecognized --manifest-profile cargo-manifest-facts-v1 selector",
+    "runner": "fails only because RepositorySnapshotV7 success was expected",
+    "subject_exit_code": 2,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "{\"code\":\"input.invalid_revision\",\"context\":{},\"message\":\"invalid revision\",\"retryable\":false,\"schema_version\":\"codenoesis.error/v4\",\"stage\":\"input\"}\n",
+    "stderr_bytes": 149,
+    "stderr_sha256": "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe",
+    "store_exists": false,
+    "forbidden_red_causes": [
+      "compilation failure",
+      "fixture failure",
+      "acquisition failure",
+      "dependency outage",
+      "panic",
+      "timeout",
+      "Cargo rustc build script proc macro or target execution",
+      "network or path-dependency read",
+      "different subject error"
+    ]
+  },
+  "ordered_scenarios": [
+    "exact RepositorySnapshotV7 for the project-owned virtual-workspace fixture",
+    "one cargo.manifest entity per analyzed committed Cargo.toml with exact byte evidence",
+    "workspace package defaults and member inheritance remain declarations linked by REFERENCES_DECLARATION",
+    "package metadata values retain type and evidence while external locators emit digest only",
+    "explicit lib bin example test and bench declarations are represented without selecting an active target world",
+    "required-features and proc-macro declarations are preserved without activation or execution",
+    "normal dev build workspace and target-specific dependency declarations retain exact scope kind predicate and source kind",
+    "registry path Git and workspace-inherited dependencies produce no DEPENDS_ON or RESOLVES_TO relationship",
+    "path dependencies and patch paths normalize inside the root but absent targets are never opened",
+    "Git and source locators plus branch tag and rev values never appear in output errors logs docs query IDs or diagnostics",
+    "feature bare dep dependency-feature and weak-dependency-feature syntax is represented without computing an active feature set",
+    "patch declarations set applied false and never select or fetch a source",
+    "build-script presence is represented while Cargo rustc build target and proc-macro sentinels never execute",
+    "package metadata profile lint replace and advanced dependency fields produce only their exact diagnostic and coverage mapping",
+    "malformed conflicting duplicate escaping unsupported and Unicode-normalization variants fail closed",
+    "every R4 maximum and maximum-plus-one is exact before proportional allocation",
+    "50 manifest table field and array permutations plus shuffled parallel replay are byte-identical",
+    "V7 publication reuses existing roles marker DDL transaction crash and sweep semantics",
+    "docs distinguish declared from resolved behavior and exact-ID query resolves Cargo entities relationships evidence and gaps",
+    "R4 selector absence retains byte-identical V6 R3 output and every earlier selector-absent output",
+    "pinned non-vendored Lekton R1 plus R3 plus R4 pilot completes with declaration-only facts",
+    "pinned non-vendored RustDesk R1 plus R2 plus R3 plus R4 pilot completes while the gitlink remains external"
+  ],
+  "limits": {
+    "manifest_fact_entities": 10000,
+    "dependencies_per_manifest": 256,
+    "features_per_manifest": 256,
+    "feature_members_per_feature": 128,
+    "targets_per_package": 128,
+    "patches_per_workspace": 256,
+    "metadata_fields_per_owner": 32,
+    "requested_features_per_declaration": 64,
+    "target_predicates_per_manifest": 128,
+    "declaration_string_bytes": 2048,
+    "external_locator_bytes": 4096,
+    "permutations": 50
+  },
+  "error_v11": {
+    "input.invalid_manifest_profile": 2,
+    "extraction.invalid_cargo_manifest_fact": 11,
+    "extraction.cargo_manifest_fact_conflict": 11,
+    "extraction.cargo_manifest_fact_limit_exceeded": 11,
+    "internal.unexpected": 70
+  },
+  "required_test_names": [
+    "e2e_fr_ext_009_cargo_manifest_facts",
+    "gt_fr_ext_009_manifest_declaration_entities",
+    "gt_fr_ext_009_workspace_inheritance_references_declarations",
+    "conf_fr_ext_009_snapshot_v7_graph_v4_error_v11",
+    "pt_dr_idn_002_r4_preserves_rust_v3_identity_domains",
+    "pt_fr_ext_009_limits_have_max_and_plus_one",
+    "pt_nfr_det_001_r4_permutation_and_schedule_invariant",
+    "sec_fr_ext_009_external_locators_are_digest_only",
+    "sec_fr_ext_009_manifest_facts_never_resolve_fetch_or_execute",
+    "reg_fr_cli_001_r4_selector_absence_is_byte_identical",
+    "e2e_fr_doc_001_r4_declared_vs_resolved_is_documented",
+    "e2e_fr_qry_001_r4_exact_id_results"
+  ],
+  "public_pilots": [
+    {
+      "id": "lekton",
+      "repository": "dghilardi/lekton",
+      "commit": "7a4d1a4a30468f4c18ce158a9b825680b00f4820",
+      "profiles": [
+        "local-git-sha1-packed-v1",
+        "cargo-root-package-v1",
+        "cargo-manifest-facts-v1"
+      ],
+      "expected": "scan_docs_query_success_with_declaration_only_manifest_facts",
+      "vendored_source": false
+    },
+    {
+      "id": "rustdesk",
+      "repository": "rustdesk/rustdesk",
+      "commit": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "profiles": [
+        "local-git-sha1-packed-v1",
+        "local-gitlinks-v1",
+        "cargo-root-package-v1",
+        "cargo-manifest-facts-v1"
+      ],
+      "expected": "scan_docs_query_success_with_declaration_only_manifest_facts_and_one_unbound_boundary",
+      "boundary_path": "libs/hbb_common",
+      "boundary_commit": "69cea8dafee147848ae88702029f4bf7df7224c3",
+      "nested_source_opened": false,
+      "vendored_source": false
+    }
+  ],
+  "immutable_dependencies": {
+    "r3_contract_bundle_sha256": "0b99760da4e978fefa91468b5dbef1b59816e30b02d92c70c26a7df715ef509a"
+  },
+  "forbidden_authority": [
+    "Cargo process",
+    "rustc process",
+    "build script",
+    "procedural macro",
+    "target process",
+    "Git process",
+    "network or DNS",
+    "registry lookup",
+    "dependency resolution or fetch",
+    "path-dependency traversal",
+    "patch application",
+    "cfg evaluation",
+    "feature activation",
+    "target selection",
+    "external locator plaintext projection",
+    "outside-root read",
+    "repository write",
+    "automatic retry",
+    "first-party unsafe",
+    "model provider"
+  ],
+  "stop_conditions": [
+    "a declaration cannot resolve to exact committed byte evidence",
+    "a Cargo declaration requires a resolved dependency feature cfg target or patch claim",
+    "a raw external locator must enter output identity error log docs or query data",
+    "v3 Rust identity domains or preimages cannot be preserved",
+    "selector-absent V6 or earlier bytes change",
+    "existing local-store DDL marker role or transaction meaning must change",
+    "Cargo target dependency or generated code execution becomes necessary",
+    "a path dependency or gitlink must be opened as analyzed source",
+    "a protected inherited oracle must change",
+    "scope risk dependency or rollback changes",
+    "five correction rounds are exhausted"
+  ]
+}

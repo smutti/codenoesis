@@ -1,0 +1,32 @@
+{
+  "schema_version": "codenoesis.red-observation/v1",
+  "observed_at": "2026-08-03",
+  "required_base": "ea51a8151749fc65e75dd7a10e550adc0b67d422",
+  "governance_guard_red": {
+    "command": "python3 -m unittest scripts.tests.test_s4_cargo_manifest_facts_contract",
+    "guard_sha256": "bd526f463aa3239b440c2746d6b1812f50803a86ecfbeefe856c1b2a33bd9a7e",
+    "exit_code": 1,
+    "expected_failure": "Decision 0012 does not exist before the governance artifacts are written",
+    "actual_failure": "test_fr_ext_009_governance_contract_is_materialized: AssertionError: DECISION_PATH.is_file() is false",
+    "raw_log_sha256": "8db24457fafe179c7787f1f718006972ed3306d8d46c458dc614c151601d8cce",
+    "failed_for_expected_reason": true
+  },
+  "first_product_red_measurement": {
+    "command": "noesis scan --repository . --repository-id urn:codenoesis:fixture:s4-cargo-manifest-facts-v1 --revision ea51a8151749fc65e75dd7a10e550adc0b67d422 --profile standard-local-s4 --workspace-profile cargo-root-package-v1 --manifest-profile cargo-manifest-facts-v1 --store <fresh-store> --format json",
+    "cause": "the merged R3 parser does not recognize --manifest-profile cargo-manifest-facts-v1",
+    "subject_exit_code": 2,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "{\"code\":\"input.invalid_revision\",\"context\":{},\"message\":\"invalid revision\",\"retryable\":false,\"schema_version\":\"codenoesis.error/v4\",\"stage\":\"input\"}\n",
+    "stderr_bytes": 149,
+    "stderr_sha256": "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe",
+    "store_exists": false,
+    "forbidden_side_effects_observed": 0
+  },
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "host": "aarch64-apple-darwin"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/configuration-v4.schema.json",
+  "title": "CodeNoesis ConfigurationV4",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile",
+    "workspace_profile",
+    "manifest_profile",
+    "repository_boundary_profile",
+    "semantic_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.configuration/v4"
+    },
+    "profile": {
+      "const": "standard-local-s4"
+    },
+    "workspace_profile": {
+      "const": "cargo-root-package-v1"
+    },
+    "manifest_profile": {
+      "const": "cargo-manifest-facts-v1"
+    },
+    "repository_boundary_profile": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "const": "local-gitlinks-v1"
+        }
+      ]
+    },
+    "semantic_hash": {
+      "$ref": "../../s1/repository-snapshot-v2.schema.json#/$defs/blake3_hash"
+    }
+  }
+}
