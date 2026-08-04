@@ -7,8 +7,8 @@ use codenoesis_domain::knowledge::EntityKind;
 use codenoesis_domain::s4::workspace_crate_id;
 use codenoesis_domain::s4_r4::{
     CargoCoverageState, CargoEntityKind, CargoEntityProperties, CargoFactLimit, CargoFactReason,
-    CargoManifestFactError, CargoRelationshipKind, DeclaredValue, R4_DETERMINISM_PERMUTATIONS,
-    SourceAnalysisState, cargo_fact_limit_exceeded,
+    CargoManifestFactError, CargoRelationshipKind, DeclaredValue, DependencySourceKind,
+    R4_DETERMINISM_PERMUTATIONS, SourceAnalysisState, cargo_fact_limit_exceeded,
 };
 use codenoesis_domain::{
     AcquiredFile, AcquiredRepository, BoundRevision, ObjectId, RegularFileMode, RepositoryIdentity,
@@ -332,6 +332,71 @@ fn gt_fr_ext_009_legacy_badges_is_typed_unsupported() {
             ..
         })
     ));
+}
+
+#[test]
+fn gt_fr_ext_009_standard_dependency_tables_are_declarations() {
+    let extraction = extract_inventory(&manifest_inventory(
+        "[dependencies.winapi]\nversion = \"0.3\"\ndefault-features = true\nfeatures = [\"dxgi\"]\n\n[target.'cfg(target_os = \"linux\")'.dependencies.hwcodec]\ngit = \"https://example.invalid/standard-table-secret.git\"\noptional = true\n",
+    ))
+    .expect("literal standard dependency tables are supported declarations");
+    let dependencies = extraction
+        .knowledge
+        .graph
+        .entities
+        .iter()
+        .filter_map(|entity| match &entity.properties {
+            CargoEntityProperties::Dependency(properties) => Some(properties),
+            _ => None,
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(dependencies.len(), 2);
+    let winapi = dependencies
+        .iter()
+        .find(|properties| properties.declared_name == "winapi")
+        .expect("standard registry dependency");
+    assert_eq!(winapi.source.kind, DependencySourceKind::RegistryDefault);
+    assert_eq!(
+        winapi
+            .source
+            .version_requirement
+            .as_ref()
+            .map(|value| value.value.as_str()),
+        Some("0.3")
+    );
+    assert_eq!(
+        winapi.default_features.as_ref().map(|value| value.value),
+        Some(true)
+    );
+    assert_eq!(
+        winapi
+            .requested_features
+            .iter()
+            .map(|feature| feature.value.as_str())
+            .collect::<Vec<_>>(),
+        ["dxgi"]
+    );
+    let hwcodec = dependencies
+        .iter()
+        .find(|properties| properties.declared_name == "hwcodec")
+        .expect("target-specific standard Git dependency");
+    assert_eq!(hwcodec.source.kind, DependencySourceKind::Git);
+    assert_eq!(
+        hwcodec
+            .target_predicate
+            .as_ref()
+            .map(|predicate| predicate.value.as_str()),
+        Some("cfg(target_os = \"linux\")")
+    );
+    assert_eq!(
+        hwcodec.optional.as_ref().map(|value| value.value),
+        Some(true)
+    );
+    assert!(hwcodec.source.git_locator.is_some());
+    assert!(
+        !format!("{:#?}", extraction.knowledge).contains("standard-table-secret"),
+        "standard dependency table leaked locator plaintext"
+    );
 }
 
 #[test]
