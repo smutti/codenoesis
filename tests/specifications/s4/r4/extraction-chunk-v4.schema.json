@@ -1435,6 +1435,7 @@
             "cargo.dependency_source_not_fetched",
             "cargo.external_locator_redacted",
             "cargo.generated_source_not_analyzed",
+            "cargo.legacy_badges_unsupported",
             "cargo.lint_configuration_unsupported",
             "cargo.package_file_selection_not_applied",
             "cargo.package_metadata_table_unsupported",

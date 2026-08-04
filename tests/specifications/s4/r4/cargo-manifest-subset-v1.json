@@ -208,6 +208,7 @@
     "errors_logs_docs_query": "plaintext forbidden"
   },
   "typed_unsupported": {
+    "badges": "cargo.legacy_badges_unsupported",
     "package.metadata": "cargo.package_metadata_table_unsupported",
     "workspace.metadata": "cargo.package_metadata_table_unsupported",
     "profile": "cargo.profile_tables_unsupported",
