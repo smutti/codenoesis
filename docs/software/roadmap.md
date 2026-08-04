@@ -76,7 +76,8 @@ used only by separately reproducible pilot runs.
 
 ## Real-world Rust compatibility lane
 
-R0-R5 are implemented but remain not Verified until their complete retained
+R0-R4 are implemented as the inherited compatibility baseline.
+R0-R5 are implemented, but remain not Verified until their complete retained
 evidence is independently accepted. R6 governance is Proposed in issue #117
 and PR #118; it authorizes no product implementation. The bounded delivery
 order remains R5 → R6 → R7 → R8; implementation, review, and protected merge
