@@ -289,6 +289,47 @@ def assignment_keys(body: str) -> set[str]:
 
 
 class S4CargoManifestFactsGovernanceTests(unittest.TestCase):
+    def test_legacy_badges_has_exact_typed_unsupported_mapping(self) -> None:
+        subset = load_json(SUBSET_PATH)
+        capability = subset["typed_unsupported"].get("badges")
+        self.assertEqual(
+            capability,
+            "cargo.legacy_badges_unsupported",
+            "R4 legacy badges family lacks an exact typed unsupported mapping",
+        )
+
+        ontology = load_json(ONTOLOGY_PATH)
+        self.assertEqual(
+            ontology["coverage_capability_states"].get(capability),
+            "unsupported",
+        )
+        chunk = load_json(CHUNK_SCHEMA_PATH)
+        self.assertIn(
+            capability,
+            chunk["$defs"]["coverage"]["properties"]["capability"]["enum"],
+        )
+        self.assertNotIn(
+            "cargo.legacy_badges",
+            chunk["$defs"]["diagnostic"]["properties"]["code"]["enum"],
+        )
+
+        rustdesk = next(
+            pilot
+            for pilot in load_json(ORACLE_PATH)["public_pilots"]
+            if pilot["id"] == "rustdesk"
+        )
+        self.assertEqual(
+            rustdesk["typed_unsupported"],
+            {
+                "manifest_path": "libs/enigo/Cargo.toml",
+                "table": "badges",
+                "diagnostic": "cargo.unsupported_manifest_family",
+                "coverage": capability,
+                "state": "unsupported",
+                "values_interpreted": False,
+            },
+        )
+
     def test_r4_exact_id_query_contract_is_complete(self) -> None:
         chunk_schema = load_json(CHUNK_SCHEMA_PATH)
         diagnostic = chunk_schema["$defs"]["diagnostic"]
