@@ -147,6 +147,14 @@
       "expected": "scan_docs_query_success_with_declaration_only_manifest_facts_and_one_unbound_boundary",
       "boundary_path": "libs/hbb_common",
       "boundary_commit": "69cea8dafee147848ae88702029f4bf7df7224c3",
+      "typed_unsupported": {
+        "manifest_path": "libs/enigo/Cargo.toml",
+        "table": "badges",
+        "diagnostic": "cargo.unsupported_manifest_family",
+        "coverage": "cargo.legacy_badges_unsupported",
+        "state": "unsupported",
+        "values_interpreted": false
+      },
       "nested_source_opened": false,
       "vendored_source": false
     }
