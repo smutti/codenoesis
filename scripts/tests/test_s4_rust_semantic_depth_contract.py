@@ -655,19 +655,8 @@ class S4RustSemanticDepthGovernanceTests(unittest.TestCase):
             "paint": declaration_id("trait", "crate", "Paint"),
             "preview": declaration_id("trait", "crate", "Preview"),
         }
-        for context_name in (
-            "crate",
-            "record",
-            "message",
-            "descriptor",
-            "paint",
-            "preview",
-        ):
-            with self.subTest(context_name=context_name):
-                self.assertEqual(
-                    facts["legacy_context_ids"][context_name],
-                    contexts[context_name],
-                )
+        self.assertEqual(facts["legacy_context_ids"]["crate"], crate_id)
+        self.assertEqual(facts["legacy_context_ids"], contexts)
 
         member_domain = "codenoesis.entity-id/rust-member/v1"
 
