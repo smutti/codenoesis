@@ -165,6 +165,10 @@ impl LocalQueryResultV2 {
         bytes.push(b'\n');
         Ok(bytes)
     }
+
+    pub(crate) fn into_value(self) -> Value {
+        self.value
+    }
 }
 
 /// Builds one strict V7 exact-ID query result without adding read authority.

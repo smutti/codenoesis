@@ -16,21 +16,23 @@ use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
 use codenoesis_application::{
     BoundaryScanError, CargoManifestScanError, PublicationService, RefreshError, RefreshService,
-    RootPackageScanError, ScanError, ScanRequest, ScanService,
+    RootPackageScanError, RustSemanticScanError, ScanError, ScanRequest, ScanService,
 };
 use codenoesis_contracts::{
     AnalysisCacheEntryV1, BoundaryManifestReason, CodeNoesisErrorV1, CodeNoesisErrorV2,
     CodeNoesisErrorV3, CodeNoesisErrorV4, CodeNoesisErrorV5, CodeNoesisErrorV6, CodeNoesisErrorV7,
     CodeNoesisErrorV8, CodeNoesisErrorV9, CodeNoesisErrorV10, CodeNoesisErrorV11,
-    DocumentationContractError, IncrementalRefreshReportError, IncrementalRefreshReportInput,
-    IncrementalRefreshReportV1, NestedRepositoryUnavailableReason, QueryContractError,
-    RepositorySnapshotV2Error, RepositorySnapshotV3, RepositorySnapshotV3Error,
+    CodeNoesisErrorV12, DocumentationContractError, IncrementalRefreshReportError,
+    IncrementalRefreshReportInput, IncrementalRefreshReportV1, NestedRepositoryUnavailableReason,
+    QueryContractError, RepositorySnapshotV2Error, RepositorySnapshotV3, RepositorySnapshotV3Error,
     RepositorySnapshotV4, RepositorySnapshotV4Error, RepositorySnapshotV5,
     RepositorySnapshotV5Error, RepositorySnapshotV6, RepositorySnapshotV6Error,
-    RepositorySnapshotV7, RepositorySnapshotV7Error, SnapshotEnvelopeV1, ValidatedS4Head,
-    generate_documentation_v1, local_query_result_v1, local_query_result_v2,
+    RepositorySnapshotV7, RepositorySnapshotV7Error, RepositorySnapshotV8,
+    RepositorySnapshotV8Error, SnapshotEnvelopeV1, ValidatedS4Head, generate_documentation_v1,
+    local_query_result_v1, local_query_result_v2, local_query_result_v3,
     validate_stored_snapshot_semantic_v4, validate_stored_snapshot_semantic_v5,
     validate_stored_snapshot_semantic_v6, validate_stored_snapshot_semantic_v7,
+    validate_stored_snapshot_semantic_v8,
 };
 use codenoesis_domain::AcquisitionError;
 use codenoesis_domain::knowledge::KnowledgeError;
@@ -42,6 +44,7 @@ use codenoesis_domain::s4::{
 };
 use codenoesis_domain::s4_r3::{R3_WORKSPACE_PROFILE, RootPackageWorkspaceError};
 use codenoesis_domain::s4_r4::{CargoManifestFactError, R4_MANIFEST_PROFILE};
+use codenoesis_domain::s4_r5::{R5_RUST_SEMANTIC_PROFILE, RustSemanticError};
 use codenoesis_domain::s5::{
     ANALYSIS_CACHE_SCHEMA_VERSION, AnalysisCacheEntry, DEPENDENCY_RULE_VERSION,
     EXTRACTION_CONTRACT_VERSION, IncrementalRuleOutcome, MAX_ANALYSIS_ENTRIES,
@@ -49,7 +52,8 @@ use codenoesis_domain::s5::{
 };
 use codenoesis_domain::storage::{
     ArtifactRole, LocalSnapshotHead, SNAPSHOT_SCHEMA_VERSION_V4, SNAPSHOT_SCHEMA_VERSION_V5,
-    SNAPSHOT_SCHEMA_VERSION_V6, SNAPSHOT_SCHEMA_VERSION_V7, StorageComponent, StorageError,
+    SNAPSHOT_SCHEMA_VERSION_V6, SNAPSHOT_SCHEMA_VERSION_V7, SNAPSHOT_SCHEMA_VERSION_V8,
+    StorageComponent, StorageError,
 };
 use codenoesis_domain::{
     InputError, LimitKind, RepositoryIdentity, Revision, STANDARD_LOCAL_S1_LIMITS, limit_exceeded,
@@ -134,7 +138,8 @@ fn main() -> ExitCode {
         || option_requested(&arguments, "--repository-boundary-manifest");
     let r3_requested = option_requested(&arguments, "--workspace-profile");
     let r4_requested = option_requested(&arguments, "--manifest-profile");
-    let mut scan_worker = if r4_requested || r3_requested || boundary_requested {
+    let r5_requested = option_requested(&arguments, "--rust-semantic-profile");
+    let mut scan_worker = if r5_requested || r4_requested || r3_requested || boundary_requested {
         ScanWorker::spawn().ok()
     } else {
         None
@@ -147,7 +152,7 @@ fn main() -> ExitCode {
     let s4_error_lineage = s4_requested || docs_requested || query_requested;
     let s3_error_lineage = s3_requested || s4_error_lineage;
     let s2_requested = requested_profile(&arguments, "standard-local-s2");
-    let result = if r4_requested || r3_requested || boundary_requested {
+    let result = if r5_requested || r4_requested || r3_requested || boundary_requested {
         run_s4(arguments, scan_worker.as_mut())
     } else if federation_requested {
         federation::run(arguments).map_err(Failure::S6)
@@ -173,6 +178,7 @@ fn main() -> ExitCode {
             Ok(()) => ExitCode::SUCCESS,
             Err(_) if federation_requested => emit_internal_error_v8(),
             Err(_) if refresh_requested => emit_internal_error_v7(),
+            Err(_) if r5_requested => emit_internal_error_v12(),
             Err(_) if r4_requested => emit_internal_error_v11(),
             Err(_) if r3_requested => emit_internal_error_v10(),
             Err(_) if boundary_requested => emit_internal_error_v9(),
@@ -183,6 +189,7 @@ fn main() -> ExitCode {
             Err(_) => emit_internal_error_v1(),
         },
         Err(Failure::S6(failure)) => emit_error_v8(&failure.error, failure.exit_code),
+        Err(Failure::R5(failure)) => emit_error_v12(&failure.error, failure.exit_code),
         Err(Failure::R4(failure)) => emit_error_v11(&failure.error, failure.exit_code),
         Err(Failure::R3(failure)) => emit_error_v10(&failure.error, failure.exit_code),
         Err(Failure::V9(failure)) => emit_error_v9(&failure.error, failure.exit_code),
@@ -233,6 +240,9 @@ fn main() -> ExitCode {
         Err(Failure::Scan(
             ScanError::Knowledge(_) | ScanError::Workspace(_) | ScanError::Storage(_),
         )) if profiled => emit_internal_error_v2(),
+        Err(Failure::Scan(ScanError::Internal) | Failure::Internal) if r5_requested => {
+            emit_internal_error_v12()
+        }
         Err(Failure::Scan(ScanError::Internal) | Failure::Internal)
             if packed_acquisition_requested =>
         {
@@ -417,6 +427,14 @@ fn run_s4(
 ) -> Result<Vec<u8>, Failure> {
     let invocation =
         Invocation::parse(arguments, Some("standard-local-s4")).map_err(invocation_failure)?;
+    if invocation.rust_semantic_profile {
+        let scan_worker = scan_worker.ok_or_else(r5_internal_failure)?;
+        return if invocation.boundary_profile {
+            run_s4_r5_boundaries(invocation, scan_worker)
+        } else {
+            run_s4_r5(invocation, scan_worker)
+        };
+    }
     if invocation.manifest_profile {
         let scan_worker = scan_worker.ok_or_else(r4_internal_failure)?;
         return if invocation.boundary_profile {
@@ -493,6 +511,151 @@ fn run_s4(
         }
     }
     serialize_v4(&scan.snapshot)
+}
+
+fn run_s4_r5(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Vec<u8>, Failure> {
+    let store = invocation
+        .store
+        .clone()
+        .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
+    let repository = invocation.repository.clone();
+    let started_at = Instant::now();
+    let scan_repository = repository.clone();
+    let scan = run_confined_scan(
+        scan_worker,
+        repository.clone(),
+        None,
+        Vec::new(),
+        move || {
+            let envelope = current_envelope().ok_or_else(r5_internal_failure)?;
+            let request = ScanRequest::new(
+                invocation.repository,
+                invocation.identity,
+                invocation.revision,
+                envelope,
+            );
+            ScanService::new(repository_adapter(invocation.packed_sha1))
+                .scan_s4_r5(request, &TreeSitterRustWorkspaceExtractor::new())
+                .map_err(r5_scan_failure)
+        },
+    )
+    .map_err(|()| r5_internal_failure())??;
+    enforce_scan_deadline(started_at)?;
+    let stdout = serialize_v8(&scan.snapshot)?;
+    let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
+        .is_err_and(|error| error.kind() == std::io::ErrorKind::NotFound);
+    let mut rollback = EmptyStoreRollback::new(store.clone(), store_was_absent);
+    ensure_store_root_for_boundary(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    noesis::install_s3_filesystem_boundary(&scan_repository, &store)
+        .map_err(|_| r5_internal_failure())?;
+    let mut local_store = LocalStore::open(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    PublicationService::publish_v8(
+        &scan.snapshot,
+        &mut local_store.artifacts,
+        &mut local_store.metadata,
+        &mut NoopPublicationObserver,
+    )
+    .map_err(|error| match error {
+        ScanError::Internal => r5_internal_failure(),
+        other => Failure::Scan(other),
+    })?;
+    rollback.disarm();
+    stage_analysis_cache_best_effort(&mut local_store, &scan.analysis_cache_entries);
+    Ok(stdout)
+}
+
+fn run_s4_r5_boundaries(
+    invocation: Invocation,
+    scan_worker: &mut ScanWorker,
+) -> Result<Vec<u8>, Failure> {
+    let mut prepared = repository_boundaries::prepare(
+        invocation.boundary_manifest.as_deref(),
+        &invocation.identity,
+        &invocation.revision,
+    )
+    .map_err(repository_boundary_input_failure)?;
+    let store = invocation
+        .store
+        .clone()
+        .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
+    let repository = invocation.repository.clone();
+    if let Some(canonical_store) = canonical_existing_or_absent_leaf(&store) {
+        prepared.reject_overlaps(&canonical_store);
+    }
+    if let Ok(canonical_repository) = fs::canonicalize(std::path::Path::new(&repository)) {
+        prepared.reject_overlaps(&canonical_repository);
+    }
+    let manifest_path = prepared.manifest_path;
+    let nested_roots = prepared.nested_roots;
+    let started_at = Instant::now();
+    let scan_repository = repository.clone();
+    let scan = run_confined_scan(
+        scan_worker,
+        repository.clone(),
+        manifest_path.clone(),
+        nested_roots.clone(),
+        move || {
+            let envelope = current_envelope().ok_or_else(r5_internal_failure)?;
+            let request = ScanRequest::new(
+                invocation.repository,
+                invocation.identity,
+                invocation.revision,
+                envelope,
+            );
+            ScanService::new(repository_adapter(invocation.packed_sha1))
+                .scan_s4_r5_boundaries(
+                    request,
+                    prepared.scan_input,
+                    &TreeSitterRustWorkspaceExtractor::new(),
+                    &repository_boundaries::Sha256BoundaryHasher,
+                )
+                .map_err(r5_scan_failure)
+        },
+    )
+    .map_err(|()| r5_internal_failure())??;
+    enforce_scan_deadline(started_at)?;
+    let stdout = serialize_v8(&scan.snapshot)?;
+    let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
+        .is_err_and(|error| error.kind() == std::io::ErrorKind::NotFound);
+    let mut rollback = EmptyStoreRollback::new(store.clone(), store_was_absent);
+    ensure_store_root_for_boundary(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    noesis::install_s1_boundaries_filesystem_boundary(
+        &scan_repository,
+        &store,
+        manifest_path.as_deref().map(std::path::Path::as_os_str),
+        &nested_roots,
+    )
+    .map_err(|_| boundary_internal_failure())?;
+    let mut local_store = LocalStore::open(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    PublicationService::publish_v8(
+        &scan.snapshot,
+        &mut local_store.artifacts,
+        &mut local_store.metadata,
+        &mut NoopPublicationObserver,
+    )
+    .map_err(|error| match error {
+        ScanError::Internal => r5_internal_failure(),
+        other => Failure::Scan(other),
+    })?;
+    rollback.disarm();
+    stage_analysis_cache_best_effort(&mut local_store, &scan.analysis_cache_entries);
+    Ok(stdout)
 }
 
 fn run_s4_r4(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Vec<u8>, Failure> {
@@ -1144,8 +1307,9 @@ fn run_query(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, F
             LoadS4Error::Scan(error) => Failure::Scan(error),
             LoadS4Error::SnapshotMismatch => Failure::Query(QueryFailure::SnapshotMismatch),
         })?;
+    let query_v3 = loaded.head.snapshot_schema_version == SNAPSHOT_SCHEMA_VERSION_V8;
     let query_v2 = loaded.head.snapshot_schema_version == SNAPSHOT_SCHEMA_VERSION_V7;
-    if !query_v2 && v2_only_query_id(&invocation.requested_id) {
+    if !query_v3 && !query_v2 && v2_only_query_id(&invocation.requested_id) {
         return Err(Failure::S4Input(CodeNoesisErrorV5::invalid_query_id()));
     }
     validate_documents_root_for_boundary(
@@ -1169,7 +1333,17 @@ fn run_query(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, F
         | GeneratedDocsError::CorruptGeneration
         | GeneratedDocsError::Failed => Failure::Query(QueryFailure::CorruptDocuments),
     })?;
-    let stdout = if query_v2 {
+    let stdout = if query_v3 {
+        local_query_result_v3(
+            &loaded.semantic,
+            &manifest,
+            loaded.head.snapshot_id.as_str(),
+            &invocation.requested_id,
+        )
+        .map_err(query_contract_failure)?
+        .canonical_stdout()
+        .map_err(query_stdout_failure)?
+    } else if query_v2 {
         local_query_result_v2(
             &loaded.semantic,
             &manifest,
@@ -1240,6 +1414,7 @@ fn load_s4_snapshot_from_store(
             | SNAPSHOT_SCHEMA_VERSION_V5
             | SNAPSHOT_SCHEMA_VERSION_V6
             | SNAPSHOT_SCHEMA_VERSION_V7
+            | SNAPSHOT_SCHEMA_VERSION_V8
     ) {
         return Err(LoadS4Error::SnapshotMismatch);
     }
@@ -1270,6 +1445,7 @@ fn load_s4_snapshot_from_store(
         SNAPSHOT_SCHEMA_VERSION_V5 => validate_stored_snapshot_semantic_v5(&semantic, &head),
         SNAPSHOT_SCHEMA_VERSION_V6 => validate_stored_snapshot_semantic_v6(&semantic, &head),
         SNAPSHOT_SCHEMA_VERSION_V7 => validate_stored_snapshot_semantic_v7(&semantic, &head),
+        SNAPSHOT_SCHEMA_VERSION_V8 => validate_stored_snapshot_semantic_v8(&semantic, &head),
         _ => return Err(LoadS4Error::SnapshotMismatch),
     }
     .map_err(|error| LoadS4Error::Scan(ScanError::Storage(error)))?;
@@ -1543,6 +1719,17 @@ fn serialize_v7(snapshot: &RepositorySnapshotV7) -> Result<Vec<u8>, Failure> {
     })
 }
 
+fn serialize_v8(snapshot: &RepositorySnapshotV8) -> Result<Vec<u8>, Failure> {
+    snapshot.canonical_stdout().map_err(|error| match error {
+        RepositorySnapshotV8Error::LimitExceeded(error) => {
+            Failure::Scan(ScanError::Acquisition(error))
+        }
+        RepositorySnapshotV8Error::Serialization(_)
+        | RepositorySnapshotV8Error::ContractInvalid
+        | RepositorySnapshotV8Error::OutputLengthOverflow => r5_internal_failure(),
+    })
+}
+
 fn enforce_scan_deadline(started_at: Instant) -> Result<(), Failure> {
     let elapsed = u64::try_from(started_at.elapsed().as_millis()).map_err(|_| Failure::Internal)?;
     if elapsed > STANDARD_LOCAL_S1_LIMITS.scan_wall_milliseconds {
@@ -1590,6 +1777,13 @@ fn invocation_failure(error: InvocationError) -> Failure {
         InvocationError::InvalidManifestProfile => {
             r4_failure(CodeNoesisErrorV11::invalid_manifest_profile(), 2)
         }
+        InvocationError::InvalidRustSemanticProfile(provided_profile) => r5_failure(
+            CodeNoesisErrorV12::invalid_rust_semantic_profile(&provided_profile),
+            2,
+        ),
+        InvocationError::InvalidRustSemanticComposition(reason) => {
+            r5_failure(CodeNoesisErrorV12::unsupported_composition(reason), 11)
+        }
         InvocationError::InvalidBoundaryProfile => {
             boundary_failure(CodeNoesisErrorV9::invalid_profile(), 2)
         }
@@ -1610,6 +1804,13 @@ fn s5_invocation_failure(error: InvocationError) -> Failure {
         }
         InvocationError::InvalidManifestProfile => {
             r4_failure(CodeNoesisErrorV11::invalid_manifest_profile(), 2)
+        }
+        InvocationError::InvalidRustSemanticProfile(provided_profile) => r5_failure(
+            CodeNoesisErrorV12::invalid_rust_semantic_profile(&provided_profile),
+            2,
+        ),
+        InvocationError::InvalidRustSemanticComposition(reason) => {
+            r5_failure(CodeNoesisErrorV12::unsupported_composition(reason), 11)
         }
         InvocationError::InvalidBoundaryProfile => {
             boundary_failure(CodeNoesisErrorV9::invalid_profile(), 2)
@@ -1691,6 +1892,35 @@ fn r4_scan_failure(error: CargoManifestScanError) -> Failure {
             .map_or_else(r4_internal_failure, |error| r4_failure(error, 11)),
         CargoManifestScanError::Boundary(error) => boundary_scan_failure(error),
     }
+}
+
+fn r5_scan_failure(error: RustSemanticScanError) -> Failure {
+    match error {
+        RustSemanticScanError::Scan(ScanError::Internal) => r5_internal_failure(),
+        RustSemanticScanError::Scan(error) => Failure::Scan(error),
+        RustSemanticScanError::Semantic(RustSemanticError::Source(
+            CargoManifestFactError::Source(RootPackageWorkspaceError::Source(error)),
+        )) => Failure::Scan(ScanError::Workspace(error)),
+        RustSemanticScanError::Semantic(RustSemanticError::Source(
+            CargoManifestFactError::Source(error),
+        )) => CodeNoesisErrorV10::from_workspace(&error)
+            .map_or_else(r3_internal_failure, |error| r3_failure(error, 11)),
+        RustSemanticScanError::Semantic(RustSemanticError::Source(error)) => {
+            CodeNoesisErrorV11::from_manifest(&error)
+                .map_or_else(r4_internal_failure, |error| r4_failure(error, 11))
+        }
+        RustSemanticScanError::Semantic(error) => CodeNoesisErrorV12::from_semantic(&error)
+            .map_or_else(r5_internal_failure, |error| r5_failure(error, 11)),
+        RustSemanticScanError::Boundary(error) => boundary_scan_failure(error),
+    }
+}
+
+fn r5_failure(error: CodeNoesisErrorV12, exit_code: u8) -> Failure {
+    Failure::R5(R5Failure { error, exit_code })
+}
+
+fn r5_internal_failure() -> Failure {
+    r5_failure(CodeNoesisErrorV12::internal(), 70)
 }
 
 fn r4_failure(error: CodeNoesisErrorV11, exit_code: u8) -> Failure {
@@ -2004,12 +2234,27 @@ fn emit_error_v11(error: &CodeNoesisErrorV11, code: u8) -> ExitCode {
     }
 }
 
+fn emit_error_v12(error: &CodeNoesisErrorV12, code: u8) -> ExitCode {
+    let Ok(bytes) = error.canonical_stderr() else {
+        return ExitCode::from(70);
+    };
+    if io::stderr().lock().write_all(&bytes).is_ok() {
+        ExitCode::from(code)
+    } else {
+        ExitCode::from(70)
+    }
+}
+
 fn emit_internal_error_v10() -> ExitCode {
     emit_error_v10(&CodeNoesisErrorV10::internal(), 70)
 }
 
 fn emit_internal_error_v11() -> ExitCode {
     emit_error_v11(&CodeNoesisErrorV11::internal(), 70)
+}
+
+fn emit_internal_error_v12() -> ExitCode {
+    emit_error_v12(&CodeNoesisErrorV12::internal(), 70)
 }
 
 fn emit_docs_error(error: GeneratedDocsError) -> ExitCode {
@@ -2039,6 +2284,7 @@ fn emit_query_error(error: QueryFailure) -> ExitCode {
 
 enum Failure {
     S6(federation::FederationFailure),
+    R5(R5Failure),
     R4(R4Failure),
     R3(R3Failure),
     V9(V9Failure),
@@ -2050,6 +2296,11 @@ enum Failure {
     Docs(GeneratedDocsError),
     Query(QueryFailure),
     Internal,
+}
+
+struct R5Failure {
+    error: CodeNoesisErrorV12,
+    exit_code: u8,
 }
 
 struct R4Failure {
@@ -2266,16 +2517,19 @@ struct Invocation {
     packed_sha1: bool,
     workspace_profile: bool,
     manifest_profile: bool,
+    rust_semantic_profile: bool,
     boundary_profile: bool,
     boundary_manifest: Option<OsString>,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 enum InvocationError {
     Input(InputError),
     InvalidAcquisitionProfile,
     InvalidWorkspaceProfile,
     InvalidManifestProfile,
+    InvalidRustSemanticProfile(String),
+    InvalidRustSemanticComposition(&'static str),
     InvalidBoundaryProfile,
     InvalidBoundaryManifest(BoundaryManifestReason),
 }
@@ -2306,10 +2560,14 @@ impl Invocation {
                 || option_requested(&arguments, "--repository-boundary-manifest");
         let workspace_option_requested = option_requested(&arguments, "--workspace-profile");
         let manifest_option_requested = option_requested(&arguments, "--manifest-profile");
+        let rust_semantic_option_requested =
+            option_requested(&arguments, "--rust-semantic-profile");
         let mut arguments = arguments.into_iter();
         let _program = arguments.next();
         if arguments.next().as_deref() != Some(OsStr::new(command)) {
-            return Err(if boundary_options_requested {
+            return Err(if rust_semantic_option_requested {
+                InvocationError::InvalidRustSemanticComposition("scan_command_required")
+            } else if boundary_options_requested {
                 InvocationError::InvalidBoundaryProfile
             } else if workspace_option_requested {
                 InvocationError::InvalidWorkspaceProfile
@@ -2328,6 +2586,7 @@ impl Invocation {
         let mut acquisition_profile = None;
         let mut workspace_profile = None;
         let mut manifest_profile = None;
+        let mut rust_semantic_profile = None;
         let mut boundary_profile = None;
         let mut boundary_manifest = None;
         while let Some(flag) = arguments.next() {
@@ -2338,6 +2597,8 @@ impl Invocation {
                     InvocationError::InvalidWorkspaceProfile
                 } else if flag == OsStr::new("--manifest-profile") {
                     InvocationError::InvalidManifestProfile
+                } else if flag == OsStr::new("--rust-semantic-profile") {
+                    InvocationError::InvalidRustSemanticProfile(String::new())
                 } else if flag == OsStr::new("--repository-boundary-profile") {
                     InvocationError::InvalidBoundaryProfile
                 } else if flag == OsStr::new("--repository-boundary-manifest") {
@@ -2381,6 +2642,12 @@ impl Invocation {
                     };
                     manifest_profile = Some(value.to_owned());
                 }
+                Some("--rust-semantic-profile") if rust_semantic_profile.is_none() => {
+                    let Some(value) = value.to_str() else {
+                        return Err(InvocationError::InvalidRustSemanticProfile(String::new()));
+                    };
+                    rust_semantic_profile = Some(value.to_owned());
+                }
                 Some("--repository-boundary-profile") if boundary_profile.is_none() => {
                     let Some(value) = value.to_str() else {
                         return Err(InvocationError::InvalidBoundaryProfile);
@@ -2400,6 +2667,11 @@ impl Invocation {
                 }
                 Some("--manifest-profile") => {
                     return Err(InvocationError::InvalidManifestProfile);
+                }
+                Some("--rust-semantic-profile") => {
+                    return Err(InvocationError::InvalidRustSemanticProfile(
+                        value.to_string_lossy().into_owned(),
+                    ));
                 }
                 Some("--repository-boundary-profile") => {
                     return Err(InvocationError::InvalidBoundaryProfile);
@@ -2423,7 +2695,11 @@ impl Invocation {
             .map_err(InvocationError::Input)?;
         if let Some(required_profile) = required_profile {
             if profile.as_deref() != Some(required_profile) {
-                return Err(if boundary_options_requested {
+                return Err(if rust_semantic_option_requested {
+                    InvocationError::InvalidRustSemanticComposition(
+                        "standard_local_s4_profile_required",
+                    )
+                } else if boundary_options_requested {
                     InvocationError::InvalidBoundaryProfile
                 } else if workspace_option_requested {
                     InvocationError::InvalidWorkspaceProfile
@@ -2434,7 +2710,11 @@ impl Invocation {
                 });
             }
         } else if profile.is_some() {
-            return Err(if boundary_options_requested {
+            return Err(if rust_semantic_option_requested {
+                InvocationError::InvalidRustSemanticComposition(
+                    "standard_local_s4_profile_required",
+                )
+            } else if boundary_options_requested {
                 InvocationError::InvalidBoundaryProfile
             } else if workspace_option_requested {
                 InvocationError::InvalidWorkspaceProfile
@@ -2462,17 +2742,40 @@ impl Invocation {
             }
             _ => return Err(InvocationError::InvalidWorkspaceProfile),
         };
+        let rust_semantic_profile = match rust_semantic_profile.as_deref() {
+            None => false,
+            Some(R5_RUST_SEMANTIC_PROFILE)
+                if command == "scan" && required_profile == Some("standard-local-s4") =>
+            {
+                true
+            }
+            Some(provided) => {
+                return Err(InvocationError::InvalidRustSemanticProfile(
+                    provided.to_owned(),
+                ));
+            }
+        };
         let manifest_profile = match manifest_profile.as_deref() {
             None => false,
             Some(R4_MANIFEST_PROFILE)
                 if command == "scan"
                     && required_profile == Some("standard-local-s4")
-                    && workspace_profile =>
+                    && (workspace_profile || rust_semantic_profile) =>
             {
                 true
             }
             _ => return Err(InvocationError::InvalidManifestProfile),
         };
+        if rust_semantic_profile && !workspace_profile {
+            return Err(InvocationError::InvalidRustSemanticComposition(
+                "cargo_root_package_profile_required",
+            ));
+        }
+        if rust_semantic_profile && !manifest_profile {
+            return Err(InvocationError::InvalidRustSemanticComposition(
+                "cargo_manifest_facts_profile_required",
+            ));
+        }
         if boundary_manifest
             .as_ref()
             .is_some_and(|value| value.is_empty())
@@ -2522,6 +2825,7 @@ impl Invocation {
             packed_sha1,
             workspace_profile,
             manifest_profile,
+            rust_semantic_profile,
             boundary_profile,
             boundary_manifest,
         })

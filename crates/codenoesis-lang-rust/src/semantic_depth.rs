@@ -2,10 +2,11 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use codenoesis_domain::knowledge::{ClaimSubjectKind, EntityKind, RelationshipKind};
 use codenoesis_domain::s4::{
-    WorkspaceEntity, WorkspaceEvidence, WorkspaceRelationship, WorkspaceVisibility,
+    WorkspaceEntity, WorkspaceError, WorkspaceEvidence, WorkspaceRelationship, WorkspaceVisibility,
     workspace_declaration_id, workspace_evidence_id, workspace_module_id,
 };
-use codenoesis_domain::s4_r3::ExternalWorkspaceBoundary;
+use codenoesis_domain::s4_r3::{ExternalWorkspaceBoundary, RootPackageWorkspaceError};
+use codenoesis_domain::s4_r4::CargoManifestFactError;
 use codenoesis_domain::s4_r5::{
     CompilationPresence, RustMemberProperties, RustMethodContext, RustMethodProperties,
     RustSemanticAttribute, RustSemanticAttributeKind, RustSemanticCoverageGap,
@@ -398,7 +399,7 @@ impl RustSemanticDepthExtractor for TreeSitterRustWorkspaceExtractor {
                 external_boundaries,
                 cache_entries,
             )
-            .map_err(RustSemanticError::Source)?;
+            .map_err(map_manifest_source_error)?;
         let repository_identity = inventory.bound_revision().repository_identity().as_str();
         let commit_oid = inventory.bound_revision().commit_oid().as_str();
         let contexts = source_contexts(&manifest.knowledge, inventory)?;
@@ -546,6 +547,19 @@ impl RustSemanticDepthExtractor for TreeSitterRustWorkspaceExtractor {
             source_records: manifest.source_records,
             parser_invocation_count,
         })
+    }
+}
+
+fn map_manifest_source_error(error: CargoManifestFactError) -> RustSemanticError {
+    match error {
+        CargoManifestFactError::Source(RootPackageWorkspaceError::Source(
+            WorkspaceError::MalformedSyntax { path },
+        )) => RustSemanticError::InvalidDeclaration {
+            path,
+            start_byte: 0,
+            declaration_kind: "syntax_error".to_owned(),
+        },
+        other => RustSemanticError::Source(other),
     }
 }
 

@@ -6,7 +6,8 @@ use std::thread;
 use codenoesis_domain::knowledge::RelationshipKind;
 use codenoesis_domain::s4_r5::{
     CompilationPresence, R5_DETERMINISM_PERMUTATIONS, RustMethodContext, RustSemanticEntityKind,
-    RustSemanticProperties, capability_state, r5_entity_counts,
+    RustSemanticError, RustSemanticLimit, RustSemanticProperties, capability_state,
+    r5_entity_counts,
 };
 use codenoesis_domain::{
     AcquiredFile, AcquiredRepository, BoundRevision, ObjectId, RegularFileMode, RepositoryIdentity,
@@ -203,6 +204,65 @@ fn sec_fr_ext_010_never_executes_or_interprets_target_worlds() {
     assert!(debug.contains("rust.macro_generated_items_not_analyzed"));
 }
 
+#[test]
+fn sec_fr_ext_010_malformed_and_limit_plus_one_fail_closed() {
+    let extractor = TreeSitterRustWorkspaceExtractor::new();
+    let malformed = extractor
+        .extract_rust_semantic_depth_incremental(
+            &synthetic_inventory("pub struct Broken { value: }\n"),
+            &[],
+            &[],
+        )
+        .expect_err("malformed R5 declaration must fail");
+    assert!(
+        matches!(
+            &malformed,
+            RustSemanticError::InvalidDeclaration {
+                path,
+                declaration_kind,
+                ..
+            } if path == "src/lib.rs" && !declaration_kind.is_empty()
+        ),
+        "unexpected malformed-declaration error: {malformed:?}"
+    );
+
+    let mut fields = String::from("pub struct TooMany {\n");
+    for index in 0..=1_024 {
+        fields.push_str(&format!("field_{index}: u8,\n"));
+    }
+    fields.push_str("}\n");
+    let exceeded = extractor
+        .extract_rust_semantic_depth_incremental(&synthetic_inventory(&fields), &[], &[])
+        .expect_err("R5 field maximum plus one must fail");
+    assert_eq!(
+        exceeded,
+        RustSemanticError::LimitExceeded {
+            limit: RustSemanticLimit::FieldsPerOwner,
+            maximum: 1_024,
+            observed: 1_025,
+        }
+    );
+
+    let collision = extractor
+        .extract_rust_semantic_depth_incremental(
+            &synthetic_inventory("pub struct Collision { café: u8, cafe\u{301}: u8 }\n"),
+            &[],
+            &[],
+        )
+        .expect_err("NFC-equivalent R5 members must fail closed");
+    assert!(
+        matches!(
+            &collision,
+            RustSemanticError::IdentityConflict {
+                member_kind,
+                normalized_member,
+                ..
+            } if member_kind == "rust.field" && normalized_member == "café"
+        ),
+        "unexpected R5 identity-collision error: {collision:?}"
+    );
+}
+
 fn extract_fixture(
     rotation: usize,
     reverse: bool,
@@ -239,6 +299,33 @@ fn fixture_inventory(rotation: usize, reverse: bool) -> RepositoryInventory {
         ),
         u64::try_from(files.len()).expect("reviewed R5 file count"),
         files,
+    ))
+}
+
+fn synthetic_inventory(source: &str) -> RepositoryInventory {
+    RepositoryInventory::classify(AcquiredRepository::new(
+        BoundRevision::new(
+            RepositoryIdentity::parse("urn:codenoesis:test:r5-fail-closed")
+                .expect("synthetic repository identity"),
+            ObjectId::parse_sha1(&"a".repeat(40)).expect("synthetic commit OID"),
+            ObjectId::parse_sha1(&"b".repeat(40)).expect("synthetic tree OID"),
+        ),
+        2,
+        vec![
+            AcquiredFile::new(
+                "Cargo.toml".to_owned(),
+                RegularFileMode::Regular,
+                ObjectId::parse_sha1(&"c".repeat(40)).expect("synthetic manifest OID"),
+                b"[package]\nname = \"fail-closed\"\nversion = \"0.1.0\"\nedition = \"2024\"\n\n[lib]\npath = \"src/lib.rs\"\n"
+                    .to_vec(),
+            ),
+            AcquiredFile::new(
+                "src/lib.rs".to_owned(),
+                RegularFileMode::Regular,
+                ObjectId::parse_sha1(&"d".repeat(40)).expect("synthetic source OID"),
+                source.as_bytes().to_vec(),
+            ),
+        ],
     ))
 }
 

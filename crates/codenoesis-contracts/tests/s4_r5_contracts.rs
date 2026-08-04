@@ -1,9 +1,7 @@
 use std::fs;
 use std::path::Path;
 
-use codenoesis_contracts::{
-    CodeNoesisErrorV12, QueryContractError, local_query_result_v3,
-};
+use codenoesis_contracts::{CodeNoesisErrorV12, QueryContractError, local_query_result_v3};
 use codenoesis_domain::s4_r5::{RustSemanticError, RustSemanticLimit};
 use serde_json::{Value, json};
 
