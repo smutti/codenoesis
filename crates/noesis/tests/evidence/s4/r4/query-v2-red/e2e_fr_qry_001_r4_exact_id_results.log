@@ -1,0 +1,24 @@
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.3+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s
+     Running tests/e2e_fr_ext_009_cargo_manifest_facts.rs (target/debug/deps/e2e_fr_ext_009_cargo_manifest_facts-177956c28453725d)
+
+running 1 test
+test e2e_fr_qry_001_r4_exact_id_results ... FAILED
+
+failures:
+
+---- e2e_fr_qry_001_r4_exact_id_results stdout ----
+
+thread 'e2e_fr_qry_001_r4_exact_id_results' (11141859) panicked at crates/noesis/tests/e2e_fr_ext_009_cargo_manifest_facts.rs:110:9:
+assertion `left == right` failed: V7 must dispatch to LocalQueryResultV2
+  left: String("codenoesis.local-query-result/v1")
+ right: "codenoesis.local-query-result/v2"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    e2e_fr_qry_001_r4_exact_id_results
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 1.33s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_ext_009_cargo_manifest_facts`

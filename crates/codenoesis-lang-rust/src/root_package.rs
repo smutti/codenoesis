@@ -40,19 +40,28 @@ pub(super) fn plan_root_package_workspace(
     inventory: &RepositoryInventory,
     external_boundaries: &[ExternalWorkspaceBoundary],
 ) -> Result<PlannedRootPackageWorkspace, RootPackageWorkspaceError> {
-    Planner::new(inventory, external_boundaries)?.plan()
+    Planner::new(inventory, external_boundaries, false)?.plan()
+}
+
+pub(super) fn plan_root_package_workspace_r4(
+    inventory: &RepositoryInventory,
+    external_boundaries: &[ExternalWorkspaceBoundary],
+) -> Result<PlannedRootPackageWorkspace, RootPackageWorkspaceError> {
+    Planner::new(inventory, external_boundaries, true)?.plan()
 }
 
 struct Planner<'a> {
     inventory: &'a RepositoryInventory,
     files: BTreeMap<&'a str, &'a InventoryFile>,
     external_boundaries: BTreeMap<&'a str, &'a str>,
+    manifest_facts: bool,
 }
 
 impl<'a> Planner<'a> {
     fn new(
         inventory: &'a RepositoryInventory,
         external_boundaries: &'a [ExternalWorkspaceBoundary],
+        manifest_facts: bool,
     ) -> Result<Self, RootPackageWorkspaceError> {
         let files = inventory
             .files()
@@ -75,6 +84,7 @@ impl<'a> Planner<'a> {
             inventory,
             files,
             external_boundaries,
+            manifest_facts,
         })
     }
 
@@ -326,22 +336,28 @@ impl<'a> Planner<'a> {
                 Some(manifest_path.clone()),
             )
         })?;
-        for automatic in [
-            "autolib",
-            "autobins",
-            "autoexamples",
-            "autotests",
-            "autobenches",
-        ] {
-            if package.contains_key(automatic) {
-                return Err(invalid_manifest(
-                    WorkspaceManifestReason::UnsupportedStructuralKey,
-                    Some(manifest_path),
-                ));
+        if !self.manifest_facts {
+            for automatic in [
+                "autolib",
+                "autobins",
+                "autoexamples",
+                "autotests",
+                "autobenches",
+            ] {
+                if package.contains_key(automatic) {
+                    return Err(invalid_manifest(
+                        WorkspaceManifestReason::UnsupportedStructuralKey,
+                        Some(manifest_path),
+                    ));
+                }
             }
         }
         let package_name = required_nonempty_string(package, "name", &manifest_path)?;
-        let _edition = required_nonempty_string(package, "edition", &manifest_path)?;
+        if self.manifest_facts {
+            validate_r4_edition(package, &manifest_path)?;
+        } else {
+            let _edition = required_nonempty_string(package, "edition", &manifest_path)?;
+        }
         if package_name.len() > 255 {
             return Err(invalid_manifest(
                 WorkspaceManifestReason::InvalidPackageManifest,
@@ -917,6 +933,27 @@ fn required_nonempty_string<'a>(
                 Some(manifest_path.to_owned()),
             )
         })
+}
+
+fn validate_r4_edition(
+    package: &toml::Table,
+    manifest_path: &str,
+) -> Result<(), RootPackageWorkspaceError> {
+    let valid = package.get("edition").is_some_and(|value| {
+        value.as_str().is_some_and(|edition| !edition.is_empty())
+            || value.as_table().is_some_and(|table| {
+                table.len() == 1
+                    && table.get("workspace").and_then(toml::Value::as_bool) == Some(true)
+            })
+    });
+    if valid {
+        Ok(())
+    } else {
+        Err(invalid_manifest(
+            WorkspaceManifestReason::InvalidPackageManifest,
+            Some(manifest_path.to_owned()),
+        ))
+    }
 }
 
 fn optional_nonempty_string(
