@@ -991,11 +991,15 @@ impl<'a> ManifestFactBuilder<'a> {
         let mut dependency_count = 0_usize;
         let mut predicates = BTreeSet::new();
         for section in &map.sections {
-            let Some((scope, kind, predicate)) = dependency_section(&section.path) else {
+            let Some((scope, kind, predicate, standard_table_name)) =
+                dependency_section(&section.path)
+            else {
                 continue;
             };
+            let declarations =
+                dependency_declarations(section, standard_table_name.as_deref(), manifest_path)?;
             let mut declaration_names = BTreeMap::new();
-            dependency_count = dependency_count.saturating_add(section.entries.len());
+            dependency_count = dependency_count.saturating_add(declarations.len());
             check_limit(CargoFactLimit::DependenciesPerManifest, dependency_count)?;
             if let Some(predicate) = predicate.as_deref() {
                 predicates.insert(predicate.to_owned());
@@ -1015,21 +1019,13 @@ impl<'a> ManifestFactBuilder<'a> {
                     )
                 })?,
             };
-            for entry in &section.entries {
-                if entry.key_path.len() != 1 {
-                    return Err(invalid_fact(
-                        CargoFactReason::InvalidDeclarationName,
-                        manifest_path,
-                        CargoFactKind::Dependency,
-                        None,
-                    ));
-                }
+            for declaration in declarations {
                 let declared_name =
-                    normalized_name(&entry.key_path[0], manifest_path, CargoFactKind::Dependency)?;
+                    normalized_name(&declaration.name, manifest_path, CargoFactKind::Dependency)?;
                 if let Some(previous) =
-                    declaration_names.insert(declared_name.clone(), entry.key_path[0].clone())
+                    declaration_names.insert(declared_name.clone(), declaration.name.clone())
                 {
-                    let reason = if previous == entry.key_path[0] {
+                    let reason = if previous == declaration.name {
                         CargoFactReason::DuplicateDeclaration
                     } else {
                         CargoFactReason::UnicodeNormalizationCollision
@@ -1041,7 +1037,7 @@ impl<'a> ManifestFactBuilder<'a> {
                         None,
                     ));
                 }
-                let evidence_id = self.add_evidence(file, entry.span);
+                let evidence_id = self.add_evidence(file, declaration.span);
                 let target_predicate = predicate
                     .as_ref()
                     .map(|value| {
@@ -1055,7 +1051,7 @@ impl<'a> ManifestFactBuilder<'a> {
                     .transpose()?;
                 let parsed = self.parse_dependency_value(
                     file,
-                    &entry.value,
+                    &declaration.value,
                     &evidence_id,
                     manifest_path,
                     scope,
@@ -2004,58 +2000,60 @@ impl<'a> ManifestFactBuilder<'a> {
         manifest_path: &str,
     ) -> Result<(), CargoManifestFactError> {
         for section in &map.sections {
-            let recognized = match section.path.as_slice() {
-                [] => false,
-                [value]
-                    if matches!(
-                        value.as_str(),
-                        "workspace"
-                            | "package"
-                            | "lib"
-                            | "bin"
-                            | "example"
-                            | "test"
-                            | "bench"
-                            | "dependencies"
-                            | "dev-dependencies"
-                            | "build-dependencies"
-                            | "features"
-                            | "badges"
-                            | "profile"
-                            | "lints"
-                            | "replace"
-                    ) =>
-                {
-                    true
-                }
-                [first, second]
-                    if first == "workspace"
-                        && matches!(
-                            second.as_str(),
-                            "package" | "dependencies" | "metadata" | "lints"
+            let recognized = dependency_section(&section.path).is_some()
+                || match section.path.as_slice() {
+                    [value]
+                        if matches!(
+                            value.as_str(),
+                            "workspace"
+                                | "package"
+                                | "lib"
+                                | "bin"
+                                | "example"
+                                | "test"
+                                | "bench"
+                                | "dependencies"
+                                | "dev-dependencies"
+                                | "build-dependencies"
+                                | "features"
+                                | "badges"
+                                | "profile"
+                                | "lints"
+                                | "replace"
                         ) =>
-                {
-                    true
-                }
-                [first, ..] if matches!(first.as_str(), "profile" | "lints" | "replace") => true,
-                [first, second, ..]
-                    if (first == "package" || first == "workspace")
-                        && matches!(second.as_str(), "metadata" | "lints") =>
-                {
-                    true
-                }
-                [first, _] if first == "patch" => true,
-                [first, _, third]
-                    if first == "target"
-                        && matches!(
-                            third.as_str(),
-                            "dependencies" | "dev-dependencies" | "build-dependencies"
-                        ) =>
-                {
-                    true
-                }
-                _ => false,
-            };
+                    {
+                        true
+                    }
+                    [first, second]
+                        if first == "workspace"
+                            && matches!(
+                                second.as_str(),
+                                "package" | "dependencies" | "metadata" | "lints"
+                            ) =>
+                    {
+                        true
+                    }
+                    [first, ..] if matches!(first.as_str(), "profile" | "lints" | "replace") => {
+                        true
+                    }
+                    [first, second, ..]
+                        if (first == "package" || first == "workspace")
+                            && matches!(second.as_str(), "metadata" | "lints") =>
+                    {
+                        true
+                    }
+                    [first, _] if first == "patch" => true,
+                    [first, _, third]
+                        if first == "target"
+                            && matches!(
+                                third.as_str(),
+                                "dependencies" | "dev-dependencies" | "build-dependencies"
+                            ) =>
+                    {
+                        true
+                    }
+                    _ => false,
+                };
             if !recognized {
                 return Err(invalid_fact(
                     CargoFactReason::UnsupportedKey,
@@ -2360,6 +2358,12 @@ struct ParsedDependency {
     optional: Option<DeclaredBoolean>,
     default_features: Option<DeclaredBoolean>,
     requested_features: Vec<DeclaredName>,
+}
+
+struct DependencyDeclaration {
+    name: String,
+    value: toml::Value,
+    span: ByteRange,
 }
 
 struct ParsedPatch {
@@ -2737,37 +2741,155 @@ fn parse_key_segment(segment: &str, manifest_path: &str) -> Result<String, Cargo
 
 fn dependency_section(
     path: &[String],
-) -> Option<(DependencyScope, DependencyKind, Option<String>)> {
+) -> Option<(
+    DependencyScope,
+    DependencyKind,
+    Option<String>,
+    Option<String>,
+)> {
     match path {
         [first] if first == "dependencies" => {
-            Some((DependencyScope::Package, DependencyKind::Normal, None))
+            Some((DependencyScope::Package, DependencyKind::Normal, None, None))
         }
-        [first] if first == "dev-dependencies" => {
-            Some((DependencyScope::Package, DependencyKind::Development, None))
-        }
+        [first] if first == "dev-dependencies" => Some((
+            DependencyScope::Package,
+            DependencyKind::Development,
+            None,
+            None,
+        )),
         [first] if first == "build-dependencies" => {
-            Some((DependencyScope::Package, DependencyKind::Build, None))
+            Some((DependencyScope::Package, DependencyKind::Build, None, None))
         }
-        [first, second] if first == "workspace" && second == "dependencies" => {
-            Some((DependencyScope::Workspace, DependencyKind::Normal, None))
-        }
+        [first, name] if first == "dependencies" => Some((
+            DependencyScope::Package,
+            DependencyKind::Normal,
+            None,
+            Some(name.clone()),
+        )),
+        [first, name] if first == "dev-dependencies" => Some((
+            DependencyScope::Package,
+            DependencyKind::Development,
+            None,
+            Some(name.clone()),
+        )),
+        [first, name] if first == "build-dependencies" => Some((
+            DependencyScope::Package,
+            DependencyKind::Build,
+            None,
+            Some(name.clone()),
+        )),
+        [first, second] if first == "workspace" && second == "dependencies" => Some((
+            DependencyScope::Workspace,
+            DependencyKind::Normal,
+            None,
+            None,
+        )),
+        [first, second, name] if first == "workspace" && second == "dependencies" => Some((
+            DependencyScope::Workspace,
+            DependencyKind::Normal,
+            None,
+            Some(name.clone()),
+        )),
         [first, predicate, third] if first == "target" && third == "dependencies" => Some((
             DependencyScope::Package,
             DependencyKind::Normal,
             Some(predicate.nfc().collect()),
+            None,
         )),
         [first, predicate, third] if first == "target" && third == "dev-dependencies" => Some((
             DependencyScope::Package,
             DependencyKind::Development,
             Some(predicate.nfc().collect()),
+            None,
         )),
         [first, predicate, third] if first == "target" && third == "build-dependencies" => Some((
             DependencyScope::Package,
             DependencyKind::Build,
             Some(predicate.nfc().collect()),
+            None,
         )),
+        [first, predicate, third, name] if first == "target" && third == "dependencies" => Some((
+            DependencyScope::Package,
+            DependencyKind::Normal,
+            Some(predicate.nfc().collect()),
+            Some(name.clone()),
+        )),
+        [first, predicate, third, name] if first == "target" && third == "dev-dependencies" => {
+            Some((
+                DependencyScope::Package,
+                DependencyKind::Development,
+                Some(predicate.nfc().collect()),
+                Some(name.clone()),
+            ))
+        }
+        [first, predicate, third, name] if first == "target" && third == "build-dependencies" => {
+            Some((
+                DependencyScope::Package,
+                DependencyKind::Build,
+                Some(predicate.nfc().collect()),
+                Some(name.clone()),
+            ))
+        }
         _ => None,
     }
+}
+
+fn dependency_declarations(
+    section: &Section,
+    standard_table_name: Option<&str>,
+    manifest_path: &str,
+) -> Result<Vec<DependencyDeclaration>, CargoManifestFactError> {
+    if let Some(name) = standard_table_name {
+        let mut table = toml::Table::new();
+        for entry in &section.entries {
+            if entry.key_path.len() != 1 {
+                return Err(invalid_fact(
+                    CargoFactReason::UnsupportedKey,
+                    manifest_path,
+                    CargoFactKind::Dependency,
+                    None,
+                ));
+            }
+            let field = entry.key_path[0].clone();
+            if table.insert(field.clone(), entry.value.clone()).is_some() {
+                return Err(conflict(manifest_path, CargoFactKind::Dependency, &field));
+            }
+        }
+        let end = section
+            .entries
+            .iter()
+            .map(|entry| entry.span.end)
+            .max()
+            .unwrap_or(section.header.end);
+        return Ok(vec![DependencyDeclaration {
+            name: name.to_owned(),
+            value: toml::Value::Table(table),
+            span: ByteRange {
+                start: section.header.start,
+                end,
+            },
+        }]);
+    }
+
+    section
+        .entries
+        .iter()
+        .map(|entry| {
+            if entry.key_path.len() != 1 {
+                return Err(invalid_fact(
+                    CargoFactReason::InvalidDeclarationName,
+                    manifest_path,
+                    CargoFactKind::Dependency,
+                    None,
+                ));
+            }
+            Ok(DependencyDeclaration {
+                name: entry.key_path[0].clone(),
+                value: entry.value.clone(),
+                span: entry.span,
+            })
+        })
+        .collect()
 }
 
 fn declared_string_field(
