@@ -1,0 +1,55 @@
+{
+  "schema_version": "codenoesis.r5-golden-correction-red-observation/v1",
+  "observed_at": "2026-08-04",
+  "issue": "https://github.com/smutti/codenoesis/issues/114",
+  "authorization": "https://github.com/smutti/codenoesis/issues/114#issuecomment-5181677202",
+  "scope_authorization": "https://github.com/smutti/codenoesis/issues/114#issuecomment-5181734966",
+  "required_base": "c2ae40aed24f24ee666ea5a2549d34ec8553686b",
+  "test_first_head": "9c3f394e0acd7ee5c07910345bc7ea5e1c4c6c17",
+  "accepted_red_head": "5b54d04cd620e11b8f4b972b7dac22df89e22747",
+  "command": "python3 -m unittest scripts.tests.test_s4_rust_semantic_depth_contract.S4RustSemanticDepthGovernanceTests.test_expected_facts_match_immutable_r4_identity_and_fixture_declarations",
+  "test_first_guard_sha256": "75b7e1ba19e284004c03204cd2c7e8221774ba4876340a3b3e5b98473fbbc954",
+  "exit_code": 1,
+  "expected_failure": "the protected legacy crate identity differs from the independently derived immutable R4 crate identity",
+  "actual_failure": "legacy crate identity 29b8192ad0335325c31211d6ef80f991d9ff0b1f66d63951187d03ad40ffd056 differs from required R4 identity 2f3cd49660b1463ed14a14650a45d77315e5fd66c29edeffc3ba7f1bd46500c0",
+  "failed_for_expected_reason": true,
+  "golden_or_bound_hashes_changed_before_red": false,
+  "production_files_changed_before_red": false,
+  "changed_paths_before_red": [
+    "scripts/tests/test_s4_rust_semantic_depth_contract.py"
+  ],
+  "stdout_bytes": 0,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_bytes": 1099,
+  "stderr_sha256": "f9ce76fcb562a7b30b8a570ac157ec0a4d7ac0e5e2c17bcd768f2e86364a3fb1",
+  "raw_log_path": "tests/specifications/s4/r5/red/golden-correction-red.log",
+  "raw_log_bytes": 1099,
+  "raw_log_sha256": "f9ce76fcb562a7b30b8a570ac157ec0a4d7ac0e5e2c17bcd768f2e86364a3fb1",
+  "rejected_attempts": [
+    {
+      "class": "runner_invocation",
+      "exit_code": 127,
+      "stderr_bytes": 205,
+      "stderr_sha256": "451244577ee1478b6113e0a172b87587dd6176f48c93d4c891bf29ed719c16bc",
+      "reason": "the zsh wrapper treated the complete command string as one executable, so the test did not run"
+    },
+    {
+      "class": "oracle_width",
+      "head": "9c3f394e0acd7ee5c07910345bc7ea5e1c4c6c17",
+      "exit_code": 1,
+      "stderr_bytes": 6902,
+      "stderr_sha256": "7d57ee8571117834b1b32f65debe5cf6a1057cb9c030ab9d5a741b51e310ce91",
+      "reason": "subtests reported seven propagated mismatches instead of the one canonical crate-identity failure"
+    }
+  ],
+  "correction_rounds_used": 1,
+  "environment": {
+    "os": "macOS 26.5.2",
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "toolchain": "1.97.1-aarch64-apple-darwin"
+  }
+}
