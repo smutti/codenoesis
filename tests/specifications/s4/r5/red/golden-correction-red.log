@@ -1,0 +1,16 @@
+F
+======================================================================
+FAIL: test_expected_facts_match_immutable_r4_identity_and_fixture_declarations (scripts.tests.test_s4_rust_semantic_depth_contract.S4RustSemanticDepthGovernanceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis-issue-114/scripts/tests/test_s4_rust_semantic_depth_contract.py", line 658, in test_expected_facts_match_immutable_r4_identity_and_fixture_declarations
+    self.assertEqual(facts["legacy_context_ids"]["crate"], crate_id)
+AssertionError: 'urn:[21 chars]ke3:29b8192ad0335325c31211d6ef80f991d9ff0b1f66[18 chars]d056' != 'urn:[21 chars]ke3:2f3cd49660b1463ed14a14650a45d77315e5fd66c2[18 chars]00c0'
+- urn:codenoesis:entity:blake3:29b8192ad0335325c31211d6ef80f991d9ff0b1f66d63951187d03ad40ffd056
++ urn:codenoesis:entity:blake3:2f3cd49660b1463ed14a14650a45d77315e5fd66c29edeffc3ba7f1bd46500c0
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+FAILED (failures=1)
