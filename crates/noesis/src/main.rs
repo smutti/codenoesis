@@ -28,9 +28,9 @@ use codenoesis_contracts::{
     RepositorySnapshotV4, RepositorySnapshotV4Error, RepositorySnapshotV5,
     RepositorySnapshotV5Error, RepositorySnapshotV6, RepositorySnapshotV6Error,
     RepositorySnapshotV7, RepositorySnapshotV7Error, SnapshotEnvelopeV1, ValidatedS4Head,
-    generate_documentation_v1, local_query_result_v1, validate_stored_snapshot_semantic_v4,
-    validate_stored_snapshot_semantic_v5, validate_stored_snapshot_semantic_v6,
-    validate_stored_snapshot_semantic_v7,
+    generate_documentation_v1, local_query_result_v1, local_query_result_v2,
+    validate_stored_snapshot_semantic_v4, validate_stored_snapshot_semantic_v5,
+    validate_stored_snapshot_semantic_v6, validate_stored_snapshot_semantic_v7,
 };
 use codenoesis_domain::AcquisitionError;
 use codenoesis_domain::knowledge::KnowledgeError;
@@ -1144,6 +1144,10 @@ fn run_query(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, F
             LoadS4Error::Scan(error) => Failure::Scan(error),
             LoadS4Error::SnapshotMismatch => Failure::Query(QueryFailure::SnapshotMismatch),
         })?;
+    let query_v2 = loaded.head.snapshot_schema_version == SNAPSHOT_SCHEMA_VERSION_V7;
+    if !query_v2 && v2_only_query_id(&invocation.requested_id) {
+        return Err(Failure::S4Input(CodeNoesisErrorV5::invalid_query_id()));
+    }
     validate_documents_root_for_boundary(
         std::path::Path::new(&invocation.store),
         std::path::Path::new(&invocation.documents),
@@ -1165,25 +1169,46 @@ fn run_query(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, F
         | GeneratedDocsError::CorruptGeneration
         | GeneratedDocsError::Failed => Failure::Query(QueryFailure::CorruptDocuments),
     })?;
-    local_query_result_v1(
-        &loaded.semantic,
-        &manifest,
-        loaded.head.snapshot_id.as_str(),
-        &invocation.requested_id,
-    )
-    .map_err(|error| match error {
+    let stdout = if query_v2 {
+        local_query_result_v2(
+            &loaded.semantic,
+            &manifest,
+            loaded.head.snapshot_id.as_str(),
+            &invocation.requested_id,
+        )
+        .map_err(query_contract_failure)?
+        .canonical_stdout()
+        .map_err(query_stdout_failure)?
+    } else {
+        local_query_result_v1(
+            &loaded.semantic,
+            &manifest,
+            loaded.head.snapshot_id.as_str(),
+            &invocation.requested_id,
+        )
+        .map_err(query_contract_failure)?
+        .canonical_stdout()
+        .map_err(query_stdout_failure)?
+    };
+    Ok(stdout)
+}
+
+fn query_contract_failure(error: QueryContractError) -> Failure {
+    match error {
         QueryContractError::NotFound => Failure::Query(QueryFailure::NotFound),
         QueryContractError::InvalidDocuments => Failure::Query(QueryFailure::CorruptDocuments),
         QueryContractError::InvalidSnapshot => Failure::Query(QueryFailure::SnapshotMismatch),
         QueryContractError::LimitExceeded => Failure::Query(QueryFailure::LimitExceeded),
-    })?
-    .canonical_stdout()
-    .map_err(|error| match error {
+    }
+}
+
+fn query_stdout_failure(error: QueryContractError) -> Failure {
+    match error {
         QueryContractError::LimitExceeded => Failure::Query(QueryFailure::LimitExceeded),
         QueryContractError::InvalidSnapshot
         | QueryContractError::InvalidDocuments
         | QueryContractError::NotFound => Failure::Internal,
-    })
+    }
 }
 
 fn load_s4_snapshot(
@@ -2207,6 +2232,7 @@ fn valid_query_id(value: &str) -> bool {
         "urn:codenoesis:relationship:blake3:",
         "urn:codenoesis:claim:blake3:",
         "urn:codenoesis:evidence:blake3:",
+        "urn:codenoesis:diagnostic:blake3:",
         "urn:codenoesis:coverage-gap:blake3:",
         "urn:codenoesis:document:blake3:",
     ]
@@ -2220,6 +2246,10 @@ fn valid_query_id(value: &str) -> bool {
     })
 }
 
+fn v2_only_query_id(value: &str) -> bool {
+    value.starts_with("urn:codenoesis:diagnostic:blake3:")
+}
+
 fn valid_s4_root_argument(value: &OsStr) -> bool {
     !value.is_empty()
         && !std::path::Path::new(value)
@@ -2227,6 +2257,7 @@ fn valid_s4_root_argument(value: &OsStr) -> bool {
             .any(|component| matches!(component, std::path::Component::ParentDir))
 }
 
+#[allow(clippy::struct_excessive_bools)]
 struct Invocation {
     repository: OsString,
     identity: RepositoryIdentity,

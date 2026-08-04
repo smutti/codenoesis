@@ -1,5 +1,6 @@
 mod support;
 
+use std::fmt::Write as _;
 use std::fs;
 use std::path::Path;
 
@@ -133,6 +134,75 @@ fn e2e_fr_qry_001_r4_exact_id_results() {
     assert_eq!(tree_fingerprint(&repository.documents), before_documents);
 }
 
+#[test]
+fn e2e_fr_doc_001_r4_declared_vs_resolved_is_documented() {
+    let repository = MaterializedCargoManifestRepository::fixture();
+    let scan = repository.scan();
+    assert!(
+        scan.status.success(),
+        "R4 scan failed: {}",
+        String::from_utf8_lossy(&scan.stderr)
+    );
+    let docs = repository.docs();
+    assert!(
+        docs.status.success(),
+        "R4 docs failed: {}",
+        String::from_utf8_lossy(&docs.stderr)
+    );
+    let manifest: Value = serde_json::from_slice(&docs.stdout).expect("parse R4 docs manifest");
+    let overview =
+        fs::read_to_string(repository.documents.join("overview.md")).expect("read R4 overview");
+    assert!(overview.contains("## Cargo manifest declarations"));
+    assert!(overview.contains("Declared facts only"));
+    assert!(overview.contains("not resolved, activated, fetched, applied, or executed"));
+    assert!(overview.contains("cargo.dependency_graph_not_resolved"));
+    assert!(overview.contains("not_resolved"));
+
+    let statements = manifest["documents"]
+        .as_array()
+        .expect("R4 document records")
+        .iter()
+        .find(|document| document["path"] == "overview.md")
+        .and_then(|document| document["statements"].as_array())
+        .expect("R4 overview statements");
+    assert!(statements.iter().any(|statement| {
+        statement["subject_ids"].as_array().is_some_and(|ids| {
+            ids.iter().any(|id| {
+                id == "urn:codenoesis:entity:blake3:13c3407742a8aaf4ff919842621e5ef164757103a995146775b49441da886527"
+            })
+        }) && statement["truth_state"] == "deterministic_fact"
+    }));
+    assert!(statements.iter().any(|statement| {
+        statement["coverage_gap_ids"]
+            .as_array()
+            .is_some_and(|ids| !ids.is_empty())
+            && statement["truth_state"] == "unsupported"
+    }));
+    for plaintext in [
+        "fixture-token",
+        "member-token",
+        "https://example.invalid/serde.git",
+        "0123456789abcdef0123456789abcdef01234567",
+    ] {
+        assert!(!overview.contains(plaintext));
+        assert!(!String::from_utf8_lossy(&docs.stdout).contains(plaintext));
+    }
+}
+
+#[test]
+fn reg_fr_cli_001_r4_selector_absence_is_byte_identical() {
+    let repository = MaterializedCargoManifestRepository::fixture();
+    let output = repository.scan_r3();
+    assert_eq!(output.status.code(), Some(11));
+    assert!(output.stdout.is_empty());
+    assert_eq!(
+        output.stderr,
+        b"{\"code\":\"extraction.invalid_workspace_manifest\",\"context\":{\"path\":\"crates/app/Cargo.toml\",\"reason\":\"unsupported_structural_key\"},\"message\":\"invalid workspace manifest\",\"retryable\":false,\"schema_version\":\"codenoesis.error/v10\",\"stage\":\"extraction\"}\n"
+    );
+    assert!(!repository.store.exists());
+    assert!(!repository.documents.exists());
+}
+
 fn assert_query_cardinality(result: &Value, kind: &str, requested_id: &str) {
     let claims = result["claims"].as_array().expect("query claims");
     let evidence = result["evidence"].as_array().expect("query evidence");
@@ -200,10 +270,7 @@ fn tree_fingerprint(root: &Path) -> Vec<(String, u64, String)> {
                         .to_string_lossy()
                         .replace('\\', "/"),
                     u64::try_from(bytes.len()).expect("fingerprint byte length"),
-                    Sha256::digest(&bytes)
-                        .iter()
-                        .map(|byte| format!("{byte:02x}"))
-                        .collect(),
+                    sha256_hex(&bytes),
                 ));
             }
         }
@@ -212,4 +279,12 @@ fn tree_fingerprint(root: &Path) -> Vec<(String, u64, String)> {
     let mut files = Vec::new();
     visit(root, root, &mut files);
     files
+}
+
+fn sha256_hex(bytes: &[u8]) -> String {
+    let mut hexadecimal = String::with_capacity(64);
+    for byte in Sha256::digest(bytes) {
+        let _ = write!(hexadecimal, "{byte:02x}");
+    }
+    hexadecimal
 }

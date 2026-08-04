@@ -36,7 +36,7 @@ const MAX_DOCUMENTS: usize = 2_001;
 const MAX_DOCUMENT_BYTES: usize = 1_048_576;
 const MAX_TOTAL_DOCUMENT_BYTES: usize = 33_554_432;
 const MAX_STATEMENTS: usize = 200_000;
-const MAX_QUERY_BYTES: usize = 4_194_304;
+pub(super) const MAX_QUERY_BYTES: usize = 4_194_304;
 
 pub const MARKDOWN_RENDERER_VERSION: &str = "codenoesis.renderer/markdown-v1";
 
@@ -613,18 +613,20 @@ struct DocumentDraft {
     statements: Vec<Value>,
 }
 
-struct GraphIndex {
-    repository_identity: String,
-    entities: BTreeMap<String, Value>,
+pub(super) struct GraphIndex {
+    pub(super) repository_identity: String,
+    cargo_manifest_declarations: bool,
+    pub(super) entities: BTreeMap<String, Value>,
     relationships: Vec<Value>,
+    pub(super) relationships_by_id: BTreeMap<String, Value>,
     claims: BTreeMap<(String, String), Value>,
-    claims_by_id: BTreeMap<String, Value>,
-    evidence: BTreeMap<String, Value>,
-    coverage: BTreeMap<String, Value>,
+    pub(super) claims_by_id: BTreeMap<String, Value>,
+    pub(super) evidence: BTreeMap<String, Value>,
+    pub(super) coverage: BTreeMap<String, Value>,
 }
 
 impl GraphIndex {
-    fn new(semantic: &Value) -> Result<Self, DocumentationContractError> {
+    pub(super) fn new(semantic: &Value) -> Result<Self, DocumentationContractError> {
         let repository_identity = semantic
             .pointer("/repository/identity")
             .and_then(Value::as_str)
@@ -633,12 +635,15 @@ impl GraphIndex {
         let graph = semantic
             .get("knowledge_graph")
             .ok_or(DocumentationContractError::InvalidSnapshot)?;
+        let cargo_manifest_declarations =
+            string_field(graph, "schema_version") == Ok("codenoesis.knowledge-graph/v4");
         let entities = id_map(graph, "entities")?;
         let relationships = graph
             .get("relationships")
             .and_then(Value::as_array)
             .cloned()
             .ok_or(DocumentationContractError::InvalidSnapshot)?;
+        let relationships_by_id = id_map(graph, "relationships")?;
         let claims_values = graph
             .get("claims")
             .and_then(Value::as_array)
@@ -659,8 +664,10 @@ impl GraphIndex {
         }
         Ok(Self {
             repository_identity,
+            cargo_manifest_declarations,
             entities,
             relationships,
+            relationships_by_id,
             claims,
             claims_by_id,
             evidence: id_map(graph, "evidence")?,
@@ -668,7 +675,7 @@ impl GraphIndex {
         })
     }
 
-    fn claim(
+    pub(super) fn claim(
         &self,
         subject_kind: &str,
         subject_id: &str,
@@ -793,6 +800,87 @@ fn overview_document(index: &GraphIndex) -> Result<DocumentDraft, DocumentationC
         )
         .expect("writing Markdown to a String cannot fail");
         statements.push(statement);
+    }
+    let mut cargo_entities = index
+        .entities
+        .values()
+        .filter(|entity| string_field(entity, "kind").is_ok_and(|kind| kind.starts_with("cargo.")))
+        .collect::<Vec<_>>();
+    cargo_entities.sort_by(|left, right| {
+        string_field(left, "id")
+            .unwrap_or_default()
+            .cmp(string_field(right, "id").unwrap_or_default())
+    });
+    if !cargo_entities.is_empty() {
+        content.push_str(
+            "\n## Cargo manifest declarations\n\nDeclared facts only: dependencies, features, targets, patches, build scripts, and procedural macros are not resolved, activated, fetched, applied, or executed.\n\n",
+        );
+        for (ordinal, entity) in cargo_entities.into_iter().enumerate() {
+            let id = string_field(entity, "id")?;
+            let kind = string_field(entity, "kind")?;
+            let name = string_field(entity, "name")?;
+            let claim = index.claim("entity", id)?;
+            let statement = statement_value(
+                &document_id,
+                "cargo_declaration",
+                id,
+                ordinal,
+                "deterministic_fact",
+                vec![id.to_owned()],
+                string_array(claim, "evidence_ids")?,
+                Vec::new(),
+            );
+            writeln!(
+                content,
+                "- Declared `{}` `{}`. {}",
+                markdown_code(kind),
+                markdown_code(name),
+                statement_marker(&statement)?
+            )
+            .expect("writing Markdown to a String cannot fail");
+            statements.push(statement);
+        }
+
+        let mut cargo_gaps = index
+            .coverage
+            .values()
+            .filter(|gap| {
+                string_field(gap, "capability")
+                    .is_ok_and(|capability| capability.starts_with("cargo."))
+            })
+            .collect::<Vec<_>>();
+        cargo_gaps.sort_by(|left, right| {
+            string_field(left, "id")
+                .unwrap_or_default()
+                .cmp(string_field(right, "id").unwrap_or_default())
+        });
+        if !cargo_gaps.is_empty() {
+            content.push_str("\n## Cargo declaration coverage\n\n");
+            for (ordinal, gap) in cargo_gaps.into_iter().enumerate() {
+                let id = string_field(gap, "id")?;
+                let capability = string_field(gap, "capability")?;
+                let state = string_field(gap, "state")?;
+                let statement = statement_value(
+                    &document_id,
+                    "cargo_coverage_gap",
+                    id,
+                    ordinal,
+                    "unsupported",
+                    vec![id.to_owned()],
+                    Vec::new(),
+                    vec![id.to_owned()],
+                );
+                writeln!(
+                    content,
+                    "- `{}` is `{}`; no resolved behavior is claimed. {}",
+                    markdown_code(capability),
+                    markdown_code(state),
+                    statement_marker(&statement)?
+                )
+                .expect("writing Markdown to a String cannot fail");
+                statements.push(statement);
+            }
+        }
     }
     let mut gaps = index
         .coverage
@@ -981,33 +1069,55 @@ fn module_document(
             .get(target_id)
             .ok_or(DocumentationContractError::InvalidSnapshot)?;
         if string_field(target, "kind")? == "rust.symbol_reference" {
-            let gap = index
-                .coverage
-                .values()
-                .find(|gap| {
-                    string_field(gap, "capability") == Ok("compiler_cross_crate_use_resolution")
-                })
-                .ok_or(DocumentationContractError::InvalidSnapshot)?;
-            let gap_id = string_field(gap, "id")?;
-            let statement = statement_value(
-                &document_id,
-                "coverage_gap",
-                gap_id,
-                gap_ordinal,
-                "unsupported",
-                vec![gap_id.to_owned()],
-                Vec::new(),
-                vec![gap_id.to_owned()],
-            );
-            gap_ordinal += 1;
-            writeln!(
-                content,
-                "- Unsupported: `{}` remains an unresolved cross-crate symbol. {}",
-                markdown_code(string_field(target, "name")?),
-                statement_marker(&statement)?
-            )
-            .expect("writing Markdown to a String cannot fail");
-            statements.push(statement);
+            let gap = index.coverage.values().find(|gap| {
+                string_field(gap, "capability") == Ok("compiler_cross_crate_use_resolution")
+            });
+            if let Some(gap) = gap {
+                let gap_id = string_field(gap, "id")?;
+                let statement = statement_value(
+                    &document_id,
+                    "coverage_gap",
+                    gap_id,
+                    gap_ordinal,
+                    "unsupported",
+                    vec![gap_id.to_owned()],
+                    Vec::new(),
+                    vec![gap_id.to_owned()],
+                );
+                gap_ordinal += 1;
+                writeln!(
+                    content,
+                    "- Unsupported: `{}` remains an unresolved cross-crate symbol. {}",
+                    markdown_code(string_field(target, "name")?),
+                    statement_marker(&statement)?
+                )
+                .expect("writing Markdown to a String cannot fail");
+                statements.push(statement);
+            } else if index.cargo_manifest_declarations {
+                let relationship_id = string_field(relationship, "id")?;
+                let claim = index.claim("relationship", relationship_id)?;
+                let statement = statement_value(
+                    &document_id,
+                    "unresolved_import",
+                    relationship_id,
+                    import_ordinal,
+                    "deterministic_fact",
+                    vec![relationship_id.to_owned(), target_id.to_owned()],
+                    string_array(claim, "evidence_ids")?,
+                    Vec::new(),
+                );
+                import_ordinal += 1;
+                writeln!(
+                    content,
+                    "- Declared import reference: `{}`; cross-crate resolution is unavailable. {}",
+                    markdown_code(string_field(target, "name")?),
+                    statement_marker(&statement)?
+                )
+                .expect("writing Markdown to a String cannot fail");
+                statements.push(statement);
+            } else {
+                return Err(DocumentationContractError::InvalidSnapshot);
+            }
         } else {
             let relationship_id = string_field(relationship, "id")?;
             let claim = index.claim("relationship", relationship_id)?;
@@ -1141,7 +1251,7 @@ fn markdown_code(value: &str) -> String {
         .replace(']', "&#93;")
 }
 
-fn id_map(
+pub(super) fn id_map(
     parent: &Value,
     field: &str,
 ) -> Result<BTreeMap<String, Value>, DocumentationContractError> {
@@ -1159,7 +1269,10 @@ fn id_map(
     Ok(result)
 }
 
-fn string_field<'a>(value: &'a Value, field: &str) -> Result<&'a str, DocumentationContractError> {
+pub(super) fn string_field<'a>(
+    value: &'a Value,
+    field: &str,
+) -> Result<&'a str, DocumentationContractError> {
     value
         .get(field)
         .and_then(Value::as_str)
@@ -1170,7 +1283,10 @@ fn property<'a>(properties: &'a Value, field: &str) -> Result<&'a str, Documenta
     string_field(properties, field)
 }
 
-fn string_array(value: &Value, field: &str) -> Result<Vec<String>, DocumentationContractError> {
+pub(super) fn string_array(
+    value: &Value,
+    field: &str,
+) -> Result<Vec<String>, DocumentationContractError> {
     value
         .get(field)
         .and_then(Value::as_array)
@@ -1202,7 +1318,7 @@ fn stable_digest(value: &Value) -> String {
     .to_string()
 }
 
-fn validate_manifest_binding(
+pub(super) fn validate_manifest_binding(
     manifest: &Value,
     repository_identity: &str,
     snapshot_id: &str,
@@ -1219,7 +1335,10 @@ fn validate_manifest_binding(
     Ok(())
 }
 
-fn evidence_for_claim(index: &GraphIndex, claim: &Value) -> Result<Vec<Value>, QueryContractError> {
+pub(super) fn evidence_for_claim(
+    index: &GraphIndex,
+    claim: &Value,
+) -> Result<Vec<Value>, QueryContractError> {
     string_array(claim, "evidence_ids")
         .map_err(|_| QueryContractError::InvalidSnapshot)?
         .into_iter()
@@ -1233,7 +1352,7 @@ fn evidence_for_claim(index: &GraphIndex, claim: &Value) -> Result<Vec<Value>, Q
         .collect()
 }
 
-fn linked_statements(
+pub(super) fn linked_statements(
     documents: &[Value],
     requested_id: &str,
 ) -> Result<Vec<Value>, QueryContractError> {

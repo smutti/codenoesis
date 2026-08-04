@@ -26,7 +26,11 @@ use codenoesis_domain::{
 use serde_json::{Value, json};
 
 use super::s1_boundaries::repository_boundary_value;
-use super::s4::{claim_value, entity_value, evidence_value, relationship_value};
+use super::s4::{
+    GraphIndex, MAX_QUERY_BYTES, QueryContractError, claim_value, entity_value, evidence_for_claim,
+    evidence_value, id_map, linked_statements, relationship_value, string_array, string_field,
+    validate_manifest_binding,
+};
 use super::{
     LimitedVecWriter, PublicationCandidateError, SnapshotEnvelopeV1, inventory_value,
     publication_candidate, semantic_hash,
@@ -115,7 +119,7 @@ impl CodeNoesisErrorV11 {
         )
     }
 
-    /// Serializes one strict ErrorV11 followed by one LF.
+    /// Serializes one strict `ErrorV11` followed by one LF.
     ///
     /// # Errors
     ///
@@ -139,6 +143,245 @@ impl CodeNoesisErrorV11 {
             }),
         }
     }
+}
+
+#[derive(Clone, Debug)]
+pub struct LocalQueryResultV2 {
+    value: Value,
+}
+
+impl LocalQueryResultV2 {
+    /// Serializes one bounded exact-ID V2 result followed by one LF.
+    ///
+    /// # Errors
+    ///
+    /// Returns a serialization or fixed query-result limit failure.
+    pub fn canonical_stdout(&self) -> Result<Vec<u8>, QueryContractError> {
+        let mut bytes =
+            serde_json::to_vec(&self.value).map_err(|_| QueryContractError::InvalidSnapshot)?;
+        if bytes.len() >= MAX_QUERY_BYTES {
+            return Err(QueryContractError::LimitExceeded);
+        }
+        bytes.push(b'\n');
+        Ok(bytes)
+    }
+}
+
+/// Builds one strict V7 exact-ID query result without adding read authority.
+///
+/// # Errors
+///
+/// Returns a strict snapshot, document, not-found, or output-limit failure.
+#[allow(clippy::too_many_lines)]
+pub fn local_query_result_v2(
+    semantic: &Value,
+    manifest: &Value,
+    snapshot_id: &str,
+    requested_id: &str,
+) -> Result<LocalQueryResultV2, QueryContractError> {
+    let index = GraphIndex::new(semantic).map_err(|_| QueryContractError::InvalidSnapshot)?;
+    validate_manifest_binding(manifest, &index.repository_identity, snapshot_id)?;
+    let graph = semantic
+        .get("knowledge_graph")
+        .ok_or(QueryContractError::InvalidSnapshot)?;
+    let diagnostics =
+        id_map(graph, "diagnostics").map_err(|_| QueryContractError::InvalidSnapshot)?;
+    let documents = manifest
+        .get("documents")
+        .and_then(Value::as_array)
+        .ok_or(QueryContractError::InvalidDocuments)?;
+
+    let value = if let Some(entity) = index.entities.get(requested_id) {
+        let claim = index
+            .claim("entity", requested_id)
+            .map_err(|_| QueryContractError::InvalidSnapshot)?;
+        let evidence = evidence_for_claim(&index, claim)?;
+        json!({
+            "schema_version": "codenoesis.local-query-result/v2",
+            "repository_identity": index.repository_identity,
+            "snapshot_id": snapshot_id,
+            "requested_id": requested_id,
+            "result_kind": "entity",
+            "entity": entity,
+            "relationship": null,
+            "claims": [claim],
+            "evidence": evidence,
+            "diagnostic": null,
+            "coverage_gap": null,
+            "document": null,
+            "document_statements": linked_statements(documents, requested_id)?
+        })
+    } else if let Some(relationship) = index.relationships_by_id.get(requested_id) {
+        let claim = index
+            .claim("relationship", requested_id)
+            .map_err(|_| QueryContractError::InvalidSnapshot)?;
+        let evidence = evidence_for_claim(&index, claim)?;
+        json!({
+            "schema_version": "codenoesis.local-query-result/v2",
+            "repository_identity": index.repository_identity,
+            "snapshot_id": snapshot_id,
+            "requested_id": requested_id,
+            "result_kind": "relationship",
+            "entity": null,
+            "relationship": relationship,
+            "claims": [claim],
+            "evidence": evidence,
+            "diagnostic": null,
+            "coverage_gap": null,
+            "document": null,
+            "document_statements": linked_statements(documents, requested_id)?
+        })
+    } else if let Some(claim) = index.claims_by_id.get(requested_id) {
+        let evidence = evidence_for_claim(&index, claim)?;
+        let subject_id =
+            string_field(claim, "subject_id").map_err(|_| QueryContractError::InvalidSnapshot)?;
+        let (entity, relationship) = match string_field(claim, "subject_kind")
+            .map_err(|_| QueryContractError::InvalidSnapshot)?
+        {
+            "entity" => (
+                Some(
+                    index
+                        .entities
+                        .get(subject_id)
+                        .ok_or(QueryContractError::InvalidSnapshot)?,
+                ),
+                None,
+            ),
+            "relationship" => (
+                None,
+                Some(
+                    index
+                        .relationships_by_id
+                        .get(subject_id)
+                        .ok_or(QueryContractError::InvalidSnapshot)?,
+                ),
+            ),
+            _ => return Err(QueryContractError::InvalidSnapshot),
+        };
+        json!({
+            "schema_version": "codenoesis.local-query-result/v2",
+            "repository_identity": index.repository_identity,
+            "snapshot_id": snapshot_id,
+            "requested_id": requested_id,
+            "result_kind": "claim",
+            "entity": entity,
+            "relationship": relationship,
+            "claims": [claim],
+            "evidence": evidence,
+            "diagnostic": null,
+            "coverage_gap": null,
+            "document": null,
+            "document_statements": linked_statements(documents, requested_id)?
+        })
+    } else if let Some(evidence) = index.evidence.get(requested_id) {
+        json!({
+            "schema_version": "codenoesis.local-query-result/v2",
+            "repository_identity": index.repository_identity,
+            "snapshot_id": snapshot_id,
+            "requested_id": requested_id,
+            "result_kind": "evidence",
+            "entity": null,
+            "relationship": null,
+            "claims": [],
+            "evidence": [evidence],
+            "diagnostic": null,
+            "coverage_gap": null,
+            "document": null,
+            "document_statements": linked_statements(documents, requested_id)?
+        })
+    } else if let Some(diagnostic) = diagnostics.get(requested_id) {
+        let evidence = evidence_for_record(&index, diagnostic)?;
+        json!({
+            "schema_version": "codenoesis.local-query-result/v2",
+            "repository_identity": index.repository_identity,
+            "snapshot_id": snapshot_id,
+            "requested_id": requested_id,
+            "result_kind": "diagnostic",
+            "entity": null,
+            "relationship": null,
+            "claims": [],
+            "evidence": evidence,
+            "diagnostic": diagnostic,
+            "coverage_gap": null,
+            "document": null,
+            "document_statements": linked_statements(documents, requested_id)?
+        })
+    } else if let Some(coverage_gap) = index.coverage.get(requested_id) {
+        let evidence = evidence_for_record(&index, coverage_gap)?;
+        json!({
+            "schema_version": "codenoesis.local-query-result/v2",
+            "repository_identity": index.repository_identity,
+            "snapshot_id": snapshot_id,
+            "requested_id": requested_id,
+            "result_kind": "coverage_gap",
+            "entity": null,
+            "relationship": null,
+            "claims": [],
+            "evidence": evidence,
+            "diagnostic": null,
+            "coverage_gap": coverage_gap,
+            "document": null,
+            "document_statements": linked_statements(documents, requested_id)?
+        })
+    } else if let Some(document) = documents
+        .iter()
+        .find(|document| string_field(document, "document_id") == Ok(requested_id))
+    {
+        let mut record = document
+            .as_object()
+            .cloned()
+            .ok_or(QueryContractError::InvalidDocuments)?;
+        let statements = record
+            .remove("statements")
+            .and_then(|value| value.as_array().cloned())
+            .ok_or(QueryContractError::InvalidDocuments)?;
+        json!({
+            "schema_version": "codenoesis.local-query-result/v2",
+            "repository_identity": index.repository_identity,
+            "snapshot_id": snapshot_id,
+            "requested_id": requested_id,
+            "result_kind": "document",
+            "entity": null,
+            "relationship": null,
+            "claims": [],
+            "evidence": [],
+            "diagnostic": null,
+            "coverage_gap": null,
+            "document": Value::Object(record),
+            "document_statements": statements
+        })
+    } else {
+        return Err(QueryContractError::NotFound);
+    };
+    let result = LocalQueryResultV2 { value };
+    result.canonical_stdout()?;
+    Ok(result)
+}
+
+fn evidence_for_record(
+    index: &GraphIndex,
+    record: &Value,
+) -> Result<Vec<Value>, QueryContractError> {
+    let evidence_ids =
+        string_array(record, "evidence_ids").map_err(|_| QueryContractError::InvalidSnapshot)?;
+    if evidence_ids.is_empty()
+        || evidence_ids.len() > 64
+        || evidence_ids
+            .windows(2)
+            .any(|pair| pair[0].as_bytes() >= pair[1].as_bytes())
+    {
+        return Err(QueryContractError::InvalidSnapshot);
+    }
+    evidence_ids
+        .into_iter()
+        .map(|identifier| {
+            index
+                .evidence
+                .get(&identifier)
+                .cloned()
+                .ok_or(QueryContractError::InvalidSnapshot)
+        })
+        .collect()
 }
 
 #[derive(Clone, Debug)]
@@ -737,6 +980,7 @@ fn cargo_relationship_value(relationship: &CargoRelationship) -> Value {
 
 fn cargo_diagnostic_value(diagnostic: &CargoDiagnostic) -> Value {
     json!({
+        "id": diagnostic.id,
         "code": diagnostic.code,
         "message": diagnostic.message,
         "evidence_ids": diagnostic.evidence_ids

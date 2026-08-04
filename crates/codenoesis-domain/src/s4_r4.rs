@@ -28,6 +28,7 @@ pub const R4_DETERMINISM_PERMUTATIONS: u64 = 50;
 
 const CARGO_ENTITY_ID_DOMAIN: &str = "codenoesis.entity-id/cargo-manifest/v1";
 const CARGO_RELATIONSHIP_ID_DOMAIN: &str = "codenoesis.relationship-id/cargo-manifest/v1";
+const DIAGNOSTIC_ID_DOMAIN: &str = "codenoesis.diagnostic-id/cargo-manifest/v1";
 const COVERAGE_GAP_ID_DOMAIN: &str = "codenoesis.coverage-gap-id/v3";
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
@@ -399,7 +400,7 @@ pub struct DependencySource {
     pub workspace_reference_id: Option<String>,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct TargetOptions {
     pub crate_types: Vec<DeclaredName>,
     pub proc_macro: Option<DeclaredBoolean>,
@@ -409,21 +410,6 @@ pub struct TargetOptions {
     pub test: Option<DeclaredBoolean>,
     pub harness: Option<DeclaredBoolean>,
     pub edition: Option<DeclaredString>,
-}
-
-impl Default for TargetOptions {
-    fn default() -> Self {
-        Self {
-            crate_types: Vec::new(),
-            proc_macro: None,
-            bench: None,
-            doc: None,
-            doctest: None,
-            test: None,
-            harness: None,
-            edition: None,
-        }
-    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -637,9 +623,34 @@ impl CargoRelationship {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct CargoDiagnostic {
+    pub id: String,
     pub code: String,
     pub message: String,
     pub evidence_ids: Vec<String>,
+}
+
+impl CargoDiagnostic {
+    #[must_use]
+    pub fn new(
+        repository_identity: &str,
+        code: &str,
+        message: &str,
+        mut evidence_ids: Vec<String>,
+    ) -> Self {
+        evidence_ids.sort_by(|left, right| left.as_bytes().cmp(right.as_bytes()));
+        evidence_ids.dedup();
+        let mut components = Vec::with_capacity(evidence_ids.len() + 3);
+        components.push(DIAGNOSTIC_ID_DOMAIN);
+        components.push(repository_identity);
+        components.push(code);
+        components.extend(evidence_ids.iter().map(String::as_str));
+        Self {
+            id: stable_id("urn:codenoesis:diagnostic:blake3:", &components),
+            code: code.to_owned(),
+            message: message.to_owned(),
+            evidence_ids,
+        }
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -661,19 +672,15 @@ impl CargoCoverageGap {
     ) -> Self {
         evidence_ids.sort_by(|left, right| left.as_bytes().cmp(right.as_bytes()));
         evidence_ids.dedup();
-        let evidence_identity = evidence_ids.join("");
+        let mut components = Vec::with_capacity(evidence_ids.len() + 5);
+        components.push(COVERAGE_GAP_ID_DOMAIN);
+        components.push(repository_identity);
+        components.push(commit_oid);
+        components.push(capability);
+        components.push(state.as_str());
+        components.extend(evidence_ids.iter().map(String::as_str));
         Self {
-            id: stable_id(
-                "urn:codenoesis:coverage-gap:blake3:",
-                &[
-                    COVERAGE_GAP_ID_DOMAIN,
-                    repository_identity,
-                    commit_oid,
-                    capability,
-                    state.as_str(),
-                    &evidence_identity,
-                ],
-            ),
+            id: stable_id("urn:codenoesis:coverage-gap:blake3:", &components),
             capability: capability.to_owned(),
             state,
             evidence_ids,
@@ -729,6 +736,13 @@ impl CargoManifestKnowledge {
         self.workspace
             .validate()
             .map_err(CargoManifestFactError::Source)?;
+        self.validate_graph_shape()?;
+        self.validate_entity_relationship_evidence()?;
+        self.validate_claim_diagnostic_coverage()?;
+        self.validate_manifest_index()
+    }
+
+    fn validate_graph_shape(&self) -> Result<(), CargoManifestFactError> {
         let graph = &self.graph;
         if graph.entities.is_empty()
             || graph.evidence.is_empty()
@@ -743,6 +757,12 @@ impl CargoManifestKnowledge {
             )
             || !ordered_unique(graph.claims.iter().map(|claim| claim.id.as_str()))
             || !ordered_unique(graph.evidence.iter().map(|evidence| evidence.id.as_str()))
+            || !ordered_unique(
+                graph
+                    .diagnostics
+                    .iter()
+                    .map(|diagnostic| diagnostic.id.as_str()),
+            )
             || !ordered_unique(graph.coverage.iter().map(|gap| gap.id.as_str()))
             || !ordered_unique(
                 graph
@@ -753,6 +773,11 @@ impl CargoManifestKnowledge {
         {
             return Err(CargoManifestFactError::ContractInvalid);
         }
+        Ok(())
+    }
+
+    fn validate_entity_relationship_evidence(&self) -> Result<(), CargoManifestFactError> {
+        let graph = &self.graph;
         let rust_entity_ids = self
             .workspace
             .knowledge
@@ -767,11 +792,6 @@ impl CargoManifestKnowledge {
             .collect::<BTreeSet<_>>();
         let all_entity_ids = rust_entity_ids
             .chain(cargo_entity_ids.iter().copied())
-            .collect::<BTreeSet<_>>();
-        let relationship_ids = graph
-            .relationships
-            .iter()
-            .map(|relationship| relationship.id.as_str())
             .collect::<BTreeSet<_>>();
         let evidence_ids = graph
             .evidence
@@ -799,6 +819,26 @@ impl CargoManifestKnowledge {
         }) {
             return Err(CargoManifestFactError::ContractInvalid);
         }
+        Ok(())
+    }
+
+    fn validate_claim_diagnostic_coverage(&self) -> Result<(), CargoManifestFactError> {
+        let graph = &self.graph;
+        let cargo_entity_ids = graph
+            .entities
+            .iter()
+            .map(|entity| entity.id.as_str())
+            .collect::<BTreeSet<_>>();
+        let relationship_ids = graph
+            .relationships
+            .iter()
+            .map(|relationship| relationship.id.as_str())
+            .collect::<BTreeSet<_>>();
+        let evidence_ids = graph
+            .evidence
+            .iter()
+            .map(|evidence| evidence.id.as_str())
+            .collect::<BTreeSet<_>>();
         let cargo_subjects = cargo_entity_ids
             .iter()
             .map(|identifier| (ClaimSubjectKind::Entity, *identifier))
@@ -827,9 +867,36 @@ impl CargoManifestKnowledge {
                         .iter()
                         .any(|identifier| !evidence_ids.contains(identifier.as_str()))
             })
+            || graph.diagnostics.iter().any(|diagnostic| {
+                diagnostic.evidence_ids.is_empty()
+                    || diagnostic.evidence_ids.len() > 64
+                    || !ordered_unique(diagnostic.evidence_ids.iter().map(String::as_str))
+                    || !valid_diagnostic(&diagnostic.code, &diagnostic.message)
+                    || *diagnostic
+                        != CargoDiagnostic::new(
+                            &self.workspace.knowledge.graph.repository_identity,
+                            &diagnostic.code,
+                            &diagnostic.message,
+                            diagnostic.evidence_ids.clone(),
+                        )
+                    || diagnostic
+                        .evidence_ids
+                        .iter()
+                        .any(|identifier| !evidence_ids.contains(identifier.as_str()))
+            })
             || graph.coverage.iter().any(|gap| {
                 gap.evidence_ids.is_empty()
+                    || gap.evidence_ids.len() > 64
+                    || !ordered_unique(gap.evidence_ids.iter().map(String::as_str))
                     || !valid_coverage(&gap.capability, gap.state)
+                    || *gap
+                        != CargoCoverageGap::new(
+                            &self.workspace.knowledge.graph.repository_identity,
+                            &self.workspace.knowledge.graph.commit_oid,
+                            &gap.capability,
+                            gap.state,
+                            gap.evidence_ids.clone(),
+                        )
                     || gap
                         .evidence_ids
                         .iter()
@@ -838,6 +905,11 @@ impl CargoManifestKnowledge {
         {
             return Err(CargoManifestFactError::ContractInvalid);
         }
+        Ok(())
+    }
+
+    fn validate_manifest_index(&self) -> Result<(), CargoManifestFactError> {
+        let graph = &self.graph;
         let entities_by_id = graph
             .entities
             .iter()
@@ -1105,6 +1177,25 @@ fn valid_coverage(capability: &str, state: CargoCoverageState) -> bool {
     )
 }
 
+fn valid_diagnostic(code: &str, message: &str) -> bool {
+    matches!(
+        (code, message),
+        (
+            "cargo.unsupported_manifest_family",
+            "Cargo manifest family is outside the selected declaration subset"
+        ) | (
+            "cargo.unsupported_manifest_field",
+            "Cargo manifest field is outside the selected declaration subset"
+        ) | (
+            "cargo.external_locator_redacted",
+            "external Cargo locator is represented only by digest"
+        ) | (
+            "cargo.target_source_not_analyzed",
+            "declared Cargo target source is not analyzed by R4"
+        )
+    )
+}
+
 fn ordered_unique<'a>(values: impl IntoIterator<Item = &'a str>) -> bool {
     let mut previous = None;
     for value in values {
@@ -1140,7 +1231,7 @@ fn write_json_string(bytes: &mut Vec<u8>, value: &str) {
     for character in value.chars() {
         match character {
             '"' => bytes.extend_from_slice(br#"\""#),
-            '\\' => bytes.extend_from_slice(br#"\\"#),
+            '\\' => bytes.extend_from_slice(br"\\"),
             '\u{08}' => bytes.extend_from_slice(br"\b"),
             '\u{0c}' => bytes.extend_from_slice(br"\f"),
             '\n' => bytes.extend_from_slice(br"\n"),

@@ -77,7 +77,7 @@ pub(super) fn extract_manifest_facts(
         source_records,
         parser_invocation_count,
     } = workspace_extraction;
-    let projection = ManifestFactBuilder::new(inventory, &workspace)?.build()?;
+    let projection = ManifestFactBuilder::new(inventory, &workspace).build()?;
     let knowledge = CargoManifestKnowledge {
         workspace,
         extraction_chunks: projection.extraction_chunks,
@@ -107,7 +107,7 @@ struct ManifestFactBuilder<'a> {
     relationships: BTreeMap<String, CargoRelationship>,
     relationship_states: BTreeMap<String, ClaimState>,
     evidence: BTreeMap<String, WorkspaceEvidence>,
-    diagnostics: BTreeMap<(String, String), CargoDiagnostic>,
+    diagnostics: BTreeMap<String, CargoDiagnostic>,
     coverage: BTreeMap<String, CargoCoverageGap>,
     workspace_defaults_id: Option<String>,
     workspace_default_fields: BTreeSet<String>,
@@ -118,13 +118,13 @@ impl<'a> ManifestFactBuilder<'a> {
     fn new(
         inventory: &'a RepositoryInventory,
         workspace: &'a codenoesis_domain::s4_r3::RootPackageWorkspaceKnowledge,
-    ) -> Result<Self, CargoManifestFactError> {
+    ) -> Self {
         let files = inventory
             .files()
             .iter()
             .map(|file| (file.path(), file))
             .collect::<BTreeMap<_, _>>();
-        Ok(Self {
+        Self {
             workspace,
             files,
             repository_identity: inventory.bound_revision().repository_identity().as_str(),
@@ -139,7 +139,7 @@ impl<'a> ManifestFactBuilder<'a> {
             workspace_defaults_id: None,
             workspace_default_fields: BTreeSet::new(),
             workspace_dependencies: BTreeMap::new(),
-        })
+        }
     }
 
     #[allow(clippy::too_many_lines)]
@@ -174,7 +174,7 @@ impl<'a> ManifestFactBuilder<'a> {
         }
 
         let claims = self.build_claims()?;
-        let manifest_index = self.build_manifest_index()?;
+        let manifest_index = self.build_manifest_index();
         let extraction_chunks = self.build_chunks(&claims, &manifest_index)?;
         Ok(ManifestProjection {
             extraction_chunks,
@@ -295,7 +295,7 @@ impl<'a> ManifestFactBuilder<'a> {
             self.process_build_script(file, &map, &manifest_id, package_id, manifest_path)?;
         }
         self.process_typed_unsupported(file, &map, manifest_path)?;
-        self.reject_unrecognized_sections(&map, manifest_path)?;
+        Self::reject_unrecognized_sections(&map, manifest_path)?;
         Ok(())
     }
 
@@ -341,6 +341,7 @@ impl<'a> ManifestFactBuilder<'a> {
         )
     }
 
+    #[allow(clippy::too_many_lines)]
     fn process_package(
         &mut self,
         file: &InventoryFile,
@@ -581,7 +582,7 @@ impl<'a> ManifestFactBuilder<'a> {
                 })?;
                 check_locator(locator)?;
                 let digest = sha256_hex(locator.as_bytes());
-                self.add_external_locator_projection(evidence_id);
+                self.add_external_locator_projection(evidence_id)?;
                 Ok(DeclaredValue::LocatorSha256(digest))
             }
             "license-file" | "readme" => {
@@ -876,7 +877,7 @@ impl<'a> ManifestFactBuilder<'a> {
                     "cargo.target_source_not_analyzed",
                     "declared Cargo target source is not analyzed by R4",
                     vec![entity_evidence_id.clone()],
-                );
+                )?;
                 self.add_gap(
                     "cargo.target_source_not_analyzed",
                     CargoCoverageState::NotAnalyzed,
@@ -993,6 +994,7 @@ impl<'a> ManifestFactBuilder<'a> {
             let Some((scope, kind, predicate)) = dependency_section(&section.path) else {
                 continue;
             };
+            let mut declaration_names = BTreeMap::new();
             dependency_count = dependency_count.saturating_add(section.entries.len());
             check_limit(CargoFactLimit::DependenciesPerManifest, dependency_count)?;
             if let Some(predicate) = predicate.as_deref() {
@@ -1024,6 +1026,21 @@ impl<'a> ManifestFactBuilder<'a> {
                 }
                 let declared_name =
                     normalized_name(&entry.key_path[0], manifest_path, CargoFactKind::Dependency)?;
+                if let Some(previous) =
+                    declaration_names.insert(declared_name.clone(), entry.key_path[0].clone())
+                {
+                    let reason = if previous == entry.key_path[0] {
+                        CargoFactReason::DuplicateDeclaration
+                    } else {
+                        CargoFactReason::UnicodeNormalizationCollision
+                    };
+                    return Err(invalid_fact(
+                        reason,
+                        manifest_path,
+                        CargoFactKind::Dependency,
+                        None,
+                    ));
+                }
                 let evidence_id = self.add_evidence(file, entry.span);
                 let target_predicate = predicate
                     .as_ref()
@@ -1084,18 +1101,17 @@ impl<'a> ManifestFactBuilder<'a> {
                     vec![evidence_id.clone()],
                     ClaimState::DeterministicFact,
                 )?;
-                if scope == DependencyScope::Workspace {
-                    if self
+                if scope == DependencyScope::Workspace
+                    && self
                         .workspace_dependencies
                         .insert(declared_name.clone(), dependency_id.clone())
                         .is_some()
-                    {
-                        return Err(conflict(
-                            manifest_path,
-                            CargoFactKind::Dependency,
-                            &declared_name,
-                        ));
-                    }
+                {
+                    return Err(conflict(
+                        manifest_path,
+                        CargoFactKind::Dependency,
+                        &declared_name,
+                    ));
                 }
                 if parsed.source.kind == DependencySourceKind::WorkspaceInherited {
                     let target = parsed
@@ -1212,7 +1228,7 @@ impl<'a> ManifestFactBuilder<'a> {
                 "cargo.unsupported_manifest_field",
                 "Cargo manifest field is outside the selected declaration subset",
                 vec![evidence_id.to_owned()],
-            );
+            )?;
             self.add_gap(
                 "cargo.dependency_advanced_fields_unsupported",
                 CargoCoverageState::Unsupported,
@@ -1359,7 +1375,7 @@ impl<'a> ManifestFactBuilder<'a> {
                     })
                 })
                 .transpose()?;
-            self.add_external_locator_projection(evidence_id);
+            self.add_external_locator_projection(evidence_id)?;
             DependencySource {
                 kind: DependencySourceKind::Git,
                 version_requirement,
@@ -1532,6 +1548,7 @@ impl<'a> ManifestFactBuilder<'a> {
         Ok(())
     }
 
+    #[allow(clippy::too_many_lines)]
     fn process_patches(
         &mut self,
         file: &InventoryFile,
@@ -1571,7 +1588,7 @@ impl<'a> ManifestFactBuilder<'a> {
                 } else if raw_selector.contains("://") {
                     check_locator(raw_selector)?;
                     let digest = sha256_hex(raw_selector.as_bytes());
-                    self.add_external_locator_projection(&selector_evidence_id);
+                    self.add_external_locator_projection(&selector_evidence_id)?;
                     (
                         PatchSelectorKind::SourceLocatorSha256,
                         digest.clone(),
@@ -1648,6 +1665,7 @@ impl<'a> ManifestFactBuilder<'a> {
         Ok(())
     }
 
+    #[allow(clippy::too_many_lines)]
     fn parse_patch_value(
         &mut self,
         value: &toml::Value,
@@ -1743,7 +1761,7 @@ impl<'a> ManifestFactBuilder<'a> {
                     })
                 })
                 .transpose()?;
-            self.add_external_locator_projection(evidence_id);
+            self.add_external_locator_projection(evidence_id)?;
             DependencySource {
                 kind: DependencySourceKind::Git,
                 version_requirement,
@@ -1820,6 +1838,7 @@ impl<'a> ManifestFactBuilder<'a> {
         })
     }
 
+    #[allow(clippy::too_many_lines)]
     fn process_build_script(
         &mut self,
         file: &InventoryFile,
@@ -1968,7 +1987,7 @@ impl<'a> ManifestFactBuilder<'a> {
                     "cargo.unsupported_manifest_family",
                     "Cargo manifest family is outside the selected declaration subset",
                     vec![evidence_id.clone()],
-                );
+                )?;
                 self.add_gap(
                     capability,
                     CargoCoverageState::Unsupported,
@@ -1980,7 +1999,6 @@ impl<'a> ManifestFactBuilder<'a> {
     }
 
     fn reject_unrecognized_sections(
-        &self,
         map: &ManifestMap,
         manifest_path: &str,
     ) -> Result<(), CargoManifestFactError> {
@@ -2118,17 +2136,22 @@ impl<'a> ManifestFactBuilder<'a> {
         identifier
     }
 
-    fn add_diagnostic(&mut self, code: &str, message: &str, mut evidence_ids: Vec<String>) {
-        evidence_ids.sort_by(|left, right| left.as_bytes().cmp(right.as_bytes()));
-        evidence_ids.dedup();
-        let evidence_key = evidence_ids.join("");
-        self.diagnostics
-            .entry((code.to_owned(), evidence_key))
-            .or_insert(CargoDiagnostic {
-                code: code.to_owned(),
-                message: message.to_owned(),
-                evidence_ids,
-            });
+    fn add_diagnostic(
+        &mut self,
+        code: &str,
+        message: &str,
+        evidence_ids: Vec<String>,
+    ) -> Result<(), CargoManifestFactError> {
+        let diagnostic =
+            CargoDiagnostic::new(self.repository_identity, code, message, evidence_ids);
+        if self
+            .diagnostics
+            .insert(diagnostic.id.clone(), diagnostic)
+            .is_some()
+        {
+            return Err(CargoManifestFactError::ContractInvalid);
+        }
+        Ok(())
     }
 
     fn add_gap(&mut self, capability: &str, state: CargoCoverageState, evidence_ids: Vec<String>) {
@@ -2142,17 +2165,21 @@ impl<'a> ManifestFactBuilder<'a> {
         self.coverage.entry(gap.id.clone()).or_insert(gap);
     }
 
-    fn add_external_locator_projection(&mut self, evidence_id: &str) {
+    fn add_external_locator_projection(
+        &mut self,
+        evidence_id: &str,
+    ) -> Result<(), CargoManifestFactError> {
         self.add_diagnostic(
             "cargo.external_locator_redacted",
             "external Cargo locator is represented only by digest",
             vec![evidence_id.to_owned()],
-        );
+        )?;
         self.add_gap(
             "cargo.external_locator_redacted",
             CargoCoverageState::Redacted,
             vec![evidence_id.to_owned()],
         );
+        Ok(())
     }
 
     fn build_claims(
@@ -2188,7 +2215,7 @@ impl<'a> ManifestFactBuilder<'a> {
         Ok(claims.into_values().collect())
     }
 
-    fn build_manifest_index(&self) -> Result<Vec<ManifestIndexEntry>, CargoManifestFactError> {
+    fn build_manifest_index(&self) -> Vec<ManifestIndexEntry> {
         let manifests = self
             .entities
             .values()
@@ -2233,7 +2260,7 @@ impl<'a> ManifestFactBuilder<'a> {
                 .as_bytes()
                 .cmp(right.manifest_path.as_bytes())
         });
-        Ok(index)
+        index
     }
 
     fn build_chunks(
@@ -3159,6 +3186,7 @@ fn static_field(field: &str) -> Option<&'static str> {
 }
 
 fn sha256_hex(bytes: &[u8]) -> String {
+    const HEX: &[u8; 16] = b"0123456789abcdef";
     let mut state = [
         0x6a09_e667_u32,
         0xbb67_ae85,
@@ -3181,9 +3209,17 @@ fn sha256_hex(bytes: &[u8]) -> String {
     for block in padded.chunks_exact(64) {
         sha256_compress(&mut state, block);
     }
-    state.iter().map(|word| format!("{word:08x}")).collect()
+    let mut digest = String::with_capacity(64);
+    for word in state {
+        for byte in word.to_be_bytes() {
+            digest.push(char::from(HEX[usize::from(byte >> 4)]));
+            digest.push(char::from(HEX[usize::from(byte & 0x0f)]));
+        }
+    }
+    digest
 }
 
+#[allow(clippy::too_many_lines)]
 fn sha256_compress(state: &mut [u32; 8], block: &[u8]) {
     const ROUND: [u32; 64] = [
         0x428a_2f98,
