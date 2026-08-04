@@ -32,6 +32,10 @@ QUERY_ORACLE_PATH = SPEC_ROOT / "e2e_fr_qry_001_r5_exact_id_results.json"
 INVALID_CASES_PATH = SPEC_ROOT / "invalid-cases-v1.json"
 RED_OBSERVATION_PATH = SPEC_ROOT / "red-observation.json"
 RED_LOG_PATH = SPEC_ROOT / "red/governance-red.log"
+GOLDEN_CORRECTION_RED_OBSERVATION_PATH = (
+    SPEC_ROOT / "golden-correction-red-observation.json"
+)
+GOLDEN_CORRECTION_RED_LOG_PATH = SPEC_ROOT / "red/golden-correction-red.log"
 BUNDLE_PATH = SPEC_ROOT / "contract-bundle.json"
 FIXTURE_ROOT = ROOT / "tests/fixtures/s4/rust-semantic-depth-v1"
 FIXTURE_REPOSITORY = FIXTURE_ROOT / "repository"
@@ -132,6 +136,8 @@ MATERIALIZED_PATHS = (
     INVALID_CASES_PATH,
     RED_OBSERVATION_PATH,
     RED_LOG_PATH,
+    GOLDEN_CORRECTION_RED_OBSERVATION_PATH,
+    GOLDEN_CORRECTION_RED_LOG_PATH,
     BUNDLE_PATH,
     FIXTURE_ROOT / "README.md",
     FIXTURE_MANIFEST_PATH,
@@ -163,6 +169,8 @@ BUNDLE_FILES = {
     "tests/specifications/s4/r5/knowledge-graph-v5.schema.json",
     "tests/specifications/s4/r5/local-query-result-v3.schema.json",
     "tests/specifications/s4/r5/red-observation.json",
+    "tests/specifications/s4/r5/golden-correction-red-observation.json",
+    "tests/specifications/s4/r5/red/golden-correction-red.log",
     "tests/specifications/s4/r5/red/governance-red.log",
     "tests/specifications/s4/r5/repository-snapshot-v8.schema.json",
     "tests/specifications/s4/r5/rust-ontology-v5.json",
@@ -709,6 +717,7 @@ class S4RustSemanticDepthGovernanceTests(unittest.TestCase):
                 contexts["record"],
                 contexts[trait_name],
             )
+            del example["kind"]
             example["trait_context_id"] = contexts[trait_name]
             expected_trait_methods.append(example)
         self.assertEqual(
@@ -836,7 +845,10 @@ class S4RustSemanticDepthGovernanceTests(unittest.TestCase):
         self.assertTrue(observation["failed_for_expected_reason"])
         self.assertFalse(observation["semantic_contract_files_changed_before_red"])
         self.assertFalse(observation["production_files_changed_before_red"])
-        self.assertEqual(observation["guard_sha256"], sha256_path(Path(__file__)))
+        self.assertEqual(
+            observation["guard_sha256"],
+            "78785783f126c14cea014d88e5f353a654a441911dc4ff7a7518cc05787a0287",
+        )
         self.assertEqual(observation["raw_log_path"], RED_LOG_PATH.relative_to(ROOT).as_posix())
         self.assertEqual(observation["raw_log_bytes"], RED_LOG_PATH.stat().st_size)
         self.assertEqual(observation["raw_log_sha256"], sha256_path(RED_LOG_PATH))
@@ -847,6 +859,80 @@ class S4RustSemanticDepthGovernanceTests(unittest.TestCase):
             "docs/software/decisions/0015-s4-r5-rust-semantic-depth-contract.md",
             log,
         )
+
+    def test_golden_correction_red_observation_and_log_are_immutable(self) -> None:
+        observation = load_json(GOLDEN_CORRECTION_RED_OBSERVATION_PATH)
+        self.assertEqual(
+            observation["schema_version"],
+            "codenoesis.r5-golden-correction-red-observation/v1",
+        )
+        self.assertEqual(
+            observation["issue"],
+            "https://github.com/smutti/codenoesis/issues/114",
+        )
+        self.assertEqual(
+            observation["authorization"],
+            "https://github.com/smutti/codenoesis/issues/114#issuecomment-5181677202",
+        )
+        self.assertEqual(
+            observation["scope_authorization"],
+            "https://github.com/smutti/codenoesis/issues/114#issuecomment-5181734966",
+        )
+        self.assertEqual(
+            observation["required_base"],
+            "c2ae40aed24f24ee666ea5a2549d34ec8553686b",
+        )
+        self.assertEqual(
+            observation["test_first_head"],
+            "9c3f394e0acd7ee5c07910345bc7ea5e1c4c6c17",
+        )
+        self.assertEqual(
+            observation["accepted_red_head"],
+            "5b54d04cd620e11b8f4b972b7dac22df89e22747",
+        )
+        self.assertEqual(observation["exit_code"], 1)
+        self.assertTrue(observation["failed_for_expected_reason"])
+        self.assertFalse(observation["golden_or_bound_hashes_changed_before_red"])
+        self.assertFalse(observation["production_files_changed_before_red"])
+        self.assertEqual(
+            observation["changed_paths_before_red"],
+            ["scripts/tests/test_s4_rust_semantic_depth_contract.py"],
+        )
+        self.assertEqual(
+            observation["test_first_guard_sha256"],
+            "75b7e1ba19e284004c03204cd2c7e8221774ba4876340a3b3e5b98473fbbc954",
+        )
+        self.assertEqual(observation["stdout_bytes"], 0)
+        self.assertEqual(
+            observation["stdout_sha256"],
+            "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        )
+        self.assertEqual(observation["correction_rounds_used"], 1)
+        self.assertEqual(len(observation["rejected_attempts"]), 2)
+        self.assertEqual(
+            observation["raw_log_path"],
+            GOLDEN_CORRECTION_RED_LOG_PATH.relative_to(ROOT).as_posix(),
+        )
+        self.assertEqual(
+            observation["raw_log_bytes"],
+            GOLDEN_CORRECTION_RED_LOG_PATH.stat().st_size,
+        )
+        self.assertEqual(
+            observation["raw_log_sha256"],
+            sha256_path(GOLDEN_CORRECTION_RED_LOG_PATH),
+        )
+        self.assertEqual(observation["stderr_bytes"], observation["raw_log_bytes"])
+        self.assertEqual(observation["stderr_sha256"], observation["raw_log_sha256"])
+        log = GOLDEN_CORRECTION_RED_LOG_PATH.read_text(encoding="utf-8")
+        self.assertIn(
+            "29b8192ad0335325c31211d6ef80f991d9ff0b1f66d63951187d03ad40ffd056",
+            log,
+        )
+        self.assertIn(
+            "2f3cd49660b1463ed14a14650a45d77315e5fd66c29edeffc3ba7f1bd46500c0",
+            log,
+        )
+        self.assertIn("FAILED (failures=1)", log)
 
     def test_inherited_r4_bytes_are_immutable(self) -> None:
         for relative, expected in IMMUTABLE_FILES.items():

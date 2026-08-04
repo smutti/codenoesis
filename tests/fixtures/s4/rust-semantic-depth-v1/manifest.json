@@ -44,7 +44,7 @@
   "expected_facts": {
     "path": "expected-rust-semantic-depth.json",
     "byte_length": 6395,
-    "sha256": "dca1ac0d25e97a13cc0f76c7370b9a3e3364c55a3161fd5c8cc63ebda720dea5"
+    "sha256": "3079e0a7ff34797345ba90f6eae9fb9022c5fcce1cc7923c1965cfcd9aa67fd8"
   },
   "sentinels": {
     "build_script_path": "repository/build.rs",

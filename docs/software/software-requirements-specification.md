@@ -1098,7 +1098,7 @@ excluded from that digest. Any bound-byte change requires a new digest and
 renewed semantic human review.
 
 R5 Rust semantic-depth contract bundle:
-`sha256:1e00c81c4a3c7ca701e98324e61a250fcfee490aeddf021415564044175e6645`.
+`sha256:ed48512d8337d2dda2a3b5f752177f3988915bdfc98eda1ff2391e15039e7d45`.
 
 ## 3. Product intent and success definition
 

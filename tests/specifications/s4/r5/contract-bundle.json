@@ -11,7 +11,7 @@
     },
     {
       "path": "scripts/tests/test_s4_rust_semantic_depth_contract.py",
-      "sha256": "78785783f126c14cea014d88e5f353a654a441911dc4ff7a7518cc05787a0287"
+      "sha256": "713fa7c26baab5bd1c7a59c28ff028cd5510230ba2fa995f98aca21ec6f52768"
     },
     {
       "path": "tests/fixtures/s4/rust-semantic-depth-v1/README.md",
@@ -19,11 +19,11 @@
     },
     {
       "path": "tests/fixtures/s4/rust-semantic-depth-v1/expected-rust-semantic-depth.json",
-      "sha256": "dca1ac0d25e97a13cc0f76c7370b9a3e3364c55a3161fd5c8cc63ebda720dea5"
+      "sha256": "3079e0a7ff34797345ba90f6eae9fb9022c5fcce1cc7923c1965cfcd9aa67fd8"
     },
     {
       "path": "tests/fixtures/s4/rust-semantic-depth-v1/manifest.json",
-      "sha256": "401fd52791616344ed10a60648ce430924f6598add5b8e175211105d86358439"
+      "sha256": "10f0800e5692ea05b3bbe3cfd4ffaddbf6db1a9899e5db626330ced52b34d780"
     },
     {
       "path": "tests/fixtures/s4/rust-semantic-depth-v1/repository/Cargo.toml",
@@ -66,6 +66,10 @@
       "sha256": "9be074d9e02979fc3e094adb60e7d1cfc1f82e7591ecfe95a69f68b174268538"
     },
     {
+      "path": "tests/specifications/s4/r5/golden-correction-red-observation.json",
+      "sha256": "2bad2d3dcb68c93b653ce3fb2d9da9ab669404a03a7f77bb06bfe2eb080c5560"
+    },
+    {
       "path": "tests/specifications/s4/r5/invalid-cases-v1.json",
       "sha256": "0ae7b9ace4d634c79b32074b87c1827febf9b3fd354ec0cff491d1e0cdc32e97"
     },
@@ -80,6 +84,10 @@
     {
       "path": "tests/specifications/s4/r5/red-observation.json",
       "sha256": "dd237bfd0212c7278ab01fd4dd94dd57a6bf40b9beffd5faa70442d0f92266dd"
+    },
+    {
+      "path": "tests/specifications/s4/r5/red/golden-correction-red.log",
+      "sha256": "f9ce76fcb562a7b30b8a570ac157ec0a4d7ac0e5e2c17bcd768f2e86364a3fb1"
     },
     {
       "path": "tests/specifications/s4/r5/red/governance-red.log",
@@ -102,5 +110,5 @@
       "sha256": "45b7009f68af046cf74b240fcd54287b8f05251d381d7a3f87b4faec8bdbc85c"
     }
   ],
-  "bundle_sha256": "1e00c81c4a3c7ca701e98324e61a250fcfee490aeddf021415564044175e6645"
+  "bundle_sha256": "ed48512d8337d2dda2a3b5f752177f3988915bdfc98eda1ff2391e15039e7d45"
 }
