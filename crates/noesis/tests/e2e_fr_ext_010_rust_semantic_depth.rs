@@ -1,6 +1,7 @@
 mod support;
 
 use serde_json::Value;
+use std::collections::BTreeSet;
 use std::fs;
 
 use support::s4_r4::MaterializedCargoManifestRepository;
@@ -115,6 +116,84 @@ fn e2e_fr_doc_001_r5_declared_and_unresolved_are_documented() {
         String::from_utf8_lossy(&docs.stderr)
     );
     let manifest: Value = serde_json::from_slice(&docs.stdout).expect("parse R5 docs manifest");
+    let graph = &snapshot["semantic"]["knowledge_graph"];
+    let r5_entity_ids = graph["entities"]
+        .as_array()
+        .expect("R5 graph entities")
+        .iter()
+        .filter(|entity| {
+            matches!(
+                entity["kind"].as_str(),
+                Some(
+                    "rust.field"
+                        | "rust.enum_variant"
+                        | "rust.constant"
+                        | "rust.static"
+                        | "rust.associated_type"
+                        | "rust.method"
+                )
+            )
+        })
+        .map(|entity| entity["id"].as_str().expect("R5 entity ID"))
+        .collect::<BTreeSet<_>>();
+    let diagnostic_ids = graph["diagnostics"]
+        .as_array()
+        .expect("R5 graph diagnostics")
+        .iter()
+        .map(|diagnostic| diagnostic["id"].as_str().expect("R5 diagnostic ID"))
+        .collect::<BTreeSet<_>>();
+    let coverage_ids = graph["coverage"]
+        .as_array()
+        .expect("R5 graph coverage")
+        .iter()
+        .filter(|gap| {
+            gap["capability"]
+                .as_str()
+                .is_some_and(|capability| capability.starts_with("rust."))
+        })
+        .map(|gap| gap["id"].as_str().expect("R5 coverage ID"))
+        .collect::<BTreeSet<_>>();
+    let statements = manifest["documents"]
+        .as_array()
+        .expect("R5 generated documents")
+        .iter()
+        .flat_map(|document| {
+            document["statements"]
+                .as_array()
+                .expect("R5 document statements")
+        })
+        .collect::<Vec<_>>();
+    let documented_subjects = statements
+        .iter()
+        .flat_map(|statement| {
+            statement["subject_ids"]
+                .as_array()
+                .expect("R5 statement subjects")
+        })
+        .filter_map(Value::as_str)
+        .collect::<BTreeSet<_>>();
+    let documented_gaps = statements
+        .iter()
+        .flat_map(|statement| {
+            statement["coverage_gap_ids"]
+                .as_array()
+                .expect("R5 statement coverage")
+        })
+        .filter_map(Value::as_str)
+        .collect::<BTreeSet<_>>();
+    assert_eq!(r5_entity_ids.len(), 40);
+    assert!(r5_entity_ids.is_subset(&documented_subjects));
+    assert!(diagnostic_ids.is_subset(&documented_subjects));
+    assert!(coverage_ids.is_subset(&documented_gaps));
+    assert!(
+        manifest["documents"]
+            .as_array()
+            .expect("R5 document records")
+            .iter()
+            .all(|document| document["byte_length"]
+                .as_u64()
+                .is_some_and(|bytes| bytes <= 1_048_576))
+    );
     let markdown = manifest["documents"]
         .as_array()
         .expect("R5 generated documents")

@@ -890,9 +890,6 @@ fn overview_document(index: &GraphIndex) -> Result<DocumentDraft, DocumentationC
             }
         }
     }
-    if index.rust_semantic_depth {
-        append_rust_semantic_depth(index, &document_id, &mut content, &mut statements)?;
-    }
     let mut gaps = index
         .coverage
         .values()
@@ -1156,6 +1153,19 @@ fn module_document(
             statements.push(statement);
         }
     }
+    if index.rust_semantic_depth {
+        append_rust_semantic_depth(
+            index,
+            &document_id,
+            module_id,
+            string_field(module, "crate_id")?,
+            module_path,
+            source_file_id,
+            source_path,
+            &mut content,
+            &mut statements,
+        )?;
+    }
     Ok(DocumentDraft {
         document_id,
         kind: "module",
@@ -1167,81 +1177,109 @@ fn module_document(
 }
 
 #[allow(clippy::too_many_lines)]
+#[allow(clippy::too_many_arguments)]
 fn append_rust_semantic_depth(
     index: &GraphIndex,
     document_id: &str,
+    module_id: &str,
+    crate_id: &str,
+    module_path: &str,
+    source_file_id: &str,
+    source_path: &str,
     content: &mut String,
     statements: &mut Vec<Value>,
 ) -> Result<(), DocumentationContractError> {
     let mut entities = index
         .entities
         .values()
-        .filter(|entity| string_field(entity, "kind").is_ok_and(r5_entity_kind))
+        .filter(|entity| {
+            string_field(entity, "kind").is_ok_and(r5_entity_kind)
+                && string_field(entity, "crate_id") == Ok(crate_id)
+                && string_field(entity, "module_path") == Ok(module_path)
+        })
         .collect::<Vec<_>>();
     entities.sort_by(|left, right| {
         string_field(left, "id")
             .unwrap_or_default()
             .cmp(string_field(right, "id").unwrap_or_default())
     });
-    if entities.is_empty() {
-        return Err(DocumentationContractError::InvalidSnapshot);
-    }
-    content.push_str(
-        "\n## Rust semantic declarations\n\nEvery entry is declared syntax only and not observed runtime behavior. Compilation presence records parser-visible uncertainty; attributes, cfg, types, values, traits, macros, and runtime behavior are not interpreted.\n\n",
-    );
-    for (ordinal, entity) in entities.into_iter().enumerate() {
-        let id = string_field(entity, "id")?;
-        let kind = string_field(entity, "kind")?;
-        let name = string_field(entity, "name")?;
-        let owner_id = string_field(entity, "owner_id")?;
-        let properties = entity
-            .get("properties")
-            .ok_or(DocumentationContractError::InvalidSnapshot)?;
-        let compilation_presence = if kind == "rust.method" {
-            string_field(properties, "compilation_presence")?
-        } else {
-            string_field(entity, "compilation_presence")?
-        };
-        let spelling = if kind == "rust.method" {
-            string_field(properties, "declared_signature")?
-        } else {
-            properties
-                .get("declared_type_or_header")
-                .and_then(Value::as_str)
-                .unwrap_or("not applicable")
-        };
-        let claim = index.claim("entity", id)?;
-        let statement = statement_value(
-            document_id,
-            "rust_semantic_declaration",
-            id,
-            ordinal,
-            "deterministic_fact",
-            vec![id.to_owned()],
-            string_array(claim, "evidence_ids")?,
-            Vec::new(),
+    if !entities.is_empty() {
+        content.push_str(
+            "\n## Rust semantic declarations\n\nEvery entry is declared syntax only and not observed runtime behavior. Compilation presence records parser-visible uncertainty; attributes, cfg, types, values, traits, macros, and runtime behavior are not interpreted.\n\n",
         );
-        writeln!(
-            content,
-            "- Declared `{}` `{}` owned by `{}` with compilation presence `{}` and spelling `{}`; declared syntax only, not observed runtime behavior. {}",
-            markdown_code(kind),
-            markdown_code(name),
-            markdown_code(owner_id),
-            markdown_code(compilation_presence),
-            markdown_code(spelling),
-            statement_marker(&statement)?
-        )
-        .expect("writing Markdown to a String cannot fail");
-        statements.push(statement);
+        for (ordinal, entity) in entities.into_iter().enumerate() {
+            let id = string_field(entity, "id")?;
+            let kind = string_field(entity, "kind")?;
+            let name = string_field(entity, "name")?;
+            let owner_id = string_field(entity, "owner_id")?;
+            let properties = entity
+                .get("properties")
+                .ok_or(DocumentationContractError::InvalidSnapshot)?;
+            let compilation_presence = if kind == "rust.method" {
+                string_field(properties, "compilation_presence")?
+            } else {
+                string_field(entity, "compilation_presence")?
+            };
+            let spelling = if kind == "rust.method" {
+                string_field(properties, "declared_signature")?
+            } else {
+                properties
+                    .get("declared_type_or_header")
+                    .and_then(Value::as_str)
+                    .unwrap_or("not applicable")
+            };
+            let claim = index.claim("entity", id)?;
+            let statement = statement_value(
+                document_id,
+                "rust_semantic_declaration",
+                id,
+                ordinal,
+                "deterministic_fact",
+                vec![id.to_owned()],
+                string_array(claim, "evidence_ids")?,
+                Vec::new(),
+            );
+            writeln!(
+                content,
+                "- Declared `{}` `{}` owned by `{}` with compilation presence `{}` and spelling `{}`; declared syntax only, not observed runtime behavior. {}",
+                markdown_code(kind),
+                markdown_code(name),
+                markdown_code(owner_id),
+                markdown_code(compilation_presence),
+                markdown_code(spelling),
+                statement_marker(&statement)?
+            )
+            .expect("writing Markdown to a String cannot fail");
+            statements.push(statement);
+        }
     }
 
-    let mut diagnostics = index
-        .diagnostics
+    let uncertainty_owner = index
+        .entities
         .values()
-        .filter(|diagnostic| {
-            string_field(diagnostic, "code").is_ok_and(|code| code.starts_with("rust."))
+        .filter(|entity| {
+            string_field(entity, "kind") == Ok("rust.module")
+                && string_field(entity, "crate_id") == Ok(crate_id)
+                && entity
+                    .pointer("/properties/source_file_id")
+                    .and_then(Value::as_str)
+                    == Some(source_file_id)
         })
-        .collect::<Vec<_>>();
+        .filter_map(|entity| string_field(entity, "id").ok())
+        .min()
+        .ok_or(DocumentationContractError::InvalidSnapshot)?
+        == module_id;
+    if !uncertainty_owner {
+        return Ok(());
+    }
+    let mut diagnostics = Vec::new();
+    for diagnostic in index.diagnostics.values() {
+        if string_field(diagnostic, "code").is_ok_and(|code| code.starts_with("rust."))
+            && record_has_evidence_path(index, diagnostic, source_path)?
+        {
+            diagnostics.push(diagnostic);
+        }
+    }
     diagnostics.sort_by(|left, right| {
         string_field(left, "id")
             .unwrap_or_default()
@@ -1275,47 +1313,63 @@ fn append_rust_semantic_depth(
         }
     }
 
-    let mut gaps = index
-        .coverage
-        .values()
-        .filter(|gap| {
-            string_field(gap, "capability").is_ok_and(|capability| capability.starts_with("rust."))
-        })
-        .collect::<Vec<_>>();
+    let mut gaps = Vec::new();
+    for gap in index.coverage.values() {
+        if string_field(gap, "capability").is_ok_and(|capability| capability.starts_with("rust."))
+            && record_has_evidence_path(index, gap, source_path)?
+        {
+            gaps.push(gap);
+        }
+    }
     gaps.sort_by(|left, right| {
         string_field(left, "id")
             .unwrap_or_default()
             .cmp(string_field(right, "id").unwrap_or_default())
     });
-    if gaps.is_empty() {
-        return Err(DocumentationContractError::InvalidSnapshot);
-    }
-    content.push_str("\n## Rust semantic uncertainty\n\n");
-    for (ordinal, gap) in gaps.into_iter().enumerate() {
-        let id = string_field(gap, "id")?;
-        let capability = string_field(gap, "capability")?;
-        let state = string_field(gap, "state")?;
-        let statement = statement_value(
-            document_id,
-            "rust_semantic_coverage_gap",
-            id,
-            ordinal,
-            "unsupported",
-            vec![id.to_owned()],
-            Vec::new(),
-            vec![id.to_owned()],
-        );
-        writeln!(
-            content,
-            "- `{}` is `{}`; the unresolved semantic world is not claimed. {}",
-            markdown_code(capability),
-            markdown_code(state),
-            statement_marker(&statement)?
-        )
-        .expect("writing Markdown to a String cannot fail");
-        statements.push(statement);
+    if !gaps.is_empty() {
+        content.push_str("\n## Rust semantic uncertainty\n\n");
+        for (ordinal, gap) in gaps.into_iter().enumerate() {
+            let id = string_field(gap, "id")?;
+            let capability = string_field(gap, "capability")?;
+            let state = string_field(gap, "state")?;
+            let statement = statement_value(
+                document_id,
+                "rust_semantic_coverage_gap",
+                id,
+                ordinal,
+                "unsupported",
+                vec![id.to_owned()],
+                Vec::new(),
+                vec![id.to_owned()],
+            );
+            writeln!(
+                content,
+                "- `{}` is `{}`; the unresolved semantic world is not claimed. {}",
+                markdown_code(capability),
+                markdown_code(state),
+                statement_marker(&statement)?
+            )
+            .expect("writing Markdown to a String cannot fail");
+            statements.push(statement);
+        }
     }
     Ok(())
+}
+
+fn record_has_evidence_path(
+    index: &GraphIndex,
+    record: &Value,
+    source_path: &str,
+) -> Result<bool, DocumentationContractError> {
+    string_array(record, "evidence_ids")?
+        .into_iter()
+        .try_fold(false, |matched, evidence_id| {
+            let evidence = index
+                .evidence
+                .get(&evidence_id)
+                .ok_or(DocumentationContractError::InvalidSnapshot)?;
+            Ok(matched || string_field(evidence, "path")? == source_path)
+        })
 }
 
 fn r5_entity_kind(kind: &str) -> bool {
