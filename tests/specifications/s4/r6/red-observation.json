@@ -1,0 +1,37 @@
+{
+  "schema_version": "codenoesis.r6-governance-red-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/117",
+  "authorization": "https://github.com/smutti/codenoesis/issues/117#issuecomment-5183312890",
+  "required_base": "6750f293c24ea501df6177a2f7c96c2c7f0a6390",
+  "test_first_head": "be5ffb9a8380975ab8458adfb5ca55a70540d268",
+  "recorded_at_utc": "2026-08-04T19:03:21Z",
+  "command": "python3 -m unittest scripts.tests.test_s4_r6_framework_declarations_contract",
+  "expected_failure": "Exit 1 because Decision 0016 is absent before any R6 schema, fixture, golden, or bundle byte exists.",
+  "actual_failure": "setUpClass raised AssertionError: R6 governance artifact is not materialized: docs/software/decisions/0016-s4-r6-framework-declarations-contract.md",
+  "exit_code": 1,
+  "failed_for_expected_reason": true,
+  "r6_contract_files_changed_before_red": false,
+  "production_files_changed_before_red": false,
+  "changed_paths_before_red": [
+    "scripts/tests/test_s4_r6_framework_declarations_contract.py"
+  ],
+  "guard_sha256": "2dc7e2627165f6879733562b1459216365f6a0f0d9f6eceed7e37f65d1c3a48f",
+  "stdout_bytes": 0,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_bytes": 704,
+  "stderr_sha256": "aad6a707da779c1737c863aa693826933015031da7a989914276f105b7604b68",
+  "raw_log_path": "tests/specifications/s4/r6/red/governance-red.log",
+  "raw_log_bytes": 704,
+  "raw_log_sha256": "aad6a707da779c1737c863aa693826933015031da7a989914276f105b7604b68",
+  "environment": {
+    "os": "macOS 26.5.2",
+    "architecture": "arm64",
+    "python": "Python 3.9.6",
+    "timezone": "CEST",
+    "working_directory": "/Users/smutti/Documents/personal/codenoesis"
+  },
+  "semantic_contract_files_present_before_red": false,
+  "fixture_or_golden_files_present_before_red": false,
+  "dependency_manifest_changed_before_red": false,
+  "correction_rounds_used": 0
+}

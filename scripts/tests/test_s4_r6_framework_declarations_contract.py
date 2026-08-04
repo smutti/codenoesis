@@ -47,7 +47,9 @@ AUTHORIZATION_REFERENCE = (
 REQUIRED_BASE = "6750f293c24ea501df6177a2f7c96c2c7f0a6390"
 REPOSITORY_IDENTITY = "urn:codenoesis:fixture:s4-framework-declarations-v1"
 IDENTITY_DOMAIN = "codenoesis.entity-id/framework-declaration/v1"
-TEST_FIRST_GUARD_SHA256 = "__R6_TEST_FIRST_GUARD_SHA256__"
+TEST_FIRST_GUARD_SHA256 = (
+    "2dc7e2627165f6879733562b1459216365f6a0f0d9f6eceed7e37f65d1c3a48f"
+)
 
 LIMITS = {
     "framework_declarations_per_source": 4_096,
