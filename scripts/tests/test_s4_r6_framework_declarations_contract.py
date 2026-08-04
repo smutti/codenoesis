@@ -247,7 +247,7 @@ def git_blob_oid(value: bytes) -> str:
 def stable_framework_id(preimage: list[str]) -> str:
     normalized = [unicodedata.normalize("NFC", value) for value in preimage]
     digest = blake3_256(canonical_json([IDENTITY_DOMAIN, *normalized]))
-    return f"urn:codenoesis:framework-declaration:blake3:{digest}"
+    return f"urn:codenoesis:entity:blake3:{digest}"
 
 
 def evidence_id(path: str, start: int, end: int, source_sha256: str) -> str:
@@ -296,7 +296,7 @@ class S4R6FrameworkDeclarationsGovernanceTests(unittest.TestCase):
         decision = DECISION_PATH.read_text(encoding="utf-8")
         roadmap = ROADMAP_PATH.read_text(encoding="utf-8")
         for value in (
-            "0.10+r6",
+            "0.9+r6",
             "S4 R6 framework-declarations ratification register",
             ISSUE_REFERENCE,
             AUTHORIZATION_REFERENCE,
