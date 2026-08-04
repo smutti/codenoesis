@@ -116,6 +116,47 @@ fn e2e_fr_doc_001_r5_declared_and_unresolved_are_documented() {
         String::from_utf8_lossy(&docs.stderr)
     );
     let manifest: Value = serde_json::from_slice(&docs.stdout).expect("parse R5 docs manifest");
+    assert_r5_documentation_coverage(&snapshot, &manifest);
+    let markdown = manifest["documents"]
+        .as_array()
+        .expect("R5 generated documents")
+        .iter()
+        .map(|document| {
+            let path = document["path"].as_str().expect("generated document path");
+            fs::read_to_string(repository.documents.join(path)).expect("read R5 generated document")
+        })
+        .collect::<Vec<_>>()
+        .join("\n");
+    assert!(markdown.contains("Rust semantic declarations"));
+    assert!(markdown.contains("declared syntax only"));
+    assert!(markdown.contains("conditional_unknown"));
+    assert!(markdown.contains("rust.cfg_presence_unresolved"));
+    assert!(markdown.contains("not observed runtime behavior"));
+
+    let field_id = "urn:codenoesis:entity:blake3:ab24c82375e533b482ef71fe657a00b190ecf49712498cdc772c8d9db946b9d4";
+    let query = repository.query(field_id);
+    assert!(
+        query.status.success(),
+        "R5 query failed: status={:?}, stderr={}",
+        query.status.code(),
+        String::from_utf8_lossy(&query.stderr)
+    );
+    let result: Value = serde_json::from_slice(&query.stdout).expect("parse LocalQueryResultV3");
+    assert_eq!(result["schema_version"], "codenoesis.local-query-result/v3");
+    assert_eq!(result["requested_id"], field_id);
+    assert_eq!(result["result_kind"], "entity");
+    assert_eq!(result["entity"]["kind"], "rust.field");
+    assert_eq!(
+        result["snapshot_id"], manifest["snapshot_id"],
+        "stored V8 head must be the sole query-version authority"
+    );
+    assert_eq!(
+        snapshot["semantic_hash"]["value"],
+        manifest["snapshot_semantic_hash"]["value"]
+    );
+}
+
+fn assert_r5_documentation_coverage(snapshot: &Value, manifest: &Value) {
     let graph = &snapshot["semantic"]["knowledge_graph"];
     let r5_entity_ids = graph["entities"]
         .as_array()
@@ -193,43 +234,6 @@ fn e2e_fr_doc_001_r5_declared_and_unresolved_are_documented() {
             .all(|document| document["byte_length"]
                 .as_u64()
                 .is_some_and(|bytes| bytes <= 1_048_576))
-    );
-    let markdown = manifest["documents"]
-        .as_array()
-        .expect("R5 generated documents")
-        .iter()
-        .map(|document| {
-            let path = document["path"].as_str().expect("generated document path");
-            fs::read_to_string(repository.documents.join(path)).expect("read R5 generated document")
-        })
-        .collect::<Vec<_>>()
-        .join("\n");
-    assert!(markdown.contains("Rust semantic declarations"));
-    assert!(markdown.contains("declared syntax only"));
-    assert!(markdown.contains("conditional_unknown"));
-    assert!(markdown.contains("rust.cfg_presence_unresolved"));
-    assert!(markdown.contains("not observed runtime behavior"));
-
-    let field_id = "urn:codenoesis:entity:blake3:ab24c82375e533b482ef71fe657a00b190ecf49712498cdc772c8d9db946b9d4";
-    let query = repository.query(field_id);
-    assert!(
-        query.status.success(),
-        "R5 query failed: status={:?}, stderr={}",
-        query.status.code(),
-        String::from_utf8_lossy(&query.stderr)
-    );
-    let result: Value = serde_json::from_slice(&query.stdout).expect("parse LocalQueryResultV3");
-    assert_eq!(result["schema_version"], "codenoesis.local-query-result/v3");
-    assert_eq!(result["requested_id"], field_id);
-    assert_eq!(result["result_kind"], "entity");
-    assert_eq!(result["entity"]["kind"], "rust.field");
-    assert_eq!(
-        result["snapshot_id"], manifest["snapshot_id"],
-        "stored V8 head must be the sole query-version authority"
-    );
-    assert_eq!(
-        snapshot["semantic_hash"]["value"],
-        manifest["snapshot_semantic_hash"]["value"]
     );
 }
 

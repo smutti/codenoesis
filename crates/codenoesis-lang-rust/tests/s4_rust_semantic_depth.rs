@@ -1,4 +1,5 @@
 use std::collections::{BTreeMap, BTreeSet};
+use std::fmt::Write as _;
 use std::fs;
 use std::path::Path;
 use std::thread;
@@ -228,7 +229,8 @@ fn sec_fr_ext_010_malformed_and_limit_plus_one_fail_closed() {
 
     let mut fields = String::from("pub struct TooMany {\n");
     for index in 0..=1_024 {
-        fields.push_str(&format!("field_{index}: u8,\n"));
+        writeln!(&mut fields, "field_{index}: u8,")
+            .expect("writing Rust source to a String cannot fail");
     }
     fields.push_str("}\n");
     let exceeded = extractor
