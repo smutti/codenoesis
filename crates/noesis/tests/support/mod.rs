@@ -11,6 +11,7 @@ pub mod s3;
 pub mod s4;
 pub mod s4_r3;
 pub mod s4_r4;
+pub mod s4_r5;
 pub mod s5;
 
 use std::fs;
