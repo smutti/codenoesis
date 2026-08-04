@@ -42,7 +42,7 @@ ISSUE_REFERENCE = "https://github.com/smutti/codenoesis/issues/111"
 AUTHORIZATION_REFERENCE = (
     "https://github.com/smutti/codenoesis/issues/111#issuecomment-5179817871"
 )
-APPROVAL_REFERENCE = "__R5_GOVERNANCE_PR__"
+APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/112"
 REQUIRED_BASE = "e7cceb08b0aa4b7342cd2c6c1e267733130bd5f8"
 REPOSITORY_IDENTITY = "urn:codenoesis:fixture:s4-rust-semantic-depth-v1"
 
