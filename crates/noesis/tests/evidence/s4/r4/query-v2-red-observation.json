@@ -1,0 +1,35 @@
+{
+  "schema_version": "codenoesis.product-red-observation/s4-r4-query-v2-v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/104",
+  "authorization": "https://github.com/smutti/codenoesis/issues/104#issuecomment-5162940571",
+  "governance_issue": "https://github.com/smutti/codenoesis/issues/105",
+  "governance_merge": "557547285f9532772efceea900ba982b6a8e65a9",
+  "governance_bundle_sha256": "92866fad76feca023d650c6a8d25114b2404e0221b77e7f5a86918f8ded4f7c4",
+  "branch_integration_head": "759e5533464b3cd6a76ba513a58f24268d97b2c2",
+  "test_only_head": "35178e78974adb3f3d54792d581b85dc9539a9af",
+  "core_red_head": "bc2310d68e02b06c08bf1dd45ed83b34984d6526",
+  "command": "cargo test --locked -p noesis --test e2e_fr_ext_009_cargo_manifest_facts -- e2e_fr_qry_001_r4_exact_id_results --exact",
+  "runner_exit_code": 101,
+  "first_query_exit_code": 0,
+  "expected_schema_version": "codenoesis.local-query-result/v2",
+  "observed_schema_version": "codenoesis.local-query-result/v1",
+  "failed_for_expected_reason": true,
+  "raw_log_path": "crates/noesis/tests/evidence/s4/r4/query-v2-red/e2e_fr_qry_001_r4_exact_id_results.log",
+  "raw_log_bytes": 1213,
+  "raw_log_sha256": "2a0b15654bbfb8d62cb337b30cdd0725ed2379ba0c30f3494f93d10c89b89244",
+  "production_query_v2_files_changed_before_red": false,
+  "protected_semantic_files_changed_by_product_branch_before_red": false,
+  "rejected_harness_attempt": {
+    "reason": "test compilation failed before subject execution because the fingerprint helper used an unsupported LowerHex formatter",
+    "exit_code": 101,
+    "raw_log_bytes": 1741,
+    "raw_log_sha256": "be87dadfdef1565f743e6972a7f11496771397c273f5545394b28ecbf1213849",
+    "accepted_as_red": false
+  },
+  "pre_checkpoint_observation": {
+    "reason": "semantic failure was correct but core R4 product changes were not yet captured by an immutable commit",
+    "raw_log_bytes": 1300,
+    "raw_log_sha256": "535f4c65c3b0a65a0040ef6531d3024cfeee916d30de0744ec11513545507d3f",
+    "accepted_as_red": false
+  }
+}
