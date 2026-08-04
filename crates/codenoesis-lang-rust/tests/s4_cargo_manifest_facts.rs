@@ -51,6 +51,18 @@ const FIXTURE_FILES: [(&str, &str); 8] = [
 ];
 
 #[test]
+fn conf_fr_ext_009_reviewed_fixture_newlines_are_platform_neutral() {
+    assert_eq!(
+        normalize_reviewed_fixture_bytes(b"[package]\r\nname = \"app\"\r\n"),
+        Ok(b"[package]\nname = \"app\"\n".to_vec())
+    );
+    assert_eq!(
+        normalize_reviewed_fixture_bytes(b"[package]\rname = \"app\"\n"),
+        Err("reviewed fixture contains a bare carriage return")
+    );
+}
+
+#[test]
 fn gt_fr_ext_009_manifest_declaration_entities() {
     let extraction = extract_fixture(0, false);
     let graph = &extraction.knowledge.graph;
@@ -518,7 +530,7 @@ fn fixture_inventory(rotation: usize, reverse: bool) -> RepositoryInventory {
                 path.to_owned(),
                 RegularFileMode::Regular,
                 ObjectId::parse_sha1(blob_oid).expect("reviewed R4 blob OID"),
-                fs::read(root.join(path)).expect("read reviewed R4 fixture file"),
+                read_reviewed_fixture(&root.join(path)),
             )
         })
         .collect::<Vec<_>>();
@@ -536,6 +548,32 @@ fn fixture_inventory(rotation: usize, reverse: bool) -> RepositoryInventory {
         u64::try_from(files.len()).expect("reviewed R4 file count"),
         files,
     ))
+}
+
+fn read_reviewed_fixture(path: &Path) -> Vec<u8> {
+    let bytes = fs::read(path).unwrap_or_else(|error| {
+        panic!("read reviewed R4 fixture file {}: {error}", path.display())
+    });
+    normalize_reviewed_fixture_bytes(&bytes)
+        .unwrap_or_else(|reason| panic!("invalid reviewed R4 fixture {}: {reason}", path.display()))
+}
+
+fn normalize_reviewed_fixture_bytes(bytes: &[u8]) -> Result<Vec<u8>, &'static str> {
+    let mut normalized = Vec::with_capacity(bytes.len());
+    let mut index = 0;
+    while index < bytes.len() {
+        if bytes[index] != b'\r' {
+            normalized.push(bytes[index]);
+            index += 1;
+            continue;
+        }
+        if bytes.get(index + 1) != Some(&b'\n') {
+            return Err("reviewed fixture contains a bare carriage return");
+        }
+        normalized.push(b'\n');
+        index += 2;
+    }
+    Ok(normalized)
 }
 
 fn dependency_inventory(count: usize) -> RepositoryInventory {
