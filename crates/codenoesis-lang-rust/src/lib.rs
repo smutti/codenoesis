@@ -16,6 +16,7 @@ use unicode_normalization::UnicodeNormalization as _;
 
 mod manifest_facts;
 mod root_package;
+mod semantic_depth;
 mod workspace;
 
 pub use workspace::TreeSitterRustWorkspaceExtractor;
