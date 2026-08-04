@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/configuration-v5.schema.json",
+  "title": "CodeNoesis ConfigurationV5",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile",
+    "workspace_profile",
+    "manifest_profile",
+    "rust_semantic_profile",
+    "repository_boundary_profile",
+    "semantic_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.configuration/v5"
+    },
+    "profile": {
+      "const": "standard-local-s4"
+    },
+    "workspace_profile": {
+      "const": "cargo-root-package-v1"
+    },
+    "manifest_profile": {
+      "const": "cargo-manifest-facts-v1"
+    },
+    "rust_semantic_profile": {
+      "const": "rust-semantic-depth-v1"
+    },
+    "repository_boundary_profile": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "const": "local-gitlinks-v1"
+        }
+      ]
+    },
+    "semantic_hash": {
+      "$ref": "../../s1/repository-snapshot-v2.schema.json#/$defs/blake3_hash"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "schema_version": "codenoesis.r5-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-semantic-depth-v1",
+  "source": "project-owned synthetic bytes",
+  "external_source_vendored": false,
+  "materialization": {
+    "object_format": "sha1",
+    "tree_oid": "9f2229d9caf4efacfb8dc0eccf1e47e6bd738fef",
+    "commit_oid": "4fc9e6efd37c289a347c9f642fdac0ef611c9fe8",
+    "author": "CodeNoesis <fixture@codenoesis.invalid>",
+    "timestamp": "2026-08-04T00:00:00Z",
+    "message": "R5 project-owned semantic-depth fixture"
+  },
+  "files": [
+    {
+      "path": "repository/Cargo.toml",
+      "mode": "100644",
+      "byte_length": 128,
+      "sha256": "8470d390bf28ea599197ff0dfa2d270183bd0b9a405054cbdfc4b1712e2c0920",
+      "git_blob_oid": "e6f7f97a4b080927cdee4e494576e43344246eee"
+    },
+    {
+      "path": "repository/build.rs",
+      "mode": "100644",
+      "byte_length": 206,
+      "sha256": "b08fd329de1ea6d332a29a2bcae36358e02eb1f3a2a1926c8fe326382800ad81",
+      "git_blob_oid": "7990ab0f9cf4d3e3acf2020c7aa7cbd616870d64"
+    },
+    {
+      "path": "repository/src/lib.rs",
+      "mode": "100644",
+      "byte_length": 1530,
+      "sha256": "ce4d55e2551b92f6cd0e0616c386aa2f6007919a5363ef9a7b3aa4d817a7fa82",
+      "git_blob_oid": "568a344c63d688a4c4b5b391d106848a39f25a04"
+    },
+    {
+      "path": "repository/src/model.rs",
+      "mode": "100644",
+      "byte_length": 920,
+      "sha256": "a2341aa45c8cb1b85e830ed8616e8918c3609eacc7bd363e79976db1b976305f",
+      "git_blob_oid": "486549154e06c2a7c9d017109a00cadf1e6eaa69"
+    }
+  ],
+  "expected_facts": {
+    "path": "expected-rust-semantic-depth.json",
+    "byte_length": 6395,
+    "sha256": "dca1ac0d25e97a13cc0f76c7370b9a3e3364c55a3161fd5c8cc63ebda720dea5"
+  },
+  "sentinels": {
+    "build_script_path": "repository/build.rs",
+    "forbidden_output": "BUILD_SENTINEL_EXECUTED",
+    "process_execution_permitted": false,
+    "network_access_permitted": false,
+    "target_execution_permitted": false
+  }
+}

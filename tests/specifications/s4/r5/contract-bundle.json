@@ -1,0 +1,106 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "docs/software/decisions/0015-s4-r5-rust-semantic-depth-contract.md",
+      "sha256": "454a60c1eaa7df2a9f2e43f4602503b86a35f44430ab87ba0fab975f7d0e982d"
+    },
+    {
+      "path": "scripts/tests/test_s4_rust_semantic_depth_contract.py",
+      "sha256": "78785783f126c14cea014d88e5f353a654a441911dc4ff7a7518cc05787a0287"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-semantic-depth-v1/README.md",
+      "sha256": "2bfc1851b40252ca62f5ee3379fa0e1562a3cc4a03da9765691dfe940c903d4a"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-semantic-depth-v1/expected-rust-semantic-depth.json",
+      "sha256": "dca1ac0d25e97a13cc0f76c7370b9a3e3364c55a3161fd5c8cc63ebda720dea5"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-semantic-depth-v1/manifest.json",
+      "sha256": "401fd52791616344ed10a60648ce430924f6598add5b8e175211105d86358439"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-semantic-depth-v1/repository/Cargo.toml",
+      "sha256": "8470d390bf28ea599197ff0dfa2d270183bd0b9a405054cbdfc4b1712e2c0920"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-semantic-depth-v1/repository/build.rs",
+      "sha256": "b08fd329de1ea6d332a29a2bcae36358e02eb1f3a2a1926c8fe326382800ad81"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-semantic-depth-v1/repository/src/lib.rs",
+      "sha256": "ce4d55e2551b92f6cd0e0616c386aa2f6007919a5363ef9a7b3aa4d817a7fa82"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-semantic-depth-v1/repository/src/model.rs",
+      "sha256": "a2341aa45c8cb1b85e830ed8616e8918c3609eacc7bd363e79976db1b976305f"
+    },
+    {
+      "path": "tests/specifications/s4/r4/contract-bundle.json",
+      "sha256": "55630163c95d786eff65d3065684201b1c050025b0ca3586dced56d0f77458b1"
+    },
+    {
+      "path": "tests/specifications/s4/r5/codenoesis-error-v12.schema.json",
+      "sha256": "7b46cd00185bea04a1482c2cafaf7d75fd3e547107f8aaf3846795bbb97c3e04"
+    },
+    {
+      "path": "tests/specifications/s4/r5/configuration-v5.schema.json",
+      "sha256": "f8c16f1bffbc5eb1a084bb7d6dbfff58e64ca43ead565283a1fcb6828af0786e"
+    },
+    {
+      "path": "tests/specifications/s4/r5/e2e_fr_ext_010_rust_semantic_depth.json",
+      "sha256": "116ffc8e443215eefe89446061f3d8dedce46dcc304afa1bd640e9a5c22f0642"
+    },
+    {
+      "path": "tests/specifications/s4/r5/e2e_fr_qry_001_r5_exact_id_results.json",
+      "sha256": "f44665ec8740fc4950f64d4c3fd696e6e49cfe7de57ef3a37753ed1103e70f11"
+    },
+    {
+      "path": "tests/specifications/s4/r5/extraction-chunk-v5.schema.json",
+      "sha256": "9be074d9e02979fc3e094adb60e7d1cfc1f82e7591ecfe95a69f68b174268538"
+    },
+    {
+      "path": "tests/specifications/s4/r5/invalid-cases-v1.json",
+      "sha256": "0ae7b9ace4d634c79b32074b87c1827febf9b3fd354ec0cff491d1e0cdc32e97"
+    },
+    {
+      "path": "tests/specifications/s4/r5/knowledge-graph-v5.schema.json",
+      "sha256": "de2db15fe9e77a8162883bb95da42f67a14f71bca0c179d3b0d7694f47c67630"
+    },
+    {
+      "path": "tests/specifications/s4/r5/local-query-result-v3.schema.json",
+      "sha256": "c4cb94f96af9cc405e04c4f9a3c57969ddfddab886e34392a93fce38bda8ebab"
+    },
+    {
+      "path": "tests/specifications/s4/r5/red-observation.json",
+      "sha256": "dd237bfd0212c7278ab01fd4dd94dd57a6bf40b9beffd5faa70442d0f92266dd"
+    },
+    {
+      "path": "tests/specifications/s4/r5/red/governance-red.log",
+      "sha256": "d565d942729dece7b3cd08b2a67b714962b4de6979e3c7aa309061b5c4a89dd4"
+    },
+    {
+      "path": "tests/specifications/s4/r5/repository-snapshot-v8.schema.json",
+      "sha256": "6eebe6283143ab2c394fda69a422a1fb3fe5cc54303bd3e5f118cab412b80e66"
+    },
+    {
+      "path": "tests/specifications/s4/r5/rust-ontology-v5.json",
+      "sha256": "ed5460ba08308cc1d075fb92841943be3354ef33a46327a11f86e284a5cff348"
+    },
+    {
+      "path": "tests/specifications/s4/r5/rust-semantic-depth-subset-v1.json",
+      "sha256": "2b80371adfd4a344a6b28231b92f14a09bfe5fd639cae45d9ad93fb4fa6fc73a"
+    },
+    {
+      "path": "tests/specifications/s4/r5/semantic-hash-contract-v4.json",
+      "sha256": "45b7009f68af046cf74b240fcd54287b8f05251d381d7a3f87b4faec8bdbc85c"
+    }
+  ],
+  "bundle_sha256": "1e00c81c4a3c7ca701e98324e61a250fcfee490aeddf021415564044175e6645"
+}
