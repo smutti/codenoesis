@@ -16,8 +16,12 @@ SRS_PATH = ROOT / "docs/software/software-requirements-specification.md"
 DECISION_PATH = (
     ROOT / "docs/software/decisions/0012-s4-cargo-manifest-facts-contract.md"
 )
+QUERY_DECISION_PATH = (
+    ROOT / "docs/software/decisions/0013-s4-r4-exact-id-query-contract.md"
+)
 SPEC_ROOT = ROOT / "tests/specifications/s4/r4"
 ORACLE_PATH = SPEC_ROOT / "e2e_fr_ext_009_cargo_manifest_facts.json"
+QUERY_ORACLE_PATH = SPEC_ROOT / "e2e_fr_qry_001_r4_exact_id_results.json"
 BUNDLE_PATH = SPEC_ROOT / "contract-bundle.json"
 SUBSET_PATH = SPEC_ROOT / "cargo-manifest-subset-v1.json"
 CONFIGURATION_SCHEMA_PATH = SPEC_ROOT / "configuration-v4.schema.json"
@@ -29,6 +33,7 @@ ERROR_SCHEMA_PATH = SPEC_ROOT / "codenoesis-error-v11.schema.json"
 HASH_CONTRACT_PATH = SPEC_ROOT / "semantic-hash-contract-v3.json"
 RED_OBSERVATION_PATH = SPEC_ROOT / "red-observation.json"
 QUERY_V2_SCHEMA_PATH = SPEC_ROOT / "local-query-result-v2.schema.json"
+QUERY_RED_OBSERVATION_PATH = SPEC_ROOT / "query-v2-red-observation.json"
 FIXTURE_ROOT = ROOT / "tests/fixtures/s4/cargo-manifest-facts-v1"
 FIXTURE_REPOSITORY = FIXTURE_ROOT / "repository"
 FIXTURE_MANIFEST_PATH = FIXTURE_ROOT / "manifest.json"
@@ -40,7 +45,17 @@ AUTHORIZATION_REFERENCE = (
 )
 APPROVAL_REFERENCE = "https://github.com/smutti/codenoesis/pull/103"
 REQUIRED_BASE = "ea51a8151749fc65e75dd7a10e550adc0b67d422"
+QUERY_ISSUE_REFERENCE = "https://github.com/smutti/codenoesis/issues/105"
+QUERY_AUTHORIZATION_REFERENCE = (
+    "https://github.com/smutti/codenoesis/issues/105#issuecomment-5170981186"
+)
+QUERY_RED_REFERENCE = (
+    "https://github.com/smutti/codenoesis/issues/105#issuecomment-5170981348"
+)
+QUERY_REQUIRED_BASE = "94a8fe9b27b7e4fd9ae5c759cc23591c4fa12d00"
 REPOSITORY_IDENTITY = "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1"
+FIXTURE_TREE_OID = "c99449f6f0651e4f6398521e316f3500d0e508e7"
+FIXTURE_COMMIT_OID = "7b1fc9073552b5967b1620d1e082a1d45e1b380e"
 
 LIMITS = {
     "manifest_fact_entities": 10_000,
@@ -127,11 +142,13 @@ SCHEMA_PATHS = (
     CHUNK_SCHEMA_PATH,
     GRAPH_SCHEMA_PATH,
     ERROR_SCHEMA_PATH,
+    QUERY_V2_SCHEMA_PATH,
 )
 
 BUNDLE_FILES = {
     "LICENSE",
     "docs/software/decisions/0012-s4-cargo-manifest-facts-contract.md",
+    "docs/software/decisions/0013-s4-r4-exact-id-query-contract.md",
     "scripts/tests/test_s4_cargo_manifest_facts_contract.py",
     "tests/corpora/real-world-rust-v1.json",
     "tests/fixtures/s4/cargo-manifest-facts-v1/README.md",
@@ -150,8 +167,11 @@ BUNDLE_FILES = {
     "tests/specifications/s4/r4/codenoesis-error-v11.schema.json",
     "tests/specifications/s4/r4/configuration-v4.schema.json",
     "tests/specifications/s4/r4/e2e_fr_ext_009_cargo_manifest_facts.json",
+    "tests/specifications/s4/r4/e2e_fr_qry_001_r4_exact_id_results.json",
     "tests/specifications/s4/r4/extraction-chunk-v4.schema.json",
     "tests/specifications/s4/r4/knowledge-graph-v4.schema.json",
+    "tests/specifications/s4/r4/local-query-result-v2.schema.json",
+    "tests/specifications/s4/r4/query-v2-red-observation.json",
     "tests/specifications/s4/r4/red-observation.json",
     "tests/specifications/s4/r4/repository-snapshot-v7.schema.json",
     "tests/specifications/s4/r4/rust-ontology-v4.json",
@@ -168,6 +188,12 @@ IMMUTABLE_FILES = {
     ),
     "tests/specifications/s4/r3/rust-ontology-v3.json": (
         "ae86b71ac0a5940761b2799ba891f0f4de5cff06a6c87ff42dd0b30b69d1dc43"
+    ),
+    "tests/specifications/s4/local-query-result-v1.schema.json": (
+        "f2808d10af0b6e4dfe3a2fd43307cef51bd473abf146d76da915c652d072c013"
+    ),
+    "tests/specifications/s4/documentation-manifest-v1.schema.json": (
+        "13fc4500b8a63669f4e99e99e797f039421589c8b5caf9dcc7d4051792729943"
     ),
 }
 
@@ -271,14 +297,181 @@ class S4CargoManifestFactsGovernanceTests(unittest.TestCase):
             diagnostic["properties"],
             "R4 diagnostics lack stable exact-query identity",
         )
-        self.assertTrue(
-            QUERY_V2_SCHEMA_PATH.is_file(),
-            "LocalQueryResultV2 contract is absent",
+        self.assertIn("id", diagnostic["required"])
+        self.assertEqual(
+            diagnostic["properties"]["id"]["pattern"],
+            r"^urn:codenoesis:diagnostic:blake3:[0-9a-f]{64}$",
+        )
+
+        query_schema = load_json(QUERY_V2_SCHEMA_PATH)
+        self.assertEqual(
+            query_schema["properties"]["schema_version"]["const"],
+            "codenoesis.local-query-result/v2",
+        )
+        result_kinds = {
+            "entity",
+            "relationship",
+            "claim",
+            "evidence",
+            "diagnostic",
+            "coverage_gap",
+            "document",
+        }
+        self.assertEqual(
+            set(query_schema["properties"]["result_kind"]["enum"]),
+            result_kinds,
+        )
+        self.assertEqual(
+            set(query_schema["required"]),
+            {
+                "schema_version",
+                "repository_identity",
+                "snapshot_id",
+                "requested_id",
+                "result_kind",
+                "entity",
+                "relationship",
+                "claims",
+                "evidence",
+                "diagnostic",
+                "coverage_gap",
+                "document",
+                "document_statements",
+            },
+        )
+        conditional_kinds = {
+            branch["if"]["properties"]["result_kind"]["const"]
+            for branch in query_schema["allOf"]
+        }
+        self.assertEqual(conditional_kinds, result_kinds)
+
+        ontology = load_json(ONTOLOGY_PATH)
+        identity = ontology["identity"]
+        self.assertEqual(
+            identity["diagnostic_domain"],
+            "codenoesis.diagnostic-id/cargo-manifest/v1",
+        )
+        self.assertEqual(
+            identity["diagnostic_preimage"],
+            [
+                "repository_identity",
+                "diagnostic_code",
+                "evidence_id_1_through_n_in_byte_order",
+            ],
+        )
+        self.assertEqual(
+            identity["coverage_gap_preimage"],
+            [
+                "repository_identity",
+                "commit_oid",
+                "capability",
+                "state",
+                "evidence_id_1_through_n_in_byte_order",
+            ],
+        )
+
+        plan = load_json(EXPECTED_FACTS_PATH)
+        examples = plan["exact_query_examples"]
+        evidence = examples["evidence"]
+        evidence_id = stable_id(
+            plan["identity_domains"]["evidence"],
+            [
+                REPOSITORY_IDENTITY,
+                FIXTURE_COMMIT_OID,
+                evidence["blob_oid"],
+                evidence["path"],
+                str(evidence["start_byte"]),
+                str(evidence["end_byte"]),
+            ],
+        )
+        self.assertEqual(evidence["id"], evidence_id)
+        entity = examples["entity"]
+        self.assertEqual(
+            entity["claim_id"],
+            stable_id(
+                plan["identity_domains"]["claim"],
+                ["entity", entity["id"], "deterministic_fact"],
+            ),
+        )
+        relationship = examples["relationship"]
+        self.assertEqual(
+            relationship["claim_id"],
+            stable_id(
+                plan["identity_domains"]["claim"],
+                ["relationship", relationship["id"], "deterministic_fact"],
+            ),
+        )
+        self.assertEqual(examples["claim"]["id"], relationship["claim_id"])
+        self.assertEqual(examples["claim"]["subject_id"], relationship["id"])
+        self.assertEqual(
+            examples["diagnostic"]["id"],
+            stable_id(
+                plan["identity_domains"]["diagnostic"],
+                [
+                    REPOSITORY_IDENTITY,
+                    examples["diagnostic"]["code"],
+                    evidence_id,
+                ],
+            ),
+        )
+        self.assertEqual(
+            examples["coverage_gap"]["id"],
+            stable_id(
+                plan["identity_domains"]["coverage_gap"],
+                [
+                    REPOSITORY_IDENTITY,
+                    FIXTURE_COMMIT_OID,
+                    examples["coverage_gap"]["capability"],
+                    examples["coverage_gap"]["state"],
+                    evidence_id,
+                ],
+            ),
+        )
+        self.assertEqual(
+            examples["document"]["id"],
+            stable_id(
+                plan["identity_domains"]["document"],
+                [
+                    REPOSITORY_IDENTITY,
+                    "overview",
+                    REPOSITORY_IDENTITY,
+                    "codenoesis.renderer/markdown-v1",
+                ],
+            ),
+        )
+
+        oracle = load_json(QUERY_ORACLE_PATH)
+        self.assertEqual(oracle["issue"], QUERY_ISSUE_REFERENCE)
+        self.assertEqual(oracle["authorization"], QUERY_AUTHORIZATION_REFERENCE)
+        self.assertEqual(oracle["requirement_ids"], ["FR-QRY-001", "FR-EXT-009"])
+        self.assertEqual(oracle["required_base"], QUERY_REQUIRED_BASE)
+        self.assertEqual(set(oracle["result_kinds"]), result_kinds)
+        self.assertEqual(oracle["fixture"]["exact_ids"], {
+            kind: value["id"] for kind, value in examples.items()
+        })
+        self.assertEqual(
+            oracle["dispatch"],
+            {
+                "codenoesis.repository-snapshot/v7": (
+                    "codenoesis.local-query-result/v2"
+                ),
+                "codenoesis.repository-snapshot/v6": (
+                    "codenoesis.local-query-result/v1"
+                ),
+                "codenoesis.repository-snapshot/v5": (
+                    "codenoesis.local-query-result/v1"
+                ),
+                "codenoesis.repository-snapshot/v4": (
+                    "codenoesis.local-query-result/v1"
+                ),
+                "explicit_query_version_flag": False,
+            },
         )
 
     def test_ratification_register_and_decision_are_exact(self) -> None:
         srs = SRS_PATH.read_text(encoding="utf-8")
         decision = DECISION_PATH.read_text(encoding="utf-8")
+        query_decision = QUERY_DECISION_PATH.read_text(encoding="utf-8")
         for value in (
             "### 2.14 S4 Cargo manifest facts ratification register",
             ISSUE_REFERENCE,
@@ -308,6 +501,29 @@ class S4CargoManifestFactsGovernanceTests(unittest.TestCase):
             self.assertIn(value, decision)
         self.assertIn("R3 implementation merge #99", srs)
         self.assertIn("R4 governance adds no production behavior", decision)
+        for value in (
+            QUERY_ISSUE_REFERENCE,
+            QUERY_AUTHORIZATION_REFERENCE,
+            QUERY_RED_REFERENCE,
+            QUERY_REQUIRED_BASE,
+            "FR-QRY-001",
+            "FR-EXT-009",
+            "LocalQueryResultV2",
+            "LocalQueryResultV1",
+            "codenoesis.diagnostic-id/cargo-manifest/v1",
+            "query.not_found",
+            "The SRS is excluded",
+        ):
+            self.assertIn(value, query_decision)
+        for value in (
+            "0.9+r4.1",
+            QUERY_ISSUE_REFERENCE,
+            QUERY_AUTHORIZATION_REFERENCE,
+            "Decision 0013",
+            "codenoesis.local-query-result/v2",
+            "byte-identical LocalQueryResultV1",
+        ):
+            self.assertIn(value, srs)
 
     def test_machine_oracle_binds_authorization_red_limits_and_pilots(self) -> None:
         oracle = load_json(ORACLE_PATH)
@@ -448,6 +664,12 @@ class S4CargoManifestFactsGovernanceTests(unittest.TestCase):
             {"DECLARES", "REFERENCES_DECLARATION", "MATERIALIZES"},
         )
         coverage = chunk["$defs"]["coverage"]["properties"]
+        diagnostic = chunk["$defs"]["diagnostic"]
+        self.assertIn("id", diagnostic["required"])
+        self.assertEqual(
+            diagnostic["properties"]["id"]["pattern"],
+            r"^urn:codenoesis:diagnostic:blake3:[0-9a-f]{64}$",
+        )
         self.assertEqual(set(coverage["capability"]["enum"]), set(CAPABILITY_STATES))
         self.assertEqual(set(coverage["state"]["enum"]), set(CAPABILITY_STATES.values()))
 
@@ -471,6 +693,10 @@ class S4CargoManifestFactsGovernanceTests(unittest.TestCase):
             },
         )
         self.assertEqual(set(ontology["cargo_entity_kinds"]), CARGO_ENTITY_KINDS)
+        self.assertEqual(
+            ontology["identity"]["diagnostic_domain"],
+            "codenoesis.diagnostic-id/cargo-manifest/v1",
+        )
         self.assertEqual(ontology["coverage_capability_states"], CAPABILITY_STATES)
         self.assertEqual(ontology["limits"], LIMITS)
         self.assertEqual(
@@ -537,6 +763,14 @@ class S4CargoManifestFactsGovernanceTests(unittest.TestCase):
         )
         self.assertEqual(manifest["repository_identity"], REPOSITORY_IDENTITY)
         self.assertFalse(manifest["external_source_vendored"])
+        self.assertEqual(
+            manifest["materialization"]["tree_oid"],
+            FIXTURE_TREE_OID,
+        )
+        self.assertEqual(
+            manifest["materialization"]["commit_oid"],
+            FIXTURE_COMMIT_OID,
+        )
         files = manifest["files"]
         paths = [item["path"] for item in files]
         expected_paths = sorted(
@@ -816,6 +1050,34 @@ class S4CargoManifestFactsGovernanceTests(unittest.TestCase):
         ):
             self.assertEqual(measured[field], oracle_red[field])
         self.assertEqual(measured["forbidden_side_effects_observed"], 0)
+
+        query_observation = load_json(QUERY_RED_OBSERVATION_PATH)
+        self.assertEqual(query_observation["issue"], QUERY_ISSUE_REFERENCE)
+        self.assertEqual(
+            query_observation["authorization"],
+            QUERY_AUTHORIZATION_REFERENCE,
+        )
+        self.assertEqual(query_observation["evidence_comment"], QUERY_RED_REFERENCE)
+        self.assertEqual(query_observation["required_base"], QUERY_REQUIRED_BASE)
+        self.assertEqual(
+            query_observation["test_only_head"],
+            "4b8a38b2cbd9dcefb9dc5af0f3bd393ef6c95573",
+        )
+        self.assertEqual(query_observation["exit_code"], 1)
+        self.assertEqual(query_observation["raw_log_bytes"], 1259)
+        self.assertEqual(
+            query_observation["raw_log_sha256"],
+            "d4d489aa2afa625813da46660b5f3042fd5f38502d709f9fce4cffb5ffee8574",
+        )
+        self.assertEqual(
+            query_observation["guard_sha256"],
+            "f3cb16d074ad5005e784b34c1d510e4b32d78874b0a7102ea9409e599593917f",
+        )
+        self.assertTrue(query_observation["failed_for_expected_reason"])
+        self.assertFalse(query_observation["production_files_changed_before_red"])
+        self.assertFalse(
+            query_observation["protected_semantic_files_changed_before_red"]
+        )
 
     def test_inherited_r3_and_corpus_bytes_are_immutable(self) -> None:
         for relative, expected in IMMUTABLE_FILES.items():

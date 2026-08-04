@@ -10,8 +10,12 @@
       "sha256": "6fa29d1f8e4e245db917a70b54db9dbb87997c3167ced64d208c224feb077845"
     },
     {
+      "path": "docs/software/decisions/0013-s4-r4-exact-id-query-contract.md",
+      "sha256": "fc6a56b7a81d90e4d2a556e202107470f7b27e4dd49db2fbbee5a4f0744bf004"
+    },
+    {
       "path": "scripts/tests/test_s4_cargo_manifest_facts_contract.py",
-      "sha256": "bee027904eacd7c68c140c6cf9c102e972ae85ef33afe912af1b6c6c32b93bb5"
+      "sha256": "df04f34ab7ab74a32df7f3b50c5b3deae1da1c6bd2629ba21d9cde1ae6dfd5fc"
     },
     {
       "path": "tests/corpora/real-world-rust-v1.json",
@@ -23,11 +27,11 @@
     },
     {
       "path": "tests/fixtures/s4/cargo-manifest-facts-v1/expected-manifest-facts.json",
-      "sha256": "643f72b1ba5c2b7f14e518d4014f684e9837c6165ca6b1dbf86c6d0935ea5b09"
+      "sha256": "dce17e88dc942272bb31c4f50c54d0bacbe936a14838c2dd2452d2cf464b078a"
     },
     {
       "path": "tests/fixtures/s4/cargo-manifest-facts-v1/manifest.json",
-      "sha256": "b9027ef07dd8ae9f8339ae1e8434abbe6c36874b73cb81e651d4e5230a4e0a72"
+      "sha256": "1f850f88ca142b5220e8ff1a3f35f0dc618ebadf2be61a98461491822ef86f22"
     },
     {
       "path": "tests/fixtures/s4/cargo-manifest-facts-v1/repository/Cargo.toml",
@@ -79,15 +83,27 @@
     },
     {
       "path": "tests/specifications/s4/r4/e2e_fr_ext_009_cargo_manifest_facts.json",
-      "sha256": "ead9f09f47097a734594aa773656a74397efe397fd9316174d5f94b8763118f1"
+      "sha256": "fb745c66882c258092c57c3261202c373831b869314d4b6ea3dd94ffbad51a86"
+    },
+    {
+      "path": "tests/specifications/s4/r4/e2e_fr_qry_001_r4_exact_id_results.json",
+      "sha256": "58e702c4539e0a5a3a7b6fda25db16c7f1c385821167922e526669358eb30a61"
     },
     {
       "path": "tests/specifications/s4/r4/extraction-chunk-v4.schema.json",
-      "sha256": "41fd7ebe6b078a456e4e5204b622d6f984bd8583c1e423ce771b9cf26f2d8244"
+      "sha256": "cbf8c7d0899810e839e69851343f4ef05042ba00e5727b2e657668d09703aa5e"
     },
     {
       "path": "tests/specifications/s4/r4/knowledge-graph-v4.schema.json",
       "sha256": "8a0c1f085e3faf2c4fd7aebab53373a584b4e8d4239c3907934f07f6107a355c"
+    },
+    {
+      "path": "tests/specifications/s4/r4/local-query-result-v2.schema.json",
+      "sha256": "1235e23bd8e282d3f560dfad7c791c43b9d8d0dead120886d90dbf39c288deff"
+    },
+    {
+      "path": "tests/specifications/s4/r4/query-v2-red-observation.json",
+      "sha256": "a513e778ee955a194d64dcd89f886bc9e26df6a9880dddc29b8e6b3dde0097eb"
     },
     {
       "path": "tests/specifications/s4/r4/red-observation.json",
@@ -99,12 +115,12 @@
     },
     {
       "path": "tests/specifications/s4/r4/rust-ontology-v4.json",
-      "sha256": "df24f5a9b0e035870601466820fd4ba84df5ea56a9c1159ae48ae0e2ebb85936"
+      "sha256": "3aedab734d51047a0b52d107c553ba8fe8e24cb8fcbc1bebdd53c32a9623e6f0"
     },
     {
       "path": "tests/specifications/s4/r4/semantic-hash-contract-v3.json",
       "sha256": "1dc68c80cb628e6acee323cf47b708f58b89534166908880f502d3af76b9075a"
     }
   ],
-  "bundle_sha256": "e4af7183ec111eeee06d65d752884cee09d9e943e70fbd14a434d688f1dfa0a3"
+  "bundle_sha256": "92866fad76feca023d650c6a8d25114b2404e0221b77e7f5a86918f8ded4f7c4"
 }

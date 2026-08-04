@@ -1374,11 +1374,16 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
+        "id",
         "code",
         "message",
         "evidence_ids"
       ],
       "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:diagnostic:blake3:[0-9a-f]{64}$"
+        },
         "code": {
           "enum": [
             "cargo.unsupported_manifest_family",

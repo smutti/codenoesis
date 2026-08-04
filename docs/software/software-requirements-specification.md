@@ -1,13 +1,14 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9+r4 — S0 through S6 and R0-R3 implemented; R4 Cargo manifest
-> facts proposed for protected ratification**.
+> Status: **0.9+r4.1 — S0 through S6 and R0-R3 implemented; R4 Cargo manifest
+> facts Approved and its additive exact-ID query correction proposed for
+> protected ratification**.
 > The S0–S6 runtime and product suites exist on `main`, but CodeNoesis claims
 > no slice `Verified` without complete immutable retention evidence. This
-> revision records R3 implementation merge #99 and proposes `FR-EXT-009` plus
-> Decision 0012 for one explicit S4 compatibility profile that represents
-> evidence-backed Cargo declarations without resolving Cargo, while retaining
-> every accepted S0–S6 and R0–R3 invocation.
+> revision records protected R4 governance merge #103 and proposes Decision
+> 0013 for a V7-only `LocalQueryResultV2` that makes every already-required R4
+> exact-ID result implementable while retaining `LocalQueryResultV1` and every
+> accepted S0–S6 and R0–R3 invocation.
 
 ## 1. Document control
 
@@ -15,7 +16,7 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S6 and roadmap R0-R3 are Approved and Implemented but not Verified. `FR-EXT-009` is Proposed and becomes Approved only after the accountable maintainer manually merges protected PR #103. |
+| Status | S0 through S6 and roadmap R0-R3 are Approved and Implemented but not Verified. `FR-EXT-009` is Approved by protected PR #103; the additive `FR-QRY-001` R4 query-contract amendment is Proposed and becomes effective only after the accountable maintainer manually merges the protected pull request for issue #105. |
 | Date | 2026-08-03 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
@@ -40,6 +41,7 @@
 | `0.9+r2` | 2026-08-02 | Proposed `FR-ACQ-005` and Decision 0010 for the explicit `local-gitlinks-v1` boundary profile; fixed RepositorySnapshotV5, ErrorV9, strict committed `.gitmodules` metadata, digest-only URL projection, explicit depth-one nested binding, limits, synthetic fixture, exact Red, R0/R1 regressions, and the non-vendored RustDesk R0-R2 checkpoint. |
 | `0.9+r3` | 2026-08-02 | Retained document-control version `0.9` for historical guard compatibility, recorded protected R2 implementation merge #95, and proposed `FR-EXT-008` plus Decision 0011 for the explicit `cargo-root-package-v1` workspace profile; fixed RepositorySnapshotV6, ErrorV10, Rust ontology v3, standalone/virtual/non-virtual root membership, literal exclusions, bounded target roots, R4-deferred coverage, R2 gitlink composition, exact Red, generic fixtures, and non-vendored Lekton/RustDesk R3 pilots. |
 | `0.9+r4` | 2026-08-03 | Retained document-control version `0.9`, recorded protected R3 implementation merge #99, and proposed `FR-EXT-009` plus Decision 0012 for explicit declaration-only Cargo manifest facts; fixed RepositorySnapshotV7, ErrorV11, Rust/Cargo ontology v4, evidence-backed metadata/target/dependency/feature/patch/build facts, digest-only locators, typed unsupported coverage, exact Red, generic fixtures, and non-vendored Lekton/RustDesk R4 pilots. |
+| `0.9+r4.1` | 2026-08-03 | Recorded protected R4 governance merge #103 and proposed Decision 0013 for additive V7-only `LocalQueryResultV2`, stable Cargo diagnostic identities, exact relationship/claim/evidence/diagnostic/coverage/document query examples after restart, and byte-identical V1 behavior for V4-V6 heads. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -900,19 +902,24 @@ R3 root-package workspace contract bundle:
 
 ### 2.14 S4 Cargo manifest facts ratification register
 
-Issue [#100](https://github.com/smutti/codenoesis/issues/100) and its explicit
+Issue [#100](https://github.com/smutti/codenoesis/issues/100), its explicit
 maintainer authorization
-[comment](https://github.com/smutti/codenoesis/issues/100#issuecomment-5163551187)
-govern this high-risk package. The following single requirement becomes
-Approved only when `@smutti` manually merges the exact protected head of
-[PR #103](https://github.com/smutti/codenoesis/pull/103).
-The authoring agent does not approve or merge. This approval targets exactly
-the **S4 — Evidence-backed workspace docs compatibility extension** and roadmap
-R4. It does not broaden R3 or any selector-absent contract.
+[comment](https://github.com/smutti/codenoesis/issues/100#issuecomment-5163551187),
+and protected [PR #103](https://github.com/smutti/codenoesis/pull/103) Approved
+`FR-EXT-009`. Issue [#105](https://github.com/smutti/codenoesis/issues/105)
+and its explicit maintainer
+[authorization](https://github.com/smutti/codenoesis/issues/105#issuecomment-5170981186)
+govern the additive exact-ID correction required to make that approved R4
+outcome implementation-complete. The correction becomes effective only when
+`@smutti` manually merges its exact protected head. The authoring agent does
+not approve or merge. Both packages target exactly the **S4 — Evidence-backed
+workspace docs compatibility extension** and roadmap R4; they do not broaden
+R3 or any selector-absent contract.
 
 | Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
 |---|---|---|---|---|---|---|---|
-| `FR-EXT-009` | `Proposed` (authorized in issue #100; pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #103 protected merge record](https://github.com/smutti/codenoesis/pull/103) | `S4` | [Cargo manifest facts decision](decisions/0012-s4-cargo-manifest-facts-contract.md), [RepositorySnapshotV7 schema](../../tests/specifications/s4/r4/repository-snapshot-v7.schema.json), [Rust/Cargo ontology v4](../../tests/specifications/s4/r4/rust-ontology-v4.json), [ErrorV11 schema](../../tests/specifications/s4/r4/codenoesis-error-v11.schema.json), [machine oracle](../../tests/specifications/s4/r4/e2e_fr_ext_009_cargo_manifest_facts.json), and [project-owned fixture](../../tests/fixtures/s4/cargo-manifest-facts-v1/README.md) |
+| `FR-EXT-009` | `Approved` (protected PR #103) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #103 protected merge record](https://github.com/smutti/codenoesis/pull/103) | `S4` | [Cargo manifest facts decision](decisions/0012-s4-cargo-manifest-facts-contract.md), [RepositorySnapshotV7 schema](../../tests/specifications/s4/r4/repository-snapshot-v7.schema.json), [Rust/Cargo ontology v4](../../tests/specifications/s4/r4/rust-ontology-v4.json), [ErrorV11 schema](../../tests/specifications/s4/r4/codenoesis-error-v11.schema.json), [machine oracle](../../tests/specifications/s4/r4/e2e_fr_ext_009_cargo_manifest_facts.json), and [project-owned fixture](../../tests/fixtures/s4/cargo-manifest-facts-v1/README.md) |
+| `FR-QRY-001` | `Approved` (R4 amendment authorized in issue #105; pending protected merge) | `Approved` with additive V7 query contract | Andrea Moretti (`@smutti` persona) | `@smutti` | [Issue #105 authorization](https://github.com/smutti/codenoesis/issues/105#issuecomment-5170981186) | `S4` | [Exact-ID query decision](decisions/0013-s4-r4-exact-id-query-contract.md), [LocalQueryResultV2 schema](../../tests/specifications/s4/r4/local-query-result-v2.schema.json), [query oracle](../../tests/specifications/s4/r4/e2e_fr_qry_001_r4_exact_id_results.json), and [retained governance Red](../../tests/specifications/s4/r4/query-v2-red-observation.json) |
 
 R4 is selected only by `--manifest-profile cargo-manifest-facts-v1` on an
 otherwise valid `standard-local-s4` scan that also explicitly selects
@@ -956,7 +963,9 @@ The selected scan emits strict `RepositorySnapshotV7`
 retains all v3 Rust identity domains and preimages and adds disjoint Cargo
 declaration domains. V7 reuses the existing immutable artifact roles, local
 store marker, DDL, single-writer transaction, crash behavior, documentation
-format, and exact-ID query contract. No migration, repair, role, deletion, or
+format, and query command. A validated V7 head emits additive strict
+`codenoesis.local-query-result/v2`; V4-V6 heads retain byte-identical
+`codenoesis.local-query-result/v1`. No migration, repair, role, deletion, or
 destructive action is part of R4.
 
 The first implementation command fails before repository acquisition because
@@ -973,7 +982,7 @@ RustDesk pilot expectations are bound by the R4 contract bundle. Any bound-byte
 change requires a new digest and renewed human review.
 
 R4 Cargo manifest facts contract bundle:
-`sha256:e4af7183ec111eeee06d65d752884cee09d9e943e70fbd14a434d688f1dfa0a3`.
+`sha256:92866fad76feca023d650c6a8d25114b2404e0221b77e7f5a86918f8ded4f7c4`.
 
 ## 3. Product intent and success definition
 
@@ -1152,7 +1161,7 @@ cannot replace their verification.
 
 | ID | Pri. | Target | Normative requirement | Acceptance evidence |
 |---|---:|---:|---|---|
-| `FR-QRY-001` | P0 | `0.1` | Local queries MUST retrieve entities, claims, evidence, and documents by stable identity and expose unknown or contradictory states. | CLI black-box scenarios return the reviewed typed result and stable exit status. `E2E` |
+| `FR-QRY-001` | P0 | `0.1` | Local queries MUST retrieve every approved entity, relationship, claim, evidence, diagnostic, coverage gap, and document by stable identity, expose unknown or contradictory states, and select a versioned result contract from the validated snapshot without changing prior result versions. | CLI black-box scenarios return the reviewed typed result and stable exit status; V7 exercises all seven exact-ID kinds after restart while V4-V6 retain byte-identical LocalQueryResultV1. `E2E`, `CONF` |
 | `FR-QRY-002` | P1 | `0.2` | Graph traversal MUST enforce configurable depth, result, time, and resource limits with cycle handling. | Cyclic and adversarial queries terminate within the configured bound without starving unrelated work. `PT`, `PERF`, `SEC` |
 | `FR-CLI-001` | P0 | `0.1` | The CLI MUST provide local `scan`, `docs`, and `query` journeys with human-readable and versioned JSON output. | One black-box fixture completes scan -> docs -> query without network access. `E2E`, `CONF` |
 | `FR-CLI-002` | P1 | `1.0` | Approved CLI commands MUST have stable exit codes, error codes, configuration precedence, and local/remote capability behaviour. | Golden compatibility tests cover output schema, error catalog, precedence, and server parity. `CONF`, `E2E` |
@@ -1567,6 +1576,12 @@ resolves only explicit R4 declaration entities, byte evidence, digest-only
 locators, typed coverage, and ontology v4 identities after protected merge;
 dependency/feature/target resolution, patch application, generated code, and
 execution remain open.
+The
+[S4 R4 exact-ID query decision](decisions/0013-s4-r4-exact-id-query-contract.md)
+resolves only additive V7 LocalQueryResultV2 dispatch, direct exact-ID
+projection for approved R4 facts and uncertainty artifacts, and stable Cargo
+diagnostic identities; V1 mutation, traversal, fuzzy search, repair, migration,
+and new authority remain open.
 The
 [S5 incremental refresh decision](decisions/0008-s5-incremental-refresh-contract.md)
 resolves only the revision-neutral Rust-workspace analysis cache,
