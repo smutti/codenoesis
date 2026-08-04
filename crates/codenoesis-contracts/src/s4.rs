@@ -643,6 +643,11 @@ impl GraphIndex {
         );
         let rust_semantic_depth =
             string_field(graph, "schema_version") == Ok("codenoesis.knowledge-graph/v5");
+        let diagnostics = if rust_semantic_depth {
+            id_map(graph, "diagnostics")?
+        } else {
+            BTreeMap::new()
+        };
         let entities = id_map(graph, "entities")?;
         let relationships = graph
             .get("relationships")
@@ -678,7 +683,7 @@ impl GraphIndex {
             claims,
             claims_by_id,
             evidence: id_map(graph, "evidence")?,
-            diagnostics: id_map(graph, "diagnostics")?,
+            diagnostics,
             coverage: id_map(graph, "coverage")?,
         })
     }
