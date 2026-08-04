@@ -42,6 +42,7 @@
 | `0.9+r3` | 2026-08-02 | Retained document-control version `0.9` for historical guard compatibility, recorded protected R2 implementation merge #95, and proposed `FR-EXT-008` plus Decision 0011 for the explicit `cargo-root-package-v1` workspace profile; fixed RepositorySnapshotV6, ErrorV10, Rust ontology v3, standalone/virtual/non-virtual root membership, literal exclusions, bounded target roots, R4-deferred coverage, R2 gitlink composition, exact Red, generic fixtures, and non-vendored Lekton/RustDesk R3 pilots. |
 | `0.9+r4` | 2026-08-03 | Retained document-control version `0.9`, recorded protected R3 implementation merge #99, and proposed `FR-EXT-009` plus Decision 0012 for explicit declaration-only Cargo manifest facts; fixed RepositorySnapshotV7, ErrorV11, Rust/Cargo ontology v4, evidence-backed metadata/target/dependency/feature/patch/build facts, digest-only locators, typed unsupported coverage, exact Red, generic fixtures, and non-vendored Lekton/RustDesk R4 pilots. |
 | `0.9+r4.1` | 2026-08-03 | Recorded protected R4 governance merge #103 and proposed Decision 0013 for additive V7-only `LocalQueryResultV2`, stable Cargo diagnostic identities, exact relationship/claim/evidence/diagnostic/coverage/document query examples after restart, and byte-identical V1 behavior for V4-V6 heads. |
+| `0.9+r4.2` | 2026-08-04 | Recorded protected exact-ID governance merge #106 and proposed Decision 0014 after the pinned RustDesk pilot exposed legacy top-level `[badges]`; fixed one generic typed-unsupported mapping to `cargo.legacy_badges_unsupported` without interpreting badge values or weakening unknown-key fail-closed behavior. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -910,15 +911,21 @@ and protected [PR #103](https://github.com/smutti/codenoesis/pull/103) Approved
 and its explicit maintainer
 [authorization](https://github.com/smutti/codenoesis/issues/105#issuecomment-5170981186)
 govern the additive exact-ID correction required to make that approved R4
-outcome implementation-complete. The correction becomes effective only when
-`@smutti` manually merges its exact protected head. The authoring agent does
-not approve or merge. Both packages target exactly the **S4 — Evidence-backed
-workspace docs compatibility extension** and roadmap R4; they do not broaden
-R3 or any selector-absent contract.
+outcome implementation-complete; protected PR #106 merged that correction at
+`557547285f9532772efceea900ba982b6a8e65a9`. Issue
+[#107](https://github.com/smutti/codenoesis/issues/107) and its explicit
+maintainer
+[authorization](https://github.com/smutti/codenoesis/issues/107#issuecomment-5177741408)
+govern the observed legacy `[badges]` typed-unsupported correction. Decision
+0014 becomes effective only when `@smutti` manually merges its exact
+protected head. The authoring agent does not approve or merge. All packages
+target exactly the **S4 — Evidence-backed workspace docs compatibility
+extension** and roadmap R4; they do not broaden R3 or any selector-absent
+contract.
 
 | Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
 |---|---|---|---|---|---|---|---|
-| `FR-EXT-009` | `Approved` (protected PR #103) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #103 protected merge record](https://github.com/smutti/codenoesis/pull/103) | `S4` | [Cargo manifest facts decision](decisions/0012-s4-cargo-manifest-facts-contract.md), [RepositorySnapshotV7 schema](../../tests/specifications/s4/r4/repository-snapshot-v7.schema.json), [Rust/Cargo ontology v4](../../tests/specifications/s4/r4/rust-ontology-v4.json), [ErrorV11 schema](../../tests/specifications/s4/r4/codenoesis-error-v11.schema.json), [machine oracle](../../tests/specifications/s4/r4/e2e_fr_ext_009_cargo_manifest_facts.json), and [project-owned fixture](../../tests/fixtures/s4/cargo-manifest-facts-v1/README.md) |
+| `FR-EXT-009` | `Approved` (protected PR #103; issue #107 amendment authorized and pending protected merge) | `Approved` with exact legacy-family typed coverage | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #103 protected merge record](https://github.com/smutti/codenoesis/pull/103) and [issue #107 authorization](https://github.com/smutti/codenoesis/issues/107#issuecomment-5177741408) | `S4` | [Cargo manifest facts decision](decisions/0012-s4-cargo-manifest-facts-contract.md), [legacy badges decision](decisions/0014-s4-r4-legacy-badges-contract.md), [RepositorySnapshotV7 schema](../../tests/specifications/s4/r4/repository-snapshot-v7.schema.json), [Rust/Cargo ontology v4](../../tests/specifications/s4/r4/rust-ontology-v4.json), [ErrorV11 schema](../../tests/specifications/s4/r4/codenoesis-error-v11.schema.json), [machine oracle](../../tests/specifications/s4/r4/e2e_fr_ext_009_cargo_manifest_facts.json), [retained badges Red](../../tests/specifications/s4/r4/legacy-badges-red-observation.json), and [project-owned fixture](../../tests/fixtures/s4/cargo-manifest-facts-v1/README.md) |
 | `FR-QRY-001` | `Approved` (R4 amendment authorized in issue #105; pending protected merge) | `Approved` with additive V7 query contract | Andrea Moretti (`@smutti` persona) | `@smutti` | [Issue #105 authorization](https://github.com/smutti/codenoesis/issues/105#issuecomment-5170981186) | `S4` | [Exact-ID query decision](decisions/0013-s4-r4-exact-id-query-contract.md), [LocalQueryResultV2 schema](../../tests/specifications/s4/r4/local-query-result-v2.schema.json), [query oracle](../../tests/specifications/s4/r4/e2e_fr_qry_001_r4_exact_id_results.json), and [retained governance Red](../../tests/specifications/s4/r4/query-v2-red-observation.json) |
 
 R4 is selected only by `--manifest-profile cargo-manifest-facts-v1` on an
@@ -953,7 +960,9 @@ Cargo validation remain explicit typed gaps. Cargo, rustc, build scripts,
 procedural macros, targets, dependencies, Git, registries, path dependencies,
 network clients, and model providers never execute or open under this profile.
 Reviewed unsupported metadata/profile/lint/replace/advanced-dependency families
-emit exact diagnostics and coverage rather than disappearing silently.
+and the legacy top-level `[badges]` family emit exact diagnostics and coverage
+rather than disappearing silently. Badge values remain uninterpreted and never
+enter derived output; every other unknown key remains fail-closed.
 
 The selected scan emits strict `RepositorySnapshotV7`
 (`codenoesis.repository-snapshot/v7`) with
@@ -982,7 +991,7 @@ RustDesk pilot expectations are bound by the R4 contract bundle. Any bound-byte
 change requires a new digest and renewed human review.
 
 R4 Cargo manifest facts contract bundle:
-`sha256:92866fad76feca023d650c6a8d25114b2404e0221b77e7f5a86918f8ded4f7c4`.
+`sha256:2588abf38d686cc6475e7662ad8e90d585d1cdbff77702231dcadb1626a0c249`.
 
 ## 3. Product intent and success definition
 
@@ -1582,6 +1591,13 @@ resolves only additive V7 LocalQueryResultV2 dispatch, direct exact-ID
 projection for approved R4 facts and uncertainty artifacts, and stable Cargo
 diagnostic identities; V1 mutation, traversal, fuzzy search, repair, migration,
 and new authority remain open.
+The
+[S4 R4 legacy badges decision](decisions/0014-s4-r4-legacy-badges-contract.md)
+resolves only the exact typed-unsupported boundary for a literal top-level
+`[badges]` table after the pinned public pilot exposed the missing mapping;
+badge-value interpretation, provider semantics, network access, new
+relationships, silent ignore, and any broader Cargo-family support remain
+open.
 The
 [S5 incremental refresh decision](decisions/0008-s5-incremental-refresh-contract.md)
 resolves only the revision-neutral Rust-workspace analysis cache,

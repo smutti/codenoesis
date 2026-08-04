@@ -19,6 +19,9 @@ DECISION_PATH = (
 QUERY_DECISION_PATH = (
     ROOT / "docs/software/decisions/0013-s4-r4-exact-id-query-contract.md"
 )
+BADGES_DECISION_PATH = (
+    ROOT / "docs/software/decisions/0014-s4-r4-legacy-badges-contract.md"
+)
 SPEC_ROOT = ROOT / "tests/specifications/s4/r4"
 ORACLE_PATH = SPEC_ROOT / "e2e_fr_ext_009_cargo_manifest_facts.json"
 QUERY_ORACLE_PATH = SPEC_ROOT / "e2e_fr_qry_001_r4_exact_id_results.json"
@@ -34,6 +37,7 @@ HASH_CONTRACT_PATH = SPEC_ROOT / "semantic-hash-contract-v3.json"
 RED_OBSERVATION_PATH = SPEC_ROOT / "red-observation.json"
 QUERY_V2_SCHEMA_PATH = SPEC_ROOT / "local-query-result-v2.schema.json"
 QUERY_RED_OBSERVATION_PATH = SPEC_ROOT / "query-v2-red-observation.json"
+BADGES_RED_OBSERVATION_PATH = SPEC_ROOT / "legacy-badges-red-observation.json"
 FIXTURE_ROOT = ROOT / "tests/fixtures/s4/cargo-manifest-facts-v1"
 FIXTURE_REPOSITORY = FIXTURE_ROOT / "repository"
 FIXTURE_MANIFEST_PATH = FIXTURE_ROOT / "manifest.json"
@@ -53,6 +57,14 @@ QUERY_RED_REFERENCE = (
     "https://github.com/smutti/codenoesis/issues/105#issuecomment-5170981348"
 )
 QUERY_REQUIRED_BASE = "94a8fe9b27b7e4fd9ae5c759cc23591c4fa12d00"
+BADGES_ISSUE_REFERENCE = "https://github.com/smutti/codenoesis/issues/107"
+BADGES_AUTHORIZATION_REFERENCE = (
+    "https://github.com/smutti/codenoesis/issues/107#issuecomment-5177741408"
+)
+BADGES_RED_REFERENCE = (
+    "https://github.com/smutti/codenoesis/issues/107#issuecomment-5177766905"
+)
+BADGES_REQUIRED_BASE = "557547285f9532772efceea900ba982b6a8e65a9"
 REPOSITORY_IDENTITY = "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1"
 FIXTURE_TREE_OID = "c99449f6f0651e4f6398521e316f3500d0e508e7"
 FIXTURE_COMMIT_OID = "7b1fc9073552b5967b1620d1e082a1d45e1b380e"
@@ -89,6 +101,7 @@ CAPABILITY_STATES = {
     "cargo.dependency_source_not_fetched": "not_fetched",
     "cargo.external_locator_redacted": "redacted",
     "cargo.generated_source_not_analyzed": "not_analyzed",
+    "cargo.legacy_badges_unsupported": "unsupported",
     "cargo.lint_configuration_unsupported": "unsupported",
     "cargo.package_file_selection_not_applied": "not_applied",
     "cargo.package_metadata_table_unsupported": "unsupported",
@@ -106,6 +119,7 @@ FIXTURE_CAPABILITY_STATES = {
     if capability
     not in {
         "cargo.dependency_advanced_fields_unsupported",
+        "cargo.legacy_badges_unsupported",
         "cargo.replace_table_unsupported",
     }
 }
@@ -149,6 +163,7 @@ BUNDLE_FILES = {
     "LICENSE",
     "docs/software/decisions/0012-s4-cargo-manifest-facts-contract.md",
     "docs/software/decisions/0013-s4-r4-exact-id-query-contract.md",
+    "docs/software/decisions/0014-s4-r4-legacy-badges-contract.md",
     "scripts/tests/test_s4_cargo_manifest_facts_contract.py",
     "tests/corpora/real-world-rust-v1.json",
     "tests/fixtures/s4/cargo-manifest-facts-v1/README.md",
@@ -170,6 +185,7 @@ BUNDLE_FILES = {
     "tests/specifications/s4/r4/e2e_fr_qry_001_r4_exact_id_results.json",
     "tests/specifications/s4/r4/extraction-chunk-v4.schema.json",
     "tests/specifications/s4/r4/knowledge-graph-v4.schema.json",
+    "tests/specifications/s4/r4/legacy-badges-red-observation.json",
     "tests/specifications/s4/r4/local-query-result-v2.schema.json",
     "tests/specifications/s4/r4/query-v2-red-observation.json",
     "tests/specifications/s4/r4/red-observation.json",
@@ -513,6 +529,7 @@ class S4CargoManifestFactsGovernanceTests(unittest.TestCase):
         srs = SRS_PATH.read_text(encoding="utf-8")
         decision = DECISION_PATH.read_text(encoding="utf-8")
         query_decision = QUERY_DECISION_PATH.read_text(encoding="utf-8")
+        badges_decision = BADGES_DECISION_PATH.read_text(encoding="utf-8")
         for value in (
             "### 2.14 S4 Cargo manifest facts ratification register",
             ISSUE_REFERENCE,
@@ -563,6 +580,28 @@ class S4CargoManifestFactsGovernanceTests(unittest.TestCase):
             "Decision 0013",
             "codenoesis.local-query-result/v2",
             "byte-identical LocalQueryResultV1",
+        ):
+            self.assertIn(value, srs)
+        for value in (
+            BADGES_ISSUE_REFERENCE,
+            BADGES_AUTHORIZATION_REFERENCE,
+            BADGES_RED_REFERENCE,
+            BADGES_REQUIRED_BASE,
+            "FR-EXT-009",
+            "cargo.unsupported_manifest_family",
+            "cargo.legacy_badges_unsupported",
+            "top-level `[badges]`",
+            "unknown-key fail-closed",
+            "The SRS is excluded",
+        ):
+            self.assertIn(value, badges_decision)
+        for value in (
+            "0.9+r4.2",
+            BADGES_ISSUE_REFERENCE,
+            BADGES_AUTHORIZATION_REFERENCE,
+            "Decision 0014",
+            "cargo.legacy_badges_unsupported",
+            "legacy top-level `[badges]`",
         ):
             self.assertIn(value, srs)
 
@@ -1118,6 +1157,34 @@ class S4CargoManifestFactsGovernanceTests(unittest.TestCase):
         self.assertFalse(query_observation["production_files_changed_before_red"])
         self.assertFalse(
             query_observation["protected_semantic_files_changed_before_red"]
+        )
+
+        badges_observation = load_json(BADGES_RED_OBSERVATION_PATH)
+        self.assertEqual(badges_observation["issue"], BADGES_ISSUE_REFERENCE)
+        self.assertEqual(
+            badges_observation["authorization"],
+            BADGES_AUTHORIZATION_REFERENCE,
+        )
+        self.assertEqual(badges_observation["evidence_comment"], BADGES_RED_REFERENCE)
+        self.assertEqual(badges_observation["required_base"], BADGES_REQUIRED_BASE)
+        self.assertEqual(
+            badges_observation["test_only_head"],
+            "89f0455777cdf6fd344af2f8549e50462df98a1a",
+        )
+        self.assertEqual(badges_observation["exit_code"], 1)
+        self.assertEqual(badges_observation["raw_log_bytes"], 763)
+        self.assertEqual(
+            badges_observation["raw_log_sha256"],
+            "029e4b82a33f53fc25a0548dad20bf5b5cf5253713705d04dd045ff56c1492a4",
+        )
+        self.assertEqual(
+            badges_observation["guard_sha256"],
+            "463ceff5a5ff1dd5042f3e5c0795146e77c1605e0a3daf9b633be564cd42e654",
+        )
+        self.assertTrue(badges_observation["failed_for_expected_reason"])
+        self.assertFalse(badges_observation["product_files_changed_before_red"])
+        self.assertFalse(
+            badges_observation["protected_semantic_files_changed_before_red"]
         )
 
     def test_inherited_r3_and_corpus_bytes_are_immutable(self) -> None:
