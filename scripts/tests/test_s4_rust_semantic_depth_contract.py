@@ -614,6 +614,162 @@ class S4RustSemanticDepthGovernanceTests(unittest.TestCase):
         )
         self.assertEqual(facts["forbidden_relationship_kinds"], ["CALLS", "EXECUTES"])
 
+    def test_expected_facts_match_immutable_r4_identity_and_fixture_declarations(
+        self,
+    ) -> None:
+        facts = load_json(EXPECTED_FACTS_PATH)
+        legacy_domain = "codenoesis.entity-id/rust/v2"
+        crate_id = stable_id(
+            legacy_domain,
+            [
+                REPOSITORY_IDENTITY,
+                "crate",
+                "Cargo.toml",
+                "rust-semantic-depth-fixture",
+                "lib",
+                "rust_semantic_depth_fixture",
+            ],
+        )
+
+        def declaration_id(
+            declaration_kind: str,
+            module_path: str,
+            name: str,
+        ) -> str:
+            return stable_id(
+                legacy_domain,
+                [
+                    REPOSITORY_IDENTITY,
+                    declaration_kind,
+                    crate_id,
+                    module_path,
+                    name,
+                ],
+            )
+
+        contexts = {
+            "crate": crate_id,
+            "record": declaration_id("struct", "crate::model", "Record"),
+            "message": declaration_id("enum", "crate::model", "Message"),
+            "descriptor": declaration_id("trait", "crate", "Descriptor"),
+            "paint": declaration_id("trait", "crate", "Paint"),
+            "preview": declaration_id("trait", "crate", "Preview"),
+        }
+        for context_name in (
+            "crate",
+            "record",
+            "message",
+            "descriptor",
+            "paint",
+            "preview",
+        ):
+            with self.subTest(context_name=context_name):
+                self.assertEqual(
+                    facts["legacy_context_ids"][context_name],
+                    contexts[context_name],
+                )
+
+        member_domain = "codenoesis.entity-id/rust-member/v1"
+
+        def member_example(
+            kind: str,
+            display_name: str,
+            owner_id: str,
+            trait_context_id: str = "",
+        ) -> dict[str, Any]:
+            preimage = [
+                REPOSITORY_IDENTITY,
+                crate_id,
+                owner_id,
+                kind,
+                display_name,
+                trait_context_id,
+            ]
+            return {
+                "kind": kind,
+                "display_name": display_name,
+                "preimage": preimage,
+                "id": stable_id(member_domain, preimage),
+            }
+
+        self.assertEqual(
+            facts["identity_examples"],
+            [
+                member_example(
+                    "rust.associated_type",
+                    "Output",
+                    contexts["descriptor"],
+                    contexts["descriptor"],
+                ),
+                member_example("rust.constant", "DEFAULT_LIMIT", crate_id),
+                member_example(
+                    "rust.enum_variant",
+                    "Data",
+                    contexts["message"],
+                ),
+                member_example("rust.field", "key", contexts["record"]),
+                member_example("rust.static", "PRODUCT_NAME", crate_id),
+            ],
+        )
+
+        expected_trait_methods = []
+        for trait_name in ("paint", "preview"):
+            example = member_example(
+                "rust.method",
+                "render",
+                contexts["record"],
+                contexts[trait_name],
+            )
+            example["trait_context_id"] = contexts[trait_name]
+            expected_trait_methods.append(example)
+        self.assertEqual(
+            facts["same_name_trait_method_examples"],
+            expected_trait_methods,
+        )
+
+        self.assertEqual(
+            facts["entity_counts"],
+            {
+                "rust.associated_type": 2,
+                "rust.constant": 6,
+                "rust.enum_variant": 5,
+                "rust.field": 16,
+                "rust.method": 9,
+                "rust.static": 2,
+            },
+        )
+        self.assertEqual(
+            facts["relationship_counts"],
+            {
+                "DEFINES_member_edges": 40,
+                "IMPLEMENTS_local_named_trait_edges": 3,
+            },
+        )
+        self.assertEqual(
+            facts["compilation_presence_counts"],
+            {
+                "attribute_transform_unknown": 1,
+                "conditional_unknown": 1,
+                "unconditional": 38,
+            },
+        )
+
+        library_source = (FIXTURE_REPOSITORY / "src/lib.rs").read_text(
+            encoding="utf-8"
+        )
+        model_source = (FIXTURE_REPOSITORY / "src/model.rs").read_text(
+            encoding="utf-8"
+        )
+        for declaration in (
+            "pub const DEFAULT_LIMIT: usize = 64;",
+            "pub const EMPTY_KEY: &'static str = \"\";",
+            "pub const DECLARATION_STRING_DECOY: &str =",
+        ):
+            self.assertIn(declaration, library_source)
+        self.assertEqual(library_source.count("const KIND: &'static str"), 2)
+        self.assertIn("pub const UNICODE_Δ: &str = \"delta\";", model_source)
+        self.assertIn("StringVariantDecoy", library_source)
+
     def test_invalid_cases_cover_every_limit_and_security_boundary(self) -> None:
         cases = load_json(INVALID_CASES_PATH)
         self.assertEqual(cases["schema_version"], "codenoesis.r5-invalid-cases/v1")
