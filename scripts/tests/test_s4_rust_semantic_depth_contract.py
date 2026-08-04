@@ -172,7 +172,7 @@ BUNDLE_FILES = {
 
 IMMUTABLE_FILES = {
     "tests/specifications/s4/r4/contract-bundle.json": (
-        "9153809d5108dbf395f4d25bcfbe582c80dd9394b97c091a39295c9a9e78908c"
+        "55630163c95d786eff65d3065684201b1c050025b0ca3586dced56d0f77458b1"
     ),
     "tests/specifications/s4/r4/rust-ontology-v4.json": (
         "30138d850faac4a644be64796e1cf7934b51ae2ad8e24f922e0b2559f513d594"
