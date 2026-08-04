@@ -278,6 +278,63 @@ fn negative_fr_ext_009_manifest_variants_fail_closed() {
 }
 
 #[test]
+fn gt_fr_ext_009_legacy_badges_is_typed_unsupported() {
+    let extraction = extract_inventory(&manifest_inventory(
+        "[badges]\nservice = { repository = \"badge-secret\" }\n",
+    ))
+    .expect("literal top-level badges table is typed unsupported");
+    let graph = &extraction.knowledge.graph;
+    let diagnostic = graph
+        .diagnostics
+        .iter()
+        .find(|diagnostic| diagnostic.code == "cargo.unsupported_manifest_family")
+        .expect("legacy badges diagnostic");
+    assert_eq!(
+        diagnostic.message,
+        "Cargo manifest family is outside the selected declaration subset"
+    );
+    let gap = graph
+        .coverage
+        .iter()
+        .find(|gap| gap.capability == "cargo.legacy_badges_unsupported")
+        .expect("legacy badges coverage gap");
+    assert_eq!(gap.state, CargoCoverageState::Unsupported);
+    assert_eq!(gap.evidence_ids, diagnostic.evidence_ids);
+    assert_eq!(gap.evidence_ids.len(), 1);
+    let evidence = graph
+        .evidence
+        .iter()
+        .find(|evidence| evidence.id == gap.evidence_ids[0])
+        .expect("legacy badges header evidence");
+    assert_eq!(evidence.path, "Cargo.toml");
+    assert_eq!(
+        evidence.end_byte - evidence.start_byte,
+        u64::try_from("[badges]".len()).expect("header length")
+    );
+    assert!(!format!("{:#?}", extraction.knowledge).contains("badge-secret"));
+
+    let nested = manifest_inventory("[badges.service]\nrepository = \"badge-secret\"\n");
+    assert!(matches!(
+        extract_inventory(&nested),
+        Err(CargoManifestFactError::InvalidFact {
+            reason: CargoFactReason::UnsupportedKey,
+            ..
+        })
+    ));
+
+    let non_table = raw_manifest_inventory(
+        "badges = { service = { repository = \"badge-secret\" } }\n\n[package]\nname = \"limit-fixture\"\nversion = \"0.1.0\"\nedition = \"2024\"\n\n[lib]\npath = \"src/lib.rs\"\n",
+    );
+    assert!(matches!(
+        extract_inventory(&non_table),
+        Err(CargoManifestFactError::InvalidFact {
+            reason: CargoFactReason::UnsupportedKey,
+            ..
+        })
+    ));
+}
+
+#[test]
 fn pt_nfr_det_001_r4_permutation_and_schedule_invariant() {
     let expected = extract_fixture(0, false).knowledge;
     for permutation in 0..R4_DETERMINISM_PERMUTATIONS {
@@ -428,8 +485,12 @@ fn manifest_inventory(extra: &str) -> RepositoryInventory {
     let manifest = format!(
         "[package]\nname = \"limit-fixture\"\nversion = \"0.1.0\"\nedition = \"2024\"\n\n[lib]\npath = \"src/lib.rs\"\n\n{extra}"
     );
+    raw_manifest_inventory(&manifest)
+}
+
+fn raw_manifest_inventory(manifest: &str) -> RepositoryInventory {
     let files = [
-        ("Cargo.toml", manifest.into_bytes()),
+        ("Cargo.toml", manifest.as_bytes().to_vec()),
         ("src/lib.rs", b"pub struct Item;\n".to_vec()),
     ]
     .into_iter()
