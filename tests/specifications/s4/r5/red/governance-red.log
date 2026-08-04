@@ -1,0 +1,13 @@
+E
+======================================================================
+ERROR: setUpClass (scripts.tests.test_s4_rust_semantic_depth_contract.S4RustSemanticDepthGovernanceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/scripts/tests/test_s4_rust_semantic_depth_contract.py", line 259, in setUpClass
+    raise AssertionError(
+AssertionError: R5 governance artifact is not materialized: docs/software/decisions/0015-s4-r5-rust-semantic-depth-contract.md
+
+----------------------------------------------------------------------
+Ran 0 tests in 0.000s
+
+FAILED (errors=1)

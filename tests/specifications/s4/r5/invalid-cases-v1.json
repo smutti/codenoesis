@@ -1,0 +1,138 @@
+{
+  "schema_version": "codenoesis.r5-invalid-cases/v1",
+  "cases": [
+    {
+      "id": "ambiguous-local-trait",
+      "class": "ambiguous_resolution",
+      "input": "two normalized local traits satisfy one named implementation header",
+      "expected": "extraction.unsupported_rust_semantic_composition",
+      "partial_publication": false
+    },
+    {
+      "id": "forbidden-build-execution",
+      "class": "forbidden_authority",
+      "input": "build.rs writes a sentinel if executed",
+      "expected": "no process and no sentinel",
+      "partial_publication": false
+    },
+    {
+      "id": "forbidden-generated-output",
+      "class": "forbidden_authority",
+      "input": "target and OUT_DIR contain declaration-shaped bytes",
+      "expected": "not opened or analyzed",
+      "partial_publication": false
+    },
+    {
+      "id": "hard-negative-cfg-branch",
+      "class": "hard_negative",
+      "input": "cfg-decorated declaration",
+      "expected": "conditional_unknown, never assumed active",
+      "partial_publication": false
+    },
+    {
+      "id": "hard-negative-comment",
+      "class": "hard_negative",
+      "input": "field-shaped text inside a comment",
+      "expected": "no entity",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-associated-items-1025",
+      "class": "limit_plus_one",
+      "limit": "associated_items_per_context",
+      "observed": 1025,
+      "expected": "extraction.rust_semantic_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-attribute-token-bytes-16385",
+      "class": "limit_plus_one",
+      "limit": "attribute_token_bytes",
+      "observed": 16385,
+      "expected": "extraction.rust_semantic_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-attributes-129",
+      "class": "limit_plus_one",
+      "limit": "outer_attributes_per_declaration",
+      "observed": 129,
+      "expected": "extraction.rust_semantic_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-declared-header-bytes-4097",
+      "class": "limit_plus_one",
+      "limit": "declared_type_or_header_bytes",
+      "observed": 4097,
+      "expected": "extraction.rust_semantic_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-fields-1025",
+      "class": "limit_plus_one",
+      "limit": "fields_per_owner",
+      "observed": 1025,
+      "expected": "extraction.rust_semantic_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-tuple-fields-1025",
+      "class": "limit_plus_one",
+      "limit": "tuple_fields_per_owner",
+      "observed": 1025,
+      "expected": "extraction.rust_semantic_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-variants-1025",
+      "class": "limit_plus_one",
+      "limit": "variants_per_enum",
+      "observed": 1025,
+      "expected": "extraction.rust_semantic_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "malformed-missing-field-type",
+      "class": "malformed",
+      "input": "struct Broken { value: }",
+      "expected": "extraction.invalid_rust_semantic_declaration",
+      "partial_publication": false
+    },
+    {
+      "id": "malformed-unclosed-item",
+      "class": "malformed",
+      "input": "enum Broken { Open(",
+      "expected": "extraction.invalid_rust_semantic_declaration",
+      "partial_publication": false
+    },
+    {
+      "id": "normalization-collision-member",
+      "class": "normalization_collision",
+      "input": "two owner members collide after Unicode NFC normalization",
+      "expected": "extraction.rust_semantic_identity_conflict",
+      "partial_publication": false
+    },
+    {
+      "id": "unsupported-foreign-block",
+      "class": "unsupported_header",
+      "input": "extern block",
+      "expected": "rust.foreign_block_unsupported",
+      "partial_publication": false
+    },
+    {
+      "id": "unsupported-impl-header",
+      "class": "unsupported_header",
+      "input": "negative, blanket, or unresolved implementation target",
+      "expected": "rust.unsupported_impl_header",
+      "partial_publication": false
+    },
+    {
+      "id": "unsupported-union",
+      "class": "unsupported_header",
+      "input": "union declaration",
+      "expected": "rust.union_unsupported",
+      "partial_publication": false
+    }
+  ]
+}

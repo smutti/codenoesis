@@ -1,0 +1,117 @@
+{
+  "schema_version": "codenoesis.rust-semantic-depth-subset/v1",
+  "selection": {
+    "flag": "--rust-semantic-profile",
+    "value": "rust-semantic-depth-v1",
+    "required_scan_profile": "standard-local-s4",
+    "required_workspace_profile": "cargo-root-package-v1",
+    "required_manifest_profile": "cargo-manifest-facts-v1",
+    "implicit_selection": false,
+    "repository_content_selects_profile": false
+  },
+  "authority": "committed UTF-8 Rust declaration syntax selected by the immutable R4 workspace plan",
+  "entity_kinds": [
+    "rust.field",
+    "rust.enum_variant",
+    "rust.constant",
+    "rust.static",
+    "rust.associated_type"
+  ],
+  "extended_legacy_entity": {
+    "kind": "rust.method",
+    "contexts": [
+      "trait_declaration",
+      "inherent_implementation",
+      "named_local_trait_implementation"
+    ],
+    "trait_context_enters_identity": true
+  },
+  "declaration_forms": {
+    "rust.field": [
+      "named_struct_field",
+      "tuple_struct_field",
+      "named_variant_field",
+      "tuple_variant_field"
+    ],
+    "rust.enum_variant": [
+      "unit",
+      "tuple",
+      "struct"
+    ],
+    "rust.constant": [
+      "module",
+      "trait",
+      "inherent_implementation",
+      "named_local_trait_implementation"
+    ],
+    "rust.static": [
+      "module_immutable",
+      "module_mutable"
+    ],
+    "rust.associated_type": [
+      "trait_declaration",
+      "named_local_trait_implementation"
+    ]
+  },
+  "attribute_policy": {
+    "cfg": {
+      "presence": "conditional_unknown",
+      "coverage": "rust.cfg_presence_unresolved",
+      "evaluated": false
+    },
+    "cfg_attr": {
+      "presence": "attribute_transform_unknown",
+      "coverage": "rust.cfg_presence_unresolved",
+      "evaluated": false
+    },
+    "custom": {
+      "presence": "unconditional",
+      "coverage": "rust.attribute_semantics_not_interpreted",
+      "interpreted": false
+    },
+    "token_policy": "bounded exact UTF-8 source evidence only",
+    "declaration_retained": true
+  },
+  "resolution_policy": {
+    "supported_impl_target": "one unambiguous local rust.struct or rust.enum identity",
+    "supported_trait_target": "one unambiguous local rust.trait identity",
+    "ambiguous_or_external": "typed failure or explicit coverage; never guessed",
+    "generic_and_where_clauses": "retained only as bounded declaration spelling"
+  },
+  "semantic_non_claims": [
+    "no active cfg world is selected or inferred",
+    "no macro expansion or generated declaration is analyzed",
+    "no framework role is inferred from an attribute or name",
+    "no resolved type is asserted from declared type spelling",
+    "no evaluated value or discriminant is asserted",
+    "no runtime behavior is observed or predicted",
+    "no call graph or data-flow edge is produced"
+  ],
+  "relationship_policy": {
+    "allowed": [
+      "DEFINES",
+      "IMPLEMENTS"
+    ],
+    "forbidden": [
+      "CALLS",
+      "EXECUTES"
+    ]
+  },
+  "limits": {
+    "fields_per_owner": 1024,
+    "variants_per_enum": 1024,
+    "tuple_fields_per_owner": 1024,
+    "associated_items_per_context": 1024,
+    "outer_attributes_per_declaration": 128,
+    "attribute_token_bytes": 16384,
+    "declared_type_or_header_bytes": 4096,
+    "permutations": 50
+  },
+  "excluded_syntax": [
+    "union declarations",
+    "foreign blocks",
+    "anonymous or unresolved implementation headers",
+    "items generated inside macro token trees",
+    "generated build or target output"
+  ]
+}

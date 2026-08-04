@@ -1,0 +1,132 @@
+{
+  "schema_version": "codenoesis.r5-acceptance-oracle/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/111",
+  "authorization": "https://github.com/smutti/codenoesis/issues/111#issuecomment-5179817871",
+  "approval": "https://github.com/smutti/codenoesis/pull/112",
+  "requirement_ids": [
+    "FR-EXT-010"
+  ],
+  "requirement_status": {
+    "current": "Proposed",
+    "target_after_protected_merge": "Approved"
+  },
+  "slice": "S4",
+  "roadmap_capability": "R5",
+  "risk": "high",
+  "required_base": "e7cceb08b0aa4b7342cd2c6c1e267733130bd5f8",
+  "selector": {
+    "flag": "--rust-semantic-profile",
+    "value": "rust-semantic-depth-v1",
+    "required_profile": "standard-local-s4",
+    "required_workspace_profile": "cargo-root-package-v1",
+    "required_manifest_profile": "cargo-manifest-facts-v1",
+    "implicit_selection": false
+  },
+  "versions": {
+    "configuration": "codenoesis.configuration/v5",
+    "snapshot": "codenoesis.repository-snapshot/v8",
+    "extraction_chunk": "codenoesis.extraction-chunk/v5",
+    "extraction_contract": "codenoesis.extraction/v5",
+    "knowledge_graph": "codenoesis.knowledge-graph/v5",
+    "ontology": "codenoesis.ontology/rust/v5",
+    "error": "codenoesis.error/v12",
+    "query": "codenoesis.local-query-result/v3",
+    "pipeline": "codenoesis.pipeline/s4-r5-v1"
+  },
+  "fixture": {
+    "root": "tests/fixtures/s4/rust-semantic-depth-v1",
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-semantic-depth-v1",
+    "external_source_vendored": false,
+    "build_and_target_execution_permitted": false
+  },
+  "success_journey": [
+    "scan the immutable fixture with all four explicit S4 selectors",
+    "publish one strict RepositorySnapshotV8 only after complete validation",
+    "restart from the local store without reparsing or changing semantic bytes",
+    "generate evidence-backed docs for every R5 entity and uncertainty kind",
+    "query every entity, relationship, claim, evidence, diagnostic, coverage gap, and document by exact ID using LocalQueryResultV3"
+  ],
+  "expected_entities": [
+    "rust.field",
+    "rust.enum_variant",
+    "rust.constant",
+    "rust.static",
+    "rust.associated_type",
+    "rust.method with implementation context"
+  ],
+  "expected_relationships": [
+    "reviewed DEFINES owner/member edges",
+    "IMPLEMENTS only for one unambiguous local type and one unambiguous local trait"
+  ],
+  "hard_negatives": [
+    "comments",
+    "strings",
+    "macro token trees",
+    "inactive-looking cfg branches",
+    "build output",
+    "target output",
+    "external repositories",
+    "absent gitlinks"
+  ],
+  "failure_policy": {
+    "malformed_or_ambiguous": "strict ErrorV12 with no snapshot publication",
+    "unsupported_but_bounded": "exact diagnostic and coverage gap with committed evidence",
+    "limit_plus_one": "extraction.rust_semantic_limit_exceeded with no partial publication",
+    "identity_collision": "extraction.rust_semantic_identity_conflict with no ordinal repair"
+  },
+  "limits": {
+    "fields_per_owner": 1024,
+    "variants_per_enum": 1024,
+    "tuple_fields_per_owner": 1024,
+    "associated_items_per_context": 1024,
+    "outer_attributes_per_declaration": 128,
+    "attribute_token_bytes": 16384,
+    "declared_type_or_header_bytes": 4096,
+    "permutations": 50
+  },
+  "determinism": {
+    "permutations": 50,
+    "vary": [
+      "inventory order",
+      "source order",
+      "chunk order",
+      "worker schedule"
+    ],
+    "expected": "byte-identical semantic payload, docs, and exact-ID query results",
+    "isolated_replay": true
+  },
+  "required_test_names": [
+    "e2e_fr_ext_010_rust_semantic_depth",
+    "gt_fr_ext_010_fields_and_variants_are_owned",
+    "gt_fr_ext_010_constants_statics_and_associated_types",
+    "gt_fr_ext_010_method_context_prevents_trait_collisions",
+    "gt_fr_ext_010_attributes_preserve_declarations_and_gaps",
+    "conf_fr_ext_010_snapshot_v8_graph_v5_error_v12",
+    "conf_fr_qry_001_v8_uses_local_query_result_v3",
+    "pt_dr_idn_002_r5_member_identities_and_cardinalities",
+    "pt_fr_ext_010_limits_have_max_and_plus_one",
+    "pt_nfr_det_001_r5_permutation_and_schedule_invariant",
+    "sec_fr_ext_010_never_executes_or_interprets_target_worlds",
+    "e2e_fr_doc_001_r5_declared_and_unresolved_are_documented",
+    "reg_fr_cli_001_r5_selector_absence_is_byte_identical"
+  ],
+  "public_pilots": [
+    {
+      "id": "lekton",
+      "repository": "https://github.com/dghilardi/lekton",
+      "commit": "7a4d1a4a30468f4c18ce158a9b825680b00f4820",
+      "vendored_source": false,
+      "role": "replaceable non-authoritative sampled compatibility observation"
+    },
+    {
+      "id": "rustdesk",
+      "repository": "https://github.com/rustdesk/rustdesk",
+      "commit": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "vendored_source": false,
+      "role": "replaceable non-authoritative sampled compatibility observation"
+    }
+  ],
+  "immutable_dependencies": {
+    "r4_contract_bundle_sha256": "2588abf38d686cc6475e7662ad8e90d585d1cdbff77702231dcadb1626a0c249"
+  }
+}

@@ -1,14 +1,12 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9+r4.1 — S0 through S6 and R0-R3 implemented; R4 Cargo manifest
-> facts Approved and its additive exact-ID query correction proposed for
-> protected ratification**.
+> Status: **0.9+r5 — S0 through S6 and R0-R4 implemented; R5 Rust
+> semantic-depth governance proposed for protected ratification**.
 > The S0–S6 runtime and product suites exist on `main`, but CodeNoesis claims
 > no slice `Verified` without complete immutable retention evidence. This
-> revision records protected R4 governance merge #103 and proposes Decision
-> 0013 for a V7-only `LocalQueryResultV2` that makes every already-required R4
-> exact-ID result implementable while retaining `LocalQueryResultV1` and every
-> accepted S0–S6 and R0–R3 invocation.
+> revision records R4 product merge #109 and proposes Decision 0015 for the
+> explicit declaration-only `rust-semantic-depth-v1` profile while retaining
+> every accepted S0–S6 and R0–R4 selector-absent invocation.
 
 ## 1. Document control
 
@@ -16,8 +14,8 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S6 and roadmap R0-R3 are Approved and Implemented but not Verified. `FR-EXT-009` is Approved by protected PR #103; the additive `FR-QRY-001` R4 query-contract amendment is Proposed and becomes effective only after the accountable maintainer manually merges the protected pull request for issue #105. |
-| Date | 2026-08-03 |
+| Status | S0 through S6 and roadmap R0-R4 are Approved and Implemented but not Verified. `FR-EXT-010` and the R5 V8/V5/V12/V3 compatibility package are Proposed and become effective only after the accountable maintainer manually merges the protected pull request for issue #111. |
+| Date | 2026-08-04 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -43,6 +41,7 @@
 | `0.9+r4` | 2026-08-03 | Retained document-control version `0.9`, recorded protected R3 implementation merge #99, and proposed `FR-EXT-009` plus Decision 0012 for explicit declaration-only Cargo manifest facts; fixed RepositorySnapshotV7, ErrorV11, Rust/Cargo ontology v4, evidence-backed metadata/target/dependency/feature/patch/build facts, digest-only locators, typed unsupported coverage, exact Red, generic fixtures, and non-vendored Lekton/RustDesk R4 pilots. |
 | `0.9+r4.1` | 2026-08-03 | Recorded protected R4 governance merge #103 and proposed Decision 0013 for additive V7-only `LocalQueryResultV2`, stable Cargo diagnostic identities, exact relationship/claim/evidence/diagnostic/coverage/document query examples after restart, and byte-identical V1 behavior for V4-V6 heads. |
 | `0.9+r4.2` | 2026-08-04 | Recorded protected exact-ID governance merge #106 and proposed Decision 0014 after the pinned RustDesk pilot exposed legacy top-level `[badges]`; fixed one generic typed-unsupported mapping to `cargo.legacy_badges_unsupported` without interpreting badge values or weakening unknown-key fail-closed behavior. |
+| `0.9+r5` | 2026-08-04 | Recorded R4 product merge #109 and proposed `FR-EXT-010` plus Decision 0015 for the explicit `rust-semantic-depth-v1` profile; fixed RepositorySnapshotV8, ExtractionChunkV5, KnowledgeGraphV5, Rust ontology v5, ErrorV12, LocalQueryResultV3 dispatch, declaration-level fields/variants/constants/statics/associated types/method contexts, attribute-preserving uncertainty, member identity, strict limits, project-owned fixture, exact governance Red, and non-vendored Lekton/RustDesk pilot descriptors while deferring framework meaning to R6 and compiler evidence to R7. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -993,6 +992,114 @@ change requires a new digest and renewed human review.
 R4 Cargo manifest facts contract bundle:
 `sha256:2588abf38d686cc6475e7662ad8e90d585d1cdbff77702231dcadb1626a0c249`.
 
+### 2.15 S4 Rust semantic-depth ratification register
+
+Issue [#111](https://github.com/smutti/codenoesis/issues/111), its explicit
+accountable-maintainer
+[authorization](https://github.com/smutti/codenoesis/issues/111#issuecomment-5179817871),
+and protected [PR #112](https://github.com/smutti/codenoesis/pull/112) govern
+the proposed R5 Rust semantic-depth contract. Decision 0015 becomes effective
+only when `@smutti` manually merges the exact independently reviewed protected
+head. The authoring agent does not approve or merge. This package targets
+exactly the **S4 — Evidence-backed workspace docs compatibility extension** and
+roadmap R5; it does not broaden S5, S6, S7, R6, R7, or R8.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| `FR-EXT-010` | `Proposed` | `Approved` only after protected manual merge of PR #112 | Andrea Moretti (`@smutti` persona) | `@smutti` | [Issue #111 authorization](https://github.com/smutti/codenoesis/issues/111#issuecomment-5179817871) and [PR #112](https://github.com/smutti/codenoesis/pull/112) | `S4` | [Rust semantic-depth decision](decisions/0015-s4-r5-rust-semantic-depth-contract.md), [RepositorySnapshotV8 schema](../../tests/specifications/s4/r5/repository-snapshot-v8.schema.json), [ExtractionChunkV5 schema](../../tests/specifications/s4/r5/extraction-chunk-v5.schema.json), [KnowledgeGraphV5 schema](../../tests/specifications/s4/r5/knowledge-graph-v5.schema.json), [Rust ontology v5](../../tests/specifications/s4/r5/rust-ontology-v5.json), [ErrorV12 schema](../../tests/specifications/s4/r5/codenoesis-error-v12.schema.json), [LocalQueryResultV3 schema](../../tests/specifications/s4/r5/local-query-result-v3.schema.json), [machine oracle](../../tests/specifications/s4/r5/e2e_fr_ext_010_rust_semantic_depth.json), [retained governance Red](../../tests/specifications/s4/r5/red-observation.json), and [project-owned fixture](../../tests/fixtures/s4/rust-semantic-depth-v1/README.md) |
+
+R5 is selected only by
+`--rust-semantic-profile rust-semantic-depth-v1` on an otherwise valid
+`standard-local-s4` scan that also explicitly selects
+`--workspace-profile cargo-root-package-v1` and
+`--manifest-profile cargo-manifest-facts-v1`. R1 packed acquisition and R2
+gitlink representation remain independent optional selectors. Repository
+content, Rust attributes, macros, Cargo declarations, public-corpus identity,
+and prior profiles never select R5 implicitly. Every invocation without the
+R5 selector remains byte-for-byte unchanged, including every R0-R4 success,
+error, storage, documentation, and query byte.
+
+The selected profile represents only bounded committed Rust declaration
+syntax. Ontology v5 adds `rust.field`, `rust.enum_variant`, `rust.constant`,
+`rust.static`, and `rust.associated_type`; it extends V8 `rust.method` with
+trait-declaration, inherent-implementation, or named-local-trait-implementation
+context. Named and tuple fields, unit/tuple/struct variants, module and
+associated constants, immutable and mutable statics, associated types, trait
+required/default methods, inherent methods, and supported named local trait
+methods retain exact committed-source evidence.
+
+New member entities use the disjoint
+`codenoesis.entity-id/rust-member/v1` domain over repository identity,
+unchanged crate identity, lexical owner identity, member kind, NFC declared
+name or zero-based tuple index, and resolved local trait identity or the empty
+string. Trait context prevents same-name method collisions. Commit OID, byte
+offset, file/output path, source order, scheduler order, inferred type,
+evaluated value, active configuration, and macro output never enter identity.
+Normalization collisions fail with a typed error; they are never repaired by
+ordinal or offset.
+
+Outer attributes no longer cause a committed declaration to disappear.
+`#[cfg]` records `conditional_unknown` plus
+`rust.cfg_presence_unresolved`; `#[cfg_attr]` records
+`attribute_transform_unknown` plus the same unresolved capability. Every
+other outer attribute emits
+`rust.attribute_semantics_not_interpreted`. Attribute tokens remain bounded
+syntax evidence and never imply a component, service, configuration,
+endpoint, route, handler, active branch, generated item, or runtime role.
+
+R5 does not evaluate `cfg`, derive, macros, types, values, initializers,
+discriminants, calls, data flow, control flow, or runtime behavior. It does not
+execute Cargo, rustc, build scripts, procedural macros, targets, dependencies,
+network clients, or model providers. Unions, foreign blocks, macro-generated
+items, unresolved implementation headers, type resolution, and value
+evaluation remain exact typed diagnostics or coverage gaps. R5 emits no
+`CALLS` or `EXECUTES` relationship.
+
+The selected scan emits strict `codenoesis.repository-snapshot/v8` with
+`codenoesis.configuration/v5`, `codenoesis.extraction-chunk/v5`,
+`codenoesis.knowledge-graph/v5`, `codenoesis.ontology/rust/v5`,
+`codenoesis.error/v12`, and pipeline `codenoesis.pipeline/s4-r5-v1`.
+A validated V8 head emits additive
+`codenoesis.local-query-result/v3`; V7 retains byte-identical
+`codenoesis.local-query-result/v2`, and V4-V6 retain byte-identical
+`codenoesis.local-query-result/v1`. The stored validated snapshot selects the
+query result version; no public version flag is introduced.
+
+Fixed maxima are 1,024 fields per owner, 1,024 variants per enum, 1,024 tuple
+fields per owner, 1,024 associated items per context, 128 outer attributes per
+declaration, 16,384 UTF-8 bytes per attribute token payload, 4,096 UTF-8 bytes
+per declared type or implementation-header spelling, and 50 determinism
+permutations. Existing S2 graph maxima remain authoritative. Maximum-plus-one
+fails with `extraction.rust_semantic_limit_exceeded` and no partial
+publication; no bound silently truncates.
+
+The project-owned fixture fixes exact fields, variants, constants/statics,
+associated types, method contexts, raw and Unicode identifiers, attributes,
+hard negatives, and a build sentinel that must never execute. The pinned
+Lekton commit `7a4d1a4a30468f4c18ce158a9b825680b00f4820` and RustDesk commit
+`d412d198720aa56f6cfed2dfad262e8fb1322fb7` remain non-vendored,
+replaceable pilot observations rather than ontology goldens.
+
+The governance conformance test was committed before Decision 0015 and every
+R5 schema, subset, fixture, and oracle. On test-first head
+`b6d3ec20b69258fac76fc42b5b95c7ea8f436da0`, the command
+`python3 -m unittest scripts.tests.test_s4_rust_semantic_depth_contract`
+failed for the expected missing-Decision reason with exit `1`. The retained
+683-byte log has SHA-256
+`d565d942729dece7b3cd08b2a67b714962b4de6979e3c7aa309061b5c4a89dd4`.
+No production or semantic-contract byte changed before Red. Product
+implementation requires a separate Ready issue and a separate executable CLI
+Red after this protected package is merged.
+
+The strict schemas, machine subset and oracles, retained Red, project-owned
+fixture and expected facts, immutable R4 dependency, and non-vendored pilot
+descriptors are bound by the R5 contract bundle. SRS and roadmap bytes are
+excluded from that digest. Any bound-byte change requires a new digest and
+renewed semantic human review.
+
+R5 Rust semantic-depth contract bundle:
+`sha256:1e00c81c4a3c7ca701e98324e61a250fcfee490aeddf021415564044175e6645`.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,
@@ -1130,6 +1237,7 @@ cannot replace their verification.
 | `FR-EXT-007` | P0 | `0.1` | The S4 standard profile MUST extract bounded literal-member Rust workspaces, conventional or explicit library/binary roots, and unambiguous inline/out-of-line modules from committed UTF-8 files without evaluating Cargo or target code. | A reviewed two-member workspace matches ontology v2 identities and graph counts; globs, ambiguous modules, build execution, and unsupported worlds fail or remain explicit coverage. `GT`, `SEC`, `E2E` |
 | `FR-EXT-008` | P0 | `0.1` | An explicitly selected S4 workspace profile MUST extract bounded standalone, virtual, and non-virtual Cargo root-package workspaces, normalize implicit or explicit `"."` root membership exactly once, apply literal members/exclusions and conventional or explicit library/binary roots, preserve deferred Cargo meaning as coverage gaps, and keep gitlink members as external R2 boundaries without evaluating Cargo or target code. | Reviewed root-package fixtures match strict V6/ontology-v3 identities and provenance; maximum and maximum-plus-one, malformed/conflicting paths, deferred metadata, gitlink composition, permutations, docs/query, target/build sentinels, and pinned non-vendored Lekton/RustDesk pilots remain deterministic and side-effect free. `GT`, `SEC`, `E2E`, `PT`, `CONF` |
 | `FR-EXT-009` | P0 | `0.1` | An explicitly selected S4 manifest profile MUST represent the approved bounded Cargo package metadata, target, dependency, target-predicate, feature, patch, workspace-reference, and build-script declarations as stable evidence-backed facts while preserving external locators as digest-only values and MUST NOT claim dependency resolution, active features/targets/cfg, patch application, generated source, path traversal, fetch, or execution. | The reviewed R4 fixture matches strict V7/ontology-v4 declaration identities, relationships, byte spans, locator digests, typed unsupported gaps, and unchanged R3 crate IDs; malformed/conflicting/escaping/Unicode inputs, every maximum and maximum-plus-one, permutations, selector-absent bytes, no-authority sentinels, docs/query, and pinned non-vendored Lekton/RustDesk pilots pass. `GT`, `SEC`, `E2E`, `PT`, `CONF` |
+| `FR-EXT-010` | P0 | `0.1` | An explicitly selected S4 Rust semantic-depth profile MUST represent the approved bounded committed declaration subset for fields, enum variants, constants, statics, associated types, trait required/default methods, inherent methods, and named local trait-implementation methods with collision-safe owner/trait context, evidence-backed outer-attribute uncertainty, and no target execution or interpretation of cfg, macros, types, values, calls, framework roles, or runtime behavior. | The reviewed R5 fixture matches strict V8/ontology-v5 member identities, owner relationships, claims, byte evidence, compilation-presence states, diagnostics, coverage gaps, docs, and LocalQueryResultV3; malformed, Unicode, normalization-collision, ambiguous implementation, hard-negative, every maximum and maximum-plus-one, 50 permutations, selector-absent V1/V2 compatibility, no-authority sentinels, and pinned non-vendored Lekton/RustDesk pilots pass. `GT`, `SEC`, `E2E`, `PT`, `CONF` |
 
 ### 9.3 Knowledge graph, claims, and snapshots
 
@@ -1323,9 +1431,10 @@ The `S1` row records the already Implemented base slice and is not reopened by
 `FR-ACQ-004` or `FR-ACQ-005`. The implemented R0/R1 behavior is an additive
 packed SHA-1 compatibility extension with its own accepted oracle. R2 gitlink
 boundaries and R3 root-package workspaces are additive implemented profiles
-with V5 and V6 lineages and remain not Verified. R4 is a separate proposed S4
-compatibility profile with a V7 declaration-only lineage; its governance merge
-does not implement runtime behavior or reopen R0-R3.
+with V5 and V6 lineages and remain not Verified. R4 is an additive implemented
+S4 compatibility profile with a V7 declaration-only lineage and remains not
+Verified. R5 is the separate proposed V8 declaration-depth profile; its
+governance merge does not implement runtime behavior or reopen R0-R4.
 
 ### 12.1 Release map
 
@@ -1537,8 +1646,8 @@ implementation choices.
 
 | ID | Decision required | Blocks |
 |---|---|---|
-| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0010 resolves only the R2 gitlink, `.gitmodules`, explicit nested-root, depth, and boundary-output subset after protected merge. Decision 0011 resolves only the R3 member, exclusion, package-manifest, crate-target, and binary-root subset after protected merge. Decision 0012 resolves only the R4 manifest-fact, dependency, feature/member, target, patch, metadata, target-predicate, declaration-string, external-locator, and permutation subset after protected merge. Decision 0008 resolves the fixed S5 changed-path, analysis-entry, dependency-edge, report-subject, report-byte, and wall-time subset. Decision 0009 resolves the fixed S6 manifest, repository, document, YAML/reference depth, semantic count, evidence, output, memory, and wall-time subset when its protected ratification revision is manually merged. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
-| `OD-ONT-001` | Decision 0003 resolves the bounded single-crate `codenoesis.ontology/rust/v1`. Decision 0005 resolves multi-crate cardinality and unambiguous out-of-line module identity for `codenoesis.ontology/rust/v2`. Decision 0011 resolves only root-package workspace provenance and R3 coverage semantics in `codenoesis.ontology/rust/v3` while preserving v2 identity domains for unchanged facts. Decision 0012 resolves only declaration-level Cargo entities, relationships, evidence, claim policy, and coverage states in `codenoesis.ontology/rust/v4` while preserving v3 Rust identities after protected merge. Cross-language, resolver/compiler-grade, framework, and later ontology evolution remain open. | `S8` and later ontology evolution |
+| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0010 resolves only the R2 gitlink, `.gitmodules`, explicit nested-root, depth, and boundary-output subset after protected merge. Decision 0011 resolves only the R3 member, exclusion, package-manifest, crate-target, and binary-root subset after protected merge. Decision 0012 resolves only the R4 manifest-fact, dependency, feature/member, target, patch, metadata, target-predicate, declaration-string, external-locator, and permutation subset after protected merge. Decision 0015 resolves only the R5 field, variant, tuple-field, associated-item, outer-attribute, attribute-token, declared-type/header, and permutation subset after protected merge. Decision 0008 resolves the fixed S5 changed-path, analysis-entry, dependency-edge, report-subject, report-byte, and wall-time subset. Decision 0009 resolves the fixed S6 manifest, repository, document, YAML/reference depth, semantic count, evidence, output, memory, and wall-time subset when its protected ratification revision is manually merged. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
+| `OD-ONT-001` | Decision 0003 resolves the bounded single-crate `codenoesis.ontology/rust/v1`. Decision 0005 resolves multi-crate cardinality and unambiguous out-of-line module identity for `codenoesis.ontology/rust/v2`. Decision 0011 resolves only root-package workspace provenance and R3 coverage semantics in `codenoesis.ontology/rust/v3` while preserving v2 identity domains for unchanged facts. Decision 0012 resolves only declaration-level Cargo entities, relationships, evidence, claim policy, and coverage states in `codenoesis.ontology/rust/v4` while preserving v3 Rust identities after protected merge. Decision 0015 resolves only the R5 committed Rust field, variant, constant/static, associated-type, implementation-context method, attribute-evidence, compilation-presence, and member-identity subset in `codenoesis.ontology/rust/v5` while preserving unchanged v4 identities after protected merge. Cross-language, resolver/compiler-grade, framework, and later ontology evolution remain open. | `S8` and later ontology evolution |
 | `OD-STO-001` | Decision 0004 resolves fresh single-writer local SQLite/CAS identity, publication, restart, corruption, and cleanup semantics for `codenoesis.local-store/v1` only when its protected S3 ratification revision is manually merged. Migration, repair, deletion, backup/restore, multi-writer, and server storage remain open. | Post-S3 storage evolution and `S10` |
 | `OD-GIT-001` | Decision 0006 resolves the packed local SHA-1 subset only for the explicit `local-git-sha1-packed-v1` acquisition selector. After protected merge, Decision 0010 additionally resolves only the explicit `local-gitlinks-v1` representation of committed mode `160000` boundaries, bounded root `.gitmodules` metadata, and depth-one separately supplied local nested commit verification. Residual decisions cover remote protocols and identity resolution, SHA-256, LFS, shallow and bare repositories, alternates, promisor/partial clones, MIDX authority, symlinks, nested analysis/federation/recursion, complete Git configuration semantics, automatic repair, and history rewrite. Legacy invocations still reject packed objects without R1 and reject gitlinks without R2. | Remote and remaining post-S1 `FR-ACQ-*` |
 | `OD-CMP-001` | Decision 0009 resolves only `codenoesis.contract-capability/openapi-3.1-http-json/v1`, deterministic provider/client operation federation, heuristic non-confirmation, and source-neutral S6 identities when its protected ratification revision is manually merged. Decision 0007 resolves only the `implementation-aware-http-json/v1` field-level projection, evidence separation, seven dimensions, classifier rules, and oracle. Residual decisions cover complete OpenAPI, AsyncAPI, GraphQL, Protobuf, events, package/SCIP and event/schema authority, framework-specific semantics, observation coverage, protocol behavior, and causal evidence. | Remaining `S6`–`S7` compatibility capabilities |
@@ -1598,6 +1707,15 @@ resolves only the exact typed-unsupported boundary for a literal top-level
 badge-value interpretation, provider semantics, network access, new
 relationships, silent ignore, and any broader Cargo-family support remain
 open.
+The
+[S4 R5 Rust semantic-depth decision](decisions/0015-s4-r5-rust-semantic-depth-contract.md)
+resolves only the explicit `rust-semantic-depth-v1` committed declaration
+subset, member and implementation-context method identities, outer-attribute
+uncertainty, ontology v5 relationships, fixed R5 limits, ErrorV12, and V8-only
+LocalQueryResultV3 dispatch after protected manual merge; framework roles,
+macro expansion, active cfg worlds, compiler/type resolution, value
+evaluation, calls, runtime behavior, migration, and explorer/export semantics
+remain open.
 The
 [S5 incremental refresh decision](decisions/0008-s5-incremental-refresh-contract.md)
 resolves only the revision-neutral Rust-workspace analysis cache,

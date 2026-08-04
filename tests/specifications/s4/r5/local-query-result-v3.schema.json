@@ -1,0 +1,332 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/local-query-result-v3.schema.json",
+  "title": "CodeNoesis LocalQueryResultV3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "repository_identity",
+    "snapshot_id",
+    "requested_id",
+    "result_kind",
+    "entity",
+    "relationship",
+    "claims",
+    "evidence",
+    "diagnostic",
+    "coverage_gap",
+    "document",
+    "document_statements"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.local-query-result/v3"
+    },
+    "repository_identity": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:[a-z0-9][a-z0-9._:-]{0,254}$"
+    },
+    "snapshot_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:snapshot:blake3:[0-9a-f]{64}$"
+    },
+    "requested_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:(entity|relationship|claim|evidence|diagnostic|coverage-gap|document):blake3:[0-9a-f]{64}$"
+    },
+    "result_kind": {
+      "enum": [
+        "entity",
+        "relationship",
+        "claim",
+        "evidence",
+        "diagnostic",
+        "coverage_gap",
+        "document"
+      ]
+    },
+    "entity": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "extraction-chunk-v5.schema.json#/$defs/graph_entity"
+        }
+      ]
+    },
+    "relationship": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "extraction-chunk-v5.schema.json#/$defs/graph_relationship"
+        }
+      ]
+    },
+    "claims": {
+      "type": "array",
+      "maxItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "../extraction-chunk-v2.schema.json#/$defs/claim"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 200000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "../extraction-chunk-v2.schema.json#/$defs/evidence"
+      }
+    },
+    "diagnostic": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "extraction-chunk-v5.schema.json#/$defs/graph_diagnostic"
+        }
+      ]
+    },
+    "coverage_gap": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "extraction-chunk-v5.schema.json#/$defs/graph_coverage"
+        }
+      ]
+    },
+    "document": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "../local-query-result-v1.schema.json#/$defs/document"
+        }
+      ]
+    },
+    "document_statements": {
+      "type": "array",
+      "maxItems": 200000,
+      "uniqueItems": true,
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "../local-query-result-v1.schema.json#/$defs/statement"
+          },
+          {
+            "$ref": "../local-query-result-v1.schema.json#/$defs/linked_statement"
+          }
+        ]
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "result_kind": {
+            "const": "entity"
+          }
+        },
+        "required": [
+          "result_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "entity": {
+            "not": {
+              "type": "null"
+            }
+          },
+          "relationship": {
+            "type": "null"
+          },
+          "diagnostic": {
+            "type": "null"
+          },
+          "coverage_gap": {
+            "type": "null"
+          },
+          "document": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "result_kind": {
+            "const": "relationship"
+          }
+        },
+        "required": [
+          "result_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "entity": {
+            "type": "null"
+          },
+          "relationship": {
+            "not": {
+              "type": "null"
+            }
+          },
+          "diagnostic": {
+            "type": "null"
+          },
+          "coverage_gap": {
+            "type": "null"
+          },
+          "document": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "result_kind": {
+            "const": "diagnostic"
+          }
+        },
+        "required": [
+          "result_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "entity": {
+            "type": "null"
+          },
+          "relationship": {
+            "type": "null"
+          },
+          "diagnostic": {
+            "not": {
+              "type": "null"
+            }
+          },
+          "coverage_gap": {
+            "type": "null"
+          },
+          "document": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "result_kind": {
+            "const": "coverage_gap"
+          }
+        },
+        "required": [
+          "result_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "entity": {
+            "type": "null"
+          },
+          "relationship": {
+            "type": "null"
+          },
+          "diagnostic": {
+            "type": "null"
+          },
+          "coverage_gap": {
+            "not": {
+              "type": "null"
+            }
+          },
+          "document": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "result_kind": {
+            "const": "document"
+          }
+        },
+        "required": [
+          "result_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "entity": {
+            "type": "null"
+          },
+          "relationship": {
+            "type": "null"
+          },
+          "diagnostic": {
+            "type": "null"
+          },
+          "coverage_gap": {
+            "type": "null"
+          },
+          "document": {
+            "not": {
+              "type": "null"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "result_kind": {
+            "enum": [
+              "claim",
+              "evidence"
+            ]
+          }
+        },
+        "required": [
+          "result_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "entity": {
+            "type": "null"
+          },
+          "relationship": {
+            "type": "null"
+          },
+          "diagnostic": {
+            "type": "null"
+          },
+          "coverage_gap": {
+            "type": "null"
+          },
+          "document": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ]
+}
