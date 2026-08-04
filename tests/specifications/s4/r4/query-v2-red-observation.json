@@ -1,0 +1,20 @@
+{
+  "schema_version": "codenoesis.red-observation/v1",
+  "observed_at": "2026-08-03",
+  "issue": "https://github.com/smutti/codenoesis/issues/105",
+  "authorization": "https://github.com/smutti/codenoesis/issues/105#issuecomment-5170981186",
+  "evidence_comment": "https://github.com/smutti/codenoesis/issues/105#issuecomment-5170981348",
+  "required_base": "94a8fe9b27b7e4fd9ae5c759cc23591c4fa12d00",
+  "test_only_head": "4b8a38b2cbd9dcefb9dc5af0f3bd393ef6c95573",
+  "command": "python3 -m unittest scripts.tests.test_s4_cargo_manifest_facts_contract.S4CargoManifestFactsGovernanceTests.test_r4_exact_id_query_contract_is_complete",
+  "guard_sha256": "f3cb16d074ad5005e784b34c1d510e4b32d78874b0a7102ea9409e599593917f",
+  "exit_code": 1,
+  "expected_failure": "R4 diagnostics lack stable exact-query identity",
+  "actual_failure": "AssertionError: 'id' not found: R4 diagnostics lack stable exact-query identity",
+  "raw_log_bytes": 1259,
+  "raw_log_sha256": "d4d489aa2afa625813da46660b5f3042fd5f38502d709f9fce4cffb5ffee8574",
+  "failed_for_expected_reason": true,
+  "production_files_changed_before_red": false,
+  "protected_semantic_files_changed_before_red": false,
+  "capture_note": "A first identical subject run was followed by a zsh wrapper-variable error; this retained log is from the unchanged test-only commit and contains the accepted subject failure."
+}

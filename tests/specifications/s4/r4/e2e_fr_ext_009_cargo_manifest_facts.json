@@ -81,7 +81,7 @@
     "every R4 maximum and maximum-plus-one is exact before proportional allocation",
     "50 manifest table field and array permutations plus shuffled parallel replay are byte-identical",
     "V7 publication reuses existing roles marker DDL transaction crash and sweep semantics",
-    "docs distinguish declared from resolved behavior and exact-ID query resolves Cargo entities relationships evidence and gaps",
+    "docs distinguish declared from resolved behavior and exact-ID query resolves Cargo entities relationships claims evidence diagnostics and gaps through LocalQueryResultV2",
     "R4 selector absence retains byte-identical V6 R3 output and every earlier selector-absent output",
     "pinned non-vendored Lekton R1 plus R3 plus R4 pilot completes with declaration-only facts",
     "pinned non-vendored RustDesk R1 plus R2 plus R3 plus R4 pilot completes while the gitlink remains external"
