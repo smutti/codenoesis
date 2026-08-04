@@ -7,13 +7,14 @@
     "contract_sha256": "ae86b71ac0a5940761b2799ba891f0f4de5cff06a6c87ff42dd0b30b69d1dc43"
   },
   "identity": {
-    "compatibility": "all v3 Rust domains and preimages are unchanged; R4 adds disjoint Cargo declaration domains",
+    "compatibility": "all v3 Rust domains and preimages are unchanged; R4 adds disjoint Cargo declaration and diagnostic domains",
     "rust_entity_domain": "codenoesis.entity-id/rust/v2",
     "rust_relationship_domain": "codenoesis.relationship-id/rust/v2",
     "cargo_entity_domain": "codenoesis.entity-id/cargo-manifest/v1",
     "cargo_relationship_domain": "codenoesis.relationship-id/cargo-manifest/v1",
     "claim_domain": "codenoesis.claim-id/v2",
     "evidence_domain": "codenoesis.evidence-id/v2",
+    "diagnostic_domain": "codenoesis.diagnostic-id/cargo-manifest/v1",
     "coverage_gap_domain": "codenoesis.coverage-gap-id/v3",
     "manifest_preimage": [
       "repository_identity",
@@ -73,6 +74,18 @@
       "relationship_kind",
       "source_entity_id",
       "target_entity_id"
+    ],
+    "diagnostic_preimage": [
+      "repository_identity",
+      "diagnostic_code",
+      "evidence_id_1_through_n_in_byte_order"
+    ],
+    "coverage_gap_preimage": [
+      "repository_identity",
+      "commit_oid",
+      "capability",
+      "state",
+      "evidence_id_1_through_n_in_byte_order"
     ],
     "forbidden_inputs": [
       "commit_oid",
@@ -286,6 +299,7 @@
     "workspace_reference": "an inherited package or dependency declaration has exactly one REFERENCES_DECLARATION target",
     "target_materialization": "an R3-analyzed lib or bin declaration has exactly one MATERIALIZES edge; other declared targets have none",
     "claim_subject": "every Cargo entity and Cargo relationship has exactly one claim",
+    "diagnostic_identity": "every Cargo diagnostic has exactly one stable ID; duplicate code plus evidence identity is invalid",
     "evidence_resolution": "every Cargo fact and relationship resolves to committed manifest or inventory evidence"
   },
   "limits": {

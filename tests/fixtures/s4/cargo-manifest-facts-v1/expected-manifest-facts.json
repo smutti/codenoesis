@@ -4,7 +4,17 @@
   "identity_domains": {
     "cargo_entity": "codenoesis.entity-id/cargo-manifest/v1",
     "cargo_relationship": "codenoesis.relationship-id/cargo-manifest/v1",
-    "rust_entity": "codenoesis.entity-id/rust/v2"
+    "rust_entity": "codenoesis.entity-id/rust/v2",
+    "claim": "codenoesis.claim-id/v2",
+    "evidence": "codenoesis.evidence-id/v2",
+    "diagnostic": "codenoesis.diagnostic-id/cargo-manifest/v1",
+    "coverage_gap": "codenoesis.coverage-gap-id/v3",
+    "document": "codenoesis.document-id/v1"
+  },
+  "materialized_repository": {
+    "object_format": "sha1",
+    "tree_oid": "c99449f6f0651e4f6398521e316f3500d0e508e7",
+    "commit_oid": "7b1fc9073552b5967b1620d1e082a1d45e1b380e"
   },
   "entities": [
     {
@@ -593,6 +603,59 @@
     "cargo.target_source_not_analyzed",
     "cargo.unsupported_manifest_family"
   ],
+  "exact_query_examples": {
+    "entity": {
+      "id": "urn:codenoesis:entity:blake3:13c3407742a8aaf4ff919842621e5ef164757103a995146775b49441da886527",
+      "claim_id": "urn:codenoesis:claim:blake3:a2c9ec8447c72fd9cc2c59d80feb217691c3995d3b1cedcdd21711930ec80a90",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:e2da79817c12805d7e6a2572b7d8064259e6d47935f0b36df67a7bad138695d2"
+      ]
+    },
+    "relationship": {
+      "id": "urn:codenoesis:relationship:blake3:b3903033520baafddfd50990a13f97e3a6de640f779fd2e930172ed8ebbaeb75",
+      "claim_id": "urn:codenoesis:claim:blake3:036f0a2218dedeac2770614f56fff8562cb333223a91eeb04d666e6a38ffac90",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:e2da79817c12805d7e6a2572b7d8064259e6d47935f0b36df67a7bad138695d2"
+      ]
+    },
+    "claim": {
+      "id": "urn:codenoesis:claim:blake3:036f0a2218dedeac2770614f56fff8562cb333223a91eeb04d666e6a38ffac90",
+      "subject_kind": "relationship",
+      "subject_id": "urn:codenoesis:relationship:blake3:b3903033520baafddfd50990a13f97e3a6de640f779fd2e930172ed8ebbaeb75",
+      "state": "deterministic_fact",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:e2da79817c12805d7e6a2572b7d8064259e6d47935f0b36df67a7bad138695d2"
+      ]
+    },
+    "evidence": {
+      "id": "urn:codenoesis:evidence:blake3:e2da79817c12805d7e6a2572b7d8064259e6d47935f0b36df67a7bad138695d2",
+      "path": "crates/app/Cargo.toml",
+      "blob_oid": "c9a7a7513824fa8ff7339e8fcde93b174f080890",
+      "start_byte": 714,
+      "end_byte": 739
+    },
+    "diagnostic": {
+      "id": "urn:codenoesis:diagnostic:blake3:7aa42489d042d8a69f88910cd472e635995c6e2eee6a81f3c3f3261897d5f486",
+      "code": "cargo.target_source_not_analyzed",
+      "message": "declared Cargo target source is not analyzed by R4",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:e2da79817c12805d7e6a2572b7d8064259e6d47935f0b36df67a7bad138695d2"
+      ]
+    },
+    "coverage_gap": {
+      "id": "urn:codenoesis:coverage-gap:blake3:c7b525aa7556f66951e82b90829d7f4b7090cb03fdf44ee35824635d8bb804ba",
+      "capability": "cargo.target_source_not_analyzed",
+      "state": "not_analyzed",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:e2da79817c12805d7e6a2572b7d8064259e6d47935f0b36df67a7bad138695d2"
+      ]
+    },
+    "document": {
+      "id": "urn:codenoesis:document:blake3:3db638c882928eccb9d8ec660b9cdb50cbb7eff3f1687fbb693fd80701fcb7b7",
+      "kind": "overview",
+      "subject_id": "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1"
+    }
+  },
   "forbidden_relationship_kinds": [
     "ACTIVATES",
     "APPLIES_PATCH",

@@ -5,6 +5,8 @@
     "repository_directory": "repository",
     "root_manifest": "repository/Cargo.toml",
     "workspace_member": "crates/app",
+    "tree_oid": "c99449f6f0651e4f6398521e316f3500d0e508e7",
+    "commit_oid": "7b1fc9073552b5967b1620d1e082a1d45e1b380e",
     "deliberately_absent_paths": [
       "repository/crates/shared",
       "repository/vendor/custom"
@@ -78,8 +80,8 @@
   ],
   "expected_plan": {
     "path": "expected-manifest-facts.json",
-    "byte_length": 23175,
-    "sha256": "643f72b1ba5c2b7f14e518d4014f684e9837c6165ca6b1dbf86c6d0935ea5b09"
+    "byte_length": 26171,
+    "sha256": "dce17e88dc942272bb31c4f50c54d0bacbe936a14838c2dd2452d2cf464b078a"
   },
   "external_source_vendored": false
 }
