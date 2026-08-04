@@ -12,6 +12,7 @@ use codenoesis_domain::s4::{RustWorkspaceKnowledge, WorkspaceError};
 use codenoesis_domain::s4_r3::{
     ExternalWorkspaceBoundary, RootPackageWorkspaceError, RootPackageWorkspaceExtraction,
 };
+use codenoesis_domain::s4_r4::{CargoManifestFactError, CargoManifestFactExtraction};
 use codenoesis_domain::s5::{AnalysisCacheEntry, IncrementalWorkspaceExtraction};
 use codenoesis_domain::s6::{ContractError, OpenApiContractInput, ProviderContract};
 use codenoesis_domain::storage::{
@@ -129,6 +130,21 @@ pub trait RootPackageWorkspaceExtractor {
         external_boundaries: &[ExternalWorkspaceBoundary],
         cache_entries: &[AnalysisCacheEntry],
     ) -> Result<RootPackageWorkspaceExtraction, RootPackageWorkspaceError>;
+}
+
+pub trait CargoManifestFactExtractor {
+    /// Extracts the selected R4 Cargo declaration subset over the accepted R3 workspace.
+    ///
+    /// # Errors
+    ///
+    /// Returns an inherited R3 failure or a typed declaration, conflict, or limit failure without
+    /// resolving dependencies, fetching sources, or executing repository content.
+    fn extract_cargo_manifest_facts_incremental(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+        cache_entries: &[AnalysisCacheEntry],
+    ) -> Result<CargoManifestFactExtraction, CargoManifestFactError>;
 }
 
 pub trait OpenApiContractExtractor {

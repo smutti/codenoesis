@@ -4,6 +4,7 @@ mod s1_boundaries;
 mod s1_packed;
 mod s4;
 mod s4_r3;
+mod s4_r4;
 mod s5;
 mod s6;
 
@@ -11,6 +12,7 @@ pub use s1_boundaries::*;
 pub use s1_packed::*;
 pub use s4::*;
 pub use s4_r3::*;
+pub use s4_r4::*;
 pub use s5::*;
 pub use s6::*;
 
@@ -537,6 +539,7 @@ fn publication_candidate(value: &Value) -> Result<PublicationCandidate, Publicat
         codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V4
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V5
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V6
+            | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V7
     );
     let semantic = required_field(value, "semantic", "semantic")?;
     let repository = required_field(semantic, "repository", "semantic.repository")?;
@@ -646,14 +649,33 @@ fn publication_artifacts(
                 embedded_domains_required,
             )?,
         );
-        let chunk_id_field = if embedded_domains_required {
-            "chunk_id"
+        let chunk_id = if embedded_domains_required {
+            required_str(chunk, "chunk_id", "extraction_chunk.chunk_id")?
+        } else if chunk["schema_version"] == "codenoesis.extraction-chunk/v4" {
+            let subject = required_field(chunk, "subject", "extraction_chunk.subject")?;
+            match required_str(subject, "kind", "extraction_chunk.subject.kind")? {
+                "cargo_manifest" => required_str(
+                    subject,
+                    "manifest_id",
+                    "extraction_chunk.subject.manifest_id",
+                )?,
+                "rust_source" => required_str(
+                    subject,
+                    "source_file_id",
+                    "extraction_chunk.subject.source_file_id",
+                )?,
+                _ => {
+                    return Err(PublicationCandidateError::InvalidContract(
+                        "extraction_chunk.subject.kind",
+                    ));
+                }
+            }
         } else {
-            "source_file_id"
+            required_str(chunk, "source_file_id", "extraction_chunk.source_file_id")?
         };
         extraction_rows.push(ExtractionRow {
             ordinal,
-            chunk_id: required_str(chunk, chunk_id_field, "extraction_chunk.chunk_id")?.to_owned(),
+            chunk_id: chunk_id.to_owned(),
             artifact_id: artifact.artifact_id.clone(),
             canonical_json: bytes,
         });
