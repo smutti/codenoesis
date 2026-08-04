@@ -146,6 +146,7 @@ fn conf_fr_ext_009_snapshot_v7_graph_v4_error_v11() {
 }
 
 #[test]
+#[allow(clippy::too_many_lines)]
 fn reg_fr_doc_001_r4_declared_import_survives_omitted_r3_coverage() {
     let repository_identity = "urn:codenoesis:test:r4-docs";
     let snapshot_id = format!("urn:codenoesis:snapshot:blake3:{}", "a".repeat(64));
