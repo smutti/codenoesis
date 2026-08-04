@@ -1,0 +1,31 @@
+{
+  "schema_version": "codenoesis.red-observation/v1",
+  "observed_at": "2026-08-04",
+  "issue": "https://github.com/smutti/codenoesis/issues/107",
+  "authorization": "https://github.com/smutti/codenoesis/issues/107#issuecomment-5177741408",
+  "evidence_comment": "https://github.com/smutti/codenoesis/issues/107#issuecomment-5177766905",
+  "required_base": "557547285f9532772efceea900ba982b6a8e65a9",
+  "test_only_head": "89f0455777cdf6fd344af2f8549e50462df98a1a",
+  "command": "python3 -m unittest scripts.tests.test_s4_cargo_manifest_facts_contract.S4CargoManifestFactsGovernanceTests.test_legacy_badges_has_exact_typed_unsupported_mapping",
+  "guard_sha256": "463ceff5a5ff1dd5042f3e5c0795146e77c1605e0a3daf9b633be564cd42e654",
+  "exit_code": 1,
+  "expected_failure": "R4 legacy badges family lacks an exact typed unsupported mapping",
+  "actual_failure": "AssertionError: None != 'cargo.legacy_badges_unsupported' : R4 legacy badges family lacks an exact typed unsupported mapping",
+  "raw_log_bytes": 763,
+  "raw_log_sha256": "029e4b82a33f53fc25a0548dad20bf5b5cf5253713705d04dd045ff56c1492a4",
+  "failed_for_expected_reason": true,
+  "product_files_changed_before_red": false,
+  "protected_semantic_files_changed_before_red": false,
+  "rustdesk_observation": {
+    "commit_oid": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+    "tree_oid": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+    "manifest_path": "libs/enigo/Cargo.toml",
+    "table": "badges",
+    "subject_exit_code": 11,
+    "subject_stdout_bytes": 0,
+    "subject_stderr_bytes": 275,
+    "subject_stderr_sha256": "661ec93d5f0409ab807c0422417d2074054d57581cc1c92b3c6f3ef41911f4a9",
+    "store_exists": false,
+    "nested_gitlink_source_opened": false
+  }
+}
