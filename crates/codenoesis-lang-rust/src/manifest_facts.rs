@@ -1968,6 +1968,7 @@ impl<'a> ManifestFactBuilder<'a> {
     ) -> Result<(), CargoManifestFactError> {
         for section in &map.sections {
             let capability = match section.path.as_slice() {
+                [value] if value == "badges" => Some("cargo.legacy_badges_unsupported"),
                 [first, ..] if first == "profile" => Some("cargo.profile_tables_unsupported"),
                 [first, ..] if first == "lints" => Some("cargo.lint_configuration_unsupported"),
                 [first, second, ..] if first == "workspace" && second == "lints" => {
@@ -2004,7 +2005,7 @@ impl<'a> ManifestFactBuilder<'a> {
     ) -> Result<(), CargoManifestFactError> {
         for section in &map.sections {
             let recognized = match section.path.as_slice() {
-                [] => true,
+                [] => false,
                 [value]
                     if matches!(
                         value.as_str(),
@@ -2019,6 +2020,7 @@ impl<'a> ManifestFactBuilder<'a> {
                             | "dev-dependencies"
                             | "build-dependencies"
                             | "features"
+                            | "badges"
                             | "profile"
                             | "lints"
                             | "replace"

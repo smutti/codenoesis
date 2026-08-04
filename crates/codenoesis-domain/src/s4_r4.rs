@@ -1168,6 +1168,7 @@ fn valid_coverage(capability: &str, state: CargoCoverageState) -> bool {
             CargoCoverageState::NotAnalyzed
         ) | (
             "cargo.dependency_advanced_fields_unsupported"
+                | "cargo.legacy_badges_unsupported"
                 | "cargo.lint_configuration_unsupported"
                 | "cargo.package_metadata_table_unsupported"
                 | "cargo.profile_tables_unsupported"
