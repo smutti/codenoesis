@@ -1,0 +1,151 @@
+{
+  "schema_version": "codenoesis.s4-r5-pilot-observations/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/113",
+  "slice": "S4",
+  "roadmap_capability": "R5",
+  "requirement_status": "Approved",
+  "risk": "high",
+  "observed_at": "2026-08-04T18:19:29Z",
+  "environment": {
+    "os": "macOS 26.5.2 (Darwin 25.5.0)",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "profile": "debug binary built from the implementation branch",
+    "network_during_product_invocations": "not traced at OS level",
+    "source_repositories_vendored_into_codenoesis": false,
+    "raw_external_source_or_generated_outputs_committed": false
+  },
+  "repositories": [
+    {
+      "repository": "dghilardi/lekton",
+      "repository_identity": "urn:codenoesis:pilot:lekton:r5",
+      "commit_oid": "7a4d1a4a30468f4c18ce158a9b825680b00f4820",
+      "tree_oid": "fa81df35c6fa32068d1707d0eacdc459258877c5",
+      "checkout": {
+        "non_shallow": true,
+        "object_format": "sha1",
+        "packed_object_database": true,
+        "worktree_materialized": false,
+        "gitlink_count": 0,
+        "vendored_into_codenoesis": false
+      },
+      "composition": [
+        "standard-local-s4",
+        "local-git-sha1-packed-v1",
+        "cargo-root-package-v1",
+        "cargo-manifest-facts-v1",
+        "rust-semantic-depth-v1"
+      ],
+      "scan": {
+        "command": "noesis scan --repository <lekton-object-database> --repository-id urn:codenoesis:pilot:lekton:r5 --revision 7a4d1a4a30468f4c18ce158a9b825680b00f4820 --profile standard-local-s4 --acquisition-profile local-git-sha1-packed-v1 --workspace-profile cargo-root-package-v1 --manifest-profile cargo-manifest-facts-v1 --rust-semantic-profile rust-semantic-depth-v1 --store <temporary-store> --format json",
+        "exit_code": 0,
+        "stderr_bytes": 0,
+        "wall_time_ms": 12943,
+        "wall_time_limit_ms": 60000,
+        "snapshot_schema": "codenoesis.repository-snapshot/v8",
+        "snapshot_output_bytes": 14757958,
+        "snapshot_output_sha256": "d3e50dac808f2b126d1f438d64e5d592b20e190e381b537021baa8f0d3f09da9",
+        "semantic_hash": "6f2f62cb89d154c64ecb19aacd790cb77f43612c70edfe29f39849b5659ed7c5",
+        "entity_count": 2457,
+        "relationship_count": 2604,
+        "claim_count": 5061,
+        "evidence_count": 3540,
+        "diagnostic_count": 1347,
+        "coverage_gap_count": 2985,
+        "r5_declaration_counts": {
+          "rust.field": 1003,
+          "rust.enum_variant": 39,
+          "rust.constant": 23,
+          "rust.static": 1,
+          "rust.associated_type": 0,
+          "rust.method": 489
+        }
+      },
+      "documentation": {
+        "command": "noesis docs --store <temporary-store> --repository-id urn:codenoesis:pilot:lekton:r5 --output <temporary-documents> --format json",
+        "exit_code": 0,
+        "stderr_bytes": 0,
+        "wall_time_ms": 7902,
+        "manifest_bytes": 2795893,
+        "manifest_sha256": "a68b0936fdf251f51453db0a7ec38d19f68b46a927b63bc95c64c223bbf19348",
+        "generation_hash": "263ec81ddc40d9b37bee11da3fc61909a38b218e3229594968aa38241ee54542",
+        "document_count": 219,
+        "maximum_document_bytes": 66456,
+        "total_document_bytes": 1803998,
+        "initial_observation": "The first implementation concentrated all R5 statements in overview.md and failed the inherited document bound. The retained product correction distributes declarations by module and uncertainty by committed source path; the initial temporary failure log was not retained and no digest is claimed."
+      },
+      "query": {
+        "command": "noesis query --store <temporary-store> --repository-id urn:codenoesis:pilot:lekton:r5 --documents <temporary-documents> --id urn:codenoesis:entity:blake3:0008e3b4d0265ae52df413a704059d8f2b602c65c74ec38f57731af80ea6b4ab --format json",
+        "exit_code": 0,
+        "stderr_bytes": 0,
+        "wall_time_ms": 5795,
+        "result_schema": "codenoesis.local-query-result/v3",
+        "result_kind": "entity",
+        "entity_kind": "rust.field",
+        "evidence_count": 1,
+        "document_statement_count": 1,
+        "output_bytes": 2343,
+        "output_sha256": "35585916c77700bb41d1d452e7c304d75972aed4348f349def78ecfb1c9ec633"
+      },
+      "result": "successful replaceable compatibility observation; counts are not ontology truth"
+    },
+    {
+      "repository": "rustdesk/rustdesk",
+      "repository_identity": "urn:codenoesis:pilot:rustdesk:r5",
+      "commit_oid": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "tree_oid": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+      "checkout": {
+        "non_shallow": true,
+        "object_format": "sha1",
+        "packed_object_database": true,
+        "worktree_materialized": false,
+        "gitlink_count": 1,
+        "gitlink_path": "libs/hbb_common",
+        "gitlink_oid": "69cea8dafee147848ae88702029f4bf7df7224c3",
+        "nested_gitlink_worktree_present": false,
+        "vendored_into_codenoesis": false
+      },
+      "composition": [
+        "standard-local-s4",
+        "local-git-sha1-packed-v1",
+        "local-gitlinks-v1",
+        "cargo-root-package-v1",
+        "cargo-manifest-facts-v1",
+        "rust-semantic-depth-v1"
+      ],
+      "scan": {
+        "command": "noesis scan --repository <rustdesk-object-database> --repository-id urn:codenoesis:pilot:rustdesk:r5 --revision d412d198720aa56f6cfed2dfad262e8fb1322fb7 --profile standard-local-s4 --acquisition-profile local-git-sha1-packed-v1 --repository-boundary-profile local-gitlinks-v1 --workspace-profile cargo-root-package-v1 --manifest-profile cargo-manifest-facts-v1 --rust-semantic-profile rust-semantic-depth-v1 --store <temporary-store> --format json",
+        "exit_code": 11,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_bytes": 369,
+        "stderr_sha256": "928202b05604d25250ba51483f3d0f72d8d85ad8e9e721c8ae00d0575c2c0876",
+        "wall_time_ms": 14578,
+        "wall_time_limit_ms": 60000,
+        "error_schema": "codenoesis.error/v12",
+        "error_code": "extraction.rust_semantic_identity_conflict",
+        "error_context": {
+          "owner_id": "urn:codenoesis:entity:blake3:5604c3b2a099c50d2e2e59bb00a79fc2865ed8846629213d7eaba58393ff959c",
+          "member_kind": "rust.struct",
+          "normalized_member": "ClientClipboardContext"
+        },
+        "store_root_exists_after_failure": false,
+        "nested_gitlink_opened": false
+      },
+      "compatibility_gap": {
+        "committed_path": "src/client.rs",
+        "declarations": "Two same-owner ClientClipboardContext structs have mutually exclusive cfg(feature = \"flutter\") and cfg(not(feature = \"flutter\")) attributes but different forms.",
+        "reason": "R5 intentionally does not interpret cfg and the approved identity recipe has no cfg discriminator. Merging, selecting, or activating either declaration would overclaim semantics.",
+        "disposition": "deterministic fail-closed; no parser exception, cfg interpretation, fixture-specific branch, or oracle weakening"
+      },
+      "result": "replaceable compatibility observation completed with a truthful fail-closed gap; a RustDesk V8 ontology was not published"
+    }
+  ],
+  "limitations": [
+    "Pilot outputs and external source bytes remain outside the repository.",
+    "No OS-level process, file-access, or network trace was captured for these pilot invocations.",
+    "The Lekton pilot was not repeated from a second fresh clone, so pilot-level replay identity is not claimed.",
+    "The RustDesk observation exposes an approved semantic-boundary limitation rather than a successful ontology generation.",
+    "Pilot observations support compatibility review and do not mark FR-EXT-010 Verified."
+  ]
+}

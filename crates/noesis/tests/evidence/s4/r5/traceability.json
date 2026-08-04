@@ -1,0 +1,323 @@
+{
+  "schema_version": "codenoesis.s4-r5-traceability/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/113",
+  "slice": "S4",
+  "roadmap_capability": "R5",
+  "requirement_status": "Approved",
+  "requirements": [
+    {
+      "id": "FR-EXT-010",
+      "role": "primary",
+      "required_tests": [
+        "e2e_fr_ext_010_rust_semantic_depth",
+        "gt_fr_ext_010_fields_and_variants_are_owned",
+        "gt_fr_ext_010_constants_statics_and_associated_types",
+        "gt_fr_ext_010_method_context_prevents_trait_collisions",
+        "gt_fr_ext_010_attributes_preserve_declarations_and_gaps",
+        "conf_fr_ext_010_snapshot_v8_graph_v5_error_v12",
+        "conf_fr_qry_001_v8_uses_local_query_result_v3",
+        "pt_dr_idn_002_r5_member_identities_and_cardinalities",
+        "pt_fr_ext_010_limits_have_max_and_plus_one",
+        "pt_nfr_det_001_r5_permutation_and_schedule_invariant",
+        "sec_fr_ext_010_never_executes_or_interprets_target_worlds",
+        "e2e_fr_doc_001_r5_declared_and_unresolved_are_documented",
+        "reg_fr_cli_001_r5_selector_absence_is_byte_identical"
+      ],
+      "additional_tests": [
+        "e2e_fr_qry_001_r5_exact_id_results",
+        "sec_fr_ext_010_invalid_composition_precedes_acquisition",
+        "sec_fr_ext_010_malformed_has_error_v12_no_publication",
+        "sec_fr_ext_010_malformed_and_limit_plus_one_fail_closed"
+      ],
+      "evidence": [
+        "crates/noesis/tests/evidence/s4/r5/red-observation.json",
+        "crates/noesis/tests/evidence/s4/r5/red/e2e_fr_ext_010_rust_semantic_depth.log",
+        "crates/noesis/tests/evidence/s4/r5/implementation-observation-local.json",
+        "crates/noesis/tests/evidence/s4/r5/dependency-review.json",
+        "crates/noesis/tests/evidence/s4/r5/pilot-observations-local.json"
+      ]
+    },
+    {
+      "id": "FR-EXT-001",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_ext_010_rust_semantic_depth",
+        "reg_fr_cli_001_r5_selector_absence_is_byte_identical"
+      ]
+    },
+    {
+      "id": "FR-EXT-002",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_ext_010_rust_semantic_depth",
+        "sec_fr_ext_010_never_executes_or_interprets_target_worlds"
+      ]
+    },
+    {
+      "id": "FR-KNW-001",
+      "role": "compatibility",
+      "tests": [
+        "gt_fr_ext_010_fields_and_variants_are_owned",
+        "gt_fr_ext_010_constants_statics_and_associated_types"
+      ]
+    },
+    {
+      "id": "FR-KNW-002",
+      "role": "compatibility",
+      "tests": [
+        "gt_fr_ext_010_method_context_prevents_trait_collisions",
+        "pt_dr_idn_002_r5_member_identities_and_cardinalities"
+      ]
+    },
+    {
+      "id": "FR-KNW-003",
+      "role": "compatibility",
+      "tests": [
+        "gt_fr_ext_010_attributes_preserve_declarations_and_gaps",
+        "sec_fr_ext_010_never_executes_or_interprets_target_worlds"
+      ]
+    },
+    {
+      "id": "FR-DOC-001",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_doc_001_r5_declared_and_unresolved_are_documented"
+      ]
+    },
+    {
+      "id": "FR-DOC-002",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_doc_001_r5_declared_and_unresolved_are_documented"
+      ]
+    },
+    {
+      "id": "FR-QRY-001",
+      "role": "compatibility",
+      "tests": [
+        "conf_fr_qry_001_v8_uses_local_query_result_v3",
+        "e2e_fr_qry_001_r5_exact_id_results",
+        "reg_fr_cli_001_r5_selector_absence_is_byte_identical"
+      ]
+    },
+    {
+      "id": "FR-CLI-001",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_ext_010_rust_semantic_depth",
+        "sec_fr_ext_010_invalid_composition_precedes_acquisition",
+        "reg_fr_cli_001_r5_selector_absence_is_byte_identical"
+      ]
+    }
+  ],
+  "ordered_acceptance_scenarios": [
+    {
+      "order": 1,
+      "outcome": "The R5 selector is accepted only with the complete S4/R3/R4 composition and invalid composition fails before acquisition.",
+      "status": "passed",
+      "tests": [
+        "sec_fr_ext_010_invalid_composition_precedes_acquisition"
+      ]
+    },
+    {
+      "order": 2,
+      "outcome": "ConfigurationV5, chunk v5, graph v5, ontology Rust/v5, pipeline s4-r5-v1, semantic hash v4, and RepositorySnapshotV8 are strict.",
+      "status": "passed",
+      "tests": [
+        "e2e_fr_ext_010_rust_semantic_depth",
+        "conf_fr_ext_010_snapshot_v8_graph_v5_error_v12"
+      ]
+    },
+    {
+      "order": 3,
+      "outcome": "The complete immutable R4 workspace, Cargo-fact, packed-acquisition, and gitlink-boundary lineage is composed without changing legacy identities.",
+      "status": "passed",
+      "tests": [
+        "pt_dr_idn_002_r5_member_identities_and_cardinalities",
+        "reg_fr_cli_001_r5_selector_absence_is_byte_identical",
+        "complete workspace regression gate"
+      ]
+    },
+    {
+      "order": 4,
+      "outcome": "Named and tuple fields have one supported lexical owner and retain only declared type syntax.",
+      "status": "passed",
+      "tests": [
+        "gt_fr_ext_010_fields_and_variants_are_owned"
+      ]
+    },
+    {
+      "order": 5,
+      "outcome": "Unit, tuple, and struct enum variants and their fields are emitted without discriminant evaluation.",
+      "status": "passed",
+      "tests": [
+        "gt_fr_ext_010_fields_and_variants_are_owned"
+      ]
+    },
+    {
+      "order": 6,
+      "outcome": "Module, trait, and implementation constants, module statics, and associated types remain syntax-only.",
+      "status": "passed",
+      "tests": [
+        "gt_fr_ext_010_constants_statics_and_associated_types"
+      ]
+    },
+    {
+      "order": 7,
+      "outcome": "Trait-required, trait-default, inherent, and supported named-local-trait methods retain collision-safe implementation context.",
+      "status": "passed",
+      "tests": [
+        "gt_fr_ext_010_method_context_prevents_trait_collisions"
+      ]
+    },
+    {
+      "order": 8,
+      "outcome": "Outer attributes and compilation presence are retained with exact diagnostics and gaps but attributes and cfg are not interpreted.",
+      "status": "passed",
+      "tests": [
+        "gt_fr_ext_010_attributes_preserve_declarations_and_gaps"
+      ]
+    },
+    {
+      "order": 9,
+      "outcome": "Macro token trees remain bounded unsupported regions and decoys never create declarations.",
+      "status": "passed",
+      "tests": [
+        "sec_fr_ext_010_never_executes_or_interprets_target_worlds"
+      ]
+    },
+    {
+      "order": 10,
+      "outcome": "The six-part NFC member identity has no span or ordinal repair and separates same-name methods by implementation context.",
+      "status": "passed",
+      "tests": [
+        "pt_dr_idn_002_r5_member_identities_and_cardinalities",
+        "gt_fr_ext_010_method_context_prevents_trait_collisions"
+      ]
+    },
+    {
+      "order": 11,
+      "outcome": "Every member has one DEFINES edge, unambiguous local named traits have IMPLEMENTS, and CALLS or EXECUTES never appear.",
+      "status": "passed",
+      "tests": [
+        "pt_dr_idn_002_r5_member_identities_and_cardinalities",
+        "sec_fr_ext_010_never_executes_or_interprets_target_worlds"
+      ]
+    },
+    {
+      "order": 12,
+      "outcome": "The reviewed fixture has 16 fields, 5 variants, 6 constants, 2 statics, 2 associated types, 9 methods, 40 member DEFINES edges, and 3 IMPLEMENTS edges.",
+      "status": "passed",
+      "tests": [
+        "e2e_fr_ext_010_rust_semantic_depth",
+        "pt_dr_idn_002_r5_member_identities_and_cardinalities"
+      ]
+    },
+    {
+      "order": 13,
+      "outcome": "The exact eight reviewed capability/state pairs describe attributes, cfg, macros, types, values, unions, foreign blocks, and unsupported implementation headers.",
+      "status": "passed",
+      "tests": [
+        "gt_fr_ext_010_attributes_preserve_declarations_and_gaps",
+        "sec_fr_ext_010_never_executes_or_interprets_target_worlds"
+      ]
+    },
+    {
+      "order": 14,
+      "outcome": "Malformed, ambiguous, colliding, invalid-selector, unsupported-composition, and maximum-plus-one inputs return deterministic ErrorV12 with no partial publication.",
+      "status": "passed",
+      "tests": [
+        "sec_fr_ext_010_malformed_and_limit_plus_one_fail_closed",
+        "sec_fr_ext_010_invalid_composition_precedes_acquisition",
+        "sec_fr_ext_010_malformed_has_error_v12_no_publication"
+      ]
+    },
+    {
+      "order": 15,
+      "outcome": "Every new R5 maximum accepts max and rejects max+1 before proportional output or publication.",
+      "status": "passed",
+      "tests": [
+        "pt_fr_ext_010_limits_have_max_and_plus_one",
+        "sec_fr_ext_010_malformed_and_limit_plus_one_fail_closed"
+      ]
+    },
+    {
+      "order": 16,
+      "outcome": "Fifty permutations and isolated fresh-store replay preserve semantic content, documentation, and exact-ID query bytes.",
+      "status": "passed",
+      "tests": [
+        "pt_nfr_det_001_r5_permutation_and_schedule_invariant"
+      ],
+      "evidence": "implementation-observation-local.json resource_and_replay_observation"
+    },
+    {
+      "order": 17,
+      "outcome": "V8 reuses the immutable three-role publication, marker, DDL, CAS, transaction, restart, corruption, crash, and sweep behavior without migration.",
+      "status": "passed locally",
+      "tests": [
+        "e2e_fr_ext_010_rust_semantic_depth",
+        "inherited storage, corruption, failpoint, and sweep tests in the complete gate"
+      ]
+    },
+    {
+      "order": 18,
+      "outcome": "Every declaration, R5 diagnostic, and R5 coverage gap is evidence-backed in bounded documentation that distinguishes syntax from runtime behavior.",
+      "status": "passed",
+      "tests": [
+        "e2e_fr_doc_001_r5_declared_and_unresolved_are_documented"
+      ]
+    },
+    {
+      "order": 19,
+      "outcome": "Stored V8 heads dispatch every exact-ID kind to LocalQueryResultV3 using the validated stored head as sole authority.",
+      "status": "passed",
+      "tests": [
+        "conf_fr_qry_001_v8_uses_local_query_result_v3",
+        "e2e_fr_qry_001_r5_exact_id_results"
+      ]
+    },
+    {
+      "order": 20,
+      "outcome": "Stored V7 remains LocalQueryResultV2 and V4-V6 remain byte-identical LocalQueryResultV1.",
+      "status": "passed locally",
+      "tests": [
+        "conf_fr_qry_001_v8_uses_local_query_result_v3",
+        "reg_fr_cli_001_r5_selector_absence_is_byte_identical",
+        "complete legacy query regression gate"
+      ]
+    },
+    {
+      "order": 21,
+      "outcome": "Selector-absent R4/V7 and earlier success, error, publication, documentation, and query behavior remains byte-compatible.",
+      "status": "passed locally",
+      "tests": [
+        "reg_fr_cli_001_r5_selector_absence_is_byte_identical",
+        "gt_fr_doc_001_deterministic_markdown",
+        "e2e_fr_qry_001_exact_id_results",
+        "complete workspace regression gate"
+      ]
+    },
+    {
+      "order": 22,
+      "outcome": "The product does not execute Cargo, rustc, builds, proc macros, targets, models, network, or external repositories and does not interpret cfg, macros, types, values, or frameworks.",
+      "status": "passed by architecture and tests; no OS-level pilot trace claimed",
+      "tests": [
+        "sec_fr_ext_010_never_executes_or_interprets_target_worlds",
+        "sec_nfr_sec_001 filesystem and execution sentinels in the complete gate"
+      ]
+    },
+    {
+      "order": 23,
+      "outcome": "Lekton at the approved commit produces a bounded V8 ontology, documentation, and QueryV3 observation without vendoring source.",
+      "status": "observed",
+      "evidence": "pilot-observations-local.json"
+    },
+    {
+      "order": 24,
+      "outcome": "RustDesk at the approved commit is analyzed with its gitlink unopened and exposes any R5 compatibility gap without semantic overclaiming.",
+      "status": "observed fail-closed compatibility gap",
+      "evidence": "pilot-observations-local.json"
+    }
+  ],
+  "review_constraint": "Local and CI evidence make FR-EXT-010 reviewable but do not mark it Verified; independent human ontology, identity, semantic, compatibility, and security review plus protected manual merge remain required."
+}
