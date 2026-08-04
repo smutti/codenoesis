@@ -105,7 +105,7 @@ where
         build_output(request.envelope, &inventory, Some(&report), extractor)
     }
 
-    fn verify_r4_nested_boundaries(
+    pub(crate) fn verify_r4_nested_boundaries(
         &self,
         gitlinks: &[codenoesis_domain::s1_boundaries::AcquiredGitlink],
         input: RepositoryBoundaryScanInput,
@@ -189,7 +189,7 @@ impl PublicationService {
     }
 }
 
-fn validate_boundary_input(
+pub(crate) fn validate_boundary_input(
     request: &ScanRequest,
     input: &RepositoryBoundaryScanInput,
 ) -> Result<(), BoundaryScanError> {
@@ -213,7 +213,9 @@ fn validate_boundary_input(
     Ok(())
 }
 
-fn map_boundary_acquisition(error: RepositoryBoundaryAcquisitionError) -> BoundaryScanError {
+pub(crate) fn map_boundary_acquisition(
+    error: RepositoryBoundaryAcquisitionError,
+) -> BoundaryScanError {
     match error {
         RepositoryBoundaryAcquisitionError::Repository(RepositoryError::Acquisition(error)) => {
             BoundaryScanError::Scan(ScanError::Acquisition(error))

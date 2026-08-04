@@ -4,6 +4,7 @@ mod s1_boundaries;
 mod s4;
 mod s4_r3;
 mod s4_r4;
+mod s4_r5;
 mod s5;
 mod s6;
 
@@ -14,6 +15,7 @@ pub use s1_boundaries::{
 pub use s4::S4ScanOutput;
 pub use s4_r3::{RootPackageScanError, S4R3ScanOutput};
 pub use s4_r4::{CargoManifestScanError, S4R4ScanOutput};
+pub use s4_r5::{RustSemanticScanError, S4R5ScanOutput};
 pub use s5::{RefreshError, RefreshPlan, RefreshService};
 pub use s6::{FederationRequest, FederationService, FederationServiceError};
 

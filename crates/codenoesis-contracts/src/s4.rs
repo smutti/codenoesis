@@ -616,12 +616,14 @@ struct DocumentDraft {
 pub(super) struct GraphIndex {
     pub(super) repository_identity: String,
     cargo_manifest_declarations: bool,
+    rust_semantic_depth: bool,
     pub(super) entities: BTreeMap<String, Value>,
     relationships: Vec<Value>,
     pub(super) relationships_by_id: BTreeMap<String, Value>,
     claims: BTreeMap<(String, String), Value>,
     pub(super) claims_by_id: BTreeMap<String, Value>,
     pub(super) evidence: BTreeMap<String, Value>,
+    pub(super) diagnostics: BTreeMap<String, Value>,
     pub(super) coverage: BTreeMap<String, Value>,
 }
 
@@ -635,8 +637,17 @@ impl GraphIndex {
         let graph = semantic
             .get("knowledge_graph")
             .ok_or(DocumentationContractError::InvalidSnapshot)?;
-        let cargo_manifest_declarations =
-            string_field(graph, "schema_version") == Ok("codenoesis.knowledge-graph/v4");
+        let cargo_manifest_declarations = matches!(
+            string_field(graph, "schema_version"),
+            Ok("codenoesis.knowledge-graph/v4" | "codenoesis.knowledge-graph/v5")
+        );
+        let rust_semantic_depth =
+            string_field(graph, "schema_version") == Ok("codenoesis.knowledge-graph/v5");
+        let diagnostics = if rust_semantic_depth {
+            id_map(graph, "diagnostics")?
+        } else {
+            BTreeMap::new()
+        };
         let entities = id_map(graph, "entities")?;
         let relationships = graph
             .get("relationships")
@@ -665,12 +676,14 @@ impl GraphIndex {
         Ok(Self {
             repository_identity,
             cargo_manifest_declarations,
+            rust_semantic_depth,
             entities,
             relationships,
             relationships_by_id,
             claims,
             claims_by_id,
             evidence: id_map(graph, "evidence")?,
+            diagnostics,
             coverage: id_map(graph, "coverage")?,
         })
     }
@@ -995,7 +1008,9 @@ fn module_document(
         .filter_map(|relationship| {
             let target = string_field(relationship, "target").ok()?;
             let entity = index.entities.get(target)?;
-            (string_field(entity, "kind").ok()? != "rust.module").then_some((relationship, entity))
+            let kind = string_field(entity, "kind").ok()?;
+            (kind != "rust.module" && !(index.rust_semantic_depth && r5_entity_kind(kind)))
+                .then_some((relationship, entity))
         })
         .collect::<Vec<_>>();
     declarations.sort_by(|(_, left), (_, right)| {
@@ -1143,6 +1158,19 @@ fn module_document(
             statements.push(statement);
         }
     }
+    if index.rust_semantic_depth {
+        append_rust_semantic_depth(
+            index,
+            &document_id,
+            module_id,
+            string_field(module, "crate_id")?,
+            module_path,
+            source_file_id,
+            source_path,
+            &mut content,
+            &mut statements,
+        )?;
+    }
     Ok(DocumentDraft {
         document_id,
         kind: "module",
@@ -1151,6 +1179,214 @@ fn module_document(
         bytes: content.into_bytes(),
         statements,
     })
+}
+
+#[allow(clippy::too_many_lines)]
+#[allow(clippy::too_many_arguments)]
+fn append_rust_semantic_depth(
+    index: &GraphIndex,
+    document_id: &str,
+    module_id: &str,
+    crate_id: &str,
+    module_path: &str,
+    source_file_id: &str,
+    source_path: &str,
+    content: &mut String,
+    statements: &mut Vec<Value>,
+) -> Result<(), DocumentationContractError> {
+    let mut entities = index
+        .entities
+        .values()
+        .filter(|entity| {
+            string_field(entity, "kind").is_ok_and(r5_entity_kind)
+                && string_field(entity, "crate_id") == Ok(crate_id)
+                && string_field(entity, "module_path") == Ok(module_path)
+        })
+        .collect::<Vec<_>>();
+    entities.sort_by(|left, right| {
+        string_field(left, "id")
+            .unwrap_or_default()
+            .cmp(string_field(right, "id").unwrap_or_default())
+    });
+    if !entities.is_empty() {
+        content.push_str(
+            "\n## Rust semantic declarations\n\nEvery entry is declared syntax only and not observed runtime behavior. Compilation presence records parser-visible uncertainty; attributes, cfg, types, values, traits, macros, and runtime behavior are not interpreted.\n\n",
+        );
+        for (ordinal, entity) in entities.into_iter().enumerate() {
+            let id = string_field(entity, "id")?;
+            let kind = string_field(entity, "kind")?;
+            let name = string_field(entity, "name")?;
+            let owner_id = string_field(entity, "owner_id")?;
+            let properties = entity
+                .get("properties")
+                .ok_or(DocumentationContractError::InvalidSnapshot)?;
+            let compilation_presence = if kind == "rust.method" {
+                string_field(properties, "compilation_presence")?
+            } else {
+                string_field(entity, "compilation_presence")?
+            };
+            let spelling = if kind == "rust.method" {
+                string_field(properties, "declared_signature")?
+            } else {
+                properties
+                    .get("declared_type_or_header")
+                    .and_then(Value::as_str)
+                    .unwrap_or("not applicable")
+            };
+            let claim = index.claim("entity", id)?;
+            let statement = statement_value(
+                document_id,
+                "rust_semantic_declaration",
+                id,
+                ordinal,
+                "deterministic_fact",
+                vec![id.to_owned()],
+                string_array(claim, "evidence_ids")?,
+                Vec::new(),
+            );
+            writeln!(
+                content,
+                "- Declared `{}` `{}` owned by `{}` with compilation presence `{}` and spelling `{}`; declared syntax only, not observed runtime behavior. {}",
+                markdown_code(kind),
+                markdown_code(name),
+                markdown_code(owner_id),
+                markdown_code(compilation_presence),
+                markdown_code(spelling),
+                statement_marker(&statement)?
+            )
+            .expect("writing Markdown to a String cannot fail");
+            statements.push(statement);
+        }
+    }
+
+    let uncertainty_owner = index
+        .entities
+        .values()
+        .filter(|entity| {
+            string_field(entity, "kind") == Ok("rust.module")
+                && string_field(entity, "crate_id") == Ok(crate_id)
+                && entity
+                    .pointer("/properties/source_file_id")
+                    .and_then(Value::as_str)
+                    == Some(source_file_id)
+        })
+        .filter_map(|entity| string_field(entity, "id").ok())
+        .min()
+        .ok_or(DocumentationContractError::InvalidSnapshot)?
+        == module_id;
+    if !uncertainty_owner {
+        return Ok(());
+    }
+    let mut diagnostics = Vec::new();
+    for diagnostic in index.diagnostics.values() {
+        if string_field(diagnostic, "code").is_ok_and(|code| code.starts_with("rust."))
+            && record_has_evidence_path(index, diagnostic, source_path)?
+        {
+            diagnostics.push(diagnostic);
+        }
+    }
+    diagnostics.sort_by(|left, right| {
+        string_field(left, "id")
+            .unwrap_or_default()
+            .cmp(string_field(right, "id").unwrap_or_default())
+    });
+    if !diagnostics.is_empty() {
+        content.push_str("\n## Rust semantic diagnostics\n\n");
+        for (ordinal, diagnostic) in diagnostics.into_iter().enumerate() {
+            let id = string_field(diagnostic, "id")?;
+            let code = string_field(diagnostic, "code")?;
+            let message = string_field(diagnostic, "message")?;
+            let statement = statement_value(
+                document_id,
+                "rust_semantic_diagnostic",
+                id,
+                ordinal,
+                "deterministic_fact",
+                vec![id.to_owned()],
+                string_array(diagnostic, "evidence_ids")?,
+                Vec::new(),
+            );
+            writeln!(
+                content,
+                "- Diagnostic `{}`: {}; declarations remain syntax-only. {}",
+                markdown_code(code),
+                markdown_code(message),
+                statement_marker(&statement)?
+            )
+            .expect("writing Markdown to a String cannot fail");
+            statements.push(statement);
+        }
+    }
+
+    let mut gaps = Vec::new();
+    for gap in index.coverage.values() {
+        if string_field(gap, "capability").is_ok_and(|capability| capability.starts_with("rust."))
+            && record_has_evidence_path(index, gap, source_path)?
+        {
+            gaps.push(gap);
+        }
+    }
+    gaps.sort_by(|left, right| {
+        string_field(left, "id")
+            .unwrap_or_default()
+            .cmp(string_field(right, "id").unwrap_or_default())
+    });
+    if !gaps.is_empty() {
+        content.push_str("\n## Rust semantic uncertainty\n\n");
+        for (ordinal, gap) in gaps.into_iter().enumerate() {
+            let id = string_field(gap, "id")?;
+            let capability = string_field(gap, "capability")?;
+            let state = string_field(gap, "state")?;
+            let statement = statement_value(
+                document_id,
+                "rust_semantic_coverage_gap",
+                id,
+                ordinal,
+                "unsupported",
+                vec![id.to_owned()],
+                Vec::new(),
+                vec![id.to_owned()],
+            );
+            writeln!(
+                content,
+                "- `{}` is `{}`; the unresolved semantic world is not claimed. {}",
+                markdown_code(capability),
+                markdown_code(state),
+                statement_marker(&statement)?
+            )
+            .expect("writing Markdown to a String cannot fail");
+            statements.push(statement);
+        }
+    }
+    Ok(())
+}
+
+fn record_has_evidence_path(
+    index: &GraphIndex,
+    record: &Value,
+    source_path: &str,
+) -> Result<bool, DocumentationContractError> {
+    string_array(record, "evidence_ids")?
+        .into_iter()
+        .try_fold(false, |matched, evidence_id| {
+            let evidence = index
+                .evidence
+                .get(&evidence_id)
+                .ok_or(DocumentationContractError::InvalidSnapshot)?;
+            Ok(matched || string_field(evidence, "path")? == source_path)
+        })
+}
+
+fn r5_entity_kind(kind: &str) -> bool {
+    matches!(
+        kind,
+        "rust.field"
+            | "rust.enum_variant"
+            | "rust.constant"
+            | "rust.static"
+            | "rust.associated_type"
+            | "rust.method"
+    )
 }
 
 #[allow(clippy::too_many_arguments)]
