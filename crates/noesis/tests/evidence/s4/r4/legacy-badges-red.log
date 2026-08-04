@@ -1,0 +1,23 @@
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.3+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling codenoesis-lang-rust v0.1.0 (/Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.12s
+     Running tests/s4_cargo_manifest_facts.rs (target/debug/deps/s4_cargo_manifest_facts-881cf43a6ae689aa)
+
+running 1 test
+test gt_fr_ext_009_legacy_badges_is_typed_unsupported ... FAILED
+
+failures:
+
+---- gt_fr_ext_009_legacy_badges_is_typed_unsupported stdout ----
+
+thread 'gt_fr_ext_009_legacy_badges_is_typed_unsupported' (11377159) panicked at crates/codenoesis-lang-rust/tests/s4_cargo_manifest_facts.rs:285:6:
+literal top-level badges table is typed unsupported: InvalidFact { reason: UnsupportedKey, path: "Cargo.toml", fact_kind: Manifest, field: None }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    gt_fr_ext_009_legacy_badges_is_typed_unsupported
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p codenoesis-lang-rust --test s4_cargo_manifest_facts`
