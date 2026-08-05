@@ -34,6 +34,10 @@ INVALID_CASES_PATH = SPEC_ROOT / "invalid-cases-v1.json"
 PILOT_OBSERVATIONS_PATH = SPEC_ROOT / "pilot-observations-v1.json"
 RED_OBSERVATION_PATH = SPEC_ROOT / "red-observation.json"
 RED_LOG_PATH = SPEC_ROOT / "red/governance-red.log"
+EVIDENCE_ID_RED_OBSERVATION_PATH = (
+    SPEC_ROOT / "red/evidence-id-schema-red-observation.json"
+)
+EVIDENCE_ID_RED_LOG_PATH = SPEC_ROOT / "red/evidence-id-schema-red.log"
 BUNDLE_PATH = SPEC_ROOT / "contract-bundle.json"
 FIXTURE_ROOT = ROOT / "tests/fixtures/s4/framework-declarations-v1"
 FIXTURE_REPOSITORY = FIXTURE_ROOT / "repository"
@@ -164,6 +168,8 @@ MATERIALIZED_PATHS = (
     PILOT_OBSERVATIONS_PATH,
     RED_OBSERVATION_PATH,
     RED_LOG_PATH,
+    EVIDENCE_ID_RED_OBSERVATION_PATH,
+    EVIDENCE_ID_RED_LOG_PATH,
     BUNDLE_PATH,
     FIXTURE_ROOT / "README.md",
     FIXTURE_MANIFEST_PATH,
@@ -203,6 +209,8 @@ BUNDLE_FILES = {
     "tests/specifications/s4/r6/local-query-result-v4.schema.json",
     "tests/specifications/s4/r6/pilot-observations-v1.json",
     "tests/specifications/s4/r6/red-observation.json",
+    "tests/specifications/s4/r6/red/evidence-id-schema-red-observation.json",
+    "tests/specifications/s4/r6/red/evidence-id-schema-red.log",
     "tests/specifications/s4/r6/red/governance-red.log",
     "tests/specifications/s4/r6/repository-snapshot-v9.schema.json",
     "tests/specifications/s4/r6/rust-ontology-v6.json",
