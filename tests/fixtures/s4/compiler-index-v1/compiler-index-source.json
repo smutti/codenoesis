@@ -1,0 +1,447 @@
+{
+  "schema_version": "codenoesis.r7-reviewed-scip-source/v1",
+  "metadata": {
+    "version": 0,
+    "tool_info": {
+      "name": "rust-analyzer",
+      "version": "2026-08-03",
+      "arguments": [
+        "scip",
+        ".",
+        "--config=R7_SECRET_ARGUMENT_CANARY"
+      ]
+    },
+    "project_root": "file:///private/compiler-index-fixture",
+    "text_document_encoding": 1
+  },
+  "documents": [
+    {
+      "relative_path": "crates/api/src/lib.rs",
+      "language": "rust",
+      "position_encoding": 1,
+      "text": "",
+      "occurrences": [
+        {
+          "range": [0, 10, 15],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/Store#",
+          "symbol_roles": 1,
+          "syntax_kind": 19,
+          "enclosing_range": [0, 0, 2, 1]
+        },
+        {
+          "range": [1, 7, 10],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/Store#get().",
+          "symbol_roles": 1,
+          "syntax_kind": 16,
+          "enclosing_range": [1, 4, 1, 49]
+        },
+        {
+          "range": [1, 22, 28],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/UserId#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [1, 4, 1, 49]
+        },
+        {
+          "range": [1, 40, 44],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/User#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [1, 4, 1, 49]
+        },
+        {
+          "range": [4, 11, 15],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/User#",
+          "symbol_roles": 1,
+          "syntax_kind": 19,
+          "enclosing_range": [4, 0, 6, 1]
+        },
+        {
+          "range": [5, 12, 18],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/UserId#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [4, 0, 6, 1]
+        },
+        {
+          "range": [8, 9, 15],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/UserId#",
+          "symbol_roles": 1,
+          "syntax_kind": 19,
+          "enclosing_range": [8, 0, 8, 22]
+        },
+        {
+          "range": [10, 9, 18],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/UserAlias#",
+          "symbol_roles": 1,
+          "syntax_kind": 19,
+          "enclosing_range": [10, 0, 10, 26]
+        },
+        {
+          "range": [10, 21, 25],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/User#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [10, 0, 10, 26]
+        },
+        {
+          "range": [12, 11, 22],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/MemoryStore#",
+          "symbol_roles": 1,
+          "syntax_kind": 19,
+          "enclosing_range": [12, 0, 12, 23]
+        },
+        {
+          "range": [14, 5, 10],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/Store#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [14, 0, 18, 1]
+        },
+        {
+          "range": [14, 15, 26],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/MemoryStore#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [14, 0, 18, 1]
+        },
+        {
+          "range": [15, 7, 10],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/MemoryStore#get().",
+          "symbol_roles": 1,
+          "syntax_kind": 16,
+          "enclosing_range": [15, 4, 17, 5]
+        },
+        {
+          "range": [15, 22, 28],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/UserId#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [15, 4, 17, 5]
+        },
+        {
+          "range": [15, 40, 44],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/User#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [15, 4, 17, 5]
+        },
+        {
+          "range": [16, 13, 17],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/User#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [15, 4, 17, 5]
+        },
+        {
+          "range": [20, 7, 11],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/load().",
+          "symbol_roles": 1,
+          "syntax_kind": 16,
+          "enclosing_range": [20, 0, 22, 1]
+        },
+        {
+          "range": [20, 25, 30],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/Store#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [20, 0, 22, 1]
+        },
+        {
+          "range": [20, 36, 42],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/UserId#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [20, 0, 22, 1]
+        },
+        {
+          "range": [20, 54, 58],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/User#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [20, 0, 22, 1]
+        },
+        {
+          "range": [21, 10, 13],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/Store#get().",
+          "symbol_roles": 8,
+          "syntax_kind": 15,
+          "enclosing_range": [21, 4, 21, 17]
+        },
+        {
+          "range": [24, 11, 16],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/`Café`#",
+          "symbol_roles": 1,
+          "syntax_kind": 19,
+          "enclosing_range": [24, 0, 24, 17]
+        },
+        {
+          "range": [26, 13, 29],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/generated_helper!",
+          "symbol_roles": 1,
+          "syntax_kind": 18,
+          "enclosing_range": [26, 0, 30, 1]
+        },
+        {
+          "range": [32, 0, 16],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/generated_helper().",
+          "symbol_roles": 16,
+          "syntax_kind": 17,
+          "enclosing_range": [32, 0, 32, 20]
+        }
+      ],
+      "symbols": [
+        {
+          "symbol": "rust-analyzer cargo api 0.1.0 api/Store#",
+          "documentation": [],
+          "relationships": [],
+          "kind": 53,
+          "display_name": "Store"
+        },
+        {
+          "symbol": "rust-analyzer cargo api 0.1.0 api/Store#get().",
+          "documentation": [],
+          "relationships": [],
+          "kind": 70,
+          "display_name": "get"
+        },
+        {
+          "symbol": "rust-analyzer cargo api 0.1.0 api/User#",
+          "documentation": [],
+          "relationships": [],
+          "kind": 49,
+          "display_name": "User"
+        },
+        {
+          "symbol": "rust-analyzer cargo api 0.1.0 api/UserId#",
+          "documentation": [],
+          "relationships": [],
+          "kind": 55,
+          "display_name": "UserId"
+        },
+        {
+          "symbol": "rust-analyzer cargo api 0.1.0 api/UserAlias#",
+          "documentation": [],
+          "relationships": [
+            {
+              "symbol": "rust-analyzer cargo api 0.1.0 api/User#",
+              "is_type_definition": true
+            }
+          ],
+          "kind": 55,
+          "display_name": "UserAlias"
+        },
+        {
+          "symbol": "rust-analyzer cargo api 0.1.0 api/MemoryStore#",
+          "documentation": [],
+          "relationships": [
+            {
+              "symbol": "rust-analyzer cargo api 0.1.0 api/Store#",
+              "is_implementation": true
+            }
+          ],
+          "kind": 49,
+          "display_name": "MemoryStore"
+        },
+        {
+          "symbol": "rust-analyzer cargo api 0.1.0 api/MemoryStore#get().",
+          "documentation": [],
+          "relationships": [
+            {
+              "symbol": "rust-analyzer cargo api 0.1.0 api/Store#get().",
+              "is_reference": true,
+              "is_implementation": true
+            }
+          ],
+          "kind": 26,
+          "display_name": "get"
+        },
+        {
+          "symbol": "rust-analyzer cargo api 0.1.0 api/load().",
+          "documentation": [],
+          "relationships": [],
+          "kind": 17,
+          "display_name": "load"
+        },
+        {
+          "symbol": "rust-analyzer cargo api 0.1.0 api/`Café`#",
+          "documentation": [
+            "R7_DOCUMENTATION_CANARY"
+          ],
+          "relationships": [],
+          "kind": 49,
+          "display_name": "Café"
+        },
+        {
+          "symbol": "rust-analyzer cargo api 0.1.0 api/generated_helper!",
+          "documentation": [],
+          "relationships": [],
+          "kind": 25,
+          "display_name": "generated_helper"
+        },
+        {
+          "symbol": "rust-analyzer cargo api 0.1.0 api/generated_helper().",
+          "documentation": [],
+          "relationships": [],
+          "kind": 17,
+          "display_name": "generated_helper"
+        }
+      ]
+    },
+    {
+      "relative_path": "crates/client/src/lib.rs",
+      "language": "rust",
+      "position_encoding": 1,
+      "text": "",
+      "occurrences": [
+        {
+          "range": [0, 10, 14],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/load().",
+          "symbol_roles": 2,
+          "syntax_kind": 15,
+          "enclosing_range": [0, 0, 0, 57]
+        },
+        {
+          "range": [0, 16, 21],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/`Café`#",
+          "symbol_roles": 2,
+          "syntax_kind": 19,
+          "enclosing_range": [0, 0, 0, 57]
+        },
+        {
+          "range": [0, 23, 34],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/MemoryStore#",
+          "symbol_roles": 2,
+          "syntax_kind": 19,
+          "enclosing_range": [0, 0, 0, 57]
+        },
+        {
+          "range": [0, 36, 41],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/Store#",
+          "symbol_roles": 2,
+          "syntax_kind": 19,
+          "enclosing_range": [0, 0, 0, 57]
+        },
+        {
+          "range": [0, 43, 47],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/User#",
+          "symbol_roles": 2,
+          "syntax_kind": 19,
+          "enclosing_range": [0, 0, 0, 57]
+        },
+        {
+          "range": [0, 49, 55],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/UserId#",
+          "symbol_roles": 2,
+          "syntax_kind": 19,
+          "enclosing_range": [0, 0, 0, 57]
+        },
+        {
+          "range": [2, 7, 12],
+          "symbol": "rust-analyzer cargo client 0.1.0 client/fetch().",
+          "symbol_roles": 1,
+          "syntax_kind": 16,
+          "enclosing_range": [2, 0, 6, 1]
+        },
+        {
+          "range": [2, 17, 23],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/UserId#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [2, 0, 6, 1]
+        },
+        {
+          "range": [2, 35, 39],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/User#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [2, 0, 6, 1]
+        },
+        {
+          "range": [3, 16, 27],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/MemoryStore#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [2, 0, 6, 1]
+        },
+        {
+          "range": [3, 8, 13],
+          "symbol": "local 0",
+          "symbol_roles": 1,
+          "syntax_kind": 12,
+          "enclosing_range": [2, 0, 6, 1]
+        },
+        {
+          "range": [4, 18, 23],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/`Café`#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [2, 0, 6, 1]
+        },
+        {
+          "range": [5, 4, 8],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/load().",
+          "symbol_roles": 8,
+          "syntax_kind": 15,
+          "enclosing_range": [5, 4, 5, 20]
+        },
+        {
+          "range": [5, 10, 15],
+          "symbol": "local 0",
+          "symbol_roles": 8,
+          "syntax_kind": 12,
+          "enclosing_range": [5, 4, 5, 20]
+        },
+        {
+          "range": [8, 7, 20],
+          "symbol": "rust-analyzer cargo client 0.1.0 client/accepts_store().",
+          "symbol_roles": 1,
+          "syntax_kind": 16,
+          "enclosing_range": [8, 0, 8, 43]
+        },
+        {
+          "range": [8, 34, 39],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/Store#",
+          "symbol_roles": 8,
+          "syntax_kind": 19,
+          "enclosing_range": [8, 0, 8, 43]
+        }
+      ],
+      "symbols": [
+        {
+          "symbol": "rust-analyzer cargo client 0.1.0 client/fetch().",
+          "documentation": [],
+          "relationships": [],
+          "kind": 17,
+          "display_name": "fetch"
+        },
+        {
+          "symbol": "rust-analyzer cargo client 0.1.0 client/accepts_store().",
+          "documentation": [],
+          "relationships": [],
+          "kind": 17,
+          "display_name": "accepts_store"
+        },
+        {
+          "symbol": "local 0",
+          "documentation": [],
+          "relationships": [],
+          "kind": 61,
+          "display_name": "store",
+          "enclosing_symbol": "rust-analyzer cargo client 0.1.0 client/fetch()."
+        }
+      ]
+    }
+  ],
+  "external_symbols": [
+    {
+      "symbol": "rust-analyzer cargo core 1.97.1 core/option/Option#",
+      "documentation": [
+        "R7_EXTERNAL_DOCUMENTATION_CANARY"
+      ],
+      "relationships": [],
+      "kind": 49,
+      "display_name": "Option"
+    }
+  ]
+}

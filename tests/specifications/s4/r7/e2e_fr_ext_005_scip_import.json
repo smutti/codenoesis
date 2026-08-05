@@ -1,0 +1,165 @@
+{
+  "schema_version": "codenoesis.acceptance/s4-r7-scip-import-v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/123",
+  "authorization": "https://github.com/smutti/codenoesis/issues/123#issuecomment-5193618752",
+  "required_base": "3f750201a1527c85ed2ce83f70ed0932213f3548",
+  "requirement_ids": [
+    "FR-EXT-005",
+    "DR-EVD-001",
+    "DR-IDN-001",
+    "FR-EXT-001",
+    "FR-EXT-002",
+    "FR-EXT-010",
+    "FR-EXT-011",
+    "FR-KNW-001",
+    "FR-KNW-002",
+    "FR-KNW-003",
+    "FR-DOC-001",
+    "FR-DOC-002",
+    "FR-QRY-001",
+    "FR-CLI-001",
+    "NFR-DET-001",
+    "NFR-SEC-001",
+    "NFR-SEC-004",
+    "NFR-SEC-005",
+    "NFR-PRV-002",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "requirement_status": {
+    "current": "Proposed",
+    "target_after_protected_merge": "Approved for the bounded R7 profile"
+  },
+  "slice": "S4",
+  "roadmap_capability": "R7",
+  "risk": "high",
+  "correction_rounds": 4,
+  "selector": {
+    "flag": "--compiler-index-profile",
+    "value": "scip-rust-v0.9.0-import-v1",
+    "binding_flag": "--compiler-index-binding",
+    "required_scan_profile": "standard-local-s4",
+    "required_workspace_profile": "cargo-root-package-v1",
+    "required_manifest_profile": "cargo-manifest-facts-v1",
+    "required_semantic_profile": "rust-semantic-depth-v1",
+    "required_framework_profile": "rust-framework-declarations-v1",
+    "implicit_selection": false
+  },
+  "public_contracts": {
+    "binding": "codenoesis.compiler-index-binding/v1",
+    "configuration": "codenoesis.configuration/v7",
+    "snapshot": "codenoesis.repository-snapshot/v10",
+    "extraction_chunk": "codenoesis.extraction-chunk/v7",
+    "knowledge_graph": "codenoesis.knowledge-graph/v7",
+    "ontology": "codenoesis.ontology/rust/v7",
+    "pipeline": "codenoesis.pipeline/s4-r7-v1",
+    "error": "codenoesis.error/v14",
+    "query": "codenoesis.local-query-result/v5"
+  },
+  "wire_contract": {
+    "format": "scip-protobuf",
+    "tag": "v0.9.0",
+    "commit": "e8ee0ae6038f8298e2195812eea9d7b1196748ae",
+    "proto_sha256": "04cb20f2b8be73f6c0376b5b3e84c3ae20ebaff0ad3d23ba2d16f866b395ed7d",
+    "protocol_version": 0,
+    "producer_family": "rust-analyzer-scip"
+  },
+  "success": [
+    "Both explicit R7 inputs pass safe-path, race, length, SHA-256, schema, repository, revision, tree, source-manifest, document, producer, and toolchain validation.",
+    "A bounded wire framing pass rejects amplification, malformed fields, illegal wire types, excess recursion, and count or length overflow before generated protobuf decode.",
+    "Recursive unknown fields, duplicate singular values, non-canonical varints or field order, and canonical re-encoding drift fail before graph construction.",
+    "Only UTF-8 Rust documents with valid UTF-8 byte ranges and exact committed source hashes can become in-repository compiler facts.",
+    "Compiler symbol identities remain stable across document, occurrence, relationship, and scheduling permutations.",
+    "RESOLVES_TO and REFERENCES require unique source and lexical-owner bindings; IMPLEMENTS and TYPE_DEFINITION require their explicit SCIP flags.",
+    "Syntax and compiler evidence are both retained on disagreement; precedence never hides a conflict or incomplete coverage.",
+    "External and generated symbols remain explicit unbound compiler assertions rather than committed source or runtime declarations.",
+    "Absolute roots, raw arguments, embedded text, documentation, signatures, diagnostics, environment values, and privacy canaries do not reach public artifacts.",
+    "No CALLS or runtime relationship is emitted and call/macro limitations remain exact coverage gaps.",
+    "Publication, restart, corruption, crash, and sweep retain the immutable R6 semantics without migration.",
+    "Every invocation without both R7 selector inputs remains byte-identical through R6."
+  ],
+  "expected_failures": [
+    "invalid profile or incomplete selector composition",
+    "unsafe missing changed or escaping binding or artifact path",
+    "malformed or unknown binding field",
+    "unsupported schema producer protocol language or encoding",
+    "artifact repository revision tree source producer or toolchain mismatch",
+    "malformed truncated non-canonical duplicate unknown or over-recursive protobuf",
+    "invalid symbol role range identity evidence or NFC collision",
+    "ambiguous required endpoint or contradictory authoritative relation",
+    "maximum plus one",
+    "internal contract failure"
+  ],
+  "failure_streams": {
+    "stdout": "empty",
+    "stderr": "one strict LF-terminated CodeNoesisErrorV14",
+    "exit_code": 10,
+    "partial_store_mutation": false,
+    "partial_document_mutation": false
+  },
+  "limits": {
+    "raw_index_bytes": 67108864,
+    "binding_json_bytes": 1048576,
+    "documents": 20000,
+    "occurrences_total": 1000000,
+    "occurrences_per_document": 100000,
+    "symbol_information_total": 250000,
+    "relationships_total": 500000,
+    "symbol_or_display_bytes": 16384,
+    "unpromoted_value_bytes": 65536,
+    "tool_arguments": 128,
+    "tool_argument_bytes": 4096,
+    "protobuf_recursion": 64,
+    "permutations": 50
+  },
+  "evidence_ceilings": {
+    "wall_time_ms": 60000,
+    "peak_rss_bytes": 536870912,
+    "silent_truncation": false
+  },
+  "fixture": {
+    "id": "compiler-index-v1",
+    "repository_identity": "urn:codenoesis:fixture:s4-compiler-index-v1",
+    "manifest": "tests/fixtures/s4/compiler-index-v1/manifest.json",
+    "binding": "tests/fixtures/s4/compiler-index-v1/compiler-index-binding.json",
+    "raw_artifact": "tests/fixtures/s4/compiler-index-v1/index.scip",
+    "reviewed_source": "tests/fixtures/s4/compiler-index-v1/compiler-index-source.json",
+    "expected_overlay": "tests/fixtures/s4/compiler-index-v1/expected-compiler-overlay.json",
+    "external_source_vendored": false,
+    "may_execute": false
+  },
+  "required_test_names": [
+    "e2e_fr_ext_005_revision_bound_scip_import",
+    "gt_fr_ext_005_cross_crate_symbol_resolution",
+    "gt_fr_ext_005_explicit_implementation_and_type_relations",
+    "gt_fr_ext_005_external_and_generated_symbols_remain_bounded",
+    "conf_fr_ext_005_snapshot_v10_graph_v7_error_v14",
+    "conf_fr_qry_001_v10_uses_local_query_result_v5",
+    "pt_dr_idn_001_r7_global_local_symbol_identity_nfc",
+    "pt_fr_ext_005_limits_have_max_and_plus_one",
+    "pt_nfr_det_001_r7_permutation_and_replay_invariant",
+    "sec_fr_ext_005_protobuf_preflight_precedes_decode",
+    "sec_fr_ext_005_binding_path_race_and_privacy",
+    "sec_fr_ext_005_never_executes_indexer_or_target",
+    "e2e_fr_doc_001_r7_provenance_conflict_and_gap_wording",
+    "reg_fr_cli_001_r7_selector_absence_is_byte_identical"
+  ],
+  "immutable_dependencies": {
+    "r6_contract_bundle_sha256": "46f5e0fab0439979c456cb41ce7195efd5e02a342be4292402ef2cb44909bc47"
+  },
+  "future_product_dependencies": [
+    {
+      "name": "protobuf",
+      "version": "=3.7.2"
+    },
+    {
+      "name": "scip",
+      "version": "=0.9.0"
+    }
+  ],
+  "production_implementation_forbidden": true,
+  "index_generation_forbidden": true,
+  "standard_scan_process_execution": false,
+  "standard_scan_network_access": false,
+  "r8_issue_110_authority": false
+}

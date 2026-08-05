@@ -1,0 +1,141 @@
+{
+  "schema_version": "codenoesis.ontology/rust/v7",
+  "extends": {
+    "ontology_version": "codenoesis.ontology/rust/v6",
+    "contract_path": "tests/specifications/s4/r6/rust-ontology-v6.json",
+    "contract_sha256": "d91c47426295b3fc633218cf386a79e69c7e19b69d575691e40be8b94a055818"
+  },
+  "selector": "codenoesis.compiler-index-profile/scip-rust-v0.9.0-import-v1",
+  "compiler_entity_kind": "compiler.symbol",
+  "entity_semantics": {
+    "compiler.symbol": "One normalized assertion from the explicitly supplied validated compiler index; it is not automatically a committed source declaration, runtime object, or producer attestation."
+  },
+  "binding_states": [
+    "in_repository_bound",
+    "external_unbound",
+    "generated_unbound"
+  ],
+  "binding_state_semantics": {
+    "in_repository_bound": "The defining occurrence resolves uniquely to exact committed bytes and an existing source declaration when one is required.",
+    "external_unbound": "The SCIP symbol is outside the acquired repository and has no authoritative committed definition in this snapshot.",
+    "generated_unbound": "The compiler index marks or exposes a generated product whose committed source definition cannot be bound exactly."
+  },
+  "identity": {
+    "domain": "codenoesis.entity-id/compiler-symbol/v1",
+    "normalization": "NFC",
+    "canonical_preimage": "RFC8785 JSON array prefixed by the domain",
+    "hash": "BLAKE3-256",
+    "global_fields": [
+      "scope=global",
+      "SCIP scheme",
+      "package manager",
+      "package name",
+      "package version",
+      "normalized descriptor sequence"
+    ],
+    "local_fields": [
+      "scope=local",
+      "repository identity",
+      "canonical document path",
+      "SCIP local id"
+    ],
+    "forbidden_inputs": [
+      "commit_oid",
+      "artifact_sha256",
+      "producer_version",
+      "toolchain",
+      "byte_offset",
+      "document_order",
+      "occurrence_order",
+      "scheduler_order",
+      "absolute_project_root",
+      "raw_arguments"
+    ],
+    "collision_behavior": "fail before publication; no ordinal, offset, ordering, scheduling, or retry repair"
+  },
+  "relationship_kinds": [
+    "RESOLVES_TO",
+    "REFERENCES",
+    "IMPLEMENTS",
+    "TYPE_DEFINITION"
+  ],
+  "relationship_semantics": {
+    "RESOLVES_TO": "An existing syntax reference is uniquely bound by compiler-index evidence to one committed declaration or one explicitly unbound compiler symbol.",
+    "REFERENCES": "A uniquely identified lexical owner contains one compiler-resolved symbol reference; this does not distinguish call, type use, value use, or runtime access.",
+    "IMPLEMENTS": "The pinned SCIP record explicitly sets is_implementation and both endpoints are unique; existing syntax evidence remains retained.",
+    "TYPE_DEFINITION": "The pinned SCIP record explicitly sets is_type_definition and both endpoints are unique."
+  },
+  "forbidden_relationship_kinds": [
+    "CALLS",
+    "EXECUTES",
+    "SERVES",
+    "STARTS",
+    "REACHES",
+    "ACTIVATES"
+  ],
+  "evidence": {
+    "compiler_domain": "codenoesis.evidence-id/compiler-index/v1",
+    "compiler_hash": "SHA-256",
+    "compiler_preimage": [
+      "raw artifact SHA-256",
+      "canonical semantic locator"
+    ],
+    "source_domain": "codenoesis.evidence-id/source-span/v1",
+    "source_hash": "SHA-256",
+    "in_repository_promotion_requires_both": true,
+    "raw_absolute_or_secret_values_public": false
+  },
+  "claim_policy": {
+    "validated_index_assertion": "deterministic_fact with compiler provenance",
+    "producer_attestation": false,
+    "syntax_evidence_deleted": false,
+    "conflict_hidden_by_precedence": false,
+    "ambiguous_endpoint_promoted": false,
+    "generated_symbol_becomes_source_declaration": false,
+    "runtime_state": "never emitted"
+  },
+  "coverage_capability_states": {
+    "compiler_index.call_semantics_unavailable": "unsupported",
+    "compiler_index.generated_product_unbound": "unbound",
+    "compiler_index.document_not_indexed": "not_indexed",
+    "compiler_index.documentation_not_imported": "unsupported",
+    "compiler_index.absolute_project_root_redacted": "redacted",
+    "compiler_index.arguments_redacted": "redacted"
+  },
+  "limits": {
+    "raw_index_bytes": 67108864,
+    "binding_json_bytes": 1048576,
+    "documents": 20000,
+    "occurrences_total": 1000000,
+    "occurrences_per_document": 100000,
+    "symbol_information_total": 250000,
+    "relationships_total": 500000,
+    "symbol_or_display_bytes": 16384,
+    "unpromoted_value_bytes": 65536,
+    "tool_arguments": 128,
+    "tool_argument_bytes": 4096,
+    "protobuf_recursion": 64,
+    "permutations": 50
+  },
+  "compatibility": {
+    "v9_v4": "byte-identical",
+    "v8_v3": "byte-identical",
+    "v7_v2": "byte-identical",
+    "v4_v6_v1": "byte-identical",
+    "selector_absent_r0_r6": "byte-identical",
+    "migration": false
+  },
+  "forbidden_authority": [
+    "compiler or indexer execution",
+    "Cargo or rustc execution",
+    "build-script or proc-macro execution",
+    "target execution",
+    "plugin or sidecar execution",
+    "network access",
+    "call inference from a generic reference",
+    "generated source declaration without committed binding",
+    "runtime observation",
+    "producer authenticity",
+    "model output"
+  ]
+}

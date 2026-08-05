@@ -1,0 +1,44 @@
+{
+  "schema_version": "codenoesis.acceptance/s4-r7-query-v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/123",
+  "authorization": "https://github.com/smutti/codenoesis/issues/123#issuecomment-5193618752",
+  "dispatch": {
+    "codenoesis.repository-snapshot/v10": "codenoesis.local-query-result/v5",
+    "codenoesis.repository-snapshot/v9": "codenoesis.local-query-result/v4",
+    "codenoesis.repository-snapshot/v8": "codenoesis.local-query-result/v3",
+    "codenoesis.repository-snapshot/v7": "codenoesis.local-query-result/v2",
+    "codenoesis.repository-snapshot/v6": "codenoesis.local-query-result/v1",
+    "codenoesis.repository-snapshot/v5": "codenoesis.local-query-result/v1",
+    "codenoesis.repository-snapshot/v4": "codenoesis.local-query-result/v1",
+    "explicit_query_version_flag": false
+  },
+  "result_kinds": [
+    "entity",
+    "relationship",
+    "claim",
+    "evidence",
+    "diagnostic",
+    "coverage_gap",
+    "document"
+  ],
+  "v10_additions": [
+    "compiler.symbol entities",
+    "RESOLVES_TO REFERENCES IMPLEMENTS and TYPE_DEFINITION relationships",
+    "compiler-index SHA-256 evidence locators",
+    "compiler-index diagnostics and coverage gaps",
+    "evidence-backed compiler provenance document statements"
+  ],
+  "stored_head_validation_required": true,
+  "raw_project_root_exposed": false,
+  "raw_arguments_exposed": false,
+  "embedded_prose_exposed": false,
+  "call_semantics_authorized": false,
+  "runtime_semantics_authorized": false,
+  "traversal_or_search_added": false,
+  "legacy_bytes": {
+    "v9_v4": "byte-identical",
+    "v8_v3": "byte-identical",
+    "v7_v2": "byte-identical",
+    "v4_v6_v1": "byte-identical"
+  }
+}
