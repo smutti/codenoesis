@@ -1,0 +1,62 @@
+{
+  "schema_version": "codenoesis.r7-supply-chain-review/v1",
+  "decision_scope": "future R7 product implementation only",
+  "dependencies": [
+    {
+      "name": "protobuf",
+      "version": "3.7.2",
+      "requirement": "=3.7.2",
+      "registry": "crates.io",
+      "crate_archive_sha256": "d65a1d4ddae7d8b5de68153b48f6aa3bba8cb002b243dbdbc55a5afbc98f99f4",
+      "license": "MIT",
+      "declared_rust_version": null,
+      "default_features": [],
+      "role": "runtime decode and deterministic re-encode support required by scip bindings",
+      "lexical_unsafe_occurrences_in_published_src": 49,
+      "unsafe_review_status": "mandatory in the product issue; lexical count is not a semantic audit"
+    },
+    {
+      "name": "scip",
+      "version": "0.9.0",
+      "requirement": "=0.9.0",
+      "registry": "crates.io",
+      "crate_archive_sha256": "26a72133c2d6fd45c9a3a343bcb3db2faa30f68f0919bfa3370ca85add5460c3",
+      "license": "Apache-2.0",
+      "declared_rust_version": "1.81.0",
+      "default_features": [],
+      "role": "generated Rust bindings for the exact SCIP v0.9.0 schema",
+      "lexical_unsafe_occurrences_in_published_src": 0,
+      "unsafe_review_status": "mandatory in the product issue"
+    }
+  ],
+  "transitive_expectation": [
+    "once_cell compatible with protobuf 3.7.2",
+    "protobuf-support =3.7.2",
+    "thiserror compatible with protobuf 3.7.2"
+  ],
+  "forbidden_dependencies": [
+    "prost",
+    "prost-build",
+    "protobuf-codegen",
+    "protoc",
+    "runtime downloader",
+    "alternative SCIP parser"
+  ],
+  "build_time_codegen_authorized": false,
+  "governance_manifest_changed": false,
+  "governance_lockfile_changed": false,
+  "product_evidence_required": [
+    "exact resolved lockfile",
+    "license and advisory scan",
+    "transitive dependency review",
+    "first-party and transitive unsafe review",
+    "pinned-toolchain compile",
+    "Linux macOS Windows tests",
+    "rollback by reverting the complete product pull request"
+  ],
+  "correction": {
+    "round": 1,
+    "issue_comment": "https://github.com/smutti/codenoesis/issues/123#issuecomment-5193814091",
+    "meaning": "protobuf 3.7.2 is MIT; the dependency name, version, risk, and scope are unchanged"
+  }
+}

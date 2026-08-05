@@ -1,0 +1,36 @@
+{
+  "schema_version": "codenoesis.r6-query-oracle/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/117",
+  "authorization": "https://github.com/smutti/codenoesis/issues/117#issuecomment-5183312890",
+  "protected_review": "https://github.com/smutti/codenoesis/pull/118",
+  "dispatch": {
+    "codenoesis.repository-snapshot/v9": "codenoesis.local-query-result/v4",
+    "codenoesis.repository-snapshot/v8": "codenoesis.local-query-result/v3",
+    "codenoesis.repository-snapshot/v7": "codenoesis.local-query-result/v2",
+    "codenoesis.repository-snapshot/v6": "codenoesis.local-query-result/v1",
+    "codenoesis.repository-snapshot/v5": "codenoesis.local-query-result/v1",
+    "codenoesis.repository-snapshot/v4": "codenoesis.local-query-result/v1",
+    "explicit_query_version_flag": false
+  },
+  "result_kinds": [
+    "entity",
+    "relationship",
+    "claim",
+    "evidence",
+    "diagnostic",
+    "coverage_gap",
+    "document"
+  ],
+  "stored_head_validation_required": true,
+  "exact_id_only": true,
+  "runtime_semantics_authorized": false,
+  "document_statement_policy": "Every declaration or candidate statement says source-declared or unresolved and never observed runtime behavior.",
+  "not_authorized": [
+    "traversal",
+    "fuzzy search",
+    "repair",
+    "migration",
+    "runtime reachability",
+    "macro expansion"
+  ]
+}

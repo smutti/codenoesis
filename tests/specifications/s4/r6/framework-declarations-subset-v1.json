@@ -1,0 +1,190 @@
+{
+  "schema_version": "codenoesis.rust-framework-declarations-subset/v1",
+  "selection": {
+    "flag": "--rust-framework-profile",
+    "value": "rust-framework-declarations-v1",
+    "required_scan_profile": "standard-local-s4",
+    "required_workspace_profile": "cargo-root-package-v1",
+    "required_manifest_profile": "cargo-manifest-facts-v1",
+    "required_semantic_profile": "rust-semantic-depth-v1",
+    "implicit_selection": false,
+    "repository_content_selects_profile": false
+  },
+  "entity_kinds": [
+    "framework.component_declaration",
+    "framework.configuration_declaration",
+    "framework.endpoint_declaration",
+    "framework.handler_declaration",
+    "framework.route_declaration",
+    "framework.service_declaration"
+  ],
+  "epistemic_states": [
+    "declared_registration_syntax",
+    "candidate_unresolved"
+  ],
+  "source_profiles": [
+    {
+      "id": "explicit-builder-registration-v1",
+      "epistemic_state": "declared_registration_syntax",
+      "root_expressions": [
+        "RegistrationSet::new()",
+        "Router::new()"
+      ],
+      "root_type_semantics_resolved": false,
+      "required_context": "function tail expression returning the registration chain",
+      "chain_methods": {
+        "component": {
+          "role": "component",
+          "arguments": [
+            "direct_local_target"
+          ]
+        },
+        "service": {
+          "role": "service",
+          "arguments": [
+            "direct_local_target"
+          ]
+        },
+        "configuration": {
+          "role": "configuration",
+          "arguments": [
+            "literal_key",
+            "direct_local_target"
+          ]
+        },
+        "endpoint": {
+          "role": "endpoint",
+          "arguments": [
+            "literal_path",
+            "direct_local_target"
+          ]
+        },
+        "route": {
+          "role": "route",
+          "argument_forms": [
+            [
+              "literal_method",
+              "literal_path",
+              "direct_local_target"
+            ],
+            [
+              "literal_path",
+              "reviewed_method_wrapper_around_direct_local_target"
+            ]
+          ]
+        },
+        "group": {
+          "role": "route",
+          "arguments": [
+            "literal_path",
+            "direct_local_target"
+          ]
+        },
+        "nest": {
+          "role": "route",
+          "arguments": [
+            "literal_path",
+            "direct_local_target"
+          ]
+        },
+        "layer": {
+          "role": "service",
+          "arguments": [
+            "direct_target_spelling"
+          ]
+        },
+        "route_layer": {
+          "role": "service",
+          "arguments": [
+            "direct_target_spelling"
+          ]
+        },
+        "with_state": {
+          "role": "configuration",
+          "arguments": [
+            "direct_target_spelling"
+          ]
+        },
+        "handler": {
+          "role": "handler",
+          "arguments": [
+            "direct_local_target"
+          ]
+        }
+      },
+      "non_tail_or_standalone_builder_is_declaration": false,
+      "macro_expansion": false,
+      "call_graph_authority": false,
+      "runtime_authority": false
+    },
+    {
+      "id": "attribute-macro-candidate-v1",
+      "epistemic_state": "candidate_unresolved",
+      "reviewed_candidate_patterns": [
+        "route-like outer attribute",
+        "component-like outer attribute or derive",
+        "service-like outer attribute",
+        "configuration-like outer attribute",
+        "command-like outer attribute",
+        "runtime-entry-like outer attribute",
+        "bridge-like outer attribute",
+        "framework-qualified endpoint-like outer attribute",
+        "declarative macro invocation with route-like token tree"
+      ],
+      "macro_arguments_authoritative": false,
+      "generated_declarations_emitted": false,
+      "cfg_evaluated": false,
+      "runtime_authority": false
+    }
+  ],
+  "literal_policy": {
+    "builder_method_and_path": "retain only reviewed committed literal syntax",
+    "candidate_attribute_or_macro_arguments": "retain as evidence only; never promote to authoritative properties",
+    "normalization": "NFC without evaluating escapes or values",
+    "silent_truncation": false
+  },
+  "local_target_binding": {
+    "resolved_unique": "existing R5 lexical facts resolve exactly one committed local declaration",
+    "unresolved_external": "retain spelling and exact gap; do not open dependency or repository",
+    "ambiguous_local": "retain exact diagnostic and gap; source order cannot repair ambiguity",
+    "not_applicable": "no target claim is made"
+  },
+  "relationships": [
+    "DEFINES"
+  ],
+  "hard_negatives": [
+    "comments",
+    "strings",
+    "documentation",
+    "imports",
+    "return_types",
+    "parameter_wrappers",
+    "dependency_names",
+    "name_only_conventions",
+    "isolated_identifiers",
+    "generated_directories",
+    "target_directories",
+    "non_tail_builder_values"
+  ],
+  "semantic_non_claims": [
+    "No source declaration proves runtime behavior.",
+    "No route declaration proves route reachability.",
+    "No handler declaration proves handler execution.",
+    "No service declaration proves service start.",
+    "No configuration declaration proves active configuration.",
+    "No attribute or macro candidate authorizes macro expansion.",
+    "No registration chain is a call graph.",
+    "No declaration proves endpoint availability or middleware order."
+  ],
+  "limits": {
+    "framework_declarations_per_source": 4096,
+    "explicit_registration_chain_segments": 256,
+    "registration_expression_depth": 64,
+    "literal_route_path_bytes": 2048,
+    "literal_method_or_configuration_key_bytes": 1024,
+    "target_spelling_bytes": 1024,
+    "outer_attributes_per_declaration": 128,
+    "attribute_token_bytes": 16384,
+    "permutations": 50
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "schema_version": "codenoesis.acceptance-oracle/s4-r4-query-v2-v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/105",
+  "authorization": "https://github.com/smutti/codenoesis/issues/105#issuecomment-5170981186",
+  "requirement_ids": [
+    "FR-QRY-001",
+    "FR-EXT-009"
+  ],
+  "requirement_status": "Approved",
+  "slice": "S4",
+  "roadmap_capability": "R4",
+  "risk": "high",
+  "required_base": "94a8fe9b27b7e4fd9ae5c759cc23591c4fa12d00",
+  "public_journey": {
+    "ordered_steps": [
+      "publish one strict RepositorySnapshotV7",
+      "terminate the scan process",
+      "start a new noesis process",
+      "generate and validate DocumentationManifestV1",
+      "query each reviewed stable ID exactly",
+      "replay each query and compare canonical bytes"
+    ],
+    "query_command": "noesis query --store <store> --repository-id urn:codenoesis:fixture:s4-cargo-manifest-facts-v1 --documents <documents> --id <stable-id> --format json",
+    "restart_required": true,
+    "fuzzy_matching": false,
+    "empty_success_for_unknown_id": false
+  },
+  "dispatch": {
+    "codenoesis.repository-snapshot/v7": "codenoesis.local-query-result/v2",
+    "codenoesis.repository-snapshot/v6": "codenoesis.local-query-result/v1",
+    "codenoesis.repository-snapshot/v5": "codenoesis.local-query-result/v1",
+    "codenoesis.repository-snapshot/v4": "codenoesis.local-query-result/v1",
+    "explicit_query_version_flag": false
+  },
+  "result_kinds": {
+    "entity": {
+      "entity": 1,
+      "relationship": 0,
+      "claims": 1,
+      "evidence": "one_or_more",
+      "diagnostic": 0,
+      "coverage_gap": 0,
+      "document": 0
+    },
+    "relationship": {
+      "entity": 0,
+      "relationship": 1,
+      "claims": 1,
+      "evidence": "one_or_more",
+      "diagnostic": 0,
+      "coverage_gap": 0,
+      "document": 0
+    },
+    "claim": {
+      "entity_or_relationship": 1,
+      "claims": 1,
+      "evidence": "one_or_more",
+      "diagnostic": 0,
+      "coverage_gap": 0,
+      "document": 0
+    },
+    "evidence": {
+      "entity": 0,
+      "relationship": 0,
+      "claims": 0,
+      "evidence": 1,
+      "diagnostic": 0,
+      "coverage_gap": 0,
+      "document": 0
+    },
+    "diagnostic": {
+      "entity": 0,
+      "relationship": 0,
+      "claims": 0,
+      "evidence": "one_to_64",
+      "diagnostic": 1,
+      "coverage_gap": 0,
+      "document": 0
+    },
+    "coverage_gap": {
+      "entity": 0,
+      "relationship": 0,
+      "claims": 0,
+      "evidence": "one_to_64",
+      "diagnostic": 0,
+      "coverage_gap": 1,
+      "document": 0
+    },
+    "document": {
+      "entity": 0,
+      "relationship": 0,
+      "claims": 0,
+      "evidence": 0,
+      "diagnostic": 0,
+      "coverage_gap": 0,
+      "document": 1,
+      "document_statements": "one_or_more"
+    }
+  },
+  "fixture": {
+    "repository_identity": "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+    "tree_oid": "c99449f6f0651e4f6398521e316f3500d0e508e7",
+    "commit_oid": "7b1fc9073552b5967b1620d1e082a1d45e1b380e",
+    "query_examples_path": "tests/fixtures/s4/cargo-manifest-facts-v1/expected-manifest-facts.json#/exact_query_examples",
+    "exact_ids": {
+      "entity": "urn:codenoesis:entity:blake3:13c3407742a8aaf4ff919842621e5ef164757103a995146775b49441da886527",
+      "relationship": "urn:codenoesis:relationship:blake3:b3903033520baafddfd50990a13f97e3a6de640f779fd2e930172ed8ebbaeb75",
+      "claim": "urn:codenoesis:claim:blake3:036f0a2218dedeac2770614f56fff8562cb333223a91eeb04d666e6a38ffac90",
+      "evidence": "urn:codenoesis:evidence:blake3:e2da79817c12805d7e6a2572b7d8064259e6d47935f0b36df67a7bad138695d2",
+      "diagnostic": "urn:codenoesis:diagnostic:blake3:7aa42489d042d8a69f88910cd472e635995c6e2eee6a81f3c3f3261897d5f486",
+      "coverage_gap": "urn:codenoesis:coverage-gap:blake3:c7b525aa7556f66951e82b90829d7f4b7090cb03fdf44ee35824635d8bb804ba",
+      "document": "urn:codenoesis:document:blake3:3db638c882928eccb9d8ec660b9cdb50cbb7eff3f1687fbb693fd80701fcb7b7"
+    }
+  },
+  "identity": {
+    "diagnostic_domain": "codenoesis.diagnostic-id/cargo-manifest/v1",
+    "diagnostic_preimage": [
+      "repository_identity",
+      "diagnostic_code",
+      "evidence_id_1_through_n_in_byte_order"
+    ],
+    "coverage_gap_domain": "codenoesis.coverage-gap-id/v3",
+    "coverage_gap_preimage": [
+      "repository_identity",
+      "commit_oid",
+      "capability",
+      "state",
+      "evidence_id_1_through_n_in_byte_order"
+    ],
+    "canonicalization": "RFC8785 JSON array",
+    "algorithm": "blake3-256",
+    "duplicate_diagnostic_policy": "reject"
+  },
+  "unknown_id": {
+    "requested_id": "urn:codenoesis:entity:blake3:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "error_schema_version": "codenoesis.error/v5",
+    "error_code": "query.not_found",
+    "exit_code": 14,
+    "stdout_bytes": 0,
+    "mutation": false
+  },
+  "determinism": {
+    "canonicalization": "RFC8785-compatible canonical JSON",
+    "stdout_terminated_by_single_lf": true,
+    "same_head_same_documents_same_id_is_byte_identical": true,
+    "scheduler_or_worker_count_changes_bytes": false
+  },
+  "security": {
+    "external_locator_plaintext_allowed": false,
+    "source_bytes_allowed": false,
+    "absolute_paths_allowed": false,
+    "environment_values_allowed": false,
+    "secrets_allowed": false,
+    "network_or_process_authority_added": false
+  },
+  "compatibility": {
+    "local_query_result_v1_sha256": "f2808d10af0b6e4dfe3a2fd43307cef51bd473abf146d76da915c652d072c013",
+    "documentation_manifest_v1_sha256": "13fc4500b8a63669f4e99e99e797f039421589c8b5caf9dcc7d4051792729943",
+    "v1_bytes_may_change": false,
+    "v4_v5_v6_query_bytes_may_change": false,
+    "storage_schema_migration": false,
+    "new_artifact_role": false
+  }
+}

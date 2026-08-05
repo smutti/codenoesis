@@ -12,6 +12,7 @@ use codenoesis_domain::s4_r3::{
     ExternalWorkspaceBoundary, RootPackageWorkspaceError, RootPackageWorkspaceExtraction,
     RootPackageWorkspaceKnowledge, RootPackageWorkspacePlan,
 };
+use codenoesis_domain::s4_r4::{CargoManifestFactError, CargoManifestFactExtraction};
 use codenoesis_domain::s5::{
     AnalysisCacheEntry, AnalysisCacheKey, IncrementalWorkspaceExtraction,
     RustDeclarationObservation, RustModuleObservation, RustSourceAnalysis, SourceAnalysisRecord,
@@ -20,13 +21,15 @@ use codenoesis_domain::{
     ContentKind, InventoryFile, RepositoryInventory, STANDARD_LOCAL_S1_LIMITS,
 };
 use codenoesis_ports::{
-    IncrementalRustWorkspaceExtractor, RootPackageWorkspaceExtractor, RustWorkspaceExtractor,
+    CargoManifestFactExtractor, IncrementalRustWorkspaceExtractor, RootPackageWorkspaceExtractor,
+    RustWorkspaceExtractor,
 };
 use tree_sitter::{Node, Parser};
 use unicode_normalization::UnicodeNormalization as _;
 
 use crate::root_package::{
     PlannedCoverage, PlannedRootPackageWorkspace, plan_root_package_workspace,
+    plan_root_package_workspace_r4,
 };
 
 #[derive(Clone, Copy, Debug, Default)]
@@ -69,6 +72,25 @@ impl RootPackageWorkspaceExtractor for TreeSitterRustWorkspaceExtractor {
         WorkspaceBuilder::new(inventory)
             .map_err(RootPackageWorkspaceError::Source)?
             .extract_root_package_incremental(cache_entries, planned)
+    }
+}
+
+impl CargoManifestFactExtractor for TreeSitterRustWorkspaceExtractor {
+    fn extract_cargo_manifest_facts_incremental(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+        cache_entries: &[AnalysisCacheEntry],
+    ) -> Result<CargoManifestFactExtraction, CargoManifestFactError> {
+        let planned = plan_root_package_workspace_r4(inventory, external_boundaries)
+            .map_err(CargoManifestFactError::Source)?;
+        let workspace = WorkspaceBuilder::new(inventory)
+            .map_err(|error| {
+                CargoManifestFactError::Source(RootPackageWorkspaceError::Source(error))
+            })?
+            .extract_root_package_incremental(cache_entries, planned)
+            .map_err(CargoManifestFactError::Source)?;
+        crate::manifest_facts::extract_manifest_facts(inventory, workspace)
     }
 }
 

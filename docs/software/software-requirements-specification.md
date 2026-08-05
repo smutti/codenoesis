@@ -1,13 +1,13 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9+r3 — S0 through S6 and R0-R2 implemented; R3 root-package
-> workspace compatibility proposed for protected ratification**.
+> Status: **0.9+r7 — S0 through S6 and R0-R6 implemented; R7 static
+> revision-bound SCIP import governance proposed for protected ratification**.
 > The S0–S6 runtime and product suites exist on `main`, but CodeNoesis claims
 > no slice `Verified` without complete immutable retention evidence. This
-> revision records the implemented `FR-ACQ-005` R2 boundary and proposes
-> `FR-EXT-008` plus Decision 0011 for one explicit S4 compatibility profile
-> that accepts bounded Cargo root-package workspaces without evaluating Cargo
-> or target code, while retaining every accepted S0–S6 and R0–R2 invocation.
+> revision records protected R6 governance, evidence-ID correction, and product
+> merges #118, #121, and #122 and proposes Decision 0017 for explicit static
+> import of one revision-bound SCIP v0.9.0 artifact while retaining every
+> accepted S0–S6 and R0–R6 selector-absent invocation.
 
 ## 1. Document control
 
@@ -15,8 +15,8 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S6 and roadmap R0-R2 are Approved and Implemented but not Verified. `FR-EXT-008` is Proposed and becomes Approved only after the accountable maintainer manually merges protected PR #97. |
-| Date | 2026-08-02 |
+| Status | S0 through S6 and roadmap R0-R6 are Approved and Implemented but not Verified. The bounded `FR-EXT-005` R7 static-import profile and its V10/V7/V14/V5 compatibility package are Proposed and become effective only after the accountable maintainer manually merges the protected pull request for issue #123. The broader polyglot compiler-enrichment requirement remains Proposed. |
+| Date | 2026-08-05 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -39,6 +39,12 @@
 | `0.9+s6.1` | 2026-07-31 | Recorded protected PR #81 approval and corrected the S6 implementation contract through issue #83 and PR #84: zero-client workspaces, typed unsupported-OpenAPI gaps, reproducible provider evidence and source-neutral gap identities, exact Unicode heuristic selection, and public-command versus component-counter boundary observations. |
 | `0.9+r2` | 2026-08-02 | Proposed `FR-ACQ-005` and Decision 0010 for the explicit `local-gitlinks-v1` boundary profile; fixed RepositorySnapshotV5, ErrorV9, strict committed `.gitmodules` metadata, digest-only URL projection, explicit depth-one nested binding, limits, synthetic fixture, exact Red, R0/R1 regressions, and the non-vendored RustDesk R0-R2 checkpoint. |
 | `0.9+r3` | 2026-08-02 | Retained document-control version `0.9` for historical guard compatibility, recorded protected R2 implementation merge #95, and proposed `FR-EXT-008` plus Decision 0011 for the explicit `cargo-root-package-v1` workspace profile; fixed RepositorySnapshotV6, ErrorV10, Rust ontology v3, standalone/virtual/non-virtual root membership, literal exclusions, bounded target roots, R4-deferred coverage, R2 gitlink composition, exact Red, generic fixtures, and non-vendored Lekton/RustDesk R3 pilots. |
+| `0.9+r4` | 2026-08-03 | Retained document-control version `0.9`, recorded protected R3 implementation merge #99, and proposed `FR-EXT-009` plus Decision 0012 for explicit declaration-only Cargo manifest facts; fixed RepositorySnapshotV7, ErrorV11, Rust/Cargo ontology v4, evidence-backed metadata/target/dependency/feature/patch/build facts, digest-only locators, typed unsupported coverage, exact Red, generic fixtures, and non-vendored Lekton/RustDesk R4 pilots. |
+| `0.9+r4.1` | 2026-08-03 | Recorded protected R4 governance merge #103 and proposed Decision 0013 for additive V7-only `LocalQueryResultV2`, stable Cargo diagnostic identities, exact relationship/claim/evidence/diagnostic/coverage/document query examples after restart, and byte-identical V1 behavior for V4-V6 heads. |
+| `0.9+r4.2` | 2026-08-04 | Recorded protected exact-ID governance merge #106 and proposed Decision 0014 after the pinned RustDesk pilot exposed legacy top-level `[badges]`; fixed one generic typed-unsupported mapping to `cargo.legacy_badges_unsupported` without interpreting badge values or weakening unknown-key fail-closed behavior. |
+| `0.9+r5` | 2026-08-04 | Recorded R4 product merge #109 and proposed `FR-EXT-010` plus Decision 0015 for the explicit `rust-semantic-depth-v1` profile; fixed RepositorySnapshotV8, ExtractionChunkV5, KnowledgeGraphV5, Rust ontology v5, ErrorV12, LocalQueryResultV3 dispatch, declaration-level fields/variants/constants/statics/associated types/method contexts, attribute-preserving uncertainty, member identity, strict limits, project-owned fixture, exact governance Red, and non-vendored Lekton/RustDesk pilot descriptors while deferring framework meaning to R6 and compiler evidence to R7. |
+| `0.9+r6` | 2026-08-04 | Recorded protected R5 governance, golden-correction, and product merges #112, #115, and #116; proposed `FR-EXT-011` plus Decision 0016 for explicit framework-neutral source declarations and unresolved attribute/macro candidates; fixed RepositorySnapshotV9, ExtractionChunkV6, KnowledgeGraphV6, Rust ontology v6, ErrorV13, LocalQueryResultV4 dispatch, disjoint identities, strict source/runtime epistemic boundaries, limits, project-owned two-style fixture, exact governance Red, and non-vendored motivation-only Lekton/RustDesk observations while deferring compiler evidence to R7 and export/explorer work to R8. |
+| `0.9+r7` | 2026-08-05 | Recorded protected R6 governance, evidence-ID correction, and product merges #118, #121, and #122; proposed bounded `FR-EXT-005` plus Decision 0017 for explicit static import of one revision-, tree-, source-, producer-, toolchain-, and schema-bound Rust SCIP v0.9.0 artifact; fixed RepositorySnapshotV10, ExtractionChunkV7, KnowledgeGraphV7, Rust ontology v7, ErrorV14, LocalQueryResultV5 dispatch, compiler-symbol identity and SHA-256 evidence, strict protobuf/resource/privacy limits, project-owned binary fixture, exact governance Red, and immutable R6 compatibility while leaving index generation in S9 and export/explorer work in R8. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -830,16 +836,22 @@ renewed human review.
 Issue [#96](https://github.com/smutti/codenoesis/issues/96) and its explicit
 maintainer authorization
 [comment](https://github.com/smutti/codenoesis/issues/96#issuecomment-5158164180)
-govern this high-risk package. The following single requirement becomes
-Approved only when `@smutti` manually merges the exact protected head of
-[PR #97](https://github.com/smutti/codenoesis/pull/97). The authoring agent
-does not approve or merge. This approval targets exactly the
+govern this high-risk package. The following single requirement became
+Approved when `@smutti` manually merged the exact protected head of
+[PR #97](https://github.com/smutti/codenoesis/pull/97), and its product
+implementation was merged through
+[PR #99](https://github.com/smutti/codenoesis/pull/99). It remains not
+Verified. The authoring agent did not approve or merge. This approval targets exactly the
 **S4 — Evidence-backed workspace docs compatibility extension** and roadmap
 R3. It does not broaden the selector-absent `FR-EXT-007` contract.
 
+For immutable historical-guard traceability, the pre-ratification row state was
+`FR-EXT-008` | `Proposed`; the current normative row below supersedes that
+state with the protected approval and implementation records.
+
 | Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
 |---|---|---|---|---|---|---|---|
-| `FR-EXT-008` | `Proposed` (authorized in issue #96; pending protected merge) | `Approved` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #97 protected merge record](https://github.com/smutti/codenoesis/pull/97) | `S4` | [Root-package workspace decision](decisions/0011-s4-root-package-workspace-contract.md), [RepositorySnapshotV6 schema](../../tests/specifications/s4/r3/repository-snapshot-v6.schema.json), [ErrorV10 schema](../../tests/specifications/s4/r3/codenoesis-error-v10.schema.json), [machine oracle](../../tests/specifications/s4/r3/e2e_fr_ext_008_root_package_workspace.json), and [project-owned fixture](../../tests/fixtures/s4/root-package-workspace-v1/README.md) |
+| `FR-EXT-008` | `Implemented` (approved in PR #97; product merge #99; not Verified) | `Verified` | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #97 protected approval](https://github.com/smutti/codenoesis/pull/97), [PR #99 implementation](https://github.com/smutti/codenoesis/pull/99) | `S4` | [Root-package workspace decision](decisions/0011-s4-root-package-workspace-contract.md), [RepositorySnapshotV6 schema](../../tests/specifications/s4/r3/repository-snapshot-v6.schema.json), [ErrorV10 schema](../../tests/specifications/s4/r3/codenoesis-error-v10.schema.json), [machine oracle](../../tests/specifications/s4/r3/e2e_fr_ext_008_root_package_workspace.json), and [project-owned fixture](../../tests/fixtures/s4/root-package-workspace-v1/README.md) |
 
 R3 is selected only by `--workspace-profile cargo-root-package-v1` on an
 otherwise valid `standard-local-s4` scan. R1 packed acquisition and R2 gitlink
@@ -890,6 +902,520 @@ digest and renewed human review.
 
 R3 root-package workspace contract bundle:
 `sha256:0b99760da4e978fefa91468b5dbef1b59816e30b02d92c70c26a7df715ef509a`.
+
+### 2.14 S4 Cargo manifest facts ratification register
+
+Issue [#100](https://github.com/smutti/codenoesis/issues/100), its explicit
+maintainer authorization
+[comment](https://github.com/smutti/codenoesis/issues/100#issuecomment-5163551187),
+and protected [PR #103](https://github.com/smutti/codenoesis/pull/103) Approved
+`FR-EXT-009`. Issue [#105](https://github.com/smutti/codenoesis/issues/105)
+and its explicit maintainer
+[authorization](https://github.com/smutti/codenoesis/issues/105#issuecomment-5170981186)
+govern the additive exact-ID correction required to make that approved R4
+outcome implementation-complete; protected PR #106 merged that correction at
+`557547285f9532772efceea900ba982b6a8e65a9`. Issue
+[#107](https://github.com/smutti/codenoesis/issues/107) and its explicit
+maintainer
+[authorization](https://github.com/smutti/codenoesis/issues/107#issuecomment-5177741408)
+govern the observed legacy `[badges]` typed-unsupported correction. Decision
+0014 becomes effective only when `@smutti` manually merges its exact
+protected head. The authoring agent does not approve or merge. All packages
+target exactly the **S4 — Evidence-backed workspace docs compatibility
+extension** and roadmap R4; they do not broaden R3 or any selector-absent
+contract.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| `FR-EXT-009` | `Approved` (protected PR #103; issue #107 amendment authorized and pending protected merge) | `Approved` with exact legacy-family typed coverage | Andrea Moretti (`@smutti` persona) | `@smutti` | [PR #103 protected merge record](https://github.com/smutti/codenoesis/pull/103) and [issue #107 authorization](https://github.com/smutti/codenoesis/issues/107#issuecomment-5177741408) | `S4` | [Cargo manifest facts decision](decisions/0012-s4-cargo-manifest-facts-contract.md), [legacy badges decision](decisions/0014-s4-r4-legacy-badges-contract.md), [RepositorySnapshotV7 schema](../../tests/specifications/s4/r4/repository-snapshot-v7.schema.json), [Rust/Cargo ontology v4](../../tests/specifications/s4/r4/rust-ontology-v4.json), [ErrorV11 schema](../../tests/specifications/s4/r4/codenoesis-error-v11.schema.json), [machine oracle](../../tests/specifications/s4/r4/e2e_fr_ext_009_cargo_manifest_facts.json), [retained badges Red](../../tests/specifications/s4/r4/legacy-badges-red-observation.json), and [project-owned fixture](../../tests/fixtures/s4/cargo-manifest-facts-v1/README.md) |
+| `FR-QRY-001` | `Approved` (R4 amendment authorized in issue #105; pending protected merge) | `Approved` with additive V7 query contract | Andrea Moretti (`@smutti` persona) | `@smutti` | [Issue #105 authorization](https://github.com/smutti/codenoesis/issues/105#issuecomment-5170981186) | `S4` | [Exact-ID query decision](decisions/0013-s4-r4-exact-id-query-contract.md), [LocalQueryResultV2 schema](../../tests/specifications/s4/r4/local-query-result-v2.schema.json), [query oracle](../../tests/specifications/s4/r4/e2e_fr_qry_001_r4_exact_id_results.json), and [retained governance Red](../../tests/specifications/s4/r4/query-v2-red-observation.json) |
+
+R4 is selected only by `--manifest-profile cargo-manifest-facts-v1` on an
+otherwise valid `standard-local-s4` scan that also explicitly selects
+`--workspace-profile cargo-root-package-v1`. R1 packed acquisition and R2
+gitlink representation remain independent optional selectors. Manifest
+content, repository shape, a dependency table, corpus identity, or prior
+profile never selects R4 implicitly. Every invocation without the R4 selector
+remains byte-for-byte unchanged, including RepositorySnapshotV6 and every
+earlier success, failure, publication, docs, and query byte.
+
+The selected profile represents bounded committed Cargo declarations as
+evidence-backed `cargo.manifest`, workspace-default, package, target,
+dependency, feature, patch, and build-script entities. `DECLARES` and
+`REFERENCES_DECLARATION` preserve literal ownership and workspace references;
+`MATERIALIZES` links only an R3-analyzed lib/bin declaration to its unchanged
+Rust crate ID. R4 emits no `DEPENDS_ON`, resolver, activation, target-selection,
+patch-application, or execution relationship.
+
+Package metadata values, direct/inherited provenance, target declarations,
+registry/path/Git/workspace dependency source kinds, target predicates,
+optional/default-feature flags, requested features, feature-member syntax,
+`required-features`, patch declarations, and build-script presence retain
+exact byte evidence. Path declarations normalize inside the bound repository
+without traversal. Package/dependency/patch external locators and Git
+branch/tag/rev values emit only SHA-256 plus evidence; plaintext is forbidden
+in derived artifacts, errors, logs, documentation, and query output.
+
+Dependency graphs, package versions/sources, active feature/target/cfg worlds,
+effective workspace inheritance, patch application, generated source, and
+Cargo validation remain explicit typed gaps. Cargo, rustc, build scripts,
+procedural macros, targets, dependencies, Git, registries, path dependencies,
+network clients, and model providers never execute or open under this profile.
+Reviewed unsupported metadata/profile/lint/replace/advanced-dependency families
+and the legacy top-level `[badges]` family emit exact diagnostics and coverage
+rather than disappearing silently. Badge values remain uninterpreted and never
+enter derived output; every other unknown key remains fail-closed.
+
+The selected scan emits strict `RepositorySnapshotV7`
+(`codenoesis.repository-snapshot/v7`) with
+`codenoesis.configuration/v4`, `codenoesis.extraction/v4`,
+`codenoesis.knowledge-graph/v4`, `codenoesis.ontology/rust/v4`, and
+`codenoesis.error/v11`. Ontology v4
+retains all v3 Rust identity domains and preimages and adds disjoint Cargo
+declaration domains. V7 reuses the existing immutable artifact roles, local
+store marker, DDL, single-writer transaction, crash behavior, documentation
+format, and query command. A validated V7 head emits additive strict
+`codenoesis.local-query-result/v2`; V4-V6 heads retain byte-identical
+`codenoesis.local-query-result/v1`. No migration, repair, role, deletion, or
+destructive action is part of R4.
+
+The first implementation command fails before repository acquisition because
+the selector is unknown: exit `2`, empty stdout, no store, and the exact
+149-byte LF-terminated ErrorV4 `input.invalid_revision` stderr with SHA-256
+`7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe`.
+That is the only accepted first product Red. Compilation, malformed fixture,
+acquisition failure, panic, timeout, target/dependency execution, side effect,
+or a different subject error is rejected Red evidence.
+
+The governance fixture, strict schemas, machine subset and oracle, exact Red
+observation, immutable R3 bundle dependency, and non-vendored pinned Lekton and
+RustDesk pilot expectations are bound by the R4 contract bundle. Any bound-byte
+change requires a new digest and renewed human review.
+
+R4 Cargo manifest facts contract bundle:
+`sha256:2588abf38d686cc6475e7662ad8e90d585d1cdbff77702231dcadb1626a0c249`.
+
+### 2.15 S4 Rust semantic-depth ratification register
+
+Issue [#111](https://github.com/smutti/codenoesis/issues/111), its explicit
+accountable-maintainer
+[authorization](https://github.com/smutti/codenoesis/issues/111#issuecomment-5179817871),
+protected governance [PR #112](https://github.com/smutti/codenoesis/pull/112),
+golden correction [PR #115](https://github.com/smutti/codenoesis/pull/115), and
+product [PR #116](https://github.com/smutti/codenoesis/pull/116) record the R5
+Rust semantic-depth contract as Approved and Implemented but not Verified.
+Decision 0015 became effective through the protected manual governance merge;
+the later product merge does not provide complete immutable verification
+evidence. The package targets exactly the **S4 — Evidence-backed workspace docs
+compatibility extension** and roadmap R5; it does not broaden S5, S6, S7, R6,
+R7, or R8.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| `FR-EXT-010` | `Implemented` (`Approved`, not `Verified`) | `Verified` only after complete immutable retention evidence is independently accepted | Andrea Moretti (`@smutti` persona) | `@smutti` | [Issue #111 authorization](https://github.com/smutti/codenoesis/issues/111#issuecomment-5179817871), governance [PR #112](https://github.com/smutti/codenoesis/pull/112), correction [PR #115](https://github.com/smutti/codenoesis/pull/115), and product [PR #116](https://github.com/smutti/codenoesis/pull/116) | `S4` | [Rust semantic-depth decision](decisions/0015-s4-r5-rust-semantic-depth-contract.md), [RepositorySnapshotV8 schema](../../tests/specifications/s4/r5/repository-snapshot-v8.schema.json), [ExtractionChunkV5 schema](../../tests/specifications/s4/r5/extraction-chunk-v5.schema.json), [KnowledgeGraphV5 schema](../../tests/specifications/s4/r5/knowledge-graph-v5.schema.json), [Rust ontology v5](../../tests/specifications/s4/r5/rust-ontology-v5.json), [ErrorV12 schema](../../tests/specifications/s4/r5/codenoesis-error-v12.schema.json), [LocalQueryResultV3 schema](../../tests/specifications/s4/r5/local-query-result-v3.schema.json), [machine oracle](../../tests/specifications/s4/r5/e2e_fr_ext_010_rust_semantic_depth.json), [retained governance Red](../../tests/specifications/s4/r5/red-observation.json), and [project-owned fixture](../../tests/fixtures/s4/rust-semantic-depth-v1/README.md) |
+
+R5 is selected only by
+`--rust-semantic-profile rust-semantic-depth-v1` on an otherwise valid
+`standard-local-s4` scan that also explicitly selects
+`--workspace-profile cargo-root-package-v1` and
+`--manifest-profile cargo-manifest-facts-v1`. R1 packed acquisition and R2
+gitlink representation remain independent optional selectors. Repository
+content, Rust attributes, macros, Cargo declarations, public-corpus identity,
+and prior profiles never select R5 implicitly. Every invocation without the
+R5 selector remains byte-for-byte unchanged, including every R0-R4 success,
+error, storage, documentation, and query byte.
+
+The selected profile represents only bounded committed Rust declaration
+syntax. Ontology v5 adds `rust.field`, `rust.enum_variant`, `rust.constant`,
+`rust.static`, and `rust.associated_type`; it extends V8 `rust.method` with
+trait-declaration, inherent-implementation, or named-local-trait-implementation
+context. Named and tuple fields, unit/tuple/struct variants, module and
+associated constants, immutable and mutable statics, associated types, trait
+required/default methods, inherent methods, and supported named local trait
+methods retain exact committed-source evidence.
+
+New member entities use the disjoint
+`codenoesis.entity-id/rust-member/v1` domain over repository identity,
+unchanged crate identity, lexical owner identity, member kind, NFC declared
+name or zero-based tuple index, and resolved local trait identity or the empty
+string. Trait context prevents same-name method collisions. Commit OID, byte
+offset, file/output path, source order, scheduler order, inferred type,
+evaluated value, active configuration, and macro output never enter identity.
+Normalization collisions fail with a typed error; they are never repaired by
+ordinal or offset.
+
+Outer attributes no longer cause a committed declaration to disappear.
+`#[cfg]` records `conditional_unknown` plus
+`rust.cfg_presence_unresolved`; `#[cfg_attr]` records
+`attribute_transform_unknown` plus the same unresolved capability. Every
+other outer attribute emits
+`rust.attribute_semantics_not_interpreted`. Attribute tokens remain bounded
+syntax evidence and never imply a component, service, configuration,
+endpoint, route, handler, active branch, generated item, or runtime role.
+
+R5 does not evaluate `cfg`, derive, macros, types, values, initializers,
+discriminants, calls, data flow, control flow, or runtime behavior. It does not
+execute Cargo, rustc, build scripts, procedural macros, targets, dependencies,
+network clients, or model providers. Unions, foreign blocks, macro-generated
+items, unresolved implementation headers, type resolution, and value
+evaluation remain exact typed diagnostics or coverage gaps. R5 emits no
+`CALLS` or `EXECUTES` relationship.
+
+The selected scan emits strict `codenoesis.repository-snapshot/v8` with
+`codenoesis.configuration/v5`, `codenoesis.extraction-chunk/v5`,
+`codenoesis.knowledge-graph/v5`, `codenoesis.ontology/rust/v5`,
+`codenoesis.error/v12`, and pipeline `codenoesis.pipeline/s4-r5-v1`.
+A validated V8 head emits additive
+`codenoesis.local-query-result/v3`; V7 retains byte-identical
+`codenoesis.local-query-result/v2`, and V4-V6 retain byte-identical
+`codenoesis.local-query-result/v1`. The stored validated snapshot selects the
+query result version; no public version flag is introduced.
+
+Fixed maxima are 1,024 fields per owner, 1,024 variants per enum, 1,024 tuple
+fields per owner, 1,024 associated items per context, 128 outer attributes per
+declaration, 16,384 UTF-8 bytes per attribute token payload, 4,096 UTF-8 bytes
+per declared type or implementation-header spelling, and 50 determinism
+permutations. Existing S2 graph maxima remain authoritative. Maximum-plus-one
+fails with `extraction.rust_semantic_limit_exceeded` and no partial
+publication; no bound silently truncates.
+
+The project-owned fixture fixes exact fields, variants, constants/statics,
+associated types, method contexts, raw and Unicode identifiers, attributes,
+hard negatives, and a build sentinel that must never execute. The pinned
+Lekton commit `7a4d1a4a30468f4c18ce158a9b825680b00f4820` and RustDesk commit
+`d412d198720aa56f6cfed2dfad262e8fb1322fb7` remain non-vendored,
+replaceable pilot observations rather than ontology goldens.
+
+The governance conformance test was committed before Decision 0015 and every
+R5 schema, subset, fixture, and oracle. On test-first head
+`b6d3ec20b69258fac76fc42b5b95c7ea8f436da0`, the command
+`python3 -m unittest scripts.tests.test_s4_rust_semantic_depth_contract`
+failed for the expected missing-Decision reason with exit `1`. The retained
+683-byte log has SHA-256
+`d565d942729dece7b3cd08b2a67b714962b4de6979e3c7aa309061b5c4a89dd4`.
+No production or semantic-contract byte changed before Red. Product
+implementation requires a separate Ready issue and a separate executable CLI
+Red after this protected package is merged.
+
+The strict schemas, machine subset and oracles, retained Red, project-owned
+fixture and expected facts, immutable R4 dependency, and non-vendored pilot
+descriptors are bound by the R5 contract bundle. SRS and roadmap bytes are
+excluded from that digest. Any bound-byte change requires a new digest and
+renewed semantic human review.
+
+R5 Rust semantic-depth contract bundle:
+`sha256:ed48512d8337d2dda2a3b5f752177f3988915bdfc98eda1ff2391e15039e7d45`.
+
+### 2.16 S4 R6 framework-declarations ratification register
+
+Issue [#117](https://github.com/smutti/codenoesis/issues/117), its explicit
+accountable-maintainer
+[authorization](https://github.com/smutti/codenoesis/issues/117#issuecomment-5183312890),
+and protected [PR #118](https://github.com/smutti/codenoesis/pull/118) govern
+the proposed R6 framework-declarations contract. Decision 0016 becomes
+effective only when `@smutti` manually merges the exact independently reviewed
+protected head. The authoring agent does not approve or merge. This package
+targets exactly the **S4 — Evidence-backed workspace docs compatibility
+extension** and roadmap R6; it does not broaden S5, S6, S7, R7, R8, compiler
+enrichment, runtime observation, export, explorer, server, MCP, or release
+behavior.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| `FR-EXT-011` | `Proposed` | `Approved` only after protected manual merge of PR #118 | Andrea Moretti (`@smutti` persona) | `@smutti` | [Issue #117 authorization](https://github.com/smutti/codenoesis/issues/117#issuecomment-5183312890) and [PR #118](https://github.com/smutti/codenoesis/pull/118) | `S4` | [Framework-declarations decision](decisions/0016-s4-r6-framework-declarations-contract.md), [RepositorySnapshotV9 schema](../../tests/specifications/s4/r6/repository-snapshot-v9.schema.json), [ExtractionChunkV6 schema](../../tests/specifications/s4/r6/extraction-chunk-v6.schema.json), [KnowledgeGraphV6 schema](../../tests/specifications/s4/r6/knowledge-graph-v6.schema.json), [Rust ontology v6](../../tests/specifications/s4/r6/rust-ontology-v6.json), [ErrorV13 schema](../../tests/specifications/s4/r6/codenoesis-error-v13.schema.json), [LocalQueryResultV4 schema](../../tests/specifications/s4/r6/local-query-result-v4.schema.json), [machine oracle](../../tests/specifications/s4/r6/e2e_fr_ext_011_framework_declarations.json), [retained governance Red](../../tests/specifications/s4/r6/red-observation.json), and [project-owned fixture](../../tests/fixtures/s4/framework-declarations-v1/README.md) |
+
+R6 is selected only by
+`--rust-framework-profile rust-framework-declarations-v1` on an otherwise
+valid `standard-local-s4` scan that also explicitly selects
+`--workspace-profile cargo-root-package-v1`,
+`--manifest-profile cargo-manifest-facts-v1`, and
+`--rust-semantic-profile rust-semantic-depth-v1`. R1 packed acquisition and R2
+repository-boundary representation remain independent optional selectors.
+Repository content, dependency names, imports, attributes, macros, file names,
+public-corpus identity, and prior profiles never select R6 implicitly. Missing
+or incomplete composition fails before acquisition. Every invocation without
+the R6 selector remains byte-for-byte unchanged through R5.
+
+Ontology v6 adds only framework-neutral source declaration entities:
+`framework.component_declaration`, `framework.service_declaration`,
+`framework.configuration_declaration`, `framework.endpoint_declaration`,
+`framework.route_declaration`, and `framework.handler_declaration`. These
+kinds never denote framework brands or runtime objects. Each entity has one
+lexical R5 owner, one closed source-profile rule, inherited compilation
+presence, exact committed byte evidence, and one of exactly two states:
+
+- `declared_registration_syntax` means a reviewed direct builder source form
+  exists; it does not prove the enclosing function runs or its result is used;
+- `candidate_unresolved` means a reviewed attribute, derive, `cfg`,
+  `cfg_attr`, declarative-macro, or proc-macro-looking form resembles a role
+  while its meaning remains unsupported.
+
+Resolved or observed runtime behavior has no R6 schema state. Candidate macro
+arguments remain raw evidence and never become authoritative methods, paths,
+keys, targets, roles, or generated declarations. Every declaration documents
+that runtime behavior was not observed. Conditional, attribute, macro,
+unresolved, and ambiguous forms additionally emit their exact reviewed
+diagnostic and coverage gap.
+
+The closed explicit-builder source profile accepts only reviewed direct
+return-tail call chains rooted in the approved `RegistrationSet::new` or
+`Router::new` constructor spelling. Its bounded rules cover direct
+component/service/configuration/endpoint/handler registration, literal
+method-path-target routes, literal path plus reviewed method-wrapper routes,
+`group`/`nest`, `layer`/`route_layer`, and `with_state`. Constructor spelling
+does not resolve type or framework meaning. Standalone or unused builders,
+returned aliases requiring data flow, dynamic paths, closures, arbitrary
+expressions, and forms outside the closed rules are not promoted.
+
+The independent attribute/macro profile retains the underlying R5 declaration
+and emits only an unresolved candidate for reviewed route-, component-,
+service-, configuration-, command-, runtime-entry-, bridge-, endpoint-,
+derive-, `cfg`-, `cfg_attr`-, and declarative-route-macro-looking syntax. It
+never expands a macro, evaluates configuration, interprets arguments, infers a
+generated declaration, or assigns runtime behavior. Comments, strings,
+documentation, imports, return types, parameter wrappers, dependency names,
+isolated identifiers, name-only conventions, generated directories, target
+directories, and unused builder values remain hard negatives.
+
+Framework declarations use the disjoint
+`codenoesis.entity-id/framework-declaration/v1` domain. The NFC-normalized RFC
+8785 JSON-array preimage contains repository identity, unchanged crate
+identity, lexical owner identity, framework-neutral role, source profile,
+source-form rule identity, and normalized declared key or target spelling.
+The public ID retains the existing
+`urn:codenoesis:entity:blake3:<digest>` shape. Commit OID, byte offset, source
+or chunk order, schedule, active `cfg` world, macro output, inferred type,
+evaluated value, runtime address, and runtime state never enter identity.
+Duplicate or normalization-colliding preimages fail before publication and
+cannot be repaired by ordinal, offset, ordering, scheduling, or retry.
+
+R6 reuses only `DEFINES` for lexical ownership. A local target identity is a
+nullable property and is retained only when existing committed R5 lexical
+facts resolve exactly one declaration. An external target remains unresolved;
+an ambiguous local spelling retains the reviewed ambiguity gap or fails where
+the product oracle requires exact binding. Source order cannot select a
+candidate. R6 emits no `CALLS`, `EXECUTES`, `SERVES`, `STARTS`, `REACHES`, or
+`ACTIVATES` relationship, and no property may be reinterpreted as runtime
+reachability, execution, service start, active configuration, endpoint
+availability, or middleware order.
+
+The selected scan emits strict `codenoesis.repository-snapshot/v9` with
+`codenoesis.configuration/v6`, `codenoesis.extraction-chunk/v6`,
+`codenoesis.knowledge-graph/v6`, `codenoesis.ontology/rust/v6`,
+`codenoesis.error/v13`, and pipeline `codenoesis.pipeline/s4-r6-v1`.
+A validated stored V9 head emits additive
+`codenoesis.local-query-result/v4` for exact entity, relationship, claim,
+evidence, diagnostic, coverage-gap, and document IDs. V8 retains byte-identical
+LocalQueryResultV3, V7 retains V2, and V4-V6 retain V1. The stored validated
+head selects the result version; no public query-version flag, traversal,
+fuzzy search, migration, repair, or runtime inference is introduced.
+
+Fixed maxima are 4,096 framework declarations per committed source file, 256
+explicit registration chain segments, registration-expression depth 64, 2,048
+UTF-8 bytes per literal route path, 1,024 UTF-8 bytes per literal method or
+configuration key, 1,024 UTF-8 bytes per target spelling, inherited R5 maxima
+of 128 outer attributes and 16,384 UTF-8 attribute-token bytes, and 50
+determinism permutations plus isolated replay. Existing graph, snapshot,
+repository, docs, query, memory, output, and wall-time limits remain
+authoritative. Every maximum-plus-one fails before proportional allocation or
+publication with no silent truncation, stdout, partial store, or documentation
+mutation.
+
+New failures are strict LF-terminated ErrorV13 with empty stdout and no partial
+mutation: invalid profile, unsupported composition, malformed declaration,
+identity or NFC collision, limit exceeded, required-target ambiguity,
+unresolvable evidence, unsafe path, or internal contract failure. An
+intentionally unsupported candidate remains an exact diagnostic and coverage
+gap rather than an error, silent omission, or invented fact.
+
+The Apache-2.0 project-owned `framework-declarations-v1` fixture contains two
+independent modules. The explicit builder module covers every entity role,
+nested groups, configuration, duplicate paths under distinct methods, unique,
+external, and ambiguous targets, and an unused builder. The attribute/macro
+module covers all reviewed candidate families and `cfg` uncertainty. Comments,
+strings, docs, imports, names, macro-generated tokens, generated and target
+directories, and a `build.rs` sentinel are hard negatives. Conformance must
+never compile, execute, expand, fetch, link, or open external sources for this
+fixture. Its manifest and expected facts bind every byte, identity, owner,
+state, evidence span, diagnostic, gap, document statement, and query kind.
+
+The governance conformance guard was committed before Decision 0016 and every
+R6 schema, fixture, golden, and bundle. On test-first head
+`be5ffb9a8380975ab8458adfb5ca55a70540d268`, the command
+`python3 -m unittest scripts.tests.test_s4_r6_framework_declarations_contract`
+failed for the expected missing-Decision reason with exit `1` and empty
+stdout. The retained 704-byte stderr log has SHA-256
+`aad6a707da779c1737c863aa693826933015031da7a989914276f105b7604b68`;
+the test-first guard has SHA-256
+`2dc7e2627165f6879733562b1459216365f6a0f0d9f6eceed7e37f65d1c3a48f`.
+No production, dependency, R5 contract, fixture, golden, or unrelated
+protected byte changed before Red. Product implementation requires a separate
+Ready issue and a separate executable CLI Red after this package is merged.
+
+Pinned non-vendored Lekton commit
+`7a4d1a4a30468f4c18ce158a9b825680b00f4820` motivates the explicit-router
+style; pinned non-vendored RustDesk commit
+`d412d198720aa56f6cfed2dfad262e8fb1322fb7` motivates unresolved
+attribute/macro candidates while its gitlink remains unopened. The retained
+counts are lexical, motivation-only observations, not goldens, runtime facts,
+completeness, performance evidence, or repository-specific product semantics.
+
+The strict schemas, machine subset and oracles, retained Red, project-owned
+fixture and expected facts, immutable R5 dependency, invalid/security matrix,
+and non-vendored pilot descriptor are bound by the R6 contract bundle. SRS and
+roadmap bytes are excluded from that digest. Any bound-byte change requires a
+new digest and renewed semantic human review.
+
+R6 framework-declarations contract bundle:
+`sha256:46f5e0fab0439979c456cb41ce7195efd5e02a342be4292402ef2cb44909bc47`.
+
+### 2.17 S4 R7 revision-bound SCIP import ratification register
+
+Issue [#123](https://github.com/smutti/codenoesis/issues/123), its explicit
+accountable-maintainer
+[authorization](https://github.com/smutti/codenoesis/issues/123#issuecomment-5193618752),
+and the independently reviewed protected pull request created from that issue
+govern the proposed R7 static compiler-index contract. The factual
+[supply-chain correction](https://github.com/smutti/codenoesis/issues/123#issuecomment-5193814091)
+records that `protobuf 3.7.2` is MIT while `scip 0.9.0` is Apache-2.0; dependency
+names, versions, scope, and risk are unchanged. Decision 0017 becomes effective
+only when `@smutti` manually merges the exact reviewed head. The authoring agent
+does not approve or merge.
+
+This register targets exactly the **S4 — Evidence-backed workspace docs
+compatibility extension** and roadmap R7 static import. It does not broaden S5,
+S6, S7, S8, S9, R8, compiler/indexer generation, sandbox execution, runtime
+observation, export, explorer, server, MCP, release, or control-plane behavior.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| Bounded `FR-EXT-005` for `codenoesis.compiler-index-profile/scip-rust-v0.9.0-import-v1` | `Proposed`; broader polyglot meaning remains `Proposed` | `Approved` only for this static Rust SCIP profile after protected manual merge | Andrea Moretti (`@smutti` persona) | `@smutti` | [Issue #123 authorization](https://github.com/smutti/codenoesis/issues/123#issuecomment-5193618752) | `S4` | [SCIP import decision](decisions/0017-s4-r7-scip-import-contract.md), [binding schema](../../tests/specifications/s4/r7/compiler-index-binding-v1.schema.json), [RepositorySnapshotV10 schema](../../tests/specifications/s4/r7/repository-snapshot-v10.schema.json), [ExtractionChunkV7 schema](../../tests/specifications/s4/r7/extraction-chunk-v7.schema.json), [KnowledgeGraphV7 schema](../../tests/specifications/s4/r7/knowledge-graph-v7.schema.json), [Rust ontology v7](../../tests/specifications/s4/r7/rust-ontology-v7.json), [ErrorV14 schema](../../tests/specifications/s4/r7/codenoesis-error-v14.schema.json), [LocalQueryResultV5 schema](../../tests/specifications/s4/r7/local-query-result-v5.schema.json), [machine oracle](../../tests/specifications/s4/r7/e2e_fr_ext_005_scip_import.json), [retained governance Red](../../tests/specifications/s4/r7/red-observation.json), and [project-owned fixture](../../tests/fixtures/s4/compiler-index-v1/README.md) |
+
+R7 is selected only by
+`--compiler-index-profile scip-rust-v0.9.0-import-v1` together with an explicit
+`--compiler-index-binding <safe-relative-path>` on a valid
+`standard-local-s4` scan that also selects `cargo-root-package-v1`,
+`cargo-manifest-facts-v1`, `rust-semantic-depth-v1`, and
+`rust-framework-declarations-v1`. Repository content, environment, dependency
+names, a conventional artifact filename, prior selectors, or cached state never
+enable R7 implicitly. Incomplete composition fails before acquisition. Every
+invocation without both R7 inputs remains byte-identical through R6.
+
+The only accepted wire schema is SCIP v0.9.0 at commit
+`e8ee0ae6038f8298e2195812eea9d7b1196748ae`, with `scip.proto` SHA-256
+`04cb20f2b8be73f6c0376b5b3e84c3ae20ebaff0ad3d23ba2d16f866b395ed7d`.
+Metadata and every Rust document must use the approved UTF-8 encodings. The
+accepted producer family is rust-analyzer SCIP, and the binding preserves exact
+producer name, release, commit, digest-only arguments and project root,
+toolchain release and commit, and target triple. These values establish declared
+provenance and consistency, not executable attestation.
+
+`CompilerIndexBindingV1` strictly binds repository identity, immutable commit
+and tree OIDs, the R6 source-manifest digest, artifact path/length/SHA-256/schema,
+producer and toolchain, and every indexed or omitted document. Indexed documents
+bind canonical repository-relative path, committed blob OID, SHA-256, and byte
+length. Omission reasons, coverage mode, generated exclusions, and known
+producer limits are explicit. Neither `Metadata.project_root`, raw arguments,
+embedded source text, documentation, signatures, diagnostics, external prose,
+nor environment values grant filesystem authority or enter public bytes.
+
+A bounded framing preflight runs before generated protobuf decode or
+proportional allocation. It enforces raw bytes, legal wire types, metadata first
+and exactly once, recursion, repeated counts, and length-delimited field bounds.
+Recursive unknown fields, duplicate singular values, malformed or non-minimal
+varints, invalid roles/ranges/encodings, and non-canonical re-encoding fail.
+Every in-repository occurrence must resolve to exact committed UTF-8 bytes.
+Traversal, absolute or escaping paths, symlinks, mutable-input races, stale
+revisions, source mismatches, producer/toolchain mismatches, and changed
+artifact bytes fail before graph construction or publication.
+
+Ontology v7 adds only `compiler.symbol` assertions with binding state
+`in_repository_bound`, `external_unbound`, or `generated_unbound`. Global SCIP
+identities parse scheme, package manager/name/version, and descriptors; local
+identities additionally bind repository and canonical document path. NFC
+RFC 8785 preimages use the disjoint
+`codenoesis.entity-id/compiler-symbol/v1` domain and BLAKE3-256. Commit, artifact
+digest, ordering, offset, scheduling, and retry never enter symbol identity.
+Duplicate, invalid, ambiguous, or normalization-colliding identities cannot be
+repaired by ordinal or source order.
+
+R7 adds only `RESOLVES_TO`, `REFERENCES`, `IMPLEMENTS`, and `TYPE_DEFINITION`.
+The first two require unique source and lexical-owner bindings; the latter two
+require their exact SCIP relationship flags and unique endpoints. A reference
+is not a call. No `CALLS`, `EXECUTES`, `SERVES`, `STARTS`, `REACHES`, or
+`ACTIVATES` relation, data flow, generated source declaration, macro expansion,
+or runtime behavior is authorized. Unsupported call and generated-product
+meaning remains an exact coverage gap.
+
+Every promoted fact retains SHA-256 compiler-index evidence over the raw
+artifact digest and canonical semantic locator plus exact committed-source
+evidence for each local endpoint. A uniquely validated compiler relation may
+outrank a syntax-only unresolved heuristic, but it never deletes syntax
+evidence. Contradiction retains both evidence sets, emits a typed diagnostic and
+gap, and blocks ambiguous promotion. External and generated symbols remain
+compiler assertions and never become source or runtime declarations.
+
+The selected scan emits strict `codenoesis.repository-snapshot/v10` with
+`codenoesis.configuration/v7`, `codenoesis.extraction-chunk/v7`,
+`codenoesis.knowledge-graph/v7`, `codenoesis.ontology/rust/v7`,
+`codenoesis.error/v14`, and pipeline `codenoesis.pipeline/s4-r7-v1`.
+A validated stored V10 head emits `codenoesis.local-query-result/v5` for exact
+entity, relationship, claim, evidence, diagnostic, coverage-gap, and document
+IDs, including compiler symbols and compiler evidence. V9 retains V4 query
+bytes, V8 retains V3, V7 retains V2, and V4-V6 retain V1. No query-version flag,
+traversal, fuzzy search, migration, repair, or runtime inference is introduced.
+
+Fixed maxima are 67,108,864 raw artifact bytes, 1,048,576 binding JSON bytes,
+20,000 documents, 1,000,000 total occurrences, 100,000 occurrences per
+document, 250,000 symbol-information records, 500,000 relationships, 16,384
+UTF-8 bytes per symbol/display value, 65,536 UTF-8 bytes per unpromoted value,
+128 tool arguments, 4,096 UTF-8 bytes per tool argument, protobuf recursion 64,
+and 50 deterministic permutations plus isolated replay. Inherited source/path,
+60-second wall-time, and 512 MiB peak-RSS ceilings remain authoritative. Every
+maximum-plus-one fails before proportional allocation or publication; silent
+truncation is forbidden.
+
+New selected failures are strict LF-terminated ErrorV14 with empty stdout and
+no partial store/docs mutation: invalid profile or composition, unsafe path,
+invalid binding, unsupported schema or producer, binding mismatch, malformed or
+non-canonical artifact, identity collision, ambiguous endpoint, contradictory
+relation, limit exceeded, unresolvable evidence, or internal failure. Reviewed
+incomplete coverage remains a diagnostic/gap only where the oracle permits it.
+
+The Apache-2.0 project-owned `compiler-index-v1` fixture contains a two-crate
+Rust workspace, panic `build.rs` sentinel, reviewed source representation,
+canonical binary artifact, strict binding, expected overlay, and manifest that
+binds every byte. It covers cross-crate and Unicode references, aliases,
+local/global/external/generated symbols, explicit implementation and
+type-definition relations, one omitted document, exact source/compiler evidence,
+privacy canaries, honest call/macro gaps, malformed inputs, stale/mismatched
+bindings, path/race cases, and all maxima-plus-one. It launches no compiler,
+indexer, build, proc macro, target, process, model, or network client.
+
+The governance guard was committed first at
+`bb9acb9ae7f6dbed4da2294cc85b12a7fb07b5ef`. The command
+`python3 -m unittest scripts.tests.test_s4_r7_compiler_index_contract` failed
+only for the expected missing Decision 0017, with exit `1`, empty stdout, and a
+669-byte stderr log whose SHA-256 is
+`6d8ef8c7850a87140028a25f49d920936338bc3191a5ed53d058c358434ef8cc`.
+The retained test-first guard SHA-256 is
+`61490532b478fc391bb383287503ecb8cd5f384aa1710aba4ffd93c4703c4ff9`.
+No production, dependency, R6 contract, fixture, golden, or unrelated protected
+byte changed before Red.
+
+A future product issue may add exactly `scip = "=0.9.0"` and
+`protobuf = "=3.7.2"`. This governance package changes no manifest or lockfile,
+authorizes no generator or alternative parser, and performs no index generation.
+Generation remains S9 work under a separately Approved trust/sandbox boundary.
+
+The strict schemas, machine subset and oracles, supply-chain review, retained
+Red, project-owned fixture and expected overlay, invalid/security matrix, and
+immutable R6 dependency are bound by the R7 bundle. SRS and roadmap bytes are
+excluded from that digest. Any bound-byte change requires a new digest and
+renewed semantic human review.
+
+R7 revision-bound SCIP import contract bundle:
+`sha256:086d775afef43801946fd23100e3de5b144b0e1dbc5893ce8779ab398aaed8b1`.
 
 ## 3. Product intent and success definition
 
@@ -1027,6 +1553,9 @@ cannot replace their verification.
 | `FR-EXT-006` | P0 | `0.1` | A standard extraction stage MUST NOT spawn target processes or use network access. Trusted build/index execution MUST require a separate explicit profile. | Sentinel build scripts never execute in standard mode; process and network attempts are denied and audited. `SEC`, `E2E` |
 | `FR-EXT-007` | P0 | `0.1` | The S4 standard profile MUST extract bounded literal-member Rust workspaces, conventional or explicit library/binary roots, and unambiguous inline/out-of-line modules from committed UTF-8 files without evaluating Cargo or target code. | A reviewed two-member workspace matches ontology v2 identities and graph counts; globs, ambiguous modules, build execution, and unsupported worlds fail or remain explicit coverage. `GT`, `SEC`, `E2E` |
 | `FR-EXT-008` | P0 | `0.1` | An explicitly selected S4 workspace profile MUST extract bounded standalone, virtual, and non-virtual Cargo root-package workspaces, normalize implicit or explicit `"."` root membership exactly once, apply literal members/exclusions and conventional or explicit library/binary roots, preserve deferred Cargo meaning as coverage gaps, and keep gitlink members as external R2 boundaries without evaluating Cargo or target code. | Reviewed root-package fixtures match strict V6/ontology-v3 identities and provenance; maximum and maximum-plus-one, malformed/conflicting paths, deferred metadata, gitlink composition, permutations, docs/query, target/build sentinels, and pinned non-vendored Lekton/RustDesk pilots remain deterministic and side-effect free. `GT`, `SEC`, `E2E`, `PT`, `CONF` |
+| `FR-EXT-009` | P0 | `0.1` | An explicitly selected S4 manifest profile MUST represent the approved bounded Cargo package metadata, target, dependency, target-predicate, feature, patch, workspace-reference, and build-script declarations as stable evidence-backed facts while preserving external locators as digest-only values and MUST NOT claim dependency resolution, active features/targets/cfg, patch application, generated source, path traversal, fetch, or execution. | The reviewed R4 fixture matches strict V7/ontology-v4 declaration identities, relationships, byte spans, locator digests, typed unsupported gaps, and unchanged R3 crate IDs; malformed/conflicting/escaping/Unicode inputs, every maximum and maximum-plus-one, permutations, selector-absent bytes, no-authority sentinels, docs/query, and pinned non-vendored Lekton/RustDesk pilots pass. `GT`, `SEC`, `E2E`, `PT`, `CONF` |
+| `FR-EXT-010` | P0 | `0.1` | An explicitly selected S4 Rust semantic-depth profile MUST represent the approved bounded committed declaration subset for fields, enum variants, constants, statics, associated types, trait required/default methods, inherent methods, and named local trait-implementation methods with collision-safe owner/trait context, evidence-backed outer-attribute uncertainty, and no target execution or interpretation of cfg, macros, types, values, calls, framework roles, or runtime behavior. | The reviewed R5 fixture matches strict V8/ontology-v5 member identities, owner relationships, claims, byte evidence, compilation-presence states, diagnostics, coverage gaps, docs, and LocalQueryResultV3; malformed, Unicode, normalization-collision, ambiguous implementation, hard-negative, every maximum and maximum-plus-one, 50 permutations, selector-absent V1/V2 compatibility, no-authority sentinels, and pinned non-vendored Lekton/RustDesk pilots pass. `GT`, `SEC`, `E2E`, `PT`, `CONF` |
+| `FR-EXT-011` | P0 | `0.1` | An explicitly selected S4 framework-declarations profile MUST represent only the approved bounded framework-neutral component, service, configuration, endpoint, route, and handler source declarations or unresolved candidates with exact committed evidence, disjoint NFC identities, inherited compilation presence, and unique-local-target binding, while keeping declaration syntax, macro/attribute candidate meaning, and unsupported runtime behavior schema-distinct and MUST NOT execute or infer cfg, macros, generated code, compiler facts, reachability, serving, startup, active configuration, handler execution, or any equivalent runtime relation. | The reviewed two-style R6 fixture matches strict V9/ontology-v6 entities, `DEFINES` ownership, claims, byte spans, candidate diagnostics/gaps, non-runtime docs, and LocalQueryResultV4; comments, strings, docs, imports, names, unused builders, generated/target/build sentinels, malformed/Unicode/NFC-collision/ambiguity/path/privacy cases, every maximum and maximum-plus-one, 50 permutations plus isolated replay, selector-absent V3/V2/V1 bytes, zero execution/network/model authority, and pinned non-vendored motivation-only Lekton/RustDesk pilots pass. `GT`, `SEC`, `E2E`, `PT`, `CONF` |
 
 ### 9.3 Knowledge graph, claims, and snapshots
 
@@ -1067,7 +1596,7 @@ cannot replace their verification.
 
 | ID | Pri. | Target | Normative requirement | Acceptance evidence |
 |---|---:|---:|---|---|
-| `FR-QRY-001` | P0 | `0.1` | Local queries MUST retrieve entities, claims, evidence, and documents by stable identity and expose unknown or contradictory states. | CLI black-box scenarios return the reviewed typed result and stable exit status. `E2E` |
+| `FR-QRY-001` | P0 | `0.1` | Local queries MUST retrieve every approved entity, relationship, claim, evidence, diagnostic, coverage gap, and document by stable identity, expose unknown or contradictory states, and select a versioned result contract from the validated snapshot without changing prior result versions. | CLI black-box scenarios return the reviewed typed result and stable exit status; V7 exercises all seven exact-ID kinds after restart while V4-V6 retain byte-identical LocalQueryResultV1. `E2E`, `CONF` |
 | `FR-QRY-002` | P1 | `0.2` | Graph traversal MUST enforce configurable depth, result, time, and resource limits with cycle handling. | Cyclic and adversarial queries terminate within the configured bound without starving unrelated work. `PT`, `PERF`, `SEC` |
 | `FR-CLI-001` | P0 | `0.1` | The CLI MUST provide local `scan`, `docs`, and `query` journeys with human-readable and versioned JSON output. | One black-box fixture completes scan -> docs -> query without network access. `E2E`, `CONF` |
 | `FR-CLI-002` | P1 | `1.0` | Approved CLI commands MUST have stable exit codes, error codes, configuration precedence, and local/remote capability behaviour. | Golden compatibility tests cover output schema, error catalog, precedence, and server parity. `CONF`, `E2E` |
@@ -1218,14 +1747,14 @@ crate tree is not scaffolded upfront.
 
 The `S1` row records the already Implemented base slice and is not reopened by
 `FR-ACQ-004` or `FR-ACQ-005`. The implemented R0/R1 behavior is an additive
-packed SHA-1 compatibility extension with its own accepted oracle. The R2 gitlink
-boundary is a second additive S1 compatibility extension with one new V5
-snapshot selected only from `standard-local-s4`. It becomes Implemented only
-when a separate product change proves exact bound/unbound semantics, every
-fixed maximum and maximum-plus-one, privacy, race and no-authority behavior,
-V5 store/docs/query compatibility, the inherited R0/R1 guards, and every
-S0–S6 regression. The base slice remains Implemented while `FR-ACQ-005`
-remains independently Proposed or Approved.
+packed SHA-1 compatibility extension with its own accepted oracle. R2 gitlink
+boundaries and R3 root-package workspaces are additive implemented profiles
+with V5 and V6 lineages and remain not Verified. R4 is an additive implemented
+S4 compatibility profile with a V7 declaration-only lineage and remains not
+Verified. R5 is the separate implemented V8 declaration-depth profile and also
+remains not Verified. R6 is the proposed V9 source-only framework-declarations
+profile; its governance merge does not implement product behavior, add runtime
+meaning, or reopen R0-R5.
 
 ### 12.1 Release map
 
@@ -1437,8 +1966,8 @@ implementation choices.
 
 | ID | Decision required | Blocks |
 |---|---|---|
-| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0010 resolves only the R2 gitlink, `.gitmodules`, explicit nested-root, depth, and boundary-output subset after protected merge. Decision 0011 resolves only the R3 member, exclusion, package-manifest, crate-target, and binary-root subset after protected merge. Decision 0008 resolves the fixed S5 changed-path, analysis-entry, dependency-edge, report-subject, report-byte, and wall-time subset. Decision 0009 resolves the fixed S6 manifest, repository, document, YAML/reference depth, semantic count, evidence, output, memory, and wall-time subset when its protected ratification revision is manually merged. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
-| `OD-ONT-001` | Decision 0003 resolves the bounded single-crate `codenoesis.ontology/rust/v1`. Decision 0005 resolves multi-crate cardinality and unambiguous out-of-line module identity for `codenoesis.ontology/rust/v2`. Decision 0011 resolves only root-package workspace provenance and R3 coverage semantics in `codenoesis.ontology/rust/v3` while preserving v2 identity domains for unchanged facts after protected merge. Cross-language, compiler-grade, framework, and later ontology evolution remain open. | `S8` and later ontology evolution |
+| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0010 resolves only the R2 gitlink, `.gitmodules`, explicit nested-root, depth, and boundary-output subset after protected merge. Decision 0011 resolves only the R3 member, exclusion, package-manifest, crate-target, and binary-root subset after protected merge. Decision 0012 resolves only the R4 manifest-fact, dependency, feature/member, target, patch, metadata, target-predicate, declaration-string, external-locator, and permutation subset after protected merge. Decision 0015 resolves only the R5 field, variant, tuple-field, associated-item, outer-attribute, attribute-token, declared-type/header, and permutation subset after protected merge. Decision 0016 resolves only the R6 per-source declaration, registration-chain, expression-depth, route-path, method/configuration-key, target-spelling, inherited attribute, and permutation subset after protected merge. Decision 0017 resolves only the R7 raw artifact, binding, document, occurrence, symbol, relationship, value, argument, recursion, and permutation subset after protected merge. Decision 0008 resolves the fixed S5 changed-path, analysis-entry, dependency-edge, report-subject, report-byte, and wall-time subset. Decision 0009 resolves the fixed S6 manifest, repository, document, YAML/reference depth, semantic count, evidence, output, memory, and wall-time subset when its protected ratification revision is manually merged. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
+| `OD-ONT-001` | Decision 0003 resolves the bounded single-crate `codenoesis.ontology/rust/v1`. Decision 0005 resolves multi-crate cardinality and unambiguous out-of-line module identity for `codenoesis.ontology/rust/v2`. Decision 0011 resolves only root-package workspace provenance and R3 coverage semantics in `codenoesis.ontology/rust/v3` while preserving v2 identity domains for unchanged facts. Decision 0012 resolves only declaration-level Cargo entities, relationships, evidence, claim policy, and coverage states in `codenoesis.ontology/rust/v4` while preserving v3 Rust identities after protected merge. Decision 0015 resolves only the R5 committed Rust field, variant, constant/static, associated-type, implementation-context method, attribute-evidence, compilation-presence, and member-identity subset in `codenoesis.ontology/rust/v5` while preserving unchanged v4 identities after protected merge. Decision 0016 resolves only the R6 framework-neutral committed source declarations, unresolved attribute/macro candidates, disjoint identity, lexical `DEFINES` ownership, target-binding states, and explicit non-runtime semantics in `codenoesis.ontology/rust/v6` while preserving unchanged v5 identities after protected merge. Decision 0017 resolves only revision-bound Rust SCIP v0.9.0 compiler symbols, explicit compiler relationships, dual source/index evidence, precedence/conflict handling, and honest unsupported-call/generated states in `codenoesis.ontology/rust/v7` while preserving unchanged v6 identities after protected merge. Cross-language adapters, index generation, richer compiler/data-flow semantics, expanded/generated framework meaning, runtime observation, and later ontology evolution remain open. | `S8` and later ontology evolution |
 | `OD-STO-001` | Decision 0004 resolves fresh single-writer local SQLite/CAS identity, publication, restart, corruption, and cleanup semantics for `codenoesis.local-store/v1` only when its protected S3 ratification revision is manually merged. Migration, repair, deletion, backup/restore, multi-writer, and server storage remain open. | Post-S3 storage evolution and `S10` |
 | `OD-GIT-001` | Decision 0006 resolves the packed local SHA-1 subset only for the explicit `local-git-sha1-packed-v1` acquisition selector. After protected merge, Decision 0010 additionally resolves only the explicit `local-gitlinks-v1` representation of committed mode `160000` boundaries, bounded root `.gitmodules` metadata, and depth-one separately supplied local nested commit verification. Residual decisions cover remote protocols and identity resolution, SHA-256, LFS, shallow and bare repositories, alternates, promisor/partial clones, MIDX authority, symlinks, nested analysis/federation/recursion, complete Git configuration semantics, automatic repair, and history rewrite. Legacy invocations still reject packed objects without R1 and reject gitlinks without R2. | Remote and remaining post-S1 `FR-ACQ-*` |
 | `OD-CMP-001` | Decision 0009 resolves only `codenoesis.contract-capability/openapi-3.1-http-json/v1`, deterministic provider/client operation federation, heuristic non-confirmation, and source-neutral S6 identities when its protected ratification revision is manually merged. Decision 0007 resolves only the `implementation-aware-http-json/v1` field-level projection, evidence separation, seven dimensions, classifier rules, and oracle. Residual decisions cover complete OpenAPI, AsyncAPI, GraphQL, Protobuf, events, package/SCIP and event/schema authority, framework-specific semantics, observation coverage, protocol behavior, and causal evidence. | Remaining `S6`–`S7` compatibility capabilities |
@@ -1475,6 +2004,56 @@ profile decision remains open. The
 resolves the bounded Rust ontology v2, generated Markdown, and exact-ID local
 query semantics only for the explicit S4 profile; Cargo evaluation, compiler
 resolution, traversal/search, and later documentation formats remain open.
+The
+[S4 root-package decision](decisions/0011-s4-root-package-workspace-contract.md)
+resolves only explicit R3 standalone/virtual/non-virtual package membership,
+literal exclusions, target roots, gitlink composition, and ontology v3
+provenance. The
+[S4 Cargo manifest facts decision](decisions/0012-s4-cargo-manifest-facts-contract.md)
+resolves only explicit R4 declaration entities, byte evidence, digest-only
+locators, typed coverage, and ontology v4 identities after protected merge;
+dependency/feature/target resolution, patch application, generated code, and
+execution remain open.
+The
+[S4 R4 exact-ID query decision](decisions/0013-s4-r4-exact-id-query-contract.md)
+resolves only additive V7 LocalQueryResultV2 dispatch, direct exact-ID
+projection for approved R4 facts and uncertainty artifacts, and stable Cargo
+diagnostic identities; V1 mutation, traversal, fuzzy search, repair, migration,
+and new authority remain open.
+The
+[S4 R4 legacy badges decision](decisions/0014-s4-r4-legacy-badges-contract.md)
+resolves only the exact typed-unsupported boundary for a literal top-level
+`[badges]` table after the pinned public pilot exposed the missing mapping;
+badge-value interpretation, provider semantics, network access, new
+relationships, silent ignore, and any broader Cargo-family support remain
+open.
+The
+[S4 R5 Rust semantic-depth decision](decisions/0015-s4-r5-rust-semantic-depth-contract.md)
+resolves only the explicit `rust-semantic-depth-v1` committed declaration
+subset, member and implementation-context method identities, outer-attribute
+uncertainty, ontology v5 relationships, fixed R5 limits, ErrorV12, and V8-only
+LocalQueryResultV3 dispatch after protected manual merge; framework roles,
+macro expansion, active cfg worlds, compiler/type resolution, value
+evaluation, calls, runtime behavior, migration, and explorer/export semantics
+remain open.
+The
+[S4 R6 framework-declarations decision](decisions/0016-s4-r6-framework-declarations-contract.md)
+resolves only the explicit `rust-framework-declarations-v1` source profile,
+framework-neutral declaration entities, `declared_registration_syntax` and
+`candidate_unresolved` states, disjoint identities, lexical ownership,
+unique-local-target binding, fixed R6 limits, ErrorV13, and V9-only
+LocalQueryResultV4 dispatch after protected manual merge. Macro expansion,
+active cfg worlds, compiler/type/trait/value resolution, generated code,
+calls, runtime behavior or observation, migration, and explorer/export
+semantics remain open.
+The
+[S4 R7 revision-bound SCIP import decision](decisions/0017-s4-r7-scip-import-contract.md)
+resolves only explicit static import of one bound Rust SCIP v0.9.0 artifact,
+compiler-symbol identity, four explicit relationship kinds, dual source/index
+evidence, fixed R7 limits, ErrorV14, and V10-only LocalQueryResultV5 dispatch
+after protected manual merge. Index generation, compiler or build execution,
+macro expansion, reliable call or data-flow meaning, runtime behavior,
+migration, and explorer/export semantics remain open.
 The
 [S5 incremental refresh decision](decisions/0008-s5-incremental-refresh-contract.md)
 resolves only the revision-neutral Rust-workspace analysis cache,

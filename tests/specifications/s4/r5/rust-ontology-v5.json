@@ -1,0 +1,218 @@
+{
+  "schema_version": "codenoesis.ontology/rust/v5",
+  "status": "proposed_until_protected_merge",
+  "scope": "R5 committed Rust declaration depth for the explicit rust-semantic-depth-v1 selector",
+  "extends": {
+    "ontology_version": "codenoesis.ontology/rust/v4",
+    "contract_path": "tests/specifications/s4/r4/rust-ontology-v4.json",
+    "contract_sha256": "30138d850faac4a644be64796e1cf7934b51ae2ad8e24f922e0b2559f513d594"
+  },
+  "compatibility": {
+    "unchanged_r4_entity_ids": true,
+    "unchanged_r4_relationship_ids": true,
+    "selector_absence_preserves_r4_bytes": true,
+    "method_identity_change_scope": "V8 implementation-context methods only",
+    "query_dispatch": {
+      "v4_to_v6": "codenoesis.local-query-result/v1",
+      "v7": "codenoesis.local-query-result/v2",
+      "v8": "codenoesis.local-query-result/v3"
+    }
+  },
+  "r5_entity_kinds": [
+    "rust.field",
+    "rust.enum_variant",
+    "rust.constant",
+    "rust.static",
+    "rust.associated_type"
+  ],
+  "extended_entity_kinds": [
+    "rust.method"
+  ],
+  "entity_semantics": {
+    "rust.field": {
+      "owners": [
+        "rust.struct",
+        "rust.enum_variant"
+      ],
+      "forms": [
+        "named",
+        "tuple"
+      ],
+      "properties": [
+        "declared_name_or_tuple_index",
+        "visibility",
+        "declared_type_spelling",
+        "compilation_presence"
+      ]
+    },
+    "rust.enum_variant": {
+      "owner": "rust.enum",
+      "forms": [
+        "unit",
+        "tuple",
+        "struct"
+      ],
+      "properties": [
+        "discriminant_present",
+        "compilation_presence"
+      ],
+      "discriminant_evaluated": false
+    },
+    "rust.constant": {
+      "owners": [
+        "rust.module",
+        "rust.trait",
+        "supported_implementation"
+      ],
+      "properties": [
+        "declared_type_spelling",
+        "initializer_present",
+        "compilation_presence"
+      ],
+      "value_evaluated": false
+    },
+    "rust.static": {
+      "owner": "rust.module",
+      "properties": [
+        "visibility",
+        "mutable",
+        "declared_type_spelling",
+        "initializer_present",
+        "compilation_presence"
+      ],
+      "value_read_or_evaluated": false
+    },
+    "rust.associated_type": {
+      "owners": [
+        "rust.trait",
+        "supported_implementation"
+      ],
+      "properties": [
+        "bounds_present",
+        "default_present",
+        "compilation_presence"
+      ],
+      "type_resolved": false
+    },
+    "rust.method": {
+      "contexts": [
+        "trait_declaration",
+        "inherent_implementation",
+        "named_local_trait_implementation"
+      ],
+      "properties": [
+        "implementation_context",
+        "trait_context_id",
+        "receiver_present",
+        "bounded_signature_spelling",
+        "compilation_presence"
+      ]
+    }
+  },
+  "compilation_presence_states": [
+    "unconditional",
+    "conditional_unknown",
+    "attribute_transform_unknown"
+  ],
+  "relationship_matrix": [
+    {
+      "kind": "DEFINES",
+      "source": "rust.struct",
+      "target": "rust.field"
+    },
+    {
+      "kind": "DEFINES",
+      "source": "rust.enum",
+      "target": "rust.enum_variant"
+    },
+    {
+      "kind": "DEFINES",
+      "source": "rust.enum_variant",
+      "target": "rust.field"
+    },
+    {
+      "kind": "DEFINES",
+      "source": "rust.module|rust.trait|supported_implementation",
+      "target": "rust.constant|rust.static|rust.associated_type|rust.method"
+    },
+    {
+      "kind": "IMPLEMENTS",
+      "source": "resolved local rust.struct|rust.enum",
+      "target": "resolved local rust.trait"
+    }
+  ],
+  "identity": {
+    "algorithm": "blake3-256",
+    "canonicalization": "RFC8785 JSON array",
+    "member_entity_domain": "codenoesis.entity-id/rust-member/v1",
+    "legacy_rust_entity_domain": "codenoesis.entity-id/rust/v2",
+    "member_preimage": [
+      "repository_identity",
+      "crate_identity",
+      "lexical_owner_identity",
+      "member_kind",
+      "NFC_declared_name_or_zero_based_tuple_index",
+      "resolved_trait_identity_or_empty_string"
+    ],
+    "trait_context_required_for": [
+      "named_local_trait_implementation_method",
+      "named_local_trait_implementation_associated_type",
+      "named_local_trait_implementation_constant"
+    ],
+    "collision_policy": "typed failure; no source-order or ordinal repair",
+    "forbidden_inputs": [
+      "commit_oid",
+      "byte_offset",
+      "source_order",
+      "scheduler_order",
+      "output_path",
+      "inferred_type",
+      "evaluated_value",
+      "active_cfg_world",
+      "macro_expansion"
+    ]
+  },
+  "claim_policy": {
+    "entity_and_relationship_state": "deterministic_fact",
+    "evidence_cardinality": "exactly one resolving committed-source evidence item per parser claim",
+    "attribute_tokens": "bounded evidence only",
+    "uncertainty": "coverage gaps never promote syntax to behavior"
+  },
+  "coverage_capability_states": {
+    "rust.attribute_semantics_not_interpreted": "unsupported",
+    "rust.cfg_presence_unresolved": "not_resolved",
+    "rust.macro_generated_items_not_analyzed": "not_analyzed",
+    "rust.type_resolution_not_performed": "not_resolved",
+    "rust.value_not_evaluated": "not_evaluated",
+    "rust.union_unsupported": "unsupported",
+    "rust.foreign_block_unsupported": "unsupported",
+    "rust.unsupported_impl_header": "unsupported"
+  },
+  "limits": {
+    "fields_per_owner": 1024,
+    "variants_per_enum": 1024,
+    "tuple_fields_per_owner": 1024,
+    "associated_items_per_context": 1024,
+    "outer_attributes_per_declaration": 128,
+    "attribute_token_bytes": 16384,
+    "declared_type_or_header_bytes": 4096,
+    "permutations": 50
+  },
+  "limit_policy": "maximum-plus-one fails with ErrorV12 and no partial publication",
+  "forbidden_relationship_kinds": [
+    "CALLS",
+    "EXECUTES"
+  ],
+  "forbidden_authority": [
+    "active_cfg_world",
+    "macro_expansion",
+    "framework_role_inference",
+    "compiler_type_resolution",
+    "value_evaluation",
+    "build_script_execution",
+    "procedural_macro_execution",
+    "target_execution",
+    "network_access",
+    "model_provider_access"
+  ]
+}

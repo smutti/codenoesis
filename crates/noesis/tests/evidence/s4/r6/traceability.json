@@ -1,0 +1,381 @@
+{
+  "schema_version": "codenoesis.s4-r6-traceability/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/119",
+  "slice": "S4",
+  "roadmap_capability": "R6",
+  "requirement_status": "Approved",
+  "risk": "high",
+  "requirements": [
+    {
+      "id": "FR-EXT-011",
+      "role": "primary",
+      "required_tests": [
+        "e2e_fr_ext_011_framework_declarations",
+        "gt_fr_ext_011_explicit_builder_declarations",
+        "gt_fr_ext_011_attribute_macro_candidates_remain_unresolved",
+        "gt_fr_ext_011_unique_local_targets_only",
+        "conf_fr_ext_011_snapshot_v9_graph_v6_error_v13",
+        "conf_fr_qry_001_v9_uses_local_query_result_v4",
+        "pt_dr_idn_002_r6_framework_identity_nfc",
+        "pt_fr_ext_011_limits_have_max_and_plus_one",
+        "pt_nfr_det_001_r6_permutation_and_replay_invariant",
+        "sec_fr_ext_011_never_executes_or_expands_target_worlds",
+        "sec_fr_ext_011_hard_negative_source_forms",
+        "e2e_fr_doc_001_r6_declaration_candidate_non_runtime_wording",
+        "reg_fr_cli_001_r6_selector_absence_is_byte_identical"
+      ],
+      "additional_tests": [
+        "conf_fr_ext_011_reviewed_fixture_newlines_are_platform_neutral",
+        "conf_fr_ext_011_error_v13_invalid_matrix_is_strict",
+        "gt_fr_ext_011_application_propagates_typed_r6_failure",
+        "gt_fr_ext_011_qualified_simple_method_wrapper_is_reviewed",
+        "pt_dr_idn_002_r6_nfc_collision_is_rejected",
+        "pt_fr_ext_011_adapter_limits_have_max_and_plus_one",
+        "sec_fr_ext_011_comment_only_repository_emits_no_declaration",
+        "sec_fr_ext_011_invalid_composition_precedes_acquisition",
+        "sec_fr_ext_011_malformed_private_and_unsafe_inputs_are_typed",
+        "sec_fr_ext_011_r6_prerequisite_parse_failures_use_v13",
+        "e2e_fr_qry_001_r6_exact_id_results"
+      ],
+      "evidence": [
+        "crates/noesis/tests/evidence/s4/r6/red-observation.json",
+        "crates/noesis/tests/evidence/s4/r6/red/e2e_fr_ext_011_framework_declarations.log",
+        "crates/noesis/tests/evidence/s4/r6/implementation-observation-local.json",
+        "crates/noesis/tests/evidence/s4/r6/pilot-observations-local.json",
+        "pull request local-gate and exact-head CI results"
+      ]
+    },
+    {
+      "id": "FR-EXT-001",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_ext_011_framework_declarations",
+        "reg_fr_cli_001_r6_selector_absence_is_byte_identical"
+      ]
+    },
+    {
+      "id": "FR-EXT-002",
+      "role": "compatibility",
+      "tests": [
+        "sec_fr_ext_011_never_executes_or_expands_target_worlds",
+        "sec_fr_ext_011_hard_negative_source_forms"
+      ]
+    },
+    {
+      "id": "FR-EXT-010",
+      "role": "compatibility",
+      "tests": [
+        "gt_fr_ext_011_unique_local_targets_only",
+        "reg_fr_cli_001_r6_selector_absence_is_byte_identical"
+      ]
+    },
+    {
+      "id": "FR-KNW-001",
+      "role": "compatibility",
+      "tests": [
+        "gt_fr_ext_011_explicit_builder_declarations",
+        "gt_fr_ext_011_attribute_macro_candidates_remain_unresolved"
+      ]
+    },
+    {
+      "id": "FR-KNW-002",
+      "role": "compatibility",
+      "tests": [
+        "pt_dr_idn_002_r6_framework_identity_nfc",
+        "gt_fr_ext_011_unique_local_targets_only"
+      ]
+    },
+    {
+      "id": "FR-KNW-003",
+      "role": "compatibility",
+      "tests": [
+        "sec_fr_ext_011_never_executes_or_expands_target_worlds",
+        "sec_fr_ext_011_hard_negative_source_forms"
+      ]
+    },
+    {
+      "id": "FR-DOC-001",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_doc_001_r6_declaration_candidate_non_runtime_wording"
+      ]
+    },
+    {
+      "id": "FR-DOC-002",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_doc_001_r6_declaration_candidate_non_runtime_wording"
+      ]
+    },
+    {
+      "id": "FR-QRY-001",
+      "role": "compatibility",
+      "tests": [
+        "conf_fr_qry_001_v9_uses_local_query_result_v4",
+        "e2e_fr_qry_001_r6_exact_id_results",
+        "reg_fr_cli_001_r6_selector_absence_is_byte_identical"
+      ]
+    },
+    {
+      "id": "FR-CLI-001",
+      "role": "compatibility",
+      "tests": [
+        "sec_fr_ext_011_invalid_composition_precedes_acquisition",
+        "sec_fr_ext_011_r6_prerequisite_parse_failures_use_v13",
+        "reg_fr_cli_001_r6_selector_absence_is_byte_identical"
+      ]
+    },
+    {
+      "id": "NFR-DET-001",
+      "role": "compatibility",
+      "tests": [
+        "pt_nfr_det_001_r6_permutation_and_replay_invariant",
+        "e2e_fr_qry_001_r6_exact_id_results"
+      ]
+    },
+    {
+      "id": "NFR-SEC-001",
+      "role": "compatibility",
+      "tests": [
+        "sec_fr_ext_011_never_executes_or_expands_target_worlds",
+        "sec_fr_ext_011_malformed_private_and_unsafe_inputs_are_typed"
+      ]
+    },
+    {
+      "id": "NFR-SEC-005",
+      "role": "compatibility",
+      "tests": [
+        "sec_fr_ext_011_hard_negative_source_forms",
+        "sec_fr_ext_011_invalid_composition_precedes_acquisition"
+      ]
+    },
+    {
+      "id": "NFR-TST-001",
+      "role": "compatibility",
+      "tests": [
+        "all 24 focused R6 tests",
+        "complete repository gate"
+      ]
+    },
+    {
+      "id": "NFR-TST-002",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_ext_011_framework_declarations",
+        "complete exact-head pull-request checks"
+      ]
+    }
+  ],
+  "ordered_acceptance_scenarios": [
+    {
+      "order": 1,
+      "outcome": "The explicit R6 selector requires the complete R3, R4, and R5 composition and invalid input fails with ErrorV13 before acquisition.",
+      "status": "passed_focused",
+      "tests": [
+        "sec_fr_ext_011_invalid_composition_precedes_acquisition",
+        "sec_fr_ext_011_r6_prerequisite_parse_failures_use_v13"
+      ]
+    },
+    {
+      "order": 2,
+      "outcome": "ConfigurationV6, ExtractionChunkV6, KnowledgeGraphV6, Rust ontology v6, pipeline s4-r6-v1, semantic hash v5, and RepositorySnapshotV9 are strict.",
+      "status": "passed_focused",
+      "tests": [
+        "conf_fr_ext_011_snapshot_v9_graph_v6_error_v13",
+        "e2e_fr_ext_011_framework_declarations"
+      ]
+    },
+    {
+      "order": 3,
+      "outcome": "The immutable R5 workspace, Cargo, semantic, acquisition, gitlink, storage, docs, and query lineage remains additive and unchanged.",
+      "status": "pending_final_regression_gate",
+      "tests": [
+        "reg_fr_cli_001_r6_selector_absence_is_byte_identical",
+        "complete repository gate"
+      ]
+    },
+    {
+      "order": 4,
+      "outcome": "The reviewed fixture emits exactly 24 declarations with role counts 4, 2, 2, 3, 10, and 3.",
+      "status": "passed_focused",
+      "tests": [
+        "e2e_fr_ext_011_framework_declarations"
+      ]
+    },
+    {
+      "order": 5,
+      "outcome": "The reviewed fixture emits 12 declared registration records and 12 unresolved candidates.",
+      "status": "passed_focused",
+      "tests": [
+        "e2e_fr_ext_011_framework_declarations",
+        "gt_fr_ext_011_attribute_macro_candidates_remain_unresolved"
+      ]
+    },
+    {
+      "order": 6,
+      "outcome": "Only reviewed direct return-tail chains rooted at RegistrationSet::new or Router::new create explicit declarations.",
+      "status": "passed_focused",
+      "tests": [
+        "gt_fr_ext_011_explicit_builder_declarations",
+        "sec_fr_ext_011_hard_negative_source_forms"
+      ]
+    },
+    {
+      "order": 7,
+      "outcome": "Reviewed attribute and declarative-macro candidates remain unresolved without argument decoding or expansion.",
+      "status": "passed_focused",
+      "tests": [
+        "gt_fr_ext_011_attribute_macro_candidates_remain_unresolved",
+        "sec_fr_ext_011_never_executes_or_expands_target_worlds"
+      ]
+    },
+    {
+      "order": 8,
+      "outcome": "Every declaration retains one lexical owner, compilation presence, source profile, parser claim, and committed UTF-8 evidence span.",
+      "status": "passed_focused",
+      "tests": [
+        "e2e_fr_ext_011_framework_declarations",
+        "conf_fr_ext_011_snapshot_v9_graph_v6_error_v13"
+      ]
+    },
+    {
+      "order": 9,
+      "outcome": "Local targets bind only to one unique committed R5 lexical fact with exact 21, 1, 1, and 1 cardinalities.",
+      "status": "passed_focused",
+      "tests": [
+        "gt_fr_ext_011_unique_local_targets_only",
+        "e2e_fr_ext_011_framework_declarations"
+      ]
+    },
+    {
+      "order": 10,
+      "outcome": "Exactly 24 lexical DEFINES relationships are emitted and no runtime relationship is present.",
+      "status": "passed_focused",
+      "tests": [
+        "e2e_fr_ext_011_framework_declarations",
+        "sec_fr_ext_011_never_executes_or_expands_target_worlds"
+      ]
+    },
+    {
+      "order": 11,
+      "outcome": "Framework declaration IDs use the exact seven-part NFC semantic preimage without spans or runtime inputs.",
+      "status": "passed_focused",
+      "tests": [
+        "pt_dr_idn_002_r6_framework_identity_nfc",
+        "pt_dr_idn_002_r6_nfc_collision_is_rejected"
+      ]
+    },
+    {
+      "order": 12,
+      "outcome": "The reviewed 14 diagnostics and 40 coverage gaps are exact and include runtime-not-observed statements.",
+      "status": "passed_focused",
+      "tests": [
+        "e2e_fr_ext_011_framework_declarations"
+      ]
+    },
+    {
+      "order": 13,
+      "outcome": "Comments, strings, imports, names, unused builders, generated outputs, targets, and macro outputs do not create declarations.",
+      "status": "passed_focused",
+      "tests": [
+        "sec_fr_ext_011_hard_negative_source_forms",
+        "sec_fr_ext_011_comment_only_repository_emits_no_declaration"
+      ]
+    },
+    {
+      "order": 14,
+      "outcome": "Malformed, colliding, composition, selector, evidence, unsafe, privacy, and maximum-plus-one inputs fail typed without partial publication.",
+      "status": "passed_focused_with_inherited_filesystem_regression_pending",
+      "tests": [
+        "conf_fr_ext_011_error_v13_invalid_matrix_is_strict",
+        "sec_fr_ext_011_malformed_private_and_unsafe_inputs_are_typed",
+        "sec_fr_ext_011_invalid_composition_precedes_acquisition",
+        "complete repository gate"
+      ]
+    },
+    {
+      "order": 15,
+      "outcome": "All eight fixed limits are enforced before proportional allocation and no value is truncated silently.",
+      "status": "passed_focused",
+      "tests": [
+        "pt_fr_ext_011_limits_have_max_and_plus_one",
+        "pt_fr_ext_011_adapter_limits_have_max_and_plus_one"
+      ]
+    },
+    {
+      "order": 16,
+      "outcome": "Semantic payload and exact-ID results are deterministic across 50 permutations and replay.",
+      "status": "passed_focused",
+      "tests": [
+        "pt_nfr_det_001_r6_permutation_and_replay_invariant",
+        "e2e_fr_qry_001_r6_exact_id_results"
+      ]
+    },
+    {
+      "order": 17,
+      "outcome": "The existing three-role atomic publication, head validation, restart, corruption, crash, and sweep behavior is reused without migration.",
+      "status": "pending_final_regression_gate",
+      "tests": [
+        "e2e_fr_ext_011_framework_declarations",
+        "complete repository gate"
+      ]
+    },
+    {
+      "order": 18,
+      "outcome": "Every R6 declaration, diagnostic, and gap has evidence-backed documentation with explicit non-runtime wording.",
+      "status": "passed_focused",
+      "tests": [
+        "e2e_fr_doc_001_r6_declaration_candidate_non_runtime_wording"
+      ]
+    },
+    {
+      "order": 19,
+      "outcome": "Stored V9 heads dispatch to LocalQueryResultV4 for all seven exact-ID result kinds.",
+      "status": "passed_focused",
+      "tests": [
+        "conf_fr_qry_001_v9_uses_local_query_result_v4",
+        "e2e_fr_qry_001_r6_exact_id_results"
+      ]
+    },
+    {
+      "order": 20,
+      "outcome": "V8 uses LocalQueryResultV3, V7 uses V2, and V4 through V6 use V1 with stored snapshot authority.",
+      "status": "pending_final_regression_gate",
+      "tests": [
+        "reg_fr_cli_001_r6_selector_absence_is_byte_identical",
+        "complete repository gate"
+      ]
+    },
+    {
+      "order": 21,
+      "outcome": "R5 and every earlier success, error, publication, documentation, and query result remain byte-compatible when R6 is absent.",
+      "status": "pending_final_regression_gate",
+      "tests": [
+        "reg_fr_cli_001_r6_selector_absence_is_byte_identical",
+        "complete repository gate"
+      ]
+    },
+    {
+      "order": 22,
+      "outcome": "The product does not execute Cargo, rustc, build scripts, macros, targets, models, networks, or external repositories and does not interpret target worlds.",
+      "status": "passed_focused_without_os_level_trace",
+      "tests": [
+        "sec_fr_ext_011_never_executes_or_expands_target_worlds",
+        "e2e_fr_ext_011_framework_declarations"
+      ]
+    },
+    {
+      "order": 23,
+      "outcome": "Pinned non-vendored Lekton is observed as a replaceable compatibility pilot without promoting counts to ontology truth.",
+      "status": "pilot_observed",
+      "evidence": "crates/noesis/tests/evidence/s4/r6/pilot-observations-local.json"
+    },
+    {
+      "order": 24,
+      "outcome": "Pinned non-vendored RustDesk is observed fail-closed at the inherited R5 identity boundary while its gitlink remains unopened.",
+      "status": "pilot_observed_negative",
+      "evidence": "crates/noesis/tests/evidence/s4/r6/pilot-observations-local.json"
+    }
+  ],
+  "verification_status": "Implemented locally; final repository gate, pull-request CI, CodeQL, platform checks, and independent human review remain required before Verified."
+}

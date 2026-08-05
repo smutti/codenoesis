@@ -1,0 +1,385 @@
+{
+  "schema_version": "codenoesis.s4-r5-local-implementation-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/113",
+  "slice": "S4",
+  "roadmap_capability": "R5",
+  "requirement_status": "Approved",
+  "requirements": [
+    "FR-EXT-010",
+    "FR-EXT-001",
+    "FR-EXT-002",
+    "FR-KNW-001",
+    "FR-KNW-002",
+    "FR-KNW-003",
+    "FR-DOC-001",
+    "FR-DOC-002",
+    "FR-QRY-001",
+    "FR-CLI-001"
+  ],
+  "risk": "high",
+  "observed_at": "2026-08-04T18:19:29Z",
+  "authorization": {
+    "ready_issue": "https://github.com/smutti/codenoesis/issues/113",
+    "human_authorization": "https://github.com/smutti/codenoesis/issues/113#issuecomment-5180933104",
+    "governance_correction_issue": "https://github.com/smutti/codenoesis/issues/114",
+    "governance_correction_pull_request": "https://github.com/smutti/codenoesis/pull/115",
+    "maintainer_supervised_interactive_lane": true,
+    "correction_budget": 5,
+    "manual_independent_review_and_merge_required": true
+  },
+  "commits": {
+    "governance_merge": "c2ae40aed24f24ee666ea5a2549d34ec8553686b",
+    "test_first": "6953c63d496b0b7b7bfdfb2cf4b866d69abe9557",
+    "red_evidence": "a5b0f5903c0ae74d80af507b05383ad9f82e2fa4",
+    "governance_correction_merge": "99f1d2f870ecab4630b0f5c97b366adcb8c26b83",
+    "corrected_base_integration": "a75a23cda6754edccbf47af8582733d181643e09",
+    "domain_and_parser_implementation": "44bfb8b77d196e8b0bbe0929396828a70602384a",
+    "contract_test_first": "e1f15e68d9aebb5737ef30107af96a77c4e169a1",
+    "complete_vertical_implementation": "12089462e2d2d85163f17453046c01387df8ea84",
+    "documentation_distribution_correction": "1bb7b90ed3b3f84340e9650a69ebd1eb2b3dc6d6",
+    "workspace_lint_correction": "b6ca55fc22ea59ee5fbfef1ca6bf26e862b80ea2",
+    "legacy_graph_validation_correction": "f886b5b5d3480a619edaee2d9028dc288ddad8e9",
+    "final_evidence_and_review_head": "recorded by the pull request after the final working-tree gate"
+  },
+  "contracts": {
+    "bundle_sha256": "ed48512d8337d2dda2a3b5f752177f3988915bdfc98eda1ff2391e15039e7d45",
+    "decision_sha256": "454a60c1eaa7df2a9f2e43f4602503b86a35f44430ab87ba0fab975f7d0e982d",
+    "acceptance_specification_sha256": "116ffc8e443215eefe89446061f3d8dedce46dcc304afa1bd640e9a5c22f0642",
+    "exact_id_query_oracle_sha256": "f44665ec8740fc4950f64d4c3fd696e6e49cfe7de57ef3a37753ed1103e70f11",
+    "rust_semantic_subset_sha256": "2b80371adfd4a344a6b28231b92f14a09bfe5fd639cae45d9ad93fb4fa6fc73a",
+    "configuration_v5_schema_sha256": "f8c16f1bffbc5eb1a084bb7d6dbfff58e64ca43ead565283a1fcb6828af0786e",
+    "repository_snapshot_v8_schema_sha256": "6eebe6283143ab2c394fda69a422a1fb3fe5cc54303bd3e5f118cab412b80e66",
+    "extraction_chunk_v5_schema_sha256": "9be074d9e02979fc3e094adb60e7d1cfc1f82e7591ecfe95a69f68b174268538",
+    "knowledge_graph_v5_schema_sha256": "de2db15fe9e77a8162883bb95da42f67a14f71bca0c179d3b0d7694f47c67630",
+    "rust_ontology_v5_sha256": "ed5460ba08308cc1d075fb92841943be3354ef33a46327a11f86e284a5cff348",
+    "error_v12_schema_sha256": "7b46cd00185bea04a1482c2cafaf7d75fd3e547107f8aaf3846795bbb97c3e04",
+    "local_query_result_v3_schema_sha256": "c4cb94f96af9cc405e04c4f9a3c57969ddfddab886e34392a93fce38bda8ebab",
+    "semantic_hash_contract_v4_sha256": "45b7009f68af046cf74b240fcd54287b8f05251d381d7a3f87b4faec8bdbc85c",
+    "invalid_case_matrix_sha256": "0ae7b9ace4d634c79b32074b87c1827febf9b3fd354ec0cff491d1e0cdc32e97",
+    "fixture_manifest_sha256": "10f0800e5692ea05b3bbe3cfd4ffaddbf6db1a9899e5db626330ced52b34d780",
+    "expected_semantic_facts_sha256": "3079e0a7ff34797345ba90f6eae9fb9022c5fcce1cc7923c1965cfcd9aa67fd8",
+    "contract_bundle_file_sha256": "6491386c0fc8ec21dd3bf5112c2460eed56e33b976bb3afb1ac55fa4a8308509",
+    "protected_contract_or_fixture_delta_from_corrected_base": false,
+    "accepted_r0_r4_contract_delta_from_corrected_base": false,
+    "requirements_architecture_governance_or_control_plane_delta_from_corrected_base": false
+  },
+  "public_contracts": {
+    "rust_semantic_selector": "rust-semantic-depth-v1",
+    "required_composition": "standard-local-s4+cargo-root-package-v1+cargo-manifest-facts-v1",
+    "configuration": "codenoesis.configuration/v5",
+    "snapshot": "codenoesis.repository-snapshot/v8",
+    "extraction_chunk": "codenoesis.extraction-chunk/v5",
+    "knowledge_graph": "codenoesis.knowledge-graph/v5",
+    "ontology": "codenoesis.ontology/rust/v5",
+    "error": "codenoesis.error/v12",
+    "query": "codenoesis.local-query-result/v3",
+    "pipeline": "codenoesis.pipeline/s4-r5-v1",
+    "semantic_hash_contract": "v4",
+    "documentation": "v1 with additive evidence-backed R5 statements"
+  },
+  "focused_validation": {
+    "commands": [
+      "cargo test --locked -p codenoesis-domain --test s4_rust_semantic_depth",
+      "cargo test --locked -p codenoesis-contracts --test s4_r5_contracts",
+      "cargo test --locked -p codenoesis-lang-rust --test s4_rust_semantic_depth",
+      "cargo test --locked -p noesis --test e2e_fr_ext_010_rust_semantic_depth"
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "domain_tests_passed": 2,
+    "contract_tests_passed": 2,
+    "rust_adapter_tests_passed": 7,
+    "public_black_box_tests_passed": 6,
+    "total_focused_tests_passed": 17,
+    "required_machine_linkable_tests_present": 13,
+    "focused_log_bytes": 3383,
+    "focused_log_sha256": "72a0115e1c2c01750d8923d2b4828f257ea54812f24bb21f55040b66d8e74084",
+    "focused_log_committed": false,
+    "workspace_all_targets_all_features_clippy_passed": true,
+    "legacy_s4_contract_tests_passed": 6
+  },
+  "reviewed_fixture": {
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-semantic-depth-v1",
+    "commit_oid": "4fc9e6efd37c289a347c9f642fdac0ef611c9fe8",
+    "tree_oid": "9f2229d9caf4efacfb8dc0eccf1e47e6bd738fef",
+    "snapshot_schema": "codenoesis.repository-snapshot/v8",
+    "semantic_hash": "21c27d93dd370b2789e1b076fb84887ae309de1ceb6fc97cbbba83ddc1e83c69",
+    "entity_count": 62,
+    "relationship_count": 65,
+    "claim_count": 127,
+    "evidence_count": 70,
+    "diagnostic_count": 8,
+    "coverage_gap_count": 57,
+    "declaration_counts": {
+      "rust.field": 16,
+      "rust.enum_variant": 5,
+      "rust.constant": 6,
+      "rust.static": 2,
+      "rust.associated_type": 2,
+      "rust.method": 9
+    },
+    "member_defines_edges": 40,
+    "implements_edges": 3,
+    "calls_edges": 0,
+    "executes_edges": 0,
+    "compilation_presence": {
+      "unconditional": 38,
+      "conditional_unknown": 1,
+      "attribute_transform_unknown": 1
+    },
+    "capability_states": [
+      [
+        "rust.attribute_semantics_not_interpreted",
+        "unsupported"
+      ],
+      [
+        "rust.cfg_presence_unresolved",
+        "not_resolved"
+      ],
+      [
+        "rust.foreign_block_unsupported",
+        "unsupported"
+      ],
+      [
+        "rust.macro_generated_items_not_analyzed",
+        "not_analyzed"
+      ],
+      [
+        "rust.type_resolution_not_performed",
+        "not_resolved"
+      ],
+      [
+        "rust.union_unsupported",
+        "unsupported"
+      ],
+      [
+        "rust.unsupported_impl_header",
+        "unsupported"
+      ],
+      [
+        "rust.value_not_evaluated",
+        "not_evaluated"
+      ]
+    ]
+  },
+  "resource_and_replay_observation": {
+    "scan": {
+      "exit_code": 0,
+      "wall_time_seconds": 1.12,
+      "maximum_resident_set_bytes": 19988480,
+      "snapshot_output_bytes": 322067,
+      "snapshot_output_limit_bytes": 67108864
+    },
+    "documentation": {
+      "exit_code": 0,
+      "wall_time_seconds": 0.30,
+      "maximum_resident_set_bytes": 13369344,
+      "manifest_bytes": 53237,
+      "document_count": 3,
+      "maximum_document_bytes": 17680,
+      "total_document_bytes": 34353,
+      "generation_hash": "f14ca1bbbcdf94308416206b3b8955398fa8e0d6e79c6d6b508e9fa45a21b74b"
+    },
+    "query": {
+      "exit_code": 0,
+      "wall_time_seconds": 0.13,
+      "maximum_resident_set_bytes": 13123584,
+      "output_bytes": 2334,
+      "schema": "codenoesis.local-query-result/v3",
+      "result_kind": "entity",
+      "evidence_count": 1,
+      "document_statement_count": 1
+    },
+    "fresh_store_replay": {
+      "semantic_bytes_identical": true,
+      "canonical_semantic_sha256": "aa37bd40ecaeca212e0d7231a2783747041c159fe1e6a7f8e21ad5ee1073542c",
+      "documentation_manifest_bytes_identical": true,
+      "documentation_manifest_sha256": "63b69fd6a2e5556bb0c7a6bbd47c5ef796e9e64add4b4ef261c25850ff019971",
+      "documentation_tree_bytes_identical": true,
+      "documentation_tree_sha256": "8b72ccafaffbef0f83de6069a75f1f4db49e362461256e36c4b4ff0d0981ffc9",
+      "query_bytes_identical": true,
+      "query_sha256": "0f0e96f5c2516512bab5682dbcccfde6ef31a669b8e3841103b76d834d7d7a93",
+      "full_snapshot_envelope_identical": false,
+      "full_snapshot_difference": "correlation_id and created_at are intentionally operational"
+    }
+  },
+  "fixed_limits": {
+    "fields_per_struct_or_struct_variant": 1024,
+    "variants_per_enum": 1024,
+    "tuple_fields_per_owner": 1024,
+    "associated_items_per_trait_or_supported_implementation": 1024,
+    "outer_attributes_per_declaration": 128,
+    "one_attribute_token_payload_bytes": 16384,
+    "one_declared_type_or_implementation_header_bytes": 4096,
+    "determinism_permutations": 50,
+    "all_maximum_and_maximum_plus_one_cases_passed": true
+  },
+  "failure_and_publication": {
+    "strict_error_v12_context_and_precedence_passed": true,
+    "malformed_syntax_has_no_publication": true,
+    "invalid_selector_precedes_acquisition": true,
+    "invalid_composition_precedes_acquisition": true,
+    "identity_collision_fails_closed": true,
+    "silent_truncation_or_fallback": false,
+    "existing_artifact_roles_reused": true,
+    "artifact_roles_added": 0,
+    "local_store_ddl_changed": false,
+    "local_store_marker_changed": false,
+    "migration_added": false,
+    "cas_transaction_repair_or_sweep_semantics_changed": false,
+    "restart_before_docs_and_query": true,
+    "all_seven_exact_id_kinds_passed": true,
+    "inherited_corruption_crash_failpoint_and_sweep_tests_passed": true
+  },
+  "compatibility": {
+    "selector_absent_r4_error_byte_identical": true,
+    "v7_local_query_result_v2_preserved": true,
+    "v4_v6_local_query_result_v1_preserved": true,
+    "legacy_documentation_golden_preserved": true,
+    "legacy_query_golden_preserved": true,
+    "legacy_graph_validation_preserved": true,
+    "failed_scan_store_and_documents_absent": true,
+    "r0_r4_identity_recipes_changed": false
+  },
+  "security": {
+    "first_party_unsafe_construct_occurrences_in_changed_production_paths": 0,
+    "cargo_rustc_build_script_proc_macro_or_target_execution_by_product": false,
+    "runtime_network_model_or_dependency_fetch": false,
+    "cfg_attribute_macro_type_value_framework_or_runtime_interpretation": false,
+    "nested_gitlink_source_authority": false,
+    "symlink_outside_root_and_changing_input_confinement": "passed inherited complete-gate tests",
+    "build_and_execution_sentinels": "passed focused and inherited complete-gate tests",
+    "os_level_process_network_and_file_trace": "not run"
+  },
+  "dependency_review": "crates/noesis/tests/evidence/s4/r5/dependency-review.json",
+  "pilot_evidence": "crates/noesis/tests/evidence/s4/r5/pilot-observations-local.json",
+  "traceability": "crates/noesis/tests/evidence/s4/r5/traceability.json",
+  "red_evidence": {
+    "observation": "crates/noesis/tests/evidence/s4/r5/red-observation.json",
+    "log": "crates/noesis/tests/evidence/s4/r5/red/e2e_fr_ext_010_rust_semantic_depth.log",
+    "test_first_sha": "6953c63d496b0b7b7bfdfb2cf4b866d69abe9557",
+    "evidence_sha": "a5b0f5903c0ae74d80af507b05383ad9f82e2fa4",
+    "runner_exit_code": 101,
+    "subject_exit_code": 2,
+    "subject_stdout_bytes": 0,
+    "subject_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "subject_stderr_bytes": 149,
+    "subject_stderr_sha256": "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe",
+    "store_documents_and_build_sentinel_absent": true
+  },
+  "actual_changed_paths": [
+    "crates/codenoesis-application/src/lib.rs",
+    "crates/codenoesis-application/src/s4_r4.rs",
+    "crates/codenoesis-application/src/s4_r5.rs",
+    "crates/codenoesis-contracts/src/lib.rs",
+    "crates/codenoesis-contracts/src/s4.rs",
+    "crates/codenoesis-contracts/src/s4_r4.rs",
+    "crates/codenoesis-contracts/src/s4_r5.rs",
+    "crates/codenoesis-contracts/tests/s4_r5_contracts.rs",
+    "crates/codenoesis-domain/src/lib.rs",
+    "crates/codenoesis-domain/src/s4_r5.rs",
+    "crates/codenoesis-domain/src/storage.rs",
+    "crates/codenoesis-domain/tests/s4_rust_semantic_depth.rs",
+    "crates/codenoesis-lang-rust/src/lib.rs",
+    "crates/codenoesis-lang-rust/src/semantic_depth.rs",
+    "crates/codenoesis-lang-rust/tests/s4_rust_semantic_depth.rs",
+    "crates/codenoesis-ports/src/lib.rs",
+    "crates/noesis/src/main.rs",
+    "crates/noesis/tests/e2e_fr_ext_010_rust_semantic_depth.rs",
+    "crates/noesis/tests/evidence/s4/r5/dependency-review.json",
+    "crates/noesis/tests/evidence/s4/r5/implementation-observation-local.json",
+    "crates/noesis/tests/evidence/s4/r5/pilot-observations-local.json",
+    "crates/noesis/tests/evidence/s4/r5/red-observation.json",
+    "crates/noesis/tests/evidence/s4/r5/red/e2e_fr_ext_010_rust_semantic_depth.log",
+    "crates/noesis/tests/evidence/s4/r5/traceability.json",
+    "crates/noesis/tests/support/mod.rs",
+    "crates/noesis/tests/support/s4_r5.rs"
+  ],
+  "environment": {
+    "os": "macOS 26.5.2 (Darwin 25.5.0)",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "rustc_host": "aarch64-apple-darwin",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "python": "Python 3.9.6",
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "actionlint": "1.7.12",
+    "toolchain_file_sha256": "279d77167cec5426fa80f457cd066dc74a360fbe4e2816f4f3fa01487a918fdc",
+    "features": "all workspace features for the full gate; default features for focused R5 tests and pilots",
+    "policy_version": 1,
+    "policy_sha256": "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993",
+    "agent": "OpenAI Codex",
+    "model": "not exposed by runtime",
+    "run_identifier": "issue-113-r5-interactive-20260804",
+    "implementation_duration": "not exposed by runtime",
+    "monetary_cost": "not exposed by runtime"
+  },
+  "pre_evidence_bootstrap_gate": {
+    "status": "passed",
+    "tested_head": "f886b5b5d3480a619edaee2d9028dc288ddad8e9",
+    "log_bytes": 34683,
+    "log_sha256": "c9af0a2aec75adf4dfaf792c9b34cf4fdac6733cb7794fdcf48eb1e936e67b2d",
+    "rust_tests_passed": 276,
+    "rust_doc_tests_passed": 0,
+    "python_tests_passed": 221,
+    "benchmark_assets": "valid: status=scaffold, suites=0",
+    "benchmarks_compiled": true
+  },
+  "final_working_tree_bootstrap_gate": {
+    "status": "passed before committing the unchanged tested working-tree content",
+    "commands": [
+      "actionlint -no-color",
+      "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+      "cargo fmt --all --check",
+      "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "cargo test --workspace --all-targets --all-features --locked",
+      "cargo test --workspace --doc --all-features --locked",
+      "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "python3 scripts/validate_benchmark_assets.py",
+      "cargo bench --workspace --all-features --no-run --locked"
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "exact_committed_head_ci": "pending pull-request publication",
+    "linux_macos_windows_codeql_and_benchmark_integrity": "pending pull-request checks"
+  },
+  "corrections": {
+    "authorized_rounds": 5,
+    "rounds_used": 3,
+    "remaining_rounds_before_pull_request_review": 2,
+    "observations": [
+      "Lekton exposed an inherited 1 MiB documentation bound because R5 facts were concentrated in overview.md. The correction deterministically distributes declarations by module and uncertainty by committed source path without changing any limit or oracle.",
+      "The workspace Clippy gate required allocation-free construction of the max+1 test source and extraction of a long documentation assertion into a helper; behavior and public assertions remained unchanged.",
+      "The complete regression gate exposed that diagnostics had become mandatory for legacy graph schemas. The correction requires diagnostics only for GraphV5 and restores V1-V4 documentation and query behavior without weakening V5."
+    ],
+    "same_deterministic_failure_repeated_after_fix": false
+  },
+  "known_limitations": [
+    "Local and pilot evidence support review but do not mark FR-EXT-010 Verified.",
+    "Exact committed-head Linux, macOS, Windows, CodeQL, benchmark-integrity, and independent human review evidence remain pending until pull-request publication.",
+    "The local host validates Darwin arm64 only.",
+    "Pilot process, file-access, and network inactivity were not captured with an OS-level trace.",
+    "RustDesk exposes a deterministic cfg-conditioned same-identity declaration conflict; R5 intentionally fails closed rather than interpreting cfg or publishing an ontology.",
+    "Operational snapshot envelopes vary by correlation_id and created_at; canonical semantic content, documentation, and exact-ID query results are deterministic."
+  ],
+  "unresolved_decisions": [],
+  "dissent": [],
+  "human_approvals": [
+    "The accountable maintainer authorized the complete high-risk package on issue #113.",
+    "The corrected R5 governance bundle was independently reviewed and manually merged through PR #115.",
+    "Independent human ontology, identity, semantic, compatibility, and security review plus protected manual merge remain mandatory."
+  ]
+}

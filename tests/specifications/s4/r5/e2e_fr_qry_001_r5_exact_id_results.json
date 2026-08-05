@@ -1,0 +1,51 @@
+{
+  "schema_version": "codenoesis.r5-query-oracle/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/111",
+  "authorization": "https://github.com/smutti/codenoesis/issues/111#issuecomment-5179817871",
+  "approval": "https://github.com/smutti/codenoesis/pull/112",
+  "requirement_ids": [
+    "FR-QRY-001",
+    "FR-EXT-010"
+  ],
+  "dispatch": {
+    "codenoesis.repository-snapshot/v8": "codenoesis.local-query-result/v3",
+    "codenoesis.repository-snapshot/v7": "codenoesis.local-query-result/v2",
+    "codenoesis.repository-snapshot/v6": "codenoesis.local-query-result/v1",
+    "codenoesis.repository-snapshot/v5": "codenoesis.local-query-result/v1",
+    "codenoesis.repository-snapshot/v4": "codenoesis.local-query-result/v1",
+    "explicit_query_version_flag": false
+  },
+  "result_kinds": [
+    "entity",
+    "relationship",
+    "claim",
+    "evidence",
+    "diagnostic",
+    "coverage_gap",
+    "document"
+  ],
+  "lookup": {
+    "mode": "exact ID only",
+    "traversal": false,
+    "fuzzy_search": false,
+    "pagination": false,
+    "mutation": false,
+    "result_cardinality": "zero or one subject plus directly owned evidence and document statements"
+  },
+  "v3_addition": "V8 R5 member and implementation-context method entities plus their direct uncertainty artifacts",
+  "compatibility": {
+    "v1_bytes_for_v4_v6": "byte-identical",
+    "v2_bytes_for_v7": "byte-identical",
+    "querying_r5_id_on_legacy_head": "not found under the legacy result version",
+    "stored_snapshot_is_authoritative": true
+  },
+  "required_examples": [
+    "named field entity with owner relationship, claim, and evidence",
+    "tuple field entity addressed by stable zero-based identity input",
+    "enum variant and owned field",
+    "constant, static, and associated type",
+    "same-name trait method identities with distinct trait context",
+    "cfg coverage gap and custom-attribute diagnostic",
+    "generated Markdown document and linked statement"
+  ]
+}

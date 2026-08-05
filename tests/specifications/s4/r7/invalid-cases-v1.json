@@ -1,0 +1,237 @@
+{
+  "schema_version": "codenoesis.r7-invalid-cases/v1",
+  "failure_streams": {
+    "stdout": "empty",
+    "stderr": "one LF-terminated CodeNoesisErrorV14",
+    "exit_code": 10
+  },
+  "cases": [
+    {
+      "id": "artifact-digest-mismatch",
+      "class": "artifact_mismatch",
+      "subject": "artifact SHA-256 differs from binding",
+      "expected_error": "extraction.compiler_index_binding_mismatch",
+      "partial_publication": false
+    },
+    {
+      "id": "binding-revision-mismatch",
+      "class": "binding_mismatch",
+      "subject": "binding commit differs from acquired immutable revision",
+      "expected_error": "extraction.compiler_index_binding_mismatch",
+      "partial_publication": false
+    },
+    {
+      "id": "duplicate-metadata",
+      "class": "duplicate_metadata",
+      "subject": "metadata appears twice or not first",
+      "expected_error": "extraction.noncanonical_compiler_index",
+      "partial_publication": false
+    },
+    {
+      "id": "forbidden-indexer-execution",
+      "class": "forbidden_authority",
+      "subject": "fixture requests rust-analyzer generation",
+      "expected_error": "extraction.unsupported_compiler_index_composition",
+      "partial_publication": false
+    },
+    {
+      "id": "incomplete-declared-document",
+      "class": "incomplete_coverage",
+      "subject": "index document is absent from indexed and omitted sets",
+      "expected_error": "extraction.invalid_compiler_index_binding",
+      "partial_publication": false
+    },
+    {
+      "id": "invalid-scip-symbol",
+      "class": "invalid_symbol",
+      "subject": "symbol violates SCIP grammar",
+      "expected_error": "extraction.malformed_compiler_index",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-plus-one-binding-json-bytes",
+      "class": "limit_plus_one",
+      "limit": "binding_json_bytes",
+      "maximum": 1048576,
+      "observed": 1048577,
+      "expected_error": "extraction.compiler_index_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-plus-one-documents",
+      "class": "limit_plus_one",
+      "limit": "documents",
+      "maximum": 20000,
+      "observed": 20001,
+      "expected_error": "extraction.compiler_index_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-plus-one-occurrences-per-document",
+      "class": "limit_plus_one",
+      "limit": "occurrences_per_document",
+      "maximum": 100000,
+      "observed": 100001,
+      "expected_error": "extraction.compiler_index_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-plus-one-occurrences-total",
+      "class": "limit_plus_one",
+      "limit": "occurrences_total",
+      "maximum": 1000000,
+      "observed": 1000001,
+      "expected_error": "extraction.compiler_index_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-plus-one-protobuf-recursion",
+      "class": "limit_plus_one",
+      "limit": "protobuf_recursion",
+      "maximum": 64,
+      "observed": 65,
+      "expected_error": "extraction.compiler_index_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-plus-one-raw-index-bytes",
+      "class": "limit_plus_one",
+      "limit": "raw_index_bytes",
+      "maximum": 67108864,
+      "observed": 67108865,
+      "expected_error": "extraction.compiler_index_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-plus-one-relationships-total",
+      "class": "limit_plus_one",
+      "limit": "relationships_total",
+      "maximum": 500000,
+      "observed": 500001,
+      "expected_error": "extraction.compiler_index_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-plus-one-symbol-information-total",
+      "class": "limit_plus_one",
+      "limit": "symbol_information_total",
+      "maximum": 250000,
+      "observed": 250001,
+      "expected_error": "extraction.compiler_index_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-plus-one-symbol-or-display-bytes",
+      "class": "limit_plus_one",
+      "limit": "symbol_or_display_bytes",
+      "maximum": 16384,
+      "observed": 16385,
+      "expected_error": "extraction.compiler_index_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-plus-one-tool-argument-bytes",
+      "class": "limit_plus_one",
+      "limit": "tool_argument_bytes",
+      "maximum": 4096,
+      "observed": 4097,
+      "expected_error": "extraction.compiler_index_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-plus-one-tool-arguments",
+      "class": "limit_plus_one",
+      "limit": "tool_arguments",
+      "maximum": 128,
+      "observed": 129,
+      "expected_error": "extraction.compiler_index_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "limit-plus-one-unpromoted-value-bytes",
+      "class": "limit_plus_one",
+      "limit": "unpromoted_value_bytes",
+      "maximum": 65536,
+      "observed": 65537,
+      "expected_error": "extraction.compiler_index_limit_exceeded",
+      "partial_publication": false
+    },
+    {
+      "id": "malformed-truncated-varint",
+      "class": "malformed_protobuf",
+      "subject": "truncated length-delimited field",
+      "expected_error": "extraction.malformed_compiler_index",
+      "partial_publication": false
+    },
+    {
+      "id": "mutable-artifact-race",
+      "class": "mutable_input_race",
+      "subject": "artifact identity changes between verified reads",
+      "expected_error": "extraction.compiler_index_binding_mismatch",
+      "partial_publication": false
+    },
+    {
+      "id": "nfc-symbol-collision",
+      "class": "normalization_collision",
+      "subject": "distinct raw symbols normalize to one identity",
+      "expected_error": "extraction.compiler_index_identity_conflict",
+      "partial_publication": false
+    },
+    {
+      "id": "noncanonical-varint",
+      "class": "noncanonical_protobuf",
+      "subject": "overlong varint re-encodes differently",
+      "expected_error": "extraction.noncanonical_compiler_index",
+      "partial_publication": false
+    },
+    {
+      "id": "privacy-argument-canary",
+      "class": "privacy_boundary",
+      "subject": "raw argument canary reaches public output",
+      "expected_error": "internal.unexpected",
+      "partial_publication": false
+    },
+    {
+      "id": "relation-authority-conflict",
+      "class": "relation_conflict",
+      "subject": "two authoritative compiler relationships contradict",
+      "expected_error": "extraction.compiler_index_relation_conflict",
+      "partial_publication": false
+    },
+    {
+      "id": "required-endpoint-ambiguous",
+      "class": "ambiguous_endpoint",
+      "subject": "one compiler symbol maps to two committed declarations",
+      "expected_error": "extraction.ambiguous_compiler_index_endpoint",
+      "partial_publication": false
+    },
+    {
+      "id": "symlink-artifact-escape",
+      "class": "symlink_escape",
+      "subject": "artifact path resolves through a symlink",
+      "expected_error": "input.unsafe_compiler_index_path",
+      "partial_publication": false
+    },
+    {
+      "id": "unknown-nested-field",
+      "class": "unknown_field",
+      "subject": "nested protobuf message contains an unknown field",
+      "expected_error": "extraction.malformed_compiler_index",
+      "partial_publication": false
+    },
+    {
+      "id": "unsafe-artifact-parent",
+      "class": "unsafe_path",
+      "subject": "artifact path contains parent traversal",
+      "expected_error": "input.unsafe_compiler_index_path",
+      "partial_publication": false
+    },
+    {
+      "id": "unsupported-position-encoding",
+      "class": "unsupported_encoding",
+      "subject": "document uses UTF-16 offsets",
+      "expected_error": "extraction.unsupported_compiler_index_schema",
+      "partial_publication": false
+    }
+  ]
+}

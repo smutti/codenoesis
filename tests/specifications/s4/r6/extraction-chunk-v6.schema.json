@@ -1,0 +1,989 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/extraction-chunk-v6.schema.json",
+  "title": "CodeNoesis ExtractionChunkV6",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ontology_version",
+    "repository_identity",
+    "subject",
+    "semantic_hash",
+    "entities",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.extraction-chunk/v6"
+    },
+    "ontology_version": {
+      "const": "codenoesis.ontology/rust/v6"
+    },
+    "repository_identity": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:[a-z0-9][a-z0-9._:-]{0,254}$"
+    },
+    "subject": {
+      "$ref": "../r4/extraction-chunk-v4.schema.json#/$defs/subject"
+    },
+    "semantic_hash": {
+      "$ref": "../extraction-chunk-v2.schema.json#/$defs/hash"
+    },
+    "entities": {
+      "type": "array",
+      "maxItems": 30000,
+      "items": {
+        "$ref": "#/$defs/graph_entity"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "maxItems": 60000,
+      "items": {
+        "$ref": "#/$defs/graph_relationship"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "maxItems": 90000,
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 90000,
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "#/$defs/graph_diagnostic"
+      }
+    },
+    "coverage": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "#/$defs/graph_coverage"
+      }
+    }
+  },
+  "$defs": {
+    "entity_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:entity:blake3:[0-9a-f]{64}$"
+    },
+    "evidence_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:evidence:(blake3|sha256):[0-9a-f]{64}$"
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "source",
+        "target",
+        "evidence_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:relationship:blake3:[0-9a-f]{64}$"
+        },
+        "kind": {
+          "enum": [
+            "CONTAINS",
+            "DEFINES",
+            "IMPORTS",
+            "IMPLEMENTS"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "target": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "evidence_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "subject_kind",
+        "subject_id",
+        "state",
+        "evidence_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:claim:blake3:[0-9a-f]{64}$"
+        },
+        "subject_kind": {
+          "enum": [
+            "entity",
+            "relationship"
+          ]
+        },
+        "subject_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "state": {
+          "enum": [
+            "deterministic_fact",
+            "derived_fact",
+            "candidate",
+            "reviewed_inference",
+            "confirmed",
+            "rejected",
+            "superseded"
+          ]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "path",
+        "blob_oid",
+        "start_byte",
+        "end_byte"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/evidence_id"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "blob_oid": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "start_byte": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end_byte": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "r5_entity_kind": {
+      "enum": [
+        "rust.field",
+        "rust.enum_variant",
+        "rust.constant",
+        "rust.static",
+        "rust.associated_type"
+      ]
+    },
+    "compilation_presence": {
+      "enum": [
+        "unconditional",
+        "conditional_unknown",
+        "attribute_transform_unknown"
+      ]
+    },
+    "visibility": {
+      "enum": [
+        "public",
+        "crate",
+        "restricted",
+        "private",
+        "inherited_trait",
+        "not_applicable"
+      ]
+    },
+    "nullable_entity_id": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/entity_id"
+        }
+      ]
+    },
+    "nullable_string": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "maxLength": 4096
+        }
+      ]
+    },
+    "nullable_boolean": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        }
+      ]
+    },
+    "nullable_tuple_index": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1023
+        }
+      ]
+    },
+    "attribute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "token_text",
+        "evidence_id"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "cfg",
+            "cfg_attr",
+            "other"
+          ]
+        },
+        "token_text": {
+          "type": "string",
+          "maxLength": 16384
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "member_properties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "owner_kind",
+        "form",
+        "declared_name",
+        "tuple_index",
+        "declared_type_or_header",
+        "mutable",
+        "initializer_present",
+        "discriminant_present",
+        "bounds_present",
+        "default_present",
+        "attributes"
+      ],
+      "properties": {
+        "owner_kind": {
+          "enum": [
+            "rust.module",
+            "rust.struct",
+            "rust.enum",
+            "rust.enum_variant",
+            "rust.trait",
+            "inherent_implementation",
+            "named_local_trait_implementation"
+          ]
+        },
+        "form": {
+          "enum": [
+            "named",
+            "tuple",
+            "unit",
+            "struct",
+            "constant",
+            "static",
+            "associated_type"
+          ]
+        },
+        "declared_name": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "tuple_index": {
+          "$ref": "#/$defs/nullable_tuple_index"
+        },
+        "declared_type_or_header": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "mutable": {
+          "$ref": "#/$defs/nullable_boolean"
+        },
+        "initializer_present": {
+          "$ref": "#/$defs/nullable_boolean"
+        },
+        "discriminant_present": {
+          "$ref": "#/$defs/nullable_boolean"
+        },
+        "bounds_present": {
+          "$ref": "#/$defs/nullable_boolean"
+        },
+        "default_present": {
+          "$ref": "#/$defs/nullable_boolean"
+        },
+        "attributes": {
+          "type": "array",
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/attribute"
+          }
+        }
+      }
+    },
+    "r5_entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "crate_id",
+        "module_path",
+        "name",
+        "visibility",
+        "owner_id",
+        "trait_context_id",
+        "compilation_presence",
+        "properties"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "kind": {
+          "$ref": "#/$defs/r5_entity_kind"
+        },
+        "crate_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "module_path": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "visibility": {
+          "$ref": "#/$defs/visibility"
+        },
+        "owner_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "trait_context_id": {
+          "$ref": "#/$defs/nullable_entity_id"
+        },
+        "compilation_presence": {
+          "$ref": "#/$defs/compilation_presence"
+        },
+        "properties": {
+          "$ref": "#/$defs/member_properties"
+        }
+      }
+    },
+    "method_properties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "implementation_context",
+        "trait_context_id",
+        "receiver_present",
+        "declared_signature",
+        "compilation_presence",
+        "attributes"
+      ],
+      "properties": {
+        "implementation_context": {
+          "enum": [
+            "trait_declaration",
+            "inherent_implementation",
+            "named_local_trait_implementation"
+          ]
+        },
+        "trait_context_id": {
+          "$ref": "#/$defs/nullable_entity_id"
+        },
+        "receiver_present": {
+          "type": "boolean"
+        },
+        "declared_signature": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "compilation_presence": {
+          "$ref": "#/$defs/compilation_presence"
+        },
+        "attributes": {
+          "type": "array",
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/attribute"
+          }
+        }
+      }
+    },
+    "r5_method_entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "crate_id",
+        "module_path",
+        "name",
+        "visibility",
+        "owner_id",
+        "properties"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "kind": {
+          "const": "rust.method"
+        },
+        "crate_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "module_path": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "visibility": {
+          "$ref": "#/$defs/visibility"
+        },
+        "owner_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "properties": {
+          "$ref": "#/$defs/method_properties"
+        }
+      }
+    },
+    "graph_entity": {
+      "anyOf": [
+        {
+          "$ref": "../r4/extraction-chunk-v4.schema.json#/$defs/graph_entity"
+        },
+        {
+          "$ref": "#/$defs/r5_entity"
+        },
+        {
+          "$ref": "#/$defs/r5_method_entity"
+        },
+        {
+          "$ref": "#/$defs/framework_declaration"
+        }
+      ]
+    },
+    "graph_relationship": {
+      "anyOf": [
+        {
+          "$ref": "../r4/extraction-chunk-v4.schema.json#/$defs/graph_relationship"
+        },
+        {
+          "$ref": "#/$defs/relationship"
+        }
+      ]
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "code",
+        "message",
+        "evidence_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:diagnostic:blake3:[0-9a-f]{64}$"
+        },
+        "code": {
+          "enum": [
+            "rust.attribute_semantics_not_interpreted",
+            "rust.cfg_presence_unresolved",
+            "rust.macro_generated_items_not_analyzed",
+            "rust.type_resolution_not_performed",
+            "rust.value_not_evaluated",
+            "rust.union_unsupported",
+            "rust.foreign_block_unsupported",
+            "rust.unsupported_impl_header",
+            "rust.framework_runtime_not_observed",
+            "rust.framework_target_resolution_unresolved",
+            "rust.framework_target_resolution_ambiguous",
+            "rust.framework_source_form_unsupported"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "evidence_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        }
+      }
+    },
+    "graph_diagnostic": {
+      "anyOf": [
+        {
+          "$ref": "../r4/extraction-chunk-v4.schema.json#/$defs/diagnostic"
+        },
+        {
+          "$ref": "#/$defs/diagnostic"
+        }
+      ]
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "capability",
+        "state",
+        "evidence_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:coverage-gap:blake3:[0-9a-f]{64}$"
+        },
+        "capability": {
+          "enum": [
+            "rust.attribute_semantics_not_interpreted",
+            "rust.cfg_presence_unresolved",
+            "rust.macro_generated_items_not_analyzed",
+            "rust.type_resolution_not_performed",
+            "rust.value_not_evaluated",
+            "rust.union_unsupported",
+            "rust.foreign_block_unsupported",
+            "rust.unsupported_impl_header",
+            "rust.framework_runtime_not_observed",
+            "rust.framework_target_resolution_unresolved",
+            "rust.framework_target_resolution_ambiguous",
+            "rust.framework_source_form_unsupported"
+          ]
+        },
+        "state": {
+          "enum": [
+            "ambiguous",
+            "not_analyzed",
+            "not_evaluated",
+            "not_observed",
+            "not_resolved",
+            "unsupported"
+          ]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        }
+      }
+    },
+    "graph_coverage": {
+      "anyOf": [
+        {
+          "$ref": "../r4/extraction-chunk-v4.schema.json#/$defs/coverage"
+        },
+        {
+          "$ref": "#/$defs/coverage"
+        }
+      ]
+    },
+    "framework_declaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "crate_id",
+        "lexical_owner_id",
+        "role",
+        "source_profile",
+        "source_form_identity",
+        "declared_key_or_target",
+        "epistemic_state",
+        "compilation_presence",
+        "method",
+        "path",
+        "configuration_key",
+        "target_spelling",
+        "local_target_id",
+        "target_binding",
+        "evidence_ids"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "kind": {
+          "enum": [
+            "framework.component_declaration",
+            "framework.configuration_declaration",
+            "framework.endpoint_declaration",
+            "framework.handler_declaration",
+            "framework.route_declaration",
+            "framework.service_declaration"
+          ]
+        },
+        "crate_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "lexical_owner_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "role": {
+          "enum": [
+            "component",
+            "service",
+            "configuration",
+            "endpoint",
+            "route",
+            "handler"
+          ]
+        },
+        "source_profile": {
+          "enum": [
+            "explicit-builder-registration-v1",
+            "attribute-macro-candidate-v1"
+          ]
+        },
+        "source_form_identity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "declared_key_or_target": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "epistemic_state": {
+          "enum": [
+            "declared_registration_syntax",
+            "candidate_unresolved"
+          ]
+        },
+        "compilation_presence": {
+          "enum": [
+            "unconditional",
+            "conditional_unknown",
+            "attribute_transform_unknown"
+          ]
+        },
+        "method": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "maxLength": 1024
+            }
+          ]
+        },
+        "path": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "maxLength": 2048
+            }
+          ]
+        },
+        "configuration_key": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "maxLength": 1024
+            }
+          ]
+        },
+        "target_spelling": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "maxLength": 1024
+            }
+          ]
+        },
+        "local_target_id": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/entity_id"
+            }
+          ]
+        },
+        "target_binding": {
+          "enum": [
+            "resolved_unique",
+            "unresolved_external",
+            "ambiguous_local",
+            "not_applicable"
+          ]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "role": {
+                "const": "component"
+              }
+            },
+            "required": [
+              "role"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "framework.component_declaration"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "role": {
+                "const": "service"
+              }
+            },
+            "required": [
+              "role"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "framework.service_declaration"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "role": {
+                "const": "configuration"
+              }
+            },
+            "required": [
+              "role"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "framework.configuration_declaration"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "role": {
+                "const": "endpoint"
+              }
+            },
+            "required": [
+              "role"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "framework.endpoint_declaration"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "role": {
+                "const": "route"
+              }
+            },
+            "required": [
+              "role"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "framework.route_declaration"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "role": {
+                "const": "handler"
+              }
+            },
+            "required": [
+              "role"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "framework.handler_declaration"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "source_profile": {
+                "const": "explicit-builder-registration-v1"
+              }
+            },
+            "required": [
+              "source_profile"
+            ]
+          },
+          "then": {
+            "properties": {
+              "epistemic_state": {
+                "const": "declared_registration_syntax"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "source_profile": {
+                "const": "attribute-macro-candidate-v1"
+              }
+            },
+            "required": [
+              "source_profile"
+            ]
+          },
+          "then": {
+            "properties": {
+              "epistemic_state": {
+                "const": "candidate_unresolved"
+              },
+              "method": {
+                "type": "null"
+              },
+              "path": {
+                "type": "null"
+              },
+              "configuration_key": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "target_binding": {
+                "const": "resolved_unique"
+              }
+            },
+            "required": [
+              "target_binding"
+            ]
+          },
+          "then": {
+            "properties": {
+              "local_target_id": {
+                "$ref": "#/$defs/entity_id"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "local_target_id": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

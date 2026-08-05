@@ -1,0 +1,454 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/codenoesis-error-v13.schema.json",
+  "title": "CodeNoesis ErrorV13",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v13"
+    },
+    "code": {
+      "enum": [
+        "input.invalid_rust_framework_profile",
+        "extraction.invalid_framework_declaration",
+        "extraction.framework_declaration_identity_conflict",
+        "extraction.framework_declaration_limit_exceeded",
+        "extraction.unsupported_framework_composition",
+        "extraction.ambiguous_framework_target",
+        "extraction.unresolvable_framework_evidence",
+        "input.unsafe_framework_path",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "input",
+        "extraction",
+        "internal"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "retryable": {
+      "const": false
+    },
+    "context": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/profile_context"
+        },
+        {
+          "$ref": "#/$defs/declaration_context"
+        },
+        {
+          "$ref": "#/$defs/identity_context"
+        },
+        {
+          "$ref": "#/$defs/limit_context"
+        },
+        {
+          "$ref": "#/$defs/composition_context"
+        },
+        {
+          "$ref": "#/$defs/target_context"
+        },
+        {
+          "$ref": "#/$defs/evidence_context"
+        },
+        {
+          "$ref": "#/$defs/path_context"
+        },
+        {
+          "$ref": "#/$defs/empty_context"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "profile_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile"
+      ],
+      "properties": {
+        "profile": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      }
+    },
+    "declaration_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "reason"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      }
+    },
+    "identity_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain",
+        "normalized_preimage_sha256"
+      ],
+      "properties": {
+        "domain": {
+          "const": "codenoesis.entity-id/framework-declaration/v1"
+        },
+        "normalized_preimage_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "limit_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "limit",
+        "maximum",
+        "observed"
+      ],
+      "properties": {
+        "limit": {
+          "enum": [
+            "framework_declarations_per_source",
+            "explicit_registration_chain_segments",
+            "registration_expression_depth",
+            "literal_route_path_bytes",
+            "literal_method_or_configuration_key_bytes",
+            "target_spelling_bytes",
+            "outer_attributes_per_declaration",
+            "attribute_token_bytes"
+          ]
+        },
+        "maximum": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "observed": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "composition_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_profiles",
+        "selected_profiles"
+      ],
+      "properties": {
+        "required_profiles": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "selected_profiles": {
+          "type": "array",
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        }
+      }
+    },
+    "target_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_spelling",
+        "candidate_count"
+      ],
+      "properties": {
+        "target_spelling": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "candidate_count": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 4096
+        }
+      }
+    },
+    "evidence_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id"
+      ],
+      "properties": {
+        "evidence_id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:evidence:(blake3|sha256):[0-9a-f]{64}$"
+        }
+      }
+    },
+    "path_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "reason"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      }
+    },
+    "empty_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 0
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "input.invalid_rust_framework_profile"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "input"
+          },
+          "context": {
+            "$ref": "#/$defs/profile_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.invalid_framework_declaration"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/declaration_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.framework_declaration_identity_conflict"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/identity_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.framework_declaration_limit_exceeded"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/limit_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.unsupported_framework_composition"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/composition_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.ambiguous_framework_target"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/target_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.unresolvable_framework_evidence"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/evidence_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "input.unsafe_framework_path"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "input"
+          },
+          "context": {
+            "$ref": "#/$defs/path_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "internal.unexpected"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "internal"
+          },
+          "context": {
+            "$ref": "#/$defs/empty_context"
+          }
+        }
+      }
+    }
+  ]
+}

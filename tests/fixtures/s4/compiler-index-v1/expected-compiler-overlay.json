@@ -1,0 +1,745 @@
+{
+  "schema_version": "codenoesis.r7-expected-compiler-overlay/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-compiler-index-v1",
+  "ontology_version": "codenoesis.ontology/rust/v7",
+  "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+  "compiler_symbols": [
+    {
+      "id": "urn:codenoesis:entity:blake3:eb1d85daea722e537c7fa1e0d5ebec48ee64f5bc19c60e2c3c3a7e0dcbaee348",
+      "symbol": "rust-analyzer cargo api 0.1.0 api/Store#",
+      "display_name": "Store",
+      "binding_state": "in_repository_bound",
+      "identity_preimage": [
+        "global",
+        "rust-analyzer",
+        "cargo",
+        "api",
+        "0.1.0",
+        "api/Store#"
+      ],
+      "compiler_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:9b4e76f3444a69bae8c1c040dfbfccb8c53a2ad8e3a92c40c24aa798d6da8552",
+        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "locator": {
+          "record_kind": "occurrence",
+          "document_path": "crates/api/src/lib.rs",
+          "range": [
+            0,
+            10,
+            15
+          ],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/Store#",
+          "symbol_roles": 1
+        }
+      },
+      "source_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:8fc7110ba67a3a6e3ca2602a534bc7f80afaff1606e51553048d3f921393e504",
+        "path": "crates/api/src/lib.rs",
+        "blob_oid": "fc3ff1e76544992d7d104ee9877d33db34bb6838",
+        "start_byte": 10,
+        "end_byte": 15,
+        "source_sha256": "0bb39b6f06bed7e27af233e10966121803523bec7960289d65489343e87adb79"
+      }
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:e6a6cf3c156a588d5810c760423ad09756efbd111facb6b6d3596868d6a1a292",
+      "symbol": "rust-analyzer cargo api 0.1.0 api/Store#get().",
+      "display_name": "get",
+      "binding_state": "in_repository_bound",
+      "identity_preimage": [
+        "global",
+        "rust-analyzer",
+        "cargo",
+        "api",
+        "0.1.0",
+        "api/Store#get()."
+      ],
+      "compiler_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:09298902f6233122b13afad7320922c062e833b10a86d6400991bed125227d1f",
+        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "locator": {
+          "record_kind": "occurrence",
+          "document_path": "crates/api/src/lib.rs",
+          "range": [
+            1,
+            7,
+            10
+          ],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/Store#get().",
+          "symbol_roles": 1
+        }
+      },
+      "source_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:0e7a75a091ad9b8584fb86180d364bfb19214cee933c1eb1141b4f3bda9dbdbb",
+        "path": "crates/api/src/lib.rs",
+        "blob_oid": "fc3ff1e76544992d7d104ee9877d33db34bb6838",
+        "start_byte": 25,
+        "end_byte": 28,
+        "source_sha256": "0bb39b6f06bed7e27af233e10966121803523bec7960289d65489343e87adb79"
+      }
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:748ecb4632e636a369206c3839453d7a8ebc317df213ee757f832f9111f4edef",
+      "symbol": "rust-analyzer cargo api 0.1.0 api/User#",
+      "display_name": "User",
+      "binding_state": "in_repository_bound",
+      "identity_preimage": [
+        "global",
+        "rust-analyzer",
+        "cargo",
+        "api",
+        "0.1.0",
+        "api/User#"
+      ],
+      "compiler_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:247455425c5ac77170f5639f136dc96aadaa2f49fcbd2086774428763384aff9",
+        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "locator": {
+          "record_kind": "occurrence",
+          "document_path": "crates/api/src/lib.rs",
+          "range": [
+            4,
+            11,
+            15
+          ],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/User#",
+          "symbol_roles": 1
+        }
+      },
+      "source_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:6c95e01ed1d51d053621f506da97fc3efe70e4559f0f3013a995e6e5a3440364",
+        "path": "crates/api/src/lib.rs",
+        "blob_oid": "fc3ff1e76544992d7d104ee9877d33db34bb6838",
+        "start_byte": 79,
+        "end_byte": 83,
+        "source_sha256": "0bb39b6f06bed7e27af233e10966121803523bec7960289d65489343e87adb79"
+      }
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:9eba2e3821090bf706d040025e53b5630c23689b8463e3f4936aa7106ec8764f",
+      "symbol": "rust-analyzer cargo api 0.1.0 api/UserId#",
+      "display_name": "UserId",
+      "binding_state": "in_repository_bound",
+      "identity_preimage": [
+        "global",
+        "rust-analyzer",
+        "cargo",
+        "api",
+        "0.1.0",
+        "api/UserId#"
+      ],
+      "compiler_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:8c8da09eb2a3e02902bd3879be4ee6735a8f449c015638f491eb74296fa10f38",
+        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "locator": {
+          "record_kind": "occurrence",
+          "document_path": "crates/api/src/lib.rs",
+          "range": [
+            8,
+            9,
+            15
+          ],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/UserId#",
+          "symbol_roles": 1
+        }
+      },
+      "source_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:cddd56353221796709dcc05625867dccbedd8b5aaa3d461547eea68f0268eb6b",
+        "path": "crates/api/src/lib.rs",
+        "blob_oid": "fc3ff1e76544992d7d104ee9877d33db34bb6838",
+        "start_byte": 118,
+        "end_byte": 124,
+        "source_sha256": "0bb39b6f06bed7e27af233e10966121803523bec7960289d65489343e87adb79"
+      }
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:336c4846626bdd5a8d9fe1625703dd2b4feb0de7d429b8c77604db4c37bca19e",
+      "symbol": "rust-analyzer cargo api 0.1.0 api/UserAlias#",
+      "display_name": "UserAlias",
+      "binding_state": "in_repository_bound",
+      "identity_preimage": [
+        "global",
+        "rust-analyzer",
+        "cargo",
+        "api",
+        "0.1.0",
+        "api/UserAlias#"
+      ],
+      "compiler_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:e1410b9941d1079d9a0690070d6ac1895859f768afeb1ea08c63089542bab56a",
+        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "locator": {
+          "record_kind": "occurrence",
+          "document_path": "crates/api/src/lib.rs",
+          "range": [
+            10,
+            9,
+            18
+          ],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/UserAlias#",
+          "symbol_roles": 1
+        }
+      },
+      "source_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:776da6b6779e3e673e2a9f08d89930e031b3df3e21d05a7c037a5e791ebe79ae",
+        "path": "crates/api/src/lib.rs",
+        "blob_oid": "fc3ff1e76544992d7d104ee9877d33db34bb6838",
+        "start_byte": 142,
+        "end_byte": 151,
+        "source_sha256": "0bb39b6f06bed7e27af233e10966121803523bec7960289d65489343e87adb79"
+      }
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:f4a770192c8311e73b562f6944a05980b27b6dec9dd1a82855dee677fdf63e81",
+      "symbol": "rust-analyzer cargo api 0.1.0 api/MemoryStore#",
+      "display_name": "MemoryStore",
+      "binding_state": "in_repository_bound",
+      "identity_preimage": [
+        "global",
+        "rust-analyzer",
+        "cargo",
+        "api",
+        "0.1.0",
+        "api/MemoryStore#"
+      ],
+      "compiler_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:e6b53823f286000b0caf5660a208d2d3c1857c5eb8bc2dc10b6d49dc3d01cd71",
+        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "locator": {
+          "record_kind": "occurrence",
+          "document_path": "crates/api/src/lib.rs",
+          "range": [
+            12,
+            11,
+            22
+          ],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/MemoryStore#",
+          "symbol_roles": 1
+        }
+      },
+      "source_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:0ada7e4086cf2017e56f420c28ecb208c0f7fa37dfc4ded8d869c6927956bc6a",
+        "path": "crates/api/src/lib.rs",
+        "blob_oid": "fc3ff1e76544992d7d104ee9877d33db34bb6838",
+        "start_byte": 172,
+        "end_byte": 183,
+        "source_sha256": "0bb39b6f06bed7e27af233e10966121803523bec7960289d65489343e87adb79"
+      }
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:e7ea2a5aa5fba1710d42c76c36c5d8b3b488d093946c4c20f5e6418572fa0b33",
+      "symbol": "rust-analyzer cargo api 0.1.0 api/MemoryStore#get().",
+      "display_name": "get",
+      "binding_state": "in_repository_bound",
+      "identity_preimage": [
+        "global",
+        "rust-analyzer",
+        "cargo",
+        "api",
+        "0.1.0",
+        "api/MemoryStore#get()."
+      ],
+      "compiler_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:3995d5420019fcf5b6b5cc1bcd9089890888662b44477b851ddc521e7f9d35da",
+        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "locator": {
+          "record_kind": "occurrence",
+          "document_path": "crates/api/src/lib.rs",
+          "range": [
+            15,
+            7,
+            10
+          ],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/MemoryStore#get().",
+          "symbol_roles": 1
+        }
+      },
+      "source_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:844a3ce477b923f86feac4743a058bd22bde0dd4c575bf5a6ee280d56a667b92",
+        "path": "crates/api/src/lib.rs",
+        "blob_oid": "fc3ff1e76544992d7d104ee9877d33db34bb6838",
+        "start_byte": 222,
+        "end_byte": 225,
+        "source_sha256": "0bb39b6f06bed7e27af233e10966121803523bec7960289d65489343e87adb79"
+      }
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:e76696388a0810768639dd858c172a9f0d32273564a6c9456641bb3d11c31dfd",
+      "symbol": "rust-analyzer cargo api 0.1.0 api/load().",
+      "display_name": "load",
+      "binding_state": "in_repository_bound",
+      "identity_preimage": [
+        "global",
+        "rust-analyzer",
+        "cargo",
+        "api",
+        "0.1.0",
+        "api/load()."
+      ],
+      "compiler_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:956361d8673fce1b4c3c9628eccd252f8171c935a8230370d790d81480ebd77c",
+        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "locator": {
+          "record_kind": "occurrence",
+          "document_path": "crates/api/src/lib.rs",
+          "range": [
+            20,
+            7,
+            11
+          ],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/load().",
+          "symbol_roles": 1
+        }
+      },
+      "source_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:1457b9e8847cf95471af46d2322e535eefc51956c046fa25ad15278d03e959f2",
+        "path": "crates/api/src/lib.rs",
+        "blob_oid": "fc3ff1e76544992d7d104ee9877d33db34bb6838",
+        "start_byte": 305,
+        "end_byte": 309,
+        "source_sha256": "0bb39b6f06bed7e27af233e10966121803523bec7960289d65489343e87adb79"
+      }
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:4d211f47aa0fc35bf70bf4331db4c85d28936af2ccefd64aa6f19720c08d2e82",
+      "symbol": "rust-analyzer cargo api 0.1.0 api/`Café`#",
+      "display_name": "Café",
+      "binding_state": "in_repository_bound",
+      "identity_preimage": [
+        "global",
+        "rust-analyzer",
+        "cargo",
+        "api",
+        "0.1.0",
+        "api/`Café`#"
+      ],
+      "compiler_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:9aa3fd57011e3cad09c830781b7ed486add10bb87f958dd8275204f84ff979af",
+        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "locator": {
+          "record_kind": "occurrence",
+          "document_path": "crates/api/src/lib.rs",
+          "range": [
+            24,
+            11,
+            16
+          ],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/`Café`#",
+          "symbol_roles": 1
+        }
+      },
+      "source_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:03e41393d1c1e9740beac85b2ad0a3968be161ac29881122ddd8c43b9c679044",
+        "path": "crates/api/src/lib.rs",
+        "blob_oid": "fc3ff1e76544992d7d104ee9877d33db34bb6838",
+        "start_byte": 392,
+        "end_byte": 397,
+        "source_sha256": "0bb39b6f06bed7e27af233e10966121803523bec7960289d65489343e87adb79"
+      }
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:d226bfbd4cd8a40750e47586e22a62ef1d6d8ddd24a312d322458017d5c78140",
+      "symbol": "rust-analyzer cargo api 0.1.0 api/generated_helper!",
+      "display_name": "generated_helper",
+      "binding_state": "in_repository_bound",
+      "identity_preimage": [
+        "global",
+        "rust-analyzer",
+        "cargo",
+        "api",
+        "0.1.0",
+        "api/generated_helper!"
+      ],
+      "compiler_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:344786b4bf2d0ddc9e3a4a49099b9ce676e92fc09b61040866f4aab025187a79",
+        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "locator": {
+          "record_kind": "occurrence",
+          "document_path": "crates/api/src/lib.rs",
+          "range": [
+            26,
+            13,
+            29
+          ],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/generated_helper!",
+          "symbol_roles": 1
+        }
+      },
+      "source_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:a8512a502ba9fc28856fbc19ee0f496aa2a20237bf43604cc1daea5f2ad6fd61",
+        "path": "crates/api/src/lib.rs",
+        "blob_oid": "fc3ff1e76544992d7d104ee9877d33db34bb6838",
+        "start_byte": 413,
+        "end_byte": 429,
+        "source_sha256": "0bb39b6f06bed7e27af233e10966121803523bec7960289d65489343e87adb79"
+      }
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:b728c8371db89f7bcdef3a08be5e49cb16b2e9058c27ba501addedb91e7f8ab5",
+      "symbol": "rust-analyzer cargo api 0.1.0 api/generated_helper().",
+      "display_name": "generated_helper",
+      "binding_state": "generated_unbound",
+      "identity_preimage": [
+        "global",
+        "rust-analyzer",
+        "cargo",
+        "api",
+        "0.1.0",
+        "api/generated_helper()."
+      ],
+      "compiler_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:8b1b86d248a2b048c429a51bfc9a8bee1c03feb52d27b3b59d196f3589bd7e18",
+        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "locator": {
+          "record_kind": "occurrence",
+          "document_path": "crates/api/src/lib.rs",
+          "range": [
+            32,
+            0,
+            16
+          ],
+          "symbol": "rust-analyzer cargo api 0.1.0 api/generated_helper().",
+          "symbol_roles": 16
+        }
+      },
+      "source_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:baa30a50ad663ca7d5bd7b058544c9c3a79c1ef048e5b1c097dd7cd7598203af",
+        "path": "crates/api/src/lib.rs",
+        "blob_oid": "fc3ff1e76544992d7d104ee9877d33db34bb6838",
+        "start_byte": 491,
+        "end_byte": 507,
+        "source_sha256": "0bb39b6f06bed7e27af233e10966121803523bec7960289d65489343e87adb79"
+      }
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:cc98d373e293196f075b94a1e6f43e8357d5f7b006aad62676f7d39330b1e1f1",
+      "symbol": "rust-analyzer cargo client 0.1.0 client/fetch().",
+      "display_name": "fetch",
+      "binding_state": "in_repository_bound",
+      "identity_preimage": [
+        "global",
+        "rust-analyzer",
+        "cargo",
+        "client",
+        "0.1.0",
+        "client/fetch()."
+      ],
+      "compiler_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:1d2c7aea463ea2686f547b0b30e91dcb6691bc50854ffa3a0a4b029a3021f7e7",
+        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "locator": {
+          "record_kind": "occurrence",
+          "document_path": "crates/client/src/lib.rs",
+          "range": [
+            2,
+            7,
+            12
+          ],
+          "symbol": "rust-analyzer cargo client 0.1.0 client/fetch().",
+          "symbol_roles": 1
+        }
+      },
+      "source_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:0e742adf588883556f28fdc6b2736c732480137d8e717aae6910acba13943b66",
+        "path": "crates/client/src/lib.rs",
+        "blob_oid": "06b2ebfacb6c903e4eb5d5c40c554fbd8d9ec972",
+        "start_byte": 66,
+        "end_byte": 71,
+        "source_sha256": "664aac908ede4b1dffb1cd82f5b4462138024cdbebba7a87c41bd2dbfe4ead0e"
+      }
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:cd6fc4e62ad797e4cbdcbbf3670845842f013b267c0f72f45eea9426cef4d48c",
+      "symbol": "rust-analyzer cargo client 0.1.0 client/accepts_store().",
+      "display_name": "accepts_store",
+      "binding_state": "in_repository_bound",
+      "identity_preimage": [
+        "global",
+        "rust-analyzer",
+        "cargo",
+        "client",
+        "0.1.0",
+        "client/accepts_store()."
+      ],
+      "compiler_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:02a73afbe546e39d42f382b7ae0bbcc11e1fe90d293bd6130e34aec37ddf44a3",
+        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "locator": {
+          "record_kind": "occurrence",
+          "document_path": "crates/client/src/lib.rs",
+          "range": [
+            8,
+            7,
+            20
+          ],
+          "symbol": "rust-analyzer cargo client 0.1.0 client/accepts_store().",
+          "symbol_roles": 1
+        }
+      },
+      "source_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:e61f99ff0af898d26d6b78d610d178153f7b72ddf1f1c636ce27e9f8e13ee2a0",
+        "path": "crates/client/src/lib.rs",
+        "blob_oid": "06b2ebfacb6c903e4eb5d5c40c554fbd8d9ec972",
+        "start_byte": 187,
+        "end_byte": 200,
+        "source_sha256": "664aac908ede4b1dffb1cd82f5b4462138024cdbebba7a87c41bd2dbfe4ead0e"
+      }
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:21de437376eaad16b6a9b6bfa96cf71f9d2db69f80daa470432f1094642dd712",
+      "symbol": "local 0",
+      "display_name": "store",
+      "binding_state": "in_repository_bound",
+      "identity_preimage": [
+        "local",
+        "urn:codenoesis:fixture:s4-compiler-index-v1",
+        "crates/client/src/lib.rs",
+        "0"
+      ],
+      "compiler_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:e079aafb21f851ec137b985430fca61d25b242f095482b029714f885a67a7757",
+        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "locator": {
+          "record_kind": "occurrence",
+          "document_path": "crates/client/src/lib.rs",
+          "range": [
+            3,
+            8,
+            13
+          ],
+          "symbol": "local 0",
+          "symbol_roles": 1
+        }
+      },
+      "source_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:8484672e604e878c5ab2e0309602adf72334cc48046f17802997323deba81768",
+        "path": "crates/client/src/lib.rs",
+        "blob_oid": "06b2ebfacb6c903e4eb5d5c40c554fbd8d9ec972",
+        "start_byte": 110,
+        "end_byte": 115,
+        "source_sha256": "664aac908ede4b1dffb1cd82f5b4462138024cdbebba7a87c41bd2dbfe4ead0e"
+      }
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:1cd0bac8835cb8926ff48a960c08ddf754640b357eff359b9c165bb57c2e0c3a",
+      "symbol": "rust-analyzer cargo core 1.97.1 core/option/Option#",
+      "display_name": "Option",
+      "binding_state": "external_unbound",
+      "identity_preimage": [
+        "global",
+        "rust-analyzer",
+        "cargo",
+        "core",
+        "1.97.1",
+        "core/option/Option#"
+      ],
+      "compiler_evidence": {
+        "id": "urn:codenoesis:evidence:sha256:ca653b24dca528888c5f3b1cba02508cf52956ba307b55757b75059397eb4e62",
+        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "locator": {
+          "record_kind": "external_symbol",
+          "symbol": "rust-analyzer cargo core 1.97.1 core/option/Option#"
+        }
+      },
+      "source_evidence": null
+    }
+  ],
+  "syntax_reference_bindings": [
+    {
+      "id": "urn:codenoesis:entity:blake3:c3ebb92fb28b377dfc1f6476189b2fa640404a8d1009241e20c275f118049e6c",
+      "path": "crates/client/src/lib.rs",
+      "range": [
+        0,
+        36,
+        41
+      ],
+      "spelling": "Store"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "urn:codenoesis:relationship:blake3:53b2b0f17cc6d6d0616a33700a1ba3d030b2ed21bd3f4534b91a2655bfb42f54",
+      "kind": "RESOLVES_TO",
+      "source": "urn:codenoesis:entity:blake3:c3ebb92fb28b377dfc1f6476189b2fa640404a8d1009241e20c275f118049e6c",
+      "target": "urn:codenoesis:entity:blake3:eb1d85daea722e537c7fa1e0d5ebec48ee64f5bc19c60e2c3c3a7e0dcbaee348",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:sha256:19b26f8592dd183e7f9a7325caf8361e2bc832403cf151199d5a18e890c41601"
+      ]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:a6f77926da34f4ef771e4a68c1404b5415b019f274094768387b91e2aece4eb1",
+      "kind": "REFERENCES",
+      "source": "urn:codenoesis:entity:blake3:cc98d373e293196f075b94a1e6f43e8357d5f7b006aad62676f7d39330b1e1f1",
+      "target": "urn:codenoesis:entity:blake3:e76696388a0810768639dd858c172a9f0d32273564a6c9456641bb3d11c31dfd",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:sha256:dffec3bd288bdfb185cfe206e6ef8f6e6f943025ae79fd671c9cac0dcabab9ea"
+      ]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:9411250245a876a5307b7145a39cfa20e0925397d978cc4174a5b6da43f9ae16",
+      "kind": "IMPLEMENTS",
+      "source": "urn:codenoesis:entity:blake3:f4a770192c8311e73b562f6944a05980b27b6dec9dd1a82855dee677fdf63e81",
+      "target": "urn:codenoesis:entity:blake3:eb1d85daea722e537c7fa1e0d5ebec48ee64f5bc19c60e2c3c3a7e0dcbaee348",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:sha256:90315928ed50bac067ad74172857aa91ae81d5c6ce34dfe1b3f219fd95bc1bda"
+      ]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:0c65bfac55598b57fe297736e571c0b7644f698c1d6068f7f1842f435ad7670c",
+      "kind": "IMPLEMENTS",
+      "source": "urn:codenoesis:entity:blake3:e7ea2a5aa5fba1710d42c76c36c5d8b3b488d093946c4c20f5e6418572fa0b33",
+      "target": "urn:codenoesis:entity:blake3:e6a6cf3c156a588d5810c760423ad09756efbd111facb6b6d3596868d6a1a292",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:sha256:9444168b15439799358e3f03f55b61a057de20e8f95f096eee954666be04f00a"
+      ]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:1f2f92b3f9e803e80305ac6ab41399137c22f62a8bbe46ea3992fbd7b9d3f959",
+      "kind": "TYPE_DEFINITION",
+      "source": "urn:codenoesis:entity:blake3:336c4846626bdd5a8d9fe1625703dd2b4feb0de7d429b8c77604db4c37bca19e",
+      "target": "urn:codenoesis:entity:blake3:748ecb4632e636a369206c3839453d7a8ebc317df213ee757f832f9111f4edef",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:sha256:4c2c6b210846512aa019a7ef6f0518200ac67e7b5734a5b5bba800454707f180"
+      ]
+    }
+  ],
+  "relationship_evidence": [
+    {
+      "id": "urn:codenoesis:evidence:sha256:19b26f8592dd183e7f9a7325caf8361e2bc832403cf151199d5a18e890c41601",
+      "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+      "locator": {
+        "record_kind": "occurrence_resolution",
+        "source_symbol": "rust.symbol_reference:Store",
+        "target_symbol": "rust-analyzer cargo api 0.1.0 api/Store#",
+        "document_path": "crates/client/src/lib.rs",
+        "range": [
+          0,
+          36,
+          41
+        ]
+      }
+    },
+    {
+      "id": "urn:codenoesis:evidence:sha256:dffec3bd288bdfb185cfe206e6ef8f6e6f943025ae79fd671c9cac0dcabab9ea",
+      "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+      "locator": {
+        "record_kind": "occurrence_reference",
+        "source_symbol": "rust-analyzer cargo client 0.1.0 client/fetch().",
+        "target_symbol": "rust-analyzer cargo api 0.1.0 api/load().",
+        "document_path": "crates/client/src/lib.rs",
+        "range": [
+          5,
+          4,
+          8
+        ]
+      }
+    },
+    {
+      "id": "urn:codenoesis:evidence:sha256:90315928ed50bac067ad74172857aa91ae81d5c6ce34dfe1b3f219fd95bc1bda",
+      "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+      "locator": {
+        "record_kind": "symbol_relationship",
+        "source_symbol": "rust-analyzer cargo api 0.1.0 api/MemoryStore#",
+        "target_symbol": "rust-analyzer cargo api 0.1.0 api/Store#",
+        "flags": [
+          "is_implementation"
+        ]
+      }
+    },
+    {
+      "id": "urn:codenoesis:evidence:sha256:9444168b15439799358e3f03f55b61a057de20e8f95f096eee954666be04f00a",
+      "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+      "locator": {
+        "record_kind": "symbol_relationship",
+        "source_symbol": "rust-analyzer cargo api 0.1.0 api/MemoryStore#get().",
+        "target_symbol": "rust-analyzer cargo api 0.1.0 api/Store#get().",
+        "flags": [
+          "is_reference",
+          "is_implementation"
+        ]
+      }
+    },
+    {
+      "id": "urn:codenoesis:evidence:sha256:4c2c6b210846512aa019a7ef6f0518200ac67e7b5734a5b5bba800454707f180",
+      "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+      "locator": {
+        "record_kind": "symbol_relationship",
+        "source_symbol": "rust-analyzer cargo api 0.1.0 api/UserAlias#",
+        "target_symbol": "rust-analyzer cargo api 0.1.0 api/User#",
+        "flags": [
+          "is_type_definition"
+        ]
+      }
+    }
+  ],
+  "binding_state_counts": {
+    "in_repository_bound": 13,
+    "external_unbound": 1,
+    "generated_unbound": 1
+  },
+  "relationship_counts": {
+    "IMPLEMENTS": 2,
+    "REFERENCES": 1,
+    "RESOLVES_TO": 1,
+    "TYPE_DEFINITION": 1
+  },
+  "coverage_gaps": [
+    {
+      "capability": "compiler_index.absolute_project_root_redacted",
+      "state": "redacted",
+      "subject": "artifact"
+    },
+    {
+      "capability": "compiler_index.arguments_redacted",
+      "state": "redacted",
+      "subject": "artifact"
+    },
+    {
+      "capability": "compiler_index.call_semantics_unavailable",
+      "state": "unsupported",
+      "subject": "urn:codenoesis:entity:blake3:e76696388a0810768639dd858c172a9f0d32273564a6c9456641bb3d11c31dfd"
+    },
+    {
+      "capability": "compiler_index.document_not_indexed",
+      "state": "not_indexed",
+      "subject": "crates/client/src/omitted.rs"
+    },
+    {
+      "capability": "compiler_index.documentation_not_imported",
+      "state": "unsupported",
+      "subject": "urn:codenoesis:entity:blake3:4d211f47aa0fc35bf70bf4331db4c85d28936af2ccefd64aa6f19720c08d2e82"
+    },
+    {
+      "capability": "compiler_index.generated_product_unbound",
+      "state": "unbound",
+      "subject": "urn:codenoesis:entity:blake3:b728c8371db89f7bcdef3a08be5e49cb16b2e9058c27ba501addedb91e7f8ab5"
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "compiler_index.syntax_uncertainty_retained",
+      "subject_id": "urn:codenoesis:entity:blake3:c3ebb92fb28b377dfc1f6476189b2fa640404a8d1009241e20c275f118049e6c",
+      "compiler_target_id": "urn:codenoesis:entity:blake3:eb1d85daea722e537c7fa1e0d5ebec48ee64f5bc19c60e2c3c3a7e0dcbaee348"
+    }
+  ],
+  "claims": {
+    "compiler_symbol_state": "deterministic_fact",
+    "relationship_state": "deterministic_fact",
+    "producer_attestation": false,
+    "runtime_observation": false
+  },
+  "documentation_statements": [
+    "Compiler-index assertions are bound to the supplied artifact and committed source; producer authenticity is not attested.",
+    "Reference evidence does not establish a call, execution, reachability, or runtime fact.",
+    "One generated symbol and one external symbol remain explicitly unbound."
+  ],
+  "syntax_evidence_retained_on_conflict": true,
+  "forbidden_relationship_kinds": [
+    "ACTIVATES",
+    "CALLS",
+    "EXECUTES",
+    "REACHES",
+    "SERVES",
+    "STARTS"
+  ]
+}

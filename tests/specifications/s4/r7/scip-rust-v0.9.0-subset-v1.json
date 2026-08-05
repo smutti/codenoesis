@@ -1,0 +1,114 @@
+{
+  "schema_version": "codenoesis.compiler-index-subset/scip-rust-v0.9.0-import-v1",
+  "profile": "scip-rust-v0.9.0-import-v1",
+  "wire_contract": {
+    "repository": "https://github.com/scip-code/scip",
+    "tag": "v0.9.0",
+    "commit": "e8ee0ae6038f8298e2195812eea9d7b1196748ae",
+    "proto_path": "scip.proto",
+    "proto_sha256": "04cb20f2b8be73f6c0376b5b3e84c3ae20ebaff0ad3d23ba2d16f866b395ed7d",
+    "protocol_version": 0,
+    "required_text_encoding": "UTF8",
+    "required_position_encoding": "UTF8CodeUnitOffsetFromLineStart",
+    "required_language": "rust"
+  },
+  "selector_composition": {
+    "scan_profile": "standard-local-s4",
+    "workspace_profile": "cargo-root-package-v1",
+    "manifest_profile": "cargo-manifest-facts-v1",
+    "rust_semantic_profile": "rust-semantic-depth-v1",
+    "rust_framework_profile": "rust-framework-declarations-v1",
+    "compiler_index_profile": "scip-rust-v0.9.0-import-v1",
+    "binding_required": true,
+    "implicit_selection": false
+  },
+  "accepted_producer": {
+    "family": "rust-analyzer-scip",
+    "tool_info_name": "rust-analyzer",
+    "version_and_commit_must_be_bound": true,
+    "toolchain_must_be_bound": true,
+    "producer_attestation": false
+  },
+  "binding_states": [
+    "in_repository_bound",
+    "external_unbound",
+    "generated_unbound"
+  ],
+  "relationship_kinds": [
+    "RESOLVES_TO",
+    "REFERENCES",
+    "IMPLEMENTS",
+    "TYPE_DEFINITION"
+  ],
+  "relationship_sources": {
+    "RESOLVES_TO": "one uniquely mapped SCIP occurrence and one existing syntax reference",
+    "REFERENCES": "one uniquely mapped non-definition occurrence and one uniquely identified lexical owner",
+    "IMPLEMENTS": "SCIP Relationship.is_implementation with two unique endpoints",
+    "TYPE_DEFINITION": "SCIP Relationship.is_type_definition with two unique endpoints"
+  },
+  "call_relationship_authorized": false,
+  "call_reason": "SCIP SyntaxKind.IdentifierFunction includes references as well as calls and rust-analyzer does not emit a distinct call relation.",
+  "index_generation_authorized": false,
+  "generated_symbol_policy": "A generated-role symbol without one exact committed definition remains compiler.symbol/generated_unbound and cannot become a Rust source declaration.",
+  "conflict_policy": {
+    "retain_syntax_evidence": true,
+    "retain_compiler_evidence": true,
+    "ambiguous_endpoint_promoted": false,
+    "compiler_precedence_hides_conflict": false,
+    "producer_assertion_is_attestation": false
+  },
+  "coverage_capabilities": [
+    "compiler_index.call_semantics_unavailable",
+    "compiler_index.generated_product_unbound",
+    "compiler_index.document_not_indexed",
+    "compiler_index.documentation_not_imported",
+    "compiler_index.absolute_project_root_redacted",
+    "compiler_index.arguments_redacted"
+  ],
+  "unpromoted_fields": [
+    "Metadata.project_root raw value",
+    "ToolInfo.arguments raw values",
+    "Document.text",
+    "SymbolInformation.documentation",
+    "SymbolInformation.signature_documentation",
+    "Occurrence.override_documentation",
+    "Occurrence.diagnostics",
+    "external symbol prose"
+  ],
+  "wire_validation": {
+    "bounded_framing_preflight_before_generated_decode": true,
+    "metadata_first_and_exactly_once": true,
+    "unknown_fields_rejected_recursively": true,
+    "canonical_reencoding_must_equal_input": true,
+    "typed_and_deprecated_ranges_must_agree": true,
+    "duplicate_singular_fields_rejected": true,
+    "length_and_count_limits_precede_proportional_allocation": true
+  },
+  "limits": {
+    "raw_index_bytes": 67108864,
+    "binding_json_bytes": 1048576,
+    "documents": 20000,
+    "occurrences_total": 1000000,
+    "occurrences_per_document": 100000,
+    "symbol_information_total": 250000,
+    "relationships_total": 500000,
+    "symbol_or_display_bytes": 16384,
+    "unpromoted_value_bytes": 65536,
+    "tool_arguments": 128,
+    "tool_argument_bytes": 4096,
+    "protobuf_recursion": 64,
+    "permutations": 50
+  },
+  "side_effects": {
+    "cargo": false,
+    "rustc": false,
+    "rust_analyzer": false,
+    "build_scripts": false,
+    "proc_macros": false,
+    "targets": false,
+    "plugins": false,
+    "sidecars": false,
+    "network": false,
+    "models": false
+  }
+}

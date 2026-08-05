@@ -1,0 +1,130 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "docs/software/decisions/0016-s4-r6-framework-declarations-contract.md",
+      "sha256": "8d520de22b2d882a0ab283e9fa6e9dd24a9c569d71feeda84d80ae30af8c7e31"
+    },
+    {
+      "path": "scripts/tests/test_s4_r6_framework_declarations_contract.py",
+      "sha256": "5a2330c17e11834de19a30b13f7bf9af28229b76e939ee8dcdb47859f27b2f93"
+    },
+    {
+      "path": "tests/fixtures/s4/framework-declarations-v1/README.md",
+      "sha256": "a2f485da98b2b1de5e8cf264a00aa660b41024bca8db58baf75a56152d750c84"
+    },
+    {
+      "path": "tests/fixtures/s4/framework-declarations-v1/expected-framework-declarations.json",
+      "sha256": "c6956cf1887d3d201d4eb95f6e6a50c204d795b5def968fd5d3d25d88faabd1f"
+    },
+    {
+      "path": "tests/fixtures/s4/framework-declarations-v1/manifest.json",
+      "sha256": "e2cae52ecb2c7e5bfae25cc8a4aaeeef18107011431a1b04f0859930d7ae5919"
+    },
+    {
+      "path": "tests/fixtures/s4/framework-declarations-v1/repository/Cargo.toml",
+      "sha256": "b2438116d0e5dfe629b257570825fb75b8dc57809ab961a0e4069f1d0661e533"
+    },
+    {
+      "path": "tests/fixtures/s4/framework-declarations-v1/repository/build.rs",
+      "sha256": "08a734b7da4b2c17ff12e8b059fd7047007ffc1a674353bf7e7e3a608abd31d5"
+    },
+    {
+      "path": "tests/fixtures/s4/framework-declarations-v1/repository/generated/framework.rs",
+      "sha256": "5107ca6b3f0aae7f457eb7debe39c310bb1370140856add9d2e60bd68f08cfc7"
+    },
+    {
+      "path": "tests/fixtures/s4/framework-declarations-v1/repository/src/attribute_style.rs",
+      "sha256": "781ee4aa9bf99cbb445a18fa3d7ce2ca1d045827257d8bb12966f9d22bae1e13"
+    },
+    {
+      "path": "tests/fixtures/s4/framework-declarations-v1/repository/src/builder_style.rs",
+      "sha256": "91e8ef3f5dc6781960f4d13509257519a7fe46f7a632e33cfc7ad1e0571cfd49"
+    },
+    {
+      "path": "tests/fixtures/s4/framework-declarations-v1/repository/src/lib.rs",
+      "sha256": "af385e28b748887a1ad8d9fc1e6f3425af2ced78afe7adea6d9647a85f6d19a4"
+    },
+    {
+      "path": "tests/fixtures/s4/framework-declarations-v1/repository/target/generated.rs",
+      "sha256": "2dfe16711285cd1b28665014f178b10fad4017b04202203e8584e44d1b6a40f5"
+    },
+    {
+      "path": "tests/specifications/s4/r5/contract-bundle.json",
+      "sha256": "6491386c0fc8ec21dd3bf5112c2460eed56e33b976bb3afb1ac55fa4a8308509"
+    },
+    {
+      "path": "tests/specifications/s4/r6/codenoesis-error-v13.schema.json",
+      "sha256": "dc9f951f104c32d9ae1d5197d357b40b352684ee1d79d205c0da645c221cf7d6"
+    },
+    {
+      "path": "tests/specifications/s4/r6/configuration-v6.schema.json",
+      "sha256": "c6dbd3fa99647f67c90f42fc129589ade1af6d098f28cd4ebb65c3bb4a134e1e"
+    },
+    {
+      "path": "tests/specifications/s4/r6/e2e_fr_ext_011_framework_declarations.json",
+      "sha256": "0b5441ace9af054a3655ec227ecdd45556cc8172433942b7513cc94e04756288"
+    },
+    {
+      "path": "tests/specifications/s4/r6/e2e_fr_qry_001_r6_exact_id_results.json",
+      "sha256": "2ec6499d13e267423010a97af7fc42c4bfad5a8bf553fd4753a7e33e46dd2d73"
+    },
+    {
+      "path": "tests/specifications/s4/r6/extraction-chunk-v6.schema.json",
+      "sha256": "c2efd6691ce402503cc9ce03da4d7cd138699def1050ea8fd63ca6f6c5f29c30"
+    },
+    {
+      "path": "tests/specifications/s4/r6/framework-declarations-subset-v1.json",
+      "sha256": "379cea9cc58f5c7f850fa9604d6f2683a1d5b5d61e552cef65f1a731d8030ff1"
+    },
+    {
+      "path": "tests/specifications/s4/r6/invalid-cases-v1.json",
+      "sha256": "71f6f8016612848e9a94ce44a3f3998c22db4e9da95bea3cd98102248fa77be8"
+    },
+    {
+      "path": "tests/specifications/s4/r6/knowledge-graph-v6.schema.json",
+      "sha256": "8d7ba8c5c9bda215bf6daa3d214896c284e898fb9391e3eba1fc32f5dd92dafb"
+    },
+    {
+      "path": "tests/specifications/s4/r6/local-query-result-v4.schema.json",
+      "sha256": "83eb9cc246cda061feb9b924c2fbe3815f907013ec80a6f20423854770555598"
+    },
+    {
+      "path": "tests/specifications/s4/r6/pilot-observations-v1.json",
+      "sha256": "6ce9d6736f68830ea6cd9b2b1d37cc8b566766f85a399e2a32a0e6f02c0190dd"
+    },
+    {
+      "path": "tests/specifications/s4/r6/red-observation.json",
+      "sha256": "7671016254ffa42ba3f6803746f56483022f9443c32c8de969b0b2a629a9a027"
+    },
+    {
+      "path": "tests/specifications/s4/r6/red/evidence-id-schema-red-observation.json",
+      "sha256": "8cd23509212bd634f0dac507485d43e7b78e49c989e2dbdcfc054d84f85eb9eb"
+    },
+    {
+      "path": "tests/specifications/s4/r6/red/evidence-id-schema-red.log",
+      "sha256": "b82a7234dfe777e6e846591a38bb3bf43fcf69df78ebf5cc08c3c579bc93fe3f"
+    },
+    {
+      "path": "tests/specifications/s4/r6/red/governance-red.log",
+      "sha256": "aad6a707da779c1737c863aa693826933015031da7a989914276f105b7604b68"
+    },
+    {
+      "path": "tests/specifications/s4/r6/repository-snapshot-v9.schema.json",
+      "sha256": "3fed6f3f5b6ae51a6e5459ffd410584573bfca043febf9367c7b0abbd6f5fd65"
+    },
+    {
+      "path": "tests/specifications/s4/r6/rust-ontology-v6.json",
+      "sha256": "d91c47426295b3fc633218cf386a79e69c7e19b69d575691e40be8b94a055818"
+    },
+    {
+      "path": "tests/specifications/s4/r6/semantic-hash-contract-v5.json",
+      "sha256": "5d7b12b44416ccae0cf1a97e614494be74d9fb607a9f85fd25e7f5006f4e2532"
+    }
+  ],
+  "bundle_sha256": "46f5e0fab0439979c456cb41ce7195efd5e02a342be4292402ef2cb44909bc47"
+}

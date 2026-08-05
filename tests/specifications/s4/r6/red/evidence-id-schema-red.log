@@ -1,0 +1,13 @@
+F
+======================================================================
+FAIL: test_golden_evidence_ids_are_schema_representable_and_queryable (scripts.tests.test_s4_r6_framework_declarations_contract.S4R6FrameworkDeclarationsGovernanceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/scripts/tests/test_s4_r6_framework_declarations_contract.py", line 500, in test_golden_evidence_ids_are_schema_representable_and_queryable
+    self.assertTrue(
+AssertionError: False is not true : reviewed SHA-256 evidence IDs are rejected by ^urn:codenoesis:evidence:blake3:[0-9a-f]{64}$
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+FAILED (failures=1)

@@ -1,0 +1,32 @@
+{
+  "schema_version": "codenoesis.red-observation/v1",
+  "observed_at": "2026-08-04",
+  "issue": "https://github.com/smutti/codenoesis/issues/111",
+  "authorization": "https://github.com/smutti/codenoesis/issues/111#issuecomment-5179817871",
+  "approval": "https://github.com/smutti/codenoesis/pull/112",
+  "required_base": "e7cceb08b0aa4b7342cd2c6c1e267733130bd5f8",
+  "test_first_head": "b6d3ec20b69258fac76fc42b5b95c7ea8f436da0",
+  "command": "python3 -m unittest scripts.tests.test_s4_rust_semantic_depth_contract",
+  "guard_sha256": "78785783f126c14cea014d88e5f353a654a441911dc4ff7a7518cc05787a0287",
+  "exit_code": 1,
+  "expected_failure": "Decision 0015 and every R5 semantic contract, fixture, and oracle byte are absent before governance ratification",
+  "actual_failure": "R5 governance artifact is not materialized: docs/software/decisions/0015-s4-r5-rust-semantic-depth-contract.md",
+  "failed_for_expected_reason": true,
+  "semantic_contract_files_changed_before_red": false,
+  "production_files_changed_before_red": false,
+  "changed_paths_before_red": [
+    "scripts/tests/test_s4_rust_semantic_depth_contract.py"
+  ],
+  "raw_log_path": "tests/specifications/s4/r5/red/governance-red.log",
+  "raw_log_bytes": 683,
+  "raw_log_sha256": "d565d942729dece7b3cd08b2a67b714962b4de6979e3c7aa309061b5c4a89dd4",
+  "environment": {
+    "os": "macOS 26.5.2",
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "toolchain": "1.97.1-aarch64-apple-darwin"
+  }
+}

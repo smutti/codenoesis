@@ -1,0 +1,40 @@
+[workspace]
+members = ["crates/app"]
+resolver = "3"
+
+[workspace.package]
+version = "1.4.2"
+edition = "2024"
+rust-version = "1.85"
+authors = ["CodeNoesis Fixture <fixture@example.invalid>"]
+description = "Generic manifest-fact workspace"
+documentation = "https://docs.example.invalid/workspace"
+homepage = "https://example.invalid/workspace"
+repository = "https://fixture-user:fixture-token@example.invalid/workspace.git"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+keywords = ["ontology", "manifest"]
+categories = ["development-tools"]
+publish = ["internal"]
+include = ["src/**", "Cargo.toml"]
+exclude = ["tmp/**"]
+
+[workspace.dependencies]
+serde = { version = "1.0.219", default-features = false, features = ["derive"] }
+shared-core = { package = "shared-core", path = "crates/shared", version = "0.4" }
+remote-api = { git = "https://fixture-user:fixture-token@example.invalid/remote-api.git", branch = "stable", default-features = false }
+
+[patch.crates-io]
+serde = { git = "https://example.invalid/serde.git", rev = "0123456789abcdef0123456789abcdef01234567" }
+
+[patch."https://fixture-token@example.invalid/custom-index"]
+custom = { path = "vendor/custom", version = "2" }
+
+[workspace.metadata.codenoesis-fixture]
+ignored = true
+
+[profile.release]
+lto = true
+
+[workspace.lints.rust]
+unsafe_code = "forbid"

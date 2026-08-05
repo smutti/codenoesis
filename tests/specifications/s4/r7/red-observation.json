@@ -1,0 +1,36 @@
+{
+  "schema_version": "codenoesis.governance-red-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/123",
+  "authorization": "https://github.com/smutti/codenoesis/issues/123#issuecomment-5193618752",
+  "required_base": "3f750201a1527c85ed2ce83f70ed0932213f3548",
+  "guard_commit_sha": "bb9acb9ae7f6dbed4da2294cc85b12a7fb07b5ef",
+  "guard_sha256": "61490532b478fc391bb383287503ecb8cd5f384aa1710aba4ffd93c4703c4ff9",
+  "command": "python3 -m unittest scripts.tests.test_s4_r7_compiler_index_contract",
+  "exit_code": 1,
+  "failed_for_expected_reason": true,
+  "expected_failure": "Decision 0017 and every R7 contract, fixture, golden, and reviewed digest are absent on the required R6 product base.",
+  "actual_failure": "R7 governance artifact is not materialized: docs/software/decisions/0017-s4-r7-scip-import-contract.md",
+  "changed_paths_before_red": [
+    "scripts/tests/test_s4_r7_compiler_index_contract.py"
+  ],
+  "r7_contract_files_changed_before_red": false,
+  "production_files_changed_before_red": false,
+  "dependency_files_changed_before_red": false,
+  "stdout_bytes": 0,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "raw_log_path": "tests/specifications/s4/r7/red/governance-red.log",
+  "raw_log_bytes": 669,
+  "raw_log_sha256": "6d8ef8c7850a87140028a25f49d920936338bc3191a5ed53d058c358434ef8cc",
+  "environment": {
+    "os": "Darwin 26.5.2",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "rustc_host": "aarch64-apple-darwin",
+    "python": "3.9.6"
+  },
+  "captured_at": "2026-08-05",
+  "limitations": [
+    "The retained Red proves only that the independently authored governance contract was absent.",
+    "No compiler index was decoded and no production behavior was executed by this Red."
+  ]
+}

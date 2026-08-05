@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/knowledge-graph-v6.schema.json",
+  "title": "CodeNoesis KnowledgeGraphV6",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ontology_version",
+    "repository",
+    "extractor_versions",
+    "workspace",
+    "manifest_index",
+    "rust_semantic_index",
+    "framework_declaration_index",
+    "semantic_hash",
+    "entities",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.knowledge-graph/v6"
+    },
+    "ontology_version": {
+      "const": "codenoesis.ontology/rust/v6"
+    },
+    "repository": {
+      "$ref": "../../s1/repository-snapshot-v2.schema.json#/$defs/repository"
+    },
+    "extractor_versions": {
+      "const": [
+        "codenoesis.rust-tree-sitter/s4-v1",
+        "codenoesis.rust-workspace/s4-r3-v1",
+        "codenoesis.cargo-manifest/s4-r4-v1",
+        "codenoesis.rust-semantic/s4-r5-v1",
+        "codenoesis.rust-framework/s4-r6-v1"
+      ]
+    },
+    "workspace": {
+      "$ref": "../r3/knowledge-graph-v3.schema.json#/$defs/workspace"
+    },
+    "manifest_index": {
+      "$ref": "../r4/knowledge-graph-v4.schema.json#/$defs/manifest_index"
+    },
+    "rust_semantic_index": {
+      "$ref": "#/$defs/rust_semantic_index"
+    },
+    "semantic_hash": {
+      "$ref": "../extraction-chunk-v2.schema.json#/$defs/hash"
+    },
+    "entities": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 30000,
+      "items": {
+        "$ref": "extraction-chunk-v6.schema.json#/$defs/graph_entity"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "maxItems": 60000,
+      "items": {
+        "$ref": "extraction-chunk-v6.schema.json#/$defs/graph_relationship"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 90000,
+      "items": {
+        "$ref": "extraction-chunk-v6.schema.json#/$defs/claim"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 90000,
+      "items": {
+        "$ref": "extraction-chunk-v6.schema.json#/$defs/evidence"
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "extraction-chunk-v6.schema.json#/$defs/graph_diagnostic"
+      }
+    },
+    "coverage": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "extraction-chunk-v6.schema.json#/$defs/graph_coverage"
+      }
+    },
+    "framework_declaration_index": {
+      "$ref": "#/$defs/framework_declaration_index"
+    }
+  },
+  "$defs": {
+    "rust_semantic_index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "profile",
+        "member_entity_ids",
+        "implementation_context_method_ids"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "codenoesis.rust-semantic-index/v1"
+        },
+        "profile": {
+          "const": "rust-semantic-depth-v1"
+        },
+        "member_entity_ids": {
+          "type": "array",
+          "maxItems": 30000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "extraction-chunk-v6.schema.json#/$defs/entity_id"
+          }
+        },
+        "implementation_context_method_ids": {
+          "type": "array",
+          "maxItems": 30000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "extraction-chunk-v6.schema.json#/$defs/entity_id"
+          }
+        }
+      }
+    },
+    "framework_declaration_index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "profile",
+        "entity_ids",
+        "declared_registration_ids",
+        "candidate_unresolved_ids"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "codenoesis.framework-declaration-index/v1"
+        },
+        "profile": {
+          "const": "rust-framework-declarations-v1"
+        },
+        "entity_ids": {
+          "type": "array",
+          "maxItems": 30000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "extraction-chunk-v6.schema.json#/$defs/entity_id"
+          }
+        },
+        "declared_registration_ids": {
+          "type": "array",
+          "maxItems": 30000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "extraction-chunk-v6.schema.json#/$defs/entity_id"
+          }
+        },
+        "candidate_unresolved_ids": {
+          "type": "array",
+          "maxItems": 30000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "extraction-chunk-v6.schema.json#/$defs/entity_id"
+          }
+        }
+      }
+    }
+  }
+}

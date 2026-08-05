@@ -1,0 +1,1495 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/extraction-chunk-v4.schema.json",
+  "title": "CodeNoesis ExtractionChunkV4",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ontology_version",
+    "repository_identity",
+    "subject",
+    "semantic_hash",
+    "entities",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.extraction-chunk/v4"
+    },
+    "ontology_version": {
+      "const": "codenoesis.ontology/rust/v4"
+    },
+    "repository_identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "subject": {
+      "$ref": "#/$defs/subject"
+    },
+    "semantic_hash": {
+      "$ref": "../extraction-chunk-v2.schema.json#/$defs/hash"
+    },
+    "entities": {
+      "type": "array",
+      "maxItems": 30000,
+      "items": {
+        "$ref": "#/$defs/graph_entity"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "maxItems": 60000,
+      "items": {
+        "$ref": "#/$defs/graph_relationship"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "maxItems": 90000,
+      "items": {
+        "$ref": "../extraction-chunk-v2.schema.json#/$defs/claim"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 90000,
+      "items": {
+        "$ref": "../extraction-chunk-v2.schema.json#/$defs/evidence"
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "#/$defs/diagnostic"
+      }
+    },
+    "coverage": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "#/$defs/coverage"
+      }
+    }
+  },
+  "$defs": {
+    "subject": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/cargo_manifest_subject"
+        },
+        {
+          "$ref": "#/$defs/rust_source_subject"
+        }
+      ]
+    },
+    "cargo_manifest_subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "manifest_id",
+        "manifest_path"
+      ],
+      "properties": {
+        "kind": {
+          "const": "cargo_manifest"
+        },
+        "manifest_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "manifest_path": {
+          "$ref": "#/$defs/canonical_path"
+        }
+      }
+    },
+    "rust_source_subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "manifest_id",
+        "crate_id",
+        "source_file_id",
+        "workspace"
+      ],
+      "properties": {
+        "kind": {
+          "const": "rust_source"
+        },
+        "manifest_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "crate_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "source_file_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "workspace": {
+          "$ref": "../r3/extraction-chunk-v3.schema.json#/$defs/workspace_binding"
+        }
+      }
+    },
+    "graph_entity": {
+      "oneOf": [
+        {
+          "$ref": "../extraction-chunk-v2.schema.json#/$defs/entity"
+        },
+        {
+          "$ref": "#/$defs/cargo_entity"
+        }
+      ]
+    },
+    "cargo_entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "crate_id",
+        "module_path",
+        "name",
+        "visibility",
+        "properties"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "kind": {
+          "enum": [
+            "cargo.manifest",
+            "cargo.workspace_package_defaults",
+            "cargo.package",
+            "cargo.target",
+            "cargo.dependency",
+            "cargo.feature",
+            "cargo.patch",
+            "cargo.build_script"
+          ]
+        },
+        "crate_id": {
+          "type": "null"
+        },
+        "module_path": {
+          "type": "null"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "visibility": {
+          "const": "not_applicable"
+        },
+        "properties": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/manifest_properties"
+            },
+            {
+              "$ref": "#/$defs/workspace_defaults_properties"
+            },
+            {
+              "$ref": "#/$defs/package_properties"
+            },
+            {
+              "$ref": "#/$defs/target_properties"
+            },
+            {
+              "$ref": "#/$defs/dependency_properties"
+            },
+            {
+              "$ref": "#/$defs/feature_properties"
+            },
+            {
+              "$ref": "#/$defs/patch_properties"
+            },
+            {
+              "$ref": "#/$defs/build_script_properties"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "cargo.manifest"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "properties": {
+                "$ref": "#/$defs/manifest_properties"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "cargo.workspace_package_defaults"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "properties": {
+                "$ref": "#/$defs/workspace_defaults_properties"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "cargo.package"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "properties": {
+                "$ref": "#/$defs/package_properties"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "cargo.target"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "properties": {
+                "$ref": "#/$defs/target_properties"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "cargo.dependency"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "properties": {
+                "$ref": "#/$defs/dependency_properties"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "cargo.feature"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "properties": {
+                "$ref": "#/$defs/feature_properties"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "cargo.patch"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "properties": {
+                "$ref": "#/$defs/patch_properties"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "cargo.build_script"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "properties": {
+                "$ref": "#/$defs/build_script_properties"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "manifest_properties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_path",
+        "manifest_role",
+        "root_shape",
+        "package_table_present",
+        "workspace_table_present",
+        "evidence_id"
+      ],
+      "properties": {
+        "manifest_path": {
+          "$ref": "#/$defs/canonical_path"
+        },
+        "manifest_role": {
+          "enum": [
+            "workspace_root",
+            "workspace_member"
+          ]
+        },
+        "root_shape": {
+          "enum": [
+            "standalone_root_package",
+            "virtual_workspace",
+            "non_virtual_workspace"
+          ]
+        },
+        "package_table_present": {
+          "type": "boolean"
+        },
+        "workspace_table_present": {
+          "type": "boolean"
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "workspace_defaults_properties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_id",
+        "manifest_path",
+        "metadata",
+        "evidence_id"
+      ],
+      "properties": {
+        "manifest_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "manifest_path": {
+          "$ref": "#/$defs/canonical_path"
+        },
+        "metadata": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "$ref": "#/$defs/metadata_fact"
+          }
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "package_properties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_id",
+        "manifest_path",
+        "package_name",
+        "metadata",
+        "evidence_id"
+      ],
+      "properties": {
+        "manifest_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "manifest_path": {
+          "$ref": "#/$defs/canonical_path"
+        },
+        "package_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "metadata": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "$ref": "#/$defs/metadata_fact"
+          }
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "metadata_fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "field",
+        "value",
+        "inherited_from",
+        "evidence_id"
+      ],
+      "properties": {
+        "field": {
+          "enum": [
+            "version",
+            "edition",
+            "rust-version",
+            "authors",
+            "description",
+            "documentation",
+            "homepage",
+            "repository",
+            "license",
+            "license-file",
+            "readme",
+            "keywords",
+            "categories",
+            "publish",
+            "include",
+            "exclude",
+            "default-run",
+            "links",
+            "autolib",
+            "autobins",
+            "autoexamples",
+            "autotests",
+            "autobenches"
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/declared_value"
+        },
+        "inherited_from": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/entity_id"
+            }
+          ]
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "declared_value": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/string_value"
+        },
+        {
+          "$ref": "#/$defs/boolean_value"
+        },
+        {
+          "$ref": "#/$defs/string_array_value"
+        },
+        {
+          "$ref": "#/$defs/publish_value"
+        },
+        {
+          "$ref": "#/$defs/locator_value"
+        },
+        {
+          "$ref": "#/$defs/path_value"
+        },
+        {
+          "$ref": "#/$defs/workspace_reference_value"
+        }
+      ]
+    },
+    "string_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "value"
+      ],
+      "properties": {
+        "kind": {
+          "const": "string"
+        },
+        "value": {
+          "type": "string",
+          "maxLength": 2048
+        }
+      }
+    },
+    "boolean_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "value"
+      ],
+      "properties": {
+        "kind": {
+          "const": "boolean"
+        },
+        "value": {
+          "type": "boolean"
+        }
+      }
+    },
+    "string_array_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "values"
+      ],
+      "properties": {
+        "kind": {
+          "const": "string_array"
+        },
+        "values": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "maxLength": 2048
+          }
+        }
+      }
+    },
+    "publish_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "enabled",
+        "registries"
+      ],
+      "properties": {
+        "kind": {
+          "const": "publish"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "registries": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          }
+        }
+      }
+    },
+    "locator_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "sha256",
+        "redacted"
+      ],
+      "properties": {
+        "kind": {
+          "const": "locator_sha256"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "redacted": {
+          "const": true
+        }
+      }
+    },
+    "path_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "declared",
+        "normalized"
+      ],
+      "properties": {
+        "kind": {
+          "const": "path"
+        },
+        "declared": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "normalized": {
+          "$ref": "#/$defs/canonical_path"
+        }
+      }
+    },
+    "workspace_reference_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "source_entity_id",
+        "source_field"
+      ],
+      "properties": {
+        "kind": {
+          "const": "workspace_reference"
+        },
+        "source_entity_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "source_field": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        }
+      }
+    },
+    "target_properties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_id",
+        "package_id",
+        "manifest_path",
+        "target_kind",
+        "target_name",
+        "name_source",
+        "source_path",
+        "path_source",
+        "required_features",
+        "options",
+        "source_analysis_state",
+        "materialized_crate_id",
+        "evidence_id"
+      ],
+      "properties": {
+        "manifest_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "package_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "manifest_path": {
+          "$ref": "#/$defs/canonical_path"
+        },
+        "target_kind": {
+          "enum": [
+            "lib",
+            "bin",
+            "example",
+            "test",
+            "bench"
+          ]
+        },
+        "target_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "name_source": {
+          "enum": [
+            "literal",
+            "package_default",
+            "path_stem"
+          ]
+        },
+        "source_path": {
+          "$ref": "#/$defs/declared_path"
+        },
+        "path_source": {
+          "enum": [
+            "literal",
+            "conventional"
+          ]
+        },
+        "required_features": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "$ref": "#/$defs/declared_name"
+          }
+        },
+        "options": {
+          "$ref": "#/$defs/target_options"
+        },
+        "source_analysis_state": {
+          "enum": [
+            "analyzed_r3",
+            "not_analyzed"
+          ]
+        },
+        "materialized_crate_id": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/entity_id"
+            }
+          ]
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "target_options": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "crate_types",
+        "proc_macro",
+        "bench",
+        "doc",
+        "doctest",
+        "test",
+        "harness",
+        "edition"
+      ],
+      "properties": {
+        "crate_types": {
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "$ref": "#/$defs/declared_name"
+          }
+        },
+        "proc_macro": {
+          "$ref": "#/$defs/nullable_declared_boolean"
+        },
+        "bench": {
+          "$ref": "#/$defs/nullable_declared_boolean"
+        },
+        "doc": {
+          "$ref": "#/$defs/nullable_declared_boolean"
+        },
+        "doctest": {
+          "$ref": "#/$defs/nullable_declared_boolean"
+        },
+        "test": {
+          "$ref": "#/$defs/nullable_declared_boolean"
+        },
+        "harness": {
+          "$ref": "#/$defs/nullable_declared_boolean"
+        },
+        "edition": {
+          "$ref": "#/$defs/nullable_declared_string"
+        }
+      }
+    },
+    "dependency_properties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_id",
+        "owner_id",
+        "manifest_path",
+        "scope",
+        "dependency_kind",
+        "target_predicate",
+        "declared_name",
+        "package_name",
+        "source",
+        "optional",
+        "default_features",
+        "requested_features",
+        "evidence_id"
+      ],
+      "properties": {
+        "manifest_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "owner_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "manifest_path": {
+          "$ref": "#/$defs/canonical_path"
+        },
+        "scope": {
+          "enum": [
+            "workspace",
+            "package"
+          ]
+        },
+        "dependency_kind": {
+          "enum": [
+            "normal",
+            "dev",
+            "build"
+          ]
+        },
+        "target_predicate": {
+          "$ref": "#/$defs/nullable_declared_string"
+        },
+        "declared_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "package_name": {
+          "$ref": "#/$defs/nullable_declared_string"
+        },
+        "source": {
+          "$ref": "#/$defs/dependency_source"
+        },
+        "optional": {
+          "$ref": "#/$defs/nullable_declared_boolean"
+        },
+        "default_features": {
+          "$ref": "#/$defs/nullable_declared_boolean"
+        },
+        "requested_features": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "$ref": "#/$defs/declared_name"
+          }
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "dependency_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "version_requirement",
+        "registry_name",
+        "path",
+        "git_locator",
+        "git_reference",
+        "workspace_reference_id"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "registry_default",
+            "registry_named",
+            "path",
+            "git",
+            "workspace_inherited"
+          ]
+        },
+        "version_requirement": {
+          "$ref": "#/$defs/nullable_declared_string"
+        },
+        "registry_name": {
+          "$ref": "#/$defs/nullable_declared_string"
+        },
+        "path": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/declared_path"
+            }
+          ]
+        },
+        "git_locator": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/locator_digest"
+            }
+          ]
+        },
+        "git_reference": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/locator_reference"
+            }
+          ]
+        },
+        "workspace_reference_id": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/entity_id"
+            }
+          ]
+        }
+      }
+    },
+    "feature_properties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_id",
+        "package_id",
+        "manifest_path",
+        "feature_name",
+        "members",
+        "evidence_id"
+      ],
+      "properties": {
+        "manifest_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "package_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "manifest_path": {
+          "$ref": "#/$defs/canonical_path"
+        },
+        "feature_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "members": {
+          "type": "array",
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/feature_member"
+          }
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "feature_member": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lexeme",
+        "syntax",
+        "dependency_name",
+        "feature_name",
+        "evidence_id"
+      ],
+      "properties": {
+        "lexeme": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "syntax": {
+          "enum": [
+            "bare",
+            "explicit_dependency",
+            "dependency_feature",
+            "weak_dependency_feature"
+          ]
+        },
+        "dependency_name": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          ]
+        },
+        "feature_name": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          ]
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "patch_properties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_id",
+        "manifest_path",
+        "source_selector",
+        "declared_name",
+        "package_name",
+        "source",
+        "applied",
+        "evidence_id"
+      ],
+      "properties": {
+        "manifest_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "manifest_path": {
+          "$ref": "#/$defs/canonical_path"
+        },
+        "source_selector": {
+          "$ref": "#/$defs/patch_source_selector"
+        },
+        "declared_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "package_name": {
+          "$ref": "#/$defs/nullable_declared_string"
+        },
+        "source": {
+          "$ref": "#/$defs/dependency_source"
+        },
+        "applied": {
+          "const": false
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "patch_source_selector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "name",
+        "sha256",
+        "evidence_id"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "crates_io",
+            "named_registry",
+            "source_locator_sha256"
+          ]
+        },
+        "name": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          ]
+        },
+        "sha256": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/sha256"
+            }
+          ]
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "build_script_properties": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_id",
+        "package_id",
+        "manifest_path",
+        "selection",
+        "path",
+        "committed_present",
+        "executed",
+        "evidence_id"
+      ],
+      "properties": {
+        "manifest_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "package_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "manifest_path": {
+          "$ref": "#/$defs/canonical_path"
+        },
+        "selection": {
+          "enum": [
+            "explicit_path",
+            "explicit_disabled",
+            "conventional_present",
+            "absent"
+          ]
+        },
+        "path": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/declared_path"
+            }
+          ]
+        },
+        "committed_present": {
+          "type": "boolean"
+        },
+        "executed": {
+          "const": false
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "declared_name": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "evidence_id"
+      ],
+      "properties": {
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "declared_string": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "evidence_id"
+      ],
+      "properties": {
+        "value": {
+          "type": "string",
+          "maxLength": 2048
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "nullable_declared_string": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/declared_string"
+        }
+      ]
+    },
+    "declared_boolean": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "evidence_id"
+      ],
+      "properties": {
+        "value": {
+          "type": "boolean"
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "nullable_declared_boolean": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/declared_boolean"
+        }
+      ]
+    },
+    "declared_path": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "declared",
+        "normalized",
+        "evidence_id"
+      ],
+      "properties": {
+        "declared": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "normalized": {
+          "$ref": "#/$defs/canonical_path"
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "locator_digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sha256",
+        "redacted",
+        "evidence_id"
+      ],
+      "properties": {
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "redacted": {
+          "const": true
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "locator_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "sha256",
+        "redacted",
+        "evidence_id"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "branch",
+            "tag",
+            "rev"
+          ]
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "redacted": {
+          "const": true
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "graph_relationship": {
+      "oneOf": [
+        {
+          "$ref": "../extraction-chunk-v2.schema.json#/$defs/relationship"
+        },
+        {
+          "$ref": "#/$defs/cargo_relationship"
+        }
+      ]
+    },
+    "cargo_relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "source",
+        "target",
+        "evidence_ids"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/relationship_id"
+        },
+        "kind": {
+          "enum": [
+            "DECLARES",
+            "REFERENCES_DECLARATION",
+            "MATERIALIZES"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "target": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "evidence_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        }
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "code",
+        "message",
+        "evidence_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:diagnostic:blake3:[0-9a-f]{64}$"
+        },
+        "code": {
+          "enum": [
+            "cargo.unsupported_manifest_family",
+            "cargo.unsupported_manifest_field",
+            "cargo.external_locator_redacted",
+            "cargo.target_source_not_analyzed"
+          ]
+        },
+        "message": {
+          "enum": [
+            "Cargo manifest family is outside the selected declaration subset",
+            "Cargo manifest field is outside the selected declaration subset",
+            "external Cargo locator is represented only by digest",
+            "declared Cargo target source is not analyzed by R4"
+          ]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "capability",
+        "state",
+        "evidence_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:coverage-gap:blake3:[0-9a-f]{64}$"
+        },
+        "capability": {
+          "enum": [
+            "cargo.active_features_not_resolved",
+            "cargo.active_target_not_resolved",
+            "cargo.build_script_not_executed",
+            "cargo.dependency_advanced_fields_unsupported",
+            "cargo.dependency_graph_not_resolved",
+            "cargo.dependency_source_not_fetched",
+            "cargo.external_locator_redacted",
+            "cargo.generated_source_not_analyzed",
+            "cargo.legacy_badges_unsupported",
+            "cargo.lint_configuration_unsupported",
+            "cargo.package_file_selection_not_applied",
+            "cargo.package_metadata_table_unsupported",
+            "cargo.patch_not_applied",
+            "cargo.proc_macro_not_executed",
+            "cargo.profile_tables_unsupported",
+            "cargo.replace_table_unsupported",
+            "cargo.target_source_not_analyzed",
+            "cargo.workspace_inheritance_not_materialized"
+          ]
+        },
+        "state": {
+          "enum": [
+            "not_resolved",
+            "not_fetched",
+            "redacted",
+            "not_applied",
+            "not_executed",
+            "not_analyzed",
+            "unsupported"
+          ]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        }
+      }
+    },
+    "entity_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:entity:blake3:[0-9a-f]{64}$"
+    },
+    "relationship_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:relationship:blake3:[0-9a-f]{64}$"
+    },
+    "evidence_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:evidence:blake3:[0-9a-f]{64}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "canonical_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!.*(?:^|/)(?:\\.|\\.\\.)(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    }
+  }
+}
