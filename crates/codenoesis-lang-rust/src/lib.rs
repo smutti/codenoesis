@@ -14,6 +14,7 @@ use codenoesis_ports::RustKnowledgeExtractor;
 use tree_sitter::{Node, Parser};
 use unicode_normalization::UnicodeNormalization as _;
 
+mod framework_declarations;
 mod manifest_facts;
 mod root_package;
 mod semantic_depth;

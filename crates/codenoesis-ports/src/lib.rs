@@ -14,6 +14,7 @@ use codenoesis_domain::s4_r3::{
 };
 use codenoesis_domain::s4_r4::{CargoManifestFactError, CargoManifestFactExtraction};
 use codenoesis_domain::s4_r5::{RustSemanticDepthExtraction, RustSemanticError};
+use codenoesis_domain::s4_r6::{FrameworkError, FrameworkExtraction};
 use codenoesis_domain::s5::{AnalysisCacheEntry, IncrementalWorkspaceExtraction};
 use codenoesis_domain::s6::{ContractError, OpenApiContractInput, ProviderContract};
 use codenoesis_domain::storage::{
@@ -162,6 +163,22 @@ pub trait RustSemanticDepthExtractor {
         external_boundaries: &[ExternalWorkspaceBoundary],
         cache_entries: &[AnalysisCacheEntry],
     ) -> Result<RustSemanticDepthExtraction, RustSemanticError>;
+}
+
+pub trait RustFrameworkDeclarationExtractor {
+    /// Extracts the explicit R6 committed framework-declaration subset over accepted R5 facts.
+    ///
+    /// # Errors
+    ///
+    /// Returns an inherited R5 failure or a typed declaration, identity, evidence, composition,
+    /// target-binding, or limit failure without expanding macros, evaluating cfg, resolving with a
+    /// compiler, or executing repository content.
+    fn extract_rust_framework_declarations_incremental(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+        cache_entries: &[AnalysisCacheEntry],
+    ) -> Result<FrameworkExtraction, FrameworkError>;
 }
 
 pub trait OpenApiContractExtractor {
