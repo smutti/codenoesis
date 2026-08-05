@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/repository-snapshot-v10.schema.json",
+  "title": "CodeNoesis RepositorySnapshotV10",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "semantic_hash",
+    "semantic",
+    "envelope"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.repository-snapshot/v10"
+    },
+    "semantic_hash": {
+      "$ref": "../../s1/repository-snapshot-v2.schema.json#/$defs/blake3_hash"
+    },
+    "semantic": {
+      "$ref": "#/$defs/semantic"
+    },
+    "envelope": {
+      "$ref": "../../s1/repository-snapshot-v2.schema.json#/$defs/envelope"
+    }
+  },
+  "$defs": {
+    "semantic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "configuration",
+        "pipeline_version",
+        "ontology_version",
+        "extractor_contract_version",
+        "extractor_versions",
+        "evidence_lineage_version",
+        "inventory",
+        "extraction_chunks",
+        "knowledge_graph"
+      ],
+      "properties": {
+        "repository": {
+          "$ref": "../../s1/repository-snapshot-v2.schema.json#/$defs/repository"
+        },
+        "configuration": {
+          "$ref": "configuration-v7.schema.json"
+        },
+        "pipeline_version": {
+          "const": "codenoesis.pipeline/s4-r7-v1"
+        },
+        "ontology_version": {
+          "const": "codenoesis.ontology/rust/v7"
+        },
+        "extractor_contract_version": {
+          "const": "codenoesis.extraction/v7"
+        },
+        "extractor_versions": {
+          "oneOf": [
+            {
+              "const": [
+                "codenoesis.inventory-classifier/s1-v1",
+                "codenoesis.rust-tree-sitter/s4-v1",
+                "codenoesis.rust-workspace/s4-r3-v1",
+                "codenoesis.cargo-manifest/s4-r4-v1",
+                "codenoesis.rust-semantic/s4-r5-v1",
+                "codenoesis.rust-framework/s4-r6-v1",
+                "codenoesis.scip-import/s4-r7-v1"
+              ]
+            },
+            {
+              "const": [
+                "codenoesis.inventory-classifier/s1-v1",
+                "codenoesis.rust-tree-sitter/s4-v1",
+                "codenoesis.rust-workspace/s4-r3-v1",
+                "codenoesis.cargo-manifest/s4-r4-v1",
+                "codenoesis.rust-semantic/s4-r5-v1",
+                "codenoesis.rust-framework/s4-r6-v1",
+                "codenoesis.scip-import/s4-r7-v1",
+                "codenoesis.git-boundary/s1-v1"
+              ]
+            }
+          ]
+        },
+        "evidence_lineage_version": {
+          "const": "codenoesis.evidence-lineage/v3"
+        },
+        "inventory": {
+          "$ref": "../../s1/repository-snapshot-v2.schema.json#/$defs/inventory"
+        },
+        "repository_boundaries": {
+          "$ref": "../../s1/external-repository-boundary-v1.schema.json"
+        },
+        "extraction_chunks": {
+          "type": "array",
+          "maxItems": 20000,
+          "items": {
+            "$ref": "extraction-chunk-v7.schema.json"
+          }
+        },
+        "knowledge_graph": {
+          "$ref": "knowledge-graph-v7.schema.json"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "configuration": {
+                "properties": {
+                  "repository_boundary_profile": {
+                    "const": "local-gitlinks-v1"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "repository_boundaries"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "repository_boundaries"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

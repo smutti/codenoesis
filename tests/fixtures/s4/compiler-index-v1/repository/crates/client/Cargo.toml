@@ -1,0 +1,10 @@
+[package]
+name = "client"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+api = { path = "../api" }
+
+[lib]
+path = "src/lib.rs"

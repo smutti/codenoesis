@@ -1,0 +1,254 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/knowledge-graph-v7.schema.json",
+  "title": "CodeNoesis KnowledgeGraphV7",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ontology_version",
+    "repository",
+    "extractor_versions",
+    "workspace",
+    "manifest_index",
+    "rust_semantic_index",
+    "framework_declaration_index",
+    "compiler_index",
+    "semantic_hash",
+    "entities",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.knowledge-graph/v7"
+    },
+    "ontology_version": {
+      "const": "codenoesis.ontology/rust/v7"
+    },
+    "repository": {
+      "$ref": "../../s1/repository-snapshot-v2.schema.json#/$defs/repository"
+    },
+    "extractor_versions": {
+      "const": [
+        "codenoesis.rust-tree-sitter/s4-v1",
+        "codenoesis.rust-workspace/s4-r3-v1",
+        "codenoesis.cargo-manifest/s4-r4-v1",
+        "codenoesis.rust-semantic/s4-r5-v1",
+        "codenoesis.rust-framework/s4-r6-v1",
+        "codenoesis.scip-import/s4-r7-v1"
+      ]
+    },
+    "workspace": {
+      "$ref": "../r3/knowledge-graph-v3.schema.json#/$defs/workspace"
+    },
+    "manifest_index": {
+      "$ref": "../r4/knowledge-graph-v4.schema.json#/$defs/manifest_index"
+    },
+    "rust_semantic_index": {
+      "$ref": "../r6/knowledge-graph-v6.schema.json#/$defs/rust_semantic_index"
+    },
+    "framework_declaration_index": {
+      "$ref": "../r6/knowledge-graph-v6.schema.json#/$defs/framework_declaration_index"
+    },
+    "compiler_index": {
+      "$ref": "#/$defs/compiler_index"
+    },
+    "semantic_hash": {
+      "$ref": "../extraction-chunk-v2.schema.json#/$defs/hash"
+    },
+    "entities": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 30000,
+      "items": {
+        "$ref": "extraction-chunk-v7.schema.json#/$defs/graph_entity"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "maxItems": 60000,
+      "items": {
+        "$ref": "extraction-chunk-v7.schema.json#/$defs/graph_relationship"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 90000,
+      "items": {
+        "$ref": "extraction-chunk-v7.schema.json#/$defs/claim"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 90000,
+      "items": {
+        "$ref": "extraction-chunk-v7.schema.json#/$defs/evidence"
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "extraction-chunk-v7.schema.json#/$defs/graph_diagnostic"
+      }
+    },
+    "coverage": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "extraction-chunk-v7.schema.json#/$defs/graph_coverage"
+      }
+    }
+  },
+  "$defs": {
+    "compiler_index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "profile",
+        "binding_sha256",
+        "artifact_sha256",
+        "producer",
+        "toolchain",
+        "coverage_mode",
+        "compiler_symbol_ids",
+        "in_repository_symbol_ids",
+        "external_symbol_ids",
+        "generated_symbol_ids",
+        "compiler_relationship_ids"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "codenoesis.compiler-index/v1"
+        },
+        "profile": {
+          "const": "scip-rust-v0.9.0-import-v1"
+        },
+        "binding_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "artifact_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "producer": {
+          "$ref": "#/$defs/producer"
+        },
+        "toolchain": {
+          "$ref": "#/$defs/toolchain"
+        },
+        "coverage_mode": {
+          "const": "declared_partial"
+        },
+        "compiler_symbol_ids": {
+          "$ref": "#/$defs/entity_ids"
+        },
+        "in_repository_symbol_ids": {
+          "$ref": "#/$defs/entity_ids"
+        },
+        "external_symbol_ids": {
+          "$ref": "#/$defs/entity_ids"
+        },
+        "generated_symbol_ids": {
+          "$ref": "#/$defs/entity_ids"
+        },
+        "compiler_relationship_ids": {
+          "type": "array",
+          "maxItems": 60000,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^urn:codenoesis:relationship:blake3:[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "entity_ids": {
+      "type": "array",
+      "maxItems": 30000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "extraction-chunk-v7.schema.json#/$defs/entity_id"
+      }
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "family",
+        "name",
+        "version",
+        "commit",
+        "arguments_sha256",
+        "project_root_sha256",
+        "attested"
+      ],
+      "properties": {
+        "family": {
+          "const": "rust-analyzer-scip"
+        },
+        "name": {
+          "const": "rust-analyzer"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "arguments_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "project_root_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "attested": {
+          "const": false
+        }
+      }
+    },
+    "toolchain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "channel",
+        "rustc_release",
+        "rustc_commit",
+        "target_triple"
+      ],
+      "properties": {
+        "channel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "rustc_release": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "rustc_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "target_triple": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]{1,128}$"
+        }
+      }
+    }
+  }
+}

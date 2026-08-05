@@ -1,0 +1,735 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/codenoesis-error-v14.schema.json",
+  "title": "CodeNoesis ErrorV14",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v14"
+    },
+    "code": {
+      "enum": [
+        "input.invalid_compiler_index_profile",
+        "input.unsafe_compiler_index_path",
+        "extraction.unsupported_compiler_index_composition",
+        "extraction.invalid_compiler_index_binding",
+        "extraction.unsupported_compiler_index_schema",
+        "extraction.unsupported_compiler_index_producer",
+        "extraction.compiler_index_binding_mismatch",
+        "extraction.malformed_compiler_index",
+        "extraction.noncanonical_compiler_index",
+        "extraction.compiler_index_identity_conflict",
+        "extraction.ambiguous_compiler_index_endpoint",
+        "extraction.compiler_index_relation_conflict",
+        "extraction.compiler_index_limit_exceeded",
+        "extraction.unresolvable_compiler_index_evidence",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "input",
+        "extraction",
+        "internal"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "retryable": {
+      "const": false
+    },
+    "context": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/profile_context"
+        },
+        {
+          "$ref": "#/$defs/path_context"
+        },
+        {
+          "$ref": "#/$defs/composition_context"
+        },
+        {
+          "$ref": "#/$defs/binding_context"
+        },
+        {
+          "$ref": "#/$defs/schema_context"
+        },
+        {
+          "$ref": "#/$defs/producer_context"
+        },
+        {
+          "$ref": "#/$defs/mismatch_context"
+        },
+        {
+          "$ref": "#/$defs/artifact_context"
+        },
+        {
+          "$ref": "#/$defs/identity_context"
+        },
+        {
+          "$ref": "#/$defs/endpoint_context"
+        },
+        {
+          "$ref": "#/$defs/relation_context"
+        },
+        {
+          "$ref": "#/$defs/limit_context"
+        },
+        {
+          "$ref": "#/$defs/evidence_context"
+        },
+        {
+          "$ref": "#/$defs/empty_context"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "profile_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile"
+      ],
+      "properties": {
+        "profile": {
+          "const": "scip-rust-v0.9.0-import-v1"
+        }
+      }
+    },
+    "path_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "reason"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      }
+    },
+    "composition_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_profiles",
+        "selected_profiles"
+      ],
+      "properties": {
+        "required_profiles": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "selected_profiles": {
+          "type": "array",
+          "maxItems": 10,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        }
+      }
+    },
+    "binding_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "reason"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      }
+    },
+    "schema_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tag",
+        "commit",
+        "scip_proto_sha256"
+      ],
+      "properties": {
+        "tag": {
+          "const": "v0.9.0"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "scip_proto_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "producer_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version_sha256",
+        "commit_sha256"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "version_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "commit_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "mismatch_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subject",
+        "expected_sha256",
+        "observed_sha256"
+      ],
+      "properties": {
+        "subject": {
+          "enum": [
+            "artifact",
+            "repository",
+            "revision",
+            "tree",
+            "source_manifest",
+            "document",
+            "producer",
+            "toolchain"
+          ]
+        },
+        "expected_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "observed_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "artifact_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_sha256",
+        "reason"
+      ],
+      "properties": {
+        "artifact_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      }
+    },
+    "identity_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain",
+        "normalized_preimage_sha256"
+      ],
+      "properties": {
+        "domain": {
+          "const": "codenoesis.entity-id/compiler-symbol/v1"
+        },
+        "normalized_preimage_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "endpoint_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "symbol_sha256",
+        "candidate_count"
+      ],
+      "properties": {
+        "symbol_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "candidate_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 250000
+        }
+      }
+    },
+    "relation_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "source_id",
+        "target_id",
+        "reason"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "RESOLVES_TO",
+            "REFERENCES",
+            "IMPLEMENTS",
+            "TYPE_DEFINITION"
+          ]
+        },
+        "source_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "target_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      }
+    },
+    "limit_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "limit",
+        "maximum",
+        "observed"
+      ],
+      "properties": {
+        "limit": {
+          "enum": [
+            "raw_index_bytes",
+            "binding_json_bytes",
+            "documents",
+            "occurrences_total",
+            "occurrences_per_document",
+            "symbol_information_total",
+            "relationships_total",
+            "symbol_or_display_bytes",
+            "unpromoted_value_bytes",
+            "tool_arguments",
+            "tool_argument_bytes",
+            "protobuf_recursion"
+          ]
+        },
+        "maximum": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "observed": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "evidence_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id"
+      ],
+      "properties": {
+        "evidence_id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:evidence:sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "empty_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 0
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "input.invalid_compiler_index_profile"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "input"
+          },
+          "context": {
+            "$ref": "#/$defs/profile_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "input.unsafe_compiler_index_path"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "input"
+          },
+          "context": {
+            "$ref": "#/$defs/path_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.unsupported_compiler_index_composition"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/composition_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.invalid_compiler_index_binding"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/binding_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.unsupported_compiler_index_schema"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/schema_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.unsupported_compiler_index_producer"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/producer_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.compiler_index_binding_mismatch"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/mismatch_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.malformed_compiler_index"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/artifact_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.noncanonical_compiler_index"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/artifact_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.compiler_index_identity_conflict"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/identity_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.ambiguous_compiler_index_endpoint"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/endpoint_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.compiler_index_relation_conflict"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/relation_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.compiler_index_limit_exceeded"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/limit_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.unresolvable_compiler_index_evidence"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "context": {
+            "$ref": "#/$defs/evidence_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "internal.unexpected"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "internal"
+          },
+          "context": {
+            "$ref": "#/$defs/empty_context"
+          }
+        }
+      }
+    }
+  ]
+}

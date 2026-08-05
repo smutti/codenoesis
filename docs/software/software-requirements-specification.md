@@ -1,13 +1,13 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9+r6 — S0 through S6 and R0-R5 implemented; R6 honest
-> framework-declarations governance proposed for protected ratification**.
+> Status: **0.9+r7 — S0 through S6 and R0-R6 implemented; R7 static
+> revision-bound SCIP import governance proposed for protected ratification**.
 > The S0–S6 runtime and product suites exist on `main`, but CodeNoesis claims
 > no slice `Verified` without complete immutable retention evidence. This
-> revision records protected R5 governance, correction, and product merges
-> #112, #115, and #116 and proposes Decision 0016 for the explicit
-> source-only `rust-framework-declarations-v1` profile while retaining every
-> accepted S0–S6 and R0–R5 selector-absent invocation.
+> revision records protected R6 governance, evidence-ID correction, and product
+> merges #118, #121, and #122 and proposes Decision 0017 for explicit static
+> import of one revision-bound SCIP v0.9.0 artifact while retaining every
+> accepted S0–S6 and R0–R6 selector-absent invocation.
 
 ## 1. Document control
 
@@ -15,8 +15,8 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S6 and roadmap R0-R5 are Approved and Implemented but not Verified. `FR-EXT-011` and the R6 V9/V6/V13/V4 compatibility package are Proposed and become effective only after the accountable maintainer manually merges the protected pull request for issue #117. |
-| Date | 2026-08-04 |
+| Status | S0 through S6 and roadmap R0-R6 are Approved and Implemented but not Verified. The bounded `FR-EXT-005` R7 static-import profile and its V10/V7/V14/V5 compatibility package are Proposed and become effective only after the accountable maintainer manually merges the protected pull request for issue #123. The broader polyglot compiler-enrichment requirement remains Proposed. |
+| Date | 2026-08-05 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -44,6 +44,7 @@
 | `0.9+r4.2` | 2026-08-04 | Recorded protected exact-ID governance merge #106 and proposed Decision 0014 after the pinned RustDesk pilot exposed legacy top-level `[badges]`; fixed one generic typed-unsupported mapping to `cargo.legacy_badges_unsupported` without interpreting badge values or weakening unknown-key fail-closed behavior. |
 | `0.9+r5` | 2026-08-04 | Recorded R4 product merge #109 and proposed `FR-EXT-010` plus Decision 0015 for the explicit `rust-semantic-depth-v1` profile; fixed RepositorySnapshotV8, ExtractionChunkV5, KnowledgeGraphV5, Rust ontology v5, ErrorV12, LocalQueryResultV3 dispatch, declaration-level fields/variants/constants/statics/associated types/method contexts, attribute-preserving uncertainty, member identity, strict limits, project-owned fixture, exact governance Red, and non-vendored Lekton/RustDesk pilot descriptors while deferring framework meaning to R6 and compiler evidence to R7. |
 | `0.9+r6` | 2026-08-04 | Recorded protected R5 governance, golden-correction, and product merges #112, #115, and #116; proposed `FR-EXT-011` plus Decision 0016 for explicit framework-neutral source declarations and unresolved attribute/macro candidates; fixed RepositorySnapshotV9, ExtractionChunkV6, KnowledgeGraphV6, Rust ontology v6, ErrorV13, LocalQueryResultV4 dispatch, disjoint identities, strict source/runtime epistemic boundaries, limits, project-owned two-style fixture, exact governance Red, and non-vendored motivation-only Lekton/RustDesk observations while deferring compiler evidence to R7 and export/explorer work to R8. |
+| `0.9+r7` | 2026-08-05 | Recorded protected R6 governance, evidence-ID correction, and product merges #118, #121, and #122; proposed bounded `FR-EXT-005` plus Decision 0017 for explicit static import of one revision-, tree-, source-, producer-, toolchain-, and schema-bound Rust SCIP v0.9.0 artifact; fixed RepositorySnapshotV10, ExtractionChunkV7, KnowledgeGraphV7, Rust ontology v7, ErrorV14, LocalQueryResultV5 dispatch, compiler-symbol identity and SHA-256 evidence, strict protobuf/resource/privacy limits, project-owned binary fixture, exact governance Red, and immutable R6 compatibility while leaving index generation in S9 and export/explorer work in R8. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -1268,6 +1269,154 @@ new digest and renewed semantic human review.
 R6 framework-declarations contract bundle:
 `sha256:46f5e0fab0439979c456cb41ce7195efd5e02a342be4292402ef2cb44909bc47`.
 
+### 2.17 S4 R7 revision-bound SCIP import ratification register
+
+Issue [#123](https://github.com/smutti/codenoesis/issues/123), its explicit
+accountable-maintainer
+[authorization](https://github.com/smutti/codenoesis/issues/123#issuecomment-5193618752),
+and the independently reviewed protected pull request created from that issue
+govern the proposed R7 static compiler-index contract. The factual
+[supply-chain correction](https://github.com/smutti/codenoesis/issues/123#issuecomment-5193814091)
+records that `protobuf 3.7.2` is MIT while `scip 0.9.0` is Apache-2.0; dependency
+names, versions, scope, and risk are unchanged. Decision 0017 becomes effective
+only when `@smutti` manually merges the exact reviewed head. The authoring agent
+does not approve or merge.
+
+This register targets exactly the **S4 — Evidence-backed workspace docs
+compatibility extension** and roadmap R7 static import. It does not broaden S5,
+S6, S7, S8, S9, R8, compiler/indexer generation, sandbox execution, runtime
+observation, export, explorer, server, MCP, release, or control-plane behavior.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| Bounded `FR-EXT-005` for `codenoesis.compiler-index-profile/scip-rust-v0.9.0-import-v1` | `Proposed`; broader polyglot meaning remains `Proposed` | `Approved` only for this static Rust SCIP profile after protected manual merge | Andrea Moretti (`@smutti` persona) | `@smutti` | [Issue #123 authorization](https://github.com/smutti/codenoesis/issues/123#issuecomment-5193618752) | `S4` | [SCIP import decision](decisions/0017-s4-r7-scip-import-contract.md), [binding schema](../../tests/specifications/s4/r7/compiler-index-binding-v1.schema.json), [RepositorySnapshotV10 schema](../../tests/specifications/s4/r7/repository-snapshot-v10.schema.json), [ExtractionChunkV7 schema](../../tests/specifications/s4/r7/extraction-chunk-v7.schema.json), [KnowledgeGraphV7 schema](../../tests/specifications/s4/r7/knowledge-graph-v7.schema.json), [Rust ontology v7](../../tests/specifications/s4/r7/rust-ontology-v7.json), [ErrorV14 schema](../../tests/specifications/s4/r7/codenoesis-error-v14.schema.json), [LocalQueryResultV5 schema](../../tests/specifications/s4/r7/local-query-result-v5.schema.json), [machine oracle](../../tests/specifications/s4/r7/e2e_fr_ext_005_scip_import.json), [retained governance Red](../../tests/specifications/s4/r7/red-observation.json), and [project-owned fixture](../../tests/fixtures/s4/compiler-index-v1/README.md) |
+
+R7 is selected only by
+`--compiler-index-profile scip-rust-v0.9.0-import-v1` together with an explicit
+`--compiler-index-binding <safe-relative-path>` on a valid
+`standard-local-s4` scan that also selects `cargo-root-package-v1`,
+`cargo-manifest-facts-v1`, `rust-semantic-depth-v1`, and
+`rust-framework-declarations-v1`. Repository content, environment, dependency
+names, a conventional artifact filename, prior selectors, or cached state never
+enable R7 implicitly. Incomplete composition fails before acquisition. Every
+invocation without both R7 inputs remains byte-identical through R6.
+
+The only accepted wire schema is SCIP v0.9.0 at commit
+`e8ee0ae6038f8298e2195812eea9d7b1196748ae`, with `scip.proto` SHA-256
+`04cb20f2b8be73f6c0376b5b3e84c3ae20ebaff0ad3d23ba2d16f866b395ed7d`.
+Metadata and every Rust document must use the approved UTF-8 encodings. The
+accepted producer family is rust-analyzer SCIP, and the binding preserves exact
+producer name, release, commit, digest-only arguments and project root,
+toolchain release and commit, and target triple. These values establish declared
+provenance and consistency, not executable attestation.
+
+`CompilerIndexBindingV1` strictly binds repository identity, immutable commit
+and tree OIDs, the R6 source-manifest digest, artifact path/length/SHA-256/schema,
+producer and toolchain, and every indexed or omitted document. Indexed documents
+bind canonical repository-relative path, committed blob OID, SHA-256, and byte
+length. Omission reasons, coverage mode, generated exclusions, and known
+producer limits are explicit. Neither `Metadata.project_root`, raw arguments,
+embedded source text, documentation, signatures, diagnostics, external prose,
+nor environment values grant filesystem authority or enter public bytes.
+
+A bounded framing preflight runs before generated protobuf decode or
+proportional allocation. It enforces raw bytes, legal wire types, metadata first
+and exactly once, recursion, repeated counts, and length-delimited field bounds.
+Recursive unknown fields, duplicate singular values, malformed or non-minimal
+varints, invalid roles/ranges/encodings, and non-canonical re-encoding fail.
+Every in-repository occurrence must resolve to exact committed UTF-8 bytes.
+Traversal, absolute or escaping paths, symlinks, mutable-input races, stale
+revisions, source mismatches, producer/toolchain mismatches, and changed
+artifact bytes fail before graph construction or publication.
+
+Ontology v7 adds only `compiler.symbol` assertions with binding state
+`in_repository_bound`, `external_unbound`, or `generated_unbound`. Global SCIP
+identities parse scheme, package manager/name/version, and descriptors; local
+identities additionally bind repository and canonical document path. NFC
+RFC 8785 preimages use the disjoint
+`codenoesis.entity-id/compiler-symbol/v1` domain and BLAKE3-256. Commit, artifact
+digest, ordering, offset, scheduling, and retry never enter symbol identity.
+Duplicate, invalid, ambiguous, or normalization-colliding identities cannot be
+repaired by ordinal or source order.
+
+R7 adds only `RESOLVES_TO`, `REFERENCES`, `IMPLEMENTS`, and `TYPE_DEFINITION`.
+The first two require unique source and lexical-owner bindings; the latter two
+require their exact SCIP relationship flags and unique endpoints. A reference
+is not a call. No `CALLS`, `EXECUTES`, `SERVES`, `STARTS`, `REACHES`, or
+`ACTIVATES` relation, data flow, generated source declaration, macro expansion,
+or runtime behavior is authorized. Unsupported call and generated-product
+meaning remains an exact coverage gap.
+
+Every promoted fact retains SHA-256 compiler-index evidence over the raw
+artifact digest and canonical semantic locator plus exact committed-source
+evidence for each local endpoint. A uniquely validated compiler relation may
+outrank a syntax-only unresolved heuristic, but it never deletes syntax
+evidence. Contradiction retains both evidence sets, emits a typed diagnostic and
+gap, and blocks ambiguous promotion. External and generated symbols remain
+compiler assertions and never become source or runtime declarations.
+
+The selected scan emits strict `codenoesis.repository-snapshot/v10` with
+`codenoesis.configuration/v7`, `codenoesis.extraction-chunk/v7`,
+`codenoesis.knowledge-graph/v7`, `codenoesis.ontology/rust/v7`,
+`codenoesis.error/v14`, and pipeline `codenoesis.pipeline/s4-r7-v1`.
+A validated stored V10 head emits `codenoesis.local-query-result/v5` for exact
+entity, relationship, claim, evidence, diagnostic, coverage-gap, and document
+IDs, including compiler symbols and compiler evidence. V9 retains V4 query
+bytes, V8 retains V3, V7 retains V2, and V4-V6 retain V1. No query-version flag,
+traversal, fuzzy search, migration, repair, or runtime inference is introduced.
+
+Fixed maxima are 67,108,864 raw artifact bytes, 1,048,576 binding JSON bytes,
+20,000 documents, 1,000,000 total occurrences, 100,000 occurrences per
+document, 250,000 symbol-information records, 500,000 relationships, 16,384
+UTF-8 bytes per symbol/display value, 65,536 UTF-8 bytes per unpromoted value,
+128 tool arguments, 4,096 UTF-8 bytes per tool argument, protobuf recursion 64,
+and 50 deterministic permutations plus isolated replay. Inherited source/path,
+60-second wall-time, and 512 MiB peak-RSS ceilings remain authoritative. Every
+maximum-plus-one fails before proportional allocation or publication; silent
+truncation is forbidden.
+
+New selected failures are strict LF-terminated ErrorV14 with empty stdout and
+no partial store/docs mutation: invalid profile or composition, unsafe path,
+invalid binding, unsupported schema or producer, binding mismatch, malformed or
+non-canonical artifact, identity collision, ambiguous endpoint, contradictory
+relation, limit exceeded, unresolvable evidence, or internal failure. Reviewed
+incomplete coverage remains a diagnostic/gap only where the oracle permits it.
+
+The Apache-2.0 project-owned `compiler-index-v1` fixture contains a two-crate
+Rust workspace, panic `build.rs` sentinel, reviewed source representation,
+canonical binary artifact, strict binding, expected overlay, and manifest that
+binds every byte. It covers cross-crate and Unicode references, aliases,
+local/global/external/generated symbols, explicit implementation and
+type-definition relations, one omitted document, exact source/compiler evidence,
+privacy canaries, honest call/macro gaps, malformed inputs, stale/mismatched
+bindings, path/race cases, and all maxima-plus-one. It launches no compiler,
+indexer, build, proc macro, target, process, model, or network client.
+
+The governance guard was committed first at
+`bb9acb9ae7f6dbed4da2294cc85b12a7fb07b5ef`. The command
+`python3 -m unittest scripts.tests.test_s4_r7_compiler_index_contract` failed
+only for the expected missing Decision 0017, with exit `1`, empty stdout, and a
+669-byte stderr log whose SHA-256 is
+`6d8ef8c7850a87140028a25f49d920936338bc3191a5ed53d058c358434ef8cc`.
+The retained test-first guard SHA-256 is
+`61490532b478fc391bb383287503ecb8cd5f384aa1710aba4ffd93c4703c4ff9`.
+No production, dependency, R6 contract, fixture, golden, or unrelated protected
+byte changed before Red.
+
+A future product issue may add exactly `scip = "=0.9.0"` and
+`protobuf = "=3.7.2"`. This governance package changes no manifest or lockfile,
+authorizes no generator or alternative parser, and performs no index generation.
+Generation remains S9 work under a separately Approved trust/sandbox boundary.
+
+The strict schemas, machine subset and oracles, supply-chain review, retained
+Red, project-owned fixture and expected overlay, invalid/security matrix, and
+immutable R6 dependency are bound by the R7 bundle. SRS and roadmap bytes are
+excluded from that digest. Any bound-byte change requires a new digest and
+renewed semantic human review.
+
+R7 revision-bound SCIP import contract bundle:
+`sha256:086d775afef43801946fd23100e3de5b144b0e1dbc5893ce8779ab398aaed8b1`.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,
@@ -1817,8 +1966,8 @@ implementation choices.
 
 | ID | Decision required | Blocks |
 |---|---|---|
-| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0010 resolves only the R2 gitlink, `.gitmodules`, explicit nested-root, depth, and boundary-output subset after protected merge. Decision 0011 resolves only the R3 member, exclusion, package-manifest, crate-target, and binary-root subset after protected merge. Decision 0012 resolves only the R4 manifest-fact, dependency, feature/member, target, patch, metadata, target-predicate, declaration-string, external-locator, and permutation subset after protected merge. Decision 0015 resolves only the R5 field, variant, tuple-field, associated-item, outer-attribute, attribute-token, declared-type/header, and permutation subset after protected merge. Decision 0016 resolves only the R6 per-source declaration, registration-chain, expression-depth, route-path, method/configuration-key, target-spelling, inherited attribute, and permutation subset after protected merge. Decision 0008 resolves the fixed S5 changed-path, analysis-entry, dependency-edge, report-subject, report-byte, and wall-time subset. Decision 0009 resolves the fixed S6 manifest, repository, document, YAML/reference depth, semantic count, evidence, output, memory, and wall-time subset when its protected ratification revision is manually merged. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
-| `OD-ONT-001` | Decision 0003 resolves the bounded single-crate `codenoesis.ontology/rust/v1`. Decision 0005 resolves multi-crate cardinality and unambiguous out-of-line module identity for `codenoesis.ontology/rust/v2`. Decision 0011 resolves only root-package workspace provenance and R3 coverage semantics in `codenoesis.ontology/rust/v3` while preserving v2 identity domains for unchanged facts. Decision 0012 resolves only declaration-level Cargo entities, relationships, evidence, claim policy, and coverage states in `codenoesis.ontology/rust/v4` while preserving v3 Rust identities after protected merge. Decision 0015 resolves only the R5 committed Rust field, variant, constant/static, associated-type, implementation-context method, attribute-evidence, compilation-presence, and member-identity subset in `codenoesis.ontology/rust/v5` while preserving unchanged v4 identities after protected merge. Decision 0016 resolves only the R6 framework-neutral committed source declarations, unresolved attribute/macro candidates, disjoint identity, lexical `DEFINES` ownership, target-binding states, and explicit non-runtime semantics in `codenoesis.ontology/rust/v6` while preserving unchanged v5 identities after protected merge. Cross-language, resolver/compiler-grade, expanded/generated framework meaning, runtime observation, and later ontology evolution remain open. | `S8` and later ontology evolution |
+| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0010 resolves only the R2 gitlink, `.gitmodules`, explicit nested-root, depth, and boundary-output subset after protected merge. Decision 0011 resolves only the R3 member, exclusion, package-manifest, crate-target, and binary-root subset after protected merge. Decision 0012 resolves only the R4 manifest-fact, dependency, feature/member, target, patch, metadata, target-predicate, declaration-string, external-locator, and permutation subset after protected merge. Decision 0015 resolves only the R5 field, variant, tuple-field, associated-item, outer-attribute, attribute-token, declared-type/header, and permutation subset after protected merge. Decision 0016 resolves only the R6 per-source declaration, registration-chain, expression-depth, route-path, method/configuration-key, target-spelling, inherited attribute, and permutation subset after protected merge. Decision 0017 resolves only the R7 raw artifact, binding, document, occurrence, symbol, relationship, value, argument, recursion, and permutation subset after protected merge. Decision 0008 resolves the fixed S5 changed-path, analysis-entry, dependency-edge, report-subject, report-byte, and wall-time subset. Decision 0009 resolves the fixed S6 manifest, repository, document, YAML/reference depth, semantic count, evidence, output, memory, and wall-time subset when its protected ratification revision is manually merged. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
+| `OD-ONT-001` | Decision 0003 resolves the bounded single-crate `codenoesis.ontology/rust/v1`. Decision 0005 resolves multi-crate cardinality and unambiguous out-of-line module identity for `codenoesis.ontology/rust/v2`. Decision 0011 resolves only root-package workspace provenance and R3 coverage semantics in `codenoesis.ontology/rust/v3` while preserving v2 identity domains for unchanged facts. Decision 0012 resolves only declaration-level Cargo entities, relationships, evidence, claim policy, and coverage states in `codenoesis.ontology/rust/v4` while preserving v3 Rust identities after protected merge. Decision 0015 resolves only the R5 committed Rust field, variant, constant/static, associated-type, implementation-context method, attribute-evidence, compilation-presence, and member-identity subset in `codenoesis.ontology/rust/v5` while preserving unchanged v4 identities after protected merge. Decision 0016 resolves only the R6 framework-neutral committed source declarations, unresolved attribute/macro candidates, disjoint identity, lexical `DEFINES` ownership, target-binding states, and explicit non-runtime semantics in `codenoesis.ontology/rust/v6` while preserving unchanged v5 identities after protected merge. Decision 0017 resolves only revision-bound Rust SCIP v0.9.0 compiler symbols, explicit compiler relationships, dual source/index evidence, precedence/conflict handling, and honest unsupported-call/generated states in `codenoesis.ontology/rust/v7` while preserving unchanged v6 identities after protected merge. Cross-language adapters, index generation, richer compiler/data-flow semantics, expanded/generated framework meaning, runtime observation, and later ontology evolution remain open. | `S8` and later ontology evolution |
 | `OD-STO-001` | Decision 0004 resolves fresh single-writer local SQLite/CAS identity, publication, restart, corruption, and cleanup semantics for `codenoesis.local-store/v1` only when its protected S3 ratification revision is manually merged. Migration, repair, deletion, backup/restore, multi-writer, and server storage remain open. | Post-S3 storage evolution and `S10` |
 | `OD-GIT-001` | Decision 0006 resolves the packed local SHA-1 subset only for the explicit `local-git-sha1-packed-v1` acquisition selector. After protected merge, Decision 0010 additionally resolves only the explicit `local-gitlinks-v1` representation of committed mode `160000` boundaries, bounded root `.gitmodules` metadata, and depth-one separately supplied local nested commit verification. Residual decisions cover remote protocols and identity resolution, SHA-256, LFS, shallow and bare repositories, alternates, promisor/partial clones, MIDX authority, symlinks, nested analysis/federation/recursion, complete Git configuration semantics, automatic repair, and history rewrite. Legacy invocations still reject packed objects without R1 and reject gitlinks without R2. | Remote and remaining post-S1 `FR-ACQ-*` |
 | `OD-CMP-001` | Decision 0009 resolves only `codenoesis.contract-capability/openapi-3.1-http-json/v1`, deterministic provider/client operation federation, heuristic non-confirmation, and source-neutral S6 identities when its protected ratification revision is manually merged. Decision 0007 resolves only the `implementation-aware-http-json/v1` field-level projection, evidence separation, seven dimensions, classifier rules, and oracle. Residual decisions cover complete OpenAPI, AsyncAPI, GraphQL, Protobuf, events, package/SCIP and event/schema authority, framework-specific semantics, observation coverage, protocol behavior, and causal evidence. | Remaining `S6`–`S7` compatibility capabilities |
@@ -1897,6 +2046,14 @@ LocalQueryResultV4 dispatch after protected manual merge. Macro expansion,
 active cfg worlds, compiler/type/trait/value resolution, generated code,
 calls, runtime behavior or observation, migration, and explorer/export
 semantics remain open.
+The
+[S4 R7 revision-bound SCIP import decision](decisions/0017-s4-r7-scip-import-contract.md)
+resolves only explicit static import of one bound Rust SCIP v0.9.0 artifact,
+compiler-symbol identity, four explicit relationship kinds, dual source/index
+evidence, fixed R7 limits, ErrorV14, and V10-only LocalQueryResultV5 dispatch
+after protected manual merge. Index generation, compiler or build execution,
+macro expansion, reliable call or data-flow meaning, runtime behavior,
+migration, and explorer/export semantics remain open.
 The
 [S5 incremental refresh decision](decisions/0008-s5-incremental-refresh-contract.md)
 resolves only the revision-neutral Rust-workspace analysis cache,

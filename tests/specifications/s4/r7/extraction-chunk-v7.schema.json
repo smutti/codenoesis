@@ -1,0 +1,521 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/extraction-chunk-v7.schema.json",
+  "title": "CodeNoesis ExtractionChunkV7",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ontology_version",
+    "repository_identity",
+    "subject",
+    "semantic_hash",
+    "entities",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.extraction-chunk/v7"
+    },
+    "ontology_version": {
+      "const": "codenoesis.ontology/rust/v7"
+    },
+    "repository_identity": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:[a-z0-9][a-z0-9._:-]{0,254}$"
+    },
+    "subject": {
+      "$ref": "../r4/extraction-chunk-v4.schema.json#/$defs/subject"
+    },
+    "semantic_hash": {
+      "$ref": "../extraction-chunk-v2.schema.json#/$defs/hash"
+    },
+    "entities": {
+      "type": "array",
+      "maxItems": 30000,
+      "items": {
+        "$ref": "#/$defs/graph_entity"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "maxItems": 60000,
+      "items": {
+        "$ref": "#/$defs/graph_relationship"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "maxItems": 90000,
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 90000,
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "#/$defs/graph_diagnostic"
+      }
+    },
+    "coverage": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "#/$defs/graph_coverage"
+      }
+    }
+  },
+  "$defs": {
+    "entity_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:entity:blake3:[0-9a-f]{64}$"
+    },
+    "nullable_entity_id": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/entity_id"
+        }
+      ]
+    },
+    "evidence_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:evidence:(blake3|sha256):[0-9a-f]{64}$"
+    },
+    "compiler_evidence_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:evidence:sha256:[0-9a-f]{64}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "safe_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?/)(?!.*//)[^\\u0000]+$"
+    },
+    "source_range": {
+      "oneOf": [
+        {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "prefixItems": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "integer",
+              "minimum": 0
+            }
+          ],
+          "items": false
+        },
+        {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "prefixItems": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "integer",
+              "minimum": 0
+            }
+          ],
+          "items": false
+        }
+      ]
+    },
+    "graph_entity": {
+      "anyOf": [
+        {
+          "$ref": "../r6/extraction-chunk-v6.schema.json#/$defs/graph_entity"
+        },
+        {
+          "$ref": "#/$defs/compiler_symbol"
+        }
+      ]
+    },
+    "compiler_symbol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "symbol",
+        "display_name",
+        "scope",
+        "binding_state",
+        "identity_preimage",
+        "source_entity_id",
+        "compiler_evidence_ids",
+        "source_evidence_ids"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "kind": {
+          "const": "compiler.symbol"
+        },
+        "symbol": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 16384
+        },
+        "display_name": {
+          "type": "string",
+          "maxLength": 16384
+        },
+        "scope": {
+          "enum": [
+            "global",
+            "local"
+          ]
+        },
+        "binding_state": {
+          "enum": [
+            "in_repository_bound",
+            "external_unbound",
+            "generated_unbound"
+          ]
+        },
+        "identity_preimage": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 6,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 16384
+          }
+        },
+        "source_entity_id": {
+          "$ref": "#/$defs/nullable_entity_id"
+        },
+        "compiler_evidence_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/compiler_evidence_id"
+          }
+        },
+        "source_evidence_ids": {
+          "type": "array",
+          "maxItems": 100000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        }
+      }
+    },
+    "graph_relationship": {
+      "anyOf": [
+        {
+          "$ref": "../r6/extraction-chunk-v6.schema.json#/$defs/graph_relationship"
+        },
+        {
+          "$ref": "#/$defs/compiler_relationship"
+        }
+      ]
+    },
+    "compiler_relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "source",
+        "target",
+        "evidence_ids",
+        "provenance",
+        "endpoint_binding"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:relationship:blake3:[0-9a-f]{64}$"
+        },
+        "kind": {
+          "enum": [
+            "RESOLVES_TO",
+            "REFERENCES",
+            "IMPLEMENTS",
+            "TYPE_DEFINITION"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "target": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "evidence_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        },
+        "provenance": {
+          "const": "validated_scip_v0.9.0"
+        },
+        "endpoint_binding": {
+          "const": "unique"
+        }
+      }
+    },
+    "claim": {
+      "$ref": "../r6/extraction-chunk-v6.schema.json#/$defs/claim"
+    },
+    "evidence": {
+      "anyOf": [
+        {
+          "$ref": "../r6/extraction-chunk-v6.schema.json#/$defs/evidence"
+        },
+        {
+          "$ref": "#/$defs/compiler_evidence"
+        }
+      ]
+    },
+    "compiler_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "artifact_sha256",
+        "record_kind",
+        "document_path",
+        "range",
+        "symbol",
+        "symbol_roles",
+        "relationship_target",
+        "relationship_flags"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:evidence:sha256:[0-9a-f]{64}$"
+        },
+        "artifact_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "record_kind": {
+          "enum": [
+            "occurrence",
+            "external_symbol",
+            "occurrence_resolution",
+            "occurrence_reference",
+            "symbol_relationship"
+          ]
+        },
+        "document_path": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/safe_path"
+            }
+          ]
+        },
+        "range": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/source_range"
+            }
+          ]
+        },
+        "symbol": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 16384
+        },
+        "symbol_roles": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 127
+            }
+          ]
+        },
+        "relationship_target": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 16384
+            }
+          ]
+        },
+        "relationship_flags": {
+          "type": "array",
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "is_reference",
+              "is_implementation",
+              "is_type_definition",
+              "is_definition"
+            ]
+          }
+        }
+      }
+    },
+    "graph_diagnostic": {
+      "anyOf": [
+        {
+          "$ref": "../r6/extraction-chunk-v6.schema.json#/$defs/graph_diagnostic"
+        },
+        {
+          "$ref": "#/$defs/compiler_diagnostic"
+        }
+      ]
+    },
+    "compiler_diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "code",
+        "subject_id",
+        "compiler_target_id",
+        "evidence_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:diagnostic:blake3:[0-9a-f]{64}$"
+        },
+        "code": {
+          "enum": [
+            "compiler_index.syntax_uncertainty_retained",
+            "compiler_index.syntax_compiler_conflict",
+            "compiler_index.ambiguous_symbol",
+            "compiler_index.incomplete_coverage"
+          ]
+        },
+        "subject_id": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "compiler_target_id": {
+          "$ref": "#/$defs/nullable_entity_id"
+        },
+        "evidence_ids": {
+          "type": "array",
+          "maxItems": 100000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        }
+      }
+    },
+    "graph_coverage": {
+      "anyOf": [
+        {
+          "$ref": "../r6/extraction-chunk-v6.schema.json#/$defs/graph_coverage"
+        },
+        {
+          "$ref": "#/$defs/compiler_coverage"
+        }
+      ]
+    },
+    "compiler_coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "subject",
+        "capability",
+        "state",
+        "evidence_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:coverage-gap:blake3:[0-9a-f]{64}$"
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 16384
+        },
+        "capability": {
+          "enum": [
+            "compiler_index.call_semantics_unavailable",
+            "compiler_index.generated_product_unbound",
+            "compiler_index.document_not_indexed",
+            "compiler_index.documentation_not_imported",
+            "compiler_index.absolute_project_root_redacted",
+            "compiler_index.arguments_redacted"
+          ]
+        },
+        "state": {
+          "enum": [
+            "unsupported",
+            "unbound",
+            "not_indexed",
+            "redacted"
+          ]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "maxItems": 100000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        }
+      }
+    }
+  }
+}
