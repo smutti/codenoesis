@@ -1,0 +1,64 @@
+{
+  "schema_version": "codenoesis.r6-pilot-observations/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/117",
+  "authorization": "https://github.com/smutti/codenoesis/issues/117#issuecomment-5183312890",
+  "observation_date": "2026-08-04",
+  "external_source_vendored": false,
+  "authority": "motivation-only lexical sample; not ontology truth, fixture, golden, benchmark, or product branch",
+  "environment": {
+    "os": "macOS 26.5.2",
+    "architecture": "arm64",
+    "sampling_input": "temporary non-vendored repository object databases at pinned commits",
+    "network_during_retained_contract_generation": false,
+    "timing_status": "not retained by the pre-issue lexical sample"
+  },
+  "pilots": [
+    {
+      "id": "lekton",
+      "repository": "https://github.com/dghilardi/lekton",
+      "commit": "7a4d1a4a30468f4c18ce158a9b825680b00f4820",
+      "git_commit_pinned": true,
+      "observed_license": "AGPL-3.0-or-later",
+      "command": "git grep -I -E -n '\\.(route|nest|merge)\\(' 7a4d1a4a30468f4c18ce158a9b825680b00f4820 -- '*.rs'; git grep -I -E -n '\\.(layer|route_layer|with_state|service)\\(' 7a4d1a4a30468f4c18ce158a9b825680b00f4820 -- '*.rs'",
+      "observed_counts": {
+        "route_like_builder_source": 88,
+        "layer_or_service_builder_source": 7
+      },
+      "ontology_truth": false,
+      "golden_fixture": false,
+      "duration_ms": null,
+      "gaps": [
+        "lexical occurrence count does not classify approved source forms",
+        "no runtime reachability or handler execution was observed"
+      ],
+      "limitations": [
+        "timing was not retained",
+        "counts include lexical false positives until the future R6 product oracle classifies them"
+      ]
+    },
+    {
+      "id": "rustdesk",
+      "repository": "https://github.com/rustdesk/rustdesk",
+      "commit": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "git_commit_pinned": true,
+      "observed_license": "AGPL-3.0",
+      "command": "git grep -I -E -n '#\\[[^]]*(command|runtime|bridge|component|service|handler)' d412d198720aa56f6cfed2dfad262e8fb1322fb7 -- '*.rs'",
+      "observed_counts": {
+        "route_like_builder_source": 0,
+        "attribute_macro_role_looking_source": 75
+      },
+      "ontology_truth": false,
+      "golden_fixture": false,
+      "gitlink_opened": false,
+      "duration_ms": null,
+      "gaps": [
+        "attribute and macro meaning is unresolved without expansion",
+        "no generated declaration or runtime behavior was observed"
+      ],
+      "limitations": [
+        "timing was not retained",
+        "name and attribute-path matches are motivation-only lexical candidates"
+      ]
+    }
+  ]
+}

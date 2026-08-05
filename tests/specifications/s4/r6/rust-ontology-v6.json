@@ -1,0 +1,134 @@
+{
+  "schema_version": "codenoesis.ontology/rust/v6",
+  "extends": {
+    "ontology_version": "codenoesis.ontology/rust/v5",
+    "contract_path": "tests/specifications/s4/r5/rust-ontology-v5.json",
+    "contract_sha256": "ed5460ba08308cc1d075fb92841943be3354ef33a46327a11f86e284a5cff348"
+  },
+  "selector": "codenoesis.rust-framework-profile/rust-framework-declarations-v1",
+  "framework_entity_kinds": [
+    "framework.component_declaration",
+    "framework.configuration_declaration",
+    "framework.endpoint_declaration",
+    "framework.handler_declaration",
+    "framework.route_declaration",
+    "framework.service_declaration"
+  ],
+  "entity_semantics": {
+    "framework.component_declaration": "Committed framework-neutral component source declaration or explicitly unresolved candidate; never runtime observation.",
+    "framework.configuration_declaration": "Committed framework-neutral configuration source declaration or explicitly unresolved candidate; never runtime observation.",
+    "framework.endpoint_declaration": "Committed framework-neutral endpoint source declaration or explicitly unresolved candidate; never runtime observation.",
+    "framework.handler_declaration": "Committed framework-neutral handler source declaration or explicitly unresolved candidate; never runtime observation.",
+    "framework.route_declaration": "Committed framework-neutral route source declaration or explicitly unresolved candidate; never runtime observation.",
+    "framework.service_declaration": "Committed framework-neutral service source declaration or explicitly unresolved candidate; never runtime observation."
+  },
+  "epistemic_states": [
+    "declared_registration_syntax",
+    "candidate_unresolved"
+  ],
+  "state_semantics": {
+    "declared_registration_syntax": "A closed source-profile rule matched committed registration syntax; reachability and execution are not claimed.",
+    "candidate_unresolved": "Reviewed syntax resembles a role but attribute, macro, cfg, type, trait, value, generated-code, or runtime meaning remains unresolved.",
+    "resolved_or_observed_runtime_behavior": "unsupported and forbidden in R6 output"
+  },
+  "identity": {
+    "domain": "codenoesis.entity-id/framework-declaration/v1",
+    "normalization": "NFC",
+    "canonical_preimage": "RFC8785 JSON array prefixed by the domain",
+    "hash": "BLAKE3-256",
+    "preimage_fields": [
+      "repository_identity",
+      "crate_identity",
+      "lexical_owner_identity",
+      "role",
+      "source_profile",
+      "source_form_identity",
+      "normalized_declared_key_or_target_spelling"
+    ],
+    "forbidden_inputs": [
+      "commit_oid",
+      "byte_offset",
+      "source_order",
+      "scheduler_order",
+      "active_cfg_world",
+      "macro_output",
+      "inferred_type",
+      "evaluated_value",
+      "runtime_address"
+    ],
+    "collision_behavior": "fail before publication; no ordinal, offset, schedule, or retry repair"
+  },
+  "relationship_kinds": [
+    "DEFINES"
+  ],
+  "relationship_semantics": {
+    "DEFINES": "The existing lexical owner contains the committed framework declaration entity; no runtime relation is implied."
+  },
+  "forbidden_relationship_kinds": [
+    "CALLS",
+    "EXECUTES",
+    "SERVES",
+    "STARTS",
+    "REACHES",
+    "ACTIVATES"
+  ],
+  "compilation_presence_states": [
+    "unconditional",
+    "conditional_unknown",
+    "attribute_transform_unknown"
+  ],
+  "target_binding_states": [
+    "resolved_unique",
+    "unresolved_external",
+    "ambiguous_local",
+    "not_applicable"
+  ],
+  "coverage_capability_states": {
+    "rust.attribute_semantics_not_interpreted": "unsupported",
+    "rust.cfg_presence_unresolved": "not_resolved",
+    "rust.macro_generated_items_not_analyzed": "not_analyzed",
+    "rust.framework_runtime_not_observed": "not_observed",
+    "rust.framework_target_resolution_unresolved": "not_resolved",
+    "rust.framework_target_resolution_ambiguous": "ambiguous",
+    "rust.framework_source_form_unsupported": "unsupported"
+  },
+  "claim_policy": {
+    "source_profile_rule": "deterministic parser rule",
+    "evidence": "one or more exact committed UTF-8 byte spans",
+    "candidate_arguments": "evidence only",
+    "runtime_state": "never emitted",
+    "generated_declarations": "never emitted"
+  },
+  "limits": {
+    "framework_declarations_per_source": 4096,
+    "explicit_registration_chain_segments": 256,
+    "registration_expression_depth": 64,
+    "literal_route_path_bytes": 2048,
+    "literal_method_or_configuration_key_bytes": 1024,
+    "target_spelling_bytes": 1024,
+    "outer_attributes_per_declaration": 128,
+    "attribute_token_bytes": 16384,
+    "permutations": 50
+  },
+  "compatibility": {
+    "v8_v3": "byte-identical",
+    "v7_v2": "byte-identical",
+    "v4_v6_v1": "byte-identical",
+    "selector_absent_r0_r5": "byte-identical",
+    "migration": false
+  },
+  "forbidden_authority": [
+    "framework execution",
+    "macro expansion",
+    "cfg activation",
+    "compiler resolution",
+    "type resolution",
+    "trait resolution",
+    "value evaluation",
+    "generated source",
+    "runtime observation",
+    "dependency fetch",
+    "network access",
+    "model output"
+  ]
+}

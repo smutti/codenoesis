@@ -1,0 +1,217 @@
+{
+  "schema_version": "codenoesis.r6-invalid-cases/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/117",
+  "authorization": "https://github.com/smutti/codenoesis/issues/117#issuecomment-5183312890",
+  "cases": [
+    {
+      "id": "r6-001-malformed-builder",
+      "class": "malformed",
+      "expected_error": "extraction.invalid_framework_declaration",
+      "expected_behavior": "reject malformed reviewed source form",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false
+    },
+    {
+      "id": "r6-002-nfc-collision",
+      "class": "normalization_collision",
+      "expected_error": "extraction.framework_declaration_identity_conflict",
+      "expected_behavior": "reject colliding NFC identity preimages",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false
+    },
+    {
+      "id": "r6-003-ambiguous-target",
+      "class": "ambiguous_resolution",
+      "expected_error": "extraction.ambiguous_framework_target",
+      "expected_behavior": "emit reviewed ambiguity gap or fail where exact binding is mandatory",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false
+    },
+    {
+      "id": "r6-004-unsupported-source-form",
+      "class": "unsupported_source_form",
+      "expected_error": "extraction.invalid_framework_declaration",
+      "expected_behavior": "reject attempted authoritative promotion outside the closed source profile",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false
+    },
+    {
+      "id": "r6-005-unsupported-composition",
+      "class": "unsupported_composition",
+      "expected_error": "extraction.unsupported_framework_composition",
+      "expected_behavior": "reject before acquisition",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false
+    },
+    {
+      "id": "r6-006-unresolvable-evidence",
+      "class": "unresolvable_evidence",
+      "expected_error": "extraction.unresolvable_framework_evidence",
+      "expected_behavior": "reject before graph ingestion",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false
+    },
+    {
+      "id": "r6-007-unsafe-path",
+      "class": "unsafe_path",
+      "expected_error": "input.unsafe_framework_path",
+      "expected_behavior": "reject absolute or parent-traversing path",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false
+    },
+    {
+      "id": "r6-008-symlink-escape",
+      "class": "symlink_escape",
+      "expected_error": "input.unsafe_framework_path",
+      "expected_behavior": "reject evidence path escaping through symlink",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false
+    },
+    {
+      "id": "r6-009-privacy-locator",
+      "class": "privacy_boundary",
+      "expected_error": "extraction.invalid_framework_declaration",
+      "expected_behavior": "reject plaintext credential or external locator in derived output",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false
+    },
+    {
+      "id": "r6-010-comment-decoy",
+      "class": "hard_negative",
+      "expected_error": null,
+      "expected_behavior": "emit no framework declaration for comment-only form",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false
+    },
+    {
+      "id": "r6-011-runtime-authority",
+      "class": "forbidden_authority",
+      "expected_error": "extraction.invalid_framework_declaration",
+      "expected_behavior": "reject observed, active, reachable, serving, or executing state",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false
+    },
+    {
+      "id": "r6-020-limit-framework-declarations-per-source",
+      "class": "limit_plus_one",
+      "expected_error": "extraction.framework_declaration_limit_exceeded",
+      "expected_behavior": "reject before proportional allocation or publication",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false,
+      "limit": "framework_declarations_per_source",
+      "maximum": 4096,
+      "observed": 4097
+    },
+    {
+      "id": "r6-021-limit-explicit-registration-chain-segments",
+      "class": "limit_plus_one",
+      "expected_error": "extraction.framework_declaration_limit_exceeded",
+      "expected_behavior": "reject before proportional allocation or publication",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false,
+      "limit": "explicit_registration_chain_segments",
+      "maximum": 256,
+      "observed": 257
+    },
+    {
+      "id": "r6-022-limit-registration-expression-depth",
+      "class": "limit_plus_one",
+      "expected_error": "extraction.framework_declaration_limit_exceeded",
+      "expected_behavior": "reject before proportional allocation or publication",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false,
+      "limit": "registration_expression_depth",
+      "maximum": 64,
+      "observed": 65
+    },
+    {
+      "id": "r6-023-limit-literal-route-path-bytes",
+      "class": "limit_plus_one",
+      "expected_error": "extraction.framework_declaration_limit_exceeded",
+      "expected_behavior": "reject before proportional allocation or publication",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false,
+      "limit": "literal_route_path_bytes",
+      "maximum": 2048,
+      "observed": 2049
+    },
+    {
+      "id": "r6-024-limit-literal-method-or-configuration-key-bytes",
+      "class": "limit_plus_one",
+      "expected_error": "extraction.framework_declaration_limit_exceeded",
+      "expected_behavior": "reject before proportional allocation or publication",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false,
+      "limit": "literal_method_or_configuration_key_bytes",
+      "maximum": 1024,
+      "observed": 1025
+    },
+    {
+      "id": "r6-025-limit-target-spelling-bytes",
+      "class": "limit_plus_one",
+      "expected_error": "extraction.framework_declaration_limit_exceeded",
+      "expected_behavior": "reject before proportional allocation or publication",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false,
+      "limit": "target_spelling_bytes",
+      "maximum": 1024,
+      "observed": 1025
+    },
+    {
+      "id": "r6-026-limit-outer-attributes-per-declaration",
+      "class": "limit_plus_one",
+      "expected_error": "extraction.framework_declaration_limit_exceeded",
+      "expected_behavior": "reject before proportional allocation or publication",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false,
+      "limit": "outer_attributes_per_declaration",
+      "maximum": 128,
+      "observed": 129
+    },
+    {
+      "id": "r6-027-limit-attribute-token-bytes",
+      "class": "limit_plus_one",
+      "expected_error": "extraction.framework_declaration_limit_exceeded",
+      "expected_behavior": "reject before proportional allocation or publication",
+      "stdout_empty": true,
+      "partial_publication": false,
+      "store_or_document_mutation": false,
+      "limit": "attribute_token_bytes",
+      "maximum": 16384,
+      "observed": 16385
+    }
+  ],
+  "determinism": {
+    "permutations": 50,
+    "isolated_replay": true
+  },
+  "security_non_authority": [
+    "cargo",
+    "rustc",
+    "build.rs",
+    "proc_macro",
+    "target",
+    "generated_source",
+    "network",
+    "model_provider",
+    "external_repository"
+  ]
+}
