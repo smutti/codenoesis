@@ -87,6 +87,18 @@ fn gt_fr_ext_011_explicit_builder_declarations() {
 }
 
 #[test]
+fn conf_fr_ext_011_reviewed_fixture_newlines_are_platform_neutral() {
+    assert_eq!(
+        normalize_reviewed_fixture_bytes(b"#[component]\r\nfn app() {}\r\n"),
+        Ok(b"#[component]\nfn app() {}\n".to_vec())
+    );
+    assert_eq!(
+        normalize_reviewed_fixture_bytes(b"#[component]\rfn app() {}\n"),
+        Err("reviewed fixture contains a bare carriage return")
+    );
+}
+
+#[test]
 fn gt_fr_ext_011_attribute_macro_candidates_remain_unresolved() {
     let graph = &extract_fixture(0, false).knowledge.graph;
     let candidates = graph
@@ -547,7 +559,7 @@ fn fixture_inventory(rotation: usize, reverse: bool) -> RepositoryInventory {
                 path.to_owned(),
                 RegularFileMode::Regular,
                 ObjectId::parse_sha1(blob_oid).expect("reviewed R6 blob OID"),
-                fs::read(root.join(path)).expect("read reviewed R6 fixture file"),
+                read_reviewed_fixture(&root.join(path)),
             )
         })
         .collect::<Vec<_>>();
@@ -565,4 +577,30 @@ fn fixture_inventory(rotation: usize, reverse: bool) -> RepositoryInventory {
         u64::try_from(files.len()).expect("reviewed R6 file count"),
         files,
     ))
+}
+
+fn read_reviewed_fixture(path: &Path) -> Vec<u8> {
+    let bytes = fs::read(path).unwrap_or_else(|error| {
+        panic!("read reviewed R6 fixture file {}: {error}", path.display())
+    });
+    normalize_reviewed_fixture_bytes(&bytes)
+        .unwrap_or_else(|reason| panic!("invalid reviewed R6 fixture {}: {reason}", path.display()))
+}
+
+fn normalize_reviewed_fixture_bytes(bytes: &[u8]) -> Result<Vec<u8>, &'static str> {
+    let mut normalized = Vec::with_capacity(bytes.len());
+    let mut index = 0;
+    while index < bytes.len() {
+        if bytes[index] != b'\r' {
+            normalized.push(bytes[index]);
+            index += 1;
+            continue;
+        }
+        if bytes.get(index + 1) != Some(&b'\n') {
+            return Err("reviewed fixture contains a bare carriage return");
+        }
+        normalized.push(b'\n');
+        index += 2;
+    }
+    Ok(normalized)
 }

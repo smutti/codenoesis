@@ -99,9 +99,9 @@
     "domain_tests_passed": 2,
     "contract_tests_passed": 3,
     "application_tests_passed": 1,
-    "rust_adapter_tests_passed": 11,
+    "rust_adapter_tests_passed": 12,
     "public_black_box_tests_passed": 6,
-    "total_focused_tests_passed": 23,
+    "total_focused_tests_passed": 24,
     "required_machine_linkable_tests_present": 13,
     "focused_log_committed": false
   },
@@ -278,10 +278,11 @@
   },
   "corrections": {
     "authorized_rounds": 4,
-    "rounds_used": 1,
-    "remaining_rounds_before_pull_request_review": 3,
+    "rounds_used": 2,
+    "remaining_authorized_rounds": 2,
     "observations": [
-      "The Lekton packed pilot exposed a valid complex layer target outside the closed direct-target source profile. The bounded correction leaves that source form unpromoted instead of failing the repository, while malformed reviewed forms still fail typed and all immutable fixture declarations remain exact."
+      "The Lekton packed pilot exposed a valid complex layer target outside the closed direct-target source profile. The bounded correction leaves that source form unpromoted instead of failing the repository, while malformed reviewed forms still fail typed and all immutable fixture declarations remain exact.",
+      "Windows CI checked out reviewed fixture text with CRLF and changed source-span evidence IDs in the adapter-only synthetic inventory. The correction normalizes checkout transport newlines to canonical Git blob LF bytes, rejects bare carriage returns, and leaves product acquisition and immutable fixture bytes unchanged."
     ],
     "same_deterministic_failure_repeated_after_fix": false
   },

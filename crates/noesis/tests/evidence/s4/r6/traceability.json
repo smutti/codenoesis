@@ -25,6 +25,7 @@
         "reg_fr_cli_001_r6_selector_absence_is_byte_identical"
       ],
       "additional_tests": [
+        "conf_fr_ext_011_reviewed_fixture_newlines_are_platform_neutral",
         "conf_fr_ext_011_error_v13_invalid_matrix_is_strict",
         "gt_fr_ext_011_application_propagates_typed_r6_failure",
         "gt_fr_ext_011_qualified_simple_method_wrapper_is_reviewed",
@@ -152,7 +153,7 @@
       "id": "NFR-TST-001",
       "role": "compatibility",
       "tests": [
-        "all 23 focused R6 tests",
+        "all 24 focused R6 tests",
         "complete repository gate"
       ]
     },
