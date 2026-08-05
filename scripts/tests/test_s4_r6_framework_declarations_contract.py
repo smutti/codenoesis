@@ -486,6 +486,73 @@ class S4R6FrameworkDeclarationsGovernanceTests(unittest.TestCase):
             },
         )
 
+    def test_golden_evidence_ids_are_schema_representable_and_queryable(self) -> None:
+        facts = load_json(EXPECTED_FACTS_PATH)
+        evidence_ids = [
+            declaration["evidence"]["id"]
+            for declaration in facts["declarations"]
+        ]
+        self.assertEqual(len(evidence_ids), 24)
+        self.assertEqual(len(set(evidence_ids)), len(evidence_ids))
+
+        chunk = load_json(CHUNK_SCHEMA_PATH)
+        evidence_pattern = chunk["$defs"]["evidence_id"]["pattern"]
+        self.assertTrue(
+            all(re.fullmatch(evidence_pattern, identifier) for identifier in evidence_ids),
+            f"reviewed SHA-256 evidence IDs are rejected by {evidence_pattern}",
+        )
+        self.assertEqual(
+            chunk["properties"]["evidence"]["items"]["$ref"],
+            "#/$defs/evidence",
+        )
+        self.assertEqual(
+            chunk["$defs"]["evidence"]["properties"]["id"]["$ref"],
+            "#/$defs/evidence_id",
+        )
+
+        graph = load_json(GRAPH_SCHEMA_PATH)
+        self.assertEqual(
+            graph["properties"]["evidence"]["items"]["$ref"],
+            "extraction-chunk-v6.schema.json#/$defs/evidence",
+        )
+
+        query = load_json(QUERY_SCHEMA_PATH)
+        self.assertEqual(
+            query["properties"]["evidence"]["items"]["$ref"],
+            "extraction-chunk-v6.schema.json#/$defs/evidence",
+        )
+        evidence_rule = next(
+            rule
+            for rule in query["allOf"]
+            if rule["if"]["properties"]["result_kind"].get("const") == "evidence"
+        )
+        query_pattern = evidence_rule["then"]["properties"]["requested_id"][
+            "pattern"
+        ]
+        for identifier in evidence_ids:
+            with self.subTest(query_identifier=identifier):
+                self.assertIsNotNone(re.fullmatch(query_pattern, identifier))
+
+        for result_kind in (
+            "entity",
+            "relationship",
+            "claim",
+            "diagnostic",
+            "coverage_gap",
+            "document",
+        ):
+            rule = next(
+                rule
+                for rule in query["allOf"]
+                if rule["if"]["properties"]["result_kind"].get("const")
+                == result_kind
+            )
+            requested_pattern = rule["then"]["properties"]["requested_id"][
+                "pattern"
+            ]
+            self.assertIn(":blake3:", requested_pattern)
+            self.assertIsNone(re.fullmatch(requested_pattern, evidence_ids[0]))
+
     def test_subset_and_ontology_keep_source_syntax_non_runtime(self) -> None:
         subset = load_json(SUBSET_PATH)
         self.assertEqual(set(subset["entity_kinds"]), ENTITY_KINDS)
