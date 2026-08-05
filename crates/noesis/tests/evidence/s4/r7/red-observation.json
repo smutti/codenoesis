@@ -1,0 +1,44 @@
+{
+  "schema_version": "codenoesis.product-red-observation/s4-r7-v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/125",
+  "authorization": "https://github.com/smutti/codenoesis/issues/125#issuecomment-5196104999",
+  "requirement_ids": [
+    "FR-EXT-005"
+  ],
+  "slice": "S4",
+  "roadmap_capability": "R7",
+  "risk": "high",
+  "base_sha": "b7d9e087164c0d2ce701585f437b3fbe269239e6",
+  "command": "cargo test --locked -p noesis --test e2e_fr_ext_005_scip_import -- e2e_fr_ext_005_revision_bound_scip_import --exact",
+  "runner_exit": 101,
+  "expected_reason": "The complete explicit R7 selector reaches the pre-R7 unknown-option boundary and the black-box test rejects the legacy failure because RepositorySnapshotV10 success is required.",
+  "actual_reason": "expected RepositorySnapshotV10 success; observed approved unknown compiler-index selector Red",
+  "subject": {
+    "exit": 2,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "{\"code\":\"input.invalid_revision\",\"context\":{},\"message\":\"invalid revision\",\"retryable\":false,\"schema_version\":\"codenoesis.error/v4\",\"stage\":\"input\"}\n",
+    "stderr_bytes": 149,
+    "stderr_sha256": "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe"
+  },
+  "side_effects": {
+    "store_created": false,
+    "documents_created": false,
+    "build_sentinel_created": false,
+    "indexer_sentinel_created": false
+  },
+  "retained_log": {
+    "path": "crates/noesis/tests/evidence/s4/r7/red.log",
+    "byte_length": 1218,
+    "sha256": "b610049be4e5fbd5ab12023a886799bc6faa44209be40f65bf4c3c575033eedc"
+  },
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "rustc_commit": "8bab26f4f68e0e26f0bb7960be334d5b520ea452",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "features": "default",
+    "network_required": false
+  }
+}
