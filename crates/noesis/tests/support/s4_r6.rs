@@ -124,28 +124,68 @@ impl MaterializedFrameworkDeclarationsRepository {
     }
 
     pub fn scan(&self) -> Output {
-        Command::new(env!("CARGO_BIN_EXE_noesis"))
+        self.scan_with_profiles(
+            true,
+            true,
+            Some("rust-semantic-depth-v1"),
+            Some("rust-framework-declarations-v1"),
+        )
+    }
+
+    pub fn scan_with_profiles(
+        &self,
+        workspace_profile: bool,
+        manifest_profile: bool,
+        rust_semantic_profile: Option<&str>,
+        rust_framework_profile: Option<&str>,
+    ) -> Output {
+        let mut command = Command::new(env!("CARGO_BIN_EXE_noesis"));
+        command
             .args(["scan", "--repository"])
             .arg(&self.worktree)
             .args(["--repository-id", REPOSITORY_ID, "--revision"])
             .arg(&self.commit_oid)
-            .args([
-                "--profile",
-                "standard-local-s4",
-                "--workspace-profile",
-                "cargo-root-package-v1",
-                "--manifest-profile",
-                "cargo-manifest-facts-v1",
-                "--rust-semantic-profile",
-                "rust-semantic-depth-v1",
-                "--rust-framework-profile",
-                "rust-framework-declarations-v1",
-                "--store",
-            ])
+            .args(["--profile", "standard-local-s4"]);
+        if workspace_profile {
+            command.args(["--workspace-profile", "cargo-root-package-v1"]);
+        }
+        if manifest_profile {
+            command.args(["--manifest-profile", "cargo-manifest-facts-v1"]);
+        }
+        if let Some(profile) = rust_semantic_profile {
+            command.args(["--rust-semantic-profile", profile]);
+        }
+        if let Some(profile) = rust_framework_profile {
+            command.args(["--rust-framework-profile", profile]);
+        }
+        command
+            .arg("--store")
             .arg(&self.store)
             .args(["--format", "json"])
             .output()
             .expect("launch R6 framework-declarations subject")
+    }
+
+    pub fn docs(&self) -> Output {
+        Command::new(env!("CARGO_BIN_EXE_noesis"))
+            .args(["docs", "--store"])
+            .arg(&self.store)
+            .args(["--repository-id", REPOSITORY_ID, "--output"])
+            .arg(&self.documents)
+            .args(["--format", "json"])
+            .output()
+            .expect("launch R6 documentation subject")
+    }
+
+    pub fn query(&self, requested_id: &str) -> Output {
+        Command::new(env!("CARGO_BIN_EXE_noesis"))
+            .args(["query", "--store"])
+            .arg(&self.store)
+            .args(["--repository-id", REPOSITORY_ID, "--documents"])
+            .arg(&self.documents)
+            .args(["--id", requested_id, "--format", "json"])
+            .output()
+            .expect("launch R6 exact-ID query subject")
     }
 
     pub fn build_sentinel(&self) -> PathBuf {
@@ -160,8 +200,7 @@ impl Drop for MaterializedFrameworkDeclarationsRepository {
 }
 
 pub fn fixture_root() -> PathBuf {
-    Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("../../tests/fixtures/s4/framework-declarations-v1")
+    Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/s4/framework-declarations-v1")
 }
 
 fn update_index(worktree: &Path, global_config: &Path, mode: &str, oid: &str, path: &str) {

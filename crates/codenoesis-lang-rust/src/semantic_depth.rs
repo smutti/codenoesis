@@ -25,14 +25,14 @@ use unicode_normalization::UnicodeNormalization as _;
 use crate::TreeSitterRustWorkspaceExtractor;
 
 #[derive(Clone)]
-struct SourceContext<'a> {
-    repository_identity: String,
-    crate_id: String,
-    source_file_id: String,
-    path: String,
-    base_module_path: String,
-    base_module_id: String,
-    file: &'a InventoryFile,
+pub(crate) struct SourceContext<'a> {
+    pub(crate) repository_identity: String,
+    pub(crate) crate_id: String,
+    pub(crate) source_file_id: String,
+    pub(crate) path: String,
+    pub(crate) base_module_path: String,
+    pub(crate) base_module_id: String,
+    pub(crate) file: &'a InventoryFile,
 }
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
@@ -563,7 +563,7 @@ fn map_manifest_source_error(error: CargoManifestFactError) -> RustSemanticError
     }
 }
 
-fn source_contexts<'a>(
+pub(crate) fn source_contexts<'a>(
     knowledge: &codenoesis_domain::s4_r4::CargoManifestKnowledge,
     inventory: &'a RepositoryInventory,
 ) -> Result<Vec<SourceContext<'a>>, RustSemanticError> {
@@ -629,12 +629,14 @@ fn source_contexts<'a>(
     Ok(contexts)
 }
 
-fn source_text<'a>(context: &'a SourceContext<'a>) -> Result<&'a str, RustSemanticError> {
+pub(crate) fn source_text<'a>(
+    context: &'a SourceContext<'a>,
+) -> Result<&'a str, RustSemanticError> {
     std::str::from_utf8(context.file.bytes())
         .map_err(|_| invalid_declaration(&context.path, 0, "utf8"))
 }
 
-fn parse_tree(path: &str, source: &str) -> Result<Tree, RustSemanticError> {
+pub(crate) fn parse_tree(path: &str, source: &str) -> Result<Tree, RustSemanticError> {
     let mut parser = Parser::new();
     parser
         .set_language(&tree_sitter_rust::LANGUAGE.into())
@@ -1646,13 +1648,23 @@ fn attributed_children<'tree>(
     let mut values = Vec::new();
     for child in parent.named_children(&mut cursor) {
         match child.kind() {
-            "attribute_item" => pending.push(parse_attribute(child, source, path)?),
+            "attribute_item" => {
+                enforce_count(
+                    RustSemanticLimit::OuterAttributesPerDeclaration,
+                    pending.len().saturating_add(1),
+                )?;
+                pending.push(parse_attribute(child, source, path)?);
+            }
             "line_comment" | "block_comment" | "inner_attribute_item" => {}
             _ => {
                 let mut attributes = std::mem::take(&mut pending);
                 let mut child_cursor = child.walk();
                 for direct in child.named_children(&mut child_cursor) {
                     if direct.kind() == "attribute_item" {
+                        enforce_count(
+                            RustSemanticLimit::OuterAttributesPerDeclaration,
+                            attributes.len().saturating_add(1),
+                        )?;
                         attributes.push(parse_attribute(direct, source, path)?);
                     }
                 }
@@ -1672,7 +1684,7 @@ fn parse_attribute(
     source: &str,
     path: &str,
 ) -> Result<AttributeDraft, RustSemanticError> {
-    let token_text = node_text(node, source).to_owned();
+    let token_text = node_text(node, source);
     enforce_bytes(RustSemanticLimit::AttributeTokenBytes, token_text.len())?;
     let compact = token_text
         .chars()
@@ -1694,7 +1706,7 @@ fn parse_attribute(
     }
     Ok(AttributeDraft {
         kind,
-        token_text,
+        token_text: token_text.to_owned(),
         span: node_range(node),
     })
 }

@@ -6,6 +6,7 @@ mod s4;
 mod s4_r3;
 mod s4_r4;
 mod s4_r5;
+mod s4_r6;
 mod s5;
 mod s6;
 
@@ -15,6 +16,7 @@ pub use s4::*;
 pub use s4_r3::*;
 pub use s4_r4::*;
 pub use s4_r5::*;
+pub use s4_r6::*;
 pub use s5::*;
 pub use s6::*;
 
@@ -543,6 +545,7 @@ fn publication_candidate(value: &Value) -> Result<PublicationCandidate, Publicat
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V6
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V7
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V8
+            | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V9
     );
     let semantic = required_field(value, "semantic", "semantic")?;
     let repository = required_field(semantic, "repository", "semantic.repository")?;
@@ -656,7 +659,11 @@ fn publication_artifacts(
             required_str(chunk, "chunk_id", "extraction_chunk.chunk_id")?
         } else if matches!(
             chunk["schema_version"].as_str(),
-            Some("codenoesis.extraction-chunk/v4" | "codenoesis.extraction-chunk/v5")
+            Some(
+                "codenoesis.extraction-chunk/v4"
+                    | "codenoesis.extraction-chunk/v5"
+                    | "codenoesis.extraction-chunk/v6"
+            )
         ) {
             let subject = required_field(chunk, "subject", "extraction_chunk.subject")?;
             match required_str(subject, "kind", "extraction_chunk.subject.kind")? {

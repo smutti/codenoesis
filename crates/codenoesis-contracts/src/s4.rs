@@ -249,7 +249,13 @@ pub fn generate_documentation_v1(
     let modules = index
         .entities
         .values()
-        .filter(|entity| string_field(entity, "kind") == Ok("rust.module"))
+        .filter(|entity| {
+            string_field(entity, "kind") == Ok("rust.module")
+                && entity
+                    .pointer("/properties/source_file_id")
+                    .and_then(Value::as_str)
+                    .is_some()
+        })
         .collect::<Vec<_>>();
     let mut slug_counts = BTreeMap::<String, usize>::new();
     for module in &modules {
@@ -617,6 +623,7 @@ pub(super) struct GraphIndex {
     pub(super) repository_identity: String,
     cargo_manifest_declarations: bool,
     rust_semantic_depth: bool,
+    framework_declarations: bool,
     pub(super) entities: BTreeMap<String, Value>,
     relationships: Vec<Value>,
     pub(super) relationships_by_id: BTreeMap<String, Value>,
@@ -639,10 +646,16 @@ impl GraphIndex {
             .ok_or(DocumentationContractError::InvalidSnapshot)?;
         let cargo_manifest_declarations = matches!(
             string_field(graph, "schema_version"),
-            Ok("codenoesis.knowledge-graph/v4" | "codenoesis.knowledge-graph/v5")
+            Ok("codenoesis.knowledge-graph/v4"
+                | "codenoesis.knowledge-graph/v5"
+                | "codenoesis.knowledge-graph/v6")
         );
-        let rust_semantic_depth =
-            string_field(graph, "schema_version") == Ok("codenoesis.knowledge-graph/v5");
+        let rust_semantic_depth = matches!(
+            string_field(graph, "schema_version"),
+            Ok("codenoesis.knowledge-graph/v5" | "codenoesis.knowledge-graph/v6")
+        );
+        let framework_declarations =
+            string_field(graph, "schema_version") == Ok("codenoesis.knowledge-graph/v6");
         let diagnostics = if rust_semantic_depth {
             id_map(graph, "diagnostics")?
         } else {
@@ -677,6 +690,7 @@ impl GraphIndex {
             repository_identity,
             cargo_manifest_declarations,
             rust_semantic_depth,
+            framework_declarations,
             entities,
             relationships,
             relationships_by_id,
@@ -1009,8 +1023,10 @@ fn module_document(
             let target = string_field(relationship, "target").ok()?;
             let entity = index.entities.get(target)?;
             let kind = string_field(entity, "kind").ok()?;
-            (kind != "rust.module" && !(index.rust_semantic_depth && r5_entity_kind(kind)))
-                .then_some((relationship, entity))
+            (kind != "rust.module"
+                && !(index.rust_semantic_depth && r5_entity_kind(kind))
+                && !(index.framework_declarations && r6_entity_kind(kind)))
+            .then_some((relationship, entity))
         })
         .collect::<Vec<_>>();
     declarations.sort_by(|(_, left), (_, right)| {
@@ -1171,6 +1187,17 @@ fn module_document(
             &mut statements,
         )?;
     }
+    if index.framework_declarations {
+        append_framework_declarations(
+            index,
+            &document_id,
+            module_id,
+            source_file_id,
+            source_path,
+            &mut content,
+            &mut statements,
+        )?;
+    }
     Ok(DocumentDraft {
         document_id,
         kind: "module",
@@ -1280,6 +1307,7 @@ fn append_rust_semantic_depth(
     let mut diagnostics = Vec::new();
     for diagnostic in index.diagnostics.values() {
         if string_field(diagnostic, "code").is_ok_and(|code| code.starts_with("rust."))
+            && (!index.framework_declarations || !record_has_sha256_evidence(diagnostic)?)
             && record_has_evidence_path(index, diagnostic, source_path)?
         {
             diagnostics.push(diagnostic);
@@ -1321,6 +1349,7 @@ fn append_rust_semantic_depth(
     let mut gaps = Vec::new();
     for gap in index.coverage.values() {
         if string_field(gap, "capability").is_ok_and(|capability| capability.starts_with("rust."))
+            && (!index.framework_declarations || !record_has_sha256_evidence(gap)?)
             && record_has_evidence_path(index, gap, source_path)?
         {
             gaps.push(gap);
@@ -1377,6 +1406,174 @@ fn record_has_evidence_path(
         })
 }
 
+fn record_has_sha256_evidence(record: &Value) -> Result<bool, DocumentationContractError> {
+    Ok(string_array(record, "evidence_ids")?
+        .iter()
+        .any(|value| value.starts_with("urn:codenoesis:evidence:sha256:")))
+}
+
+#[allow(clippy::too_many_arguments, clippy::too_many_lines)]
+fn append_framework_declarations(
+    index: &GraphIndex,
+    document_id: &str,
+    module_id: &str,
+    source_file_id: &str,
+    source_path: &str,
+    content: &mut String,
+    statements: &mut Vec<Value>,
+) -> Result<(), DocumentationContractError> {
+    let primary_source_module = index
+        .entities
+        .values()
+        .filter(|entity| {
+            string_field(entity, "kind") == Ok("rust.module")
+                && entity
+                    .pointer("/properties/source_file_id")
+                    .and_then(Value::as_str)
+                    == Some(source_file_id)
+        })
+        .filter_map(|entity| string_field(entity, "id").ok())
+        .min()
+        .ok_or(DocumentationContractError::InvalidSnapshot)?
+        == module_id;
+    if !primary_source_module {
+        return Ok(());
+    }
+    let mut declarations = Vec::new();
+    for entity in index.entities.values() {
+        if string_field(entity, "kind").is_ok_and(r6_entity_kind)
+            && record_has_evidence_path(index, entity, source_path)?
+        {
+            declarations.push(entity);
+        }
+    }
+    declarations.sort_by(|left, right| {
+        string_field(left, "id")
+            .unwrap_or_default()
+            .cmp(string_field(right, "id").unwrap_or_default())
+    });
+    if declarations.is_empty() {
+        return Ok(());
+    }
+    content.push_str(
+        "\n## Framework source declarations\n\nExplicit builder matches are committed source registration declarations, not observed runtime behavior.\n\nAttribute and macro matches are unresolved candidates; their arguments do not establish routes, handlers, components, services, configuration, or endpoint behavior.\n\nNo declaration proves route reachability, handler execution, service start, active configuration, middleware order, or generated code.\n\n",
+    );
+    for (ordinal, declaration) in declarations.into_iter().enumerate() {
+        let id = string_field(declaration, "id")?;
+        let kind = string_field(declaration, "kind")?;
+        let source_profile = string_field(declaration, "source_profile")?;
+        let epistemic_state = string_field(declaration, "epistemic_state")?;
+        let declared_key_or_target = string_field(declaration, "declared_key_or_target")?;
+        let claim = index.claim("entity", id)?;
+        let statement = statement_value(
+            document_id,
+            "framework_source_declaration",
+            id,
+            ordinal,
+            "deterministic_fact",
+            vec![id.to_owned()],
+            string_array(claim, "evidence_ids")?,
+            Vec::new(),
+        );
+        let description = match source_profile {
+            "explicit-builder-registration-v1" => "source registration declaration",
+            "attribute-macro-candidate-v1" => "unresolved candidate",
+            _ => return Err(DocumentationContractError::InvalidSnapshot),
+        };
+        writeln!(
+            content,
+            "- `{}` `{}` is a {description} with epistemic state `{}`; it is not observed runtime behavior. {}",
+            markdown_code(kind),
+            markdown_code(declared_key_or_target),
+            markdown_code(epistemic_state),
+            statement_marker(&statement)?
+        )
+        .expect("writing Markdown to a String cannot fail");
+        statements.push(statement);
+    }
+
+    let mut diagnostics = Vec::new();
+    for diagnostic in index.diagnostics.values() {
+        if record_has_sha256_evidence(diagnostic)?
+            && record_has_evidence_path(index, diagnostic, source_path)?
+        {
+            diagnostics.push(diagnostic);
+        }
+    }
+    diagnostics.sort_by(|left, right| {
+        string_field(left, "id")
+            .unwrap_or_default()
+            .cmp(string_field(right, "id").unwrap_or_default())
+    });
+    if !diagnostics.is_empty() {
+        content.push_str("\n## Framework declaration diagnostics\n\n");
+        for (ordinal, diagnostic) in diagnostics.into_iter().enumerate() {
+            let id = string_field(diagnostic, "id")?;
+            let code = string_field(diagnostic, "code")?;
+            let message = string_field(diagnostic, "message")?;
+            let statement = statement_value(
+                document_id,
+                "framework_declaration_diagnostic",
+                id,
+                ordinal,
+                "deterministic_fact",
+                vec![id.to_owned()],
+                string_array(diagnostic, "evidence_ids")?,
+                Vec::new(),
+            );
+            writeln!(
+                content,
+                "- Diagnostic `{}`: {}; the candidate remains unresolved and is not observed runtime behavior. {}",
+                markdown_code(code),
+                markdown_code(message),
+                statement_marker(&statement)?
+            )
+            .expect("writing Markdown to a String cannot fail");
+            statements.push(statement);
+        }
+    }
+
+    let mut gaps = Vec::new();
+    for gap in index.coverage.values() {
+        if record_has_sha256_evidence(gap)? && record_has_evidence_path(index, gap, source_path)? {
+            gaps.push(gap);
+        }
+    }
+    gaps.sort_by(|left, right| {
+        string_field(left, "id")
+            .unwrap_or_default()
+            .cmp(string_field(right, "id").unwrap_or_default())
+    });
+    if !gaps.is_empty() {
+        content.push_str("\n## Framework declaration uncertainty\n\n");
+        for (ordinal, gap) in gaps.into_iter().enumerate() {
+            let id = string_field(gap, "id")?;
+            let capability = string_field(gap, "capability")?;
+            let state = string_field(gap, "state")?;
+            let statement = statement_value(
+                document_id,
+                "framework_declaration_coverage_gap",
+                id,
+                ordinal,
+                "unsupported",
+                vec![id.to_owned()],
+                Vec::new(),
+                vec![id.to_owned()],
+            );
+            writeln!(
+                content,
+                "- `{}` is `{}`; the unresolved candidate and runtime world are not claimed. {}",
+                markdown_code(capability),
+                markdown_code(state),
+                statement_marker(&statement)?
+            )
+            .expect("writing Markdown to a String cannot fail");
+            statements.push(statement);
+        }
+    }
+    Ok(())
+}
+
 fn r5_entity_kind(kind: &str) -> bool {
     matches!(
         kind,
@@ -1386,6 +1583,18 @@ fn r5_entity_kind(kind: &str) -> bool {
             | "rust.static"
             | "rust.associated_type"
             | "rust.method"
+    )
+}
+
+fn r6_entity_kind(kind: &str) -> bool {
+    matches!(
+        kind,
+        "framework.component_declaration"
+            | "framework.configuration_declaration"
+            | "framework.endpoint_declaration"
+            | "framework.handler_declaration"
+            | "framework.route_declaration"
+            | "framework.service_declaration"
     )
 }
 
