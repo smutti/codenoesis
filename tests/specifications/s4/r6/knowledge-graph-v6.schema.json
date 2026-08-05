@@ -72,7 +72,7 @@
       "minItems": 1,
       "maxItems": 90000,
       "items": {
-        "$ref": "../extraction-chunk-v2.schema.json#/$defs/claim"
+        "$ref": "extraction-chunk-v6.schema.json#/$defs/claim"
       }
     },
     "evidence": {
@@ -80,7 +80,7 @@
       "minItems": 1,
       "maxItems": 90000,
       "items": {
-        "$ref": "../extraction-chunk-v2.schema.json#/$defs/evidence"
+        "$ref": "extraction-chunk-v6.schema.json#/$defs/evidence"
       }
     },
     "diagnostics": {

@@ -34,6 +34,10 @@ INVALID_CASES_PATH = SPEC_ROOT / "invalid-cases-v1.json"
 PILOT_OBSERVATIONS_PATH = SPEC_ROOT / "pilot-observations-v1.json"
 RED_OBSERVATION_PATH = SPEC_ROOT / "red-observation.json"
 RED_LOG_PATH = SPEC_ROOT / "red/governance-red.log"
+EVIDENCE_ID_RED_OBSERVATION_PATH = (
+    SPEC_ROOT / "red/evidence-id-schema-red-observation.json"
+)
+EVIDENCE_ID_RED_LOG_PATH = SPEC_ROOT / "red/evidence-id-schema-red.log"
 BUNDLE_PATH = SPEC_ROOT / "contract-bundle.json"
 FIXTURE_ROOT = ROOT / "tests/fixtures/s4/framework-declarations-v1"
 FIXTURE_REPOSITORY = FIXTURE_ROOT / "repository"
@@ -164,6 +168,8 @@ MATERIALIZED_PATHS = (
     PILOT_OBSERVATIONS_PATH,
     RED_OBSERVATION_PATH,
     RED_LOG_PATH,
+    EVIDENCE_ID_RED_OBSERVATION_PATH,
+    EVIDENCE_ID_RED_LOG_PATH,
     BUNDLE_PATH,
     FIXTURE_ROOT / "README.md",
     FIXTURE_MANIFEST_PATH,
@@ -203,6 +209,8 @@ BUNDLE_FILES = {
     "tests/specifications/s4/r6/local-query-result-v4.schema.json",
     "tests/specifications/s4/r6/pilot-observations-v1.json",
     "tests/specifications/s4/r6/red-observation.json",
+    "tests/specifications/s4/r6/red/evidence-id-schema-red-observation.json",
+    "tests/specifications/s4/r6/red/evidence-id-schema-red.log",
     "tests/specifications/s4/r6/red/governance-red.log",
     "tests/specifications/s4/r6/repository-snapshot-v9.schema.json",
     "tests/specifications/s4/r6/rust-ontology-v6.json",
@@ -485,6 +493,95 @@ class S4R6FrameworkDeclarationsGovernanceTests(unittest.TestCase):
                 "document",
             },
         )
+
+    def test_golden_evidence_ids_are_schema_representable_and_queryable(self) -> None:
+        facts = load_json(EXPECTED_FACTS_PATH)
+        evidence_ids = [
+            declaration["evidence"]["id"]
+            for declaration in facts["declarations"]
+        ]
+        self.assertEqual(len(evidence_ids), 24)
+        self.assertEqual(len(set(evidence_ids)), len(evidence_ids))
+
+        chunk = load_json(CHUNK_SCHEMA_PATH)
+        evidence_pattern = chunk["$defs"]["evidence_id"]["pattern"]
+        self.assertTrue(
+            all(re.fullmatch(evidence_pattern, identifier) for identifier in evidence_ids),
+            f"reviewed SHA-256 evidence IDs are rejected by {evidence_pattern}",
+        )
+        self.assertEqual(
+            chunk["properties"]["evidence"]["items"]["$ref"],
+            "#/$defs/evidence",
+        )
+        self.assertEqual(
+            chunk["properties"]["claims"]["items"]["$ref"],
+            "#/$defs/claim",
+        )
+        self.assertEqual(
+            chunk["$defs"]["evidence"]["properties"]["id"]["$ref"],
+            "#/$defs/evidence_id",
+        )
+        self.assertEqual(
+            chunk["$defs"]["claim"]["properties"]["evidence_ids"]["items"][
+                "$ref"
+            ],
+            "#/$defs/evidence_id",
+        )
+        self.assertIn(
+            {"$ref": "#/$defs/relationship"},
+            chunk["$defs"]["graph_relationship"]["anyOf"],
+        )
+
+        graph = load_json(GRAPH_SCHEMA_PATH)
+        self.assertEqual(
+            graph["properties"]["evidence"]["items"]["$ref"],
+            "extraction-chunk-v6.schema.json#/$defs/evidence",
+        )
+        self.assertEqual(
+            graph["properties"]["claims"]["items"]["$ref"],
+            "extraction-chunk-v6.schema.json#/$defs/claim",
+        )
+
+        query = load_json(QUERY_SCHEMA_PATH)
+        self.assertEqual(
+            query["properties"]["evidence"]["items"]["$ref"],
+            "extraction-chunk-v6.schema.json#/$defs/evidence",
+        )
+        self.assertEqual(
+            query["properties"]["claims"]["items"]["$ref"],
+            "extraction-chunk-v6.schema.json#/$defs/claim",
+        )
+        evidence_rule = next(
+            rule
+            for rule in query["allOf"]
+            if rule["if"]["properties"]["result_kind"].get("const") == "evidence"
+        )
+        query_pattern = evidence_rule["then"]["properties"]["requested_id"][
+            "pattern"
+        ]
+        for identifier in evidence_ids:
+            with self.subTest(query_identifier=identifier):
+                self.assertIsNotNone(re.fullmatch(query_pattern, identifier))
+
+        for result_kind in (
+            "entity",
+            "relationship",
+            "claim",
+            "diagnostic",
+            "coverage_gap",
+            "document",
+        ):
+            rule = next(
+                rule
+                for rule in query["allOf"]
+                if rule["if"]["properties"]["result_kind"].get("const")
+                == result_kind
+            )
+            requested_pattern = rule["then"]["properties"]["requested_id"][
+                "pattern"
+            ]
+            self.assertIn(":blake3:", requested_pattern)
+            self.assertIsNone(re.fullmatch(requested_pattern, evidence_ids[0]))
 
     def test_subset_and_ontology_keep_source_syntax_non_runtime(self) -> None:
         subset = load_json(SUBSET_PATH)

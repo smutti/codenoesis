@@ -11,7 +11,7 @@
     },
     {
       "path": "scripts/tests/test_s4_r6_framework_declarations_contract.py",
-      "sha256": "6cbfe0017b8540858907c7a5580632ab352b1389170744887a4f3d98bcb818fc"
+      "sha256": "5a2330c17e11834de19a30b13f7bf9af28229b76e939ee8dcdb47859f27b2f93"
     },
     {
       "path": "tests/fixtures/s4/framework-declarations-v1/README.md",
@@ -75,7 +75,7 @@
     },
     {
       "path": "tests/specifications/s4/r6/extraction-chunk-v6.schema.json",
-      "sha256": "cb399698b3520ace0eebb0dd083d33d6cef6973013a2bb6a5915942ab5beb44f"
+      "sha256": "c2efd6691ce402503cc9ce03da4d7cd138699def1050ea8fd63ca6f6c5f29c30"
     },
     {
       "path": "tests/specifications/s4/r6/framework-declarations-subset-v1.json",
@@ -87,11 +87,11 @@
     },
     {
       "path": "tests/specifications/s4/r6/knowledge-graph-v6.schema.json",
-      "sha256": "31a37c97ab8583092867abab9451980f29abeee9ea1c6c8f3edce51b60e56678"
+      "sha256": "8d7ba8c5c9bda215bf6daa3d214896c284e898fb9391e3eba1fc32f5dd92dafb"
     },
     {
       "path": "tests/specifications/s4/r6/local-query-result-v4.schema.json",
-      "sha256": "d51d25dec77b7f12612fde26e648ad8dabcf3906f3a3447b0a209ff11f63b62e"
+      "sha256": "83eb9cc246cda061feb9b924c2fbe3815f907013ec80a6f20423854770555598"
     },
     {
       "path": "tests/specifications/s4/r6/pilot-observations-v1.json",
@@ -100,6 +100,14 @@
     {
       "path": "tests/specifications/s4/r6/red-observation.json",
       "sha256": "7671016254ffa42ba3f6803746f56483022f9443c32c8de969b0b2a629a9a027"
+    },
+    {
+      "path": "tests/specifications/s4/r6/red/evidence-id-schema-red-observation.json",
+      "sha256": "8cd23509212bd634f0dac507485d43e7b78e49c989e2dbdcfc054d84f85eb9eb"
+    },
+    {
+      "path": "tests/specifications/s4/r6/red/evidence-id-schema-red.log",
+      "sha256": "b82a7234dfe777e6e846591a38bb3bf43fcf69df78ebf5cc08c3c579bc93fe3f"
     },
     {
       "path": "tests/specifications/s4/r6/red/governance-red.log",
@@ -118,5 +126,5 @@
       "sha256": "5d7b12b44416ccae0cf1a97e614494be74d9fb607a9f85fd25e7f5006f4e2532"
     }
   ],
-  "bundle_sha256": "42a7670669d9184c5663767f5b3bb5d9335a0fa65a195a4833a6ab2ed8209ea7"
+  "bundle_sha256": "46f5e0fab0439979c456cb41ce7195efd5e02a342be4292402ef2cb44909bc47"
 }
