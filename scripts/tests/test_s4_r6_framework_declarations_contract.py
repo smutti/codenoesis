@@ -514,8 +514,22 @@ class S4R6FrameworkDeclarationsGovernanceTests(unittest.TestCase):
             "#/$defs/evidence",
         )
         self.assertEqual(
+            chunk["properties"]["claims"]["items"]["$ref"],
+            "#/$defs/claim",
+        )
+        self.assertEqual(
             chunk["$defs"]["evidence"]["properties"]["id"]["$ref"],
             "#/$defs/evidence_id",
+        )
+        self.assertEqual(
+            chunk["$defs"]["claim"]["properties"]["evidence_ids"]["items"][
+                "$ref"
+            ],
+            "#/$defs/evidence_id",
+        )
+        self.assertIn(
+            {"$ref": "#/$defs/relationship"},
+            chunk["$defs"]["graph_relationship"]["anyOf"],
         )
 
         graph = load_json(GRAPH_SCHEMA_PATH)
@@ -523,11 +537,19 @@ class S4R6FrameworkDeclarationsGovernanceTests(unittest.TestCase):
             graph["properties"]["evidence"]["items"]["$ref"],
             "extraction-chunk-v6.schema.json#/$defs/evidence",
         )
+        self.assertEqual(
+            graph["properties"]["claims"]["items"]["$ref"],
+            "extraction-chunk-v6.schema.json#/$defs/claim",
+        )
 
         query = load_json(QUERY_SCHEMA_PATH)
         self.assertEqual(
             query["properties"]["evidence"]["items"]["$ref"],
             "extraction-chunk-v6.schema.json#/$defs/evidence",
+        )
+        self.assertEqual(
+            query["properties"]["claims"]["items"]["$ref"],
+            "extraction-chunk-v6.schema.json#/$defs/claim",
         )
         evidence_rule = next(
             rule

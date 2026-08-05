@@ -52,14 +52,14 @@
       "type": "array",
       "maxItems": 90000,
       "items": {
-        "$ref": "../extraction-chunk-v2.schema.json#/$defs/claim"
+        "$ref": "#/$defs/claim"
       }
     },
     "evidence": {
       "type": "array",
       "maxItems": 90000,
       "items": {
-        "$ref": "../extraction-chunk-v2.schema.json#/$defs/evidence"
+        "$ref": "#/$defs/evidence"
       }
     },
     "diagnostics": {
@@ -84,7 +84,121 @@
     },
     "evidence_id": {
       "type": "string",
-      "pattern": "^urn:codenoesis:evidence:blake3:[0-9a-f]{64}$"
+      "pattern": "^urn:codenoesis:evidence:(blake3|sha256):[0-9a-f]{64}$"
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "source",
+        "target",
+        "evidence_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:relationship:blake3:[0-9a-f]{64}$"
+        },
+        "kind": {
+          "enum": [
+            "CONTAINS",
+            "DEFINES",
+            "IMPORTS",
+            "IMPLEMENTS"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "target": {
+          "$ref": "#/$defs/entity_id"
+        },
+        "evidence_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "subject_kind",
+        "subject_id",
+        "state",
+        "evidence_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:claim:blake3:[0-9a-f]{64}$"
+        },
+        "subject_kind": {
+          "enum": [
+            "entity",
+            "relationship"
+          ]
+        },
+        "subject_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "state": {
+          "enum": [
+            "deterministic_fact",
+            "derived_fact",
+            "candidate",
+            "reviewed_inference",
+            "confirmed",
+            "rejected",
+            "superseded"
+          ]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_id"
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "path",
+        "blob_oid",
+        "start_byte",
+        "end_byte"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/evidence_id"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "blob_oid": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "start_byte": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "end_byte": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
     },
     "r5_entity_kind": {
       "enum": [
@@ -402,7 +516,14 @@
       ]
     },
     "graph_relationship": {
-      "$ref": "../r4/extraction-chunk-v4.schema.json#/$defs/graph_relationship"
+      "anyOf": [
+        {
+          "$ref": "../r4/extraction-chunk-v4.schema.json#/$defs/graph_relationship"
+        },
+        {
+          "$ref": "#/$defs/relationship"
+        }
+      ]
     },
     "diagnostic": {
       "type": "object",

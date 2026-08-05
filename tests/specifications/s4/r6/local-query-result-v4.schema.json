@@ -33,7 +33,7 @@
     },
     "requested_id": {
       "type": "string",
-      "pattern": "^urn:codenoesis:(entity|relationship|claim|evidence|diagnostic|coverage-gap|document):blake3:[0-9a-f]{64}$"
+      "pattern": "^urn:codenoesis:((entity|relationship|claim|diagnostic|coverage-gap|document):blake3|evidence:(blake3|sha256)):[0-9a-f]{64}$"
     },
     "result_kind": {
       "enum": [
@@ -71,7 +71,7 @@
       "maxItems": 1,
       "uniqueItems": true,
       "items": {
-        "$ref": "../extraction-chunk-v2.schema.json#/$defs/claim"
+        "$ref": "extraction-chunk-v6.schema.json#/$defs/claim"
       }
     },
     "evidence": {
@@ -79,7 +79,7 @@
       "maxItems": 200000,
       "uniqueItems": true,
       "items": {
-        "$ref": "../extraction-chunk-v2.schema.json#/$defs/evidence"
+        "$ref": "extraction-chunk-v6.schema.json#/$defs/evidence"
       }
     },
     "diagnostic": {
@@ -142,6 +142,9 @@
       },
       "then": {
         "properties": {
+          "requested_id": {
+            "pattern": "^urn:codenoesis:entity:blake3:[0-9a-f]{64}$"
+          },
           "entity": {
             "not": {
               "type": "null"
@@ -175,6 +178,9 @@
       },
       "then": {
         "properties": {
+          "requested_id": {
+            "pattern": "^urn:codenoesis:relationship:blake3:[0-9a-f]{64}$"
+          },
           "entity": {
             "type": "null"
           },
@@ -208,6 +214,9 @@
       },
       "then": {
         "properties": {
+          "requested_id": {
+            "pattern": "^urn:codenoesis:diagnostic:blake3:[0-9a-f]{64}$"
+          },
           "entity": {
             "type": "null"
           },
@@ -241,6 +250,9 @@
       },
       "then": {
         "properties": {
+          "requested_id": {
+            "pattern": "^urn:codenoesis:coverage-gap:blake3:[0-9a-f]{64}$"
+          },
           "entity": {
             "type": "null"
           },
@@ -274,6 +286,9 @@
       },
       "then": {
         "properties": {
+          "requested_id": {
+            "pattern": "^urn:codenoesis:document:blake3:[0-9a-f]{64}$"
+          },
           "entity": {
             "type": "null"
           },
@@ -298,10 +313,7 @@
       "if": {
         "properties": {
           "result_kind": {
-            "enum": [
-              "claim",
-              "evidence"
-            ]
+            "const": "claim"
           }
         },
         "required": [
@@ -310,6 +322,43 @@
       },
       "then": {
         "properties": {
+          "requested_id": {
+            "pattern": "^urn:codenoesis:claim:blake3:[0-9a-f]{64}$"
+          },
+          "entity": {
+            "type": "null"
+          },
+          "relationship": {
+            "type": "null"
+          },
+          "diagnostic": {
+            "type": "null"
+          },
+          "coverage_gap": {
+            "type": "null"
+          },
+          "document": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "result_kind": {
+            "const": "evidence"
+          }
+        },
+        "required": [
+          "result_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "requested_id": {
+            "pattern": "^urn:codenoesis:evidence:(blake3|sha256):[0-9a-f]{64}$"
+          },
           "entity": {
             "type": "null"
           },

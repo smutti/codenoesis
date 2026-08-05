@@ -1266,7 +1266,7 @@ roadmap bytes are excluded from that digest. Any bound-byte change requires a
 new digest and renewed semantic human review.
 
 R6 framework-declarations contract bundle:
-`sha256:42a7670669d9184c5663767f5b3bb5d9335a0fa65a195a4833a6ab2ed8209ea7`.
+`sha256:46f5e0fab0439979c456cb41ce7195efd5e02a342be4292402ef2cb44909bc47`.
 
 ## 3. Product intent and success definition
 
