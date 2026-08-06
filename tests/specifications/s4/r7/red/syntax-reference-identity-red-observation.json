@@ -1,0 +1,83 @@
+{
+  "schema_version": "codenoesis.r7-syntax-reference-identity-governance-red-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/128",
+  "authorization": "https://github.com/smutti/codenoesis/issues/128#issuecomment-5202990385",
+  "blocked_product_issue": "https://github.com/smutti/codenoesis/issues/125#issuecomment-5202934336",
+  "required_base": "0467dc5607c330d6680ae32c8bf6888bc696cc1b",
+  "test_first_head": "17ed100a7669248ede5f7a1e2e0b7e52a110111c",
+  "recorded_at_utc": "2026-08-06T09:46:54Z",
+  "command": "python3 -m unittest scripts.tests.test_s4_r7_compiler_index_contract.S4R7CompilerIndexGovernanceTests.test_syntax_reference_uses_approved_r6_identity",
+  "expected_failure": "Exit 1 because the protected syntax-reference and dependent RESOLVES_TO identities differ from the independently derived unchanged R6 entity and approved R7 relationship preimages before any golden correction.",
+  "actual_failure": "AssertionError: all three protected syntax-reference locations use c3ebb92fb28b377dfc1f6476189b2fa640404a8d1009241e20c275f118049e6c instead of a30d5f4622a17cd8328ce8e1c6521f8aef7ff318c8724128dc9b45dae549cf46, and the protected relationship uses 53b2b0f17cc6d6d0616a33700a1ba3d030b2ed21bd3f4534b91a2655bfb42f54 instead of 52850cec8a5a34154e1f0ecb96a829f3bcd16ab8ca4c2de7e1dd33c2ca3dc76e.",
+  "exit_code": 1,
+  "failed_for_expected_reason": true,
+  "approved_preimages": {
+    "client_crate": [
+      "codenoesis.entity-id/rust/v2",
+      "urn:codenoesis:fixture:s4-compiler-index-v1",
+      "crate",
+      "crates/client/Cargo.toml",
+      "client",
+      "lib",
+      "client"
+    ],
+    "syntax_reference": [
+      "codenoesis.entity-id/rust/v2",
+      "urn:codenoesis:fixture:s4-compiler-index-v1",
+      "symbol_reference",
+      "urn:codenoesis:entity:blake3:ce0454e207b0c17fc28656bd7c7adc032e3204e6f5372e8ce329028173044ab0",
+      "crate",
+      "Store"
+    ],
+    "relationship": [
+      "codenoesis.relationship-id/compiler-index/v1",
+      "RESOLVES_TO",
+      "urn:codenoesis:entity:blake3:a30d5f4622a17cd8328ce8e1c6521f8aef7ff318c8724128dc9b45dae549cf46",
+      "urn:codenoesis:entity:blake3:eb1d85daea722e537c7fa1e0d5ebec48ee64f5bc19c60e2c3c3a7e0dcbaee348"
+    ]
+  },
+  "derived_values": {
+    "client_crate_id": "urn:codenoesis:entity:blake3:ce0454e207b0c17fc28656bd7c7adc032e3204e6f5372e8ce329028173044ab0",
+    "syntax_reference_id": "urn:codenoesis:entity:blake3:a30d5f4622a17cd8328ce8e1c6521f8aef7ff318c8724128dc9b45dae549cf46",
+    "relationship_id": "urn:codenoesis:relationship:blake3:52850cec8a5a34154e1f0ecb96a829f3bcd16ab8ca4c2de7e1dd33c2ca3dc76e"
+  },
+  "protected_values_before_correction": {
+    "syntax_reference_id": "urn:codenoesis:entity:blake3:c3ebb92fb28b377dfc1f6476189b2fa640404a8d1009241e20c275f118049e6c",
+    "relationship_id": "urn:codenoesis:relationship:blake3:53b2b0f17cc6d6d0616a33700a1ba3d030b2ed21bd3f4534b91a2655bfb42f54",
+    "syntax_reference_locations": 3,
+    "relationship_id_locations": 1
+  },
+  "fixture_or_bound_hashes_changed_before_red": false,
+  "production_files_changed_before_red": false,
+  "dependency_manifest_changed_before_red": false,
+  "changed_paths_before_red": [
+    "scripts/tests/test_s4_r7_compiler_index_contract.py"
+  ],
+  "stdout_bytes": 0,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_bytes": 1804,
+  "stderr_sha256": "dacea4d31029fd5b28a53c0d216ff901b9f0699d4bfcb05b723ad4c37e0f4339",
+  "raw_log_path": "tests/specifications/s4/r7/red/syntax-reference-identity-red.log",
+  "raw_log_bytes": 1804,
+  "raw_log_sha256": "dacea4d31029fd5b28a53c0d216ff901b9f0699d4bfcb05b723ad4c37e0f4339",
+  "immutable_source_sha256": "12699c82058916f61e20b3e219929c35308e777f7b0bcf995dd60e835b87c113",
+  "immutable_decision_sha256_before_correction": "edfc04b3e52f48501cf8732f089327054ec3a3e1832bf38ac4c72d7900e34bd1",
+  "immutable_overlay_sha256_before_correction": "01c468d143f4730eceb2c7eb15223c6e7d17e4b21fc984f45ad7ab77d32b9e22",
+  "immutable_manifest_sha256_before_correction": "45b2d6a342b370293c6347186438dd80791302c4513ad8c4061fb8f807b3d39c",
+  "immutable_binding_sha256": "2885d72887046edaa4dbbcc273ed7c8b42ed804e169296b2a0c092edbfc0d04c",
+  "immutable_index_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
+  "immutable_r6_bundle_sha256": "46f5e0fab0439979c456cb41ce7195efd5e02a342be4292402ef2cb44909bc47",
+  "r7_bundle_sha256_before_correction": "a630c02800727075e1672838133b90c9fff1fffac679b69dccc66ebf81ac1e17",
+  "environment": {
+    "os": "macOS 26.5.2",
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "python": "Python 3.9.6",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "toolchain": "1.97.1-aarch64-apple-darwin",
+    "timezone": "CEST",
+    "working_directory": "/Users/smutti/Documents/personal/codenoesis"
+  },
+  "correction_rounds_used": 0
+}
