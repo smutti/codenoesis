@@ -51,6 +51,7 @@ AUTHORIZATION_REFERENCE = (
 REQUIRED_BASE = "3f750201a1527c85ed2ce83f70ed0932213f3548"
 R6_BUNDLE_SHA256 = "46f5e0fab0439979c456cb41ce7195efd5e02a342be4292402ef2cb44909bc47"
 REPOSITORY_IDENTITY = "urn:codenoesis:fixture:s4-compiler-index-v1"
+R6_ENTITY_DOMAIN = "codenoesis.entity-id/rust/v2"
 COMPILER_SYMBOL_DOMAIN = "codenoesis.entity-id/compiler-symbol/v1"
 RELATIONSHIP_DOMAIN = "codenoesis.relationship-id/compiler-index/v1"
 COMPILER_EVIDENCE_DOMAIN = "codenoesis.evidence-id/compiler-index/v1"
@@ -285,6 +286,43 @@ def git_blob_oid(value: bytes) -> str:
 def stable_compiler_symbol_id(preimage: list[str]) -> str:
     normalized = [unicodedata.normalize("NFC", item) for item in preimage]
     digest = blake3_256(canonical_json([COMPILER_SYMBOL_DOMAIN, *normalized]))
+    return f"urn:codenoesis:entity:blake3:{digest}"
+
+
+def stable_r6_crate_id(
+    manifest_path: str,
+    package_name: str,
+    target_kind: str,
+    target_name: str,
+) -> str:
+    payload = [
+        R6_ENTITY_DOMAIN,
+        REPOSITORY_IDENTITY,
+        "crate",
+        manifest_path,
+        package_name,
+        target_kind,
+        target_name,
+    ]
+    digest = blake3_256(canonical_json(payload))
+    return f"urn:codenoesis:entity:blake3:{digest}"
+
+
+def stable_r6_declaration_id(
+    kind: str,
+    crate_id: str,
+    module_path: str,
+    name: str,
+) -> str:
+    payload = [
+        R6_ENTITY_DOMAIN,
+        REPOSITORY_IDENTITY,
+        kind,
+        crate_id,
+        module_path,
+        name,
+    ]
+    digest = blake3_256(canonical_json(payload))
     return f"urn:codenoesis:entity:blake3:{digest}"
 
 
@@ -824,6 +862,62 @@ class S4R7CompilerIndexGovernanceTests(unittest.TestCase):
             b"/private/compiler-index-fixture",
         ):
             self.assertNotIn(canary, public_bytes)
+
+    def test_syntax_reference_uses_approved_r6_identity(self) -> None:
+        overlay = load_json(EXPECTED_OVERLAY_PATH)
+        client_crate_id = stable_r6_crate_id(
+            "crates/client/Cargo.toml",
+            "client",
+            "lib",
+            "client",
+        )
+        self.assertEqual(
+            client_crate_id,
+            "urn:codenoesis:entity:blake3:ce0454e207b0c17fc28656bd7c7adc032e3204e6f5372e8ce329028173044ab0",
+        )
+        syntax_reference_id = stable_r6_declaration_id(
+            "symbol_reference",
+            client_crate_id,
+            "crate",
+            "Store",
+        )
+        self.assertEqual(
+            syntax_reference_id,
+            "urn:codenoesis:entity:blake3:a30d5f4622a17cd8328ce8e1c6521f8aef7ff318c8724128dc9b45dae549cf46",
+        )
+        resolves_to = next(
+            relationship
+            for relationship in overlay["relationships"]
+            if relationship["kind"] == "RESOLVES_TO"
+        )
+        relationship_id = stable_relationship_id(
+            "RESOLVES_TO",
+            syntax_reference_id,
+            resolves_to["target"],
+        )
+        self.assertEqual(
+            relationship_id,
+            "urn:codenoesis:relationship:blake3:52850cec8a5a34154e1f0ecb96a829f3bcd16ab8ca4c2de7e1dd33c2ca3dc76e",
+        )
+        diagnostic = next(
+            item
+            for item in overlay["diagnostics"]
+            if item["code"] == "compiler_index.syntax_uncertainty_retained"
+        )
+        actual = {
+            "syntax_reference_id": overlay["syntax_reference_bindings"][0]["id"],
+            "relationship_source": resolves_to["source"],
+            "relationship_id": resolves_to["id"],
+            "diagnostic_subject_id": diagnostic["subject_id"],
+        }
+        expected = {
+            "syntax_reference_id": syntax_reference_id,
+            "relationship_source": syntax_reference_id,
+            "relationship_id": relationship_id,
+            "diagnostic_subject_id": syntax_reference_id,
+        }
+        self.maxDiff = None
+        self.assertEqual(actual, expected)
 
     def test_subset_ontology_invalid_cases_and_errors_are_exact(self) -> None:
         subset = load_json(SUBSET_PATH)
