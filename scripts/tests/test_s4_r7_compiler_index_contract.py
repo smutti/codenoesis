@@ -59,6 +59,10 @@ SCIP_COMMIT = "e8ee0ae6038f8298e2195812eea9d7b1196748ae"
 SCIP_PROTO_SHA256 = "04cb20f2b8be73f6c0376b5b3e84c3ae20ebaff0ad3d23ba2d16f866b395ed7d"
 RUST_ANALYZER_RELEASE = "2026-08-03"
 RUST_ANALYZER_COMMIT = "b54a82b321c9617c5cf0b07ac0f12c08f7bc5902"
+PINNED_WRITER_INDEX_BYTES = 3_733
+PINNED_WRITER_INDEX_SHA256 = (
+    "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92"
+)
 
 LIMITS = {
     "raw_index_bytes": 67_108_864,
@@ -389,12 +393,12 @@ def encode_occurrence(value: dict[str, Any]) -> bytes:
 
 
 def encode_document(value: dict[str, Any]) -> bytes:
-    result = encode_string(1, value["relative_path"])
+    result = encode_string(4, value["language"])
+    result += encode_string(1, value["relative_path"])
     for occurrence in value["occurrences"]:
         result += encode_bytes(2, encode_occurrence(occurrence))
     for symbol in value["symbols"]:
         result += encode_bytes(3, encode_symbol_information(symbol))
-    result += encode_string(4, value["language"])
     result += encode_string(5, value.get("text", ""))
     result += encode_scalar(6, value["position_encoding"])
     return result
@@ -729,6 +733,34 @@ class S4R7CompilerIndexGovernanceTests(unittest.TestCase):
             binding["repository"]["source_manifest_sha256"],
             sha256_bytes(canonical_json(expected_documents)),
         )
+
+    def test_binary_scip_matches_pinned_generated_writer_order(self) -> None:
+        source = load_json(FIXTURE_SOURCE_PATH)
+        raw_index = FIXTURE_INDEX_PATH.read_bytes()
+        pinned_writer_index = encode_index(source)
+        self.assertEqual(len(pinned_writer_index), PINNED_WRITER_INDEX_BYTES)
+        self.assertEqual(
+            sha256_bytes(pinned_writer_index), PINNED_WRITER_INDEX_SHA256
+        )
+        if raw_index != pinned_writer_index:
+            first_difference = next(
+                (
+                    offset
+                    for offset, (current, required) in enumerate(
+                        zip(raw_index, pinned_writer_index)
+                    )
+                    if current != required
+                ),
+                min(len(raw_index), len(pinned_writer_index)),
+            )
+            self.fail(
+                "pinned generated writer bytes differ: "
+                f"first_difference={first_difference}, "
+                f"current_length={len(raw_index)}, "
+                f"required_length={len(pinned_writer_index)}, "
+                f"current_sha256={sha256_bytes(raw_index)}, "
+                f"required_sha256={sha256_bytes(pinned_writer_index)}"
+            )
 
     def test_binary_scip_is_canonical_and_matches_reviewed_source(self) -> None:
         source = load_json(FIXTURE_SOURCE_PATH)
