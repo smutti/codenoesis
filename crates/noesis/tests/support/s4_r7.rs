@@ -7,7 +7,7 @@ use std::process::{Command, Output};
 use serde_json::Value;
 use sha2::{Digest as _, Sha256};
 
-use super::{git_command, stdout_line, successful_output, unique_temp_root};
+use super::{git_command, read_repository_text, stdout_line, successful_output, unique_temp_root};
 
 pub const REPOSITORY_ID: &str = "urn:codenoesis:fixture:s4-compiler-index-v1";
 pub const FIXTURE_TREE_OID: &str = "d117f2f0924cbef9e7396b97ee46c76bd5261e00";
@@ -63,7 +63,7 @@ impl MaterializedCompilerIndexRepository {
             let destination = fixture_path
                 .strip_prefix("repository/")
                 .expect("R7 repository-relative fixture path");
-            let bytes = fs::read(fixture.join(fixture_path)).expect("read R7 repository byte");
+            let bytes = read_repository_text(fixture.join(fixture_path));
             assert_reviewed_bytes(file, &bytes, fixture_path);
             let destination_path = worktree.join(destination);
             fs::create_dir_all(
@@ -92,7 +92,7 @@ impl MaterializedCompilerIndexRepository {
             ("index.scip", "index.scip"),
         ] {
             let file = reviewed.get(source).expect("reviewed R7 sidecar entry");
-            let bytes = fs::read(fixture.join(source)).expect("read R7 sidecar byte");
+            let bytes = read_reviewed_sidecar(&fixture, source);
             assert_reviewed_bytes(file, &bytes, source);
             fs::write(compiler_index.join(destination), bytes)
                 .expect("materialize explicit R7 sidecar input");
@@ -316,6 +316,14 @@ fn assert_reviewed_bytes(file: &Value, bytes: &[u8], fixture_path: &str) {
         file["sha256"].as_str().expect("reviewed SHA-256"),
         "R7 fixture SHA-256 changed for {fixture_path}"
     );
+}
+
+fn read_reviewed_sidecar(fixture: &Path, source: &str) -> Vec<u8> {
+    if source == "compiler-index-binding.json" {
+        read_repository_text(fixture.join(source))
+    } else {
+        fs::read(fixture.join(source)).expect("read R7 binary sidecar byte")
+    }
 }
 
 fn update_index(worktree: &Path, global_config: &Path, mode: &str, oid: &str, path: &str) {

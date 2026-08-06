@@ -37,8 +37,9 @@
     "generated_writer_correction_issue": "https://github.com/smutti/codenoesis/issues/126",
     "generated_writer_correction_pull_request": "https://github.com/smutti/codenoesis/pull/127",
     "syntax_identity_correction_pull_request": "https://github.com/smutti/codenoesis/pull/129",
+    "fifth_correction_authorization": "https://github.com/smutti/codenoesis/issues/125#issuecomment-5205387989",
     "maintainer_supervised_interactive_lane": true,
-    "correction_budget": 4,
+    "correction_budget": 5,
     "manual_independent_review_and_merge_required": true
   },
   "commits": {
@@ -372,8 +373,8 @@
     "linux_macos_windows_codeql_benchmark_and_codex_policy_checks": "pending pull-request publication"
   },
   "corrections": {
-    "authorized_rounds": 4,
-    "rounds_used": 4,
+    "authorized_rounds": 5,
+    "rounds_used": 5,
     "remaining_authorized_rounds": 0,
     "governance_prerequisites_outside_product_rounds": [
       "PR 127 aligned the protected binary fixture and dependent evidence IDs with the pinned generated writer.",
@@ -383,7 +384,8 @@
       "The immutable invalid/security matrix exposed duplicate top-level metadata as malformed instead of noncanonical; the bounded wire classifier now selects the required ErrorV14 code before generated decode.",
       "The complete local Clippy gate exposed structural lint findings only; focused signatures, pattern structure, and bounded lint allowances were corrected without changing behavior or protected bytes.",
       "The first Linux CI quality gate exposed the two compiler-index Landlock helpers as dead only in the duplicated noesis library module while the binary module used both paths.",
-      "The second Linux CI quality gate showed that retaining the duplicated sandbox module made the pre-existing non-R7 helpers dead in the binary test target. The final correction removes that duplicate module, restores the shared library sandbox byte-for-byte, and co-locates only the R7 Landlock boundary with the compiler-index adapter."
+      "The second Linux CI quality gate showed that retaining the duplicated sandbox module made the pre-existing non-R7 helpers dead in the binary test target. The fourth correction removes that duplicate module, restores the shared library sandbox byte-for-byte, and co-locates only the R7 Landlock boundary with the compiler-index adapter.",
+      "The exact-head Windows gate checked out reviewed repository fixture text with CRLF and failed immutable byte guards before runtime execution. An isolated core.autocrlf checkout then confirmed the reviewed JSON binding is also transported as CRLF while index.scip remains binary. The fifth and final correction reuses the existing test-only read_repository_text helper for repository text and the JSON binding, converts only CRLF transport bytes to canonical LF, rejects bare carriage returns, and leaves index.scip, runtime, and immutable fixture bytes unchanged."
     ],
     "same_deterministic_failure_repeated_after_fix": false
   },
@@ -403,6 +405,7 @@
     "The accountable maintainer authorized the complete high-risk issue 125 package.",
     "The generated-writer governance correction was independently reviewed and manually merged through pull request 127.",
     "The syntax-reference identity governance correction was independently reviewed and manually merged through pull request 129.",
+    "The accountable maintainer explicitly authorized a fifth and final correction limited to CRLF fixture normalization and its evidence.",
     "Independent human ontology, protobuf, supply-chain, compatibility, and security review plus protected manual merge remain mandatory."
   ]
 }
