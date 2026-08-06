@@ -374,15 +374,16 @@
   },
   "corrections": {
     "authorized_rounds": 4,
-    "rounds_used": 2,
-    "remaining_authorized_rounds": 2,
+    "rounds_used": 3,
+    "remaining_authorized_rounds": 1,
     "governance_prerequisites_outside_product_rounds": [
       "PR 127 aligned the protected binary fixture and dependent evidence IDs with the pinned generated writer.",
       "PR 129 fixed the protected syntax-reference and RESOLVES_TO identities to the unchanged R6 identity recipe."
     ],
     "product_observations": [
       "The immutable invalid/security matrix exposed duplicate top-level metadata as malformed instead of noncanonical; the bounded wire classifier now selects the required ErrorV14 code before generated decode.",
-      "The complete Clippy gate exposed structural lint findings only; focused signatures, pattern structure, and bounded lint allowances were corrected without changing behavior or protected bytes."
+      "The complete local Clippy gate exposed structural lint findings only; focused signatures, pattern structure, and bounded lint allowances were corrected without changing behavior or protected bytes.",
+      "The Linux CI quality gate exposed the two compiler-index Landlock helpers as dead only in the duplicated noesis library module while the binary module uses both paths; bounded dead-code allowances preserve the existing module layout and runtime behavior."
     ],
     "same_deterministic_failure_repeated_after_fix": false
   },

@@ -63,6 +63,7 @@ pub(crate) fn install_read_only_paths(
     Ok(())
 }
 
+#[allow(dead_code)]
 pub(crate) fn install_with_compiler_index(
     repository: &OsStr,
     binding: &Path,
@@ -100,6 +101,7 @@ pub(crate) fn install_with_compiler_index(
     Ok(())
 }
 
+#[allow(dead_code)]
 pub(crate) fn install_with_compiler_index_and_roots(
     repository: &OsStr,
     binding: &Path,
