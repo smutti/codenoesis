@@ -33,6 +33,10 @@ INVALID_CASES_PATH = SPEC_ROOT / "invalid-cases-v1.json"
 SUPPLY_CHAIN_PATH = SPEC_ROOT / "supply-chain-v1.json"
 RED_OBSERVATION_PATH = SPEC_ROOT / "red-observation.json"
 RED_LOG_PATH = SPEC_ROOT / "red/governance-red.log"
+SYNTAX_ID_RED_OBSERVATION_PATH = (
+    SPEC_ROOT / "red/syntax-reference-identity-red-observation.json"
+)
+SYNTAX_ID_RED_LOG_PATH = SPEC_ROOT / "red/syntax-reference-identity-red.log"
 RETAINED_GUARD_PATH = SPEC_ROOT / "red/test-first-guard.py"
 BUNDLE_PATH = SPEC_ROOT / "contract-bundle.json"
 
@@ -194,6 +198,8 @@ MATERIALIZED_PATHS = (
     SUPPLY_CHAIN_PATH,
     RED_OBSERVATION_PATH,
     RED_LOG_PATH,
+    SYNTAX_ID_RED_OBSERVATION_PATH,
+    SYNTAX_ID_RED_LOG_PATH,
     RETAINED_GUARD_PATH,
     BUNDLE_PATH,
     FIXTURE_ROOT / "README.md",
@@ -236,6 +242,8 @@ BUNDLE_FILES = {
     "tests/specifications/s4/r7/red/generated-writer-correction-red-observation.json",
     "tests/specifications/s4/r7/red/generated-writer-correction-red.log",
     "tests/specifications/s4/r7/red/governance-red.log",
+    "tests/specifications/s4/r7/red/syntax-reference-identity-red-observation.json",
+    "tests/specifications/s4/r7/red/syntax-reference-identity-red.log",
     "tests/specifications/s4/r7/red/test-first-guard.py",
     "tests/specifications/s4/r7/repository-snapshot-v10.schema.json",
     "tests/specifications/s4/r7/rust-ontology-v7.json",

@@ -546,7 +546,7 @@
   ],
   "syntax_reference_bindings": [
     {
-      "id": "urn:codenoesis:entity:blake3:c3ebb92fb28b377dfc1f6476189b2fa640404a8d1009241e20c275f118049e6c",
+      "id": "urn:codenoesis:entity:blake3:a30d5f4622a17cd8328ce8e1c6521f8aef7ff318c8724128dc9b45dae549cf46",
       "path": "crates/client/src/lib.rs",
       "range": [
         0,
@@ -558,9 +558,9 @@
   ],
   "relationships": [
     {
-      "id": "urn:codenoesis:relationship:blake3:53b2b0f17cc6d6d0616a33700a1ba3d030b2ed21bd3f4534b91a2655bfb42f54",
+      "id": "urn:codenoesis:relationship:blake3:52850cec8a5a34154e1f0ecb96a829f3bcd16ab8ca4c2de7e1dd33c2ca3dc76e",
       "kind": "RESOLVES_TO",
-      "source": "urn:codenoesis:entity:blake3:c3ebb92fb28b377dfc1f6476189b2fa640404a8d1009241e20c275f118049e6c",
+      "source": "urn:codenoesis:entity:blake3:a30d5f4622a17cd8328ce8e1c6521f8aef7ff318c8724128dc9b45dae549cf46",
       "target": "urn:codenoesis:entity:blake3:eb1d85daea722e537c7fa1e0d5ebec48ee64f5bc19c60e2c3c3a7e0dcbaee348",
       "evidence_ids": [
         "urn:codenoesis:evidence:sha256:ad2950dfa6dd4193af9f7d6b7f5a778ed7339ef15f7350e529519c10d8e8d19e"
@@ -718,7 +718,7 @@
   "diagnostics": [
     {
       "code": "compiler_index.syntax_uncertainty_retained",
-      "subject_id": "urn:codenoesis:entity:blake3:c3ebb92fb28b377dfc1f6476189b2fa640404a8d1009241e20c275f118049e6c",
+      "subject_id": "urn:codenoesis:entity:blake3:a30d5f4622a17cd8328ce8e1c6521f8aef7ff318c8724128dc9b45dae549cf46",
       "compiler_target_id": "urn:codenoesis:entity:blake3:eb1d85daea722e537c7fa1e0d5ebec48ee64f5bc19c60e2c3c3a7e0dcbaee348"
     }
   ],
