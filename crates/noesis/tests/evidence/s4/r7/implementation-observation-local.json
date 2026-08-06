@@ -309,7 +309,6 @@
     "crates/codenoesis-scip/src/wire.rs",
     "crates/noesis/Cargo.toml",
     "crates/noesis/src/compiler_index.rs",
-    "crates/noesis/src/filesystem_sandbox.rs",
     "crates/noesis/src/main.rs",
     "crates/noesis/tests/e2e_fr_ext_005_scip_import.rs",
     "crates/noesis/tests/evidence/s4/r7/cargo-audit.json",
@@ -374,8 +373,8 @@
   },
   "corrections": {
     "authorized_rounds": 4,
-    "rounds_used": 3,
-    "remaining_authorized_rounds": 1,
+    "rounds_used": 4,
+    "remaining_authorized_rounds": 0,
     "governance_prerequisites_outside_product_rounds": [
       "PR 127 aligned the protected binary fixture and dependent evidence IDs with the pinned generated writer.",
       "PR 129 fixed the protected syntax-reference and RESOLVES_TO identities to the unchanged R6 identity recipe."
@@ -383,7 +382,8 @@
     "product_observations": [
       "The immutable invalid/security matrix exposed duplicate top-level metadata as malformed instead of noncanonical; the bounded wire classifier now selects the required ErrorV14 code before generated decode.",
       "The complete local Clippy gate exposed structural lint findings only; focused signatures, pattern structure, and bounded lint allowances were corrected without changing behavior or protected bytes.",
-      "The Linux CI quality gate exposed the two compiler-index Landlock helpers as dead only in the duplicated noesis library module while the binary module uses both paths; bounded dead-code allowances preserve the existing module layout and runtime behavior."
+      "The first Linux CI quality gate exposed the two compiler-index Landlock helpers as dead only in the duplicated noesis library module while the binary module used both paths.",
+      "The second Linux CI quality gate showed that retaining the duplicated sandbox module made the pre-existing non-R7 helpers dead in the binary test target. The final correction removes that duplicate module, restores the shared library sandbox byte-for-byte, and co-locates only the R7 Landlock boundary with the compiler-index adapter."
     ],
     "same_deterministic_failure_repeated_after_fix": false
   },

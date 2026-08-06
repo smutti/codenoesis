@@ -4,12 +4,6 @@ mod compiler_index;
 mod federation;
 mod repository_boundaries;
 
-#[cfg(target_os = "linux")]
-mod filesystem_sandbox;
-
-#[cfg(target_os = "linux")]
-use noesis::SecurityBoundaryError;
-
 use std::collections::BTreeMap;
 use std::env;
 use std::ffi::{OsStr, OsString};
