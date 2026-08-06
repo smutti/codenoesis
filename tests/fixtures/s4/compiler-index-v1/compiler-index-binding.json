@@ -10,7 +10,7 @@
   "artifact": {
     "path": "index.scip",
     "byte_length": 3733,
-    "sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+    "sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
     "format": "scip-protobuf",
     "scip_tag": "v0.9.0",
     "scip_commit": "e8ee0ae6038f8298e2195812eea9d7b1196748ae",

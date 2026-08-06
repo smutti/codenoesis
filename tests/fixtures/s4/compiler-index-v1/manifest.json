@@ -14,8 +14,8 @@
       "path": "compiler-index-binding.json",
       "mode": "100644",
       "byte_length": 2460,
-      "sha256": "db7f389786066c7aab36ecca4f5af506f3a98efd47f23a59e6b30d306ad6ba71",
-      "git_blob_oid": "a8e9833a63e9cf83a90a1f4d06257d0a51cfd7a4"
+      "sha256": "2885d72887046edaa4dbbcc273ed7c8b42ed804e169296b2a0c092edbfc0d04c",
+      "git_blob_oid": "67e04b2eec95ee92a35834286ab9f0b9b3c3c577"
     },
     {
       "path": "compiler-index-source.json",
@@ -28,8 +28,8 @@
       "path": "index.scip",
       "mode": "100644",
       "byte_length": 3733,
-      "sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
-      "git_blob_oid": "7223642841943a05f8d84a9dd6208b3e34ec4a6e"
+      "sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
+      "git_blob_oid": "7881055e3cac9991080cedc1db280f65e677a186"
     },
     {
       "path": "repository/Cargo.toml",
@@ -84,7 +84,7 @@
   "expected_overlay": {
     "path": "expected-compiler-overlay.json",
     "byte_length": 28180,
-    "sha256": "07f11224f546935dd86052e760935081927407c693a67f9778ada87533eb7b9e"
+    "sha256": "01c468d143f4730eceb2c7eb15223c6e7d17e4b21fc984f45ad7ab77d32b9e22"
   },
   "authority": {
     "source_bytes": "committed project-owned fixture bytes only",

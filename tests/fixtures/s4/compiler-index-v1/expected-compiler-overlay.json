@@ -2,7 +2,7 @@
   "schema_version": "codenoesis.r7-expected-compiler-overlay/v1",
   "repository_identity": "urn:codenoesis:fixture:s4-compiler-index-v1",
   "ontology_version": "codenoesis.ontology/rust/v7",
-  "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+  "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
   "compiler_symbols": [
     {
       "id": "urn:codenoesis:entity:blake3:eb1d85daea722e537c7fa1e0d5ebec48ee64f5bc19c60e2c3c3a7e0dcbaee348",
@@ -18,8 +18,8 @@
         "api/Store#"
       ],
       "compiler_evidence": {
-        "id": "urn:codenoesis:evidence:sha256:9b4e76f3444a69bae8c1c040dfbfccb8c53a2ad8e3a92c40c24aa798d6da8552",
-        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "id": "urn:codenoesis:evidence:sha256:7917e39fcc157002ad2e3264b93a842b0ab96a117dfb599d30bfb99bc4850b44",
+        "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
         "locator": {
           "record_kind": "occurrence",
           "document_path": "crates/api/src/lib.rs",
@@ -55,8 +55,8 @@
         "api/Store#get()."
       ],
       "compiler_evidence": {
-        "id": "urn:codenoesis:evidence:sha256:09298902f6233122b13afad7320922c062e833b10a86d6400991bed125227d1f",
-        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "id": "urn:codenoesis:evidence:sha256:0e855c7df5055de34f2a33e781efe24afd5e01f7234ac2dd3ddf32f7e8a94fe1",
+        "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
         "locator": {
           "record_kind": "occurrence",
           "document_path": "crates/api/src/lib.rs",
@@ -92,8 +92,8 @@
         "api/User#"
       ],
       "compiler_evidence": {
-        "id": "urn:codenoesis:evidence:sha256:247455425c5ac77170f5639f136dc96aadaa2f49fcbd2086774428763384aff9",
-        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "id": "urn:codenoesis:evidence:sha256:5be73ad3f9623ae064a4114ab22510c243225b88f4b081bb3e959071994b1013",
+        "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
         "locator": {
           "record_kind": "occurrence",
           "document_path": "crates/api/src/lib.rs",
@@ -129,8 +129,8 @@
         "api/UserId#"
       ],
       "compiler_evidence": {
-        "id": "urn:codenoesis:evidence:sha256:8c8da09eb2a3e02902bd3879be4ee6735a8f449c015638f491eb74296fa10f38",
-        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "id": "urn:codenoesis:evidence:sha256:6e2a2a703036a314c019058ec947a243fee7045eadf7e0da61c28e66d5373849",
+        "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
         "locator": {
           "record_kind": "occurrence",
           "document_path": "crates/api/src/lib.rs",
@@ -166,8 +166,8 @@
         "api/UserAlias#"
       ],
       "compiler_evidence": {
-        "id": "urn:codenoesis:evidence:sha256:e1410b9941d1079d9a0690070d6ac1895859f768afeb1ea08c63089542bab56a",
-        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "id": "urn:codenoesis:evidence:sha256:b76156256c49a68c563164d80dc6391e36cf525fc4dea124a4c566757d3787e8",
+        "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
         "locator": {
           "record_kind": "occurrence",
           "document_path": "crates/api/src/lib.rs",
@@ -203,8 +203,8 @@
         "api/MemoryStore#"
       ],
       "compiler_evidence": {
-        "id": "urn:codenoesis:evidence:sha256:e6b53823f286000b0caf5660a208d2d3c1857c5eb8bc2dc10b6d49dc3d01cd71",
-        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "id": "urn:codenoesis:evidence:sha256:b91bbcc0f1ca8f06d5cee2a042ecf9cdf2fa3c5e9461deef8db18d0c2bbe96b3",
+        "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
         "locator": {
           "record_kind": "occurrence",
           "document_path": "crates/api/src/lib.rs",
@@ -240,8 +240,8 @@
         "api/MemoryStore#get()."
       ],
       "compiler_evidence": {
-        "id": "urn:codenoesis:evidence:sha256:3995d5420019fcf5b6b5cc1bcd9089890888662b44477b851ddc521e7f9d35da",
-        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "id": "urn:codenoesis:evidence:sha256:1da59162737f60141e3a51bf50ef6ad84d21c385f20322072b7e1794f3873bd8",
+        "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
         "locator": {
           "record_kind": "occurrence",
           "document_path": "crates/api/src/lib.rs",
@@ -277,8 +277,8 @@
         "api/load()."
       ],
       "compiler_evidence": {
-        "id": "urn:codenoesis:evidence:sha256:956361d8673fce1b4c3c9628eccd252f8171c935a8230370d790d81480ebd77c",
-        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "id": "urn:codenoesis:evidence:sha256:ff88021bb62c925a9a40397202d12fccaa36302f11cbf32c92c18644d409b030",
+        "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
         "locator": {
           "record_kind": "occurrence",
           "document_path": "crates/api/src/lib.rs",
@@ -314,8 +314,8 @@
         "api/`Café`#"
       ],
       "compiler_evidence": {
-        "id": "urn:codenoesis:evidence:sha256:9aa3fd57011e3cad09c830781b7ed486add10bb87f958dd8275204f84ff979af",
-        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "id": "urn:codenoesis:evidence:sha256:078e4e532aba841813b5248cae0862db0c8bc2facc723a82177c312d88b3d42d",
+        "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
         "locator": {
           "record_kind": "occurrence",
           "document_path": "crates/api/src/lib.rs",
@@ -351,8 +351,8 @@
         "api/generated_helper!"
       ],
       "compiler_evidence": {
-        "id": "urn:codenoesis:evidence:sha256:344786b4bf2d0ddc9e3a4a49099b9ce676e92fc09b61040866f4aab025187a79",
-        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "id": "urn:codenoesis:evidence:sha256:2585b349fbc99a118f1f8a4e854608205b89ff7b1f6eee38e292d548950d293c",
+        "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
         "locator": {
           "record_kind": "occurrence",
           "document_path": "crates/api/src/lib.rs",
@@ -388,8 +388,8 @@
         "api/generated_helper()."
       ],
       "compiler_evidence": {
-        "id": "urn:codenoesis:evidence:sha256:8b1b86d248a2b048c429a51bfc9a8bee1c03feb52d27b3b59d196f3589bd7e18",
-        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "id": "urn:codenoesis:evidence:sha256:bcc0a1e55dad14c6adf126b098b806ccdb3acbe1b3e7301b4316ff37f57517a4",
+        "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
         "locator": {
           "record_kind": "occurrence",
           "document_path": "crates/api/src/lib.rs",
@@ -425,8 +425,8 @@
         "client/fetch()."
       ],
       "compiler_evidence": {
-        "id": "urn:codenoesis:evidence:sha256:1d2c7aea463ea2686f547b0b30e91dcb6691bc50854ffa3a0a4b029a3021f7e7",
-        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "id": "urn:codenoesis:evidence:sha256:1133be7a88815d21811a3de7b6c8fb7a124b87900016b7387843bf51910a900c",
+        "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
         "locator": {
           "record_kind": "occurrence",
           "document_path": "crates/client/src/lib.rs",
@@ -462,8 +462,8 @@
         "client/accepts_store()."
       ],
       "compiler_evidence": {
-        "id": "urn:codenoesis:evidence:sha256:02a73afbe546e39d42f382b7ae0bbcc11e1fe90d293bd6130e34aec37ddf44a3",
-        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "id": "urn:codenoesis:evidence:sha256:166f5e9a5984ffce71462d77de085cc86f8cca86d3fd5a7f9cf97b35e2696d26",
+        "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
         "locator": {
           "record_kind": "occurrence",
           "document_path": "crates/client/src/lib.rs",
@@ -497,8 +497,8 @@
         "0"
       ],
       "compiler_evidence": {
-        "id": "urn:codenoesis:evidence:sha256:e079aafb21f851ec137b985430fca61d25b242f095482b029714f885a67a7757",
-        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "id": "urn:codenoesis:evidence:sha256:817f2699d050d0475e6505f70db3f6e9870a0ae78b20c3be1127bb0d790bd1ee",
+        "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
         "locator": {
           "record_kind": "occurrence",
           "document_path": "crates/client/src/lib.rs",
@@ -534,8 +534,8 @@
         "core/option/Option#"
       ],
       "compiler_evidence": {
-        "id": "urn:codenoesis:evidence:sha256:ca653b24dca528888c5f3b1cba02508cf52956ba307b55757b75059397eb4e62",
-        "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+        "id": "urn:codenoesis:evidence:sha256:9250ad59768212012b4d012e357a1fe955e4ca88da4c35580929261e579c0dc6",
+        "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
         "locator": {
           "record_kind": "external_symbol",
           "symbol": "rust-analyzer cargo core 1.97.1 core/option/Option#"
@@ -563,7 +563,7 @@
       "source": "urn:codenoesis:entity:blake3:c3ebb92fb28b377dfc1f6476189b2fa640404a8d1009241e20c275f118049e6c",
       "target": "urn:codenoesis:entity:blake3:eb1d85daea722e537c7fa1e0d5ebec48ee64f5bc19c60e2c3c3a7e0dcbaee348",
       "evidence_ids": [
-        "urn:codenoesis:evidence:sha256:19b26f8592dd183e7f9a7325caf8361e2bc832403cf151199d5a18e890c41601"
+        "urn:codenoesis:evidence:sha256:ad2950dfa6dd4193af9f7d6b7f5a778ed7339ef15f7350e529519c10d8e8d19e"
       ]
     },
     {
@@ -572,7 +572,7 @@
       "source": "urn:codenoesis:entity:blake3:cc98d373e293196f075b94a1e6f43e8357d5f7b006aad62676f7d39330b1e1f1",
       "target": "urn:codenoesis:entity:blake3:e76696388a0810768639dd858c172a9f0d32273564a6c9456641bb3d11c31dfd",
       "evidence_ids": [
-        "urn:codenoesis:evidence:sha256:dffec3bd288bdfb185cfe206e6ef8f6e6f943025ae79fd671c9cac0dcabab9ea"
+        "urn:codenoesis:evidence:sha256:5b1924167ad8d865adbf7daff968fe90e4e67ac7b64f2c52ddea7fefca890050"
       ]
     },
     {
@@ -581,7 +581,7 @@
       "source": "urn:codenoesis:entity:blake3:f4a770192c8311e73b562f6944a05980b27b6dec9dd1a82855dee677fdf63e81",
       "target": "urn:codenoesis:entity:blake3:eb1d85daea722e537c7fa1e0d5ebec48ee64f5bc19c60e2c3c3a7e0dcbaee348",
       "evidence_ids": [
-        "urn:codenoesis:evidence:sha256:90315928ed50bac067ad74172857aa91ae81d5c6ce34dfe1b3f219fd95bc1bda"
+        "urn:codenoesis:evidence:sha256:de29ca6b891fbfc7ec95acb1564e60edf83f72cb2e7ea401bd6cd123452dd97e"
       ]
     },
     {
@@ -590,7 +590,7 @@
       "source": "urn:codenoesis:entity:blake3:e7ea2a5aa5fba1710d42c76c36c5d8b3b488d093946c4c20f5e6418572fa0b33",
       "target": "urn:codenoesis:entity:blake3:e6a6cf3c156a588d5810c760423ad09756efbd111facb6b6d3596868d6a1a292",
       "evidence_ids": [
-        "urn:codenoesis:evidence:sha256:9444168b15439799358e3f03f55b61a057de20e8f95f096eee954666be04f00a"
+        "urn:codenoesis:evidence:sha256:f38ffed9dde768b758fafbcad690d2abc78ab914d9ecdf5fbfa5c42e2cb5976e"
       ]
     },
     {
@@ -599,14 +599,14 @@
       "source": "urn:codenoesis:entity:blake3:336c4846626bdd5a8d9fe1625703dd2b4feb0de7d429b8c77604db4c37bca19e",
       "target": "urn:codenoesis:entity:blake3:748ecb4632e636a369206c3839453d7a8ebc317df213ee757f832f9111f4edef",
       "evidence_ids": [
-        "urn:codenoesis:evidence:sha256:4c2c6b210846512aa019a7ef6f0518200ac67e7b5734a5b5bba800454707f180"
+        "urn:codenoesis:evidence:sha256:bfcc70be5b63d2ffe4174adda4cda8e11203eb001c885b7396f29214ccff5768"
       ]
     }
   ],
   "relationship_evidence": [
     {
-      "id": "urn:codenoesis:evidence:sha256:19b26f8592dd183e7f9a7325caf8361e2bc832403cf151199d5a18e890c41601",
-      "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+      "id": "urn:codenoesis:evidence:sha256:ad2950dfa6dd4193af9f7d6b7f5a778ed7339ef15f7350e529519c10d8e8d19e",
+      "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
       "locator": {
         "record_kind": "occurrence_resolution",
         "source_symbol": "rust.symbol_reference:Store",
@@ -620,8 +620,8 @@
       }
     },
     {
-      "id": "urn:codenoesis:evidence:sha256:dffec3bd288bdfb185cfe206e6ef8f6e6f943025ae79fd671c9cac0dcabab9ea",
-      "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+      "id": "urn:codenoesis:evidence:sha256:5b1924167ad8d865adbf7daff968fe90e4e67ac7b64f2c52ddea7fefca890050",
+      "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
       "locator": {
         "record_kind": "occurrence_reference",
         "source_symbol": "rust-analyzer cargo client 0.1.0 client/fetch().",
@@ -635,8 +635,8 @@
       }
     },
     {
-      "id": "urn:codenoesis:evidence:sha256:90315928ed50bac067ad74172857aa91ae81d5c6ce34dfe1b3f219fd95bc1bda",
-      "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+      "id": "urn:codenoesis:evidence:sha256:de29ca6b891fbfc7ec95acb1564e60edf83f72cb2e7ea401bd6cd123452dd97e",
+      "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
       "locator": {
         "record_kind": "symbol_relationship",
         "source_symbol": "rust-analyzer cargo api 0.1.0 api/MemoryStore#",
@@ -647,8 +647,8 @@
       }
     },
     {
-      "id": "urn:codenoesis:evidence:sha256:9444168b15439799358e3f03f55b61a057de20e8f95f096eee954666be04f00a",
-      "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+      "id": "urn:codenoesis:evidence:sha256:f38ffed9dde768b758fafbcad690d2abc78ab914d9ecdf5fbfa5c42e2cb5976e",
+      "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
       "locator": {
         "record_kind": "symbol_relationship",
         "source_symbol": "rust-analyzer cargo api 0.1.0 api/MemoryStore#get().",
@@ -660,8 +660,8 @@
       }
     },
     {
-      "id": "urn:codenoesis:evidence:sha256:4c2c6b210846512aa019a7ef6f0518200ac67e7b5734a5b5bba800454707f180",
-      "artifact_sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527",
+      "id": "urn:codenoesis:evidence:sha256:bfcc70be5b63d2ffe4174adda4cda8e11203eb001c885b7396f29214ccff5768",
+      "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
       "locator": {
         "record_kind": "symbol_relationship",
         "source_symbol": "rust-analyzer cargo api 0.1.0 api/UserAlias#",
