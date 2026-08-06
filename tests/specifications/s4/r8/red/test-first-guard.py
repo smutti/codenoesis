@@ -351,10 +351,8 @@ def portable_graph_failure(graph: dict[str, Any]) -> str | None:
             return "export.unresolved_evidence"
 
     for entity in graph["entities"]:
-        referenced = [
-            *entity.get("compiler_evidence_ids", []),
-            *entity.get("source_evidence_ids", []),
-        ]
+        referenced = entity.get("compiler_evidence_ids", [])
+        referenced += entity.get("source_evidence_ids", [])
         if not set(referenced).issubset(evidence_ids):
             return "export.unresolved_evidence"
         source_entity_id = entity.get("source_entity_id")
@@ -620,7 +618,7 @@ class S4R8PortableExplorerGovernanceTests(unittest.TestCase):
             self.assertEqual(item["git_blob_oid"], git_blob_oid(value))
 
         graph = load_json(PORTABLE_GRAPH_PATH)
-        self.assertEqual(PORTABLE_GRAPH_PATH.read_bytes(), canonical_json(graph) + b"\n")
+        self.assertEqual(PORTABLE_GRAPH_PATH.read_bytes(), canonical_json(graph))
         self.assertLessEqual(len(PORTABLE_GRAPH_PATH.read_bytes()), LIMITS["portable_graph_bytes"])
         self.assertIsNone(portable_graph_failure(graph))
 

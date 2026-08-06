@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/portable-graph-v1.schema.json",
+  "title": "CodeNoesis PortableGraphV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "repository",
+    "source_snapshot",
+    "ontology_version",
+    "query_contract_version",
+    "projection",
+    "entities",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage_gaps",
+    "documents",
+    "document_statements"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.portable-graph/v1"
+    },
+    "repository": {
+      "$ref": "../../s1/repository-snapshot-v2.schema.json#/$defs/repository"
+    },
+    "source_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "snapshot_id",
+        "semantic_hash"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "codenoesis.repository-snapshot/v10"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:snapshot:blake3:[0-9a-f]{64}$"
+        },
+        "semantic_hash": {
+          "$ref": "../../s1/repository-snapshot-v2.schema.json#/$defs/blake3_hash"
+        }
+      }
+    },
+    "ontology_version": {
+      "const": "codenoesis.ontology/rust/v7"
+    },
+    "query_contract_version": {
+      "const": "codenoesis.local-query-result/v5"
+    },
+    "projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonicalization",
+        "family_order",
+        "identity_preservation",
+        "reference_preservation",
+        "evidence_preservation",
+        "claim_state_policy",
+        "unknown_fields_allowed",
+        "source_contents_included",
+        "source_snippets_included"
+      ],
+      "properties": {
+        "canonicalization": {
+          "const": "RFC8785"
+        },
+        "family_order": {
+          "const": [
+            "entities",
+            "relationships",
+            "claims",
+            "evidence",
+            "diagnostics",
+            "coverage_gaps",
+            "documents",
+            "document_statements"
+          ]
+        },
+        "identity_preservation": {
+          "const": "exact"
+        },
+        "reference_preservation": {
+          "const": "exact"
+        },
+        "evidence_preservation": {
+          "const": "lossless_redacted_metadata"
+        },
+        "claim_state_policy": {
+          "const": "preserve_without_upgrade"
+        },
+        "unknown_fields_allowed": {
+          "const": false
+        },
+        "source_contents_included": {
+          "const": false
+        },
+        "source_snippets_included": {
+          "const": false
+        }
+      }
+    },
+    "entities": {
+      "type": "array",
+      "maxItems": 30000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "../r7/extraction-chunk-v7.schema.json#/$defs/graph_entity"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "maxItems": 60000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "../r7/extraction-chunk-v7.schema.json#/$defs/graph_relationship"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "maxItems": 90000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "../r7/extraction-chunk-v7.schema.json#/$defs/claim"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 90000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "../r7/extraction-chunk-v7.schema.json#/$defs/evidence"
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "maxItems": 10000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "../r7/extraction-chunk-v7.schema.json#/$defs/graph_diagnostic"
+      }
+    },
+    "coverage_gaps": {
+      "type": "array",
+      "maxItems": 10000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "../r7/extraction-chunk-v7.schema.json#/$defs/graph_coverage"
+      }
+    },
+    "documents": {
+      "type": "array",
+      "maxItems": 2001,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "../local-query-result-v1.schema.json#/$defs/document"
+      }
+    },
+    "document_statements": {
+      "type": "array",
+      "maxItems": 200000,
+      "uniqueItems": true,
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "../local-query-result-v1.schema.json#/$defs/statement"
+          },
+          {
+            "$ref": "../local-query-result-v1.schema.json#/$defs/linked_statement"
+          }
+        ]
+      }
+    }
+  }
+}

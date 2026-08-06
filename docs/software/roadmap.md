@@ -1,7 +1,7 @@
 # CodeNoesis Delivery Roadmap
 
 > Status: **Proposed planning companion — not implementation authority**.
-> Last updated: **2026-08-05**.
+> Last updated: **2026-08-06**.
 
 This roadmap sequences product and validation work without changing the
 normative meaning or approval status of the
@@ -38,8 +38,9 @@ The current compatibility profile deliberately remains narrow:
   fields, variants, constants/statics, associated types, method contexts, and
   attribute-preserving uncertainty while remaining not Verified;
 - Cargo feature worlds, macro expansion, compiler-grade resolution, framework
-  semantics, general graph traversal, and an interactive viewer remain
-  unsupported or explicit coverage gaps.
+  semantics and general canonical graph traversal remain unsupported or
+  explicit coverage gaps; R8 export/explorer governance is defined, but its
+  product implementation is not yet present.
 
 ## Real-world Rust compatibility target
 
@@ -80,14 +81,18 @@ For immutable guard traceability, the R5 pre-merge roadmap said
 "R0-R4 are implemented" and used the sequence "R5 → R6 → R7 → R8". The R6
 pre-merge roadmap then said "R0-R5 are implemented". Its exact status marker
 was "R6 governance is Proposed", and it retained "R5 → R6 → R7 → R8". These
-quoted historical markers do not describe the current planning state.
+quoted historical markers do not describe the current planning state. The R7
+pre-merge roadmap said "R0-R6 are implemented" and used the exact marker
+"R7 static import governance is Proposed"; those markers are also retained
+only as history.
 
-R0-R6 are implemented, but remain not Verified until their complete retained
-evidence is independently accepted. R7 static import governance is Proposed in
-issue #123; it authorizes no product implementation, and index generation
-remains S9 work. The bounded delivery order remains R6 → R7 → R8;
-implementation, review, and protected merge remain separate for each
-capability.
+R0-R7 are implemented, but remain not Verified until their complete retained
+evidence is independently accepted. R7 is implemented but not yet Verified;
+index generation remains S9 work. R8 governance is Approved only by the exact
+protected manual merge of the package authorized in issue #110, and that merge
+still authorizes no product implementation. The bounded delivery order is
+R7 → R8 → R9; implementation, review, and protected merge remain separate for
+each capability.
 
 | Order | Planning item | Outcome | Governance dependency | Candidate acceptance gate |
 |---|---|---|---|---|
@@ -98,8 +103,8 @@ capability.
 | `R4` | Manifest facts and feature coverage | Represent package metadata, target declarations, registry/path/Git dependencies, target-specific dependency tables, feature declarations, optional dependencies, `required-features`, patch declarations, and build-script presence without claiming an active Cargo resolution. | Approve entity/property identities, claim states, compatibility, limits, and ontology version. | Every supported manifest fact resolves to bytes; ignored or unsupported fields are explicit diagnostics or coverage gaps; no dependency is fetched, no patch is applied, and no feature or target world is guessed. |
 | `R5` | Rust semantic depth at real-world scale | Implemented but not Verified: the explicit V8 declaration-only profile adds fields, variants, constants/statics, associated types, inherent methods, trait-context method identities, and attribute-preserving uncertainty states. | Decision 0015, protected governance/correction/product merges #112/#115/#116; complete immutable verification remains open. | Reviewed generic fixtures and sampled facts from multiple corpus entries cover every new entity/relation, malformed syntax, stable IDs, graph invariants, evidence resolution, selector-absent compatibility, no execution, and deterministic replay. |
 | `R6` | Honest framework and macro handling | Implemented but not Verified: the explicit V9 source profile adds framework-neutral component, service, configuration, endpoint, route, and handler declarations for closed forms while preserving unresolved `cfg`, attribute-macro, declarative-macro, and proc-macro meaning as candidates and gaps. | Decision 0016 plus protected governance/evidence-ID/product merges #118/#121/#122; complete immutable verification remains open. | The project-owned two-style fixture finds reviewed declarations and unresolved candidates, rejects comments/strings/docs/imports/names/unused/generated/target decoys, preserves exact evidence and identities, never expands code, and never labels syntax as observed runtime behavior. |
-| `R7` | Optional compiler-grade enrichment | Proposed static import: accept one explicitly supplied Rust SCIP v0.9.0 artifact only after exact repository/revision/tree/source/producer/toolchain binding and bounded canonical wire validation; add compiler symbols plus `RESOLVES_TO`, `REFERENCES`, `IMPLEMENTS`, and `TYPE_DEFINITION` without inventing calls or generated source. | Proposed Decision 0017 and bounded `FR-EXT-005` in issue #123; future product work requires a separate Ready issue. Static import grants no build authority; generation remains S9 work behind a separately approved trust/sandbox profile. | The project-owned binary fixture imports deterministically with dual source/index evidence, explicit external/generated states and call/macro gaps; stale, malformed, mismatched, ambiguous, over-limit, unsafe, or privacy-leaking inputs fail before publication. Standard local scans still execute nothing. |
-| `R8` | Portable graph export and local explorer | Export a versioned, evidence-preserving projection and open a read-only local graph explorer for entities, relations, claims, gaps, and source evidence. | Public export compatibility decision; viewer security and size limits. The canonical snapshot remains authoritative. | Reimport validates identity and evidence without loss; filters and bounded traversal cannot mutate the snapshot; unsupported projections remain non-canonical. This is not a full product authoring GUI. |
+| `R7` | Optional compiler-grade enrichment | Implemented but not Verified: one explicitly supplied Rust SCIP v0.9.0 artifact is accepted only after exact repository/revision/tree/source/producer/toolchain binding and bounded canonical wire validation; compiler symbols plus `RESOLVES_TO`, `REFERENCES`, `IMPLEMENTS`, and `TYPE_DEFINITION` add no calls or generated source. | Decision 0017, protected governance/correction/product merges through #130, and bounded `FR-EXT-005`; complete immutable verification remains open. Static import grants no build authority, and generation remains S9 work behind a separately approved trust/sandbox profile. | The project-owned binary fixture imports deterministically with dual source/index evidence, explicit external/generated states and call/macro gaps; stale, malformed, mismatched, ambiguous, over-limit, unsafe, or privacy-leaking inputs fail before publication. Standard local scans still execute nothing. |
+| `R8` | Portable graph export and local explorer | Governance package defined, product not implemented: export exact R7 families as canonical PortableGraphV1 and generate a read-only first-party LocalExplorerV1 with exact-ID/text search, typed filters, evidence inspection, and deterministic depth-1/2 neighborhoods. | Decision 0018 and issue #110; protected governance merge approves only the bounded contract. A separate Ready product issue must retain its own CLI Red. The V10 snapshot remains canonical; no dependency, source snippet, server, network, browser auto-launch, or ontology change is authorized. | Lossless reimport validates every identity/reference/evidence/family digest; 50 permutations are byte-identical; CSP/XSS/privacy/path/symlink and maximum-plus-one cases fail closed; the static viewer remains useful without the source repository and cannot mutate the graph. |
 | `R9` | Multi-repository pilot and publication evidence | Run scan, docs, query, export, and explorer against structurally independent pinned public repositories and publish a reproducible evaluation package. | Product evidence remains under `docs/software/`; conference hypotheses and analysis remain under `docs/research/`. | Repeated runs are deterministic; per-repository and aggregate graph/coverage counts, unresolved constructs, timings, resource usage, environment, tool versions, failure cases, and known limitations are retained in machine-readable form. |
 
 ### Earliest useful real-world checkpoint
@@ -348,9 +353,10 @@ The recommended execution order is:
 5. run the first partial S4 journey on one replaceable corpus entry;
 6. deliver `R5` and `R6` as separate ontology/framework objectives after the
    implemented R4 baseline;
-7. deliver the separately authorized R7 static importer after its trust contract;
+7. retain and independently accept the implemented R7 importer evidence;
    index generation remains S9 work under a distinct sandbox decision;
-8. deliver `R8`, then execute `R9` on at least two independent repositories;
+8. implement the separately governed `R8` package, then execute `R9` on at
+   least two independent repositories;
 9. continue the polyglot lane one approved adapter at a time;
 10. after S5/S6 prerequisites, deliver `C0`–`C4` as one capability and one
     behavioral implementation objective at a time, then extend through `C5`.
