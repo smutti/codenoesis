@@ -7,6 +7,7 @@ mod s4_r3;
 mod s4_r4;
 mod s4_r5;
 mod s4_r6;
+mod s4_r7;
 mod s5;
 mod s6;
 
@@ -17,6 +18,7 @@ pub use s4_r3::*;
 pub use s4_r4::*;
 pub use s4_r5::*;
 pub use s4_r6::*;
+pub use s4_r7::*;
 pub use s5::*;
 pub use s6::*;
 
@@ -546,6 +548,7 @@ fn publication_candidate(value: &Value) -> Result<PublicationCandidate, Publicat
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V7
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V8
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V9
+            | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V10
     );
     let semantic = required_field(value, "semantic", "semantic")?;
     let repository = required_field(semantic, "repository", "semantic.repository")?;
@@ -663,6 +666,7 @@ fn publication_artifacts(
                 "codenoesis.extraction-chunk/v4"
                     | "codenoesis.extraction-chunk/v5"
                     | "codenoesis.extraction-chunk/v6"
+                    | "codenoesis.extraction-chunk/v7"
             )
         ) {
             let subject = required_field(chunk, "subject", "extraction_chunk.subject")?;

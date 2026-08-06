@@ -1,0 +1,34 @@
+{
+  "schema_version": "codenoesis.s4-r7-implementation-correction-red/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/125",
+  "requirement_ids": [
+    "FR-EXT-005",
+    "NFR-SEC-001",
+    "NFR-TST-001"
+  ],
+  "slice": "S4",
+  "roadmap_capability": "R7",
+  "risk": "high",
+  "phase": "implementation_correction_red",
+  "test": "conf_fr_ext_005_invalid_security_matrix",
+  "command": "cargo test --locked -p noesis --test e2e_fr_ext_005_scip_import conf_fr_ext_005_invalid_security_matrix -- --exact --nocapture",
+  "runner_exit": 101,
+  "expected_reason": "Every one of the 29 immutable invalid/security cases must fail with its oracle-bound ErrorV14 code and no publication.",
+  "actual_reason": "The duplicate-metadata case returned extraction.malformed_compiler_index instead of the immutable extraction.noncanonical_compiler_index result.",
+  "failing_case": "duplicate-metadata",
+  "expected_error": "extraction.noncanonical_compiler_index",
+  "actual_error": "extraction.malformed_compiler_index",
+  "production_fix_applied_after_red": true,
+  "retained_log": {
+    "path": "crates/noesis/tests/evidence/s4/r7/red/invalid-security-matrix.log",
+    "byte_length": 1195,
+    "sha256": "2adef7acf30bbe835ab48f56f6e26edc8d1eefa9b154487d9d51b4b0bce3499d"
+  },
+  "resolution": {
+    "behavior": "Duplicate or non-first top-level SCIP metadata is classified as a noncanonical artifact before generated decode.",
+    "green_command": "cargo test --locked -p noesis --test e2e_fr_ext_005_scip_import conf_fr_ext_005_invalid_security_matrix -- --exact",
+    "green_exit": 0,
+    "observed_cases": 29,
+    "partial_publication": false
+  }
+}
