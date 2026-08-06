@@ -15,6 +15,7 @@ use codenoesis_domain::s4_r3::{
 use codenoesis_domain::s4_r4::{CargoManifestFactError, CargoManifestFactExtraction};
 use codenoesis_domain::s4_r5::{RustSemanticDepthExtraction, RustSemanticError};
 use codenoesis_domain::s4_r6::{FrameworkError, FrameworkExtraction};
+use codenoesis_domain::s4_r7::{CompilerIndexError, CompilerIndexOverlay};
 use codenoesis_domain::s5::{AnalysisCacheEntry, IncrementalWorkspaceExtraction};
 use codenoesis_domain::s6::{ContractError, OpenApiContractInput, ProviderContract};
 use codenoesis_domain::storage::{
@@ -25,6 +26,19 @@ use codenoesis_domain::{
     AcquiredRepository, BoundRevision, RepositoryError, RepositoryIdentity, RepositoryInventory,
     Revision,
 };
+
+pub trait CompilerIndexImporter {
+    /// Imports one explicitly supplied immutable compiler index over validated R6 facts.
+    ///
+    /// # Errors
+    ///
+    /// Returns a closed path, binding, wire, identity, evidence, or limit failure.
+    fn import_compiler_index(
+        &self,
+        inventory: &RepositoryInventory,
+        source: &codenoesis_domain::s4_r6::FrameworkKnowledge,
+    ) -> Result<CompilerIndexOverlay, CompilerIndexError>;
+}
 
 pub trait RepositoryAcquirer {
     /// Resolves and verifies the complete supported repository closure once.

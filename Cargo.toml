@@ -7,6 +7,7 @@ members = [
     "crates/codenoesis-lang-rust",
     "crates/codenoesis-ports",
     "crates/codenoesis-repository",
+    "crates/codenoesis-scip",
     "crates/codenoesis-store-local",
     "crates/noesis",
     "xtask",
@@ -23,11 +24,13 @@ codenoesis-domain = { path = "crates/codenoesis-domain" }
 codenoesis-lang-rust = { path = "crates/codenoesis-lang-rust" }
 codenoesis-ports = { path = "crates/codenoesis-ports" }
 codenoesis-repository = { path = "crates/codenoesis-repository" }
+codenoesis-scip = { path = "crates/codenoesis-scip" }
 codenoesis-store-local = { path = "crates/codenoesis-store-local" }
 crc32fast = "=1.5.0"
 flate2 = { version = "1", default-features = false, features = ["rust_backend"] }
 landlock = "0.4.5"
 libc = "0.2"
+protobuf = "=3.7.2"
 rusqlite = { version = "=0.40.1", default-features = false, features = ["bundled"] }
 same-file = "=1.0.6"
 seccompiler = "0.5"
@@ -35,6 +38,7 @@ serde_json = "1"
 sha1 = "0.11"
 sha1collisiondetection = { version = "=0.3.4", default-features = false }
 sha2 = "0.11"
+scip = "=0.9.0"
 tempfile = "=3.27.0"
 tree-sitter = "0.26.11"
 tree-sitter-rust = "0.24.2"

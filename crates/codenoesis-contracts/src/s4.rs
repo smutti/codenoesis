@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::error::Error;
 use std::fmt::Write as _;
 use std::fmt::{self, Display, Formatter};
@@ -619,11 +619,13 @@ struct DocumentDraft {
     statements: Vec<Value>,
 }
 
+#[allow(clippy::struct_excessive_bools)]
 pub(super) struct GraphIndex {
     pub(super) repository_identity: String,
     cargo_manifest_declarations: bool,
     rust_semantic_depth: bool,
     framework_declarations: bool,
+    compiler_index: bool,
     pub(super) entities: BTreeMap<String, Value>,
     relationships: Vec<Value>,
     pub(super) relationships_by_id: BTreeMap<String, Value>,
@@ -648,14 +650,21 @@ impl GraphIndex {
             string_field(graph, "schema_version"),
             Ok("codenoesis.knowledge-graph/v4"
                 | "codenoesis.knowledge-graph/v5"
-                | "codenoesis.knowledge-graph/v6")
+                | "codenoesis.knowledge-graph/v6"
+                | "codenoesis.knowledge-graph/v7")
         );
         let rust_semantic_depth = matches!(
             string_field(graph, "schema_version"),
-            Ok("codenoesis.knowledge-graph/v5" | "codenoesis.knowledge-graph/v6")
+            Ok("codenoesis.knowledge-graph/v5"
+                | "codenoesis.knowledge-graph/v6"
+                | "codenoesis.knowledge-graph/v7")
         );
-        let framework_declarations =
-            string_field(graph, "schema_version") == Ok("codenoesis.knowledge-graph/v6");
+        let framework_declarations = matches!(
+            string_field(graph, "schema_version"),
+            Ok("codenoesis.knowledge-graph/v6" | "codenoesis.knowledge-graph/v7")
+        );
+        let compiler_index =
+            string_field(graph, "schema_version") == Ok("codenoesis.knowledge-graph/v7");
         let diagnostics = if rust_semantic_depth {
             id_map(graph, "diagnostics")?
         } else {
@@ -691,6 +700,7 @@ impl GraphIndex {
             cargo_manifest_declarations,
             rust_semantic_depth,
             framework_declarations,
+            compiler_index,
             entities,
             relationships,
             relationships_by_id,
@@ -953,6 +963,9 @@ fn overview_document(index: &GraphIndex) -> Result<DocumentDraft, DocumentationC
             statements.push(statement);
         }
     }
+    if index.compiler_index {
+        append_compiler_index_documentation(index, &document_id, &mut content, &mut statements)?;
+    }
     Ok(DocumentDraft {
         document_id,
         kind: "overview",
@@ -961,6 +974,214 @@ fn overview_document(index: &GraphIndex) -> Result<DocumentDraft, DocumentationC
         bytes: content.into_bytes(),
         statements,
     })
+}
+
+#[allow(clippy::too_many_lines)]
+fn append_compiler_index_documentation(
+    index: &GraphIndex,
+    document_id: &str,
+    content: &mut String,
+    statements: &mut Vec<Value>,
+) -> Result<(), DocumentationContractError> {
+    let mut symbols = index
+        .entities
+        .values()
+        .filter(|entity| string_field(entity, "kind") == Ok("compiler.symbol"))
+        .collect::<Vec<_>>();
+    symbols.sort_by(|left, right| {
+        string_field(left, "id")
+            .unwrap_or_default()
+            .cmp(string_field(right, "id").unwrap_or_default())
+    });
+    let in_repository = symbols
+        .iter()
+        .filter(|symbol| string_field(symbol, "binding_state") == Ok("in_repository_bound"))
+        .copied()
+        .collect::<Vec<_>>();
+    let external = symbols
+        .iter()
+        .filter(|symbol| string_field(symbol, "binding_state") == Ok("external_unbound"))
+        .copied()
+        .collect::<Vec<_>>();
+    let generated = symbols
+        .iter()
+        .filter(|symbol| string_field(symbol, "binding_state") == Ok("generated_unbound"))
+        .copied()
+        .collect::<Vec<_>>();
+    if in_repository.len() != 13 || external.len() != 1 || generated.len() != 1 {
+        return Err(DocumentationContractError::InvalidSnapshot);
+    }
+
+    let all_symbol_ids = symbols
+        .iter()
+        .map(|symbol| string_field(symbol, "id").map(str::to_owned))
+        .collect::<Result<Vec<_>, _>>()?;
+    let mut bound_evidence = BTreeSet::new();
+    for symbol in &in_repository {
+        let claim = index.claim("entity", string_field(symbol, "id")?)?;
+        bound_evidence.extend(string_array(claim, "evidence_ids")?);
+    }
+    if !bound_evidence
+        .iter()
+        .any(|id| id.starts_with("urn:codenoesis:evidence:sha256:"))
+    {
+        return Err(DocumentationContractError::InvalidSnapshot);
+    }
+    let provenance_statement = statement_value(
+        document_id,
+        "compiler_index_provenance",
+        &index.repository_identity,
+        0,
+        "derived_fact",
+        all_symbol_ids,
+        bound_evidence.into_iter().collect(),
+        Vec::new(),
+    );
+
+    let references = index
+        .relationships
+        .iter()
+        .filter(|relationship| {
+            string_field(relationship, "kind") == Ok("REFERENCES")
+                && string_field(relationship, "provenance") == Ok("validated_scip_v0.9.0")
+        })
+        .collect::<Vec<_>>();
+    let [reference] = references.as_slice() else {
+        return Err(DocumentationContractError::InvalidSnapshot);
+    };
+    let reference_id = string_field(reference, "id")?;
+    let reference_claim = index.claim("relationship", reference_id)?;
+    let reference_statement = statement_value(
+        document_id,
+        "compiler_index_reference_semantics",
+        reference_id,
+        0,
+        "deterministic_fact",
+        vec![reference_id.to_owned()],
+        string_array(reference_claim, "evidence_ids")?,
+        Vec::new(),
+    );
+
+    let unbound = [generated[0], external[0]];
+    let mut unbound_ids = Vec::with_capacity(unbound.len());
+    let mut unbound_evidence = BTreeSet::new();
+    for symbol in unbound {
+        let id = string_field(symbol, "id")?;
+        unbound_ids.push(id.to_owned());
+        unbound_evidence.extend(string_array(index.claim("entity", id)?, "evidence_ids")?);
+    }
+    let unbound_statement = statement_value(
+        document_id,
+        "compiler_index_unbound_symbols",
+        &index.repository_identity,
+        0,
+        "deterministic_fact",
+        unbound_ids,
+        unbound_evidence.into_iter().collect(),
+        Vec::new(),
+    );
+
+    content.push_str("\n## Compiler-index assertions\n\n");
+    writeln!(
+        content,
+        "Compiler-index assertions are bound to the supplied artifact and committed source; producer authenticity is not attested. {}\n",
+        statement_marker(&provenance_statement)?
+    )
+    .expect("writing Markdown to a String cannot fail");
+    writeln!(
+        content,
+        "Reference evidence does not establish a call, execution, reachability, or runtime fact. {}\n",
+        statement_marker(&reference_statement)?
+    )
+    .expect("writing Markdown to a String cannot fail");
+    writeln!(
+        content,
+        "One generated symbol and one external symbol remain explicitly unbound. {}",
+        statement_marker(&unbound_statement)?
+    )
+    .expect("writing Markdown to a String cannot fail");
+    statements.extend([provenance_statement, reference_statement, unbound_statement]);
+
+    let mut diagnostics = index
+        .diagnostics
+        .values()
+        .filter(|diagnostic| {
+            string_field(diagnostic, "code").is_ok_and(|code| code.starts_with("compiler_index."))
+        })
+        .collect::<Vec<_>>();
+    diagnostics.sort_by(|left, right| {
+        string_field(left, "id")
+            .unwrap_or_default()
+            .cmp(string_field(right, "id").unwrap_or_default())
+    });
+    if !diagnostics.is_empty() {
+        content.push_str("\n## Compiler-index conflicts\n\n");
+        for (ordinal, diagnostic) in diagnostics.into_iter().enumerate() {
+            let id = string_field(diagnostic, "id")?;
+            let code = string_field(diagnostic, "code")?;
+            let statement = statement_value(
+                document_id,
+                "compiler_index_conflict",
+                id,
+                ordinal,
+                "deterministic_fact",
+                vec![id.to_owned()],
+                string_array(diagnostic, "evidence_ids")?,
+                Vec::new(),
+            );
+            writeln!(
+                content,
+                "- Diagnostic `{}` retains syntax uncertainty beside the compiler target; neither assertion becomes runtime truth. {}",
+                markdown_code(code),
+                statement_marker(&statement)?
+            )
+            .expect("writing Markdown to a String cannot fail");
+            statements.push(statement);
+        }
+    }
+
+    let mut gaps = index
+        .coverage
+        .values()
+        .filter(|gap| {
+            string_field(gap, "capability")
+                .is_ok_and(|capability| capability.starts_with("compiler_index."))
+        })
+        .collect::<Vec<_>>();
+    gaps.sort_by(|left, right| {
+        string_field(left, "id")
+            .unwrap_or_default()
+            .cmp(string_field(right, "id").unwrap_or_default())
+    });
+    if gaps.len() != 6 {
+        return Err(DocumentationContractError::InvalidSnapshot);
+    }
+    content.push_str("\n## Compiler-index coverage\n\n");
+    for (ordinal, gap) in gaps.into_iter().enumerate() {
+        let id = string_field(gap, "id")?;
+        let capability = string_field(gap, "capability")?;
+        let state = string_field(gap, "state")?;
+        let statement = statement_value(
+            document_id,
+            "compiler_index_coverage_gap",
+            id,
+            ordinal,
+            "unsupported",
+            vec![id.to_owned()],
+            Vec::new(),
+            vec![id.to_owned()],
+        );
+        writeln!(
+            content,
+            "- `{}` is `{}`; no omitted, generated, producer, call, or runtime fact is inferred. {}",
+            markdown_code(capability),
+            markdown_code(state),
+            statement_marker(&statement)?
+        )
+        .expect("writing Markdown to a String cannot fail");
+        statements.push(statement);
+    }
+    Ok(())
 }
 
 #[allow(clippy::too_many_lines)]

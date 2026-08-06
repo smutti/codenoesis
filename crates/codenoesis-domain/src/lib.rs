@@ -8,6 +8,7 @@ pub mod s4_r3;
 pub mod s4_r4;
 pub mod s4_r5;
 pub mod s4_r6;
+pub mod s4_r7;
 pub mod s5;
 pub mod s6;
 pub mod storage;

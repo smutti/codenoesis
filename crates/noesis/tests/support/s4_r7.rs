@@ -163,6 +163,100 @@ impl MaterializedCompilerIndexRepository {
             .expect("launch R7 compiler-index subject")
     }
 
+    pub fn docs(&self) -> Output {
+        Command::new(env!("CARGO_BIN_EXE_noesis"))
+            .args(["docs", "--store"])
+            .arg(&self.store)
+            .args(["--repository-id", REPOSITORY_ID, "--output"])
+            .arg(&self.documents)
+            .args(["--format", "json"])
+            .output()
+            .expect("launch R7 documentation subject")
+    }
+
+    pub fn query(&self, requested_id: &str) -> Output {
+        Command::new(env!("CARGO_BIN_EXE_noesis"))
+            .args(["query", "--store"])
+            .arg(&self.store)
+            .args(["--repository-id", REPOSITORY_ID, "--documents"])
+            .arg(&self.documents)
+            .args(["--id", requested_id, "--format", "json"])
+            .output()
+            .expect("launch R7 exact-ID query subject")
+    }
+
+    pub fn binding_path(&self) -> PathBuf {
+        self.root.join(BINDING_RELATIVE_PATH)
+    }
+
+    pub fn artifact_path(&self) -> PathBuf {
+        self.root.join("compiler-index/index.scip")
+    }
+
+    pub fn artifact_bytes(&self) -> Vec<u8> {
+        fs::read(self.artifact_path()).expect("read materialized R7 artifact")
+    }
+
+    pub fn binding(&self) -> Value {
+        serde_json::from_slice(
+            &fs::read(self.binding_path()).expect("read materialized R7 binding"),
+        )
+        .expect("parse materialized R7 binding")
+    }
+
+    pub fn write_binding(&self, binding: &Value) {
+        fs::write(
+            self.binding_path(),
+            serde_json::to_vec(binding).expect("serialize materialized R7 binding"),
+        )
+        .expect("write materialized R7 binding");
+    }
+
+    pub fn mutate_binding(&self, mutate: impl FnOnce(&mut Value)) {
+        let mut binding = self.binding();
+        mutate(&mut binding);
+        self.write_binding(&binding);
+    }
+
+    pub fn write_bound_artifact(&self, bytes: &[u8]) {
+        fs::write(self.artifact_path(), bytes).expect("write materialized R7 artifact");
+        self.mutate_binding(|binding| {
+            binding["artifact"]["byte_length"] = Value::Number(
+                u64::try_from(bytes.len())
+                    .expect("materialized R7 artifact length")
+                    .into(),
+            );
+            binding["artifact"]["sha256"] = Value::String(lower_hex(&Sha256::digest(bytes)));
+        });
+    }
+
+    pub fn refresh_source_manifest(&self) {
+        self.mutate_binding(|binding| {
+            let indexed = binding["documents"]["indexed"]
+                .as_array()
+                .expect("materialized indexed documents")
+                .clone();
+            let bytes = serde_json::to_vec(&Value::Array(indexed))
+                .expect("serialize materialized source manifest");
+            binding["repository"]["source_manifest_sha256"] =
+                Value::String(lower_hex(&Sha256::digest(bytes)));
+        });
+    }
+
+    pub fn bind_arguments(&self, arguments: &[&str]) {
+        let value = Value::Array(
+            arguments
+                .iter()
+                .map(|argument| Value::String((*argument).to_owned()))
+                .collect(),
+        );
+        let bytes = serde_json::to_vec(&value).expect("serialize materialized R7 arguments");
+        self.mutate_binding(|binding| {
+            binding["producer"]["arguments_sha256"] =
+                Value::String(lower_hex(&Sha256::digest(bytes)));
+        });
+    }
+
     pub fn build_sentinel(&self) -> PathBuf {
         self.worktree.join("BUILD_SENTINEL_EXECUTED")
     }
@@ -188,6 +282,27 @@ pub fn expected_overlay() -> Value {
             .expect("read expected R7 compiler overlay"),
     )
     .expect("parse expected R7 compiler overlay")
+}
+
+pub fn invalid_case_expectations() -> BTreeMap<String, String> {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/specifications/s4/r7/invalid-cases-v1.json");
+    let value: Value = serde_json::from_slice(&fs::read(path).expect("read R7 invalid matrix"))
+        .expect("parse R7 invalid matrix");
+    value["cases"]
+        .as_array()
+        .expect("R7 invalid cases")
+        .iter()
+        .map(|case| {
+            (
+                case["id"].as_str().expect("R7 invalid case ID").to_owned(),
+                case["expected_error"]
+                    .as_str()
+                    .expect("R7 invalid expected error")
+                    .to_owned(),
+            )
+        })
+        .collect()
 }
 
 fn assert_reviewed_bytes(file: &Value, bytes: &[u8], fixture_path: &str) {

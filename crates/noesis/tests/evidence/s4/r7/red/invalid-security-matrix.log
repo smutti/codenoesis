@@ -1,0 +1,22 @@
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.3+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling noesis v0.1.0 (/Users/smutti/Documents/personal/codenoesis/crates/noesis)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.45s
+     Running tests/e2e_fr_ext_005_scip_import.rs (target/debug/deps/e2e_fr_ext_005_scip_import-0ceb67b958f065f8)
+
+running 1 test
+
+thread 'conf_fr_ext_005_invalid_security_matrix' (14728227) panicked at crates/noesis/tests/e2e_fr_ext_005_scip_import.rs:582:5:
+assertion `left == right` failed
+  left: String("extraction.malformed_compiler_index")
+ right: "extraction.noncanonical_compiler_index"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test conf_fr_ext_005_invalid_security_matrix ... FAILED
+
+failures:
+
+failures:
+    conf_fr_ext_005_invalid_security_matrix
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 1.47s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_ext_005_scip_import`
