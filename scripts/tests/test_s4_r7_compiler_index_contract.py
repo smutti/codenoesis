@@ -232,6 +232,8 @@ BUNDLE_FILES = {
     "tests/specifications/s4/r7/knowledge-graph-v7.schema.json",
     "tests/specifications/s4/r7/local-query-result-v5.schema.json",
     "tests/specifications/s4/r7/red-observation.json",
+    "tests/specifications/s4/r7/red/generated-writer-correction-red-observation.json",
+    "tests/specifications/s4/r7/red/generated-writer-correction-red.log",
     "tests/specifications/s4/r7/red/governance-red.log",
     "tests/specifications/s4/r7/red/test-first-guard.py",
     "tests/specifications/s4/r7/repository-snapshot-v10.schema.json",

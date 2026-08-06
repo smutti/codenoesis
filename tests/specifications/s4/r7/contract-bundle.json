@@ -11,7 +11,7 @@
     },
     {
       "path": "scripts/tests/test_s4_r7_compiler_index_contract.py",
-      "sha256": "25ba4fa82659ee714e771a7a301b572e5842ceab8ef0685e0e498a5b376776c9"
+      "sha256": "827d481b562d5ca401a44feee830a8261038a8db824693526ef5fe8ec2d7f061"
     },
     {
       "path": "tests/fixtures/s4/compiler-index-v1/README.md",
@@ -19,7 +19,7 @@
     },
     {
       "path": "tests/fixtures/s4/compiler-index-v1/compiler-index-binding.json",
-      "sha256": "db7f389786066c7aab36ecca4f5af506f3a98efd47f23a59e6b30d306ad6ba71"
+      "sha256": "2885d72887046edaa4dbbcc273ed7c8b42ed804e169296b2a0c092edbfc0d04c"
     },
     {
       "path": "tests/fixtures/s4/compiler-index-v1/compiler-index-source.json",
@@ -27,15 +27,15 @@
     },
     {
       "path": "tests/fixtures/s4/compiler-index-v1/expected-compiler-overlay.json",
-      "sha256": "07f11224f546935dd86052e760935081927407c693a67f9778ada87533eb7b9e"
+      "sha256": "01c468d143f4730eceb2c7eb15223c6e7d17e4b21fc984f45ad7ab77d32b9e22"
     },
     {
       "path": "tests/fixtures/s4/compiler-index-v1/index.scip",
-      "sha256": "b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527"
+      "sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92"
     },
     {
       "path": "tests/fixtures/s4/compiler-index-v1/manifest.json",
-      "sha256": "0a6676b132cce7336fc68dd0a4cc8029af46d4151599195e370ec9dda65ab030"
+      "sha256": "45b2d6a342b370293c6347186438dd80791302c4513ad8c4061fb8f807b3d39c"
     },
     {
       "path": "tests/fixtures/s4/compiler-index-v1/repository/Cargo.toml",
@@ -110,6 +110,14 @@
       "sha256": "3a08ae3a8fbbd51b706c9fe50d688166720bb2b923d6c38ff53650343f92c796"
     },
     {
+      "path": "tests/specifications/s4/r7/red/generated-writer-correction-red-observation.json",
+      "sha256": "f0a2a10b179fb780d619c775bab288cead8c1056166f4858a7df57f659d208a6"
+    },
+    {
+      "path": "tests/specifications/s4/r7/red/generated-writer-correction-red.log",
+      "sha256": "e5d8de71405afa58ed94fe6d4add7c0349f22fa1905f366eb3c9da96ace09dcf"
+    },
+    {
       "path": "tests/specifications/s4/r7/red/governance-red.log",
       "sha256": "6d8ef8c7850a87140028a25f49d920936338bc3191a5ed53d058c358434ef8cc"
     },
@@ -138,5 +146,5 @@
       "sha256": "12a853b449a03f3ff972b31ee5ec1ed74358a38786a33d1ef961f463a5966caa"
     }
   ],
-  "bundle_sha256": "086d775afef43801946fd23100e3de5b144b0e1dbc5893ce8779ab398aaed8b1"
+  "bundle_sha256": "a630c02800727075e1672838133b90c9fff1fffac679b69dccc66ebf81ac1e17"
 }
