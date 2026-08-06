@@ -84,7 +84,7 @@
   "expected_overlay": {
     "path": "expected-compiler-overlay.json",
     "byte_length": 28180,
-    "sha256": "01c468d143f4730eceb2c7eb15223c6e7d17e4b21fc984f45ad7ab77d32b9e22"
+    "sha256": "e533cdaac30b9257bbc33a1cdcfbb54bfeb3bf9871e33faad0b72a892e8807a0"
   },
   "authority": {
     "source_bytes": "committed project-owned fixture bytes only",

@@ -1,0 +1,21 @@
+F
+======================================================================
+FAIL: test_syntax_reference_uses_approved_r6_identity (scripts.tests.test_s4_r7_compiler_index_contract.S4R7CompilerIndexGovernanceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/scripts/tests/test_s4_r7_compiler_index_contract.py", line 920, in test_syntax_reference_uses_approved_r6_identity
+    self.assertEqual(actual, expected)
+AssertionError: {'syn[44 chars]ake3:c3ebb92fb28b377dfc1f6476189b2fa640404a8d1[384 chars]e6c'} != {'syn[44 chars]ake3:a30d5f4622a17cd8328ce8e1c6521f8aef7ff318c[384 chars]f46'}
+- {'diagnostic_subject_id': 'urn:codenoesis:entity:blake3:c3ebb92fb28b377dfc1f6476189b2fa640404a8d1009241e20c275f118049e6c',
+-  'relationship_id': 'urn:codenoesis:relationship:blake3:53b2b0f17cc6d6d0616a33700a1ba3d030b2ed21bd3f4534b91a2655bfb42f54',
+-  'relationship_source': 'urn:codenoesis:entity:blake3:c3ebb92fb28b377dfc1f6476189b2fa640404a8d1009241e20c275f118049e6c',
+-  'syntax_reference_id': 'urn:codenoesis:entity:blake3:c3ebb92fb28b377dfc1f6476189b2fa640404a8d1009241e20c275f118049e6c'}
++ {'diagnostic_subject_id': 'urn:codenoesis:entity:blake3:a30d5f4622a17cd8328ce8e1c6521f8aef7ff318c8724128dc9b45dae549cf46',
++  'relationship_id': 'urn:codenoesis:relationship:blake3:52850cec8a5a34154e1f0ecb96a829f3bcd16ab8ca4c2de7e1dd33c2ca3dc76e',
++  'relationship_source': 'urn:codenoesis:entity:blake3:a30d5f4622a17cd8328ce8e1c6521f8aef7ff318c8724128dc9b45dae549cf46',
++  'syntax_reference_id': 'urn:codenoesis:entity:blake3:a30d5f4622a17cd8328ce8e1c6521f8aef7ff318c8724128dc9b45dae549cf46'}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.004s
+
+FAILED (failures=1)

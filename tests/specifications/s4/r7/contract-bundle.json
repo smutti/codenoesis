@@ -7,11 +7,11 @@
     },
     {
       "path": "docs/software/decisions/0017-s4-r7-scip-import-contract.md",
-      "sha256": "edfc04b3e52f48501cf8732f089327054ec3a3e1832bf38ac4c72d7900e34bd1"
+      "sha256": "8bb3eb971f71cdcf2de5e3e45422b258868b95302e9b40f56167245d2f4cdc8b"
     },
     {
       "path": "scripts/tests/test_s4_r7_compiler_index_contract.py",
-      "sha256": "827d481b562d5ca401a44feee830a8261038a8db824693526ef5fe8ec2d7f061"
+      "sha256": "eddabacfed61ef12f21819827ee92e6cda455f6b2b72140d9c54da3f44f9a85d"
     },
     {
       "path": "tests/fixtures/s4/compiler-index-v1/README.md",
@@ -27,7 +27,7 @@
     },
     {
       "path": "tests/fixtures/s4/compiler-index-v1/expected-compiler-overlay.json",
-      "sha256": "01c468d143f4730eceb2c7eb15223c6e7d17e4b21fc984f45ad7ab77d32b9e22"
+      "sha256": "e533cdaac30b9257bbc33a1cdcfbb54bfeb3bf9871e33faad0b72a892e8807a0"
     },
     {
       "path": "tests/fixtures/s4/compiler-index-v1/index.scip",
@@ -35,7 +35,7 @@
     },
     {
       "path": "tests/fixtures/s4/compiler-index-v1/manifest.json",
-      "sha256": "45b2d6a342b370293c6347186438dd80791302c4513ad8c4061fb8f807b3d39c"
+      "sha256": "b84efb1a1eb6911156654b081b2164fe6dbc1963265d3b682ace88a228129a48"
     },
     {
       "path": "tests/fixtures/s4/compiler-index-v1/repository/Cargo.toml",
@@ -122,6 +122,14 @@
       "sha256": "6d8ef8c7850a87140028a25f49d920936338bc3191a5ed53d058c358434ef8cc"
     },
     {
+      "path": "tests/specifications/s4/r7/red/syntax-reference-identity-red-observation.json",
+      "sha256": "64c7fd66ec3d592d009d315eb7cb9c7cc789d6c91b0eac8b30f7df31dc33d96e"
+    },
+    {
+      "path": "tests/specifications/s4/r7/red/syntax-reference-identity-red.log",
+      "sha256": "dacea4d31029fd5b28a53c0d216ff901b9f0699d4bfcb05b723ad4c37e0f4339"
+    },
+    {
       "path": "tests/specifications/s4/r7/red/test-first-guard.py",
       "sha256": "61490532b478fc391bb383287503ecb8cd5f384aa1710aba4ffd93c4703c4ff9"
     },
@@ -146,5 +154,5 @@
       "sha256": "12a853b449a03f3ff972b31ee5ec1ed74358a38786a33d1ef961f463a5966caa"
     }
   ],
-  "bundle_sha256": "a630c02800727075e1672838133b90c9fff1fffac679b69dccc66ebf81ac1e17"
+  "bundle_sha256": "81ef2609c875af3d36a88f1fe97851f21368f90a60e2cc2706d6130ba95af882"
 }

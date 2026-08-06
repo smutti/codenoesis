@@ -1415,7 +1415,7 @@ excluded from that digest. Any bound-byte change requires a new digest and
 renewed semantic human review.
 
 R7 revision-bound SCIP import contract bundle:
-`sha256:a630c02800727075e1672838133b90c9fff1fffac679b69dccc66ebf81ac1e17`.
+`sha256:81ef2609c875af3d36a88f1fe97851f21368f90a60e2cc2706d6130ba95af882`.
 
 ## 3. Product intent and success definition
 

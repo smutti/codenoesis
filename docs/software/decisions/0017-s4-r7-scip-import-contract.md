@@ -180,12 +180,33 @@ grammar, and NFC collisions fail or remain the exact reviewed ambiguity gap.
 Ordinal, source order, byte offset, scheduling, and retry cannot repair an
 identity collision.
 
+When one uniquely mapped committed occurrence has no selector-absent R6
+`rust.symbol_reference`, R7 materializes that syntax-reference entity with the
+unchanged R6 declaration preimage rather than inventing an R7 identity domain:
+
+```json
+[
+  "codenoesis.entity-id/rust/v2",
+  "<repository-identity>",
+  "symbol_reference",
+  "<crate-id>",
+  "<canonical-module-path>",
+  "<NFC-spelling>"
+]
+```
+
+This entity is derived from the uniquely mapped committed occurrence and is
+not claimed to have existed in the selector-absent R6 graph. The occurrence
+path and range remain evidence locators and do not alter the immutable R6
+identity recipe.
+
 ## Relationships and honest limitations
 
 R7 adds only these compiler-backed relationship kinds:
 
-- `RESOLVES_TO` links an existing syntax reference to one uniquely bound
-  committed declaration or compiler symbol;
+- `RESOLVES_TO` links an existing R6 syntax reference, or the occurrence-derived
+  R6-identity syntax reference defined above, to one uniquely bound committed
+  declaration or compiler symbol;
 - `REFERENCES` links one uniquely identified lexical owner to a resolved target
   and means symbol reference only;
 - `IMPLEMENTS` requires an explicit SCIP `is_implementation` relationship and
