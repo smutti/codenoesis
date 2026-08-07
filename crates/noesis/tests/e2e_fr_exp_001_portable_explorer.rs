@@ -18,7 +18,8 @@ use support::s4_r7::{MaterializedCompilerIndexRepository, REPOSITORY_ID};
 use support::s4_r8::{
     PORTABLE_CANONICAL_SHA256, PORTABLE_FILE_SHA256, VIEWER_SHA256, canonical_temp_root,
     corrupt_visible_snapshot_semantic, explorer_manifest_bytes, family_digest_oracle,
-    invalid_case_expectations, portable_bytes, portable_value, viewer_bytes, write_portable_input,
+    invalid_case_expectations, portable_bytes, portable_value, reviewed_checkout_text,
+    viewer_bytes, write_portable_input,
 };
 
 #[test]
@@ -329,8 +330,9 @@ fn sec_fr_exp_001_xss_payloads_render_as_text() {
 fn sec_nfr_sec_001_r8_csp_forbids_active_remote_content() {
     let viewer = viewer_bytes();
     assert_eq!(noesis::portable_explorer::sha256(&viewer), VIEWER_SHA256);
-    let shipped = fs::read(Path::new(env!("CARGO_MANIFEST_DIR")).join("assets/s4/r8/index.html"))
-        .expect("read shipped R8 viewer");
+    let shipped = reviewed_checkout_text(
+        &Path::new(env!("CARGO_MANIFEST_DIR")).join("assets/s4/r8/index.html"),
+    );
     assert_eq!(shipped, viewer);
     let html = String::from_utf8(shipped).expect("reviewed UTF-8 viewer");
     assert!(html.contains("default-src 'none'"));

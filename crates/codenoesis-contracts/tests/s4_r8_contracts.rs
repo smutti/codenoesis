@@ -13,8 +13,7 @@ use serde_json::{Value, json};
 
 #[test]
 fn conf_fr_exp_001_portable_graph_v1_lossless_reimport() {
-    let bytes = fs::read(fixture_root().join("portable-graph.json"))
-        .expect("read canonical PortableGraphV1 fixture");
+    let bytes = canonical_fixture_bytes();
     let portable = PortableGraphV1::from_canonical_file(&bytes, test_digest)
         .expect("validate canonical PortableGraphV1 fixture");
     assert_eq!(
@@ -162,7 +161,43 @@ fn canonical_fixture() -> Value {
 }
 
 fn canonical_fixture_bytes() -> Vec<u8> {
-    fs::read(fixture_root().join("portable-graph.json")).expect("read PortableGraphV1 fixture")
+    let bytes =
+        fs::read(fixture_root().join("portable-graph.json")).expect("read PortableGraphV1 fixture");
+    normalize_checkout_text(&bytes).expect("normalize PortableGraphV1 fixture checkout")
+}
+
+fn normalize_checkout_text(bytes: &[u8]) -> Option<Vec<u8>> {
+    if !bytes.contains(&b'\r') {
+        return Some(bytes.to_vec());
+    }
+    let mut normalized = Vec::with_capacity(bytes.len());
+    let mut index = 0;
+    let mut saw_crlf = false;
+    let mut saw_lf = false;
+    while index < bytes.len() {
+        match bytes[index] {
+            b'\r' if bytes.get(index + 1) == Some(&b'\n') => {
+                normalized.push(b'\n');
+                saw_crlf = true;
+                index += 2;
+            }
+            b'\r' => return None,
+            b'\n' => {
+                normalized.push(b'\n');
+                saw_lf = true;
+                index += 1;
+            }
+            byte => {
+                normalized.push(byte);
+                index += 1;
+            }
+        }
+    }
+    if saw_crlf && saw_lf {
+        None
+    } else {
+        Some(normalized)
+    }
 }
 
 fn fixture_head(fixture: &Value) -> LocalSnapshotHead {

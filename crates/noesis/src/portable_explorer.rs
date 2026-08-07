@@ -18,7 +18,7 @@ const PORTABLE_MARKER_BYTES: &[u8] =
 const EXPLORER_MARKER_BYTES: &[u8] =
     b"{\"schema_version\":\"codenoesis.local-explorer-marker/v1\"}\n";
 const VIEWER_SHA256: &str = "1caa2c0ca5675937eab674f61681883ba3c6a428feb6b1baa744a0cb7eecd044";
-const VIEWER_BYTES: &[u8] = include_bytes!("../assets/s4/r8/index.html");
+const VIEWER_SOURCE_BYTES: &[u8] = include_bytes!("../assets/s4/r8/index.html");
 static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -192,6 +192,40 @@ fn read_retrying_interrupts(file: &mut File, buffer: &mut [u8]) -> std::io::Resu
     }
 }
 
+fn normalize_checkout_text(bytes: &[u8]) -> Option<Vec<u8>> {
+    if !bytes.contains(&b'\r') {
+        return Some(bytes.to_vec());
+    }
+    let mut normalized = Vec::with_capacity(bytes.len());
+    let mut index = 0;
+    let mut saw_crlf = false;
+    let mut saw_lf = false;
+    while index < bytes.len() {
+        match bytes[index] {
+            b'\r' if bytes.get(index + 1) == Some(&b'\n') => {
+                normalized.push(b'\n');
+                saw_crlf = true;
+                index += 2;
+            }
+            b'\r' => return None,
+            b'\n' => {
+                normalized.push(b'\n');
+                saw_lf = true;
+                index += 1;
+            }
+            byte => {
+                normalized.push(byte);
+                index += 1;
+            }
+        }
+    }
+    if saw_crlf && saw_lf {
+        None
+    } else {
+        Some(normalized)
+    }
+}
+
 /// Validates an explorer destination without creating or changing it.
 ///
 /// # Errors
@@ -226,8 +260,10 @@ pub fn publish_local_explorer(
     portable: &PortableGraphV1,
     portable_bytes: &[u8],
 ) -> Result<Vec<u8>, PortableExplorerError> {
+    let viewer_bytes =
+        normalize_checkout_text(VIEWER_SOURCE_BYTES).ok_or(PortableExplorerError::Internal)?;
     let manifest =
-        LocalExplorerManifestV1::new(portable, portable_bytes, VIEWER_BYTES, VIEWER_SHA256)?;
+        LocalExplorerManifestV1::new(portable, portable_bytes, &viewer_bytes, VIEWER_SHA256)?;
     let manifest_bytes = manifest
         .canonical_file()
         .map_err(|_| PortableExplorerError::Internal)?;
@@ -236,7 +272,7 @@ pub fn publish_local_explorer(
         OutputKind::Explorer,
         &[
             OwnedFile::new("portable-graph.json", portable_bytes.to_vec()),
-            OwnedFile::new("index.html", VIEWER_BYTES.to_vec()),
+            OwnedFile::new("index.html", viewer_bytes),
             OwnedFile::new("explorer-manifest.json", manifest_bytes.clone()),
         ],
     )?;
@@ -724,16 +760,32 @@ mod tests {
         OutputKind, OwnedFile, PortableExplorerError, publish_files_with, read_portable_graph_with,
     };
 
-    const PORTABLE_FIXTURE: &[u8] =
+    const PORTABLE_FIXTURE_SOURCE: &[u8] =
         include_bytes!("../../../tests/fixtures/s4/portable-explorer-v1/portable-graph.json");
+
+    #[test]
+    fn sec_nfr_sec_001_checkout_text_normalization_is_closed() {
+        assert_eq!(
+            super::normalize_checkout_text(b"first\r\nsecond\r\n"),
+            Some(b"first\nsecond\n".to_vec())
+        );
+        assert_eq!(
+            super::normalize_checkout_text(b"first\nsecond\n"),
+            Some(b"first\nsecond\n".to_vec())
+        );
+        assert_eq!(super::normalize_checkout_text(b"first\rsecond"), None);
+        assert_eq!(super::normalize_checkout_text(b"first\r\nsecond\n"), None);
+    }
 
     #[test]
     fn race_nfr_sec_005_mutable_input_is_rejected() {
         let root = temporary_root("mutable-input");
         let input = root.join("portable-graph.json");
-        fs::write(&input, PORTABLE_FIXTURE).expect("write R8 race input");
+        let portable_fixture = super::normalize_checkout_text(PORTABLE_FIXTURE_SOURCE)
+            .expect("normalize R8 race fixture checkout");
+        fs::write(&input, &portable_fixture).expect("write R8 race input");
         let result = read_portable_graph_with(&input, || {
-            let mut changed = PORTABLE_FIXTURE.to_vec();
+            let mut changed = portable_fixture;
             changed[0] ^= 1;
             fs::write(&input, changed).expect("rewrite R8 race input");
         });

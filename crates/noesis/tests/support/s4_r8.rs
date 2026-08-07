@@ -18,7 +18,7 @@ pub fn fixture_root() -> PathBuf {
 }
 
 pub fn portable_bytes() -> Vec<u8> {
-    fs::read(fixture_root().join("portable-graph.json")).expect("read R8 portable fixture")
+    reviewed_text_bytes("portable-graph.json")
 }
 
 pub fn portable_value() -> Value {
@@ -34,12 +34,54 @@ pub fn family_digest_oracle() -> Value {
 }
 
 pub fn viewer_bytes() -> Vec<u8> {
-    fs::read(fixture_root().join("index.html")).expect("read R8 viewer fixture")
+    reviewed_text_bytes("index.html")
 }
 
 pub fn explorer_manifest_bytes() -> Vec<u8> {
-    fs::read(fixture_root().join("explorer-manifest.json"))
-        .expect("read R8 explorer manifest fixture")
+    reviewed_text_bytes("explorer-manifest.json")
+}
+
+fn reviewed_text_bytes(name: &str) -> Vec<u8> {
+    reviewed_checkout_text(&fixture_root().join(name))
+}
+
+pub fn reviewed_checkout_text(path: &Path) -> Vec<u8> {
+    let bytes = fs::read(path).expect("read R8 reviewed text");
+    normalize_checkout_text(&bytes).expect("normalize R8 reviewed text checkout")
+}
+
+fn normalize_checkout_text(bytes: &[u8]) -> Option<Vec<u8>> {
+    if !bytes.contains(&b'\r') {
+        return Some(bytes.to_vec());
+    }
+    let mut normalized = Vec::with_capacity(bytes.len());
+    let mut index = 0;
+    let mut saw_crlf = false;
+    let mut saw_lf = false;
+    while index < bytes.len() {
+        match bytes[index] {
+            b'\r' if bytes.get(index + 1) == Some(&b'\n') => {
+                normalized.push(b'\n');
+                saw_crlf = true;
+                index += 2;
+            }
+            b'\r' => return None,
+            b'\n' => {
+                normalized.push(b'\n');
+                saw_lf = true;
+                index += 1;
+            }
+            byte => {
+                normalized.push(byte);
+                index += 1;
+            }
+        }
+    }
+    if saw_crlf && saw_lf {
+        None
+    } else {
+        Some(normalized)
+    }
 }
 
 pub fn invalid_case_expectations() -> BTreeMap<String, String> {

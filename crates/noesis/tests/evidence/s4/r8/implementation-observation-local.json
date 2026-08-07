@@ -71,6 +71,13 @@
         "resolution": "Capture the output root and parent same-file handles before installing Landlock, carry the prepared guard across the boundary, and compare Unix path dev/ino metadata with the retained handles without reopening the parent or broadening Landlock authority.",
         "local_green_exit_code": 0,
         "exact_head_linux_ci": "pending corrected-head publication"
+      },
+      {
+        "expected_red": "GitHub Windows CI converted reviewed text fixtures and the compiled viewer asset from LF to CRLF at checkout, so exact PortableGraphV1 canonical bytes and viewer digests failed without any semantic source change.",
+        "retained_log": "https://github.com/smutti/codenoesis/actions/runs/31207108123/job/92960798421",
+        "resolution": "Normalize only uniformly CRLF-transported first-party reviewed text to LF before exact digest/canonical validation, reject lone or mixed carriage returns, and leave every protected fixture and golden byte unchanged.",
+        "local_green_exit_code": 0,
+        "exact_head_windows_ci": "pending corrected-head publication"
       }
     ],
     "governance_scope_decision": "The maintainer explicitly authorized the one-line noesis lock dependency edge after the issue's dependency decision and lockfile stop condition conflicted."
