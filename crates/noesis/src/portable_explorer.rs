@@ -146,16 +146,39 @@ fn read_portable_graph_with(
     after_first_read();
     verify_open_file_bytes(&mut file, &bytes).map_err(|_| invalid_input(&input))?;
     let after = file.metadata().map_err(|_| invalid_input(&input))?;
+    let path_before_reopen = fs::symlink_metadata(&input).map_err(|_| invalid_input(&input))?;
+    if !path_before_reopen.is_file() || unsafe_metadata(&path_before_reopen) {
+        return Err(invalid_input(&input));
+    }
+    let mut reopened = File::open(&input).map_err(|_| invalid_input(&input))?;
+    let reopened_before = reopened.metadata().map_err(|_| invalid_input(&input))?;
+    if !reopened_before.is_file() {
+        return Err(invalid_input(&input));
+    }
+    #[cfg(any(unix, windows))]
+    let reopened_identity =
+        FileIdentity::from_file(reopened.try_clone().map_err(|_| invalid_input(&input))?)
+            .map_err(|_| invalid_input(&input))?;
+    verify_open_file_bytes(&mut reopened, &bytes).map_err(|_| invalid_input(&input))?;
+    let reopened_after = reopened.metadata().map_err(|_| invalid_input(&input))?;
     let path_after = fs::symlink_metadata(&input).map_err(|_| invalid_input(&input))?;
     #[cfg(any(unix, windows))]
     let path_identity_matches =
         FileIdentity::from_path(&input).is_ok_and(|path_identity| path_identity == identity);
     #[cfg(not(any(unix, windows)))]
     let path_identity_matches = true;
+    #[cfg(any(unix, windows))]
+    let reopened_identity_matches = reopened_identity == identity;
+    #[cfg(not(any(unix, windows)))]
+    let reopened_identity_matches = true;
     if before.len() != observed
         || unsafe_metadata(&path_after)
         || !same_file_metadata(&before, &after)
-        || !same_file_metadata(&after, &path_after)
+        || !same_file_metadata(&after, &path_before_reopen)
+        || !same_file_metadata(&path_before_reopen, &reopened_before)
+        || !same_file_metadata(&reopened_before, &reopened_after)
+        || !same_file_metadata(&reopened_after, &path_after)
+        || !reopened_identity_matches
         || !path_identity_matches
     {
         return Err(invalid_input(&input));
@@ -784,12 +807,19 @@ mod tests {
         let portable_fixture = super::normalize_checkout_text(PORTABLE_FIXTURE_SOURCE)
             .expect("normalize R8 race fixture checkout");
         fs::write(&input, &portable_fixture).expect("write R8 race input");
+        let mutation_ran = Cell::new(false);
         let result = read_portable_graph_with(&input, || {
             let mut changed = portable_fixture;
             changed[0] ^= 1;
             fs::write(&input, changed).expect("rewrite R8 race input");
+            mutation_ran.set(true);
         });
-        assert!(matches!(result, Err(PortableExplorerError::Contract(_))));
+        assert!(mutation_ran.get(), "R8 mutable-input schedule did not run");
+        match result {
+            Err(PortableExplorerError::Contract(_)) => {}
+            Err(error) => panic!("R8 mutable input returned the wrong error: {error:?}"),
+            Ok(_) => panic!("R8 mutable input was accepted"),
+        }
         fs::remove_dir_all(root).expect("remove R8 race fixture");
     }
 

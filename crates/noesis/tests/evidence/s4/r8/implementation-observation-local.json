@@ -23,10 +23,11 @@
     "ready_issue": "https://github.com/smutti/codenoesis/issues/134",
     "human_authorization": "https://github.com/smutti/codenoesis/issues/134#issuecomment-5219647892",
     "lockfile_edge_authorization": "https://github.com/smutti/codenoesis/issues/134#issuecomment-5220405144",
+    "final_correction_authorization": "https://github.com/smutti/codenoesis/issues/134#issuecomment-5221071330",
     "governance_issue": "https://github.com/smutti/codenoesis/issues/110",
     "governance_pull_request": "https://github.com/smutti/codenoesis/pull/131",
     "maintainer_supervised_interactive_lane": true,
-    "correction_budget": 4,
+    "correction_budget": 5,
     "manual_independent_review_and_merge_required": true
   },
   "commits": {
@@ -50,8 +51,8 @@
     "destinations_and_sentinels_unchanged": true
   },
   "corrections": {
-    "configured_budget": 4,
-    "budget_exhausted": false,
+    "configured_budget": 5,
+    "budget_exhausted": true,
     "observations": [
       {
         "expected_red": "The new one-to-one 33-case conformance test did not compile because the production contract lacked explicit viewer-limit and viewer-asset validators.",
@@ -77,10 +78,17 @@
         "retained_log": "https://github.com/smutti/codenoesis/actions/runs/31207108123/job/92960798421",
         "resolution": "Normalize only uniformly CRLF-transported first-party reviewed text to LF before exact digest/canonical validation, reject lone or mixed carriage returns, and leave every protected fixture and golden byte unchanged.",
         "local_green_exit_code": 0,
-        "exact_head_windows_ci": "pending corrected-head publication"
+        "exact_head_windows_ci": "The corrected checkout contracts passed before a distinct mutable-input race oracle failed the same Windows job."
+      },
+      {
+        "expected_red": "Exact-head GitHub Windows CI ran the mutable-input callback but did not return the required typed PortableExplorerError::Contract rejection after the already-open portable file was rewritten in place.",
+        "retained_log": "https://github.com/smutti/codenoesis/actions/runs/31208153059/job/92964219535",
+        "resolution": "Retain the original-handle reread and metadata checks, then reopen the selected path, bind the fresh handle to the retained same-file identity, compare its bytes within the existing bound, and verify metadata and path identity again before accepting the original bytes.",
+        "local_green_exit_code": 0,
+        "exact_head_windows_ci": "pending final corrected-head publication"
       }
     ],
-    "governance_scope_decision": "The maintainer explicitly authorized the one-line noesis lock dependency edge after the issue's dependency decision and lockfile stop condition conflicted."
+    "governance_scope_decision": "The maintainer explicitly authorized the one-line noesis lock dependency edge after the issue's dependency decision and lockfile stop condition conflicted, then expanded the correction budget from four to exactly five for the final bounded Windows mutable-input correction."
   },
   "public_contracts": {
     "source_snapshot": "codenoesis.repository-snapshot/v10",
@@ -164,6 +172,7 @@
     "different_existing_owned_generation_rejected_unchanged": true,
     "partial_output_on_failure": false,
     "input_double_read_and_retained_identity": true,
+    "input_fresh_path_reopen_and_retained_identity": true,
     "output_root_and_parent_retained_identity": true
   },
   "security_and_privacy": {
@@ -211,7 +220,7 @@
     ],
     "contract_tests_passed": 4,
     "public_black_box_tests_passed": 15,
-    "race_unit_tests_passed": 2,
+    "race_unit_tests_passed": 3,
     "required_machine_linkable_tests_present": 15,
     "immutable_invalid_security_cases_passed": 33,
     "determinism_permutations": 50,
@@ -339,6 +348,7 @@
   "human_approvals": [
     "The accountable maintainer authorized the complete high-risk issue 134 package.",
     "The accountable maintainer explicitly authorized the same-file manifest edge and sole noesis Cargo.lock dependency row.",
+    "The accountable maintainer expanded the bounded correction budget from four to exactly five for the final Windows mutable-input correction; no sixth correction is authorized.",
     "Independent human public-contract, ontology, browser, supply-chain, compatibility, and security review plus protected manual merge remain mandatory."
   ]
 }
