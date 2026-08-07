@@ -1,0 +1,13 @@
+E
+======================================================================
+ERROR: setUpClass (scripts.tests.test_s4_portable_explorer_contract.S4R8PortableExplorerGovernanceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/scripts/tests/test_s4_portable_explorer_contract.py", line 396, in setUpClass
+    raise AssertionError(
+AssertionError: R8 governance artifact is not materialized: docs/software/decisions/0018-s4-r8-portable-explorer-contract.md
+
+----------------------------------------------------------------------
+Ran 0 tests in 0.000s
+
+FAILED (errors=1)

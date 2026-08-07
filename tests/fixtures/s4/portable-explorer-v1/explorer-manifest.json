@@ -1,0 +1,56 @@
+{
+  "schema_version": "codenoesis.local-explorer/v1",
+  "portable_graph": {
+    "path": "portable-graph.json",
+    "byte_length": 6329,
+    "sha256": "389f5b211dd2a0c33af36a639145fb9867653fe3d85b56f3899f8cac799e3523",
+    "canonical_sha256": "ba3ab0fe6c4de2c1c195c5a3e4902f07e4864358669f00c8ea3fcb10944412bc"
+  },
+  "entrypoint": {
+    "path": "index.html",
+    "byte_length": 14833,
+    "sha256": "1caa2c0ca5675937eab674f61681883ba3c6a428feb6b1baa744a0cb7eecd044"
+  },
+  "security": {
+    "profile": "codenoesis.local-explorer-security/v1",
+    "csp_sha256": "b1aefa1dbfd9e988445b626f1bf5b9081d924a78c5d3d44c762457524b2faf0b",
+    "untrusted_rendering": "textContent_only",
+    "explicit_file_selection_required": true,
+    "network_allowed": false,
+    "remote_resources_allowed": false,
+    "browser_auto_launch": false,
+    "child_process_allowed": false,
+    "persistent_browser_state_allowed": false
+  },
+  "capabilities": {
+    "exact_id_search": true,
+    "text_search": "nfc_case_sensitive_codepoint_substring",
+    "filters": [
+      "subject_kind",
+      "relationship_kind",
+      "claim_state",
+      "diagnostic_code",
+      "coverage_capability"
+    ],
+    "bounded_neighborhood": "deterministic_breadth_first",
+    "evidence_metadata": true,
+    "diagnostics": true,
+    "coverage_gaps": true,
+    "source_repository_required": false,
+    "projection_mutation_allowed": false
+  },
+  "limits": {
+    "text_search_results": 100,
+    "traversal_depth_default": 1,
+    "traversal_depth_maximum": 2,
+    "neighborhood_subjects": 256,
+    "neighborhood_relationships": 512
+  },
+  "generation": {
+    "output_publication": "atomic_marker_owned_directory",
+    "destination_ownership": "empty_or_exact_r8_marker",
+    "server_required": false,
+    "package_manager_required": false,
+    "model_provider_required": false
+  }
+}

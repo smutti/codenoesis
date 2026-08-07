@@ -1,0 +1,86 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "docs/software/decisions/0018-s4-r8-portable-explorer-contract.md",
+      "sha256": "82a8bb84d54845a597cf59f7e459e8b372544f78ff054657d72c30ce788854c0"
+    },
+    {
+      "path": "scripts/tests/test_s4_portable_explorer_contract.py",
+      "sha256": "4fc78a4ed55fc2cb83441d3c09e8c8844082e9e186d4a7374e87b28d93b219a8"
+    },
+    {
+      "path": "tests/fixtures/s4/portable-explorer-v1/README.md",
+      "sha256": "f054763c6ee759943e69322e15e007c9015c05a0c4ee134d3533de795457e3f3"
+    },
+    {
+      "path": "tests/fixtures/s4/portable-explorer-v1/explorer-manifest.json",
+      "sha256": "7718049806c39dd4a9daef4db83d34103388756851e28707141b51893968556e"
+    },
+    {
+      "path": "tests/fixtures/s4/portable-explorer-v1/index.html",
+      "sha256": "1caa2c0ca5675937eab674f61681883ba3c6a428feb6b1baa744a0cb7eecd044"
+    },
+    {
+      "path": "tests/fixtures/s4/portable-explorer-v1/manifest.json",
+      "sha256": "25e925558b5e573ac520939ad9b41be6ddac5dbbb761ce4fded7532479daa508"
+    },
+    {
+      "path": "tests/fixtures/s4/portable-explorer-v1/portable-graph.json",
+      "sha256": "389f5b211dd2a0c33af36a639145fb9867653fe3d85b56f3899f8cac799e3523"
+    },
+    {
+      "path": "tests/fixtures/s4/portable-explorer-v1/source-family-digests.json",
+      "sha256": "55faf2d1f97bbacecfe0204cc45b8b97fde97ee796dde66a89d8a2c4292a3a85"
+    },
+    {
+      "path": "tests/specifications/s4/r7/contract-bundle.json",
+      "sha256": "aa3c8384f3ef48499d7ae51652774177739a720fc20c329f22d387ee4f040e8e"
+    },
+    {
+      "path": "tests/specifications/s4/r8/codenoesis-error-v15.schema.json",
+      "sha256": "9d29a891d0bc333499c4ea37585eb9851cda5ea7e41371406360da3e336b45e9"
+    },
+    {
+      "path": "tests/specifications/s4/r8/e2e_fr_exp_001_portable_explorer.json",
+      "sha256": "4e8dd8be33301a34bdaee595ac25bf00ba86e9e8f9a0fb6c0cf28757ea557581"
+    },
+    {
+      "path": "tests/specifications/s4/r8/explorer-content-security-policy-v1.json",
+      "sha256": "b1aefa1dbfd9e988445b626f1bf5b9081d924a78c5d3d44c762457524b2faf0b"
+    },
+    {
+      "path": "tests/specifications/s4/r8/invalid-security-cases-v1.json",
+      "sha256": "5b7c29c7b8c64b495c27b0a36ce881ec8aab46bce2171a4ffc4555f1e814c8ac"
+    },
+    {
+      "path": "tests/specifications/s4/r8/local-explorer-manifest-v1.schema.json",
+      "sha256": "5de7ce6597726f90a3c6b18cdd3c3c6313ad24101a544dd6a2328478575eaf8a"
+    },
+    {
+      "path": "tests/specifications/s4/r8/portable-graph-v1.schema.json",
+      "sha256": "ef93ebcc8afd7a0c762c1d1a97ce3e393cf1adfac162de6cfd42f6f57d048cfa"
+    },
+    {
+      "path": "tests/specifications/s4/r8/red-observation.json",
+      "sha256": "1adcc24cec64a4d70344ca76bf4fa39d7dbe581fd1ca6c858be16d5813651a2f"
+    },
+    {
+      "path": "tests/specifications/s4/r8/red/governance-red.log",
+      "sha256": "784ac21ea5e0257136c3710616d463d00ee3117c0edb34dc40521aa73fe126e7"
+    },
+    {
+      "path": "tests/specifications/s4/r8/red/test-first-guard.py",
+      "sha256": "42ec1167d9be5c935b50496f3703a9840601ce68cec3f669dad8ccc6aa6ff959"
+    },
+    {
+      "path": "tests/specifications/s4/r8/reimport-validation-v1.json",
+      "sha256": "0268e379be372f7a89a1266f29ea220ecc76635f8d669a9f7d56c2b2bb2ce773"
+    }
+  ],
+  "bundle_sha256": "f8bba5eda9e43825f2fe31e0c55a37641a4d9213a8d94c6854bdfa290c39ca42"
+}

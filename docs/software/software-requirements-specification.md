@@ -1,13 +1,13 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9+r7 — S0 through S6 and R0-R6 implemented; R7 static
-> revision-bound SCIP import governance proposed for protected ratification**.
+> Status: **0.9+r8 — S0 through S6 and R0-R7 implemented; R8 portable
+> export and offline explorer governance proposed for protected ratification**.
 > The S0–S6 runtime and product suites exist on `main`, but CodeNoesis claims
 > no slice `Verified` without complete immutable retention evidence. This
-> revision records protected R6 governance, evidence-ID correction, and product
-> merges #118, #121, and #122 and proposes Decision 0017 for explicit static
-> import of one revision-bound SCIP v0.9.0 artifact while retaining every
-> accepted S0–S6 and R0–R6 selector-absent invocation.
+> revision records protected R7 governance, five bounded corrections, and
+> product merge #130 and proposes Decision 0018 for a lossless PortableGraphV1
+> plus a static offline LocalExplorerV1 while retaining every accepted S0–S6
+> and R0–R7 invocation and artifact byte.
 
 ## 1. Document control
 
@@ -15,8 +15,8 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S6 and roadmap R0-R6 are Approved and Implemented but not Verified. The bounded `FR-EXT-005` R7 static-import profile and its V10/V7/V14/V5 compatibility package are Proposed and become effective only after the accountable maintainer manually merges the protected pull request for issue #123. The broader polyglot compiler-enrichment requirement remains Proposed. |
-| Date | 2026-08-05 |
+| Status | S0 through S6 and roadmap R0-R7 are Approved and Implemented but not Verified. The new `FR-EXP-001` and bounded additive R8 amendments are Proposed and become Approved only after the accountable maintainer manually merges the exact protected pull request for issue #110. Product implementation remains forbidden until a separate Ready issue is approved. |
+| Date | 2026-08-06 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -45,6 +45,7 @@
 | `0.9+r5` | 2026-08-04 | Recorded R4 product merge #109 and proposed `FR-EXT-010` plus Decision 0015 for the explicit `rust-semantic-depth-v1` profile; fixed RepositorySnapshotV8, ExtractionChunkV5, KnowledgeGraphV5, Rust ontology v5, ErrorV12, LocalQueryResultV3 dispatch, declaration-level fields/variants/constants/statics/associated types/method contexts, attribute-preserving uncertainty, member identity, strict limits, project-owned fixture, exact governance Red, and non-vendored Lekton/RustDesk pilot descriptors while deferring framework meaning to R6 and compiler evidence to R7. |
 | `0.9+r6` | 2026-08-04 | Recorded protected R5 governance, golden-correction, and product merges #112, #115, and #116; proposed `FR-EXT-011` plus Decision 0016 for explicit framework-neutral source declarations and unresolved attribute/macro candidates; fixed RepositorySnapshotV9, ExtractionChunkV6, KnowledgeGraphV6, Rust ontology v6, ErrorV13, LocalQueryResultV4 dispatch, disjoint identities, strict source/runtime epistemic boundaries, limits, project-owned two-style fixture, exact governance Red, and non-vendored motivation-only Lekton/RustDesk observations while deferring compiler evidence to R7 and export/explorer work to R8. |
 | `0.9+r7` | 2026-08-05 | Recorded protected R6 governance, evidence-ID correction, and product merges #118, #121, and #122; proposed bounded `FR-EXT-005` plus Decision 0017 for explicit static import of one revision-, tree-, source-, producer-, toolchain-, and schema-bound Rust SCIP v0.9.0 artifact; fixed RepositorySnapshotV10, ExtractionChunkV7, KnowledgeGraphV7, Rust ontology v7, ErrorV14, LocalQueryResultV5 dispatch, compiler-symbol identity and SHA-256 evidence, strict protobuf/resource/privacy limits, project-owned binary fixture, exact governance Red, and immutable R6 compatibility while leaving index generation in S9 and export/explorer work in R8. |
+| `0.9+r8` | 2026-08-06 | Recorded protected R7 governance/correction and product merge #130; proposed `FR-EXP-001` plus Decision 0018 for deterministic PortableGraphV1 export and a first-party static LocalExplorerV1; fixed exact R7 family reuse, lossless reimport, explicit export/explore CLI journeys, ErrorV15, offline search/filter/depth-1/2 traversal, CSP/XSS/privacy/path/resource limits, project-owned golden, retained governance Red, and immutable R7 compatibility while leaving production implementation to a separate Ready issue. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -1417,6 +1418,127 @@ renewed semantic human review.
 R7 revision-bound SCIP import contract bundle:
 `sha256:81ef2609c875af3d36a88f1fe97851f21368f90a60e2cc2706d6130ba95af882`.
 
+### 2.18 S4 R8 portable export and offline explorer ratification register
+
+Issue [#110](https://github.com/smutti/codenoesis/issues/110), its explicit
+accountable-maintainer
+[authorization](https://github.com/smutti/codenoesis/issues/110#issuecomment-5205875435),
+and the independently reviewed protected pull request created from that issue
+govern the proposed R8 package. The authorization supersedes the issue's stale
+SnapshotV7/R4 baseline and binds the package to protected R7 product head
+`d003a563830bdb5ff79197c8b92050b23eb92b27`. Decision 0018 becomes effective
+only when `@smutti` manually merges the exact reviewed head. The authoring
+agent does not approve or merge.
+
+This register targets exactly the **S4 — Evidence-backed workspace docs
+compatibility extension** and roadmap R8. It does not broaden S5 refresh, S6
+federation, S7 impact, S8 polyglot extraction, S9 sandboxing or index
+generation, server, REST, MCP, authentication, release, ontology facts, or
+control-plane behavior.
+
+The selected public lineage is exactly `codenoesis.repository-snapshot/v10`,
+`codenoesis.ontology/rust/v7`, `codenoesis.local-query-result/v5`,
+`codenoesis.portable-graph/v1`, `codenoesis.local-explorer/v1`, and
+`codenoesis.error/v15`.
+
+R8 does not alter historical query compatibility: V4-V6 retain
+byte-identical LocalQueryResultV1, V7 retains LocalQueryResultV2, V8 retains
+LocalQueryResultV3, V9 retains LocalQueryResultV4, and V10 retains
+LocalQueryResultV5.
+
+| Requirement | Current state | Target state | Product owner | Technical approver | Approval reference | Slice | Ratification material |
+|---|---|---|---|---|---|---|---|
+| `FR-EXP-001` | `Proposed` | `Approved` only for PortableGraphV1 export and LocalExplorerV1 generation after protected manual merge | Andrea Moretti (`@smutti` persona) | `@smutti` | [Issue #110 authorization](https://github.com/smutti/codenoesis/issues/110#issuecomment-5205875435) | `S4` | [Portable export decision](decisions/0018-s4-r8-portable-explorer-contract.md), [PortableGraphV1 schema](../../tests/specifications/s4/r8/portable-graph-v1.schema.json), [LocalExplorerV1 schema](../../tests/specifications/s4/r8/local-explorer-manifest-v1.schema.json), [machine oracle](../../tests/specifications/s4/r8/e2e_fr_exp_001_portable_explorer.json), and [golden fixture](../../tests/fixtures/s4/portable-explorer-v1/README.md) |
+| Bounded R8 amendment to `FR-QRY-001` | `Approved` for exact-ID LocalQueryResultV1-V5 dispatch | `Approved` with additive read-only projection exposure; existing query contracts remain byte-identical | Andrea Moretti (`@smutti` persona) | `@smutti` | [Issue #110 authorization](https://github.com/smutti/codenoesis/issues/110#issuecomment-5205875435) | `S4` | [PortableGraphV1 schema](../../tests/specifications/s4/r8/portable-graph-v1.schema.json) and [lossless reimport matrix](../../tests/specifications/s4/r8/reimport-validation-v1.json) |
+| Bounded R8 subset of `FR-QRY-002` | broader graph traversal remains `Proposed` | `Approved` only for deterministic read-only depth-1/2 traversal over one validated PortableGraphV1 | Andrea Moretti (`@smutti` persona) | `@smutti` | [Issue #110 authorization](https://github.com/smutti/codenoesis/issues/110#issuecomment-5205875435) | `S4` | [Portable export decision](decisions/0018-s4-r8-portable-explorer-contract.md) and [machine oracle](../../tests/specifications/s4/r8/e2e_fr_exp_001_portable_explorer.json) |
+| Bounded R8 amendment to `FR-CLI-001` | `Approved` for `scan`, `docs`, and `query` | `Approved` with explicit additive `export` and `explore` journeys after protected manual merge | Andrea Moretti (`@smutti` persona) | `@smutti` | [Issue #110 authorization](https://github.com/smutti/codenoesis/issues/110#issuecomment-5205875435) | `S4` | [Portable export decision](decisions/0018-s4-r8-portable-explorer-contract.md) and [ErrorV15 schema](../../tests/specifications/s4/r8/codenoesis-error-v15.schema.json) |
+| Bounded R8 amendment to `FR-DOC-003` | `Approved` for marker-owned generated documentation | `Approved` with the same fail-closed ownership rule for portable and explorer output roots | Andrea Moretti (`@smutti` persona) | `@smutti` | [Issue #110 authorization](https://github.com/smutti/codenoesis/issues/110#issuecomment-5205875435) | `S4` | [Portable export decision](decisions/0018-s4-r8-portable-explorer-contract.md) and [invalid/security corpus](../../tests/specifications/s4/r8/invalid-security-cases-v1.json) |
+| Bounded R8 amendments to `NFR-DET-001`, `NFR-SEC-001`, and `NFR-SEC-005` | `Approved` | `Approved` with 50 export permutations, closed CSP/XSS/path limits, and zero network/process/target execution for both commands | Andrea Moretti (`@smutti` persona) | `@smutti` | [Issue #110 authorization](https://github.com/smutti/codenoesis/issues/110#issuecomment-5205875435) | `S4` | [CSP contract](../../tests/specifications/s4/r8/explorer-content-security-policy-v1.json), [invalid/security corpus](../../tests/specifications/s4/r8/invalid-security-cases-v1.json), and [reimport matrix](../../tests/specifications/s4/r8/reimport-validation-v1.json) |
+| Bounded R8 subset of `NFR-PRV-002` | broader lifecycle policy remains `Proposed` | `Approved` only for explicit portable-v1 classification: redacted evidence metadata is exportable, source contents/snippets and ambient private values are excluded | Andrea Moretti (`@smutti` persona) | `@smutti` | [Issue #110 authorization](https://github.com/smutti/codenoesis/issues/110#issuecomment-5205875435) | `S4` | [PortableGraphV1 schema](../../tests/specifications/s4/r8/portable-graph-v1.schema.json), [CSP contract](../../tests/specifications/s4/r8/explorer-content-security-policy-v1.json), and [golden fixture](../../tests/fixtures/s4/portable-explorer-v1/README.md) |
+
+`noesis export` accepts one explicit store, canonical repository identity,
+marker-owned output root, and JSON format. It reads only a completely
+validated visible RepositorySnapshotV10 head and atomically publishes one
+`portable-graph.json` plus its exact ownership marker. Success stdout is the
+same canonical PortableGraphV1 value plus LF; failure emits strict ErrorV15
+on stderr with empty stdout and leaves the prior complete output unchanged.
+
+`noesis explore` accepts one explicit canonical portable graph, marker-owned
+output root, and JSON format. It validates before writing and atomically
+publishes the graph, first-party `index.html`, strict
+`explorer-manifest.json`, and exact ownership marker. Success stdout is
+LocalExplorerV1 plus LF. Neither command mutates the repository or local
+store, launches a child or browser, starts a server, opens a network channel,
+executes target code, or consults ambient authority.
+
+PortableGraphV1 binds repository identity, immutable commit/tree, V10 snapshot
+ID and semantic hash, Rust ontology v7, and LocalQueryResultV5 compatibility.
+It preserves exact R7 entities, relationships, claims, evidence, diagnostics,
+coverage gaps, and documents plus exact document-statement bindings. Stable
+IDs, reference closure, claim states, evidence lineage, diagnostics, gaps,
+and redacted locator metadata are not translated or upgraded. Source contents
+and snippets, absolute paths, raw compiler roots/arguments, environment
+values, file URLs, and active content are absent.
+
+The artifact is RFC8785 JSON plus one LF. Families are sorted by exact stable
+ID, and repeated export plus 50 insertion-order permutations are byte
+identical. Reimport preflights 268,435,456 bytes and nesting 64, rejects
+duplicate members and unknown fields, validates identity/reference/evidence
+closure and source binding, and compares all family counts, ordered IDs, and
+canonical SHA-256 digests. It never repairs, deduplicates, drops, promotes, or
+silently truncates.
+
+LocalExplorerV1 is a non-canonical reconstructable view. The user opens the
+static page manually and explicitly selects the graph. Exact-ID lookup,
+case-sensitive NFC substring search, typed filters, and deterministic
+breadth-first depth-1/2 traversal expose evidence, diagnostics, and gaps even
+when the source repository is absent. Search displays at most 100 results;
+neighborhoods display at most 256 subjects and 512 relationships. Display
+truncation is explicit and never alters the projection.
+
+The static entrypoint has no remote resource or runtime package manager. Its
+reviewed CSP hashes the only inline style and script, defaults all other
+capabilities to none, and denies connections, objects, frames, forms, base
+navigation, manifests, media, fonts, workers, storage, cookies, dynamic code,
+and telemetry. Untrusted values use `textContent` only. No browser auto-launch
+or local server is permitted. Non-data viewer assets are bounded to 1,048,576
+bytes.
+
+Absent or empty destinations and exact matching marker-owned generations are
+accepted. Non-empty unmarked roots, marker mismatch, absolute/parent escape,
+parent or component symlink, input-output alias, race replacement, and any
+write outside the selected root fail before publication. The retained corpus
+covers corruption, loss, duplication, reordering, hash/reference mismatch,
+unresolved evidence, script-close and quote injection, Unicode separators,
+bidi/control values, oversized labels/metadata, remote origins, dynamic code,
+path attacks, and every maximum-plus-one.
+
+The governance guard was committed first at
+`b8a3fde629417fb150275448f50ec9356b45ab76`. The command
+`python3 -m unittest scripts.tests.test_s4_portable_explorer_contract` failed
+only for the expected missing Decision 0018, with exit `1`, empty stdout, and
+a 678-byte stderr log whose SHA-256 is
+`784ac21ea5e0257136c3710616d463d00ee3117c0edb34dc40521aa73fe126e7`.
+The retained test-first guard SHA-256 is
+`42ec1167d9be5c935b50496f3703a9840601ce68cec3f669dad8ccc6aa6ff959`.
+No R8 contract, production, dependency, workflow, policy, release, R7 golden,
+or unrelated protected byte changed before Red.
+
+This package adds no dependency and changes no manifest, lockfile, product
+crate, workflow, policy, release asset, existing schema, fixture, or golden.
+Product implementation requires a separate Ready issue with its own
+executable CLI Red and retained evidence.
+
+The strict schemas, machine oracle, CSP and invalid/security contracts,
+lossless reimport matrix, retained Red, project-owned canonical fixture,
+static entrypoint, and immutable R7 dependency are bound by the R8 contract
+bundle. SRS and roadmap bytes are excluded from that digest. Any bound-byte
+change requires a new digest and renewed semantic, privacy, and security
+review.
+
+R8 portable export and offline explorer contract bundle:
+`sha256:f8bba5eda9e43825f2fe31e0c55a37641a4d9213a8d94c6854bdfa290c39ca42`.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,
@@ -1596,9 +1718,10 @@ cannot replace their verification.
 
 | ID | Pri. | Target | Normative requirement | Acceptance evidence |
 |---|---:|---:|---|---|
-| `FR-QRY-001` | P0 | `0.1` | Local queries MUST retrieve every approved entity, relationship, claim, evidence, diagnostic, coverage gap, and document by stable identity, expose unknown or contradictory states, and select a versioned result contract from the validated snapshot without changing prior result versions. | CLI black-box scenarios return the reviewed typed result and stable exit status; V7 exercises all seven exact-ID kinds after restart while V4-V6 retain byte-identical LocalQueryResultV1. `E2E`, `CONF` |
-| `FR-QRY-002` | P1 | `0.2` | Graph traversal MUST enforce configurable depth, result, time, and resource limits with cycle handling. | Cyclic and adversarial queries terminate within the configured bound without starving unrelated work. `PT`, `PERF`, `SEC` |
-| `FR-CLI-001` | P0 | `0.1` | The CLI MUST provide local `scan`, `docs`, and `query` journeys with human-readable and versioned JSON output. | One black-box fixture completes scan -> docs -> query without network access. `E2E`, `CONF` |
+| `FR-EXP-001` | P0 | `0.2` | The local CLI MUST export one validated visible RepositorySnapshotV10 as deterministic `PortableGraphV1` and MUST generate a read-only offline `LocalExplorerV1` without identity, reference, claim-state, evidence-lineage, diagnostic, coverage-gap, document, or statement loss. Reimport MUST fail closed on unsupported schema, non-canonical order, duplication, loss, ambiguity, hash/reference mismatch, unresolved evidence, unsafe path, or resource excess; source contents and snippets MUST be absent from portable v1. | Black-box export/explore, schema, 50-permutation, lossless reimport, CSP/XSS/privacy/path/symlink, corruption, maximum-plus-one, atomic publication, and R7 compatibility suites match Decision 0018 and the canonical project-owned fixture. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
+| `FR-QRY-001` | P0 | `0.1` | Local queries MUST retrieve every approved entity, relationship, claim, evidence, diagnostic, coverage gap, and document by stable identity, expose unknown or contradictory states, and select a versioned result contract from the validated snapshot without changing prior result versions. R8 MAY expose the same exact subjects in a validated read-only portable projection but MUST NOT change LocalQueryResultV1-V5 bytes or authority. | CLI black-box scenarios return the reviewed typed result and stable exit status; V10 exercises all seven LocalQueryResultV5 exact-ID kinds after restart while V4-V9 retain their approved version dispatch and bytes. R8 family digests prove exact projection preservation. `E2E`, `CONF` |
+| `FR-QRY-002` | P1 | `0.2` | Graph traversal MUST enforce configurable depth, result, time, and resource limits with cycle handling. The bounded R8 subset is deterministic breadth-first read-only traversal over one validated PortableGraphV1 with default depth 1, maximum depth 2, at most 256 subjects and 512 relationships, and explicit display truncation. Broader canonical/server traversal remains Proposed. | Cyclic and adversarial queries terminate within the configured bound without starving unrelated work; R8 permutation and maximum-plus-one cases return identical bounded neighborhoods or typed failures without mutating the graph. `PT`, `PERF`, `SEC` |
+| `FR-CLI-001` | P0 | `0.1` | The CLI MUST provide local `scan`, `docs`, `query`, `export`, and `explore` journeys with human-readable and versioned JSON output. R8 commands MUST be explicitly selected, preserve accepted command bytes, and use marker-owned atomic output roots. | One black-box fixture completes scan -> docs -> query -> export -> explore without network, child process, browser auto-launch, target execution, repository mutation, or store mutation. `E2E`, `CONF`, `SEC`, `FT` |
 | `FR-CLI-002` | P1 | `1.0` | Approved CLI commands MUST have stable exit codes, error codes, configuration precedence, and local/remote capability behaviour. | Golden compatibility tests cover output schema, error catalog, precedence, and server parity. `CONF`, `E2E` |
 | `FR-CLI-003` | P0 | `0.1` | The S0 CLI MUST provide a local `noesis scan` JSON journey that accepts an explicit repository identity and revision and emits either `RepositorySnapshotV1` or `CodeNoesisErrorV1` with the ratified S0 stream and exit semantics. | S0 black-box tests validate success, non-Git input, missing and inconsistent objects, schema, stdout/stderr separation, and exit status. `E2E`, `CONF` |
 | `FR-CLI-004` | P1 | `0.2` | The local CLI MUST provide `noesis refresh` with explicit repository, repository identity, revision, store, and `standard-local-s5` profile inputs; success emits strict canonical `IncrementalRefreshReportV1` on stdout and failure emits strict `CodeNoesisErrorV7` on stderr without a partial head. | Black-box and conformance tests validate exact command parsing, streams, exits, report/error schemas, no-change retry, concurrent-head failure, limits, and S4 cold equivalence. `E2E`, `CONF`, `FT` |
@@ -1639,13 +1762,13 @@ cannot replace their verification.
 
 | ID | Pri. | Normative requirement | Acceptance evidence |
 |---|---:|---|---|
-| `NFR-SEC-001` | P0 | Standard local analysis MUST have zero target process execution, zero analysis-stage network access, and zero filesystem access outside allowed roots. | A malicious-repository corpus includes traversal, symlink loops, archive/repository bombs, oversized input, parser attacks, and sentinel scripts. `SEC`, `FZ` |
+| `NFR-SEC-001` | P0 | Standard local analysis MUST have zero target process execution, zero analysis-stage network access, and zero filesystem access outside allowed roots. R8 export/explore additionally MUST NOT start a server, auto-launch a browser, load a remote resource, interpret graph data as active content, mutate repository/store state, or write outside an exact marker-owned destination. | A malicious-repository and portable-projection corpus includes traversal, symlink loops, archive/repository bombs, oversized input, parser attacks, XSS/CSP payloads, remote origins, path races, and sentinel scripts. `SEC`, `FZ` |
 | `NFR-SEC-002` | P1 | Server authorization and storage MUST satisfy `INV-TEN-001` across database, objects, FTS, caches, jobs, events, logs, metrics, and model requests. | Randomized multi-tenant operations and explicit attack cases find no cross-tenant data. `SEC`, `PERF` |
 | `NFR-SEC-003` | P1 | Secrets MUST use an external secret manager, MUST be redacted from observable output, and MUST be scoped to the stage that requires them. | Canary secrets never appear in persisted artifacts, logs, traces, metrics, errors, or model payloads. `SEC` |
 | `NFR-SEC-004` | P1 | A release MUST have no known exploitable Critical vulnerability. High-risk exceptions require owner, expiry, rationale, and compensating control. | Dependency, container, binary, and configuration reports plus the exception register are release artifacts. `SEC`, `CONF` |
-| `NFR-SEC-005` | P0 | From S0 `noesis` process start until exit, a standard local scan MUST launch no child process and MUST have no direct or brokered network channel. Fixture setup and the test harness are outside this monitored boundary. | A Linux black-box run combines an empty network namespace, non-socket-only inherited standard descriptors, and the ratified deny-and-audit seccomp policy for process, socket/network, and `io_uring` paths. Generated probes cover every policy syscall and conditional branch on the selected architecture; missing, unexpectedly allowed, or unproved `not_exposed` results fail. `SEC`, `E2E` |
+| `NFR-SEC-005` | P0 | From S0 `noesis` process start until exit, a standard local scan MUST launch no child process and MUST have no direct or brokered network channel. The same zero-child/zero-network boundary applies to R8 `export` and `explore`, including no browser auto-launch or local server. Fixture setup, manual opening of the generated static page after command exit, and the test harness are outside this monitored boundary. | A Linux black-box run combines an empty network namespace, non-socket-only inherited standard descriptors, and the ratified deny-and-audit seccomp policy for process, socket/network, and `io_uring` paths. Generated probes cover every policy syscall and conditional branch on the selected architecture; missing, unexpectedly allowed, or unproved `not_exposed` results fail. R8 repeats the command boundary for both additive journeys. `SEC`, `E2E` |
 | `NFR-PRV-001` | P0 | Source, evidence, and derived knowledge MUST NOT leave the local system or configured workspace unless an authorized user explicitly enables an allowlisted destination. | Network capture in default/off mode records zero external content-bearing calls. `SEC`, `E2E` |
-| `NFR-PRV-002` | P1 | Data classification, retention, export, deletion, legal hold, residency, and backup expiry MUST be explicit per deployment policy. | Lifecycle conformance tests exercise creation through purge and backup expiration. `SEC`, `DR` |
+| `NFR-PRV-002` | P1 | Data classification, retention, export, deletion, legal hold, residency, and backup expiry MUST be explicit per deployment policy. The approved portable-v1 profile classifies already-redacted evidence metadata as exportable and excludes source contents, snippets, absolute paths, raw tool roots/arguments, environment values, telemetry, and ambient private data. Broader lifecycle policy remains Proposed. | Lifecycle conformance tests exercise creation through purge and backup expiration; R8 privacy goldens and canaries prove only the approved metadata crosses the explicit output boundary. `SEC`, `DR` |
 
 ### 10.3 Operability, compatibility, and maintainability
 
@@ -1752,9 +1875,11 @@ boundaries and R3 root-package workspaces are additive implemented profiles
 with V5 and V6 lineages and remain not Verified. R4 is an additive implemented
 S4 compatibility profile with a V7 declaration-only lineage and remains not
 Verified. R5 is the separate implemented V8 declaration-depth profile and also
-remains not Verified. R6 is the proposed V9 source-only framework-declarations
-profile; its governance merge does not implement product behavior, add runtime
-meaning, or reopen R0-R5.
+remains not Verified. R6 is the implemented V9 source-only framework profile,
+and R7 is the implemented V10 revision-bound SCIP-import profile; both remain
+not Verified. R8 is governance-only in this revision: it approves no product
+code, dependency, migration, browser launch, server, source snippet, or
+ontology change before a separate Ready implementation issue.
 
 ### 12.1 Release map
 
@@ -2054,6 +2179,15 @@ evidence, fixed R7 limits, ErrorV14, and V10-only LocalQueryResultV5 dispatch
 after protected manual merge. Index generation, compiler or build execution,
 macro expansion, reliable call or data-flow meaning, runtime behavior,
 migration, and explorer/export semantics remain open.
+The
+[S4 R8 portable export and offline explorer decision](decisions/0018-s4-r8-portable-explorer-contract.md)
+resolves only deterministic lossless PortableGraphV1 export from one validated
+V10 head and generation of one read-only first-party static LocalExplorerV1
+with exact R7 identities/evidence, bounded search/traversal, fixed CSP/XSS,
+privacy, path, atomic-output, and resource semantics after protected manual
+merge. Product implementation, source snippets, remote resources, auto-launch,
+servers, graph databases, ontology changes, S5/S6/S7 behavior, and external
+repository bytes remain open or explicitly forbidden.
 The
 [S5 incremental refresh decision](decisions/0008-s5-incremental-refresh-contract.md)
 resolves only the revision-neutral Rust-workspace analysis cache,
