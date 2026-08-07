@@ -17,18 +17,18 @@ use serde_json::Value;
 use support::s4_r7::{MaterializedCompilerIndexRepository, REPOSITORY_ID};
 use support::s4_r8::{
     PORTABLE_CANONICAL_SHA256, PORTABLE_FILE_SHA256, VIEWER_SHA256, canonical_temp_root,
-    corrupt_visible_snapshot_semantic, explorer_manifest_bytes, family_digest_oracle,
-    invalid_case_expectations, portable_bytes, portable_value, reviewed_checkout_text,
-    viewer_bytes, write_portable_input,
+    corrupt_visible_snapshot_semantic, existing_test_path, explorer_manifest_bytes,
+    family_digest_oracle, invalid_case_expectations, materialized_repository, portable_bytes,
+    portable_value, reviewed_checkout_text, viewer_bytes, write_portable_input,
 };
 
 #[test]
 fn e2e_fr_exp_001_export_and_explore_offline() {
-    let repository = MaterializedCompilerIndexRepository::fixture();
+    let repository = materialized_repository();
     let scan = repository.scan();
     assert_success(&scan, "R8 source V10 scan");
 
-    let canonical_root = fs::canonicalize(&repository.root).expect("canonical R8 fixture root");
+    let canonical_root = existing_test_path(&repository.root);
     let portable_root = canonical_root.join("portable-graph");
     let explorer_root = canonical_root.join("local-explorer");
     let export = export(&repository, &portable_root);
@@ -269,10 +269,10 @@ fn gt_fr_exp_001_exact_identity_reference_and_evidence_preservation() {
 
 #[test]
 fn ft_fr_exp_001_corrupt_visible_snapshot_fails_before_publication() {
-    let repository = MaterializedCompilerIndexRepository::fixture();
+    let repository = materialized_repository();
     assert_success(&repository.scan(), "R8 corrupt-head source scan");
     corrupt_visible_snapshot_semantic(&repository.store, REPOSITORY_ID);
-    let root = fs::canonicalize(&repository.root).expect("canonical corrupt-head root");
+    let root = existing_test_path(&repository.root);
     let output = root.join("must-not-publish");
     let rejected = export(&repository, &output);
     assert_r8_error(&rejected, 16, "export.invalid_snapshot");
@@ -281,9 +281,9 @@ fn ft_fr_exp_001_corrupt_visible_snapshot_fails_before_publication() {
 
 #[test]
 fn pt_nfr_det_001_r8_fifty_permutation_replay() {
-    let repository = MaterializedCompilerIndexRepository::fixture();
+    let repository = materialized_repository();
     assert_success(&repository.scan(), "R8 permutation source scan");
-    let canonical_root = fs::canonicalize(&repository.root).expect("canonical R8 fixture root");
+    let canonical_root = existing_test_path(&repository.root);
     let store_before = directory_bytes(&repository.store);
     let mut expected = None;
 
@@ -434,9 +434,9 @@ fn sec_nfr_sec_005_r8_path_symlink_and_destination_confinement() {
 
 #[test]
 fn sec_nfr_prv_002_r8_excludes_source_contents_and_snippets() {
-    let repository = MaterializedCompilerIndexRepository::fixture();
+    let repository = materialized_repository();
     assert_success(&repository.scan(), "R8 privacy source scan");
-    let root = fs::canonicalize(&repository.root).expect("canonical privacy fixture root");
+    let root = existing_test_path(&repository.root);
     let output = root.join("portable-privacy");
     let exported = export(&repository, &output);
     assert_success(&exported, "R8 privacy export");
@@ -569,7 +569,7 @@ fn pt_od_lim_001_r8_all_limits_have_maximum_plus_one() {
 
 #[test]
 fn reg_fr_qry_001_r7_exact_query_bytes_unchanged() {
-    let repository = MaterializedCompilerIndexRepository::fixture();
+    let repository = materialized_repository();
     let scan = repository.scan();
     assert_success(&scan, "R7 query-regression source scan");
     let snapshot: Value = serde_json::from_slice(&scan.stdout).expect("parse R7 snapshot");
@@ -581,7 +581,7 @@ fn reg_fr_qry_001_r7_exact_query_bytes_unchanged() {
     assert_success(&before, "R7 query before R8");
     let store_before = directory_bytes(&repository.store);
 
-    let root = fs::canonicalize(&repository.root).expect("canonical query-regression root");
+    let root = existing_test_path(&repository.root);
     let portable_root = root.join("query-regression-portable");
     let explorer_root = root.join("query-regression-explorer");
     assert_success(&export(&repository, &portable_root), "R8 regression export");
@@ -599,11 +599,11 @@ fn reg_fr_qry_001_r7_exact_query_bytes_unchanged() {
 
 #[test]
 fn reg_fr_cli_001_r7_commands_and_stored_head_unchanged() {
-    let repository = MaterializedCompilerIndexRepository::fixture();
+    let repository = materialized_repository();
     let before = repository.scan();
     assert_success(&before, "R7 CLI before R8");
     let store_before = directory_bytes(&repository.store);
-    let root = fs::canonicalize(&repository.root).expect("canonical CLI-regression root");
+    let root = existing_test_path(&repository.root);
     let portable_root = root.join("cli-regression-portable");
     let explorer_root = root.join("cli-regression-explorer");
 
@@ -630,7 +630,7 @@ fn reg_fr_cli_001_r7_commands_and_stored_head_unchanged() {
 }
 
 fn export(repository: &MaterializedCompilerIndexRepository, output: &std::path::Path) -> Output {
-    let store = fs::canonicalize(&repository.store).expect("canonical R8 fixture store");
+    let store = existing_test_path(&repository.store);
     Command::new(env!("CARGO_BIN_EXE_noesis"))
         .args(["export", "--store"])
         .arg(store)
@@ -666,7 +666,7 @@ fn export_permutation(
     output: &Path,
     permutation: u64,
 ) -> Output {
-    let store = fs::canonicalize(&repository.store).expect("canonical R8 fixture store");
+    let store = existing_test_path(&repository.store);
     let mut options = vec![
         ("--store", store.into_os_string()),
         ("--repository-id", REPOSITORY_ID.into()),
@@ -885,10 +885,10 @@ fn exercise_invalid_case(case_id: &str) -> String {
             )
         }
         "snapshot_hash_mismatch" => {
-            let repository = MaterializedCompilerIndexRepository::fixture();
+            let repository = materialized_repository();
             assert_success(&repository.scan(), "R8 invalid-matrix source scan");
             corrupt_visible_snapshot_semantic(&repository.store, REPOSITORY_ID);
-            let root = fs::canonicalize(&repository.root).expect("canonical invalid-matrix root");
+            let root = existing_test_path(&repository.root);
             return strict_error_code(&export(&repository, &root.join("output")));
         }
         "text_results_max_plus_one" => validate_r8_view_limits(

@@ -28,6 +28,8 @@
     "windows_test_root_authorization": "https://github.com/smutti/codenoesis/issues/136#issuecomment-5221218548",
     "windows_validated_authority_issue": "https://github.com/smutti/codenoesis/issues/137",
     "windows_validated_authority_authorization": "https://github.com/smutti/codenoesis/issues/137#issuecomment-5221360057",
+    "windows_e2e_authority_issue": "https://github.com/smutti/codenoesis/issues/138",
+    "windows_e2e_authority_authorization": "https://github.com/smutti/codenoesis/issues/138#issuecomment-5221713858",
     "governance_issue": "https://github.com/smutti/codenoesis/issues/110",
     "governance_pull_request": "https://github.com/smutti/codenoesis/pull/131",
     "maintainer_supervised_interactive_lane": true,
@@ -134,6 +136,27 @@
     "focused_green_exit_code": 0,
     "status": "unit race authority corrected; stopped because the separate Windows E2E authority requires an unlisted path or production validation decision",
     "exact_head_windows_ci": "pending Unix-restoration head; the first-round Windows unit oracle passed but the R8 E2E suite remained Red"
+  },
+  "windows_e2e_authority_follow_up": {
+    "issue": "https://github.com/smutti/codenoesis/issues/138",
+    "authorization": "https://github.com/smutti/codenoesis/issues/138#issuecomment-5221713858",
+    "risk": "high",
+    "required_base": "a7d23ae52b0fc6f40fa1d8cf2114e90465844bb9",
+    "configured_correction_rounds": 2,
+    "correction_rounds_used": 1,
+    "budget_exhausted": false,
+    "retained_red": "https://github.com/smutti/codenoesis/actions/runs/31214240782/job/92983920553",
+    "red_failure": "Native Windows passed all three portable-explorer security/race unit tests but eight of fifteen immutable R8 E2E journeys failed closed with input.unsafe_output_path/outside_destination after test helpers transported verbatim canonical paths.",
+    "resolution": "Preserve the exact existing temporary-root and canonicalization behavior on non-Windows systems. On Windows only, create one uniquely named R8 E2E root beneath the bounded workspace-target or volume-root candidates, validate a sibling authority/output probe through the unchanged public export boundary, materialize the existing R7 fixture beneath the selected root, and transport existing test paths without converting them to verbatim spelling.",
+    "cleanup": "Direct R8 roots use an owning drop guard; materialized repositories transfer that root to the existing repository lifecycle, which removes only the unique root.",
+    "raw_private_path_retained": false,
+    "production_validation_changed": false,
+    "dependencies_changed": false,
+    "immutable_oracles_or_fixtures_changed": false,
+    "focused_green_exit_code": 0,
+    "focused_e2e_tests_passed": 15,
+    "immutable_invalid_security_cases_passed": 33,
+    "exact_head_windows_ci": "pending corrected-head publication"
   },
   "public_contracts": {
     "source_snapshot": "codenoesis.repository-snapshot/v10",
@@ -376,6 +399,7 @@
     "crates/noesis/tests/evidence/s4/r8/red.log",
     "crates/noesis/tests/evidence/s4/r8/traceability.json",
     "crates/noesis/tests/support/mod.rs",
+    "crates/noesis/tests/support/s4_r7.rs",
     "crates/noesis/tests/support/s4_r8.rs"
   ],
   "traceability": "crates/noesis/tests/evidence/s4/r8/traceability.json",
@@ -396,6 +420,7 @@
     "The accountable maintainer expanded the bounded correction budget from four to exactly five for the final Windows mutable-input correction; no sixth correction is authorized.",
     "The accountable maintainer separately authorized issue 136 for the bounded Windows-safe test-root correction after issue 134 exhausted its budget.",
     "The accountable maintainer separately authorized issue 137 for bounded validated test-authority selection after issue 136 reached its workspace-root stop condition.",
+    "The accountable maintainer separately authorized issue 138 for the bounded Windows E2E authority and non-verbatim test-path transport after issue 137 exhausted its budget.",
     "Independent human public-contract, ontology, browser, supply-chain, compatibility, and security review plus protected manual merge remain mandatory."
   ]
 }
