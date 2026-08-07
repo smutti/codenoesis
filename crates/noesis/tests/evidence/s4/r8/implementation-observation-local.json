@@ -64,6 +64,13 @@
         "retained_log": "not retained",
         "resolution": "Added exact per-family record-shape validation before identity and reference checks.",
         "green_exit_code": 0
+      },
+      {
+        "expected_red": "GitHub Linux CI rejected every valid export publication with input.unsafe_output_path/outside_destination because PublicationGuard reopened the output parent after Landlock restricted reads to the store/input and output roots.",
+        "retained_log": "https://github.com/smutti/codenoesis/actions/runs/31206221476/job/92957833892",
+        "resolution": "Capture the output root and parent same-file handles before installing Landlock, carry the prepared guard across the boundary, and compare Unix path dev/ino metadata with the retained handles without reopening the parent or broadening Landlock authority.",
+        "local_green_exit_code": 0,
+        "exact_head_linux_ci": "pending corrected-head publication"
       }
     ],
     "governance_scope_decision": "The maintainer explicitly authorized the one-line noesis lock dependency edge after the issue's dependency decision and lockfile stop condition conflicted."

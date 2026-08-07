@@ -1675,11 +1675,11 @@ fn run_export(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, 
     let output = std::path::Path::new(&invocation.output);
     noesis::portable_explorer::validate_export_output_root(store, output)
         .map_err(|error| r8_portable_failure(error, 16))?;
-    noesis::portable_explorer::ensure_export_output_root_for_boundary(store, output)
+    let prepared = noesis::portable_explorer::ensure_export_output_root_for_boundary(store, output)
         .map_err(|error| r8_portable_failure(error, 16))?;
     noesis::install_r8_export_filesystem_boundary(&invocation.store, &invocation.output)
         .map_err(|_| r8_internal_failure())?;
-    noesis::portable_explorer::publish_portable_graph(output, &portable)
+    noesis::portable_explorer::publish_portable_graph(&prepared, &portable)
         .map_err(|error| r8_portable_failure(error, 16))
 }
 
@@ -1691,11 +1691,12 @@ fn run_explore(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>,
         .map_err(|error| r8_portable_failure(error, 17))?;
     noesis::portable_explorer::validate_explorer_output_root(input, output)
         .map_err(|error| r8_portable_failure(error, 17))?;
-    noesis::portable_explorer::ensure_explorer_output_root_for_boundary(input, output)
-        .map_err(|error| r8_portable_failure(error, 17))?;
+    let prepared =
+        noesis::portable_explorer::ensure_explorer_output_root_for_boundary(input, output)
+            .map_err(|error| r8_portable_failure(error, 17))?;
     noesis::install_r8_explorer_filesystem_boundary(&invocation.input, &invocation.output)
         .map_err(|_| r8_internal_failure())?;
-    noesis::portable_explorer::publish_local_explorer(output, &portable, &portable_bytes)
+    noesis::portable_explorer::publish_local_explorer(&prepared, &portable, &portable_bytes)
         .map_err(|error| r8_portable_failure(error, 17))
 }
 

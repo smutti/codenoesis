@@ -37,6 +37,11 @@ impl From<R8ContractError> for PortableExplorerError {
     }
 }
 
+pub struct PreparedOutputRoot {
+    kind: OutputKind,
+    guard: PublicationGuard,
+}
+
 /// Validates an export destination without creating or changing it.
 ///
 /// # Errors
@@ -57,7 +62,7 @@ pub fn validate_export_output_root(
 pub fn ensure_export_output_root_for_boundary(
     store: &Path,
     output: &Path,
-) -> Result<(), PortableExplorerError> {
+) -> Result<PreparedOutputRoot, PortableExplorerError> {
     ensure_output_root(store, output, OutputKind::Portable)
 }
 
@@ -67,12 +72,12 @@ pub fn ensure_export_output_root_for_boundary(
 ///
 /// Returns a typed error for integrity, ownership, race, or I/O failures.
 pub fn publish_portable_graph(
-    output: &Path,
+    prepared: &PreparedOutputRoot,
     portable: &PortableGraphV1,
 ) -> Result<Vec<u8>, PortableExplorerError> {
     let bytes = portable.canonical_file();
     publish_files(
-        output,
+        prepared,
         OutputKind::Portable,
         &[OwnedFile::new("portable-graph.json", bytes.clone())],
     )?;
@@ -207,7 +212,7 @@ pub fn validate_explorer_output_root(
 pub fn ensure_explorer_output_root_for_boundary(
     input: &Path,
     output: &Path,
-) -> Result<(), PortableExplorerError> {
+) -> Result<PreparedOutputRoot, PortableExplorerError> {
     ensure_output_root(input, output, OutputKind::Explorer)
 }
 
@@ -217,7 +222,7 @@ pub fn ensure_explorer_output_root_for_boundary(
 ///
 /// Returns a typed error for asset, integrity, ownership, race, or I/O failures.
 pub fn publish_local_explorer(
-    output: &Path,
+    prepared: &PreparedOutputRoot,
     portable: &PortableGraphV1,
     portable_bytes: &[u8],
 ) -> Result<Vec<u8>, PortableExplorerError> {
@@ -227,7 +232,7 @@ pub fn publish_local_explorer(
         .canonical_file()
         .map_err(|_| PortableExplorerError::Internal)?;
     publish_files(
-        output,
+        prepared,
         OutputKind::Explorer,
         &[
             OwnedFile::new("portable-graph.json", portable_bytes.to_vec()),
@@ -296,16 +301,20 @@ fn ensure_output_root(
     authority: &Path,
     output: &Path,
     kind: OutputKind,
-) -> Result<(), PortableExplorerError> {
+) -> Result<PreparedOutputRoot, PortableExplorerError> {
     validate_output_root(authority, output, kind)?;
     match fs::symlink_metadata(output) {
-        Ok(_) => Ok(()),
+        Ok(_) => {}
         Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
             fs::create_dir(output).map_err(|_| PortableExplorerError::Internal)?;
-            sync_directory(output.parent().ok_or(PortableExplorerError::Internal)?)
+            sync_directory(output.parent().ok_or(PortableExplorerError::Internal)?)?;
         }
-        Err(_) => Err(PortableExplorerError::Internal),
+        Err(_) => return Err(PortableExplorerError::Internal),
     }
+    let guard = PublicationGuard::capture(output)?;
+    validate_output_root(authority, output, kind)?;
+    guard.verify()?;
+    Ok(PreparedOutputRoot { kind, guard })
 }
 
 fn inspect_output(root: &Path, kind: OutputKind) -> Result<(), PortableExplorerError> {
@@ -341,13 +350,17 @@ fn inspect_output(root: &Path, kind: OutputKind) -> Result<(), PortableExplorerE
 }
 
 fn publish_files(
-    root: &Path,
+    prepared: &PreparedOutputRoot,
     kind: OutputKind,
     files: &[OwnedFile],
 ) -> Result<(), PortableExplorerError> {
-    publish_files_with(root, kind, files, || {})
+    if prepared.kind != kind {
+        return Err(PortableExplorerError::Internal);
+    }
+    publish_files_with_guard(&prepared.guard, kind, files, || {})
 }
 
+#[cfg(test)]
 fn publish_files_with(
     root: &Path,
     kind: OutputKind,
@@ -356,10 +369,21 @@ fn publish_files_with(
 ) -> Result<(), PortableExplorerError> {
     verify_directory(root)?;
     let guard = PublicationGuard::capture(root)?;
+    publish_files_with_guard(&guard, kind, files, before_publication)
+}
+
+fn publish_files_with_guard(
+    guard: &PublicationGuard,
+    kind: OutputKind,
+    files: &[OwnedFile],
+    before_publication: impl FnOnce(),
+) -> Result<(), PortableExplorerError> {
+    let root = guard.root.clone();
+    verify_directory(&root)?;
     before_publication();
     guard.verify()?;
     let marker = root.join(kind.marker());
-    let fresh = fs::read_dir(root)
+    let fresh = fs::read_dir(&root)
         .map_err(|_| PortableExplorerError::Internal)?
         .next()
         .is_none();
@@ -367,19 +391,19 @@ fn publish_files_with(
         guard.verify()?;
         write_exclusive(&marker, kind.marker_bytes())?;
         guard.verify()?;
-        sync_directory(root)?;
+        sync_directory(&root)?;
     } else {
         verify_exact_file(&marker, kind.marker_bytes())?;
     }
     let result = (|| {
         for file in files {
             guard.verify()?;
-            write_atomic_or_verify(root, &file.path, &file.bytes)?;
+            write_atomic_or_verify(&root, &file.path, &file.bytes)?;
             guard.verify()?;
         }
-        sync_directory(root)?;
+        sync_directory(&root)?;
         guard.verify()?;
-        inspect_output(root, kind)?;
+        inspect_output(&root, kind)?;
         for file in files {
             verify_exact_file(&root.join(&file.path), &file.bytes)?;
         }
@@ -390,7 +414,7 @@ fn publish_files_with(
             let _ = fs::remove_file(root.join(&file.path));
         }
         let _ = fs::remove_file(marker);
-        let _ = sync_directory(root);
+        let _ = sync_directory(&root);
     }
     result
 }
@@ -447,7 +471,10 @@ impl PublicationGuard {
             .map_err(|_| unsafe_output(self.root.as_os_str(), "outside_destination"))?;
         let parent_metadata = fs::symlink_metadata(&self.parent)
             .map_err(|_| unsafe_output(self.parent.as_os_str(), "outside_destination"))?;
-        #[cfg(any(unix, windows))]
+        #[cfg(unix)]
+        let identity_matches = retained_unix_identity_matches(&self.root_identity, &root_metadata)
+            && retained_unix_identity_matches(&self.parent_identity, &parent_metadata);
+        #[cfg(windows)]
         let identity_matches = FileIdentity::from_path(&self.root)
             .is_ok_and(|identity| identity == self.root_identity)
             && FileIdentity::from_path(&self.parent)
@@ -590,6 +617,12 @@ fn same_file_metadata(left: &Metadata, right: &Metadata) -> bool {
         && left.mtime_nsec() == right.mtime_nsec()
 }
 
+#[cfg(unix)]
+fn retained_unix_identity_matches(identity: &FileIdentity, metadata: &Metadata) -> bool {
+    use std::os::unix::fs::MetadataExt as _;
+    identity.dev() == metadata.dev() && identity.ino() == metadata.ino()
+}
+
 #[cfg(windows)]
 fn same_file_metadata(left: &Metadata, right: &Metadata) -> bool {
     use std::os::windows::fs::MetadataExt as _;
@@ -647,7 +680,7 @@ impl OwnedFile {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Eq, PartialEq)]
 enum OutputKind {
     Portable,
     Explorer,
