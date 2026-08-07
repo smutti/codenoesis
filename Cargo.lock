@@ -167,6 +167,7 @@ dependencies = [
  "codenoesis-domain",
  "codenoesis-ports",
  "protobuf",
+ "same-file",
  "scip",
  "serde_json",
  "sha2",
