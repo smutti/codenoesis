@@ -24,6 +24,8 @@
     "human_authorization": "https://github.com/smutti/codenoesis/issues/134#issuecomment-5219647892",
     "lockfile_edge_authorization": "https://github.com/smutti/codenoesis/issues/134#issuecomment-5220405144",
     "final_correction_authorization": "https://github.com/smutti/codenoesis/issues/134#issuecomment-5221071330",
+    "windows_test_root_issue": "https://github.com/smutti/codenoesis/issues/136",
+    "windows_test_root_authorization": "https://github.com/smutti/codenoesis/issues/136#issuecomment-5221218548",
     "governance_issue": "https://github.com/smutti/codenoesis/issues/110",
     "governance_pull_request": "https://github.com/smutti/codenoesis/pull/131",
     "maintainer_supervised_interactive_lane": true,
@@ -81,14 +83,31 @@
         "exact_head_windows_ci": "The corrected checkout contracts passed before a distinct mutable-input race oracle failed the same Windows job."
       },
       {
-        "expected_red": "Exact-head GitHub Windows CI ran the mutable-input callback but did not return the required typed PortableExplorerError::Contract rejection after the already-open portable file was rewritten in place.",
+        "expected_red": "Exact-head GitHub Windows CI did not return the required typed PortableExplorerError::Contract rejection; the earlier broad assertion did not distinguish a preflight rejection from an executed mutable-input schedule.",
         "retained_log": "https://github.com/smutti/codenoesis/actions/runs/31208153059/job/92964219535",
-        "resolution": "Retain the original-handle reread and metadata checks, then reopen the selected path, bind the fresh handle to the retained same-file identity, compare its bytes within the existing bound, and verify metadata and path identity again before accepting the original bytes.",
+        "resolution": "Retain the original-handle reread and metadata checks, reopen the selected path, bind the fresh handle to the retained same-file identity, compare its bytes within the existing bound, verify metadata and path identity again, and require explicit proof that the mutation callback ran.",
         "local_green_exit_code": 0,
-        "exact_head_windows_ci": "pending final corrected-head publication"
+        "exact_head_windows_ci": "The diagnostic head proved the callback did not run because the Windows runner temporary path was rejected during preflight."
       }
     ],
     "governance_scope_decision": "The maintainer explicitly authorized the one-line noesis lock dependency edge after the issue's dependency decision and lockfile stop condition conflicted, then expanded the correction budget from four to exactly five for the final bounded Windows mutable-input correction."
+  },
+  "windows_test_root_follow_up": {
+    "issue": "https://github.com/smutti/codenoesis/issues/136",
+    "authorization": "https://github.com/smutti/codenoesis/issues/136#issuecomment-5221218548",
+    "risk": "high",
+    "required_base": "7eddab299a0e0e4857291c67dd9734b1ada8e711",
+    "configured_correction_rounds": 2,
+    "correction_rounds_used": 1,
+    "budget_exhausted": false,
+    "retained_red": "https://github.com/smutti/codenoesis/actions/runs/31210885307/job/92973140849",
+    "red_failure": "R8 mutable-input schedule did not run",
+    "resolution": "Create the uniquely named unit-test root beneath the workspace-local target directory instead of the Windows runner temporary directory, while preserving the callback proof and exact Contract-only rejection oracle.",
+    "production_validation_changed": false,
+    "dependencies_changed": false,
+    "immutable_oracles_or_fixtures_changed": false,
+    "focused_green_exit_code": 0,
+    "exact_head_windows_ci": "pending corrected-head publication"
   },
   "public_contracts": {
     "source_snapshot": "codenoesis.repository-snapshot/v10",
@@ -349,6 +368,7 @@
     "The accountable maintainer authorized the complete high-risk issue 134 package.",
     "The accountable maintainer explicitly authorized the same-file manifest edge and sole noesis Cargo.lock dependency row.",
     "The accountable maintainer expanded the bounded correction budget from four to exactly five for the final Windows mutable-input correction; no sixth correction is authorized.",
+    "The accountable maintainer separately authorized issue 136 for the bounded Windows-safe test-root correction after issue 134 exhausted its budget.",
     "Independent human public-contract, ontology, browser, supply-chain, compatibility, and security review plus protected manual merge remain mandatory."
   ]
 }

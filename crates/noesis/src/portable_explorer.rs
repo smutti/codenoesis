@@ -865,7 +865,12 @@ mod tests {
     }
 
     fn temporary_root(label: &str) -> PathBuf {
-        let root = std::env::temp_dir().join(format!(
+        let parent = std::env::current_dir()
+            .expect("resolve R8 unit workspace")
+            .join("target")
+            .join("codenoesis-r8-unit");
+        fs::create_dir_all(&parent).expect("create R8 unit parent");
+        let root = parent.join(format!(
             "codenoesis-r8-unit-{label}-{}-{}",
             std::process::id(),
             super::TEMP_SEQUENCE.fetch_add(1, std::sync::atomic::Ordering::Relaxed)
