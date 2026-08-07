@@ -1,0 +1,52 @@
+{
+  "schema_version": "codenoesis.r8-product-red-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/134",
+  "authorization": "https://github.com/smutti/codenoesis/issues/134#issuecomment-5219647892",
+  "requirement_ids": [
+    "FR-EXP-001",
+    "FR-QRY-001",
+    "FR-QRY-002",
+    "FR-CLI-001",
+    "FR-DOC-003",
+    "NFR-DET-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-PRV-002"
+  ],
+  "requirement_status": "Approved",
+  "slice": "S4",
+  "roadmap_capability": "R8",
+  "risk": "high",
+  "required_base": "9709d3a19230b933fe80be67142e6a7457e6e963",
+  "command": "cargo test --locked -p noesis --test e2e_fr_exp_001_portable_explorer -- e2e_fr_exp_001_export_and_explore_offline --exact",
+  "expected_failure": "the validated R7 setup succeeds and the subject fails only because the explicit export command is not implemented",
+  "actual": {
+    "runner_exit_code": 101,
+    "runner_failure": "expected PortableGraphV1 success; observed approved unknown export command Red",
+    "subject_exit_code": 2,
+    "subject_stdout_bytes": 0,
+    "subject_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "subject_stderr_bytes": 149,
+    "subject_stderr_sha256": "ce9225d963d52e228c7d53ae2b481d969eb0e73992d48db919cc80801a9ee2e6",
+    "subject_stderr": "{\"code\":\"input.invalid_revision\",\"context\":{},\"message\":\"invalid revision\",\"retryable\":false,\"schema_version\":\"codenoesis.error/v1\",\"stage\":\"input\"}\n",
+    "portable_destination_created": false,
+    "explorer_destination_created": false,
+    "build_sentinel_created": false,
+    "indexer_sentinel_created": false
+  },
+  "artifacts": {
+    "test_source_sha256": "647aa2cbc39fa235faa34680d5e7c3a416e0c15d98c8998799ecf6ab3266e326",
+    "red_log_bytes": 1225,
+    "red_log_sha256": "5eeeb21e6458ccf82086470f75c49e98196f3463a939045e77085fe45c05ad85"
+  },
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "features": "no explicit features",
+    "network_or_model_calls": false
+  },
+  "accepted_red": true,
+  "production_bytes_present": false
+}
