@@ -865,18 +865,41 @@ mod tests {
     }
 
     fn temporary_root(label: &str) -> PathBuf {
-        let parent = std::env::current_dir()
-            .expect("resolve R8 unit workspace")
-            .join("target")
-            .join("codenoesis-r8-unit");
-        fs::create_dir_all(&parent).expect("create R8 unit parent");
-        let root = parent.join(format!(
-            "codenoesis-r8-unit-{label}-{}-{}",
-            std::process::id(),
-            super::TEMP_SEQUENCE.fetch_add(1, std::sync::atomic::Ordering::Relaxed)
-        ));
-        fs::create_dir(&root).expect("create R8 unit root");
-        fs::canonicalize(root).expect("canonicalize R8 unit root")
+        let workspace = std::env::current_dir().expect("resolve R8 unit workspace");
+        #[cfg(windows)]
+        let mut candidates = vec![("workspace", workspace.join("target"))];
+        #[cfg(not(windows))]
+        let candidates = vec![("workspace", workspace.join("target"))];
+        #[cfg(windows)]
+        if let Some(volume_root) = workspace.ancestors().last() {
+            if candidates
+                .iter()
+                .all(|(_, candidate)| candidate != volume_root)
+            {
+                candidates.push(("windows-volume", volume_root.to_path_buf()));
+            }
+        }
+        let sequence = super::TEMP_SEQUENCE.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+        let candidate_count = candidates.len();
+        for (authority, candidate) in candidates {
+            if super::verify_existing_components(&candidate).is_err() {
+                continue;
+            }
+            let root = candidate.join(format!(
+                "codenoesis-r8-unit-{authority}-{label}-{}-{sequence}",
+                std::process::id()
+            ));
+            if fs::create_dir(&root).is_err() {
+                continue;
+            }
+            if super::verify_existing_components(&root).is_ok() {
+                return root;
+            }
+            let _ = fs::remove_dir(&root);
+        }
+        panic!(
+            "no validated R8 unit authority across {candidate_count} bounded candidates for {label}"
+        );
     }
 
     fn directory_is_empty(path: &Path) -> bool {
