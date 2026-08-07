@@ -4,6 +4,7 @@ use std::ffi::OsStr;
 use std::path::PathBuf;
 
 pub mod generated_docs;
+pub mod portable_explorer;
 
 #[cfg(target_os = "linux")]
 mod filesystem_sandbox;
@@ -215,6 +216,58 @@ pub fn install_s4_query_filesystem_boundary(
 pub const fn install_s4_query_filesystem_boundary(
     _store: &OsStr,
     _documents: &OsStr,
+) -> Result<(), SecurityBoundaryError> {
+    Ok(())
+}
+
+#[cfg(target_os = "linux")]
+/// Installs the R8 read-only store and writable portable-output boundary.
+///
+/// # Errors
+///
+/// Returns an opaque error when Linux Landlock cannot enforce both roots.
+pub fn install_r8_export_filesystem_boundary(
+    store: &OsStr,
+    output: &OsStr,
+) -> Result<(), SecurityBoundaryError> {
+    filesystem_sandbox::install_with_documents(store, output, true)
+}
+
+#[cfg(not(target_os = "linux"))]
+/// Confirms that normative R8 export confinement is Linux-only.
+///
+/// # Errors
+///
+/// This portability implementation is infallible.
+pub const fn install_r8_export_filesystem_boundary(
+    _store: &OsStr,
+    _output: &OsStr,
+) -> Result<(), SecurityBoundaryError> {
+    Ok(())
+}
+
+#[cfg(target_os = "linux")]
+/// Installs the R8 read-only portable-input and writable explorer boundary.
+///
+/// # Errors
+///
+/// Returns an opaque error when Linux Landlock cannot enforce both roots.
+pub fn install_r8_explorer_filesystem_boundary(
+    input: &OsStr,
+    output: &OsStr,
+) -> Result<(), SecurityBoundaryError> {
+    filesystem_sandbox::install_with_input_file_and_output(input, output)
+}
+
+#[cfg(not(target_os = "linux"))]
+/// Confirms that normative R8 explorer confinement is Linux-only.
+///
+/// # Errors
+///
+/// This portability implementation is infallible.
+pub const fn install_r8_explorer_filesystem_boundary(
+    _input: &OsStr,
+    _output: &OsStr,
 ) -> Result<(), SecurityBoundaryError> {
     Ok(())
 }

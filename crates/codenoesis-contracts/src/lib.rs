@@ -8,6 +8,7 @@ mod s4_r4;
 mod s4_r5;
 mod s4_r6;
 mod s4_r7;
+mod s4_r8;
 mod s5;
 mod s6;
 
@@ -19,6 +20,7 @@ pub use s4_r4::*;
 pub use s4_r5::*;
 pub use s4_r6::*;
 pub use s4_r7::*;
+pub use s4_r8::*;
 pub use s5::*;
 pub use s6::*;
 

@@ -24,6 +24,10 @@ pub struct MaterializedCompilerIndexRepository {
 
 impl MaterializedCompilerIndexRepository {
     pub fn fixture() -> Self {
+        Self::fixture_in(unique_temp_root())
+    }
+
+    pub fn fixture_in(root: PathBuf) -> Self {
         let fixture = fixture_root();
         let fixture_manifest: Value = serde_json::from_slice(
             &fs::read(fixture.join("manifest.json")).expect("read R7 fixture manifest"),
@@ -31,7 +35,6 @@ impl MaterializedCompilerIndexRepository {
         .expect("parse R7 fixture manifest");
         assert_eq!(fixture_manifest["repository_identity"], REPOSITORY_ID);
 
-        let root = unique_temp_root();
         let worktree = root.join("repository");
         let store = root.join("store");
         let documents = root.join("documents");

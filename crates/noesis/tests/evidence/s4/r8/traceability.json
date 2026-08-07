@@ -1,0 +1,279 @@
+{
+  "schema_version": "codenoesis.s4-r8-traceability/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/134",
+  "requirement_status": "Approved",
+  "slice": "S4",
+  "roadmap_capability": "R8",
+  "risk": "high",
+  "verification_status": "Implemented locally with focused and complete Darwin arm64 gates passing; exact committed-head Linux, macOS, Windows, CodeQL, benchmark-integrity, Codex review-policy, and independent human review remain required before Verified.",
+  "requirements": [
+    {
+      "id": "FR-EXP-001",
+      "role": "primary",
+      "tests": [
+        "e2e_fr_exp_001_export_and_explore_offline",
+        "conf_fr_exp_001_portable_graph_v1_lossless_reimport",
+        "gt_fr_exp_001_exact_identity_reference_and_evidence_preservation",
+        "gt_fr_exp_001_duplicate_loss_reorder_and_hash_rejection",
+        "sec_fr_exp_001_xss_payloads_render_as_text"
+      ]
+    },
+    {
+      "id": "FR-QRY-001",
+      "role": "compatibility",
+      "tests": [
+        "conf_fr_qry_001_r8_preserves_all_v5_subject_families",
+        "reg_fr_qry_001_r7_exact_query_bytes_unchanged"
+      ]
+    },
+    {
+      "id": "FR-QRY-002",
+      "role": "compatibility",
+      "tests": [
+        "conf_fr_qry_002_bounded_deterministic_neighborhood",
+        "pt_od_lim_001_r8_all_limits_have_maximum_plus_one"
+      ]
+    },
+    {
+      "id": "FR-CLI-001",
+      "role": "compatibility",
+      "tests": [
+        "conf_fr_cli_001_export_explore_are_explicit",
+        "reg_fr_cli_001_r7_commands_and_stored_head_unchanged"
+      ]
+    },
+    {
+      "id": "FR-DOC-003",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_exp_001_export_and_explore_offline",
+        "conf_fr_qry_001_r8_preserves_all_v5_subject_families"
+      ]
+    },
+    {
+      "id": "NFR-DET-001",
+      "role": "compatibility",
+      "tests": [
+        "pt_nfr_det_001_r8_fifty_permutation_replay",
+        "conf_fr_exp_001_fifty_source_permutations_are_byte_identical"
+      ]
+    },
+    {
+      "id": "NFR-SEC-001",
+      "role": "compatibility",
+      "tests": [
+        "sec_nfr_sec_001_r8_csp_forbids_active_remote_content",
+        "conf_fr_exp_001_invalid_security_matrix"
+      ]
+    },
+    {
+      "id": "NFR-SEC-005",
+      "role": "compatibility",
+      "tests": [
+        "sec_nfr_sec_005_r8_path_symlink_and_destination_confinement",
+        "race_nfr_sec_005_mutable_input_is_rejected",
+        "race_nfr_sec_005_output_replacement_is_rejected_or_blocked",
+        "conf_fr_exp_001_invalid_security_matrix"
+      ]
+    },
+    {
+      "id": "NFR-PRV-002",
+      "role": "compatibility",
+      "tests": [
+        "sec_nfr_prv_002_r8_excludes_source_contents_and_snippets",
+        "conf_fr_exp_001_invalid_security_matrix"
+      ]
+    },
+    {
+      "id": "NFR-TST-001",
+      "role": "compatibility",
+      "tests": [
+        "all focused R8 contract, adapter, CLI, security, privacy, limit, and regression tests",
+        "all 33 immutable invalid/security cases",
+        "complete repository gate"
+      ]
+    },
+    {
+      "id": "NFR-TST-002",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_exp_001_export_and_explore_offline",
+        "pt_nfr_det_001_r8_fifty_permutation_replay",
+        "complete exact-head pull-request checks"
+      ]
+    }
+  ],
+  "required_machine_linkable_tests": [
+    "e2e_fr_exp_001_export_and_explore_offline",
+    "conf_fr_exp_001_portable_graph_v1_lossless_reimport",
+    "conf_fr_cli_001_export_explore_are_explicit",
+    "conf_fr_qry_001_r8_preserves_all_v5_subject_families",
+    "conf_fr_qry_002_bounded_deterministic_neighborhood",
+    "gt_fr_exp_001_exact_identity_reference_and_evidence_preservation",
+    "gt_fr_exp_001_duplicate_loss_reorder_and_hash_rejection",
+    "pt_nfr_det_001_r8_fifty_permutation_replay",
+    "sec_fr_exp_001_xss_payloads_render_as_text",
+    "sec_nfr_sec_001_r8_csp_forbids_active_remote_content",
+    "sec_nfr_sec_005_r8_path_symlink_and_destination_confinement",
+    "sec_nfr_prv_002_r8_excludes_source_contents_and_snippets",
+    "pt_od_lim_001_r8_all_limits_have_maximum_plus_one",
+    "reg_fr_qry_001_r7_exact_query_bytes_unchanged",
+    "reg_fr_cli_001_r7_commands_and_stored_head_unchanged"
+  ],
+  "test_layers": {
+    "contract": [
+      "conf_fr_exp_001_portable_graph_v1_lossless_reimport",
+      "conf_fr_exp_001_error_v15_is_strict_and_lf_terminated",
+      "gt_fr_exp_001_duplicate_loss_reorder_and_hash_rejection",
+      "conf_fr_exp_001_fifty_source_permutations_are_byte_identical"
+    ],
+    "filesystem_adapter": [
+      "race_nfr_sec_005_mutable_input_is_rejected",
+      "race_nfr_sec_005_output_replacement_is_rejected_or_blocked"
+    ],
+    "application_cli_security_and_compatibility": [
+      "all 15 tests in e2e_fr_exp_001_portable_explorer",
+      "all 33 immutable invalid/security cases through conf_fr_exp_001_invalid_security_matrix"
+    ]
+  },
+  "ordered_acceptance_scenarios": [
+    {
+      "order": 1,
+      "outcome": "Only explicit export and explore commands with complete unique arguments are accepted before any input, store, or output access.",
+      "status": "passed_focused",
+      "tests": [
+        "conf_fr_cli_001_export_explore_are_explicit"
+      ]
+    },
+    {
+      "order": 2,
+      "outcome": "One fully validated visible V10 head exports all eight ordered families with exact stable identities, references, evidence, claim states, diagnostics, gaps, and documentation bindings.",
+      "status": "passed_focused",
+      "tests": [
+        "e2e_fr_exp_001_export_and_explore_offline",
+        "conf_fr_qry_001_r8_preserves_all_v5_subject_families",
+        "gt_fr_exp_001_exact_identity_reference_and_evidence_preservation"
+      ]
+    },
+    {
+      "order": 3,
+      "outcome": "PortableGraphV1 is canonical, strict, lossless on reimport, and rejects duplicate, reordered, unknown, unbound, unsafe, or hash-mismatched content without repair.",
+      "status": "passed_focused",
+      "tests": [
+        "conf_fr_exp_001_portable_graph_v1_lossless_reimport",
+        "gt_fr_exp_001_duplicate_loss_reorder_and_hash_rejection",
+        "conf_fr_exp_001_invalid_security_matrix"
+      ]
+    },
+    {
+      "order": 4,
+      "outcome": "Fifty source permutations and repeated public journeys produce byte-identical canonical graph and manifest results.",
+      "status": "passed_focused",
+      "tests": [
+        "pt_nfr_det_001_r8_fifty_permutation_replay",
+        "conf_fr_exp_001_fifty_source_permutations_are_byte_identical"
+      ]
+    },
+    {
+      "order": 5,
+      "outcome": "Marker-owned export and explorer publication is confined to validated destinations and detects symlink, alias, mutable-input, and replacement races without partial publication.",
+      "status": "passed_focused_on_darwin_with_native_windows_ci_pending",
+      "tests": [
+        "sec_nfr_sec_005_r8_path_symlink_and_destination_confinement",
+        "race_nfr_sec_005_mutable_input_is_rejected",
+        "race_nfr_sec_005_output_replacement_is_rejected_or_blocked"
+      ]
+    },
+    {
+      "order": 6,
+      "outcome": "The exact reviewed offline viewer and strict manifest bind graph, viewer, CSP, limits, capabilities, and security profile without active remote content.",
+      "status": "passed_focused",
+      "tests": [
+        "e2e_fr_exp_001_export_and_explore_offline",
+        "sec_nfr_sec_001_r8_csp_forbids_active_remote_content"
+      ]
+    },
+    {
+      "order": 7,
+      "outcome": "Exact-ID, NFC case-sensitive text, typed filters, and deterministic bounded depth-1/depth-2 neighborhoods preserve evidence inspection semantics and explicit truncation.",
+      "status": "passed_focused",
+      "tests": [
+        "conf_fr_qry_002_bounded_deterministic_neighborhood",
+        "pt_od_lim_001_r8_all_limits_have_maximum_plus_one"
+      ]
+    },
+    {
+      "order": 8,
+      "outcome": "XSS, URL, dynamic-code, Unicode control, source-content, snippet, environment, path, network, process, model, and mutation payloads are rejected or rendered only as text.",
+      "status": "passed_focused",
+      "tests": [
+        "sec_fr_exp_001_xss_payloads_render_as_text",
+        "sec_nfr_sec_001_r8_csp_forbids_active_remote_content",
+        "sec_nfr_prv_002_r8_excludes_source_contents_and_snippets",
+        "conf_fr_exp_001_invalid_security_matrix"
+      ]
+    },
+    {
+      "order": 9,
+      "outcome": "Every fixed maximum and maximum-plus-one is enforced without proportional publication, silent truncation, retry, or repair.",
+      "status": "passed_focused",
+      "tests": [
+        "pt_od_lim_001_r8_all_limits_have_maximum_plus_one",
+        "conf_fr_exp_001_invalid_security_matrix"
+      ]
+    },
+    {
+      "order": 10,
+      "outcome": "All 33 immutable invalid/security cases return their exact closed ErrorV15 code with empty stdout and no partial output.",
+      "status": "passed_focused",
+      "tests": [
+        "conf_fr_exp_001_invalid_security_matrix"
+      ]
+    },
+    {
+      "order": 11,
+      "outcome": "R7 exact query bytes, commands, and stored head remain unchanged.",
+      "status": "passed_focused_and_complete_gate",
+      "tests": [
+        "reg_fr_qry_001_r7_exact_query_bytes_unchanged",
+        "reg_fr_cli_001_r7_commands_and_stored_head_unchanged",
+        "complete repository gate"
+      ]
+    }
+  ],
+  "invalid_security_cases": [
+    "connect_source_enabled",
+    "destination_component_dot_dot",
+    "destination_marker_mismatch",
+    "destination_non_empty_unmarked",
+    "destination_parent_symlink_escape",
+    "duplicate_entity_id",
+    "duplicate_relationship_id",
+    "dynamic_code_evaluation",
+    "evidence_absolute_path",
+    "evidence_parent_escape",
+    "html_attribute_quotes",
+    "html_script_close",
+    "json_nesting_max_plus_one",
+    "missing_claim_subject",
+    "missing_evidence_reference",
+    "missing_relationship_endpoint",
+    "neighborhood_relationships_max_plus_one",
+    "neighborhood_subjects_max_plus_one",
+    "noncanonical_family_order",
+    "oversized_display_label",
+    "oversized_metadata",
+    "portable_graph_bytes_max_plus_one",
+    "remote_script_origin",
+    "snapshot_hash_mismatch",
+    "text_results_max_plus_one",
+    "traversal_depth_max_plus_one",
+    "unicode_bidi_override",
+    "unicode_control_character",
+    "unicode_line_separator",
+    "unicode_paragraph_separator",
+    "unknown_projection_field",
+    "unsupported_projection_version",
+    "viewer_asset_bytes_max_plus_one"
+  ]
+}

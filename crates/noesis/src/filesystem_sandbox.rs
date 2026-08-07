@@ -199,3 +199,41 @@ pub(crate) fn install_with_documents(
     }
     Ok(())
 }
+
+pub(crate) fn install_with_input_file_and_output(
+    input: &OsStr,
+    output: &OsStr,
+) -> Result<(), SecurityBoundaryError> {
+    let abi = ABI::V3;
+    let read_only = AccessFs::ReadFile | AccessFs::ReadDir;
+    let output_access = read_only
+        | AccessFs::WriteFile
+        | AccessFs::RemoveDir
+        | AccessFs::RemoveFile
+        | AccessFs::MakeDir
+        | AccessFs::MakeReg
+        | AccessFs::Refer
+        | AccessFs::Truncate;
+    let status = Ruleset::default()
+        .set_compatibility(CompatLevel::HardRequirement)
+        .handle_access(AccessFs::from_all(abi))
+        .map_err(|_| SecurityBoundaryError)?
+        .create()
+        .map_err(|_| SecurityBoundaryError)?
+        .add_rule(PathBeneath::new(
+            PathFd::new(Path::new(input)).map_err(|_| SecurityBoundaryError)?,
+            AccessFs::ReadFile,
+        ))
+        .map_err(|_| SecurityBoundaryError)?
+        .add_rule(PathBeneath::new(
+            PathFd::new(Path::new(output)).map_err(|_| SecurityBoundaryError)?,
+            output_access,
+        ))
+        .map_err(|_| SecurityBoundaryError)?
+        .restrict_self()
+        .map_err(|_| SecurityBoundaryError)?;
+    if status.ruleset != RulesetStatus::FullyEnforced || !status.no_new_privs {
+        return Err(SecurityBoundaryError);
+    }
+    Ok(())
+}
