@@ -454,6 +454,7 @@ dependencies = [
  "landlock",
  "libc",
  "rusqlite",
+ "same-file",
  "seccompiler",
  "serde_json",
  "sha2",

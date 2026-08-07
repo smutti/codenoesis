@@ -1,0 +1,330 @@
+{
+  "schema_version": "codenoesis.s4-r8-local-implementation-observation/v1",
+  "profile": "codenoesis.portable-graph/v1+codenoesis.local-explorer/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/134",
+  "requirements": [
+    "FR-EXP-001",
+    "FR-QRY-001",
+    "FR-QRY-002",
+    "FR-CLI-001",
+    "FR-DOC-003",
+    "NFR-DET-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-PRV-002",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "requirement_status": "Approved for the bounded R8 portable graph and local explorer profile",
+  "slice": "S4",
+  "roadmap_capability": "R8",
+  "risk": "high",
+  "authorization": {
+    "ready_issue": "https://github.com/smutti/codenoesis/issues/134",
+    "human_authorization": "https://github.com/smutti/codenoesis/issues/134#issuecomment-5219647892",
+    "lockfile_edge_authorization": "https://github.com/smutti/codenoesis/issues/134#issuecomment-5220405144",
+    "governance_issue": "https://github.com/smutti/codenoesis/issues/110",
+    "governance_pull_request": "https://github.com/smutti/codenoesis/pull/131",
+    "maintainer_supervised_interactive_lane": true,
+    "correction_budget": 4,
+    "manual_independent_review_and_merge_required": true
+  },
+  "commits": {
+    "required_governance_and_product_base": "9709d3a19230b933fe80be67142e6a7457e6e963",
+    "test_first_and_retained_red": "4e1a6fa90c7a00f804fc453cf6310785ad52224c",
+    "implementation": "recorded by the product commit after the final unchanged working-tree gate",
+    "final_review_head": "recorded by the pull request after publication"
+  },
+  "red_evidence": {
+    "observation": "crates/noesis/tests/evidence/s4/r8/red-observation.json",
+    "observation_sha256": "722ad154b3078806033938997ba560e3a61ca9d6bddb9032dc12b0d8b229fa6a",
+    "log": "crates/noesis/tests/evidence/s4/r8/red.log",
+    "log_sha256": "5eeeb21e6458ccf82086470f75c49e98196f3463a939045e77085fe45c05ad85",
+    "command": "cargo test --locked -p noesis --test e2e_fr_exp_001_portable_explorer -- e2e_fr_exp_001_export_and_explore_offline --exact",
+    "runner_exit_code": 101,
+    "subject_exit_code": 2,
+    "subject_stdout_bytes": 0,
+    "subject_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "subject_stderr_bytes": 149,
+    "subject_stderr_sha256": "ce9225d963d52e228c7d53ae2b481d969eb0e73992d48db919cc80801a9ee2e6",
+    "destinations_and_sentinels_unchanged": true
+  },
+  "corrections": {
+    "configured_budget": 4,
+    "budget_exhausted": false,
+    "observations": [
+      {
+        "expected_red": "The new one-to-one 33-case conformance test did not compile because the production contract lacked explicit viewer-limit and viewer-asset validators.",
+        "retained_log": "not retained",
+        "resolution": "Added strict production validators and exercised them through the immutable matrix.",
+        "green_exit_code": 0
+      },
+      {
+        "expected_red": "A nested unknown entity member was accepted by reimport validation.",
+        "retained_log": "not retained",
+        "resolution": "Added exact per-family record-shape validation before identity and reference checks.",
+        "green_exit_code": 0
+      }
+    ],
+    "governance_scope_decision": "The maintainer explicitly authorized the one-line noesis lock dependency edge after the issue's dependency decision and lockfile stop condition conflicted."
+  },
+  "public_contracts": {
+    "source_snapshot": "codenoesis.repository-snapshot/v10",
+    "source_ontology": "codenoesis.ontology/rust/v7",
+    "source_query": "codenoesis.local-query-result/v5",
+    "portable_graph": "codenoesis.portable-graph/v1",
+    "local_explorer": "codenoesis.local-explorer/v1",
+    "errors": "codenoesis.error/v15",
+    "portable_graph_family_order": [
+      "entities",
+      "relationships",
+      "claims",
+      "evidence",
+      "diagnostics",
+      "coverage_gaps",
+      "documents",
+      "document_statements"
+    ]
+  },
+  "fixed_limits": {
+    "portable_graph_bytes": 268435456,
+    "viewer_non_data_bytes": 1048576,
+    "text_search_results": 100,
+    "traversal_depth_default": 1,
+    "traversal_depth_maximum": 2,
+    "neighborhood_subjects": 256,
+    "neighborhood_relationships": 512,
+    "json_nesting": 64,
+    "permutations": 50
+  },
+  "reviewed_fixture": {
+    "root": "tests/fixtures/s4/portable-explorer-v1",
+    "portable_graph_file_sha256": "389f5b211dd2a0c33af36a639145fb9867653fe3d85b56f3899f8cac799e3523",
+    "portable_graph_canonical_sha256": "ba3ab0fe6c4de2c1c195c5a3e4902f07e4864358669f00c8ea3fcb10944412bc",
+    "explorer_manifest_sha256": "7718049806c39dd4a9daef4db83d34103388756851e28707141b51893968556e",
+    "viewer_sha256": "1caa2c0ca5675937eab674f61681883ba3c6a428feb6b1baa744a0cb7eecd044",
+    "implemented_viewer_sha256": "1caa2c0ca5675937eab674f61681883ba3c6a428feb6b1baa744a0cb7eecd044",
+    "source_family_digests_sha256": "55faf2d1f97bbacecfe0204cc45b8b97fde97ee796dde66a89d8a2c4292a3a85",
+    "csp_oracle_sha256": "b1aefa1dbfd9e988445b626f1bf5b9081d924a78c5d3d44c762457524b2faf0b",
+    "immutable_sources_modified": false
+  },
+  "contracts": {
+    "portable_graph_validation_order": [
+      "byte_limit_preflight",
+      "json_nesting_preflight",
+      "duplicate_member_rejection",
+      "schema_and_unknown_field_rejection",
+      "canonical_family_order",
+      "identity_uniqueness",
+      "reference_closure",
+      "evidence_resolution",
+      "source_binding",
+      "family_digest_equality"
+    ],
+    "all_eight_families_lossless": true,
+    "stable_ids_and_references_preserved": true,
+    "claim_state_upgrade_allowed": false,
+    "repair_allowed": false,
+    "silent_truncation_allowed": false,
+    "unknown_members_allowed": false,
+    "duplicate_json_members_allowed": false
+  },
+  "failure_and_publication": {
+    "export_outputs": [
+      "portable-graph.json",
+      ".codenoesis-portable-graph-v1"
+    ],
+    "explorer_outputs": [
+      "portable-graph.json",
+      "index.html",
+      "explorer-manifest.json",
+      ".codenoesis-local-explorer-v1"
+    ],
+    "accepted_destination_states": [
+      "absent",
+      "empty",
+      "exact_matching_marker_owned"
+    ],
+    "atomic_marker_owned_publication": true,
+    "exact_existing_generation_is_idempotent": true,
+    "different_existing_owned_generation_rejected_unchanged": true,
+    "partial_output_on_failure": false,
+    "input_double_read_and_retained_identity": true,
+    "output_root_and_parent_retained_identity": true
+  },
+  "security_and_privacy": {
+    "immutable_invalid_security_cases_passed": 33,
+    "viewer_active_remote_content": false,
+    "viewer_untrusted_html_rendering": false,
+    "viewer_dynamic_code": false,
+    "source_contents_or_snippets": false,
+    "absolute_or_parent_escape_paths": false,
+    "network_or_cdn": false,
+    "browser_auto_launch": false,
+    "child_process_or_target_execution": false,
+    "model_provider": false,
+    "store_or_repository_mutation": false,
+    "first_party_unsafe_blocks": 0,
+    "linux_landlock_boundaries_present": true,
+    "darwin_path_identity_and_race_tests_passed": true,
+    "native_windows_ci_pending": true
+  },
+  "compatibility": {
+    "r7_exact_query_bytes_unchanged": true,
+    "r7_commands_unchanged": true,
+    "r7_stored_head_unchanged": true,
+    "older_workspace_tests_passed": true,
+    "snapshot_or_ontology_migration": false,
+    "control_plane_change": false
+  },
+  "focused_validation": {
+    "observed_at": "2026-08-07",
+    "commands": [
+      "cargo fmt --all --check",
+      "cargo clippy --locked -p codenoesis-contracts -p noesis --all-targets --all-features -- -D warnings",
+      "cargo test --locked -p codenoesis-contracts --test s4_r8_contracts",
+      "cargo test --locked -p noesis --test e2e_fr_exp_001_portable_explorer -- --test-threads=1",
+      "cargo test --locked -p noesis --lib portable_explorer::tests:: -- --test-threads=1",
+      "git diff --check"
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "contract_tests_passed": 4,
+    "public_black_box_tests_passed": 15,
+    "race_unit_tests_passed": 2,
+    "required_machine_linkable_tests_present": 15,
+    "immutable_invalid_security_cases_passed": 33,
+    "determinism_permutations": 50,
+    "focused_log_committed": false
+  },
+  "final_working_tree_bootstrap_gate": {
+    "observed_at": "2026-08-07",
+    "status": "passed on the implementation working tree before the machine-readable observation was added; an unchanged committed-head rerun and pull-request checks remain required",
+    "commands": [
+      "actionlint -no-color",
+      "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+      "cargo fmt --all --check",
+      "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "cargo test --workspace --all-targets --all-features --locked",
+      "cargo test --workspace --doc --all-features --locked",
+      "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "python3 scripts/validate_benchmark_assets.py",
+      "cargo bench --workspace --all-features --no-run --locked"
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "duration_seconds": [
+      0,
+      0,
+      1,
+      6,
+      203,
+      3,
+      2,
+      0,
+      6
+    ],
+    "local_gate_logs_committed": false,
+    "exact_committed_head_ci": "pending product commit and pull-request publication",
+    "linux_macos_windows_codeql_benchmark_and_codex_policy_checks": "pending pull-request publication"
+  },
+  "dependency_review": {
+    "direct_packages": [
+      "same-file 1.0.6",
+      "sha2 0.11.0"
+    ],
+    "new_registry_packages": [],
+    "unauthorized_dependency_or_feature": false,
+    "first_party_unsafe_blocks": 0,
+    "native_darwin_arm64_complete_gate": true,
+    "isolated_windows_rust_api_check": true,
+    "full_native_windows_exact_head_ci": "pending pull-request publication",
+    "evidence": "crates/noesis/tests/evidence/s4/r8/dependency-review.json"
+  },
+  "environment": {
+    "observed_at": "2026-08-07T18:07:57Z",
+    "os": "macOS 26.5.2 build 25F84",
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "rustc_host": "aarch64-apple-darwin",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "python": "Python 3.9.6",
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "actionlint": "1.7.12",
+    "installed_rust_targets": [
+      "aarch64-apple-darwin",
+      "aarch64-unknown-linux-gnu",
+      "x86_64-pc-windows-msvc",
+      "x86_64-unknown-linux-gnu"
+    ],
+    "toolchain_file_sha256": "279d77167cec5426fa80f457cd066dc74a360fbe4e2816f4f3fa01487a918fdc",
+    "features": "all workspace features for the complete gate; default features for focused R8 tests",
+    "policy_version": 1,
+    "policy_sha256": "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993",
+    "agent": "OpenAI Codex",
+    "model": "not exposed by runtime",
+    "run_identifier": "issue-134-r8-interactive-20260807",
+    "implementation_duration": "not exposed by runtime",
+    "monetary_cost": "not exposed by runtime"
+  },
+  "path_review": {
+    "all_actual_paths_are_issue_or_follow_up_authorized": true,
+    "lockfile_exception_authorized": true,
+    "unlisted_path_changes": [],
+    "protected_governance_specification_fixture_schema_ontology_or_control_plane_changes": [],
+    "new_crate_boundaries": []
+  },
+  "actual_changed_paths": [
+    "Cargo.lock",
+    "crates/codenoesis-contracts/src/lib.rs",
+    "crates/codenoesis-contracts/src/s4_r8.rs",
+    "crates/codenoesis-contracts/tests/s4_r8_contracts.rs",
+    "crates/noesis/Cargo.toml",
+    "crates/noesis/assets/s4/r8/index.html",
+    "crates/noesis/src/filesystem_sandbox.rs",
+    "crates/noesis/src/lib.rs",
+    "crates/noesis/src/main.rs",
+    "crates/noesis/src/portable_explorer.rs",
+    "crates/noesis/tests/e2e_fr_exp_001_portable_explorer.rs",
+    "crates/noesis/tests/evidence/s4/r8/dependency-review.json",
+    "crates/noesis/tests/evidence/s4/r8/implementation-observation-local.json",
+    "crates/noesis/tests/evidence/s4/r8/red-observation.json",
+    "crates/noesis/tests/evidence/s4/r8/red.log",
+    "crates/noesis/tests/evidence/s4/r8/traceability.json",
+    "crates/noesis/tests/support/mod.rs",
+    "crates/noesis/tests/support/s4_r8.rs"
+  ],
+  "traceability": "crates/noesis/tests/evidence/s4/r8/traceability.json",
+  "known_limitations": [
+    "Local evidence supports review but does not mark the bounded FR-EXP-001 profile Verified.",
+    "Exact committed-head Linux, macOS, Windows, CodeQL, benchmark-integrity, Codex review-policy, and independent human public-contract/browser/security evidence remain pending until pull-request publication.",
+    "The local complete workspace gate validates Darwin arm64.",
+    "The full local Windows cross-check is blocked before noesis by inherited tree-sitter and bundled SQLite native builds that require a Windows C SDK; the exact same-file and Windows MetadataExt APIs compile in an isolated no-unsafe Rust probe, and native Windows CI remains required.",
+    "Linux Landlock enforcement is present but must execute on exact-head Linux CI.",
+    "No OS-level network, process, or filesystem trace and no interactive browser smoke were captured locally; deterministic sentinels, static viewer validation, CSP validation, race tests, and native CI provide the bounded automated evidence.",
+    "The viewer is a reconstructable read-only materialized view; PortableGraphV1 remains the sole R8 interchange authority and the stored V10 head remains canonical."
+  ],
+  "unresolved_decisions": [],
+  "dissent": [],
+  "human_approvals": [
+    "The accountable maintainer authorized the complete high-risk issue 134 package.",
+    "The accountable maintainer explicitly authorized the same-file manifest edge and sole noesis Cargo.lock dependency row.",
+    "Independent human public-contract, ontology, browser, supply-chain, compatibility, and security review plus protected manual merge remain mandatory."
+  ]
+}

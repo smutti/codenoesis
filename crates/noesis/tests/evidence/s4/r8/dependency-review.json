@@ -1,0 +1,132 @@
+{
+  "schema_version": "codenoesis.s4-r8-dependency-review/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/134",
+  "requirement_status": "Approved",
+  "slice": "S4",
+  "roadmap_capability": "R8",
+  "risk": "high",
+  "decision": {
+    "authorized_existing_packages": [
+      "sha2 0.11.0",
+      "same-file 1.0.6"
+    ],
+    "sha2_edge": "The existing noesis sha2.workspace edge is reused; codenoesis-contracts did not require or add a sha2 edge.",
+    "same_file_edge": "same-file.workspace = true was added only to crates/noesis/Cargo.toml.",
+    "lockfile_delta": "Only the \"same-file\" dependency row was added to the existing noesis package dependency array.",
+    "lockfile_delta_authorization": "https://github.com/smutti/codenoesis/issues/134#issuecomment-5220405144",
+    "base_lockfile_sha256": "532dcb8ca5b4cdce1b24f9abba78b3fbce6a08ab7877eb7355172eb709981eed",
+    "working_tree_lockfile_sha256": "dc4d979db8a86dbcb10a99ff064a20b7a67a598ad01078d024e48f5cabe16316",
+    "new_registry_packages": [],
+    "removed_registry_packages": [],
+    "resolution_or_feature_changes": [],
+    "unauthorized_dependencies": [],
+    "build_scripts_added": [],
+    "native_components_added": [],
+    "commands": [
+      "git diff --unified=3 9709d3a19230b933fe80be67142e6a7457e6e963 -- Cargo.lock crates/noesis/Cargo.toml crates/codenoesis-contracts/Cargo.toml",
+      "cargo metadata --locked --format-version 1",
+      "cargo tree --locked -p noesis -e normal",
+      "cargo tree --locked --workspace -i same-file"
+    ]
+  },
+  "packages": [
+    {
+      "name": "same-file",
+      "version": "1.0.6",
+      "checksum": "93fc1dc3aaa9bfed95e02e6eadabb4baf7e3078b0bd1b4d7b6b0b68378900502",
+      "license": "Unlicense/MIT",
+      "declared_rust_version": null,
+      "new_lockfile_package": false,
+      "features": [],
+      "normal_dependencies": [
+        "winapi-util ^0.1.1 on cfg(windows)"
+      ],
+      "build_script": false,
+      "proc_macro": false,
+      "native_source_files": 0
+    },
+    {
+      "name": "sha2",
+      "version": "0.11.0",
+      "checksum": "446ba717509524cb3f22f17ecc096f10f4822d76ab5c0b9822c5f9c284e825f4",
+      "license": "MIT OR Apache-2.0",
+      "declared_rust_version": "1.85",
+      "new_lockfile_package": false,
+      "active_features": [
+        "alloc",
+        "default",
+        "oid"
+      ],
+      "build_script": false,
+      "proc_macro": false,
+      "native_source_files": 0
+    }
+  ],
+  "resolved_tree": {
+    "reviewed_direct_edges": [
+      "noesis -> same-file 1.0.6",
+      "noesis -> sha2 0.11.0"
+    ],
+    "same_file_windows_transitive": "winapi-util 0.1.11 was already locked on the required base",
+    "package_set_changed": false,
+    "runtime_downloader": false,
+    "code_generator": false,
+    "network_runtime": false
+  },
+  "platform_compile": {
+    "pinned_toolchain": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "native_darwin_arm64_workspace_clippy": {
+      "command": "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "exit_code": 0
+    },
+    "isolated_windows_identity_api": {
+      "target": "x86_64-pc-windows-msvc",
+      "command": "rustc --crate-name codenoesis_r8_windows_probe --edition=2021 --crate-type=lib --emit=metadata --target x86_64-pc-windows-msvc -L dependency=target/x86_64-pc-windows-msvc/debug/deps --extern same_file=<locked-rmeta> probe.rs",
+      "apis": [
+        "same_file::Handle::from_file",
+        "same_file::Handle::from_path",
+        "std::os::windows::fs::MetadataExt::file_size",
+        "std::os::windows::fs::MetadataExt::last_write_time",
+        "std::os::windows::fs::MetadataExt::creation_time",
+        "std::os::windows::fs::MetadataExt::file_attributes"
+      ],
+      "first_party_unsafe_forbidden": true,
+      "exit_code": 0
+    },
+    "full_noesis_windows_cross_check": {
+      "command": "cargo check --locked -p noesis --target x86_64-pc-windows-msvc",
+      "exit_code": 101,
+      "product_rust_error_observed": false,
+      "environmental_blockers": [
+        "libsqlite3-sys inherited native build cannot find stdlib.h in a Windows C SDK",
+        "tree-sitter inherited native build cannot find stdio.h in a Windows C SDK",
+        "tree-sitter-rust inherited native build cannot find stdlib.h in a Windows C SDK"
+      ],
+      "required_follow_up": "Native exact-head Windows CI remains required."
+    }
+  },
+  "unsafe_review": {
+    "first_party_unsafe_blocks": 0,
+    "same_file_lexical_unsafe_expressions": 3,
+    "same_file_unsafe_locations": [
+      "Unix stdin descriptor constructor",
+      "Unix stdout descriptor constructor",
+      "Unix stderr descriptor constructor"
+    ],
+    "r8_reaches_same_file_standard_descriptor_constructors": false,
+    "r8_reachable_same_file_apis": [
+      "Handle::from_file",
+      "Handle::from_path",
+      "Handle equality"
+    ],
+    "unsafe_accepted_as_product_truth": false
+  },
+  "advisories": {
+    "current_exact_head_cargo_audit": "not run: cargo-audit is not installed in the current environment",
+    "package_set_change_since_r7_audit": false,
+    "inherited_package_set_audit": "crates/noesis/tests/evidence/s4/r7/cargo-audit.json",
+    "inherited_package_set_audit_sha256": "74dc240b75eda97298d37b029b013abfe0436a1859a912e3ba9ec19fc3221cf1",
+    "cargo_deny": "not run: cargo-deny is not installed and no control-plane/tooling change is authorized"
+  },
+  "conclusion": "R8 adds only the explicitly authorized direct same-file edge and its explicitly authorized noesis lockfile row. No package, version, feature, build script, native component, code generator, or runtime downloader changes. The focused and complete native gates pass; native exact-head Windows CI and independent supply-chain/security review remain mandatory before Verified."
+}

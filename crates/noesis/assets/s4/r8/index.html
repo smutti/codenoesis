@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-+wXgA8YACUINip3Bd70PW/CNa99al9KY+mUSpK5D8B0='; style-src 'sha256-acsH8EvKpLUUAIFsfEjiVSLLnbHkOls76PFfS1E7Ei4='; img-src 'self' data:; font-src 'none'; connect-src 'none'; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'; manifest-src 'none'; media-src 'none'; worker-src 'none'">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CodeNoesis Local Explorer</title>
+<style>
+:root {
+  color-scheme: dark;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #07111f;
+  color: #e6edf7;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, #12304a 0, #07111f 42rem);
+}
+header,
+main {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+header {
+  padding: 2rem 0 1rem;
+}
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+h1 {
+  letter-spacing: -0.035em;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: 0.4rem;
+}
+.subtitle,
+#status {
+  color: #9fb3c8;
+}
+.panel {
+  background: rgba(9, 24, 40, 0.92);
+  border: 1px solid #28445e;
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.22);
+}
+.controls {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.field {
+  grid-column: span 3;
+}
+.field.wide {
+  grid-column: span 6;
+}
+label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: #a9bed2;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+input,
+select,
+button {
+  width: 100%;
+  min-height: 2.7rem;
+  border-radius: 9px;
+  border: 1px solid #36536d;
+  background: #0c2033;
+  color: #eef6ff;
+  padding: 0.65rem 0.75rem;
+}
+button {
+  cursor: pointer;
+  background: #1677b8;
+  border-color: #2692d8;
+  font-weight: 750;
+}
+button.secondary {
+  background: #17334a;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 1rem;
+  padding-bottom: 2rem;
+}
+.results {
+  display: grid;
+  gap: 0.55rem;
+  max-height: 65vh;
+  overflow: auto;
+}
+.result {
+  text-align: left;
+  background: #102b43;
+  border-color: #2d5978;
+}
+.result strong,
+.result span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.result span {
+  color: #a9bed2;
+  font-size: 0.78rem;
+  margin-top: 0.25rem;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 0;
+  color: #d9e9f8;
+  font: 0.84rem/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.badge {
+  display: inline-block;
+  border-radius: 999px;
+  background: #183d58;
+  color: #9ed8ff;
+  padding: 0.2rem 0.55rem;
+  margin: 0 0.35rem 0.5rem 0;
+  font-size: 0.75rem;
+}
+#status[data-level="error"] {
+  color: #ff9f9f;
+}
+#status[data-level="ok"] {
+  color: #8fe3b2;
+}
+@media (max-width: 820px) {
+  .field,
+  .field.wide {
+    grid-column: span 12;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>CodeNoesis Local Explorer</h1>
+  <p class="subtitle">Read-only inspection of a validated PortableGraphV1. Select the graph explicitly; no repository or server is required.</p>
+</header>
+<main>
+  <section class="panel controls" aria-label="Explorer controls">
+    <div class="field wide">
+      <label for="graph-file">Portable graph</label>
+      <input id="graph-file" type="file" accept="application/json,.json">
+    </div>
+    <div class="field wide">
+      <label for="search">Exact ID or NFC text</label>
+      <input id="search" type="search" autocomplete="off" placeholder="Search stable IDs and metadata">
+    </div>
+    <div class="field">
+      <label for="family">Subject kind</label>
+      <select id="family">
+        <option value="all">All</option>
+        <option value="entities">Entity</option>
+        <option value="relationships">Relationship</option>
+        <option value="claims">Claim</option>
+        <option value="evidence">Evidence</option>
+        <option value="diagnostics">Diagnostic</option>
+        <option value="coverage_gaps">Coverage gap</option>
+        <option value="documents">Document</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="filter-mode">Typed filter</label>
+      <select id="filter-mode">
+        <option value="none">None</option>
+        <option value="relationship_kind">Relationship kind</option>
+        <option value="claim_state">Claim state</option>
+        <option value="diagnostic_code">Diagnostic code</option>
+        <option value="coverage_capability">Coverage capability</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="filter-value">Filter value</label>
+      <input id="filter-value" type="text" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="depth">Neighborhood depth</label>
+      <select id="depth">
+        <option value="1">1</option>
+        <option value="2">2</option>
+      </select>
+    </div>
+    <div class="field wide">
+      <button id="search-button" disabled>Search</button>
+    </div>
+    <div class="field wide">
+      <button id="neighborhood-button" class="secondary" disabled>Inspect selected neighborhood</button>
+    </div>
+    <div class="field wide">
+      <p id="status" role="status">Select portable-graph.json to begin.</p>
+    </div>
+  </section>
+  <section class="grid">
+    <article class="panel">
+      <h2>Results</h2>
+      <div id="results" class="results"></div>
+    </article>
+    <article class="panel">
+      <h2>Inspector</h2>
+      <div id="summary"></div>
+      <pre id="inspector">No subject selected.</pre>
+    </article>
+  </section>
+</main>
+<script>
+"use strict";
+
+const MAX_TEXT_RESULTS = 100;
+const DEFAULT_DEPTH = 1;
+const MAX_DEPTH = 2;
+const MAX_SUBJECTS = 256;
+const MAX_RELATIONSHIPS = 512;
+const FAMILY_ORDER = [
+  "entities",
+  "relationships",
+  "claims",
+  "evidence",
+  "diagnostics",
+  "coverage_gaps",
+  "documents",
+  "document_statements"
+];
+
+const graphFile = document.getElementById("graph-file");
+const searchInput = document.getElementById("search");
+const familySelect = document.getElementById("family");
+const filterMode = document.getElementById("filter-mode");
+const filterValue = document.getElementById("filter-value");
+const depthSelect = document.getElementById("depth");
+const searchButton = document.getElementById("search-button");
+const neighborhoodButton = document.getElementById("neighborhood-button");
+const statusNode = document.getElementById("status");
+const resultsNode = document.getElementById("results");
+const inspectorNode = document.getElementById("inspector");
+const summaryNode = document.getElementById("summary");
+
+let portableGraph = null;
+let selectedId = null;
+let subjectsById = new Map();
+
+function stableId(item) {
+  return item.id || item.entity_id || item.relationship_id || item.claim_id ||
+    item.evidence_id || item.document_id || item.statement_id || "";
+}
+
+function relationSource(item) {
+  return item.source || item.source_entity_id || "";
+}
+
+function relationTarget(item) {
+  return item.target || item.target_entity_id || "";
+}
+
+function setStatus(message, level) {
+  statusNode.textContent = message;
+  statusNode.dataset.level = level;
+}
+
+function validateGraph(value) {
+  if (!value || value.schema_version !== "codenoesis.portable-graph/v1") {
+    throw new Error("Unsupported portable graph schema.");
+  }
+  if (!value.projection ||
+      value.projection.source_contents_included !== false ||
+      value.projection.source_snippets_included !== false ||
+      value.projection.claim_state_policy !== "preserve_without_upgrade") {
+    throw new Error("Projection privacy or claim-state policy is invalid.");
+  }
+  for (const family of FAMILY_ORDER) {
+    if (!Array.isArray(value[family])) {
+      throw new Error("A required portable graph family is absent.");
+    }
+  }
+}
+
+function rebuildIndex() {
+  subjectsById = new Map();
+  for (const family of FAMILY_ORDER) {
+    for (const item of portableGraph[family]) {
+      const identifier = stableId(item);
+      if (identifier) {
+        subjectsById.set(identifier, { family, item });
+      }
+    }
+  }
+}
+
+function typedFilterMatches(family, item) {
+  const mode = filterMode.value;
+  const expected = filterValue.value.normalize("NFC");
+  if (mode === "none" || expected === "") {
+    return true;
+  }
+  if (mode === "relationship_kind") {
+    return family === "relationships" && item.kind === expected;
+  }
+  if (mode === "claim_state") {
+    return family === "claims" && item.state === expected;
+  }
+  if (mode === "diagnostic_code") {
+    return family === "diagnostics" && item.code === expected;
+  }
+  if (mode === "coverage_capability") {
+    return family === "coverage_gaps" && item.capability === expected;
+  }
+  return false;
+}
+
+function renderInspector(family, item, metadata) {
+  selectedId = stableId(item);
+  inspectorNode.textContent = JSON.stringify(item, null, 2);
+  summaryNode.replaceChildren();
+  for (const value of [family, selectedId, metadata]) {
+    if (!value) {
+      continue;
+    }
+    const badge = document.createElement("span");
+    badge.className = "badge";
+    badge.textContent = value;
+    summaryNode.appendChild(badge);
+  }
+  neighborhoodButton.disabled = !selectedId;
+}
+
+function renderResults(results, total) {
+  resultsNode.replaceChildren();
+  for (const result of results) {
+    const button = document.createElement("button");
+    const title = document.createElement("strong");
+    const detail = document.createElement("span");
+    button.className = "result";
+    title.textContent = result.id;
+    detail.textContent = result.family;
+    button.append(title, detail);
+    button.addEventListener("click", () => {
+      renderInspector(result.family, result.item, "exact portable metadata");
+    });
+    resultsNode.appendChild(button);
+  }
+  const truncated = total > results.length;
+  setStatus(
+    `${results.length} result(s)${truncated ? ` shown from ${total}; display truncated explicitly.` : "."}`,
+    "ok"
+  );
+}
+
+function runSearch() {
+  if (!portableGraph) {
+    return;
+  }
+  const query = searchInput.value.normalize("NFC");
+  const selectedFamily = familySelect.value;
+  const exact = subjectsById.get(query);
+  if (exact && (selectedFamily === "all" || selectedFamily === exact.family) &&
+      typedFilterMatches(exact.family, exact.item)) {
+    renderResults([{ id: query, family: exact.family, item: exact.item }], 1);
+    return;
+  }
+
+  const matches = [];
+  for (const family of FAMILY_ORDER) {
+    if (family === "document_statements") {
+      continue;
+    }
+    if (selectedFamily !== "all" && selectedFamily !== family) {
+      continue;
+    }
+    for (const item of portableGraph[family]) {
+      if (!typedFilterMatches(family, item)) {
+        continue;
+      }
+      const searchable = JSON.stringify(item).normalize("NFC");
+      if (query === "" || searchable.includes(query)) {
+        matches.push({ id: stableId(item), family, item });
+      }
+    }
+  }
+  matches.sort((left, right) => {
+    if (left.id < right.id) {
+      return -1;
+    }
+    if (left.id > right.id) {
+      return 1;
+    }
+    return 0;
+  });
+  renderResults(matches.slice(0, MAX_TEXT_RESULTS), matches.length);
+}
+
+function inspectNeighborhood() {
+  if (!portableGraph || !selectedId) {
+    return;
+  }
+  const requestedDepth = Number(depthSelect.value || DEFAULT_DEPTH);
+  const depth = Math.min(Math.max(requestedDepth, DEFAULT_DEPTH), MAX_DEPTH);
+  const relationships = [...portableGraph.relationships].sort((left, right) => {
+    const leftId = stableId(left);
+    const rightId = stableId(right);
+    return leftId < rightId ? -1 : leftId > rightId ? 1 : 0;
+  });
+  const queue = [{ id: selectedId, depth: 0 }];
+  const visited = new Set();
+  const selectedRelationships = [];
+
+  while (queue.length > 0 && visited.size < MAX_SUBJECTS) {
+    const current = queue.shift();
+    if (!current || visited.has(current.id)) {
+      continue;
+    }
+    visited.add(current.id);
+    if (current.depth >= depth) {
+      continue;
+    }
+    for (const relationship of relationships) {
+      if (selectedRelationships.length >= MAX_RELATIONSHIPS) {
+        break;
+      }
+      const source = relationSource(relationship);
+      const target = relationTarget(relationship);
+      if (source !== current.id && target !== current.id) {
+        continue;
+      }
+      if (!selectedRelationships.some(item => stableId(item) === stableId(relationship))) {
+        selectedRelationships.push(relationship);
+      }
+      const neighbor = source === current.id ? target : source;
+      if (neighbor && !visited.has(neighbor) && queue.length + visited.size < MAX_SUBJECTS) {
+        queue.push({ id: neighbor, depth: current.depth + 1 });
+      }
+    }
+  }
+
+  const view = {
+    root_id: selectedId,
+    depth,
+    subject_ids: [...visited].sort(),
+    relationships: selectedRelationships,
+    truncation: {
+      subjects: visited.size >= MAX_SUBJECTS,
+      relationships: selectedRelationships.length >= MAX_RELATIONSHIPS
+    }
+  };
+  inspectorNode.textContent = JSON.stringify(view, null, 2);
+  summaryNode.replaceChildren();
+  for (const value of ["deterministic breadth-first", `depth ${depth}`]) {
+    const badge = document.createElement("span");
+    badge.className = "badge";
+    badge.textContent = value;
+    summaryNode.appendChild(badge);
+  }
+  setStatus("Neighborhood rendered without changing the portable graph.", "ok");
+}
+
+graphFile.addEventListener("change", async () => {
+  const file = graphFile.files && graphFile.files[0];
+  if (!file) {
+    return;
+  }
+  try {
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    validateGraph(parsed);
+    portableGraph = parsed;
+    selectedId = null;
+    rebuildIndex();
+    searchButton.disabled = false;
+    neighborhoodButton.disabled = true;
+    inspectorNode.textContent = "PortableGraphV1 loaded. Search an exact ID or metadata value.";
+    summaryNode.replaceChildren();
+    resultsNode.replaceChildren();
+    setStatus("PortableGraphV1 loaded locally; no network or source repository used.", "ok");
+  } catch (error) {
+    portableGraph = null;
+    selectedId = null;
+    subjectsById = new Map();
+    searchButton.disabled = true;
+    neighborhoodButton.disabled = true;
+    resultsNode.replaceChildren();
+    summaryNode.replaceChildren();
+    inspectorNode.textContent = "Projection rejected.";
+    setStatus(error instanceof Error ? error.message : "Projection rejected.", "error");
+  }
+});
+
+searchButton.addEventListener("click", runSearch);
+searchInput.addEventListener("keydown", event => {
+  if (event.key === "Enter") {
+    runSearch();
+  }
+});
+neighborhoodButton.addEventListener("click", inspectNeighborhood);
+</script>
+</body>
+</html>

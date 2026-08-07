@@ -24,20 +24,21 @@ use codenoesis_contracts::{
     AnalysisCacheEntryV1, BoundaryManifestReason, CodeNoesisErrorV1, CodeNoesisErrorV2,
     CodeNoesisErrorV3, CodeNoesisErrorV4, CodeNoesisErrorV5, CodeNoesisErrorV6, CodeNoesisErrorV7,
     CodeNoesisErrorV8, CodeNoesisErrorV9, CodeNoesisErrorV10, CodeNoesisErrorV11,
-    CodeNoesisErrorV12, CodeNoesisErrorV13, CodeNoesisErrorV14, DocumentationContractError,
-    IncrementalRefreshReportError, IncrementalRefreshReportInput, IncrementalRefreshReportV1,
-    NestedRepositoryUnavailableReason, QueryContractError, RepositorySnapshotV2Error,
-    RepositorySnapshotV3, RepositorySnapshotV3Error, RepositorySnapshotV4,
-    RepositorySnapshotV4Error, RepositorySnapshotV5, RepositorySnapshotV5Error,
-    RepositorySnapshotV6, RepositorySnapshotV6Error, RepositorySnapshotV7,
-    RepositorySnapshotV7Error, RepositorySnapshotV8, RepositorySnapshotV8Error,
-    RepositorySnapshotV9, RepositorySnapshotV9Error, RepositorySnapshotV10,
-    RepositorySnapshotV10Error, SnapshotEnvelopeV1, ValidatedS4Head, generate_documentation_v1,
-    local_query_result_v1, local_query_result_v2, local_query_result_v3, local_query_result_v4,
-    local_query_result_v5, validate_stored_snapshot_semantic_v4,
-    validate_stored_snapshot_semantic_v5, validate_stored_snapshot_semantic_v6,
-    validate_stored_snapshot_semantic_v7, validate_stored_snapshot_semantic_v8,
-    validate_stored_snapshot_semantic_v9, validate_stored_snapshot_semantic_v10,
+    CodeNoesisErrorV12, CodeNoesisErrorV13, CodeNoesisErrorV14, CodeNoesisErrorV15,
+    DocumentationContractError, IncrementalRefreshReportError, IncrementalRefreshReportInput,
+    IncrementalRefreshReportV1, NestedRepositoryUnavailableReason, PortableGraphV1,
+    QueryContractError, R8ContractError, RepositorySnapshotV2Error, RepositorySnapshotV3,
+    RepositorySnapshotV3Error, RepositorySnapshotV4, RepositorySnapshotV4Error,
+    RepositorySnapshotV5, RepositorySnapshotV5Error, RepositorySnapshotV6,
+    RepositorySnapshotV6Error, RepositorySnapshotV7, RepositorySnapshotV7Error,
+    RepositorySnapshotV8, RepositorySnapshotV8Error, RepositorySnapshotV9,
+    RepositorySnapshotV9Error, RepositorySnapshotV10, RepositorySnapshotV10Error,
+    SnapshotEnvelopeV1, ValidatedS4Head, generate_documentation_v1, local_query_result_v1,
+    local_query_result_v2, local_query_result_v3, local_query_result_v4, local_query_result_v5,
+    validate_stored_snapshot_semantic_v4, validate_stored_snapshot_semantic_v5,
+    validate_stored_snapshot_semantic_v6, validate_stored_snapshot_semantic_v7,
+    validate_stored_snapshot_semantic_v8, validate_stored_snapshot_semantic_v9,
+    validate_stored_snapshot_semantic_v10,
 };
 use codenoesis_domain::AcquisitionError;
 use codenoesis_domain::knowledge::KnowledgeError;
@@ -132,6 +133,9 @@ impl Drop for ScanWorker {
 #[allow(clippy::too_many_lines)]
 fn main() -> ExitCode {
     let arguments = env::args_os().collect::<Vec<_>>();
+    let export_requested = arguments.get(1).is_some_and(|value| value == "export");
+    let explore_requested = arguments.get(1).is_some_and(|value| value == "explore");
+    let r8_requested = export_requested || explore_requested;
     let federation_requested = federation::requested(&arguments);
     let docs_requested = arguments.get(1).is_some_and(|value| value == "docs");
     let query_requested = arguments.get(1).is_some_and(|value| value == "query");
@@ -169,7 +173,11 @@ fn main() -> ExitCode {
     let s4_error_lineage = s4_requested || docs_requested || query_requested;
     let s3_error_lineage = s3_requested || s4_error_lineage;
     let s2_requested = requested_profile(&arguments, "standard-local-s2");
-    let result = if r7_requested
+    let result = if export_requested {
+        run_export(arguments)
+    } else if explore_requested {
+        run_explore(arguments)
+    } else if r7_requested
         || r6_requested
         || r5_requested
         || r4_requested
@@ -199,6 +207,7 @@ fn main() -> ExitCode {
     match result {
         Ok(stdout) => match io::stdout().lock().write_all(&stdout) {
             Ok(()) => ExitCode::SUCCESS,
+            Err(_) if r8_requested => emit_internal_error_v15(),
             Err(_) if federation_requested => emit_internal_error_v8(),
             Err(_) if refresh_requested => emit_internal_error_v7(),
             Err(_) if r7_requested => emit_internal_error_v14(),
@@ -213,6 +222,7 @@ fn main() -> ExitCode {
             Err(_) if profiled => emit_internal_error_v2(),
             Err(_) => emit_internal_error_v1(),
         },
+        Err(Failure::R8(failure)) => emit_error_v15(&failure.error, failure.exit_code),
         Err(Failure::S6(failure)) => emit_error_v8(&failure.error, failure.exit_code),
         Err(Failure::R7(failure)) => emit_error_v14(&failure.error, failure.exit_code),
         Err(Failure::R6(failure)) => emit_error_v13(&failure.error, failure.exit_code),
@@ -1636,12 +1646,67 @@ fn run_s5(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
     Ok(stdout)
 }
 
+fn run_export(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
+    let invocation = ExportInvocation::parse(arguments)?;
+    let loaded = load_s4_snapshot(&invocation.store, &invocation.identity)
+        .map_err(r8_snapshot_load_failure)?;
+    let documentation = generate_documentation_v1(
+        &loaded.semantic,
+        loaded.head.snapshot_id.as_str(),
+        &loaded.head.semantic_hash.value,
+    )
+    .map_err(|_| {
+        r8_contract_failure(
+            R8ContractError::InvalidSnapshot {
+                snapshot_id: loaded.head.snapshot_id.to_string(),
+                reason: "incomplete",
+            },
+            16,
+        )
+    })?;
+    let portable = PortableGraphV1::from_validated_v10(
+        &loaded.semantic,
+        &loaded.head,
+        documentation.manifest(),
+        noesis::portable_explorer::sha256,
+    )
+    .map_err(|error| r8_contract_failure(error, 16))?;
+    let store = std::path::Path::new(&invocation.store);
+    let output = std::path::Path::new(&invocation.output);
+    noesis::portable_explorer::validate_export_output_root(store, output)
+        .map_err(|error| r8_portable_failure(error, 16))?;
+    noesis::portable_explorer::ensure_export_output_root_for_boundary(store, output)
+        .map_err(|error| r8_portable_failure(error, 16))?;
+    noesis::install_r8_export_filesystem_boundary(&invocation.store, &invocation.output)
+        .map_err(|_| r8_internal_failure())?;
+    noesis::portable_explorer::publish_portable_graph(output, &portable)
+        .map_err(|error| r8_portable_failure(error, 16))
+}
+
+fn run_explore(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
+    let invocation = ExploreInvocation::parse(arguments)?;
+    let input = std::path::Path::new(&invocation.input);
+    let output = std::path::Path::new(&invocation.output);
+    let (portable, portable_bytes) = noesis::portable_explorer::read_portable_graph(input)
+        .map_err(|error| r8_portable_failure(error, 17))?;
+    noesis::portable_explorer::validate_explorer_output_root(input, output)
+        .map_err(|error| r8_portable_failure(error, 17))?;
+    noesis::portable_explorer::ensure_explorer_output_root_for_boundary(input, output)
+        .map_err(|error| r8_portable_failure(error, 17))?;
+    noesis::install_r8_explorer_filesystem_boundary(&invocation.input, &invocation.output)
+        .map_err(|_| r8_internal_failure())?;
+    noesis::portable_explorer::publish_local_explorer(output, &portable, &portable_bytes)
+        .map_err(|error| r8_portable_failure(error, 17))
+}
+
 fn run_docs(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
     let invocation = DocsInvocation::parse(arguments)?;
     let loaded =
         load_s4_snapshot(&invocation.store, &invocation.identity).map_err(|error| match error {
             LoadS4Error::Scan(error) => Failure::Scan(error),
-            LoadS4Error::SnapshotMismatch => Failure::Docs(GeneratedDocsError::SnapshotMismatch),
+            LoadS4Error::SnapshotMismatch | LoadS4Error::UnsupportedSnapshotSchema(_) => {
+                Failure::Docs(GeneratedDocsError::SnapshotMismatch)
+            }
         })?;
     validate_output_root_for_generation(
         std::path::Path::new(&invocation.store),
@@ -1691,7 +1756,9 @@ fn run_query(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, F
     let loaded =
         load_s4_snapshot(&invocation.store, &invocation.identity).map_err(|error| match error {
             LoadS4Error::Scan(error) => Failure::Scan(error),
-            LoadS4Error::SnapshotMismatch => Failure::Query(QueryFailure::SnapshotMismatch),
+            LoadS4Error::SnapshotMismatch | LoadS4Error::UnsupportedSnapshotSchema(_) => {
+                Failure::Query(QueryFailure::SnapshotMismatch)
+            }
         })?;
     let query_v5 = loaded.head.snapshot_schema_version == SNAPSHOT_SCHEMA_VERSION_V10;
     let query_v4 = loaded.head.snapshot_schema_version == SNAPSHOT_SCHEMA_VERSION_V9;
@@ -1834,7 +1901,9 @@ fn load_s4_snapshot_from_store(
             | SNAPSHOT_SCHEMA_VERSION_V9
             | SNAPSHOT_SCHEMA_VERSION_V10
     ) {
-        return Err(LoadS4Error::SnapshotMismatch);
+        return Err(LoadS4Error::UnsupportedSnapshotSchema(
+            head.snapshot_schema_version.clone(),
+        ));
     }
     let snapshot = head
         .artifacts
@@ -1890,10 +1959,12 @@ fn load_s5_baseline(
                 reason: "current_head_missing",
                 ..
             })) => s5_failure(CodeNoesisErrorV7::baseline_missing(repository_identity), 15),
-            LoadS4Error::SnapshotMismatch => s5_failure(
-                CodeNoesisErrorV7::baseline_incompatible(SNAPSHOT_SCHEMA_VERSION_V4, "invalid"),
-                15,
-            ),
+            LoadS4Error::SnapshotMismatch | LoadS4Error::UnsupportedSnapshotSchema(_) => {
+                s5_failure(
+                    CodeNoesisErrorV7::baseline_incompatible(SNAPSHOT_SCHEMA_VERSION_V4, "invalid"),
+                    15,
+                )
+            }
             LoadS4Error::Scan(error) => s5_scan_failure(error),
         })?;
     if loaded.head.snapshot_schema_version != SNAPSHOT_SCHEMA_VERSION_V4 {
@@ -2420,6 +2491,73 @@ fn r7_compiler_index_failure(error: &CompilerIndexError) -> Failure {
     r7_failure(CodeNoesisErrorV14::from_compiler_index(error), 10)
 }
 
+fn r8_snapshot_load_failure(error: LoadS4Error) -> Failure {
+    match error {
+        LoadS4Error::Scan(ScanError::Storage(StorageError::CorruptMetadata {
+            reason: "current_head_missing",
+            ..
+        })) => r8_contract_failure(
+            R8ContractError::InvalidSnapshot {
+                snapshot_id: zero_snapshot_id(),
+                reason: "missing_visible_head",
+            },
+            16,
+        ),
+        LoadS4Error::UnsupportedSnapshotSchema(observed) => {
+            r8_contract_failure(R8ContractError::UnsupportedSnapshotSchema(observed), 16)
+        }
+        LoadS4Error::Scan(_) | LoadS4Error::SnapshotMismatch => r8_contract_failure(
+            R8ContractError::InvalidSnapshot {
+                snapshot_id: zero_snapshot_id(),
+                reason: "corrupt",
+            },
+            16,
+        ),
+    }
+}
+
+fn r8_portable_failure(
+    error: noesis::portable_explorer::PortableExplorerError,
+    code: u8,
+) -> Failure {
+    match error {
+        noesis::portable_explorer::PortableExplorerError::UnsafeOutput {
+            path_sha256,
+            reason,
+        } => r8_failure(
+            CodeNoesisErrorV15::unsafe_output_path(&path_sha256, reason),
+            2,
+        ),
+        noesis::portable_explorer::PortableExplorerError::Contract(error) => {
+            r8_contract_failure(error, code)
+        }
+        noesis::portable_explorer::PortableExplorerError::Internal => r8_internal_failure(),
+    }
+}
+
+fn r8_contract_failure(error: R8ContractError, code: u8) -> Failure {
+    let failure = if error == R8ContractError::Internal {
+        r8_internal_failure()
+    } else {
+        r8_failure(CodeNoesisErrorV15::from_contract(&error), code)
+    };
+    drop(error);
+    failure
+}
+
+fn r8_failure(error: CodeNoesisErrorV15, exit_code: u8) -> Failure {
+    Failure::R8(R8Failure { error, exit_code })
+}
+
+fn r8_internal_failure() -> Failure {
+    r8_failure(CodeNoesisErrorV15::internal(), 70)
+}
+
+fn zero_snapshot_id() -> String {
+    "urn:codenoesis:snapshot:blake3:0000000000000000000000000000000000000000000000000000000000000000"
+        .to_owned()
+}
+
 fn r7_failure(error: CodeNoesisErrorV14, exit_code: u8) -> Failure {
     Failure::R7(R7Failure { error, exit_code })
 }
@@ -2788,6 +2926,17 @@ fn emit_error_v14(error: &CodeNoesisErrorV14, code: u8) -> ExitCode {
     }
 }
 
+fn emit_error_v15(error: &CodeNoesisErrorV15, code: u8) -> ExitCode {
+    let Ok(bytes) = error.canonical_stderr() else {
+        return ExitCode::from(70);
+    };
+    if io::stderr().lock().write_all(&bytes).is_ok() {
+        ExitCode::from(code)
+    } else {
+        ExitCode::from(70)
+    }
+}
+
 fn emit_internal_error_v10() -> ExitCode {
     emit_error_v10(&CodeNoesisErrorV10::internal(), 70)
 }
@@ -2806,6 +2955,10 @@ fn emit_internal_error_v13() -> ExitCode {
 
 fn emit_internal_error_v14() -> ExitCode {
     emit_error_v14(&CodeNoesisErrorV14::internal(), 70)
+}
+
+fn emit_internal_error_v15() -> ExitCode {
+    emit_error_v15(&CodeNoesisErrorV15::internal(), 70)
 }
 
 fn emit_docs_error(error: GeneratedDocsError) -> ExitCode {
@@ -2834,6 +2987,7 @@ fn emit_query_error(error: QueryFailure) -> ExitCode {
 }
 
 enum Failure {
+    R8(R8Failure),
     S6(federation::FederationFailure),
     R7(R7Failure),
     R6(R6Failure),
@@ -2849,6 +3003,11 @@ enum Failure {
     Docs(GeneratedDocsError),
     Query(QueryFailure),
     Internal,
+}
+
+struct R8Failure {
+    error: CodeNoesisErrorV15,
+    exit_code: u8,
 }
 
 struct R7Failure {
@@ -2897,6 +3056,7 @@ enum QueryFailure {
 enum LoadS4Error {
     Scan(ScanError),
     SnapshotMismatch,
+    UnsupportedSnapshotSchema(String),
 }
 
 struct LoadedS4Snapshot {
@@ -2907,6 +3067,123 @@ struct LoadedS4Snapshot {
 struct LoadedS5AnalysisCache {
     entries: Vec<AnalysisCacheEntry>,
     versions_compatible: bool,
+}
+
+struct ExportInvocation {
+    store: OsString,
+    identity: RepositoryIdentity,
+    output: OsString,
+}
+
+impl ExportInvocation {
+    fn parse(arguments: impl IntoIterator<Item = OsString>) -> Result<Self, Failure> {
+        let mut arguments = arguments.into_iter();
+        let _program = arguments.next();
+        if arguments.next().as_deref() != Some(OsStr::new("export")) {
+            return Err(invalid_r8_export_profile());
+        }
+        let mut store = None;
+        let mut identity = None;
+        let mut output = None;
+        let mut format = None;
+        while let Some(flag) = arguments.next() {
+            let value = arguments.next().ok_or_else(invalid_r8_export_profile)?;
+            if value.to_str().is_some_and(|value| value.starts_with("--")) {
+                return Err(invalid_r8_export_profile());
+            }
+            match flag.to_str() {
+                Some("--store") if store.is_none() => store = Some(value),
+                Some("--repository-id") if identity.is_none() => {
+                    identity = value.to_str().map(str::to_owned);
+                }
+                Some("--output") if output.is_none() => output = Some(value),
+                Some("--format") if format.is_none() => format = value.to_str().map(str::to_owned),
+                _ => return Err(invalid_r8_export_profile()),
+            }
+        }
+        let store = store
+            .filter(|value: &OsString| !value.is_empty())
+            .ok_or_else(invalid_r8_export_profile)?;
+        let identity = identity
+            .and_then(|value| RepositoryIdentity::parse(&value).ok())
+            .ok_or_else(invalid_r8_export_profile)?;
+        let output = output
+            .filter(|value: &OsString| !value.is_empty())
+            .ok_or_else(invalid_r8_export_profile)?;
+        if format.as_deref() != Some("json") {
+            return Err(invalid_r8_export_profile());
+        }
+        reject_r8_parent_output(&output)?;
+        Ok(Self {
+            store,
+            identity,
+            output,
+        })
+    }
+}
+
+struct ExploreInvocation {
+    input: OsString,
+    output: OsString,
+}
+
+impl ExploreInvocation {
+    fn parse(arguments: impl IntoIterator<Item = OsString>) -> Result<Self, Failure> {
+        let mut arguments = arguments.into_iter();
+        let _program = arguments.next();
+        if arguments.next().as_deref() != Some(OsStr::new("explore")) {
+            return Err(invalid_r8_explorer_profile());
+        }
+        let mut input = None;
+        let mut output = None;
+        let mut format = None;
+        while let Some(flag) = arguments.next() {
+            let value = arguments.next().ok_or_else(invalid_r8_explorer_profile)?;
+            if value.to_str().is_some_and(|value| value.starts_with("--")) {
+                return Err(invalid_r8_explorer_profile());
+            }
+            match flag.to_str() {
+                Some("--input") if input.is_none() => input = Some(value),
+                Some("--output") if output.is_none() => output = Some(value),
+                Some("--format") if format.is_none() => format = value.to_str().map(str::to_owned),
+                _ => return Err(invalid_r8_explorer_profile()),
+            }
+        }
+        let input = input
+            .filter(|value: &OsString| !value.is_empty())
+            .ok_or_else(invalid_r8_explorer_profile)?;
+        let output = output
+            .filter(|value: &OsString| !value.is_empty())
+            .ok_or_else(invalid_r8_explorer_profile)?;
+        if format.as_deref() != Some("json") {
+            return Err(invalid_r8_explorer_profile());
+        }
+        reject_r8_parent_output(&output)?;
+        Ok(Self { input, output })
+    }
+}
+
+fn invalid_r8_export_profile() -> Failure {
+    r8_failure(CodeNoesisErrorV15::invalid_export_profile(), 2)
+}
+
+fn invalid_r8_explorer_profile() -> Failure {
+    r8_failure(CodeNoesisErrorV15::invalid_explorer_profile(), 2)
+}
+
+fn reject_r8_parent_output(output: &OsStr) -> Result<(), Failure> {
+    if std::path::Path::new(output)
+        .components()
+        .any(|component| matches!(component, std::path::Component::ParentDir))
+    {
+        let path_sha256 = noesis::portable_explorer::sha256(output.as_encoded_bytes());
+        Err(r8_failure(
+            CodeNoesisErrorV15::unsafe_output_path(&path_sha256, "parent_escape"),
+            2,
+        ))
+    } else {
+        Ok(())
+    }
 }
 
 struct DocsInvocation {
