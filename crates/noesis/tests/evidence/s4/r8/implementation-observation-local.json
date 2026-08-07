@@ -143,11 +143,13 @@
     "risk": "high",
     "required_base": "a7d23ae52b0fc6f40fa1d8cf2114e90465844bb9",
     "configured_correction_rounds": 2,
-    "correction_rounds_used": 1,
-    "budget_exhausted": false,
+    "correction_rounds_used": 2,
+    "budget_exhausted": true,
     "retained_red": "https://github.com/smutti/codenoesis/actions/runs/31214240782/job/92983920553",
     "red_failure": "Native Windows passed all three portable-explorer security/race unit tests but eight of fifteen immutable R8 E2E journeys failed closed with input.unsafe_output_path/outside_destination after test helpers transported verbatim canonical paths.",
-    "resolution": "Preserve the exact existing temporary-root and canonicalization behavior on non-Windows systems. On Windows only, create one uniquely named R8 E2E root beneath the bounded workspace-target or volume-root candidates, validate a sibling authority/output probe through the unchanged public export boundary, materialize the existing R7 fixture beneath the selected root, and transport existing test paths without converting them to verbatim spelling.",
+    "first_round_ci_red": "https://github.com/smutti/codenoesis/actions/runs/31216892952/job/92992406333",
+    "first_round_result": "The validated authority and non-verbatim transport fixed seven of eight Windows failures: fourteen of fifteen R8 E2E journeys passed. The remaining destination_parent_symlink_escape case exposed that its non-Unix test helper created a regular file rather than a Windows directory reparse point, so the valid root reached an internal create-directory failure instead of the immutable unsafe-path rejection.",
+    "resolution": "Preserve the exact existing temporary-root and canonicalization behavior on non-Windows systems. On Windows only, create one uniquely named R8 E2E root beneath the bounded workspace-target or volume-root candidates, validate a sibling authority/output probe through the unchanged public export boundary, materialize the existing R7 fixture beneath the selected root, transport existing test paths without converting them to verbatim spelling, and create the immutable symlink-escape case with the standard-library Windows directory-symlink API so the unchanged reparse-point validator observes the intended hostile input.",
     "cleanup": "Direct R8 roots use an owning drop guard; materialized repositories transfer that root to the existing repository lifecycle, which removes only the unique root.",
     "raw_private_path_retained": false,
     "production_validation_changed": false,
@@ -156,7 +158,7 @@
     "focused_green_exit_code": 0,
     "focused_e2e_tests_passed": 15,
     "immutable_invalid_security_cases_passed": 33,
-    "exact_head_windows_ci": "pending corrected-head publication"
+    "exact_head_windows_ci": "pending final corrected-head publication"
   },
   "public_contracts": {
     "source_snapshot": "codenoesis.repository-snapshot/v10",

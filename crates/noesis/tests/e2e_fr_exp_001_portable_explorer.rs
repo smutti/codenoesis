@@ -1016,7 +1016,15 @@ fn create_unsafe_directory_alias(outside: &Path, alias: &Path) {
     symlink(outside, alias).expect("create R8 unsafe directory alias");
 }
 
-#[cfg(not(unix))]
+#[cfg(windows)]
+fn create_unsafe_directory_alias(outside: &Path, alias: &Path) {
+    use std::os::windows::fs::symlink_dir;
+
+    fs::create_dir(outside).expect("create R8 outside directory");
+    symlink_dir(outside, alias).expect("create R8 unsafe directory alias");
+}
+
+#[cfg(not(any(unix, windows)))]
 fn create_unsafe_directory_alias(_outside: &Path, alias: &Path) {
     fs::write(alias, b"not a directory\n").expect("create R8 unsafe parent replacement");
 }
