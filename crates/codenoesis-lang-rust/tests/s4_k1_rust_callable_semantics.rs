@@ -31,6 +31,14 @@ const UNCERTAINTY_FIXTURE_FILES: [(&str, &str); 2] = [
     ("Cargo.toml", "67ee2f2696e98ea3abd33a52898f95f7f8872784"),
     ("src/lib.rs", "a50cdb5e934b5249c406d217b8657ad59251cd99"),
 ];
+const IMPORTED_OWNER_REPOSITORY_ID: &str =
+    "urn:codenoesis:fixture:s4-rust-callable-imported-owner-v1";
+const IMPORTED_OWNER_COMMIT_OID: &str = "b699009b4837fae23891d89b7f435002598921fe";
+const IMPORTED_OWNER_TREE_OID: &str = "c87545b7b46be97892042f7b128d35138de61712";
+const IMPORTED_OWNER_FIXTURE_FILES: [(&str, &str); 2] = [
+    ("Cargo.toml", "b4b1a880da1a90ba945251b49900a913b8dcd529"),
+    ("src/lib.rs", "0f5d95ecbbba42504a2596a555cf13aeada8b216"),
+];
 
 #[test]
 fn gt_fr_ext_012_complete_signatures_and_parameters() {
@@ -252,6 +260,31 @@ fn reg_fr_ext_012_k1_preserves_inherited_uncertainty() {
     assert!(inherited_coverage.contains("rust.unsupported_impl_header"));
 }
 
+#[test]
+fn reg_fr_ext_012_k1_matches_inherited_imported_owner_resolution() {
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_callable_semantics(&imported_owner_fixture_inventory())
+        .expect("K1 must reuse the inherited unique local owner resolution");
+    extraction
+        .knowledge
+        .validate()
+        .expect("reviewed imported-owner graph");
+    let signature_names = extraction
+        .knowledge
+        .graph
+        .entities
+        .iter()
+        .filter(|entity| entity.kind == CallableSemanticEntityKind::Signature)
+        .fold(BTreeMap::new(), |mut counts, entity| {
+            *counts.entry(entity.name.as_str()).or_insert(0_usize) += 1;
+            counts
+        });
+    assert_eq!(
+        signature_names,
+        BTreeMap::from([("inherent", 1), ("local", 2)])
+    );
+}
+
 fn entity_counts(
     graph: &codenoesis_domain::s4_k1::CallableSemanticsGraph,
 ) -> BTreeMap<CallableSemanticEntityKind, usize> {
@@ -323,6 +356,35 @@ fn uncertainty_fixture_inventory() -> RepositoryInventory {
             ObjectId::parse_sha1(UNCERTAINTY_TREE_OID).expect("reviewed uncertainty tree OID"),
         ),
         u64::try_from(files.len()).expect("reviewed uncertainty file count"),
+        files,
+    ))
+}
+
+fn imported_owner_fixture_inventory() -> RepositoryInventory {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join(
+        "../../tests/fixtures/s4/rust-callable-inherited-uncertainty-v1/imported-owner-repository",
+    );
+    let files = IMPORTED_OWNER_FIXTURE_FILES
+        .into_iter()
+        .map(|(path, blob_oid)| {
+            AcquiredFile::new(
+                path.to_owned(),
+                RegularFileMode::Regular,
+                ObjectId::parse_sha1(blob_oid).expect("reviewed imported-owner fixture blob OID"),
+                read_reviewed_fixture(&root.join(path)),
+            )
+        })
+        .collect::<Vec<_>>();
+    RepositoryInventory::classify(AcquiredRepository::new(
+        BoundRevision::new(
+            RepositoryIdentity::parse(IMPORTED_OWNER_REPOSITORY_ID)
+                .expect("reviewed imported-owner repository identity"),
+            ObjectId::parse_sha1(IMPORTED_OWNER_COMMIT_OID)
+                .expect("reviewed imported-owner commit OID"),
+            ObjectId::parse_sha1(IMPORTED_OWNER_TREE_OID)
+                .expect("reviewed imported-owner tree OID"),
+        ),
+        u64::try_from(files.len()).expect("reviewed imported-owner file count"),
         files,
     ))
 }

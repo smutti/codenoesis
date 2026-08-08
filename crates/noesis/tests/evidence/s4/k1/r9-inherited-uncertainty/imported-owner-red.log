@@ -1,0 +1,20 @@
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling codenoesis-lang-rust v0.1.0 (<workspace>/crates/codenoesis-lang-rust)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.10s
+     Running tests/s4_k1_rust_callable_semantics.rs (target/debug/deps/s4_k1_rust_callable_semantics-4a9b459617404742)
+
+running 1 test
+
+thread 'reg_fr_ext_012_k1_matches_inherited_imported_owner_resolution' (2941282) panicked at crates/codenoesis-lang-rust/tests/s4_k1_rust_callable_semantics.rs:267:10:
+K1 must reuse the inherited unique local owner resolution: ContractInvalid
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test reg_fr_ext_012_k1_matches_inherited_imported_owner_resolution ... FAILED
+
+failures:
+
+failures:
+    reg_fr_ext_012_k1_matches_inherited_imported_owner_resolution
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p codenoesis-lang-rust --test s4_k1_rust_callable_semantics`

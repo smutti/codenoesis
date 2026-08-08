@@ -9,3 +9,7 @@ becoming dangling K1 subjects or internal failures.
 The fixture is materialized as the exact Git commit declared by
 `manifest.json`. A conforming scan does not execute Cargo, rustc, target code,
 network clients, or model providers.
+
+The sibling `imported-owner-repository` and `imported-owner-manifest.json`
+verify that K1 retains methods whose uniquely named local owner is inherited
+through the same unqualified cross-module resolution already accepted by R5.
