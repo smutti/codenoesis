@@ -22,8 +22,11 @@ bytes including LF. K1 correctly reaches that bound on pinned Lekton revision
 `canonical_output_bytes`, maximum `33,554,432`, observed `33,554,433`, empty
 stdout, and no visible head.
 
-A diagnostic-only run with a temporary 256 MiB ceiling completed the same K1
-snapshot at `53,031,841` bytes in 45.12 seconds. Raising the standard profile
+A diagnostic-only pre-#146 run with a temporary 256 MiB ceiling completed a K1
+snapshot at `53,031,841` bytes in 45.12 seconds. The exact authorized base
+includes inherited-uncertainty correction #146; its first bounded run completed
+at `57,394,837` bytes in 49.26 seconds. The latter is the pinned acceptance
+length, while the former remains provenance only. Raising the standard profile
 would silently broaden every earlier slice. Inferring a larger limit from
 repository shape or a failed first attempt would make resource authority
 non-deterministic. Neither is acceptable.
@@ -108,7 +111,7 @@ It requires:
 3. strict invalid-composition ErrorV16 behavior with no store mutation;
 4. standard K1 and R0-R8 selector-absent regressions unchanged;
 5. serialization completion before publication;
-6. two pinned Lekton runs with identical `53,031,841`-byte output, exit zero,
+6. two pinned Lekton runs with identical `57,394,837`-byte output, exit zero,
    and one complete visible head each;
 7. docs, exact-ID query, PortableGraphV2 export, and LocalExplorerV2 generation
    from the resulting head;

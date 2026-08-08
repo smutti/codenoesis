@@ -1651,6 +1651,9 @@ govern one maintainer-supervised package on exact base
 `aadd065defba2d4f8d202583c7da9ff70e92ece8`. The additive numeric decision and
 selector remain Proposed until protected manual merge. Existing K1 behavior
 and the requirement IDs amended below are already Approved and effective.
+The exact base includes inherited-uncertainty correction #146, so the pinned
+Lekton acceptance output is `57,394,837` bytes. The earlier `53,031,841`-byte
+diagnostic is retained only as pre-#146 provenance and is not the R9 oracle.
 
 | Requirement | Current state | Target after protected merge | Slice | Acceptance material |
 |---|---|---|---|---|
