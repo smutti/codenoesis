@@ -626,6 +626,7 @@ pub(super) struct GraphIndex {
     rust_semantic_depth: bool,
     framework_declarations: bool,
     compiler_index: bool,
+    callable_semantics: bool,
     pub(super) entities: BTreeMap<String, Value>,
     relationships: Vec<Value>,
     pub(super) relationships_by_id: BTreeMap<String, Value>,
@@ -651,20 +652,26 @@ impl GraphIndex {
             Ok("codenoesis.knowledge-graph/v4"
                 | "codenoesis.knowledge-graph/v5"
                 | "codenoesis.knowledge-graph/v6"
-                | "codenoesis.knowledge-graph/v7")
+                | "codenoesis.knowledge-graph/v7"
+                | "codenoesis.knowledge-graph/v8")
         );
         let rust_semantic_depth = matches!(
             string_field(graph, "schema_version"),
             Ok("codenoesis.knowledge-graph/v5"
                 | "codenoesis.knowledge-graph/v6"
-                | "codenoesis.knowledge-graph/v7")
+                | "codenoesis.knowledge-graph/v7"
+                | "codenoesis.knowledge-graph/v8")
         );
         let framework_declarations = matches!(
             string_field(graph, "schema_version"),
-            Ok("codenoesis.knowledge-graph/v6" | "codenoesis.knowledge-graph/v7")
+            Ok("codenoesis.knowledge-graph/v6"
+                | "codenoesis.knowledge-graph/v7"
+                | "codenoesis.knowledge-graph/v8")
         );
         let compiler_index =
             string_field(graph, "schema_version") == Ok("codenoesis.knowledge-graph/v7");
+        let callable_semantics =
+            string_field(graph, "schema_version") == Ok("codenoesis.knowledge-graph/v8");
         let diagnostics = if rust_semantic_depth {
             id_map(graph, "diagnostics")?
         } else {
@@ -701,6 +708,7 @@ impl GraphIndex {
             rust_semantic_depth,
             framework_declarations,
             compiler_index,
+            callable_semantics,
             entities,
             relationships,
             relationships_by_id,
@@ -1419,6 +1427,16 @@ fn module_document(
             &mut statements,
         )?;
     }
+    if index.callable_semantics {
+        append_callable_semantics(
+            index,
+            &document_id,
+            string_field(module, "crate_id")?,
+            module_path,
+            &mut content,
+            &mut statements,
+        )?;
+    }
     Ok(DocumentDraft {
         document_id,
         kind: "module",
@@ -1427,6 +1445,168 @@ fn module_document(
         bytes: content.into_bytes(),
         statements,
     })
+}
+
+fn append_callable_semantics(
+    index: &GraphIndex,
+    document_id: &str,
+    crate_id: &str,
+    module_path: &str,
+    content: &mut String,
+    statements: &mut Vec<Value>,
+) -> Result<(), DocumentationContractError> {
+    let mut entities = index
+        .entities
+        .values()
+        .filter(|entity| {
+            string_field(entity, "kind").is_ok_and(k1_entity_kind)
+                && string_field(entity, "crate_id") == Ok(crate_id)
+                && string_field(entity, "module_path") == Ok(module_path)
+        })
+        .collect::<Vec<_>>();
+    entities.sort_by(|left, right| {
+        string_field(left, "id")
+            .unwrap_or_default()
+            .cmp(string_field(right, "id").unwrap_or_default())
+    });
+    if entities.is_empty() {
+        return Ok(());
+    }
+    content.push_str(
+        "\n## Callable semantics (K1)\n\nCommitted Rust syntax only; compiler, CFG, data-flow, side-effect, and runtime meaning remain unresolved. Body and arbitrary initializer text are not reproduced.\n\n",
+    );
+    for (ordinal, entity) in entities.into_iter().enumerate() {
+        let id = string_field(entity, "id")?;
+        let kind = string_field(entity, "kind")?;
+        let claim = index.claim("entity", id)?;
+        let statement = statement_value(
+            document_id,
+            "callable_semantics",
+            id,
+            ordinal,
+            "deterministic_fact",
+            vec![id.to_owned()],
+            string_array(claim, "evidence_ids")?,
+            Vec::new(),
+        );
+        writeln!(
+            content,
+            "- `{}` `{}`: {}. {}",
+            markdown_code(kind),
+            markdown_code(string_field(entity, "name")?),
+            describe_k1_entity(entity)?,
+            statement_marker(&statement)?
+        )
+        .expect("writing Markdown to a String cannot fail");
+        statements.push(statement);
+    }
+    Ok(())
+}
+
+fn describe_k1_entity(entity: &Value) -> Result<String, DocumentationContractError> {
+    let properties = entity
+        .get("properties")
+        .ok_or(DocumentationContractError::InvalidSnapshot)?;
+    Ok(match string_field(entity, "kind")? {
+        "rust.callable_signature" => {
+            let mut qualifiers = Vec::new();
+            for (field, label) in [("async", "async"), ("const", "const"), ("unsafe", "unsafe")] {
+                if properties.get(field).and_then(Value::as_bool) == Some(true) {
+                    qualifiers.push(label);
+                }
+            }
+            let qualifier = if qualifiers.is_empty() {
+                "none".to_owned()
+            } else {
+                qualifiers.join(", ")
+            };
+            let return_type = properties
+                .get("return_type")
+                .and_then(Value::as_str)
+                .unwrap_or("()")
+                .to_owned();
+            format!(
+                "visibility `{}`, qualifiers `{}`, return `{}`, body `{}`",
+                markdown_code(string_field(properties, "visibility")?),
+                markdown_code(&qualifier),
+                markdown_code(&return_type),
+                markdown_code(string_field(properties, "body_state")?)
+            )
+        }
+        "rust.parameter" => format!(
+            "ordinal {}, pattern `{}`, declared type `{}`, receiver `{}`",
+            entity
+                .get("ordinal")
+                .and_then(Value::as_u64)
+                .ok_or(DocumentationContractError::InvalidSnapshot)?,
+            markdown_code(string_field(properties, "pattern")?),
+            markdown_code(
+                properties
+                    .get("declared_type")
+                    .and_then(Value::as_str)
+                    .unwrap_or("inferred")
+            ),
+            markdown_code(string_field(properties, "receiver_state")?)
+        ),
+        "rust.declared_value" => {
+            let normalized = properties
+                .get("normalized")
+                .filter(|value| !value.is_null())
+                .map(serde_json::to_string)
+                .transpose()
+                .map_err(|_| DocumentationContractError::InvalidSnapshot)?
+                .unwrap_or_else(|| "not normalized".to_owned());
+            format!(
+                "state `{}`, normalized `{}`",
+                markdown_code(string_field(properties, "state")?),
+                markdown_code(&normalized)
+            )
+        }
+        "rust.local_binding" => format!(
+            "pattern `{}`, declared type `{}`, lexical depth {}",
+            markdown_code(string_field(properties, "pattern")?),
+            markdown_code(
+                properties
+                    .get("declared_type")
+                    .and_then(Value::as_str)
+                    .unwrap_or("inferred")
+            ),
+            properties
+                .get("lexical_depth")
+                .and_then(Value::as_u64)
+                .ok_or(DocumentationContractError::InvalidSnapshot)?
+        ),
+        "rust.call_site" => format!(
+            "target syntax `{}`, state `{}`, lexical depth {}",
+            markdown_code(string_field(properties, "target_spelling")?),
+            markdown_code(string_field(properties, "resolution_state")?),
+            properties
+                .get("lexical_depth")
+                .and_then(Value::as_u64)
+                .ok_or(DocumentationContractError::InvalidSnapshot)?
+        ),
+        "rust.control" => format!(
+            "control `{}`, lexical depth {}",
+            markdown_code(string_field(properties, "control_kind")?),
+            properties
+                .get("lexical_depth")
+                .and_then(Value::as_u64)
+                .ok_or(DocumentationContractError::InvalidSnapshot)?
+        ),
+        _ => return Err(DocumentationContractError::InvalidSnapshot),
+    })
+}
+
+fn k1_entity_kind(kind: &str) -> bool {
+    matches!(
+        kind,
+        "rust.callable_signature"
+            | "rust.parameter"
+            | "rust.declared_value"
+            | "rust.local_binding"
+            | "rust.call_site"
+            | "rust.control"
+    )
 }
 
 #[allow(clippy::too_many_lines)]

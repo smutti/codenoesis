@@ -2,6 +2,7 @@
 
 mod s1_boundaries;
 mod s4;
+mod s4_k1;
 mod s4_r3;
 mod s4_r4;
 mod s4_r5;
@@ -15,6 +16,7 @@ pub use s1_boundaries::{
     S4BoundaryScanOutput,
 };
 pub use s4::S4ScanOutput;
+pub use s4_k1::{CallableSemanticsScanError, S4K1ScanOutput};
 pub use s4_r3::{RootPackageScanError, S4R3ScanOutput};
 pub use s4_r4::{CargoManifestScanError, S4R4ScanOutput};
 pub use s4_r5::{RustSemanticScanError, S4R5ScanOutput};

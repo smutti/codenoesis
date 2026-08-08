@@ -85,7 +85,10 @@ was "R6 governance is Proposed", and it retained "R5 → R6 → R7 → R8". Thes
 quoted historical markers do not describe the current planning state. The R7
 pre-merge roadmap said "R0-R6 are implemented" and used the exact marker
 "R7 static import governance is Proposed"; those markers are also retained
-only as history.
+only as history. The R8 pre-merge roadmap said "R0-R7 are implemented" and
+"R7 is implemented but not yet Verified", used the sequence "R7 → R8 → R9",
+and declared "R8 governance is Approved". Those markers likewise remain only
+as immutable guard history.
 
 R0-R8 are implemented, but remain not Verified until their complete retained
 evidence is independently accepted. R7 static import still grants no index

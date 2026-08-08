@@ -25,6 +25,8 @@ pub const SNAPSHOT_SCHEMA_VERSION_V9: &str = "codenoesis.repository-snapshot/v9"
 pub const SNAPSHOT_HASH_DOMAIN_V9: &str = "codenoesis.repository-snapshot.semantic.v9";
 pub const SNAPSHOT_SCHEMA_VERSION_V10: &str = "codenoesis.repository-snapshot/v10";
 pub const SNAPSHOT_HASH_DOMAIN_V10: &str = "codenoesis.repository-snapshot.semantic.v10";
+pub const SNAPSHOT_SCHEMA_VERSION_V11: &str = "codenoesis.repository-snapshot/v11";
+pub const SNAPSHOT_HASH_DOMAIN_V11: &str = "codenoesis.repository-snapshot.semantic.v11";
 pub const GRAPH_HASH_DOMAIN_V3: &str = "codenoesis.knowledge-graph.semantic.v3";
 pub const EXTRACTION_HASH_DOMAIN_V3: &str = "codenoesis.extraction-chunk.semantic.v3";
 pub const GRAPH_HASH_DOMAIN_V4: &str = "codenoesis.knowledge-graph.semantic.v4";
@@ -37,6 +39,8 @@ pub const GRAPH_HASH_DOMAIN_V6: &str = "codenoesis.knowledge-graph.semantic.v6";
 pub const EXTRACTION_HASH_DOMAIN_V6: &str = "codenoesis.extraction-chunk.semantic.v6";
 pub const GRAPH_HASH_DOMAIN_V7: &str = "codenoesis.knowledge-graph.semantic.v7";
 pub const EXTRACTION_HASH_DOMAIN_V7: &str = "codenoesis.extraction-chunk.semantic.v7";
+pub const GRAPH_HASH_DOMAIN_V8: &str = "codenoesis.knowledge-graph.semantic.v8";
+pub const EXTRACTION_HASH_DOMAIN_V8: &str = "codenoesis.extraction-chunk.semantic.v8";
 
 const SNAPSHOT_ID_PREFIX: &str = "urn:codenoesis:snapshot:blake3:";
 const ARTIFACT_ID_PREFIX: &str = "urn:codenoesis:artifact:blake3:";
@@ -472,6 +476,7 @@ pub fn snapshot_hash_domain(snapshot_schema_version: &str) -> Option<&'static st
         SNAPSHOT_SCHEMA_VERSION_V8 => Some(SNAPSHOT_HASH_DOMAIN_V8),
         SNAPSHOT_SCHEMA_VERSION_V9 => Some(SNAPSHOT_HASH_DOMAIN_V9),
         SNAPSHOT_SCHEMA_VERSION_V10 => Some(SNAPSHOT_HASH_DOMAIN_V10),
+        SNAPSHOT_SCHEMA_VERSION_V11 => Some(SNAPSHOT_HASH_DOMAIN_V11),
         _ => None,
     }
 }
@@ -486,6 +491,7 @@ pub fn graph_hash_domain(snapshot_schema_version: &str) -> Option<&'static str> 
         SNAPSHOT_SCHEMA_VERSION_V8 => Some(GRAPH_HASH_DOMAIN_V5),
         SNAPSHOT_SCHEMA_VERSION_V9 => Some(GRAPH_HASH_DOMAIN_V6),
         SNAPSHOT_SCHEMA_VERSION_V10 => Some(GRAPH_HASH_DOMAIN_V7),
+        SNAPSHOT_SCHEMA_VERSION_V11 => Some(GRAPH_HASH_DOMAIN_V8),
         _ => None,
     }
 }
@@ -500,6 +506,7 @@ pub fn extraction_hash_domain(snapshot_schema_version: &str) -> Option<&'static 
         SNAPSHOT_SCHEMA_VERSION_V8 => Some(EXTRACTION_HASH_DOMAIN_V5),
         SNAPSHOT_SCHEMA_VERSION_V9 => Some(EXTRACTION_HASH_DOMAIN_V6),
         SNAPSHOT_SCHEMA_VERSION_V10 => Some(EXTRACTION_HASH_DOMAIN_V7),
+        SNAPSHOT_SCHEMA_VERSION_V11 => Some(EXTRACTION_HASH_DOMAIN_V8),
         _ => None,
     }
 }
