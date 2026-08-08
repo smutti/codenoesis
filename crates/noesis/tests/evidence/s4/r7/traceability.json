@@ -1,0 +1,486 @@
+{
+  "schema_version": "codenoesis.s4-r7-traceability/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/125",
+  "slice": "S4",
+  "roadmap_capability": "R7",
+  "requirement_status": "Approved for codenoesis.compiler-index-profile/scip-rust-v0.9.0-import-v1",
+  "risk": "high",
+  "requirements": [
+    {
+      "id": "FR-EXT-005",
+      "role": "primary",
+      "required_tests": [
+        "e2e_fr_ext_005_revision_bound_scip_import",
+        "gt_fr_ext_005_cross_crate_symbol_resolution",
+        "gt_fr_ext_005_explicit_implementation_and_type_relations",
+        "gt_fr_ext_005_external_and_generated_symbols_remain_bounded",
+        "conf_fr_ext_005_snapshot_v10_graph_v7_error_v14",
+        "conf_fr_qry_001_v10_uses_local_query_result_v5",
+        "pt_dr_idn_001_r7_global_local_symbol_identity_nfc",
+        "pt_fr_ext_005_limits_have_max_and_plus_one",
+        "pt_nfr_det_001_r7_permutation_and_replay_invariant",
+        "sec_fr_ext_005_protobuf_preflight_precedes_decode",
+        "sec_fr_ext_005_binding_path_race_and_privacy",
+        "sec_fr_ext_005_never_executes_indexer_or_target",
+        "e2e_fr_doc_001_r7_provenance_conflict_and_gap_wording",
+        "reg_fr_cli_001_r7_selector_absence_is_byte_identical"
+      ],
+      "additional_tests": [
+        "conf_fr_ext_005_invalid_security_matrix",
+        "pt_fr_ext_005_determinism_budget_is_fixed",
+        "pt_fr_ext_005_input_permutations_preserve_identity_projection",
+        "race_fr_ext_005_mutable_artifact_read_is_binding_mismatch",
+        "sec_fr_ext_005_artifact_must_be_adjacent_to_binding",
+        "sec_nfr_prv_002_r7_private_canary_cannot_be_embedded",
+        "sec_nfr_sec_001_r7_reads_only_repository_and_explicit_pair"
+      ],
+      "evidence": [
+        "crates/noesis/tests/evidence/s4/r7/red-observation.json",
+        "crates/noesis/tests/evidence/s4/r7/red.log",
+        "crates/noesis/tests/evidence/s4/r7/invalid-security-matrix-red-observation.json",
+        "crates/noesis/tests/evidence/s4/r7/red/invalid-security-matrix.log",
+        "crates/noesis/tests/evidence/s4/r7/dependency-review.json",
+        "crates/noesis/tests/evidence/s4/r7/implementation-observation-local.json",
+        "pull request local-gate and exact-head CI results"
+      ]
+    },
+    {
+      "id": "DR-EVD-001",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_ext_005_revision_bound_scip_import",
+        "gt_fr_ext_005_cross_crate_symbol_resolution",
+        "e2e_fr_doc_001_r7_provenance_conflict_and_gap_wording"
+      ]
+    },
+    {
+      "id": "DR-IDN-001",
+      "role": "compatibility",
+      "tests": [
+        "pt_dr_idn_001_r7_global_local_symbol_identity_nfc",
+        "pt_fr_ext_005_input_permutations_preserve_identity_projection",
+        "pt_nfr_det_001_r7_permutation_and_replay_invariant"
+      ]
+    },
+    {
+      "id": "FR-EXT-001",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_ext_005_revision_bound_scip_import",
+        "reg_fr_cli_001_r7_selector_absence_is_byte_identical"
+      ]
+    },
+    {
+      "id": "FR-EXT-002",
+      "role": "compatibility",
+      "tests": [
+        "sec_fr_ext_005_never_executes_indexer_or_target",
+        "sec_nfr_sec_001_r7_reads_only_repository_and_explicit_pair"
+      ]
+    },
+    {
+      "id": "FR-EXT-010",
+      "role": "compatibility",
+      "tests": [
+        "gt_fr_ext_005_cross_crate_symbol_resolution",
+        "reg_fr_cli_001_r7_selector_absence_is_byte_identical"
+      ]
+    },
+    {
+      "id": "FR-EXT-011",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_doc_001_r7_provenance_conflict_and_gap_wording",
+        "reg_fr_cli_001_r7_selector_absence_is_byte_identical"
+      ]
+    },
+    {
+      "id": "FR-KNW-001",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_ext_005_revision_bound_scip_import",
+        "gt_fr_ext_005_external_and_generated_symbols_remain_bounded"
+      ]
+    },
+    {
+      "id": "FR-KNW-002",
+      "role": "compatibility",
+      "tests": [
+        "gt_fr_ext_005_cross_crate_symbol_resolution",
+        "gt_fr_ext_005_explicit_implementation_and_type_relations"
+      ]
+    },
+    {
+      "id": "FR-KNW-003",
+      "role": "compatibility",
+      "tests": [
+        "gt_fr_ext_005_external_and_generated_symbols_remain_bounded",
+        "sec_fr_ext_005_never_executes_indexer_or_target"
+      ]
+    },
+    {
+      "id": "FR-DOC-001",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_doc_001_r7_provenance_conflict_and_gap_wording"
+      ]
+    },
+    {
+      "id": "FR-DOC-002",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_doc_001_r7_provenance_conflict_and_gap_wording"
+      ]
+    },
+    {
+      "id": "FR-QRY-001",
+      "role": "compatibility",
+      "tests": [
+        "conf_fr_qry_001_v10_uses_local_query_result_v5",
+        "pt_nfr_det_001_r7_permutation_and_replay_invariant",
+        "reg_fr_cli_001_r7_selector_absence_is_byte_identical"
+      ]
+    },
+    {
+      "id": "FR-CLI-001",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_ext_005_revision_bound_scip_import",
+        "conf_fr_ext_005_invalid_security_matrix",
+        "reg_fr_cli_001_r7_selector_absence_is_byte_identical"
+      ]
+    },
+    {
+      "id": "NFR-DET-001",
+      "role": "compatibility",
+      "tests": [
+        "pt_fr_ext_005_input_permutations_preserve_identity_projection",
+        "pt_nfr_det_001_r7_permutation_and_replay_invariant"
+      ]
+    },
+    {
+      "id": "NFR-SEC-001",
+      "role": "compatibility",
+      "tests": [
+        "sec_fr_ext_005_binding_path_race_and_privacy",
+        "sec_fr_ext_005_never_executes_indexer_or_target",
+        "sec_nfr_sec_001_r7_reads_only_repository_and_explicit_pair"
+      ]
+    },
+    {
+      "id": "NFR-SEC-004",
+      "role": "compatibility",
+      "evidence": [
+        "crates/noesis/tests/evidence/s4/r7/dependency-review.json",
+        "crates/noesis/tests/evidence/s4/r7/cargo-audit.json"
+      ]
+    },
+    {
+      "id": "NFR-SEC-005",
+      "role": "compatibility",
+      "tests": [
+        "sec_fr_ext_005_protobuf_preflight_precedes_decode",
+        "conf_fr_ext_005_invalid_security_matrix"
+      ]
+    },
+    {
+      "id": "NFR-PRV-002",
+      "role": "compatibility",
+      "tests": [
+        "sec_fr_ext_005_binding_path_race_and_privacy",
+        "sec_nfr_prv_002_r7_private_canary_cannot_be_embedded"
+      ]
+    },
+    {
+      "id": "NFR-TST-001",
+      "role": "compatibility",
+      "tests": [
+        "all focused R7 domain, contract, adapter, and black-box tests",
+        "all 29 immutable invalid/security cases",
+        "complete repository gate"
+      ]
+    },
+    {
+      "id": "NFR-TST-002",
+      "role": "compatibility",
+      "tests": [
+        "e2e_fr_ext_005_revision_bound_scip_import",
+        "pt_nfr_det_001_r7_permutation_and_replay_invariant",
+        "complete exact-head pull-request checks"
+      ]
+    }
+  ],
+  "test_layers": {
+    "domain": [
+      "pt_fr_ext_005_limits_have_max_and_plus_one",
+      "pt_fr_ext_005_determinism_budget_is_fixed"
+    ],
+    "contract": [
+      "conf_fr_ext_005_snapshot_v10_graph_v7_error_v14",
+      "conf_fr_qry_001_v10_uses_local_query_result_v5"
+    ],
+    "port_adapter": [
+      "sec_fr_ext_005_protobuf_preflight_precedes_decode",
+      "pt_dr_idn_001_r7_global_local_symbol_identity_nfc",
+      "pt_fr_ext_005_input_permutations_preserve_identity_projection",
+      "race_fr_ext_005_mutable_artifact_read_is_binding_mismatch",
+      "sec_fr_ext_005_artifact_must_be_adjacent_to_binding",
+      "sec_nfr_prv_002_r7_private_canary_cannot_be_embedded"
+    ],
+    "application_cli_graph_docs_query_security": [
+      "all 12 tests in e2e_fr_ext_005_scip_import",
+      "sec_nfr_sec_001_r7_reads_only_repository_and_explicit_pair on Linux"
+    ]
+  },
+  "ordered_acceptance_scenarios": [
+    {
+      "order": 1,
+      "outcome": "R7 is accepted only with the complete explicit R3-R6 composition and both R7 inputs; no implicit or cached selection exists.",
+      "status": "passed_focused",
+      "tests": [
+        "e2e_fr_ext_005_revision_bound_scip_import",
+        "conf_fr_ext_005_invalid_security_matrix"
+      ]
+    },
+    {
+      "order": 2,
+      "outcome": "Invalid or incomplete selector composition fails with strict ErrorV14 before repository or compiler-index acquisition and without side effects.",
+      "status": "passed_focused",
+      "tests": [
+        "conf_fr_ext_005_invalid_security_matrix",
+        "sec_fr_ext_005_never_executes_indexer_or_target"
+      ]
+    },
+    {
+      "order": 3,
+      "outcome": "Only an explicit safe relative binding and its adjacent safe relative artifact are acquired; traversal, symlinks, changed paths, and mutable reads fail closed.",
+      "status": "passed_focused_with_linux_landlock_ci_pending",
+      "tests": [
+        "sec_fr_ext_005_binding_path_race_and_privacy",
+        "sec_fr_ext_005_artifact_must_be_adjacent_to_binding",
+        "race_fr_ext_005_mutable_artifact_read_is_binding_mismatch",
+        "sec_nfr_sec_001_r7_reads_only_repository_and_explicit_pair"
+      ]
+    },
+    {
+      "order": 4,
+      "outcome": "Binding JSON is bounded and strictly binds repository, revision, tree, R6 source manifest, artifact, schema, producer, toolchain, indexed documents, omissions, and limitations.",
+      "status": "passed_focused",
+      "tests": [
+        "e2e_fr_ext_005_revision_bound_scip_import",
+        "conf_fr_ext_005_invalid_security_matrix"
+      ]
+    },
+    {
+      "order": 5,
+      "outcome": "Bounded recursive protobuf framing validates wire tags, metadata, recursion, lengths, counts, and minimal varints before generated decode.",
+      "status": "passed_focused",
+      "tests": [
+        "sec_fr_ext_005_protobuf_preflight_precedes_decode",
+        "conf_fr_ext_005_invalid_security_matrix"
+      ]
+    },
+    {
+      "order": 6,
+      "outcome": "Unknown, duplicate, malformed, invalid-role, invalid-range, invalid-symbol, encoding, and noncanonical decoded forms fail before graph construction.",
+      "status": "passed_focused",
+      "tests": [
+        "conf_fr_ext_005_invalid_security_matrix",
+        "sec_fr_ext_005_protobuf_preflight_precedes_decode"
+      ]
+    },
+    {
+      "order": 7,
+      "outcome": "Only exact committed UTF-8 Rust document bytes and valid UTF-8 source ranges become in-repository compiler facts.",
+      "status": "passed_focused",
+      "tests": [
+        "e2e_fr_ext_005_revision_bound_scip_import",
+        "conf_fr_ext_005_invalid_security_matrix"
+      ]
+    },
+    {
+      "order": 8,
+      "outcome": "The reviewed overlay contains exactly 15 compiler symbols: 13 in-repository, one external, and one generated.",
+      "status": "passed_focused",
+      "tests": [
+        "e2e_fr_ext_005_revision_bound_scip_import",
+        "gt_fr_ext_005_external_and_generated_symbols_remain_bounded"
+      ]
+    },
+    {
+      "order": 9,
+      "outcome": "Exactly five reviewed relationships are emitted: one RESOLVES_TO, one REFERENCES, two IMPLEMENTS, and one TYPE_DEFINITION with bounded endpoints and evidence.",
+      "status": "passed_focused",
+      "tests": [
+        "gt_fr_ext_005_cross_crate_symbol_resolution",
+        "gt_fr_ext_005_explicit_implementation_and_type_relations"
+      ]
+    },
+    {
+      "order": 10,
+      "outcome": "Global and local SCIP symbols use the exact NFC canonical identity recipe and remain independent of revision, artifact, order, offset, schedule, retry, and host metadata.",
+      "status": "passed_focused",
+      "tests": [
+        "pt_dr_idn_001_r7_global_local_symbol_identity_nfc",
+        "pt_fr_ext_005_input_permutations_preserve_identity_projection",
+        "pt_nfr_det_001_r7_permutation_and_replay_invariant"
+      ]
+    },
+    {
+      "order": 11,
+      "outcome": "Compiler and syntax evidence are retained on disagreement and the reviewed uncertainty diagnostic remains visible without order-based repair.",
+      "status": "passed_focused",
+      "tests": [
+        "gt_fr_ext_005_cross_crate_symbol_resolution",
+        "e2e_fr_doc_001_r7_provenance_conflict_and_gap_wording"
+      ]
+    },
+    {
+      "order": 12,
+      "outcome": "Six reviewed gaps, one diagnostic, three documentation statements, the omitted document, external/generated states, and producer limitation remain exact.",
+      "status": "passed_focused",
+      "tests": [
+        "e2e_fr_ext_005_revision_bound_scip_import",
+        "e2e_fr_doc_001_r7_provenance_conflict_and_gap_wording"
+      ]
+    },
+    {
+      "order": 13,
+      "outcome": "No CALLS, execution, serving, startup, reachability, generated-source, macro, data-flow, active-configuration, or runtime fact is emitted.",
+      "status": "passed_focused",
+      "tests": [
+        "gt_fr_ext_005_external_and_generated_symbols_remain_bounded",
+        "sec_fr_ext_005_never_executes_indexer_or_target"
+      ]
+    },
+    {
+      "order": 14,
+      "outcome": "Roots, arguments, embedded text, documentation, signatures, diagnostics, environment values, and privacy canaries are excluded from public artifacts, errors, hashes, and identities.",
+      "status": "passed_focused",
+      "tests": [
+        "sec_fr_ext_005_binding_path_race_and_privacy",
+        "sec_nfr_prv_002_r7_private_canary_cannot_be_embedded"
+      ]
+    },
+    {
+      "order": 15,
+      "outcome": "ConfigurationV7, ExtractionChunkV7, KnowledgeGraphV7, Rust ontology v7, RepositorySnapshotV10, ErrorV14, pipeline s4-r7-v1, and semantic hash v6 are strict.",
+      "status": "passed_focused",
+      "tests": [
+        "conf_fr_ext_005_snapshot_v10_graph_v7_error_v14",
+        "e2e_fr_ext_005_revision_bound_scip_import"
+      ]
+    },
+    {
+      "order": 16,
+      "outcome": "The immutable three-role publication, marker, DDL, transaction, head, restart, corruption, crash, repair, and sweep behavior is reused without migration.",
+      "status": "focused_publication_passed_final_inherited_regression_gate_pending",
+      "tests": [
+        "e2e_fr_ext_005_revision_bound_scip_import",
+        "complete repository gate"
+      ]
+    },
+    {
+      "order": 17,
+      "outcome": "Documentation contains only evidence-backed reviewed provenance, reference, unbound, conflict, and gap wording without attestation or runtime claims.",
+      "status": "passed_focused",
+      "tests": [
+        "e2e_fr_doc_001_r7_provenance_conflict_and_gap_wording"
+      ]
+    },
+    {
+      "order": 18,
+      "outcome": "Validated stored V10 heads dispatch automatically to LocalQueryResultV5 for all seven exact-ID result kinds.",
+      "status": "passed_focused",
+      "tests": [
+        "conf_fr_qry_001_v10_uses_local_query_result_v5",
+        "pt_nfr_det_001_r7_permutation_and_replay_invariant"
+      ]
+    },
+    {
+      "order": 19,
+      "outcome": "V9/V4, V8/V3, V7/V2, V4-V6/V1, and every selector-absent R0-R6 byte remain compatible.",
+      "status": "focused_selector_absence_passed_final_regression_gate_pending",
+      "tests": [
+        "reg_fr_cli_001_r7_selector_absence_is_byte_identical",
+        "complete repository gate"
+      ]
+    },
+    {
+      "order": 20,
+      "outcome": "All 29 immutable invalid/security cases return empty stdout, one LF-terminated ErrorV14, exit 10, and no partial publication.",
+      "status": "passed_focused",
+      "tests": [
+        "conf_fr_ext_005_invalid_security_matrix"
+      ]
+    },
+    {
+      "order": 21,
+      "outcome": "Every fixed maximum and maximum-plus-one is enforced before proportional allocation or publication without truncation, retry, repair, or fallback.",
+      "status": "passed_focused",
+      "tests": [
+        "pt_fr_ext_005_limits_have_max_and_plus_one",
+        "conf_fr_ext_005_invalid_security_matrix"
+      ]
+    },
+    {
+      "order": 22,
+      "outcome": "Semantic bytes, documentation bytes, and all seven exact-ID query results are invariant across 50 permutations and isolated replay.",
+      "status": "passed_focused_with_resource_ceiling",
+      "tests": [
+        "pt_fr_ext_005_input_permutations_preserve_identity_projection",
+        "pt_nfr_det_001_r7_permutation_and_replay_invariant"
+      ],
+      "observed_wall_time_ms": 42280,
+      "observed_peak_rss_bytes": 55312384
+    },
+    {
+      "order": 23,
+      "outcome": "The product performs no indexer, Cargo, rustc, rust-analyzer, build, proc-macro, target, plugin, sidecar, model, network, or external-repository execution/read and Linux filesystem authority is restricted to the repository and explicit pair.",
+      "status": "passed_sentinels_linux_landlock_and_os_trace_pending_exact_head_ci",
+      "tests": [
+        "sec_fr_ext_005_never_executes_indexer_or_target",
+        "sec_fr_ext_005_binding_path_race_and_privacy",
+        "sec_nfr_sec_001_r7_reads_only_repository_and_explicit_pair"
+      ]
+    },
+    {
+      "order": 24,
+      "outcome": "Exactly scip 0.9.0, protobuf 3.7.2, and reviewed transitives resolve; the boundary compiles on the pinned macOS, Linux, and Windows Rust targets without protobuf code generation.",
+      "status": "local_dependency_and_boundary_platform_review_passed_full_exact_head_ci_pending",
+      "evidence": "crates/noesis/tests/evidence/s4/r7/dependency-review.json"
+    }
+  ],
+  "invalid_security_cases": [
+    "artifact-digest-mismatch",
+    "binding-revision-mismatch",
+    "duplicate-metadata",
+    "forbidden-indexer-execution",
+    "incomplete-declared-document",
+    "invalid-scip-symbol",
+    "limit-plus-one-binding-json-bytes",
+    "limit-plus-one-documents",
+    "limit-plus-one-occurrences-per-document",
+    "limit-plus-one-occurrences-total",
+    "limit-plus-one-protobuf-recursion",
+    "limit-plus-one-raw-index-bytes",
+    "limit-plus-one-relationships-total",
+    "limit-plus-one-symbol-information-total",
+    "limit-plus-one-symbol-or-display-bytes",
+    "limit-plus-one-tool-argument-bytes",
+    "limit-plus-one-tool-arguments",
+    "limit-plus-one-unpromoted-value-bytes",
+    "malformed-truncated-varint",
+    "mutable-artifact-race",
+    "nfc-symbol-collision",
+    "noncanonical-varint",
+    "privacy-argument-canary",
+    "relation-authority-conflict",
+    "required-endpoint-ambiguous",
+    "symlink-artifact-escape",
+    "unknown-nested-field",
+    "unsafe-artifact-parent",
+    "unsupported-position-encoding"
+  ],
+  "verification_status": "Implemented locally; final repository gate, exact-head Linux/macOS/Windows CI, CodeQL, benchmark-integrity, Codex policy review gate, and independent human ontology/protobuf/security review remain required before Verified."
+}

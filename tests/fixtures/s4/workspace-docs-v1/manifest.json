@@ -1,0 +1,156 @@
+{
+  "schema_version": "codenoesis.s4-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-workspace-docs-v1",
+  "revision": {
+    "name": "revision-a",
+    "root_tree_oid": "8f9e36122bec5caac5dc0f739ea7ab4c830bd356",
+    "files": [
+      {
+        "path": "Cargo.toml",
+        "sha256": "4d268e7f38954aad6288525c0df9120442a3ff036da2967eb73af3866cf23378",
+        "git_blob_oid": "9a61bc964dd0b80e54880d0a40471b50324b6e15"
+      },
+      {
+        "path": "crates/app/Cargo.toml",
+        "sha256": "ec155ee0ebc739a31b2b226da6ccbedb6be03b597414f79b3565f1ea70ff2bc5",
+        "git_blob_oid": "887b09de92b06c4003daf2ffc60a48e33aa1187f"
+      },
+      {
+        "path": "crates/app/build.rs",
+        "sha256": "2fecc7205a6441a0ba98fe7373bdcf2b2f4df63ed610aec79367b73492cd6751",
+        "git_blob_oid": "817cc01b6a06743e810217ca57f9abfbbdf34824"
+      },
+      {
+        "path": "crates/app/src/main.rs",
+        "sha256": "3d8a2c88c2d9b7c1fe836d4f0ac27844f5f475916cab7af2199b7a531d9976d1",
+        "git_blob_oid": "7e6f91e233eff28c5511d686f7c46f67dd919505"
+      },
+      {
+        "path": "crates/model/Cargo.toml",
+        "sha256": "ab9a1ee43fae4a45092d7923fddbd88b284e829a385d68650a05f0463b7f9c19",
+        "git_blob_oid": "bd9cc68a4885e014ce4a034be8c2317425f3e3dc"
+      },
+      {
+        "path": "crates/model/src/item.rs",
+        "sha256": "48aed2dc18300ae778c0f88d75e703f42271626071685103770a3cb95c2870fa",
+        "git_blob_oid": "885b4746097a67e5c4fb997a2082597dc23699e6"
+      },
+      {
+        "path": "crates/model/src/lib.rs",
+        "sha256": "d3eea21f10f0ff42bab73aaac68c9fce8589d1a88fbb3d24c6d90b77abece3ef",
+        "git_blob_oid": "f001952aa75e3c631153f1fe5dec0af6ca11c429"
+      }
+    ],
+    "trees": [
+      {
+        "path": "",
+        "oid": "8f9e36122bec5caac5dc0f739ea7ab4c830bd356",
+        "entries": [
+          {
+            "mode": "100644",
+            "name": "Cargo.toml",
+            "oid": "9a61bc964dd0b80e54880d0a40471b50324b6e15"
+          },
+          {
+            "mode": "40000",
+            "name": "crates",
+            "oid": "3e03df22f6961d79f831318ae35e06fa026ad599"
+          }
+        ]
+      },
+      {
+        "path": "crates",
+        "oid": "3e03df22f6961d79f831318ae35e06fa026ad599",
+        "entries": [
+          {
+            "mode": "40000",
+            "name": "app",
+            "oid": "839c54592804c3786eaa921b3fd2741fe23f052d"
+          },
+          {
+            "mode": "40000",
+            "name": "model",
+            "oid": "836d7e3d8b09c19bab01fdc5ba8cf46263799aad"
+          }
+        ]
+      },
+      {
+        "path": "crates/app",
+        "oid": "839c54592804c3786eaa921b3fd2741fe23f052d",
+        "entries": [
+          {
+            "mode": "100644",
+            "name": "Cargo.toml",
+            "oid": "887b09de92b06c4003daf2ffc60a48e33aa1187f"
+          },
+          {
+            "mode": "100644",
+            "name": "build.rs",
+            "oid": "817cc01b6a06743e810217ca57f9abfbbdf34824"
+          },
+          {
+            "mode": "40000",
+            "name": "src",
+            "oid": "747d120659c476bb5a0af68f3e73264a0d1936fa"
+          }
+        ]
+      },
+      {
+        "path": "crates/app/src",
+        "oid": "747d120659c476bb5a0af68f3e73264a0d1936fa",
+        "entries": [
+          {
+            "mode": "100644",
+            "name": "main.rs",
+            "oid": "7e6f91e233eff28c5511d686f7c46f67dd919505"
+          }
+        ]
+      },
+      {
+        "path": "crates/model",
+        "oid": "836d7e3d8b09c19bab01fdc5ba8cf46263799aad",
+        "entries": [
+          {
+            "mode": "100644",
+            "name": "Cargo.toml",
+            "oid": "bd9cc68a4885e014ce4a034be8c2317425f3e3dc"
+          },
+          {
+            "mode": "40000",
+            "name": "src",
+            "oid": "8625cf0eab213b81775a83ad25be14e041d9be68"
+          }
+        ]
+      },
+      {
+        "path": "crates/model/src",
+        "oid": "8625cf0eab213b81775a83ad25be14e041d9be68",
+        "entries": [
+          {
+            "mode": "100644",
+            "name": "item.rs",
+            "oid": "885b4746097a67e5c4fb997a2082597dc23699e6"
+          },
+          {
+            "mode": "100644",
+            "name": "lib.rs",
+            "oid": "f001952aa75e3c631153f1fe5dec0af6ca11c429"
+          }
+        ]
+      }
+    ],
+    "commit": {
+      "oid": "c09d8c24e4704036c31b4f42e2f4df6e4acd347f",
+      "payload_utf8": "tree 8f9e36122bec5caac5dc0f739ea7ab4c830bd356\nauthor CodeNoesis Fixture <fixture@codenoesis.invalid> 1785110400 +0000\ncommitter CodeNoesis Fixture <fixture@codenoesis.invalid> 1785110400 +0000\n\nCodeNoesis S4 workspace docs fixture revision A\n"
+    }
+  },
+  "sentinels": {
+    "build_script": "crates/app/build.rs",
+    "must_execute": false,
+    "network": false,
+    "target_process": false
+  },
+  "expected_profile": "standard-local-s4",
+  "expected_snapshot_schema": "codenoesis.repository-snapshot/v4",
+  "expected_ontology": "codenoesis.ontology/rust/v2"
+}

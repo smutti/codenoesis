@@ -1,0 +1,36 @@
+{
+  "schema_version": "codenoesis.r6-evidence-id-governance-red-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/120",
+  "authorization": "https://github.com/smutti/codenoesis/issues/120#issuecomment-5189701124",
+  "required_base": "117c8d5973873b5cb9a713ad81d9bcfe370adac8",
+  "test_first_head": "53c56c0c00dbee20a63c3d7731b11479733bf394",
+  "recorded_at_utc": "2026-08-05T08:56:35Z",
+  "command": "python3 -m unittest scripts.tests.test_s4_r6_framework_declarations_contract.S4R6FrameworkDeclarationsGovernanceTests.test_golden_evidence_ids_are_schema_representable_and_queryable",
+  "expected_failure": "Exit 1 because the immutable SHA-256 framework source-span evidence IDs are rejected by the current BLAKE3-only V6 evidence schema before any schema correction.",
+  "actual_failure": "AssertionError: reviewed SHA-256 evidence IDs are rejected by ^urn:codenoesis:evidence:blake3:[0-9a-f]{64}$",
+  "exit_code": 1,
+  "failed_for_expected_reason": true,
+  "golden_files_changed_before_red": false,
+  "schema_files_changed_before_red": false,
+  "production_files_changed_before_red": false,
+  "changed_paths_before_red": [
+    "scripts/tests/test_s4_r6_framework_declarations_contract.py"
+  ],
+  "stdout_bytes": 0,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_bytes": 803,
+  "stderr_sha256": "b82a7234dfe777e6e846591a38bb3bf43fcf69df78ebf5cc08c3c579bc93fe3f",
+  "raw_log_path": "tests/specifications/s4/r6/red/evidence-id-schema-red.log",
+  "raw_log_bytes": 803,
+  "raw_log_sha256": "b82a7234dfe777e6e846591a38bb3bf43fcf69df78ebf5cc08c3c579bc93fe3f",
+  "immutable_expected_facts_sha256": "c6956cf1887d3d201d4eb95f6e6a50c204d795b5def968fd5d3d25d88faabd1f",
+  "environment": {
+    "os": "macOS 26.5.2",
+    "architecture": "arm64",
+    "python": "Python 3.9.6",
+    "timezone": "CEST",
+    "working_directory": "/Users/smutti/Documents/personal/codenoesis"
+  },
+  "dependency_manifest_changed_before_red": false,
+  "correction_rounds_used": 0
+}

@@ -1,0 +1,24 @@
+[package]
+name = "codenoesis-scip"
+version = "0.1.0"
+description = "Bounded revision-bound SCIP import adapter for CodeNoesis"
+edition.workspace = true
+license.workspace = true
+publish = false
+rust-version.workspace = true
+
+[dependencies]
+blake3.workspace = true
+codenoesis-domain.workspace = true
+codenoesis-ports.workspace = true
+protobuf.workspace = true
+scip.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+unicode-normalization.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+same-file.workspace = true
+
+[lints]
+workspace = true

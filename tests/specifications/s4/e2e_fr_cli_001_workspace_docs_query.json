@@ -1,0 +1,277 @@
+{
+  "schema_version": "codenoesis.acceptance-specification/v1",
+  "status": "approved",
+  "slice": "S4",
+  "requirements": [
+    "DR-IDN-002",
+    "FR-CLI-001",
+    "FR-DOC-001",
+    "FR-DOC-002",
+    "FR-DOC-003",
+    "FR-EXT-007",
+    "FR-QRY-001"
+  ],
+  "decision": "docs/software/decisions/0005-s4-workspace-docs-query-contract.md",
+  "fixture": "tests/fixtures/s4/workspace-docs-v1",
+  "inherited_contract_bundle": "tests/specifications/s3/contract-bundle.json",
+  "schemas": {
+    "snapshot": "tests/specifications/s4/repository-snapshot-v4.schema.json",
+    "extraction_chunk": "tests/specifications/s4/extraction-chunk-v2.schema.json",
+    "knowledge_graph": "tests/specifications/s4/knowledge-graph-v2.schema.json",
+    "documentation_manifest": "tests/specifications/s4/documentation-manifest-v1.schema.json",
+    "query_result": "tests/specifications/s4/local-query-result-v1.schema.json",
+    "error": "tests/specifications/s4/codenoesis-error-v5.schema.json"
+  },
+  "contracts": {
+    "ontology": "tests/specifications/s4/rust-ontology-v2.json",
+    "docs_output": "tests/specifications/s4/docs-output-contract-v1.json",
+    "semantic_hashes": "tests/specifications/s4/semantic-hash-contract-v1.json"
+  },
+  "goldens": {
+    "graph_summary": "tests/fixtures/s4/workspace-docs-v1/expected-graph-summary.json",
+    "documentation_manifest": "tests/fixtures/s4/workspace-docs-v1/expected-documentation-manifest.json",
+    "overview": "tests/fixtures/s4/workspace-docs-v1/expected-docs/overview.md",
+    "module_app": "tests/fixtures/s4/workspace-docs-v1/expected-docs/modules/app.md",
+    "module_model": "tests/fixtures/s4/workspace-docs-v1/expected-docs/modules/model.md",
+    "module_model_item": "tests/fixtures/s4/workspace-docs-v1/expected-docs/modules/model-item.md",
+    "query_entity": "tests/fixtures/s4/workspace-docs-v1/expected-query-entity.json",
+    "query_document": "tests/fixtures/s4/workspace-docs-v1/expected-query-document.json",
+    "unknown_id_error": "tests/fixtures/s4/workspace-docs-v1/expected-error-unknown-id.json",
+    "unmarked_output_error": "tests/fixtures/s4/workspace-docs-v1/expected-error-unmarked-output.json",
+    "unsupported_workspace_error": "tests/fixtures/s4/workspace-docs-v1/expected-error-unsupported-workspace.json",
+    "snapshot_semantic": "tests/fixtures/s4/workspace-docs-v1/expected-snapshot-semantic.json"
+  },
+  "ratification": {
+    "governance_model": "single_maintainer_bootstrap",
+    "product_owner_persona": "Andrea Moretti",
+    "persona_is_natural_person": false,
+    "accountable_github_actor": "smutti",
+    "technical_approver": "smutti",
+    "approval_reference": "https://github.com/smutti/codenoesis/pull/42",
+    "effective_on": "protected_squash_merge_by_accountable_actor",
+    "required_external_approvals": 0,
+    "agent_merge_allowed": false
+  },
+  "commands": {
+    "scan": [
+      "noesis",
+      "scan",
+      "--repository",
+      "{repository_path}",
+      "--repository-id",
+      "urn:codenoesis:fixture:s4-workspace-docs-v1",
+      "--revision",
+      "{revision}",
+      "--profile",
+      "standard-local-s4",
+      "--store",
+      "{store_path}",
+      "--format",
+      "json"
+    ],
+    "docs": [
+      "noesis",
+      "docs",
+      "--store",
+      "{store_path}",
+      "--repository-id",
+      "urn:codenoesis:fixture:s4-workspace-docs-v1",
+      "--output",
+      "{documents_path}",
+      "--format",
+      "json"
+    ],
+    "query": [
+      "noesis",
+      "query",
+      "--store",
+      "{store_path}",
+      "--repository-id",
+      "urn:codenoesis:fixture:s4-workspace-docs-v1",
+      "--documents",
+      "{documents_path}",
+      "--id",
+      "{stable_id}",
+      "--format",
+      "json"
+    ]
+  },
+  "expected_red": {
+    "test_command": "cargo test --test e2e_fr_cli_001_workspace_docs_query",
+    "required_base": "merged S3 implementation from pull request 35",
+    "runner_expected_exit": "nonzero because the acceptance assertion fails",
+    "subject_observed_exit_code": 2,
+    "subject_observed_stderr_schema": "codenoesis.error/v4",
+    "subject_observed_stderr_code": "input.invalid_profile",
+    "subject_expected_exit_code": 0,
+    "expected_snapshot": "codenoesis.repository-snapshot/v4",
+    "expected_docs": "codenoesis.documentation-manifest/v1",
+    "expected_query": "codenoesis.local-query-result/v1",
+    "accepted_reason": "Merged S3 rejects standard-local-s4 before creating a store or generated-document root.",
+    "rejected_reasons": [
+      "compilation failure",
+      "missing test target",
+      "missing or corrupt fixture",
+      "schema or guard failure",
+      "dependency or network outage",
+      "timeout",
+      "unexpected panic",
+      "partial store or docs output",
+      "a modified S4 oracle"
+    ]
+  },
+  "scenarios": [
+    {
+      "test_name": "e2e_fr_cli_001_workspace_docs_query",
+      "requirements": [
+        "FR-CLI-001",
+        "FR-DOC-001",
+        "FR-QRY-001"
+      ],
+      "oracle": "scan -> restart -> docs -> entity query -> document query matches every reviewed public byte",
+      "failure": "any nonzero subject result, unexpected stream, missing file, or mismatched golden"
+    },
+    {
+      "test_name": "gt_fr_ext_007_workspace_graph_v2",
+      "requirements": [
+        "DR-IDN-002",
+        "FR-EXT-007"
+      ],
+      "oracle": "two literal members, three source files, three modules, reviewed identities/counts, one unresolved cross-crate use",
+      "failure": "wrong identity, cardinality, ownership, evidence, diagnostic, or coverage state"
+    },
+    {
+      "test_name": "gt_fr_doc_001_deterministic_markdown",
+      "requirements": [
+        "FR-DOC-001"
+      ],
+      "oracle": "four path-sorted Markdown files and manifest are byte-identical across replay and envelope/order changes",
+      "failure": "changed bytes, paths, IDs, hashes, or generation hash"
+    },
+    {
+      "test_name": "pt_fr_doc_002_statement_evidence_integrity",
+      "requirements": [
+        "FR-DOC-002"
+      ],
+      "oracle": "every material statement resolves to nonempty evidence or coverage gaps, never both",
+      "failure": "missing marker, dangling reference, unsupported claim without label, or fabricated success"
+    },
+    {
+      "test_name": "sec_fr_doc_003_generated_root_confinement",
+      "requirements": [
+        "FR-DOC-003"
+      ],
+      "oracle": "absent/marked roots publish atomically; unmarked, traversal, overlap, symlink, reparse, and sentinel cases fail without touching unowned bytes",
+      "failure": "write, delete, follow, or adoption outside the approved owned paths"
+    },
+    {
+      "test_name": "e2e_fr_qry_001_exact_id_results",
+      "requirements": [
+        "FR-QRY-001"
+      ],
+      "oracle": "entity and document IDs return exact typed linked records; unknown ID is query.not_found",
+      "failure": "partial success, empty success, fuzzy match, snapshot mismatch acceptance, or dangling link"
+    },
+    {
+      "test_name": "conf_fr_cli_001_v4_manifest_query_error_v5",
+      "requirements": [
+        "FR-CLI-001",
+        "FR-DOC-003",
+        "FR-QRY-001"
+      ],
+      "oracle": "strict V4, manifest v1, query v1, and S4-specific error v5 schemas plus stable exits/streams",
+      "failure": "unknown fields, wrong schema, wrong stream, wrong exit, or noncanonical JSON"
+    },
+    {
+      "test_name": "pt_dr_idn_002_workspace_identity_stability",
+      "requirements": [
+        "DR-IDN-002"
+      ],
+      "oracle": "member/file/order/envelope/output-root permutations preserve IDs and canonical collisions fail closed",
+      "failure": "identity depends on order, commit, output location, storage sequence, or scheduler"
+    },
+    {
+      "test_name": "sec_fr_ext_007_no_target_execution",
+      "requirements": [
+        "FR-EXT-007"
+      ],
+      "oracle": "build-script, process, and network sentinels remain untouched",
+      "failure": "Cargo, rustc, build script, target process, plugin, model, or network executes"
+    },
+    {
+      "test_name": "reg_fr_cli_001_legacy_profiles_unchanged",
+      "requirements": [
+        "FR-CLI-001"
+      ],
+      "oracle": "all S0-S3 public profiles and golden bytes remain unchanged",
+      "failure": "legacy stream, error, semantic hash, profile, or write behavior changes"
+    }
+  ],
+  "inherited_regressions": [
+    "conf_dr_art_001_repository_snapshot_v1",
+    "conf_dr_evd_001_source_evidence_resolves",
+    "conf_fr_ext_001_extraction_chunk_v1",
+    "conf_fr_ext_001_snapshot_v3_and_error_v3",
+    "conf_fr_inv_001_repository_snapshot_v2_and_error_v2",
+    "conf_fr_sto_001_store_v1_and_error_v4",
+    "conf_nfr_mnt_001_dependency_rules",
+    "conf_nfr_tst_001_requires_fixture_oracle_evidence_links",
+    "ct_fr_sto_001_cas_parity",
+    "ct_fr_sto_001_metadata_store_parity",
+    "e2e_fr_acq_001_immutable_commit",
+    "e2e_fr_acq_001_inconsistent_object_returns_typed_error",
+    "e2e_fr_acq_001_missing_object_returns_typed_error",
+    "e2e_fr_acq_001_non_git_returns_typed_error",
+    "e2e_fr_acq_002_gitlink_rejected",
+    "e2e_fr_acq_002_symlink_rejected",
+    "e2e_fr_acq_002_traversal_rejected",
+    "e2e_fr_ext_002_rust_knowledge",
+    "e2e_fr_inv_001_safe_inventory",
+    "e2e_fr_sto_001_atomic_local_storage",
+    "ft_fr_snp_001_orphan_sweep_preserves_reachable",
+    "ft_fr_snp_001_publication_failpoint_matrix",
+    "fz_fr_ext_001_extraction_contract_seed_corpus",
+    "fz_fr_ext_002_rust_parser_seed_corpus",
+    "gt_dr_idn_001_unicode_normalization_collision",
+    "gt_fr_ext_002_malformed_syntax_is_explicit",
+    "gt_fr_ext_002_reviewed_rust_graph",
+    "gt_fr_inv_001_exact_inventory_and_coverage_gaps",
+    "it_fr_acq_001_ref_move_after_binding_keeps_original_commit",
+    "it_fr_sto_001_corruption_fails_closed",
+    "it_fr_sto_001_restart_preserves_head",
+    "pt_dr_art_002_volatile_envelope_preserves_semantic_hash",
+    "pt_dr_idn_001_stable_ids_ignore_order_and_revision",
+    "pt_fr_acq_002_limits_have_max_and_plus_one",
+    "pt_fr_inv_001_inventory_is_order_invariant",
+    "pt_fr_knw_001_graph_invariants",
+    "pt_fr_knw_002_claim_state_machine",
+    "pt_fr_knw_003_rule_provenance_replays",
+    "pt_fr_snp_001_idempotent_retry",
+    "pt_inv_snp_001_reader_visibility",
+    "pt_nfr_det_001_permutation_and_schedule_invariant",
+    "pt_nfr_tst_002_replays_are_parallel_and_order_independent",
+    "reg_fr_sto_001_legacy_profiles_unchanged",
+    "sec_fr_ext_002_target_never_executes",
+    "sec_fr_sto_001_store_root_confinement",
+    "sec_nfr_sec_001_bombs_and_parser_inputs_are_bounded",
+    "sec_nfr_sec_001_scan_stays_inside_repository_root",
+    "sec_nfr_sec_001_sentinel_scripts_never_execute",
+    "sec_nfr_sec_005_scan_launches_no_child_and_opens_no_network"
+  ],
+  "limits": {
+    "workspace_crates": 200,
+    "documents": 2001,
+    "bytes_per_document": 1048576,
+    "total_document_bytes": 33554432,
+    "statements": 200000,
+    "query_result_bytes": 4194304
+  },
+  "stop_conditions": [
+    "identity, cardinality, statement grounding, query semantics, or Red is ambiguous",
+    "S3 local-store v1 meaning or schema must change",
+    "an oracle, schema, ontology, path, dependency class, or risk changes",
+    "deterministic offline behavior requires Cargo, rustc, target, network, plugin, or model execution",
+    "owned output cannot be published atomically without touching unowned content",
+    "the implementation exceeds five bounded correction rounds"
+  ]
+}

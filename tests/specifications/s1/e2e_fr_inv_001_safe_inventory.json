@@ -1,0 +1,507 @@
+{
+  "schema_version": "codenoesis.acceptance-specification/v1",
+  "status": "approved",
+  "ratification": {
+    "governance_model": "single_maintainer_bootstrap",
+    "product_owner_persona": "Andrea Moretti",
+    "persona_is_natural_person": false,
+    "accountable_github_actor": "smutti",
+    "technical_approver": "smutti",
+    "approval_reference": "https://github.com/smutti/codenoesis/pull/17",
+    "effective_on": "protected_squash_merge_by_accountable_actor",
+    "required_external_approvals": 0,
+    "agent_merge_allowed": false
+  },
+  "test_id": "e2e_fr_inv_001_safe_inventory",
+  "slice": "S1",
+  "requirements": [
+    "DR-EVD-001",
+    "FR-ACQ-002",
+    "FR-INV-001",
+    "NFR-SEC-001"
+  ],
+  "inherited_s0_regressions": [
+    "e2e_fr_acq_001_immutable_commit",
+    "it_fr_acq_001_ref_move_after_binding_keeps_original_commit",
+    "e2e_fr_acq_001_non_git_returns_typed_error",
+    "e2e_fr_acq_001_missing_object_returns_typed_error",
+    "e2e_fr_acq_001_inconsistent_object_returns_typed_error",
+    "conf_dr_art_001_repository_snapshot_v1",
+    "pt_dr_art_002_volatile_envelope_preserves_semantic_hash",
+    "pt_nfr_det_001_permutation_and_schedule_invariant",
+    "conf_nfr_mnt_001_dependency_rules",
+    "conf_nfr_tst_001_requires_fixture_oracle_evidence_links",
+    "pt_nfr_tst_002_replays_are_parallel_and_order_independent",
+    "sec_nfr_sec_005_scan_launches_no_child_and_opens_no_network"
+  ],
+  "decision": "docs/software/decisions/0002-s1-safe-inventory-contract.md",
+  "fixture": "tests/fixtures/s1/safe-inventory-v1/manifest.json",
+  "schemas": {
+    "snapshot": "tests/specifications/s1/repository-snapshot-v2.schema.json",
+    "source_evidence": "tests/specifications/s1/source-evidence-v1.schema.json",
+    "error": "tests/specifications/s1/codenoesis-error-v2.schema.json"
+  },
+  "goldens": {
+    "semantic_a": "tests/fixtures/s1/safe-inventory-v1/expected-semantic-a.json",
+    "semantic_a_jcs": "tests/fixtures/s1/safe-inventory-v1/expected-semantic-a.jcs",
+    "snapshot_a": "tests/fixtures/s1/safe-inventory-v1/expected-snapshot-a.json",
+    "snapshot_a_jcs": "tests/fixtures/s1/safe-inventory-v1/expected-snapshot-a.jcs",
+    "symlink_error": "tests/fixtures/s1/safe-inventory-v1/expected-error-symlink.json",
+    "file_limit_error": "tests/fixtures/s1/safe-inventory-v1/expected-error-file-limit.json"
+  },
+  "contract_constants": {
+    "repository_identity_pattern": "^urn:codenoesis:[a-z0-9][a-z0-9._:-]{0,254}$",
+    "revision_pattern": "^(?:[0-9a-f]{40}|refs/heads/main)$",
+    "snapshot_schema_version": "codenoesis.repository-snapshot/v2",
+    "snapshot_hash_algorithm": "blake3-256",
+    "snapshot_hash_domain": "codenoesis.repository-snapshot.semantic.v2",
+    "configuration_schema_version": "codenoesis.configuration/v1",
+    "configuration_profile": "standard-local-s1",
+    "configuration_hash_domain": "codenoesis.configuration.semantic.v1",
+    "inventory_schema_version": "codenoesis.inventory/v1",
+    "classifier_version": "codenoesis.inventory-classifier/s1-v1",
+    "source_evidence_schema_version": "codenoesis.source-evidence/v1",
+    "canonicalization": "RFC8785",
+    "error_schema_version": "codenoesis.error/v2"
+  },
+  "public_command": [
+    "noesis",
+    "scan",
+    "--repository",
+    "{repository_path}",
+    "--repository-id",
+    "urn:codenoesis:fixture:s1-safe-inventory-v1",
+    "--revision",
+    "{revision}",
+    "--profile",
+    "standard-local-s1",
+    "--format",
+    "json"
+  ],
+  "stream_contract": {
+    "success": {
+      "exit_code": 0,
+      "stdout": "one RepositorySnapshotV2 JSON document followed by one LF",
+      "stderr": "empty"
+    },
+    "invalid_s1_invocation": {
+      "exit_code": 2,
+      "stdout": "empty",
+      "stderr": "one CodeNoesisErrorV2 JSON document followed by one LF"
+    },
+    "acquisition_failure": {
+      "exit_code": 10,
+      "stdout": "empty",
+      "stderr": "one CodeNoesisErrorV2 JSON document followed by one LF"
+    },
+    "unexpected_internal_failure": {
+      "exit_code": 70,
+      "stdout": "empty",
+      "stderr": "one CodeNoesisErrorV2 JSON document followed by one LF"
+    }
+  },
+  "compatibility_contract": {
+    "s0_invocation": "The ratified S0 command without --profile keeps RepositorySnapshotV1 and CodeNoesisErrorV1 behavior.",
+    "s1_invocation": "Only the explicit --profile standard-local-s1 command selects RepositorySnapshotV2 and CodeNoesisErrorV2.",
+    "forbidden_dispatch": [
+      "repository shape",
+      "file count",
+      "file extension",
+      "environment variable",
+      "implicit configuration"
+    ]
+  },
+  "repository_policy": {
+    "allowed_read_root": "the canonical directory named by --repository, including its direct .git directory",
+    "git_directory": "a real direct child directory <root>/.git; gitfiles, symlinked Git directories, and external Git directories are rejected",
+    "source_of_truth": "the verified committed tree of the once-bound immutable commit",
+    "worktree_policy": "dirty and untracked worktree files are ignored and never inventoried",
+    "object_storage": "verified loose SHA-1 objects only; packed objects remain explicitly deferred",
+    "regular_modes": ["100644", "100755"],
+    "directory_mode": "040000",
+    "symlink_mode": "120000 rejected without reading or following its target",
+    "gitlink_mode": "160000 rejected without opening a nested repository",
+    "other_modes": "rejected as special_file_mode",
+    "lfs": "pointer blobs are rejected; no materialization is attempted",
+    "path_encoding": "valid UTF-8 bytes preserved exactly without Unicode normalization",
+    "invalid_components": [
+      "empty",
+      ".",
+      "..",
+      "contains backslash",
+      "contains U+0000 through U+001F",
+      "contains U+007F"
+    ],
+    "path_order": "ascending unsigned UTF-8 byte order of complete canonical relative paths",
+    "failure_precedence": [
+      "repository root policy",
+      "immutable object integrity",
+      "path validity",
+      "path and recursion limits",
+      "entry-mode policy",
+      "file-count and byte limits",
+      "classification",
+      "canonical-output limit"
+    ],
+    "publication": "all-or-nothing; every failure emits no partial snapshot"
+  },
+  "classifier_contract": {
+    "execution": "deterministic in-process byte and path inspection only",
+    "case_sensitivity": "all path rules are ASCII case-sensitive",
+    "rules": [
+      {
+        "id": "language:rust",
+        "match": "basename build.rs or suffix .rs",
+        "result": "language rust and role source"
+      },
+      {
+        "id": "language:shell",
+        "match": "suffix .sh",
+        "result": "language shell and role source"
+      },
+      {
+        "id": "manifest:cargo",
+        "match": "basename Cargo.toml",
+        "result": "manifest cargo"
+      },
+      {
+        "id": "contract:openapi",
+        "match": "basename openapi.yaml or openapi.yml and blob starts with UTF-8 bytes openapi:",
+        "result": "contract openapi"
+      },
+      {
+        "id": "configuration:rustfmt",
+        "match": "basename rustfmt.toml",
+        "result": "configuration rustfmt"
+      },
+      {
+        "id": "ownership:github-codeowners",
+        "match": "exact path .github/CODEOWNERS",
+        "result": "ownership github-codeowners"
+      },
+      {
+        "id": "documentation:readme",
+        "match": "basename README.md",
+        "result": "role documentation"
+      },
+      {
+        "id": "sentinel:build-script",
+        "match": "exact path build.rs",
+        "result": "role sentinel and diagnostic inventory.target_execution_suppressed"
+      },
+      {
+        "id": "sentinel:executable-script",
+        "match": "mode 100755 and suffix .sh",
+        "result": "role sentinel and diagnostic inventory.target_execution_suppressed"
+      },
+      {
+        "id": "unsupported:fallback",
+        "match": "no preceding manifest, contract, configuration, ownership, documentation, or language rule",
+        "result": "role unsupported, unsupported_extension, and warning inventory.unsupported_content"
+      }
+    ],
+    "content_kind": "text_utf8 only when the complete blob is valid UTF-8 and the path is not classified by the unsupported fallback; otherwise binary_or_unknown",
+    "no_parsing": [
+      "source syntax",
+      "manifest semantics",
+      "contract semantics",
+      "configuration semantics",
+      "ownership semantics",
+      "archive contents"
+    ],
+    "evidence_span": "the half-open byte range [0, blob_length) of the exact committed blob",
+    "ordering": "all arrays are sorted by their declared stable key; duplicate paths, evidence IDs, findings, diagnostics, and gaps are forbidden"
+  },
+  "limit_profile": {
+    "profile": "standard-local-s1",
+    "enforced_input_limits": {
+      "regular_files": 20000,
+      "tree_entries": 25000,
+      "cumulative_file_bytes": 268435456,
+      "single_file_bytes": 4194304,
+      "path_bytes": 1024,
+      "path_component_bytes": 255,
+      "recursion_depth": 32,
+      "canonical_output_bytes": 33554432,
+      "scan_wall_milliseconds": 60000
+    },
+    "evidence_budgets": {
+      "single_scan_cpu_milliseconds": 30000,
+      "peak_resident_memory_bytes": 536870912,
+      "temporary_disk_bytes": 67108864,
+      "acceptance_suite_seconds": 180,
+      "determinism_replays": 50,
+      "parallel_shuffled_repetitions": 10,
+      "minimum_evidence_retention_days": 90,
+      "autonomous_correction_rounds": 2
+    },
+    "counting": {
+      "regular_files": "each reachable 100644 or 100755 tree entry per canonical path, including duplicate blob references",
+      "tree_entries": "every reachable directory, regular, symlink, gitlink, or special entry per canonical path; the implicit root is excluded",
+      "cumulative_file_bytes": "sum of declared uncompressed blob lengths for regular-file paths, including duplicate blob references",
+      "recursion_depth": "number of path components, where a root-level entry has depth 1",
+      "observed_value": "the first value greater than maximum, capped at maximum plus one in public error context",
+      "time": "monotonic elapsed time from completion of invocation validation until the complete stdout document is ready"
+    },
+    "boundary_contract": "Every enforced input limit has a max-success and max-plus-one typed-failure case; evidence budgets fail the gate and are never converted into fabricated subject errors."
+  },
+  "security_contract": {
+    "inherits_s0_observer": "tests/specifications/s0/seccomp-capability-deny-v1.json",
+    "subject_boundary": "from noesis process start until exit",
+    "target_execution": "zero child process and zero target-controlled code execution",
+    "network": "zero direct or brokered network channel",
+    "filesystem": {
+      "allowed": "read-only access at or below the canonical repository root plus inherited standard descriptors",
+      "forbidden": "every path access outside the canonical repository root",
+      "linux_enforcement": "a read-only Landlock or equivalently strong path-capability boundary allowlists only the canonical repository root after initial image load",
+      "linux_observation": "PID-scoped open/openat/openat2, stat-family, access-family, readlink-family, and getdents events are resolved from directory descriptors and audited",
+      "self_test": "direct, openat-relative, parent traversal, symlink, proc-fd, and alternate-object escape probes are denied before product evidence",
+      "failure_rule": "an attempted denied access, an unresolved path event, a missing self-test, or an observed path outside the root fails evidence even when enforcement blocks the access"
+    },
+    "sentinels": [
+      "build.rs cannot be compiled or launched",
+      "tools/sentinel.sh cannot be launched or sourced",
+      "Git hooks, filters, attributes, remotes, alternates, and submodules cannot grant capabilities",
+      "the outside-root canary remains unread and unchanged"
+    ]
+  },
+  "expected_red": {
+    "test_command": "cargo test --test e2e_fr_inv_001_safe_inventory",
+    "precondition": "The future TDD branch contains the black-box S1 harness and the reviewed fixture, while production remains at the merged S0 behavior.",
+    "runner_expected_exit": "nonzero because the acceptance assertion fails",
+    "subject_observed_exit_code": 2,
+    "subject_observed_stderr_schema": "codenoesis.error/v1",
+    "subject_observed_stderr_code": "input.invalid_revision",
+    "subject_expected_exit_code": 0,
+    "expected_artifact": "codenoesis.repository-snapshot/v2",
+    "accepted_reason": "The S0 CLI does not recognize --profile standard-local-s1, so the approved S1 public behavior is absent.",
+    "rejected_reasons": [
+      "compilation failure",
+      "missing test target",
+      "missing or corrupt fixture",
+      "network or dependency outage",
+      "timing race",
+      "unexpected panic",
+      "a modified S1 oracle"
+    ]
+  },
+  "error_codes": {
+    "input.invalid_repository_identity": 2,
+    "input.invalid_revision": 2,
+    "input.invalid_profile": 2,
+    "acquisition.not_git_repository": 10,
+    "acquisition.revision_not_found": 10,
+    "acquisition.revision_not_commit": 10,
+    "acquisition.object_missing": 10,
+    "acquisition.repository_inconsistent": 10,
+    "acquisition.unsupported_repository_shape": 10,
+    "acquisition.path_invalid": 10,
+    "acquisition.root_policy_violation": 10,
+    "acquisition.entry_policy_violation": 10,
+    "acquisition.limit_exceeded": 10,
+    "internal.unexpected": 70
+  },
+  "scenarios": [
+    {
+      "id": "reviewed_repository_exact_inventory",
+      "test_name": "e2e_fr_inv_001_safe_inventory",
+      "requirements": ["DR-EVD-001", "FR-INV-001"],
+      "verification": ["E2E", "GT"],
+      "arrange": "Materialize fixture revision A as verified loose SHA-1 objects in a fresh worktree.",
+      "act": "Run the exact public S1 command with the full commit OID.",
+      "assert": [
+        "Exit is 0, stderr is empty, and stdout is the reviewed RepositorySnapshotV2 plus one LF.",
+        "All nine regular files, five directories, classifications, capabilities, diagnostics, and coverage gaps equal the reviewed golden.",
+        "Every inventory claim resolves through one SourceEvidenceV1 to the exact committed blob and whole-blob byte span.",
+        "No absolute path, worktree dirt, hostname, user name, or volatile value appears under semantic."
+      ]
+    },
+    {
+      "id": "traversal_component_is_rejected",
+      "test_name": "e2e_fr_acq_002_traversal_rejected",
+      "requirements": ["FR-ACQ-002", "NFR-SEC-001"],
+      "verification": ["E2E", "SEC"],
+      "arrange": "Materialize the manifest's raw tree containing a .. component and an outside-root canary.",
+      "act": "Run the public S1 command.",
+      "assert": [
+        "Exit is 10 with acquisition.path_invalid and reason dot_component.",
+        "No outside-root path is opened, read, changed, or emitted.",
+        "Stdout is empty and no partial snapshot is published."
+      ]
+    },
+    {
+      "id": "symlink_is_rejected_without_following",
+      "test_name": "e2e_fr_acq_002_symlink_rejected",
+      "requirements": ["FR-ACQ-002", "NFR-SEC-001"],
+      "verification": ["E2E", "SEC"],
+      "arrange": "Materialize the manifest's 120000 escape symlink and outside-root canary.",
+      "act": "Run the public S1 command.",
+      "assert": [
+        "Exit is 10 with acquisition.entry_policy_violation, entry symlink, and canonical path escape.",
+        "The symlink target blob is not interpreted as a filesystem path and is never followed.",
+        "Stdout is empty and the outside-root canary remains unread and unchanged."
+      ]
+    },
+    {
+      "id": "gitlink_is_rejected_without_nested_access",
+      "test_name": "e2e_fr_acq_002_gitlink_rejected",
+      "requirements": ["FR-ACQ-002", "NFR-SEC-001"],
+      "verification": ["E2E", "SEC"],
+      "arrange": "Materialize the manifest's 160000 gitlink entry.",
+      "act": "Run the public S1 command.",
+      "assert": [
+        "Exit is 10 with acquisition.entry_policy_violation, entry gitlink, and its canonical path.",
+        "No nested repository, .gitmodules content, remote, or target process is accessed.",
+        "Stdout is empty and no partial snapshot is published."
+      ]
+    },
+    {
+      "id": "every_input_limit_has_boundaries",
+      "test_name": "pt_fr_acq_002_limits_have_max_and_plus_one",
+      "requirements": ["FR-ACQ-002"],
+      "verification": ["PT", "CT"],
+      "arrange": "Generate bounded repository-port cases for each enforced input limit without allocating beyond the case's first failing value.",
+      "act": "Evaluate maximum and maximum-plus-one for every named limit in randomized order.",
+      "assert": [
+        "Every maximum case succeeds when no other limit is exceeded.",
+        "Every plus-one case returns acquisition.limit_exceeded with the exact limit, maximum, and capped observed value.",
+        "No case reads content after its first provable failure or emits a partial artifact."
+      ]
+    },
+    {
+      "id": "source_evidence_resolves",
+      "test_name": "conf_dr_evd_001_source_evidence_resolves",
+      "requirements": ["DR-EVD-001"],
+      "verification": ["CONF", "GT"],
+      "arrange": "Load the reviewed snapshot, fixture manifest, and exact source bytes.",
+      "act": "Resolve every evidence ID and mutate repository, commit, blob, path, span, extractor, and derivation fields one at a time.",
+      "assert": [
+        "The reviewed evidence set resolves uniquely to all nine committed files.",
+        "Every mutation is rejected before publication.",
+        "Each span is half-open, starts at zero, ends at exact blob length, and remains within the blob."
+      ]
+    },
+    {
+      "id": "inventory_and_gaps_match_golden",
+      "test_name": "gt_fr_inv_001_exact_inventory_and_coverage_gaps",
+      "requirements": ["FR-INV-001"],
+      "verification": ["GT"],
+      "arrange": "Use the reviewed fixture and classifier contract.",
+      "act": "Compare the semantic inventory with the hand-reviewed golden.",
+      "assert": [
+        "Languages, manifests, contracts, configuration, ownership, capabilities, unsupported content, diagnostics, and coverage gaps match exactly.",
+        "Recognized does not mean parsed or extracted.",
+        "Unsupported content and unavailable extraction remain explicit rather than omitted."
+      ]
+    },
+    {
+      "id": "inventory_order_is_semantically_invariant",
+      "test_name": "pt_fr_inv_001_inventory_is_order_invariant",
+      "requirements": ["DR-EVD-001", "FR-INV-001"],
+      "verification": ["PT"],
+      "arrange": "Supply the same verified entries through at least 50 path, tree, completion, and map-insertion permutations.",
+      "act": "Build, canonicalize, and hash the inventory for every permutation.",
+      "assert": [
+        "Every semantic byte sequence and semantic hash equals the reviewed golden.",
+        "Evidence IDs and references remain identical.",
+        "The property report records seed and schedule."
+      ]
+    },
+    {
+      "id": "filesystem_boundary_is_enforced_and_observed",
+      "test_name": "sec_nfr_sec_001_scan_stays_inside_repository_root",
+      "requirements": ["FR-ACQ-002", "NFR-SEC-001"],
+      "verification": ["SEC", "E2E"],
+      "arrange": "Run the Linux observer self-tests, then scan every malicious fixture with a read-only repository-root allowlist and an outside canary.",
+      "act": "Audit all subject filesystem path operations from process start to exit.",
+      "assert": [
+        "Every self-test escape is denied and observed.",
+        "Every product path resolves at or below the canonical repository root.",
+        "No denied, unresolved, outside-root, write, or executable access occurs."
+      ]
+    },
+    {
+      "id": "sentinel_scripts_never_execute",
+      "test_name": "sec_nfr_sec_001_sentinel_scripts_never_execute",
+      "requirements": ["NFR-SEC-001"],
+      "verification": ["SEC", "E2E"],
+      "arrange": "Set the sentinel path, materialize revision A, and enable the inherited S0 process and network observer.",
+      "act": "Run the successful public S1 scan.",
+      "assert": [
+        "build.rs and tools/sentinel.sh are inventoried with suppression diagnostics.",
+        "The sentinel is absent and zero child-process, exec, and network events are observed.",
+        "No hook, filter, helper, remote, or source-controlled executable runs."
+      ]
+    },
+    {
+      "id": "bombs_and_parser_stress_are_bounded",
+      "test_name": "sec_nfr_sec_001_bombs_and_parser_inputs_are_bounded",
+      "requirements": ["FR-ACQ-002", "FR-INV-001", "NFR-SEC-001"],
+      "verification": ["SEC", "FZ"],
+      "arrange": "Generate declared-size, compression-ratio, archive, long-path, duplicate-subtree, malformed UTF-8, and classifier-signature stress cases from the manifest recipes.",
+      "act": "Scan each case under wall, CPU, RSS, output, and temporary-disk measurement.",
+      "assert": [
+        "Git object decompression stops at the lower applicable framing, path, entry, or byte limit.",
+        "Archives and source formats are never expanded or parsed in S1.",
+        "Every case succeeds with explicit unsupported coverage or fails with the expected typed code within all evidence budgets."
+      ]
+    },
+    {
+      "id": "snapshot_and_error_contracts_are_strict",
+      "test_name": "conf_fr_inv_001_repository_snapshot_v2_and_error_v2",
+      "requirements": ["DR-EVD-001", "FR-ACQ-002", "FR-INV-001"],
+      "verification": ["CONF"],
+      "arrange": "Start from each reviewed success and error golden and generate one missing, unknown, duplicate, reordered, dangling-reference, and out-of-range mutation.",
+      "act": "Validate schemas plus cross-document invariants.",
+      "assert": [
+        "Reviewed documents pass and every invalid mutation fails.",
+        "Unknown properties and error-context fields are rejected.",
+        "All arrays, rules, evidence references, counts, spans, and hashes satisfy the machine contract."
+      ]
+    }
+  ],
+  "evidence_contract": {
+    "red": "Retain the first expected failing runner log before production changes, with base and pre-implementation commit SHAs, runner and subject exits, stderr schema/code, command, environment, SHA-256, and immutable artifact locator.",
+    "green": "Retain one ordered passing result for every S1 scenario plus every inherited S0 regression, with command, exit status, report digest, and immutable artifact locator.",
+    "security": "Retain observer self-test, process/network trace, filesystem trace, root identity, denied-attempt count, unresolved-event count, sentinel result, and resource report.",
+    "environment": [
+      "OS and architecture",
+      "pinned Rust toolchain",
+      "enabled features",
+      "filesystem and Landlock capability",
+      "network namespace and seccomp profile digest",
+      "inherited descriptor audit",
+      "agent and model identity",
+      "policy version",
+      "run identifier",
+      "duration and cost"
+    ],
+    "retention": "Every required log and report remains retrievable and digest-valid for at least 90 days.",
+    "verification_rule": "Local evidence may support review but cannot set Verified without immutable retained CI artifacts for the exact head."
+  },
+  "deferred": [
+    "remote repositories and credentials",
+    "packed Git objects",
+    "SHA-256 Git object format",
+    "Git LFS materialization",
+    "shallow and bare repositories",
+    "alternates, replace objects, and grafts",
+    "linked worktrees and external Git directories",
+    "symlink and submodule traversal",
+    "archive expansion",
+    "manifest, contract, configuration, ownership, or source parsing",
+    "ontology entities and relations",
+    "user-configurable limits",
+    "non-Linux certification of the filesystem observer"
+  ],
+  "stop_conditions": [
+    "The protected contract differs from the approved bundle.",
+    "The first Red is absent or fails for a reason other than the missing S1 profile behavior.",
+    "Any implementation path requires following a symlink, opening a gitlink, executing target code, accessing network, or reading outside the repository root.",
+    "A boundary cannot produce the declared deterministic typed outcome.",
+    "Security observation is unavailable, unresolved, or can pass only by weakening an oracle.",
+    "S0 regressions fail or public S0 dispatch changes.",
+    "Packed-object support becomes necessary without a new human decision.",
+    "The task exceeds its allowed paths, risk, resource budget, or two bounded correction attempts."
+  ]
+}

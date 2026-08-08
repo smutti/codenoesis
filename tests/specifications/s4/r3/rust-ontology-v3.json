@@ -1,0 +1,114 @@
+{
+  "schema_version": "codenoesis.ontology-contract/v1",
+  "ontology_version": "codenoesis.ontology/rust/v3",
+  "extends": {
+    "ontology_version": "codenoesis.ontology/rust/v2",
+    "contract_path": "tests/specifications/s4/rust-ontology-v2.json",
+    "contract_sha256": "10d5a5ba797c1226f5b46377cfed9f61bbd1723a75944c0e87caa4b5877a9342"
+  },
+  "identity": {
+    "compatibility": "v2_domains_and_preimages_for_unchanged_facts",
+    "entity_domain": "codenoesis.entity-id/rust/v2",
+    "relationship_domain": "codenoesis.relationship-id/rust/v2",
+    "claim_domain": "codenoesis.claim-id/v2",
+    "evidence_domain": "codenoesis.evidence-id/v2",
+    "coverage_gap_domain": "codenoesis.coverage-gap-id/v2",
+    "crate_preimage": [
+      "repository_identity",
+      "crate",
+      "manifest_relative_path",
+      "package_name",
+      "target_kind",
+      "target_name"
+    ],
+    "workspace_member_source_is_identity_input": false,
+    "workspace_root_shape_is_identity_input": false
+  },
+  "workspace": {
+    "root_shapes": [
+      "standalone_root_package",
+      "virtual_workspace",
+      "non_virtual_workspace"
+    ],
+    "member_sources": [
+      "literal_member",
+      "implicit_root_package",
+      "explicit_root_member"
+    ],
+    "root_manifest_path": "Cargo.toml",
+    "explicit_dot_and_implicit_root_share_crate_ids": true,
+    "supported_targets": [
+      "lib",
+      "bin"
+    ],
+    "gitlink_member_semantics": "external_boundary_not_root_crate"
+  },
+  "entity_kinds": [
+    "rust.crate",
+    "source.file",
+    "rust.module",
+    "rust.struct",
+    "rust.enum",
+    "rust.trait",
+    "rust.type_alias",
+    "rust.function",
+    "rust.method",
+    "rust.symbol_reference"
+  ],
+  "relationship_kinds": [
+    "CONTAINS",
+    "DEFINES",
+    "IMPORTS",
+    "IMPLEMENTS"
+  ],
+  "crate_required_properties": [
+    "manifest_path",
+    "package_name",
+    "target_kind",
+    "target_name",
+    "workspace_member_source",
+    "workspace_root_shape"
+  ],
+  "coverage_capabilities": [
+    "cargo.build_script_not_executed",
+    "cargo.dependencies_deferred",
+    "cargo.features_deferred",
+    "cargo.package_metadata_deferred",
+    "cargo.patch_deferred",
+    "cargo.proc_macro_not_executed",
+    "cargo.required_features_deferred",
+    "cargo.target_world_deferred",
+    "cargo.workspace_inheritance_deferred",
+    "workspace.external_gitlink_member_not_analyzed"
+  ],
+  "cardinality": {
+    "member_crates": "every non-external member has at least one crate target",
+    "external_member": "every external member has zero crate targets and exactly one boundary reference",
+    "root_member": "standalone and non-virtual roots have exactly one canonical dot member",
+    "crate_source_file": "every source.file has exactly one incoming CONTAINS from rust.crate",
+    "target_root_module": "every rust.crate has exactly one root rust.module",
+    "claim_subject": "every entity and relationship has exactly one claim",
+    "evidence_resolution": "every relationship and material parser claim has resolving evidence"
+  },
+  "limits": {
+    "workspace_members": 200,
+    "projected_workspace_members": 201,
+    "workspace_exclusions": 200,
+    "package_manifests": 200,
+    "crate_targets": 200,
+    "binary_roots_per_package": 64,
+    "single_manifest_bytes": 4194304
+  },
+  "forbidden_authority": [
+    "cargo_execution",
+    "rustc_execution",
+    "build_script_execution",
+    "procedural_macro_execution",
+    "target_execution",
+    "dependency_fetch",
+    "network_access",
+    "implicit_nested_repository_analysis",
+    "glob_expansion",
+    "environment_expansion"
+  ]
+}

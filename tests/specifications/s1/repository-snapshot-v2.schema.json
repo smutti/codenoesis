@@ -1,0 +1,577 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:repository-snapshot:v2",
+  "title": "RepositorySnapshotV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "semantic_hash", "semantic", "envelope"],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.repository-snapshot/v2"
+    },
+    "semantic_hash": {
+      "$ref": "#/$defs/blake3_hash"
+    },
+    "semantic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "configuration",
+        "pipeline_version",
+        "ontology_version",
+        "extractor_contract_version",
+        "extractor_versions",
+        "evidence_lineage_version",
+        "inventory"
+      ],
+      "properties": {
+        "repository": {
+          "$ref": "#/$defs/repository"
+        },
+        "configuration": {
+          "$ref": "#/$defs/configuration"
+        },
+        "pipeline_version": {
+          "const": "codenoesis.pipeline/s1-v1"
+        },
+        "ontology_version": {
+          "const": "codenoesis.ontology/none-v1"
+        },
+        "extractor_contract_version": {
+          "const": "codenoesis.extraction/v1"
+        },
+        "extractor_versions": {
+          "const": ["codenoesis.inventory-classifier/s1-v1"]
+        },
+        "evidence_lineage_version": {
+          "const": "codenoesis.evidence-lineage/v1"
+        },
+        "inventory": {
+          "$ref": "#/$defs/inventory"
+        }
+      }
+    },
+    "envelope": {
+      "$ref": "#/$defs/envelope"
+    }
+  },
+  "$defs": {
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_version",
+        "identity_schema_version",
+        "identity",
+        "vcs",
+        "object_format",
+        "commit_oid",
+        "tree_oid"
+      ],
+      "properties": {
+        "contract_version": {
+          "const": "codenoesis.repository/v1"
+        },
+        "identity_schema_version": {
+          "const": "codenoesis.repository-identity/v1"
+        },
+        "identity": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:[a-z0-9][a-z0-9._:-]{0,254}$"
+        },
+        "vcs": {
+          "const": "git"
+        },
+        "object_format": {
+          "const": "sha1"
+        },
+        "commit_oid": {
+          "$ref": "#/$defs/git_sha1"
+        },
+        "tree_oid": {
+          "$ref": "#/$defs/git_sha1"
+        }
+      }
+    },
+    "configuration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "profile", "semantic_hash"],
+      "properties": {
+        "schema_version": {
+          "const": "codenoesis.configuration/v1"
+        },
+        "profile": {
+          "const": "standard-local-s1"
+        },
+        "semantic_hash": {
+          "$ref": "#/$defs/blake3_hash"
+        }
+      }
+    },
+    "inventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "classifier_version",
+        "summary",
+        "files",
+        "languages",
+        "manifests",
+        "contracts",
+        "configurations",
+        "ownership",
+        "extraction_capabilities",
+        "unsupported_content",
+        "diagnostics",
+        "coverage_gaps",
+        "evidence"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "codenoesis.inventory/v1"
+        },
+        "classifier_version": {
+          "const": "codenoesis.inventory-classifier/s1-v1"
+        },
+        "summary": {
+          "$ref": "#/$defs/inventory_summary"
+        },
+        "files": {
+          "type": "array",
+          "maxItems": 20000,
+          "items": {
+            "$ref": "#/$defs/file"
+          }
+        },
+        "languages": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "$ref": "#/$defs/language"
+          }
+        },
+        "manifests": {
+          "type": "array",
+          "maxItems": 20000,
+          "items": {
+            "$ref": "#/$defs/classified_file"
+          }
+        },
+        "contracts": {
+          "type": "array",
+          "maxItems": 20000,
+          "items": {
+            "$ref": "#/$defs/classified_file"
+          }
+        },
+        "configurations": {
+          "type": "array",
+          "maxItems": 20000,
+          "items": {
+            "$ref": "#/$defs/classified_file"
+          }
+        },
+        "ownership": {
+          "type": "array",
+          "maxItems": 20000,
+          "items": {
+            "$ref": "#/$defs/classified_file"
+          }
+        },
+        "extraction_capabilities": {
+          "type": "array",
+          "maxItems": 256,
+          "items": {
+            "$ref": "#/$defs/extraction_capability"
+          }
+        },
+        "unsupported_content": {
+          "type": "array",
+          "maxItems": 20000,
+          "items": {
+            "$ref": "#/$defs/unsupported_content"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "maxItems": 20000,
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          }
+        },
+        "coverage_gaps": {
+          "type": "array",
+          "maxItems": 20000,
+          "items": {
+            "$ref": "#/$defs/coverage_gap"
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "maxItems": 20000,
+          "items": {
+            "$ref": "urn:codenoesis:schema:source-evidence:v1"
+          }
+        }
+      }
+    },
+    "inventory_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "directory_count",
+        "regular_file_count",
+        "total_file_bytes",
+        "supported_file_count",
+        "unsupported_file_count",
+        "language_count",
+        "manifest_count",
+        "contract_count",
+        "configuration_count",
+        "ownership_count",
+        "diagnostic_count",
+        "coverage_gap_count"
+      ],
+      "properties": {
+        "directory_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 25000
+        },
+        "regular_file_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20000
+        },
+        "total_file_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 268435456
+        },
+        "supported_file_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20000
+        },
+        "unsupported_file_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20000
+        },
+        "language_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 64
+        },
+        "manifest_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20000
+        },
+        "contract_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20000
+        },
+        "configuration_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20000
+        },
+        "ownership_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20000
+        },
+        "diagnostic_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20000
+        },
+        "coverage_gap_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20000
+        }
+      }
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "mode",
+        "blob_oid",
+        "byte_length",
+        "content_kind",
+        "roles",
+        "languages",
+        "evidence_id"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/canonical_relative_path"
+        },
+        "mode": {
+          "enum": ["100644", "100755"]
+        },
+        "blob_oid": {
+          "$ref": "#/$defs/git_sha1"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4194304
+        },
+        "content_kind": {
+          "enum": ["text_utf8", "binary_or_unknown"]
+        },
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "configuration",
+              "contract",
+              "documentation",
+              "manifest",
+              "ownership",
+              "sentinel",
+              "source",
+              "unsupported"
+            ]
+          }
+        },
+        "languages": {
+          "type": "array",
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["rust", "shell"]
+          }
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "language": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "display_name",
+        "paths",
+        "evidence_ids",
+        "detection_status",
+        "extraction_status"
+      ],
+      "properties": {
+        "id": {
+          "enum": ["rust", "shell"]
+        },
+        "display_name": {
+          "enum": ["Rust", "Shell"]
+        },
+        "paths": {
+          "$ref": "#/$defs/path_list"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/evidence_id_list"
+        },
+        "detection_status": {
+          "const": "supported"
+        },
+        "extraction_status": {
+          "const": "not_available"
+        }
+      }
+    },
+    "classified_file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "path", "status", "evidence_id"],
+      "properties": {
+        "kind": {
+          "enum": ["cargo", "github-codeowners", "openapi", "rustfmt"]
+        },
+        "path": {
+          "$ref": "#/$defs/canonical_relative_path"
+        },
+        "status": {
+          "const": "recognized_not_interpreted"
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "extraction_capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["capability", "subject", "status"],
+      "properties": {
+        "capability": {
+          "enum": [
+            "configuration_interpretation",
+            "contract_extraction",
+            "file_classification",
+            "manifest_interpretation",
+            "ownership_resolution",
+            "symbol_extraction"
+          ]
+        },
+        "subject": {
+          "type": "string",
+          "pattern": "^(?:repository|configuration:rustfmt|contract:openapi|language:(?:rust|shell)|manifest:cargo|ownership:github-codeowners)$"
+        },
+        "status": {
+          "enum": ["available", "not_available"]
+        }
+      }
+    },
+    "unsupported_content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "reason", "evidence_id"],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/canonical_relative_path"
+        },
+        "reason": {
+          "const": "unsupported_extension"
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "severity", "path", "evidence_id"],
+      "properties": {
+        "code": {
+          "enum": [
+            "inventory.target_execution_suppressed",
+            "inventory.unsupported_content"
+          ]
+        },
+        "severity": {
+          "enum": ["info", "warning"]
+        },
+        "path": {
+          "$ref": "#/$defs/canonical_relative_path"
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "coverage_gap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "scope", "paths", "evidence_ids"],
+      "properties": {
+        "code": {
+          "enum": [
+            "coverage.configuration_not_interpreted",
+            "coverage.contract_not_extracted",
+            "coverage.entities_not_extracted",
+            "coverage.manifest_not_interpreted",
+            "coverage.ownership_not_resolved",
+            "coverage.unsupported_content"
+          ]
+        },
+        "scope": {
+          "type": "string",
+          "pattern": "^(?:configuration:rustfmt|contract:openapi|language:(?:rust|shell)|manifest:cargo|ownership:github-codeowners|repository)$"
+        },
+        "paths": {
+          "$ref": "#/$defs/path_list"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/evidence_id_list"
+        }
+      }
+    },
+    "path_list": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/canonical_relative_path"
+      }
+    },
+    "evidence_id_list": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/evidence_id"
+      }
+    },
+    "canonical_relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^[^/\\\\\\u0000-\\u001f\\u007f]+(?:/[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    },
+    "evidence_id": {
+      "type": "string",
+      "pattern": "^evidence-[0-9]{5}$"
+    },
+    "blake3_hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {
+          "const": "blake3-256"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "git_sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["created_at", "job_id", "correlation_id"],
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,9})?Z$"
+        },
+        "job_id": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            }
+          ]
+        },
+        "correlation_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        }
+      }
+    }
+  }
+}

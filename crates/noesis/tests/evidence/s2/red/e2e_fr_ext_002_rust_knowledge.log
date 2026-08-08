@@ -1,0 +1,25 @@
+   Compiling noesis v0.1.0 (/Users/smutti/Documents/personal/codenoesis/crates/noesis)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.17s
+     Running tests/e2e_fr_ext_002_rust_knowledge.rs (target/debug/deps/e2e_fr_ext_002_rust_knowledge-345fa266d877e467)
+
+running 1 test
+test e2e_fr_ext_002_rust_knowledge ... FAILED
+
+failures:
+
+---- e2e_fr_ext_002_rust_knowledge stdout ----
+
+thread 'e2e_fr_ext_002_rust_knowledge' (292713) panicked at crates/noesis/tests/e2e_fr_ext_002_rust_knowledge.rs:11:5:
+assertion `left == right` failed: subject stderr: {"code":"input.invalid_profile","context":{},"message":"invalid profile","retryable":false,"schema_version":"codenoesis.error/v2","stage":"input"}
+
+  left: Some(2)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    e2e_fr_ext_002_rust_knowledge
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_ext_002_rust_knowledge`

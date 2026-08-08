@@ -1,0 +1,839 @@
+{
+  "schema_version": "codenoesis.acceptance-oracle/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/78",
+  "approval_pull_request": "https://github.com/smutti/codenoesis/pull/81",
+  "governance_correction_issue": "https://github.com/smutti/codenoesis/issues/83",
+  "governance_correction_pull_request": "https://github.com/smutti/codenoesis/pull/84",
+  "implementation_issue": "https://github.com/smutti/codenoesis/issues/82",
+  "human_authorizations": [
+    "https://github.com/smutti/codenoesis/issues/78#issuecomment-5131609031",
+    "https://github.com/smutti/codenoesis/issues/78#issuecomment-5133952315",
+    "https://github.com/smutti/codenoesis/issues/78#issuecomment-5135312628"
+  ],
+  "governance_correction_authorization": {
+    "record": "https://github.com/smutti/codenoesis/issues/83",
+    "basis": "https://github.com/smutti/codenoesis/issues/82#issuecomment-5135813783",
+    "actor": "@smutti",
+    "date": "2026-07-30",
+    "statement": "Autorizzo la correzione governance S6 descritta nel commento #82"
+  },
+  "requirements": [
+    {
+      "id": "FR-EXT-004",
+      "current_state": "Approved",
+      "target_state": "Implemented"
+    },
+    {
+      "id": "FR-FED-001",
+      "current_state": "Approved",
+      "target_state": "Implemented"
+    },
+    {
+      "id": "FR-FED-002",
+      "current_state": "Approved",
+      "target_state": "Implemented"
+    },
+    {
+      "id": "FR-CLI-005",
+      "current_state": "Approved",
+      "target_state": "Implemented"
+    }
+  ],
+  "slice": "S6",
+  "risk": {
+    "level": "high",
+    "reason": "public CLI and artifact contracts, untrusted OpenAPI and YAML parsing, cross-project authority, stable identities, heuristic epistemic state, bounded output, and downstream S7 correctness"
+  },
+  "runtime_implementation_authorized": true,
+  "runtime_authorization_effective_after": "protected manual merge of pull request #84",
+  "correction_budget": 3,
+  "analysis_profile": "standard-local-s6",
+  "contract_capability": "codenoesis.contract-capability/openapi-3.1-http-json/v1",
+  "federation_rule_catalog": "codenoesis.federation-rules/http-json/v1",
+  "public_command": {
+    "argv": [
+      "noesis",
+      "federate",
+      "--workspace-manifest",
+      "<path>",
+      "--profile",
+      "standard-local-s6",
+      "--format",
+      "json"
+    ],
+    "configuration_sources": [
+      "explicit_cli_only"
+    ],
+    "success": {
+      "exit_status": 0,
+      "stdout": "one LF-terminated canonical FederationReportV1",
+      "stderr": "empty"
+    },
+    "invalid_invocation": {
+      "exit_status": 2,
+      "stdout": "empty",
+      "stderr": "one LF-terminated CodeNoesisErrorV8"
+    },
+    "contract_or_federation_failure": {
+      "exit_status": 10,
+      "stdout": "empty",
+      "stderr": "one LF-terminated CodeNoesisErrorV8"
+    },
+    "unexpected_internal_failure": {
+      "exit_status": 70,
+      "stdout": "empty",
+      "stderr": "one LF-terminated CodeNoesisErrorV8"
+    },
+    "persistent_store": "none",
+    "publication": "buffer, validate, size-check, and write stdout once"
+  },
+  "artifacts": {
+    "workspace_schema": "tests/specifications/s6/federation-workspace-v1.schema.json",
+    "client_declaration_schema": "tests/specifications/s6/federation-client-declaration-v1.schema.json",
+    "report_schema": "tests/specifications/s6/federation-report-v1.schema.json",
+    "error_schema": "tests/specifications/s6/codenoesis-error-v8.schema.json",
+    "rule_catalog": "tests/specifications/s6/openapi-federation-rule-catalog-v1.json",
+    "fixture_manifest": "tests/fixtures/s6/openapi-federation-v1/manifest.json",
+    "reviewed_report": "tests/fixtures/s6/openapi-federation-v1/expected-federation-report.json",
+    "provider_only_report": "tests/fixtures/s6/openapi-federation-v1/expected-provider-only-report.json",
+    "unsupported_semantics_report": "tests/fixtures/s6/openapi-federation-v1/expected-unsupported-semantics-report.json"
+  },
+  "supported_openapi_subset": {
+    "versions": [
+      "3.1.0"
+    ],
+    "document_formats": [
+      "json",
+      "yaml"
+    ],
+    "methods": [
+      "DELETE",
+      "GET",
+      "PATCH",
+      "POST",
+      "PUT"
+    ],
+    "required_authority": "one literal absolute HTTPS server URL without variables, userinfo, query, or fragment",
+    "required_operation_fields": [
+      "operationId",
+      "path_template",
+      "responses"
+    ],
+    "media_types": [
+      "application/json"
+    ],
+    "schema_types": [
+      "array",
+      "boolean",
+      "integer",
+      "number",
+      "object",
+      "string"
+    ],
+    "references": "local JSON Pointer under #/components/schemas only",
+    "unsupported_as_typed_gap": [
+      "callbacks",
+      "content_outside_application_json",
+      "links",
+      "security_semantics",
+      "server_variables",
+      "webhooks"
+    ],
+    "unsupported_as_failure": [
+      "ambiguous_service_authority",
+      "duplicate_key",
+      "external_reference",
+      "multiple_documents",
+      "reference_cycle",
+      "unsupported_openapi_version",
+      "yaml_alias",
+      "yaml_anchor",
+      "yaml_custom_tag",
+      "yaml_merge_key"
+    ]
+  },
+  "yaml_parser_candidate": {
+    "crate": "yaml-rust2",
+    "version": "0.11.0",
+    "requirement": "=0.11.0",
+    "default_features": false,
+    "checksum": "631a50d867fafb7093e709d75aaee9e0e0d5deb934021fcea25ac2fe09edc51e",
+    "license": "MIT OR Apache-2.0",
+    "rust_version": "1.65.0",
+    "direct_unsafe_in_src": 0,
+    "osv_vulnerabilities_observed_at_review": 0,
+    "review_date": "2026-07-30",
+    "authority": "issue #78 explicit replacement approval",
+    "implementation_evidence_still_required": [
+      "exact transitive dependency and unsafe inventory",
+      "license and advisory gate",
+      "marked-event rejection before normalized model construction",
+      "duplicate-key detection",
+      "depth and allocation charging",
+      "malformed and fuzz corpus",
+      "maximum and maximum-plus-one resource observations"
+    ]
+  },
+  "identity_domains": {
+    "service": "codenoesis.service-id/http/v1",
+    "operation": "codenoesis.operation-id/http/v1",
+    "schema": "codenoesis.schema-id/http-json/v1",
+    "field": "codenoesis.field-id/http-json/v1",
+    "client": "codenoesis.client-id/v1",
+    "call_site": "codenoesis.call-site-id/v1",
+    "federation_link": "codenoesis.federation-link-id/v1",
+    "federation_candidate": "codenoesis.federation-candidate-id/v1",
+    "federation_rejection": "codenoesis.federation-rejection-id/v1",
+    "evidence": "codenoesis.federation-evidence-id/v1",
+    "coverage_gap": "codenoesis.federation-gap-id/v1",
+    "semantic_hash": "codenoesis.federation-report.semantic.v1"
+  },
+  "provider_evidence_identity": {
+    "domain": "codenoesis.federation-evidence-id/v1",
+    "line_numbering": "one_based_inclusive",
+    "yaml_selector_kind": "openapi_location_span",
+    "yaml_preimage": [
+      "repository_identity",
+      "revision",
+      "normalized_path",
+      "normalized_openapi_location",
+      "source_format",
+      "start_line_decimal",
+      "end_line_decimal",
+      "file_sha256"
+    ],
+    "json_selector_kind": "json_pointer",
+    "json_preimage": [
+      "repository_identity",
+      "revision",
+      "normalized_path",
+      "canonical_json_pointer",
+      "file_sha256"
+    ]
+  },
+  "heuristic_matching": {
+    "comparison": "exact_unicode_scalar_sequence",
+    "service_hint_source": "openapi_info_title",
+    "operation_hint_source": "operationId",
+    "unique_match": "candidate",
+    "no_match": "coverage_gap:heuristic_no_match",
+    "multiple_matches": "coverage_gap:heuristic_ambiguous",
+    "automatic_confirmation": false
+  },
+  "coverage_gap_identity": {
+    "domain": "codenoesis.federation-gap-id/v1",
+    "heuristic_preimage": [
+      "subject_id",
+      "reason_code",
+      "primary_evidence_id"
+    ],
+    "contract_preimage": [
+      "subject_id",
+      "reason_code",
+      "normalized_openapi_location"
+    ]
+  },
+  "authoritative_subject_uniqueness": {
+    "subject_key": [
+      "client_id",
+      "call_site_id"
+    ],
+    "identical_repetition": "federation.invalid_declaration",
+    "distinct_binding": "federation.identity_conflict",
+    "mixed_explicit_and_heuristic": "federation.identity_conflict"
+  },
+  "coverage_gap_reasons": [
+    "heuristic_requires_confirmation",
+    "heuristic_no_match",
+    "heuristic_ambiguous",
+    "unsupported_callbacks",
+    "unsupported_webhooks",
+    "unsupported_links",
+    "unsupported_security_semantics",
+    "unsupported_server_variables",
+    "unsupported_media_type"
+  ],
+  "coverage_gap_rules": [
+    {
+      "reason_code": "heuristic_requires_confirmation",
+      "subject": "candidate_id",
+      "evidence": "client_binding"
+    },
+    {
+      "reason_code": "heuristic_no_match",
+      "subject": "call_site_id",
+      "evidence": "client_binding"
+    },
+    {
+      "reason_code": "heuristic_ambiguous",
+      "subject": "call_site_id",
+      "evidence": "client_binding"
+    },
+    {
+      "reason_code": "unsupported_callbacks",
+      "subject": "operation_id",
+      "evidence": "openapi_location"
+    },
+    {
+      "reason_code": "unsupported_webhooks",
+      "subject": "service_id",
+      "evidence": "openapi_location"
+    },
+    {
+      "reason_code": "unsupported_links",
+      "subject": "operation_id",
+      "evidence": "openapi_location"
+    },
+    {
+      "reason_code": "unsupported_security_semantics",
+      "subject": "nearest_service_or_operation_id",
+      "evidence": "openapi_location"
+    },
+    {
+      "reason_code": "unsupported_server_variables",
+      "subject": "service_id",
+      "evidence": "openapi_location"
+    },
+    {
+      "reason_code": "unsupported_media_type",
+      "subject": "operation_id",
+      "evidence": "openapi_location"
+    }
+  ],
+  "boundary_accounting": {
+    "counter_contract": "inclusive_charge_before_allocation_or_traversal",
+    "public_command_limits": [
+      "workspace_manifest_bytes",
+      "repositories",
+      "contract_bytes_per_document",
+      "yaml_nesting_depth",
+      "local_ref_depth",
+      "path_items",
+      "operations",
+      "schemas",
+      "fields_per_operation",
+      "report_bytes"
+    ],
+    "component_counter_limits": [
+      "contract_documents",
+      "clients",
+      "declarations",
+      "confirmed_links",
+      "candidates",
+      "rejections",
+      "evidence_items",
+      "coverage_gaps",
+      "memory_bytes",
+      "wall_milliseconds"
+    ]
+  },
+  "limits": {
+    "workspace_manifest_bytes": 8388608,
+    "repositories": 128,
+    "contract_documents": 256,
+    "contract_bytes_per_document": 2097152,
+    "yaml_nesting_depth": 32,
+    "local_ref_depth": 16,
+    "path_items": 10000,
+    "operations": 10000,
+    "schemas": 20000,
+    "fields_per_operation": 5000,
+    "clients": 10000,
+    "declarations": 100000,
+    "confirmed_links": 1000000,
+    "candidates": 200000,
+    "rejections": 200000,
+    "evidence_items": 1000000,
+    "coverage_gaps": 200000,
+    "report_bytes": 67108864,
+    "memory_bytes": 536870912,
+    "wall_milliseconds": 60000
+  },
+  "boundary_matrix": [
+    {
+      "limit": "workspace_manifest_bytes",
+      "maximum": 8388608,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 8388609,
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "repositories",
+      "maximum": 128,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 129,
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "contract_documents",
+      "maximum": 256,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 257,
+      "failure_code": "contract.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "contract_bytes_per_document",
+      "maximum": 2097152,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 2097153,
+      "failure_code": "contract.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "yaml_nesting_depth",
+      "maximum": 32,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 33,
+      "failure_code": "contract.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "local_ref_depth",
+      "maximum": 16,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 17,
+      "failure_code": "contract.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "path_items",
+      "maximum": 10000,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 10001,
+      "failure_code": "contract.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "operations",
+      "maximum": 10000,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 10001,
+      "failure_code": "contract.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "schemas",
+      "maximum": 20000,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 20001,
+      "failure_code": "contract.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "fields_per_operation",
+      "maximum": 5000,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 5001,
+      "failure_code": "contract.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "clients",
+      "maximum": 10000,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 10001,
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "declarations",
+      "maximum": 100000,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 100001,
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "confirmed_links",
+      "maximum": 1000000,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 1000001,
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "candidates",
+      "maximum": 200000,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 200001,
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "rejections",
+      "maximum": 200000,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 200001,
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "evidence_items",
+      "maximum": 1000000,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 1000001,
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "coverage_gaps",
+      "maximum": 200000,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 200001,
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "report_bytes",
+      "maximum": 67108864,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 67108865,
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "public_command",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "memory_bytes",
+      "maximum": 536870912,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 536870913,
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    },
+    {
+      "limit": "wall_milliseconds",
+      "maximum": 60000,
+      "maximum_outcome": "accepted when otherwise valid",
+      "maximum_plus_one": 60001,
+      "failure_code": "federation.limit_exceeded",
+      "observation_level": "component_counter",
+      "counter_contract": "inclusive_charge_before_allocation_or_traversal"
+    }
+  ],
+  "scenarios": [
+    {
+      "order": 1,
+      "id": "e2e_fr_fed_001_openapi_federation",
+      "kind": "success",
+      "input": "workspace.json with provider/openapi.yaml",
+      "expected": "exact reviewed FederationReportV1"
+    },
+    {
+      "order": 2,
+      "id": "gt_fr_ext_004_yaml_json_semantic_equivalence",
+      "kind": "golden",
+      "input": "provider/openapi.yaml and provider/openapi.json",
+      "expected": "identical normalized identities, links, states, and source-neutral semantic hash; truthful format-specific evidence"
+    },
+    {
+      "order": 3,
+      "id": "gt_fr_fed_001_explicit_clients_confirmed",
+      "kind": "golden",
+      "input": "safe and strict explicit declarations",
+      "expected": "exactly two confirmed links through fed.explicit-operation.confirm/v1"
+    },
+    {
+      "order": 4,
+      "id": "gt_fr_fed_001_operation_decoy_rejected",
+      "kind": "hard_negative",
+      "input": "decoy explicit account operation",
+      "expected": "one rejected record and no confirmed link"
+    },
+    {
+      "order": 5,
+      "id": "pt_fr_fed_002_heuristic_never_auto_confirms",
+      "kind": "epistemic",
+      "input": "candidate name hints",
+      "expected": "candidate plus unresolved coverage gap and no confirmed link"
+    },
+    {
+      "order": 6,
+      "id": "conf_fr_fed_002_conflicting_authority_fails_closed",
+      "kind": "failure",
+      "input": "variants/conflicting-client.json",
+      "expected_exit": 10,
+      "expected_error": "federation.identity_conflict"
+    },
+    {
+      "order": 7,
+      "id": "sec_fr_ext_004_duplicate_yaml_key_rejected",
+      "kind": "failure",
+      "input": "variants/duplicate-key.yaml",
+      "expected_exit": 10,
+      "expected_error": "contract.duplicate_key"
+    },
+    {
+      "order": 8,
+      "id": "sec_fr_ext_004_yaml_alias_rejected",
+      "kind": "failure",
+      "input": "variants/alias.yaml",
+      "expected_exit": 10,
+      "expected_error": "contract.unsupported_yaml_feature"
+    },
+    {
+      "order": 9,
+      "id": "sec_fr_ext_004_yaml_merge_key_rejected",
+      "kind": "failure",
+      "input": "variants/merge-key.yaml",
+      "expected_exit": 10,
+      "expected_error": "contract.unsupported_yaml_feature"
+    },
+    {
+      "order": 10,
+      "id": "sec_fr_ext_004_yaml_custom_tag_rejected",
+      "kind": "failure",
+      "input": "variants/custom-tag.yaml",
+      "expected_exit": 10,
+      "expected_error": "contract.unsupported_yaml_feature"
+    },
+    {
+      "order": 11,
+      "id": "sec_fr_ext_004_multiple_yaml_documents_rejected",
+      "kind": "failure",
+      "input": "variants/multiple-documents.yaml",
+      "expected_exit": 10,
+      "expected_error": "contract.unsupported_yaml_feature"
+    },
+    {
+      "order": 12,
+      "id": "sec_fr_ext_004_remote_ref_rejected",
+      "kind": "failure",
+      "input": "variants/remote-ref.yaml",
+      "expected_exit": 10,
+      "expected_error": "contract.remote_reference_forbidden"
+    },
+    {
+      "order": 13,
+      "id": "sec_fr_ext_004_local_ref_cycle_rejected",
+      "kind": "failure",
+      "input": "variants/ref-cycle.yaml",
+      "expected_exit": 10,
+      "expected_error": "contract.reference_cycle"
+    },
+    {
+      "order": 14,
+      "id": "fz_fr_ext_004_malformed_yaml_seed",
+      "kind": "failure",
+      "input": "variants/malformed.yaml",
+      "expected_exit": 10,
+      "expected_error": "contract.invalid_yaml"
+    },
+    {
+      "order": 15,
+      "id": "conf_fr_ext_004_openapi_version_is_exact",
+      "kind": "failure",
+      "input": "variants/unsupported-openapi.yaml",
+      "expected_exit": 10,
+      "expected_error": "contract.unsupported_openapi_version"
+    },
+    {
+      "order": 16,
+      "id": "pt_fr_fed_001_every_limit_has_max_and_plus_one",
+      "kind": "boundary",
+      "input": "generated exact maximum and maximum-plus-one cases",
+      "expected": "all boundary_matrix outcomes"
+    },
+    {
+      "order": 17,
+      "id": "pt_fr_fed_001_authority_and_input_order_are_invariant",
+      "kind": "property",
+      "input": "50 client, mapping, path, operation, field, and evidence permutations",
+      "expected": "byte-identical canonical report"
+    },
+    {
+      "order": 18,
+      "id": "pt_fr_fed_001_parallel_schedule_is_invariant",
+      "kind": "property",
+      "input": "10 shuffled parallel repetitions with recorded seeds",
+      "expected": "byte-identical canonical report"
+    },
+    {
+      "order": 19,
+      "id": "sec_fr_fed_001_standard_s6_has_no_ambient_authority",
+      "kind": "security",
+      "input": "sentinel plus process, network, write, symlink, and outside-root observers",
+      "expected": "zero target child, network, write, outside-root, and sentinel events"
+    },
+    {
+      "order": 20,
+      "id": "conf_fr_cli_005_streams_exits_and_no_partial_output",
+      "kind": "conformance",
+      "input": "success, invocation, contract, federation, limit, and internal outcomes",
+      "expected": "exact exit/stream/ErrorV8 matrix and no partial stdout"
+    },
+    {
+      "order": 21,
+      "id": "conf_fr_cli_005_s0_s5_regression",
+      "kind": "compatibility",
+      "input": "all accepted S0 through S5 commands, profiles, fixtures, and public bytes",
+      "expected": "unchanged"
+    },
+    {
+      "order": 22,
+      "id": "red_e2e_fr_fed_001_pre_s6_command_boundary",
+      "kind": "future_red",
+      "input": "exact public command against merged pre-S6 binary",
+      "expected": "accepted Red record below"
+    },
+    {
+      "order": 23,
+      "id": "gt_fr_cli_005_provider_only_workspace",
+      "kind": "golden",
+      "input": "workspace-provider-only.json",
+      "expected": "exact reviewed provider-only FederationReportV1 with empty client and federation collections"
+    },
+    {
+      "order": 24,
+      "id": "gt_fr_ext_004_unsupported_semantics_are_gaps",
+      "kind": "golden",
+      "input": "workspace-unsupported-semantics.json",
+      "expected": "exact reviewed report with six typed unresolved OpenAPI coverage gaps and no loss of representable facts"
+    },
+    {
+      "order": 25,
+      "id": "conf_fr_fed_001_provider_evidence_identity_is_reproducible",
+      "kind": "conformance",
+      "input": "reviewed YAML and JSON provider selectors",
+      "expected": "every provider evidence ID is recomputed from the exact format-specific preimage contract"
+    },
+    {
+      "order": 26,
+      "id": "conf_fr_fed_002_heuristic_selection_is_exact",
+      "kind": "conformance",
+      "input": "unique, absent, and ambiguous exact service-title and operationId hint pairs",
+      "expected": "unique match remains candidate; absent and ambiguous matches remain typed unresolved gaps; none auto-confirm"
+    }
+  ],
+  "determinism": {
+    "canonicalization": "RFC 8785 JSON with LF termination",
+    "collection_order": "ascending stable identity unless a documented precedence list applies",
+    "semantic_hash_projection": "remove semantic_hash, all evidence objects and evidence_ids, provider source path/hash/format, and client declaration paths; prefix canonical projection with codenoesis.federation-report.semantic.v1 plus NUL",
+    "replays": 50,
+    "parallel_repetitions": 10,
+    "retry_policy": "a retry is diagnostic and never converts the original failure into evidence"
+  },
+  "security": {
+    "allowed_reads": "workspace manifest plus explicitly bound local provider and client roots",
+    "writes": "none",
+    "target_processes": 0,
+    "network_channels": 0,
+    "plugins": 0,
+    "model_providers": 0,
+    "remote_refs": "forbidden before any fetch attempt",
+    "yaml_aliases_tags_merges": "rejected from marked parser events before normalized model construction",
+    "first_party_unsafe": 0,
+    "all_or_nothing": "no stdout bytes before the complete report passes identities, references, limits, schema, canonicalization, and semantic hash"
+  },
+  "compatibility": {
+    "unchanged_profiles": [
+      "legacy-s0",
+      "standard-local-s1",
+      "standard-local-s2",
+      "standard-local-s3",
+      "standard-local-s4",
+      "standard-local-s5"
+    ],
+    "persistent_store_change": false,
+    "ontology_change": false,
+    "accepted_s0_s5_s7_artifact_change": false,
+    "existing_artifact_scope": "no accepted S0-S5 or S7 artifact changes; this pre-runtime S6 correction changes only governed S6 selectors, evidence IDs, schemas, oracles, fixtures, and bundle bytes while retaining the base semantic hash",
+    "downstream_s7": "service, operation, field, decoy, safe-client, and strict-client identities must equal the immutable S7 fixture; S6 does not prove S7 source behavior"
+  },
+  "expected_red": {
+    "test_target": "e2e_fr_fed_001_openapi_federation",
+    "command": "cargo test --locked -p noesis --test e2e_fr_fed_001_openapi_federation -- --exact e2e_fr_fed_001_openapi_federation",
+    "base_behavior_probe": "target/debug/noesis federate --workspace-manifest /nonexistent --profile standard-local-s6 --format json",
+    "runner_exit": 101,
+    "subject_exit": 2,
+    "stdout_bytes": 0,
+    "stderr_schema": "codenoesis.error/v2",
+    "stderr_code": "input.invalid_revision",
+    "stderr_sha256": "6441e0037f864d2fae4a60e6355e4a85b26b00d5e4e24c59ffeb5fe9c6f3859f",
+    "stderr_bytes": 149,
+    "store_or_artifact_created": false,
+    "accepted_reason": "the merged pre-S6 binary has no federate command and returns the exact existing invocation-boundary error before any S6 production edit",
+    "rejected_reasons": [
+      "compilation failure",
+      "dependency or network outage",
+      "missing fixture or test target",
+      "modified oracle",
+      "panic",
+      "schema-invalid harness",
+      "target execution",
+      "timeout",
+      "validation of hand-authored JSON without the public command"
+    ]
+  },
+  "governance_source_paths": [
+    "docs/software/software-requirements-specification.md",
+    "docs/software/decisions/0009-s6-openapi-federation-contract.md",
+    "tests/specifications/s6",
+    "tests/fixtures/s6/openapi-federation-v1",
+    "scripts/tests/test_s6_openapi_federation_contract.py"
+  ],
+  "implementation_scope": {
+    "authority": "https://github.com/smutti/codenoesis/issues/82",
+    "effective_after": "protected manual merge of pull request #84",
+    "allowed_paths": "exact issue #82 allowlist",
+    "dependency_change": "yaml-rust2 =0.11.0 with default features disabled plus existing workspace dependencies only",
+    "correction_budget": 3,
+    "review": "independent human review and protected manual merge required"
+  },
+  "implementation_forbidden": [
+    "paths outside the exact issue #82 allowlist",
+    "a second YAML or OpenAPI parser",
+    "workflow, policy, agent, architecture, or roadmap files",
+    "ontology, schema migration, or persistent storage changes",
+    "existing accepted S0 through S5 or S7 protected artifact bytes",
+    "target, Git, compiler, package-manager, build-script, hook, plugin, network, model, or Council execution",
+    "remote reference resolution",
+    "automatic heuristic confirmation",
+    "partial stdout or persistent publication",
+    "automatic golden or oracle refresh"
+  ],
+  "required_implementation_evidence": [
+    "retained expected Red before production edits",
+    "exact success and error goldens",
+    "schema, identity, reference, ordering, and semantic-hash mutation rejection",
+    "every boundary maximum and maximum-plus-one",
+    "YAML and JSON normalized differential equivalence",
+    "malformed and fuzz corpus",
+    "dependency license, advisory, transitive unsafe, and checksum inventory",
+    "50 deterministic replays and 10 shuffled parallel repetitions",
+    "process, network, write, outside-root, descriptor, sentinel, memory, CPU, and wall observers",
+    "all S0 through S5 regressions",
+    "full repository gate and exact-head immutable CI"
+  ],
+  "stop_conditions": [
+    "a second YAML or OpenAPI parser dependency is required",
+    "an existing protected contract, fixture, schema, ontology, storage format, workflow, policy, or architecture byte must change",
+    "a remote reference or target execution becomes necessary",
+    "an authority conflict cannot remain typed and unresolved",
+    "a heuristic must be promoted automatically to pass",
+    "a fixed maximum cannot produce its exact typed maximum-plus-one result",
+    "the expected Red is not observed for the approved reason",
+    "the same deterministic failure recurs after the authorized correction budget",
+    "a gate can pass only by weakening the oracle"
+  ]
+}

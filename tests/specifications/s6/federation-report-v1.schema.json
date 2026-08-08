@@ -1,0 +1,734 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/federation-report-v1.schema.json",
+  "title": "FederationReportV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "analysis_profile",
+    "contract_capability",
+    "federation_rule_catalog",
+    "workspace_identity",
+    "provider",
+    "operations",
+    "clients",
+    "confirmed_links",
+    "candidates",
+    "rejections",
+    "evidence",
+    "coverage_gaps",
+    "limits",
+    "semantic_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.federation-report/v1"
+    },
+    "analysis_profile": {
+      "const": "standard-local-s6"
+    },
+    "contract_capability": {
+      "const": "codenoesis.contract-capability/openapi-3.1-http-json/v1"
+    },
+    "federation_rule_catalog": {
+      "const": "codenoesis.federation-rules/http-json/v1"
+    },
+    "workspace_identity": {
+      "$ref": "#/$defs/identity"
+    },
+    "provider": {
+      "$ref": "#/$defs/provider"
+    },
+    "operations": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "#/$defs/operation"
+      }
+    },
+    "clients": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "$ref": "#/$defs/client"
+      }
+    },
+    "confirmed_links": {
+      "type": "array",
+      "maxItems": 1000000,
+      "items": {
+        "$ref": "#/$defs/confirmed_link"
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "maxItems": 200000,
+      "items": {
+        "$ref": "#/$defs/candidate"
+      }
+    },
+    "rejections": {
+      "type": "array",
+      "maxItems": 200000,
+      "items": {
+        "$ref": "#/$defs/rejection"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 1000000,
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "coverage_gaps": {
+      "type": "array",
+      "maxItems": 200000,
+      "items": {
+        "$ref": "#/$defs/coverage_gap"
+      }
+    },
+    "limits": {
+      "$ref": "#/$defs/limits"
+    },
+    "semantic_hash": {
+      "$ref": "#/$defs/blake3_digest"
+    }
+  },
+  "$defs": {
+    "identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^urn:codenoesis:[a-z0-9][A-Za-z0-9:._/-]*$"
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "safe_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)[^\\u0000\\r\\n]+$"
+    },
+    "sha256_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "blake3_digest": {
+      "type": "string",
+      "pattern": "^blake3:[0-9a-f]{64}$"
+    },
+    "id_list": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "items": {
+        "$ref": "#/$defs/identity"
+      }
+    },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository_identity",
+        "revision",
+        "contract_path",
+        "contract_sha256",
+        "source_format",
+        "service_id",
+        "service_authority",
+        "evidence_ids"
+      ],
+      "properties": {
+        "repository_identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "contract_path": {
+          "$ref": "#/$defs/safe_path"
+        },
+        "contract_sha256": {
+          "$ref": "#/$defs/sha256_digest"
+        },
+        "source_format": {
+          "enum": [
+            "json",
+            "yaml"
+          ]
+        },
+        "service_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "service_authority": {
+          "type": "string",
+          "minLength": 9,
+          "maxLength": 2048,
+          "pattern": "^https://[a-z0-9.-]+(?::[0-9]{1,5})?(?:/[A-Za-z0-9._~!$&'()*+,;=:@%/-]*)?$"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/id_list"
+        }
+      }
+    },
+    "field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "field_id",
+        "json_pointer",
+        "required",
+        "type",
+        "evidence_ids"
+      ],
+      "properties": {
+        "field_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "json_pointer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^/(?:[^~\\u0000\\r\\n]|~[01])*$"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "type": {
+          "enum": [
+            "array",
+            "boolean",
+            "integer",
+            "number",
+            "object",
+            "string"
+          ]
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/id_list"
+        }
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "service_id",
+        "method",
+        "path_template",
+        "explicit_operation_id",
+        "response_status",
+        "schema_id",
+        "fields",
+        "evidence_ids"
+      ],
+      "properties": {
+        "operation_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "service_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "method": {
+          "enum": [
+            "DELETE",
+            "GET",
+            "PATCH",
+            "POST",
+            "PUT"
+          ]
+        },
+        "path_template": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048,
+          "pattern": "^/(?:[A-Za-z0-9._~!$&'()*+,;=:@%{}-]+/?)*$"
+        },
+        "explicit_operation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z][A-Za-z0-9._-]*$"
+        },
+        "response_status": {
+          "type": "string",
+          "pattern": "^[1-5][0-9]{2}$"
+        },
+        "schema_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "fields": {
+          "type": "array",
+          "maxItems": 5000,
+          "items": {
+            "$ref": "#/$defs/field"
+          }
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/id_list"
+        }
+      }
+    },
+    "client": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "repository_identity",
+        "revision",
+        "client_id",
+        "call_site_id",
+        "declaration_path",
+        "binding_kind",
+        "operation_candidate_id",
+        "evidence_ids"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9_-]*$"
+        },
+        "repository_identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "client_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "call_site_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "declaration_path": {
+          "$ref": "#/$defs/safe_path"
+        },
+        "binding_kind": {
+          "enum": [
+            "explicit_operation_identity",
+            "heuristic_name"
+          ]
+        },
+        "operation_candidate_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/identity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/id_list"
+        }
+      }
+    },
+    "confirmed_link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "link_id",
+        "operation_id",
+        "client_id",
+        "call_site_id",
+        "authority",
+        "rule_id",
+        "state",
+        "evidence_ids"
+      ],
+      "properties": {
+        "link_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "operation_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "client_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "call_site_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "authority": {
+          "const": "explicit_workspace_identity"
+        },
+        "rule_id": {
+          "const": "fed.explicit-operation.confirm/v1"
+        },
+        "state": {
+          "const": "confirmed"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/id_list"
+        }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id",
+        "target_operation_id",
+        "client_id",
+        "call_site_id",
+        "authority",
+        "service_hint",
+        "operation_hint",
+        "rule_id",
+        "state",
+        "evidence_ids",
+        "coverage_gap_id"
+      ],
+      "properties": {
+        "candidate_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "target_operation_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "client_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "call_site_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "authority": {
+          "const": "heuristic_candidate"
+        },
+        "service_hint": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[^\\u0000\\r\\n]+$"
+        },
+        "operation_hint": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z][A-Za-z0-9._-]*$"
+        },
+        "rule_id": {
+          "const": "fed.heuristic-name.candidate/v1"
+        },
+        "state": {
+          "const": "candidate"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/id_list"
+        },
+        "coverage_gap_id": {
+          "$ref": "#/$defs/identity"
+        }
+      }
+    },
+    "rejection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rejection_id",
+        "operation_candidate_id",
+        "client_id",
+        "call_site_id",
+        "reason_code",
+        "rule_id",
+        "state",
+        "evidence_ids"
+      ],
+      "properties": {
+        "rejection_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "operation_candidate_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "client_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "call_site_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "reason_code": {
+          "const": "operation_not_exposed"
+        },
+        "rule_id": {
+          "const": "fed.operation-decoy.reject/v1"
+        },
+        "state": {
+          "const": "rejected"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/id_list"
+        }
+      }
+    },
+    "openapi_location_span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "location",
+        "start_line",
+        "end_line"
+      ],
+      "properties": {
+        "kind": {
+          "const": "openapi_location_span"
+        },
+        "location": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^#/(?:[^~\\u0000\\r\\n]|~[01])+$"
+        },
+        "start_line": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000000
+        },
+        "end_line": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000000
+        }
+      }
+    },
+    "json_pointer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "pointer"
+      ],
+      "properties": {
+        "kind": {
+          "const": "json_pointer"
+        },
+        "pointer": {
+          "type": "string",
+          "maxLength": 4096,
+          "pattern": "^(?:|/(?:[^~\\u0000\\r\\n]|~[01])*)$"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "kind",
+        "repository_identity",
+        "revision",
+        "path",
+        "file_sha256",
+        "selector"
+      ],
+      "properties": {
+        "evidence_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "kind": {
+          "enum": [
+            "openapi_yaml_span",
+            "openapi_json_pointer",
+            "workspace_json_pointer"
+          ]
+        },
+        "repository_identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "path": {
+          "$ref": "#/$defs/safe_path"
+        },
+        "file_sha256": {
+          "$ref": "#/$defs/sha256_digest"
+        },
+        "selector": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/openapi_location_span"
+            },
+            {
+              "$ref": "#/$defs/json_pointer"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "openapi_yaml_span"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "selector": {
+                "$ref": "#/$defs/openapi_location_span"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "openapi_json_pointer",
+                  "workspace_json_pointer"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "selector": {
+                "$ref": "#/$defs/json_pointer"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "coverage_gap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coverage_gap_id",
+        "subject_id",
+        "reason_code",
+        "state",
+        "evidence_ids"
+      ],
+      "properties": {
+        "coverage_gap_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "subject_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "reason_code": {
+          "enum": [
+            "heuristic_requires_confirmation",
+            "heuristic_no_match",
+            "heuristic_ambiguous",
+            "unsupported_callbacks",
+            "unsupported_webhooks",
+            "unsupported_links",
+            "unsupported_security_semantics",
+            "unsupported_server_variables",
+            "unsupported_media_type"
+          ]
+        },
+        "state": {
+          "const": "unresolved"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/id_list"
+        }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workspace_manifest_bytes",
+        "repositories",
+        "contract_documents",
+        "contract_bytes_per_document",
+        "yaml_nesting_depth",
+        "local_ref_depth",
+        "path_items",
+        "operations",
+        "schemas",
+        "fields_per_operation",
+        "clients",
+        "declarations",
+        "confirmed_links",
+        "candidates",
+        "rejections",
+        "evidence_items",
+        "coverage_gaps",
+        "report_bytes",
+        "memory_bytes",
+        "wall_milliseconds"
+      ],
+      "properties": {
+        "workspace_manifest_bytes": {
+          "const": 8388608
+        },
+        "repositories": {
+          "const": 128
+        },
+        "contract_documents": {
+          "const": 256
+        },
+        "contract_bytes_per_document": {
+          "const": 2097152
+        },
+        "yaml_nesting_depth": {
+          "const": 32
+        },
+        "local_ref_depth": {
+          "const": 16
+        },
+        "path_items": {
+          "const": 10000
+        },
+        "operations": {
+          "const": 10000
+        },
+        "schemas": {
+          "const": 20000
+        },
+        "fields_per_operation": {
+          "const": 5000
+        },
+        "clients": {
+          "const": 10000
+        },
+        "declarations": {
+          "const": 100000
+        },
+        "confirmed_links": {
+          "const": 1000000
+        },
+        "candidates": {
+          "const": 200000
+        },
+        "rejections": {
+          "const": 200000
+        },
+        "evidence_items": {
+          "const": 1000000
+        },
+        "coverage_gaps": {
+          "const": 200000
+        },
+        "report_bytes": {
+          "const": 67108864
+        },
+        "memory_bytes": {
+          "const": 536870912
+        },
+        "wall_milliseconds": {
+          "const": 60000
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": "codenoesis.r7-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-compiler-index-v1",
+  "license": "Apache-2.0 project-owned fixture under repository LICENSE",
+  "external_source_vendored": false,
+  "fixture_may_execute": false,
+  "materialization": {
+    "tree_oid": "d117f2f0924cbef9e7396b97ee46c76bd5261e00",
+    "commit_oid": "2203600cce0f0904aefc66dcb49dd0dbc7fd5fd3",
+    "commit_recipe": "SHA-1 Git commit over repository/ 100644 files; fixed CodeNoesis Fixture author/committer at 1970-01-01T00:00:00Z; message compiler-index-v1"
+  },
+  "files": [
+    {
+      "path": "compiler-index-binding.json",
+      "mode": "100644",
+      "byte_length": 2460,
+      "sha256": "2885d72887046edaa4dbbcc273ed7c8b42ed804e169296b2a0c092edbfc0d04c",
+      "git_blob_oid": "67e04b2eec95ee92a35834286ab9f0b9b3c3c577"
+    },
+    {
+      "path": "compiler-index-source.json",
+      "mode": "100644",
+      "byte_length": 13380,
+      "sha256": "12699c82058916f61e20b3e219929c35308e777f7b0bcf995dd60e835b87c113",
+      "git_blob_oid": "fc81f6f7b2328ef1926998db340aae330124a316"
+    },
+    {
+      "path": "index.scip",
+      "mode": "100644",
+      "byte_length": 3733,
+      "sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
+      "git_blob_oid": "7881055e3cac9991080cedc1db280f65e677a186"
+    },
+    {
+      "path": "repository/Cargo.toml",
+      "mode": "100644",
+      "byte_length": 69,
+      "sha256": "105eb432b6464e82bad62d0b690d0b05778d078b1d00a81f0783a8e8e9a6dd3e",
+      "git_blob_oid": "3981e7727765d2e26f39ce897b7284f5c010208b"
+    },
+    {
+      "path": "repository/build.rs",
+      "mode": "100644",
+      "byte_length": 74,
+      "sha256": "42878a81c34f84cfff86f6f39f13ab47e1e258bb25fc857cffea20c51499fe46",
+      "git_blob_oid": "6d0908ecd333ea82e04e15d615d5c5a1c3911d7a"
+    },
+    {
+      "path": "repository/crates/api/Cargo.toml",
+      "mode": "100644",
+      "byte_length": 85,
+      "sha256": "8ace443b2e932c07ca1bb697f68d3422110194ed99df299e71b40fb5a79ef51f",
+      "git_blob_oid": "c97a3f5dfb313c3ec1036b280481ff63e48d10c5"
+    },
+    {
+      "path": "repository/crates/api/src/lib.rs",
+      "mode": "100644",
+      "byte_length": 512,
+      "sha256": "0bb39b6f06bed7e27af233e10966121803523bec7960289d65489343e87adb79",
+      "git_blob_oid": "fc3ff1e76544992d7d104ee9877d33db34bb6838"
+    },
+    {
+      "path": "repository/crates/client/Cargo.toml",
+      "mode": "100644",
+      "byte_length": 130,
+      "sha256": "c8bf4fd1288c46d6188575c6205d7f0001753a91d44b6969bb1c0186e95dda75",
+      "git_blob_oid": "7c48bdd2d5681c6ab0eee011530b03e96e098d6c"
+    },
+    {
+      "path": "repository/crates/client/src/lib.rs",
+      "mode": "100644",
+      "byte_length": 224,
+      "sha256": "664aac908ede4b1dffb1cd82f5b4462138024cdbebba7a87c41bd2dbfe4ead0e",
+      "git_blob_oid": "06b2ebfacb6c903e4eb5d5c40c554fbd8d9ec972"
+    },
+    {
+      "path": "repository/crates/client/src/omitted.rs",
+      "mode": "100644",
+      "byte_length": 34,
+      "sha256": "04a0bf7bb47f6cbfc27360957a65ed07be88e861522c0ea6e807da5a2c92520a",
+      "git_blob_oid": "9b9ff2fb88d7b2f692116f1ab539d2eb2e7b72ec"
+    }
+  ],
+  "expected_overlay": {
+    "path": "expected-compiler-overlay.json",
+    "byte_length": 28180,
+    "sha256": "e533cdaac30b9257bbc33a1cdcfbb54bfeb3bf9871e33faad0b72a892e8807a0"
+  },
+  "authority": {
+    "source_bytes": "committed project-owned fixture bytes only",
+    "compiler_index": "pre-generated untrusted input validated by binding",
+    "producer_attestation": false,
+    "target_execution": false,
+    "index_generation": false,
+    "network_access": false,
+    "runtime_observation": false
+  }
+}

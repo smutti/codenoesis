@@ -1,0 +1,36 @@
+{
+  "schema_version": "codenoesis.governance-red-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/110",
+  "authorization": "https://github.com/smutti/codenoesis/issues/110#issuecomment-5205875435",
+  "required_base": "d003a563830bdb5ff79197c8b92050b23eb92b27",
+  "guard_commit_sha": "b8a3fde629417fb150275448f50ec9356b45ab76",
+  "guard_sha256": "42ec1167d9be5c935b50496f3703a9840601ce68cec3f669dad8ccc6aa6ff959",
+  "command": "python3 -m unittest scripts.tests.test_s4_portable_explorer_contract",
+  "exit_code": 1,
+  "failed_for_expected_reason": true,
+  "expected_failure": "Decision 0018 and every R8 contract, fixture, golden, security corpus, and reviewed digest are absent on the required R7 product base.",
+  "actual_failure": "R8 governance artifact is not materialized: docs/software/decisions/0018-s4-r8-portable-explorer-contract.md",
+  "changed_paths_before_red": [
+    "scripts/tests/test_s4_portable_explorer_contract.py"
+  ],
+  "r8_contract_files_changed_before_red": false,
+  "production_files_changed_before_red": false,
+  "dependency_files_changed_before_red": false,
+  "stdout_bytes": 0,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "raw_log_path": "tests/specifications/s4/r8/red/governance-red.log",
+  "raw_log_bytes": 678,
+  "raw_log_sha256": "784ac21ea5e0257136c3710616d463d00ee3117c0edb34dc40521aa73fe126e7",
+  "environment": {
+    "os": "macOS 26.5.2",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "rustc_host": "aarch64-apple-darwin",
+    "python": "3.9.6"
+  },
+  "captured_at": "2026-08-06",
+  "limitations": [
+    "The retained Red proves only that the independently authored R8 governance contract was absent.",
+    "No portable graph was exported and no production explorer behavior was executed by this Red."
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": "codenoesis.r8-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-portable-explorer-v1",
+  "source_snapshot_schema": "codenoesis.repository-snapshot/v10",
+  "source_ontology": "codenoesis.ontology/rust/v7",
+  "source_query_contract": "codenoesis.local-query-result/v5",
+  "external_source_vendored": false,
+  "fixture_may_execute": false,
+  "useful_without_source_repository": true,
+  "source_contents_included": false,
+  "source_snippets_included": false,
+  "files": [
+    {
+      "path": "explorer-manifest.json",
+      "mode": "100644",
+      "byte_length": 1834,
+      "sha256": "7718049806c39dd4a9daef4db83d34103388756851e28707141b51893968556e",
+      "git_blob_oid": "1e173e1f57c6179e4dd3bd2a8c095decb09d2c1c"
+    },
+    {
+      "path": "index.html",
+      "mode": "100644",
+      "byte_length": 14833,
+      "sha256": "1caa2c0ca5675937eab674f61681883ba3c6a428feb6b1baa744a0cb7eecd044",
+      "git_blob_oid": "115f9e7fb1bda079ca876200f9c816ad1b715091"
+    },
+    {
+      "path": "portable-graph.json",
+      "mode": "100644",
+      "byte_length": 6329,
+      "sha256": "389f5b211dd2a0c33af36a639145fb9867653fe3d85b56f3899f8cac799e3523",
+      "git_blob_oid": "e11fdb3384fe2499a63b116cb2df0a766e9f3c4f"
+    },
+    {
+      "path": "source-family-digests.json",
+      "mode": "100644",
+      "byte_length": 3155,
+      "sha256": "55faf2d1f97bbacecfe0204cc45b8b97fde97ee796dde66a89d8a2c4292a3a85",
+      "git_blob_oid": "c14266189ef417f502748103d0186efa33c1e004"
+    }
+  ]
+}

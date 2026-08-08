@@ -1,0 +1,738 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/codenoesis-error-v15.schema.json",
+  "title": "CodeNoesis ErrorV15",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v15"
+    },
+    "code": {
+      "enum": [
+        "input.invalid_export_profile",
+        "input.invalid_explorer_profile",
+        "input.unsafe_output_path",
+        "export.invalid_snapshot",
+        "export.unsupported_snapshot_schema",
+        "export.unsupported_portable_graph_schema",
+        "export.noncanonical_portable_graph",
+        "export.identity_conflict",
+        "export.reference_mismatch",
+        "export.unresolved_evidence",
+        "export.limit_exceeded",
+        "explorer.invalid_projection",
+        "explorer.unsafe_payload",
+        "explorer.asset_integrity_mismatch",
+        "explorer.limit_exceeded",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "input",
+        "export",
+        "explorer",
+        "internal"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "retryable": {
+      "const": false
+    },
+    "context": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/profile_context"
+        },
+        {
+          "$ref": "#/$defs/path_context"
+        },
+        {
+          "$ref": "#/$defs/snapshot_context"
+        },
+        {
+          "$ref": "#/$defs/schema_context"
+        },
+        {
+          "$ref": "#/$defs/canonical_context"
+        },
+        {
+          "$ref": "#/$defs/identity_context"
+        },
+        {
+          "$ref": "#/$defs/reference_context"
+        },
+        {
+          "$ref": "#/$defs/evidence_context"
+        },
+        {
+          "$ref": "#/$defs/limit_context"
+        },
+        {
+          "$ref": "#/$defs/projection_context"
+        },
+        {
+          "$ref": "#/$defs/payload_context"
+        },
+        {
+          "$ref": "#/$defs/asset_context"
+        },
+        {
+          "$ref": "#/$defs/empty_context"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "profile_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile"
+      ],
+      "properties": {
+        "profile": {
+          "enum": [
+            "portable-graph-v1",
+            "local-explorer-v1"
+          ]
+        }
+      }
+    },
+    "path_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path_sha256",
+        "reason"
+      ],
+      "properties": {
+        "path_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "reason": {
+          "enum": [
+            "absolute",
+            "parent_escape",
+            "symlink_escape",
+            "non_empty_unmarked",
+            "marker_mismatch",
+            "outside_destination"
+          ]
+        }
+      }
+    },
+    "snapshot_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "snapshot_id",
+        "reason"
+      ],
+      "properties": {
+        "snapshot_id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:snapshot:blake3:[0-9a-f]{64}$"
+        },
+        "reason": {
+          "enum": [
+            "missing_visible_head",
+            "corrupt",
+            "unbound",
+            "semantic_hash_mismatch",
+            "incomplete"
+          ]
+        }
+      }
+    },
+    "schema_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subject",
+        "observed"
+      ],
+      "properties": {
+        "subject": {
+          "enum": [
+            "repository_snapshot",
+            "portable_graph",
+            "local_explorer_manifest"
+          ]
+        },
+        "observed": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      }
+    },
+    "canonical_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expected_sha256",
+        "observed_sha256"
+      ],
+      "properties": {
+        "expected_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "observed_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "identity_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "family",
+        "identity_sha256"
+      ],
+      "properties": {
+        "family": {
+          "enum": [
+            "entity",
+            "relationship",
+            "claim",
+            "evidence",
+            "diagnostic",
+            "coverage_gap",
+            "document",
+            "document_statement"
+          ]
+        },
+        "identity_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "reference_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "family",
+        "subject_id_sha256",
+        "reference_id_sha256"
+      ],
+      "properties": {
+        "family": {
+          "enum": [
+            "relationship_endpoint",
+            "claim_subject",
+            "document_subject",
+            "statement_subject",
+            "coverage_gap"
+          ]
+        },
+        "subject_id_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "reference_id_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "evidence_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subject_id_sha256",
+        "evidence_id"
+      ],
+      "properties": {
+        "subject_id_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "evidence_id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:evidence:(blake3|sha256):[0-9a-f]{64}$"
+        }
+      }
+    },
+    "limit_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "limit",
+        "maximum",
+        "observed"
+      ],
+      "properties": {
+        "limit": {
+          "enum": [
+            "portable_graph_bytes",
+            "viewer_non_data_bytes",
+            "text_search_results",
+            "traversal_depth_maximum",
+            "neighborhood_subjects",
+            "neighborhood_relationships",
+            "json_nesting"
+          ]
+        },
+        "maximum": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "observed": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "projection_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projection_sha256",
+        "reason"
+      ],
+      "properties": {
+        "projection_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "reason": {
+          "enum": [
+            "invalid_json",
+            "duplicate_member",
+            "missing_member",
+            "unknown_field",
+            "invalid_shape",
+            "unsafe_path"
+          ]
+        }
+      }
+    },
+    "payload_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "field_sha256",
+        "reason"
+      ],
+      "properties": {
+        "field_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "reason": {
+          "enum": [
+            "active_content",
+            "control_character",
+            "bidi_control",
+            "oversized_value",
+            "remote_origin",
+            "dynamic_code"
+          ]
+        }
+      }
+    },
+    "asset_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "expected_sha256",
+        "observed_sha256"
+      ],
+      "properties": {
+        "path": {
+          "enum": [
+            "index.html",
+            "portable-graph.json",
+            "explorer-manifest.json"
+          ]
+        },
+        "expected_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "observed_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "empty_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 0
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "input.invalid_export_profile"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "input"
+          },
+          "context": {
+            "$ref": "#/$defs/profile_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "input.invalid_explorer_profile"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "input"
+          },
+          "context": {
+            "$ref": "#/$defs/profile_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "input.unsafe_output_path"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "input"
+          },
+          "context": {
+            "$ref": "#/$defs/path_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "export.invalid_snapshot"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "export"
+          },
+          "context": {
+            "$ref": "#/$defs/snapshot_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "export.unsupported_snapshot_schema"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "export"
+          },
+          "context": {
+            "$ref": "#/$defs/schema_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "export.unsupported_portable_graph_schema"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "export"
+          },
+          "context": {
+            "$ref": "#/$defs/schema_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "export.noncanonical_portable_graph"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "export"
+          },
+          "context": {
+            "$ref": "#/$defs/canonical_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "export.identity_conflict"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "export"
+          },
+          "context": {
+            "$ref": "#/$defs/identity_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "export.reference_mismatch"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "export"
+          },
+          "context": {
+            "$ref": "#/$defs/reference_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "export.unresolved_evidence"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "export"
+          },
+          "context": {
+            "$ref": "#/$defs/evidence_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "export.limit_exceeded"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "export"
+          },
+          "context": {
+            "$ref": "#/$defs/limit_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "explorer.invalid_projection"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "explorer"
+          },
+          "context": {
+            "$ref": "#/$defs/projection_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "explorer.unsafe_payload"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "explorer"
+          },
+          "context": {
+            "$ref": "#/$defs/payload_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "explorer.asset_integrity_mismatch"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "explorer"
+          },
+          "context": {
+            "$ref": "#/$defs/asset_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "explorer.limit_exceeded"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "explorer"
+          },
+          "context": {
+            "$ref": "#/$defs/limit_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "internal.unexpected"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "internal"
+          },
+          "context": {
+            "$ref": "#/$defs/empty_context"
+          }
+        }
+      }
+    }
+  ]
+}

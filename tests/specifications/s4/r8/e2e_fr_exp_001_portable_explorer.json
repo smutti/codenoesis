@@ -1,0 +1,173 @@
+{
+  "schema_version": "codenoesis.r8-portable-explorer-oracle/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/110",
+  "authorization": "https://github.com/smutti/codenoesis/issues/110#issuecomment-5205875435",
+  "required_base": "d003a563830bdb5ff79197c8b92050b23eb92b27",
+  "requirement_ids": [
+    "FR-EXP-001",
+    "FR-QRY-001",
+    "FR-QRY-002",
+    "FR-CLI-001",
+    "FR-DOC-003",
+    "NFR-DET-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-PRV-002"
+  ],
+  "requirement_status": {
+    "current": "Proposed",
+    "target_after_protected_merge": "Approved for the bounded R8 profile"
+  },
+  "slice": "S4",
+  "roadmap_capability": "R8",
+  "risk": "high",
+  "correction_rounds": 4,
+  "contracts": {
+    "source_snapshot": "codenoesis.repository-snapshot/v10",
+    "source_ontology": "codenoesis.ontology/rust/v7",
+    "source_query": "codenoesis.local-query-result/v5",
+    "portable_graph": "codenoesis.portable-graph/v1",
+    "local_explorer": "codenoesis.local-explorer/v1",
+    "errors": "codenoesis.error/v15"
+  },
+  "public_journey": {
+    "export": {
+      "command": "noesis export --store <local-store-root> --repository-id <canonical-logical-id> --output <portable-output-root> --format json",
+      "reads": "one validated visible RepositorySnapshotV10 head",
+      "writes": [
+        "portable-graph.json",
+        ".codenoesis-portable-graph-v1"
+      ],
+      "stdout": "the exact canonical PortableGraphV1 bytes plus one LF, byte-identical to portable-graph.json",
+      "publication": "atomic_marker_owned_directory"
+    },
+    "explore": {
+      "command": "noesis explore --input <portable-graph.json> --output <explorer-output-root> --format json",
+      "reads": "one validated canonical PortableGraphV1",
+      "writes": [
+        "portable-graph.json",
+        "index.html",
+        "explorer-manifest.json",
+        ".codenoesis-local-explorer-v1"
+      ],
+      "stdout": "LocalExplorerManifestV1 plus LF",
+      "publication": "atomic_marker_owned_directory"
+    },
+    "argument_order_semantic": false,
+    "ambient_configuration_selects_behavior": false,
+    "success_exit_code": 0,
+    "success_stderr_bytes": 0
+  },
+  "export_semantics": {
+    "canonicalization": "RFC8785",
+    "family_order": [
+      "entities",
+      "relationships",
+      "claims",
+      "evidence",
+      "diagnostics",
+      "coverage_gaps",
+      "documents",
+      "document_statements"
+    ],
+    "preserve_stable_ids_exactly": true,
+    "preserve_references_exactly": true,
+    "preserve_claim_states_without_upgrade": true,
+    "preserve_evidence_metadata_exactly": true,
+    "preserve_diagnostics_and_gaps_exactly": true,
+    "unknown_fields_allowed": false,
+    "repair_allowed": false,
+    "silent_truncation_allowed": false,
+    "repeated_export_byte_identical": true
+  },
+  "explorer_semantics": {
+    "authority": "non_canonical_reconstructable_materialized_view",
+    "data_authority": "portable_graph_only",
+    "exact_id_search": true,
+    "text_search": "nfc_case_sensitive_codepoint_substring_sorted_by_exact_id",
+    "filters": [
+      "subject_kind",
+      "relationship_kind",
+      "claim_state",
+      "diagnostic_code",
+      "coverage_capability"
+    ],
+    "traversal": "deterministic_breadth_first_depth_then_relationship_id",
+    "explicit_truncation": true,
+    "claim_state_upgrade_allowed": false,
+    "source_repository_required": false,
+    "mutation_allowed": false
+  },
+  "limits": {
+    "portable_graph_bytes": 268435456,
+    "viewer_non_data_bytes": 1048576,
+    "text_search_results": 100,
+    "traversal_depth_default": 1,
+    "traversal_depth_maximum": 2,
+    "neighborhood_subjects": 256,
+    "neighborhood_relationships": 512,
+    "json_nesting": 64,
+    "permutations": 50
+  },
+  "source_contents_included": false,
+  "source_snippets_included": false,
+  "browser_auto_launch": false,
+  "network_service": false,
+  "child_process": false,
+  "remote_resources": false,
+  "telemetry": false,
+  "package_manager_runtime": false,
+  "model_provider_runtime": false,
+  "destination_policy": {
+    "accepted": [
+      "absent",
+      "empty",
+      "exact_matching_marker_owned"
+    ],
+    "rejected": [
+      "non_empty_unmarked",
+      "marker_mismatch",
+      "parent_or_component_symlink",
+      "path_escape",
+      "write_outside_destination"
+    ]
+  },
+  "required_test_names": [
+    "e2e_fr_exp_001_export_and_explore_offline",
+    "conf_fr_exp_001_portable_graph_v1_lossless_reimport",
+    "conf_fr_cli_001_export_explore_are_explicit",
+    "conf_fr_qry_001_r8_preserves_all_v5_subject_families",
+    "conf_fr_qry_002_bounded_deterministic_neighborhood",
+    "gt_fr_exp_001_exact_identity_reference_and_evidence_preservation",
+    "gt_fr_exp_001_duplicate_loss_reorder_and_hash_rejection",
+    "pt_nfr_det_001_r8_fifty_permutation_replay",
+    "sec_fr_exp_001_xss_payloads_render_as_text",
+    "sec_nfr_sec_001_r8_csp_forbids_active_remote_content",
+    "sec_nfr_sec_005_r8_path_symlink_and_destination_confinement",
+    "sec_nfr_prv_002_r8_excludes_source_contents_and_snippets",
+    "pt_od_lim_001_r8_all_limits_have_maximum_plus_one",
+    "reg_fr_qry_001_r7_exact_query_bytes_unchanged",
+    "reg_fr_cli_001_r7_commands_and_stored_head_unchanged"
+  ],
+  "immutable_dependencies": {
+    "r7_contract_bundle_sha256": "81ef2609c875af3d36a88f1fe97851f21368f90a60e2cc2706d6130ba95af882",
+    "r7_contract_bundle_file_sha256": "aa3c8384f3ef48499d7ae51652774177739a720fc20c329f22d387ee4f040e8e"
+  },
+  "future_product_dependencies": [],
+  "production_implementation_forbidden": true,
+  "excluded_scope": [
+    "source snippets or contents",
+    "browser auto-launch",
+    "local or remote server",
+    "network or CDN",
+    "target execution",
+    "child process",
+    "persistent browser state",
+    "graph database mutation",
+    "S5 refresh",
+    "S6 federation",
+    "S7 semantic impact",
+    "ontology fact changes",
+    "external repository bytes"
+  ]
+}

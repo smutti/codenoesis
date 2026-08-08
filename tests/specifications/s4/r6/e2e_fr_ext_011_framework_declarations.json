@@ -1,0 +1,118 @@
+{
+  "schema_version": "codenoesis.r6-governance-oracle/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/117",
+  "authorization": "https://github.com/smutti/codenoesis/issues/117#issuecomment-5183312890",
+  "protected_review": "https://github.com/smutti/codenoesis/pull/118",
+  "required_base": "6750f293c24ea501df6177a2f7c96c2c7f0a6390",
+  "requirement_ids": [
+    "FR-EXT-011",
+    "FR-EXT-001",
+    "FR-EXT-002",
+    "FR-EXT-010",
+    "FR-KNW-001",
+    "FR-KNW-002",
+    "FR-KNW-003",
+    "FR-DOC-001",
+    "FR-DOC-002",
+    "FR-QRY-001",
+    "FR-CLI-001"
+  ],
+  "requirement_status": {
+    "current": "Proposed",
+    "target_after_protected_merge": "Approved"
+  },
+  "slice": "S4",
+  "roadmap_capability": "R6",
+  "risk": "high",
+  "correction_rounds": 4,
+  "selector": {
+    "flag": "--rust-framework-profile",
+    "value": "rust-framework-declarations-v1",
+    "required_scan_profile": "standard-local-s4",
+    "required_workspace_profile": "cargo-root-package-v1",
+    "required_manifest_profile": "cargo-manifest-facts-v1",
+    "required_semantic_profile": "rust-semantic-depth-v1",
+    "implicit_selection": false
+  },
+  "versions": {
+    "configuration": "codenoesis.configuration/v6",
+    "snapshot": "codenoesis.repository-snapshot/v9",
+    "extraction_chunk": "codenoesis.extraction-chunk/v6",
+    "graph": "codenoesis.knowledge-graph/v6",
+    "ontology": "codenoesis.ontology/rust/v6",
+    "pipeline": "codenoesis.pipeline/s4-r6-v1",
+    "error": "codenoesis.error/v13",
+    "query": "codenoesis.local-query-result/v4"
+  },
+  "limits": {
+    "framework_declarations_per_source": 4096,
+    "explicit_registration_chain_segments": 256,
+    "registration_expression_depth": 64,
+    "literal_route_path_bytes": 2048,
+    "literal_method_or_configuration_key_bytes": 1024,
+    "target_spelling_bytes": 1024,
+    "outer_attributes_per_declaration": 128,
+    "attribute_token_bytes": 16384,
+    "permutations": 50
+  },
+  "required_test_names": [
+    "e2e_fr_ext_011_framework_declarations",
+    "gt_fr_ext_011_explicit_builder_declarations",
+    "gt_fr_ext_011_attribute_macro_candidates_remain_unresolved",
+    "gt_fr_ext_011_unique_local_targets_only",
+    "conf_fr_ext_011_snapshot_v9_graph_v6_error_v13",
+    "conf_fr_qry_001_v9_uses_local_query_result_v4",
+    "pt_dr_idn_002_r6_framework_identity_nfc",
+    "pt_fr_ext_011_limits_have_max_and_plus_one",
+    "pt_nfr_det_001_r6_permutation_and_replay_invariant",
+    "sec_fr_ext_011_never_executes_or_expands_target_worlds",
+    "sec_fr_ext_011_hard_negative_source_forms",
+    "e2e_fr_doc_001_r6_declaration_candidate_non_runtime_wording",
+    "reg_fr_cli_001_r6_selector_absence_is_byte_identical"
+  ],
+  "immutable_dependencies": {
+    "r5_contract_bundle_sha256": "ed48512d8337d2dda2a3b5f752177f3988915bdfc98eda1ff2391e15039e7d45"
+  },
+  "public_pilots": [
+    {
+      "id": "lekton",
+      "repository": "https://github.com/dghilardi/lekton",
+      "commit": "7a4d1a4a30468f4c18ce158a9b825680b00f4820",
+      "role": "explicit-router-style",
+      "vendored_source": false
+    },
+    {
+      "id": "rustdesk",
+      "repository": "https://github.com/rustdesk/rustdesk",
+      "commit": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "role": "attribute-macro-heavy-negative-candidate",
+      "vendored_source": false,
+      "gitlink_opened": false
+    }
+  ],
+  "acceptance_behavior": [
+    "Reject incomplete selector composition before acquisition.",
+    "Emit only approved source declarations and unresolved candidates.",
+    "Keep declaration, candidate, and runtime meaning schema-distinct.",
+    "Bind every fact and gap to exact committed evidence.",
+    "Resolve a local target only from one unique existing R5 lexical fact.",
+    "Emit no runtime relationship or runtime behavior claim.",
+    "Preserve all selector-absent and earlier query bytes.",
+    "Enforce every maximum and maximum-plus-one before allocation or publication.",
+    "Execute no target, toolchain, macro, dependency, network, model, or external repository."
+  ],
+  "expected_error_codes": [
+    "input.invalid_rust_framework_profile",
+    "extraction.invalid_framework_declaration",
+    "extraction.framework_declaration_identity_conflict",
+    "extraction.framework_declaration_limit_exceeded",
+    "extraction.unsupported_framework_composition",
+    "extraction.ambiguous_framework_target",
+    "extraction.unresolvable_framework_evidence",
+    "input.unsafe_framework_path",
+    "internal.unexpected"
+  ],
+  "production_implementation_forbidden": true,
+  "new_dependencies": [],
+  "rollback": "revert the complete R6 governance pull request before any product issue is authorized"
+}

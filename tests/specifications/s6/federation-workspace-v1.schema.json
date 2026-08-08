@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/federation-workspace-v1.schema.json",
+  "title": "FederationWorkspaceV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "workspace_identity",
+    "analysis_profile",
+    "contract_capability",
+    "federation_rule_catalog",
+    "provider",
+    "clients"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.federation-workspace/v1"
+    },
+    "workspace_identity": {
+      "$ref": "#/$defs/identity"
+    },
+    "analysis_profile": {
+      "const": "standard-local-s6"
+    },
+    "contract_capability": {
+      "const": "codenoesis.contract-capability/openapi-3.1-http-json/v1"
+    },
+    "federation_rule_catalog": {
+      "const": "codenoesis.federation-rules/http-json/v1"
+    },
+    "provider": {
+      "$ref": "#/$defs/provider"
+    },
+    "clients": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 10000,
+      "items": {
+        "$ref": "#/$defs/client_input"
+      }
+    }
+  },
+  "$defs": {
+    "identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^urn:codenoesis:[a-z0-9][a-z0-9:._/-]*$"
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "safe_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)[^\\u0000\\r\\n]+$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "service_authority": {
+      "type": "string",
+      "minLength": 9,
+      "maxLength": 2048,
+      "pattern": "^https://[a-z0-9.-]+(?::[0-9]{1,5})?(?:/[A-Za-z0-9._~!$&'()*+,;=:@%/-]*)?$"
+    },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository_identity",
+        "revision",
+        "root",
+        "contract_path",
+        "contract_sha256",
+        "service_authority"
+      ],
+      "properties": {
+        "repository_identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "root": {
+          "$ref": "#/$defs/safe_path"
+        },
+        "contract_path": {
+          "$ref": "#/$defs/safe_path"
+        },
+        "contract_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "service_authority": {
+          "$ref": "#/$defs/service_authority"
+        }
+      }
+    },
+    "client_input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "root",
+        "declaration_path",
+        "declaration_sha256"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9_-]*$"
+        },
+        "root": {
+          "$ref": "#/$defs/safe_path"
+        },
+        "declaration_path": {
+          "$ref": "#/$defs/safe_path"
+        },
+        "declaration_sha256": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    }
+  }
+}

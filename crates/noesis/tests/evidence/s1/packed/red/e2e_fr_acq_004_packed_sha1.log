@@ -1,0 +1,23 @@
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.3+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests/e2e_fr_acq_004_packed_sha1.rs (target/debug/deps/e2e_fr_acq_004_packed_sha1-6954733d4b00c37c)
+
+running 1 test
+test e2e_fr_acq_004_packed_sha1_equivalence ... FAILED
+
+failures:
+
+---- e2e_fr_acq_004_packed_sha1_equivalence stdout ----
+
+thread 'e2e_fr_acq_004_packed_sha1_equivalence' (5204171) panicked at crates/noesis/tests/e2e_fr_acq_004_packed_sha1.rs:30:5:
+expected selected packed S1 scan success; status=Some(2); stdout=; stderr={"code":"input.invalid_revision","context":{},"message":"invalid revision","retryable":false,"schema_version":"codenoesis.error/v2","stage":"input"}
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    e2e_fr_acq_004_packed_sha1_equivalence
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.83s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_acq_004_packed_sha1`

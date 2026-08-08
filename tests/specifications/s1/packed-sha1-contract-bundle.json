@@ -1,0 +1,50 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "docs/software/decisions/0006-s1-packed-sha1-acquisition-contract.md",
+      "sha256": "bb1ec2eaa0ee9fbc451e4ffdb25c5dbc946435de69e3a4e79f63ceb96971709c"
+    },
+    {
+      "path": "scripts/tests/test_s1_packed_contract.py",
+      "sha256": "c677f938f8eaeac33fda5bce786285e344b25a1599ecdf3f7b93562b1cb8e919"
+    },
+    {
+      "path": "tests/corpora/real-world-rust-v1.json",
+      "sha256": "1d2edc9f858d612e76abb70e6dd255d28e88306a0e4874b0e8ea7351f4347f46"
+    },
+    {
+      "path": "tests/fixtures/s1/packed-sha1-v1/README.md",
+      "sha256": "6891084fe9e09b74df8b4a8dbac84ff76be502cf437b7218892c54eae6910840"
+    },
+    {
+      "path": "tests/fixtures/s1/packed-sha1-v1/manifest.json",
+      "sha256": "d8d0363ade05f0ec393f636f03fdb23e8875a1871e8747c0018f6b430c0bdedd"
+    },
+    {
+      "path": "tests/specifications/s1/codenoesis-error-v6.schema.json",
+      "sha256": "9ce9baab14cb61a66a0e8eda1374193defe9d5419d61a9948f07afcfced9889b"
+    },
+    {
+      "path": "tests/specifications/s1/contract-bundle.json",
+      "sha256": "5e626841c94d7fb5c01a812ebbca62f583b85d2365546ce94ba9ed2b479d74a7"
+    },
+    {
+      "path": "tests/specifications/s1/corpus-descriptor-v1.schema.json",
+      "sha256": "3741997af103c4aa9b6ff514424390643824ef5bef3ec2151d3f759554d88c40"
+    },
+    {
+      "path": "tests/specifications/s1/e2e_fr_acq_004_packed_sha1.json",
+      "sha256": "41ade77f2e0c806c0586f6234c830f932286c18a9419f21ef5f9689a41a5338d"
+    },
+    {
+      "path": "tests/specifications/s4/contract-bundle.json",
+      "sha256": "be199ebbeb9cb35c2e6a68c5b9d847f86fe131efd007b0d09d9fd28390c91437"
+    }
+  ],
+  "bundle_sha256": "08602c21b06e0e0cea754312fb8c9f5d28db36ae31e9e646df669b2c129826df"
+}

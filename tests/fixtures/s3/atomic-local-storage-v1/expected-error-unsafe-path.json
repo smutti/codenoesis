@@ -1,0 +1,11 @@
+{
+  "schema_version": "codenoesis.error/v4",
+  "code": "storage.unsafe_path",
+  "stage": "storage",
+  "message": "The store root violates the local storage path policy.",
+  "retryable": false,
+  "context": {
+    "component": "marker",
+    "reason": "repository_overlap"
+  }
+}

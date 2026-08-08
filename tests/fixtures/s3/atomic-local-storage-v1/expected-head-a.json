@@ -1,0 +1,53 @@
+{
+  "schema_version": "codenoesis.local-snapshot-head/v1",
+  "repository_identity": "urn:codenoesis:fixture:s3-atomic-local-storage-v1",
+  "snapshot_id": "urn:codenoesis:snapshot:blake3:7be8f9f9c453445b9d464b3c909593cf33fbf274f917b3c16e795ba811a14dce",
+  "commit_oid": "d77c36ec27d878cee6d5d85d761de2b70284cd55",
+  "snapshot_schema_version": "codenoesis.repository-snapshot/v3",
+  "semantic_hash": {
+    "algorithm": "blake3-256",
+    "domain": "codenoesis.repository-snapshot.semantic.v3",
+    "value": "58f36e23cab8089bd018a9a70ae7585176dfd25628638f57906090fd1ded776f"
+  },
+  "graph_semantic_hash": {
+    "algorithm": "blake3-256",
+    "domain": "codenoesis.knowledge-graph.semantic.v1",
+    "value": "5847e5524f9310c6753820a2f1eba572898979e22b2246e839417964668de18e"
+  },
+  "generation": 1,
+  "artifacts": [
+    {
+      "role": "snapshot_semantic",
+      "ordinal": 0,
+      "artifact_id": "urn:codenoesis:artifact:blake3:77731ba299209e243651724195af01275710e4c5521378ad1d976f0baec5f61d",
+      "byte_length": 64317,
+      "semantic_hash": {
+        "algorithm": "blake3-256",
+        "domain": "codenoesis.repository-snapshot.semantic.v3",
+        "value": "58f36e23cab8089bd018a9a70ae7585176dfd25628638f57906090fd1ded776f"
+      }
+    },
+    {
+      "role": "knowledge_graph",
+      "ordinal": 0,
+      "artifact_id": "urn:codenoesis:artifact:blake3:f6aacd1faade1c79c72aa63f73a85726863a35080eaa844a3ed5cbbad1a09f09",
+      "byte_length": 30699,
+      "semantic_hash": {
+        "algorithm": "blake3-256",
+        "domain": "codenoesis.knowledge-graph.semantic.v1",
+        "value": "5847e5524f9310c6753820a2f1eba572898979e22b2246e839417964668de18e"
+      }
+    },
+    {
+      "role": "extraction_chunk",
+      "ordinal": 0,
+      "artifact_id": "urn:codenoesis:artifact:blake3:1f559ff0e4d954644d6ac61d84d228d6c5adef62e0baef1ef3501bd26eba5aba",
+      "byte_length": 29780,
+      "semantic_hash": {
+        "algorithm": "blake3-256",
+        "domain": "codenoesis.extraction-chunk.semantic.v1",
+        "value": "dd2ef1eeede35c4eba28e7c6b71e72153e213949e2d1966b9a5b826811474fc8"
+      }
+    }
+  ]
+}

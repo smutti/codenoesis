@@ -1,0 +1,13 @@
+F
+======================================================================
+FAIL: test_binary_scip_matches_pinned_generated_writer_order (scripts.tests.test_s4_r7_compiler_index_contract.S4R7CompilerIndexGovernanceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis-issue-126/scripts/tests/test_s4_r7_compiler_index_contract.py", line 756, in test_binary_scip_matches_pinned_generated_writer_order
+    self.fail(
+AssertionError: pinned generated writer bytes differ: first_difference=121, current_length=3733, required_length=3733, current_sha256=b976da42527edfaa23a59c478e69fce5c97f109bda9b7134a7c384853c34c527, required_sha256=e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)

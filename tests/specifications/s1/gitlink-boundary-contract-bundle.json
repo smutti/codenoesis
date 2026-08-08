@@ -1,0 +1,78 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "docs/software/decisions/0010-s1-gitlink-boundary-contract.md",
+      "sha256": "81f7a9f18efc67fcc9904ba6cb52e4aa545a43974a930c69295d2e00c750eea7"
+    },
+    {
+      "path": "scripts/tests/test_s1_gitlink_contract.py",
+      "sha256": "5ec4cfc27c94e22f22df058a4d8542b7e00afdc8763751612b39fc39d94b4fc0"
+    },
+    {
+      "path": "tests/corpora/real-world-rust-v1.json",
+      "sha256": "1d2edc9f858d612e76abb70e6dd255d28e88306a0e4874b0e8ea7351f4347f46"
+    },
+    {
+      "path": "tests/fixtures/s1/gitlink-boundary-v1/README.md",
+      "sha256": "c4fd29cd20c3560725af8dce489c84195025d1891da1b98033d82aadf6b9a126"
+    },
+    {
+      "path": "tests/fixtures/s1/gitlink-boundary-v1/boundary-input-matching.json",
+      "sha256": "eea8eba8cd9dabf8b426d0da38a0faeab774cf6d666e774fb8d90527da1da441"
+    },
+    {
+      "path": "tests/fixtures/s1/gitlink-boundary-v1/boundary-input-mismatch.json",
+      "sha256": "b874fba4c6642ac7e942efc647b6e4e773bb176a392a0a511c032fba10cf4f58"
+    },
+    {
+      "path": "tests/fixtures/s1/gitlink-boundary-v1/expected-boundaries-bound.json",
+      "sha256": "f3d3f05fe795721f3e6a88f5d2346f849580e1239e575a1dc64f2a2791d8a219"
+    },
+    {
+      "path": "tests/fixtures/s1/gitlink-boundary-v1/expected-boundaries-unbound.json",
+      "sha256": "baf6fb9fa83e136d9535d580e19845bac4530a9643efd6ed5f4cc56fc4451d98"
+    },
+    {
+      "path": "tests/fixtures/s1/gitlink-boundary-v1/manifest.json",
+      "sha256": "ec83796222aaffeb47af0e0ebf47c7a24283007787f1a3e6f8870d8877d1f8e2"
+    },
+    {
+      "path": "tests/fixtures/s1/gitlink-boundary-v1/revision-overlay/.gitmodules",
+      "sha256": "1f5b8be2b1398183bb02369231938556f9f02aba714cf1aa134b96bd0cdabab8"
+    },
+    {
+      "path": "tests/specifications/s1/codenoesis-error-v9.schema.json",
+      "sha256": "2a6d387ac9881b02366b36b43e3afaaa866994aea93b12f884b67a89ef25b6cd"
+    },
+    {
+      "path": "tests/specifications/s1/e2e_fr_acq_005_gitlink_boundaries.json",
+      "sha256": "812e2f448784ba42076d98fb85428b06569df9695099c926db00ffad6ad2a4ba"
+    },
+    {
+      "path": "tests/specifications/s1/external-repository-boundary-v1.schema.json",
+      "sha256": "b9f742f53baa43ac2b08fee142d7d83c5a65ac1e30621d5845d899f2861ae0f5"
+    },
+    {
+      "path": "tests/specifications/s1/packed-sha1-contract-bundle.json",
+      "sha256": "38024dda756914484b38ded700a82373cff95b5ae549c815917c0f79649c0578"
+    },
+    {
+      "path": "tests/specifications/s1/repository-boundary-input-v1.schema.json",
+      "sha256": "a1c054442a1ec19cbdaf96918cd8d1f14e81b0aa64f72b824c25f43edab2e10b"
+    },
+    {
+      "path": "tests/specifications/s1/repository-snapshot-v5.schema.json",
+      "sha256": "60cdc5b3e9dfcc8f5f2b2cfe0a36348efe4b6c0fded548b1b70f6eab1311c51e"
+    },
+    {
+      "path": "tests/specifications/s4/contract-bundle.json",
+      "sha256": "be199ebbeb9cb35c2e6a68c5b9d847f86fe131efd007b0d09d9fd28390c91437"
+    }
+  ],
+  "bundle_sha256": "2f59bb311b64b0f4f9d506266f05e9e52f4c0bf5af8926276ed371967690969b"
+}

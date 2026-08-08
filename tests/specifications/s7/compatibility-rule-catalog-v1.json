@@ -1,0 +1,138 @@
+{
+  "schema_version": "codenoesis.compatibility-rule-catalog/v1",
+  "catalog_version": "codenoesis.compatibility-rules/http-json/v1",
+  "analysis_profile": "implementation-aware-http-json/v1",
+  "fact_views": [
+    "declared_contract",
+    "provider_implementation",
+    "client_assumption",
+    "test_observation",
+    "runtime_observation"
+  ],
+  "dimensions": [
+    "presence",
+    "nullability",
+    "default",
+    "validation",
+    "value_set",
+    "http_status",
+    "error_code"
+  ],
+  "classifications": [
+    "compatible",
+    "potentially_breaking",
+    "breaking",
+    "unresolved"
+  ],
+  "rules": [
+    {
+      "id": "cmp.error.code.changed/v1",
+      "priority": 70,
+      "direction": "response",
+      "dimension": "error_code",
+      "predicate": "provider error identity changes and a deterministically linked client branches on the removed identity",
+      "classification": "breaking"
+    },
+    {
+      "id": "cmp.http.response-status.removed/v1",
+      "priority": 70,
+      "direction": "response",
+      "dimension": "http_status",
+      "predicate": "a previously emitted response status is removed and a deterministically linked client relies on that status",
+      "classification": "breaking"
+    },
+    {
+      "id": "cmp.request.presence.optional-to-required/v1",
+      "priority": 80,
+      "direction": "request",
+      "dimension": "presence",
+      "predicate": "the provider changes from accepting absence to requiring input and a deterministically linked call site can omit the field",
+      "classification": "breaking"
+    },
+    {
+      "id": "cmp.request.validation.tightened/v1",
+      "priority": 60,
+      "direction": "request",
+      "dimension": "validation",
+      "predicate": "the accepted request domain narrows; deterministic client-value evidence yields breaking and otherwise yields potentially_breaking",
+      "classification": "potentially_breaking"
+    },
+    {
+      "id": "cmp.response.nullability.non-null-to-nullable/v1",
+      "priority": 80,
+      "direction": "response",
+      "dimension": "nullability",
+      "predicate": "the provider may newly emit null and a deterministically linked client rejects null",
+      "classification": "breaking"
+    },
+    {
+      "id": "cmp.response.presence.client-stricter-than-contract/v1",
+      "priority": 50,
+      "direction": "response",
+      "dimension": "presence",
+      "predicate": "the declared response field is optional while a deterministically linked client requires presence",
+      "classification": "potentially_breaking"
+    },
+    {
+      "id": "cmp.response.presence.safe-absence-handling/v1",
+      "priority": 40,
+      "direction": "response",
+      "dimension": "presence",
+      "predicate": "the provider may omit the field and a deterministically linked client handles absence on the exercised decode path",
+      "classification": "compatible"
+    },
+    {
+      "id": "cmp.response.presence.undocumented-guarantee-removed/v1",
+      "priority": 90,
+      "direction": "response",
+      "dimension": "presence",
+      "predicate": "the contract remains optional, provider implementation changes from guaranteed present to may be absent, and a deterministically linked client requires presence",
+      "classification": "breaking"
+    },
+    {
+      "id": "cmp.response.value-set.expanded/v1",
+      "priority": 60,
+      "direction": "response",
+      "dimension": "value_set",
+      "predicate": "the provider may emit a new value; deterministic exhaustive client handling yields breaking and otherwise yields potentially_breaking",
+      "classification": "potentially_breaking"
+    },
+    {
+      "id": "cmp.unresolved.insufficient-evidence/v1",
+      "priority": 100,
+      "direction": "both",
+      "dimension": "any",
+      "predicate": "operation identity or a fact required by another rule is unknown, candidate-only, conflicting, or outside an approved capability",
+      "classification": "unresolved"
+    }
+  ],
+  "precedence": {
+    "evaluation": [
+      "reject non-authoritative or conflicting federation",
+      "emit unresolved for each missing required fact",
+      "evaluate direction- and dimension-specific rules",
+      "select the highest rule priority per subject and client",
+      "break ties by classification severity then rule id"
+    ],
+    "severity": [
+      "unresolved",
+      "breaking",
+      "potentially_breaking",
+      "compatible"
+    ],
+    "breaking_fact_states": [
+      "deterministic_fact",
+      "confirmed"
+    ],
+    "candidate_client_impact": "unresolved"
+  },
+  "semantic_constraints": {
+    "presence_is_distinct_from_nullability": true,
+    "presence_is_distinct_from_default": true,
+    "declared_default_proves_runtime_application": false,
+    "source_type_alone_proves_client_requiredness": false,
+    "absence_of_trace_proves_absence_of_behavior": false,
+    "unchanged_contract_suppresses_implementation_diff": false,
+    "model_output_may_create_breaking_fact": false
+  }
+}

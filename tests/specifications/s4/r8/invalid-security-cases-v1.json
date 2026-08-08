@@ -1,0 +1,326 @@
+{
+  "schema_version": "codenoesis.r8-invalid-security-cases/v1",
+  "cases": [
+    {
+      "id": "connect_source_enabled",
+      "boundary": "csp",
+      "mutation": "allow connect-src other than 'none'",
+      "expected_code": "explorer.unsafe_payload",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false
+    },
+    {
+      "id": "destination_component_dot_dot",
+      "boundary": "path",
+      "mutation": "output contains a parent component",
+      "expected_code": "input.unsafe_output_path",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": "../explorer"
+    },
+    {
+      "id": "destination_marker_mismatch",
+      "boundary": "path",
+      "mutation": "destination marker names another contract",
+      "expected_code": "input.unsafe_output_path",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": ".codenoesis-workspace-docs-v1"
+    },
+    {
+      "id": "destination_non_empty_unmarked",
+      "boundary": "path",
+      "mutation": "destination contains unowned bytes",
+      "expected_code": "input.unsafe_output_path",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": "manual.txt"
+    },
+    {
+      "id": "destination_parent_symlink_escape",
+      "boundary": "path",
+      "mutation": "destination parent resolves outside the selected root",
+      "expected_code": "input.unsafe_output_path",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": "out -> /tmp"
+    },
+    {
+      "id": "duplicate_entity_id",
+      "boundary": "reimport",
+      "mutation": "second entity reuses an existing ID with different bytes",
+      "expected_code": "export.identity_conflict",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false
+    },
+    {
+      "id": "duplicate_relationship_id",
+      "boundary": "reimport",
+      "mutation": "second relationship reuses an existing ID with different bytes",
+      "expected_code": "export.identity_conflict",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false
+    },
+    {
+      "id": "dynamic_code_evaluation",
+      "boundary": "csp",
+      "mutation": "viewer introduces eval or Function",
+      "expected_code": "explorer.unsafe_payload",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": "new Function('return 1')"
+    },
+    {
+      "id": "evidence_absolute_path",
+      "boundary": "privacy_path",
+      "mutation": "evidence path is absolute",
+      "expected_code": "explorer.invalid_projection",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": "/private/source.rs"
+    },
+    {
+      "id": "evidence_parent_escape",
+      "boundary": "privacy_path",
+      "mutation": "evidence path contains a parent component",
+      "expected_code": "explorer.invalid_projection",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": "../../source.rs"
+    },
+    {
+      "id": "html_attribute_quotes",
+      "boundary": "xss",
+      "mutation": "display label contains attribute-breaking quotes",
+      "expected_code": "explorer.unsafe_payload",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": "\" onfocus=\"alert(1)"
+    },
+    {
+      "id": "html_script_close",
+      "boundary": "xss",
+      "mutation": "display label contains a script close and active tag",
+      "expected_code": "explorer.unsafe_payload",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": "</script><script>alert(1)</script>"
+    },
+    {
+      "id": "json_nesting_max_plus_one",
+      "boundary": "resource",
+      "mutation": "JSON nesting is 65",
+      "expected_code": "export.limit_exceeded",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": 65
+    },
+    {
+      "id": "missing_claim_subject",
+      "boundary": "reimport",
+      "mutation": "claim subject is absent",
+      "expected_code": "export.reference_mismatch",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false
+    },
+    {
+      "id": "missing_evidence_reference",
+      "boundary": "reimport",
+      "mutation": "subject references absent evidence",
+      "expected_code": "export.unresolved_evidence",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false
+    },
+    {
+      "id": "missing_relationship_endpoint",
+      "boundary": "reimport",
+      "mutation": "relationship target is absent",
+      "expected_code": "export.reference_mismatch",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false
+    },
+    {
+      "id": "neighborhood_relationships_max_plus_one",
+      "boundary": "resource",
+      "mutation": "bounded view requests 513 relationships",
+      "expected_code": "explorer.limit_exceeded",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": 513
+    },
+    {
+      "id": "neighborhood_subjects_max_plus_one",
+      "boundary": "resource",
+      "mutation": "bounded view requests 257 subjects",
+      "expected_code": "explorer.limit_exceeded",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": 257
+    },
+    {
+      "id": "noncanonical_family_order",
+      "boundary": "determinism",
+      "mutation": "one family is not sorted by exact stable ID",
+      "expected_code": "export.noncanonical_portable_graph",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false
+    },
+    {
+      "id": "oversized_display_label",
+      "boundary": "resource_xss",
+      "mutation": "display label exceeds its source schema maximum",
+      "expected_code": "explorer.unsafe_payload",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": 16385
+    },
+    {
+      "id": "oversized_metadata",
+      "boundary": "resource_xss",
+      "mutation": "metadata value exceeds the approved bound",
+      "expected_code": "explorer.unsafe_payload",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": 65537
+    },
+    {
+      "id": "portable_graph_bytes_max_plus_one",
+      "boundary": "resource",
+      "mutation": "projection has 268435457 bytes",
+      "expected_code": "export.limit_exceeded",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": 268435457
+    },
+    {
+      "id": "remote_script_origin",
+      "boundary": "csp",
+      "mutation": "viewer references a remote script",
+      "expected_code": "explorer.unsafe_payload",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": "remote-origin/script.js"
+    },
+    {
+      "id": "snapshot_hash_mismatch",
+      "boundary": "reimport",
+      "mutation": "source semantic hash does not bind the exported families",
+      "expected_code": "export.invalid_snapshot",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false
+    },
+    {
+      "id": "text_results_max_plus_one",
+      "boundary": "resource",
+      "mutation": "viewer attempts to display 101 text results",
+      "expected_code": "explorer.limit_exceeded",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": 101
+    },
+    {
+      "id": "traversal_depth_max_plus_one",
+      "boundary": "resource",
+      "mutation": "viewer requests depth 3",
+      "expected_code": "explorer.limit_exceeded",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": 3
+    },
+    {
+      "id": "unicode_bidi_override",
+      "boundary": "xss",
+      "mutation": "display label contains a bidi override",
+      "expected_code": "explorer.unsafe_payload",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": "safe‮txt.exe"
+    },
+    {
+      "id": "unicode_control_character",
+      "boundary": "xss",
+      "mutation": "display label contains a disallowed control",
+      "expected_code": "explorer.unsafe_payload",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": "safe\u0001label"
+    },
+    {
+      "id": "unicode_line_separator",
+      "boundary": "xss",
+      "mutation": "display label contains Unicode line separator",
+      "expected_code": "explorer.unsafe_payload",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": "line break"
+    },
+    {
+      "id": "unicode_paragraph_separator",
+      "boundary": "xss",
+      "mutation": "display label contains Unicode paragraph separator",
+      "expected_code": "explorer.unsafe_payload",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": "line break"
+    },
+    {
+      "id": "unknown_projection_field",
+      "boundary": "schema",
+      "mutation": "portable graph adds an unknown top-level member",
+      "expected_code": "explorer.invalid_projection",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false
+    },
+    {
+      "id": "unsupported_projection_version",
+      "boundary": "schema",
+      "mutation": "portable graph names an unknown schema version",
+      "expected_code": "export.unsupported_portable_graph_schema",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": "codenoesis.portable-graph/v2"
+    },
+    {
+      "id": "viewer_asset_bytes_max_plus_one",
+      "boundary": "resource",
+      "mutation": "non-data viewer asset has 1048577 bytes",
+      "expected_code": "explorer.limit_exceeded",
+      "expected_behavior": "reject_before_publication_without_mutation",
+      "repair_allowed": false,
+      "silent_truncation_allowed": false,
+      "payload": 1048577
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "schema_version": "codenoesis.local-test-observation/v1",
+  "slice": "S4",
+  "roadmap_capability": "R4",
+  "status": "red_observed",
+  "requirement_status": "Approved",
+  "requirements": [
+    "FR-EXT-009"
+  ],
+  "risk": "high",
+  "issue": "https://github.com/smutti/codenoesis/issues/104",
+  "authorization_comment": "https://github.com/smutti/codenoesis/issues/104#issuecomment-5168735482",
+  "oracle_bundle_sha256": "e4af7183ec111eeee06d65d752884cee09d9e943e70fbd14a434d688f1dfa0a3",
+  "reviewed_source_sha256": {
+    "decision": "6fa29d1f8e4e245db917a70b54db9dbb87997c3167ced64d208c224feb077845",
+    "acceptance_specification": "ead9f09f47097a734594aa773656a74397efe397fd9316174d5f94b8763118f1",
+    "cargo_manifest_subset": "23d0d13baabd4659f739be74d92073c7a6b03786f5e51ebaaf06d8750ea5e4fb",
+    "configuration_v4_schema": "b253d286e430693fbd91f16d85b4feef5cb5debbebaac5ebc0c290ab4054fcf1",
+    "snapshot_v7_schema": "213467b0ffeb3e57c3effab6abd495417547bad2ca6eb80f4e6300871835e6ae",
+    "extraction_chunk_v4_schema": "41fd7ebe6b078a456e4e5204b622d6f984bd8583c1e423ce771b9cf26f2d8244",
+    "knowledge_graph_v4_schema": "8a0c1f085e3faf2c4fd7aebab53373a584b4e8d4239c3907934f07f6107a355c",
+    "rust_ontology_v4": "df24f5a9b0e035870601466820fd4ba84df5ea56a9c1159ae48ae0e2ebb85936",
+    "error_v11_schema": "e1dc0ab8f74596b5d0b95cab9161d7e09c9f6f90b6bd104e618de1e6032249aa",
+    "semantic_hash_contract": "1dc68c80cb628e6acee323cf47b708f58b89534166908880f502d3af76b9075a",
+    "fixture_manifest": "b9027ef07dd8ae9f8339ae1e8434abbe6c36874b73cb81e651d4e5230a4e0a72",
+    "expected_manifest_facts": "643f72b1ba5c2b7f14e518d4014f684e9837c6165ca6b1dbf86c6d0935ea5b09",
+    "bundle_file": "edd73fc6c7b6f354d62eed8bda630cb251a28a530f521a6ba1aeae921eb08b63"
+  },
+  "base_sha": "94a8fe9b27b7e4fd9ae5c759cc23591c4fa12d00",
+  "pre_r4_runtime_sha": "ea51a8151749fc65e75dd7a10e550adc0b67d422",
+  "test_first_sha": "2b19d8a44c254b074e9c1e91d35bf8c8272af428",
+  "policy": {
+    "version": 1,
+    "sha256": "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993",
+    "binding": "maintainer_supervised_interactive_lane",
+    "unattended_authorization": false
+  },
+  "red": {
+    "test_id": "e2e_fr_ext_009_cargo_manifest_facts",
+    "command": "cargo test --locked -p noesis --test e2e_fr_ext_009_cargo_manifest_facts -- e2e_fr_ext_009_cargo_manifest_facts --exact",
+    "runner_exit_code": 101,
+    "subject_exit_code": 2,
+    "subject_stdout": "empty",
+    "subject_stdout_bytes": 0,
+    "subject_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "subject_stderr": "{\"code\":\"input.invalid_revision\",\"context\":{},\"message\":\"invalid revision\",\"retryable\":false,\"schema_version\":\"codenoesis.error/v4\",\"stage\":\"input\"}\n",
+    "subject_stderr_bytes": 149,
+    "subject_stderr_sha256": "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe",
+    "expected_failure": "The exact R4 fixture reaches the unsupported cargo-manifest-facts-v1 selector and the monitored pre-R4 subject returns exit 2, empty stdout, and strict LF-terminated ErrorV4 input.invalid_revision before acquisition.",
+    "observed_failure": "The harness validated every selected fixture byte, SHA-256, Git blob, tree, and commit identity, then reached its explicit V7 success assertion after observing exactly the approved unrecognized-selector boundary.",
+    "rejected_attempts": [
+      {
+        "accepted_as_red": false,
+        "reason": "the capture wrapper used zsh's reserved status variable after subject execution and exited before emitting the retained log"
+      }
+    ],
+    "fixture_observations": {
+      "setup_outside_monitored_subject": true,
+      "root_commit_oid": "7b1fc9073552b5967b1620d1e082a1d45e1b380e",
+      "root_tree_oid": "c99449f6f0651e4f6398521e316f3500d0e508e7",
+      "deliberately_absent_paths": [
+        "crates/shared",
+        "vendor/custom"
+      ],
+      "store_exists_after_subject": false,
+      "documents_root_exists_after_subject": false,
+      "root_repository_opened": false,
+      "dependency_paths_opened": 0,
+      "external_locators_opened": 0,
+      "processes_spawned": 0,
+      "network_attempts": 0,
+      "cargo_executions": 0,
+      "rustc_executions": 0,
+      "build_script_executions": 0,
+      "procedural_macro_executions": 0,
+      "target_executions": 0,
+      "writes": 0,
+      "publications": 0
+    },
+    "log": {
+      "path": "crates/noesis/tests/evidence/s4/r4/red/e2e_fr_ext_009_cargo_manifest_facts.log",
+      "sha256": "4d6f7c78edbf98388aaea822f8e20dbd244ec82ac4077b80628957dc1e249c75",
+      "bytes": 1136
+    }
+  },
+  "environment": {
+    "observed_at_utc": "2026-08-03T16:03:06Z",
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "macos": "26.5.2",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "python": "Python 3.9.6",
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "actionlint": "1.7.12",
+    "features": []
+  },
+  "agent": {
+    "identity": "OpenAI Codex",
+    "model": "not exposed by the runtime",
+    "run_identifier": "issue-104-interactive",
+    "duration": "not exposed by the runtime",
+    "cost": "not exposed by the runtime"
+  },
+  "limitation": "This retained local Red is not exact-head CI evidence and must not be used to claim FR-EXT-009 Verified. Authority counters are inferred from the pre-acquisition CLI failure, absent store/docs roots, strict fixture assertions, and the harness boundary rather than an OS trace."
+}

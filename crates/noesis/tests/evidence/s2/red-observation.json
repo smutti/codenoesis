@@ -1,0 +1,48 @@
+{
+  "schema_version": "codenoesis.local-test-observation/v1",
+  "slice": "S2",
+  "status": "red_observed",
+  "requirements": [
+    "DR-IDN-001",
+    "FR-EXT-001",
+    "FR-EXT-002",
+    "FR-KNW-001",
+    "FR-KNW-002",
+    "FR-KNW-003"
+  ],
+  "oracle_bundle_sha256": "d105957b00335ece563ae2783543aa112916d71131cfb23a0ebcaa14d7f57c9f",
+  "base_sha": "50faee5d12d57eae33943f61ee16de9001dc8ece",
+  "pre_implementation_sha": "1abe1a4cf82e9902b7e5195f709ffd98c00c527e",
+  "policy": {
+    "version": 1,
+    "source_sha": "6675f81410ce79e6d5b8a8085502f5331ea61d75",
+    "approval_reference": "https://github.com/smutti/codenoesis/pull/23",
+    "binding_merge": "https://github.com/smutti/codenoesis/pull/25"
+  },
+  "red": {
+    "test_id": "e2e_fr_ext_002_rust_knowledge",
+    "command": "cargo test --test e2e_fr_ext_002_rust_knowledge",
+    "runner_exit_code": 101,
+    "subject_exit_code": 2,
+    "subject_stderr_schema": "codenoesis.error/v2",
+    "subject_stderr_code": "input.invalid_profile",
+    "expected_failure": "The harness expects exit 0 and RepositorySnapshotV3 while merged S1 rejects --profile standard-local-s2.",
+    "observed_failure": "The fixture materialized to the ratified commit, the subject returned the approved S1 invalid-profile precursor, and the acceptance assertion failed.",
+    "observed_at": "2026-07-26T09:33:26Z",
+    "issue_comment": "https://github.com/smutti/codenoesis/issues/26#issuecomment-5082916435",
+    "log": {
+      "path": "crates/noesis/tests/evidence/s2/red/e2e_fr_ext_002_rust_knowledge.log",
+      "sha256": "50e164ed47c85d3cf95838c839bb12b931512755541ef4a3c0233db58e3df6e8"
+    }
+  },
+  "rejected_attempts": [],
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "features": []
+  },
+  "github_actions_artifact": null,
+  "limitation": "This local observation is not immutable retained CI evidence and must not be used to claim Verified."
+}

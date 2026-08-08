@@ -1,0 +1,128 @@
+{
+  "schema_version": "codenoesis.fixture.git/v3",
+  "fixture_id": "s2-rust-knowledge-v1",
+  "provenance": {
+    "kind": "synthetic_first_party",
+    "description": "Original Rust source and deterministic variants authored for the CodeNoesis S2 acceptance contract.",
+    "third_party_material": false,
+    "license_spdx": "Apache-2.0",
+    "license_file": "../../../../LICENSE",
+    "license_scope": "entire repository",
+    "copyright_holder": "CodeNoesis contributors"
+  },
+  "repository": {
+    "identity": "urn:codenoesis:fixture:s2-rust-knowledge-v1",
+    "object_format": "sha1",
+    "default_ref": "refs/heads/main",
+    "source_root": "revision-a",
+    "author_name": "CodeNoesis Fixture",
+    "author_email": "fixture@codenoesis.invalid",
+    "timestamp": 1784851200,
+    "timezone": "+0000",
+    "message": "CodeNoesis S2 Rust knowledge fixture revision A\n",
+    "materialization": {
+      "object_storage": "loose",
+      "global_git_config": "disabled",
+      "hooks": "disabled",
+      "core.autocrlf": "false",
+      "core.filemode": "true",
+      "checkout_required": false
+    }
+  },
+  "revision": {
+    "label": "A",
+    "commit_oid": "d77c36ec27d878cee6d5d85d761de2b70284cd55",
+    "tree_oid": "262d3054a4d054b2c90fbbb5f1d0f347f680b635",
+    "commit_payload_sha256": "e713952097cda2c190515c6df7ceecae8ca960766afd26c66e60e47603c5538d",
+    "files": [
+      {
+        "path": "Cargo.toml",
+        "mode": "100644",
+        "source_sha256": "dc36cc10826c43e0d5308c48ffe30474062b4b3cfaa6e19560221242a735b542",
+        "byte_length": 103,
+        "blob_oid": "9f33cdaae97d9c660c90f299e54d4522d4b3d5cc"
+      },
+      {
+        "path": "src/lib.rs",
+        "mode": "100644",
+        "source_sha256": "91232acb38ea9e4b646650c7023ce610412b69df3d487b881fece794892c601a",
+        "byte_length": 630,
+        "blob_oid": "615f6db198ab9ebb96fbdfbbfab8d7e4e7c0c242"
+      }
+    ],
+    "trees": [
+      {
+        "path": "",
+        "entry_count": 2,
+        "payload_bytes": 68,
+        "tree_oid": "262d3054a4d054b2c90fbbb5f1d0f347f680b635"
+      },
+      {
+        "path": "src",
+        "entry_count": 1,
+        "payload_bytes": 34,
+        "tree_oid": "3e711cceb17eaaa7707805aaf79fc342d9026c83"
+      }
+    ]
+  },
+  "expected_graph": {
+    "ontology_version": "codenoesis.ontology/rust/v1",
+    "extractor_version": "codenoesis.rust-tree-sitter/s2-v1",
+    "entity_count": 11,
+    "relationship_count": 15,
+    "deterministic_fact_count": 25,
+    "derived_fact_count": 1,
+    "evidence_count": 13,
+    "diagnostic_count": 0,
+    "coverage_gap_count": 3,
+    "golden": "expected-graph-a.json"
+  },
+  "expected_extraction": {
+    "chunk_id": "urn:codenoesis:extraction-chunk:blake3:bede00dd7856de4d2f45d762ef2541317559b1d7babf967d3e7be8974e171d89",
+    "semantic_hash": "b5292b7e345e873cdb4a226ebd4672a69a63c029491471ac8c6172b3e5bbe043",
+    "entity_count": 11,
+    "relationship_count": 14,
+    "claim_count": 25,
+    "evidence_count": 13,
+    "golden": "expected-extraction-a.json"
+  },
+  "generated_variants": {
+    "malformed_token": {
+      "base_path": "src/lib.rs",
+      "operation": "insert_before_utf8",
+      "anchor_utf8": "pub fn café_label",
+      "insert_utf8": "\n§\n",
+      "result_byte_length": 634,
+      "result_sha256": "73c9bc768097f0bcea93f1ada36dba696068aab380f65cca6b8428f59b5988f5",
+      "expected_diagnostic": {
+        "code": "extraction.malformed_syntax",
+        "path": "src/lib.rs",
+        "span": {
+          "unit": "byte",
+          "start": 556,
+          "end": 558
+        }
+      },
+      "expected_gap": {
+        "code": "malformed_syntax_excluded",
+        "path": "src/lib.rs",
+        "span": {
+          "unit": "byte",
+          "start": 556,
+          "end": 558
+        }
+      }
+    },
+    "nfc_collision": {
+      "base_path": "src/lib.rs",
+      "operation": "append_utf8",
+      "append_utf8": "\npub fn café_label() {}\n",
+      "result_byte_length": 656,
+      "result_sha256": "51f9e5345759da792c45c007882f3ad9e7d8ec8f73b9a5b2b480022f9170092e",
+      "first_source_spelling": "café_label",
+      "second_source_spelling": "café_label",
+      "normalized_identity": "crate::café_label",
+      "expected_error": "expected-error-nfc-collision.json"
+    }
+  }
+}

@@ -1,0 +1,236 @@
+{
+  "schema_version": "codenoesis.acceptance-specification/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/62",
+  "approval_pull_request": "https://github.com/smutti/codenoesis/pull/63",
+  "requirements": [
+    {
+      "id": "DR-SEM-001",
+      "current_state": "Proposed",
+      "target_state": "Approved"
+    },
+    {
+      "id": "FR-IMP-004",
+      "current_state": "Proposed",
+      "target_state": "Approved"
+    },
+    {
+      "id": "FR-IMP-005",
+      "current_state": "Proposed",
+      "target_state": "Approved"
+    }
+  ],
+  "slice": "S7",
+  "risk": {
+    "level": "high",
+    "rationale": "Public compatibility schema, semantic classifier, cross-repository impact meaning, ontology-facing identity, and protected fixture/oracle"
+  },
+  "analysis_profile": "implementation-aware-http-json/v1",
+  "runtime_implementation_authorized": false,
+  "prerequisites": {
+    "required_before_red": [
+      "Approved and Implemented S5 incremental snapshot comparison",
+      "Approved and Implemented S6 deterministic provider/client federation",
+      "Approved OpenAPI 3.1 HTTP/JSON contract capability",
+      "Approved Rust direct JSON-map provider capability",
+      "Approved Kotlin/KMP direct JSON-access client capability"
+    ],
+    "unapproved_or_missing_prerequisite": "The S7 implementation issue is human-required until every listed prerequisite exists on main."
+  },
+  "fixture": {
+    "root": "tests/fixtures/s7/implementation-aware-api-v1",
+    "manifest": "tests/fixtures/s7/implementation-aware-api-v1/manifest.json",
+    "expected_report": "tests/fixtures/s7/implementation-aware-api-v1/expected-semantic-compatibility-report.json",
+    "report_schema": "tests/specifications/s7/semantic-compatibility-report-v1.schema.json",
+    "rule_catalog": "tests/specifications/s7/compatibility-rule-catalog-v1.json"
+  },
+  "expected_red": {
+    "test_name": "e2e_fr_imp_004_implementation_aware_api_diff",
+    "command": "cargo test -p noesis --test e2e_fr_imp_004_implementation_aware_api_diff --locked -- --exact e2e_fr_imp_004_implementation_aware_api_diff",
+    "precondition": "Every prerequisite is merged and the test harness is added before production implementation.",
+    "expected_failure": "The provider contract and deterministic client links are available, but the implementation-aware capability returns unsupported and emits no SemanticCompatibilityReportV1 finding.",
+    "accepted_error_code": "impact.unsupported_implementation_semantics",
+    "rejected_failures": [
+      "compilation failure",
+      "missing or changed fixture",
+      "unknown command or profile",
+      "schema or oracle failure",
+      "panic",
+      "timeout",
+      "network, build, target, plugin, or model execution",
+      "comparison of only the two byte-identical OpenAPI files"
+    ],
+    "run_in_governance_change": false,
+    "reason_not_run": "S5, S6, and approved source capability profiles do not yet exist; governance may not fabricate a behavioral Red."
+  },
+  "semantic_contract": {
+    "fact_views": [
+      "declared_contract",
+      "provider_implementation",
+      "client_assumption",
+      "test_observation",
+      "runtime_observation"
+    ],
+    "dimensions": [
+      "presence",
+      "nullability",
+      "default",
+      "validation",
+      "value_set",
+      "http_status",
+      "error_code"
+    ],
+    "directions": [
+      "request",
+      "response"
+    ],
+    "classifications": [
+      "compatible",
+      "potentially_breaking",
+      "breaking",
+      "unresolved"
+    ],
+    "required_separations": [
+      "presence from nullability",
+      "presence from declared or applied default",
+      "declared contract from provider implementation",
+      "provider implementation from client assumption",
+      "static universal claim from one test or runtime observation",
+      "deterministic federation from candidate or conflicting identity",
+      "affected client from merely reachable or name-similar client"
+    ]
+  },
+  "oracle": {
+    "provider_contract_sha256_equal": true,
+    "nickname": {
+      "contract_baseline": "optional",
+      "contract_target": "optional",
+      "implementation_baseline": "guaranteed_present",
+      "implementation_target": "may_be_absent",
+      "change_kind": "implementation_behavior_changed_without_contract_change",
+      "strict_client_baseline": "potentially_breaking",
+      "strict_client_target": "breaking",
+      "safe_client_target": "compatible"
+    },
+    "displayName": {
+      "contract_baseline": "optional",
+      "contract_target": "optional",
+      "implementation_baseline": "unknown",
+      "implementation_target": "unknown",
+      "classification": "unresolved",
+      "coverage_gap": "unsupported_custom_provider_mapping"
+    },
+    "decoy": {
+      "reason": "operation_identity_mismatch",
+      "must_not_appear_as_assessed_or_affected": true
+    },
+    "evidence": {
+      "all_material_findings_resolve": true,
+      "line_spans_are_exact": true,
+      "rule_id_and_version_are_required": true,
+      "missing_trace_proves_absence": false
+    }
+  },
+  "limits": {
+    "operations": 10000,
+    "fields_per_operation": 5000,
+    "linked_clients": 10000,
+    "call_sites": 1000000,
+    "semantic_diffs": 200000,
+    "evidence_items": 1000000,
+    "coverage_gaps": 200000,
+    "report_bytes": 67108864
+  },
+  "determinism": {
+    "semantic_diff_order": "id ascending",
+    "client_assessment_order": "client_identity ascending",
+    "rejected_candidate_order": "client_identity ascending",
+    "evidence_order": "id ascending",
+    "coverage_gap_order": "id ascending",
+    "set_like_id_lists": "UTF-8 byte ascending with duplicates rejected",
+    "replay": "50 sequential replays plus 10 shuffled parallel repetitions are byte-identical"
+  },
+  "tests": [
+    {
+      "id": "conf_dr_sem_001_report_v1",
+      "requirements": [
+        "DR-SEM-001"
+      ],
+      "oracle": "The expected report validates against the closed Draft 2020-12 schema and rejects missing, unknown, duplicate, unsorted, dangling, or incompatible fields."
+    },
+    {
+      "id": "pt_dr_sem_001_semantic_dimensions_are_distinct",
+      "requirements": [
+        "DR-SEM-001"
+      ],
+      "oracle": "Presence, nullability, declared default, and applied default cannot substitute for one another in rule predicates."
+    },
+    {
+      "id": "e2e_fr_imp_004_implementation_aware_api_diff",
+      "requirements": [
+        "FR-IMP-004"
+      ],
+      "oracle": "The report reconciles contract, provider source, and linked client source without executing any target and exposes exact evidence or explicit gaps."
+    },
+    {
+      "id": "gt_fr_imp_004_client_stricter_than_contract",
+      "requirements": [
+        "FR-IMP-004"
+      ],
+      "oracle": "The strict client is potentially breaking before the provider change because it requires a response field the contract declares optional."
+    },
+    {
+      "id": "gt_fr_imp_004_safe_client_and_decoy",
+      "requirements": [
+        "FR-IMP-004"
+      ],
+      "oracle": "The safe linked client remains compatible and the name-similar client for another operation is rejected."
+    },
+    {
+      "id": "gt_fr_imp_005_unchanged_contract_implementation_diff",
+      "requirements": [
+        "FR-IMP-005"
+      ],
+      "oracle": "Byte-identical OpenAPI inputs do not suppress the guaranteed-present to may-be-absent implementation delta."
+    },
+    {
+      "id": "pt_fr_imp_005_rule_precedence_and_unknowns",
+      "requirements": [
+        "FR-IMP-005"
+      ],
+      "oracle": "Insufficient or candidate-only facts produce unresolved with a gap; complete facts select the highest-priority deterministic rule."
+    },
+    {
+      "id": "sec_fr_imp_004_no_target_execution",
+      "requirements": [
+        "FR-IMP-004"
+      ],
+      "oracle": "Build, target, plugin, network, and model sentinels remain untouched during static analysis."
+    }
+  ],
+  "allowed_paths": [
+    "docs/software/software-requirements-specification.md",
+    "docs/software/roadmap.md",
+    "docs/software/decisions/0007-s7-implementation-aware-api-compatibility-contract.md",
+    "tests/specifications/s7",
+    "tests/fixtures/s7/implementation-aware-api-v1",
+    "scripts/tests/test_s7_implementation_aware_api_contract.py"
+  ],
+  "forbidden": [
+    "production Rust code",
+    "dependency manifests",
+    "workflow or policy files",
+    "existing accepted contract bundles or goldens",
+    "target compilation or execution",
+    "network or model access",
+    "automatic promotion of type names, heuristic links, model output, or missing traces into behavioral facts",
+    "claim of arbitrary behavioral equivalence or full causal impact"
+  ],
+  "stop_conditions": [
+    "contract, provider, and client semantics cannot remain separate",
+    "directionality, nullability, default, evidence, rule precedence, or classification is ambiguous",
+    "the fixture requires build, target, network, plugin, or model execution",
+    "a broad language or framework promise is required without an approved capability matrix",
+    "implementation, dependency, policy, workflow, architecture, existing bundle, or release changes become necessary",
+    "the task exceeds the allowed paths or high-risk classification"
+  ]
+}

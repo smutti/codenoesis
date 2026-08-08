@@ -1,0 +1,9 @@
+openapi: 3.1.0
+defaults: &defaults
+  version: 1.0.0
+info:
+  <<: *defaults
+  title: Merge Key
+servers:
+  - url: https://api.example.invalid
+paths: {}

@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:repository-boundary-input:v1",
+  "title": "RepositoryBoundaryInputV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "root",
+    "nested_repositories"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.repository-boundary-input/v1"
+    },
+    "root": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository_identity",
+        "commit_oid"
+      ],
+      "properties": {
+        "repository_identity": {
+          "$ref": "#/$defs/repository_identity"
+        },
+        "commit_oid": {
+          "$ref": "#/$defs/git_sha1"
+        }
+      }
+    },
+    "nested_repositories": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "boundary_path",
+          "repository_identity",
+          "repository_root",
+          "revision",
+          "acquisition_profile"
+        ],
+        "properties": {
+          "boundary_path": {
+            "$ref": "#/$defs/canonical_relative_path"
+          },
+          "repository_identity": {
+            "$ref": "#/$defs/repository_identity"
+          },
+          "repository_root": {
+            "$ref": "#/$defs/canonical_relative_path"
+          },
+          "revision": {
+            "$ref": "#/$defs/git_sha1"
+          },
+          "acquisition_profile": {
+            "enum": [
+              "verified-loose-sha1-v1",
+              "local-git-sha1-packed-v1"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "repository_identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^urn:codenoesis:[a-z0-9][a-z0-9._:-]{0,254}$"
+    },
+    "git_sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "canonical_relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!.*(?:^|/)(?:\\.|\\.\\.)(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    }
+  }
+}

@@ -1,0 +1,302 @@
+{
+  "schema_version": "codenoesis.ontology-definition/v1",
+  "ontology_version": "codenoesis.ontology/rust/v1",
+  "status": "approved",
+  "language": "rust",
+  "entity_common_properties": [
+    "entity_id",
+    "kind",
+    "canonical_identity",
+    "display_name",
+    "language",
+    "properties",
+    "evidence_ids",
+    "claim"
+  ],
+  "entity_kinds": [
+    {
+      "kind": "rust.crate",
+      "required_properties": ["crate_root"]
+    },
+    {
+      "kind": "rust.enum",
+      "required_properties": ["visibility"]
+    },
+    {
+      "kind": "rust.function",
+      "required_properties": ["visibility"]
+    },
+    {
+      "kind": "rust.method",
+      "required_properties": ["owner_kind", "visibility"]
+    },
+    {
+      "kind": "rust.module",
+      "required_properties": ["visibility"]
+    },
+    {
+      "kind": "rust.struct",
+      "required_properties": ["visibility"]
+    },
+    {
+      "kind": "rust.symbol_reference",
+      "required_properties": ["resolution", "symbol_path"]
+    },
+    {
+      "kind": "rust.trait",
+      "required_properties": ["visibility"]
+    },
+    {
+      "kind": "rust.type_alias",
+      "required_properties": ["visibility"]
+    },
+    {
+      "kind": "source.file",
+      "required_properties": ["path"]
+    }
+  ],
+  "property_domains": {
+    "language": ["rust"],
+    "owner_kind": ["rust.enum", "rust.struct", "rust.trait"],
+    "resolution": ["unresolved"],
+    "visibility": ["inherited_trait", "private", "public"]
+  },
+  "relationship_common_properties": [
+    "relationship_id",
+    "kind",
+    "source_entity_id",
+    "target_entity_id",
+    "evidence_ids",
+    "claim"
+  ],
+  "relationship_matrix": [
+    {
+      "kind": "CONTAINS",
+      "sources": ["rust.crate"],
+      "targets": ["source.file"]
+    },
+    {
+      "kind": "DEFINES",
+      "sources": ["rust.crate", "rust.module"],
+      "targets": [
+        "rust.enum",
+        "rust.function",
+        "rust.module",
+        "rust.struct",
+        "rust.trait",
+        "rust.type_alias"
+      ]
+    },
+    {
+      "kind": "DEFINES",
+      "sources": ["rust.enum", "rust.struct", "rust.trait"],
+      "targets": ["rust.method"]
+    },
+    {
+      "kind": "IMPLEMENTS",
+      "sources": ["rust.enum", "rust.struct"],
+      "targets": ["rust.symbol_reference", "rust.trait"]
+    },
+    {
+      "kind": "IMPORTS",
+      "sources": ["rust.crate", "rust.module"],
+      "targets": [
+        "rust.enum",
+        "rust.function",
+        "rust.module",
+        "rust.struct",
+        "rust.symbol_reference",
+        "rust.trait",
+        "rust.type_alias"
+      ]
+    }
+  ],
+  "cardinalities": [
+    {
+      "id": "exactly_one_crate",
+      "subject_kind": "rust.crate",
+      "direction": "graph",
+      "relationship_kind": null,
+      "minimum": 1,
+      "maximum": 1
+    },
+    {
+      "id": "file_has_one_container",
+      "subject_kind": "source.file",
+      "direction": "incoming",
+      "relationship_kind": "CONTAINS",
+      "minimum": 1,
+      "maximum": 1
+    },
+    {
+      "id": "declaration_has_one_definer",
+      "subject_kind": [
+        "rust.enum",
+        "rust.function",
+        "rust.method",
+        "rust.module",
+        "rust.struct",
+        "rust.trait",
+        "rust.type_alias"
+      ],
+      "direction": "incoming",
+      "relationship_kind": "DEFINES",
+      "minimum": 1,
+      "maximum": 1
+    },
+    {
+      "id": "unresolved_reference_is_used",
+      "subject_kind": "rust.symbol_reference",
+      "direction": "incoming",
+      "relationship_kind": ["IMPLEMENTS", "IMPORTS"],
+      "minimum": 1,
+      "maximum": null
+    },
+    {
+      "id": "unresolved_reference_has_no_outgoing_relationship",
+      "subject_kind": "rust.symbol_reference",
+      "direction": "outgoing",
+      "relationship_kind": "*",
+      "minimum": 0,
+      "maximum": 0
+    }
+  ],
+  "graph_invariants": [
+    "all_relationship_endpoints_resolve",
+    "all_evidence_references_resolve",
+    "all_entities_and_relationships_have_exactly_one_claim",
+    "claim_subjects_are_unique",
+    "defines_is_acyclic",
+    "all_declarations_are_defines_reachable_from_crate",
+    "relationship_kind_source_target_tuples_are_unique",
+    "normalization_collisions_fail_without_ordinal_repair"
+  ],
+  "identity": {
+    "canonicalization": "RFC8785",
+    "hash_algorithm": "blake3-256",
+    "entity_domain": "codenoesis.entity-id/v1",
+    "relationship_domain": "codenoesis.relationship-id/v1",
+    "claim_domain": "codenoesis.claim-id/v1",
+    "extraction_chunk_domain": "codenoesis.extraction-chunk-id/v1",
+    "entity_preimage": [
+      "domain",
+      "repository_identity",
+      "language",
+      "entity_kind",
+      "canonical_identity"
+    ],
+    "relationship_preimage": [
+      "domain",
+      "repository_identity",
+      "ontology_version",
+      "relationship_kind",
+      "source_entity_id",
+      "target_entity_id"
+    ],
+    "claim_preimage": [
+      "domain",
+      "repository_identity",
+      "ontology_version",
+      "subject_kind",
+      "subject_id"
+    ],
+    "extraction_chunk_preimage": [
+      "domain",
+      "repository_identity",
+      "immutable_commit_oid",
+      "blob_oid",
+      "canonical_relative_path",
+      "extractor_version"
+    ],
+    "entity_urn_prefix": "urn:codenoesis:entity:blake3:",
+    "relationship_urn_prefix": "urn:codenoesis:relationship:blake3:",
+    "claim_urn_prefix": "urn:codenoesis:claim:blake3:",
+    "extraction_chunk_urn_prefix": "urn:codenoesis:extraction-chunk:blake3:"
+  },
+  "normalization": {
+    "identifier_components": "Unicode NFC",
+    "display_name": "exact source spelling",
+    "repository_paths": "S1 exact UTF-8 bytes without Unicode normalization",
+    "declaration_separator": "::",
+    "crate_identity": "crate",
+    "file_identity_prefix": "file:",
+    "unresolved_identity_prefix": "unresolved:",
+    "collision_error": "extraction.normalization_collision"
+  },
+  "claim_states": [
+    "candidate",
+    "confirmed",
+    "derived_fact",
+    "deterministic_fact",
+    "rejected",
+    "reviewed_inference",
+    "superseded"
+  ],
+  "claim_transitions": [
+    ["candidate", "confirmed"],
+    ["candidate", "rejected"],
+    ["candidate", "reviewed_inference"],
+    ["candidate", "superseded"],
+    ["confirmed", "superseded"],
+    ["derived_fact", "superseded"],
+    ["deterministic_fact", "superseded"],
+    ["rejected", "superseded"],
+    ["reviewed_inference", "confirmed"],
+    ["reviewed_inference", "rejected"],
+    ["reviewed_inference", "superseded"]
+  ],
+  "claim_origins": {
+    "parser": ["deterministic_fact"],
+    "deterministic_rule": ["derived_fact"],
+    "heuristic": ["candidate"],
+    "model": ["candidate"],
+    "council": ["reviewed_inference"],
+    "deterministic_gate_or_authorized_human": ["confirmed"]
+  },
+  "deterministic_rules": [
+    {
+      "version": "codenoesis.rule.rust-file-containment/s2-v1",
+      "output_relationship_kind": "CONTAINS",
+      "required_input_claims": ["rust.crate", "source.file"],
+      "output_state": "derived_fact"
+    }
+  ],
+  "ordering": {
+    "chunks": ["path_utf8_bytes"],
+    "entities": ["entity_id_utf8_bytes"],
+    "relationships": ["relationship_id_utf8_bytes"],
+    "claims": ["claim_id_utf8_bytes"],
+    "evidence": ["path_utf8_bytes", "span_start", "span_end", "evidence_id"],
+    "diagnostics_and_gaps": [
+      "path_utf8_bytes",
+      "span_start",
+      "span_end",
+      "code"
+    ]
+  },
+  "versioning": {
+    "write_policy": "write exactly codenoesis.ontology/rust/v1",
+    "mutation_policy": "immutable semantic contract",
+    "change_policy": "every semantic change requires a new ontology version",
+    "migration_policy": "reviewed migration or deterministic rebuild evidence",
+    "unsupported_version_policy": "reject before graph ingestion"
+  },
+  "deferred_entity_families": [
+    "calls_and_expressions",
+    "constants_and_statics",
+    "dependencies",
+    "enum_variants",
+    "fields",
+    "generic_parameters_and_lifetimes",
+    "macros_and_closures"
+  ],
+  "deferred_resolution": [
+    "cargo_configuration_worlds",
+    "compiler_name_and_type_resolution",
+    "glob_and_alias_imports",
+    "macro_expansion",
+    "out_of_line_modules",
+    "procedural_macros",
+    "rustc_or_cargo_execution"
+  ]
+}

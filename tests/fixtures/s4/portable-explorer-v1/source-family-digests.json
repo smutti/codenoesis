@@ -1,0 +1,76 @@
+{
+  "schema_version": "codenoesis.source-family-digests/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-portable-explorer-v1",
+  "source_snapshot_schema": "codenoesis.repository-snapshot/v10",
+  "source_ontology": "codenoesis.ontology/rust/v7",
+  "source_query_contract": "codenoesis.local-query-result/v5",
+  "portable_graph_canonical_sha256": "ba3ab0fe6c4de2c1c195c5a3e4902f07e4864358669f00c8ea3fcb10944412bc",
+  "families": {
+    "entities": {
+      "count": 2,
+      "canonical_sha256": "9f06729db7bfdeaa005240a42cfa473358522a72325f72b8785de8b4e8cb11e8",
+      "ids": [
+        "urn:codenoesis:entity:blake3:1111111111111111111111111111111111111111111111111111111111111111",
+        "urn:codenoesis:entity:blake3:2222222222222222222222222222222222222222222222222222222222222222"
+      ]
+    },
+    "relationships": {
+      "count": 1,
+      "canonical_sha256": "038192724cddc11d2a1827e7d563c0d06ab14ce6b79c489e153e2819a4c55d56",
+      "ids": [
+        "urn:codenoesis:relationship:blake3:3333333333333333333333333333333333333333333333333333333333333333"
+      ]
+    },
+    "claims": {
+      "count": 1,
+      "canonical_sha256": "c6b4c8e7617106ab60b08ea279acc264450e0af870b32a07ce77527df3cab89c",
+      "ids": [
+        "urn:codenoesis:claim:blake3:4444444444444444444444444444444444444444444444444444444444444444"
+      ]
+    },
+    "evidence": {
+      "count": 3,
+      "canonical_sha256": "c9398a38566cb281308ed99c8e5eebbc117886a1e6b7b432294a9aa88c7736c1",
+      "ids": [
+        "urn:codenoesis:evidence:blake3:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "urn:codenoesis:evidence:sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "urn:codenoesis:evidence:sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      ]
+    },
+    "diagnostics": {
+      "count": 1,
+      "canonical_sha256": "6618bdf51ccf8dcf2b987bf2cdea3e914d135455fa6650f219c431501f9f89a6",
+      "ids": [
+        "urn:codenoesis:diagnostic:blake3:5555555555555555555555555555555555555555555555555555555555555555"
+      ]
+    },
+    "coverage_gaps": {
+      "count": 1,
+      "canonical_sha256": "1fabcb69b94759e86b967649285460c644a558e794df9046e134e19410157520",
+      "ids": [
+        "urn:codenoesis:coverage-gap:blake3:6666666666666666666666666666666666666666666666666666666666666666"
+      ]
+    },
+    "documents": {
+      "count": 1,
+      "canonical_sha256": "19066e8828382af400873b984c682d3d3a332cba71554c7953dde696266bbc2b",
+      "ids": [
+        "urn:codenoesis:document:blake3:7777777777777777777777777777777777777777777777777777777777777777"
+      ]
+    },
+    "document_statements": {
+      "count": 1,
+      "canonical_sha256": "b6b0640db750e2967a940bd963978551ccaa4122342a5527a18cc1548e04ecfc",
+      "ids": [
+        "urn:codenoesis:statement:blake3:8888888888888888888888888888888888888888888888888888888888888888"
+      ]
+    }
+  },
+  "validation": {
+    "identity_preservation": "exact",
+    "reference_preservation": "exact",
+    "evidence_preservation": "lossless_redacted_metadata",
+    "source_contents_included": false,
+    "source_snippets_included": false
+  }
+}

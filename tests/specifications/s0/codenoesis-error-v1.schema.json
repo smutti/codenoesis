@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:error:v1",
+  "title": "CodeNoesisErrorV1 S0 subset",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "code", "stage", "message", "retryable", "context"],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v1"
+    },
+    "code": {
+      "enum": [
+        "input.invalid_repository_identity",
+        "input.invalid_revision",
+        "acquisition.not_git_repository",
+        "acquisition.revision_not_found",
+        "acquisition.revision_not_commit",
+        "acquisition.object_missing",
+        "acquisition.repository_inconsistent",
+        "acquisition.unsupported_repository_shape",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {
+      "enum": ["input", "acquisition", "internal"]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[^\\r\\n]+$"
+    },
+    "retryable": {
+      "const": false
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "revision": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{40}|refs/heads/main)$"
+        },
+        "object_oid": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "expected_kind": {
+          "enum": ["commit", "tree", "blob"]
+        },
+        "actual_kind": {
+          "enum": ["tag", "tree", "blob"]
+        },
+        "referenced_by": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "feature": {
+          "enum": [
+            "bare_repository",
+            "shallow_repository",
+            "sha256_object_format",
+            "alternate_object_database",
+            "replace_or_graft",
+            "non_single_regular_root_file",
+            "lfs_materialization",
+            "submodule_or_gitlink",
+            "symlink"
+          ]
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "enum": ["input.invalid_repository_identity", "input.invalid_revision"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {"const": "input"},
+          "context": {"maxProperties": 0}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"code": {"const": "acquisition.not_git_repository"}}
+      },
+      "then": {
+        "properties": {
+          "stage": {"const": "acquisition"},
+          "context": {"maxProperties": 0}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"code": {"const": "acquisition.revision_not_found"}}
+      },
+      "then": {
+        "properties": {
+          "stage": {"const": "acquisition"},
+          "context": {
+            "required": ["revision"],
+            "maxProperties": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"code": {"const": "acquisition.revision_not_commit"}}
+      },
+      "then": {
+        "properties": {
+          "stage": {"const": "acquisition"},
+          "context": {
+            "required": ["object_oid", "actual_kind"],
+            "maxProperties": 2
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"code": {"const": "acquisition.object_missing"}}
+      },
+      "then": {
+        "properties": {
+          "stage": {"const": "acquisition"},
+          "context": {
+            "required": ["object_oid", "expected_kind", "referenced_by"],
+            "maxProperties": 3
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"code": {"const": "acquisition.repository_inconsistent"}}
+      },
+      "then": {
+        "properties": {
+          "stage": {"const": "acquisition"},
+          "context": {
+            "required": ["object_oid", "expected_kind"],
+            "maxProperties": 2
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"code": {"const": "acquisition.unsupported_repository_shape"}}
+      },
+      "then": {
+        "properties": {
+          "stage": {"const": "acquisition"},
+          "context": {
+            "required": ["feature"],
+            "maxProperties": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"code": {"const": "internal.unexpected"}}
+      },
+      "then": {
+        "properties": {
+          "stage": {"const": "internal"},
+          "context": {"maxProperties": 0}
+        }
+      }
+    }
+  ]
+}

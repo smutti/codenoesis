@@ -1,0 +1,21 @@
+[package]
+name = "codenoesis-store-local"
+version = "0.1.0"
+description = "SQLite and filesystem-CAS adapter for CodeNoesis"
+edition.workspace = true
+license.workspace = true
+publish = false
+rust-version.workspace = true
+
+[dependencies]
+codenoesis-domain.workspace = true
+codenoesis-ports.workspace = true
+rusqlite.workspace = true
+serde_json.workspace = true
+tempfile.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+atomicwrites.workspace = true
+
+[lints]
+workspace = true

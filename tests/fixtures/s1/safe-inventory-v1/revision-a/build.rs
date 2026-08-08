@@ -1,0 +1,3 @@
+fn main() {
+    panic!("CODENOESIS_SENTINEL_BUILD_SCRIPT_EXECUTED");
+}

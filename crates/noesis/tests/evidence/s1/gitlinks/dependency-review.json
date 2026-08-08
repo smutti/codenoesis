@@ -1,0 +1,80 @@
+{
+  "schema_version": "codenoesis.s1-gitlinks-dependency-review/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/94",
+  "requirement": "FR-ACQ-005",
+  "slice": "S1",
+  "risk": "high",
+  "observed_at": "2026-08-02T11:06:06Z",
+  "review_owner": "@smutti",
+  "decision": {
+    "new_packages_authorized": 0,
+    "new_versions_authorized": 0,
+    "new_features_authorized": 0,
+    "lockfile_change_authorized": false,
+    "optional_authorized_edge": "sha2.workspace = true in crates/codenoesis-domain/Cargo.toml",
+    "authorized_edge_applied": false,
+    "rationale": "The domain owns every framed R2 preimage and identity rule through the inward BoundarySha256 port. The existing noesis sha2 adapter performs only the hash primitive, so no domain manifest edge or forbidden Cargo.lock package-dependency delta is required."
+  },
+  "dependency": {
+    "crate": "sha2",
+    "requirement": "0.11",
+    "resolved": "0.11.0",
+    "default_features": true,
+    "active_features": [
+      "alloc",
+      "default",
+      "oid"
+    ],
+    "license": "MIT OR Apache-2.0",
+    "rust_version": "1.85",
+    "lock_checksum_and_crate_archive_sha256": "446ba717509524cb3f22f17ecc096f10f4822d76ab5c0b9822c5f9c284e825f4",
+    "license_file_sha256": {
+      "LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+      "LICENSE-MIT": "831e0f43ad0bf014c1c4fec5767aae470434c1d66d6e671be2d823e729063e25"
+    },
+    "existing_direct_dependents": [
+      "noesis 0.1.0"
+    ],
+    "normal_transitive_graph": [
+      "sha2 0.11.0",
+      "cfg-if 1.0.4",
+      "cpufeatures 0.3.0",
+      "libc 0.2.189",
+      "digest 0.11.3",
+      "block-buffer 0.12.1",
+      "hybrid-array 0.4.13",
+      "typenum 1.20.1",
+      "const-oid 0.10.2",
+      "crypto-common 0.2.2"
+    ],
+    "reviewed_dependency_unsafe_syntax_occurrences": 53,
+    "runtime_purpose": "Implement the existing SHA-256 primitive adapter for domain-owned R2 boundary, declaration, evidence, gap, URL-value, and unsupported-value digests."
+  },
+  "graph_delta": {
+    "new_direct_dependencies": 0,
+    "new_transitive_dependencies": 0,
+    "version_changes": 0,
+    "feature_changes": 0,
+    "manifest_changes": 0,
+    "lockfile_changes": 0,
+    "first_party_unsafe_occurrences": 0
+  },
+  "protected_file_sha256": {
+    "Cargo.toml": "e124fe990cefc9d4c412ae61ce9eb9df0086f121ffcd6b9fc4213b0f9e9a4c7e",
+    "Cargo.lock": "ea1a37570ce00a61216ddd092231d61fc4ca4831dcdce4485ff4259a850a8ea5",
+    "crates/codenoesis-domain/Cargo.toml": "c40538a5c25d16634f9db6d5e51a42500bc6ac2b2e6ca3771b81b20160a5fa6b"
+  },
+  "review_evidence": {
+    "cargo_tree_locked_inverse": "passed",
+    "cargo_tree_locked_forward": "passed",
+    "cargo_metadata_locked": "passed",
+    "protected_manifest_diff": "empty",
+    "cargo_clippy_workspace_all_targets_all_features_locked": "passed",
+    "cargo_test_workspace_all_targets_all_features_locked": "passed",
+    "cargo_bench_workspace_all_features_no_run_locked": "passed"
+  },
+  "limitations": [
+    "This review records the already locked dependency graph and does not claim permanent advisory safety.",
+    "Exact-head CI, CodeQL, and independent supply-chain review remain required before merge."
+  ]
+}

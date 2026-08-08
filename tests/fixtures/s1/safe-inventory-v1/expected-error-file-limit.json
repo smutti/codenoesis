@@ -1,0 +1,12 @@
+{
+  "schema_version": "codenoesis.error/v2",
+  "code": "acquisition.limit_exceeded",
+  "stage": "acquisition",
+  "message": "repository exceeds a standard-local-s1 limit",
+  "retryable": false,
+  "context": {
+    "limit": "single_file_bytes",
+    "maximum": 4194304,
+    "observed": 4194305
+  }
+}

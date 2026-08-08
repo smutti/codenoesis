@@ -1,0 +1,550 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:external-repository-boundary:v1",
+  "title": "ExternalRepositoryBoundariesV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile",
+    "root_repository",
+    "summary",
+    "boundaries",
+    "declarations",
+    "coverage_gaps",
+    "evidence"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.repository-boundaries/v1"
+    },
+    "profile": {
+      "const": "local-gitlinks-v1"
+    },
+    "root_repository": {
+      "$ref": "#/$defs/repository"
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "boundary_count",
+        "declaration_count",
+        "bound_count",
+        "unbound_count",
+        "coverage_gap_count"
+      ],
+      "properties": {
+        "boundary_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 128
+        },
+        "declaration_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 256
+        },
+        "bound_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 32
+        },
+        "unbound_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 128
+        },
+        "coverage_gap_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 512
+        }
+      }
+    },
+    "boundaries": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {
+        "$ref": "#/$defs/boundary"
+      }
+    },
+    "declarations": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "$ref": "#/$defs/declaration"
+      }
+    },
+    "coverage_gaps": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "$ref": "#/$defs/coverage_gap"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 384,
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/git_tree_entry_evidence"
+          },
+          {
+            "$ref": "#/$defs/gitmodules_declaration_evidence"
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "boundary_id",
+        "path",
+        "gitlink_oid",
+        "state",
+        "declaration_id",
+        "nested_repository",
+        "evidence_ids",
+        "coverage_gap_ids"
+      ],
+      "properties": {
+        "boundary_id": {
+          "$ref": "#/$defs/boundary_id"
+        },
+        "path": {
+          "$ref": "#/$defs/canonical_relative_path"
+        },
+        "gitlink_oid": {
+          "$ref": "#/$defs/git_sha1"
+        },
+        "state": {
+          "enum": [
+            "declared_unbound",
+            "undeclared_unbound",
+            "explicitly_bound"
+          ]
+        },
+        "declaration_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/declaration_id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "nested_repository": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/nested_repository"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/nonempty_evidence_ids"
+        },
+        "coverage_gap_ids": {
+          "$ref": "#/$defs/gap_ids"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "declared_unbound"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "declaration_id": {
+                "$ref": "#/$defs/declaration_id"
+              },
+              "nested_repository": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "undeclared_unbound"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "declaration_id": {
+                "type": "null"
+              },
+              "nested_repository": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "explicitly_bound"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "nested_repository": {
+                "$ref": "#/$defs/nested_repository"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "declaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "declaration_id",
+        "name_sha256",
+        "path",
+        "url_kind",
+        "url_sha256",
+        "unsupported_keys",
+        "boundary_id",
+        "evidence_id"
+      ],
+      "properties": {
+        "declaration_id": {
+          "$ref": "#/$defs/declaration_id"
+        },
+        "name_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "path": {
+          "$ref": "#/$defs/canonical_relative_path"
+        },
+        "url_kind": {
+          "enum": [
+            "relative",
+            "absolute_path",
+            "file",
+            "ssh",
+            "https",
+            "http",
+            "git",
+            "scp_like",
+            "other"
+          ]
+        },
+        "url_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "unsupported_keys": {
+          "type": "array",
+          "maxItems": 30,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "key",
+              "value_sha256"
+            ],
+            "properties": {
+              "key": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64,
+                "pattern": "^[a-z][a-z0-9-]*$"
+              },
+              "value_sha256": {
+                "$ref": "#/$defs/sha256"
+              }
+            }
+          }
+        },
+        "boundary_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/boundary_id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        }
+      }
+    },
+    "nested_repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "vcs",
+        "object_format",
+        "commit_oid",
+        "tree_oid"
+      ],
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/repository_identity"
+        },
+        "vcs": {
+          "const": "git"
+        },
+        "object_format": {
+          "const": "sha1"
+        },
+        "commit_oid": {
+          "$ref": "#/$defs/git_sha1"
+        },
+        "tree_oid": {
+          "$ref": "#/$defs/git_sha1"
+        }
+      }
+    },
+    "coverage_gap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gap_id",
+        "code",
+        "path",
+        "subject_id",
+        "evidence_ids"
+      ],
+      "properties": {
+        "gap_id": {
+          "$ref": "#/$defs/gap_id"
+        },
+        "code": {
+          "enum": [
+            "boundary.nested_repository_unbound",
+            "boundary.gitmodules_declaration_missing",
+            "boundary.gitmodules_declaration_orphan",
+            "boundary.gitmodules_key_unsupported",
+            "boundary.nested_repository_not_analyzed"
+          ]
+        },
+        "path": {
+          "$ref": "#/$defs/canonical_relative_path"
+        },
+        "subject_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/boundary_id"
+            },
+            {
+              "$ref": "#/$defs/declaration_id"
+            }
+          ]
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/nonempty_evidence_ids"
+        }
+      }
+    },
+    "git_tree_entry_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "kind",
+        "repository",
+        "tree_oid",
+        "path",
+        "mode",
+        "object_oid"
+      ],
+      "properties": {
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        },
+        "kind": {
+          "const": "git_tree_entry"
+        },
+        "repository": {
+          "$ref": "#/$defs/repository_reference"
+        },
+        "tree_oid": {
+          "$ref": "#/$defs/git_sha1"
+        },
+        "path": {
+          "$ref": "#/$defs/canonical_relative_path"
+        },
+        "mode": {
+          "const": "160000"
+        },
+        "object_oid": {
+          "$ref": "#/$defs/git_sha1"
+        }
+      }
+    },
+    "gitmodules_declaration_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "kind",
+        "repository",
+        "blob_oid",
+        "path",
+        "span"
+      ],
+      "properties": {
+        "evidence_id": {
+          "$ref": "#/$defs/evidence_id"
+        },
+        "kind": {
+          "const": "gitmodules_declaration"
+        },
+        "repository": {
+          "$ref": "#/$defs/repository_reference"
+        },
+        "blob_oid": {
+          "$ref": "#/$defs/git_sha1"
+        },
+        "path": {
+          "const": ".gitmodules"
+        },
+        "span": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unit",
+            "start",
+            "end"
+          ],
+          "properties": {
+            "unit": {
+              "const": "byte"
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1048576
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1048576
+            }
+          }
+        }
+      }
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "vcs",
+        "object_format",
+        "commit_oid",
+        "tree_oid"
+      ],
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/repository_identity"
+        },
+        "vcs": {
+          "const": "git"
+        },
+        "object_format": {
+          "const": "sha1"
+        },
+        "commit_oid": {
+          "$ref": "#/$defs/git_sha1"
+        },
+        "tree_oid": {
+          "$ref": "#/$defs/git_sha1"
+        }
+      }
+    },
+    "repository_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "commit_oid"
+      ],
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/repository_identity"
+        },
+        "commit_oid": {
+          "$ref": "#/$defs/git_sha1"
+        }
+      }
+    },
+    "nonempty_evidence_ids": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/evidence_id"
+      }
+    },
+    "gap_ids": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/gap_id"
+      }
+    },
+    "repository_identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^urn:codenoesis:[a-z0-9][a-z0-9._:-]{0,254}$"
+    },
+    "canonical_relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!.*(?:^|/)(?:\\.|\\.\\.)(?:/|$))[^/\\\\\\u0000-\\u001f\\u007f]+(?:/[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    },
+    "git_sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "boundary_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:repository-boundary:sha256:[0-9a-f]{64}$"
+    },
+    "declaration_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:gitmodules-declaration:sha256:[0-9a-f]{64}$"
+    },
+    "gap_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:boundary-gap:sha256:[0-9a-f]{64}$"
+    },
+    "evidence_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:boundary-evidence:sha256:[0-9a-f]{64}$"
+    }
+  }
+}

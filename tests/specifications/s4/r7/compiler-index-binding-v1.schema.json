@@ -1,0 +1,294 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/compiler-index-binding-v1.schema.json",
+  "title": "CodeNoesis CompilerIndexBindingV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile",
+    "repository",
+    "artifact",
+    "producer",
+    "documents",
+    "known_limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.compiler-index-binding/v1"
+    },
+    "profile": {
+      "const": "scip-rust-v0.9.0-import-v1"
+    },
+    "repository": {
+      "$ref": "#/$defs/repository_binding"
+    },
+    "artifact": {
+      "$ref": "#/$defs/artifact_binding"
+    },
+    "producer": {
+      "$ref": "#/$defs/producer_binding"
+    },
+    "documents": {
+      "$ref": "#/$defs/document_binding_set"
+    },
+    "known_limitations": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "call_kind_not_encoded",
+          "generated_definition_not_source_bound",
+          "documentation_not_imported",
+          "absolute_project_root_redacted",
+          "arguments_redacted"
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "safe_relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?/)(?!.*//)[^\\u0000]+$"
+    },
+    "repository_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "commit_oid",
+        "tree_oid",
+        "source_manifest_sha256"
+      ],
+      "properties": {
+        "identity": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:[a-z0-9][a-z0-9._:-]{0,254}$"
+        },
+        "commit_oid": {
+          "$ref": "#/$defs/sha1"
+        },
+        "tree_oid": {
+          "$ref": "#/$defs/sha1"
+        },
+        "source_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "artifact_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "byte_length",
+        "sha256",
+        "format",
+        "scip_tag",
+        "scip_commit",
+        "scip_proto_sha256",
+        "protocol_version",
+        "canonical_encoding"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/safe_relative_path"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 67108864
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "format": {
+          "const": "scip-protobuf"
+        },
+        "scip_tag": {
+          "const": "v0.9.0"
+        },
+        "scip_commit": {
+          "const": "e8ee0ae6038f8298e2195812eea9d7b1196748ae"
+        },
+        "scip_proto_sha256": {
+          "const": "04cb20f2b8be73f6c0376b5b3e84c3ae20ebaff0ad3d23ba2d16f866b395ed7d"
+        },
+        "protocol_version": {
+          "const": 0
+        },
+        "canonical_encoding": {
+          "const": true
+        }
+      }
+    },
+    "producer_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "family",
+        "name",
+        "version",
+        "commit",
+        "arguments_sha256",
+        "project_root_sha256",
+        "toolchain"
+      ],
+      "properties": {
+        "family": {
+          "const": "rust-analyzer-scip"
+        },
+        "name": {
+          "const": "rust-analyzer"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "commit": {
+          "$ref": "#/$defs/sha1"
+        },
+        "arguments_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "project_root_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "toolchain": {
+          "$ref": "#/$defs/toolchain"
+        }
+      }
+    },
+    "toolchain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "channel",
+        "rustc_release",
+        "rustc_commit",
+        "target_triple"
+      ],
+      "properties": {
+        "channel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "rustc_release": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "rustc_commit": {
+          "$ref": "#/$defs/sha1"
+        },
+        "target_triple": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]{1,128}$"
+        }
+      }
+    },
+    "document_binding_set": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coverage_mode",
+        "indexed",
+        "omitted"
+      ],
+      "properties": {
+        "coverage_mode": {
+          "const": "declared_partial"
+        },
+        "indexed": {
+          "type": "array",
+          "maxItems": 20000,
+          "items": {
+            "$ref": "#/$defs/indexed_document"
+          }
+        },
+        "omitted": {
+          "type": "array",
+          "maxItems": 20000,
+          "items": {
+            "$ref": "#/$defs/omitted_document"
+          }
+        }
+      }
+    },
+    "indexed_document": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "blob_oid",
+        "sha256",
+        "byte_length"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/safe_relative_path"
+        },
+        "blob_oid": {
+          "$ref": "#/$defs/sha1"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4194304
+        }
+      }
+    },
+    "omitted_document": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "blob_oid",
+        "sha256",
+        "byte_length",
+        "reason"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/safe_relative_path"
+        },
+        "blob_oid": {
+          "$ref": "#/$defs/sha1"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4194304
+        },
+        "reason": {
+          "enum": [
+            "not_emitted_by_indexer",
+            "generated_or_out_of_root",
+            "unsupported_language",
+            "producer_failure"
+          ]
+        }
+      }
+    }
+  }
+}

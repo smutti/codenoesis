@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:source-evidence:v1",
+  "title": "SourceEvidenceV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "evidence_id",
+    "repository",
+    "blob_oid",
+    "path",
+    "span",
+    "extractor",
+    "derivation"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.source-evidence/v1"
+    },
+    "evidence_id": {
+      "type": "string",
+      "pattern": "^evidence-[0-9]{5}$"
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity", "vcs", "object_format", "commit_oid"],
+      "properties": {
+        "identity": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:[a-z0-9][a-z0-9._:-]{0,254}$"
+        },
+        "vcs": {
+          "const": "git"
+        },
+        "object_format": {
+          "const": "sha1"
+        },
+        "commit_oid": {
+          "$ref": "#/$defs/git_sha1"
+        }
+      }
+    },
+    "blob_oid": {
+      "$ref": "#/$defs/git_sha1"
+    },
+    "path": {
+      "$ref": "#/$defs/canonical_relative_path"
+    },
+    "span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unit", "start", "end"],
+      "properties": {
+        "unit": {
+          "const": "byte"
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4194304
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4194304
+        }
+      }
+    },
+    "extractor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version"],
+      "properties": {
+        "id": {
+          "const": "codenoesis.inventory.static-classifier"
+        },
+        "version": {
+          "const": "codenoesis.inventory-classifier/s1-v1"
+        }
+      }
+    },
+    "derivation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "rules"],
+      "properties": {
+        "kind": {
+          "const": "deterministic_static_classification"
+        },
+        "rules": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[a-z0-9][a-z0-9._:/-]*$"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "canonical_relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^[^/\\\\\\u0000-\\u001f\\u007f]+(?:/[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+    },
+    "git_sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    }
+  }
+}

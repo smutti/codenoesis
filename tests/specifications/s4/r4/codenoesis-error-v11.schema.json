@@ -1,0 +1,306 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/codenoesis-error-v11.schema.json",
+  "title": "CodeNoesisErrorV11",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v11"
+    },
+    "code": {
+      "enum": [
+        "input.invalid_manifest_profile",
+        "extraction.invalid_cargo_manifest_fact",
+        "extraction.cargo_manifest_fact_conflict",
+        "extraction.cargo_manifest_fact_limit_exceeded",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "input",
+        "extraction",
+        "internal"
+      ]
+    },
+    "message": {
+      "enum": [
+        "invalid manifest profile",
+        "invalid Cargo manifest fact",
+        "conflicting Cargo manifest fact",
+        "Cargo manifest fact limit exceeded",
+        "internal error"
+      ]
+    },
+    "retryable": {
+      "const": false
+    },
+    "context": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/empty_context"
+        },
+        {
+          "$ref": "#/$defs/invalid_fact_context"
+        },
+        {
+          "$ref": "#/$defs/conflict_context"
+        },
+        {
+          "$ref": "#/$defs/limit_context"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "input.invalid_manifest_profile"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "input"
+          },
+          "message": {
+            "const": "invalid manifest profile"
+          },
+          "context": {
+            "$ref": "#/$defs/empty_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.invalid_cargo_manifest_fact"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "message": {
+            "const": "invalid Cargo manifest fact"
+          },
+          "context": {
+            "$ref": "#/$defs/invalid_fact_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.cargo_manifest_fact_conflict"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "message": {
+            "const": "conflicting Cargo manifest fact"
+          },
+          "context": {
+            "$ref": "#/$defs/conflict_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "extraction.cargo_manifest_fact_limit_exceeded"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "extraction"
+          },
+          "message": {
+            "const": "Cargo manifest fact limit exceeded"
+          },
+          "context": {
+            "$ref": "#/$defs/limit_context"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "internal.unexpected"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "internal"
+          },
+          "message": {
+            "const": "internal error"
+          },
+          "context": {
+            "$ref": "#/$defs/empty_context"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "empty_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 0
+    },
+    "invalid_fact_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reason",
+        "path",
+        "fact_kind",
+        "field"
+      ],
+      "properties": {
+        "reason": {
+          "enum": [
+            "malformed_value",
+            "unsupported_key",
+            "invalid_declaration_name",
+            "invalid_relative_path",
+            "conflicting_source_selectors",
+            "duplicate_declaration",
+            "missing_workspace_declaration",
+            "invalid_feature_member",
+            "invalid_target_declaration",
+            "unsupported_structural_interaction",
+            "unicode_normalization_collision"
+          ]
+        },
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "fact_kind": {
+          "enum": [
+            "manifest",
+            "workspace_package_defaults",
+            "package",
+            "target",
+            "dependency",
+            "feature",
+            "patch",
+            "build_script"
+          ]
+        },
+        "field": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[a-z][a-z0-9_-]*$"
+            }
+          ]
+        }
+      }
+    },
+    "conflict_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "fact_kind",
+        "declaration_name_sha256"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "fact_kind": {
+          "enum": [
+            "target",
+            "dependency",
+            "feature",
+            "patch"
+          ]
+        },
+        "declaration_name_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "limit_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "limit",
+        "maximum",
+        "observed"
+      ],
+      "properties": {
+        "limit": {
+          "enum": [
+            "manifest_fact_entities",
+            "dependencies_per_manifest",
+            "features_per_manifest",
+            "feature_members_per_feature",
+            "targets_per_package",
+            "patches_per_workspace",
+            "metadata_fields_per_owner",
+            "requested_features_per_declaration",
+            "target_predicates_per_manifest",
+            "declaration_string_bytes",
+            "external_locator_bytes"
+          ]
+        },
+        "maximum": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "observed": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 10001
+        }
+      }
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?:Cargo\\.toml|[^/\\\\\\u0000-\\u001f\\u007f]+(?:/[^/\\\\\\u0000-\\u001f\\u007f]+)*)$"
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "schema_version": "codenoesis.r5-expected-rust-semantic-depth/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-semantic-depth-v1",
+  "ontology_version": "codenoesis.ontology/rust/v5",
+  "entity_counts": {
+    "rust.associated_type": 2,
+    "rust.constant": 6,
+    "rust.enum_variant": 5,
+    "rust.field": 16,
+    "rust.method": 9,
+    "rust.static": 2
+  },
+  "relationship_counts": {
+    "DEFINES_member_edges": 40,
+    "IMPLEMENTS_local_named_trait_edges": 3
+  },
+  "legacy_context_ids": {
+    "crate": "urn:codenoesis:entity:blake3:2f3cd49660b1463ed14a14650a45d77315e5fd66c29edeffc3ba7f1bd46500c0",
+    "record": "urn:codenoesis:entity:blake3:eb0d7723ffe04f7e7b1ec27a438f3949fc1332a502397a41578ba96d15842f75",
+    "message": "urn:codenoesis:entity:blake3:273e3b03c06bdb29969eabb60e67cde70631b2811041026b3bb39d740bd5e340",
+    "descriptor": "urn:codenoesis:entity:blake3:cc74c852ba1384fed22aa8b23642a22d98738f3d13d03512ef4e7d2847fced28",
+    "paint": "urn:codenoesis:entity:blake3:e16b7d6ce6da580ba6fa30b4eab297e2d441d7e3aa524e7b2270ae4223a2e142",
+    "preview": "urn:codenoesis:entity:blake3:37feac9e3551de1a216a7ba5dbd3264cef5d0bf084198fb4d5582b56ab0ff125"
+  },
+  "identity_examples": [
+    {
+      "kind": "rust.associated_type",
+      "display_name": "Output",
+      "preimage": [
+        "urn:codenoesis:fixture:s4-rust-semantic-depth-v1",
+        "urn:codenoesis:entity:blake3:2f3cd49660b1463ed14a14650a45d77315e5fd66c29edeffc3ba7f1bd46500c0",
+        "urn:codenoesis:entity:blake3:cc74c852ba1384fed22aa8b23642a22d98738f3d13d03512ef4e7d2847fced28",
+        "rust.associated_type",
+        "Output",
+        "urn:codenoesis:entity:blake3:cc74c852ba1384fed22aa8b23642a22d98738f3d13d03512ef4e7d2847fced28"
+      ],
+      "id": "urn:codenoesis:entity:blake3:bd87af6c99ecae26e014d365640206b1665e281150e7e0cc3ac5020abd0007a5"
+    },
+    {
+      "kind": "rust.constant",
+      "display_name": "DEFAULT_LIMIT",
+      "preimage": [
+        "urn:codenoesis:fixture:s4-rust-semantic-depth-v1",
+        "urn:codenoesis:entity:blake3:2f3cd49660b1463ed14a14650a45d77315e5fd66c29edeffc3ba7f1bd46500c0",
+        "urn:codenoesis:entity:blake3:2f3cd49660b1463ed14a14650a45d77315e5fd66c29edeffc3ba7f1bd46500c0",
+        "rust.constant",
+        "DEFAULT_LIMIT",
+        ""
+      ],
+      "id": "urn:codenoesis:entity:blake3:ecc0131c233fb18b11b7ff701d7304763f5483c6b21fe3675a415e31bd70e756"
+    },
+    {
+      "kind": "rust.enum_variant",
+      "display_name": "Data",
+      "preimage": [
+        "urn:codenoesis:fixture:s4-rust-semantic-depth-v1",
+        "urn:codenoesis:entity:blake3:2f3cd49660b1463ed14a14650a45d77315e5fd66c29edeffc3ba7f1bd46500c0",
+        "urn:codenoesis:entity:blake3:273e3b03c06bdb29969eabb60e67cde70631b2811041026b3bb39d740bd5e340",
+        "rust.enum_variant",
+        "Data",
+        ""
+      ],
+      "id": "urn:codenoesis:entity:blake3:b5fb7e5c95be33b9d495bc3b76b2b94e327b4d7580d71124eef20b7fd120d81e"
+    },
+    {
+      "kind": "rust.field",
+      "display_name": "key",
+      "preimage": [
+        "urn:codenoesis:fixture:s4-rust-semantic-depth-v1",
+        "urn:codenoesis:entity:blake3:2f3cd49660b1463ed14a14650a45d77315e5fd66c29edeffc3ba7f1bd46500c0",
+        "urn:codenoesis:entity:blake3:eb0d7723ffe04f7e7b1ec27a438f3949fc1332a502397a41578ba96d15842f75",
+        "rust.field",
+        "key",
+        ""
+      ],
+      "id": "urn:codenoesis:entity:blake3:ab24c82375e533b482ef71fe657a00b190ecf49712498cdc772c8d9db946b9d4"
+    },
+    {
+      "kind": "rust.static",
+      "display_name": "PRODUCT_NAME",
+      "preimage": [
+        "urn:codenoesis:fixture:s4-rust-semantic-depth-v1",
+        "urn:codenoesis:entity:blake3:2f3cd49660b1463ed14a14650a45d77315e5fd66c29edeffc3ba7f1bd46500c0",
+        "urn:codenoesis:entity:blake3:2f3cd49660b1463ed14a14650a45d77315e5fd66c29edeffc3ba7f1bd46500c0",
+        "rust.static",
+        "PRODUCT_NAME",
+        ""
+      ],
+      "id": "urn:codenoesis:entity:blake3:5b449f980aae6bd1478364af4d27458661ca954a34e619b9c9594689ac61b3d5"
+    }
+  ],
+  "same_name_trait_method_examples": [
+    {
+      "display_name": "render",
+      "trait_context_id": "urn:codenoesis:entity:blake3:e16b7d6ce6da580ba6fa30b4eab297e2d441d7e3aa524e7b2270ae4223a2e142",
+      "preimage": [
+        "urn:codenoesis:fixture:s4-rust-semantic-depth-v1",
+        "urn:codenoesis:entity:blake3:2f3cd49660b1463ed14a14650a45d77315e5fd66c29edeffc3ba7f1bd46500c0",
+        "urn:codenoesis:entity:blake3:eb0d7723ffe04f7e7b1ec27a438f3949fc1332a502397a41578ba96d15842f75",
+        "rust.method",
+        "render",
+        "urn:codenoesis:entity:blake3:e16b7d6ce6da580ba6fa30b4eab297e2d441d7e3aa524e7b2270ae4223a2e142"
+      ],
+      "id": "urn:codenoesis:entity:blake3:1f78bcb85d1c36b3b5fd7c5886002baea09b44bbfb7a0efa8d04963f3272877f"
+    },
+    {
+      "display_name": "render",
+      "trait_context_id": "urn:codenoesis:entity:blake3:37feac9e3551de1a216a7ba5dbd3264cef5d0bf084198fb4d5582b56ab0ff125",
+      "preimage": [
+        "urn:codenoesis:fixture:s4-rust-semantic-depth-v1",
+        "urn:codenoesis:entity:blake3:2f3cd49660b1463ed14a14650a45d77315e5fd66c29edeffc3ba7f1bd46500c0",
+        "urn:codenoesis:entity:blake3:eb0d7723ffe04f7e7b1ec27a438f3949fc1332a502397a41578ba96d15842f75",
+        "rust.method",
+        "render",
+        "urn:codenoesis:entity:blake3:37feac9e3551de1a216a7ba5dbd3264cef5d0bf084198fb4d5582b56ab0ff125"
+      ],
+      "id": "urn:codenoesis:entity:blake3:4f9b4995acaeb649751a33f150e20e6b70ae1550348e18e5a8eb8f14d7b00164"
+    }
+  ],
+  "compilation_presence_counts": {
+    "attribute_transform_unknown": 1,
+    "conditional_unknown": 1,
+    "unconditional": 38
+  },
+  "coverage_capability_states": {
+    "rust.attribute_semantics_not_interpreted": "unsupported",
+    "rust.cfg_presence_unresolved": "not_resolved",
+    "rust.foreign_block_unsupported": "unsupported",
+    "rust.macro_generated_items_not_analyzed": "not_analyzed",
+    "rust.type_resolution_not_performed": "not_resolved",
+    "rust.union_unsupported": "unsupported",
+    "rust.unsupported_impl_header": "unsupported",
+    "rust.value_not_evaluated": "not_evaluated"
+  },
+  "hard_negative_labels": [
+    "build_sentinel_not_executed",
+    "cfg_not_assumed_active",
+    "comment_field_decoy",
+    "custom_attribute_not_interpreted",
+    "macro_constant_decoy",
+    "string_variant_decoy"
+  ],
+  "forbidden_relationship_kinds": [
+    "CALLS",
+    "EXECUTES"
+  ]
+}

@@ -1,0 +1,315 @@
+{
+  "schema_version": "codenoesis.semantic-compatibility-report/v1",
+  "analysis_profile": "implementation-aware-http-json/v1",
+  "configuration_hash": "blake3:5fdb5f89e0c04758bc424a131605fcae02502fb09e6321f41c4cec04d9ddc4db",
+  "pipeline_version": "codenoesis.pipeline/semantic-impact/v1",
+  "ontology_versions": [
+    "codenoesis.ontology/api-compatibility/v1"
+  ],
+  "extractor_versions": [
+    {
+      "name": "kotlin-direct-json-access",
+      "version": "v1"
+    },
+    {
+      "name": "openapi-contract",
+      "version": "v1"
+    },
+    {
+      "name": "rust-direct-json-map",
+      "version": "v1"
+    },
+    {
+      "name": "semantic-impact-classifier",
+      "version": "v1"
+    }
+  ],
+  "evidence_lineage_version": "codenoesis.source-evidence/v2",
+  "rule_catalog_version": "codenoesis.compatibility-rules/http-json/v1",
+  "provider": {
+    "service_identity": "urn:codenoesis:service:blake3:509813cd6e049acb2c9de79cb9f0a1f385b355473512592a22d5f115ac9243cc",
+    "repository_identity": "urn:codenoesis:fixture:s7-provider",
+    "baseline": {
+      "revision": "fixture-provider-a",
+      "contract_sha256": "d6decc18d428316b209aa554ee028fe9db8761df515bf34b9e92c3a369f2de3d"
+    },
+    "target": {
+      "revision": "fixture-provider-b",
+      "contract_sha256": "d6decc18d428316b209aa554ee028fe9db8761df515bf34b9e92c3a369f2de3d"
+    }
+  },
+  "semantic_diffs": [
+    {
+      "id": "urn:codenoesis:diff:blake3:0ae7aad43c4c2dcf639e0e8929e9904118f02f9a35a1f370eb5d2cd1b541b251",
+      "operation_id": "urn:codenoesis:operation:blake3:071cbb8fa33a959879d7d8a2bfbbac31e1fea4850c28fdb73227c605f5974923",
+      "field_id": "urn:codenoesis:field:blake3:a2b6cafe0db73cb016ffd790941c18fbab768923a5b8b4b671eb22459ec66301",
+      "field_pointer": "/nickname",
+      "direction": "response",
+      "dimension": "presence",
+      "contract": {
+        "before": "optional",
+        "after": "optional",
+        "delta": "unchanged",
+        "claim_state": "deterministic_fact",
+        "evidence_ids": [
+          "urn:codenoesis:evidence:blake3:2492b7f7812a611e40767099013258db69fca1b8f316cd4a63aaea434e4c2318",
+          "urn:codenoesis:evidence:blake3:5fe56093df651923157842179cec130e657d438b75a42f7eb1f3be684398eafb"
+        ]
+      },
+      "implementation": {
+        "before": "guaranteed_present",
+        "after": "may_be_absent",
+        "delta": "weakened",
+        "claim_state": "derived_fact",
+        "evidence_ids": [
+          "urn:codenoesis:evidence:blake3:074cd404e50be00ae5994034b76986b555548f89730fbb0b8fdf2143427043fe",
+          "urn:codenoesis:evidence:blake3:cfdd789f3af29b3e9e3b5873f40d18f7448ebba6e77e4ff4edcf7d025c3a700f"
+        ]
+      },
+      "change_kind": "implementation_behavior_changed_without_contract_change",
+      "classification": "breaking",
+      "claim_state": "derived_fact",
+      "rule_id": "cmp.response.presence.undocumented-guarantee-removed/v1",
+      "affected_client_ids": [
+        "urn:codenoesis:client:blake3:ebd716cc12c29ad94e757a84d525b057f53ab8d3e6f9e21a35ffa55a6b8057a9"
+      ],
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:074cd404e50be00ae5994034b76986b555548f89730fbb0b8fdf2143427043fe",
+        "urn:codenoesis:evidence:blake3:2492b7f7812a611e40767099013258db69fca1b8f316cd4a63aaea434e4c2318",
+        "urn:codenoesis:evidence:blake3:5fe56093df651923157842179cec130e657d438b75a42f7eb1f3be684398eafb",
+        "urn:codenoesis:evidence:blake3:688f3aec4a2f790e83b0a6326b74499fa045fd3c8dede4faf24cf0400c4a3219",
+        "urn:codenoesis:evidence:blake3:cfdd789f3af29b3e9e3b5873f40d18f7448ebba6e77e4ff4edcf7d025c3a700f"
+      ],
+      "coverage_gap_ids": []
+    },
+    {
+      "id": "urn:codenoesis:diff:blake3:b3579d38aad062c55ac0fd4e9b7cef14cf561afdc4d95b2722a8c22b58266517",
+      "operation_id": "urn:codenoesis:operation:blake3:071cbb8fa33a959879d7d8a2bfbbac31e1fea4850c28fdb73227c605f5974923",
+      "field_id": "urn:codenoesis:field:blake3:a4bef896d066ecb3441a6d9638cea00947075d62c66bad642455840a7ce4f0e7",
+      "field_pointer": "/displayName",
+      "direction": "response",
+      "dimension": "presence",
+      "contract": {
+        "before": "optional",
+        "after": "optional",
+        "delta": "unchanged",
+        "claim_state": "deterministic_fact",
+        "evidence_ids": [
+          "urn:codenoesis:evidence:blake3:2492b7f7812a611e40767099013258db69fca1b8f316cd4a63aaea434e4c2318",
+          "urn:codenoesis:evidence:blake3:5fe56093df651923157842179cec130e657d438b75a42f7eb1f3be684398eafb"
+        ]
+      },
+      "implementation": {
+        "before": "unknown",
+        "after": "unknown",
+        "delta": "unresolved",
+        "claim_state": "derived_fact",
+        "evidence_ids": [
+          "urn:codenoesis:evidence:blake3:2c98054eb52df0ef0bfcb04c8147c0a6ac5d9a3048499dc1216f9e958900b918",
+          "urn:codenoesis:evidence:blake3:5f5149524ca3ce81a00ff9a24264d8813e0e16ceaaff268aa26ee9f4c064eec5"
+        ]
+      },
+      "change_kind": "unresolved_implementation_semantics",
+      "classification": "unresolved",
+      "claim_state": "derived_fact",
+      "rule_id": "cmp.unresolved.insufficient-evidence/v1",
+      "affected_client_ids": [],
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:2492b7f7812a611e40767099013258db69fca1b8f316cd4a63aaea434e4c2318",
+        "urn:codenoesis:evidence:blake3:2c98054eb52df0ef0bfcb04c8147c0a6ac5d9a3048499dc1216f9e958900b918",
+        "urn:codenoesis:evidence:blake3:5f5149524ca3ce81a00ff9a24264d8813e0e16ceaaff268aa26ee9f4c064eec5",
+        "urn:codenoesis:evidence:blake3:5fe56093df651923157842179cec130e657d438b75a42f7eb1f3be684398eafb"
+      ],
+      "coverage_gap_ids": [
+        "urn:codenoesis:coverage-gap:blake3:d50c035847baacf04cdb30d284fa010e934182ac1295d5018dc1ba574488a3cb"
+      ]
+    }
+  ],
+  "client_assessments": [
+    {
+      "client_identity": "urn:codenoesis:client:blake3:bc61c394bfca258f571afdc1ff8a69cbe141c0f093942c031392157568d937b0",
+      "repository_identity": "urn:codenoesis:fixture:s7-client-safe",
+      "operation_id": "urn:codenoesis:operation:blake3:071cbb8fa33a959879d7d8a2bfbbac31e1fea4850c28fdb73227c605f5974923",
+      "call_site_id": "urn:codenoesis:call-site:blake3:bf63c10163327564a50f45606830ab57d450e2c8480cc170eb30bb21891b661c",
+      "link_state": "deterministic_fact",
+      "presence_assumption": "handles_absent",
+      "assumption_claim_state": "derived_fact",
+      "baseline_risk": "compatible",
+      "target_impact": "compatible",
+      "affected": false,
+      "rule_ids": [
+        "cmp.response.presence.safe-absence-handling/v1"
+      ],
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:074cd404e50be00ae5994034b76986b555548f89730fbb0b8fdf2143427043fe",
+        "urn:codenoesis:evidence:blake3:2492b7f7812a611e40767099013258db69fca1b8f316cd4a63aaea434e4c2318",
+        "urn:codenoesis:evidence:blake3:5fe56093df651923157842179cec130e657d438b75a42f7eb1f3be684398eafb",
+        "urn:codenoesis:evidence:blake3:80344b673d7cb641993ac879611554370402a153a6201a5c7d6e15a176adcf26",
+        "urn:codenoesis:evidence:blake3:cfdd789f3af29b3e9e3b5873f40d18f7448ebba6e77e4ff4edcf7d025c3a700f"
+      ],
+      "coverage_gap_ids": []
+    },
+    {
+      "client_identity": "urn:codenoesis:client:blake3:ebd716cc12c29ad94e757a84d525b057f53ab8d3e6f9e21a35ffa55a6b8057a9",
+      "repository_identity": "urn:codenoesis:fixture:s7-client-strict",
+      "operation_id": "urn:codenoesis:operation:blake3:071cbb8fa33a959879d7d8a2bfbbac31e1fea4850c28fdb73227c605f5974923",
+      "call_site_id": "urn:codenoesis:call-site:blake3:a59693122eeb35ee111acb47cfa2a20eafb4c75746ed60ae9ed61aa4e859884b",
+      "link_state": "deterministic_fact",
+      "presence_assumption": "requires_present",
+      "assumption_claim_state": "derived_fact",
+      "baseline_risk": "potentially_breaking",
+      "target_impact": "breaking",
+      "affected": true,
+      "rule_ids": [
+        "cmp.response.presence.client-stricter-than-contract/v1",
+        "cmp.response.presence.undocumented-guarantee-removed/v1"
+      ],
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:074cd404e50be00ae5994034b76986b555548f89730fbb0b8fdf2143427043fe",
+        "urn:codenoesis:evidence:blake3:2492b7f7812a611e40767099013258db69fca1b8f316cd4a63aaea434e4c2318",
+        "urn:codenoesis:evidence:blake3:5fe56093df651923157842179cec130e657d438b75a42f7eb1f3be684398eafb",
+        "urn:codenoesis:evidence:blake3:688f3aec4a2f790e83b0a6326b74499fa045fd3c8dede4faf24cf0400c4a3219",
+        "urn:codenoesis:evidence:blake3:cfdd789f3af29b3e9e3b5873f40d18f7448ebba6e77e4ff4edcf7d025c3a700f"
+      ],
+      "coverage_gap_ids": []
+    }
+  ],
+  "rejected_candidates": [
+    {
+      "client_identity": "urn:codenoesis:client:blake3:03879c99edb3bb0d0a2f5af4d6d842f21cf6232ee9efb60aed5c375f625100ea",
+      "repository_identity": "urn:codenoesis:fixture:s7-client-decoy",
+      "call_site_id": "urn:codenoesis:call-site:blake3:0f3124309b75ad804310cfbf01feb1a7fa23f9deb98dad9dfdf43a8213ce7031",
+      "reason_code": "operation_identity_mismatch",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:d72907cbe1ce4705a837a224f3ea3b99ddad18fbfb03fcc442020004cfeed668"
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "urn:codenoesis:evidence:blake3:074cd404e50be00ae5994034b76986b555548f89730fbb0b8fdf2143427043fe",
+      "repository_identity": "urn:codenoesis:fixture:s7-provider",
+      "revision": "fixture-provider-a",
+      "path": "src/user_response.rs",
+      "start_line": 6,
+      "end_line": 6,
+      "excerpt_sha256": "cb67bab3a4deab11c69a7d2f890a462bc464c059ddd813712179331a0bcf14d7",
+      "source_kind": "provider_implementation",
+      "claim_state": "deterministic_fact",
+      "capability_version": "rust-direct-json-map/v1"
+    },
+    {
+      "id": "urn:codenoesis:evidence:blake3:2492b7f7812a611e40767099013258db69fca1b8f316cd4a63aaea434e4c2318",
+      "repository_identity": "urn:codenoesis:fixture:s7-provider",
+      "revision": "fixture-provider-b",
+      "path": "openapi.yaml",
+      "start_line": 20,
+      "end_line": 30,
+      "excerpt_sha256": "95eab2115fa0996e13cd4069101cb09173e01ec574497601dad5de4c68893d9f",
+      "source_kind": "declared_contract",
+      "claim_state": "deterministic_fact",
+      "capability_version": "openapi-3.1-http-json/v1"
+    },
+    {
+      "id": "urn:codenoesis:evidence:blake3:2c98054eb52df0ef0bfcb04c8147c0a6ac5d9a3048499dc1216f9e958900b918",
+      "repository_identity": "urn:codenoesis:fixture:s7-provider",
+      "revision": "fixture-provider-b",
+      "path": "src/user_response.rs",
+      "start_line": 9,
+      "end_line": 9,
+      "excerpt_sha256": "3c84d2f9087096fa9a6203d9c0d7b5ac7d6ba4514dd10227d76c71fa011c3e8a",
+      "source_kind": "provider_implementation",
+      "claim_state": "deterministic_fact",
+      "capability_version": "rust-direct-json-map/v1"
+    },
+    {
+      "id": "urn:codenoesis:evidence:blake3:5f5149524ca3ce81a00ff9a24264d8813e0e16ceaaff268aa26ee9f4c064eec5",
+      "repository_identity": "urn:codenoesis:fixture:s7-provider",
+      "revision": "fixture-provider-a",
+      "path": "src/user_response.rs",
+      "start_line": 7,
+      "end_line": 7,
+      "excerpt_sha256": "3c84d2f9087096fa9a6203d9c0d7b5ac7d6ba4514dd10227d76c71fa011c3e8a",
+      "source_kind": "provider_implementation",
+      "claim_state": "deterministic_fact",
+      "capability_version": "rust-direct-json-map/v1"
+    },
+    {
+      "id": "urn:codenoesis:evidence:blake3:5fe56093df651923157842179cec130e657d438b75a42f7eb1f3be684398eafb",
+      "repository_identity": "urn:codenoesis:fixture:s7-provider",
+      "revision": "fixture-provider-a",
+      "path": "openapi.yaml",
+      "start_line": 20,
+      "end_line": 30,
+      "excerpt_sha256": "95eab2115fa0996e13cd4069101cb09173e01ec574497601dad5de4c68893d9f",
+      "source_kind": "declared_contract",
+      "claim_state": "deterministic_fact",
+      "capability_version": "openapi-3.1-http-json/v1"
+    },
+    {
+      "id": "urn:codenoesis:evidence:blake3:688f3aec4a2f790e83b0a6326b74499fa045fd3c8dede4faf24cf0400c4a3219",
+      "repository_identity": "urn:codenoesis:fixture:s7-client-strict",
+      "revision": "fixture-client-v1",
+      "path": "src/commonMain/kotlin/dev/codenoesis/fixture/StrictUsersClient.kt",
+      "start_line": 6,
+      "end_line": 15,
+      "excerpt_sha256": "2eaaf065c1dd4616efcf25349d310e21fa926bd876cb98d18d220aa9ee230773",
+      "source_kind": "client_assumption",
+      "claim_state": "deterministic_fact",
+      "capability_version": "kotlin-direct-json-access/v1"
+    },
+    {
+      "id": "urn:codenoesis:evidence:blake3:80344b673d7cb641993ac879611554370402a153a6201a5c7d6e15a176adcf26",
+      "repository_identity": "urn:codenoesis:fixture:s7-client-safe",
+      "revision": "fixture-client-v1",
+      "path": "src/commonMain/kotlin/dev/codenoesis/fixture/SafeUsersClient.kt",
+      "start_line": 7,
+      "end_line": 16,
+      "excerpt_sha256": "a26adb797f8c2e82d19cd48dca9374dcc006ec00c64abcbe8eca77a2c10d44db",
+      "source_kind": "client_assumption",
+      "claim_state": "deterministic_fact",
+      "capability_version": "kotlin-direct-json-access/v1"
+    },
+    {
+      "id": "urn:codenoesis:evidence:blake3:cfdd789f3af29b3e9e3b5873f40d18f7448ebba6e77e4ff4edcf7d025c3a700f",
+      "repository_identity": "urn:codenoesis:fixture:s7-provider",
+      "revision": "fixture-provider-b",
+      "path": "src/user_response.rs",
+      "start_line": 6,
+      "end_line": 8,
+      "excerpt_sha256": "e984d9ce61789609c8591530794c1f73be86ea3cc25d9429e29628050289ee8a",
+      "source_kind": "provider_implementation",
+      "claim_state": "deterministic_fact",
+      "capability_version": "rust-direct-json-map/v1"
+    },
+    {
+      "id": "urn:codenoesis:evidence:blake3:d72907cbe1ce4705a837a224f3ea3b99ddad18fbfb03fcc442020004cfeed668",
+      "repository_identity": "urn:codenoesis:fixture:s7-client-decoy",
+      "revision": "fixture-client-v1",
+      "path": "src/commonMain/kotlin/dev/codenoesis/fixture/DecoyAccountClient.kt",
+      "start_line": 6,
+      "end_line": 15,
+      "excerpt_sha256": "077bcdfcb902e97fddbc6b60dddc329fbed4de3a4bda7979bdf58da06c54575e",
+      "source_kind": "client_assumption",
+      "claim_state": "deterministic_fact",
+      "capability_version": "kotlin-direct-json-access/v1"
+    }
+  ],
+  "coverage_gaps": [
+    {
+      "id": "urn:codenoesis:coverage-gap:blake3:d50c035847baacf04cdb30d284fa010e934182ac1295d5018dc1ba574488a3cb",
+      "subject_id": "urn:codenoesis:field:blake3:a4bef896d066ecb3441a6d9638cea00947075d62c66bad642455840a7ce4f0e7",
+      "dimension": "presence",
+      "reason_code": "unsupported_custom_provider_mapping",
+      "revisions": [
+        "fixture-provider-a",
+        "fixture-provider-b"
+      ],
+      "blocks_classification": true,
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:2c98054eb52df0ef0bfcb04c8147c0a6ac5d9a3048499dc1216f9e958900b918",
+        "urn:codenoesis:evidence:blake3:5f5149524ca3ce81a00ff9a24264d8813e0e16ceaaff268aa26ee9f4c064eec5"
+      ]
+    }
+  ]
+}

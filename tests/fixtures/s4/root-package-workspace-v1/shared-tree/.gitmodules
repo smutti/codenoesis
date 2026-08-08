@@ -1,0 +1,3 @@
+[submodule "model"]
+	path = external/model
+	url = https://example.invalid/model.git

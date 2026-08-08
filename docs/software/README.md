@@ -11,6 +11,8 @@ This directory records the engineering track. Experimental hypotheses, novel inf
 The normative product requirements, verification model, TDD policy, and
 incremental vertical-slice plan are defined in the
 [Software Requirements Specification](software-requirements-specification.md).
+Detailed semantics accepted or proposed for ratification are indexed in the
+[software decision records](decisions/README.md).
 
 ## Product goals
 
@@ -86,6 +88,9 @@ The estimate assumes four Rust engineers plus part-time platform and security su
 The phase table remains a macro planning view. Implementation order and release
 eligibility are governed by the smaller, demonstrable slices in the
 [Software Requirements Specification](software-requirements-specification.md#12-incremental-delivery-plan).
+The evolving, non-normative sequencing for real-world validation targets,
+including generic Rust repository compatibility and proposed polyglot adapter
+lanes, is tracked in the [delivery roadmap](roadmap.md).
 
 ## Production-readiness exit criteria
 

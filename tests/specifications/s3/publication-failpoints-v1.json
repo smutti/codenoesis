@@ -1,0 +1,140 @@
+{
+  "schema_version": "codenoesis.publication-failpoints/v1",
+  "status": "approved",
+  "injection": {
+    "production_switch": false,
+    "probe": "test_only_process",
+    "control": "injected_boundary_callback",
+    "termination": "external_process_termination"
+  },
+  "boundaries": [
+    {
+      "order": 1,
+      "name": "cas_before_temp_create",
+      "phase": "cas_stage",
+      "occurrence_scope": "each_canonical_artifact",
+      "durable_effect_before_termination": "prior_artifact_final_objects_only",
+      "abandoned_temporary_possible": false,
+      "unreferenced_final_possible": true,
+      "restart_first_publication_head": null,
+      "restart_replacement_head": "A",
+      "retry_first_publication_head": "A",
+      "retry_replacement_head": "B"
+    },
+    {
+      "order": 2,
+      "name": "cas_after_temp_sync",
+      "phase": "cas_stage",
+      "occurrence_scope": "each_canonical_artifact",
+      "durable_effect_before_termination": "current_temporary_and_prior_final_objects",
+      "abandoned_temporary_possible": true,
+      "unreferenced_final_possible": true,
+      "restart_first_publication_head": null,
+      "restart_replacement_head": "A",
+      "retry_first_publication_head": "A",
+      "retry_replacement_head": "B"
+    },
+    {
+      "order": 3,
+      "name": "cas_after_object_move",
+      "phase": "cas_stage",
+      "occurrence_scope": "each_canonical_artifact",
+      "durable_effect_before_termination": "final_objects_through_current_move",
+      "abandoned_temporary_possible": false,
+      "unreferenced_final_possible": true,
+      "restart_first_publication_head": null,
+      "restart_replacement_head": "A",
+      "retry_first_publication_head": "A",
+      "retry_replacement_head": "B"
+    },
+    {
+      "order": 4,
+      "name": "cas_after_parent_sync",
+      "phase": "cas_stage",
+      "occurrence_scope": "each_canonical_artifact",
+      "durable_effect_before_termination": "durable_final_objects_through_current",
+      "abandoned_temporary_possible": false,
+      "unreferenced_final_possible": true,
+      "restart_first_publication_head": null,
+      "restart_replacement_head": "A",
+      "retry_first_publication_head": "A",
+      "retry_replacement_head": "B"
+    },
+    {
+      "order": 5,
+      "name": "sqlite_after_begin",
+      "phase": "metadata_transaction",
+      "occurrence_scope": "once_per_publication",
+      "durable_effect_before_termination": "all_cas_objects_staged",
+      "abandoned_temporary_possible": false,
+      "unreferenced_final_possible": true,
+      "restart_first_publication_head": null,
+      "restart_replacement_head": "A",
+      "retry_first_publication_head": "A",
+      "retry_replacement_head": "B"
+    },
+    {
+      "order": 6,
+      "name": "sqlite_after_snapshot_rows",
+      "phase": "metadata_transaction",
+      "occurrence_scope": "once_per_publication",
+      "durable_effect_before_termination": "uncommitted_snapshot_rows",
+      "abandoned_temporary_possible": false,
+      "unreferenced_final_possible": true,
+      "restart_first_publication_head": null,
+      "restart_replacement_head": "A",
+      "retry_first_publication_head": "A",
+      "retry_replacement_head": "B"
+    },
+    {
+      "order": 7,
+      "name": "sqlite_after_head_update",
+      "phase": "metadata_transaction",
+      "occurrence_scope": "once_per_publication",
+      "durable_effect_before_termination": "uncommitted_head_update",
+      "abandoned_temporary_possible": false,
+      "unreferenced_final_possible": true,
+      "restart_first_publication_head": null,
+      "restart_replacement_head": "A",
+      "retry_first_publication_head": "A",
+      "retry_replacement_head": "B"
+    },
+    {
+      "order": 8,
+      "name": "sqlite_after_commit",
+      "phase": "metadata_committed",
+      "occurrence_scope": "once_per_publication",
+      "durable_effect_before_termination": "new_complete_head_committed",
+      "abandoned_temporary_possible": false,
+      "unreferenced_final_possible": false,
+      "restart_first_publication_head": "A",
+      "restart_replacement_head": "B",
+      "retry_first_publication_head": "A",
+      "retry_replacement_head": "B"
+    }
+  ],
+  "required_sequence_per_boundary": [
+    "materialize clean store",
+    "publish or prepublish A as required by the scenario",
+    "select every canonical artifact occurrence for a CAS boundary or the single publication occurrence for a metadata boundary",
+    "start isolated publication probe",
+    "observe exact named boundary",
+    "terminate the probe externally without graceful cleanup",
+    "restart with a new process",
+    "load and validate the visible head",
+    "retry the same intended publication",
+    "load and validate the resulting head",
+    "run orphan sweep",
+    "load and validate the head again"
+  ],
+  "rejected_evidence": [
+    "panic or exit before the named boundary",
+    "in-process error injection without process termination",
+    "timeout used as a boundary signal",
+    "retry without first observing restart state",
+    "head validation that does not read every referenced object",
+    "automatic retry hiding the first failure",
+    "testing only the first occurrence of a CAS boundary",
+    "a skipped or quarantined boundary"
+  ]
+}

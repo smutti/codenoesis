@@ -1,0 +1,11 @@
+{
+  "schema_version": "codenoesis.error/v2",
+  "code": "acquisition.entry_policy_violation",
+  "stage": "acquisition",
+  "message": "repository entry violates the standard-local-s1 policy",
+  "retryable": false,
+  "context": {
+    "entry": "symlink",
+    "path": "escape"
+  }
+}

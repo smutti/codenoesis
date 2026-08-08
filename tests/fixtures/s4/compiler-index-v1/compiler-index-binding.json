@@ -1,0 +1,68 @@
+{
+  "schema_version": "codenoesis.compiler-index-binding/v1",
+  "profile": "scip-rust-v0.9.0-import-v1",
+  "repository": {
+    "identity": "urn:codenoesis:fixture:s4-compiler-index-v1",
+    "commit_oid": "2203600cce0f0904aefc66dcb49dd0dbc7fd5fd3",
+    "tree_oid": "d117f2f0924cbef9e7396b97ee46c76bd5261e00",
+    "source_manifest_sha256": "db34f7ab7b3db4871ff9d89ac7e8c8383acaad89200105813bd7b39e25c859d2"
+  },
+  "artifact": {
+    "path": "index.scip",
+    "byte_length": 3733,
+    "sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
+    "format": "scip-protobuf",
+    "scip_tag": "v0.9.0",
+    "scip_commit": "e8ee0ae6038f8298e2195812eea9d7b1196748ae",
+    "scip_proto_sha256": "04cb20f2b8be73f6c0376b5b3e84c3ae20ebaff0ad3d23ba2d16f866b395ed7d",
+    "protocol_version": 0,
+    "canonical_encoding": true
+  },
+  "producer": {
+    "family": "rust-analyzer-scip",
+    "name": "rust-analyzer",
+    "version": "2026-08-03",
+    "commit": "b54a82b321c9617c5cf0b07ac0f12c08f7bc5902",
+    "arguments_sha256": "1a1921373272ee8efd80d3325719ea4a28b43e3d4617814e6c28d953a7f3ce37",
+    "project_root_sha256": "4c7487c14488ac629e69fe9dd003ce6dfd2f54aaa0e2bb260bff3569dbab7790",
+    "toolchain": {
+      "channel": "1.97.1",
+      "rustc_release": "1.97.1",
+      "rustc_commit": "8bab26f4f68e0e26f0bb7960be334d5b520ea452",
+      "target_triple": "aarch64-apple-darwin"
+    }
+  },
+  "documents": {
+    "coverage_mode": "declared_partial",
+    "indexed": [
+      {
+        "path": "crates/api/src/lib.rs",
+        "blob_oid": "fc3ff1e76544992d7d104ee9877d33db34bb6838",
+        "sha256": "0bb39b6f06bed7e27af233e10966121803523bec7960289d65489343e87adb79",
+        "byte_length": 512
+      },
+      {
+        "path": "crates/client/src/lib.rs",
+        "blob_oid": "06b2ebfacb6c903e4eb5d5c40c554fbd8d9ec972",
+        "sha256": "664aac908ede4b1dffb1cd82f5b4462138024cdbebba7a87c41bd2dbfe4ead0e",
+        "byte_length": 224
+      }
+    ],
+    "omitted": [
+      {
+        "path": "crates/client/src/omitted.rs",
+        "blob_oid": "9b9ff2fb88d7b2f692116f1ab539d2eb2e7b72ec",
+        "sha256": "04a0bf7bb47f6cbfc27360957a65ed07be88e861522c0ea6e807da5a2c92520a",
+        "byte_length": 34,
+        "reason": "not_emitted_by_indexer"
+      }
+    ]
+  },
+  "known_limitations": [
+    "call_kind_not_encoded",
+    "generated_definition_not_source_bound",
+    "documentation_not_imported",
+    "absolute_project_root_redacted",
+    "arguments_redacted"
+  ]
+}

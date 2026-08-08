@@ -1,0 +1,76 @@
+{
+  "schema_version": "codenoesis.local-test-observation/v1",
+  "slice": "S1",
+  "roadmap_capability": "R1",
+  "status": "red_observed",
+  "requirement_status": "Approved",
+  "requirements": [
+    "FR-ACQ-004"
+  ],
+  "risk": "high",
+  "issue": "https://github.com/smutti/codenoesis/issues/76",
+  "authorization_comment": "https://github.com/smutti/codenoesis/issues/76#issuecomment-5127185922",
+  "oracle_bundle_sha256": "08602c21b06e0e0cea754312fb8c9f5d28db36ae31e9e646df669b2c129826df",
+  "reviewed_source_sha256": {
+    "decision": "bb1ec2eaa0ee9fbc451e4ffdb25c5dbc946435de69e3a4e79f63ceb96971709c",
+    "acceptance_specification": "41ade77f2e0c806c0586f6234c830f932286c18a9419f21ef5f9689a41a5338d",
+    "error_v6_schema": "9ce9baab14cb61a66a0e8eda1374193defe9d5419d61a9948f07afcfced9889b",
+    "bundle_file": "38024dda756914484b38ded700a82373cff95b5ae549c815917c0f79649c0578",
+    "fixture_manifest": "d8d0363ade05f0ec393f636f03fdb23e8875a1871e8747c0018f6b430c0bdedd",
+    "public_corpus_descriptor": "1d2edc9f858d612e76abb70e6dd255d28e88306a0e4874b0e8ea7351f4347f46"
+  },
+  "base_sha": "763a1a0d07b857defdd6ae95b7ee07cdf8bde532",
+  "test_first_sha": "88b41bd293922be0bc33192986ef5614017d11d9",
+  "policy": {
+    "version": 1,
+    "source_sha": "763a1a0d07b857defdd6ae95b7ee07cdf8bde532",
+    "sha256": "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993",
+    "binding": "https://github.com/smutti/codenoesis/pull/75"
+  },
+  "red": {
+    "test_id": "e2e_fr_acq_004_packed_sha1_equivalence",
+    "command": "cargo test --locked -p noesis --test e2e_fr_acq_004_packed_sha1 e2e_fr_acq_004_packed_sha1_equivalence -- --exact",
+    "runner_exit_code": 101,
+    "subject_exit_code": 2,
+    "subject_stdout": "empty",
+    "subject_stderr": "{\"code\":\"input.invalid_revision\",\"context\":{},\"message\":\"invalid revision\",\"retryable\":false,\"schema_version\":\"codenoesis.error/v2\",\"stage\":\"input\"}\n",
+    "expected_failure": "The valid base-only pack v2/index v2 closure reaches the unsupported acquisition-profile selector and the monitored subject returns exit 2, empty stdout, and strict LF-terminated ErrorV2 input.invalid_revision.",
+    "observed_failure": "The harness reached its explicit success assertion after validating the packed closure and observed exactly the approved unrecognized-selector boundary.",
+    "fixture_observations": {
+      "setup_outside_monitored_subject": true,
+      "exactly_one_authoritative_pair": true,
+      "pack_version": 2,
+      "index_version": 2,
+      "offline_verify_pack_succeeded": true,
+      "reachable_loose_fallback_absent": true,
+      "pack_bytes_unchanged": true,
+      "index_bytes_unchanged": true,
+      "outside_root_sentinel_unchanged": true
+    },
+    "log": {
+      "path": "crates/noesis/tests/evidence/s1/packed/red/e2e_fr_acq_004_packed_sha1.log",
+      "sha256": "79ee61a7a597d3ddda4c62b11a50b7a63f8564466556fb0a119fb9864c978e85",
+      "bytes": 1248
+    }
+  },
+  "environment": {
+    "observed_at_utc": "2026-07-30T06:03:18Z",
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "macos": "26.5.2",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "python": "Python 3.9.6",
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "actionlint": "1.7.12",
+    "features": []
+  },
+  "agent": {
+    "identity": "OpenAI Codex",
+    "model": "not exposed by the runtime",
+    "run_identifier": "not exposed by the runtime",
+    "duration": "not exposed by the runtime",
+    "cost": "not exposed by the runtime"
+  },
+  "limitation": "This retained local Red is not exact-head CI evidence and must not be used to claim FR-ACQ-004 Verified."
+}

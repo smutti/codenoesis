@@ -1,0 +1,13 @@
+{
+  "schema_version": "codenoesis.error/v8",
+  "code": "federation.identity_conflict",
+  "stage": "federation",
+  "message": "conflicting authoritative federation identity",
+  "retryable": false,
+  "context": {
+    "path": "variants/conflicting-client.json",
+    "component": "operation_identity",
+    "reason": "conflicting_authoritative_evidence",
+    "subject_id": "urn:codenoesis:client:blake3:ebd716cc12c29ad94e757a84d525b057f53ab8d3e6f9e21a35ffa55a6b8057a9"
+  }
+}

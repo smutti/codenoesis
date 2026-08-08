@@ -1,0 +1,215 @@
+{
+  "schema_version": "codenoesis.local-store-contract/v1",
+  "status": "approved",
+  "project_key": "repository_identity",
+  "snapshot_identity": {
+    "algorithm": "blake3-256",
+    "canonicalization": "RFC8785",
+    "preimage": [
+      "codenoesis.snapshot-id/v1",
+      "repository_snapshot_v3_semantic_hash_value"
+    ],
+    "urn_prefix": "urn:codenoesis:snapshot:blake3:"
+  },
+  "artifact_identity": {
+    "algorithm": "blake3-256",
+    "preimage": "UTF-8(codenoesis.artifact-id/v1) + 0x00 + exact bytes",
+    "urn_prefix": "urn:codenoesis:artifact:blake3:"
+  },
+  "sqlite": {
+    "schema_version": "codenoesis.local-store/v1",
+    "database_file": "metadata.sqlite3",
+    "pragmas": {
+      "application_id": 1129205587,
+      "busy_timeout": 0,
+      "foreign_keys": true,
+      "journal_mode": "WAL",
+      "synchronous": "FULL",
+      "trusted_schema": false,
+      "user_version": 1
+    },
+    "writer_mode": "single_begin_immediate",
+    "reader_mode": "single_read_transaction",
+    "tables": [
+      "artifacts",
+      "claims",
+      "coverage_gaps",
+      "diagnostics",
+      "entities",
+      "evidence",
+      "extraction_chunks",
+      "project_heads",
+      "relationships",
+      "snapshot_artifacts",
+      "snapshots",
+      "store_metadata"
+    ],
+    "immutable_tables": [
+      "artifacts",
+      "claims",
+      "coverage_gaps",
+      "diagnostics",
+      "entities",
+      "evidence",
+      "extraction_chunks",
+      "relationships",
+      "snapshot_artifacts",
+      "snapshots",
+      "store_metadata"
+    ],
+    "mutable_tables": [
+      "project_heads"
+    ],
+    "graph_encoding": "exact RFC8785 JSON bytes in STRICT BLOB columns",
+    "unknown_schema_policy": "reject_without_migration_or_repair"
+  },
+  "cas": {
+    "layout_version": "codenoesis.filesystem-cas/v1",
+    "object_path": "objects/blake3/{digest[0:2]}/{digest[2:64]}",
+    "temporary_path": "tmp/{exclusive-random-name}",
+    "ordered_roles": [
+      "snapshot_semantic",
+      "knowledge_graph",
+      "extraction_chunk"
+    ],
+    "role_cardinality": {
+      "snapshot_semantic": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "knowledge_graph": {
+        "minimum": 1,
+        "maximum": 1
+      },
+      "extraction_chunk": {
+        "minimum": 0,
+        "maximum": 20000
+      }
+    },
+    "canonical_bytes": {
+      "snapshot_semantic": "RFC8785 RepositorySnapshotV3.semantic",
+      "knowledge_graph": "RFC8785 KnowledgeGraphV1",
+      "extraction_chunk": "RFC8785 ExtractionChunkV1"
+    },
+    "stage_protocol": [
+      "create temporary file exclusively below tmp",
+      "write every byte and reject short writes",
+      "sync temporary file data and metadata",
+      "recompute artifact digest and byte length",
+      "move atomically without replacing a final object",
+      "sync final object parent with a supported durability primitive",
+      "report staged only after every prior operation succeeds"
+    ],
+    "existing_object_policy": "verify exact length and digest then reuse",
+    "collision_or_corruption_policy": "fail_closed_without_overwrite",
+    "partial_final_object_allowed": false
+  },
+  "publication": {
+    "candidate_contract": "codenoesis.repository-snapshot/v3",
+    "head_contract": "codenoesis.local-snapshot-head/v1",
+    "boundaries": [
+      "cas_before_temp_create",
+      "cas_after_temp_sync",
+      "cas_after_object_move",
+      "cas_after_parent_sync",
+      "sqlite_after_begin",
+      "sqlite_after_snapshot_rows",
+      "sqlite_after_head_update",
+      "sqlite_after_commit"
+    ],
+    "steps": [
+      "validate complete RepositorySnapshotV3",
+      "derive canonical artifact order and exact bytes",
+      "stage and verify every CAS object",
+      "begin one immediate SQLite transaction",
+      "insert or verify immutable snapshot and graph rows",
+      "compare and set the project head",
+      "commit the SQLite transaction",
+      "return the unchanged RepositorySnapshotV3 stdout bytes"
+    ],
+    "artifact_order": [
+      "snapshot_semantic ordinal 0",
+      "knowledge_graph ordinal 0",
+      "extraction_chunk by ascending chunk ordinal"
+    ],
+    "boundary_occurrence": {
+      "cas": "every canonical artifact role and ordinal",
+      "sqlite": "once per publication"
+    },
+    "commit_point": "sqlite_after_commit",
+    "pre_commit_visible_head": "previous",
+    "post_commit_visible_head": "new",
+    "idempotency_key": [
+      "repository_identity",
+      "snapshot_id"
+    ],
+    "same_snapshot_policy": "verify rows and objects, leave generation unchanged",
+    "retry_policy": "bounded caller retry with no adapter retry loop",
+    "head_conflict_policy": "typed failure without overwriting another committed head",
+    "production_failpoint_switch": false
+  },
+  "head_read": {
+    "transaction": "one stable SQLite read transaction",
+    "validation_order": [
+      "project head row",
+      "snapshot metadata row",
+      "ordered artifact references",
+      "immutable graph rows",
+      "CAS object existence",
+      "CAS byte length",
+      "CAS artifact digest",
+      "public semantic hashes"
+    ],
+    "success": "return one complete LocalSnapshotHeadV1",
+    "corruption_policy": "fail_closed_without_fallback",
+    "partial_or_degraded_success": false
+  },
+  "cleanup": {
+    "scope": [
+      "abandoned temporary files",
+      "final CAS objects absent from a committed snapshot_artifacts row"
+    ],
+    "reachability_view": "stable committed SQLite read transaction",
+    "recheck_before_delete": true,
+    "reachable_object_policy": "never_delete",
+    "corrupt_reachable_object_policy": "report_and_preserve",
+    "automatic_destructive_repair": false
+  },
+  "path_policy": {
+    "store_argument": "one explicit --store path",
+    "marker_file": "store.json",
+    "marker_bytes": "{\"database\":\"metadata.sqlite3\",\"objects\":\"objects\",\"schema_version\":\"codenoesis.local-store-marker/v1\",\"temporary\":\"tmp\"}\n",
+    "create_policy": "empty root or absent leaf below a verified existing parent",
+    "reopen_policy": "exact marker and exact SQLite schema only",
+    "nonempty_unmarked_policy": "reject",
+    "repository_overlap_policy": "reject either ancestor direction",
+    "symlink_or_reparse_policy": "reject every traversed component",
+    "write_scope": "store root only",
+    "absolute_path_in_public_error": false
+  },
+  "platform_durability": {
+    "process_crash_restart": [
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "power_loss_claim": "only with named successful file and parent-directory durability primitives",
+    "unsupported_primitive_policy": "typed failure before publication",
+    "evidence_fields": [
+      "os",
+      "filesystem",
+      "file_sync_primitive",
+      "atomic_move_primitive",
+      "parent_sync_primitive",
+      "sqlite_version",
+      "sqlite_compile_options"
+    ]
+  },
+  "versioning": {
+    "write_policy": "write exactly codenoesis.local-store/v1",
+    "read_policy": "read exactly codenoesis.local-store/v1",
+    "migration_policy": "none in S3",
+    "repair_policy": "none in S3",
+    "unknown_version_policy": "reject before mutation"
+  }
+}

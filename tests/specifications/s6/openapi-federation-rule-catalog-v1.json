@@ -1,0 +1,263 @@
+{
+  "schema_version": "codenoesis.federation-rule-catalog/v1",
+  "catalog_version": "codenoesis.federation-rules/http-json/v1",
+  "analysis_profile": "standard-local-s6",
+  "contract_capability": "codenoesis.contract-capability/openapi-3.1-http-json/v1",
+  "provider_evidence_identity": {
+    "domain": "codenoesis.federation-evidence-id/v1",
+    "line_numbering": "one_based_inclusive",
+    "yaml_selector_kind": "openapi_location_span",
+    "yaml_preimage": [
+      "repository_identity",
+      "revision",
+      "normalized_path",
+      "normalized_openapi_location",
+      "source_format",
+      "start_line_decimal",
+      "end_line_decimal",
+      "file_sha256"
+    ],
+    "json_selector_kind": "json_pointer",
+    "json_preimage": [
+      "repository_identity",
+      "revision",
+      "normalized_path",
+      "canonical_json_pointer",
+      "file_sha256"
+    ]
+  },
+  "heuristic_matching": {
+    "comparison": "exact_unicode_scalar_sequence",
+    "service_hint_source": "openapi_info_title",
+    "operation_hint_source": "operationId",
+    "unique_match": "candidate",
+    "no_match": "coverage_gap:heuristic_no_match",
+    "multiple_matches": "coverage_gap:heuristic_ambiguous",
+    "automatic_confirmation": false
+  },
+  "coverage_gap_identity": {
+    "domain": "codenoesis.federation-gap-id/v1",
+    "heuristic_preimage": [
+      "subject_id",
+      "reason_code",
+      "primary_evidence_id"
+    ],
+    "contract_preimage": [
+      "subject_id",
+      "reason_code",
+      "normalized_openapi_location"
+    ]
+  },
+  "authoritative_subject_uniqueness": {
+    "subject_key": [
+      "client_id",
+      "call_site_id"
+    ],
+    "identical_repetition": "federation.invalid_declaration",
+    "distinct_binding": "federation.identity_conflict",
+    "mixed_explicit_and_heuristic": "federation.identity_conflict"
+  },
+  "authority_order": [
+    "explicit_workspace_identity",
+    "package_or_scip_identity",
+    "canonical_operation_identity",
+    "event_or_schema_identity",
+    "heuristic_candidate"
+  ],
+  "capabilities": [
+    {
+      "authority": "explicit_workspace_identity",
+      "status": "supported",
+      "confirmation": "deterministic"
+    },
+    {
+      "authority": "package_or_scip_identity",
+      "status": "not_exposed",
+      "confirmation": "coverage_gap"
+    },
+    {
+      "authority": "canonical_operation_identity",
+      "status": "supported",
+      "confirmation": "deterministic"
+    },
+    {
+      "authority": "event_or_schema_identity",
+      "status": "not_exposed",
+      "confirmation": "coverage_gap"
+    },
+    {
+      "authority": "heuristic_candidate",
+      "status": "supported",
+      "confirmation": "never_automatic"
+    }
+  ],
+  "states": [
+    "candidate",
+    "confirmed",
+    "rejected",
+    "unresolved"
+  ],
+  "rules": [
+    {
+      "id": "fed.explicit-operation.confirm/v1",
+      "precedence": 10,
+      "requires": [
+        "explicit_workspace_identity",
+        "canonical_service_identity",
+        "canonical_operation_identity",
+        "exact_revision_binding"
+      ],
+      "outcome": "confirmed",
+      "on_conflict": "unresolved"
+    },
+    {
+      "id": "fed.operation-identity.confirm/v1",
+      "precedence": 20,
+      "requires": [
+        "canonical_service_identity",
+        "canonical_operation_identity",
+        "exact_revision_binding"
+      ],
+      "outcome": "confirmed",
+      "on_conflict": "unresolved"
+    },
+    {
+      "id": "fed.operation-decoy.reject/v1",
+      "precedence": 30,
+      "requires": [
+        "canonical_operation_identity",
+        "provider_operation_absent"
+      ],
+      "outcome": "rejected",
+      "on_conflict": "unresolved"
+    },
+    {
+      "id": "fed.heuristic-name.candidate/v1",
+      "precedence": 40,
+      "requires": [
+        "exact_unicode_scalar_sequence_match"
+      ],
+      "outcome": "candidate",
+      "on_conflict": "unresolved"
+    },
+    {
+      "id": "fed.conflict.unresolved/v1",
+      "precedence": 50,
+      "requires": [
+        "conflicting_authoritative_evidence"
+      ],
+      "outcome": "unresolved",
+      "on_conflict": "unresolved"
+    }
+  ],
+  "coverage_gap_rules": [
+    {
+      "reason_code": "heuristic_requires_confirmation",
+      "subject": "candidate_id",
+      "evidence": "client_binding"
+    },
+    {
+      "reason_code": "heuristic_no_match",
+      "subject": "call_site_id",
+      "evidence": "client_binding"
+    },
+    {
+      "reason_code": "heuristic_ambiguous",
+      "subject": "call_site_id",
+      "evidence": "client_binding"
+    },
+    {
+      "reason_code": "unsupported_callbacks",
+      "subject": "operation_id",
+      "evidence": "openapi_location"
+    },
+    {
+      "reason_code": "unsupported_webhooks",
+      "subject": "service_id",
+      "evidence": "openapi_location"
+    },
+    {
+      "reason_code": "unsupported_links",
+      "subject": "operation_id",
+      "evidence": "openapi_location"
+    },
+    {
+      "reason_code": "unsupported_security_semantics",
+      "subject": "nearest_service_or_operation_id",
+      "evidence": "openapi_location"
+    },
+    {
+      "reason_code": "unsupported_server_variables",
+      "subject": "service_id",
+      "evidence": "openapi_location"
+    },
+    {
+      "reason_code": "unsupported_media_type",
+      "subject": "operation_id",
+      "evidence": "openapi_location"
+    }
+  ],
+  "boundary_accounting": {
+    "counter_contract": "inclusive_charge_before_allocation_or_traversal",
+    "public_command_limits": [
+      "workspace_manifest_bytes",
+      "repositories",
+      "contract_bytes_per_document",
+      "yaml_nesting_depth",
+      "local_ref_depth",
+      "path_items",
+      "operations",
+      "schemas",
+      "fields_per_operation",
+      "report_bytes"
+    ],
+    "component_counter_limits": [
+      "contract_documents",
+      "clients",
+      "declarations",
+      "confirmed_links",
+      "candidates",
+      "rejections",
+      "evidence_items",
+      "coverage_gaps",
+      "memory_bytes",
+      "wall_milliseconds"
+    ]
+  },
+  "failure_precedence": [
+    "invocation",
+    "workspace_manifest",
+    "repository_binding",
+    "contract_encoding",
+    "yaml_structure",
+    "openapi_profile",
+    "local_reference",
+    "client_declaration",
+    "federation_identity",
+    "resource_limit",
+    "report_validation",
+    "internal"
+  ],
+  "limits": {
+    "workspace_manifest_bytes": 8388608,
+    "repositories": 128,
+    "contract_documents": 256,
+    "contract_bytes_per_document": 2097152,
+    "yaml_nesting_depth": 32,
+    "local_ref_depth": 16,
+    "path_items": 10000,
+    "operations": 10000,
+    "schemas": 20000,
+    "fields_per_operation": 5000,
+    "clients": 10000,
+    "declarations": 100000,
+    "confirmed_links": 1000000,
+    "candidates": 200000,
+    "rejections": 200000,
+    "evidence_items": 1000000,
+    "coverage_gaps": 200000,
+    "report_bytes": 67108864,
+    "memory_bytes": 536870912,
+    "wall_milliseconds": 60000
+  }
+}

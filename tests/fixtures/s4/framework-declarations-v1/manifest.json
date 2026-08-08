@@ -1,0 +1,75 @@
+{
+  "schema_version": "codenoesis.r6-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-framework-declarations-v1",
+  "license": "Apache-2.0 project-owned fixture under repository LICENSE",
+  "external_source_vendored": false,
+  "fixture_may_execute": false,
+  "materialization": {
+    "tree_oid": "22edc029079ac4fb600e07bc43596d8794e28d52",
+    "commit_oid": "d6e5ae087cdfe44bf7c47bf31a73dfc09c3795b1",
+    "commit_recipe": "SHA-1 Git commit over the listed 100644 files; fixed author/committer CodeNoesis Fixture, epoch 0 UTC, message framework-declarations-v1"
+  },
+  "files": [
+    {
+      "path": "repository/Cargo.toml",
+      "mode": "100644",
+      "byte_length": 128,
+      "sha256": "b2438116d0e5dfe629b257570825fb75b8dc57809ab961a0e4069f1d0661e533",
+      "git_blob_oid": "5343d18251ca02791a1e2b234ed548becf09e43a"
+    },
+    {
+      "path": "repository/build.rs",
+      "mode": "100644",
+      "byte_length": 89,
+      "sha256": "08a734b7da4b2c17ff12e8b059fd7047007ffc1a674353bf7e7e3a608abd31d5",
+      "git_blob_oid": "24818b624f0e012709421566c4e4ed03fca8e8e6"
+    },
+    {
+      "path": "repository/generated/framework.rs",
+      "mode": "100644",
+      "byte_length": 118,
+      "sha256": "5107ca6b3f0aae7f457eb7debe39c310bb1370140856add9d2e60bd68f08cfc7",
+      "git_blob_oid": "9b617a46d696bd8e56e5e0c4ddd34aa2bcb1d67f"
+    },
+    {
+      "path": "repository/src/attribute_style.rs",
+      "mode": "100644",
+      "byte_length": 699,
+      "sha256": "781ee4aa9bf99cbb445a18fa3d7ce2ca1d045827257d8bb12966f9d22bae1e13",
+      "git_blob_oid": "c28cf3303d65de6beecee515eee6fd4a8c6bddd4"
+    },
+    {
+      "path": "repository/src/builder_style.rs",
+      "mode": "100644",
+      "byte_length": 1828,
+      "sha256": "91e8ef3f5dc6781960f4d13509257519a7fe46f7a632e33cfc7ad1e0571cfd49",
+      "git_blob_oid": "621fa4daec573b24a08bd9e83385ca8b36310bde"
+    },
+    {
+      "path": "repository/src/lib.rs",
+      "mode": "100644",
+      "byte_length": 416,
+      "sha256": "af385e28b748887a1ad8d9fc1e6f3425af2ced78afe7adea6d9647a85f6d19a4",
+      "git_blob_oid": "9b3a9c9f5871133f67cc311378cf332b06ad9c05"
+    },
+    {
+      "path": "repository/target/generated.rs",
+      "mode": "100644",
+      "byte_length": 60,
+      "sha256": "2dfe16711285cd1b28665014f178b10fad4017b04202203e8584e44d1b6a40f5",
+      "git_blob_oid": "a60381cd3e9b5fbee741390564d43ca18a8a0e8f"
+    }
+  ],
+  "expected_facts": {
+    "path": "expected-framework-declarations.json",
+    "byte_length": 74139,
+    "sha256": "c6956cf1887d3d201d4eb95f6e6a50c204d795b5def968fd5d3d25d88faabd1f"
+  },
+  "authority": {
+    "source_bytes": "committed fixture syntax only",
+    "target_execution": false,
+    "macro_expansion": false,
+    "cfg_evaluation": false,
+    "runtime_observation": false
+  }
+}

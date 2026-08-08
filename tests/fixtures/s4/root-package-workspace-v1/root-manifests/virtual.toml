@@ -1,0 +1,7 @@
+[workspace]
+members = ["external/model", "crates/macro-sentinel", "crates/cli"]
+exclude = ["excluded/legacy"]
+resolver = "3"
+
+[workspace.dependencies]
+serde = "1"

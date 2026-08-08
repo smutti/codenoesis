@@ -1,0 +1,83 @@
+{
+  "schema_version": "codenoesis.recovery-oracle/v1",
+  "boundary_occurrence_head_equivalence": true,
+  "failpoints": [
+    {
+      "name": "cas_before_temp_create",
+      "restart_first_publication_head": null,
+      "restart_replacement_head": "A",
+      "retry_first_publication_head": "A",
+      "retry_replacement_head": "B",
+      "partial_head_visible": false
+    },
+    {
+      "name": "cas_after_temp_sync",
+      "restart_first_publication_head": null,
+      "restart_replacement_head": "A",
+      "retry_first_publication_head": "A",
+      "retry_replacement_head": "B",
+      "partial_head_visible": false
+    },
+    {
+      "name": "cas_after_object_move",
+      "restart_first_publication_head": null,
+      "restart_replacement_head": "A",
+      "retry_first_publication_head": "A",
+      "retry_replacement_head": "B",
+      "partial_head_visible": false
+    },
+    {
+      "name": "cas_after_parent_sync",
+      "restart_first_publication_head": null,
+      "restart_replacement_head": "A",
+      "retry_first_publication_head": "A",
+      "retry_replacement_head": "B",
+      "partial_head_visible": false
+    },
+    {
+      "name": "sqlite_after_begin",
+      "restart_first_publication_head": null,
+      "restart_replacement_head": "A",
+      "retry_first_publication_head": "A",
+      "retry_replacement_head": "B",
+      "partial_head_visible": false
+    },
+    {
+      "name": "sqlite_after_snapshot_rows",
+      "restart_first_publication_head": null,
+      "restart_replacement_head": "A",
+      "retry_first_publication_head": "A",
+      "retry_replacement_head": "B",
+      "partial_head_visible": false
+    },
+    {
+      "name": "sqlite_after_head_update",
+      "restart_first_publication_head": null,
+      "restart_replacement_head": "A",
+      "retry_first_publication_head": "A",
+      "retry_replacement_head": "B",
+      "partial_head_visible": false
+    },
+    {
+      "name": "sqlite_after_commit",
+      "restart_first_publication_head": "A",
+      "restart_replacement_head": "B",
+      "retry_first_publication_head": "A",
+      "retry_replacement_head": "B",
+      "partial_head_visible": false
+    }
+  ],
+  "idempotency": {
+    "same_snapshot_repetitions": 100,
+    "snapshot_row_count": 1,
+    "head_generation_delta": 0,
+    "duplicate_artifact_rows": 0,
+    "result": "same_head"
+  },
+  "cleanup": {
+    "reachable_objects_deleted": 0,
+    "reachable_objects_reverified": true,
+    "orphan_objects_deleted": "all_reviewed_orphans",
+    "head_after_sweep": "B"
+  }
+}

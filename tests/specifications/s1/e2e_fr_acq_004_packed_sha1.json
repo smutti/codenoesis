@@ -1,0 +1,679 @@
+{
+  "schema_version": "codenoesis.acceptance-specification/v1",
+  "status": "approved",
+  "ratification": {
+    "governance_model": "single_maintainer_bootstrap",
+    "product_owner_persona": "Andrea Moretti",
+    "persona_is_natural_person": false,
+    "accountable_github_actor": "smutti",
+    "technical_approver": "smutti",
+    "approval_reference": "https://github.com/smutti/codenoesis/pull/61",
+    "effective_on": "protected_squash_merge_by_accountable_actor",
+    "required_external_approvals": 0,
+    "agent_merge_allowed": false
+  },
+  "test_id": "e2e_fr_acq_004_packed_sha1_equivalence",
+  "slice": "S1",
+  "requirements": [
+    "FR-ACQ-004"
+  ],
+  "inherited_constraints": [
+    "DR-EVD-001",
+    "FR-ACQ-001",
+    "FR-ACQ-002",
+    "FR-INV-001",
+    "NFR-DET-001",
+    "NFR-MNT-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "decision": "docs/software/decisions/0006-s1-packed-sha1-acquisition-contract.md",
+  "fixture": "tests/fixtures/s1/packed-sha1-v1/manifest.json",
+  "public_corpus": "tests/corpora/real-world-rust-v1.json",
+  "schemas": {
+    "error": "tests/specifications/s1/codenoesis-error-v6.schema.json",
+    "corpus": "tests/specifications/s1/corpus-descriptor-v1.schema.json",
+    "inherited_snapshot": "tests/specifications/s1/repository-snapshot-v2.schema.json",
+    "inherited_source_evidence": "tests/specifications/s1/source-evidence-v1.schema.json"
+  },
+  "selector_contract": {
+    "flag": "--acquisition-profile",
+    "value": "local-git-sha1-packed-v1",
+    "kind": "explicit_operational_input",
+    "valid_with_profiles": [
+      "standard-local-s1",
+      "standard-local-s2",
+      "standard-local-s3",
+      "standard-local-s4"
+    ],
+    "invalid_without_standard_profile": true,
+    "implicit_repository_shape_dispatch": false,
+    "included_in_configuration_semantic": false,
+    "included_in_semantic_hash": false,
+    "included_in_snapshot_identity": false,
+    "reason": "loose and packed storage are physical representations of the same verified Git objects"
+  },
+  "public_commands": {
+    "primary_s1": [
+      "noesis",
+      "scan",
+      "--repository",
+      "{repository_path}",
+      "--repository-id",
+      "urn:codenoesis:fixture:s1-safe-inventory-v1",
+      "--revision",
+      "a72b34a03936b70511bd72bd4fa0d37a5a593386",
+      "--profile",
+      "standard-local-s1",
+      "--acquisition-profile",
+      "local-git-sha1-packed-v1",
+      "--format",
+      "json"
+    ],
+    "real_world_progression": [
+      "noesis",
+      "scan",
+      "--repository",
+      "{repository_path}",
+      "--repository-id",
+      "{repository_id}",
+      "--revision",
+      "{full_sha1}",
+      "--profile",
+      "standard-local-s4",
+      "--acquisition-profile",
+      "local-git-sha1-packed-v1",
+      "--store",
+      "{store_path}",
+      "--format",
+      "json"
+    ]
+  },
+  "stream_contract": {
+    "success": {
+      "exit_code": 0,
+      "stdout": "the unchanged snapshot version selected by standard-local-s1, s2, s3, or s4 followed by one LF",
+      "stderr": "empty"
+    },
+    "invalid_acquisition_profile": {
+      "exit_code": 2,
+      "stdout": "empty",
+      "stderr": "one strict CodeNoesisErrorV6 input.invalid_acquisition_profile document followed by one LF"
+    },
+    "acquisition_failure": {
+      "exit_code": 10,
+      "stdout": "empty",
+      "stderr": "one strict CodeNoesisErrorV6 acquisition document followed by one LF"
+    },
+    "post_acquisition_failure": {
+      "behavior": "the already approved extraction, graph, storage, workspace, documentation, and query error lineages remain unchanged"
+    },
+    "unexpected_internal_failure": {
+      "exit_code": 70,
+      "stdout": "empty",
+      "stderr": "one strict CodeNoesisErrorV6 internal.unexpected document followed by one LF"
+    }
+  },
+  "compatibility_contract": {
+    "legacy_invocations": "Every S0 through S4 invocation without --acquisition-profile remains byte-for-byte unchanged.",
+    "legacy_packed_behavior": "The existing standard-local-s1 packed_object_database rejection remains required when the selector is absent.",
+    "selected_loose_behavior": "The new selector accepts a repository whose required objects are all loose.",
+    "selected_packed_behavior": "The new selector accepts the approved packed subset with no reachable loose fallback.",
+    "equivalence": "For a fixed standard profile, repository identity, revision, source bytes, and controlled envelope, selected loose and packed materializations produce identical RFC 8785 semantic bytes, semantic hashes, inventory, evidence, graph, storage input, documents, and query results as applicable.",
+    "forbidden_dispatch": [
+      "presence of .pack or .idx files",
+      "repository size",
+      "source extension",
+      "environment variable",
+      "Git configuration not explicitly approved",
+      "automatic retry"
+    ],
+    "unchanged_contract_bundles": [
+      "tests/specifications/s1/contract-bundle.json",
+      "tests/specifications/s4/contract-bundle.json"
+    ]
+  },
+  "supported_subset": {
+    "object_format": "sha1_with_collision_detection",
+    "pack_version": 2,
+    "index_version": 2,
+    "repository_kind": "non-bare local worktree with a real direct .git directory",
+    "object_sources": [
+      "repository-local loose objects",
+      "repository-local paired pack v2 and index v2 files"
+    ],
+    "entry_types": [
+      "commit",
+      "tree",
+      "blob",
+      "tag",
+      "ofs_delta",
+      "ref_delta"
+    ],
+    "ref_delta_bases": [
+      "same pack",
+      "different approved local pack",
+      "approved local loose object"
+    ],
+    "ignored_non_authoritative_sidecars": [
+      ".bitmap",
+      ".keep",
+      ".mtimes",
+      ".rev",
+      "multi-pack-index when complete paired indexes are present"
+    ],
+    "explicitly_unsupported": [
+      "pack versions other than 2",
+      "index versions other than 2",
+      "MIDX-only lookup",
+      "promisor or partial-clone object databases",
+      "SHA-256 object format",
+      "alternates",
+      "shallow or bare repositories",
+      "replace refs or grafts",
+      "LFS materialization",
+      "implicit submodule traversal",
+      "remote fetch or repair"
+    ]
+  },
+  "catalog_contract": {
+    "directory": ".git/objects/pack",
+    "authoritative_pair_pattern": "^pack-([0-9a-f]{40})\\.(?:pack|idx)$",
+    "pack_id": "the lowercase 40-hex identifier shared by one pack/index pair",
+    "ordering": "ascending unsigned UTF-8 bytes of pack_id",
+    "discovery": "enumerate once, validate entry kinds without following symlinks, sort, open every authoritative regular file once, and retain stable handles",
+    "pairing": "exactly one .pack and one .idx for each authoritative pack_id",
+    "transient_or_unpaired": "acquisition.object_database_changed with component catalog",
+    "unknown_or_unsafe_entry": "typed failure; never ignored through filename fallback",
+    "mmap": false,
+    "pre_post_metadata_check": true,
+    "concurrent_repack": "stable success from one coherent handle set or retryable object_database_changed; never partial success or implicit retry"
+  },
+  "index_contract": {
+    "magic_hex": "ff744f63",
+    "version": 2,
+    "fanout_entries": 256,
+    "fanout": "monotonic and exactly counts the strictly ascending unique OID table",
+    "object_ids": "strictly ascending unsigned bytes with no duplicate row",
+    "crc32": "one big-endian CRC32 per represented packed entry",
+    "offsets32": "one big-endian value per OID; high bit selects the large-offset table",
+    "offsets64": "every referenced large-offset slot exists, is referenced exactly once, and names a candidate offset inside the pack entry region",
+    "offset_uniqueness": true,
+    "candidate_offset_policy": "index validation proves bounds and uniqueness; every candidate must match one-to-one with the bounded sequential pack-entry map before revision resolution",
+    "pack_checksum": "matches the paired pack trailer",
+    "index_checksum": "collision-detecting SHA-1 over all preceding index bytes",
+    "exact_length": true,
+    "pack_object_count_match": true
+  },
+  "pack_contract": {
+    "signature": "PACK",
+    "version": 2,
+    "count": "matches the validated index object count",
+    "trailer": "collision-detecting SHA-1 over all preceding pack bytes",
+    "filename_binding": "pack_id equals the pack trailer checksum",
+    "whole_pack_validation": "every paired pack header and trailer checksum is validated before revision resolution",
+    "entry_map": "starting at byte 12, consume exactly the pack-declared entry count; parse each header and delta-base header, inflate one exact zlib stream under per-entry and cumulative structural limits while discarding output, record start and end, validate inflated size and CRC, and require one-to-one equality with index offsets",
+    "entry_validation": "every location selected by the reachable closure additionally validates delta semantics, reconstructed type and size, and collision-detecting Git object OID",
+    "unreachable_entry_validation": "unreachable entries receive structural framing, zlib, size, CRC, and offset-map validation but no delta reconstruction, retained body, or semantic OID validation",
+    "trailing_or_concatenated_zlib": "rejected",
+    "unreachable_corruption": "raw-byte corruption is caught by whole-pack checksum; semantic entry validation is required for the reachable closure"
+  },
+  "object_resolution": {
+    "location_order": [
+      "loose",
+      "ascending pack_id",
+      "ascending pack offset"
+    ],
+    "locations_per_oid": "bounded by object_locations",
+    "duplicate_policy": "Every reachable location for one OID must reconstruct the same Git type and bytes; any invalid location or conflict fails rather than falling back.",
+    "missing_policy": "object_missing only when the OID is absent from every approved local source",
+    "kind_policy": "repository_inconsistent only after a valid object reconstructs with an incompatible Git kind",
+    "sha1_policy": "Git object IDs and pack/index checksums use collision-detecting SHA-1; a detected collision fails as object_database_invalid sha1_collision",
+    "publication": "all-or-nothing"
+  },
+  "delta_contract": {
+    "algorithm": "iterative stack machine with explicit cycle detection and counters",
+    "ofs_delta": "base distance is nonzero, overflow-safe, strictly before the delta entry, and within the same pack",
+    "ref_delta": "base OID resolves only through approved local locations and never triggers fetch or repair",
+    "header": "base size and result size variable integers are complete, bounded, and exact",
+    "copy": "offset and size fields are overflow-safe and the complete copy range lies inside the base",
+    "insert": "literal length is nonzero and complete",
+    "opcode_zero": "invalid",
+    "result": "exactly the declared result size",
+    "cycles": "acquisition.object_database_invalid delta_cycle",
+    "resource_accounting": "depth, program bytes, instructions, intermediate bytes, cumulative work, locations, and cache bytes are charged before allocation or copy"
+  },
+  "limits": {
+    "pack_directory_entries": 512,
+    "pack_pairs": 64,
+    "single_pack_index_bytes": 134217728,
+    "cumulative_pack_index_bytes": 268435456,
+    "indexed_objects": 8000000,
+    "single_pack_bytes": 4294967296,
+    "cumulative_verified_pack_bytes": 8589934592,
+    "compressed_entry_bytes": 67108864,
+    "inflated_entry_bytes": 268435456,
+    "cumulative_entry_inflate_bytes": 1073741824,
+    "delta_program_bytes": 33554432,
+    "delta_depth": 50,
+    "delta_instructions": 4194304,
+    "delta_intermediate_bytes": 268435456,
+    "cumulative_delta_work_bytes": 1073741824,
+    "object_locations": 8,
+    "reconstructed_object_cache_bytes": 134217728
+  },
+  "limit_contract": {
+    "legacy_s1_limits_inherited": true,
+    "packed_limits_never_relax_inherited_limits": true,
+    "effective_limit": "minimum of every applicable inherited type-aware S1 limit and packed-parser ceiling",
+    "regular_file_blob": "single_file_bytes 4194304 is checked before retained semantic body reconstruction or allocation; the prerequisite discard-only structural inflate is separately charged to inflated_entry_bytes and cumulative_entry_inflate_bytes",
+    "fixed_no_environment_override": true,
+    "checked_arithmetic": true,
+    "charge_before_allocation_copy_or_decompression": true,
+    "maximum_and_maximum_plus_one_required": true,
+    "public_limit_context": "maximum is the exact fixed value for the limit token and observed is exactly maximum + 1",
+    "large_boundary_method": "bounded model or injected reader plus representative real-byte integration case",
+    "wall_time_is_independent": true
+  },
+  "error_contract": {
+    "schema_version": "codenoesis.error/v6",
+    "new_codes": {
+      "input.invalid_acquisition_profile": {
+        "stage": "input",
+        "retryable": false,
+        "context": []
+      },
+      "acquisition.object_database_invalid": {
+        "stage": "acquisition",
+        "retryable": false,
+        "context_shapes": [
+          {
+            "component": "catalog",
+            "reasons": [
+              "catalog_entry"
+            ],
+            "required_fields": [
+              "component",
+              "reason"
+            ]
+          },
+          {
+            "component": "index",
+            "reasons": [
+              "index_layout",
+              "index_fanout",
+              "index_checksum",
+              "sha1_collision"
+            ],
+            "required_fields": [
+              "component",
+              "reason",
+              "pack_id"
+            ]
+          },
+          {
+            "component": "index",
+            "reasons": [
+              "index_object_order",
+              "index_offset"
+            ],
+            "required_fields": [
+              "component",
+              "reason",
+              "pack_id",
+              "object_oid"
+            ]
+          },
+          {
+            "component": "pack",
+            "reasons": [
+              "pack_header",
+              "pack_checksum",
+              "pack_index_mismatch",
+              "object_count",
+              "sha1_collision"
+            ],
+            "required_fields": [
+              "component",
+              "reason",
+              "pack_id"
+            ]
+          },
+          {
+            "component": "entry",
+            "reasons": [
+              "entry_header",
+              "entry_crc",
+              "zlib_stream"
+            ],
+            "required_fields": [
+              "component",
+              "reason",
+              "pack_id",
+              "object_oid"
+            ]
+          },
+          {
+            "component": "object",
+            "reasons": [
+              "object_size",
+              "object_oid",
+              "sha1_collision",
+              "duplicate_object_conflict"
+            ],
+            "required_fields": [
+              "component",
+              "reason",
+              "object_oid"
+            ]
+          },
+          {
+            "component": "delta",
+            "reasons": [
+              "delta_base",
+              "delta_cycle",
+              "delta_program"
+            ],
+            "required_fields": [
+              "component",
+              "reason",
+              "pack_id",
+              "object_oid"
+            ]
+          }
+        ]
+      },
+      "acquisition.object_database_changed": {
+        "stage": "acquisition",
+        "retryable": true,
+        "context": [
+          "component"
+        ]
+      },
+      "acquisition.object_database_unavailable": {
+        "stage": "acquisition",
+        "retryable": false,
+        "context": [
+          "component"
+        ]
+      }
+    },
+    "invalid_reasons": [
+      "catalog_entry",
+      "index_layout",
+      "index_fanout",
+      "index_object_order",
+      "index_offset",
+      "index_checksum",
+      "pack_header",
+      "pack_checksum",
+      "pack_index_mismatch",
+      "object_count",
+      "entry_header",
+      "entry_crc",
+      "zlib_stream",
+      "object_size",
+      "object_oid",
+      "sha1_collision",
+      "delta_base",
+      "delta_cycle",
+      "delta_program",
+      "duplicate_object_conflict"
+    ],
+    "safe_context": "No absolute path, pack filename, source byte, malformed byte, environment value, credential, or secret is emitted.",
+    "automatic_retry": "forbidden for acceptance evidence; changed remains the original typed observation"
+  },
+  "failure_precedence": [
+    "complete invocation validation including standard profile and acquisition selector before repository filesystem access",
+    "repository root and legacy shape policy",
+    "pack directory entry limit and safe catalog",
+    "pairing and stable file handles",
+    "index size, structure, order, candidate-offset bounds, and checksum",
+    "pack size, header, count, trailer, and index binding",
+    "bounded sequential entry map, framing, zlib, inflated size, CRC, and exact index-offset/start equality",
+    "revision resolution",
+    "object location limit and deterministic duplicate validation",
+    "lazy reachable delta, type, reconstructed size, collision detection, and OID validation",
+    "inherited S1 path, mode, file, tree, output, and wall limits",
+    "no partial publication"
+  ],
+  "security_contract": {
+    "product_processes": 0,
+    "product_network_channels": 0,
+    "product_filesystem_writes": 0,
+    "product_outside_root_reads": 0,
+    "target_execution": 0,
+    "credential_or_filter_execution": 0,
+    "first_party_unsafe": 0,
+    "memory_mapping": 0,
+    "filesystem_boundary": "the accepted S1 Linux capability-and-observation gate remains normative",
+    "race_outcomes": [
+      "stable success",
+      "acquisition.object_database_changed"
+    ]
+  },
+  "implementation_boundary": {
+    "production_approach": "bounded in-process safe-Rust reader owned by the repository adapter",
+    "domain_and_port_result": "the existing AcquiredRepository abstraction remains independent of physical object storage",
+    "required_components": [
+      "deterministic pack catalog",
+      "streaming positional pack reader",
+      "bounded sequential pack-entry map",
+      "unified loose-and-pack object resolver",
+      "iterative bounded delta machine",
+      "single typed error mapping"
+    ],
+    "forbidden_production_dependencies": [
+      "Git subprocess",
+      "libgit2",
+      "gix object-database discovery",
+      "mmap-based reader",
+      "network-capable Git client"
+    ],
+    "allowed_test_oracles": [
+      "official Git format documentation",
+      "offline git index-pack --strict outside the monitored subject",
+      "offline independent Rust differential reader outside the monitored subject"
+    ],
+    "differential_oracle_is_product_truth": false
+  },
+  "expected_red": {
+    "test_name": "e2e_fr_acq_004_packed_sha1_equivalence",
+    "command": "cargo test --locked -p noesis --test e2e_fr_acq_004_packed_sha1 e2e_fr_acq_004_packed_sha1_equivalence -- --exact",
+    "fixture_state": "packed v2/index v2 source fixture with no reachable loose fallback, materialized before subject launch",
+    "subject_expected_success": "exit 0 and RepositorySnapshotV2 semantic bytes equal the accepted loose golden",
+    "accepted_preimplementation_exit": 2,
+    "accepted_preimplementation_schema": "codenoesis.error/v2",
+    "accepted_preimplementation_code": "input.invalid_revision",
+    "accepted_reason": "Merged S0 through S4 do not recognize --acquisition-profile and reject the unknown flag before acquisition.",
+    "rejected_reasons": [
+      "compilation failure",
+      "missing test target",
+      "missing or corrupt fixture",
+      "empty pack sentinel without a valid packed closure",
+      "modified oracle",
+      "dependency outage",
+      "panic",
+      "timeout",
+      "race",
+      "legacy packed_object_database rejection without the new explicit selector"
+    ]
+  },
+  "test_order": [
+    "e2e_fr_acq_004_packed_sha1_equivalence",
+    "conf_fr_acq_004_pack_catalog_v1",
+    "conf_fr_acq_004_index_v2",
+    "sec_fr_acq_004_pack_integrity",
+    "conf_fr_acq_004_entry_integrity",
+    "conf_fr_acq_004_ofs_delta",
+    "conf_fr_acq_004_ref_delta",
+    "sec_fr_acq_004_delta_adversarial",
+    "pt_fr_acq_004_limits_have_max_and_plus_one",
+    "pt_fr_acq_004_location_and_order_invariant",
+    "race_fr_acq_004_pack_replacement",
+    "sec_fr_acq_004_scan_has_no_new_authority",
+    "fz_fr_acq_004_pack_index_delta_seed_corpus",
+    "diff_fr_acq_004_offline_reference_readers",
+    "reg_fr_acq_004_legacy_profiles_unchanged"
+  ],
+  "acceptance_tests": [
+    {
+      "test_name": "e2e_fr_acq_004_packed_sha1_equivalence",
+      "classes": [
+        "E2E",
+        "GT"
+      ],
+      "assertion": "Loose, base-only pack, OFS_DELTA, REF_DELTA, and cross-pack/loose REF materializations of the same commit produce identical semantic bytes and hashes with no loose fallback in packed variants."
+    },
+    {
+      "test_name": "conf_fr_acq_004_pack_catalog_v1",
+      "classes": [
+        "CONF",
+        "SEC"
+      ],
+      "assertion": "Pairing, sidecars, MIDX, promisor markers, entry kinds, ordering, duplicate locations, and transient catalog states match the fixed contract."
+    },
+    {
+      "test_name": "conf_fr_acq_004_index_v2",
+      "classes": [
+        "CONF",
+        "PT"
+      ],
+      "assertion": "Magic, version, length, fanout, OID order, CRC table, 32/64-bit offsets, checksums, and object counts reject every reviewed mutation with the exact safe reason."
+    },
+    {
+      "test_name": "sec_fr_acq_004_pack_integrity",
+      "classes": [
+        "SEC",
+        "CONF"
+      ],
+      "assertion": "Header, version, count, trailer, filename, and index checksum binding are verified before revision resolution and publish nothing on failure."
+    },
+    {
+      "test_name": "conf_fr_acq_004_entry_integrity",
+      "classes": [
+        "CONF",
+        "SEC"
+      ],
+      "assertion": "Headers, exact zlib framing, CRC32, declared size, reconstructed kind/size, collision detection, and Git OID are all enforced."
+    },
+    {
+      "test_name": "conf_fr_acq_004_ofs_delta",
+      "classes": [
+        "CONF",
+        "PT"
+      ],
+      "assertion": "Valid OFS chains resolve; zero, overflow, forward, missing, and out-of-pack distances fail deterministically."
+    },
+    {
+      "test_name": "conf_fr_acq_004_ref_delta",
+      "classes": [
+        "CONF",
+        "PT"
+      ],
+      "assertion": "Same-pack, cross-pack, and loose local bases resolve without fetch; absent or invalid bases fail."
+    },
+    {
+      "test_name": "sec_fr_acq_004_delta_adversarial",
+      "classes": [
+        "SEC",
+        "PT"
+      ],
+      "assertion": "Cycles, depth 51, oversized programs, excessive instructions/work, opcode zero, truncated inserts, out-of-range copies, and size mismatch terminate within every budget."
+    },
+    {
+      "test_name": "pt_fr_acq_004_limits_have_max_and_plus_one",
+      "classes": [
+        "PT",
+        "SEC"
+      ],
+      "assertion": "Every new limit has a successful maximum model and a typed maximum-plus-one result whose observed value is capped."
+    },
+    {
+      "test_name": "pt_fr_acq_004_location_and_order_invariant",
+      "classes": [
+        "PT"
+      ],
+      "assertion": "Fifty catalog/location permutations and ten shuffled parallel repetitions produce identical semantic bytes and failure precedence."
+    },
+    {
+      "test_name": "race_fr_acq_004_pack_replacement",
+      "classes": [
+        "SEC",
+        "FT"
+      ],
+      "assertion": "Rename, truncate, rewrite, and repack schedules produce one stable result or object_database_changed, never fallback, SIGBUS, panic, partial output, or accepted retry."
+    },
+    {
+      "test_name": "sec_fr_acq_004_scan_has_no_new_authority",
+      "classes": [
+        "SEC",
+        "E2E"
+      ],
+      "assertion": "The inherited Linux gate observes no process, network, write, outside-root access, hook/filter/credential execution, or target sentinel event."
+    },
+    {
+      "test_name": "fz_fr_acq_004_pack_index_delta_seed_corpus",
+      "classes": [
+        "FZ"
+      ],
+      "assertion": "Separate catalog/index, pack-entry/zlib, and delta-machine seed corpora find no panic, unbounded allocation, loop, or unsafe behavior."
+    },
+    {
+      "test_name": "diff_fr_acq_004_offline_reference_readers",
+      "classes": [
+        "CONF"
+      ],
+      "assertion": "Offline differential results against Git strict validation and an independent reader are retained; every divergence is reviewed and neither tool can weaken the ratified oracle."
+    },
+    {
+      "test_name": "reg_fr_acq_004_legacy_profiles_unchanged",
+      "classes": [
+        "E2E",
+        "CONF"
+      ],
+      "assertion": "All accepted S0 through S4 fixtures, errors, semantic hashes, output roots, and the legacy packed rejection remain byte-identical without the selector."
+    }
+  ],
+  "evidence": {
+    "red": [
+      "immutable failing command log",
+      "expected and observed exit/schema/code",
+      "base, pre-implementation, and harness commit SHAs",
+      "fixture, oracle, schema, and bundle digests"
+    ],
+    "green": [
+      "complete ordered acceptance results",
+      "all inherited S0 through S4 regressions",
+      "generated pack/index/object manifest and digests",
+      "determinism and parallel replay report",
+      "resource maxima and maximum-plus-one report",
+      "race schedule report",
+      "fuzz seed and bounded campaign report",
+      "offline differential report with reviewed divergences",
+      "Landlock/filesystem, seccomp/process, and network observer artifacts"
+    ],
+    "environment": [
+      "OS and architecture",
+      "pinned Rust toolchain and features",
+      "filesystem",
+      "Git and differential-tool versions used only by fixture setup",
+      "agent/model identity, policy version, run ID, duration, and cost"
+    ],
+    "retention": "Local output is review aid only; immutable CI artifacts and every digest must remain retrievable for at least 90 days.",
+    "verification_claim": "not Verified until complete immutable retained evidence is green and independently reviewed"
+  },
+  "deferred": [
+    "R2 gitlink and submodule representation",
+    "R3 non-virtual and root-package Cargo workspaces",
+    "remote acquisition",
+    "SHA-256 object format",
+    "shallow, bare, alternate, promisor, partial-clone, replace, and graft semantics",
+    "LFS materialization",
+    "MIDX as an authoritative lookup source",
+    "automatic repository repair or retry",
+    "user-configurable packed-object limits"
+  ]
+}

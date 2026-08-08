@@ -1,0 +1,674 @@
+{
+  "schema_version": "codenoesis.r4-manifest-fact-plan/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+  "identity_domains": {
+    "cargo_entity": "codenoesis.entity-id/cargo-manifest/v1",
+    "cargo_relationship": "codenoesis.relationship-id/cargo-manifest/v1",
+    "rust_entity": "codenoesis.entity-id/rust/v2",
+    "claim": "codenoesis.claim-id/v2",
+    "evidence": "codenoesis.evidence-id/v2",
+    "diagnostic": "codenoesis.diagnostic-id/cargo-manifest/v1",
+    "coverage_gap": "codenoesis.coverage-gap-id/v3",
+    "document": "codenoesis.document-id/v1"
+  },
+  "materialized_repository": {
+    "object_format": "sha1",
+    "tree_oid": "c99449f6f0651e4f6398521e316f3500d0e508e7",
+    "commit_oid": "7b1fc9073552b5967b1620d1e082a1d45e1b380e"
+  },
+  "entities": [
+    {
+      "key": "root_manifest",
+      "kind": "cargo.manifest",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.manifest",
+        "Cargo.toml"
+      ],
+      "id": "urn:codenoesis:entity:blake3:44db3049e9964d46d9a91775ea7df241588eb900d1781a8ce36ca68f74fab2fd",
+      "evidence": {
+        "path": "Cargo.toml",
+        "start_byte": 0,
+        "end_byte": 11,
+        "slice_sha256": "59bc0a0f46c351ca788a518854b298adb512865e8c940bc63665cae98879b4f8"
+      }
+    },
+    {
+      "key": "app_manifest",
+      "kind": "cargo.manifest",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.manifest",
+        "crates/app/Cargo.toml"
+      ],
+      "id": "urn:codenoesis:entity:blake3:55291049d6ae41cd96cadd3e7e494a07102bdfd333d51ab93f3599c9b94dcc5b",
+      "evidence": {
+        "path": "crates/app/Cargo.toml",
+        "start_byte": 0,
+        "end_byte": 9,
+        "slice_sha256": "70acf00586aa7b90c3866278505be7b81fb7ee1f7e21c17c1a22ac239be3c72a"
+      }
+    },
+    {
+      "key": "workspace_defaults",
+      "kind": "cargo.workspace_package_defaults",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.workspace_package_defaults",
+        "Cargo.toml"
+      ],
+      "id": "urn:codenoesis:entity:blake3:4e7cfb30e61be8f92efd638f48c4053593dc0852b21fc0917a249199dec16cea",
+      "evidence": {
+        "path": "Cargo.toml",
+        "start_byte": 53,
+        "end_byte": 72,
+        "slice_sha256": "8c4182aea1f3c2c06c665cbf6c80afc1558334f8e770a7ce55d2a3eece13534c"
+      }
+    },
+    {
+      "key": "package",
+      "kind": "cargo.package",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.package",
+        "crates/app/Cargo.toml",
+        "manifest-app"
+      ],
+      "id": "urn:codenoesis:entity:blake3:86230638bf2b8bb2cc43ec80f62fda264d31efc524fa2cf018f35d04430b911a",
+      "evidence": {
+        "path": "crates/app/Cargo.toml",
+        "start_byte": 0,
+        "end_byte": 31,
+        "slice_sha256": "c9260c8d23f24a7213348c2b464578825334930b6d7cf7466a90c52d398601a9"
+      }
+    },
+    {
+      "key": "target_lib",
+      "kind": "cargo.target",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.target",
+        "crates/app/Cargo.toml",
+        "manifest-app",
+        "lib",
+        "manifest_app"
+      ],
+      "id": "urn:codenoesis:entity:blake3:a730bc18e408abcbe013243456519062936544a685573ce43d1accded78e0b9c",
+      "evidence": {
+        "path": "crates/app/Cargo.toml",
+        "start_byte": 516,
+        "end_byte": 543,
+        "slice_sha256": "5b64726278c9c833e092ad733c30f4da9fe6bb0578a3c58e1c1eb31ff39caadc"
+      }
+    },
+    {
+      "key": "target_bin",
+      "kind": "cargo.target",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.target",
+        "crates/app/Cargo.toml",
+        "manifest-app",
+        "bin",
+        "manifest-app"
+      ],
+      "id": "urn:codenoesis:entity:blake3:7045f9e678d6872cd8caa9c57a714b6bb0043c7c9c3c4651d46593204d5fe1ba",
+      "evidence": {
+        "path": "crates/app/Cargo.toml",
+        "start_byte": 621,
+        "end_byte": 650,
+        "slice_sha256": "11317792a43731f93a57426d2606a8d58035f733fe36fb1c06d285d38efd15f5"
+      }
+    },
+    {
+      "key": "target_example",
+      "kind": "cargo.target",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.target",
+        "crates/app/Cargo.toml",
+        "manifest-app",
+        "example",
+        "demo"
+      ],
+      "id": "urn:codenoesis:entity:blake3:13c3407742a8aaf4ff919842621e5ef164757103a995146775b49441da886527",
+      "evidence": {
+        "path": "crates/app/Cargo.toml",
+        "start_byte": 714,
+        "end_byte": 739,
+        "slice_sha256": "b92c1a64f85c41b97d07fa1ade08ad0ac6d6388b19d7106640c5269e4b54ed85"
+      }
+    },
+    {
+      "key": "workspace_dep_serde",
+      "kind": "cargo.dependency",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.dependency",
+        "Cargo.toml",
+        "workspace",
+        "normal",
+        "",
+        "serde"
+      ],
+      "id": "urn:codenoesis:entity:blake3:e4628cfdd45f41efab5d3985b760b02c3a7c28b2d32ae16bd45831b66a30de75",
+      "evidence": {
+        "path": "Cargo.toml",
+        "start_byte": 648,
+        "end_byte": 728,
+        "slice_sha256": "d28cbd860764cbc2561a4e73918fdff2488ce031a17c2a5092ae04191f1f808a"
+      }
+    },
+    {
+      "key": "workspace_dep_shared",
+      "kind": "cargo.dependency",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.dependency",
+        "Cargo.toml",
+        "workspace",
+        "normal",
+        "",
+        "shared-core"
+      ],
+      "id": "urn:codenoesis:entity:blake3:4182027bedf84ff90748dc1b9b187f032a81263ee18a8e4a2cb78ece54a894a8",
+      "evidence": {
+        "path": "Cargo.toml",
+        "start_byte": 729,
+        "end_byte": 811,
+        "slice_sha256": "108bc69f29320ad4ecdb0c96fed44c4ac7ba78d092ca633dc7fff387eb6c1e0e"
+      }
+    },
+    {
+      "key": "workspace_dep_remote",
+      "kind": "cargo.dependency",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.dependency",
+        "Cargo.toml",
+        "workspace",
+        "normal",
+        "",
+        "remote-api"
+      ],
+      "id": "urn:codenoesis:entity:blake3:4065fab02f62c65987ca8df4d60ebc2ec6946f0f0fecc7ca8b833a3db4b27bd4",
+      "evidence": {
+        "path": "Cargo.toml",
+        "start_byte": 812,
+        "end_byte": 947,
+        "slice_sha256": "f15a1251c6ebba3418abcbf6c18b0a5ff82ce60048e412b8f5244897c1eeff22"
+      }
+    },
+    {
+      "key": "package_dep_serde",
+      "kind": "cargo.dependency",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.dependency",
+        "crates/app/Cargo.toml",
+        "package",
+        "normal",
+        "",
+        "serde"
+      ],
+      "id": "urn:codenoesis:entity:blake3:1c028324ef57523788747f7b86aab44d73ee760ceb2db05152e3d1a89362d80e",
+      "evidence": {
+        "path": "crates/app/Cargo.toml",
+        "start_byte": 836,
+        "end_byte": 903,
+        "slice_sha256": "1f31719f416329f934a4d96422a4482922c54e9de218fafd35fa071c20f204c5"
+      }
+    },
+    {
+      "key": "package_dep_renamed",
+      "kind": "cargo.dependency",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.dependency",
+        "crates/app/Cargo.toml",
+        "package",
+        "normal",
+        "",
+        "renamed"
+      ],
+      "id": "urn:codenoesis:entity:blake3:2a645d0b871aff04fa2dbaa4c142680dd370ce9b228d7f3d098534920fb416f4",
+      "evidence": {
+        "path": "crates/app/Cargo.toml",
+        "start_byte": 904,
+        "end_byte": 1029,
+        "slice_sha256": "6a8504d0dce7b4ab52e7d6abbc09203f5e7da90e54de74084339de99d6f8c060"
+      }
+    },
+    {
+      "key": "package_dep_local",
+      "kind": "cargo.dependency",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.dependency",
+        "crates/app/Cargo.toml",
+        "package",
+        "normal",
+        "",
+        "local-util"
+      ],
+      "id": "urn:codenoesis:entity:blake3:4e2392255c3cf1fb2ccbffa26e8fb8fcfda5bdc266e88b88f0c078ba41b7e10a",
+      "evidence": {
+        "path": "crates/app/Cargo.toml",
+        "start_byte": 1030,
+        "end_byte": 1082,
+        "slice_sha256": "2d1a76af7b001fcd350300ee6823ee20241dfcd517b15935d5cda36c5ab0f9d3"
+      }
+    },
+    {
+      "key": "package_dep_remote",
+      "kind": "cargo.dependency",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.dependency",
+        "crates/app/Cargo.toml",
+        "package",
+        "normal",
+        "",
+        "remote-api"
+      ],
+      "id": "urn:codenoesis:entity:blake3:02edfa7416a47bd402333b34f1ff06265cdcb29a8d6b4ea2b3b687f890f5a143",
+      "evidence": {
+        "path": "crates/app/Cargo.toml",
+        "start_byte": 1083,
+        "end_byte": 1187,
+        "slice_sha256": "60de22c541bedb508a64ed9e8456c9cd39c93eb0d32a9352fa059951b5694124"
+      }
+    },
+    {
+      "key": "package_dep_nix",
+      "kind": "cargo.dependency",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.dependency",
+        "crates/app/Cargo.toml",
+        "package",
+        "normal",
+        "cfg(target_os = \"linux\")",
+        "nix"
+      ],
+      "id": "urn:codenoesis:entity:blake3:b0d38dbf1df7b9212b36d245cc6a356102a8622f9f632485ee26a9eeb5adc8a9",
+      "evidence": {
+        "path": "crates/app/Cargo.toml",
+        "start_byte": 1238,
+        "end_byte": 1283,
+        "slice_sha256": "06566781027927d74cbe8c45b63b40a90af4781868dbaeb80290b6e878d1932c"
+      }
+    },
+    {
+      "key": "package_dep_pretty",
+      "kind": "cargo.dependency",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.dependency",
+        "crates/app/Cargo.toml",
+        "package",
+        "dev",
+        "",
+        "pretty_assertions"
+      ],
+      "id": "urn:codenoesis:entity:blake3:1a907e1df528c2105fe509ed3872a1f610bc8e40cbbcc52b4191cb8b8e96332d",
+      "evidence": {
+        "path": "crates/app/Cargo.toml",
+        "start_byte": 1304,
+        "end_byte": 1329,
+        "slice_sha256": "95faaa19368a0196f2d5e61803dd7feb2069e4c930301113997dfcf7eba46149"
+      }
+    },
+    {
+      "key": "package_dep_cc",
+      "kind": "cargo.dependency",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.dependency",
+        "crates/app/Cargo.toml",
+        "package",
+        "build",
+        "",
+        "cc"
+      ],
+      "id": "urn:codenoesis:entity:blake3:03b31a92e9916b8190e936d63465a2e5a0e5ad40e69e6de3428ba067650eb1b5",
+      "evidence": {
+        "path": "crates/app/Cargo.toml",
+        "start_byte": 1352,
+        "end_byte": 1401,
+        "slice_sha256": "2556d032f028c7cb4f535a925301811db2976d8cc6114f4ad2f72b2094a9e1fc"
+      }
+    },
+    {
+      "key": "feature_default",
+      "kind": "cargo.feature",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.feature",
+        "crates/app/Cargo.toml",
+        "manifest-app",
+        "default"
+      ],
+      "id": "urn:codenoesis:entity:blake3:4e62e3a61d028b2ccb4c822202e3b8974d8ca33745a0e42d47955c835cb6ab11",
+      "evidence": {
+        "path": "crates/app/Cargo.toml",
+        "start_byte": 1414,
+        "end_byte": 1431,
+        "slice_sha256": "19202ab75e65453bf0b931a939a9c247353e0e935ef15b9fb274367a4474978c"
+      }
+    },
+    {
+      "key": "feature_cli",
+      "kind": "cargo.feature",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.feature",
+        "crates/app/Cargo.toml",
+        "manifest-app",
+        "cli"
+      ],
+      "id": "urn:codenoesis:entity:blake3:e3b5007afade10b96db6634a32218290df342904147a9a62732a73ee35bdb1cc",
+      "evidence": {
+        "path": "crates/app/Cargo.toml",
+        "start_byte": 1432,
+        "end_byte": 1497,
+        "slice_sha256": "76349a16687d2cb6ee7598944e21f10cff69297fc3245916468a5342a8b91e6f"
+      }
+    },
+    {
+      "key": "feature_local_feature",
+      "kind": "cargo.feature",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.feature",
+        "crates/app/Cargo.toml",
+        "manifest-app",
+        "local-feature"
+      ],
+      "id": "urn:codenoesis:entity:blake3:8aa215631ad99fe8e8c264ef46105e371093f918a0e8f18828eefd8f26e463c8",
+      "evidence": {
+        "path": "crates/app/Cargo.toml",
+        "start_byte": 1498,
+        "end_byte": 1516,
+        "slice_sha256": "f70fae855b46016770bccd48ddcf9512aa06c312ed1c13c736b7b60661bc23bb"
+      }
+    },
+    {
+      "key": "patch_serde",
+      "kind": "cargo.patch",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.patch",
+        "Cargo.toml",
+        "crates_io",
+        "crates-io",
+        "serde"
+      ],
+      "id": "urn:codenoesis:entity:blake3:1aa5458c78ef9e912f2a14ea551b525bfc5f2ef743a7537212142bd5cbd29911",
+      "evidence": {
+        "path": "Cargo.toml",
+        "start_byte": 967,
+        "end_byte": 1070,
+        "slice_sha256": "26bd1544890873db8d2c6c3886255074ec17e677021e57c00959aae4d10b4c4d"
+      }
+    },
+    {
+      "key": "patch_custom",
+      "kind": "cargo.patch",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.patch",
+        "Cargo.toml",
+        "source_locator_sha256",
+        "96785b267fe3b6bbce8ffad1ff44fd67679c993e28c6e243cbebf4846d0aa981",
+        "custom"
+      ],
+      "id": "urn:codenoesis:entity:blake3:7982d9a232a7d95ef38c99fa0fc69be17a5af2be99b9166cc1e411d283473f2f",
+      "evidence": {
+        "path": "Cargo.toml",
+        "start_byte": 1133,
+        "end_byte": 1183,
+        "slice_sha256": "a872381824783e6e74a71381432b733206402ba8c70a139c4a67f2c087b13e8d"
+      }
+    },
+    {
+      "key": "build_script",
+      "kind": "cargo.build_script",
+      "identity_inputs": [
+        "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1",
+        "cargo.build_script",
+        "crates/app/Cargo.toml",
+        "manifest-app"
+      ],
+      "id": "urn:codenoesis:entity:blake3:d3ba84392f771741970ceacd529c0cfcc93c599fa1ee18a4cd8d263190c1bc32",
+      "evidence": {
+        "path": "crates/app/Cargo.toml",
+        "start_byte": 458,
+        "end_byte": 476,
+        "slice_sha256": "9b28c53b45b3bbe510e26d5c8b28510a3293602fb8eb2507365a8526c56bcacc"
+      }
+    }
+  ],
+  "rust_crates": {
+    "target_lib": "urn:codenoesis:entity:blake3:f3140f3e0b98d098b027a7c1cc90cc4ad09430f49a9b8440b4d4073ff4b6e9f8",
+    "target_bin": "urn:codenoesis:entity:blake3:f752a7c0eb3d4881c0fdc56bfb4df42a55a7f0b5a599b606223b9057736585b5"
+  },
+  "relationships": [
+    ["root_manifest", "DECLARES", "workspace_defaults", "urn:codenoesis:relationship:blake3:6200b5a6b86a90700522b0ab667140069e2811c20ec8277dafa86083e5b25544"],
+    ["root_manifest", "DECLARES", "workspace_dep_serde", "urn:codenoesis:relationship:blake3:b0be9962340e29c2193d036a772c393c5ba30a179e3115c86c2339f78c6aed28"],
+    ["root_manifest", "DECLARES", "workspace_dep_shared", "urn:codenoesis:relationship:blake3:2743ea9e0ff2de956ffdf08a25a2b823274801f14558c1ca2ae24b9ec91a9873"],
+    ["root_manifest", "DECLARES", "workspace_dep_remote", "urn:codenoesis:relationship:blake3:d0844bad37028fabfbc69c0fb22088756ae4f2a281478e51659138ec9ca041ae"],
+    ["root_manifest", "DECLARES", "patch_serde", "urn:codenoesis:relationship:blake3:f49fa591974d979ffe9c2aecb5125429c24a7037e2ba45be092231e1374391f5"],
+    ["root_manifest", "DECLARES", "patch_custom", "urn:codenoesis:relationship:blake3:958b354ea5a6458e6bdb4598d4954b16f18e462525b7eee3408f6253e44d3785"],
+    ["app_manifest", "DECLARES", "package", "urn:codenoesis:relationship:blake3:525b39355e9a6fec976288375e6589f7a78394b4aba8894bb976bd9fc5d9c5de"],
+    ["package", "DECLARES", "target_lib", "urn:codenoesis:relationship:blake3:2eae02bed3d7fe1933f06a159b4d3c9862a959ddba839f9c7e1058f909fc8887"],
+    ["package", "DECLARES", "target_bin", "urn:codenoesis:relationship:blake3:89b3025ee7016d93902cbbee80cd26394ef538dccd9afe57023e1fcca8997b13"],
+    ["package", "DECLARES", "target_example", "urn:codenoesis:relationship:blake3:b3903033520baafddfd50990a13f97e3a6de640f779fd2e930172ed8ebbaeb75"],
+    ["package", "DECLARES", "package_dep_serde", "urn:codenoesis:relationship:blake3:a2ddb286714b2eefce5e24f754ceb85ef6168635954feccb605ef2c161e66c9f"],
+    ["package", "DECLARES", "package_dep_renamed", "urn:codenoesis:relationship:blake3:f2de8b6d2a7707452a7170f5426b7b01b530d62ccf804166f07a0beb2e8a754b"],
+    ["package", "DECLARES", "package_dep_local", "urn:codenoesis:relationship:blake3:8cadd88f3975160ac8b3a48914fcae24639606151c47caa8ad65b772b98e3dfd"],
+    ["package", "DECLARES", "package_dep_remote", "urn:codenoesis:relationship:blake3:68c96d037b8a1c87fc25ea47c82522a25910586bbd4c8a3c5569caad5625910b"],
+    ["package", "DECLARES", "package_dep_nix", "urn:codenoesis:relationship:blake3:5c680c5af244222cacb2ac976a7b719e29f2741a552984518d9200d882223606"],
+    ["package", "DECLARES", "package_dep_pretty", "urn:codenoesis:relationship:blake3:0746943245a5d67e9d496a01acad1609bf038a64244eaa8580cd8d8d0ff81112"],
+    ["package", "DECLARES", "package_dep_cc", "urn:codenoesis:relationship:blake3:a92ab4a59ddbd782b19d86dc73a9cb0877b84039fed67d869382a9598d2dff52"],
+    ["package", "DECLARES", "feature_default", "urn:codenoesis:relationship:blake3:556911e1c7f2f393c6f74f640f3c6924bb0e6f6a9b2d219bd372857df7b3adad"],
+    ["package", "DECLARES", "feature_cli", "urn:codenoesis:relationship:blake3:b838e8977301a03a60eacd8300d06b7a2de578c8196562ecde7053ee943a62cd"],
+    ["package", "DECLARES", "feature_local_feature", "urn:codenoesis:relationship:blake3:56fa2fa8f7514ebb64e207a0d383dace205ef45e63449c20de555ac3c6035d5f"],
+    ["package", "DECLARES", "build_script", "urn:codenoesis:relationship:blake3:8872486c1c002e1cb55d832cd3fa3be05e745000255c8e09ae75a9b38715ebb2"],
+    ["package", "REFERENCES_DECLARATION", "workspace_defaults", "urn:codenoesis:relationship:blake3:89193efc764075a52c73316092497ac0597104b9ed2b2cba27a920a5d77dd9bf"],
+    ["package_dep_serde", "REFERENCES_DECLARATION", "workspace_dep_serde", "urn:codenoesis:relationship:blake3:a4a1e25cd01663f71275da323c8eb76722692030b7847cf5cb41cb630a3b0da7"],
+    ["target_lib", "MATERIALIZES", "rust_crates.target_lib", "urn:codenoesis:relationship:blake3:b8df1e8e16ac4cc51803ada878df6f89db7b7efb0bb50e5b1e9ecec8b4f0d75a"],
+    ["target_bin", "MATERIALIZES", "rust_crates.target_bin", "urn:codenoesis:relationship:blake3:83e5c7c5965bb8d6c76816f5286b76122b40bdef598f4030989b781560d00aa3"]
+  ],
+  "metadata": {
+    "workspace_default_fields": [
+      "authors",
+      "categories",
+      "description",
+      "documentation",
+      "edition",
+      "exclude",
+      "homepage",
+      "include",
+      "keywords",
+      "license",
+      "publish",
+      "readme",
+      "repository",
+      "rust-version",
+      "version"
+    ],
+    "package_inherited_fields": [
+      "authors",
+      "categories",
+      "description",
+      "documentation",
+      "edition",
+      "exclude",
+      "homepage",
+      "include",
+      "keywords",
+      "license",
+      "publish",
+      "readme",
+      "repository",
+      "rust-version",
+      "version"
+    ],
+    "package_direct_fields": [
+      "autobins",
+      "autoexamples",
+      "default-run"
+    ]
+  },
+  "targets": {
+    "target_lib": {
+      "kind": "lib",
+      "normalized_path": "crates/app/src/lib.rs",
+      "required_features": [],
+      "source_analysis_state": "analyzed_r3",
+      "proc_macro": true
+    },
+    "target_bin": {
+      "kind": "bin",
+      "normalized_path": "crates/app/src/main.rs",
+      "required_features": ["cli"],
+      "source_analysis_state": "analyzed_r3",
+      "proc_macro": false
+    },
+    "target_example": {
+      "kind": "example",
+      "normalized_path": "crates/app/examples/demo.rs",
+      "required_features": ["local-feature"],
+      "source_analysis_state": "not_analyzed",
+      "proc_macro": false
+    }
+  },
+  "dependencies": {
+    "workspace_dep_serde": ["workspace", "normal", null, "serde", "registry_default"],
+    "workspace_dep_shared": ["workspace", "normal", null, "shared-core", "path"],
+    "workspace_dep_remote": ["workspace", "normal", null, "remote-api", "git"],
+    "package_dep_serde": ["package", "normal", null, "serde", "workspace_inherited"],
+    "package_dep_renamed": ["package", "normal", null, "renamed", "registry_named"],
+    "package_dep_local": ["package", "normal", null, "local-util", "path"],
+    "package_dep_remote": ["package", "normal", null, "remote-api", "git"],
+    "package_dep_nix": ["package", "normal", "cfg(target_os = \"linux\")", "nix", "registry_default"],
+    "package_dep_pretty": ["package", "dev", null, "pretty_assertions", "registry_default"],
+    "package_dep_cc": ["package", "build", null, "cc", "registry_default"]
+  },
+  "feature_members": {
+    "default": [["bare", "cli"]],
+    "cli": [
+      ["explicit_dependency", "dep:serde"],
+      ["weak_dependency_feature", "serde?/std"],
+      ["dependency_feature", "renamed/api"],
+      ["bare", "local-feature"]
+    ],
+    "local-feature": []
+  },
+  "normalized_paths": {
+    "workspace_dep_shared": "crates/shared",
+    "package_dep_local": "crates/shared",
+    "patch_custom": "vendor/custom",
+    "build_script": "crates/app/build.rs"
+  },
+  "redacted_locator_sha256": [
+    "091362da76784f8483687654ce191598047e726e17d2f7d2b7bff0e41a866c7b",
+    "12a25223ba69da250347769233115f8e36107791a3977fe9176d5f04e56562e0",
+    "96785b267fe3b6bbce8ffad1ff44fd67679c993e28c6e243cbebf4846d0aa981",
+    "b3c8586c3b834e73b7edbb2dd75c936d798e00ba781ee10aee7e31616cc7b323",
+    "c694e9cf2813be58bafc73ccea356e4ca7ea59fe8e783cfd8b8d1412d9c3b594",
+    "cdd511bfab82a3e0b8cd6588b318ea97a24458549aed4e6e5b749cf3d3e149fa",
+    "f76a4c531d3520bc86a5c99a8e5d8d9ab87fe5b185b6408baca70c5a06818e58"
+  ],
+  "coverage_capability_states": {
+    "cargo.active_features_not_resolved": "not_resolved",
+    "cargo.active_target_not_resolved": "not_resolved",
+    "cargo.build_script_not_executed": "not_executed",
+    "cargo.dependency_graph_not_resolved": "not_resolved",
+    "cargo.dependency_source_not_fetched": "not_fetched",
+    "cargo.external_locator_redacted": "redacted",
+    "cargo.generated_source_not_analyzed": "not_analyzed",
+    "cargo.lint_configuration_unsupported": "unsupported",
+    "cargo.package_file_selection_not_applied": "not_applied",
+    "cargo.package_metadata_table_unsupported": "unsupported",
+    "cargo.patch_not_applied": "not_applied",
+    "cargo.proc_macro_not_executed": "not_executed",
+    "cargo.profile_tables_unsupported": "unsupported",
+    "cargo.target_source_not_analyzed": "not_analyzed",
+    "cargo.workspace_inheritance_not_materialized": "not_resolved"
+  },
+  "diagnostic_codes": [
+    "cargo.external_locator_redacted",
+    "cargo.target_source_not_analyzed",
+    "cargo.unsupported_manifest_family"
+  ],
+  "exact_query_examples": {
+    "entity": {
+      "id": "urn:codenoesis:entity:blake3:13c3407742a8aaf4ff919842621e5ef164757103a995146775b49441da886527",
+      "claim_id": "urn:codenoesis:claim:blake3:a2c9ec8447c72fd9cc2c59d80feb217691c3995d3b1cedcdd21711930ec80a90",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:e2da79817c12805d7e6a2572b7d8064259e6d47935f0b36df67a7bad138695d2"
+      ]
+    },
+    "relationship": {
+      "id": "urn:codenoesis:relationship:blake3:b3903033520baafddfd50990a13f97e3a6de640f779fd2e930172ed8ebbaeb75",
+      "claim_id": "urn:codenoesis:claim:blake3:036f0a2218dedeac2770614f56fff8562cb333223a91eeb04d666e6a38ffac90",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:e2da79817c12805d7e6a2572b7d8064259e6d47935f0b36df67a7bad138695d2"
+      ]
+    },
+    "claim": {
+      "id": "urn:codenoesis:claim:blake3:036f0a2218dedeac2770614f56fff8562cb333223a91eeb04d666e6a38ffac90",
+      "subject_kind": "relationship",
+      "subject_id": "urn:codenoesis:relationship:blake3:b3903033520baafddfd50990a13f97e3a6de640f779fd2e930172ed8ebbaeb75",
+      "state": "deterministic_fact",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:e2da79817c12805d7e6a2572b7d8064259e6d47935f0b36df67a7bad138695d2"
+      ]
+    },
+    "evidence": {
+      "id": "urn:codenoesis:evidence:blake3:e2da79817c12805d7e6a2572b7d8064259e6d47935f0b36df67a7bad138695d2",
+      "path": "crates/app/Cargo.toml",
+      "blob_oid": "c9a7a7513824fa8ff7339e8fcde93b174f080890",
+      "start_byte": 714,
+      "end_byte": 739
+    },
+    "diagnostic": {
+      "id": "urn:codenoesis:diagnostic:blake3:7aa42489d042d8a69f88910cd472e635995c6e2eee6a81f3c3f3261897d5f486",
+      "code": "cargo.target_source_not_analyzed",
+      "message": "declared Cargo target source is not analyzed by R4",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:e2da79817c12805d7e6a2572b7d8064259e6d47935f0b36df67a7bad138695d2"
+      ]
+    },
+    "coverage_gap": {
+      "id": "urn:codenoesis:coverage-gap:blake3:c7b525aa7556f66951e82b90829d7f4b7090cb03fdf44ee35824635d8bb804ba",
+      "capability": "cargo.target_source_not_analyzed",
+      "state": "not_analyzed",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:e2da79817c12805d7e6a2572b7d8064259e6d47935f0b36df67a7bad138695d2"
+      ]
+    },
+    "document": {
+      "id": "urn:codenoesis:document:blake3:3db638c882928eccb9d8ec660b9cdb50cbb7eff3f1687fbb693fd80701fcb7b7",
+      "kind": "overview",
+      "subject_id": "urn:codenoesis:fixture:s4-cargo-manifest-facts-v1"
+    }
+  },
+  "forbidden_relationship_kinds": [
+    "ACTIVATES",
+    "APPLIES_PATCH",
+    "DEPENDS_ON",
+    "EXECUTES",
+    "RESOLVES_TO",
+    "SELECTS_TARGET"
+  ],
+  "sentinels": {
+    "build_script": "crates/app/build.rs",
+    "binary": "crates/app/src/main.rs",
+    "non_analyzed_example": "crates/app/examples/demo.rs",
+    "missing_path_dependency": "crates/shared",
+    "missing_patch_path": "vendor/custom"
+  }
+}

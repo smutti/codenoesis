@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:extraction-chunk:v1",
+  "title": "ExtractionChunkV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "chunk_id",
+    "ontology_version",
+    "extractor_version",
+    "repository",
+    "source",
+    "semantic_hash",
+    "entities",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.extraction-chunk/v1"
+    },
+    "chunk_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:extraction-chunk:blake3:[0-9a-f]{64}$"
+    },
+    "ontology_version": {
+      "const": "codenoesis.ontology/rust/v1"
+    },
+    "extractor_version": {
+      "const": "codenoesis.rust-tree-sitter/s2-v1"
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity", "object_format", "commit_oid"],
+      "properties": {
+        "identity": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:[a-z0-9][a-z0-9._:-]{0,254}$"
+        },
+        "object_format": {
+          "const": "sha1"
+        },
+        "commit_oid": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["blob_oid", "path", "byte_length"],
+      "properties": {
+        "blob_oid": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "pattern": "^[^/\\\\\\u0000-\\u001f\\u007f]+(?:/[^/\\\\\\u0000-\\u001f\\u007f]+)*$"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4194304
+        }
+      }
+    },
+    "semantic_hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "domain", "value"],
+      "properties": {
+        "algorithm": {
+          "const": "blake3-256"
+        },
+        "domain": {
+          "const": "codenoesis.extraction-chunk.semantic.v1"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "entities": {
+      "type": "array",
+      "maxItems": 100000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "urn:codenoesis:schema:knowledge-graph:v1#/$defs/entity"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "maxItems": 300000,
+      "uniqueItems": true,
+      "items": {
+        "allOf": [
+          {
+            "$ref": "urn:codenoesis:schema:knowledge-graph:v1#/$defs/relationship"
+          },
+          {
+            "properties": {
+              "kind": {
+                "enum": ["DEFINES", "IMPLEMENTS", "IMPORTS"]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "claims": {
+      "type": "array",
+      "maxItems": 400000,
+      "uniqueItems": true,
+      "items": {
+        "allOf": [
+          {
+            "$ref": "urn:codenoesis:schema:knowledge-graph:v1#/$defs/claim"
+          },
+          {
+            "properties": {
+              "state": {
+                "const": "deterministic_fact"
+              },
+              "derivation": {
+                "$ref": "urn:codenoesis:schema:knowledge-graph:v1#/$defs/parser_derivation"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 400000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "urn:codenoesis:schema:source-evidence:v2"
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "maxItems": 20000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "urn:codenoesis:schema:knowledge-graph:v1#/$defs/diagnostic"
+      }
+    },
+    "coverage": {
+      "$ref": "urn:codenoesis:schema:knowledge-graph:v1#/$defs/coverage"
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "docs/software/decisions/0007-s7-implementation-aware-api-compatibility-contract.md",
+      "sha256": "3858fcee11d6a5d0da39d832d2a6163c8aec237e362687207109658f4bfb8b9d"
+    },
+    {
+      "path": "scripts/tests/test_s7_implementation_aware_api_contract.py",
+      "sha256": "a6cf5faa203958f9d05ada4c9e9a4b6450173e5e0cf54fc3913a0425685081ff"
+    },
+    {
+      "path": "tests/fixtures/s7/implementation-aware-api-v1/README.md",
+      "sha256": "0760d5c18d9d47b60972f463a8d8f796915a4a20d0fd7ffc9c9abde2c443ae47"
+    },
+    {
+      "path": "tests/fixtures/s7/implementation-aware-api-v1/clients/decoy/src/commonMain/kotlin/dev/codenoesis/fixture/DecoyAccountClient.kt",
+      "sha256": "dc9436422660a090372a81763702ce4dd719390d9f8ae5d1bdfb9f642cb4fbb7"
+    },
+    {
+      "path": "tests/fixtures/s7/implementation-aware-api-v1/clients/safe/src/commonMain/kotlin/dev/codenoesis/fixture/SafeUsersClient.kt",
+      "sha256": "bbb4e2a92b01c230d21c5bba7c8b2ec6ac04da0a3bc884caa7d32d09a7ce083c"
+    },
+    {
+      "path": "tests/fixtures/s7/implementation-aware-api-v1/clients/strict/src/commonMain/kotlin/dev/codenoesis/fixture/StrictUsersClient.kt",
+      "sha256": "d44a6b6485fe20ff4ea4d1146bd09a4439aa8d6a495320c4b549859943624920"
+    },
+    {
+      "path": "tests/fixtures/s7/implementation-aware-api-v1/expected-semantic-compatibility-report.json",
+      "sha256": "cfd9a8d4dcb2d04bcd9eaffd15f1ae947ffdaba80e07daee43375c9a67c15750"
+    },
+    {
+      "path": "tests/fixtures/s7/implementation-aware-api-v1/manifest.json",
+      "sha256": "958948f2eb078ef53e1aebac5f9e7543411cb3ba7423e1ef2dc6c0e7ef2f69c0"
+    },
+    {
+      "path": "tests/fixtures/s7/implementation-aware-api-v1/provider/revision-a/openapi.yaml",
+      "sha256": "d6decc18d428316b209aa554ee028fe9db8761df515bf34b9e92c3a369f2de3d"
+    },
+    {
+      "path": "tests/fixtures/s7/implementation-aware-api-v1/provider/revision-a/src/user_response.rs",
+      "sha256": "cec091bf3c88ab912fb824fa38c0789795d7f460b808a06b36f463f69ebc3413"
+    },
+    {
+      "path": "tests/fixtures/s7/implementation-aware-api-v1/provider/revision-b/openapi.yaml",
+      "sha256": "d6decc18d428316b209aa554ee028fe9db8761df515bf34b9e92c3a369f2de3d"
+    },
+    {
+      "path": "tests/fixtures/s7/implementation-aware-api-v1/provider/revision-b/src/user_response.rs",
+      "sha256": "f92348e5cd2270c575bef29379def98adba4fa09577726e3f259f4f2559b6632"
+    },
+    {
+      "path": "tests/specifications/s7/compatibility-rule-catalog-v1.json",
+      "sha256": "30cdddc1dbe986a8b2bf5dd76158a05a5beb959456f8500422af2a5bad6ae5c0"
+    },
+    {
+      "path": "tests/specifications/s7/e2e_fr_imp_004_implementation_aware_api_diff.json",
+      "sha256": "d17072db81a456d8ca94b64094f5f09c9fc99004d27458fc8237e911d7386af4"
+    },
+    {
+      "path": "tests/specifications/s7/semantic-compatibility-report-v1.schema.json",
+      "sha256": "3f8b6847ef688fc8ec5e3b8b5ec888efff1498bf7a6a2ef46890fa90238d3b79"
+    }
+  ],
+  "bundle_sha256": "08dabb5b4895adfa5f531a9364a8f02ba39a2548b05ac7b4af08e26b4d4d044a"
+}

@@ -1,0 +1,197 @@
+{
+  "schema_version": "codenoesis.s4-r3-local-pilot-observations/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/98",
+  "requirement": "FR-EXT-008",
+  "slice": "S4",
+  "roadmap_capability": "R3",
+  "tested_head": "1e28129c0dd217422df605ed46043d6e05792597",
+  "observed_at": "2026-08-02T18:13:22Z",
+  "environment": {
+    "os": "macOS 26.5.2 (Darwin 25.5.0)",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "noesis_profile": "standard-local-s4",
+    "acquisition_profile": "local-git-sha1-packed-v1",
+    "workspace_profile": "cargo-root-package-v1",
+    "network_and_model_providers": "disabled and unused by the deterministic local path"
+  },
+  "pilots": [
+    {
+      "repository": "dghilardi/lekton",
+      "repository_identity": "urn:codenoesis:pilot:lekton",
+      "composition": [
+        "R1",
+        "R3"
+      ],
+      "commit_oid": "7a4d1a4a30468f4c18ce158a9b825680b00f4820",
+      "tree_oid": "fa81df35c6fa32068d1707d0eacdc459258877c5",
+      "checkout": {
+        "non_shallow": true,
+        "clean": true,
+        "vendored_into_codenoesis": false
+      },
+      "command": "noesis scan --repository <lekton-checkout> --repository-id urn:codenoesis:pilot:lekton --revision 7a4d1a4a30468f4c18ce158a9b825680b00f4820 --profile standard-local-s4 --acquisition-profile local-git-sha1-packed-v1 --workspace-profile cargo-root-package-v1 --store <store> --format json",
+      "scan": {
+        "exit_code": 0,
+        "stderr_bytes": 0,
+        "wall_time_seconds": 3.82,
+        "wall_time_limit_seconds": 60,
+        "maximum_resident_set_bytes": 76759040,
+        "snapshot_schema": "codenoesis.repository-snapshot/v6",
+        "snapshot_output_bytes": 2683871,
+        "snapshot_output_sha256": "19495361947135dc82fe594bd1aed4e653c241b7183ec4c89b488f5881c9fd60",
+        "semantic_bytes": 2683571,
+        "semantic_sha256": "8c7cc90c71fb4ea3e945292abf4cd01864833f29df99051bd16c7de8cdd599d5",
+        "semantic_hash": "29d9c078c344607f76425ee64a3242ec3991b799895f7b0e4d6753c3dca9819e",
+        "root_shape": "non_virtual_workspace",
+        "member_paths": [
+          ".",
+          "cli"
+        ],
+        "member_count": 2,
+        "target_count": 5,
+        "chunk_count": 117,
+        "entity_count": 478,
+        "relationship_count": 586,
+        "claim_count": 1064,
+        "evidence_count": 119,
+        "diagnostic_count": 238,
+        "coverage_gap_count": 174,
+        "coverage_capabilities": [
+          {"capability": "cargo.build_script_not_executed", "count": 1},
+          {"capability": "cargo.dependencies_deferred", "count": 2},
+          {"capability": "cargo.features_deferred", "count": 1},
+          {"capability": "cargo.package_metadata_deferred", "count": 2},
+          {"capability": "cargo.required_features_deferred", "count": 1},
+          {"capability": "cargo.target_world_deferred", "count": 1},
+          {"capability": "compiler_cross_crate_use_resolution", "count": 53},
+          {"capability": "rust_unsupported_construct", "count": 113}
+        ]
+      },
+      "documentation": {
+        "command": "noesis docs --store <store> --repository-id urn:codenoesis:pilot:lekton --output <documents> --format json",
+        "exit_code": 0,
+        "stderr_bytes": 0,
+        "document_count": 119,
+        "manifest_bytes": 229124,
+        "manifest_sha256": "9415ea3c2d5d5ca8552a860e260533a57cee0a87d19542ec6c37b7b8bb401f7d",
+        "documentation_tree_sha256": "d46fa6864222118a901452fbaf68ad2a5653ea95ad7e8a69b70df94d4cb757fe"
+      },
+      "query": {
+        "command": "noesis query --store <store> --repository-id urn:codenoesis:pilot:lekton --documents <documents> --id <exact-id> --format json",
+        "entity_result_sha256": "c32b261c7c335d4fc62484afdea16ae0cb35926e0b024abbbbc2658358043943",
+        "evidence_result_sha256": "ca0b840077070c0b41587f59770ff09737243e0110fb041686e557edafc7505c",
+        "document_result_sha256": "bd00d6f3ce4ef293cff352bd64eda71123ecb742c46ba0fc2abec812a5783f2e",
+        "overview_statement_count": 68,
+        "overview_linked_coverage_gap_count": 61
+      },
+      "determinism": {
+        "canonical_semantic_bytes_identical_across_fresh_stores": true,
+        "semantic_hash_identical": true,
+        "documentation_manifest_identical": true,
+        "documentation_tree_identical": true,
+        "query_results_identical": true,
+        "full_snapshot_envelope_identical": false,
+        "full_snapshot_difference": "created_at and correlation_id only"
+      }
+    },
+    {
+      "repository": "rustdesk/rustdesk",
+      "repository_identity": "urn:codenoesis:pilot:rustdesk",
+      "composition": [
+        "R1",
+        "R2",
+        "R3"
+      ],
+      "commit_oid": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "tree_oid": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+      "checkout": {
+        "non_shallow": true,
+        "clean": true,
+        "vendored_into_codenoesis": false,
+        "nested_gitlink_manifest_present": false
+      },
+      "command": "noesis scan --repository <rustdesk-checkout> --repository-id urn:codenoesis:pilot:rustdesk --revision d412d198720aa56f6cfed2dfad262e8fb1322fb7 --profile standard-local-s4 --acquisition-profile local-git-sha1-packed-v1 --repository-boundary-profile local-gitlinks-v1 --workspace-profile cargo-root-package-v1 --store <store> --format json",
+      "scan": {
+        "exit_code": 0,
+        "stderr_bytes": 0,
+        "wall_time_seconds": 17.25,
+        "wall_time_limit_seconds": 60,
+        "maximum_resident_set_bytes": 120274944,
+        "snapshot_schema": "codenoesis.repository-snapshot/v6",
+        "snapshot_output_bytes": 3222300,
+        "snapshot_output_sha256": "ffba3bd9550523e1df93098b3840fce205979f6c674229e646406787cf8d0ab9",
+        "semantic_bytes": 3222000,
+        "semantic_sha256": "38d46f6acccd18d08c159d7d9e5cb255fa2b403ecefbef2b37612e8444c40337",
+        "semantic_hash": "e673f18758bfb0c3af0f9b1e4e1d4e80a89b614209b98a6bf40401f095d45f49",
+        "root_shape": "non_virtual_workspace",
+        "member_count": 9,
+        "target_count": 11,
+        "chunk_count": 92,
+        "entity_count": 505,
+        "relationship_count": 582,
+        "claim_count": 1087,
+        "evidence_count": 100,
+        "diagnostic_count": 132,
+        "coverage_gap_count": 147,
+        "coverage_capabilities": [
+          {"capability": "cargo.build_script_not_executed", "count": 6},
+          {"capability": "cargo.dependencies_deferred", "count": 8},
+          {"capability": "cargo.features_deferred", "count": 4},
+          {"capability": "cargo.package_metadata_deferred", "count": 8},
+          {"capability": "cargo.patch_deferred", "count": 1},
+          {"capability": "cargo.target_world_deferred", "count": 7},
+          {"capability": "compiler_cross_crate_use_resolution", "count": 20},
+          {"capability": "rust_unsupported_construct", "count": 92},
+          {"capability": "workspace.external_gitlink_member_not_analyzed", "count": 1}
+        ]
+      },
+      "repository_boundary": {
+        "profile": "local-gitlinks-v1",
+        "boundary_count": 1,
+        "path": "libs/hbb_common",
+        "gitlink_oid": "69cea8dafee147848ae88702029f4bf7df7224c3",
+        "state": "declared_unbound",
+        "nested_source_opened": false,
+        "coverage_capability": "workspace.external_gitlink_member_not_analyzed"
+      },
+      "documentation": {
+        "command": "noesis docs --store <store> --repository-id urn:codenoesis:pilot:rustdesk --output <documents> --format json",
+        "exit_code": 0,
+        "stderr_bytes": 0,
+        "document_count": 98,
+        "manifest_bytes": 237741,
+        "manifest_sha256": "cfffb40768e0e73745f2406c6366e7f2e120716124e40782bce8154669ebae06",
+        "documentation_tree_sha256": "a1930e15ccd55af418246e22cb3d5554542799f9172f0a94bde19fa819d93c35"
+      },
+      "query": {
+        "command": "noesis query --store <store> --repository-id urn:codenoesis:pilot:rustdesk --documents <documents> --id <exact-id> --format json",
+        "entity_result_sha256": "97c7c9de9fe287d0a0e0848a5e361bf75aa36a945fa44a569668bb1ed5387d3e",
+        "evidence_result_sha256": "0c2e23109ab4ffd847eb0ffdd93cca1e7c2d5f1a2882239f223670752a00d03c",
+        "document_result_sha256": "943b860b6b61086fb263af33a83895b52a9704104481cf04cf5684e8ea383493",
+        "overview_statement_count": 68,
+        "overview_linked_coverage_gap_count": 55
+      },
+      "determinism": {
+        "canonical_semantic_bytes_identical_across_fresh_stores": true,
+        "semantic_hash_identical": true,
+        "documentation_manifest_identical": true,
+        "documentation_tree_identical": true,
+        "query_results_identical": true,
+        "full_snapshot_envelope_identical": false,
+        "full_snapshot_difference": "created_at and correlation_id only"
+      }
+    }
+  ],
+  "correction_observations": [
+    "Initial shallow pilot checkouts were rejected by the inherited acquisition.shallow_repository policy and were replaced with full immutable checkouts.",
+    "Conditional declarations, missing generated modules, and compiler-dependent imports remain explicit coverage gaps rather than guessed facts.",
+    "Equivalent gap observations are canonicalized by stable gap ID on the R3 path."
+  ],
+  "limitations": [
+    "The pilots are reproducible local review aids, not release or verification evidence.",
+    "No external repository bytes, source paths beyond approved descriptors, URLs, or generated pilot artifacts are committed.",
+    "OS-level process and network tracing was not run for the pilot invocations."
+  ]
+}

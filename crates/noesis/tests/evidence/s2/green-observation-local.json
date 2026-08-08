@@ -1,0 +1,192 @@
+{
+  "schema_version": "codenoesis.s2-local-green-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/26",
+  "slice": "S2",
+  "requirements": [
+    "DR-IDN-001",
+    "FR-EXT-001",
+    "FR-EXT-002",
+    "FR-KNW-001",
+    "FR-KNW-002",
+    "FR-KNW-003"
+  ],
+  "risk": "high",
+  "observed_at": "2026-07-26T10:07:47Z",
+  "commits": {
+    "base": "50faee5d12d57eae33943f61ee16de9001dc8ece",
+    "test_first": "1abe1a4cf82e9902b7e5195f709ffd98c00c527e",
+    "red_evidence": "023b77d",
+    "inner_test_first": "fb43a11",
+    "implementation_tested": "e1984c8e3094ed20a9f84a0622ab7108e408e88e"
+  },
+  "contracts": {
+    "bundle_sha256": "d105957b00335ece563ae2783543aa112916d71131cfb23a0ebcaa14d7f57c9f",
+    "acceptance_specification_sha256": "b42d9a0451572aaf5f607e9c4c82ca456f3c83e9d2a14a1cb634bfaf3abc83de",
+    "ontology_sha256": "3dfe85c7426a45555e9112fd76a5d15c958503574fecffadbf90c82e167f08cd",
+    "snapshot_schema_sha256": "0a48926796505fa013ce5428c1ae045eaacecab7cd29da08e21b5662918e19f3",
+    "expected_extraction_sha256": "14ed753603285e3884d887a6e2a7b5cb8d019cbe280c5637c5421bf1cce6ffec",
+    "expected_graph_sha256": "4a77d18cd357a6b194bd919672b0c597eaa2f258f39a6e4f64259f7799ac5ed8",
+    "expected_nfc_error_sha256": "d110a2fdef29925d2b1d8066c7f7060937445a1380eeaaa02244695691156500"
+  },
+  "dependencies": {
+    "tree_sitter": "0.25.10",
+    "tree_sitter_rust": "0.24.2",
+    "unicode_normalization": "0.1.25",
+    "ontology_version": "codenoesis.ontology/rust/v1",
+    "extractor_version": "codenoesis.rust-tree-sitter/s2-v1",
+    "rule_version": "codenoesis.rule.rust-file-containment/s2-v1"
+  },
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "toolchain_file_sha256": "279d77167cec5426fa80f457cd066dc74a360fbe4e2816f4f3fa01487a918fdc",
+    "features": "all workspace features for the bootstrap gate; default features for focused scenarios",
+    "policy_version": 1,
+    "policy_sha256": "255684b7a70021727c7c5530448223cf8768b11070cf987ae41b11eaf1005ec0",
+    "agent": "OpenAI Codex",
+    "model": "not exposed by runtime",
+    "run_identifier": "issue-26-local-green-20260726T100653Z",
+    "duration_seconds": 17,
+    "cost": "not exposed by runtime"
+  },
+  "ordered_scenarios": {
+    "status": "partial_local_green",
+    "passed_local": 13,
+    "tests": [
+      "e2e_fr_ext_002_rust_knowledge",
+      "conf_fr_ext_001_extraction_chunk_v1",
+      "gt_fr_ext_002_reviewed_rust_graph",
+      "gt_fr_ext_002_malformed_syntax_is_explicit",
+      "gt_dr_idn_001_unicode_normalization_collision",
+      "pt_dr_idn_001_stable_ids_ignore_order_and_revision",
+      "pt_fr_knw_001_graph_invariants",
+      "pt_fr_knw_002_claim_state_machine",
+      "pt_fr_knw_003_rule_provenance_replays",
+      "fz_fr_ext_001_extraction_contract_seed_corpus",
+      "fz_fr_ext_002_rust_parser_seed_corpus",
+      "sec_fr_ext_002_target_never_executes",
+      "conf_fr_ext_001_snapshot_v3_and_error_v3"
+    ],
+    "focused_command": "cargo test --test e2e_fr_ext_002_rust_knowledge -- --test-threads=1",
+    "focused_exit": 0,
+    "focused_log_sha256": "2be4d3e6dd9969438825df92ee2ee359ecbb961fe5306bdc8c8357c080dde133",
+    "focused_log_retention": "ephemeral local review aid; immutable exact-head CI evidence is still required"
+  },
+  "inherited_regressions": {
+    "status": "passed_on_darwin",
+    "command": "cargo test --workspace --all-targets --all-features --locked",
+    "exit": 0,
+    "darwin_test_results": {
+      "passed": 57,
+      "failed": 0,
+      "ignored": 0
+    },
+    "python_tests_passed": 100
+  },
+  "bootstrap_gate": {
+    "status": "passed",
+    "commands": [
+      "actionlint -no-color",
+      "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+      "cargo fmt --all --check",
+      "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "cargo test --workspace --all-targets --all-features --locked",
+      "cargo test --workspace --doc --all-features --locked",
+      "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "python3 scripts/validate_benchmark_assets.py",
+      "cargo bench --workspace --all-features --no-run --locked"
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "local_log_sha256": "a759a43fadd8e387fed48231cd6aab27baf2df6e907f8368a20aca322a03edc6",
+    "local_log_bytes": 12730,
+    "local_log_retention": "ephemeral local review aid; immutable exact-head CI evidence is still required"
+  },
+  "determinism_and_mutation": {
+    "stable_id_permutations": 64,
+    "claim_state_ordered_pairs": 49,
+    "allowed_claim_transitions": 11,
+    "parser_seed_replays_per_seed": 2,
+    "parser_seeds": [
+      "valid",
+      "malformed",
+      "nfc_collision",
+      "unsupported",
+      "grouped_unresolved",
+      "token_amplification",
+      "graph_amplification",
+      "nesting"
+    ],
+    "mutation_classes": [
+      "identity",
+      "property",
+      "endpoint",
+      "dangling_reference",
+      "duplicate_tuple",
+      "cardinality",
+      "reachability_cycle",
+      "claim_state",
+      "claim_dependency",
+      "rule_version",
+      "evidence",
+      "ordering",
+      "limit"
+    ],
+    "seed_log_sha256": "0fc18c0b4b51b772b57c04f0411e7826c139edde36bf7e848f84fa9f7911f234",
+    "result": "passed"
+  },
+  "security": {
+    "seccomp_profile_sha256": "5664635f8ad76dff5421f5eeb1f20ffdf0450203d8cb9c692606c026a39ee1ad",
+    "portable_sentinel": "passed",
+    "dirty_worktree_decoy": "passed",
+    "target_build_script_decoy": "passed",
+    "first_party_unsafe": 0,
+    "runtime_process_or_network_api_references_in_new_adapter": 0,
+    "linux_landlock_runtime": "not run on Darwin",
+    "linux_process_network_observer": "not run on Darwin"
+  },
+  "resource_review_aid": {
+    "focused_acceptance_elapsed_seconds": 0.79,
+    "focused_acceptance_maximum_resident_set_bytes": 42057728,
+    "seed_corpus_elapsed_seconds": 1.12,
+    "seed_corpus_maximum_resident_set_bytes": 196329472,
+    "rss_ceiling_bytes": 536870912,
+    "scan_wall_ceiling_milliseconds": 60000,
+    "canonical_output_ceiling_bytes": 33554432,
+    "cpu_ceiling_evidence": "not collected per subject process",
+    "temporary_disk_evidence": "not collected per subject process"
+  },
+  "scope": {
+    "implementation_patch_sha256_before_this_observation": "40eb2bb1f25b5f8171a168b23ed9e77ed34729ee4f9600f01a39f0f975888057",
+    "forbidden_paths_changed": [],
+    "actual_changed_paths": [
+      "Cargo.toml",
+      "Cargo.lock",
+      "crates/codenoesis-domain/**",
+      "crates/codenoesis-contracts/**",
+      "crates/codenoesis-ports/**",
+      "crates/codenoesis-application/**",
+      "crates/codenoesis-lang-rust/**",
+      "crates/noesis/**"
+    ]
+  },
+  "verification_state": "not_verified",
+  "known_limitations": [
+    "Normative Linux Landlock, seccomp trace, network namespace, descriptor audit, and PID-scoped filesystem evidence are unavailable on this Darwin host.",
+    "Focused RSS includes the Cargo test runner and is a local review aid rather than per-subject CI evidence.",
+    "CPU and temporary-disk ceilings were not measured per subject process.",
+    "The local logs are digest-addressed review aids but are not retained immutable CI artifacts.",
+    "Verified requires digest-valid immutable CI artifacts for the final pull-request head retained for at least 90 days."
+  ]
+}

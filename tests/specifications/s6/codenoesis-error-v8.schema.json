@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:error:v8",
+  "title": "CodeNoesisErrorV8 federation subset",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v8"
+    },
+    "code": {
+      "enum": [
+        "input.invalid_profile",
+        "input.invalid_format",
+        "input.invalid_workspace_manifest",
+        "acquisition.not_git_repository",
+        "acquisition.revision_not_found",
+        "acquisition.revision_not_commit",
+        "acquisition.object_missing",
+        "acquisition.repository_inconsistent",
+        "acquisition.path_invalid",
+        "acquisition.root_policy_violation",
+        "contract.invalid_encoding",
+        "contract.invalid_yaml",
+        "contract.duplicate_key",
+        "contract.unsupported_yaml_feature",
+        "contract.unsupported_openapi_version",
+        "contract.unsupported_capability",
+        "contract.remote_reference_forbidden",
+        "contract.reference_cycle",
+        "contract.invalid_service_authority",
+        "contract.invalid_operation",
+        "contract.limit_exceeded",
+        "federation.invalid_declaration",
+        "federation.identity_conflict",
+        "federation.ambiguous_authority",
+        "federation.limit_exceeded",
+        "federation.report_invalid",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "input",
+        "acquisition",
+        "contract",
+        "federation",
+        "internal"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[^\\r\\n]+$"
+    },
+    "retryable": {
+      "const": false
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 8,
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/safe_path"
+        },
+        "component": {
+          "enum": [
+            "workspace_manifest",
+            "provider_contract",
+            "client_declaration",
+            "service_identity",
+            "operation_identity",
+            "federation_report"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "limit": {
+          "enum": [
+            "workspace_manifest_bytes",
+            "repositories",
+            "contract_documents",
+            "contract_bytes_per_document",
+            "yaml_nesting_depth",
+            "local_ref_depth",
+            "path_items",
+            "operations",
+            "schemas",
+            "fields_per_operation",
+            "clients",
+            "declarations",
+            "confirmed_links",
+            "candidates",
+            "rejections",
+            "evidence_items",
+            "coverage_gaps",
+            "report_bytes",
+            "memory_bytes",
+            "wall_milliseconds"
+          ]
+        },
+        "maximum": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 536870913
+        },
+        "observed": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 536870913
+        },
+        "subject_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "expected_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "observed_id": {
+          "$ref": "#/$defs/identity"
+        },
+        "expected_hash": {
+          "$ref": "#/$defs/digest"
+        },
+        "observed_hash": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^input\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "input"
+          },
+          "context": {
+            "maxProperties": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^acquisition\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "acquisition"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^contract\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "contract"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "pattern": "^federation\\."
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "federation"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "internal.unexpected"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "internal"
+          },
+          "context": {
+            "maxProperties": 0
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "safe_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)[^\\u0000\\r\\n]+$"
+    },
+    "identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^urn:codenoesis:[a-z0-9][A-Za-z0-9:._/-]*$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

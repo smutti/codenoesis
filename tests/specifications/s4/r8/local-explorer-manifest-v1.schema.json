@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/local-explorer-manifest-v1.schema.json",
+  "title": "CodeNoesis LocalExplorerManifestV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "portable_graph",
+    "entrypoint",
+    "security",
+    "capabilities",
+    "limits",
+    "generation"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.local-explorer/v1"
+    },
+    "portable_graph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "byte_length",
+        "sha256",
+        "canonical_sha256"
+      ],
+      "properties": {
+        "path": {
+          "const": "portable-graph.json"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 268435456
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "canonical_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "entrypoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "byte_length",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "const": "index.html"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1048576
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "csp_sha256",
+        "untrusted_rendering",
+        "explicit_file_selection_required",
+        "network_allowed",
+        "remote_resources_allowed",
+        "browser_auto_launch",
+        "child_process_allowed",
+        "persistent_browser_state_allowed"
+      ],
+      "properties": {
+        "profile": {
+          "const": "codenoesis.local-explorer-security/v1"
+        },
+        "csp_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "untrusted_rendering": {
+          "const": "textContent_only"
+        },
+        "explicit_file_selection_required": {
+          "const": true
+        },
+        "network_allowed": {
+          "const": false
+        },
+        "remote_resources_allowed": {
+          "const": false
+        },
+        "browser_auto_launch": {
+          "const": false
+        },
+        "child_process_allowed": {
+          "const": false
+        },
+        "persistent_browser_state_allowed": {
+          "const": false
+        }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exact_id_search",
+        "text_search",
+        "filters",
+        "bounded_neighborhood",
+        "evidence_metadata",
+        "diagnostics",
+        "coverage_gaps",
+        "source_repository_required",
+        "projection_mutation_allowed"
+      ],
+      "properties": {
+        "exact_id_search": {
+          "const": true
+        },
+        "text_search": {
+          "const": "nfc_case_sensitive_codepoint_substring"
+        },
+        "filters": {
+          "const": [
+            "subject_kind",
+            "relationship_kind",
+            "claim_state",
+            "diagnostic_code",
+            "coverage_capability"
+          ]
+        },
+        "bounded_neighborhood": {
+          "const": "deterministic_breadth_first"
+        },
+        "evidence_metadata": {
+          "const": true
+        },
+        "diagnostics": {
+          "const": true
+        },
+        "coverage_gaps": {
+          "const": true
+        },
+        "source_repository_required": {
+          "const": false
+        },
+        "projection_mutation_allowed": {
+          "const": false
+        }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text_search_results",
+        "traversal_depth_default",
+        "traversal_depth_maximum",
+        "neighborhood_subjects",
+        "neighborhood_relationships"
+      ],
+      "properties": {
+        "text_search_results": {
+          "const": 100
+        },
+        "traversal_depth_default": {
+          "const": 1
+        },
+        "traversal_depth_maximum": {
+          "const": 2
+        },
+        "neighborhood_subjects": {
+          "const": 256
+        },
+        "neighborhood_relationships": {
+          "const": 512
+        }
+      }
+    },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "output_publication",
+        "destination_ownership",
+        "server_required",
+        "package_manager_required",
+        "model_provider_required"
+      ],
+      "properties": {
+        "output_publication": {
+          "const": "atomic_marker_owned_directory"
+        },
+        "destination_ownership": {
+          "const": "empty_or_exact_r8_marker"
+        },
+        "server_required": {
+          "const": false
+        },
+        "package_manager_required": {
+          "const": false
+        },
+        "model_provider_required": {
+          "const": false
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,373 @@
+{
+  "schema_version": "codenoesis.s5-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s5-incremental-refresh-v1",
+  "refresh_profile": "standard-local-s5",
+  "target_semantic_profile": "standard-local-s4",
+  "versions": {
+    "cache_schema": "codenoesis.analysis-cache-entry/v1",
+    "language_extractor": "codenoesis.rust-tree-sitter/s4-v1",
+    "workspace_mapper": "codenoesis.rust-workspace/s4-v1",
+    "normalization": "codenoesis.normalization/rust-workspace/v1",
+    "ontology": "codenoesis.ontology/rust/v2",
+    "extraction_contract": "codenoesis.extraction/v2",
+    "chunk_schema": "codenoesis.extraction-chunk/v2",
+    "graph_schema": "codenoesis.knowledge-graph/v2",
+    "snapshot_schema": "codenoesis.repository-snapshot/v4",
+    "pipeline": "codenoesis.pipeline/s4-v1",
+    "evidence_lineage": "codenoesis.evidence-lineage/v2",
+    "renderer": "codenoesis.renderer/markdown-v1",
+    "dependency_rules": "codenoesis.incremental-rules/rust-workspace-v1"
+  },
+  "revisions": [
+    {
+      "name": "revision-a",
+      "root_tree_oid": "36d30c925a7bb512acd0795c97e50f5b46388cb7",
+      "files": [
+        {
+          "path": "Cargo.toml",
+          "sha256": "4d268e7f38954aad6288525c0df9120442a3ff036da2967eb73af3866cf23378",
+          "git_blob_oid": "9a61bc964dd0b80e54880d0a40471b50324b6e15"
+        },
+        {
+          "path": "crates/app/Cargo.toml",
+          "sha256": "ec155ee0ebc739a31b2b226da6ccbedb6be03b597414f79b3565f1ea70ff2bc5",
+          "git_blob_oid": "887b09de92b06c4003daf2ffc60a48e33aa1187f"
+        },
+        {
+          "path": "crates/app/build.rs",
+          "sha256": "f362e895a59d577ddd10d5a3470068f388f5c4d2c01db93960b4e3b3d6996095",
+          "git_blob_oid": "23984539c6aaa35586c06b4b01e14e20eed817a9"
+        },
+        {
+          "path": "crates/app/src/main.rs",
+          "sha256": "3d8a2c88c2d9b7c1fe836d4f0ac27844f5f475916cab7af2199b7a531d9976d1",
+          "git_blob_oid": "7e6f91e233eff28c5511d686f7c46f67dd919505"
+        },
+        {
+          "path": "crates/model/Cargo.toml",
+          "sha256": "ab9a1ee43fae4a45092d7923fddbd88b284e829a385d68650a05f0463b7f9c19",
+          "git_blob_oid": "bd9cc68a4885e014ce4a034be8c2317425f3e3dc"
+        },
+        {
+          "path": "crates/model/src/item.rs",
+          "sha256": "48aed2dc18300ae778c0f88d75e703f42271626071685103770a3cb95c2870fa",
+          "git_blob_oid": "885b4746097a67e5c4fb997a2082597dc23699e6"
+        },
+        {
+          "path": "crates/model/src/lib.rs",
+          "sha256": "d3eea21f10f0ff42bab73aaac68c9fce8589d1a88fbb3d24c6d90b77abece3ef",
+          "git_blob_oid": "f001952aa75e3c631153f1fe5dec0af6ca11c429"
+        }
+      ],
+      "trees": [
+        {
+          "path": "",
+          "oid": "36d30c925a7bb512acd0795c97e50f5b46388cb7",
+          "entries": [
+            {
+              "mode": "100644",
+              "name": "Cargo.toml",
+              "oid": "9a61bc964dd0b80e54880d0a40471b50324b6e15"
+            },
+            {
+              "mode": "040000",
+              "name": "crates",
+              "oid": "c2ee153f8448d7ace6fc8fb6f83712296638548f"
+            }
+          ]
+        },
+        {
+          "path": "crates",
+          "oid": "c2ee153f8448d7ace6fc8fb6f83712296638548f",
+          "entries": [
+            {
+              "mode": "040000",
+              "name": "app",
+              "oid": "ab06a8ddbd26c657cafb4ccdbd43b4d3b0c041d7"
+            },
+            {
+              "mode": "040000",
+              "name": "model",
+              "oid": "836d7e3d8b09c19bab01fdc5ba8cf46263799aad"
+            }
+          ]
+        },
+        {
+          "path": "crates/app",
+          "oid": "ab06a8ddbd26c657cafb4ccdbd43b4d3b0c041d7",
+          "entries": [
+            {
+              "mode": "100644",
+              "name": "Cargo.toml",
+              "oid": "887b09de92b06c4003daf2ffc60a48e33aa1187f"
+            },
+            {
+              "mode": "100644",
+              "name": "build.rs",
+              "oid": "23984539c6aaa35586c06b4b01e14e20eed817a9"
+            },
+            {
+              "mode": "040000",
+              "name": "src",
+              "oid": "747d120659c476bb5a0af68f3e73264a0d1936fa"
+            }
+          ]
+        },
+        {
+          "path": "crates/app/src",
+          "oid": "747d120659c476bb5a0af68f3e73264a0d1936fa",
+          "entries": [
+            {
+              "mode": "100644",
+              "name": "main.rs",
+              "oid": "7e6f91e233eff28c5511d686f7c46f67dd919505"
+            }
+          ]
+        },
+        {
+          "path": "crates/model",
+          "oid": "836d7e3d8b09c19bab01fdc5ba8cf46263799aad",
+          "entries": [
+            {
+              "mode": "100644",
+              "name": "Cargo.toml",
+              "oid": "bd9cc68a4885e014ce4a034be8c2317425f3e3dc"
+            },
+            {
+              "mode": "040000",
+              "name": "src",
+              "oid": "8625cf0eab213b81775a83ad25be14e041d9be68"
+            }
+          ]
+        },
+        {
+          "path": "crates/model/src",
+          "oid": "8625cf0eab213b81775a83ad25be14e041d9be68",
+          "entries": [
+            {
+              "mode": "100644",
+              "name": "item.rs",
+              "oid": "885b4746097a67e5c4fb997a2082597dc23699e6"
+            },
+            {
+              "mode": "100644",
+              "name": "lib.rs",
+              "oid": "f001952aa75e3c631153f1fe5dec0af6ca11c429"
+            }
+          ]
+        }
+      ],
+      "commit": {
+        "oid": "2106dc8bf32867e519b89ef6d73ce2afdced170d",
+        "payload_utf8": "tree 36d30c925a7bb512acd0795c97e50f5b46388cb7\nauthor CodeNoesis Fixture <fixture@codenoesis.invalid> 1785283200 +0000\ncommitter CodeNoesis Fixture <fixture@codenoesis.invalid> 1785283200 +0000\n\nCodeNoesis S5 incremental fixture revision A\n"
+      }
+    },
+    {
+      "name": "revision-b",
+      "root_tree_oid": "7e5c687082b25274ab003121b656bafbfeb0fbd0",
+      "files": [
+        {
+          "path": "Cargo.toml",
+          "sha256": "4d268e7f38954aad6288525c0df9120442a3ff036da2967eb73af3866cf23378",
+          "git_blob_oid": "9a61bc964dd0b80e54880d0a40471b50324b6e15"
+        },
+        {
+          "path": "crates/app/Cargo.toml",
+          "sha256": "ec155ee0ebc739a31b2b226da6ccbedb6be03b597414f79b3565f1ea70ff2bc5",
+          "git_blob_oid": "887b09de92b06c4003daf2ffc60a48e33aa1187f"
+        },
+        {
+          "path": "crates/app/build.rs",
+          "sha256": "f362e895a59d577ddd10d5a3470068f388f5c4d2c01db93960b4e3b3d6996095",
+          "git_blob_oid": "23984539c6aaa35586c06b4b01e14e20eed817a9"
+        },
+        {
+          "path": "crates/app/src/main.rs",
+          "sha256": "3d8a2c88c2d9b7c1fe836d4f0ac27844f5f475916cab7af2199b7a531d9976d1",
+          "git_blob_oid": "7e6f91e233eff28c5511d686f7c46f67dd919505"
+        },
+        {
+          "path": "crates/model/Cargo.toml",
+          "sha256": "ab9a1ee43fae4a45092d7923fddbd88b284e829a385d68650a05f0463b7f9c19",
+          "git_blob_oid": "bd9cc68a4885e014ce4a034be8c2317425f3e3dc"
+        },
+        {
+          "path": "crates/model/src/item.rs",
+          "sha256": "04400fa905a716eceb95cd4b3bf8e79b44ad444932301f0b2fc2a927840ad2b3",
+          "git_blob_oid": "ab58a9d6417ab6852d5311994e480fba6185002f"
+        },
+        {
+          "path": "crates/model/src/lib.rs",
+          "sha256": "d3eea21f10f0ff42bab73aaac68c9fce8589d1a88fbb3d24c6d90b77abece3ef",
+          "git_blob_oid": "f001952aa75e3c631153f1fe5dec0af6ca11c429"
+        }
+      ],
+      "trees": [
+        {
+          "path": "",
+          "oid": "7e5c687082b25274ab003121b656bafbfeb0fbd0",
+          "entries": [
+            {
+              "mode": "100644",
+              "name": "Cargo.toml",
+              "oid": "9a61bc964dd0b80e54880d0a40471b50324b6e15"
+            },
+            {
+              "mode": "040000",
+              "name": "crates",
+              "oid": "355c5d9444fe1ed51865568c1e7e5e488bd43b8b"
+            }
+          ]
+        },
+        {
+          "path": "crates",
+          "oid": "355c5d9444fe1ed51865568c1e7e5e488bd43b8b",
+          "entries": [
+            {
+              "mode": "040000",
+              "name": "app",
+              "oid": "ab06a8ddbd26c657cafb4ccdbd43b4d3b0c041d7"
+            },
+            {
+              "mode": "040000",
+              "name": "model",
+              "oid": "260204ac29654fc16618466563a03e00ac1efe80"
+            }
+          ]
+        },
+        {
+          "path": "crates/app",
+          "oid": "ab06a8ddbd26c657cafb4ccdbd43b4d3b0c041d7",
+          "entries": [
+            {
+              "mode": "100644",
+              "name": "Cargo.toml",
+              "oid": "887b09de92b06c4003daf2ffc60a48e33aa1187f"
+            },
+            {
+              "mode": "100644",
+              "name": "build.rs",
+              "oid": "23984539c6aaa35586c06b4b01e14e20eed817a9"
+            },
+            {
+              "mode": "040000",
+              "name": "src",
+              "oid": "747d120659c476bb5a0af68f3e73264a0d1936fa"
+            }
+          ]
+        },
+        {
+          "path": "crates/app/src",
+          "oid": "747d120659c476bb5a0af68f3e73264a0d1936fa",
+          "entries": [
+            {
+              "mode": "100644",
+              "name": "main.rs",
+              "oid": "7e6f91e233eff28c5511d686f7c46f67dd919505"
+            }
+          ]
+        },
+        {
+          "path": "crates/model",
+          "oid": "260204ac29654fc16618466563a03e00ac1efe80",
+          "entries": [
+            {
+              "mode": "100644",
+              "name": "Cargo.toml",
+              "oid": "bd9cc68a4885e014ce4a034be8c2317425f3e3dc"
+            },
+            {
+              "mode": "040000",
+              "name": "src",
+              "oid": "2be663a06ee5297dbc71a7e479898d6ab1e79b9c"
+            }
+          ]
+        },
+        {
+          "path": "crates/model/src",
+          "oid": "2be663a06ee5297dbc71a7e479898d6ab1e79b9c",
+          "entries": [
+            {
+              "mode": "100644",
+              "name": "item.rs",
+              "oid": "ab58a9d6417ab6852d5311994e480fba6185002f"
+            },
+            {
+              "mode": "100644",
+              "name": "lib.rs",
+              "oid": "f001952aa75e3c631153f1fe5dec0af6ca11c429"
+            }
+          ]
+        }
+      ],
+      "commit": {
+        "oid": "c2408412192e61249403bfa1dbc2dce7db0364cc",
+        "payload_utf8": "tree 7e5c687082b25274ab003121b656bafbfeb0fbd0\nparent 2106dc8bf32867e519b89ef6d73ce2afdced170d\nauthor CodeNoesis Fixture <fixture@codenoesis.invalid> 1785283260 +0000\ncommitter CodeNoesis Fixture <fixture@codenoesis.invalid> 1785283260 +0000\n\nCodeNoesis S5 incremental fixture revision B\n"
+      }
+    }
+  ],
+  "diff": {
+    "baseline_commit_oid": "2106dc8bf32867e519b89ef6d73ce2afdced170d",
+    "target_commit_oid": "c2408412192e61249403bfa1dbc2dce7db0364cc",
+    "paths": [
+      {
+        "path": "crates/model/src/item.rs",
+        "change_kind": "modified",
+        "baseline_blob_oid": "885b4746097a67e5c4fb997a2082597dc23699e6",
+        "target_blob_oid": "ab58a9d6417ab6852d5311994e480fba6185002f"
+      }
+    ],
+    "rename_inference": false
+  },
+  "source_mappings": [
+    {
+      "path": "crates/app/src/main.rs",
+      "source_file_id": "urn:codenoesis:entity:blake3:06ca422bf17dbd703230b379e9a58fc14d963c2bcba7aa6b32931fc3ee02a863",
+      "crate_id": "urn:codenoesis:entity:blake3:77bddda9b2183bca8f81217a8bc807d7cdf98274214a55492087df074a60ce21",
+      "module_path": "crate",
+      "baseline_blob_oid": "7e6f91e233eff28c5511d686f7c46f67dd919505",
+      "target_blob_oid": "7e6f91e233eff28c5511d686f7c46f67dd919505",
+      "baseline_cache_entry_id": "urn:codenoesis:analysis-cache-entry:blake3:4f36ea35e62ff1e1547354d63e37f1dc842986498267ce92f7fa254b6f6b41ab",
+      "target_cache_entry_id": "urn:codenoesis:analysis-cache-entry:blake3:4f36ea35e62ff1e1547354d63e37f1dc842986498267ce92f7fa254b6f6b41ab"
+    },
+    {
+      "path": "crates/model/src/item.rs",
+      "source_file_id": "urn:codenoesis:entity:blake3:cc0026b78ded40638ecdd0443d1abac4128001845cf26561876e5ff68fd5ab87",
+      "crate_id": "urn:codenoesis:entity:blake3:7409cb974bde86fa2508c2dd6eb76588b82bed0bce60c4cd1db46aa70443dbc4",
+      "module_path": "crate::item",
+      "baseline_blob_oid": "885b4746097a67e5c4fb997a2082597dc23699e6",
+      "target_blob_oid": "ab58a9d6417ab6852d5311994e480fba6185002f",
+      "baseline_cache_entry_id": "urn:codenoesis:analysis-cache-entry:blake3:e3fe746e097c71a502c1e16de2b2ef3a1b4220e018e170f36a173787fb1470e0",
+      "target_cache_entry_id": "urn:codenoesis:analysis-cache-entry:blake3:ca46085d6bc162e2ec49c6002ae86f60014c26d38eeb115456147ff65e058ec9"
+    },
+    {
+      "path": "crates/model/src/lib.rs",
+      "source_file_id": "urn:codenoesis:entity:blake3:6d3e1ef2654e962a99a875bbd18b163b24b3402a840e4cc15112f991c99afe34",
+      "crate_id": "urn:codenoesis:entity:blake3:7409cb974bde86fa2508c2dd6eb76588b82bed0bce60c4cd1db46aa70443dbc4",
+      "module_path": "crate",
+      "baseline_blob_oid": "f001952aa75e3c631153f1fe5dec0af6ca11c429",
+      "target_blob_oid": "f001952aa75e3c631153f1fe5dec0af6ca11c429",
+      "baseline_cache_entry_id": "urn:codenoesis:analysis-cache-entry:blake3:5b73dc45043df2725e5cee134272a4e4da33ec099a361fd49d8e5ff8676effd0",
+      "target_cache_entry_id": "urn:codenoesis:analysis-cache-entry:blake3:5b73dc45043df2725e5cee134272a4e4da33ec099a361fd49d8e5ff8676effd0"
+    }
+  ],
+  "sentinels": {
+    "build_script": "crates/app/build.rs",
+    "must_execute": false,
+    "git_process": false,
+    "cargo_process": false,
+    "rustc_process": false,
+    "target_process": false,
+    "plugin": false,
+    "network": false,
+    "model_provider": false
+  },
+  "expected_artifacts": {
+    "cold_summary": "tests/fixtures/s5/incremental-refresh-v1/expected-cold-artifacts.json",
+    "refresh_report": "tests/fixtures/s5/incremental-refresh-v1/expected-incremental-refresh-report.json",
+    "report_schema": "tests/specifications/s5/incremental-refresh-report-v1.schema.json",
+    "cache_schema": "tests/specifications/s5/analysis-cache-entry-v1.schema.json",
+    "error_schema": "tests/specifications/s5/codenoesis-error-v7.schema.json",
+    "rule_catalog": "tests/specifications/s5/incremental-rule-catalog-v1.json"
+  }
+}

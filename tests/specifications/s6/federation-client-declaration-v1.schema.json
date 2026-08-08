@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/federation-client-declaration-v1.schema.json",
+  "title": "FederationClientDeclarationV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "role",
+    "repository_identity",
+    "revision",
+    "source_path",
+    "symbol_identity",
+    "binding"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.federation-client-declaration/v1"
+    },
+    "role": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z][a-z0-9_-]*$"
+    },
+    "repository_identity": {
+      "$ref": "#/$defs/repository_identity"
+    },
+    "revision": {
+      "$ref": "#/$defs/revision"
+    },
+    "source_path": {
+      "$ref": "#/$defs/safe_path"
+    },
+    "symbol_identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[^\\u0000\\r\\n]+$"
+    },
+    "binding": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/explicit_operation_identity"
+        },
+        {
+          "$ref": "#/$defs/heuristic_name"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "repository_identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^urn:codenoesis:[a-z0-9][a-z0-9:._/-]*$"
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "safe_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)[^\\u0000\\r\\n]+$"
+    },
+    "service_authority": {
+      "type": "string",
+      "minLength": 9,
+      "maxLength": 2048,
+      "pattern": "^https://[a-z0-9.-]+(?::[0-9]{1,5})?(?:/[A-Za-z0-9._~!$&'()*+,;=:@%/-]*)?$"
+    },
+    "method": {
+      "enum": [
+        "DELETE",
+        "GET",
+        "PATCH",
+        "POST",
+        "PUT"
+      ]
+    },
+    "path_template": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "pattern": "^/(?:[A-Za-z0-9._~!$&'()*+,;=:@%{}-]+/?)*$"
+    },
+    "operation_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z][A-Za-z0-9._-]*$"
+    },
+    "explicit_operation_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "service_authority",
+        "method",
+        "path_template",
+        "operation_id"
+      ],
+      "properties": {
+        "kind": {
+          "const": "explicit_operation_identity"
+        },
+        "service_authority": {
+          "$ref": "#/$defs/service_authority"
+        },
+        "method": {
+          "$ref": "#/$defs/method"
+        },
+        "path_template": {
+          "$ref": "#/$defs/path_template"
+        },
+        "operation_id": {
+          "$ref": "#/$defs/operation_name"
+        }
+      }
+    },
+    "heuristic_name": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "service_hint",
+        "operation_hint"
+      ],
+      "properties": {
+        "kind": {
+          "const": "heuristic_name"
+        },
+        "service_hint": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[^\\u0000\\r\\n]+$"
+        },
+        "operation_hint": {
+          "$ref": "#/$defs/operation_name"
+        }
+      }
+    }
+  }
+}

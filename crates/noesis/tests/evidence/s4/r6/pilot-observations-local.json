@@ -1,0 +1,204 @@
+{
+  "schema_version": "codenoesis.s4-r6-pilot-observations/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/119",
+  "slice": "S4",
+  "roadmap_capability": "R6",
+  "requirement_status": "Approved",
+  "requirements": [
+    "FR-EXT-011"
+  ],
+  "risk": "high",
+  "observed_at": "2026-08-05T12:29:52Z",
+  "environment": {
+    "os": "macOS 26.5.2 (Darwin 25.5.0)",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "profile": "debug binary built from the issue 119 implementation working tree",
+    "network_during_product_invocations": "not traced at OS level",
+    "source_repositories_vendored_into_codenoesis": false,
+    "raw_external_source_or_generated_outputs_committed": false
+  },
+  "repositories": [
+    {
+      "repository": "dghilardi/lekton",
+      "repository_identity": "urn:codenoesis:pilot:lekton",
+      "commit_oid": "7a4d1a4a30468f4c18ce158a9b825680b00f4820",
+      "tree_oid": "fa81df35c6fa32068d1707d0eacdc459258877c5",
+      "checkout": {
+        "non_shallow": true,
+        "object_format": "sha1",
+        "packed_object_database": true,
+        "worktree_materialized": true,
+        "tracked_tree_entries": 327,
+        "gitlink_count": 0,
+        "vendored_into_codenoesis": false
+      },
+      "composition": [
+        "standard-local-s4",
+        "local-git-sha1-packed-v1",
+        "cargo-root-package-v1",
+        "cargo-manifest-facts-v1",
+        "rust-semantic-depth-v1",
+        "rust-framework-declarations-v1"
+      ],
+      "scan": {
+        "command": "noesis scan --repository <lekton-object-database> --repository-id urn:codenoesis:pilot:lekton --revision 7a4d1a4a30468f4c18ce158a9b825680b00f4820 --profile standard-local-s4 --acquisition-profile local-git-sha1-packed-v1 --workspace-profile cargo-root-package-v1 --manifest-profile cargo-manifest-facts-v1 --rust-semantic-profile rust-semantic-depth-v1 --rust-framework-profile rust-framework-declarations-v1 --store <temporary-store> --format json",
+        "exit_code": 0,
+        "stderr_bytes": 0,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "wall_time_seconds": 18.49,
+        "maximum_resident_set_bytes": 389038080,
+        "peak_memory_footprint_bytes": 251298512,
+        "snapshot_schema": "codenoesis.repository-snapshot/v9",
+        "snapshot_output_bytes": 15527120,
+        "snapshot_output_sha256": "fc1af25dc6195eb46be4e567ca8f6844f9a5c92ce3d5edcac872829cda9cfe03",
+        "semantic_hash": "234de1bc4f19600d11fc2b4a5e63cf4bf1c9c1ea2ce223933bd73e4483b090db",
+        "canonical_semantic_sha256": "80f64b1105a0af402a48e1cd49fde22fcbf9f11e461611659939c081bcaffdfd",
+        "entity_count": 2650,
+        "relationship_count": 2684,
+        "claim_count": 5334,
+        "evidence_count": 3738,
+        "diagnostic_count": 1427,
+        "coverage_gap_count": 3145,
+        "store_published": true
+      },
+      "same_commit_r5_baseline": {
+        "command": "noesis scan --repository <lekton-object-database> --repository-id urn:codenoesis:pilot:lekton --revision 7a4d1a4a30468f4c18ce158a9b825680b00f4820 --profile standard-local-s4 --acquisition-profile local-git-sha1-packed-v1 --workspace-profile cargo-root-package-v1 --manifest-profile cargo-manifest-facts-v1 --rust-semantic-profile rust-semantic-depth-v1 --store <temporary-r5-store> --format json",
+        "exit_code": 0,
+        "snapshot_schema": "codenoesis.repository-snapshot/v8",
+        "snapshot_output_bytes": 14756615,
+        "snapshot_output_sha256": "acfe787f6cba37de4325b5dae8dab09396a3284723df5507b36feaa3d2ded3d8",
+        "semantic_hash": "0c4846c08be6b41ea93378eb5e4db99f90de89e90741cb010e36332eafba7ea7",
+        "wall_time_seconds": 13.58,
+        "maximum_resident_set_bytes": 287211520,
+        "peak_memory_footprint_bytes": 181781008
+      },
+      "isolated_r6_additions_over_same_commit_r5": {
+        "new_entity_count": 193,
+        "new_entity_kinds": {
+          "framework.component_declaration": 80,
+          "rust.function": 81,
+          "rust.module": 32
+        },
+        "framework_declaration_count": 80,
+        "role_counts": {
+          "component": 80
+        },
+        "epistemic_state_counts": {
+          "candidate_unresolved": 80
+        },
+        "target_binding_counts": {
+          "resolved_unique": 80
+        },
+        "declared_registration_syntax_count": 0,
+        "new_relationship_count": 80,
+        "new_relationship_kinds": {
+          "DEFINES": 80
+        },
+        "new_claim_count": 273,
+        "new_evidence_count": 198,
+        "new_diagnostic_count": 80,
+        "new_diagnostic_codes": {
+          "rust.attribute_semantics_not_interpreted": 80
+        },
+        "new_coverage_gap_count": 160,
+        "new_coverage_capabilities": {
+          "rust.attribute_semantics_not_interpreted": 80,
+          "rust.framework_runtime_not_observed": 80
+        },
+        "removed_entity_count": 0,
+        "removed_relationship_count": 0,
+        "removed_claim_count": 0,
+        "removed_evidence_count": 0,
+        "removed_diagnostic_count": 0,
+        "removed_coverage_gap_count": 0
+      },
+      "explicit_router_compatibility_observation": {
+        "router_new_matches_found_by_external_static_review": 7,
+        "explicit_registration_records_emitted": 0,
+        "candidate_records_emitted": 80,
+        "interpretation": "The repository contains router construction, but the observed forms use mutable assembly, conditional tails, or complex and unreviewed chain segments outside the closed direct-return-tail profile. R6 therefore makes no route or runtime claim and retains only independently matched unresolved component attributes.",
+        "completeness_claim": false,
+        "runtime_claim": false
+      },
+      "replay": {
+        "independent_scan_count": 2,
+        "canonical_semantic_bytes_identical": true,
+        "semantic_hash_identical": true,
+        "full_snapshot_envelope_identical": false,
+        "full_snapshot_difference": "correlation_id and created_at are intentionally operational"
+      },
+      "documentation": "not run for this pilot",
+      "query": "not run for this pilot",
+      "result": "successful replaceable compatibility observation; counts are not ontology truth"
+    },
+    {
+      "repository": "rustdesk/rustdesk",
+      "repository_identity": "urn:codenoesis:pilot:rustdesk",
+      "commit_oid": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "tree_oid": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+      "checkout": {
+        "non_shallow": true,
+        "object_format": "sha1",
+        "packed_object_database": true,
+        "worktree_materialized": true,
+        "tracked_tree_entries": 941,
+        "gitlink_count": 1,
+        "gitlink_path": "libs/hbb_common",
+        "gitlink_oid": "69cea8dafee147848ae88702029f4bf7df7224c3",
+        "nested_gitlink_worktree_entries_before_and_after": 0,
+        "nested_gitlink_opened": false,
+        "vendored_into_codenoesis": false
+      },
+      "composition": [
+        "standard-local-s4",
+        "local-git-sha1-packed-v1",
+        "local-gitlinks-v1",
+        "cargo-root-package-v1",
+        "cargo-manifest-facts-v1",
+        "rust-semantic-depth-v1",
+        "rust-framework-declarations-v1"
+      ],
+      "scan": {
+        "command": "noesis scan --repository <rustdesk-object-database> --repository-id urn:codenoesis:pilot:rustdesk --revision d412d198720aa56f6cfed2dfad262e8fb1322fb7 --profile standard-local-s4 --acquisition-profile local-git-sha1-packed-v1 --repository-boundary-profile local-gitlinks-v1 --workspace-profile cargo-root-package-v1 --manifest-profile cargo-manifest-facts-v1 --rust-semantic-profile rust-semantic-depth-v1 --rust-framework-profile rust-framework-declarations-v1 --store <temporary-store> --format json",
+        "exit_code": 11,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_bytes": 369,
+        "stderr_sha256": "dfb8c08a9b2232e42161380f1908b99e1aeead7f5b30bf6d957ff7d3a1eab5ce",
+        "wall_time_seconds": 16.83,
+        "maximum_resident_set_bytes": 81182720,
+        "peak_memory_footprint_bytes": 72778160,
+        "error_schema": "codenoesis.error/v12",
+        "error_code": "extraction.rust_semantic_identity_conflict",
+        "error_context": {
+          "member_kind": "rust.struct",
+          "normalized_member": "ClientClipboardContext",
+          "owner_id": "urn:codenoesis:entity:blake3:25f1801c9f6cdd24f64056c3408f3646b7b363660eb3cf7fd101d76069e146bd"
+        },
+        "store_root_exists_after_failure": false,
+        "snapshot_published": false,
+        "nested_gitlink_opened": false
+      },
+      "compatibility_gap": {
+        "stage": "inherited R5 semantic extraction before R6 projection",
+        "reason": "The approved R5 identity cannot represent same-owner declarations separated only by unresolved cfg worlds without interpreting configuration.",
+        "disposition": "deterministic fail-closed; no cfg interpretation, fixture-specific branch, identity repair, or oracle weakening is part of issue 119",
+        "r6_counts_available": false
+      },
+      "documentation": "not run because no V9 snapshot was published",
+      "query": "not run because no V9 snapshot was published",
+      "result": "replaceable negative compatibility observation; the nested gitlink remained unopened and no R6 ontology was published"
+    }
+  ],
+  "limitations": [
+    "Pilot outputs and external source bytes remain outside the repository.",
+    "No OS-level process, file-access, or network trace was captured for the pilot invocations.",
+    "The Lekton counts describe the closed R6 profile at one commit and are neither ontology truth nor a completeness or performance claim.",
+    "Lekton router forms outside the reviewed direct-return-tail subset are intentionally not promoted to declarations or runtime facts.",
+    "The RustDesk observation stops at an inherited R5 fail-closed identity conflict and therefore provides no R6 declaration counts.",
+    "Pilot observations support compatibility review and do not mark FR-EXT-011 Verified."
+  ]
+}

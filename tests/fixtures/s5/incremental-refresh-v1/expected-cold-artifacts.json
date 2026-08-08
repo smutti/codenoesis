@@ -1,0 +1,153 @@
+{
+  "schema_version": "codenoesis.s5-cold-artifact-summary/v1",
+  "repository_identity": "urn:codenoesis:fixture:s5-incremental-refresh-v1",
+  "target_configuration_hash": {
+    "algorithm": "blake3-256",
+    "value": "abbf68de36374ed553f32a6b4560e9dc08b4485c709ad4eb9eaddac0f2fc2e34"
+  },
+  "inherited_s4_contract_bundle_sha256": "3efb380fb058a5831123a0f990676575da04e60998cada8987f034675b61f12e",
+  "revisions": [
+    {
+      "name": "revision-a",
+      "commit_oid": "2106dc8bf32867e519b89ef6d73ce2afdced170d",
+      "tree_oid": "36d30c925a7bb512acd0795c97e50f5b46388cb7",
+      "snapshot_id": "urn:codenoesis:snapshot:blake3:cbc3c30e6e63ff8ca3416c089d40068b62faf54eb9ff9b20da843dcbff5eba88",
+      "snapshot_semantic_hash": {
+        "algorithm": "blake3-256",
+        "value": "22f01849d0301834a0bfe3d5ecd35d0e4ea0f80d3a0df7823c8421e52343ee2d"
+      },
+      "graph_semantic_hash": {
+        "algorithm": "blake3-256",
+        "value": "611554cd42ebebc20a1c1182bbe04895d6d301f4bb4ac3c7688c3698ca77c912"
+      },
+      "documentation_generation_hash": {
+        "algorithm": "blake3-256",
+        "value": "1e7af9bc92aaa2cbb05648437a08964da153036d3687092943ea100758cbce74"
+      },
+      "graph_counts": {
+        "chunks": 3,
+        "entities": 12,
+        "relationships": 12,
+        "claims": 24,
+        "evidence": 6,
+        "coverage_gaps": 2,
+        "diagnostics": 1
+      },
+      "inventory_summary": {
+        "regular_file_count": 7,
+        "total_file_bytes": 675
+      },
+      "chunks": [
+        {
+          "source_file_id": "urn:codenoesis:entity:blake3:06ca422bf17dbd703230b379e9a58fc14d963c2bcba7aa6b32931fc3ee02a863",
+          "semantic_hash": "e7cdca124f42c09a9af2b541435db0b6a94ab1e0294be760ab599f8bb06b4c4d"
+        },
+        {
+          "source_file_id": "urn:codenoesis:entity:blake3:cc0026b78ded40638ecdd0443d1abac4128001845cf26561876e5ff68fd5ab87",
+          "semantic_hash": "71a7b7dbde46fb92622ff48e2efc80d2bf93c6418539cf7b639276628c4fd451"
+        },
+        {
+          "source_file_id": "urn:codenoesis:entity:blake3:6d3e1ef2654e962a99a875bbd18b163b24b3402a840e4cc15112f991c99afe34",
+          "semantic_hash": "b9f1c865a58bf9e4510e6ba4218858370eb78ac6f5e059ce4f11a16ac2d41e79"
+        }
+      ],
+      "documents": [
+        {
+          "document_id": "urn:codenoesis:document:blake3:59be7a8acf92abc6e59dfef422758362f407a35146b1db3f572e59c71f0ebfa4",
+          "path": "modules/app.md",
+          "blake3": "70f907e1bc1a9dc0d68a66a0c40404794a09e385f26c2d79da02f190655d5c3e",
+          "byte_length": 534
+        },
+        {
+          "document_id": "urn:codenoesis:document:blake3:caffb2ecafb7f5d596baf2a70893b1dc3bf7235570ab8b8a92759820b96552c7",
+          "path": "modules/model-item.md",
+          "blake3": "ad068178dac740f8177ad854ebfc5c6981ad2a2de39b37d54b0e6a129bd6c555",
+          "byte_length": 350
+        },
+        {
+          "document_id": "urn:codenoesis:document:blake3:107d6876c03595ccf474dc449f5683eb08631c31f01ad8de347b86cf080a1c57",
+          "path": "modules/model.md",
+          "blake3": "12b3a583b32ccf395f2ce9cbe345dd806a2108171aad5157951a3fe9d9ccc2e6",
+          "byte_length": 508
+        },
+        {
+          "document_id": "urn:codenoesis:document:blake3:1fa4b34dfaaeb59b2433bcde9bcd5577cdafd5634aa26d1f2745b2d34dbc743a",
+          "path": "overview.md",
+          "blake3": "c0f193811c1dc3e8560ee05608bd991f2ae8da9f8bbfbb9b89dc38c84de2db5e",
+          "byte_length": 949
+        }
+      ]
+    },
+    {
+      "name": "revision-b",
+      "commit_oid": "c2408412192e61249403bfa1dbc2dce7db0364cc",
+      "tree_oid": "7e5c687082b25274ab003121b656bafbfeb0fbd0",
+      "snapshot_id": "urn:codenoesis:snapshot:blake3:b444d17b4121930ff2a00795c99c60abf84c49aaca9b586616bebb5c84931519",
+      "snapshot_semantic_hash": {
+        "algorithm": "blake3-256",
+        "value": "5526646a790a72eb6efd0824a28d727ecfdc9d9a409519f6f8a550ddeee34131"
+      },
+      "graph_semantic_hash": {
+        "algorithm": "blake3-256",
+        "value": "2dfc8c43e3f950a9ea526b51c7cacafff58179242d105c24de9521906d6f7f59"
+      },
+      "documentation_generation_hash": {
+        "algorithm": "blake3-256",
+        "value": "3aa97344bc07e32378f62fa5b24f3469f6d919d69093fd0575b371d9e92be7b2"
+      },
+      "graph_counts": {
+        "chunks": 3,
+        "entities": 13,
+        "relationships": 13,
+        "claims": 26,
+        "evidence": 6,
+        "coverage_gaps": 2,
+        "diagnostics": 1
+      },
+      "inventory_summary": {
+        "regular_file_count": 7,
+        "total_file_bytes": 726
+      },
+      "chunks": [
+        {
+          "source_file_id": "urn:codenoesis:entity:blake3:06ca422bf17dbd703230b379e9a58fc14d963c2bcba7aa6b32931fc3ee02a863",
+          "semantic_hash": "b465c36f2ffddd3a98b35c4ece091d743e7e6eae7e102e2001c6ef589197cf28"
+        },
+        {
+          "source_file_id": "urn:codenoesis:entity:blake3:cc0026b78ded40638ecdd0443d1abac4128001845cf26561876e5ff68fd5ab87",
+          "semantic_hash": "ecf2c638c366f8115d41adb8be010781a3351d904b83c50cabb2a7987669ffa1"
+        },
+        {
+          "source_file_id": "urn:codenoesis:entity:blake3:6d3e1ef2654e962a99a875bbd18b163b24b3402a840e4cc15112f991c99afe34",
+          "semantic_hash": "295b5d109f16334aec6b7dc9f02318e2e298fd2ff8f28799aea2ddf17fee60e9"
+        }
+      ],
+      "documents": [
+        {
+          "document_id": "urn:codenoesis:document:blake3:59be7a8acf92abc6e59dfef422758362f407a35146b1db3f572e59c71f0ebfa4",
+          "path": "modules/app.md",
+          "blake3": "a56934ebde8f42e456cb2ab45a85bea6a895d838136a279a318b54eec848cf2e",
+          "byte_length": 534
+        },
+        {
+          "document_id": "urn:codenoesis:document:blake3:caffb2ecafb7f5d596baf2a70893b1dc3bf7235570ab8b8a92759820b96552c7",
+          "path": "modules/model-item.md",
+          "blake3": "bd13bb96295fa0a77949f31c26a33ebdbb9f91dc0060b800fd6e6a12d879abad",
+          "byte_length": 498
+        },
+        {
+          "document_id": "urn:codenoesis:document:blake3:107d6876c03595ccf474dc449f5683eb08631c31f01ad8de347b86cf080a1c57",
+          "path": "modules/model.md",
+          "blake3": "12b3a583b32ccf395f2ce9cbe345dd806a2108171aad5157951a3fe9d9ccc2e6",
+          "byte_length": 508
+        },
+        {
+          "document_id": "urn:codenoesis:document:blake3:1fa4b34dfaaeb59b2433bcde9bcd5577cdafd5634aa26d1f2745b2d34dbc743a",
+          "path": "overview.md",
+          "blake3": "32867f8af216fa8f3af36d6cf5b3e6ebdbfbef7660574df12b7def768554f15d",
+          "byte_length": 949
+        }
+      ]
+    }
+  ]
+}

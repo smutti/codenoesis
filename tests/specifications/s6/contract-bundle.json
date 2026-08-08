@@ -1,0 +1,166 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "docs/software/decisions/0009-s6-openapi-federation-contract.md",
+      "sha256": "7f7d490156e1f2f537334188ff94b372cd4994155a18c1d8db993f4e06891526"
+    },
+    {
+      "path": "scripts/tests/test_s6_openapi_federation_contract.py",
+      "sha256": "23c8c331398a28f1d5f462e387f821eae2e11c5e81f3069ba2e84c07e8f18d42"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/README.md",
+      "sha256": "63f8e42af49f2cf0c95aa0fea277be427518e6a2b4a0375a2c4c9cb615825ac7"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/clients/candidate/federation.json",
+      "sha256": "6f75df7740dcd40e0b8c1833743ac8a749720c7bea0d331f072382b53a0f3c54"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/clients/decoy/federation.json",
+      "sha256": "bbb171f8a3d6b7dc6defbc5ef3b585bc1439473a29309722916a45d1c9e846dd"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/clients/safe/federation.json",
+      "sha256": "335f933c0967bacd3477578f1aa58b222047c7ad44a2b566ffb7107a9ddf6582"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/clients/strict/federation.json",
+      "sha256": "950f38701684536a3247a243cacae9885d3bb2840a04e482834cf753085a3508"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/expected-error-duplicate-key.json",
+      "sha256": "f6cfe4010acf00ae88f1fb5198a004b427755ce4c418db39f3c9e0e71023713a"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/expected-error-identity-conflict.json",
+      "sha256": "ef9f365c397a0bd71e372029df9860cfab74354b7d1cc30e66e9821e605c511c"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/expected-error-remote-ref.json",
+      "sha256": "76dbbf773bf3ef24043ea6865ab41f1c2ea2c5435011483750b161ddfa4e5ddf"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/expected-federation-report.json",
+      "sha256": "7a301b0eb5d0e5e702a647422e57f42e1611d9e1cac5aedb39be26c7f1064628"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/expected-provider-only-report.json",
+      "sha256": "6d53dda7b209f2ca879f9a122f995ccf3ec17ee7fe86b7c611629e4f13f87d9a"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/expected-unsupported-semantics-report.json",
+      "sha256": "720aeec751d12d056677d19d0fa607721e636eb62d922364a89030d855d97e8c"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/manifest.json",
+      "sha256": "e45b2ed60ab81b161cf06038bd05ef927a71a6173f89b2fc983caf6711092082"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/provider/openapi.json",
+      "sha256": "f0f5f5231acb3ff5ff0cc1f699c38be1c6455bb84f8f0114419f7c4999216acc"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/provider/openapi.yaml",
+      "sha256": "d6decc18d428316b209aa554ee028fe9db8761df515bf34b9e92c3a369f2de3d"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/sentinel/should-not-run.sh",
+      "sha256": "6288ae2b70a634a8895dcde9426d2a2fb02001da9e2fa6fd1956d612b0cb77c6"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/variants/alias.yaml",
+      "sha256": "d49d6e29a571604a256f82b67dea1a66d1b0cc5c40f6d3c470313e8dbaff9325"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/variants/conflicting-client.json",
+      "sha256": "61f33b994b0b2f500ede08ad25bf3b20e15e6e74dc15fd6e84f428da94e00cd3"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/variants/custom-tag.yaml",
+      "sha256": "b8692f0ad3b3a03f2e2cb3242d8890c69291e8bfe0b99f5c2d09273e924acbb1"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/variants/duplicate-key.yaml",
+      "sha256": "71013e143dca60ec1e053a331dadcf385bb846364f3b0d33365108d802197968"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/variants/malformed.yaml",
+      "sha256": "c6caef5dcf20eeba9bcb422d06f90eecd544922e6f1a6e2860dbf45fa02e0568"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/variants/merge-key.yaml",
+      "sha256": "075b62576f3cceeb0abaa0030802a0fe7934e29c7a3b7e895a5b77b70e3e334f"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/variants/multiple-documents.yaml",
+      "sha256": "4ead667b2c4fd6ab6c1f7d0f42e92f027032e3f527599b981a4cf0db5621b8d2"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/variants/ref-cycle.yaml",
+      "sha256": "303d4a5ded8d67cc19f8447f7c9e5e4c6ff46c9211686c1d6f73393d93f3fd5a"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/variants/remote-ref.yaml",
+      "sha256": "aa6090cbe7a38d027be1f341d2b8f90de2bc4b8115a6c2b528cb7e02d21abb9b"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/variants/unsupported-openapi.yaml",
+      "sha256": "3ffe5f05e3254dc8199533cfa58e061cb0e5e2d21e638157cab9fc9e2e5a9ddc"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/variants/unsupported-semantics.yaml",
+      "sha256": "87817e54dc065a407b8d035df1c779e092a92286a534e3cb3a0a72b1572ec1ea"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/workspace-provider-only.json",
+      "sha256": "c0feac3bba7f4d94b29f87c8ebee5c0969f21f79a488b6acf606cf891b649da7"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/workspace-unsupported-semantics.json",
+      "sha256": "4ab517aee148770fac4afcfae2a41c1af1210819d7b713fc17a6a13040984e3d"
+    },
+    {
+      "path": "tests/fixtures/s6/openapi-federation-v1/workspace.json",
+      "sha256": "19e6851e3d29ebf86f69b76799641557426375af1c587e282baeeb36daed5616"
+    },
+    {
+      "path": "tests/fixtures/s7/implementation-aware-api-v1/manifest.json",
+      "sha256": "958948f2eb078ef53e1aebac5f9e7543411cb3ba7423e1ef2dc6c0e7ef2f69c0"
+    },
+    {
+      "path": "tests/specifications/s6/codenoesis-error-v8.schema.json",
+      "sha256": "9f7e1e4ea3e2998a6ccb95d322fc3ad7c77b8d9fe4be32ccee9cbd20ccd37177"
+    },
+    {
+      "path": "tests/specifications/s6/e2e_fr_fed_001_openapi_federation.json",
+      "sha256": "f5bd4ecd3244e17ab4e8ba76d7ddb8eed3ea083977039257345ae14fc928f2c6"
+    },
+    {
+      "path": "tests/specifications/s6/federation-client-declaration-v1.schema.json",
+      "sha256": "ddcf316b3be66d277e931177d43e64ced89f4f19acb47b687f368247143a0f38"
+    },
+    {
+      "path": "tests/specifications/s6/federation-report-v1.schema.json",
+      "sha256": "19a522a58b8c0e3596ec698234da17f3666b0dc9a45ed54ddbe6bd1a48d4475d"
+    },
+    {
+      "path": "tests/specifications/s6/federation-workspace-v1.schema.json",
+      "sha256": "250ec8bd876b8e1ba9d04b2cfd1facc7faa1eaa0199586ecacc6f735ce942d0e"
+    },
+    {
+      "path": "tests/specifications/s6/openapi-federation-rule-catalog-v1.json",
+      "sha256": "26397264aaf52765db7db04ceb8a6a427e9445e1d767bed6177a1acaea98bf2f"
+    },
+    {
+      "path": "tests/specifications/s7/contract-bundle.json",
+      "sha256": "8185cbdc0eb33dc96cb5c932a1343460b7d1794b953a64190ff4fcc6783b0208"
+    }
+  ],
+  "bundle_sha256": "cc8bb6a42abc23f51068c94641ace7775f4979108aa153a050bde93580d6db13"
+}

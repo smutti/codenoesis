@@ -1,0 +1,628 @@
+{
+  "schema_version": "codenoesis.repository-snapshot/v2",
+  "semantic_hash": {
+    "algorithm": "blake3-256",
+    "value": "236b231c3154f9be56130ddc8dfb39bb482af10330f7c6757597ad22c006e9e7"
+  },
+  "semantic": {
+    "repository": {
+      "contract_version": "codenoesis.repository/v1",
+      "identity_schema_version": "codenoesis.repository-identity/v1",
+      "identity": "urn:codenoesis:fixture:s1-safe-inventory-v1",
+      "vcs": "git",
+      "object_format": "sha1",
+      "commit_oid": "a72b34a03936b70511bd72bd4fa0d37a5a593386",
+      "tree_oid": "2a77b46a6a4a7645b7ec63831ce7e46bd7921904"
+    },
+    "configuration": {
+      "schema_version": "codenoesis.configuration/v1",
+      "profile": "standard-local-s1",
+      "semantic_hash": {
+        "algorithm": "blake3-256",
+        "value": "e1ec700bfa58726d372c6f412080684c4d47121d056e99934b61d646ed301675"
+      }
+    },
+    "pipeline_version": "codenoesis.pipeline/s1-v1",
+    "ontology_version": "codenoesis.ontology/none-v1",
+    "extractor_contract_version": "codenoesis.extraction/v1",
+    "extractor_versions": [
+      "codenoesis.inventory-classifier/s1-v1"
+    ],
+    "evidence_lineage_version": "codenoesis.evidence-lineage/v1",
+    "inventory": {
+      "schema_version": "codenoesis.inventory/v1",
+      "classifier_version": "codenoesis.inventory-classifier/s1-v1",
+      "summary": {
+        "directory_count": 5,
+        "regular_file_count": 9,
+        "total_file_bytes": 531,
+        "supported_file_count": 8,
+        "unsupported_file_count": 1,
+        "language_count": 2,
+        "manifest_count": 1,
+        "contract_count": 1,
+        "configuration_count": 1,
+        "ownership_count": 1,
+        "diagnostic_count": 3,
+        "coverage_gap_count": 7
+      },
+      "files": [
+        {
+          "path": ".github/CODEOWNERS",
+          "mode": "100644",
+          "blob_oid": "e2d63062cf5b70d85dfa800ba4acadc7b3a78262",
+          "byte_length": 22,
+          "content_kind": "text_utf8",
+          "roles": [
+            "ownership"
+          ],
+          "languages": [],
+          "evidence_id": "evidence-00001"
+        },
+        {
+          "path": "Cargo.toml",
+          "mode": "100644",
+          "blob_oid": "f2c75744ba1623ebd2bf64e8dda36fdb0fa86ab6",
+          "byte_length": 93,
+          "content_kind": "text_utf8",
+          "roles": [
+            "manifest"
+          ],
+          "languages": [],
+          "evidence_id": "evidence-00002"
+        },
+        {
+          "path": "README.md",
+          "mode": "100644",
+          "blob_oid": "bea61f8462cb66bab5eb5dbdc74b8054d0c0f116",
+          "byte_length": 93,
+          "content_kind": "text_utf8",
+          "roles": [
+            "documentation"
+          ],
+          "languages": [],
+          "evidence_id": "evidence-00003"
+        },
+        {
+          "path": "api/openapi.yaml",
+          "mode": "100644",
+          "blob_oid": "c55d01ab6f19f6d6d6ee6e81d40a65d73733c995",
+          "byte_length": 80,
+          "content_kind": "text_utf8",
+          "roles": [
+            "contract"
+          ],
+          "languages": [],
+          "evidence_id": "evidence-00004"
+        },
+        {
+          "path": "assets/payload.bin",
+          "mode": "100644",
+          "blob_oid": "de75dc54dee262791dc95eca71814a74aae4bbce",
+          "byte_length": 38,
+          "content_kind": "binary_or_unknown",
+          "roles": [
+            "unsupported"
+          ],
+          "languages": [],
+          "evidence_id": "evidence-00005"
+        },
+        {
+          "path": "build.rs",
+          "mode": "100644",
+          "blob_oid": "0ef4746c8ff5e7e129364c7c88be39742ac195e2",
+          "byte_length": 71,
+          "content_kind": "text_utf8",
+          "roles": [
+            "sentinel",
+            "source"
+          ],
+          "languages": [
+            "rust"
+          ],
+          "evidence_id": "evidence-00006"
+        },
+        {
+          "path": "rustfmt.toml",
+          "mode": "100644",
+          "blob_oid": "ed49ca7b3d9a10e8bc0c7337d85ff497e83cc3bf",
+          "byte_length": 33,
+          "content_kind": "text_utf8",
+          "roles": [
+            "configuration"
+          ],
+          "languages": [],
+          "evidence_id": "evidence-00007"
+        },
+        {
+          "path": "src/lib.rs",
+          "mode": "100644",
+          "blob_oid": "432593368f9028b66c60c5f011dd54949c10ca81",
+          "byte_length": 34,
+          "content_kind": "text_utf8",
+          "roles": [
+            "source"
+          ],
+          "languages": [
+            "rust"
+          ],
+          "evidence_id": "evidence-00008"
+        },
+        {
+          "path": "tools/sentinel.sh",
+          "mode": "100755",
+          "blob_oid": "9e02753a1d6a2f3d6825bb6e7107cecb1ad7e1c6",
+          "byte_length": 67,
+          "content_kind": "text_utf8",
+          "roles": [
+            "sentinel",
+            "source"
+          ],
+          "languages": [
+            "shell"
+          ],
+          "evidence_id": "evidence-00009"
+        }
+      ],
+      "languages": [
+        {
+          "id": "rust",
+          "display_name": "Rust",
+          "paths": [
+            "build.rs",
+            "src/lib.rs"
+          ],
+          "evidence_ids": [
+            "evidence-00006",
+            "evidence-00008"
+          ],
+          "detection_status": "supported",
+          "extraction_status": "not_available"
+        },
+        {
+          "id": "shell",
+          "display_name": "Shell",
+          "paths": [
+            "tools/sentinel.sh"
+          ],
+          "evidence_ids": [
+            "evidence-00009"
+          ],
+          "detection_status": "supported",
+          "extraction_status": "not_available"
+        }
+      ],
+      "manifests": [
+        {
+          "kind": "cargo",
+          "path": "Cargo.toml",
+          "status": "recognized_not_interpreted",
+          "evidence_id": "evidence-00002"
+        }
+      ],
+      "contracts": [
+        {
+          "kind": "openapi",
+          "path": "api/openapi.yaml",
+          "status": "recognized_not_interpreted",
+          "evidence_id": "evidence-00004"
+        }
+      ],
+      "configurations": [
+        {
+          "kind": "rustfmt",
+          "path": "rustfmt.toml",
+          "status": "recognized_not_interpreted",
+          "evidence_id": "evidence-00007"
+        }
+      ],
+      "ownership": [
+        {
+          "kind": "github-codeowners",
+          "path": ".github/CODEOWNERS",
+          "status": "recognized_not_interpreted",
+          "evidence_id": "evidence-00001"
+        }
+      ],
+      "extraction_capabilities": [
+        {
+          "capability": "configuration_interpretation",
+          "subject": "configuration:rustfmt",
+          "status": "not_available"
+        },
+        {
+          "capability": "contract_extraction",
+          "subject": "contract:openapi",
+          "status": "not_available"
+        },
+        {
+          "capability": "file_classification",
+          "subject": "repository",
+          "status": "available"
+        },
+        {
+          "capability": "manifest_interpretation",
+          "subject": "manifest:cargo",
+          "status": "not_available"
+        },
+        {
+          "capability": "ownership_resolution",
+          "subject": "ownership:github-codeowners",
+          "status": "not_available"
+        },
+        {
+          "capability": "symbol_extraction",
+          "subject": "language:rust",
+          "status": "not_available"
+        },
+        {
+          "capability": "symbol_extraction",
+          "subject": "language:shell",
+          "status": "not_available"
+        }
+      ],
+      "unsupported_content": [
+        {
+          "path": "assets/payload.bin",
+          "reason": "unsupported_extension",
+          "evidence_id": "evidence-00005"
+        }
+      ],
+      "diagnostics": [
+        {
+          "code": "inventory.target_execution_suppressed",
+          "severity": "info",
+          "path": "build.rs",
+          "evidence_id": "evidence-00006"
+        },
+        {
+          "code": "inventory.target_execution_suppressed",
+          "severity": "info",
+          "path": "tools/sentinel.sh",
+          "evidence_id": "evidence-00009"
+        },
+        {
+          "code": "inventory.unsupported_content",
+          "severity": "warning",
+          "path": "assets/payload.bin",
+          "evidence_id": "evidence-00005"
+        }
+      ],
+      "coverage_gaps": [
+        {
+          "code": "coverage.configuration_not_interpreted",
+          "scope": "configuration:rustfmt",
+          "paths": [
+            "rustfmt.toml"
+          ],
+          "evidence_ids": [
+            "evidence-00007"
+          ]
+        },
+        {
+          "code": "coverage.contract_not_extracted",
+          "scope": "contract:openapi",
+          "paths": [
+            "api/openapi.yaml"
+          ],
+          "evidence_ids": [
+            "evidence-00004"
+          ]
+        },
+        {
+          "code": "coverage.entities_not_extracted",
+          "scope": "language:rust",
+          "paths": [
+            "build.rs",
+            "src/lib.rs"
+          ],
+          "evidence_ids": [
+            "evidence-00006",
+            "evidence-00008"
+          ]
+        },
+        {
+          "code": "coverage.entities_not_extracted",
+          "scope": "language:shell",
+          "paths": [
+            "tools/sentinel.sh"
+          ],
+          "evidence_ids": [
+            "evidence-00009"
+          ]
+        },
+        {
+          "code": "coverage.manifest_not_interpreted",
+          "scope": "manifest:cargo",
+          "paths": [
+            "Cargo.toml"
+          ],
+          "evidence_ids": [
+            "evidence-00002"
+          ]
+        },
+        {
+          "code": "coverage.ownership_not_resolved",
+          "scope": "ownership:github-codeowners",
+          "paths": [
+            ".github/CODEOWNERS"
+          ],
+          "evidence_ids": [
+            "evidence-00001"
+          ]
+        },
+        {
+          "code": "coverage.unsupported_content",
+          "scope": "repository",
+          "paths": [
+            "assets/payload.bin"
+          ],
+          "evidence_ids": [
+            "evidence-00005"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "schema_version": "codenoesis.source-evidence/v1",
+          "evidence_id": "evidence-00001",
+          "repository": {
+            "identity": "urn:codenoesis:fixture:s1-safe-inventory-v1",
+            "vcs": "git",
+            "object_format": "sha1",
+            "commit_oid": "a72b34a03936b70511bd72bd4fa0d37a5a593386"
+          },
+          "blob_oid": "e2d63062cf5b70d85dfa800ba4acadc7b3a78262",
+          "path": ".github/CODEOWNERS",
+          "span": {
+            "unit": "byte",
+            "start": 0,
+            "end": 22
+          },
+          "extractor": {
+            "id": "codenoesis.inventory.static-classifier",
+            "version": "codenoesis.inventory-classifier/s1-v1"
+          },
+          "derivation": {
+            "kind": "deterministic_static_classification",
+            "rules": [
+              "git-tree-entry",
+              "ownership:github-codeowners"
+            ]
+          }
+        },
+        {
+          "schema_version": "codenoesis.source-evidence/v1",
+          "evidence_id": "evidence-00002",
+          "repository": {
+            "identity": "urn:codenoesis:fixture:s1-safe-inventory-v1",
+            "vcs": "git",
+            "object_format": "sha1",
+            "commit_oid": "a72b34a03936b70511bd72bd4fa0d37a5a593386"
+          },
+          "blob_oid": "f2c75744ba1623ebd2bf64e8dda36fdb0fa86ab6",
+          "path": "Cargo.toml",
+          "span": {
+            "unit": "byte",
+            "start": 0,
+            "end": 93
+          },
+          "extractor": {
+            "id": "codenoesis.inventory.static-classifier",
+            "version": "codenoesis.inventory-classifier/s1-v1"
+          },
+          "derivation": {
+            "kind": "deterministic_static_classification",
+            "rules": [
+              "git-tree-entry",
+              "manifest:cargo"
+            ]
+          }
+        },
+        {
+          "schema_version": "codenoesis.source-evidence/v1",
+          "evidence_id": "evidence-00003",
+          "repository": {
+            "identity": "urn:codenoesis:fixture:s1-safe-inventory-v1",
+            "vcs": "git",
+            "object_format": "sha1",
+            "commit_oid": "a72b34a03936b70511bd72bd4fa0d37a5a593386"
+          },
+          "blob_oid": "bea61f8462cb66bab5eb5dbdc74b8054d0c0f116",
+          "path": "README.md",
+          "span": {
+            "unit": "byte",
+            "start": 0,
+            "end": 93
+          },
+          "extractor": {
+            "id": "codenoesis.inventory.static-classifier",
+            "version": "codenoesis.inventory-classifier/s1-v1"
+          },
+          "derivation": {
+            "kind": "deterministic_static_classification",
+            "rules": [
+              "documentation:readme",
+              "git-tree-entry"
+            ]
+          }
+        },
+        {
+          "schema_version": "codenoesis.source-evidence/v1",
+          "evidence_id": "evidence-00004",
+          "repository": {
+            "identity": "urn:codenoesis:fixture:s1-safe-inventory-v1",
+            "vcs": "git",
+            "object_format": "sha1",
+            "commit_oid": "a72b34a03936b70511bd72bd4fa0d37a5a593386"
+          },
+          "blob_oid": "c55d01ab6f19f6d6d6ee6e81d40a65d73733c995",
+          "path": "api/openapi.yaml",
+          "span": {
+            "unit": "byte",
+            "start": 0,
+            "end": 80
+          },
+          "extractor": {
+            "id": "codenoesis.inventory.static-classifier",
+            "version": "codenoesis.inventory-classifier/s1-v1"
+          },
+          "derivation": {
+            "kind": "deterministic_static_classification",
+            "rules": [
+              "contract:openapi",
+              "git-tree-entry"
+            ]
+          }
+        },
+        {
+          "schema_version": "codenoesis.source-evidence/v1",
+          "evidence_id": "evidence-00005",
+          "repository": {
+            "identity": "urn:codenoesis:fixture:s1-safe-inventory-v1",
+            "vcs": "git",
+            "object_format": "sha1",
+            "commit_oid": "a72b34a03936b70511bd72bd4fa0d37a5a593386"
+          },
+          "blob_oid": "de75dc54dee262791dc95eca71814a74aae4bbce",
+          "path": "assets/payload.bin",
+          "span": {
+            "unit": "byte",
+            "start": 0,
+            "end": 38
+          },
+          "extractor": {
+            "id": "codenoesis.inventory.static-classifier",
+            "version": "codenoesis.inventory-classifier/s1-v1"
+          },
+          "derivation": {
+            "kind": "deterministic_static_classification",
+            "rules": [
+              "git-tree-entry",
+              "unsupported:fallback"
+            ]
+          }
+        },
+        {
+          "schema_version": "codenoesis.source-evidence/v1",
+          "evidence_id": "evidence-00006",
+          "repository": {
+            "identity": "urn:codenoesis:fixture:s1-safe-inventory-v1",
+            "vcs": "git",
+            "object_format": "sha1",
+            "commit_oid": "a72b34a03936b70511bd72bd4fa0d37a5a593386"
+          },
+          "blob_oid": "0ef4746c8ff5e7e129364c7c88be39742ac195e2",
+          "path": "build.rs",
+          "span": {
+            "unit": "byte",
+            "start": 0,
+            "end": 71
+          },
+          "extractor": {
+            "id": "codenoesis.inventory.static-classifier",
+            "version": "codenoesis.inventory-classifier/s1-v1"
+          },
+          "derivation": {
+            "kind": "deterministic_static_classification",
+            "rules": [
+              "git-tree-entry",
+              "language:rust",
+              "sentinel:build-script"
+            ]
+          }
+        },
+        {
+          "schema_version": "codenoesis.source-evidence/v1",
+          "evidence_id": "evidence-00007",
+          "repository": {
+            "identity": "urn:codenoesis:fixture:s1-safe-inventory-v1",
+            "vcs": "git",
+            "object_format": "sha1",
+            "commit_oid": "a72b34a03936b70511bd72bd4fa0d37a5a593386"
+          },
+          "blob_oid": "ed49ca7b3d9a10e8bc0c7337d85ff497e83cc3bf",
+          "path": "rustfmt.toml",
+          "span": {
+            "unit": "byte",
+            "start": 0,
+            "end": 33
+          },
+          "extractor": {
+            "id": "codenoesis.inventory.static-classifier",
+            "version": "codenoesis.inventory-classifier/s1-v1"
+          },
+          "derivation": {
+            "kind": "deterministic_static_classification",
+            "rules": [
+              "configuration:rustfmt",
+              "git-tree-entry"
+            ]
+          }
+        },
+        {
+          "schema_version": "codenoesis.source-evidence/v1",
+          "evidence_id": "evidence-00008",
+          "repository": {
+            "identity": "urn:codenoesis:fixture:s1-safe-inventory-v1",
+            "vcs": "git",
+            "object_format": "sha1",
+            "commit_oid": "a72b34a03936b70511bd72bd4fa0d37a5a593386"
+          },
+          "blob_oid": "432593368f9028b66c60c5f011dd54949c10ca81",
+          "path": "src/lib.rs",
+          "span": {
+            "unit": "byte",
+            "start": 0,
+            "end": 34
+          },
+          "extractor": {
+            "id": "codenoesis.inventory.static-classifier",
+            "version": "codenoesis.inventory-classifier/s1-v1"
+          },
+          "derivation": {
+            "kind": "deterministic_static_classification",
+            "rules": [
+              "git-tree-entry",
+              "language:rust"
+            ]
+          }
+        },
+        {
+          "schema_version": "codenoesis.source-evidence/v1",
+          "evidence_id": "evidence-00009",
+          "repository": {
+            "identity": "urn:codenoesis:fixture:s1-safe-inventory-v1",
+            "vcs": "git",
+            "object_format": "sha1",
+            "commit_oid": "a72b34a03936b70511bd72bd4fa0d37a5a593386"
+          },
+          "blob_oid": "9e02753a1d6a2f3d6825bb6e7107cecb1ad7e1c6",
+          "path": "tools/sentinel.sh",
+          "span": {
+            "unit": "byte",
+            "start": 0,
+            "end": 67
+          },
+          "extractor": {
+            "id": "codenoesis.inventory.static-classifier",
+            "version": "codenoesis.inventory-classifier/s1-v1"
+          },
+          "derivation": {
+            "kind": "deterministic_static_classification",
+            "rules": [
+              "git-tree-entry",
+              "language:shell",
+              "sentinel:executable-script"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "envelope": {
+    "created_at": "2001-01-01T00:00:00Z",
+    "job_id": null,
+    "correlation_id": "s1-fixture-a"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": "codenoesis.error/v4",
+  "code": "storage.incompatible_schema",
+  "stage": "storage",
+  "message": "The local store schema is not supported.",
+  "retryable": false,
+  "context": {
+    "component": "sqlite",
+    "expected_schema": "codenoesis.local-store/v1",
+    "observed_schema": "codenoesis.local-store/v2"
+  }
+}

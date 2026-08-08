@@ -1,0 +1,281 @@
+{
+  "schema_version": "codenoesis.s4-r4-local-pilot-observations/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/104",
+  "authorization": "https://github.com/smutti/codenoesis/issues/104#issuecomment-5168735482",
+  "requirement": "FR-EXT-009",
+  "requirement_status": "Approved",
+  "slice": "S4",
+  "roadmap_capability": "R4",
+  "risk": "high",
+  "tested_head": "7de9a3bc1caae9bd86856437352413e9528abc37",
+  "governance": {
+    "query_v2_merge": "557547285f9532772efceea900ba982b6a8e65a9",
+    "legacy_badges_merge": "d79891299916f0c4ce27061af00ba470fb74f658",
+    "contract_bundle_sha256": "2588abf38d686cc6475e7662ad8e90d585d1cdbff77702231dcadb1626a0c249"
+  },
+  "observed_at": "2026-08-04T11:34:55Z",
+  "environment": {
+    "os": "macOS 26.5.2 (Darwin 25.5.0)",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "python": "Python 3.9.6",
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "actionlint": "1.7.12",
+    "profile": "standard-local-s4",
+    "acquisition_profile": "local-git-sha1-packed-v1",
+    "workspace_profile": "cargo-root-package-v1",
+    "manifest_profile": "cargo-manifest-facts-v1",
+    "network_and_model_providers": "disabled and unused by the deterministic local path"
+  },
+  "pilots": [
+    {
+      "repository": "dghilardi/lekton",
+      "repository_identity": "urn:codenoesis:pilot:lekton",
+      "composition": [
+        "R1",
+        "R3",
+        "R4"
+      ],
+      "commit_oid": "7a4d1a4a30468f4c18ce158a9b825680b00f4820",
+      "tree_oid": "fa81df35c6fa32068d1707d0eacdc459258877c5",
+      "checkout": {
+        "non_shallow": true,
+        "clean": true,
+        "vendored_into_codenoesis": false
+      },
+      "scan": {
+        "command": "noesis scan --repository <lekton-checkout> --repository-id urn:codenoesis:pilot:lekton --revision 7a4d1a4a30468f4c18ce158a9b825680b00f4820 --profile standard-local-s4 --acquisition-profile local-git-sha1-packed-v1 --workspace-profile cargo-root-package-v1 --manifest-profile cargo-manifest-facts-v1 --store <store> --format json",
+        "exit_code": 0,
+        "stderr_bytes": 0,
+        "wall_time_seconds": 4.04,
+        "wall_time_limit_seconds": 60,
+        "maximum_resident_set_bytes": 87048192,
+        "snapshot_schema": "codenoesis.repository-snapshot/v7",
+        "snapshot_output_bytes": 3128906,
+        "snapshot_output_sha256": "d519d78f885bc12fd2ce5cffabdbda69696bd01b1c0556156108f81e5a5a23ae",
+        "semantic_hash": {
+          "algorithm": "blake3-256",
+          "value": "6382476595915979e86d9336bec5608174bafc0e46b3628d9344c6b6d594fb74"
+        },
+        "manifest_count": 2,
+        "workspace_member_count": 2,
+        "extraction_chunk_count": 119,
+        "entity_count": 579,
+        "relationship_count": 690,
+        "claim_count": 1269,
+        "evidence_count": 242,
+        "diagnostic_count": 3,
+        "coverage_gap_count": 100
+      },
+      "documentation": {
+        "command": "noesis docs --store <store> --repository-id urn:codenoesis:pilot:lekton --output <documents> --format json",
+        "exit_code": 0,
+        "stderr_bytes": 0,
+        "wall_time_seconds": 1.81,
+        "maximum_resident_set_bytes": 53035008,
+        "document_count": 119,
+        "manifest_bytes": 298019,
+        "manifest_sha256": "8cb3df0521136604aa891b1d025145c41996324c64f1ae75fe7bf7143a31bd94",
+        "document_tree_sha256": "0cbf88382eb4bfbac1e12c3dcdf60347bd2b61d2028b5cb6066880158aebc854"
+      },
+      "query": {
+        "command": "noesis query --store <store> --repository-id urn:codenoesis:pilot:lekton --documents <documents> --id <exact-id> --format json",
+        "schema_version": "codenoesis.local-query-result/v2",
+        "separate_process_count": 7,
+        "result_kinds": [
+          "entity",
+          "relationship",
+          "claim",
+          "evidence",
+          "diagnostic",
+          "coverage_gap",
+          "document"
+        ],
+        "stderr_bytes": 0,
+        "result_sha256": {
+          "entity": "38a7ab5fb6ca5f4a28a27bdbf25f324fc5e5f035028884bbc047ac79900e5669",
+          "relationship": "704d2e8fd98dd59066b0821f73b40f0e4f519820e911864f5f3cbd8b7ff6b6f3",
+          "claim": "eba8eff6377c897d340f43828d9b0d41c8d4473c7642f38ab444c71ecf10a687",
+          "evidence": "fc888ee831182a30d62db91f56bb210f3c062141e08068b843c2a4c5455227fb",
+          "diagnostic": "3b962ed8ad7744e41cec1dd21a8e2a56be72efa7ee331bb921c864aaa8e4f0d9",
+          "coverage_gap": "0f36ef088580b93eb5b3349051fd16bb39efd51d8630cff751088ab5a85add0a",
+          "document": "7a1da41be7ac1b19938facf79e61e1f7ec553c2c94942bae69054f7e18c69724"
+        },
+        "replay_byte_identical": true
+      },
+      "determinism": {
+        "fresh_store_semantic_identical": true,
+        "fresh_store_semantic_hash_identical": true,
+        "fresh_store_documentation_manifest_identical": true,
+        "fresh_store_document_tree_identical": true,
+        "full_snapshot_envelope_identical": false,
+        "full_snapshot_difference_paths": [
+          "envelope.correlation_id",
+          "envelope.created_at"
+        ]
+      }
+    },
+    {
+      "repository": "rustdesk/rustdesk",
+      "repository_identity": "urn:codenoesis:pilot:rustdesk",
+      "composition": [
+        "R1",
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "commit_oid": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "tree_oid": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+      "checkout": {
+        "non_shallow": true,
+        "clean": true,
+        "vendored_into_codenoesis": false,
+        "nested_gitlink_worktree_present": false
+      },
+      "scan": {
+        "command": "noesis scan --repository <rustdesk-checkout> --repository-id urn:codenoesis:pilot:rustdesk --revision d412d198720aa56f6cfed2dfad262e8fb1322fb7 --profile standard-local-s4 --acquisition-profile local-git-sha1-packed-v1 --repository-boundary-profile local-gitlinks-v1 --workspace-profile cargo-root-package-v1 --manifest-profile cargo-manifest-facts-v1 --store <store> --format json",
+        "exit_code": 0,
+        "stderr_bytes": 0,
+        "wall_time_seconds": 18.89,
+        "wall_time_limit_seconds": 60,
+        "maximum_resident_set_bytes": 154173440,
+        "snapshot_schema": "codenoesis.repository-snapshot/v7",
+        "snapshot_output_bytes": 4643033,
+        "snapshot_output_sha256": "ec4e741cf67121f7f17c61b3e2e18478f09d3b3d1260bba67a42a27aa6d094d2",
+        "semantic_hash": {
+          "algorithm": "blake3-256",
+          "value": "52a1fb48693527d470d82dfe8d59b07e0c5226e6ae251ca5f5a3ed6fb0a0abeb"
+        },
+        "manifest_count": 8,
+        "workspace_member_count": 9,
+        "extraction_chunk_count": 100,
+        "entity_count": 748,
+        "relationship_count": 821,
+        "claim_count": 1569,
+        "evidence_count": 412,
+        "diagnostic_count": 37,
+        "coverage_gap_count": 307
+      },
+      "legacy_badges": {
+        "manifest_path": "libs/enigo/Cargo.toml",
+        "diagnostic_code": "cargo.unsupported_manifest_family",
+        "diagnostic_id": "urn:codenoesis:diagnostic:blake3:d267037222980d72420aafe3d35687e81b170977d2f772b0deba9b37926fec1d",
+        "coverage_capability": "cargo.legacy_badges_unsupported",
+        "coverage_gap_id": "urn:codenoesis:coverage-gap:blake3:6b3f87a9d051850532bcc142b2e28694fb26ee3cccd703ab09962f00844e2de8",
+        "coverage_state": "unsupported",
+        "evidence_path": "libs/enigo/Cargo.toml",
+        "evidence_start_byte": 639,
+        "evidence_end_byte": 647,
+        "values_interpreted": false,
+        "authority_added": false
+      },
+      "standard_dependency_tables": {
+        "manifest_path": "libs/scrap/Cargo.toml",
+        "reviewed_declaration_names": [
+          "winapi",
+          "hwcodec"
+        ],
+        "represented_as_declarations": true,
+        "dependency_graph_resolved": false,
+        "git_source_fetched": false
+      },
+      "repository_boundary": {
+        "profile": "local-gitlinks-v1",
+        "boundary_count": 1,
+        "path": "libs/hbb_common",
+        "gitlink_oid": "69cea8dafee147848ae88702029f4bf7df7224c3",
+        "state": "declared_unbound",
+        "nested_source_opened": false,
+        "nested_evidence_paths": 0,
+        "nested_manifest_paths": 0
+      },
+      "privacy": {
+        "external_locator_values_checked": 38,
+        "locator_fields_containing_raw_values": 0,
+        "locator_values_retained_in_derived_data": false,
+        "short_lexeme_collision": {
+          "value_sha256": "ef260e9aa3c673af240d17a2660480361a8e081d1ffeca2a5ed0e3219fc18567",
+          "value_bytes": 3,
+          "source_field": "branch",
+          "classification": "The same three-byte lexeme occurs independently as the public dependency_kind enum; no locator field or locator-derived property retains the branch value.",
+          "raw_value_recorded": false
+        }
+      },
+      "documentation": {
+        "command": "noesis docs --store <store> --repository-id urn:codenoesis:pilot:rustdesk --output <documents> --format json",
+        "exit_code": 0,
+        "stderr_bytes": 0,
+        "wall_time_seconds": 2.26,
+        "maximum_resident_set_bytes": 72876032,
+        "document_count": 98,
+        "manifest_bytes": 442876,
+        "manifest_sha256": "bd5fd89c809a8ac07e998f790951f69d490f5930cd265c29e2530f1134497d58",
+        "document_tree_sha256": "ef65d2bdc6d8081a24f99d3ffc2f6a782c678b2d8752bd20df371e74f8ed6ded"
+      },
+      "query": {
+        "command": "noesis query --store <store> --repository-id urn:codenoesis:pilot:rustdesk --documents <documents> --id <exact-id> --format json",
+        "schema_version": "codenoesis.local-query-result/v2",
+        "separate_process_count": 7,
+        "result_kinds": [
+          "entity",
+          "relationship",
+          "claim",
+          "evidence",
+          "diagnostic",
+          "coverage_gap",
+          "document"
+        ],
+        "stderr_bytes": 0,
+        "result_sha256": {
+          "entity": "03f4cc4169ee2ee1b0607989ac51dee2eb37b2393f1f47e99fdd9b857846fe9d",
+          "relationship": "6ee1b2348f7e79bfa46cdfeadbd75115269e98f1c7e5065d38cad4f0a58a90d0",
+          "claim": "d4bd21dcc6357a9ae3b6ecec88755bd7e5f42cad6ade808fb9e376770cc6b351",
+          "evidence": "460d5b7dd894e84a604a1c2d2c79c6680e4475c75b1e257492ab809a661b7237",
+          "diagnostic": "eee9ebb61b7790d2aea52651813ba5412313f6fdf344a4d6774b75a52573aef5",
+          "coverage_gap": "60bc67987bea0b17987b97b6a4c55d0775fcdf8e7ad4514e45b737f542060662",
+          "document": "202c847acdecede5cf552bcf763bb5029fbb1529eeb38afc6ac973ec9277a782"
+        },
+        "replay_byte_identical": true
+      },
+      "determinism": {
+        "fresh_store_semantic_identical": true,
+        "fresh_store_semantic_hash_identical": true,
+        "fresh_store_documentation_manifest_identical": true,
+        "fresh_store_document_tree_identical": true,
+        "full_snapshot_envelope_identical": false,
+        "full_snapshot_difference_paths": [
+          "envelope.correlation_id",
+          "envelope.created_at"
+        ]
+      },
+      "progression": [
+        {
+          "stage": "pre-governance",
+          "exit_code": 11,
+          "manifest_path": "libs/enigo/Cargo.toml",
+          "reason": "unsupported_key",
+          "stderr_sha256": "661ec93d5f0409ab807c0422417d2074054d57581cc1c92b3c6f3ef41911f4a9"
+        },
+        {
+          "stage": "correction_round_1_red",
+          "exit_code": 11,
+          "manifest_path": "libs/scrap/Cargo.toml",
+          "reason": "unsupported_key",
+          "stderr_sha256": "ccc65e057f55112c639a07411d34dc73938a1bec380dd2815255cae66855fa87"
+        }
+      ]
+    }
+  ],
+  "correction_budget": {
+    "authorized_rounds": 5,
+    "consumed_rounds": 1,
+    "remaining_rounds": 4
+  },
+  "limitations": [
+    "These public pilots are reproducible local review aids and do not by themselves mark FR-EXT-009 Verified.",
+    "No external repository bytes, generated ontology snapshots, documentation trees, or raw locator values are committed.",
+    "OS-level process and network tracing was not run for the pilot invocations; zero-authority claims rely on the deterministic local architecture, focused sentinels, accepted security tests, and observed outputs.",
+    "Exact-head Linux, macOS, Windows CI, CodeQL, benchmark integrity, and independent human semantic review remain required."
+  ]
+}

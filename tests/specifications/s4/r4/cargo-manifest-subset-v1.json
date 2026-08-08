@@ -1,0 +1,242 @@
+{
+  "schema_version": "codenoesis.cargo-manifest-subset/v1",
+  "profile": "cargo-manifest-facts-v1",
+  "selection": {
+    "flag": "--manifest-profile",
+    "required_scan_profile": "standard-local-s4",
+    "required_workspace_profile": "cargo-root-package-v1",
+    "implicit_selection": false,
+    "repository_content_selects_profile": false
+  },
+  "input_model": {
+    "source": "committed UTF-8 Cargo.toml blobs already authorized by R3",
+    "toml_semantics": "literal declarations only",
+    "normalization": "Unicode NFC plus slash-separated repository-relative path normalization",
+    "duplicate_policy": "fail after normalization",
+    "unknown_key_policy": "fail closed unless the family or field has an exact typed unsupported mapping",
+    "changing_input_policy": "fail before publication"
+  },
+  "package_metadata": {
+    "string_fields": [
+      "version",
+      "edition",
+      "rust-version",
+      "description",
+      "license",
+      "default-run",
+      "links"
+    ],
+    "locator_digest_fields": [
+      "documentation",
+      "homepage",
+      "repository"
+    ],
+    "path_fields": [
+      "license-file",
+      "readme"
+    ],
+    "string_array_fields": [
+      "authors",
+      "keywords",
+      "categories",
+      "include",
+      "exclude"
+    ],
+    "publish_field": "false or a bounded registry-name array",
+    "boolean_fields": [
+      "autolib",
+      "autobins",
+      "autoexamples",
+      "autotests",
+      "autobenches"
+    ],
+    "workspace_inheritable_fields": [
+      "version",
+      "edition",
+      "rust-version",
+      "authors",
+      "description",
+      "documentation",
+      "homepage",
+      "repository",
+      "license",
+      "license-file",
+      "readme",
+      "keywords",
+      "categories",
+      "publish",
+      "include",
+      "exclude"
+    ],
+    "inheritance_semantics": "emit a workspace_reference value and REFERENCES_DECLARATION edge without copying or claiming an effective Cargo value",
+    "file_selection_semantics": "include and exclude are declarations only and emit cargo.package_file_selection_not_applied"
+  },
+  "target_declarations": {
+    "kinds": [
+      "lib",
+      "bin",
+      "example",
+      "test",
+      "bench"
+    ],
+    "fields": [
+      "name",
+      "path",
+      "required-features",
+      "crate-type",
+      "proc-macro",
+      "bench",
+      "doc",
+      "doctest",
+      "test",
+      "harness",
+      "edition"
+    ],
+    "r3_source_analysis_kinds": [
+      "lib",
+      "bin"
+    ],
+    "non_analyzed_kinds": [
+      "example",
+      "test",
+      "bench"
+    ],
+    "required_features_semantics": "preserve names and byte evidence without checking or activating them",
+    "proc_macro_semantics": "preserve the declaration and emit cargo.proc_macro_not_executed when true",
+    "autodiscovery_semantics": "record literal auto* declarations; fail unsupported_structural_interaction if they contradict the accepted R3 source-root plan"
+  },
+  "dependencies": {
+    "tables": [
+      "dependencies",
+      "dev-dependencies",
+      "build-dependencies",
+      "workspace.dependencies",
+      "target.<literal>.dependencies",
+      "target.<literal>.dev-dependencies",
+      "target.<literal>.build-dependencies"
+    ],
+    "forms": [
+      "literal version string",
+      "literal standard table",
+      "literal inline table"
+    ],
+    "fields": [
+      "version",
+      "registry",
+      "path",
+      "git",
+      "branch",
+      "tag",
+      "rev",
+      "package",
+      "optional",
+      "default-features",
+      "features",
+      "workspace"
+    ],
+    "source_kinds": [
+      "registry_default",
+      "registry_named",
+      "path",
+      "git",
+      "workspace_inherited"
+    ],
+    "source_classification": [
+      "workspace=true selects workspace_inherited and forbids locator or package override fields",
+      "git selects git and may carry exactly one of branch tag or rev",
+      "path selects path and is normalized against the declaring package root without opening it",
+      "registry selects registry_named",
+      "otherwise a version string selects registry_default"
+    ],
+    "compatible_version_hint": "version may accompany path or git as a declaration but is never validated against source content",
+    "target_predicate_semantics": "preserve the normalized literal predicate as identity evidence without cfg evaluation",
+    "workspace_inheritance_semantics": "link the member declaration to the exact root workspace dependency by declared name without materializing an effective dependency",
+    "requested_features_semantics": "preserve names and byte evidence without activation",
+    "optional_semantics": "preserve the literal flag without inventing an implicit feature",
+    "forbidden_graph_edges": [
+      "DEPENDS_ON",
+      "RESOLVES_TO"
+    ]
+  },
+  "features": {
+    "table": "features",
+    "value": "bounded literal string array",
+    "member_syntax": {
+      "bare": "name",
+      "explicit_dependency": "dep:name",
+      "dependency_feature": "name/feature",
+      "weak_dependency_feature": "name?/feature"
+    },
+    "bare_member_semantics": "do not decide whether a bare member names a local feature or an implicit optional dependency",
+    "default_feature_semantics": "default is an ordinary declared feature and is never treated as active"
+  },
+  "patches": {
+    "tables": [
+      "patch.crates-io",
+      "patch.<named-registry>",
+      "patch.<source-locator>"
+    ],
+    "entry_fields": [
+      "version",
+      "registry",
+      "path",
+      "git",
+      "branch",
+      "tag",
+      "rev",
+      "package"
+    ],
+    "source_locator_semantics": "emit only SHA-256 plus source evidence",
+    "application_semantics": "applied is always false and cargo.patch_not_applied is required"
+  },
+  "build_scripts": {
+    "selection_states": [
+      "explicit_path",
+      "explicit_disabled",
+      "conventional_present",
+      "absent"
+    ],
+    "path_semantics": "normalize a literal path inside the repository without execution",
+    "presence_semantics": "committed_present is an immutable inventory fact",
+    "execution_semantics": "executed is always false"
+  },
+  "external_locators": {
+    "maximum_input_bytes": 4096,
+    "output": "lowercase SHA-256 digest and redacted=true",
+    "raw_output_forbidden": true,
+    "identity_input": "only a patch source-selector digest; dependency and package locator values never enter entity identity",
+    "errors_logs_docs_query": "plaintext forbidden"
+  },
+  "typed_unsupported": {
+    "badges": "cargo.legacy_badges_unsupported",
+    "package.metadata": "cargo.package_metadata_table_unsupported",
+    "workspace.metadata": "cargo.package_metadata_table_unsupported",
+    "profile": "cargo.profile_tables_unsupported",
+    "lints": "cargo.lint_configuration_unsupported",
+    "workspace.lints": "cargo.lint_configuration_unsupported",
+    "replace": "cargo.replace_table_unsupported",
+    "dependency_artifact_lib_target_public": "cargo.dependency_advanced_fields_unsupported"
+  },
+  "ordering": {
+    "manifest_index": "manifest path by unsigned NFC UTF-8 bytes",
+    "cargo_entities": "stable entity ID",
+    "cargo_relationships": "stable relationship ID",
+    "metadata": "field code",
+    "targets": "manifest path then target-kind rank then target name then normalized source path",
+    "dependencies": "manifest path then scope then target predicate then dependency-kind rank then declared name",
+    "features": "manifest path then feature name; members by syntax then lexeme",
+    "patches": "manifest path then selector kind then selector identity then declared name",
+    "evidence_ids": "stable evidence ID"
+  },
+  "semantic_non_claims": [
+    "active feature set",
+    "active target or cfg world",
+    "resolved dependency graph",
+    "selected package version or source",
+    "fetched registry Git or path content",
+    "applied patch",
+    "executed build script procedural macro or target",
+    "generated source",
+    "Cargo validation equivalence"
+  ]
+}

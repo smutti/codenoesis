@@ -1,0 +1,41 @@
+{
+  "schema_version": "codenoesis.product-red-observation/s4-r4-legacy-badges-v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/104",
+  "authorization": "https://github.com/smutti/codenoesis/issues/104#issuecomment-5168735482",
+  "governance_issue": "https://github.com/smutti/codenoesis/issues/107",
+  "governance_authorization": "https://github.com/smutti/codenoesis/issues/107#issuecomment-5177741408",
+  "governance_merge": "d79891299916f0c4ce27061af00ba470fb74f658",
+  "governance_bundle_sha256": "2588abf38d686cc6475e7662ad8e90d585d1cdbff77702231dcadb1626a0c249",
+  "branch_integration_head": "9b6b97c252724983141c50e330c20f680c939418",
+  "pre_badges_product_head": "ab3af3b4d512062d59be16001bb3bbf43043c496",
+  "test_only_head": "04e84c8d15d3cef52ee9da7f868db4e5648b0373",
+  "command": "cargo test --locked -p codenoesis-lang-rust --test s4_cargo_manifest_facts -- gt_fr_ext_009_legacy_badges_is_typed_unsupported --exact",
+  "runner_exit_code": 101,
+  "expected_failure": "A literal top-level badges table must be represented by the exact typed-unsupported diagnostic and coverage mapping.",
+  "actual_failure": "InvalidFact { reason: UnsupportedKey, path: Cargo.toml, fact_kind: Manifest, field: None }",
+  "failed_for_expected_reason": true,
+  "raw_log_path": "crates/noesis/tests/evidence/s4/r4/legacy-badges-red.log",
+  "raw_log_bytes": 1343,
+  "raw_log_sha256": "97b3a19f6d02525c2ebf25ac772deb942974109e095831d42f7b7384f89f6e50",
+  "production_badges_files_changed_before_red": false,
+  "protected_semantic_files_changed_by_product_branch_before_red": false,
+  "policy": {
+    "version": 1,
+    "sha256": "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993",
+    "binding": "maintainer_supervised_interactive_lane",
+    "unattended_authorization": false
+  },
+  "environment": {
+    "observed_at_utc": "2026-08-04T11:16:00Z",
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "macos": "26.5.2",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "python": "Python 3.9.6",
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "actionlint": "1.7.12",
+    "features": []
+  },
+  "limitation": "This focused local Red proves only the missing generic badges product mapping; it is not exact-head CI or RustDesk pilot evidence and does not mark FR-EXT-009 Verified."
+}

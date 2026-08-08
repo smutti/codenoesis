@@ -1,0 +1,47 @@
+{
+  "schema_version": "codenoesis.local-test-observation/v1",
+  "evidence_manifest_schema": "tests/specifications/s0/evidence-manifest-v1.schema.json",
+  "slice": "S0",
+  "status": "red_observed",
+  "requirements": [
+    "DR-ART-001",
+    "DR-ART-002",
+    "FR-ACQ-001",
+    "FR-CLI-003",
+    "NFR-DET-001",
+    "NFR-MNT-001",
+    "NFR-SEC-005",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "oracle_bundle_sha256": "978a7128498d54a6c4a6b3fec11d195e37d2f67e179d2babb5320668c4e44811",
+  "base_sha": "f9500c6d9b285f9e3a9dd65f2d43efbe65717a05",
+  "pre_implementation_sha": "962f070adf7bdb682b0636e91153ed1177aec8b8",
+  "contract_correction": {
+    "pull_request": "https://github.com/smutti/codenoesis/pull/12",
+    "merge_sha": "a9c718504d126f9c3b398aed3714c132243d3d3c"
+  },
+  "red": {
+    "test_id": "e2e_fr_acq_001_immutable_commit",
+    "command": "cargo test --test e2e_fr_acq_001_immutable_commit",
+    "runner_exit_code": 101,
+    "subject_exit_code": 70,
+    "expected_failure": "The harness expects exit 0 and RepositorySnapshotV1 while the product behavior is deliberately absent.",
+    "observed_failure": "The subject exited 70 with test-only stderr marker S0_NOT_IMPLEMENTED; the acceptance assertion failed.",
+    "observed_at": "2026-07-22T20:02:34Z",
+    "log": {
+      "path": "crates/noesis/tests/evidence/s0/red-corrected/e2e_fr_acq_001_immutable_commit.log",
+      "sha256": "1761c956e0c12f9bf503251a5f742b799b688de15cf5da6504926236f248e1d7"
+    }
+  },
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "features": []
+  },
+  "github_actions_artifact": null,
+  "supersedes_local_observation": "crates/noesis/tests/evidence/s0/red-observation.json",
+  "limitation": "This corrected-contract local observation is not an EvidenceManifestV1 instance because no immutable GitHub Actions artifact locator exists yet; it must not be used to claim Verified."
+}

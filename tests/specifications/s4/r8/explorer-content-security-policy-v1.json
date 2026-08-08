@@ -1,0 +1,80 @@
+{
+  "schema_version": "codenoesis.local-explorer-security/v1",
+  "entrypoint": "index.html",
+  "content_security_policy": "default-src 'none'; script-src 'sha256-+wXgA8YACUINip3Bd70PW/CNa99al9KY+mUSpK5D8B0='; style-src 'sha256-acsH8EvKpLUUAIFsfEjiVSLLnbHkOls76PFfS1E7Ei4='; img-src 'self' data:; font-src 'none'; connect-src 'none'; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'; manifest-src 'none'; media-src 'none'; worker-src 'none'",
+  "directives": {
+    "default-src": [
+      "'none'"
+    ],
+    "script-src": [
+      "'sha256-+wXgA8YACUINip3Bd70PW/CNa99al9KY+mUSpK5D8B0='"
+    ],
+    "style-src": [
+      "'sha256-acsH8EvKpLUUAIFsfEjiVSLLnbHkOls76PFfS1E7Ei4='"
+    ],
+    "img-src": [
+      "'self'",
+      "data:"
+    ],
+    "font-src": [
+      "'none'"
+    ],
+    "connect-src": [
+      "'none'"
+    ],
+    "object-src": [
+      "'none'"
+    ],
+    "frame-src": [
+      "'none'"
+    ],
+    "frame-ancestors": [
+      "'none'"
+    ],
+    "form-action": [
+      "'none'"
+    ],
+    "base-uri": [
+      "'none'"
+    ],
+    "manifest-src": [
+      "'none'"
+    ],
+    "media-src": [
+      "'none'"
+    ],
+    "worker-src": [
+      "'none'"
+    ]
+  },
+  "inline_style_sha256": "sha256-acsH8EvKpLUUAIFsfEjiVSLLnbHkOls76PFfS1E7Ei4=",
+  "inline_script_sha256": "sha256-+wXgA8YACUINip3Bd70PW/CNa99al9KY+mUSpK5D8B0=",
+  "untrusted_rendering": "textContent_only",
+  "explicit_file_selection_required": true,
+  "browser_auto_launch": false,
+  "network_allowed": false,
+  "remote_resources_allowed": false,
+  "child_process_allowed": false,
+  "target_execution_allowed": false,
+  "persistent_browser_state_allowed": false,
+  "source_repository_required": false,
+  "forbidden_runtime_apis": [
+    "eval",
+    "Function",
+    "dynamic import",
+    "fetch",
+    "XMLHttpRequest",
+    "WebSocket",
+    "EventSource",
+    "Worker",
+    "ServiceWorker",
+    "localStorage",
+    "sessionStorage",
+    "indexedDB",
+    "document.cookie",
+    "window.open",
+    "innerHTML",
+    "insertAdjacentHTML",
+    "document.write"
+  ]
+}

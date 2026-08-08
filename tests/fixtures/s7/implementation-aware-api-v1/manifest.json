@@ -1,0 +1,112 @@
+{
+  "schema_version": "codenoesis.s7-fixture-manifest/v1",
+  "fixture_identity": "urn:codenoesis:fixture:s7-implementation-aware-api-v1",
+  "analysis_profile": "implementation-aware-http-json/v1",
+  "identities": {
+    "service": "urn:codenoesis:service:blake3:509813cd6e049acb2c9de79cb9f0a1f385b355473512592a22d5f115ac9243cc",
+    "operation": "urn:codenoesis:operation:blake3:071cbb8fa33a959879d7d8a2bfbbac31e1fea4850c28fdb73227c605f5974923",
+    "fields": {
+      "displayName": "urn:codenoesis:field:blake3:a4bef896d066ecb3441a6d9638cea00947075d62c66bad642455840a7ce4f0e7",
+      "nickname": "urn:codenoesis:field:blake3:a2b6cafe0db73cb016ffd790941c18fbab768923a5b8b4b671eb22459ec66301"
+    }
+  },
+  "provider": {
+    "repository_identity": "urn:codenoesis:fixture:s7-provider",
+    "revisions": [
+      {
+        "name": "fixture-provider-a",
+        "files": [
+          {
+            "path": "openapi.yaml",
+            "sha256": "d6decc18d428316b209aa554ee028fe9db8761df515bf34b9e92c3a369f2de3d"
+          },
+          {
+            "path": "src/user_response.rs",
+            "sha256": "cec091bf3c88ab912fb824fa38c0789795d7f460b808a06b36f463f69ebc3413"
+          }
+        ],
+        "root": "provider/revision-a"
+      },
+      {
+        "name": "fixture-provider-b",
+        "files": [
+          {
+            "path": "openapi.yaml",
+            "sha256": "d6decc18d428316b209aa554ee028fe9db8761df515bf34b9e92c3a369f2de3d"
+          },
+          {
+            "path": "src/user_response.rs",
+            "sha256": "f92348e5cd2270c575bef29379def98adba4fa09577726e3f259f4f2559b6632"
+          }
+        ],
+        "root": "provider/revision-b"
+      }
+    ],
+    "contract_bytes_identical": true
+  },
+  "clients": [
+    {
+      "role": "decoy",
+      "repository_identity": "urn:codenoesis:fixture:s7-client-decoy",
+      "revision": "fixture-client-v1",
+      "client_identity": "urn:codenoesis:client:blake3:03879c99edb3bb0d0a2f5af4d6d842f21cf6232ee9efb60aed5c375f625100ea",
+      "call_site_id": "urn:codenoesis:call-site:blake3:0f3124309b75ad804310cfbf01feb1a7fa23f9deb98dad9dfdf43a8213ce7031",
+      "operation_candidate_id": "urn:codenoesis:operation:blake3:6f93dc5d0322acb97f64f57d08f317e1e6d0b66a1f4c89157c42598ac7e855fa",
+      "file": {
+        "path": "src/commonMain/kotlin/dev/codenoesis/fixture/DecoyAccountClient.kt",
+        "sha256": "dc9436422660a090372a81763702ce4dd719390d9f8ae5d1bdfb9f642cb4fbb7"
+      },
+      "expected_target_impact": "rejected_decoy",
+      "root": "clients/decoy"
+    },
+    {
+      "role": "safe",
+      "repository_identity": "urn:codenoesis:fixture:s7-client-safe",
+      "revision": "fixture-client-v1",
+      "client_identity": "urn:codenoesis:client:blake3:bc61c394bfca258f571afdc1ff8a69cbe141c0f093942c031392157568d937b0",
+      "call_site_id": "urn:codenoesis:call-site:blake3:bf63c10163327564a50f45606830ab57d450e2c8480cc170eb30bb21891b661c",
+      "operation_candidate_id": "urn:codenoesis:operation:blake3:071cbb8fa33a959879d7d8a2bfbbac31e1fea4850c28fdb73227c605f5974923",
+      "file": {
+        "path": "src/commonMain/kotlin/dev/codenoesis/fixture/SafeUsersClient.kt",
+        "sha256": "bbb4e2a92b01c230d21c5bba7c8b2ec6ac04da0a3bc884caa7d32d09a7ce083c"
+      },
+      "expected_target_impact": "compatible",
+      "root": "clients/safe"
+    },
+    {
+      "role": "strict",
+      "repository_identity": "urn:codenoesis:fixture:s7-client-strict",
+      "revision": "fixture-client-v1",
+      "client_identity": "urn:codenoesis:client:blake3:ebd716cc12c29ad94e757a84d525b057f53ab8d3e6f9e21a35ffa55a6b8057a9",
+      "call_site_id": "urn:codenoesis:call-site:blake3:a59693122eeb35ee111acb47cfa2a20eafb4c75746ed60ae9ed61aa4e859884b",
+      "operation_candidate_id": "urn:codenoesis:operation:blake3:071cbb8fa33a959879d7d8a2bfbbac31e1fea4850c28fdb73227c605f5974923",
+      "file": {
+        "path": "src/commonMain/kotlin/dev/codenoesis/fixture/StrictUsersClient.kt",
+        "sha256": "d44a6b6485fe20ff4ea4d1146bd09a4439aa8d6a495320c4b549859943624920"
+      },
+      "expected_target_impact": "breaking",
+      "root": "clients/strict"
+    }
+  ],
+  "expected_report": {
+    "path": "expected-semantic-compatibility-report.json",
+    "sha256": "cfd9a8d4dcb2d04bcd9eaffd15f1ae947ffdaba80e07daee43375c9a67c15750",
+    "semantic_diffs": [
+      {
+        "field_pointer": "/displayName",
+        "classification": "unresolved"
+      },
+      {
+        "field_pointer": "/nickname",
+        "classification": "breaking"
+      }
+    ]
+  },
+  "sentinels": {
+    "compile_or_build": false,
+    "target_process": false,
+    "network": false,
+    "model_provider": false,
+    "absence_of_trace_is_behavioral_evidence": false
+  }
+}

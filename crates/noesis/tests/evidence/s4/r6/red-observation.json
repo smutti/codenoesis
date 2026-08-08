@@ -1,0 +1,101 @@
+{
+  "schema_version": "codenoesis.local-test-observation/v1",
+  "slice": "S4",
+  "roadmap_capability": "R6",
+  "status": "red_observed",
+  "requirement_status": "Approved",
+  "requirements": [
+    "FR-EXT-011"
+  ],
+  "risk": "high",
+  "issue": "https://github.com/smutti/codenoesis/issues/119",
+  "authorization_comment": "https://github.com/smutti/codenoesis/issues/119#issuecomment-5188985000",
+  "governance_merge_sha": "117c8d5973873b5cb9a713ad81d9bcfe370adac8",
+  "oracle_bundle_sha256": "42a7670669d9184c5663767f5b3bb5d9335a0fa65a195a4833a6ab2ed8209ea7",
+  "reviewed_source_sha256": {
+    "decision": "8d520de22b2d882a0ab283e9fa6e9dd24a9c569d71feeda84d80ae30af8c7e31",
+    "acceptance_specification": "0b5441ace9af054a3655ec227ecdd45556cc8172433942b7513cc94e04756288",
+    "exact_id_query_oracle": "2ec6499d13e267423010a97af7fc42c4bfad5a8bf553fd4753a7e33e46dd2d73",
+    "framework_declarations_subset": "379cea9cc58f5c7f850fa9604d6f2683a1d5b5d61e552cef65f1a731d8030ff1",
+    "configuration_v6_schema": "c6dbd3fa99647f67c90f42fc129589ade1af6d098f28cd4ebb65c3bb4a134e1e",
+    "snapshot_v9_schema": "3fed6f3f5b6ae51a6e5459ffd410584573bfca043febf9367c7b0abbd6f5fd65",
+    "extraction_chunk_v6_schema": "cb399698b3520ace0eebb0dd083d33d6cef6973013a2bb6a5915942ab5beb44f",
+    "knowledge_graph_v6_schema": "31a37c97ab8583092867abab9451980f29abeee9ea1c6c8f3edce51b60e56678",
+    "rust_ontology_v6": "d91c47426295b3fc633218cf386a79e69c7e19b69d575691e40be8b94a055818",
+    "error_v13_schema": "dc9f951f104c32d9ae1d5197d357b40b352684ee1d79d205c0da645c221cf7d6",
+    "local_query_result_v4_schema": "d51d25dec77b7f12612fde26e648ad8dabcf3906f3a3447b0a209ff11f63b62e",
+    "semantic_hash_contract_v5": "5d7b12b44416ccae0cf1a97e614494be74d9fb607a9f85fd25e7f5006f4e2532",
+    "invalid_case_matrix": "71f6f8016612848e9a94ce44a3f3998c22db4e9da95bea3cd98102248fa77be8",
+    "fixture_manifest": "e2cae52ecb2c7e5bfae25cc8a4aaeeef18107011431a1b04f0859930d7ae5919",
+    "expected_framework_declarations": "c6956cf1887d3d201d4eb95f6e6a50c204d795b5def968fd5d3d25d88faabd1f",
+    "bundle_file": "67cdb91baecd083b3dc87f759a5ce5256666c1cf57b9ac5063a8c30f01294742"
+  },
+  "base_sha": "117c8d5973873b5cb9a713ad81d9bcfe370adac8",
+  "pre_r6_runtime_sha": "6750f293c24ea501df6177a2f7c96c2c7f0a6390",
+  "test_first_sha": "bfa23cc35839241835ed941f4657d2f9b5af6dbe",
+  "production_files_changed_before_red": false,
+  "policy": {
+    "version": 1,
+    "sha256": "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993",
+    "binding": "maintainer_supervised_interactive_lane",
+    "unattended_authorization": false
+  },
+  "red": {
+    "test_id": "e2e_fr_ext_011_framework_declarations",
+    "command": "cargo test --locked -p noesis --test e2e_fr_ext_011_framework_declarations -- e2e_fr_ext_011_framework_declarations --exact",
+    "runner_exit_code": 101,
+    "subject_exit_code": 2,
+    "subject_stdout": "empty",
+    "subject_stdout_bytes": 0,
+    "subject_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "subject_stderr": "{\"code\":\"input.invalid_revision\",\"context\":{},\"message\":\"invalid revision\",\"retryable\":false,\"schema_version\":\"codenoesis.error/v4\",\"stage\":\"input\"}\n",
+    "subject_stderr_bytes": 149,
+    "subject_stderr_sha256": "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe",
+    "expected_failure": "The exact R6 fixture reaches the unsupported rust-framework-declarations-v1 selector after all accepted R3/R4/R5 selectors and the monitored pre-R6 subject returns exit 2, empty stdout, and strict LF-terminated ErrorV4 input.invalid_revision before acquisition.",
+    "observed_failure": "The harness validated every selected fixture byte, SHA-256, Git blob, tree, and commit identity, then reached its explicit V9 success assertion after observing exactly the approved unrecognized-selector boundary.",
+    "fixture_observations": {
+      "setup_outside_monitored_subject": true,
+      "root_commit_oid": "d6e5ae087cdfe44bf7c47bf31a73dfc09c3795b1",
+      "root_tree_oid": "22edc029079ac4fb600e07bc43596d8794e28d52",
+      "build_sentinel_exists_after_subject": false,
+      "store_exists_after_subject": false,
+      "documents_root_exists_after_subject": false,
+      "root_repository_opened": false,
+      "external_repositories_opened": 0,
+      "processes_spawned": 0,
+      "network_attempts": 0,
+      "cargo_executions": 0,
+      "rustc_executions": 0,
+      "build_script_executions": 0,
+      "procedural_macro_executions": 0,
+      "target_executions": 0,
+      "writes": 0,
+      "publications": 0
+    },
+    "log": {
+      "path": "crates/noesis/tests/evidence/s4/r6/red/e2e_fr_ext_011_framework_declarations.log",
+      "sha256": "73d0cf05ce7b3ef649601598fa5ef1b40743a3d41c340be85be3b72846fe28a0",
+      "bytes": 1158
+    }
+  },
+  "environment": {
+    "observed_at_utc": "2026-08-05T07:41:34Z",
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "macos": "26.5.2",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "python": "Python 3.9.6",
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "actionlint": "1.7.12",
+    "features": []
+  },
+  "agent": {
+    "identity": "OpenAI Codex",
+    "model": "not exposed by the runtime",
+    "run_identifier": "issue-119-interactive",
+    "duration": "not exposed by the runtime",
+    "cost": "not exposed by the runtime"
+  },
+  "limitation": "This retained local Red is not exact-head CI evidence and must not be used to claim FR-EXT-011 Verified. Authority observations are inferred from the pre-acquisition CLI failure, absent store/docs/sentinel paths, strict fixture assertions, and the harness boundary rather than an OS trace."
+}

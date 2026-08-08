@@ -1,0 +1,66 @@
+{
+  "schema_version": "codenoesis.local-test-observation/v1",
+  "slice": "S4",
+  "status": "red_observed",
+  "requirement_status": "Approved",
+  "requirements": [
+    "DR-IDN-002",
+    "FR-CLI-001",
+    "FR-DOC-001",
+    "FR-DOC-002",
+    "FR-DOC-003",
+    "FR-EXT-007",
+    "FR-QRY-001"
+  ],
+  "risk": "high",
+  "issue": "https://github.com/smutti/codenoesis/issues/47",
+  "oracle_bundle_sha256": "3efb380fb058a5831123a0f990676575da04e60998cada8987f034675b61f12e",
+  "base_sha": "3897fd8ebfbb42336534888724c7ad9db8fe0e31",
+  "test_first_sha": "593aff702b766dcc3dab8b57be68c29fc716bd10",
+  "red_precondition_correction_sha": "9c6a0d5c06e6126807a765c89e56b9ab7818b046",
+  "pre_implementation_sha": "66e53387680b64ded45480499d2a023927c1b0b3",
+  "policy": {
+    "version": 1,
+    "source_sha": "3897fd8ebfbb42336534888724c7ad9db8fe0e31",
+    "sha256": "3bdc1b20300df2aefd799356a41b3e8e652f87e8094744fb279e42a0d2560c6f",
+    "original_ratification": "https://github.com/smutti/codenoesis/pull/42",
+    "hash_amendment": "https://github.com/smutti/codenoesis/pull/49",
+    "original_binding": "https://github.com/smutti/codenoesis/pull/46",
+    "amendment_binding": "https://github.com/smutti/codenoesis/pull/51"
+  },
+  "red": {
+    "test_id": "e2e_fr_cli_001_workspace_docs_query",
+    "command": "cargo test --test e2e_fr_cli_001_workspace_docs_query",
+    "runner_exit_code": 101,
+    "subject_exit_code": 2,
+    "subject_stdout": "empty",
+    "subject_stderr_schema": "codenoesis.error/v4",
+    "subject_stderr_code": "input.invalid_profile",
+    "store_created": false,
+    "documents_root_created": false,
+    "expected_failure": "The black-box test must reach its explicit unsupported-profile assertion after observing exit 2, empty stdout, strict V4 input.invalid_profile, and no created roots.",
+    "observed_failure": "The black-box test reached the explicit panic: expected S4 scan success; observed the approved unsupported-profile Red.",
+    "recorded_issue_comment": "https://github.com/smutti/codenoesis/issues/47#issuecomment-5101637182",
+    "log": {
+      "path": "crates/noesis/tests/evidence/s4/red/e2e_fr_cli_001_workspace_docs_query.log",
+      "sha256": "b2d60d515db56dd06bbae68114559f22209ab3fc378a18ff6b2c67903a32e554",
+      "bytes": 861
+    }
+  },
+  "rejected_attempts": [
+    {
+      "reason": "The first test-first run emitted the inherited V2 error envelope instead of the ratified V4 envelope.",
+      "issue_comment": "https://github.com/smutti/codenoesis/issues/47#issuecomment-5095232696",
+      "log_sha256": "29ece7f8a380d46cfe37549e0b0c15b5e816a66af66dfeea574bda1c19b84a85"
+    }
+  ],
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "macos": "26.5.2 (25F84)",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "features": []
+  },
+  "limitation": "This retained local Red is not exact-head CI evidence and must not be used to claim the requirement Verified."
+}

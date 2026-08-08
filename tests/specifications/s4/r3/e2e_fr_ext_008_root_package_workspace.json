@@ -1,0 +1,179 @@
+{
+  "schema_version": "codenoesis.acceptance-specification/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/96",
+  "requirement_ids": [
+    "FR-EXT-008"
+  ],
+  "requirement_status": {
+    "current": "Proposed",
+    "target_after_protected_merge": "Approved"
+  },
+  "slice": "S4",
+  "roadmap_capability": "R3",
+  "risk": "high",
+  "required_base": "36e8fefe37e21ac936dedda9198465d655cebeba",
+  "authorization": "https://github.com/smutti/codenoesis/issues/96#issuecomment-5158164180",
+  "governance_corrections": [
+    "https://github.com/smutti/codenoesis/issues/96#issuecomment-5158197452",
+    "https://github.com/smutti/codenoesis/issues/96#issuecomment-5158328256"
+  ],
+  "selector": {
+    "flag": "--workspace-profile",
+    "value": "cargo-root-package-v1",
+    "required_profile": "standard-local-s4",
+    "implicit_selection": false,
+    "composes_with": [
+      "local-git-sha1-packed-v1",
+      "local-gitlinks-v1"
+    ]
+  },
+  "contracts": {
+    "decision": "docs/software/decisions/0011-s4-root-package-workspace-contract.md",
+    "configuration": "tests/specifications/s4/r3/configuration-v3.schema.json",
+    "snapshot": "tests/specifications/s4/r3/repository-snapshot-v6.schema.json",
+    "extraction_chunk": "tests/specifications/s4/r3/extraction-chunk-v3.schema.json",
+    "knowledge_graph": "tests/specifications/s4/r3/knowledge-graph-v3.schema.json",
+    "ontology": "tests/specifications/s4/r3/rust-ontology-v3.json",
+    "error": "tests/specifications/s4/r3/codenoesis-error-v10.schema.json",
+    "semantic_hashes": "tests/specifications/s4/r3/semantic-hash-contract-v2.json",
+    "fixture": "tests/fixtures/s4/root-package-workspace-v1/manifest.json",
+    "expected_workspace_plan": "tests/fixtures/s4/root-package-workspace-v1/expected-workspace-plan.json"
+  },
+  "first_red": {
+    "command": "cargo test --locked -p noesis --test e2e_fr_ext_008_root_package_workspace -- e2e_fr_ext_008_root_package_workspace --exact",
+    "cause": "unrecognized --workspace-profile cargo-root-package-v1 selector",
+    "runner": "fails only because RepositorySnapshotV6 success was expected",
+    "subject_exit_code": 2,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "{\"code\":\"input.invalid_revision\",\"context\":{},\"message\":\"invalid revision\",\"retryable\":false,\"schema_version\":\"codenoesis.error/v4\",\"stage\":\"input\"}\n",
+    "stderr_bytes": 149,
+    "stderr_sha256": "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe",
+    "store_exists": false,
+    "forbidden_red_causes": [
+      "compilation failure",
+      "fixture failure",
+      "acquisition failure",
+      "dependency outage",
+      "panic",
+      "timeout",
+      "target execution",
+      "side effect",
+      "different subject error"
+    ]
+  },
+  "ordered_scenarios": [
+    "exact RepositorySnapshotV6 for the implicit non-virtual fixture",
+    "standalone root package",
+    "unchanged virtual-workspace control under the selected profile",
+    "explicit dot root retains implicit-root crate IDs without duplication",
+    "literal members and exclusions use canonical order",
+    "member and exclusion conflict fails closed",
+    "conventional and explicit lib and bin targets are deterministic",
+    "multiple conventional binary roots are bounded",
+    "deferred R4 manifest families emit exact coverage capabilities",
+    "build script, proc macro, Cargo, rustc, and target sentinels never execute",
+    "gitlink workspace member remains an R2 external boundary",
+    "R2 selector absence retains inherited gitlink rejection",
+    "malformed, escaping, duplicate, missing, ambiguous, and Unicode variants fail closed",
+    "every R3 maximum and maximum-plus-one is exact",
+    "50 permutations and shuffled parallel replay are byte-identical",
+    "V6 publication reuses existing roles and transaction semantics",
+    "docs expose coverage and exact-ID query resolves entity evidence and gap IDs",
+    "selector-absent V4 and V5 outputs remain byte-identical",
+    "pinned non-vendored Lekton R1+R3 pilot completes",
+    "pinned non-vendored RustDesk R1+R2+R3 pilot completes without nested source"
+  ],
+  "limits": {
+    "single_manifest_bytes": 4194304,
+    "workspace_members": 200,
+    "projected_workspace_members": 201,
+    "workspace_exclusions": 200,
+    "package_manifests": 200,
+    "workspace_crates": 200,
+    "binary_roots_per_package": 64,
+    "permutations": 50
+  },
+  "error_v10": {
+    "input.invalid_workspace_profile": 2,
+    "extraction.invalid_workspace_manifest": 11,
+    "extraction.workspace_member_conflict": 11,
+    "extraction.workspace_target_conflict": 11,
+    "extraction.root_package_limit_exceeded": 11,
+    "internal.unexpected": 70
+  },
+  "required_test_names": [
+    "e2e_fr_ext_008_root_package_workspace",
+    "gt_fr_ext_008_root_membership_and_targets",
+    "conf_fr_ext_008_snapshot_v6_graph_v3_error_v10",
+    "pt_dr_idn_002_r3_preserves_v2_identity_domains",
+    "pt_fr_ext_008_limits_have_max_and_plus_one",
+    "pt_nfr_det_001_r3_permutation_and_schedule_invariant",
+    "sec_fr_ext_008_deferred_cargo_meaning_never_executes",
+    "sec_fr_ext_008_gitlink_member_stays_external",
+    "reg_fr_cli_001_r3_selector_absence_is_byte_identical",
+    "e2e_fr_doc_001_r3_coverage_is_documented",
+    "e2e_fr_qry_001_r3_exact_id_results"
+  ],
+  "public_pilots": [
+    {
+      "id": "lekton",
+      "repository": "dghilardi/lekton",
+      "commit": "7a4d1a4a30468f4c18ce158a9b825680b00f4820",
+      "profiles": [
+        "local-git-sha1-packed-v1",
+        "cargo-root-package-v1"
+      ],
+      "expected": "scan_docs_query_success_with_deferred_coverage",
+      "vendored_source": false
+    },
+    {
+      "id": "rustdesk",
+      "repository": "rustdesk/rustdesk",
+      "commit": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "profiles": [
+        "local-git-sha1-packed-v1",
+        "local-gitlinks-v1",
+        "cargo-root-package-v1"
+      ],
+      "expected": "scan_docs_query_success_with_one_unbound_external_boundary",
+      "boundary_path": "libs/hbb_common",
+      "boundary_commit": "69cea8dafee147848ae88702029f4bf7df7224c3",
+      "nested_source_opened": false,
+      "vendored_source": false
+    }
+  ],
+  "immutable_dependencies": {
+    "s4_contract_bundle_sha256": "3efb380fb058a5831123a0f990676575da04e60998cada8987f034675b61f12e",
+    "r2_contract_bundle_sha256": "2f59bb311b64b0f4f9d506266f05e9e52f4c0bf5af8926276ed371967690969b"
+  },
+  "forbidden_authority": [
+    "Cargo process",
+    "rustc process",
+    "build script",
+    "procedural macro",
+    "target process",
+    "Git process",
+    "network or DNS",
+    "dependency fetch",
+    "glob expansion",
+    "environment expansion",
+    "implicit nested repository read",
+    "outside-root read",
+    "repository write",
+    "automatic retry",
+    "first-party unsafe",
+    "model provider"
+  ],
+  "stop_conditions": [
+    "root membership or target identity is ambiguous",
+    "v2 identity domains cannot be preserved for unchanged facts",
+    "selector-absent V4 or V5 bytes change",
+    "existing local-store DDL marker role or transaction meaning must change",
+    "Cargo or target execution becomes necessary",
+    "a gitlink member must be opened as root source",
+    "a protected inherited oracle must change",
+    "scope risk dependency or rollback changes",
+    "five correction rounds are exhausted"
+  ]
+}

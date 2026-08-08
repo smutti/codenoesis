@@ -20,5 +20,318 @@
     "benchmarks/baselines/**",
     "benchmarks/results/baselines/**"
   ],
-  "approved_requirements": []
+  "approved_requirements": [
+    {
+      "id": "DR-ART-001",
+      "slice": "S0",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-22T19:41:36Z",
+      "source_sha": "a9c718504d126f9c3b398aed3714c132243d3d3c",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/12"
+    },
+    {
+      "id": "DR-ART-002",
+      "slice": "S0",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-22T19:41:36Z",
+      "source_sha": "a9c718504d126f9c3b398aed3714c132243d3d3c",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/12"
+    },
+    {
+      "id": "DR-EVD-001",
+      "slice": "S1",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-23T18:42:06Z",
+      "source_sha": "88abc745ab26a6a65615e5ead46076e18a02d9e1",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/17"
+    },
+    {
+      "id": "DR-IDN-001",
+      "slice": "S2",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-24T19:29:34Z",
+      "source_sha": "6675f81410ce79e6d5b8a8085502f5331ea61d75",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/23"
+    },
+    {
+      "id": "DR-IDN-002",
+      "slice": "S4",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T10:33:49Z",
+      "source_sha": "bfc21f574a7e99f5b236d70065def61b472ba12f",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/55"
+    },
+    {
+      "id": "DR-SEM-001",
+      "slice": "S7",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T15:39:07Z",
+      "source_sha": "d5991a0680db4392f4cad1a016cc7022d9cced77",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/63"
+    },
+    {
+      "id": "FR-ACQ-001",
+      "slice": "S0",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-22T19:41:36Z",
+      "source_sha": "a9c718504d126f9c3b398aed3714c132243d3d3c",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/12"
+    },
+    {
+      "id": "FR-ACQ-002",
+      "slice": "S1",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-23T18:42:06Z",
+      "source_sha": "88abc745ab26a6a65615e5ead46076e18a02d9e1",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/17"
+    },
+    {
+      "id": "FR-ACQ-004",
+      "slice": "S1",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T14:38:16Z",
+      "source_sha": "bc4569d06ab2f8c9baea197f129c3b4f1676cd18",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/61"
+    },
+    {
+      "id": "FR-CLI-001",
+      "slice": "S4",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T10:33:49Z",
+      "source_sha": "bfc21f574a7e99f5b236d70065def61b472ba12f",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/55"
+    },
+    {
+      "id": "FR-CLI-003",
+      "slice": "S0",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-22T19:41:36Z",
+      "source_sha": "a9c718504d126f9c3b398aed3714c132243d3d3c",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/12"
+    },
+    {
+      "id": "FR-CLI-004",
+      "slice": "S5",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T17:18:46Z",
+      "source_sha": "88086c5a0f0436d140477dce4ed6974288b89e14",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/67"
+    },
+    {
+      "id": "FR-DOC-001",
+      "slice": "S4",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T10:33:49Z",
+      "source_sha": "bfc21f574a7e99f5b236d70065def61b472ba12f",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/55"
+    },
+    {
+      "id": "FR-DOC-002",
+      "slice": "S4",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T10:33:49Z",
+      "source_sha": "bfc21f574a7e99f5b236d70065def61b472ba12f",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/55"
+    },
+    {
+      "id": "FR-DOC-003",
+      "slice": "S4",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T10:33:49Z",
+      "source_sha": "bfc21f574a7e99f5b236d70065def61b472ba12f",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/55"
+    },
+    {
+      "id": "FR-EXT-001",
+      "slice": "S2",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-24T19:29:34Z",
+      "source_sha": "6675f81410ce79e6d5b8a8085502f5331ea61d75",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/23"
+    },
+    {
+      "id": "FR-EXT-002",
+      "slice": "S2",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-24T19:29:34Z",
+      "source_sha": "6675f81410ce79e6d5b8a8085502f5331ea61d75",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/23"
+    },
+    {
+      "id": "FR-EXT-007",
+      "slice": "S4",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T10:33:49Z",
+      "source_sha": "bfc21f574a7e99f5b236d70065def61b472ba12f",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/55"
+    },
+    {
+      "id": "FR-IMP-004",
+      "slice": "S7",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T15:39:07Z",
+      "source_sha": "d5991a0680db4392f4cad1a016cc7022d9cced77",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/63"
+    },
+    {
+      "id": "FR-IMP-005",
+      "slice": "S7",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T15:39:07Z",
+      "source_sha": "d5991a0680db4392f4cad1a016cc7022d9cced77",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/63"
+    },
+    {
+      "id": "FR-INC-001",
+      "slice": "S5",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T17:18:46Z",
+      "source_sha": "88086c5a0f0436d140477dce4ed6974288b89e14",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/67"
+    },
+    {
+      "id": "FR-INC-002",
+      "slice": "S5",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T17:18:46Z",
+      "source_sha": "88086c5a0f0436d140477dce4ed6974288b89e14",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/67"
+    },
+    {
+      "id": "FR-INC-003",
+      "slice": "S5",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T17:18:46Z",
+      "source_sha": "88086c5a0f0436d140477dce4ed6974288b89e14",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/67"
+    },
+    {
+      "id": "FR-INV-001",
+      "slice": "S1",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-23T18:42:06Z",
+      "source_sha": "88abc745ab26a6a65615e5ead46076e18a02d9e1",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/17"
+    },
+    {
+      "id": "FR-KNW-001",
+      "slice": "S2",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-24T19:29:34Z",
+      "source_sha": "6675f81410ce79e6d5b8a8085502f5331ea61d75",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/23"
+    },
+    {
+      "id": "FR-KNW-002",
+      "slice": "S2",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-24T19:29:34Z",
+      "source_sha": "6675f81410ce79e6d5b8a8085502f5331ea61d75",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/23"
+    },
+    {
+      "id": "FR-KNW-003",
+      "slice": "S2",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-24T19:29:34Z",
+      "source_sha": "6675f81410ce79e6d5b8a8085502f5331ea61d75",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/23"
+    },
+    {
+      "id": "FR-QRY-001",
+      "slice": "S4",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T10:33:49Z",
+      "source_sha": "bfc21f574a7e99f5b236d70065def61b472ba12f",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/55"
+    },
+    {
+      "id": "FR-SNP-001",
+      "slice": "S3",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-26T15:31:01Z",
+      "source_sha": "3d14e4698563543b663de58fc4eea8740b724940",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/29"
+    },
+    {
+      "id": "FR-STO-001",
+      "slice": "S3",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-26T15:31:01Z",
+      "source_sha": "3d14e4698563543b663de58fc4eea8740b724940",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/29"
+    },
+    {
+      "id": "INV-INC-001",
+      "slice": "S5",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-29T17:18:46Z",
+      "source_sha": "88086c5a0f0436d140477dce4ed6974288b89e14",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/67"
+    },
+    {
+      "id": "INV-SNP-001",
+      "slice": "S3",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-26T15:31:01Z",
+      "source_sha": "3d14e4698563543b663de58fc4eea8740b724940",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/29"
+    },
+    {
+      "id": "NFR-DET-001",
+      "slice": "S0",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-22T19:41:36Z",
+      "source_sha": "a9c718504d126f9c3b398aed3714c132243d3d3c",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/12"
+    },
+    {
+      "id": "NFR-MNT-001",
+      "slice": "S0",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-22T19:41:36Z",
+      "source_sha": "a9c718504d126f9c3b398aed3714c132243d3d3c",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/12"
+    },
+    {
+      "id": "NFR-REL-001",
+      "slice": "S3",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-26T15:31:01Z",
+      "source_sha": "3d14e4698563543b663de58fc4eea8740b724940",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/29"
+    },
+    {
+      "id": "NFR-SEC-001",
+      "slice": "S1",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-23T18:42:06Z",
+      "source_sha": "88abc745ab26a6a65615e5ead46076e18a02d9e1",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/17"
+    },
+    {
+      "id": "NFR-SEC-005",
+      "slice": "S0",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-22T19:41:36Z",
+      "source_sha": "a9c718504d126f9c3b398aed3714c132243d3d3c",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/12"
+    },
+    {
+      "id": "NFR-TST-001",
+      "slice": "S0",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-22T19:41:36Z",
+      "source_sha": "a9c718504d126f9c3b398aed3714c132243d3d3c",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/12"
+    },
+    {
+      "id": "NFR-TST-002",
+      "slice": "S0",
+      "approved_by": "github:smutti",
+      "approved_at": "2026-07-22T19:41:36Z",
+      "source_sha": "a9c718504d126f9c3b398aed3714c132243d3d3c",
+      "approval_reference": "https://github.com/smutti/codenoesis/pull/12"
+    }
+  ]
 }

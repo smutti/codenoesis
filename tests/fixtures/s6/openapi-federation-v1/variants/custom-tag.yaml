@@ -1,0 +1,7 @@
+openapi: 3.1.0
+info: !codenoesis
+  title: Custom Tag
+  version: 1.0.0
+servers:
+  - url: https://api.example.invalid
+paths: {}

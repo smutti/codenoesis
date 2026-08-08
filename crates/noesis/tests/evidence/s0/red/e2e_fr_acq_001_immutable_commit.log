@@ -1,0 +1,48 @@
+CodeNoesis S0 local Red observation
+command: cargo test --test e2e_fr_acq_001_immutable_commit
+runner_exit_code: 101
+subject_exit_code: 70
+pre_implementation_sha: d5fdc8a2f9b599cc7bcf45dd976a109a5ae25dfc
+base_sha: 4a92d29b88363ef06437a698835c65d605039d44
+observed_at: 2026-07-22T05:47:51Z
+
+--- original combined runner output ---
+warning: output of `xcrun` while finding MacOSX.sdk
+  |
+  = note: 2026-07-21 22:12:38.116 xcodebuild[68794:2126479]  DVTFilePathFSEvents: Failed to start fs event stream.
+          2026-07-21 22:12:38.381 xcodebuild[68794:2126478] [MT] DVTDeveloperPaths: Failed to get length of DARWIN_USER_CACHE_DIR from confstr(3), error = Error Domain=NSPOSIXErrorDomain Code=5 "Input/output error". Using NSCachesDirectory instead.
+          2026-07-21 22:12:38.818 xcodebuild[68803:2126552]  DVTFilePathFSEvents: Failed to start fs event stream.
+          2026-07-21 22:12:38.954 xcodebuild[68803:2126550] [MT] DVTDeveloperPaths: Failed to get length of DARWIN_USER_CACHE_DIR from confstr(3), error = Error Domain=NSPOSIXErrorDomain Code=5 "Input/output error". Using NSCachesDirectory instead.
+
+warning: `noesis` (test "e2e_fr_acq_001_immutable_commit") generated 1 warning
+warning: output of `xcrun` while finding MacOSX.sdk
+  |
+  = note: 2026-07-21 22:12:38.116 xcodebuild[68785:2126370]  DVTFilePathFSEvents: Failed to start fs event stream.
+          2026-07-21 22:12:38.381 xcodebuild[68785:2126367] [MT] DVTDeveloperPaths: Failed to get length of DARWIN_USER_CACHE_DIR from confstr(3), error = Error Domain=NSPOSIXErrorDomain Code=5 "Input/output error". Using NSCachesDirectory instead.
+          2026-07-21 22:12:38.818 xcodebuild[68804:2126551]  DVTFilePathFSEvents: Failed to start fs event stream.
+          2026-07-21 22:12:38.954 xcodebuild[68804:2126549] [MT] DVTDeveloperPaths: Failed to get length of DARWIN_USER_CACHE_DIR from confstr(3), error = Error Domain=NSPOSIXErrorDomain Code=5 "Input/output error". Using NSCachesDirectory instead.
+
+warning: `noesis` (bin "noesis") generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running tests/e2e_fr_acq_001_immutable_commit.rs (target/debug/deps/e2e_fr_acq_001_immutable_commit-996f08fd24ff24bd)
+
+running 1 test
+test e2e_fr_acq_001_immutable_commit ... FAILED
+
+failures:
+
+---- e2e_fr_acq_001_immutable_commit stdout ----
+
+thread 'e2e_fr_acq_001_immutable_commit' (2473510) panicked at crates/noesis/tests/e2e_fr_acq_001_immutable_commit.rs:164:5:
+assertion `left == right` failed: expected subject exit 0 with RepositorySnapshotV1; observed subject exit Some(70); stdout=""; stderr="S0_NOT_IMPLEMENTED\n"
+  left: Some(70)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    e2e_fr_acq_001_immutable_commit
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_acq_001_immutable_commit`

@@ -1,0 +1,23 @@
+openapi: 3.1.0
+info:
+  title: Reference Cycle
+  version: 1.0.0
+servers:
+  - url: https://api.example.invalid
+paths:
+  /users/{id}:
+    get:
+      operationId: getUser
+      responses:
+        "200":
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/A"
+components:
+  schemas:
+    A:
+      $ref: "#/components/schemas/B"
+    B:
+      $ref: "#/components/schemas/A"

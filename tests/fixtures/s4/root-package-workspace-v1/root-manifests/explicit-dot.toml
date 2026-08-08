@@ -1,0 +1,40 @@
+[package]
+name = "root-app"
+version = "0.1.0"
+edition = "2024"
+build = "build.rs"
+default-run = "root-app"
+
+[workspace]
+members = ["external/model", ".", "crates/macro-sentinel", "crates/cli"]
+exclude = ["excluded/legacy"]
+resolver = "3"
+
+[lib]
+name = "root_app"
+path = "src/lib.rs"
+
+[[bin]]
+name = "root-app"
+path = "src/main.rs"
+
+[[bin]]
+name = "root-admin"
+path = "src/bin/admin.rs"
+required-features = ["admin"]
+
+[features]
+default = []
+admin = []
+
+[dependencies]
+serde = "1"
+
+[build-dependencies]
+cc = "1"
+
+[patch.crates-io]
+serde = { path = "vendor/serde" }
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = "0.59"
