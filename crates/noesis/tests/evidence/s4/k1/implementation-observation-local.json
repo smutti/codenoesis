@@ -14,7 +14,9 @@
     "FR-QRY-001",
     "FR-CLI-001"
   ],
-  "risk": "high",
+  "risk": "critical",
+  "product_risk": "high",
+  "control_plane_correction_risk": "critical",
   "risk_owner": "@smutti",
   "observed_at": "2026-08-08T11:09:51Z",
   "commits": {
@@ -28,9 +30,11 @@
     "ready_issue": "https://github.com/smutti/codenoesis/issues/142",
     "complete_package_authorization": "maintainer request to proceed with K1 in the interactive Codex task on 2026-08-08, recorded in issue #142",
     "minimal_path_expansion": "https://github.com/smutti/codenoesis/issues/142#issuecomment-5225581916",
+    "windows_ci_timeout_expansion": "https://github.com/smutti/codenoesis/issues/142#issuecomment-5226237473",
     "expanded_paths": [
       "crates/codenoesis-domain/src/storage.rs",
-      "crates/codenoesis-contracts/src/s4.rs"
+      "crates/codenoesis-contracts/src/s4.rs",
+      ".github/workflows/ci.yml"
     ],
     "maintainer_supervised_single_pr": true,
     "configured_correction_rounds": 5,
@@ -179,13 +183,19 @@
   },
   "corrections": {
     "configured_rounds": 5,
-    "rounds_used": 1,
+    "rounds_used": 2,
     "first_gate_failure": "test_s4_portable_explorer_contract.S4R8PortableExplorerGovernanceTests.test_ratification_decision_srs_and_roadmap_are_exact required the historical R8 roadmap markers",
     "resolution": "Restored the four immutable R8 marker strings as explicitly historical prose while preserving the current R0-R8 and K1 planning state.",
     "affected_governance_command": "python3 -m unittest scripts.tests.test_s4_portable_explorer_contract scripts.tests.test_s4_k1_rust_callable_semantics_contract",
     "affected_governance_tests_passed": 24,
     "affected_governance_exit_status": 0,
-    "scope_risk_dependencies_or_oracle_changed": false
+    "first_correction_scope_risk_dependencies_or_oracle_changed": false,
+    "windows_ci_timeout_run": "https://github.com/smutti/codenoesis/actions/runs/31254768550/job/93096430035",
+    "windows_ci_timeout_failure": "The 15-minute portability job budget cancelled the Windows full suite during the pre-existing ft_fr_snp_001_publication_failpoint_matrix after every K1 Windows test passed.",
+    "windows_ci_timeout_resolution": "Increase only the portability job timeout from 15 to 20 minutes; commands, matrix, permissions, secrets, actions, required jobs, and pass/fail semantics remain unchanged.",
+    "second_correction_control_plane_scope_expanded": true,
+    "second_correction_risk": "critical",
+    "second_correction_product_dependencies_contracts_fixtures_or_oracle_changed": false
   },
   "retained_red": {
     "observation": "tests/specifications/s4/k1/red-observation.json",
@@ -222,6 +232,7 @@
     "dependency_graph_changed": false
   },
   "actual_changed_paths": [
+    ".github/workflows/ci.yml",
     "crates/codenoesis-application/src/lib.rs",
     "crates/codenoesis-application/src/s4_k1.rs",
     "crates/codenoesis-application/tests/s4_k1_rust_callable_semantics.rs",
