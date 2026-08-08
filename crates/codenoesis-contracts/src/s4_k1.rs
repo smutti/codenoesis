@@ -24,7 +24,7 @@ use codenoesis_domain::storage::{
     StorageError,
 };
 use codenoesis_domain::{
-    AcquisitionError, LimitKind, RepositoryInventory, STANDARD_LOCAL_S1_LIMITS, limit_exceeded,
+    AcquisitionError, K1OutputCapacityProfile, LimitKind, RepositoryInventory,
 };
 use serde_json::{Map, Value, json};
 
@@ -533,13 +533,25 @@ impl RepositorySnapshotV11 {
         Ok(Self { value })
     }
 
-    /// Serializes the complete V11 snapshot with the inherited output bound.
+    /// Serializes the complete V11 snapshot with the inherited standard bound.
     ///
     /// # Errors
     ///
     /// Returns a serialization or output-limit failure.
     pub fn canonical_stdout(&self) -> Result<Vec<u8>, RepositorySnapshotV11Error> {
-        let maximum = usize::try_from(STANDARD_LOCAL_S1_LIMITS.canonical_output_bytes)
+        self.canonical_stdout_with_output_capacity(K1OutputCapacityProfile::Standard)
+    }
+
+    /// Serializes the complete V11 snapshot under one closed output envelope.
+    ///
+    /// # Errors
+    ///
+    /// Returns a serialization or selected output-limit failure.
+    pub fn canonical_stdout_with_output_capacity(
+        &self,
+        profile: K1OutputCapacityProfile,
+    ) -> Result<Vec<u8>, RepositorySnapshotV11Error> {
+        let maximum = usize::try_from(profile.maximum_bytes())
             .map_err(|_| RepositorySnapshotV11Error::OutputLengthOverflow)?;
         let body_maximum = maximum
             .checked_sub(1)
@@ -547,12 +559,13 @@ impl RepositorySnapshotV11 {
         let mut writer = LimitedVecWriter::new(body_maximum);
         let result = serde_json::to_writer(&mut writer, &self.value);
         if writer.overflowed() {
-            return Err(RepositorySnapshotV11Error::LimitExceeded(limit_exceeded(
-                LimitKind::CanonicalOutputBytes,
-                STANDARD_LOCAL_S1_LIMITS
-                    .canonical_output_bytes
-                    .saturating_add(1),
-            )));
+            return Err(RepositorySnapshotV11Error::LimitExceeded(
+                AcquisitionError::LimitExceeded {
+                    limit: LimitKind::CanonicalOutputBytes,
+                    maximum: profile.maximum_bytes(),
+                    observed: profile.maximum_bytes().saturating_add(1),
+                },
+            ));
         }
         result.map_err(RepositorySnapshotV11Error::Serialization)?;
         let mut bytes = writer.into_inner();
@@ -1641,5 +1654,73 @@ fn bounded_repository_path(value: &str) -> String {
         )
     } else {
         "repository-path".to_owned()
+    }
+}
+
+#[cfg(test)]
+mod output_capacity_tests {
+    use super::*;
+    use codenoesis_domain::{LOCAL_SNAPSHOT_64M_CANONICAL_OUTPUT_BYTES, STANDARD_LOCAL_S1_LIMITS};
+
+    #[test]
+    fn pt_inv_bnd_001_k1_output_capacity_maximum_plus_one() {
+        for (profile, expected_maximum) in [
+            (
+                K1OutputCapacityProfile::Standard,
+                STANDARD_LOCAL_S1_LIMITS.canonical_output_bytes,
+            ),
+            (
+                K1OutputCapacityProfile::LocalSnapshot64MV1,
+                LOCAL_SNAPSHOT_64M_CANONICAL_OUTPUT_BYTES,
+            ),
+        ] {
+            assert_capacity_boundary(profile, expected_maximum);
+        }
+    }
+
+    #[test]
+    fn reg_fr_cli_001_k1_output_capacity_preserves_small_bytes() {
+        let snapshot = RepositorySnapshotV11 {
+            value: json!({"small": true}),
+        };
+        let standard = snapshot.canonical_stdout().expect("standard output");
+        let explicit_standard = snapshot
+            .canonical_stdout_with_output_capacity(K1OutputCapacityProfile::Standard)
+            .expect("explicit standard output");
+        let large = snapshot
+            .canonical_stdout_with_output_capacity(K1OutputCapacityProfile::LocalSnapshot64MV1)
+            .expect("large-envelope output");
+        assert_eq!(standard, explicit_standard);
+        assert_eq!(standard, large);
+    }
+
+    fn assert_capacity_boundary(profile: K1OutputCapacityProfile, expected_maximum: u64) {
+        assert_eq!(profile.maximum_bytes(), expected_maximum);
+        let maximum = usize::try_from(expected_maximum).expect("test maximum fits usize");
+        let exact = RepositorySnapshotV11 {
+            value: Value::String("x".repeat(maximum - 3)),
+        };
+        let bytes = exact
+            .canonical_stdout_with_output_capacity(profile)
+            .expect("exact maximum must serialize");
+        assert_eq!(bytes.len(), maximum);
+        drop(bytes);
+        drop(exact);
+
+        let plus_one = RepositorySnapshotV11 {
+            value: Value::String("x".repeat(maximum - 2)),
+        };
+        match plus_one.canonical_stdout_with_output_capacity(profile) {
+            Err(RepositorySnapshotV11Error::LimitExceeded(AcquisitionError::LimitExceeded {
+                limit,
+                maximum,
+                observed,
+            })) => {
+                assert_eq!(limit, LimitKind::CanonicalOutputBytes);
+                assert_eq!(maximum, expected_maximum);
+                assert_eq!(observed, expected_maximum + 1);
+            }
+            other => panic!("expected maximum-plus-one failure, got {other:?}"),
+        }
     }
 }

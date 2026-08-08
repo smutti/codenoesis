@@ -68,7 +68,8 @@ use codenoesis_domain::storage::{
     StorageComponent, StorageError,
 };
 use codenoesis_domain::{
-    InputError, LimitKind, RepositoryIdentity, Revision, STANDARD_LOCAL_S1_LIMITS, limit_exceeded,
+    InputError, K1OutputCapacityProfile, LOCAL_SNAPSHOT_64M_V1, LimitKind, RepositoryIdentity,
+    Revision, STANDARD_LOCAL_S1_LIMITS, limit_exceeded,
 };
 use codenoesis_lang_rust::{TreeSitterRustExtractor, TreeSitterRustWorkspaceExtractor};
 use codenoesis_ports::{AnalysisCacheStore, ArtifactStore, NoopPublicationObserver};
@@ -140,7 +141,9 @@ fn main() -> ExitCode {
     let export_requested = arguments.get(1).is_some_and(|value| value == "export");
     let explore_requested = arguments.get(1).is_some_and(|value| value == "explore");
     let r8_requested = export_requested || explore_requested;
-    let k1_scan_requested = option_requested(&arguments, "--rust-callable-profile");
+    let output_capacity_requested = option_requested(&arguments, "--output-capacity-profile");
+    let k1_scan_requested =
+        option_requested(&arguments, "--rust-callable-profile") || output_capacity_requested;
     let k1_requested = k1_scan_requested
         || option_requested(&arguments, "--portable-profile")
         || option_requested(&arguments, "--explorer-profile");
@@ -182,7 +185,9 @@ fn main() -> ExitCode {
     let s4_error_lineage = s4_requested || docs_requested || query_requested;
     let s3_error_lineage = s3_requested || s4_error_lineage;
     let s2_requested = requested_profile(&arguments, "standard-local-s2");
-    let result = if export_requested {
+    let result = if output_capacity_requested {
+        run_s4(arguments, scan_worker.as_mut())
+    } else if export_requested {
         run_export(arguments)
     } else if explore_requested {
         run_explore(arguments)
@@ -592,6 +597,7 @@ fn run_s4_k1(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Vec
         .clone()
         .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
     let repository = invocation.repository.clone();
+    let output_capacity_profile = invocation.output_capacity_profile;
     let started_at = Instant::now();
     let scan_repository = repository.clone();
     let scan = run_confined_scan(
@@ -617,7 +623,7 @@ fn run_s4_k1(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Vec
     )
     .map_err(|()| k1_internal_failure())??;
     enforce_scan_deadline(started_at)?;
-    let stdout = serialize_v11(&scan.snapshot)?;
+    let stdout = serialize_v11(&scan.snapshot, output_capacity_profile)?;
     let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
         .is_err_and(|error| error.kind() == io::ErrorKind::NotFound);
     let mut rollback = EmptyStoreRollback::new(store.clone(), store_was_absent);
@@ -2404,15 +2410,20 @@ fn serialize_v10(snapshot: &RepositorySnapshotV10) -> Result<Vec<u8>, Failure> {
     })
 }
 
-fn serialize_v11(snapshot: &RepositorySnapshotV11) -> Result<Vec<u8>, Failure> {
-    snapshot.canonical_stdout().map_err(|error| match error {
-        RepositorySnapshotV11Error::LimitExceeded(error) => {
-            Failure::Scan(ScanError::Acquisition(error))
-        }
-        RepositorySnapshotV11Error::Serialization(_)
-        | RepositorySnapshotV11Error::ContractInvalid
-        | RepositorySnapshotV11Error::OutputLengthOverflow => k1_internal_failure(),
-    })
+fn serialize_v11(
+    snapshot: &RepositorySnapshotV11,
+    output_capacity_profile: K1OutputCapacityProfile,
+) -> Result<Vec<u8>, Failure> {
+    snapshot
+        .canonical_stdout_with_output_capacity(output_capacity_profile)
+        .map_err(|error| match error {
+            RepositorySnapshotV11Error::LimitExceeded(error) => {
+                Failure::Scan(ScanError::Acquisition(error))
+            }
+            RepositorySnapshotV11Error::Serialization(_)
+            | RepositorySnapshotV11Error::ContractInvalid
+            | RepositorySnapshotV11Error::OutputLengthOverflow => k1_internal_failure(),
+        })
 }
 
 fn enforce_scan_deadline(started_at: Instant) -> Result<(), Failure> {
@@ -3691,7 +3702,9 @@ fn valid_s4_root_argument(value: &OsStr) -> bool {
 }
 
 fn parse_s4_invocation(arguments: Vec<OsString>) -> Result<Invocation, InvocationError> {
-    if option_requested(&arguments, "--rust-callable-profile") {
+    if option_requested(&arguments, "--rust-callable-profile")
+        || option_requested(&arguments, "--output-capacity-profile")
+    {
         return parse_k1_invocation(&arguments);
     }
     let compiler_requested = option_requested(&arguments, "--compiler-index-profile")
@@ -3784,7 +3797,10 @@ fn parse_s4_invocation(arguments: Vec<OsString>) -> Result<Invocation, Invocatio
 }
 
 fn parse_k1_invocation(arguments: &[OsString]) -> Result<Invocation, InvocationError> {
-    if option_requested(arguments, "--compiler-index-profile")
+    if arguments
+        .get(1)
+        .is_none_or(|value| value != OsStr::new("scan"))
+        || option_requested(arguments, "--compiler-index-profile")
         || option_requested(arguments, "--compiler-index-binding")
         || option_requested(arguments, "--repository-boundary-profile")
         || option_requested(arguments, "--repository-boundary-manifest")
@@ -3793,6 +3809,7 @@ fn parse_k1_invocation(arguments: &[OsString]) -> Result<Invocation, InvocationE
     }
     let mut stripped = arguments.iter().take(2).cloned().collect::<Vec<_>>();
     let mut callable_profile = None;
+    let mut output_capacity_profile = None;
     let mut index = 2;
     while index < arguments.len() {
         let flag = &arguments[index];
@@ -3807,6 +3824,14 @@ fn parse_k1_invocation(arguments: &[OsString]) -> Result<Invocation, InvocationE
                 return Err(InvocationError::InvalidRustCallableProfile(String::new()));
             };
             callable_profile = Some(value.to_owned());
+        } else if flag == OsStr::new("--output-capacity-profile") {
+            if output_capacity_profile.is_some() {
+                return Err(InvocationError::InvalidRustCallableComposition);
+            }
+            let Some(value) = value.to_str() else {
+                return Err(InvocationError::InvalidRustCallableComposition);
+            };
+            output_capacity_profile = Some(value.to_owned());
         } else {
             stripped.push(flag.clone());
             stripped.push(value.clone());
@@ -3821,6 +3846,11 @@ fn parse_k1_invocation(arguments: &[OsString]) -> Result<Invocation, InvocationE
             callable_profile,
         ));
     }
+    let output_capacity_profile = match output_capacity_profile.as_deref() {
+        None => K1OutputCapacityProfile::Standard,
+        Some(LOCAL_SNAPSHOT_64M_V1) => K1OutputCapacityProfile::LocalSnapshot64MV1,
+        Some(_) => return Err(InvocationError::InvalidRustCallableComposition),
+    };
     let mut invocation =
         Invocation::parse(stripped, Some("standard-local-s4")).map_err(|error| match error {
             InvocationError::InvalidWorkspaceProfile
@@ -3845,6 +3875,7 @@ fn parse_k1_invocation(arguments: &[OsString]) -> Result<Invocation, InvocationE
         return Err(InvocationError::InvalidRustCallableComposition);
     }
     invocation.rust_callable_profile = true;
+    invocation.output_capacity_profile = output_capacity_profile;
     Ok(invocation)
 }
 
@@ -3899,6 +3930,7 @@ struct Invocation {
     rust_semantic_profile: bool,
     rust_framework_profile: bool,
     rust_callable_profile: bool,
+    output_capacity_profile: K1OutputCapacityProfile,
     compiler_index_profile: bool,
     compiler_index_binding: Option<OsString>,
     boundary_profile: bool,
@@ -4394,6 +4426,7 @@ impl Invocation {
             rust_semantic_profile,
             rust_framework_profile,
             rust_callable_profile: false,
+            output_capacity_profile: K1OutputCapacityProfile::Standard,
             compiler_index_profile: false,
             compiler_index_binding: None,
             boundary_profile,

@@ -93,6 +93,15 @@ fn conf_fr_cli_001_output_capacity_composition_is_closed() {
         compiler.output().expect("run compiler composition"),
         &compiler_store,
     );
+
+    let boundary_store = repository.root.join("boundary-store");
+    let mut boundary = k1_scan_command(&repository, &boundary_store);
+    boundary.args(["--repository-boundary-profile", "local-gitlinks-v1"]);
+    boundary.args(["--output-capacity-profile", OUTPUT_CAPACITY_PROFILE]);
+    assert_unsupported(
+        boundary.output().expect("run boundary composition"),
+        &boundary_store,
+    );
 }
 
 fn k1_scan_command(repository: &MaterializedCallableRepository, store: &Path) -> Command {
