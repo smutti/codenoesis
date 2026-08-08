@@ -1,0 +1,54 @@
+{
+  "schema_version": "codenoesis.r9-k1-inherited-uncertainty-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-inherited-uncertainty-v1",
+  "source": "project-owned synthetic bytes",
+  "external_source_vendored": false,
+  "materialization": {
+    "object_format": "sha1",
+    "tree_oid": "98b1dc6aa284c7036996f4176938e0ad9f00e8c9",
+    "commit_oid": "f287e22afe2a9800a5a65b4452010d2113f6b6ef",
+    "author": "CodeNoesis <fixture@codenoesis.invalid>",
+    "timestamp": "2026-08-08T15:00:00Z",
+    "message": "R9 K1 inherited uncertainty fixture"
+  },
+  "files": [
+    {
+      "path": "repository/Cargo.toml",
+      "mode": "100644",
+      "byte_length": 148,
+      "sha256": "ec37cb940cd93a9cf04983f1dbdb50b68eabb8e2fc064ab351e093f4fc736d69",
+      "git_blob_oid": "67ee2f2696e98ea3abd33a52898f95f7f8872784"
+    },
+    {
+      "path": "repository/src/lib.rs",
+      "mode": "100644",
+      "byte_length": 656,
+      "sha256": "b8f32a969ac609ada176a8bf5d53b5850d67be23f198053a18fa6fa9cf35dcc2",
+      "git_blob_oid": "a50cdb5e934b5249c406d217b8657ad59251cd99"
+    }
+  ],
+  "expected": {
+    "signature_name_counts": {
+      "inherent": 1,
+      "known": 1,
+      "local": 2
+    },
+    "excluded_callable_names": [
+      "gated",
+      "hidden_test",
+      "unresolved_external_target",
+      "unresolved_external_trait"
+    ],
+    "inherited_coverage": [
+      "rust.cfg_presence_unresolved",
+      "rust.unsupported_impl_header"
+    ]
+  },
+  "authority": {
+    "process_execution_permitted": false,
+    "network_access_permitted": false,
+    "compiler_execution_permitted": false,
+    "target_execution_permitted": false,
+    "model_provider_permitted": false
+  }
+}

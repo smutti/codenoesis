@@ -1,0 +1,59 @@
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.02s
+     Running tests/s4_k1_rust_callable_semantics.rs (target/debug/deps/s4_k1_rust_callable_semantics-407430bc5f310dd4)
+
+running 2 tests
+test pt_fr_ext_012_all_limits_have_maximum_plus_one ... ok
+test pt_dr_idn_002_k1_identity_preimages_and_collisions ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.02s
+     Running tests/s4_k1_rust_callable_semantics.rs (target/debug/deps/s4_k1_rust_callable_semantics-4a9b459617404742)
+
+running 7 tests
+test reg_fr_ext_012_k1_matches_inherited_imported_owner_resolution ... ok
+test reg_fr_ext_012_k1_preserves_inherited_uncertainty ... ok
+test gt_fr_ext_012_complete_signatures_and_parameters ... ok
+test gt_fr_ext_012_calls_controls_and_lexical_nesting ... ok
+test gt_fr_ext_012_declared_values_are_bounded_and_honest ... ok
+test sec_fr_ext_012_never_executes_target_or_toolchain ... ok
+test pt_nfr_det_001_k1_fifty_permutations_ten_schedules ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.06s
+
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running tests/s4_k1_rust_callable_semantics.rs (target/debug/deps/s4_k1_rust_callable_semantics-c6b9dd02bf59b3d0)
+
+running 1 test
+test gt_fr_ext_012_application_preserves_typed_k1_failure ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running tests/s4_k1_contracts.rs (target/debug/deps/s4_k1_contracts-bc42ff5bcabdfd53)
+
+running 5 tests
+test conf_fr_ext_012_snapshot_v11_graph_v8_error_v16 ... ok
+test conf_fr_qry_001_v11_uses_local_query_result_v6 ... ok
+test sec_fr_exp_002_excludes_body_expression_and_source_text ... ok
+test conf_fr_exp_002_portable_graph_v2_lossless_reimport ... ok
+test conf_fr_exp_002_local_explorer_v2_is_offline ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling codenoesis-lang-rust v0.1.0 (<workspace>/crates/codenoesis-lang-rust)
+   Compiling noesis v0.1.0 (<workspace>/crates/noesis)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.85s
+     Running tests/e2e_fr_ext_012_rust_callable_semantics.rs (target/debug/deps/e2e_fr_ext_012_rust_callable_semantics-7d1a2b24b348869e)
+
+running 3 tests
+test reg_fr_cli_001_selector_absence_preserves_r0_r8_bytes ... ok
+test sec_fr_exp_002_xss_csp_path_and_race_fail_closed ... ok
+test e2e_fr_ext_012_rust_callable_semantics ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.12s
