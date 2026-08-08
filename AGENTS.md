@@ -35,7 +35,8 @@ Keep the two project tracks separate:
 An implementation task is Ready only when its issue states all of the following:
 
 - one or more stable requirement IDs;
-- requirement status `Approved`;
+- requirement status `Approved`, or a complete `Proposed` candidate selected
+  for the branch-scoped package defined below;
 - exactly one target slice from `S0` through `S14`;
 - a reviewable acceptance oracle and expected failure behavior;
 - risk level and rationale;
@@ -44,7 +45,9 @@ An implementation task is Ready only when its issue states all of the following:
 - required evidence and stop conditions.
 
 If a requirement is still `Proposed`, work may clarify the specification,
-fixture, oracle, threat model, or failing acceptance test, but production
+fixture, oracle, threat model, or failing acceptance test. The single-PR lane
+below is the only exception that grants bounded implementation authority for
+such a candidate. Outside this branch-scoped exception, production
 implementation must not begin.
 
 Never expand allowed paths merely because a convenient refactor is nearby.
@@ -53,52 +56,104 @@ worktree.
 
 ## Maintainer-supervised accelerated delivery
 
-A linked Ready issue may select this lane only after its requirements are
-`Approved` on `main` and the accountable maintainer explicitly authorizes the
-complete package. This is interactive, maintainer-supervised work, not
-unattended autonomous execution.
+A linked Ready issue may select a single-PR vertical package when the
+accountable maintainer explicitly authorizes the complete package. It may start
+from requirements already `Approved` on `main` or from a complete, reviewable
+candidate that remains `Proposed` until merge. This is interactive,
+maintainer-supervised work, not unattended autonomous execution.
+
+The package may combine product governance and production implementation in one
+pull request. It may also combine product code and delivery control plane in one
+pull request. Product governance comprises SRS, architecture decisions, threat
+models, schemas or ontology contracts, fixtures or oracles, traceability, and
+operational documentation. The delivery control plane includes `AGENTS.md`,
+`.github/**`, and `.codex/**`, including policy, prompts, workflows, required
+checks, permissions, review, publication, signing, and release authority.
 
 For this lane, one explicit human authorization covers the complete package
 when the issue fixes:
 
-- exact Approved requirement IDs and one delivery slice;
+- exact stable requirement IDs, complete candidate semantics, and one delivery
+  slice;
 - one demonstrable public outcome and its expected Red;
-- risk, exact allowed and protected paths, and rollback boundary;
+- risk, exact base SHA, allowed and protected paths, and rollback boundary;
+- exact control-plane, privilege, signing, release, and post-merge effects;
 - exact dependency name and version, when a dependency is required;
 - fixture or oracle, required evidence, correction budget, and stop conditions.
 
-Within that unchanged scope and risk, the agent may write the acceptance test,
-implement the complete vertical behavior, update focused tests and
-documentation, add the named dependency and resulting lockfile changes, run
+For a `Proposed` candidate, that decision grants branch-scoped implementation
+authority only for the exact package. Requirement approval and production
+behavior become effective atomically only after the accountable maintainer
+manually merges the exact pull request. Before merge, the author must describe
+the requirement as Proposed and the implementation as a candidate, not as an
+Approved, Implemented, or Verified fact on `main`.
+
+The branch MUST preserve this reviewable order:
+
+1. Create a governance checkpoint before any production source edit, containing
+   the complete candidate requirement and decisions, exact contracts and
+   oracle, traceability, and the narrowest executable acceptance or conformance
+   check.
+2. Run that check against the checkpoint and produce retained expected Red
+   evidence with the checkpoint identity, command, exit status, failure reason,
+   log digest, and environment.
+3. Only then implement the minimum complete vertical behavior, focused tests,
+   documentation, named dependency and lockfile update when authorized, and
+   Green evidence.
+4. Keep the checkpoint and subsequent implementation history available for
+   independent review; do not squash or rewrite away the Red-before-code
+   evidence before merge.
+
+Within that unchanged package and risk, the agent may perform those steps, run
 validation, publish or update the pull request, and address CI or review
-findings without asking for repeated permission.
+findings without asking for repeated permission. A semantic requirement,
+oracle, scope, dependency, authority, or risk change after the checkpoint
+invalidates its authority and Red evidence and requires a new explicit human
+decision. Non-semantic documentation fixes and bounded implementation
+corrections remain covered.
+
+The exact base SHA establishes immutable base authority for the complete pull
+request. Its required checks, branch protection, reviewer and merge authority,
+workflow trust, permission boundaries, and signing and release restrictions
+remain authoritative through manual merge. A head-authored control change is
+inert as authority for that same pull request. Its output is advisory unless an
+unchanged base-controlled gate independently evaluates the head tree.
+
+No unmerged head receives privileged secrets, elevated tokens, ruleset bypass,
+approval or merge authority, deployment credentials, signing keys, publication
+credentials, tags, or release execution. Each declarative workflow, permission,
+signing, or release-authority change activates only after manual merge and any
+explicitly authorized post-merge application. A head-authored control change
+never judges or authorizes its own pull request.
 
 One coherent vertical outcome may satisfy multiple tightly related requirement
 IDs or sub-behaviors only when they share the same delivery slice, public
 acceptance journey, risk owner, rollback boundary, and versioned fixture or
 oracle. Unrelated capabilities remain separate.
 
-After the requirements are Approved, supervised interactive implementation may
-start from the authorized Ready issue without waiting for
-`.github/codex/policy.json`. That machine projection remains mandatory before
-unattended autonomous execution and may be prepared in parallel.
+Supervised interactive work may start from the authorized Ready issue without
+waiting for `.github/codex/policy.json`. That machine projection remains
+mandatory before unattended autonomous execution and may be prepared in
+parallel; a branch-scoped candidate is not eligible for unattended execution.
 
 The default budget is three correction rounds. The issue may set a bounded
 budget from one through five. A correction within the declared paths, behavior,
 dependencies, and risk does not require renewed approval. Stop for a human when
 the budget is exhausted or any of those boundaries changes.
 
-This lane never authorizes production work for a Proposed requirement, silent
-scope expansion, oracle weakening, a new unlisted dependency, a risk increase,
-secrets, destructive data or release actions, direct pushes to `main`,
-self-approval, self-merge, or a control-plane change in the product pull
-request it governs.
+This lane never authorizes silent scope expansion, oracle weakening, a new
+unlisted dependency, an undeclared risk increase, secret material in Git,
+privileged execution from an unmerged head, destructive data actions, release
+execution from an unmerged head, direct pushes to `main`, self-approval,
+self-merge, or use of a head-authored control as authority for its own pull
+request.
 
 ## Test-driven delivery
 
 Follow the outside-in loop in SRS section 11 for every behavior:
 
-1. Specify the approved requirement, oracle, failure, and public scenario.
+1. Specify the Approved requirement or branch-authorized candidate, oracle,
+   failure, and public scenario.
 2. Add the narrowest executable acceptance or conformance check.
 3. Run it and retain evidence that it is **Red for the expected reason**.
 4. Add only the focused domain, property, or contract tests needed to drive the
@@ -180,8 +235,9 @@ conclusions as facts.
   and reviewed in the issue may accompany the behavior that requires it.
 - Do not commit secrets, credentials, source repositories used as private test
   data, or model prompts containing confidential content.
-- Do not modify workflow or agent policy in the same pull request as the
-  product change it will judge.
+- A maintainer-supervised package may modify workflow or agent policy with the
+  product outcome only under the immutable-base-authority rules above. A
+  head-authored control change never judges or authorizes its own pull request.
 
 ## Verification and commands
 
@@ -222,7 +278,8 @@ original failure into acceptable evidence.
 
 Every implementation pull request must make these fields reviewable:
 
-- issue, requirement IDs, requirement status, and slice;
+- issue, requirement IDs, requirement status or branch-scoped authority, and
+  slice;
 - risk classification, allowed paths, and actual changed paths;
 - base and head commit SHA;
 - Red command, expected failure, actual failure, and immutable log/artifact;
@@ -241,7 +298,8 @@ not claim the requirement is Verified.
 
 Stop editing and mark the task `human-required` when any of these occurs:
 
-- requirement is not Approved or no stable requirement/slice is identified;
+- requirement is neither Approved nor covered by exact branch-scoped authority,
+  or no stable requirement/slice is identified;
 - acceptance oracle, expected Red failure, or success semantics are ambiguous;
 - a blocking open decision is unresolved;
 - required work exceeds allowed paths or changes the declared risk level;

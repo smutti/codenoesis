@@ -46,6 +46,8 @@
 | `0.9+r6` | 2026-08-04 | Recorded protected R5 governance, golden-correction, and product merges #112, #115, and #116; proposed `FR-EXT-011` plus Decision 0016 for explicit framework-neutral source declarations and unresolved attribute/macro candidates; fixed RepositorySnapshotV9, ExtractionChunkV6, KnowledgeGraphV6, Rust ontology v6, ErrorV13, LocalQueryResultV4 dispatch, disjoint identities, strict source/runtime epistemic boundaries, limits, project-owned two-style fixture, exact governance Red, and non-vendored motivation-only Lekton/RustDesk observations while deferring compiler evidence to R7 and export/explorer work to R8. |
 | `0.9+r7` | 2026-08-05 | Recorded protected R6 governance, evidence-ID correction, and product merges #118, #121, and #122; proposed bounded `FR-EXT-005` plus Decision 0017 for explicit static import of one revision-, tree-, source-, producer-, toolchain-, and schema-bound Rust SCIP v0.9.0 artifact; fixed RepositorySnapshotV10, ExtractionChunkV7, KnowledgeGraphV7, Rust ontology v7, ErrorV14, LocalQueryResultV5 dispatch, compiler-symbol identity and SHA-256 evidence, strict protobuf/resource/privacy limits, project-owned binary fixture, exact governance Red, and immutable R6 compatibility while leaving index generation in S9 and export/explorer work in R8. |
 | `0.9+r8` | 2026-08-06 | Recorded protected R7 governance/correction and product merge #130; proposed `FR-EXP-001` plus Decision 0018 for deterministic PortableGraphV1 export and a first-party static LocalExplorerV1; fixed exact R7 family reuse, lossless reimport, explicit export/explore CLI journeys, ErrorV15, offline search/filter/depth-1/2 traversal, CSP/XSS/privacy/path/resource limits, project-owned golden, retained governance Red, and immutable R7 compatibility while leaving production implementation to a separate Ready issue. |
+| `0.9+delivery.2` | 2026-08-08 | Defined the issue #139 maintainer-supervised single-PR vertical package so one coherent capability may atomically combine product governance, Red-first evidence, implementation, and Green evidence while the delivery control plane remains separate. |
+| `0.9+delivery.3` | 2026-08-08 | Recorded the explicit issue #139 scope expansion permitting product code and delivery control plane in one pull request under immutable base authority, base-controlled validation, inert head controls, manual merge, and post-merge-only privileged activation. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -73,7 +75,8 @@ Proposed -> Approved -> Implemented -> Verified
     +--------> Deferred <------+----> Rejected
 ```
 
-- **Proposed:** reviewable but not yet binding for implementation.
+- **Proposed:** reviewable but not yet binding on `main`; it may receive only
+  the branch-scoped implementation authority defined in section 2.1.1.
 - **Approved:** accepted, testable, and assigned to a delivery slice.
 - **Implemented:** production code exists, but all verification may not be
   complete.
@@ -97,38 +100,81 @@ re-ratified.
 
 ### 2.1.1 Maintainer-supervised accelerated delivery
 
-After requirements are `Approved` on `main`, one explicit human authorization
-may select a maintainer-supervised accelerated package in a linked Ready issue.
-The package MUST fix one delivery slice, one coherent vertical outcome, exact
-requirement IDs, risk and rollback boundary, allowed and protected paths, exact
-dependencies, acceptance oracle and expected Red, evidence, a bounded
-correction budget, and stop conditions.
+A linked Ready issue MAY select a maintainer-supervised single-PR vertical
+package through one explicit human authorization by the accountable maintainer.
+That authorization MUST fix one delivery slice, one coherent vertical outcome,
+exact stable requirement IDs and candidate semantics, risk owner and rollback
+boundary, allowed and protected paths, exact dependencies, acceptance oracle
+and expected Red, evidence, a bounded correction budget, and stop conditions.
 
-The package MAY include multiple tightly related requirement IDs or
-sub-behaviors in one implementation pull request only when they share the same
-public acceptance journey, risk owner, rollback boundary, and versioned fixture
-or oracle. An exact dependency and its lockfile update MAY accompany the
-behavior only when the issue names and reviews the dependency. Unrelated
-capabilities, upgrades, cleanup, and generated churn remain separate.
+The package MAY combine product governance and production implementation in one
+pull request. Product governance includes the SRS, architecture decisions,
+threat models, schemas or ontology contracts, fixtures or oracles,
+traceability, and operational documentation. Multiple tightly related IDs or
+sub-behaviors MAY share it only when they have the same public acceptance
+journey, delivery slice, risk owner, rollback boundary, and versioned fixture or
+oracle. An exact dependency and lockfile update MAY accompany only the behavior
+that the issue names and reviews.
+
+The package MAY also combine product code and delivery control plane in one
+pull request. The delivery control plane includes `AGENTS.md`, `.github/**`, and
+`.codex/**`, policy and prompts, workflows and required checks, permissions,
+review, publication, signing, and release authority. The Ready issue MUST fix
+the exact base SHA, complete changed paths, control and privilege effects,
+post-merge activation, threats, rollback, and evidence.
+
+The package MAY start from requirements already `Approved` on `main` or from a
+complete candidate that remains `Proposed` until merge. For the latter, the
+maintainer decision grants branch-scoped implementation authority only for the
+exact package. Requirement approval and production behavior become effective
+atomically only after the accountable maintainer manually merges the exact pull
+request; before merge they MUST be described as Proposed and candidate, not as
+an Approved, Implemented, or Verified fact on `main`.
+
+The author MUST, before any production source edit, create a governance
+checkpoint containing the complete candidate requirement and decisions, exact
+contracts and oracle, traceability, and the executable acceptance or
+conformance check. The check MUST run against that checkpoint and produce
+retained expected Red evidence bound to its identity, command, exit status,
+failure reason, log digest, and environment. Only subsequent commits may add
+production code and Green evidence, and the pull request MUST preserve the
+checkpoint and Red-before-code history for independent review.
 
 Within unchanged scope and risk, that one explicit human authorization permits
-implementation, focused validation, documentation and evidence updates, pull
-request publication, and bounded correction without repeated authorization.
-The default is three correction rounds; the issue MAY set a value from one
-through five.
+the complete sequence, focused validation, documentation and evidence updates,
+pull request publication, and bounded correction without repeated
+authorization. A semantic requirement, oracle, scope, dependency, authority,
+or risk change after the checkpoint invalidates its authority and Red evidence
+and requires a new explicit maintainer decision. The default is three
+correction rounds; the issue MAY set a value from one through five.
 
-This supervised interactive lane may proceed without waiting for the separate
-machine-policy projection. `.github/codex/policy.json` remains mandatory before
-unattended autonomous execution and may be prepared in parallel. The lane does
-not alter the requirement lifecycle, permit production work while a requirement
-is Proposed, weaken an oracle, broaden paths or risk, authorize a control-plane
-change in the product pull request it governs, or grant approval or merge
-authority to the authoring agent.
+The exact base SHA establishes immutable base authority for the complete pull
+request. Its required checks, branch protection, reviewer and merge authority,
+workflow trust, permission boundaries, and signing and release restrictions
+remain authoritative through manual merge. A head-authored control change is
+inert as authority for that same pull request. Its result is advisory unless an
+unchanged base-controlled gate independently evaluates the head tree.
 
-This control-plane amendment is authorized by
-[#79](https://github.com/smutti/codenoesis/issues/79) and becomes effective only
-after its protected manual merge by `@smutti`. The authoring agent does not
-approve or merge that change.
+No unmerged head receives privileged secrets, elevated tokens, ruleset bypass,
+approval or merge authority, deployment credentials, signing keys, publication
+credentials, tags, or release execution. Each declarative workflow, permission,
+signing, or release-authority change activates only after manual merge and any
+explicitly authorized post-merge application. Head controls cannot weaken the
+oracle, remove manual merge, or approve, merge, publish, sign, or release their
+own change.
+
+This supervised interactive lane may proceed without waiting for a new
+machine-policy projection. The base-bound `.github/codex/policy.json` remains
+authoritative for the pull request, and the merged projection remains mandatory
+before unattended autonomous execution. The lane never grants direct push,
+self-approval, self-merge, secret handling, destructive-data, unmerged release,
+or unattended authority.
+
+The original accelerated control-plane amendment was authorized by
+[#79](https://github.com/smutti/codenoesis/issues/79). The single-PR amendment
+is authorized by [#139](https://github.com/smutti/codenoesis/issues/139). Each
+becomes effective only after its protected manual merge by `@smutti`; the
+authoring agent does not approve or merge either change.
 
 ### 2.2 S0 ratification register
 
@@ -2061,6 +2107,8 @@ detect a missing or stale link.
 A requirement is Ready only when:
 
 - its statement is atomic and has one stable ID;
+- it is `Approved` on `main`, or its complete `Proposed` candidate and
+  branch-scoped implementation authority satisfy section 2.1.1;
 - priority, target slice, owner, rationale, and dependencies are known;
 - success, failure, limit, security, and observability behaviour are testable;
 - the fixture and oracle are reviewable and legally usable;
@@ -2206,6 +2254,16 @@ behavior remain open.
 ## 17. Change control
 
 - A requirement change and its tests MUST be reviewed together.
+- One maintainer-supervised single-PR vertical package MAY atomically review and
+  merge one capability's product governance, Red-first evidence, production
+  implementation, delivery control plane, and Green evidence under section
+  2.1.1.
+- A branch-scoped package MUST preserve its governance checkpoint and expected
+  Red evidence; merge is all-or-nothing and no candidate product contract or
+  implementation becomes authoritative on `main` independently.
+- A control-plane change in that package MUST remain inert for its own review;
+  the exact base authority and an unchanged base-controlled gate judge the head,
+  and privileged effects activate only after manual merge.
 - Removing or weakening an Approved requirement requires rationale, impact
   analysis, and explicit approval.
 - Breaking public-contract changes require compatibility classification and a
