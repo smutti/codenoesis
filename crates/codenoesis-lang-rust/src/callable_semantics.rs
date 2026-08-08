@@ -144,7 +144,21 @@ impl ExistingCatalog {
             .iter()
             .filter_map(|kind| self.owner(crate_id, &module_path, *kind, &name))
             .collect::<Vec<_>>();
-        match exact.as_slice() {
+        if let [value] = exact.as_slice() {
+            return Some(*value);
+        }
+        if !exact.is_empty() || spelling.contains("::") {
+            return None;
+        }
+        let candidates = self
+            .owners
+            .iter()
+            .filter(|(key, _)| {
+                key.crate_id == crate_id && key.name == name && kinds.contains(&key.kind)
+            })
+            .map(|(_, value)| value.as_str())
+            .collect::<Vec<_>>();
+        match candidates.as_slice() {
             [value] => Some(*value),
             _ => None,
         }
@@ -575,13 +589,17 @@ fn process_implementation(
     module_path: &str,
     builder: &mut ChunkBuilder<'_>,
 ) -> Result<(), CallableSemanticsError> {
-    if node.child_by_field_name("type_parameters").is_some() {
+    if node.child_by_field_name("type_parameters").is_some()
+        || node_text(node, builder.source)
+            .trim_start()
+            .starts_with("impl !")
+    {
         return Ok(());
     }
     let target = node
         .child_by_field_name("type")
         .ok_or_else(|| invalid_syntax(builder.path, node.start_byte(), node.kind()))?;
-    let target_id = builder
+    let Some(target_id) = builder
         .catalog
         .resolve_owner(
             builder.crate_id,
@@ -589,19 +607,27 @@ fn process_implementation(
             node_text(target, builder.source),
             &[EntityKind::RustStruct, EntityKind::RustEnum],
         )
-        .ok_or(CallableSemanticsError::ContractInvalid)?
-        .to_owned();
-    let trait_context_id = node
-        .child_by_field_name("trait")
-        .and_then(|trait_node| {
-            builder.catalog.resolve_owner(
+        .map(str::to_owned)
+    else {
+        return Ok(());
+    };
+    let trait_context_id = if let Some(trait_node) = node.child_by_field_name("trait") {
+        let Some(trait_context_id) = builder
+            .catalog
+            .resolve_owner(
                 builder.crate_id,
                 module_path,
                 node_text(trait_node, builder.source),
                 &[EntityKind::RustTrait],
             )
-        })
-        .map(str::to_owned);
+            .map(str::to_owned)
+        else {
+            return Ok(());
+        };
+        Some(trait_context_id)
+    } else {
+        None
+    };
     if let Some(body) = node.child_by_field_name("body") {
         process_scope(
             body,
@@ -752,10 +778,6 @@ fn process_callable(
     owner: &ScopeOwner,
     builder: &mut ChunkBuilder<'_>,
 ) -> Result<(), CallableSemanticsError> {
-    builder.callable_count = builder
-        .callable_count
-        .checked_add(1)
-        .ok_or(CallableSemanticsError::ContractInvalid)?;
     let name = normalized_name(node, builder.source, builder.path)?;
     let callable_id = if let Some((owner_id, trait_context_id)) = owner.method_context() {
         rust_semantic_member_id(
@@ -782,8 +804,16 @@ fn process_callable(
             .values()
             .any(|value| value == &callable_id);
     if !callable_known {
-        return Err(CallableSemanticsError::ContractInvalid);
+        return if matches!(owner, ScopeOwner::Module { .. }) {
+            Ok(())
+        } else {
+            Err(CallableSemanticsError::ContractInvalid)
+        };
     }
+    builder.callable_count = builder
+        .callable_count
+        .checked_add(1)
+        .ok_or(CallableSemanticsError::ContractInvalid)?;
     let body = node.child_by_field_name("body");
     let header_end = body.map_or(node.end_byte(), |value| value.start_byte());
     let header_evidence_id = builder.add_evidence_range(node.start_byte(), header_end)?;
