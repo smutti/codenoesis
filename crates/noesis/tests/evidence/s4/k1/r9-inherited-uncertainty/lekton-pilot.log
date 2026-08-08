@@ -1,0 +1,32 @@
+tested_head=45f2282db54189695826a5ec96391d59f817c076
+repository=dghilardi/lekton
+revision=247b8f42fb045db41166d70a276a41c2e079b6eb
+tree=55ba428493a4ffae86ba492422a049f46d567a30
+repository_id=urn:codenoesis:pilot:lekton:k1-r9
+profile=standard-local-s4+local-git-sha1-packed-v1+cargo-root-package-v1+cargo-manifest-facts-v1+rust-semantic-depth-v1+rust-framework-declarations-v1+rust-callable-semantics-v1
+
+attempt=1
+exit_code=10
+stdout_bytes=0
+stderr_bytes=289
+store_file_count=0
+error={"code":"acquisition.limit_exceeded","context":{"limit":"canonical_output_bytes","maximum":33554432,"observed":33554433},"message":"repository exceeds a standard-local-s1 limit","retryable":false,"schema_version":"codenoesis.error/v6","stage":"acquisition"}
+real_seconds=23.40
+user_seconds=23.17
+sys_seconds=0.19
+
+attempt=2
+exit_code=10
+stdout_bytes=0
+stderr_bytes=289
+store_file_count=0
+error={"code":"acquisition.limit_exceeded","context":{"limit":"canonical_output_bytes","maximum":33554432,"observed":33554433},"message":"repository exceeds a standard-local-s1 limit","retryable":false,"schema_version":"codenoesis.error/v6","stage":"acquisition"}
+real_seconds=23.42
+user_seconds=23.21
+sys_seconds=0.18
+
+error_bytes=258
+error_sha256=ccdd2e76b55172ac9876591d342ce19442a0c754b6809ed1c8cbbd782b9a2259
+error_bytes_identical=true
+partial_visible_head=false
+external_source_vendored=false

@@ -1,0 +1,100 @@
+{
+  "schema_version": "codenoesis.r9-k1-inherited-uncertainty-green-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/144",
+  "requirement_ids": [
+    "FR-EXT-012"
+  ],
+  "requirement_status": "Approved/effective through protected merge #143",
+  "slice": "S4",
+  "risk": "high",
+  "base_commit_sha": "8fa3097f488e15ed8ddc4586dbe83c2ccc69a965",
+  "tested_product_head_sha": "45f2282db54189695826a5ec96391d59f817c076",
+  "red_checkpoint_shas": [
+    "e9c4381bbac1b9a3d1ea73af5d1a96ceb074249a",
+    "73ab1417ec93c011bce9311d75525a4110dd7834"
+  ],
+  "observed_at_utc": "2026-08-08T17:21:45Z",
+  "focused_green": {
+    "commands": [
+      "cargo fmt --all --check",
+      "cargo test -p codenoesis-domain --test s4_k1_rust_callable_semantics --locked",
+      "cargo test -p codenoesis-lang-rust --test s4_k1_rust_callable_semantics --locked",
+      "cargo test -p codenoesis-application --test s4_k1_rust_callable_semantics --locked",
+      "cargo test -p codenoesis-contracts --test s4_k1_contracts --locked",
+      "cargo test -p noesis --test e2e_fr_ext_012_rust_callable_semantics --locked"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 7.007121,
+    "log": {
+      "path": "crates/noesis/tests/evidence/s4/k1/r9-inherited-uncertainty/focused-green.log",
+      "byte_length": 3907,
+      "sha256": "7ddae772f399c93f5e03198d177bfdbd0368d98defaae315bba8f0b3ccba61bd",
+      "normalization": "The absolute workspace prefix was replaced with <workspace>."
+    }
+  },
+  "lekton_pilot": {
+    "path": "crates/noesis/tests/evidence/s4/k1/r9-inherited-uncertainty/lekton-pilot.log",
+    "byte_length": 1371,
+    "sha256": "1349b3ac5bedf6a2a8d36945521043ada9eeae868a4d280ccf4998fbbe8e3012",
+    "attempts": 2,
+    "deterministic_error_bytes": true,
+    "exit_code": 10,
+    "typed_next_bound": "acquisition.limit_exceeded/canonical_output_bytes",
+    "partial_visible_head": false
+  },
+  "complete_repository_gate": {
+    "status": "passed on tested product head with the evidence additions present",
+    "observed_at_utc": "2026-08-08T17:27:55Z",
+    "commands": [
+      "actionlint -no-color",
+      "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+      "cargo fmt --all --check",
+      "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "cargo test --workspace --all-targets --all-features --locked",
+      "cargo test --workspace --doc --all-features --locked",
+      "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "python3 scripts/validate_benchmark_assets.py",
+      "cargo bench --workspace --all-features --no-run --locked"
+    ],
+    "exit_code": 0,
+    "summary": {
+      "path": "crates/noesis/tests/evidence/s4/k1/r9-inherited-uncertainty/complete-gate-summary.log",
+      "byte_length": 1231,
+      "sha256": "eb8b34136dc061bb86ad254a0bd572e0c223ab9e274d7b4a4bcf2011c94b7a05"
+    },
+    "raw_normalized_log": {
+      "byte_length": 45264,
+      "sha256": "f7435157b89d352e47bf7453fdd69d051a09517c931f5291444c2b1ff9d9d773",
+      "retention": "ephemeral local log; digest and command results retained by the committed summary"
+    },
+    "final_review_head": "rerun after the evidence commit and publish the result without modifying that head"
+  },
+  "actual_changed_paths": [
+    "crates/codenoesis-lang-rust/src/callable_semantics.rs",
+    "crates/codenoesis-lang-rust/tests/s4_k1_rust_callable_semantics.rs",
+    "crates/noesis/tests/evidence/s4/k1/r9-inherited-uncertainty/**",
+    "tests/fixtures/s4/rust-callable-inherited-uncertainty-v1/**"
+  ],
+  "dependencies": "none added",
+  "historical_goldens": "unchanged",
+  "environment": {
+    "os": "macOS 26.5.2",
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "features": "focused default test targets plus complete all-target/all-feature repository gate"
+  },
+  "agent": {
+    "product": "OpenAI Codex",
+    "model_identity": "not exposed by the runtime",
+    "run_identifier": "not exposed by the runtime",
+    "cost": "not exposed by the runtime",
+    "policy": "repository AGENTS.md at base commit"
+  },
+  "human_approval": "Autorizzo issue #144 e il pacchetto completo high-risk S4 descritto.",
+  "known_limitations": [
+    "The independent standard-local canonical output limit remains 33554432 bytes.",
+    "K1/R7 composition, expression semantics, compiler CFG/data flow, safe constant evaluation, trusted snippets, and LLM projection remain outside issue #144."
+  ]
+}
