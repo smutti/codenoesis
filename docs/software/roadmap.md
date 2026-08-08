@@ -8,9 +8,10 @@ normative meaning or approval status of the
 [Software Requirements Specification](software-requirements-specification.md)
 or an accepted architecture decision. The SRS and decisions remain
 authoritative. Every item below requires its own Ready issue, stable
-requirement IDs, one approved delivery slice, acceptance oracle, expected Red
-failure, risk classification, allowed paths, evidence, and human approvals
-before production implementation starts.
+requirement IDs, one delivery slice, acceptance oracle, expected Red failure,
+risk classification, allowed paths, evidence, and human approvals. Production
+implementation requires either Approved requirements or the branch-scoped
+implementation authority defined by the single-PR vertical package below.
 
 Roadmap identifiers such as `R1`, `P1`, and `G1` are planning identifiers, not
 SRS slice or requirement IDs. They must not be used to bypass the approved
@@ -176,8 +177,8 @@ the same applicable readiness gates; experimental availability is not GA.
 The SRS already defines many production requirements, especially across
 `S9`–`S14`, but the following planning lane makes their delivery order and
 evidence explicit. A row that identifies a missing requirement or decision
-must update the SRS or architecture through a separate protected governance
-package before implementation.
+may update the SRS or architecture as product governance in the same authorized
+single-PR vertical package as its implementation.
 
 | Order | Planning item | Outcome | Existing SRS mapping | Candidate acceptance gate |
 |---|---|---|---|---|
@@ -211,29 +212,52 @@ coherent behavior and share the same risk boundary.
 
 ### Maintainer-supervised accelerated package
 
-Use two pull requests for one high-risk capability instead of spreading it over
-many small administrative changes:
+Use one single-PR vertical package for one coherent capability instead of
+serial governance and implementation pull requests; one explicit human
+authorization in its linked Ready issue fixes stable requirement IDs and
+candidate semantics, one slice and public outcome, risk owner and rollback
+boundary, exact paths and dependencies, oracle and expected Red, evidence,
+correction budget, and stop conditions.
 
-1. **Governance package:** one capability's requirement IDs, SRS update, ADR,
-   threat model, schemas, fixture/oracle specification, limits, failure
-   behavior, traceability, expected Red, and explicit approval. It contains no
-   production implementation.
-2. **Implementation package:** one coherent vertical outcome containing the
-   retained Red observation, exact reviewed dependencies, minimum production
-   code, focused domain/contract/security tests, Green and regression evidence,
-   operational documentation, and traceability.
+The package may combine product governance and production implementation in one
+pull request. Product governance includes its SRS changes, architecture
+decisions, threat model, schemas or ontology contracts, fixtures or oracles,
+limits, failure behavior, traceability, and operational documentation. It may
+also contain the minimum production code, focused domain, contract, and
+security tests, exact reviewed dependency and lockfile changes, and Green and
+regression evidence for the same outcome.
 
-After the governance merge makes the requirements Approved on `main`, one
-explicit human authorization in the Ready implementation issue covers the
-bounded package and corrections, and the machine-policy projection may proceed
-in parallel. It remains mandatory before unattended autonomous execution but
-does not block the maintainer-supervised interactive package.
+The package may start from requirements already Approved on `main` or from a
+complete candidate that remains Proposed until merge. In the latter case, the
+maintainer decision grants branch-scoped implementation authority only for the
+exact package. Requirement approval and production behavior become effective
+atomically only after the accountable maintainer manually merges the exact pull
+request.
 
-One implementation package may satisfy multiple tightly related requirement
-IDs or sub-behaviors only when they share the same slice, public acceptance
-journey, risk owner, rollback boundary, and versioned fixture or oracle. An
-exact named dependency and lockfile change may accompany the behavior; unrelated
-upgrades remain separate.
+The package keeps one pull request but preserves this commit and evidence order:
+
+1. The builder creates a governance checkpoint, before any production source
+   edit, containing the complete candidate governance and executable acceptance
+   or conformance check.
+2. The builder runs that check against the checkpoint and records retained
+   expected Red evidence bound to the checkpoint identity, command, exit,
+   expected failure, log digest, and environment.
+3. Subsequent commits add the minimum implementation, focused coverage,
+   documentation, and Green evidence without rewriting away the checkpoint.
+4. Review and manual merge accept or reject the governance and behavior
+   atomically; no partial product authority reaches `main`.
+
+Multiple tightly related requirement IDs or sub-behaviors may share one package
+only when they have the same slice, public acceptance journey, risk owner,
+rollback boundary, and versioned fixture or oracle. A semantic requirement,
+oracle, scope, dependency, authority, or risk change invalidates the checkpoint
+and requires a new explicit maintainer decision. Bounded implementation
+corrections remain covered by the original authorization.
+
+The machine-policy projection may proceed in parallel. It remains mandatory
+before unattended autonomous execution but does not block the
+maintainer-supervised interactive package; a branch-scoped candidate is not
+eligible for unattended execution.
 
 ### Unattended autonomous package
 
@@ -250,15 +274,18 @@ the complete Red-to-Green journey and evidence.
 
 Never bundle these merely to reduce pull-request count:
 
-- policy/workflow/agent-control changes with the behavior they authorize or
-  judge;
+- the delivery control plane — `AGENTS.md`, `.github/**`, and `.codex/**`,
+  including policy, workflow, permission, review, publication, signing, and
+  release authority — with the behavior it authorizes or judges; it requires a
+  separate pull request;
 - unrelated capabilities or more than one behavioral implementation
   objective;
 - unrelated dependency upgrades, formatter churn, generated refreshes, or
   cleanup with a product behavior; an exact dependency named and reviewed in
   the Ready issue may accompany the objective that requires it;
-- production code with a still-Proposed requirement or an oracle whose meaning
-  has not received human review;
+- production code with a still-Proposed requirement outside the exact
+  branch-authorized package, or with an oracle whose meaning has not received
+  human review;
 - ontology, schema, migration, authorization, sandbox, release, or secret
   changes that cross different risk owners or rollback boundaries.
 

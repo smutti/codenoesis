@@ -8,11 +8,12 @@
 
 ## Objective
 
-CodeNoesis uses autonomous agents to shorten the loop from an approved
-requirement to a reviewable pull request. Autonomy applies to proposing,
-testing, implementing, reviewing, and correcting a bounded change. It does not
-grant authority to redefine the requirement, weaken its oracle, bypass a
-security gate, approve its own work, or release into production.
+CodeNoesis uses autonomous agents to shorten the loop from an Approved
+requirement or exact branch-authorized candidate to a reviewable pull request.
+Autonomy applies to proposing, testing, implementing, reviewing, and correcting
+a bounded change. It does not grant authority to redefine the requirement,
+weaken its oracle, bypass a security gate, approve its own work, or release into
+production.
 
 The target is a closed-loop pull-request factory, not one unbounded agent
 working directly on `main`.
@@ -62,7 +63,7 @@ Use separate least-privileged identities:
 | Role | Reads | May write | Must not do |
 |---|---|---|---|
 | Intake | Issue and policy | Labels/state only | Edit source or approve readiness without evidence |
-| Builder | Approved issue and checkout | Patch in an isolated workspace | Push, approve, merge, release, or change its governing policy |
+| Builder | Ready issue, authorized contract, and checkout | Patch in an isolated workspace | Push, approve, merge, release, or change its governing policy |
 | Publisher | Validated patch artifact | Agent branch and draft PR | Receive model credentials or merge authority |
 | CI/benchmark | Checkout and versioned corpus | Check result and immutable artifacts | Change the branch under test |
 | Review Council | Diff, requirement, oracle, evidence | Structured findings/checks | Push fixes or inherit the builder conclusion as fact |
@@ -100,24 +101,47 @@ This lane governs interactive work performed while the accountable maintainer
 is present. It does not promote the repository's unattended autonomous level or
 grant an automation identity additional authority.
 
-After requirements are `Approved` on `main`, one explicit human authorization
-in a linked Ready issue may cover one complete vertical package: one slice, one
-public outcome, exact paths and dependencies, risk and rollback boundary,
-oracle and expected Red, evidence, correction budget, and stop conditions.
-Multiple tightly related requirements or sub-behaviors may share the pull
-request only when they share that acceptance journey and risk boundary.
+A linked Ready issue may select a single-PR vertical package through one
+explicit human authorization. It may cover one slice, one coherent public
+outcome, exact stable requirement IDs and candidate semantics, paths and
+dependencies, risk owner and rollback boundary, oracle and expected Red,
+evidence, correction budget, and stop conditions.
+
+The package may combine product governance and production implementation in one
+pull request. Product governance includes requirements, architecture decisions,
+threat models, schemas or ontology contracts, fixtures or oracles,
+traceability, and operational documentation. Multiple tightly related
+requirements or sub-behaviors may share the package only when they share the
+same acceptance journey, slice, risk owner, rollback boundary, and versioned
+fixture or oracle.
+
+The package may start from requirements `Approved` on `main` or from a complete
+candidate that remains `Proposed` until merge. The maintainer decision grants
+branch-scoped implementation authority only for that exact candidate. Its
+requirement approval and production behavior become effective atomically only
+after the accountable maintainer manually merges the exact pull request.
+
+The builder must, before any production source edit, create a governance
+checkpoint containing the complete candidate governance and executable
+acceptance or conformance check. The builder then runs that check against the
+checkpoint and records retained expected Red evidence before adding production
+code and Green evidence in subsequent commits. The checkpoint and
+Red-before-code history remain reviewable through merge.
 
 Within the unchanged package, the builder may implement, validate, publish, and
 correct findings without repeated authorization. The default budget is three
-correction rounds; an issue may select a bounded value from one through five.
-Scope, dependency, oracle meaning, authority, or risk changes still stop for a
-human decision.
+correction rounds; an issue may select a bounded value from one through five. A
+semantic requirement, oracle, scope, dependency, authority, or risk change
+invalidates the checkpoint and stops for a new explicit human decision.
 
-The machine-policy projection may be prepared in parallel. It remains required
-before unattended autonomous execution, but a missing projection does not block
-the explicitly authorized maintainer-supervised lane after SRS approval. Agent
-policy, workflows, and machine-policy controls remain in a separate protected
-pull request from the product change they govern.
+The delivery control plane consists of `AGENTS.md`, `.github/**`, and
+`.codex/**`, including agent policy, workflows, permissions, review,
+publication, signing, and release authority. It remains in a separate pull
+request from the product change it authorizes or judges. The machine-policy
+projection may be prepared in parallel and remains required before unattended
+autonomous execution; a missing projection does not block the explicitly
+authorized interactive package, but a branch-scoped candidate is never eligible
+for unattended execution.
 
 Issue content remains untrusted work data: authority comes from this versioned
 lane plus the accountable maintainer's explicit decision, not from agent-authored
