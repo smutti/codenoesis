@@ -23,6 +23,14 @@ const FIXTURE_FILES: [(&str, &str); 4] = [
     ("src/lib.rs", "c715d312552e61ed74c8a9a33a04bbdbe9d28354"),
     ("src/model.rs", "6da92321f9b7578a09a9950fd90503f0bc548978"),
 ];
+const UNCERTAINTY_REPOSITORY_ID: &str =
+    "urn:codenoesis:fixture:s4-rust-callable-inherited-uncertainty-v1";
+const UNCERTAINTY_COMMIT_OID: &str = "f287e22afe2a9800a5a65b4452010d2113f6b6ef";
+const UNCERTAINTY_TREE_OID: &str = "98b1dc6aa284c7036996f4176938e0ad9f00e8c9";
+const UNCERTAINTY_FIXTURE_FILES: [(&str, &str); 2] = [
+    ("Cargo.toml", "67ee2f2696e98ea3abd33a52898f95f7f8872784"),
+    ("src/lib.rs", "a50cdb5e934b5249c406d217b8657ad59251cd99"),
+];
 
 #[test]
 fn gt_fr_ext_012_complete_signatures_and_parameters() {
@@ -192,6 +200,58 @@ fn sec_fr_ext_012_never_executes_target_or_toolchain() {
     assert!(!format!("{extraction:?}").contains("K1_BUILD_SENTINEL_EXECUTED"));
 }
 
+#[test]
+fn reg_fr_ext_012_k1_preserves_inherited_uncertainty() {
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_callable_semantics(&uncertainty_fixture_inventory())
+        .expect("K1 must preserve inherited uncertainty without an internal failure");
+    extraction
+        .knowledge
+        .validate()
+        .expect("reviewed inherited-uncertainty graph");
+    let signature_names = extraction
+        .knowledge
+        .graph
+        .entities
+        .iter()
+        .filter(|entity| entity.kind == CallableSemanticEntityKind::Signature)
+        .fold(BTreeMap::new(), |mut counts, entity| {
+            *counts.entry(entity.name.as_str()).or_insert(0_usize) += 1;
+            counts
+        });
+    assert_eq!(
+        signature_names,
+        BTreeMap::from([("inherent", 1), ("known", 1), ("local", 2)])
+    );
+    for excluded in [
+        "gated",
+        "hidden_test",
+        "unresolved_external_target",
+        "unresolved_external_trait",
+    ] {
+        assert!(
+            extraction
+                .knowledge
+                .graph
+                .entities
+                .iter()
+                .all(|entity| entity.name != excluded),
+            "K1 synthesized an absent inherited callable: {excluded}"
+        );
+    }
+    let inherited_coverage = extraction
+        .knowledge
+        .framework
+        .semantic
+        .graph
+        .coverage
+        .iter()
+        .map(|gap| gap.capability.as_str())
+        .collect::<BTreeSet<_>>();
+    assert!(inherited_coverage.contains("rust.cfg_presence_unresolved"));
+    assert!(inherited_coverage.contains("rust.unsupported_impl_header"));
+}
+
 fn entity_counts(
     graph: &codenoesis_domain::s4_k1::CallableSemanticsGraph,
 ) -> BTreeMap<CallableSemanticEntityKind, usize> {
@@ -237,6 +297,32 @@ fn fixture_inventory(rotation: usize, reverse: bool) -> RepositoryInventory {
             ObjectId::parse_sha1(TREE_OID).expect("reviewed K1 tree OID"),
         ),
         u64::try_from(files.len()).expect("reviewed K1 file count"),
+        files,
+    ))
+}
+
+fn uncertainty_fixture_inventory() -> RepositoryInventory {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/fixtures/s4/rust-callable-inherited-uncertainty-v1/repository");
+    let files = UNCERTAINTY_FIXTURE_FILES
+        .into_iter()
+        .map(|(path, blob_oid)| {
+            AcquiredFile::new(
+                path.to_owned(),
+                RegularFileMode::Regular,
+                ObjectId::parse_sha1(blob_oid).expect("reviewed uncertainty fixture blob OID"),
+                read_reviewed_fixture(&root.join(path)),
+            )
+        })
+        .collect::<Vec<_>>();
+    RepositoryInventory::classify(AcquiredRepository::new(
+        BoundRevision::new(
+            RepositoryIdentity::parse(UNCERTAINTY_REPOSITORY_ID)
+                .expect("reviewed uncertainty repository identity"),
+            ObjectId::parse_sha1(UNCERTAINTY_COMMIT_OID).expect("reviewed uncertainty commit OID"),
+            ObjectId::parse_sha1(UNCERTAINTY_TREE_OID).expect("reviewed uncertainty tree OID"),
+        ),
+        u64::try_from(files.len()).expect("reviewed uncertainty file count"),
         files,
     ))
 }
