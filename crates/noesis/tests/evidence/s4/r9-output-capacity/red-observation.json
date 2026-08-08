@@ -1,0 +1,64 @@
+{
+  "schema_version": "codenoesis.r9-k1-output-capacity-red-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/148",
+  "requirement_ids": [
+    "FR-EXT-012",
+    "FR-CLI-001",
+    "INV-BND-001",
+    "NFR-DET-001",
+    "NFR-TST-001",
+    "NFR-TST-002",
+    "OD-LIM-001"
+  ],
+  "requirement_status": "existing K1 Approved/Implemented; capacity amendment Proposed until protected merge",
+  "slice": "S4",
+  "risk": "high",
+  "base_commit_sha": "aadd065defba2d4f8d202583c7da9ff70e92ece8",
+  "governance_checkpoint_sha": "4fb52a1af9d3ad357949620873081d945ffaaee7",
+  "observed_at_utc": "2026-08-08T20:33:34Z",
+  "production_source_modified_before_red": false,
+  "observations": [
+    {
+      "command": "cargo test -p codenoesis-contracts --test s4_r9_output_capacity_contracts --locked",
+      "expected_failure": "RepositorySnapshotV11 exposes only the inherited standard serializer and no closed K1 output-capacity profile.",
+      "actual_failure": "E0432 for K1OutputCapacityProfile/LOCAL_SNAPSHOT_64M_V1 and E0599 for canonical_stdout_with_output_capacity.",
+      "exit_code": 101,
+      "wall_seconds": 0,
+      "log": {
+        "path": "crates/noesis/tests/evidence/s4/r9-output-capacity/contract-red.log",
+        "byte_length": 1528,
+        "sha256": "1fe4877dbd3fb0fd479a126d69ab800360690df9afc4948efe7fc53a8392ddb4"
+      }
+    },
+    {
+      "command": "cargo test -p noesis --test e2e_fr_ext_012_k1_output_capacity --locked",
+      "expected_failure": "The CLI rejects --output-capacity-profile before K1 execution.",
+      "actual_failure": "The proposed scan exited 2 with ErrorV4 input.invalid_revision; invalid composition also exited 2 instead of closed ErrorV16 exit 11.",
+      "exit_code": 101,
+      "wall_seconds": 4,
+      "log": {
+        "path": "crates/noesis/tests/evidence/s4/r9-output-capacity/cli-red.log",
+        "byte_length": 1731,
+        "sha256": "fc742b78836223f0b765d41192388fe10844c2ec4e71937ae0cf00d54145d7e3"
+      }
+    }
+  ],
+  "normalization": "Absolute workspace prefixes were replaced with <workspace>; all other captured stdout/stderr bytes were retained.",
+  "environment": {
+    "os": "macOS 26.5.2",
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "features": "focused locked integration-test targets; no network, target, compiler, build script, repository target, or model execution"
+  },
+  "agent": {
+    "product": "OpenAI Codex",
+    "model_identity": "not exposed by the runtime",
+    "run_identifier": "not exposed by the runtime",
+    "cost": "not exposed by the runtime",
+    "policy": "repository AGENTS.md at base commit"
+  },
+  "human_approval": "Autorizzo issue #148 e il pacchetto completo high-risk R9/S4 sulla baseline aadd065defba2d4f8d202583c7da9ff70e92ece8.",
+  "stop_conditions_triggered": []
+}
