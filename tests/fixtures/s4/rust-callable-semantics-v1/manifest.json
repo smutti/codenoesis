@@ -1,0 +1,58 @@
+{
+  "schema_version": "codenoesis.k1-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1",
+  "source": "project-owned synthetic bytes",
+  "external_source_vendored": false,
+  "materialization": {
+    "object_format": "sha1",
+    "tree_oid": "ead855e0545cc26b351b305fcad39f2e491b285d",
+    "commit_oid": "9a7bb3adaa5bf30eef3bc9bc656c81f42fbdb845",
+    "author": "CodeNoesis <fixture@codenoesis.invalid>",
+    "timestamp": "2026-08-08T00:00:00Z",
+    "message": "K1 project-owned callable semantics fixture"
+  },
+  "files": [
+    {
+      "path": "repository/Cargo.toml",
+      "mode": "100644",
+      "byte_length": 162,
+      "sha256": "895cdb86e3b4ad787a30a1e54d728e0ad279ed4898d2291a91f20472259e5a41",
+      "git_blob_oid": "cdf88f6e5c3f0bc5444379612ed5bc21796c8036"
+    },
+    {
+      "path": "repository/build.rs",
+      "mode": "100644",
+      "byte_length": 168,
+      "sha256": "b85d180a41257dbee60d5919f5b61c5b28128b9df50cf27c438cdbd3358be4dd",
+      "git_blob_oid": "9ab1798b7d4af3395e972d6838ff07d3e7538375"
+    },
+    {
+      "path": "repository/src/lib.rs",
+      "mode": "100644",
+      "byte_length": 1928,
+      "sha256": "07d2b8f9f3a1a0576b90bd820b5af9ef79511bcdaaca222d4d8f0c61ae815ff5",
+      "git_blob_oid": "c715d312552e61ed74c8a9a33a04bbdbe9d28354"
+    },
+    {
+      "path": "repository/src/model.rs",
+      "mode": "100644",
+      "byte_length": 156,
+      "sha256": "9dd6db028abed787998c4b46d7a14a6a6e96f9c5610d0bba0ce762116c090851",
+      "git_blob_oid": "6da92321f9b7578a09a9950fd90503f0bc548978"
+    }
+  ],
+  "expected_facts": {
+    "path": "expected-callable-semantics.json",
+    "byte_length": 2463,
+    "sha256": "ac87d7f54585a25b1bf24de46e7a93638f5e6eb7fcf4d93e8cc77735ac7422a7"
+  },
+  "sentinels": {
+    "build_script_path": "repository/build.rs",
+    "forbidden_output": "K1_BUILD_SENTINEL_EXECUTED",
+    "process_execution_permitted": false,
+    "network_access_permitted": false,
+    "target_execution_permitted": false,
+    "compiler_execution_permitted": false,
+    "model_provider_permitted": false
+  }
+}

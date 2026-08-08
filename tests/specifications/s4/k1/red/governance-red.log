@@ -1,0 +1,19 @@
+.....F.....
+======================================================================
+FAIL: test_production_candidate_is_materialized_after_expected_red (scripts.tests.test_s4_k1_rust_callable_semantics_contract.S4K1RustCallableSemanticsContractTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/scripts/tests/test_s4_k1_rust_callable_semantics_contract.py", line 420, in test_production_candidate_is_materialized_after_expected_red
+    self.assertEqual(
+AssertionError: Lists differ: ['crates/codenoesis-domain/src/s4_k1.rs', [588 chars]son'] != []
+
+First list contains 11 additional elements.
+First extra element 0:
+'crates/codenoesis-domain/src/s4_k1.rs'
+
+Diff is 673 characters long. Set self.maxDiff to None to see it. : expected K1 Red: production modules, CLI/viewer behavior, and implementation evidence are not materialized
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.002s
+
+FAILED (failures=1)

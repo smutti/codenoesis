@@ -1,0 +1,318 @@
+{
+  "schema_version": "codenoesis.s4-k1-local-implementation-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/142",
+  "slice": "S4",
+  "roadmap_capability": "K1",
+  "requirement_status": {
+    "current": "Proposed branch-scoped candidate",
+    "target_after_protected_merge": "Approved for the bounded K1 profile"
+  },
+  "requirements": [
+    "FR-EXT-012",
+    "FR-EXP-002",
+    "FR-DOC-001",
+    "FR-QRY-001",
+    "FR-CLI-001"
+  ],
+  "risk": "critical",
+  "product_risk": "high",
+  "control_plane_correction_risk": "critical",
+  "risk_owner": "@smutti",
+  "observed_at": "2026-08-08T11:09:51Z",
+  "commits": {
+    "required_base": "03ee09b172e84b5b7f5f423f9f65d63cf2953385",
+    "governance_checkpoint": "4dfc21b864395a485c63f4bffb873a61989edeff",
+    "retained_red": "1a6c2c8",
+    "implementation": "recorded by the implementation pull request",
+    "final_pull_request_head": "recorded by the pull request and exact-head CI"
+  },
+  "authorization": {
+    "ready_issue": "https://github.com/smutti/codenoesis/issues/142",
+    "complete_package_authorization": "maintainer request to proceed with K1 in the interactive Codex task on 2026-08-08, recorded in issue #142",
+    "minimal_path_expansion": "https://github.com/smutti/codenoesis/issues/142#issuecomment-5225581916",
+    "windows_ci_timeout_expansion": "https://github.com/smutti/codenoesis/issues/142#issuecomment-5226237473",
+    "expanded_paths": [
+      "crates/codenoesis-domain/src/storage.rs",
+      "crates/codenoesis-contracts/src/s4.rs",
+      ".github/workflows/ci.yml"
+    ],
+    "maintainer_supervised_single_pr": true,
+    "configured_correction_rounds": 5,
+    "manual_independent_review_and_merge_required": true
+  },
+  "contracts": {
+    "configuration": "codenoesis.configuration/v8",
+    "ontology": "codenoesis.ontology/rust/v8",
+    "extraction": "codenoesis.extraction/v8",
+    "extraction_chunk": "codenoesis.extraction-chunk/v8",
+    "knowledge_graph": "codenoesis.knowledge-graph/v8",
+    "snapshot": "codenoesis.repository-snapshot/v11",
+    "query": "codenoesis.local-query-result/v6",
+    "portable_graph": "codenoesis.portable-graph/v2",
+    "local_explorer": "codenoesis.local-explorer/v2",
+    "error": "codenoesis.error/v16",
+    "profile": "rust-callable-semantics-v1",
+    "contract_bundle_file_sha256": "a0428d0a03754aa45b0f04c07e153579ab4dc8589e23d9e2c174282f2bff0833",
+    "contract_bundle_sha256": "f98667ff5eb7b3aedfe83f9259c778641a843ca4bca879c9464d1f762812ea78",
+    "decision_sha256": "bbaef8e1b723333e25aedde61191b100f16f07c481ec0bb30345df4ec20ffff2",
+    "acceptance_oracle_sha256": "6eb9665ee1f9f0143d6ebeade6626b8813c4799767dc4089e4bbef03c545eb11",
+    "fixture_manifest_sha256": "c4cf363c78014863941baf822ed158cbc1ab28c96acdb0b7e4e597fb4c6df405",
+    "expected_facts_sha256": "ac87d7f54585a25b1bf24de46e7a93638f5e6eb7fcf4d93e8cc77735ac7422a7",
+    "viewer_sha256": "d0b633b29e6494d6494a35b5553d72c3dd04a747eeef219ca33a9f5fe2a1f4fa",
+    "historical_r0_r8_contracts_or_golden_bytes_changed": false
+  },
+  "public_journey": {
+    "sequence": [
+      "scan",
+      "docs",
+      "query",
+      "export",
+      "explore"
+    ],
+    "scan_selector": [
+      "--rust-callable-profile",
+      "rust-callable-semantics-v1"
+    ],
+    "export_selector": [
+      "--portable-profile",
+      "rust-callable-semantics-v1"
+    ],
+    "explore_selector": [
+      "--explorer-profile",
+      "rust-callable-semantics-v1"
+    ],
+    "restart_before_docs_and_query": true,
+    "selector_absence_preserves_r0_r8_bytes": true,
+    "success_exit_code": 0,
+    "success_stderr_bytes": 0
+  },
+  "reviewed_fixture": {
+    "root": "tests/fixtures/s4/rust-callable-semantics-v1",
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1",
+    "commit_oid": "9a7bb3adaa5bf30eef3bc9bc656c81f42fbdb845",
+    "tree_oid": "ead855e0545cc26b351b305fcad39f2e491b285d",
+    "new_entity_counts": {
+      "rust.callable_signature": 9,
+      "rust.parameter": 15,
+      "rust.declared_value": 10,
+      "rust.local_binding": 4,
+      "rust.call_site": 9,
+      "rust.control": 11
+    },
+    "new_relationship_counts": {
+      "HAS_SIGNATURE": 9,
+      "HAS_PARAMETER": 15,
+      "DECLARES_VALUE": 10,
+      "HAS_BODY_FACT": 24,
+      "CALLS": 4
+    },
+    "value_state_counts": {
+      "normalized_scalar": 7,
+      "expression_only": 2,
+      "unresolved": 1
+    },
+    "unresolved_call_candidates": 5,
+    "control_kinds": 11,
+    "fixture_or_golden_bytes_modified_during_implementation": false
+  },
+  "focused_validation": {
+    "commands": [
+      {
+        "command": "cargo test -p codenoesis-domain --test s4_k1_rust_callable_semantics --locked",
+        "tests_passed": 2,
+        "exit_status": 0
+      },
+      {
+        "command": "cargo test -p codenoesis-lang-rust --test s4_k1_rust_callable_semantics --locked",
+        "tests_passed": 5,
+        "exit_status": 0
+      },
+      {
+        "command": "cargo test -p codenoesis-contracts --test s4_k1_contracts --locked",
+        "tests_passed": 5,
+        "exit_status": 0
+      },
+      {
+        "command": "cargo test -p codenoesis-application --test s4_k1_rust_callable_semantics --locked",
+        "tests_passed": 1,
+        "exit_status": 0
+      },
+      {
+        "command": "cargo test -p noesis --test e2e_fr_ext_012_rust_callable_semantics --locked",
+        "tests_passed": 3,
+        "exit_status": 0
+      },
+      {
+        "command": "cargo clippy -p codenoesis-domain -p codenoesis-lang-rust -p codenoesis-contracts -p codenoesis-application -p noesis --all-targets --all-features --locked -- -D warnings",
+        "exit_status": 0
+      },
+      {
+        "command": "cargo fmt --all --check",
+        "exit_status": 0
+      }
+    ],
+    "governance_contract_tests_passed": 11,
+    "total_focused_tests_passed": 16,
+    "required_machine_linkable_tests_present": 15,
+    "input_permutations": 50,
+    "parallel_replay_schedules": 10,
+    "all_fixed_limits_have_maximum_and_maximum_plus_one": true
+  },
+  "required_tests": [
+    "e2e_fr_ext_012_rust_callable_semantics",
+    "gt_fr_ext_012_complete_signatures_and_parameters",
+    "gt_fr_ext_012_declared_values_are_bounded_and_honest",
+    "gt_fr_ext_012_calls_controls_and_lexical_nesting",
+    "conf_fr_ext_012_snapshot_v11_graph_v8_error_v16",
+    "conf_fr_qry_001_v11_uses_local_query_result_v6",
+    "conf_fr_exp_002_portable_graph_v2_lossless_reimport",
+    "conf_fr_exp_002_local_explorer_v2_is_offline",
+    "pt_dr_idn_002_k1_identity_preimages_and_collisions",
+    "pt_fr_ext_012_all_limits_have_maximum_plus_one",
+    "pt_nfr_det_001_k1_fifty_permutations_ten_schedules",
+    "sec_fr_ext_012_never_executes_target_or_toolchain",
+    "sec_fr_exp_002_excludes_body_expression_and_source_text",
+    "sec_fr_exp_002_xss_csp_path_and_race_fail_closed",
+    "reg_fr_cli_001_selector_absence_preserves_r0_r8_bytes"
+  ],
+  "repository_gate": {
+    "command": "actionlint -no-color && python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json && cargo fmt --all --check && cargo clippy --workspace --all-targets --all-features --locked -- -D warnings && cargo test --workspace --all-targets --all-features --locked && cargo test --workspace --doc --all-features --locked && python3 -m unittest discover -s scripts/tests -p 'test_*.py' && python3 scripts/validate_benchmark_assets.py && cargo bench --workspace --all-features --no-run --locked",
+    "status_at_observation": "first complete local attempt passed actionlint, policy validation, formatting, workspace clippy, all workspace tests, and all doctests, then stopped on one immutable R8 roadmap-history assertion; the bounded correction passed both affected governance modules and an exact-head complete rerun remains required before publication",
+    "exit_status": 1,
+    "exact_head_ci": "pending pull request"
+  },
+  "corrections": {
+    "configured_rounds": 5,
+    "rounds_used": 2,
+    "first_gate_failure": "test_s4_portable_explorer_contract.S4R8PortableExplorerGovernanceTests.test_ratification_decision_srs_and_roadmap_are_exact required the historical R8 roadmap markers",
+    "resolution": "Restored the four immutable R8 marker strings as explicitly historical prose while preserving the current R0-R8 and K1 planning state.",
+    "affected_governance_command": "python3 -m unittest scripts.tests.test_s4_portable_explorer_contract scripts.tests.test_s4_k1_rust_callable_semantics_contract",
+    "affected_governance_tests_passed": 24,
+    "affected_governance_exit_status": 0,
+    "first_correction_scope_risk_dependencies_or_oracle_changed": false,
+    "windows_ci_timeout_run": "https://github.com/smutti/codenoesis/actions/runs/31254768550/job/93096430035",
+    "windows_ci_timeout_failure": "The 15-minute portability job budget cancelled the Windows full suite during the pre-existing ft_fr_snp_001_publication_failpoint_matrix after every K1 Windows test passed.",
+    "windows_ci_timeout_resolution": "Increase only the portability job timeout from 15 to 20 minutes; commands, matrix, permissions, secrets, actions, required jobs, and pass/fail semantics remain unchanged.",
+    "second_correction_control_plane_scope_expanded": true,
+    "second_correction_risk": "critical",
+    "second_correction_product_dependencies_contracts_fixtures_or_oracle_changed": false
+  },
+  "retained_red": {
+    "observation": "tests/specifications/s4/k1/red-observation.json",
+    "log": "tests/specifications/s4/k1/red/governance-red.log",
+    "checkpoint_commit_sha": "4dfc21b864395a485c63f4bffb873a61989edeff",
+    "red_commit_sha": "1a6c2c8",
+    "command": "python3 -m unittest scripts.tests.test_s4_k1_rust_callable_semantics_contract",
+    "expected_failure": "K1 production modules, CLI/viewer behavior, and implementation evidence are not materialized",
+    "actual_failure": "test_production_candidate_is_materialized_after_expected_red failed with the exact missing production path set",
+    "exit_status": 1,
+    "log_bytes": 1060,
+    "log_sha256": "e5c80ace104a622c2215d92fca861138f9b9e59352452dcf715862c13a56cd8a",
+    "unexpected_failures": 0
+  },
+  "security_and_privacy": {
+    "first_party_unsafe_block_added": false,
+    "target_or_toolchain_execution": false,
+    "build_script_or_macro_execution": false,
+    "runtime_network": false,
+    "model_provider": false,
+    "browser_auto_launch": false,
+    "body_text_exported": false,
+    "arbitrary_expression_text_exported": false,
+    "source_contents_or_snippets_exported": false,
+    "absolute_paths_or_environment_exported": false,
+    "xss_csp_path_and_mutable_input_fail_closed": true,
+    "portable_reimport_repair_or_claim_upgrade_allowed": false
+  },
+  "dependency_review": {
+    "new_dependencies": 0,
+    "root_manifest_changed": false,
+    "crate_manifest_changed": false,
+    "lockfile_changed": false,
+    "dependency_graph_changed": false
+  },
+  "actual_changed_paths": [
+    ".github/workflows/ci.yml",
+    "crates/codenoesis-application/src/lib.rs",
+    "crates/codenoesis-application/src/s4_k1.rs",
+    "crates/codenoesis-application/tests/s4_k1_rust_callable_semantics.rs",
+    "crates/codenoesis-contracts/src/lib.rs",
+    "crates/codenoesis-contracts/src/s4.rs",
+    "crates/codenoesis-contracts/src/s4_k1.rs",
+    "crates/codenoesis-contracts/tests/s4_k1_contracts.rs",
+    "crates/codenoesis-domain/src/lib.rs",
+    "crates/codenoesis-domain/src/s4_k1.rs",
+    "crates/codenoesis-domain/src/storage.rs",
+    "crates/codenoesis-domain/tests/s4_k1_rust_callable_semantics.rs",
+    "crates/codenoesis-lang-rust/src/callable_semantics.rs",
+    "crates/codenoesis-lang-rust/src/lib.rs",
+    "crates/codenoesis-lang-rust/tests/s4_k1_rust_callable_semantics.rs",
+    "crates/noesis/assets/s4/k1/index.html",
+    "crates/noesis/src/main.rs",
+    "crates/noesis/src/portable_explorer.rs",
+    "crates/noesis/tests/e2e_fr_ext_012_rust_callable_semantics.rs",
+    "crates/noesis/tests/evidence/s4/k1/implementation-observation-local.json",
+    "crates/noesis/tests/support/mod.rs",
+    "crates/noesis/tests/support/s4_k1.rs",
+    "docs/software/decisions/0019-s4-k1-rust-callable-semantics-contract.md",
+    "docs/software/roadmap.md",
+    "docs/software/software-requirements-specification.md",
+    "scripts/tests/test_s4_k1_rust_callable_semantics_contract.py",
+    "tests/fixtures/s4/rust-callable-semantics-v1/README.md",
+    "tests/fixtures/s4/rust-callable-semantics-v1/expected-callable-semantics.json",
+    "tests/fixtures/s4/rust-callable-semantics-v1/manifest.json",
+    "tests/fixtures/s4/rust-callable-semantics-v1/repository/Cargo.toml",
+    "tests/fixtures/s4/rust-callable-semantics-v1/repository/build.rs",
+    "tests/fixtures/s4/rust-callable-semantics-v1/repository/src/lib.rs",
+    "tests/fixtures/s4/rust-callable-semantics-v1/repository/src/model.rs",
+    "tests/specifications/s4/k1/callable-semantics-subset-v1.json",
+    "tests/specifications/s4/k1/codenoesis-error-v16.schema.json",
+    "tests/specifications/s4/k1/configuration-v8.schema.json",
+    "tests/specifications/s4/k1/contract-bundle.json",
+    "tests/specifications/s4/k1/e2e_fr_ext_012_rust_callable_semantics.json",
+    "tests/specifications/s4/k1/extraction-chunk-v8.schema.json",
+    "tests/specifications/s4/k1/invalid-cases-v1.json",
+    "tests/specifications/s4/k1/knowledge-graph-v8.schema.json",
+    "tests/specifications/s4/k1/local-explorer-manifest-v2.schema.json",
+    "tests/specifications/s4/k1/local-query-result-v6.schema.json",
+    "tests/specifications/s4/k1/portable-graph-v2.schema.json",
+    "tests/specifications/s4/k1/red-observation.json",
+    "tests/specifications/s4/k1/red/governance-red.log",
+    "tests/specifications/s4/k1/repository-snapshot-v11.schema.json",
+    "tests/specifications/s4/k1/rust-ontology-v8.json",
+    "tests/specifications/s4/k1/semantic-hash-contract-v7.json"
+  ],
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "rustc_commit": "8bab26f4f68e0e26f0bb7960be334d5b520ea452",
+    "rustc_host": "aarch64-apple-darwin",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "python": "Python 3.9.6",
+    "actionlint": "1.7.12",
+    "toolchain_file_sha256": "279d77167cec5426fa80f457cd066dc74a360fbe4e2816f4f3fa01487a918fdc",
+    "features": "all targets and all features for targeted clippy; focused test targets for K1 validation",
+    "policy_version": 1,
+    "policy_sha256": "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993",
+    "agent": "OpenAI Codex",
+    "model": "not exposed by runtime",
+    "run_identifier": "issue-142-local-k1-20260808T110951Z",
+    "implementation_duration": "not exposed by runtime",
+    "monetary_cost": "not exposed by runtime"
+  },
+  "known_limitations": [
+    "K1 reports committed source-only lexical facts and does not claim compiler CFG, data flow, reachability, dispatch, inferred values, runtime behavior, or macro expansion.",
+    "K2 data-flow semantics and S7 runtime or provider-client behavior are explicitly deferred and are not silently inferred.",
+    "The local Darwin run does not establish native Linux or Windows portability; exact-head matrix CI remains required.",
+    "Exact-head benchmark, CodeQL, independent review, and protected manual merge evidence must come from the pull request.",
+    "This observation supports review and does not mark the candidate requirements Verified."
+  ],
+  "unresolved_decisions": [],
+  "dissent": [],
+  "human_approvals": [
+    "The accountable maintainer authorized the complete K1 package in the interactive task recorded by issue #142.",
+    "The accountable maintainer authorized the exact storage.rs and s4.rs scope expansion in issue comment #5225581916.",
+    "Independent human review and protected manual merge remain required."
+  ]
+}

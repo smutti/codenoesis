@@ -1,0 +1,39 @@
+{
+  "schema_version": "codenoesis.test-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/142",
+  "requirement_ids": [
+    "FR-EXT-012",
+    "FR-EXP-002",
+    "FR-DOC-001",
+    "FR-QRY-001",
+    "FR-CLI-001"
+  ],
+  "slice": "S4",
+  "checkpoint_commit_sha": "4dfc21b864395a485c63f4bffb873a61989edeff",
+  "observed_at": "2026-08-08T10:05:48Z",
+  "command": "python3 -m unittest scripts.tests.test_s4_k1_rust_callable_semantics_contract",
+  "expected_failure": "K1 production modules, CLI/viewer behavior, and implementation evidence are not materialized",
+  "actual_failure": "test_production_candidate_is_materialized_after_expected_red failed with the exact missing production path set",
+  "exit_status": 1,
+  "stdout_bytes": 0,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_bytes": 1060,
+  "stderr_sha256": "e5c80ace104a622c2215d92fca861138f9b9e59352452dcf715862c13a56cd8a",
+  "raw_log_path": "tests/specifications/s4/k1/red/governance-red.log",
+  "raw_log_bytes": 1060,
+  "raw_log_sha256": "e5c80ace104a622c2215d92fca861138f9b9e59352452dcf715862c13a56cd8a",
+  "tests_run": 11,
+  "expected_failures": 1,
+  "unexpected_failures": 0,
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "python": "Python 3.9.6",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "timezone": "CEST",
+    "features": "not applicable to governance unittest",
+    "network": "not used",
+    "model_provider": "not used"
+  }
+}

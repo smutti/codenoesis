@@ -1,0 +1,56 @@
+{
+  "schema_version": "codenoesis.ontology-definition/v1",
+  "ontology_version": "codenoesis.ontology/rust/v8",
+  "extends": [
+    "codenoesis.ontology/rust/v6"
+  ],
+  "optional_incompatible_overlay": "codenoesis.ontology/rust/v7",
+  "entity_kinds": {
+    "rust.callable_signature": {
+      "identity": "one_per_existing_callable",
+      "claim_state": "deterministic_fact"
+    },
+    "rust.parameter": {
+      "identity": "callable_plus_ordinal_plus_nfc_pattern",
+      "claim_state": "deterministic_fact"
+    },
+    "rust.declared_value": {
+      "identity": "one_per_existing_declaration",
+      "claim_state": "deterministic_fact"
+    },
+    "rust.local_binding": {
+      "identity": "callable_plus_evidence",
+      "claim_state": "deterministic_fact"
+    },
+    "rust.call_site": {
+      "identity": "callable_plus_evidence",
+      "claim_state": "deterministic_fact_or_candidate"
+    },
+    "rust.control": {
+      "identity": "callable_plus_control_kind_plus_evidence",
+      "claim_state": "deterministic_fact"
+    }
+  },
+  "relationship_kinds": {
+    "HAS_SIGNATURE": "existing_callable_to_signature",
+    "HAS_PARAMETER": "signature_to_parameter",
+    "DECLARES_VALUE": "existing_declaration_to_value",
+    "HAS_BODY_FACT": "existing_callable_to_body_fact",
+    "CALLS": "existing_callable_to_unique_local_free_function"
+  },
+  "forbidden_relationship_kinds": [
+    "EXECUTES",
+    "REACHES",
+    "READS",
+    "WRITES"
+  ],
+  "identity_domains": {
+    "entity": "codenoesis.entity-id/rust-callable-semantics/v1",
+    "relationship": "codenoesis.relationship-id/rust-callable-semantics/v1",
+    "diagnostic": "codenoesis.diagnostic-id/rust-callable-semantics/v1",
+    "coverage_gap": "codenoesis.coverage-gap-id/rust-callable-semantics/v1"
+  },
+  "preserves_existing_ids": true,
+  "normalization": "NFC",
+  "ordering": "exact_utf8_identity"
+}

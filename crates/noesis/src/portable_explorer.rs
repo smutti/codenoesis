@@ -6,8 +6,9 @@ use std::path::{Component, Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 
 use codenoesis_contracts::{
-    LocalExplorerManifestV1, MAX_R8_PORTABLE_GRAPH_BYTES, PortableGraphV1, R8_EXPLORER_MARKER,
-    R8_PORTABLE_MARKER, R8ContractError,
+    K1_EXPLORER_MARKER, K1_PORTABLE_MARKER, K1ContractError, LocalExplorerManifestV1,
+    LocalExplorerManifestV2, MAX_K1_PORTABLE_GRAPH_BYTES, MAX_R8_PORTABLE_GRAPH_BYTES,
+    PortableGraphV1, PortableGraphV2, R8_EXPLORER_MARKER, R8_PORTABLE_MARKER, R8ContractError,
 };
 #[cfg(any(unix, windows))]
 use same_file::Handle as FileIdentity;
@@ -17,8 +18,15 @@ const PORTABLE_MARKER_BYTES: &[u8] =
     b"{\"schema_version\":\"codenoesis.portable-graph-marker/v1\"}\n";
 const EXPLORER_MARKER_BYTES: &[u8] =
     b"{\"schema_version\":\"codenoesis.local-explorer-marker/v1\"}\n";
+const K1_PORTABLE_MARKER_BYTES: &[u8] =
+    b"{\"schema_version\":\"codenoesis.portable-graph-marker/v2\"}\n";
+const K1_EXPLORER_MARKER_BYTES: &[u8] =
+    b"{\"schema_version\":\"codenoesis.local-explorer-marker/v2\"}\n";
 const VIEWER_SHA256: &str = "1caa2c0ca5675937eab674f61681883ba3c6a428feb6b1baa744a0cb7eecd044";
 const VIEWER_SOURCE_BYTES: &[u8] = include_bytes!("../assets/s4/r8/index.html");
+const K1_VIEWER_SHA256: &str = "d0b633b29e6494d6494a35b5553d72c3dd04a747eeef219ca33a9f5fe2a1f4fa";
+const K1_VIEWER_SOURCE_BYTES: &[u8] = include_bytes!("../assets/s4/k1/index.html");
+const K1_CONTENT_SECURITY_POLICY: &str = "default-src 'none'; script-src 'sha256-R41XZjWjTeEyibhsIBP7psaPv+NxqnUdBpe0aobqE60='; style-src 'sha256-DlrPz5j7NCFDGArFkpQGNY37x++FaVe5CWumM3tlRuw='; img-src 'none'; font-src 'none'; connect-src 'none'; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'; manifest-src 'none'; media-src 'none'; worker-src 'none'";
 static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -28,12 +36,19 @@ pub enum PortableExplorerError {
         reason: &'static str,
     },
     Contract(R8ContractError),
+    K1Contract(K1ContractError),
     Internal,
 }
 
 impl From<R8ContractError> for PortableExplorerError {
     fn from(error: R8ContractError) -> Self {
         Self::Contract(error)
+    }
+}
+
+impl From<K1ContractError> for PortableExplorerError {
+    fn from(error: K1ContractError) -> Self {
+        Self::K1Contract(error)
     }
 }
 
@@ -79,6 +94,48 @@ pub fn publish_portable_graph(
     publish_files(
         prepared,
         OutputKind::Portable,
+        &[OwnedFile::new("portable-graph.json", bytes.clone())],
+    )?;
+    Ok(bytes)
+}
+
+/// Validates a K1 export destination without creating or changing it.
+///
+/// # Errors
+///
+/// Returns a typed error for aliasing, symlinks, escapes, or invalid ownership.
+pub fn validate_k1_export_output_root(
+    store: &Path,
+    output: &Path,
+) -> Result<(), PortableExplorerError> {
+    validate_output_root(store, output, OutputKind::K1Portable)
+}
+
+/// Creates an absent K1 export destination after complete validation.
+///
+/// # Errors
+///
+/// Returns a typed error when validation or directory creation fails.
+pub fn ensure_k1_export_output_root_for_boundary(
+    store: &Path,
+    output: &Path,
+) -> Result<PreparedOutputRoot, PortableExplorerError> {
+    ensure_output_root(store, output, OutputKind::K1Portable)
+}
+
+/// Publishes one validated K1 portable graph into its marker-owned destination.
+///
+/// # Errors
+///
+/// Returns a typed error for integrity, ownership, race, or I/O failures.
+pub fn publish_portable_graph_v2(
+    prepared: &PreparedOutputRoot,
+    portable: &PortableGraphV2,
+) -> Result<Vec<u8>, PortableExplorerError> {
+    let bytes = portable.canonical_file();
+    publish_files(
+        prepared,
+        OutputKind::K1Portable,
         &[OwnedFile::new("portable-graph.json", bytes.clone())],
     )?;
     Ok(bytes)
@@ -184,6 +241,105 @@ fn read_portable_graph_with(
         return Err(invalid_input(&input));
     }
     let portable = PortableGraphV1::from_canonical_file(&bytes, sha256)?;
+    Ok((portable, bytes))
+}
+
+/// Acquires and strictly validates one immutable K1 portable graph input.
+///
+/// # Errors
+///
+/// Returns a typed error for unsafe paths, input races, limits, or contract failures.
+pub fn read_portable_graph_v2(
+    input: &Path,
+) -> Result<(PortableGraphV2, Vec<u8>), PortableExplorerError> {
+    read_portable_graph_v2_with(input, || {})
+}
+
+fn read_portable_graph_v2_with(
+    input: &Path,
+    after_first_read: impl FnOnce(),
+) -> Result<(PortableGraphV2, Vec<u8>), PortableExplorerError> {
+    let input = absolute_without_parent_components(input)
+        .map_err(|_| PortableExplorerError::K1Contract(K1ContractError::InvalidProjection))?;
+    verify_existing_components(&input)?;
+    let path_metadata = fs::symlink_metadata(&input).map_err(|_| invalid_k1_input())?;
+    if !path_metadata.is_file() || unsafe_metadata(&path_metadata) {
+        return Err(invalid_k1_input());
+    }
+    let mut file = File::open(&input).map_err(|_| invalid_k1_input())?;
+    let before = file.metadata().map_err(|_| invalid_k1_input())?;
+    #[cfg(any(unix, windows))]
+    let identity = FileIdentity::from_file(file.try_clone().map_err(|_| invalid_k1_input())?)
+        .map_err(|_| invalid_k1_input())?;
+    let maximum = MAX_K1_PORTABLE_GRAPH_BYTES;
+    if before.len() > maximum {
+        return Err(K1ContractError::LimitExceeded {
+            limit: "portable_graph_bytes",
+            maximum,
+            observed: before.len(),
+        }
+        .into());
+    }
+    let capacity = usize::try_from(before.len()).map_err(|_| K1ContractError::LimitExceeded {
+        limit: "portable_graph_bytes",
+        maximum,
+        observed: u64::MAX,
+    })?;
+    let mut bytes = Vec::with_capacity(capacity);
+    std::io::Read::by_ref(&mut file)
+        .take(maximum.saturating_add(1))
+        .read_to_end(&mut bytes)
+        .map_err(|_| invalid_k1_input())?;
+    let observed = u64::try_from(bytes.len()).unwrap_or(u64::MAX);
+    if observed > maximum {
+        return Err(K1ContractError::LimitExceeded {
+            limit: "portable_graph_bytes",
+            maximum,
+            observed,
+        }
+        .into());
+    }
+    after_first_read();
+    verify_open_file_bytes(&mut file, &bytes).map_err(|_| invalid_k1_input())?;
+    let after = file.metadata().map_err(|_| invalid_k1_input())?;
+    let path_before_reopen = fs::symlink_metadata(&input).map_err(|_| invalid_k1_input())?;
+    if !path_before_reopen.is_file() || unsafe_metadata(&path_before_reopen) {
+        return Err(invalid_k1_input());
+    }
+    let mut reopened = File::open(&input).map_err(|_| invalid_k1_input())?;
+    let reopened_before = reopened.metadata().map_err(|_| invalid_k1_input())?;
+    if !reopened_before.is_file() {
+        return Err(invalid_k1_input());
+    }
+    #[cfg(any(unix, windows))]
+    let reopened_identity =
+        FileIdentity::from_file(reopened.try_clone().map_err(|_| invalid_k1_input())?)
+            .map_err(|_| invalid_k1_input())?;
+    verify_open_file_bytes(&mut reopened, &bytes).map_err(|_| invalid_k1_input())?;
+    let reopened_after = reopened.metadata().map_err(|_| invalid_k1_input())?;
+    let path_after = fs::symlink_metadata(&input).map_err(|_| invalid_k1_input())?;
+    #[cfg(any(unix, windows))]
+    let path_identity_matches =
+        FileIdentity::from_path(&input).is_ok_and(|path_identity| path_identity == identity);
+    #[cfg(not(any(unix, windows)))]
+    let path_identity_matches = true;
+    #[cfg(any(unix, windows))]
+    let reopened_identity_matches = reopened_identity == identity;
+    #[cfg(not(any(unix, windows)))]
+    let reopened_identity_matches = true;
+    if before.len() != observed
+        || unsafe_metadata(&path_after)
+        || !same_file_metadata(&before, &after)
+        || !same_file_metadata(&after, &path_before_reopen)
+        || !same_file_metadata(&path_before_reopen, &reopened_before)
+        || !same_file_metadata(&reopened_before, &reopened_after)
+        || !same_file_metadata(&reopened_after, &path_after)
+        || !reopened_identity_matches
+        || !path_identity_matches
+    {
+        return Err(invalid_k1_input());
+    }
+    let portable = PortableGraphV2::from_canonical_file(&bytes, sha256)?;
     Ok((portable, bytes))
 }
 
@@ -293,6 +449,67 @@ pub fn publish_local_explorer(
     publish_files(
         prepared,
         OutputKind::Explorer,
+        &[
+            OwnedFile::new("portable-graph.json", portable_bytes.to_vec()),
+            OwnedFile::new("index.html", viewer_bytes),
+            OwnedFile::new("explorer-manifest.json", manifest_bytes.clone()),
+        ],
+    )?;
+    Ok(manifest_bytes)
+}
+
+/// Validates a K1 explorer destination without creating or changing it.
+///
+/// # Errors
+///
+/// Returns a typed error for aliasing, symlinks, escapes, or invalid ownership.
+pub fn validate_k1_explorer_output_root(
+    input: &Path,
+    output: &Path,
+) -> Result<(), PortableExplorerError> {
+    validate_output_root(input, output, OutputKind::K1Explorer)
+}
+
+/// Creates an absent K1 explorer destination after complete validation.
+///
+/// # Errors
+///
+/// Returns a typed error when validation or directory creation fails.
+pub fn ensure_k1_explorer_output_root_for_boundary(
+    input: &Path,
+    output: &Path,
+) -> Result<PreparedOutputRoot, PortableExplorerError> {
+    ensure_output_root(input, output, OutputKind::K1Explorer)
+}
+
+/// Publishes the reviewed K1 static explorer bound to one validated graph.
+///
+/// # Errors
+///
+/// Returns a typed error for asset, integrity, ownership, race, or I/O failures.
+pub fn publish_local_explorer_v2(
+    prepared: &PreparedOutputRoot,
+    portable: &PortableGraphV2,
+    portable_bytes: &[u8],
+) -> Result<Vec<u8>, PortableExplorerError> {
+    if portable.canonical_file() != portable_bytes {
+        return Err(K1ContractError::InvalidProjection.into());
+    }
+    let viewer_bytes =
+        normalize_checkout_text(K1_VIEWER_SOURCE_BYTES).ok_or(PortableExplorerError::Internal)?;
+    let manifest = LocalExplorerManifestV2::new(
+        portable,
+        &viewer_bytes,
+        K1_VIEWER_SHA256,
+        K1_CONTENT_SECURITY_POLICY,
+        sha256,
+    )?;
+    let manifest_bytes = manifest
+        .canonical_file()
+        .map_err(|_| PortableExplorerError::Internal)?;
+    publish_files(
+        prepared,
+        OutputKind::K1Explorer,
         &[
             OwnedFile::new("portable-graph.json", portable_bytes.to_vec()),
             OwnedFile::new("index.html", viewer_bytes),
@@ -666,6 +883,10 @@ fn invalid_input(path: &Path) -> PortableExplorerError {
     })
 }
 
+fn invalid_k1_input() -> PortableExplorerError {
+    PortableExplorerError::K1Contract(K1ContractError::InvalidProjection)
+}
+
 #[cfg(unix)]
 fn same_file_metadata(left: &Metadata, right: &Metadata) -> bool {
     use std::os::unix::fs::MetadataExt as _;
@@ -743,6 +964,8 @@ impl OwnedFile {
 enum OutputKind {
     Portable,
     Explorer,
+    K1Portable,
+    K1Explorer,
 }
 
 impl OutputKind {
@@ -750,6 +973,8 @@ impl OutputKind {
         match self {
             Self::Portable => R8_PORTABLE_MARKER,
             Self::Explorer => R8_EXPLORER_MARKER,
+            Self::K1Portable => K1_PORTABLE_MARKER,
+            Self::K1Explorer => K1_EXPLORER_MARKER,
         }
     }
 
@@ -757,6 +982,8 @@ impl OutputKind {
         match self {
             Self::Portable => PORTABLE_MARKER_BYTES,
             Self::Explorer => EXPLORER_MARKER_BYTES,
+            Self::K1Portable => K1_PORTABLE_MARKER_BYTES,
+            Self::K1Explorer => K1_EXPLORER_MARKER_BYTES,
         }
     }
 
@@ -765,6 +992,13 @@ impl OutputKind {
             Self::Portable => BTreeSet::from([R8_PORTABLE_MARKER, "portable-graph.json"]),
             Self::Explorer => BTreeSet::from([
                 R8_EXPLORER_MARKER,
+                "portable-graph.json",
+                "index.html",
+                "explorer-manifest.json",
+            ]),
+            Self::K1Portable => BTreeSet::from([K1_PORTABLE_MARKER, "portable-graph.json"]),
+            Self::K1Explorer => BTreeSet::from([
+                K1_EXPLORER_MARKER,
                 "portable-graph.json",
                 "index.html",
                 "explorer-manifest.json",

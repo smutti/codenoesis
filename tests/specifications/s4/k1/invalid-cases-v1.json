@@ -1,0 +1,27 @@
+{
+  "schema_version": "codenoesis.k1-invalid-cases/v1",
+  "cases": [
+    {"id": "missing_required_profile", "expected": "input.unsupported_rust_callable_composition"},
+    {"id": "compiler_profile_composition", "expected": "input.unsupported_rust_callable_composition"},
+    {"id": "malformed_callable", "expected": "extraction.invalid_callable_syntax"},
+    {"id": "unicode_nfc_identity_collision", "expected": "extraction.callable_identity_conflict"},
+    {"id": "parameters_max_plus_one", "expected": "extraction.callable_limit_exceeded"},
+    {"id": "body_facts_max_plus_one", "expected": "extraction.callable_limit_exceeded"},
+    {"id": "lexical_depth_max_plus_one", "expected": "extraction.callable_limit_exceeded"},
+    {"id": "signature_bytes_max_plus_one", "expected": "extraction.callable_limit_exceeded"},
+    {"id": "expression_bytes_max_plus_one", "expected": "extraction.callable_limit_exceeded"},
+    {"id": "duplicate_k1_entity", "expected": "snapshot.invalid_v11"},
+    {"id": "dangling_calls_target", "expected": "snapshot.invalid_v11"},
+    {"id": "missing_evidence", "expected": "snapshot.invalid_v11"},
+    {"id": "portable_unknown_field", "expected": "export.invalid_portable_graph_v2"},
+    {"id": "portable_noncanonical_order", "expected": "export.invalid_portable_graph_v2"},
+    {"id": "portable_body_text", "expected": "export.invalid_portable_graph_v2"},
+    {"id": "portable_expression_text", "expected": "export.invalid_portable_graph_v2"},
+    {"id": "portable_bytes_max_plus_one", "expected": "export.limit_exceeded"},
+    {"id": "output_parent_symlink", "expected": "input.unsafe_output_path"},
+    {"id": "output_race_replacement", "expected": "input.unsafe_output_path"},
+    {"id": "html_script_close", "expected": "explorer.asset_integrity_mismatch"},
+    {"id": "remote_resource", "expected": "explorer.asset_integrity_mismatch"},
+    {"id": "dynamic_code", "expected": "explorer.asset_integrity_mismatch"}
+  ]
+}

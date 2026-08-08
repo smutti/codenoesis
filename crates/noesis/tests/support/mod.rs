@@ -9,6 +9,7 @@ pub mod s1_packed;
 pub mod s2;
 pub mod s3;
 pub mod s4;
+pub mod s4_k1;
 pub mod s4_r3;
 pub mod s4_r4;
 pub mod s4_r5;

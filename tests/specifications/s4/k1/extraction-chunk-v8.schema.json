@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/extraction-chunk-v8.schema.json",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "source_file_id",
+    "entities",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage",
+    "semantic_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "codenoesis.extraction-chunk/v8"},
+    "source_file_id": {"type": "string", "pattern": "^urn:codenoesis:entity:blake3:[0-9a-f]{64}$"},
+    "entities": {"type": "array", "items": {"$ref": "#/$defs/idRecord"}},
+    "relationships": {"type": "array", "items": {"$ref": "#/$defs/idRecord"}},
+    "claims": {"type": "array", "items": {"$ref": "#/$defs/idRecord"}},
+    "evidence": {"type": "array", "items": {"$ref": "#/$defs/idRecord"}},
+    "diagnostics": {"type": "array", "items": {"$ref": "#/$defs/idRecord"}},
+    "coverage": {"type": "array", "items": {"$ref": "#/$defs/idRecord"}},
+    "callable_semantics_profile": {"const": "rust-callable-semantics-v1"},
+    "semantic_hash": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "idRecord": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {"id": {"type": "string", "minLength": 1}}
+    },
+    "hash": {
+      "type": "object",
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {"const": "blake3-256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

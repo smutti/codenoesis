@@ -1,0 +1,83 @@
+{
+  "schema_version": "codenoesis.k1-expected-callable-semantics/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1",
+  "ontology_version": "codenoesis.ontology/rust/v8",
+  "profile": "rust-callable-semantics-v1",
+  "new_entity_counts": {
+    "rust.callable_signature": 9,
+    "rust.parameter": 15,
+    "rust.declared_value": 10,
+    "rust.local_binding": 4,
+    "rust.call_site": 9,
+    "rust.control": 11
+  },
+  "new_relationship_counts": {
+    "HAS_SIGNATURE": 9,
+    "HAS_PARAMETER": 15,
+    "DECLARES_VALUE": 10,
+    "HAS_BODY_FACT": 24,
+    "CALLS": 4
+  },
+  "callable_names": [
+    "async_entry",
+    "control_flow",
+    "fallible",
+    "ffi_identity",
+    "helper",
+    "label",
+    "process",
+    "process",
+    "run"
+  ],
+  "value_states": {
+    "normalized_scalar": 7,
+    "expression_only": 2,
+    "unresolved": 1
+  },
+  "normalized_values": [
+    {"declaration": "ENABLED", "kind": "boolean", "value": true},
+    {"declaration": "LIMIT_HEX", "kind": "integer", "sign": "positive", "radix": 16, "digits": "ff", "suffix": "u16"},
+    {"declaration": "NEGATIVE", "kind": "integer", "sign": "negative", "radix": 10, "digits": "7", "suffix": "i32"},
+    {"declaration": "LETTER", "kind": "character", "value": "\n"},
+    {"declaration": "NAME", "kind": "string", "value": "callable\nfixture"},
+    {"declaration": "Ready", "kind": "integer", "sign": "positive", "radix": 10, "digits": "1", "suffix": null},
+    {"declaration": "Failed", "kind": "integer", "sign": "negative", "radix": 10, "digits": "2", "suffix": null}
+  ],
+  "expression_only_declarations": ["COMPUTED", "Computed"],
+  "unresolved_declarations": ["Pending"],
+  "control_kinds": [
+    "if",
+    "if_let",
+    "match",
+    "loop",
+    "while",
+    "while_let",
+    "for",
+    "return",
+    "break",
+    "continue",
+    "try"
+  ],
+  "resolved_call_targets": [
+    {"source": "async_entry", "target": "helper"},
+    {"source": "control_flow", "target": "fallible"},
+    {"source": "control_flow", "target": "helper"},
+    {"source": "run", "target": "helper"}
+  ],
+  "unresolved_call_spellings": [
+    "external::dispatch",
+    "input.clone",
+    "input.to_owned",
+    "items.pop",
+    "worker.run"
+  ],
+  "hard_negative_labels": [
+    "build_script_not_executed",
+    "comment_callable_decoy",
+    "string_callable_decoy",
+    "macro_generated_callable_decoy",
+    "no_body_text_export",
+    "no_expression_text_export",
+    "no_cfg_or_runtime_claim"
+  ]
+}
