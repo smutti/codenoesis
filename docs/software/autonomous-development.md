@@ -1,10 +1,11 @@
 # Autonomous development governance
 
 > Status: **A1 automation scaffold implemented, inactive by default**. The
-> repository contains bounded proposal, static review, watchdog, CI, and
-> benchmark-contract workflows. Remote rulesets, the publisher GitHub App,
-> secrets, and shadow validation must be completed before the kill switch is
-> enabled. No autonomous product change has run yet.
+> repository contains bounded proposal, independently gated read-only review,
+> watchdog, CI, and benchmark-contract workflows. Proposal automation remains
+> disabled, and AI review must remain disabled until its environment secret is
+> provisioned directly by the maintainer. No autonomous product change has run
+> yet.
 
 ## Objective
 
@@ -77,6 +78,30 @@ without the model credential.
 
 Cloud and release access must use short-lived credentials and protected
 environments. No automation identity receives a ruleset bypass.
+
+## Read-only AI review activation
+
+The trusted-base review workflow has its own repository kill switch,
+`CODEX_REVIEW_ENABLED`. It gates only the model job and its review-policy
+classification. `CODEX_AUTOMATION_ENABLED=false` continues to keep proposal,
+publisher, watchdog, signing, and release capabilities inactive; enabling the
+review switch does not grant those capabilities or require publisher
+configuration for a human-authored pull request.
+
+The accountable maintainer must provision `OPENAI_API_KEY` directly in the
+protected `codex-model` environment after the workflow is merged. The value
+must never pass through source, an issue, a pull request, a log, an artifact, a
+command line, or an agent. Without that environment secret, the review switch
+must remain `false`.
+Missing or false `CODEX_REVIEW_ENABLED` leaves the deterministic policy gate
+successful with an explicit disabled reason and does not invoke the model.
+
+After the trusted workflow is merged and the secret exists, the maintainer may
+set `CODEX_REVIEW_ENABLED=true` while keeping
+`CODEX_AUTOMATION_ENABLED=false`. The review remains advisory and read-only: it
+cannot approve, merge, publish, sign, or release. Rollback is immediate by
+setting `CODEX_REVIEW_ENABLED=false`; no agent performs either activation or
+secret handling.
 
 ## Work item contract
 
