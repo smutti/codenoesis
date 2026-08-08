@@ -1,7 +1,7 @@
 # CodeNoesis Delivery Roadmap
 
 > Status: **Proposed planning companion — not implementation authority**.
-> Last updated: **2026-08-06**.
+> Last updated: **2026-08-08**.
 
 This roadmap sequences product and validation work without changing the
 normative meaning or approval status of the
@@ -87,13 +87,12 @@ pre-merge roadmap said "R0-R6 are implemented" and used the exact marker
 "R7 static import governance is Proposed"; those markers are also retained
 only as history.
 
-R0-R7 are implemented, but remain not Verified until their complete retained
-evidence is independently accepted. R7 is implemented but not yet Verified;
-index generation remains S9 work. R8 governance is Approved only by the exact
-protected manual merge of the package authorized in issue #110, and that merge
-still authorizes no product implementation. The bounded delivery order is
-R7 → R8 → R9; implementation, review, and protected merge remain separate for
-each capability.
+R0-R8 are implemented, but remain not Verified until their complete retained
+evidence is independently accepted. R7 static import still grants no index
+generation authority. K1 is the next Proposed branch-scoped candidate: it adds
+source-callable/value/body semantics and V2 visualization without pretending
+to provide compiler data flow or runtime truth. The bounded delivery order is
+K1 → R9; protected review and manual merge remain authoritative.
 
 | Order | Planning item | Outcome | Governance dependency | Candidate acceptance gate |
 |---|---|---|---|---|
@@ -105,7 +104,8 @@ each capability.
 | `R5` | Rust semantic depth at real-world scale | Implemented but not Verified: the explicit V8 declaration-only profile adds fields, variants, constants/statics, associated types, inherent methods, trait-context method identities, and attribute-preserving uncertainty states. | Decision 0015, protected governance/correction/product merges #112/#115/#116; complete immutable verification remains open. | Reviewed generic fixtures and sampled facts from multiple corpus entries cover every new entity/relation, malformed syntax, stable IDs, graph invariants, evidence resolution, selector-absent compatibility, no execution, and deterministic replay. |
 | `R6` | Honest framework and macro handling | Implemented but not Verified: the explicit V9 source profile adds framework-neutral component, service, configuration, endpoint, route, and handler declarations for closed forms while preserving unresolved `cfg`, attribute-macro, declarative-macro, and proc-macro meaning as candidates and gaps. | Decision 0016 plus protected governance/evidence-ID/product merges #118/#121/#122; complete immutable verification remains open. | The project-owned two-style fixture finds reviewed declarations and unresolved candidates, rejects comments/strings/docs/imports/names/unused/generated/target decoys, preserves exact evidence and identities, never expands code, and never labels syntax as observed runtime behavior. |
 | `R7` | Optional compiler-grade enrichment | Implemented but not Verified: one explicitly supplied Rust SCIP v0.9.0 artifact is accepted only after exact repository/revision/tree/source/producer/toolchain binding and bounded canonical wire validation; compiler symbols plus `RESOLVES_TO`, `REFERENCES`, `IMPLEMENTS`, and `TYPE_DEFINITION` add no calls or generated source. | Decision 0017, protected governance/correction/product merges through #130, and bounded `FR-EXT-005`; complete immutable verification remains open. Static import grants no build authority, and generation remains S9 work behind a separately approved trust/sandbox profile. | The project-owned binary fixture imports deterministically with dual source/index evidence, explicit external/generated states and call/macro gaps; stale, malformed, mismatched, ambiguous, over-limit, unsafe, or privacy-leaking inputs fail before publication. Standard local scans still execute nothing. |
-| `R8` | Portable graph export and local explorer | Governance package defined, product not implemented: export exact R7 families as canonical PortableGraphV1 and generate a read-only first-party LocalExplorerV1 with exact-ID/text search, typed filters, evidence inspection, and deterministic depth-1/2 neighborhoods. | Decision 0018 and issue #110; protected governance merge approves only the bounded contract. A separate Ready product issue must retain its own CLI Red. The V10 snapshot remains canonical; no dependency, source snippet, server, network, browser auto-launch, or ontology change is authorized. | Lossless reimport validates every identity/reference/evidence/family digest; 50 permutations are byte-identical; CSP/XSS/privacy/path/symlink and maximum-plus-one cases fail closed; the static viewer remains useful without the source repository and cannot mutate the graph. |
+| `R8` | Portable graph export and local explorer | Implemented but not Verified: export exact R7 families as canonical PortableGraphV1 and generate a read-only first-party LocalExplorerV1 with exact-ID/text search, typed filters, evidence inspection, and deterministic depth-1/2 neighborhoods. | Decision 0018 plus protected governance/product/correction merges through #139; complete immutable verification remains open. The V10 snapshot stays canonical and R8 adds no ontology fact. | Lossless reimport validates every identity/reference/evidence/family digest; 50 permutations are byte-identical; CSP/XSS/privacy/path/symlink and maximum-plus-one cases fail closed; the static viewer remains useful without the source repository and cannot mutate the graph. |
+| `K1` | Deterministic Rust callable and value semantics | Proposed issue #142 single-PR candidate: add complete reviewed callable signatures, ordered parameters, normalized closed scalar values, expression-only states, local bindings, call sites, unique-local `CALLS`, syntactic control structure, exact evidence, LocalQueryResultV6, PortableGraphV2, and LocalExplorerV2. | Decision 0019, exact base `03ee09b172e84b5b7f5f423f9f65d63cf2953385`, maintainer authorization, governance checkpoint, retained Red, no new dependency, and protected manual merge. K1 v1 is source-only and does not compose with R7 SCIP. | The project-owned fixture completes scan → docs → exact-ID query → export → explore; exact counts/identities, five unresolved calls, all eleven control kinds, 50 permutations, ten schedules, privacy/limits/no-execution, and byte-identical R0-R8 regressions pass. |
 | `R9` | Multi-repository pilot and publication evidence | Run scan, docs, query, export, and explorer against structurally independent pinned public repositories and publish a reproducible evaluation package. | Product evidence remains under `docs/software/`; conference hypotheses and analysis remain under `docs/research/`. | Repeated runs are deterministic; per-repository and aggregate graph/coverage counts, unresolved constructs, timings, resource usage, environment, tool versions, failure cases, and known limitations are retained in machine-readable form. |
 
 ### Earliest useful real-world checkpoint

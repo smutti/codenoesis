@@ -1,0 +1,177 @@
+{
+  "schema_version": "codenoesis.k1-rust-callable-semantics-oracle/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/142",
+  "scope_expansion_authorization": "https://github.com/smutti/codenoesis/issues/142#issuecomment-5225581916",
+  "required_base": "03ee09b172e84b5b7f5f423f9f65d63cf2953385",
+  "requirement_ids": [
+    "FR-EXT-012",
+    "FR-EXP-002",
+    "FR-DOC-001",
+    "FR-QRY-001",
+    "FR-CLI-001"
+  ],
+  "requirement_status": {
+    "current": "Proposed branch-scoped candidate",
+    "target_after_protected_merge": "Approved for the bounded K1 profile"
+  },
+  "slice": "S4",
+  "roadmap_capability": "K1",
+  "risk": "high",
+  "risk_owner": "@smutti",
+  "correction_rounds": 5,
+  "dependencies": [],
+  "contracts": {
+    "configuration": "codenoesis.configuration/v8",
+    "ontology": "codenoesis.ontology/rust/v8",
+    "extraction": "codenoesis.extraction/v8",
+    "extraction_chunk": "codenoesis.extraction-chunk/v8",
+    "knowledge_graph": "codenoesis.knowledge-graph/v8",
+    "snapshot": "codenoesis.repository-snapshot/v11",
+    "query": "codenoesis.local-query-result/v6",
+    "portable_graph": "codenoesis.portable-graph/v2",
+    "local_explorer": "codenoesis.local-explorer/v2",
+    "error": "codenoesis.error/v16"
+  },
+  "selector": {
+    "flag": "--rust-callable-profile",
+    "value": "rust-callable-semantics-v1",
+    "required_profile": "standard-local-s4",
+    "required_workspace_profile": "cargo-root-package-v1",
+    "required_manifest_profile": "cargo-manifest-facts-v1",
+    "required_rust_semantic_profile": "rust-semantic-depth-v1",
+    "required_framework_profile": "rust-framework-declarations-v1",
+    "compiler_index_composition": false,
+    "implicit_selection": false
+  },
+  "public_journey": {
+    "sequence": ["scan", "docs", "query", "export", "explore"],
+    "export_selector": ["--portable-profile", "rust-callable-semantics-v1"],
+    "explore_selector": ["--explorer-profile", "rust-callable-semantics-v1"],
+    "restart_before_query": true,
+    "success_exit_code": 0,
+    "success_stderr_bytes": 0,
+    "network": false,
+    "child_process": false,
+    "browser_auto_launch": false,
+    "target_execution": false,
+    "compiler_execution": false,
+    "model_provider": false
+  },
+  "expected_fixture": {
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1",
+    "commit_oid": "9a7bb3adaa5bf30eef3bc9bc656c81f42fbdb845",
+    "tree_oid": "ead855e0545cc26b351b305fcad39f2e491b285d",
+    "new_entity_counts": {
+      "rust.callable_signature": 9,
+      "rust.parameter": 15,
+      "rust.declared_value": 10,
+      "rust.local_binding": 4,
+      "rust.call_site": 9,
+      "rust.control": 11
+    },
+    "new_relationship_counts": {
+      "HAS_SIGNATURE": 9,
+      "HAS_PARAMETER": 15,
+      "DECLARES_VALUE": 10,
+      "HAS_BODY_FACT": 24,
+      "CALLS": 4
+    },
+    "value_state_counts": {
+      "normalized_scalar": 7,
+      "expression_only": 2,
+      "unresolved": 1
+    },
+    "unresolved_call_candidates": 5,
+    "control_kinds": 11
+  },
+  "limits": {
+    "callables_per_source": 4096,
+    "parameters_per_callable": 256,
+    "body_facts_per_callable": 8192,
+    "body_fact_lexical_depth": 256,
+    "signature_component_bytes": 4096,
+    "expression_metadata_bytes": 4096,
+    "entities_total": 200000,
+    "relationships_total": 400000,
+    "diagnostics_total": 50000,
+    "coverage_gaps_total": 50000,
+    "portable_graph_bytes": 268435456,
+    "json_nesting": 64,
+    "permutations": 50,
+    "schedules": 10
+  },
+  "privacy": {
+    "body_text_exported": false,
+    "arbitrary_expression_text_exported": false,
+    "source_contents_exported": false,
+    "source_snippets_exported": false,
+    "absolute_paths_exported": false,
+    "environment_exported": false
+  },
+  "required_test_names": [
+    "e2e_fr_ext_012_rust_callable_semantics",
+    "gt_fr_ext_012_complete_signatures_and_parameters",
+    "gt_fr_ext_012_declared_values_are_bounded_and_honest",
+    "gt_fr_ext_012_calls_controls_and_lexical_nesting",
+    "conf_fr_ext_012_snapshot_v11_graph_v8_error_v16",
+    "conf_fr_qry_001_v11_uses_local_query_result_v6",
+    "conf_fr_exp_002_portable_graph_v2_lossless_reimport",
+    "conf_fr_exp_002_local_explorer_v2_is_offline",
+    "pt_dr_idn_002_k1_identity_preimages_and_collisions",
+    "pt_fr_ext_012_all_limits_have_maximum_plus_one",
+    "pt_nfr_det_001_k1_fifty_permutations_ten_schedules",
+    "sec_fr_ext_012_never_executes_target_or_toolchain",
+    "sec_fr_exp_002_excludes_body_expression_and_source_text",
+    "sec_fr_exp_002_xss_csp_path_and_race_fail_closed",
+    "reg_fr_cli_001_selector_absence_preserves_r0_r8_bytes"
+  ],
+  "allowed_paths": [
+    "docs/software/software-requirements-specification.md",
+    "docs/software/roadmap.md",
+    "docs/software/decisions/0019-s4-k1-rust-callable-semantics-contract.md",
+    "tests/specifications/s4/k1/**",
+    "tests/fixtures/s4/rust-callable-semantics-v1/**",
+    "scripts/tests/test_s4_k1_rust_callable_semantics_contract.py",
+    "crates/codenoesis-domain/src/lib.rs",
+    "crates/codenoesis-domain/src/storage.rs",
+    "crates/codenoesis-domain/src/s4_k1.rs",
+    "crates/codenoesis-domain/tests/s4_k1_rust_callable_semantics.rs",
+    "crates/codenoesis-lang-rust/src/lib.rs",
+    "crates/codenoesis-lang-rust/src/callable_semantics.rs",
+    "crates/codenoesis-lang-rust/tests/s4_k1_rust_callable_semantics.rs",
+    "crates/codenoesis-application/src/lib.rs",
+    "crates/codenoesis-application/src/s4_k1.rs",
+    "crates/codenoesis-application/tests/s4_k1_rust_callable_semantics.rs",
+    "crates/codenoesis-contracts/src/lib.rs",
+    "crates/codenoesis-contracts/src/s4.rs",
+    "crates/codenoesis-contracts/src/s4_k1.rs",
+    "crates/codenoesis-contracts/tests/s4_k1_contracts.rs",
+    "crates/noesis/src/main.rs",
+    "crates/noesis/src/lib.rs",
+    "crates/noesis/src/portable_explorer.rs",
+    "crates/noesis/assets/s4/k1/index.html",
+    "crates/noesis/tests/e2e_fr_ext_012_rust_callable_semantics.rs",
+    "crates/noesis/tests/support/mod.rs",
+    "crates/noesis/tests/support/s4_k1.rs",
+    "crates/noesis/tests/evidence/s4/k1/**"
+  ],
+  "protected_paths": [
+    ".github/**",
+    ".codex/**",
+    "AGENTS.md",
+    "Cargo.toml",
+    "Cargo.lock",
+    "tests/specifications/s4/r0-r8 historical bytes",
+    "tests/fixtures/s4/r0-r8 historical bytes",
+    "crates/noesis/assets/s4/r8/index.html"
+  ],
+  "immutable_dependencies": {
+    "r8_contract_bundle_file_sha256": "29ad08558c3ed2dd3a6d143382655323b7fa7474e296eec0c0beab4ce1f4721f",
+    "r8_contract_bundle_sha256": "f8bba5eda9e43825f2fe31e0c55a37641a4d9213a8d94c6854bdfa290c39ca42"
+  },
+  "expected_red": {
+    "command": "python3 -m unittest scripts.tests.test_s4_k1_rust_callable_semantics_contract",
+    "reason": "K1 production modules, V11 persistence, CLI behavior, V2 export/explorer, and implementation evidence are absent",
+    "production_code_must_precede_red": false
+  }
+}

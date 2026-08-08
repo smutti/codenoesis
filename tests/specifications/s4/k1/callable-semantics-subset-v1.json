@@ -1,0 +1,99 @@
+{
+  "schema_version": "codenoesis.rust-callable-semantics-subset/v1",
+  "profile": "rust-callable-semantics-v1",
+  "lineage": "r6_source_only",
+  "composition": {
+    "required_profiles": [
+      "cargo-root-package-v1",
+      "cargo-manifest-facts-v1",
+      "rust-semantic-depth-v1",
+      "rust-framework-declarations-v1"
+    ],
+    "rejected_profiles": [
+      "scip-rust-v0.9.0-import-v1"
+    ]
+  },
+  "callable_kinds": [
+    "free_function",
+    "trait_declaration_method",
+    "inherent_implementation_method",
+    "named_local_trait_implementation_method"
+  ],
+  "qualifiers": [
+    "visibility",
+    "async",
+    "const",
+    "unsafe",
+    "literal_abi",
+    "generic_parameters",
+    "where_clause",
+    "return_type"
+  ],
+  "receiver_states": [
+    "none",
+    "value",
+    "ref",
+    "ref_mut",
+    "typed_self",
+    "explicit"
+  ],
+  "value_states": [
+    "normalized_scalar",
+    "expression_only",
+    "unresolved"
+  ],
+  "normalized_scalar_kinds": [
+    "boolean",
+    "integer",
+    "character",
+    "string"
+  ],
+  "control_kinds": [
+    "if",
+    "if_let",
+    "match",
+    "loop",
+    "while",
+    "while_let",
+    "for",
+    "return",
+    "break",
+    "continue",
+    "try"
+  ],
+  "body_fact_kinds": [
+    "rust.local_binding",
+    "rust.call_site",
+    "rust.control"
+  ],
+  "relationship_kinds": [
+    "HAS_SIGNATURE",
+    "HAS_PARAMETER",
+    "DECLARES_VALUE",
+    "HAS_BODY_FACT",
+    "CALLS"
+  ],
+  "direct_call_resolution": {
+    "accepted": [
+      "unique_unqualified_local_free_function",
+      "unique_self_path_local_free_function",
+      "unique_crate_path_local_free_function"
+    ],
+    "candidate_unresolved": [
+      "method_call",
+      "associated_call",
+      "imported_name",
+      "external_path",
+      "ambiguous_local_name",
+      "dynamic_dispatch",
+      "compiler_dependent"
+    ]
+  },
+  "digest_algorithm": "blake3-256",
+  "source_body_exported": false,
+  "arbitrary_expression_exported": false,
+  "compiler_cfg_claimed": false,
+  "reachability_claimed": false,
+  "data_flow_claimed": false,
+  "runtime_behavior_claimed": false
+}
