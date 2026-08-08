@@ -50,9 +50,10 @@ class AcceleratedDeliveryContractTests(unittest.TestCase):
             self.normalized_instructions,
             self.normalized_srs,
             self.normalized_autonomy,
+            self.normalized_roadmap,
         ):
             self.assertIn("one explicit human authorization", document)
-            self.assertIn("requirements are `Approved` on `main`", document)
+            self.assertIn("single-PR vertical package", document)
 
         self.assertIn("one coherent vertical outcome", self.normalized_instructions)
         self.assertIn(
@@ -62,6 +63,49 @@ class AcceleratedDeliveryContractTests(unittest.TestCase):
         )
         self.assertIn(
             "exact dependency name and version",
+            self.normalized_instructions,
+        )
+
+    def test_product_governance_and_implementation_share_one_pr(self) -> None:
+        for document in (
+            self.normalized_instructions,
+            self.normalized_srs,
+            self.normalized_autonomy,
+            self.normalized_roadmap,
+        ):
+            self.assertIn(
+                "product governance and production implementation in one pull "
+                "request",
+                document,
+            )
+            self.assertIn("branch-scoped implementation authority", document)
+            self.assertIn("effective atomically only after", document)
+
+        self.assertIn(
+            "SRS, architecture decisions, threat models, schemas or ontology "
+            "contracts, fixtures or oracles, traceability, and operational "
+            "documentation",
+            self.normalized_instructions,
+        )
+        self.assertNotIn(
+            "Use two pull requests for one high-risk capability",
+            self.normalized_roadmap,
+        )
+
+    def test_governance_checkpoint_preserves_red_first(self) -> None:
+        for document in (
+            self.normalized_instructions,
+            self.normalized_srs,
+            self.normalized_autonomy,
+            self.normalized_roadmap,
+        ):
+            self.assertIn("governance checkpoint", document)
+            self.assertIn("before any production source edit", document)
+            self.assertIn("retained expected Red evidence", document)
+
+        self.assertIn(
+            "semantic requirement, oracle, scope, dependency, authority, or risk "
+            "change",
             self.normalized_instructions,
         )
 
@@ -80,10 +124,6 @@ class AcceleratedDeliveryContractTests(unittest.TestCase):
         )
         self.assertIn(
             "machine-policy projection may proceed in parallel",
-            self.normalized_roadmap,
-        )
-        self.assertIn(
-            "Use two pull requests for one high-risk capability",
             self.normalized_roadmap,
         )
         self.assertNotIn(
@@ -111,7 +151,8 @@ class AcceleratedDeliveryContractTests(unittest.TestCase):
 
     def test_non_negotiable_controls_remain_explicit(self) -> None:
         required_instructions = (
-            "production implementation must not begin",
+            "Outside this branch-scoped exception, production implementation "
+            "must not begin",
             "High- and critical-risk work always requires explicit human approval.",
             "The authoring agent must not approve or merge its own change.",
             "Never push directly to `main`",
@@ -131,6 +172,17 @@ class AcceleratedDeliveryContractTests(unittest.TestCase):
             "High/critical changes and protected paths do not auto-merge.",
             self.normalized_autonomy,
         )
+
+    def test_delivery_control_plane_remains_separate(self) -> None:
+        for document in (
+            self.normalized_instructions,
+            self.normalized_srs,
+            self.normalized_autonomy,
+            self.normalized_roadmap,
+        ):
+            self.assertIn("delivery control plane", document)
+            self.assertIn("`AGENTS.md`, `.github/**`, and `.codex/**`", document)
+            self.assertIn("separate pull request", document)
 
 
 if __name__ == "__main__":
