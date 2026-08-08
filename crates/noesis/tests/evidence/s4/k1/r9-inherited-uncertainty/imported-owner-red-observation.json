@@ -1,0 +1,40 @@
+{
+  "schema_version": "codenoesis.r9-k1-imported-owner-red-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/144",
+  "requirement_ids": [
+    "FR-EXT-012"
+  ],
+  "requirement_status": "Approved/effective through protected merge #143",
+  "slice": "S4",
+  "risk": "high",
+  "base_commit_sha": "8fa3097f488e15ed8ddc4586dbe83c2ccc69a965",
+  "prior_test_first_checkpoint_sha": "e9c4381bbac1b9a3d1ea73af5d1a96ceb074249a",
+  "observed_at_utc": "2026-08-08T17:18:13Z",
+  "command": "cargo test -p codenoesis-lang-rust --test s4_k1_rust_callable_semantics --locked reg_fr_ext_012_k1_matches_inherited_imported_owner_resolution -- --exact --nocapture",
+  "expected_failure": "K1 does not reuse R5 unique unqualified cross-module owner resolution and returns CallableSemanticsError::ContractInvalid.",
+  "actual_failure": "K1 must reuse the inherited unique local owner resolution: ContractInvalid",
+  "exit_code": 101,
+  "wall_seconds": 3.20013,
+  "log": {
+    "path": "crates/noesis/tests/evidence/s4/k1/r9-inherited-uncertainty/imported-owner-red.log",
+    "byte_length": 1203,
+    "sha256": "1996989e989ac53c3d563d08fad01df359eeefcfc9763f25e203f8aac9985c79",
+    "normalization": "The absolute workspace prefix was replaced with <workspace>; all remaining bytes are the captured merged stdout/stderr."
+  },
+  "fixture": {
+    "manifest": "tests/fixtures/s4/rust-callable-inherited-uncertainty-v1/imported-owner-manifest.json",
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-imported-owner-v1",
+    "commit_oid": "b699009b4837fae23891d89b7f435002598921fe",
+    "tree_oid": "c87545b7b46be97892042f7b128d35138de61712",
+    "external_source_vendored": false
+  },
+  "environment": {
+    "os": "macOS 26.5.2",
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "features": "test target defaults; no network, compiler target, build script, repository target, or model provider executed"
+  },
+  "human_approval": "Autorizzo issue #144 e il pacchetto completo high-risk S4 descritto."
+}

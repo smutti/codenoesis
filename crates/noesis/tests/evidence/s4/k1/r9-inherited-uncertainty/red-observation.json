@@ -1,0 +1,50 @@
+{
+  "schema_version": "codenoesis.r9-k1-inherited-uncertainty-red-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/144",
+  "requirement_ids": [
+    "FR-EXT-012"
+  ],
+  "requirement_status": "Approved/effective through protected merge #143",
+  "slice": "S4",
+  "risk": "high",
+  "base_commit_sha": "8fa3097f488e15ed8ddc4586dbe83c2ccc69a965",
+  "observed_at_utc": "2026-08-08T17:12:03Z",
+  "command": "cargo test -p codenoesis-lang-rust --test s4_k1_rust_callable_semantics --locked reg_fr_ext_012_k1_preserves_inherited_uncertainty -- --exact --nocapture",
+  "expected_failure": "The K1 extractor returns CallableSemanticsError::ContractInvalid when callable syntax has no inherited R5/R6 subject.",
+  "actual_failure": "K1 must preserve inherited uncertainty without an internal failure: ContractInvalid",
+  "exit_code": 101,
+  "wall_seconds": 2.137192,
+  "log": {
+    "path": "crates/noesis/tests/evidence/s4/k1/r9-inherited-uncertainty/red.log",
+    "byte_length": 1176,
+    "sha256": "22445f946456132c0f3c9cfd57128971faad2ece28adc4d38a775abd0b830c74",
+    "normalization": "The absolute workspace prefix was replaced with <workspace>; all remaining bytes are the captured merged stdout/stderr."
+  },
+  "fixture": {
+    "manifest": "tests/fixtures/s4/rust-callable-inherited-uncertainty-v1/manifest.json",
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-inherited-uncertainty-v1",
+    "commit_oid": "f287e22afe2a9800a5a65b4452010d2113f6b6ef",
+    "tree_oid": "98b1dc6aa284c7036996f4176938e0ad9f00e8c9",
+    "external_source_vendored": false
+  },
+  "environment": {
+    "os": "macOS 26.5.2",
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "features": "test target defaults; no network, compiler target, build script, repository target, or model provider executed"
+  },
+  "agent": {
+    "product": "OpenAI Codex",
+    "model_identity": "not exposed by the runtime",
+    "run_identifier": "not exposed by the runtime",
+    "cost": "not exposed by the runtime",
+    "policy": "repository AGENTS.md at base commit"
+  },
+  "human_approval": "Autorizzo issue #144 e il pacchetto completo high-risk S4 descritto.",
+  "known_limitations": [
+    "The independent standard-local canonical output limit remains 33554432 bytes.",
+    "The pinned Lekton full-run evidence is collected after the focused implementation is Green."
+  ]
+}

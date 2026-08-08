@@ -1,0 +1,44 @@
+{
+  "schema_version": "codenoesis.r9-k1-imported-owner-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-imported-owner-v1",
+  "source": "project-owned synthetic bytes",
+  "external_source_vendored": false,
+  "materialization": {
+    "object_format": "sha1",
+    "tree_oid": "c87545b7b46be97892042f7b128d35138de61712",
+    "commit_oid": "b699009b4837fae23891d89b7f435002598921fe",
+    "author": "CodeNoesis <fixture@codenoesis.invalid>",
+    "timestamp": "2026-08-08T15:05:00Z",
+    "message": "R9 K1 imported owner fixture"
+  },
+  "files": [
+    {
+      "path": "imported-owner-repository/Cargo.toml",
+      "mode": "100644",
+      "byte_length": 118,
+      "sha256": "2f9526f34472a40300151f9394a4453485a9c5839c40fd09b08d3d220534c293",
+      "git_blob_oid": "b4b1a880da1a90ba945251b49900a913b8dcd529"
+    },
+    {
+      "path": "imported-owner-repository/src/lib.rs",
+      "mode": "100644",
+      "byte_length": 300,
+      "sha256": "489b69ee0591776d05ecf634a15c23c38e241a876f99bd149d2e5752c450651a",
+      "git_blob_oid": "0f5d95ecbbba42504a2596a555cf13aeada8b216"
+    }
+  ],
+  "expected": {
+    "signature_name_counts": {
+      "inherent": 1,
+      "local": 2
+    },
+    "resolution": "unique unqualified owner inherited from another local module"
+  },
+  "authority": {
+    "process_execution_permitted": false,
+    "network_access_permitted": false,
+    "compiler_execution_permitted": false,
+    "target_execution_permitted": false,
+    "model_provider_permitted": false
+  }
+}

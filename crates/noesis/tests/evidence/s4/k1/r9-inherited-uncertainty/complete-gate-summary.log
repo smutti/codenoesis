@@ -1,0 +1,21 @@
+CodeNoesis issue #144 complete repository gate
+result: passed
+tested_product_head_sha: 45f2282db54189695826a5ec96391d59f817c076
+raw_normalized_log_sha256: f7435157b89d352e47bf7453fdd69d051a09517c931f5291444c2b1ff9d9d773
+raw_normalized_log_byte_length: 45264
+
+exit=0 actionlint -no-color
+exit=0 python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json
+policy={"approved_requirement_count":39,"hard_protected_pattern_count":13,"status":"valid","version":1}
+exit=0 cargo fmt --all --check
+exit=0 cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+exit=0 cargo test --workspace --all-targets --all-features --locked
+exit=0 cargo test --workspace --doc --all-features --locked
+exit=0 python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+python_unittest_count: 276
+exit=0 python3 scripts/validate_benchmark_assets.py
+benchmark_assets: status=scaffold suites=0
+exit=0 cargo bench --workspace --all-features --no-run --locked
+
+known_unrelated_warning: Cargo ignores semver metadata in the existing pinned toml = "=1.1.4+spec-1.1.0" requirement.
+final_review_head_policy: rerun the complete gate after committing this evidence without modifying the resulting head.
