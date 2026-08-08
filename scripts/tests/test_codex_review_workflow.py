@@ -26,6 +26,7 @@ class CodexReviewWorkflowTests(unittest.TestCase):
         cls.propose_workflow = PROPOSE_WORKFLOW_PATH.read_text(encoding="utf-8")
         cls.watchdog_workflow = WATCHDOG_WORKFLOW_PATH.read_text(encoding="utf-8")
         cls.autonomy = AUTONOMY_PATH.read_text(encoding="utf-8")
+        cls.normalized_autonomy = " ".join(cls.autonomy.split())
         cls.review_job = job(
             cls.review_workflow,
             "review",
@@ -107,7 +108,7 @@ class CodexReviewWorkflowTests(unittest.TestCase):
         self.assertIn(
             "Without that environment secret, the review switch must remain "
             "`false`.",
-            self.autonomy,
+            self.normalized_autonomy,
         )
 
 

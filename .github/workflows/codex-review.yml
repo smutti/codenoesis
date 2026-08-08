@@ -31,12 +31,13 @@ jobs:
       head_sha: ${{ steps.pr.outputs.head_sha }}
       base_sha: ${{ steps.pr.outputs.base_sha }}
       reason: ${{ steps.pr.outputs.reason }}
+      allowed_bot_users: ${{ steps.pr.outputs.allowed_bot_users }}
     steps:
       - name: Resolve pull request
         id: pr
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
-          AUTOMATION_ENABLED: ${{ vars.CODEX_AUTOMATION_ENABLED }}
+          REVIEW_ENABLED: ${{ vars.CODEX_REVIEW_ENABLED }}
           REQUESTED_PR: ${{ inputs.pr_number || github.event.pull_request.number }}
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
           PUBLISHER_BOT_LOGIN: ${{ vars.CODEX_PUBLISHER_BOT_LOGIN }}
@@ -49,17 +50,9 @@ jobs:
             }
 
             const number = Number(raw);
-            const automationEnabled = process.env.AUTOMATION_ENABLED === "true";
+            const reviewEnabled = process.env.REVIEW_ENABLED === "true";
             const publisherLogin = process.env.PUBLISHER_BOT_LOGIN?.trim() ?? "";
-            if (
-              automationEnabled &&
-              !/^[A-Za-z0-9][A-Za-z0-9-]{0,99}$/.test(publisherLogin)
-            ) {
-              core.setFailed(
-                "CODEX_PUBLISHER_BOT_LOGIN must identify the configured publisher App when automation is enabled."
-              );
-              return;
-            }
+            const publisherConfigured = /^[A-Za-z0-9][A-Za-z0-9-]{0,99}$/.test(publisherLogin);
 
             const { data: pr } = await github.rest.pulls.get({
               owner: context.repo.owner,
@@ -70,9 +63,12 @@ jobs:
             const sameRepository = pr.head.repo?.full_name ===
               `${context.repo.owner}/${context.repo.repo}`;
             const targetsDefault = pr.base.ref === process.env.DEFAULT_BRANCH;
-            const publisherBot = publisherLogin ? `${publisherLogin}[bot]` : null;
+            const publisherBot = publisherConfigured
+              ? `${publisherLogin}[bot]`
+              : null;
             const machineBranch = /^codex\/issue-\d+-\d+-\d+$/.test(pr.head.ref);
-            const publisherAuthValid = pr.user?.login === publisherBot;
+            const publisherAuthValid =
+              publisherConfigured && pr.user?.login === publisherBot;
             const supportedAuthor = machineBranch
               ? publisherAuthValid
               : pr.user?.type !== "Bot" || publisherAuthValid;
@@ -99,8 +95,14 @@ jobs:
             core.setOutput("pr_number", String(number));
             core.setOutput("head_sha", pr.head.sha);
             core.setOutput("base_sha", pr.base.sha);
+            core.setOutput(
+              "allowed_bot_users",
+              publisherConfigured
+                ? `github-actions,${publisherLogin}`
+                : "github-actions"
+            );
 
-            if (automationEnabled && machineBranch && !publisherAuthValid) {
+            if (reviewEnabled && machineBranch && !publisherAuthValid) {
               core.setFailed(
                 "A reserved Codex proposal branch is not owned by the configured publisher App."
               );
@@ -188,7 +190,7 @@ jobs:
   review:
     name: Generate structured review
     needs: [prepare, inspect]
-    if: needs.inspect.outputs.eligible == 'true' && vars.CODEX_AUTOMATION_ENABLED == 'true'
+    if: needs.inspect.outputs.eligible == 'true' && vars.CODEX_REVIEW_ENABLED == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment: codex-model
@@ -243,7 +245,7 @@ jobs:
           permission-profile: ":read-only"
           safety-strategy: drop-sudo
           codex-args: '["--ephemeral"]'
-          allow-bot-users: github-actions,${{ vars.CODEX_PUBLISHER_BOT_LOGIN }}
+          allow-bot-users: ${{ needs.prepare.outputs.allowed_bot_users }}
 
       - name: Upload immutable review evidence
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -268,7 +270,7 @@ jobs:
       - name: Classify review preflight
         id: preflight
         env:
-          AUTOMATION_ENABLED: ${{ vars.CODEX_AUTOMATION_ENABLED }}
+          REVIEW_ENABLED: ${{ vars.CODEX_REVIEW_ENABLED }}
           CANDIDATE: ${{ needs.prepare.outputs.candidate }}
           ELIGIBLE: ${{ needs.inspect.outputs.eligible }}
           INSPECT_RESULT: ${{ needs.inspect.result }}
@@ -297,9 +299,9 @@ jobs:
           elif [ "$ELIGIBLE" != "true" ]; then
             state=success
             reason="Protected or oversized scope requires human review"
-          elif [ "$AUTOMATION_ENABLED" != "true" ]; then
+          elif [ "$REVIEW_ENABLED" != "true" ]; then
             state=success
-            reason="AI review disabled by repository kill switch"
+            reason="AI review disabled by dedicated repository review switch"
           elif [ "$REVIEW_RESULT" != "success" ]; then
             state=failure
             reason="Required read-only AI review did not complete"
