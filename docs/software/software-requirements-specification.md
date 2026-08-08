@@ -1,13 +1,11 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9+r8 — S0 through S6 and R0-R7 implemented; R8 portable
-> export and offline explorer governance proposed for protected ratification**.
-> The S0–S6 runtime and product suites exist on `main`, but CodeNoesis claims
-> no slice `Verified` without complete immutable retention evidence. This
-> revision records protected R7 governance, five bounded corrections, and
-> product merge #130 and proposes Decision 0018 for a lossless PortableGraphV1
-> plus a static offline LocalExplorerV1 while retaining every accepted S0–S6
-> and R0–R7 invocation and artifact byte.
+> Status: **0.9+r9-capacity — S0 through S6 and R0-R8 plus K1 are implemented
+> but not Verified; one additive K1 output-capacity profile is proposed**.
+> The implemented standard profile remains capped at 32 MiB. Decision 0020
+> proposes one explicit non-semantic 64 MiB V11 serialization envelope needed
+> for the pinned Lekton pilot without changing ontology, identities, schemas,
+> hashes, extraction limits, or any selector-absent behavior.
 
 ## 1. Document control
 
@@ -15,8 +13,8 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S6 and roadmap R0-R7 are Approved and Implemented but not Verified. The new `FR-EXP-001` and bounded additive R8 amendments are Proposed and become Approved only after the accountable maintainer manually merges the exact protected pull request for issue #110. Product implementation remains forbidden until a separate Ready issue is approved. |
-| Date | 2026-08-06 |
+| Status | S0 through S6 and roadmap R0-R8 plus K1 are Approved and Implemented but not Verified. The bounded R9 output-capacity amendments are Proposed and become Approved and Implemented only after the accountable maintainer manually merges the exact protected pull request for issue #148. |
+| Date | 2026-08-08 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -49,6 +47,7 @@
 | `0.9+delivery.2` | 2026-08-08 | Defined the issue #139 maintainer-supervised single-PR vertical package so one coherent capability may atomically combine product governance, Red-first evidence, implementation, and Green evidence while the delivery control plane remains separate. |
 | `0.9+delivery.3` | 2026-08-08 | Recorded the explicit issue #139 scope expansion permitting product code and delivery control plane in one pull request under immutable base authority, base-controlled validation, inert head controls, manual merge, and post-merge-only privileged activation. |
 | `0.9+k1` | 2026-08-08 | Proposed the issue #142 single-PR K1 candidate: `FR-EXT-012`, `FR-EXP-002`, and bounded S4 amendments for complete Rust callable signatures, ordered parameters, declared scalar/value states, local bindings, call candidates, unique-local `CALLS`, syntactic control structure, RepositorySnapshotV11, KnowledgeGraphV8, LocalQueryResultV6, PortableGraphV2, LocalExplorerV2, ErrorV16, exact evidence, explicit uncertainty, and immutable R0-R8 compatibility. |
+| `0.9+r9-capacity` | 2026-08-08 | Recorded K1 product merge #143 and correction merge #146, then proposed issue #148 and Decision 0020 for an explicit `local-snapshot-64m-v1` K1 output-capacity selector. The selector raises only final canonical RepositorySnapshotV11 serialization from 32 MiB to 64 MiB, preserves all semantic/configuration bytes and standard behavior, and enables retained deterministic Lekton evidence without changing any ontology or historical contract. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -1644,6 +1643,44 @@ contract bundle
 SRS, roadmap, retained Red, production source, and implementation evidence are
 excluded from that semantic digest.
 
+### 2.20 S4 R9 K1 output-capacity candidate register
+
+Issue [#148](https://github.com/smutti/codenoesis/issues/148), the accountable
+maintainer's explicit high-risk authorization, and [Decision 0020](decisions/0020-s4-r9-k1-output-capacity-contract.md)
+govern one maintainer-supervised package on exact base
+`aadd065defba2d4f8d202583c7da9ff70e92ece8`. The additive numeric decision and
+selector remain Proposed until protected manual merge. Existing K1 behavior
+and the requirement IDs amended below are already Approved and effective.
+
+| Requirement | Current state | Target after protected merge | Slice | Acceptance material |
+|---|---|---|---|---|
+| Bounded R9 amendment to `FR-EXT-012` | K1 source semantics Approved and Implemented | Approved with an explicit non-semantic V11 output envelope; extraction and ontology unchanged | `S4` | Decision 0020 and the R9 output-capacity oracle |
+| Bounded R9 amendment to `FR-CLI-001` | K1 scan journey Approved and Implemented | Approved with `--output-capacity-profile local-snapshot-64m-v1` only on the complete K1 scan composition | `S4` | CLI E2E and invalid-composition matrix |
+| Bounded R9 amendment to `INV-BND-001` | Standard 32 MiB canonical output bound Approved | Approved with one explicit 64 MiB maximum/plus-one envelope that never changes the standard maximum | `S4` | Contract and serializer maximum/plus-one tests |
+| Bounded R9 amendment to `NFR-DET-001` | K1 canonical semantics deterministic | Approved with repeated byte-identical pinned Lekton V11 output under the explicit envelope | `S4` | Two-run digest, bytes, timing, and visible-head evidence |
+| Bounded R9 amendments to `NFR-TST-001/002` | Red-first deterministic evidence required | Approved with retained compile/runtime Red, focused Green, full gate, and real-repository replay | `S4` | Committed evidence pack |
+
+The standard `canonical_output_bytes` maximum remains exactly `33,554,432`
+bytes including LF. The explicit selector raises only final canonical
+RepositorySnapshotV11 serialization to `67,108,864` bytes including LF. It is
+valid only for `scan --profile standard-local-s4` with the complete
+`rust-callable-semantics-v1` source composition. It is never inferred from
+repository shape, output size, failure, or stored state.
+
+The selector does not enter V11 semantic or configuration bytes and cannot
+change extraction, identities, hashes, evidence, diagnostics, coverage,
+query, documentation, PortableGraphV2, LocalExplorerV2, acquisition, file,
+graph, process, network, memory, or wall-time authority. Outputs that fit the
+standard maximum serialize byte-identically through both envelopes. Maximum
+and maximum-plus-one are checked before local-store publication; a failure has
+empty stdout and cannot create or move a visible head.
+
+Unknown, duplicate, incomplete, non-K1, compiler-index, boundary, docs, query,
+export, or explore composition uses existing ErrorV16 unsupported-composition
+semantics. No schema, error version, dependency, historical fixture, golden,
+identity domain, or prior command byte changes. The machine oracle is
+`tests/specifications/s4/r9-output-capacity/output-capacity-profile-v1.json`.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,
@@ -2200,7 +2237,7 @@ implementation choices.
 
 | ID | Decision required | Blocks |
 |---|---|---|
-| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0010 resolves only the R2 gitlink, `.gitmodules`, explicit nested-root, depth, and boundary-output subset after protected merge. Decision 0011 resolves only the R3 member, exclusion, package-manifest, crate-target, and binary-root subset after protected merge. Decision 0012 resolves only the R4 manifest-fact, dependency, feature/member, target, patch, metadata, target-predicate, declaration-string, external-locator, and permutation subset after protected merge. Decision 0015 resolves only the R5 field, variant, tuple-field, associated-item, outer-attribute, attribute-token, declared-type/header, and permutation subset after protected merge. Decision 0016 resolves only the R6 per-source declaration, registration-chain, expression-depth, route-path, method/configuration-key, target-spelling, inherited attribute, and permutation subset after protected merge. Decision 0017 resolves only the R7 raw artifact, binding, document, occurrence, symbol, relationship, value, argument, recursion, and permutation subset after protected merge. Decision 0008 resolves the fixed S5 changed-path, analysis-entry, dependency-edge, report-subject, report-byte, and wall-time subset. Decision 0009 resolves the fixed S6 manifest, repository, document, YAML/reference depth, semantic count, evidence, output, memory, and wall-time subset when its protected ratification revision is manually merged. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
+| `OD-LIM-001` | Numeric defaults and maximums for repository bytes/files, file size, depth, memory, CPU, wall time, output, graph query, jobs, and model cost. Decision 0002 resolves the fixed `standard-local-s1` subset. Decision 0010 resolves only the R2 gitlink, `.gitmodules`, explicit nested-root, depth, and boundary-output subset after protected merge. Decision 0011 resolves only the R3 member, exclusion, package-manifest, crate-target, and binary-root subset after protected merge. Decision 0012 resolves only the R4 manifest-fact, dependency, feature/member, target, patch, metadata, target-predicate, declaration-string, external-locator, and permutation subset after protected merge. Decision 0015 resolves only the R5 field, variant, tuple-field, associated-item, outer-attribute, attribute-token, declared-type/header, and permutation subset after protected merge. Decision 0016 resolves only the R6 per-source declaration, registration-chain, expression-depth, route-path, method/configuration-key, target-spelling, inherited attribute, and permutation subset after protected merge. Decision 0017 resolves only the R7 raw artifact, binding, document, occurrence, symbol, relationship, value, argument, recursion, and permutation subset after protected merge. Decision 0020 resolves only the explicit K1 final RepositorySnapshotV11 64 MiB output-capacity envelope while preserving the standard 32 MiB maximum. Decision 0008 resolves the fixed S5 changed-path, analysis-entry, dependency-edge, report-subject, report-byte, and wall-time subset. Decision 0009 resolves the fixed S6 manifest, repository, document, YAML/reference depth, semantic count, evidence, output, memory, and wall-time subset when its protected ratification revision is manually merged. Decision 0007 resolves only the fixed implementation-aware S7 report-count and output subset. | Approval of remaining `S7`, `S9`, `S10`, `S13` limits |
 | `OD-ONT-001` | Decision 0003 resolves the bounded single-crate `codenoesis.ontology/rust/v1`. Decision 0005 resolves multi-crate cardinality and unambiguous out-of-line module identity for `codenoesis.ontology/rust/v2`. Decision 0011 resolves only root-package workspace provenance and R3 coverage semantics in `codenoesis.ontology/rust/v3` while preserving v2 identity domains for unchanged facts. Decision 0012 resolves only declaration-level Cargo entities, relationships, evidence, claim policy, and coverage states in `codenoesis.ontology/rust/v4` while preserving v3 Rust identities after protected merge. Decision 0015 resolves only the R5 committed Rust field, variant, constant/static, associated-type, implementation-context method, attribute-evidence, compilation-presence, and member-identity subset in `codenoesis.ontology/rust/v5` while preserving unchanged v4 identities after protected merge. Decision 0016 resolves only the R6 framework-neutral committed source declarations, unresolved attribute/macro candidates, disjoint identity, lexical `DEFINES` ownership, target-binding states, and explicit non-runtime semantics in `codenoesis.ontology/rust/v6` while preserving unchanged v5 identities after protected merge. Decision 0017 resolves only revision-bound Rust SCIP v0.9.0 compiler symbols, explicit compiler relationships, dual source/index evidence, precedence/conflict handling, and honest unsupported-call/generated states in `codenoesis.ontology/rust/v7` while preserving unchanged v6 identities after protected merge. Decision 0019 proposes only K1 committed-source callable signatures, parameters, bounded declared values, body syntax, lexical unique-local calls, explicit uncertainty, and portable/query views in `codenoesis.ontology/rust/v8`; it becomes effective only with protected merge of issue #142 and preserves all prior identities. Cross-language adapters, K1/R7 composition, index generation, compiler CFG/data flow, expanded/generated framework meaning, runtime observation, and later ontology evolution remain open. | `S8` and later ontology evolution |
 | `OD-STO-001` | Decision 0004 resolves fresh single-writer local SQLite/CAS identity, publication, restart, corruption, and cleanup semantics for `codenoesis.local-store/v1` only when its protected S3 ratification revision is manually merged. Migration, repair, deletion, backup/restore, multi-writer, and server storage remain open. | Post-S3 storage evolution and `S10` |
 | `OD-GIT-001` | Decision 0006 resolves the packed local SHA-1 subset only for the explicit `local-git-sha1-packed-v1` acquisition selector. After protected merge, Decision 0010 additionally resolves only the explicit `local-gitlinks-v1` representation of committed mode `160000` boundaries, bounded root `.gitmodules` metadata, and depth-one separately supplied local nested commit verification. Residual decisions cover remote protocols and identity resolution, SHA-256, LFS, shallow and bare repositories, alternates, promisor/partial clones, MIDX authority, symlinks, nested analysis/federation/recursion, complete Git configuration semantics, automatic repair, and history rewrite. Legacy invocations still reject packed objects without R1 and reject gitlinks without R2. | Remote and remaining post-S1 `FR-ACQ-*` |
