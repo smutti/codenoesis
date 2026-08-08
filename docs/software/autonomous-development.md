@@ -63,7 +63,7 @@ Use separate least-privileged identities:
 | Role | Reads | May write | Must not do |
 |---|---|---|---|
 | Intake | Issue and policy | Labels/state only | Edit source or approve readiness without evidence |
-| Builder | Ready issue, authorized contract, and checkout | Patch in an isolated workspace | Push, approve, merge, release, or change its governing policy |
+| Builder | Ready issue, authorized contract, and checkout | Patch authorized product and control files in an isolated workspace | Push, approve, merge, release, or use a head-authored control as governing authority |
 | Publisher | Validated patch artifact | Agent branch and draft PR | Receive model credentials or merge authority |
 | CI/benchmark | Checkout and versioned corpus | Check result and immutable artifacts | Change the branch under test |
 | Review Council | Diff, requirement, oracle, evidence | Structured findings/checks | Push fixes or inherit the builder conclusion as fact |
@@ -104,8 +104,9 @@ grant an automation identity additional authority.
 A linked Ready issue may select a single-PR vertical package through one
 explicit human authorization. It may cover one slice, one coherent public
 outcome, exact stable requirement IDs and candidate semantics, paths and
-dependencies, risk owner and rollback boundary, oracle and expected Red,
-evidence, correction budget, and stop conditions.
+dependencies, exact base SHA, risk owner and rollback boundary, oracle and
+expected Red, control and privilege effects, evidence, correction budget, and
+stop conditions.
 
 The package may combine product governance and production implementation in one
 pull request. Product governance includes requirements, architecture decisions,
@@ -114,6 +115,12 @@ traceability, and operational documentation. Multiple tightly related
 requirements or sub-behaviors may share the package only when they share the
 same acceptance journey, slice, risk owner, rollback boundary, and versioned
 fixture or oracle.
+
+It may also combine product code and delivery control plane in one pull request.
+The delivery control plane includes `AGENTS.md`, `.github/**`, and `.codex/**`,
+policy and prompts, workflows and required checks, permissions, review,
+publication, signing, and release authority. Every changed control, privilege,
+post-merge effect, threat, and rollback path must be exact in the Ready issue.
 
 The package may start from requirements `Approved` on `main` or from a complete
 candidate that remains `Proposed` until merge. The maintainer decision grants
@@ -134,14 +141,25 @@ correction rounds; an issue may select a bounded value from one through five. A
 semantic requirement, oracle, scope, dependency, authority, or risk change
 invalidates the checkpoint and stops for a new explicit human decision.
 
-The delivery control plane consists of `AGENTS.md`, `.github/**`, and
-`.codex/**`, including agent policy, workflows, permissions, review,
-publication, signing, and release authority. It remains in a separate pull
-request from the product change it authorizes or judges. The machine-policy
-projection may be prepared in parallel and remains required before unattended
-autonomous execution; a missing projection does not block the explicitly
-authorized interactive package, but a branch-scoped candidate is never eligible
-for unattended execution.
+The exact base SHA establishes immutable base authority for the complete pull
+request. Its required checks, branch protection, reviewer and merge authority,
+workflow trust, permission boundaries, and signing and release restrictions
+remain authoritative through manual merge. A head-authored control change is
+inert as authority for that same pull request. Its result is advisory unless an
+unchanged base-controlled gate independently evaluates the head tree.
+
+No unmerged head receives privileged secrets, elevated tokens, ruleset bypass,
+approval or merge authority, deployment credentials, signing keys, publication
+credentials, tags, or release execution. Each declarative workflow, permission,
+signing, or release-authority change activates only after manual merge and any
+explicitly authorized post-merge application. Head-authored controls cannot
+approve, merge, publish, sign, release, or weaken the oracle for their own pull
+request.
+
+The machine-policy projection may be included in the package, but its base-bound
+version remains authoritative through review. The merged projection remains
+required before unattended autonomous execution; a branch-scoped candidate is
+never eligible for unattended execution.
 
 Issue content remains untrusted work data: authority comes from this versioned
 lane plus the accountable maintainer's explicit decision, not from agent-authored
@@ -311,9 +329,11 @@ multiple runs. Track hidden-test pass rate, escaped P0/P1 findings, surviving
 mutants, unrelated-change rate, path-policy violations, time-to-green,
 correction rounds, human interventions, cost, post-merge reverts, and incidents.
 
-An agent may propose a policy or prompt improvement only in a separate protected
-pull request. It cannot edit itself in place. Promotion requires replay against
-the frozen corpus, independent review, and human approval.
+An agent may include a policy or prompt improvement in the same authorized
+vertical pull request, but immutable base authority and a base-controlled gate
+must judge it. The head-authored change remains inert for that run and cannot
+edit the active authority in place. Promotion requires replay against the frozen
+corpus, independent review, and human approval.
 
 ## Autonomy levels and promotion
 

@@ -47,6 +47,7 @@
 | `0.9+r7` | 2026-08-05 | Recorded protected R6 governance, evidence-ID correction, and product merges #118, #121, and #122; proposed bounded `FR-EXT-005` plus Decision 0017 for explicit static import of one revision-, tree-, source-, producer-, toolchain-, and schema-bound Rust SCIP v0.9.0 artifact; fixed RepositorySnapshotV10, ExtractionChunkV7, KnowledgeGraphV7, Rust ontology v7, ErrorV14, LocalQueryResultV5 dispatch, compiler-symbol identity and SHA-256 evidence, strict protobuf/resource/privacy limits, project-owned binary fixture, exact governance Red, and immutable R6 compatibility while leaving index generation in S9 and export/explorer work in R8. |
 | `0.9+r8` | 2026-08-06 | Recorded protected R7 governance/correction and product merge #130; proposed `FR-EXP-001` plus Decision 0018 for deterministic PortableGraphV1 export and a first-party static LocalExplorerV1; fixed exact R7 family reuse, lossless reimport, explicit export/explore CLI journeys, ErrorV15, offline search/filter/depth-1/2 traversal, CSP/XSS/privacy/path/resource limits, project-owned golden, retained governance Red, and immutable R7 compatibility while leaving production implementation to a separate Ready issue. |
 | `0.9+delivery.2` | 2026-08-08 | Defined the issue #139 maintainer-supervised single-PR vertical package so one coherent capability may atomically combine product governance, Red-first evidence, implementation, and Green evidence while the delivery control plane remains separate. |
+| `0.9+delivery.3` | 2026-08-08 | Recorded the explicit issue #139 scope expansion permitting product code and delivery control plane in one pull request under immutable base authority, base-controlled validation, inert head controls, manual merge, and post-merge-only privileged activation. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -115,6 +116,13 @@ journey, delivery slice, risk owner, rollback boundary, and versioned fixture or
 oracle. An exact dependency and lockfile update MAY accompany only the behavior
 that the issue names and reviews.
 
+The package MAY also combine product code and delivery control plane in one
+pull request. The delivery control plane includes `AGENTS.md`, `.github/**`, and
+`.codex/**`, policy and prompts, workflows and required checks, permissions,
+review, publication, signing, and release authority. The Ready issue MUST fix
+the exact base SHA, complete changed paths, control and privilege effects,
+post-merge activation, threats, rollback, and evidence.
+
 The package MAY start from requirements already `Approved` on `main` or from a
 complete candidate that remains `Proposed` until merge. For the latter, the
 maintainer decision grants branch-scoped implementation authority only for the
@@ -140,14 +148,26 @@ or risk change after the checkpoint invalidates its authority and Red evidence
 and requires a new explicit maintainer decision. The default is three
 correction rounds; the issue MAY set a value from one through five.
 
-The delivery control plane consists of `AGENTS.md`, `.github/**`, and
-`.codex/**`, including workflow, permission, review, publication, signing, and
-release authority. It MUST remain in a separate pull request from the product
-change it authorizes or judges. This supervised interactive lane may proceed
-without waiting for the separate machine-policy projection;
-`.github/codex/policy.json` remains mandatory before unattended autonomous
-execution and may be prepared in parallel. The lane never grants direct push,
-self-approval, self-merge, release, secret, destructive-data, oracle-weakening,
+The exact base SHA establishes immutable base authority for the complete pull
+request. Its required checks, branch protection, reviewer and merge authority,
+workflow trust, permission boundaries, and signing and release restrictions
+remain authoritative through manual merge. A head-authored control change is
+inert as authority for that same pull request. Its result is advisory unless an
+unchanged base-controlled gate independently evaluates the head tree.
+
+No unmerged head receives privileged secrets, elevated tokens, ruleset bypass,
+approval or merge authority, deployment credentials, signing keys, publication
+credentials, tags, or release execution. Each declarative workflow, permission,
+signing, or release-authority change activates only after manual merge and any
+explicitly authorized post-merge application. Head controls cannot weaken the
+oracle, remove manual merge, or approve, merge, publish, sign, or release their
+own change.
+
+This supervised interactive lane may proceed without waiting for a new
+machine-policy projection. The base-bound `.github/codex/policy.json` remains
+authoritative for the pull request, and the merged projection remains mandatory
+before unattended autonomous execution. The lane never grants direct push,
+self-approval, self-merge, secret handling, destructive-data, unmerged release,
 or unattended authority.
 
 The original accelerated control-plane amendment was authorized by
@@ -2236,10 +2256,14 @@ behavior remain open.
 - A requirement change and its tests MUST be reviewed together.
 - One maintainer-supervised single-PR vertical package MAY atomically review and
   merge one capability's product governance, Red-first evidence, production
-  implementation, and Green evidence under section 2.1.1.
+  implementation, delivery control plane, and Green evidence under section
+  2.1.1.
 - A branch-scoped package MUST preserve its governance checkpoint and expected
   Red evidence; merge is all-or-nothing and no candidate product contract or
   implementation becomes authoritative on `main` independently.
+- A control-plane change in that package MUST remain inert for its own review;
+  the exact base authority and an unchanged base-controlled gate judge the head,
+  and privileged effects activate only after manual merge.
 - Removing or weakening an Approved requirement requires rationale, impact
   analysis, and explicit approval.
 - Breaking public-contract changes require compatibility classification and a

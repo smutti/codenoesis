@@ -62,14 +62,13 @@ from requirements already `Approved` on `main` or from a complete, reviewable
 candidate that remains `Proposed` until merge. This is interactive,
 maintainer-supervised work, not unattended autonomous execution.
 
-The package may combine product governance and production implementation in
-one pull request. Product governance comprises SRS, architecture decisions,
-threat models, schemas or ontology contracts, fixtures or oracles,
-traceability, and operational documentation. This exception never includes the
-delivery control plane: `AGENTS.md`, `.github/**`, and `.codex/**`, including
-workflow, permission, review, publication, signing, or release authority, must
-remain in a separate pull request from the product change they authorize or
-judge.
+The package may combine product governance and production implementation in one
+pull request. It may also combine product code and delivery control plane in one
+pull request. Product governance comprises SRS, architecture decisions, threat
+models, schemas or ontology contracts, fixtures or oracles, traceability, and
+operational documentation. The delivery control plane includes `AGENTS.md`,
+`.github/**`, and `.codex/**`, including policy, prompts, workflows, required
+checks, permissions, review, publication, signing, and release authority.
 
 For this lane, one explicit human authorization covers the complete package
 when the issue fixes:
@@ -77,7 +76,8 @@ when the issue fixes:
 - exact stable requirement IDs, complete candidate semantics, and one delivery
   slice;
 - one demonstrable public outcome and its expected Red;
-- risk, exact allowed and protected paths, and rollback boundary;
+- risk, exact base SHA, allowed and protected paths, and rollback boundary;
+- exact control-plane, privilege, signing, release, and post-merge effects;
 - exact dependency name and version, when a dependency is required;
 - fixture or oracle, required evidence, correction budget, and stop conditions.
 
@@ -112,6 +112,20 @@ invalidates its authority and Red evidence and requires a new explicit human
 decision. Non-semantic documentation fixes and bounded implementation
 corrections remain covered.
 
+The exact base SHA establishes immutable base authority for the complete pull
+request. Its required checks, branch protection, reviewer and merge authority,
+workflow trust, permission boundaries, and signing and release restrictions
+remain authoritative through manual merge. A head-authored control change is
+inert as authority for that same pull request. Its output is advisory unless an
+unchanged base-controlled gate independently evaluates the head tree.
+
+No unmerged head receives privileged secrets, elevated tokens, ruleset bypass,
+approval or merge authority, deployment credentials, signing keys, publication
+credentials, tags, or release execution. Each declarative workflow, permission,
+signing, or release-authority change activates only after manual merge and any
+explicitly authorized post-merge application. A head-authored control change
+never judges or authorizes its own pull request.
+
 One coherent vertical outcome may satisfy multiple tightly related requirement
 IDs or sub-behaviors only when they share the same delivery slice, public
 acceptance journey, risk owner, rollback boundary, and versioned fixture or
@@ -128,9 +142,11 @@ dependencies, and risk does not require renewed approval. Stop for a human when
 the budget is exhausted or any of those boundaries changes.
 
 This lane never authorizes silent scope expansion, oracle weakening, a new
-unlisted dependency, a risk increase, secrets, destructive data or release
-actions, direct pushes to `main`, self-approval, self-merge, or a delivery
-control-plane change in the product pull request it governs.
+unlisted dependency, an undeclared risk increase, secret material in Git,
+privileged execution from an unmerged head, destructive data actions, release
+execution from an unmerged head, direct pushes to `main`, self-approval,
+self-merge, or use of a head-authored control as authority for its own pull
+request.
 
 ## Test-driven delivery
 
@@ -219,8 +235,9 @@ conclusions as facts.
   and reviewed in the issue may accompany the behavior that requires it.
 - Do not commit secrets, credentials, source repositories used as private test
   data, or model prompts containing confidential content.
-- Do not modify workflow or agent policy in the same pull request as the
-  product change it will judge.
+- A maintainer-supervised package may modify workflow or agent policy with the
+  product outcome only under the immutable-base-authority rules above. A
+  head-authored control change never judges or authorizes its own pull request.
 
 ## Verification and commands
 

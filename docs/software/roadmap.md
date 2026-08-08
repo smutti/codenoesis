@@ -227,6 +227,12 @@ also contain the minimum production code, focused domain, contract, and
 security tests, exact reviewed dependency and lockfile changes, and Green and
 regression evidence for the same outcome.
 
+It may also combine product code and delivery control plane in one pull request.
+The delivery control plane includes `AGENTS.md`, `.github/**`, and `.codex/**`,
+policy and prompts, workflows and required checks, permissions, review,
+publication, signing, and release authority. The Ready issue fixes every changed
+control, privilege, post-merge effect, threat, and rollback path.
+
 The package may start from requirements already Approved on `main` or from a
 complete candidate that remains Proposed until merge. In the latter case, the
 maintainer decision grants branch-scoped implementation authority only for the
@@ -234,11 +240,24 @@ exact package. Requirement approval and production behavior become effective
 atomically only after the accountable maintainer manually merges the exact pull
 request.
 
+The exact base SHA establishes immutable base authority for the complete pull
+request. Its required checks, branch protection, reviewer and merge authority,
+workflow trust, permission boundaries, and signing and release restrictions
+remain authoritative through manual merge. A head-authored control change is
+inert as authority for that same pull request. Its output is advisory unless an
+unchanged base-controlled gate independently evaluates the head tree.
+
+No unmerged head receives privileged secrets, elevated tokens, ruleset bypass,
+approval or merge authority, deployment credentials, signing keys, publication
+credentials, tags, or release execution. Each declarative workflow, permission,
+signing, or release-authority change activates only after manual merge and any
+explicitly authorized post-merge application.
+
 The package keeps one pull request but preserves this commit and evidence order:
 
 1. The builder creates a governance checkpoint, before any production source
-   edit, containing the complete candidate governance and executable acceptance
-   or conformance check.
+   edit, containing the complete candidate governance, exact base SHA, control
+   changes, and executable acceptance or conformance check.
 2. The builder runs that check against the checkpoint and records retained
    expected Red evidence bound to the checkpoint identity, command, exit,
    expected failure, log digest, and environment.
@@ -254,10 +273,10 @@ oracle, scope, dependency, authority, or risk change invalidates the checkpoint
 and requires a new explicit maintainer decision. Bounded implementation
 corrections remain covered by the original authorization.
 
-The machine-policy projection may proceed in parallel. It remains mandatory
-before unattended autonomous execution but does not block the
-maintainer-supervised interactive package; a branch-scoped candidate is not
-eligible for unattended execution.
+The machine-policy projection may proceed in parallel or be included in the
+package, but the base-bound projection remains authoritative during review. The
+merged projection remains mandatory before unattended autonomous execution; a
+branch-scoped candidate is not eligible for unattended execution.
 
 ### Unattended autonomous package
 
@@ -274,10 +293,10 @@ the complete Red-to-Green journey and evidence.
 
 Never bundle these merely to reduce pull-request count:
 
-- the delivery control plane — `AGENTS.md`, `.github/**`, and `.codex/**`,
-  including policy, workflow, permission, review, publication, signing, and
-  release authority — with the behavior it authorizes or judges; it requires a
-  separate pull request;
+- a delivery-control change whose exact privilege, workflow, permission,
+  signing, release, post-merge effect, threat, or rollback path is not explicitly
+  authorized, or that is intended to judge or authorize its own head instead of
+  remaining inert under immutable base authority;
 - unrelated capabilities or more than one behavioral implementation
   objective;
 - unrelated dependency upgrades, formatter churn, generated refreshes, or
