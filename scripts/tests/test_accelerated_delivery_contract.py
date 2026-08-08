@@ -92,6 +92,36 @@ class AcceleratedDeliveryContractTests(unittest.TestCase):
             self.normalized_roadmap,
         )
 
+    def test_delivery_control_plane_can_share_the_vertical_pr(self) -> None:
+        for document in (
+            self.normalized_instructions,
+            self.normalized_srs,
+            self.normalized_autonomy,
+            self.normalized_roadmap,
+        ):
+            self.assertIn(
+                "product code and delivery control plane in one pull request",
+                document,
+            )
+            self.assertIn("`AGENTS.md`, `.github/**`, and `.codex/**`", document)
+            self.assertIn("immutable base authority", document)
+            self.assertIn("base-controlled gate", document)
+            self.assertIn(
+                "inert as authority for that same pull request",
+                document,
+            )
+            self.assertIn("activates only after manual merge", document)
+
+        self.assertNotIn(
+            "Do not modify workflow or agent policy in the same pull request as "
+            "the",
+            self.normalized_instructions,
+        )
+        self.assertNotIn(
+            "must remain in a separate pull request from the product change",
+            self.normalized_instructions,
+        )
+
     def test_governance_checkpoint_preserves_red_first(self) -> None:
         for document in (
             self.normalized_instructions,
@@ -156,7 +186,9 @@ class AcceleratedDeliveryContractTests(unittest.TestCase):
             "High- and critical-risk work always requires explicit human approval.",
             "The authoring agent must not approve or merge its own change.",
             "Never push directly to `main`",
-            "Do not modify workflow or agent policy in the same pull request as the",
+            "A head-authored control change never judges or authorizes its own "
+            "pull request.",
+            "No unmerged head receives privileged secrets",
             "weaken, delete, skip, quarantine, regenerate, or retry a failing oracle",
             "Do not fabricate unavailable evidence.",
         )
@@ -173,7 +205,7 @@ class AcceleratedDeliveryContractTests(unittest.TestCase):
             self.normalized_autonomy,
         )
 
-    def test_delivery_control_plane_remains_separate(self) -> None:
+    def test_base_authority_controls_privileged_effects(self) -> None:
         for document in (
             self.normalized_instructions,
             self.normalized_srs,
@@ -181,8 +213,11 @@ class AcceleratedDeliveryContractTests(unittest.TestCase):
             self.normalized_roadmap,
         ):
             self.assertIn("delivery control plane", document)
-            self.assertIn("`AGENTS.md`, `.github/**`, and `.codex/**`", document)
-            self.assertIn("separate pull request", document)
+            self.assertIn("required checks", document)
+            self.assertIn("manual merge", document)
+            self.assertIn("privileged secrets", document)
+            self.assertIn("signing", document)
+            self.assertIn("release", document)
 
 
 if __name__ == "__main__":
