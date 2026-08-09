@@ -1,0 +1,67 @@
+issue=https://github.com/smutti/codenoesis/issues/152
+requirements=FR-EXT-013,FR-EXP-003,NFR-TST-001,NFR-TST-002
+requirement_status=Proposed branch-scoped candidate; manual protected merge required
+slice=S4
+risk=high
+gate=complete repository bootstrap gate
+observed_at_utc=2026-08-09T14:52:51Z
+tested_head=d50156a4e0bb1d03e86675c516d91c9b84439ac1
+
+command=actionlint -no-color
+exit=0
+duration_seconds=0
+actionlint_version=1.7.12
+
+command=python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json
+exit=0
+duration_seconds=0
+policy_status=valid
+approved_requirement_count=39
+hard_protected_pattern_count=13
+
+command=cargo fmt --all --check
+exit=0
+duration_seconds=1
+
+command=cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+exit=0
+duration_seconds=0
+
+command=cargo test --workspace --all-targets --all-features --locked
+exit=0
+duration_seconds=127
+tests_passed=416
+test_result_groups=76
+
+command=cargo test --workspace --doc --all-features --locked
+exit=0
+duration_seconds=4
+tests_passed=0
+test_result_groups=11
+
+command=python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+exit=0
+duration_seconds=1
+tests_passed=281
+
+command=python3 scripts/validate_benchmark_assets.py
+exit=0
+duration_seconds=0
+benchmark_assets=status=scaffold,suites=0
+
+command=cargo bench --workspace --all-features --no-run --locked
+exit=0
+duration_seconds=0
+
+overall_exit=0
+raw_local_log_bytes=49458
+raw_local_log_sha256=3844f5308d93fc5faab382c96857714a042084b481ef6a519ce84e8047cd2022
+raw_local_log_retention=ephemeral local log; commands, exits, durations, counts, and digest retained here
+final_review_head_gate=rerun after this evidence commit and bind the immutable pull-request head in the PR record
+
+discarded_gate_attempt_head=63f942d984df12af583d8e1e94d5bf4e7046ff46
+discarded_gate_attempt_result=all Rust checks Green; Python suite exposed three legacy governance guards after the candidate decision-index and roadmap edits
+discarded_gate_attempt_raw_bytes=93390
+discarded_gate_attempt_raw_sha256=22f2043292989b3a0f457bf91a886d1bc21a93357ac9660c34181763a70e7aff
+correction=restore the immutable decision index bytes and retain the exact historical K1 roadmap marker without changing current R10 semantics
+retry_policy=the failed preliminary gate is diagnostic only; only the complete Green gate above is acceptance evidence

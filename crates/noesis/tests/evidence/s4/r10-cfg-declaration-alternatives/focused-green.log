@@ -1,0 +1,43 @@
+issue=https://github.com/smutti/codenoesis/issues/152
+authorization=https://github.com/smutti/codenoesis/issues/152#issuecomment-5231484345
+requirements=FR-EXT-013,FR-EXP-003,FR-QRY-001,FR-CLI-001,FR-DOC-001,FR-DOC-002,FR-DOC-003,NFR-DET-001,NFR-TST-001,NFR-TST-002
+requirement_status=Proposed branch-scoped candidate; manual protected merge required
+slice=S4
+risk=high
+observed_at_utc=2026-08-09T14:55:48Z
+tested_head=d50156a4e0bb1d03e86675c516d91c9b84439ac1
+toolchain=Rust 1.97.1 aarch64-apple-darwin pinned by rust-toolchain.toml
+environment=CARGO_TERM_COLOR=never; workspace default features for each focused integration target
+
+command=cargo test -p codenoesis-domain --test s4_r10_cfg_declaration_alternatives --locked
+exit=0
+duration_seconds=0
+tests_passed=2
+
+command=cargo test -p codenoesis-lang-rust --test s4_r10_cfg_declaration_alternatives --locked
+exit=0
+duration_seconds=2
+tests_passed=11
+
+command=cargo test -p codenoesis-contracts --test s4_r10_contracts --locked
+exit=0
+duration_seconds=0
+tests_passed=2
+
+command=cargo test -p codenoesis-application --test s4_r10_cfg_declaration_alternatives --locked
+exit=0
+duration_seconds=2
+tests_passed=1
+
+command=cargo test -p noesis --test e2e_fr_ext_013_cfg_declaration_alternatives --locked
+exit=0
+duration_seconds=2
+tests_passed=11
+
+total_tests_passed=27
+overall_exit=0
+raw_local_log_bytes=5804
+raw_local_log_sha256=542b035219e26336acd42d640c573857bb621ce3263c1c210ab2327fa37f15e8
+raw_local_log_retention=ephemeral local log; commands, exits, durations, counts, and digest retained here
+known_non_blocking_output=the already-pinned toml requirement emitted its existing semver-metadata warning
+retry_used_as_evidence=false
