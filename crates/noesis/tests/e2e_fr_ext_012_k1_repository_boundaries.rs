@@ -45,6 +45,12 @@ const UNSUPPORTED_KEY_GITMODULES: &[u8] = br#"[submodule "nested-model"]
 "#;
 
 #[test]
+fn conf_nfr_det_001_r11_viewer_checkout_transport_is_platform_neutral() {
+    assert_eq!(normalize_lf(b"first\r\nsecond\r\n"), b"first\nsecond\n");
+    assert_eq!(normalize_lf(b"first\nsecond\n"), b"first\nsecond\n");
+}
+
+#[test]
 #[allow(clippy::too_many_lines)]
 fn e2e_fr_ext_012_k1_gitlink_boundaries_complete_local_journey() {
     let repository = MaterializedCallableBoundaryRepository::fixture();
@@ -150,11 +156,12 @@ fn e2e_fr_ext_012_k1_gitlink_boundaries_complete_local_journey() {
     assert_eq!(manifest["schema_version"], "codenoesis.local-explorer/v4");
     assert_eq!(manifest["security"]["network"], false);
     assert_eq!(manifest["security"]["dynamic_code"], false);
-    assert_eq!(
-        fs::read(repository.explorer.join("index.html")).expect("read R11 viewer"),
-        fs::read(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("assets/s4/k1/index.html"))
-            .expect("read immutable K1 viewer")
+    let viewer = fs::read(repository.explorer.join("index.html")).expect("read R11 viewer");
+    let immutable_viewer = normalize_lf(
+        &fs::read(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("assets/s4/k1/index.html"))
+            .expect("read immutable K1 viewer"),
     );
+    assert_eq!(viewer, immutable_viewer);
     assert!(!repository.build_sentinel().exists());
 
     let bound = MaterializedCallableBoundaryRepository::fixture();
@@ -359,4 +366,19 @@ fn assert_success(output: &Output, subject: &str) {
         output.status.code(),
         String::from_utf8_lossy(&output.stderr)
     );
+}
+
+fn normalize_lf(bytes: &[u8]) -> Vec<u8> {
+    let mut normalized = Vec::with_capacity(bytes.len());
+    let mut index = 0;
+    while index < bytes.len() {
+        if bytes[index] == b'\r' && bytes.get(index + 1) == Some(&b'\n') {
+            normalized.push(b'\n');
+            index += 2;
+        } else {
+            normalized.push(bytes[index]);
+            index += 1;
+        }
+    }
+    normalized
 }

@@ -42,7 +42,7 @@
     "maintainer_supervised_interactive_lane": true,
     "governance_and_code_single_pr": true,
     "correction_budget": 5,
-    "correction_rounds_used": 3,
+    "correction_rounds_used": 4,
     "manual_independent_review_and_merge_required": true,
     "control_plane_effect": "none",
     "release_effect": "none"
@@ -88,6 +88,7 @@
     "crates/noesis/tests/evidence/s4/r11-k1-repository-boundaries/focused-green.log",
     "crates/noesis/tests/evidence/s4/r11-k1-repository-boundaries/implementation-observation-local.json",
     "crates/noesis/tests/evidence/s4/r11-k1-repository-boundaries/rustdesk-pilot.log",
+    "crates/noesis/tests/evidence/s4/r11-k1-repository-boundaries/windows-ci-correction.log",
     "crates/noesis/tests/support/mod.rs",
     "crates/noesis/tests/support/s4_r11.rs",
     "docs/software/architecture.md",
@@ -158,6 +159,23 @@
       "raw_local_log_bytes": 52669,
       "raw_local_log_sha256": "7f0529558cf784757d13dc418200d04a8f82f5d80e686e9ab0ba4a078f23957a",
       "final_review_tree": "rerun after this evidence commit and bind the immutable head in the pull request"
+    },
+    "windows_ci_diagnostic": {
+      "failed_head": "5e9ec40e4edc9b36c6295ea246589faef0f02c31",
+      "run": "https://github.com/smutti/codenoesis/actions/runs/31332638961",
+      "job": "https://github.com/smutti/codenoesis/actions/runs/31332638961/job/93293211955",
+      "failure": "the R11 journey succeeded through ExplorerV4, then the test compared the published canonical LF viewer with Git-for-Windows CRLF checkout transport bytes",
+      "failed_test": "e2e_fr_ext_012_k1_gitlink_boundaries_complete_local_journey",
+      "failed_assertion_line": 153,
+      "windows_tests_before_failure_passed": 5,
+      "macos_job": "success",
+      "ubuntu_job": "success",
+      "rust_quality_gate": "success",
+      "raw_job_log_bytes": 281772,
+      "raw_job_log_sha256": "c5c279d2fe7c0b4cc2e4e695384475ceabbca90842f3a800f8ce3adef2f4b4ab",
+      "correction": "normalize only CRLF checkout transport in the R11 test before comparing with the already canonical published immutable K1 viewer, matching the existing R10 oracle",
+      "product_or_contract_changed": false,
+      "github_recheck": "pending after correction commit and push"
     }
   },
   "fixture": {
@@ -222,6 +240,8 @@
     "restored GraphIndex compatibility for legacy query fixtures whose frozen minimal graph omits schema_version while retaining strict V10 boundary validation",
     "updated only the maintainer-authorized boundary+64m legacy oracle to require successful V13 with an empty R2 report",
     "removed the transient Decision 0022 index row so the frozen Decision README bytes remain identical to the exact base; the dedicated R11 contract bundle still binds Decision 0022"
+    ,
+    "normalized only Git-for-Windows CRLF transport in the R11 immutable-viewer test comparison, matching the existing R10 test oracle without changing product or viewer bytes"
   ],
   "unchanged": {
     "r0_r10_and_k1_no_boundary_contracts": true,
