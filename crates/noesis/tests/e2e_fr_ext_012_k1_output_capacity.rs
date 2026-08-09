@@ -44,7 +44,7 @@ fn conf_fr_cli_001_output_capacity_composition_is_closed() {
     let mut unknown = k1_scan_command(&repository, &unknown_store);
     unknown.args(["--output-capacity-profile", "unknown"]);
     assert_unsupported(
-        unknown.output().expect("run unknown profile"),
+        &unknown.output().expect("run unknown profile"),
         &unknown_store,
     );
 
@@ -53,7 +53,7 @@ fn conf_fr_cli_001_output_capacity_composition_is_closed() {
     duplicate.args(["--output-capacity-profile", OUTPUT_CAPACITY_PROFILE]);
     duplicate.args(["--output-capacity-profile", OUTPUT_CAPACITY_PROFILE]);
     assert_unsupported(
-        duplicate.output().expect("run duplicate profile"),
+        &duplicate.output().expect("run duplicate profile"),
         &duplicate_store,
     );
 
@@ -61,7 +61,7 @@ fn conf_fr_cli_001_output_capacity_composition_is_closed() {
     let mut missing = k1_scan_command(&repository, &missing_store);
     missing.arg("--output-capacity-profile");
     assert_unsupported(
-        missing.output().expect("run missing profile"),
+        &missing.output().expect("run missing profile"),
         &missing_store,
     );
 
@@ -77,7 +77,7 @@ fn conf_fr_cli_001_output_capacity_composition_is_closed() {
         .arg(&non_k1_store)
         .args(["--format", "json"])
         .args(["--output-capacity-profile", OUTPUT_CAPACITY_PROFILE]);
-    assert_unsupported(non_k1.output().expect("run non-K1 profile"), &non_k1_store);
+    assert_unsupported(&non_k1.output().expect("run non-K1 profile"), &non_k1_store);
 
     for command_name in ["docs", "query", "export", "explore"] {
         let mut command = base_command(command_name);
@@ -90,7 +90,7 @@ fn conf_fr_cli_001_output_capacity_composition_is_closed() {
     compiler.args(["--compiler-index-profile", "rust-scip-import-v1"]);
     compiler.args(["--output-capacity-profile", OUTPUT_CAPACITY_PROFILE]);
     assert_unsupported(
-        compiler.output().expect("run compiler composition"),
+        &compiler.output().expect("run compiler composition"),
         &compiler_store,
     );
 
@@ -99,7 +99,7 @@ fn conf_fr_cli_001_output_capacity_composition_is_closed() {
     boundary.args(["--repository-boundary-profile", "local-gitlinks-v1"]);
     boundary.args(["--output-capacity-profile", OUTPUT_CAPACITY_PROFILE]);
     assert_unsupported(
-        boundary.output().expect("run boundary composition"),
+        &boundary.output().expect("run boundary composition"),
         &boundary_store,
     );
 }
@@ -148,8 +148,8 @@ fn assert_success(output: &Output, subject: &str) {
     assert!(output.stderr.is_empty());
 }
 
-fn assert_unsupported(output: Output, store: &Path) {
-    assert_error_v16(&output);
+fn assert_unsupported(output: &Output, store: &Path) {
+    assert_error_v16(output);
     assert!(
         fs::symlink_metadata(store).is_err(),
         "invalid composition mutated the store"
