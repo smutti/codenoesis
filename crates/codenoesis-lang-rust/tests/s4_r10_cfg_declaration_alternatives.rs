@@ -63,6 +63,18 @@ fn gt_fr_ext_013_reviewed_heterogeneous_alternatives_are_exact() {
 }
 
 #[test]
+fn conf_fr_ext_013_reviewed_fixture_newlines_are_platform_neutral() {
+    assert_eq!(
+        normalize_reviewed_fixture_bytes(b"#[cfg(unix)]\r\nfn connect() {}\r\n"),
+        Ok(b"#[cfg(unix)]\nfn connect() {}\n".to_vec())
+    );
+    assert_eq!(
+        normalize_reviewed_fixture_bytes(b"#[cfg(unix)]\rfn connect() {}\n"),
+        Err("reviewed fixture contains a bare carriage return")
+    );
+}
+
+#[test]
 fn conf_fr_ext_013_homogeneous_direct_cfg_methods_are_alternatives() {
     let source = r"
 pub struct Client;
@@ -408,7 +420,7 @@ fn fixture_inventory(rotation: usize, reverse: bool) -> RepositoryInventory {
                 path.to_owned(),
                 RegularFileMode::Regular,
                 ObjectId::parse_sha1(blob_oid).expect("reviewed R10 blob OID"),
-                fs::read(root.join(path)).expect("read reviewed R10 fixture"),
+                read_reviewed_fixture(&root.join(path)),
             )
         })
         .collect::<Vec<_>>();
@@ -426,6 +438,33 @@ fn fixture_inventory(rotation: usize, reverse: bool) -> RepositoryInventory {
         u64::try_from(files.len()).expect("reviewed R10 file count"),
         files,
     ))
+}
+
+fn read_reviewed_fixture(path: &Path) -> Vec<u8> {
+    let bytes = fs::read(path).unwrap_or_else(|error| {
+        panic!("read reviewed R10 fixture file {}: {error}", path.display())
+    });
+    normalize_reviewed_fixture_bytes(&bytes).unwrap_or_else(|reason| {
+        panic!("invalid reviewed R10 fixture {}: {reason}", path.display())
+    })
+}
+
+fn normalize_reviewed_fixture_bytes(bytes: &[u8]) -> Result<Vec<u8>, &'static str> {
+    let mut normalized = Vec::with_capacity(bytes.len());
+    let mut index = 0;
+    while index < bytes.len() {
+        if bytes[index] != b'\r' {
+            normalized.push(bytes[index]);
+            index += 1;
+            continue;
+        }
+        if bytes.get(index + 1) != Some(&b'\n') {
+            return Err("reviewed fixture contains a bare carriage return");
+        }
+        normalized.push(b'\n');
+        index += 2;
+    }
+    Ok(normalized)
 }
 
 fn synthetic_inventory(source: &str) -> RepositoryInventory {
