@@ -4,8 +4,8 @@ requirements=FR-EXT-013,FR-EXP-003,FR-QRY-001,FR-CLI-001,FR-DOC-001,FR-DOC-002,F
 requirement_status=Proposed branch-scoped candidate; manual protected merge required
 slice=S4
 risk=high
-observed_at_utc=2026-08-09T15:14:45Z
-tested_head=f8d0a2af2f6d134396bad84f349069064fb1e7f6
+observed_at_utc=2026-08-09T15:36:10Z
+tested_head=eba5d77000b5594a04e34c5e5852eec98cb93957
 toolchain=Rust 1.97.1 aarch64-apple-darwin pinned by rust-toolchain.toml
 environment=CARGO_TERM_COLOR=never; workspace default features for each focused integration target
 
@@ -36,8 +36,8 @@ tests_passed=11
 
 total_tests_passed=28
 overall_exit=0
-raw_local_log_bytes=5760
-raw_local_log_sha256=e2c2d3259428982036991be214eb466cf049b45b0950cc63a3474fc0c5cd3b9b
+raw_local_log_bytes=5496
+raw_local_log_sha256=6160d7942aab3b4d79d143e97e1eeb188efbfd46da9b2875fd2247e6c112c0ca
 raw_local_log_retention=ephemeral local log; commands, exits, durations, counts, and digest retained here
 known_non_blocking_output=the already-pinned toml requirement emitted its existing semver-metadata warning
 retry_used_as_evidence=false

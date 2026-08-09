@@ -4,8 +4,8 @@ requirement_status=Proposed branch-scoped candidate; manual protected merge requ
 slice=S4
 risk=high
 gate=complete repository bootstrap gate
-observed_at_utc=2026-08-09T15:15:03Z
-tested_head=f8d0a2af2f6d134396bad84f349069064fb1e7f6
+observed_at_utc=2026-08-09T15:36:41Z
+tested_head=eba5d77000b5594a04e34c5e5852eec98cb93957
 
 command=actionlint -no-color
 exit=0
@@ -21,21 +21,21 @@ hard_protected_pattern_count=13
 
 command=cargo fmt --all --check
 exit=0
-duration_seconds=1
+duration_seconds=0
 
 command=cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
 exit=0
-duration_seconds=0
+duration_seconds=6
 
 command=cargo test --workspace --all-targets --all-features --locked
 exit=0
-duration_seconds=129
+duration_seconds=168
 tests_passed=417
 test_result_groups=76
 
 command=cargo test --workspace --doc --all-features --locked
 exit=0
-duration_seconds=4
+duration_seconds=5
 tests_passed=0
 test_result_groups=11
 
@@ -54,8 +54,8 @@ exit=0
 duration_seconds=0
 
 overall_exit=0
-raw_local_log_bytes=49763
-raw_local_log_sha256=ffad134135ddaf23b4d18ca484ee35030bbfab05272eec09fbc699bdb95ee982
+raw_local_log_bytes=49288
+raw_local_log_sha256=5a84e948ea51f38de23e70bd4c64153213d54f8b55a7b2b69da7afa050eea10a
 raw_local_log_retention=ephemeral local log; commands, exits, durations, counts, and digest retained here
 final_review_head_gate=rerun after this evidence commit and bind the immutable pull-request head in the PR record
 
@@ -74,4 +74,13 @@ github_windows_ci_expected_ids=urn:codenoesis:entity:blake3:452f8e5e1fe8f0e22b43
 github_windows_ci_root_cause=checkout transport converted the reviewed LF fixture to CRLF before the adapter-only inventory was built
 github_windows_ci_correction_head=f8d0a2af2f6d134396bad84f349069064fb1e7f6
 github_windows_ci_correction=normalize only uniformly CRLF-transported first-party reviewed test text to LF, reject bare carriage returns, and leave product acquisition, fixture, oracle, identities, and golden bytes unchanged
+github_windows_test_authority_diagnostic_head=393c3654a63bdbe477cf1d400bc4e2308680ee88
+github_windows_test_authority_run=31320907025
+github_windows_test_authority_job=93263624900
+github_windows_test_authority_result=the reviewed fixture-byte test passed, then ten R10 journeys failed before acquisition while Git initialized their isolated repositories
+github_windows_test_authority_root_cause=fs::canonicalize transported the Windows test root as a verbatim path through GIT_CONFIG_GLOBAL, --template, and the worktree argument; Git for Windows failed closed while reading configuration
+github_windows_test_authority_correction_head=eba5d77000b5594a04e34c5e5852eec98cb93957
+github_windows_test_authority_correction=retain canonical temporary roots on non-Windows; on Windows select only bounded workspace-target or volume-root authorities validated through the unchanged public output boundary and preserve non-verbatim absolute spelling
+github_windows_test_authority_recheck=pending exact-head native Windows CI after evidence commit and push
+correction_rounds_used=4_of_5
 retry_policy=the failed preliminary gate is diagnostic only; only the complete Green gate above is acceptance evidence

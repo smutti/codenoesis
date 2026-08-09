@@ -23,12 +23,12 @@
   "slice": "S4",
   "risk": "high",
   "risk_owner": "@smutti",
-  "observed_at_utc": "2026-08-09T15:17:39Z",
+  "observed_at_utc": "2026-08-09T15:39:43Z",
   "base_commit_sha": "dae3860ded12202bdf6bbb1134a08f28098f3c9a",
   "governance_checkpoint_sha": "9369e6a2e3ca064006f1d9997b687ab6b42a5900",
   "red_evidence_commit_sha": "7fc6336c743395411a2b9df3354d721c24f97f56",
   "implementation_commit_sha": "eaf175619f9af33e23bbf8c6453f861c95acb6df",
-  "tested_implementation_head": "f8d0a2af2f6d134396bad84f349069064fb1e7f6",
+  "tested_implementation_head": "eba5d77000b5594a04e34c5e5852eec98cb93957",
   "final_review_head": "recorded by the pull request after this evidence commit; a commit cannot contain its own SHA",
   "branch": "codex/152-r10-cfg-declaration-alternatives",
   "authorization": {
@@ -37,7 +37,7 @@
     "maintainer_supervised_interactive_lane": true,
     "governance_and_code_single_pr": true,
     "correction_budget": 5,
-    "correction_rounds_used": 3,
+    "correction_rounds_used": 4,
     "manual_independent_review_and_merge_required": true,
     "control_plane_effect": "none",
     "release_effect": "none"
@@ -159,7 +159,7 @@
       "sha256": "d590018f7e07b11361047cc8d21d18ce71aaa888d4ba595899186281310ad63f"
     },
     "focused_green": {
-      "tested_head": "f8d0a2af2f6d134396bad84f349069064fb1e7f6",
+      "tested_head": "eba5d77000b5594a04e34c5e5852eec98cb93957",
       "commands": [
         "cargo test -p codenoesis-domain --test s4_r10_cfg_declaration_alternatives --locked",
         "cargo test -p codenoesis-lang-rust --test s4_r10_cfg_declaration_alternatives --locked",
@@ -171,10 +171,10 @@
       "tests_passed": 28,
       "log": "crates/noesis/tests/evidence/s4/r10-cfg-declaration-alternatives/focused-green.log",
       "byte_length": 1684,
-      "sha256": "9c87d18219e6046c2bca084af774430a54e3a61f50e9343d0ab10804a46ea0d7"
+      "sha256": "749930b7b14da6c71d68c6d2b8130d2db7349cf70aef963f45933523c545aa27"
     },
     "complete_repository_gate": {
-      "tested_head": "f8d0a2af2f6d134396bad84f349069064fb1e7f6",
+      "tested_head": "eba5d77000b5594a04e34c5e5852eec98cb93957",
       "commands": [
         "actionlint -no-color",
         "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
@@ -190,21 +190,27 @@
       "workspace_tests_passed": 417,
       "python_tests_passed": 281,
       "summary": "crates/noesis/tests/evidence/s4/r10-cfg-declaration-alternatives/complete-gate-summary.log",
-      "summary_byte_length": 3513,
-      "summary_sha256": "42e3a6ff9026e95973dfa687da7abeacee3c9d7b8b7233e9db2d776ea287a19f",
-      "raw_local_log_byte_length": 49763,
-      "raw_local_log_sha256": "ffad134135ddaf23b4d18ca484ee35030bbfab05272eec09fbc699bdb95ee982",
+      "summary_byte_length": 4588,
+      "summary_sha256": "08e02d50e5cc81c888cb968997d5d4db9813f863bc57d28fc03b119ad125615b",
+      "raw_local_log_byte_length": 49288,
+      "raw_local_log_sha256": "5a84e948ea51f38de23e70bd4c64153213d54f8b55a7b2b69da7afa050eea10a",
       "final_review_tree": "rerun after this evidence commit and bind the immutable head in the pull request"
     },
     "windows_ci_diagnostic": {
-      "failed_head": "b6d94566c607afd871c630bc843902ad3a86bae2",
-      "run": "https://github.com/smutti/codenoesis/actions/runs/31320289947",
-      "job": "https://github.com/smutti/codenoesis/actions/runs/31320289947/job/93262039313",
-      "failure": "windows-latest transported the reviewed source fixture as CRLF, changing declaration evidence and the two derived alternative IDs",
-      "correction_head": "f8d0a2af2f6d134396bad84f349069064fb1e7f6",
-      "correction": "normalize only CRLF transport in the adapter-only reviewed fixture reader and reject bare carriage returns",
+      "first_failed_head": "b6d94566c607afd871c630bc843902ad3a86bae2",
+      "first_run": "https://github.com/smutti/codenoesis/actions/runs/31320289947",
+      "first_job": "https://github.com/smutti/codenoesis/actions/runs/31320289947/job/93262039313",
+      "first_failure": "windows-latest transported the reviewed source fixture as CRLF, changing declaration evidence and the two derived alternative IDs",
+      "first_correction_head": "f8d0a2af2f6d134396bad84f349069064fb1e7f6",
+      "first_correction": "normalize only CRLF transport in the adapter-only reviewed fixture reader and reject bare carriage returns",
+      "second_failed_head": "393c3654a63bdbe477cf1d400bc4e2308680ee88",
+      "second_run": "https://github.com/smutti/codenoesis/actions/runs/31320907025",
+      "second_job": "https://github.com/smutti/codenoesis/actions/runs/31320907025/job/93263624900",
+      "second_failure": "the reviewed fixture-byte test passed, then ten R10 journeys failed before acquisition because Git for Windows rejected the verbatim canonical test-root spelling",
+      "second_correction_head": "eba5d77000b5594a04e34c5e5852eec98cb93957",
+      "second_correction": "retain canonical roots on non-Windows and select a bounded validated non-verbatim Windows test authority through the unchanged public output boundary",
       "product_or_oracle_changed": false,
-      "local_regression_tests_passed": 12,
+      "local_regression_tests_passed": 28,
       "github_recheck": "pending after evidence commit and push"
     }
   },
@@ -339,6 +345,11 @@
       "commit": "f8d0a2af2f6d134396bad84f349069064fb1e7f6",
       "reason": "windows-latest transported the project-owned reviewed fixture with CRLF and therefore changed evidence-derived alternative IDs",
       "scope": "normalize only checkout-transport CRLF to canonical LF in the R10 adapter test reader, reject bare carriage returns, and leave product acquisition, fixture, oracle, identities, golden, viewer, and dependencies unchanged"
+    },
+    {
+      "commit": "eba5d77000b5594a04e34c5e5852eec98cb93957",
+      "reason": "after newline normalization passed, windows-latest exposed the R10 E2E helper transporting fs::canonicalize verbatim paths into Git configuration, template, and worktree arguments",
+      "scope": "retain canonical roots on non-Windows; on Windows select only bounded workspace-target or volume-root authorities validated through the unchanged public output boundary, preserve non-verbatim absolute spelling, and leave runtime, fixture, oracle, identities, golden, viewer, and dependencies unchanged"
     }
   ],
   "rollback": "revert the complete issue #152 package; no migration, historical rewrite, store repair, dependency rollback, or release action",
@@ -346,6 +357,7 @@
     "R10 v1 covers only accepted repeated direct-cfg R5 methods and does not compose with R6, R7, or K1.",
     "No cfg predicate is parsed or evaluated, no active target is selected, and no exhaustiveness or mutual exclusion is claimed.",
     "The RustDesk pilot is replaceable local macOS arm64 diagnostic evidence, not a product golden or a source of ontology semantics.",
+    "The local cross-target Windows check is unavailable because this macOS host lacks the Windows C SDK required by existing sqlite and tree-sitter build scripts; native exact-head GitHub Actions is required.",
     "Final immutable review-head gate and independent GitHub review are recorded after this evidence commit.",
     "FR-EXT-013 and FR-EXP-003 remain Proposed and the package remains not Verified before manual protected merge and independent evidence acceptance."
   ],
