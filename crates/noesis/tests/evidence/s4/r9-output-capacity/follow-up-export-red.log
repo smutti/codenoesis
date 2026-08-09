@@ -1,0 +1,23 @@
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling codenoesis-contracts v0.1.0 (<workspace>/crates/codenoesis-contracts)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.35s
+     Running tests/s4_r9_output_capacity_contracts.rs (target/debug/deps/s4_r9_output_capacity_contracts-fa7d87133971ea23)
+
+running 1 test
+test reg_fr_exp_002_k1_script_close_source_spelling_is_inert_data ... FAILED
+
+failures:
+
+---- reg_fr_exp_002_k1_script_close_source_spelling_is_inert_data stdout ----
+
+thread 'reg_fr_exp_002_k1_script_close_source_spelling_is_inert_data' (3743388) panicked at crates/codenoesis-contracts/tests/s4_r9_output_capacity_contracts.rs:35:10:
+source spelling remains inert portable JSON data: UnsafePayload { reason: "script_close_sequence" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    reg_fr_exp_002_k1_script_close_source_spelling_is_inert_data
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p codenoesis-contracts --test s4_r9_output_capacity_contracts`

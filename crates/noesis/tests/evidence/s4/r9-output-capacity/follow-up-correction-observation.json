@@ -1,0 +1,42 @@
+{
+  "schema_version": "codenoesis.r9-k1-output-capacity-follow-up-correction/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/148",
+  "slice": "S4",
+  "risk": "high",
+  "correction_round": 3,
+  "checkpoint_sha": "d917da12e718a9b701dc522aee87e24b8c1db4f9",
+  "observed_at_utc": "2026-08-09T08:10:04Z",
+  "acceptance_step": "Pinned Lekton PortableGraphV2 export after successful docs and exact-ID query",
+  "real_repository_failure": {
+    "exit_code": 16,
+    "stdout_bytes": 0,
+    "error_code": "export.invalid_portable_graph_v2",
+    "reason": "script_close_sequence",
+    "occurrences": 8,
+    "source": "R6 framework source spellings retained in K1 entity names and target_spelling metadata"
+  },
+  "root_cause": "PortableGraphV2 is selected as a separate JSON file and every viewer value is rendered with textContent, but the privacy validator rejected literal script-close text as if graph bytes were embedded in the HTML script asset.",
+  "retained_red": {
+    "command": "cargo test -p codenoesis-contracts --test s4_r9_output_capacity_contracts reg_fr_exp_002_k1_script_close_source_spelling_is_inert_data --locked",
+    "expected_failure": "The existing K1 validator rejects a literal script-close sequence before canonical PortableGraphV2 reimport.",
+    "actual_failure": "UnsafePayload { reason: script_close_sequence }",
+    "exit_code": 101,
+    "log": {
+      "path": "crates/noesis/tests/evidence/s4/r9-output-capacity/follow-up-export-red.log",
+      "byte_length": 1312,
+      "sha256": "a0ac09344d80162fef3136f7bebb0f7ea1a3914d35812ed0fd524b8c4040a164"
+    }
+  },
+  "correction_boundary": {
+    "permit_literal_source_spelling_as_json_data": true,
+    "preserve_private_field_rejection": true,
+    "preserve_separate_graph_file": true,
+    "preserve_text_content_only_rendering": true,
+    "viewer_asset_changed": false,
+    "schema_changed": false,
+    "ontology_changed": false,
+    "identity_changed": false,
+    "dependency_changed": false,
+    "historical_oracle_changed": false
+  }
+}

@@ -93,7 +93,8 @@
     "pt_inv_bnd_001_k1_output_capacity_maximum_plus_one",
     "reg_fr_cli_001_k1_output_capacity_preserves_small_bytes",
     "e2e_fr_ext_012_explicit_output_capacity_profile",
-    "conf_fr_cli_001_output_capacity_composition_is_closed"
+    "conf_fr_cli_001_output_capacity_composition_is_closed",
+    "reg_fr_exp_002_k1_script_close_source_spelling_is_inert_data"
   ],
   "expected_red": [
     {
