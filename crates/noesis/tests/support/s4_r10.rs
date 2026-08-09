@@ -121,7 +121,32 @@ impl MaterializedCfgAlternativesRepository {
     }
 
     pub fn scan(&self) -> Output {
-        Command::new(env!("CARGO_BIN_EXE_noesis"))
+        self.scan_command(R10_PROFILE)
+            .output()
+            .expect("launch R10 scan")
+    }
+
+    pub fn scan_r5(&self) -> Output {
+        self.scan_command("rust-semantic-depth-v1")
+            .output()
+            .expect("launch R5 diagnostic scan")
+    }
+
+    pub fn scan_with_rust_profile(&self, rust_profile: &str) -> Output {
+        self.scan_command(rust_profile)
+            .output()
+            .expect("launch selected R10 profile")
+    }
+
+    pub fn scan_with_extra(&self, extra: &[&str]) -> Output {
+        let mut command = self.scan_command(R10_PROFILE);
+        command.args(extra);
+        command.output().expect("launch invalid R10 composition")
+    }
+
+    fn scan_command(&self, rust_profile: &str) -> Command {
+        let mut command = Command::new(env!("CARGO_BIN_EXE_noesis"));
+        command
             .current_dir(&self.root)
             .args(["scan", "--repository"])
             .arg(&self.worktree)
@@ -135,13 +160,12 @@ impl MaterializedCfgAlternativesRepository {
                 "--manifest-profile",
                 "cargo-manifest-facts-v1",
                 "--rust-semantic-profile",
-                R10_PROFILE,
+                rust_profile,
             ])
             .arg("--store")
             .arg(&self.store)
-            .args(["--format", "json"])
-            .output()
-            .expect("launch R10 scan")
+            .args(["--format", "json"]);
+        command
     }
 
     pub fn docs(&self) -> Output {

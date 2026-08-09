@@ -16,6 +16,9 @@ use codenoesis_domain::s4_r4::{CargoManifestFactError, CargoManifestFactExtracti
 use codenoesis_domain::s4_r5::{RustSemanticDepthExtraction, RustSemanticError};
 use codenoesis_domain::s4_r6::{FrameworkError, FrameworkExtraction};
 use codenoesis_domain::s4_r7::{CompilerIndexError, CompilerIndexOverlay};
+use codenoesis_domain::s4_r10::{
+    RustCfgDeclarationAlternativesError, RustCfgDeclarationAlternativesExtraction,
+};
 use codenoesis_domain::s5::{AnalysisCacheEntry, IncrementalWorkspaceExtraction};
 use codenoesis_domain::s6::{ContractError, OpenApiContractInput, ProviderContract};
 use codenoesis_domain::storage::{
@@ -177,6 +180,21 @@ pub trait RustSemanticDepthExtractor {
         external_boundaries: &[ExternalWorkspaceBoundary],
         cache_entries: &[AnalysisCacheEntry],
     ) -> Result<RustSemanticDepthExtraction, RustSemanticError>;
+}
+
+pub trait RustCfgDeclarationAlternativesExtractor {
+    /// Extracts R10 method declaration alternatives over the unchanged R5 lineage.
+    ///
+    /// # Errors
+    ///
+    /// Returns an inherited source failure or a typed identity, evidence, source, or limit
+    /// failure without evaluating `cfg`, selecting a target, or executing repository content.
+    fn extract_rust_cfg_declaration_alternatives_incremental(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+        cache_entries: &[AnalysisCacheEntry],
+    ) -> Result<RustCfgDeclarationAlternativesExtraction, RustCfgDeclarationAlternativesError>;
 }
 
 pub trait RustFrameworkDeclarationExtractor {

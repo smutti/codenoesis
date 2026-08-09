@@ -4,6 +4,7 @@ mod s1_boundaries;
 mod s1_packed;
 mod s4;
 mod s4_k1;
+mod s4_r10;
 mod s4_r3;
 mod s4_r4;
 mod s4_r5;
@@ -23,6 +24,7 @@ pub use s4_r5::*;
 pub use s4_r6::*;
 pub use s4_r7::*;
 pub use s4_r8::*;
+pub use s4_r10::*;
 pub use s5::*;
 pub use s6::*;
 
@@ -554,6 +556,7 @@ fn publication_candidate(value: &Value) -> Result<PublicationCandidate, Publicat
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V9
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V10
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V11
+            | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V12
     );
     let semantic = required_field(value, "semantic", "semantic")?;
     let repository = required_field(semantic, "repository", "semantic.repository")?;

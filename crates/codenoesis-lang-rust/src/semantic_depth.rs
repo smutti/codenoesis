@@ -13,12 +13,19 @@ use codenoesis_domain::s4_r5::{
     RustSemanticDepthExtraction, RustSemanticDiagnostic, RustSemanticEntity,
     RustSemanticEntityKind, RustSemanticError, RustSemanticForm, RustSemanticGraph,
     RustSemanticIndex, RustSemanticKnowledge, RustSemanticLimit, RustSemanticOwnerKind,
-    RustSemanticSourceChunk, RustSemanticVisibility, capability_state, deterministic_claim,
-    diagnostic_message, rust_semantic_limit_exceeded,
+    RustSemanticProperties, RustSemanticSourceChunk, RustSemanticVisibility, capability_state,
+    deterministic_claim, diagnostic_message, rust_semantic_limit_exceeded,
+};
+use codenoesis_domain::s4_r10::{
+    MAX_R10_ALTERNATIVES_PER_METHOD, RustCfgDeclarationAlternativesError,
+    RustCfgDeclarationAlternativesExtraction, RustCfgDeclarationAlternativesLimit,
+    RustCfgDeclarationAlternativesSourceChunk, RustDeclarationAlternative,
 };
 use codenoesis_domain::s5::AnalysisCacheEntry;
 use codenoesis_domain::{InventoryFile, RepositoryInventory};
-use codenoesis_ports::{CargoManifestFactExtractor, RustSemanticDepthExtractor};
+use codenoesis_ports::{
+    CargoManifestFactExtractor, RustCfgDeclarationAlternativesExtractor, RustSemanticDepthExtractor,
+};
 use tree_sitter::{Node, Parser, Tree};
 use unicode_normalization::UnicodeNormalization as _;
 
@@ -180,6 +187,31 @@ fn closed_cfg_owner_alternative(existing: &OwnerRecord, candidate: &OwnerRecord)
         && (existing.span.end <= candidate.span.start || candidate.span.end <= existing.span.start)
 }
 
+#[derive(Clone, Copy, Eq, PartialEq)]
+enum SemanticExtractionMode {
+    R5,
+    R10,
+}
+
+struct SemanticExtractionOutput {
+    semantic: RustSemanticDepthExtraction,
+    alternatives: Vec<RustCfgDeclarationAlternativesSourceChunk>,
+}
+
+struct SemanticExtractionFailure {
+    source: Box<RustSemanticError>,
+    alternative: Option<Box<RustCfgDeclarationAlternativesError>>,
+}
+
+impl From<RustSemanticError> for SemanticExtractionFailure {
+    fn from(source: RustSemanticError) -> Self {
+        Self {
+            source: Box::new(source),
+            alternative: None,
+        }
+    }
+}
+
 struct ChunkBuilder<'a> {
     repository_identity: &'a str,
     commit_oid: &'a str,
@@ -192,6 +224,10 @@ struct ChunkBuilder<'a> {
     evidence: BTreeMap<String, WorkspaceEvidence>,
     diagnostics: BTreeMap<String, RustSemanticDiagnostic>,
     coverage: BTreeMap<String, RustSemanticCoverageGap>,
+    mode: SemanticExtractionMode,
+    method_occurrences: BTreeMap<String, Vec<RustDeclarationAlternative>>,
+    method_raw_names: BTreeMap<String, String>,
+    alternative_failure: Option<RustCfgDeclarationAlternativesError>,
 }
 
 impl<'a> ChunkBuilder<'a> {
@@ -199,6 +235,7 @@ impl<'a> ChunkBuilder<'a> {
         repository_identity: &'a str,
         commit_oid: &'a str,
         context: &'a SourceContext<'a>,
+        mode: SemanticExtractionMode,
     ) -> Result<Self, RustSemanticError> {
         let mut builder = Self {
             repository_identity,
@@ -212,6 +249,10 @@ impl<'a> ChunkBuilder<'a> {
             evidence: BTreeMap::new(),
             diagnostics: BTreeMap::new(),
             coverage: BTreeMap::new(),
+            mode,
+            method_occurrences: BTreeMap::new(),
+            method_raw_names: BTreeMap::new(),
+            alternative_failure: None,
         };
         builder.add_evidence(ByteRange {
             start: 0,
@@ -336,6 +377,11 @@ impl<'a> ChunkBuilder<'a> {
         evidence_id: String,
     ) -> Result<(), RustSemanticError> {
         if let Some(existing) = self.entities.get(&entity.id).cloned() {
+            if self.mode == SemanticExtractionMode::R10
+                && entity.kind == RustSemanticEntityKind::Method
+            {
+                return self.add_r10_method_occurrence(&existing, entity, evidence_id);
+            }
             let normalized_member = entity.identity_member();
             let existing_evidence = self
                 .entity_evidence
@@ -379,6 +425,20 @@ impl<'a> ChunkBuilder<'a> {
             *member_attributes_mut(existing) = attributes;
             return Ok(());
         }
+        if self.mode == SemanticExtractionMode::R10
+            && entity.kind == RustSemanticEntityKind::Method
+            && entity.compilation_presence == CompilationPresence::ConditionalUnknown
+            && entity
+                .attributes()
+                .iter()
+                .any(|attribute| attribute.kind == RustSemanticAttributeKind::Cfg)
+        {
+            let occurrence = self.r10_occurrence(&entity, &evidence_id)?;
+            self.method_occurrences
+                .entry(entity.id.clone())
+                .or_default()
+                .push(occurrence);
+        }
         self.add_claim(
             ClaimSubjectKind::Entity,
             entity.id.clone(),
@@ -399,6 +459,131 @@ impl<'a> ChunkBuilder<'a> {
         }
         self.entities.insert(entity.id.clone(), entity);
         Ok(())
+    }
+
+    fn add_method_entity(
+        &mut self,
+        entity: RustSemanticEntity,
+        evidence_id: String,
+        raw_name: &str,
+    ) -> Result<(), RustSemanticError> {
+        if self.mode == SemanticExtractionMode::R10 {
+            if let Some(existing) = self.method_raw_names.get(&entity.id) {
+                if existing != raw_name {
+                    return self.fail_alternative(
+                        RustCfgDeclarationAlternativesError::IdentityMismatch {
+                            logical_method_id: entity.id,
+                            reason: "unicode_nfc_collision",
+                        },
+                    );
+                }
+            } else {
+                self.method_raw_names
+                    .insert(entity.id.clone(), raw_name.to_owned());
+            }
+        }
+        self.add_entity(entity, evidence_id)
+    }
+
+    fn add_r10_method_occurrence(
+        &mut self,
+        existing: &RustSemanticEntity,
+        candidate: RustSemanticEntity,
+        evidence_id: String,
+    ) -> Result<(), RustSemanticError> {
+        if !same_r10_logical_method(existing, &candidate) {
+            return self.fail_alternative(RustCfgDeclarationAlternativesError::IdentityMismatch {
+                logical_method_id: candidate.id,
+                reason: "logical_properties",
+            });
+        }
+        let occurrence = self.r10_occurrence(&candidate, &evidence_id)?;
+        let existing_occurrences = self.method_occurrences.get(&candidate.id).ok_or_else(|| {
+            self.alternative_failure =
+                Some(RustCfgDeclarationAlternativesError::IdentityMismatch {
+                    logical_method_id: candidate.id.clone(),
+                    reason: "direct_cfg_required",
+                });
+            RustSemanticError::ContractInvalid
+        })?;
+        let candidate_evidence = self
+            .evidence
+            .get(&evidence_id)
+            .ok_or(RustSemanticError::ContractInvalid)?;
+        for existing_occurrence in existing_occurrences {
+            let existing_id = &existing_occurrence.properties.declaration_evidence_id;
+            if existing_id == &evidence_id {
+                return self.fail_alternative(RustCfgDeclarationAlternativesError::Duplicate {
+                    logical_method_id: candidate.id,
+                    declaration_evidence_id: evidence_id,
+                });
+            }
+            let existing_evidence = self
+                .evidence
+                .get(existing_id)
+                .ok_or(RustSemanticError::ContractInvalid)?;
+            if existing_evidence.path != candidate_evidence.path
+                || existing_evidence.blob_oid != candidate_evidence.blob_oid
+            {
+                return self.fail_alternative(RustCfgDeclarationAlternativesError::CrossSource {
+                    logical_method_id: candidate.id,
+                });
+            }
+            if existing_evidence.end_byte > candidate_evidence.start_byte
+                && candidate_evidence.end_byte > existing_evidence.start_byte
+            {
+                return self.fail_alternative(RustCfgDeclarationAlternativesError::Overlap {
+                    logical_method_id: candidate.id,
+                    first_evidence_id: existing_id.clone(),
+                    second_evidence_id: evidence_id,
+                });
+            }
+        }
+        let observed = existing_occurrences.len().saturating_add(1);
+        if u64::try_from(observed).unwrap_or(u64::MAX) > MAX_R10_ALTERNATIVES_PER_METHOD {
+            return self.fail_alternative(RustCfgDeclarationAlternativesError::LimitExceeded {
+                limit: RustCfgDeclarationAlternativesLimit::AlternativesPerLogicalMethod,
+                maximum: MAX_R10_ALTERNATIVES_PER_METHOD,
+                observed: MAX_R10_ALTERNATIVES_PER_METHOD.saturating_add(1),
+            });
+        }
+        self.method_occurrences
+            .get_mut(&candidate.id)
+            .ok_or(RustSemanticError::ContractInvalid)?
+            .push(occurrence);
+        Ok(())
+    }
+
+    fn r10_occurrence(
+        &mut self,
+        method: &RustSemanticEntity,
+        declaration_evidence_id: &str,
+    ) -> Result<RustDeclarationAlternative, RustSemanticError> {
+        let direct_cfg_evidence_ids = method
+            .attributes()
+            .iter()
+            .filter(|attribute| attribute.kind == RustSemanticAttributeKind::Cfg)
+            .map(|attribute| attribute.evidence_id.clone())
+            .collect::<Vec<_>>();
+        RustDeclarationAlternative::from_method(
+            self.repository_identity,
+            method,
+            self.context.source_file_id.clone(),
+            declaration_evidence_id.to_owned(),
+            direct_cfg_evidence_ids,
+        )
+        .map_err(|error| {
+            self.alternative_failure = Some(error);
+            RustSemanticError::ContractInvalid
+        })
+    }
+
+    fn fail_alternative<T>(
+        &mut self,
+        error: RustCfgDeclarationAlternativesError,
+    ) -> Result<T, RustSemanticError> {
+        self.alternative_failure = Some(error);
+        Err(RustSemanticError::ContractInvalid)
     }
 
     fn add_relationship(
@@ -449,6 +634,54 @@ impl<'a> ChunkBuilder<'a> {
             coverage: self.coverage.into_values().collect(),
         }
     }
+
+    fn alternative_chunk(
+        &self,
+    ) -> Result<RustCfgDeclarationAlternativesSourceChunk, RustCfgDeclarationAlternativesError>
+    {
+        let alternatives = self
+            .method_occurrences
+            .values()
+            .filter(|occurrences| occurrences.len() >= 2)
+            .flatten()
+            .cloned()
+            .collect();
+        RustCfgDeclarationAlternativesSourceChunk::new(
+            self.context.source_file_id.clone(),
+            alternatives,
+        )
+    }
+}
+
+fn same_r10_logical_method(existing: &RustSemanticEntity, candidate: &RustSemanticEntity) -> bool {
+    let (
+        RustSemanticProperties::Method(existing_properties),
+        RustSemanticProperties::Method(candidate_properties),
+    ) = (&existing.properties, &candidate.properties)
+    else {
+        return false;
+    };
+    existing.id == candidate.id
+        && existing.kind == RustSemanticEntityKind::Method
+        && candidate.kind == RustSemanticEntityKind::Method
+        && existing.crate_id == candidate.crate_id
+        && existing.module_path == candidate.module_path
+        && existing.name == candidate.name
+        && existing.visibility == candidate.visibility
+        && existing.owner_id == candidate.owner_id
+        && existing.trait_context_id == candidate.trait_context_id
+        && existing_properties.implementation_context == candidate_properties.implementation_context
+        && existing_properties.trait_context_id == candidate_properties.trait_context_id
+        && existing.compilation_presence == CompilationPresence::ConditionalUnknown
+        && candidate.compilation_presence == CompilationPresence::ConditionalUnknown
+        && existing
+            .attributes()
+            .iter()
+            .any(|attribute| attribute.kind == RustSemanticAttributeKind::Cfg)
+        && candidate
+            .attributes()
+            .iter()
+            .any(|attribute| attribute.kind == RustSemanticAttributeKind::Cfg)
 }
 
 fn closed_cfg_member_alternative(
@@ -492,169 +725,248 @@ fn member_attributes_mut(entity: &mut RustSemanticEntity) -> &mut Vec<RustSemant
 }
 
 impl RustSemanticDepthExtractor for TreeSitterRustWorkspaceExtractor {
-    #[allow(clippy::too_many_lines)]
     fn extract_rust_semantic_depth_incremental(
         &self,
         inventory: &RepositoryInventory,
         external_boundaries: &[ExternalWorkspaceBoundary],
         cache_entries: &[AnalysisCacheEntry],
     ) -> Result<RustSemanticDepthExtraction, RustSemanticError> {
-        let manifest =
-            <Self as CargoManifestFactExtractor>::extract_cargo_manifest_facts_incremental(
-                self,
-                inventory,
-                external_boundaries,
-                cache_entries,
-            )
-            .map_err(map_manifest_source_error)?;
-        let repository_identity = inventory.bound_revision().repository_identity().as_str();
-        let commit_oid = inventory.bound_revision().commit_oid().as_str();
-        let contexts = source_contexts(&manifest.knowledge, inventory)?;
-        let base_entity_ids = manifest
-            .knowledge
-            .workspace
-            .knowledge
-            .graph
-            .entities
-            .iter()
-            .map(|entity| entity.id.clone())
-            .collect::<BTreeSet<_>>();
-        let mut catalog = OwnerCatalog::new();
-        for context in &contexts {
-            let source = source_text(context)?;
-            let tree = parse_tree(&context.path, source)?;
-            collect_owners(
-                tree.root_node(),
-                source,
-                context,
-                &context.base_module_path,
-                &context.base_module_id,
-                CompilationPresence::Unconditional,
-                &mut catalog,
-            )?;
+        extract_semantic_depth(
+            *self,
+            inventory,
+            external_boundaries,
+            cache_entries,
+            SemanticExtractionMode::R5,
+        )
+        .map(|output| output.semantic)
+        .map_err(|failure| *failure.source)
+    }
+}
+
+impl RustCfgDeclarationAlternativesExtractor for TreeSitterRustWorkspaceExtractor {
+    fn extract_rust_cfg_declaration_alternatives_incremental(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+        cache_entries: &[AnalysisCacheEntry],
+    ) -> Result<RustCfgDeclarationAlternativesExtraction, RustCfgDeclarationAlternativesError> {
+        let output = extract_semantic_depth(
+            *self,
+            inventory,
+            external_boundaries,
+            cache_entries,
+            SemanticExtractionMode::R10,
+        )
+        .map_err(|failure| match failure.alternative {
+            Some(alternative) => *alternative,
+            None => RustCfgDeclarationAlternativesError::Source(*failure.source),
+        })?;
+        RustCfgDeclarationAlternativesExtraction::from_r5(output.semantic, output.alternatives)
+    }
+}
+
+#[allow(clippy::too_many_lines)]
+fn extract_semantic_depth(
+    extractor: TreeSitterRustWorkspaceExtractor,
+    inventory: &RepositoryInventory,
+    external_boundaries: &[ExternalWorkspaceBoundary],
+    cache_entries: &[AnalysisCacheEntry],
+    mode: SemanticExtractionMode,
+) -> Result<SemanticExtractionOutput, SemanticExtractionFailure> {
+    let manifest = <TreeSitterRustWorkspaceExtractor as CargoManifestFactExtractor>::extract_cargo_manifest_facts_incremental(
+        &extractor,
+        inventory,
+        external_boundaries,
+        cache_entries,
+    )
+    .map_err(map_manifest_source_error)?;
+    let repository_identity = inventory.bound_revision().repository_identity().as_str();
+    let commit_oid = inventory.bound_revision().commit_oid().as_str();
+    let contexts = source_contexts(&manifest.knowledge, inventory)?;
+    let base_entity_ids = manifest
+        .knowledge
+        .workspace
+        .knowledge
+        .graph
+        .entities
+        .iter()
+        .map(|entity| entity.id.clone())
+        .collect::<BTreeSet<_>>();
+    let mut catalog = OwnerCatalog::new();
+    for context in &contexts {
+        let source = source_text(context)?;
+        let tree = parse_tree(&context.path, source)?;
+        collect_owners(
+            tree.root_node(),
+            source,
+            context,
+            &context.base_module_path,
+            &context.base_module_id,
+            CompilationPresence::Unconditional,
+            &mut catalog,
+        )?;
+    }
+
+    let mut builders = contexts
+        .iter()
+        .map(|context| {
+            Ok((
+                context.source_file_id.clone(),
+                ChunkBuilder::new(repository_identity, commit_oid, context, mode)?,
+            ))
+        })
+        .collect::<Result<BTreeMap<_, _>, RustSemanticError>>()?;
+
+    for record in catalog.records.values() {
+        let builder = builders
+            .get_mut(&record.source_file_id)
+            .ok_or(RustSemanticError::ContractInvalid)?;
+        builder.materialize_attributes(&record.attributes)?;
+        if base_entity_ids.contains(&record.id) {
+            continue;
         }
-
-        let mut builders = contexts
-            .iter()
-            .map(|context| {
-                Ok((
-                    context.source_file_id.clone(),
-                    ChunkBuilder::new(repository_identity, commit_oid, context)?,
-                ))
-            })
-            .collect::<Result<BTreeMap<_, _>, RustSemanticError>>()?;
-
-        for record in catalog.records.values() {
-            let builder = builders
-                .get_mut(&record.source_file_id)
-                .ok_or(RustSemanticError::ContractInvalid)?;
-            builder.materialize_attributes(&record.attributes)?;
-            if base_entity_ids.contains(&record.id) {
-                continue;
-            }
-            let evidence_id = builder.add_evidence(record.span)?;
-            let entity = match record.key.kind {
-                EntityKind::RustModule => WorkspaceEntity::module(
+        let evidence_id = builder.add_evidence(record.span)?;
+        let entity = match record.key.kind {
+            EntityKind::RustModule => WorkspaceEntity::module(
+                repository_identity,
+                &record.key.crate_id,
+                &record.key.module_path,
+                &record.key.name,
+                workspace_visibility(record.visibility),
+                &record.source_file_id,
+            ),
+            EntityKind::RustStruct | EntityKind::RustEnum | EntityKind::RustTrait => {
+                WorkspaceEntity::declaration(
                     repository_identity,
+                    record.key.kind,
                     &record.key.crate_id,
                     &record.key.module_path,
                     &record.key.name,
                     workspace_visibility(record.visibility),
-                    &record.source_file_id,
-                ),
-                EntityKind::RustStruct | EntityKind::RustEnum | EntityKind::RustTrait => {
-                    WorkspaceEntity::declaration(
-                        repository_identity,
-                        record.key.kind,
-                        &record.key.crate_id,
-                        &record.key.module_path,
-                        &record.key.name,
-                        workspace_visibility(record.visibility),
-                    )
-                }
-                _ => return Err(RustSemanticError::ContractInvalid),
-            };
-            if entity.id != record.id {
-                return Err(RustSemanticError::ContractInvalid);
+                )
             }
-            builder.add_legacy_entity(entity, record.module_owner_id.clone(), evidence_id)?;
-        }
-
-        for context in &contexts {
-            let source = source_text(context)?;
-            let tree = parse_tree(&context.path, source)?;
-            let builder = builders
-                .get_mut(&context.source_file_id)
-                .ok_or(RustSemanticError::ContractInvalid)?;
-            process_scope(
-                tree.root_node(),
-                source,
-                context,
-                &context.base_module_path,
-                &context.base_module_id,
-                CompilationPresence::Unconditional,
-                &catalog,
-                builder,
-            )?;
-        }
-
-        let first_source = builders
-            .keys()
-            .next()
-            .cloned()
-            .ok_or(RustSemanticError::ContractInvalid)?;
-        let root_evidence = builders
-            .get(&first_source)
-            .ok_or(RustSemanticError::ContractInvalid)?
-            .evidence
-            .keys()
-            .next()
-            .cloned()
-            .ok_or(RustSemanticError::ContractInvalid)?;
-        let present_capabilities = builders
-            .values()
-            .flat_map(|builder| builder.coverage.values())
-            .map(|gap| gap.capability.clone())
-            .collect::<BTreeSet<_>>();
-        for capability in [
-            "rust.attribute_semantics_not_interpreted",
-            "rust.cfg_presence_unresolved",
-            "rust.macro_generated_items_not_analyzed",
-            "rust.type_resolution_not_performed",
-            "rust.value_not_evaluated",
-            "rust.union_unsupported",
-            "rust.foreign_block_unsupported",
-            "rust.unsupported_impl_header",
-        ] {
-            if !present_capabilities.contains(capability) {
-                builders
-                    .get_mut(&first_source)
-                    .ok_or(RustSemanticError::ContractInvalid)?
-                    .add_capability(capability, root_evidence.clone(), false)?;
-            }
-        }
-
-        let extraction_chunks = builders
-            .into_values()
-            .map(ChunkBuilder::finish)
-            .collect::<Vec<_>>();
-        let graph = aggregate_graph(&extraction_chunks)?;
-        let parser_invocation_count = manifest
-            .parser_invocation_count
-            .saturating_add(u64::try_from(contexts.len()).unwrap_or(u64::MAX));
-        let knowledge = RustSemanticKnowledge {
-            manifest: manifest.knowledge,
-            extraction_chunks,
-            graph,
+            _ => return Err(RustSemanticError::ContractInvalid.into()),
         };
-        knowledge.validate()?;
-        Ok(RustSemanticDepthExtraction {
+        if entity.id != record.id {
+            return Err(RustSemanticError::ContractInvalid.into());
+        }
+        builder.add_legacy_entity(entity, record.module_owner_id.clone(), evidence_id)?;
+    }
+
+    for context in &contexts {
+        let source = source_text(context)?;
+        let tree = parse_tree(&context.path, source)?;
+        let builder = builders
+            .get_mut(&context.source_file_id)
+            .ok_or(RustSemanticError::ContractInvalid)?;
+        if let Err(source) = process_scope(
+            tree.root_node(),
+            source,
+            context,
+            &context.base_module_path,
+            &context.base_module_id,
+            CompilationPresence::Unconditional,
+            &catalog,
+            builder,
+        ) {
+            return Err(SemanticExtractionFailure {
+                source: Box::new(source),
+                alternative: builder.alternative_failure.take().map(Box::new),
+            });
+        }
+    }
+
+    let first_source = builders
+        .keys()
+        .next()
+        .cloned()
+        .ok_or(RustSemanticError::ContractInvalid)?;
+    let root_evidence = builders
+        .get(&first_source)
+        .ok_or(RustSemanticError::ContractInvalid)?
+        .evidence
+        .keys()
+        .next()
+        .cloned()
+        .ok_or(RustSemanticError::ContractInvalid)?;
+    let present_capabilities = builders
+        .values()
+        .flat_map(|builder| builder.coverage.values())
+        .map(|gap| gap.capability.clone())
+        .collect::<BTreeSet<_>>();
+    for capability in [
+        "rust.attribute_semantics_not_interpreted",
+        "rust.cfg_presence_unresolved",
+        "rust.macro_generated_items_not_analyzed",
+        "rust.type_resolution_not_performed",
+        "rust.value_not_evaluated",
+        "rust.union_unsupported",
+        "rust.foreign_block_unsupported",
+        "rust.unsupported_impl_header",
+    ] {
+        if !present_capabilities.contains(capability) {
+            builders
+                .get_mut(&first_source)
+                .ok_or(RustSemanticError::ContractInvalid)?
+                .add_capability(capability, root_evidence.clone(), false)?;
+        }
+    }
+
+    if mode == SemanticExtractionMode::R10 {
+        let mut method_sources = BTreeMap::new();
+        for builder in builders.values() {
+            for logical_method_id in builder.method_occurrences.keys() {
+                if method_sources
+                    .insert(logical_method_id, builder.context.source_file_id.as_str())
+                    .is_some_and(|source| source != builder.context.source_file_id)
+                {
+                    return Err(SemanticExtractionFailure {
+                        source: Box::new(RustSemanticError::ContractInvalid),
+                        alternative: Some(Box::new(
+                            RustCfgDeclarationAlternativesError::CrossSource {
+                                logical_method_id: logical_method_id.clone(),
+                            },
+                        )),
+                    });
+                }
+            }
+        }
+    }
+    let alternatives = if mode == SemanticExtractionMode::R10 {
+        builders
+            .values()
+            .map(ChunkBuilder::alternative_chunk)
+            .collect::<Result<Vec<_>, _>>()
+            .map_err(|alternative| SemanticExtractionFailure {
+                source: Box::new(RustSemanticError::ContractInvalid),
+                alternative: Some(Box::new(alternative)),
+            })?
+    } else {
+        Vec::new()
+    };
+    let extraction_chunks = builders
+        .into_values()
+        .map(ChunkBuilder::finish)
+        .collect::<Vec<_>>();
+    let graph = aggregate_graph(&extraction_chunks)?;
+    let parser_invocation_count = manifest
+        .parser_invocation_count
+        .saturating_add(u64::try_from(contexts.len()).unwrap_or(u64::MAX));
+    let knowledge = RustSemanticKnowledge {
+        manifest: manifest.knowledge,
+        extraction_chunks,
+        graph,
+    };
+    knowledge.validate()?;
+    Ok(SemanticExtractionOutput {
+        semantic: RustSemanticDepthExtraction {
             knowledge,
             cache_entries: manifest.cache_entries,
             source_records: manifest.source_records,
             parser_invocation_count,
-        })
-    }
+        },
+        alternatives,
+    })
 }
 
 fn map_manifest_source_error(error: CargoManifestFactError) -> RustSemanticError {
@@ -1653,7 +1965,18 @@ fn process_method(
     method_visibility: RustSemanticVisibility,
     builder: &mut ChunkBuilder<'_>,
 ) -> Result<(), RustSemanticError> {
-    let name = normalized_node_name(node, source, &context.path)?;
+    let name_node = node
+        .child_by_field_name("name")
+        .ok_or_else(|| invalid_declaration(&context.path, node.start_byte(), node.kind()))?;
+    let raw_name = node_text(name_node, source);
+    let name = normalize_identifier(raw_name);
+    if name.is_empty() {
+        return Err(invalid_declaration(
+            &context.path,
+            node.start_byte(),
+            node.kind(),
+        ));
+    }
     let signature = method_signature(node, source, &context.path)?;
     let evidence_id = builder.add_evidence(node_range(node))?;
     let materialized_attributes = builder.materialize_attributes(attributes)?;
@@ -1676,7 +1999,7 @@ fn process_method(
             attributes: materialized_attributes,
         },
     );
-    builder.add_entity(entity, evidence_id.clone())?;
+    builder.add_method_entity(entity, evidence_id.clone(), raw_name)?;
     builder.add_capability("rust.type_resolution_not_performed", evidence_id, false)
 }
 

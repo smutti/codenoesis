@@ -624,6 +624,7 @@ pub(super) struct GraphIndex {
     pub(super) repository_identity: String,
     cargo_manifest_declarations: bool,
     rust_semantic_depth: bool,
+    declaration_alternatives: bool,
     framework_declarations: bool,
     compiler_index: bool,
     callable_semantics: bool,
@@ -653,15 +654,19 @@ impl GraphIndex {
                 | "codenoesis.knowledge-graph/v5"
                 | "codenoesis.knowledge-graph/v6"
                 | "codenoesis.knowledge-graph/v7"
-                | "codenoesis.knowledge-graph/v8")
+                | "codenoesis.knowledge-graph/v8"
+                | "codenoesis.knowledge-graph/v9")
         );
         let rust_semantic_depth = matches!(
             string_field(graph, "schema_version"),
             Ok("codenoesis.knowledge-graph/v5"
                 | "codenoesis.knowledge-graph/v6"
                 | "codenoesis.knowledge-graph/v7"
-                | "codenoesis.knowledge-graph/v8")
+                | "codenoesis.knowledge-graph/v8"
+                | "codenoesis.knowledge-graph/v9")
         );
+        let declaration_alternatives =
+            string_field(graph, "schema_version") == Ok("codenoesis.knowledge-graph/v9");
         let framework_declarations = matches!(
             string_field(graph, "schema_version"),
             Ok("codenoesis.knowledge-graph/v6"
@@ -706,6 +711,7 @@ impl GraphIndex {
             repository_identity,
             cargo_manifest_declarations,
             rust_semantic_depth,
+            declaration_alternatives,
             framework_declarations,
             compiler_index,
             callable_semantics,
@@ -1648,12 +1654,18 @@ fn append_rust_semantic_depth(
             let properties = entity
                 .get("properties")
                 .ok_or(DocumentationContractError::InvalidSnapshot)?;
-            let compilation_presence = if kind == "rust.method" {
+            let alternatives = kind == "rust.method"
+                && string_field(properties, "declaration_state") == Ok("alternatives");
+            let compilation_presence = if alternatives {
+                "conditional_unknown_alternatives"
+            } else if kind == "rust.method" {
                 string_field(properties, "compilation_presence")?
             } else {
                 string_field(entity, "compilation_presence")?
             };
-            let spelling = if kind == "rust.method" {
+            let spelling = if alternatives {
+                "evidence-backed declaration alternatives"
+            } else if kind == "rust.method" {
                 string_field(properties, "declared_signature")?
             } else {
                 properties
@@ -1684,6 +1696,57 @@ fn append_rust_semantic_depth(
             )
             .expect("writing Markdown to a String cannot fail");
             statements.push(statement);
+        }
+    }
+
+    if index.declaration_alternatives {
+        let mut alternatives = index
+            .entities
+            .values()
+            .filter(|entity| {
+                string_field(entity, "kind") == Ok("rust.declaration_alternative")
+                    && string_field(entity, "crate_id") == Ok(crate_id)
+                    && string_field(entity, "module_path") == Ok(module_path)
+            })
+            .collect::<Vec<_>>();
+        alternatives.sort_by(|left, right| {
+            string_field(left, "id")
+                .unwrap_or_default()
+                .cmp(string_field(right, "id").unwrap_or_default())
+        });
+        if !alternatives.is_empty() {
+            content.push_str(
+                "\n### Conditional declaration alternatives\n\nEach entry is committed syntax under an uninterpreted direct `cfg`; no active target, mutual exclusion, or exhaustiveness is asserted.\n\n",
+            );
+            for (ordinal, alternative) in alternatives.into_iter().enumerate() {
+                let id = string_field(alternative, "id")?;
+                let subject_id = string_field(alternative, "subject_id")?;
+                let properties = alternative
+                    .get("properties")
+                    .ok_or(DocumentationContractError::InvalidSnapshot)?;
+                let claim = index.claim("entity", id)?;
+                let statement = statement_value(
+                    document_id,
+                    "rust_declaration_alternative",
+                    id,
+                    ordinal,
+                    "deterministic_fact",
+                    vec![id.to_owned(), subject_id.to_owned()],
+                    string_array(claim, "evidence_ids")?,
+                    Vec::new(),
+                );
+                writeln!(
+                    content,
+                    "- Alternative `{}` for logical method `{}` declares `{}` with compilation presence `{}`. {}",
+                    markdown_code(id),
+                    markdown_code(subject_id),
+                    markdown_code(string_field(properties, "declared_signature")?),
+                    markdown_code(string_field(properties, "compilation_presence")?),
+                    statement_marker(&statement)?
+                )
+                .expect("writing Markdown to a String cannot fail");
+                statements.push(statement);
+            }
         }
     }
 
