@@ -69,7 +69,19 @@
     "repository": "https://github.com/dghilardi/lekton",
     "revision": "247b8f42fb045db41166d70a276a41c2e079b6eb",
     "tree": "55ba428493a4ffae86ba492422a049f46d567a30",
-    "expected_output_bytes": 57394837,
+    "observed_local_output_bytes": 57394837,
+    "output_length_role": "retained local observation including the volatile envelope, not cross-environment canonical identity",
+    "replay_equivalence": {
+      "whole_stdout_byte_identical": false,
+      "semantic_bytes_identical": true,
+      "semantic_hash_identical": true,
+      "without_envelope_bytes_identical": true,
+      "allowed_stdout_differences": [
+        "envelope.created_at",
+        "envelope.job_id",
+        "envelope.correlation_id"
+      ]
+    },
     "attempts": 2,
     "expected_exit_code": 0,
     "maximum_wall_seconds": 60,

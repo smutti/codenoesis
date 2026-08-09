@@ -25,11 +25,11 @@ stdout, and no visible head.
 A diagnostic-only pre-#146 run with a temporary 256 MiB ceiling completed a K1
 snapshot at `53,031,841` bytes in 45.12 seconds. The exact authorized base
 includes inherited-uncertainty correction #146; its first bounded run completed
-at `57,394,837` bytes in 49.26 seconds. The latter is the pinned acceptance
-length, while the former remains provenance only. Raising the standard profile
-would silently broaden every earlier slice. Inferring a larger limit from
-repository shape or a failed first attempt would make resource authority
-non-deterministic. Neither is acceptable.
+at `57,394,837` bytes in 49.26 seconds. The latter is the retained local stdout
+observation, including its volatile envelope, while the former remains
+provenance only. Raising the standard profile would silently broaden every
+earlier slice. Inferring a larger limit from repository shape or a failed first
+attempt would make resource authority non-deterministic. Neither is acceptable.
 
 ## Decision
 
@@ -79,6 +79,12 @@ the same bytes whenever the result fits the standard maximum. Existing K1 and
 R0-R8 selector-absent commands remain failure-for-failure and byte-for-byte
 unchanged.
 
+For repeated ordinary CLI processes, the complete V11 documents may differ
+only under the existing volatile `envelope` fields defined by `DR-ART-002`.
+Canonical `semantic`, `semantic_hash`, and the complete document projection
+without `envelope` are byte-identical. The retained local total byte length is
+pilot evidence rather than cross-environment canonical identity.
+
 ## CLI and failure semantics
 
 The selector is accepted once and only once in the complete K1 scan
@@ -111,8 +117,10 @@ It requires:
 3. strict invalid-composition ErrorV16 behavior with no store mutation;
 4. standard K1 and R0-R8 selector-absent regressions unchanged;
 5. serialization completion before publication;
-6. two pinned Lekton runs with identical `57,394,837`-byte output, exit zero,
-   and one complete visible head each;
+6. two pinned Lekton runs retaining the local `57,394,837`-byte observation,
+   byte-identical canonical semantic and non-envelope projections, differences
+   only under the volatile envelope, exit zero, and one complete visible head
+   each;
 7. docs, exact-ID query, PortableGraphV2 export, and LocalExplorerV2 generation
    from the resulting head;
 8. no target, compiler, Cargo, build-script, process, network, or model

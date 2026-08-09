@@ -1651,16 +1651,18 @@ govern one maintainer-supervised package on exact base
 `aadd065defba2d4f8d202583c7da9ff70e92ece8`. The additive numeric decision and
 selector remain Proposed until protected manual merge. Existing K1 behavior
 and the requirement IDs amended below are already Approved and effective.
-The exact base includes inherited-uncertainty correction #146, so the pinned
-Lekton acceptance output is `57,394,837` bytes. The earlier `53,031,841`-byte
-diagnostic is retained only as pre-#146 provenance and is not the R9 oracle.
+The exact base includes inherited-uncertainty correction #146. Its retained
+local Lekton stdout observation is `57,394,837` bytes; that length includes the
+volatile envelope and is not cross-environment canonical identity. The earlier
+`53,031,841`-byte diagnostic is retained only as pre-#146 provenance and is not
+the R9 oracle.
 
 | Requirement | Current state | Target after protected merge | Slice | Acceptance material |
 |---|---|---|---|---|
 | Bounded R9 amendment to `FR-EXT-012` | K1 source semantics Approved and Implemented | Approved with an explicit non-semantic V11 output envelope; extraction and ontology unchanged | `S4` | Decision 0020 and the R9 output-capacity oracle |
 | Bounded R9 amendment to `FR-CLI-001` | K1 scan journey Approved and Implemented | Approved with `--output-capacity-profile local-snapshot-64m-v1` only on the complete K1 scan composition | `S4` | CLI E2E and invalid-composition matrix |
 | Bounded R9 amendment to `INV-BND-001` | Standard 32 MiB canonical output bound Approved | Approved with one explicit 64 MiB maximum/plus-one envelope that never changes the standard maximum | `S4` | Contract and serializer maximum/plus-one tests |
-| Bounded R9 amendment to `NFR-DET-001` | K1 canonical semantics deterministic | Approved with repeated byte-identical pinned Lekton V11 output under the explicit envelope | `S4` | Two-run digest, bytes, timing, and visible-head evidence |
+| Bounded R9 amendment to `NFR-DET-001` | K1 canonical semantics deterministic | Approved with repeated byte-identical pinned Lekton V11 semantic and non-envelope projections under the explicit capacity profile; only the existing volatile envelope may differ | `S4` | Two-run digest, bytes, timing, and visible-head evidence |
 | Bounded R9 amendments to `NFR-TST-001/002` | Red-first deterministic evidence required | Approved with retained compile/runtime Red, focused Green, full gate, and real-repository replay | `S4` | Committed evidence pack |
 
 The standard `canonical_output_bytes` maximum remains exactly `33,554,432`
@@ -1677,6 +1679,12 @@ graph, process, network, memory, or wall-time authority. Outputs that fit the
 standard maximum serialize byte-identically through both envelopes. Maximum
 and maximum-plus-one are checked before local-store publication; a failure has
 empty stdout and cannot create or move a visible head.
+
+Across ordinary CLI replays, complete V11 stdout may differ only in
+`envelope.created_at`, `envelope.job_id`, or `envelope.correlation_id` under the
+existing `DR-ART-002` contract. Canonical `semantic`, `semantic_hash`, and the
+complete projection without `envelope` remain byte-identical. The retained
+local stdout length is evidence for this pilot, not a portable identity rule.
 
 Unknown, duplicate, incomplete, non-K1, compiler-index, boundary, docs, query,
 export, or explore composition uses existing ErrorV16 unsupported-composition
