@@ -1,0 +1,549 @@
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling codenoesis-contracts v0.1.0 (<workspace>/crates/codenoesis-contracts)
+   Compiling noesis v0.1.0 (<workspace>/crates/noesis)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.93s
+     Running unittests src/lib.rs (target/debug/deps/codenoesis_contracts-7ca20f6baec7809d)
+
+running 6 tests
+test s4_k1::output_capacity_tests::reg_fr_cli_001_k1_output_capacity_preserves_small_bytes ... ok
+test tests::conf_dr_art_001_repository_snapshot_v1 ... ok
+test tests::pt_nfr_det_001_permutation_and_schedule_invariant ... ok
+test tests::pt_dr_art_002_volatile_envelope_preserves_semantic_hash ... ok
+test tests::pt_fr_acq_002_canonical_output_has_max_and_plus_one ... ok
+test s4_k1::output_capacity_tests::pt_inv_bnd_001_k1_output_capacity_maximum_plus_one ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.81s
+
+     Running tests/s1_boundaries_contracts.rs (target/debug/deps/s1_boundaries_contracts-5b0149f77521ceb6)
+
+running 8 tests
+test conf_fr_acq_005_boundary_input_v1_rejects_duplicate_members ... ok
+test conf_fr_acq_005_error_v9_is_closed_and_redacted ... ok
+test conf_fr_acq_005_boundary_input_v1_enforces_identity_contract ... ok
+test conf_fr_acq_005_boundary_input_v1_rejects_duplicate_and_recursive_entries ... ok
+test pt_fr_acq_005_explicit_roots_have_max_and_plus_one ... ok
+test pt_fr_acq_005_boundary_manifest_bytes_have_max_and_plus_one ... ok
+test conf_fr_acq_005_boundary_input_v1_is_strict_and_ordered ... ok
+test pt_fr_acq_005_boundary_report_bytes_have_exact_max_and_plus_one ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.63s
+
+     Running tests/s1_packed_contracts.rs (target/debug/deps/s1_packed_contracts-d224e8cf5a4a5295)
+
+running 1 test
+test conf_fr_acq_004_error_v6_exact_contexts ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s4_contracts.rs (target/debug/deps/s4_contracts-df399ac96073b121)
+
+running 6 tests
+test conf_fr_cli_001_reviewed_v5_errors_are_exact ... ok
+test gt_fr_doc_001_deterministic_markdown ... ok
+test fr_doc_003_document_limits_plus_one_fail_closed ... ok
+test e2e_fr_qry_001_exact_id_results ... ok
+test fr_sto_001_loaded_s4_semantic_must_match_every_head_artifact ... ok
+test fr_qry_001_query_result_limit_plus_one_fails_closed ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+     Running tests/s4_k1_contracts.rs (target/debug/deps/s4_k1_contracts-991e0e4756355371)
+
+running 5 tests
+test conf_fr_ext_012_snapshot_v11_graph_v8_error_v16 ... ok
+test conf_fr_qry_001_v11_uses_local_query_result_v6 ... ok
+test sec_fr_exp_002_excludes_body_expression_and_source_text ... ok
+test conf_fr_exp_002_portable_graph_v2_lossless_reimport ... ok
+test conf_fr_exp_002_local_explorer_v2_is_offline ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s4_r3_contracts.rs (target/debug/deps/s4_r3_contracts-c87316d0d32b0865)
+
+running 3 tests
+test e2e_fr_doc_001_r3_coverage_is_documented ... ok
+test e2e_fr_qry_001_r3_exact_id_results ... ok
+test conf_fr_ext_008_snapshot_v6_graph_v3_error_v10 ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/s4_r4_contracts.rs (target/debug/deps/s4_r4_contracts-fed321c9e34c962e)
+
+running 2 tests
+test reg_fr_doc_001_r4_declared_import_survives_omitted_r3_coverage ... ok
+test conf_fr_ext_009_snapshot_v7_graph_v4_error_v11 ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/s4_r5_contracts.rs (target/debug/deps/s4_r5_contracts-c25db16aaf65a9de)
+
+running 2 tests
+test conf_fr_qry_001_v8_uses_local_query_result_v3 ... ok
+test conf_fr_ext_010_snapshot_v8_graph_v5_error_v12 ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s4_r6_contracts.rs (target/debug/deps/s4_r6_contracts-40702fc227db2a7a)
+
+running 3 tests
+test conf_fr_ext_011_error_v13_invalid_matrix_is_strict ... ok
+test conf_fr_qry_001_v9_uses_local_query_result_v4 ... ok
+test conf_fr_ext_011_snapshot_v9_graph_v6_error_v13 ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s4_r7_contracts.rs (target/debug/deps/s4_r7_contracts-f67274366f18c566)
+
+running 2 tests
+test conf_fr_ext_005_snapshot_v10_graph_v7_error_v14 ... ok
+test conf_fr_qry_001_v10_uses_local_query_result_v5 ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s4_r8_contracts.rs (target/debug/deps/s4_r8_contracts-204846507ed94282)
+
+running 4 tests
+test conf_fr_exp_001_error_v15_is_strict_and_lf_terminated ... ok
+test conf_fr_exp_001_portable_graph_v1_lossless_reimport ... ok
+test gt_fr_exp_001_duplicate_loss_reorder_and_hash_rejection ... ok
+test conf_fr_exp_001_fifty_source_permutations_are_byte_identical ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/s4_r9_output_capacity_contracts.rs (target/debug/deps/s4_r9_output_capacity_contracts-efba89616373f9db)
+
+running 2 tests
+test conf_fr_ext_012_k1_output_capacity_profile_is_additive ... ok
+test reg_fr_exp_002_k1_script_close_source_spelling_is_inert_data ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s5_contracts.rs (target/debug/deps/s5_contracts-4613d2eff3e9bb23)
+
+running 2 tests
+test conf_fr_cli_004_error_v7_is_closed_and_typed ... ok
+test conf_fr_inc_003_analysis_cache_v1_round_trip ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s6_contracts.rs (target/debug/deps/s6_contracts-1b79b80d13aa1270)
+
+running 3 tests
+test conf_fr_cli_005_workspace_and_client_contracts_are_closed ... ok
+test sec_fr_cli_005_logical_paths_are_bounded_and_platform_neutral ... ok
+test conf_fr_cli_005_reviewed_error_values_are_exact ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/lib.rs (target/debug/deps/codenoesis_domain-876572fc1bd14a88)
+
+running 2 tests
+test tests::pt_fr_acq_002_limits_have_max_and_plus_one ... ok
+test tests::pt_fr_inv_001_inventory_is_order_invariant ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s1_boundaries.rs (target/debug/deps/s1_boundaries-dea086e9bc5e28d8)
+
+running 10 tests
+test pt_fr_acq_005_limits_have_max_and_plus_one ... ok
+test conf_fr_acq_005_duplicate_derived_ids_are_rejected ... ok
+test fz_fr_acq_005_gitmodules_seed_corpus_is_deterministic ... ok
+test conf_fr_acq_005_gitmodules_subset_rejects_each_closed_reason ... ok
+test gt_fr_acq_005_boundary_states_and_gaps_are_complete ... ok
+test sec_fr_acq_005_url_redaction_and_classification_are_exact ... ok
+test pt_fr_acq_005_parallel_replay ... ok
+test conf_fr_acq_005_gitmodules_subset_rejects_limit_plus_one ... ok
+test pt_fr_acq_005_order_invariant ... ok
+test conf_fr_acq_005_gitmodules_subset_accepts_exact_limits ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/s1_packed.rs (target/debug/deps/s1_packed-9e60334c4e98f3dd)
+
+running 2 tests
+test pt_fr_acq_004_limits_have_max_and_plus_one ... ok
+test conf_fr_acq_004_invalid_context_is_shape_safe ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s2_knowledge.rs (target/debug/deps/s2_knowledge-f9d69252db3b9a4d)
+
+running 3 tests
+test pt_fr_knw_002_claim_state_machine ... ok
+test pt_dr_idn_001_stable_ids_match_reviewed_preimages ... ok
+test pt_dr_idn_001_stable_ids_ignore_order_and_revision ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s3_storage.rs (target/debug/deps/s3_storage-881ce2dbd4fbf9bf)
+
+running 3 tests
+test pt_fr_snp_001_artifact_and_boundary_orders_are_closed ... ok
+test pt_fr_snp_001_only_contention_and_head_conflict_are_retryable ... ok
+test pt_fr_snp_001_snapshot_and_artifact_ids_match_reviewed_preimages ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s4_compiler_index.rs (target/debug/deps/s4_compiler_index-f8881c894ff3d9ed)
+
+running 2 tests
+test pt_fr_ext_005_limits_have_max_and_plus_one ... ok
+test pt_fr_ext_005_determinism_budget_is_fixed ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s4_framework_declarations.rs (target/debug/deps/s4_framework_declarations-b0daaa868e9aa470)
+
+running 2 tests
+test pt_fr_ext_011_limits_have_max_and_plus_one ... ok
+test pt_dr_idn_002_r6_framework_identity_nfc ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s4_k1_rust_callable_semantics.rs (target/debug/deps/s4_k1_rust_callable_semantics-88565156bd2a691b)
+
+running 2 tests
+test pt_fr_ext_012_all_limits_have_maximum_plus_one ... ok
+test pt_dr_idn_002_k1_identity_preimages_and_collisions ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s4_rust_semantic_depth.rs (target/debug/deps/s4_rust_semantic_depth-0e515d6a870c4ac1)
+
+running 2 tests
+test pt_fr_ext_010_limits_have_max_and_plus_one ... ok
+test pt_dr_idn_002_r5_member_identities_and_cardinalities ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s4_workspace_docs_query.rs (target/debug/deps/s4_workspace_docs_query-ed016ba6ab63f3be)
+
+running 2 tests
+test pt_dr_idn_002_evidence_and_relationship_identity ... ok
+test pt_dr_idn_002_workspace_identity_stability ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/s5_incremental.rs (target/debug/deps/s5_incremental-13497eeda8315e21)
+
+running 6 tests
+test pt_fr_inc_002_inventory_only_excludes_source_and_mapping_inputs ... ok
+test pt_fr_inc_002_version_rebuild_matrix ... ok
+test pt_fr_inc_002_versioned_rule_precedence ... ok
+test pt_fr_inc_001_mode_only_change_is_modified ... ok
+test pt_fr_inc_003_revision_neutral_cache_identity ... ok
+test pt_fr_inc_001_changed_path_limit_boundaries ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+     Running tests/s6_federation.rs (target/debug/deps/s6_federation-b31a64a82e9fbd69)
+
+running 5 tests
+test conf_fr_fed_001_yaml_evidence_preimage_is_reproducible ... ok
+test pt_fr_fed_001_reviewed_identity_preimages_are_exact ... ok
+test pt_fr_fed_001_every_counter_accepts_max_and_rejects_plus_one ... ok
+test pt_fr_fed_001_conflicts_and_multi_call_sites_are_order_invariant ... ok
+test pt_fr_fed_001_provider_collection_orders_are_invariant ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/lib.rs (target/debug/deps/noesis-287f6720ff4a7e86)
+
+running 13 tests
+test portable_explorer::tests::sec_nfr_sec_001_checkout_text_normalization_is_closed ... ok
+test generated_docs::tests::sec_fr_doc_003_overlap_fails_without_creating_output ... ok
+test generated_docs::tests::sec_fr_doc_003_symlink_component_is_rejected ... ok
+test portable_explorer::tests::race_nfr_sec_005_output_replacement_is_rejected_or_blocked ... ok
+test generated_docs::tests::sec_fr_doc_003_unlisted_overview_is_not_owned ... ok
+test portable_explorer::tests::race_nfr_sec_005_mutable_input_is_rejected ... ok
+test generated_docs::tests::sec_fr_doc_003_unmarked_nonempty_root_is_unchanged ... ok
+test generated_docs::tests::sec_fr_doc_003_temporary_symlink_is_rejected ... ok
+test generated_docs::tests::sec_fr_doc_003_unrecognized_marked_entry_fails_closed ... ok
+test generated_docs::tests::ft_fr_doc_003_abandoned_staging_is_resumed ... ok
+test generated_docs::tests::ft_fr_doc_003_precommit_files_are_resumed_without_overwrite ... ok
+test generated_docs::tests::sec_fr_doc_003_corrupt_complete_generation_fails_closed ... ok
+test generated_docs::tests::sec_fr_doc_003_complete_generation_rejects_snapshot_replacement ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running unittests src/main.rs (target/debug/deps/noesis-f4774006c6d07b8e)
+
+running 2 tests
+test s4_root_argument_tests::sec_fr_cli_001_docs_traversal_is_rejected_during_parsing ... ok
+test s4_root_argument_tests::sec_fr_cli_001_query_traversal_is_rejected_during_parsing ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/e2e_fr_acq_001_immutable_commit.rs (target/debug/deps/e2e_fr_acq_001_immutable_commit-861bf5e0e3b32b44)
+
+running 10 tests
+test it_fr_acq_001_ref_move_after_binding_keeps_original_commit ... ok
+test e2e_fr_acq_001_non_git_returns_typed_error ... ok
+test e2e_fr_acq_001_revision_not_found_returns_typed_error ... ok
+test e2e_fr_cli_003_invalid_revision_returns_strict_error ... ok
+test e2e_fr_cli_003_invalid_identity_returns_strict_error ... ok
+test e2e_fr_acq_001_unexpected_failure_is_strict_internal ... ok
+test e2e_fr_acq_001_inconsistent_object_returns_typed_error ... ok
+test e2e_fr_acq_001_revision_not_commit_returns_typed_error ... ok
+test e2e_fr_acq_001_missing_object_returns_typed_error ... ok
+test e2e_fr_acq_001_immutable_commit ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.71s
+
+     Running tests/e2e_fr_acq_004_packed_sha1.rs (target/debug/deps/e2e_fr_acq_004_packed_sha1-2b68ef243b2aaa84)
+
+running 15 tests
+test race_fr_acq_004_pack_replacement ... ok
+test sec_fr_acq_004_scan_has_no_new_authority ... ok
+test e2e_fr_acq_004_packed_sha1_equivalence ... ok
+test diff_fr_acq_004_offline_reference_readers ... ok
+test pt_fr_acq_004_location_and_order_invariant ... ok
+test conf_fr_acq_004_entry_integrity ... ok
+test sec_fr_acq_004_pack_integrity ... ok
+test conf_fr_acq_004_pack_catalog_v1 ... ok
+test conf_fr_acq_004_index_v2 ... ok
+test reg_fr_acq_004_legacy_profiles_unchanged ... ok
+test pt_fr_acq_004_limits_have_max_and_plus_one ... ok
+test conf_fr_acq_004_ofs_delta ... ok
+test fz_fr_acq_004_pack_index_delta_seed_corpus ... ok
+test sec_fr_acq_004_delta_adversarial ... ok
+test conf_fr_acq_004_ref_delta ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.17s
+
+     Running tests/e2e_fr_acq_005_gitlink_boundaries.rs (target/debug/deps/e2e_fr_acq_005_gitlink_boundaries-6477f357104019ed)
+
+running 13 tests
+test conf_fr_acq_005_boundary_manifest_failures_are_side_effect_free ... ok
+test conf_fr_acq_005_selector_profile_matrix ... ok
+test sec_fr_acq_005_nested_symlink_escape_is_rejected ... ok
+test sec_fr_acq_005_url_canary_never_reaches_output_or_store ... ok
+test e2e_fr_acq_005_gitlink_boundaries ... ok
+test pt_fr_acq_005_manifest_bytes_have_public_max_and_plus_one ... ok
+test gt_fr_acq_005_nested_failure_precedence ... ok
+test conf_fr_acq_005_v5_store_docs_query ... ok
+test sec_fr_acq_005_no_ambient_nested_authority ... ok
+test reg_fr_acq_004_packed_sha1_composes_with_r2 ... ok
+test gt_fr_acq_005_explicit_nested_binding ... ok
+test pt_fr_acq_005_public_limits_use_128_gitlinks_and_256_sections ... ok
+test pt_fr_acq_005_explicit_roots_have_public_max_and_plus_one ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.52s
+
+     Running tests/e2e_fr_cli_001_workspace_docs_query.rs (target/debug/deps/e2e_fr_cli_001_workspace_docs_query-c6cb82b708ae6849)
+
+running 1 test
+test e2e_fr_cli_001_workspace_docs_query ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.57s
+
+     Running tests/e2e_fr_exp_001_portable_explorer.rs (target/debug/deps/e2e_fr_exp_001_portable_explorer-1e788eeec5f6dde8)
+
+running 15 tests
+test conf_fr_qry_002_bounded_deterministic_neighborhood ... ok
+test gt_fr_exp_001_exact_identity_reference_and_evidence_preservation ... ok
+test conf_fr_qry_001_r8_preserves_all_v5_subject_families ... ok
+test sec_nfr_sec_001_r8_csp_forbids_active_remote_content ... ok
+test sec_fr_exp_001_xss_payloads_render_as_text ... ok
+test pt_od_lim_001_r8_all_limits_have_maximum_plus_one ... ok
+test conf_fr_cli_001_export_explore_are_explicit ... ok
+test sec_nfr_sec_005_r8_path_symlink_and_destination_confinement ... ok
+test ft_fr_exp_001_corrupt_visible_snapshot_fails_before_publication ... ok
+test conf_fr_exp_001_invalid_security_matrix ... ok
+test sec_nfr_prv_002_r8_excludes_source_contents_and_snippets ... ok
+test e2e_fr_exp_001_export_and_explore_offline ... ok
+test reg_fr_cli_001_r7_commands_and_stored_head_unchanged ... ok
+test reg_fr_qry_001_r7_exact_query_bytes_unchanged ... ok
+test pt_nfr_det_001_r8_fifty_permutation_replay ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.46s
+
+     Running tests/e2e_fr_ext_002_rust_knowledge.rs (target/debug/deps/e2e_fr_ext_002_rust_knowledge-491d6f5218c35f18)
+
+running 5 tests
+test sec_fr_ext_002_target_never_executes ... ok
+test e2e_fr_ext_002_rust_knowledge ... ok
+test gt_dr_idn_001_unicode_normalization_collision ... ok
+test conf_fr_ext_001_snapshot_v3_and_error_v3 ... ok
+test gt_fr_ext_002_malformed_syntax_is_explicit ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+     Running tests/e2e_fr_ext_005_scip_import.rs (target/debug/deps/e2e_fr_ext_005_scip_import-4f5bfa37c9f4dbfa)
+
+running 12 tests
+test reg_fr_cli_001_r7_selector_absence_is_byte_identical ... ok
+test sec_fr_ext_005_never_executes_indexer_or_target ... ok
+test gt_fr_ext_005_external_and_generated_symbols_remain_bounded ... ok
+test gt_fr_ext_005_explicit_implementation_and_type_relations ... ok
+test e2e_fr_ext_005_revision_bound_scip_import ... ok
+test gt_fr_ext_005_cross_crate_symbol_resolution ... ok
+test e2e_fr_doc_001_r7_provenance_conflict_and_gap_wording ... ok
+test conf_fr_ext_005_snapshot_v10_graph_v7_error_v14 ... ok
+test sec_fr_ext_005_binding_path_race_and_privacy ... ok
+test conf_fr_qry_001_v10_uses_local_query_result_v5 ... ok
+test conf_fr_ext_005_invalid_security_matrix ... ok
+test pt_nfr_det_001_r7_permutation_and_replay_invariant ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 40.76s
+
+     Running tests/e2e_fr_ext_008_root_package_workspace.rs (target/debug/deps/e2e_fr_ext_008_root_package_workspace-a30cc5a2610acb87)
+
+running 6 tests
+test reg_fr_cli_001_r3_selector_absence_is_byte_identical ... ok
+test e2e_fr_ext_008_root_package_workspace ... ok
+test e2e_fr_doc_001_r3_coverage_is_documented ... ok
+test e2e_fr_qry_001_r3_exact_id_results ... ok
+test conf_fr_ext_008_error_v10_and_r2_precedence ... ok
+test gt_fr_ext_008_public_root_variants ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.49s
+
+     Running tests/e2e_fr_ext_009_cargo_manifest_facts.rs (target/debug/deps/e2e_fr_ext_009_cargo_manifest_facts-472536b5ba91f05a)
+
+running 4 tests
+test reg_fr_cli_001_r4_selector_absence_is_byte_identical ... ok
+test e2e_fr_ext_009_cargo_manifest_facts ... ok
+test e2e_fr_doc_001_r4_declared_vs_resolved_is_documented ... ok
+test e2e_fr_qry_001_r4_exact_id_results ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.39s
+
+     Running tests/e2e_fr_ext_010_rust_semantic_depth.rs (target/debug/deps/e2e_fr_ext_010_rust_semantic_depth-b18ba5840c1b4727)
+
+running 6 tests
+test sec_fr_ext_010_malformed_has_error_v12_no_publication ... ok
+test reg_fr_cli_001_r5_selector_absence_is_byte_identical ... ok
+test sec_fr_ext_010_invalid_composition_precedes_acquisition ... ok
+test e2e_fr_ext_010_rust_semantic_depth ... ok
+test e2e_fr_doc_001_r5_declared_and_unresolved_are_documented ... ok
+test e2e_fr_qry_001_r5_exact_id_results ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.66s
+
+     Running tests/e2e_fr_ext_011_framework_declarations.rs (target/debug/deps/e2e_fr_ext_011_framework_declarations-659d37e09883b86b)
+
+running 6 tests
+test reg_fr_cli_001_r6_selector_absence_is_byte_identical ... ok
+test sec_fr_ext_011_invalid_composition_precedes_acquisition ... ok
+test sec_fr_ext_011_r6_prerequisite_parse_failures_use_v13 ... ok
+test e2e_fr_ext_011_framework_declarations ... ok
+test e2e_fr_doc_001_r6_declaration_candidate_non_runtime_wording ... ok
+test e2e_fr_qry_001_r6_exact_id_results ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.48s
+
+     Running tests/e2e_fr_ext_012_k1_output_capacity.rs (target/debug/deps/e2e_fr_ext_012_k1_output_capacity-55382e915faa6212)
+
+running 2 tests
+test conf_fr_cli_001_output_capacity_composition_is_closed ... ok
+test e2e_fr_ext_012_explicit_output_capacity_profile ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.35s
+
+     Running tests/e2e_fr_ext_012_rust_callable_semantics.rs (target/debug/deps/e2e_fr_ext_012_rust_callable_semantics-7d1a2b24b348869e)
+
+running 3 tests
+test reg_fr_cli_001_selector_absence_preserves_r0_r8_bytes ... ok
+test sec_fr_exp_002_xss_csp_path_and_race_fail_closed ... ok
+test e2e_fr_ext_012_rust_callable_semantics ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.57s
+
+     Running tests/e2e_fr_fed_001_openapi_federation.rs (target/debug/deps/e2e_fr_fed_001_openapi_federation-4cdb0fffcb4fd55a)
+
+running 16 tests
+test conf_fr_cli_005_reviewed_fixture_materialization_is_platform_neutral ... ok
+test gt_fr_cli_005_provider_only_workspace_is_exact ... ok
+test conf_fr_cli_005_stdout_failure_uses_internal_error_v8 ... ok
+test sec_fr_fed_001_symlink_root_is_rejected_before_content_read ... ok
+test e2e_fr_fed_001_openapi_federation ... ok
+test gt_fr_ext_004_unsupported_semantics_are_exact_gaps ... ok
+test conf_fr_fed_002_conflicting_authority_fails_closed ... ok
+test pt_fr_fed_001_ten_parallel_schedules_are_byte_identical ... ok
+test sec_fr_fed_001_standard_path_does_not_mutate_inputs ... ok
+test conf_fr_cli_005_invocation_and_digest_fail_without_stdout ... ok
+test gt_fr_ext_004_yaml_json_reports_are_semantically_equivalent ... ok
+test conf_fr_fed_002_heuristic_selection_is_exact ... ok
+test sec_fr_ext_004_hostile_contracts_fail_closed ... ok
+test sec_fr_fed_001_unsafe_workspace_paths_are_rejected_before_reads ... ok
+test pt_fr_fed_001_fifty_input_orders_are_byte_identical ... ok
+test pt_fr_fed_001_public_limits_accept_max_and_reject_plus_one ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 22.78s
+
+     Running tests/e2e_fr_inc_001_incremental_refresh.rs (target/debug/deps/e2e_fr_inc_001_incremental_refresh-dc6081da130584df)
+
+running 10 tests
+test e2e_fr_cli_004_recognized_refresh_uses_error_v7_for_input ... ok
+test e2e_fr_cli_004_missing_baseline_is_error_v7 ... ok
+test e2e_fr_inc_003_valid_but_false_cache_fails_equivalence ... ok
+test e2e_fr_cli_004_non_s4_baseline_is_incompatible ... ok
+test e2e_fr_inc_003_corrupt_cache_preserves_baseline_head ... ok
+test ft_fr_cli_004_concurrent_head_movement_is_retryable ... ok
+test e2e_fr_inc_002_incompatible_cache_selects_full_rebuild ... ok
+test e2e_fr_inc_003_missing_cache_recomputes_without_cold_substitution ... ok
+test e2e_fr_inc_002_source_add_selects_full_workspace ... ok
+test e2e_fr_inc_001_incremental_refresh ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.75s
+
+     Running tests/e2e_fr_inv_001_safe_inventory.rs (target/debug/deps/e2e_fr_inv_001_safe_inventory-de9a430f3a0fc181)
+
+running 18 tests
+test conf_dr_evd_001_source_evidence_resolves ... ok
+test sec_nfr_sec_001_alternate_object_database_is_not_opened ... ok
+test e2e_fr_acq_002_symlinked_repository_root_is_rejected ... ok
+test sec_nfr_sec_001_git_control_symlink_is_not_followed ... ok
+test e2e_fr_acq_002_symlinked_git_directory_is_rejected ... ok
+test sec_nfr_sec_001_loose_object_symlink_is_not_followed ... ok
+test e2e_fr_acq_002_packed_object_database_is_rejected ... ok
+test e2e_fr_acq_002_dirty_worktree_is_ignored ... ok
+test conf_fr_inv_001_repository_snapshot_v2_and_error_v2 ... ok
+test e2e_fr_inv_001_safe_inventory ... ok
+test e2e_fr_acq_002_non_git_uses_error_v2 ... ok
+test e2e_fr_acq_002_traversal_rejected ... ok
+test sec_nfr_sec_001_sentinel_scripts_never_execute ... ok
+test gt_fr_inv_001_exact_inventory_and_coverage_gaps ... ok
+test e2e_fr_acq_002_gitlink_rejected ... ok
+test e2e_fr_acq_002_symlink_rejected ... ok
+test pt_fr_inv_001_public_inventory_is_replay_and_schedule_invariant ... ok
+test sec_nfr_sec_001_bombs_and_parser_inputs_are_bounded ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.40s
+
+     Running tests/e2e_fr_sto_001_atomic_local_storage.rs (target/debug/deps/e2e_fr_sto_001_atomic_local_storage-01097d944e5c313d)
+
+running 12 tests
+test s3_publication_probe_process ... ok
+test s3_head_probe_process ... ok
+test reg_fr_sto_001_legacy_profiles_unchanged ... ok
+test sec_fr_sto_001_store_root_confinement ... ok
+test it_fr_sto_001_restart_preserves_head ... ok
+test ft_fr_snp_001_orphan_sweep_preserves_reachable ... ok
+test conf_fr_sto_001_store_v1_and_error_v4 ... ok
+test e2e_fr_sto_001_atomic_local_storage ... ok
+test it_fr_sto_001_corruption_fails_closed ... ok
+test pt_inv_snp_001_reader_visibility ... ok
+test pt_fr_snp_001_idempotent_retry ... ok
+test ft_fr_snp_001_publication_failpoint_matrix ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.16s
+
+     Running tests/s0_conformance.rs (target/debug/deps/s0_conformance-e7f341d36b1723db)
+
+running 4 tests
+test conf_nfr_tst_001_requires_fixture_oracle_evidence_links ... ok
+test conf_nfr_mnt_001_dependency_rules ... ok
+test sec_nfr_sec_005_scan_launches_no_child_and_opens_no_network ... ok
+test pt_nfr_tst_002_replays_are_parallel_and_order_independent ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.21s
+
+     Running tests/sec_nfr_sec_001_filesystem_boundary.rs (target/debug/deps/sec_nfr_sec_001_filesystem_boundary-3303d8bebf6b2593)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

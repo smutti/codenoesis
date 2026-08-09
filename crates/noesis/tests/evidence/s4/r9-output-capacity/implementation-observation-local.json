@@ -1,0 +1,180 @@
+{
+  "schema_version": "codenoesis.r9-k1-output-capacity-implementation-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/148",
+  "requirement_ids": [
+    "FR-EXT-012",
+    "FR-CLI-001",
+    "INV-BND-001",
+    "NFR-DET-001",
+    "NFR-TST-001",
+    "NFR-TST-002",
+    "OD-LIM-001"
+  ],
+  "requirement_status": "existing K1 Approved/Implemented; R9 capacity amendment Proposed until protected merge",
+  "slice": "S4",
+  "risk": "high",
+  "risk_owner": "@smutti",
+  "observed_at_utc": "2026-08-09T08:18:54Z",
+  "base_commit_sha": "aadd065defba2d4f8d202583c7da9ff70e92ece8",
+  "governance_checkpoint_sha": "4fb52a1af9d3ad357949620873081d945ffaaee7",
+  "retained_red_sha": "6ead43d6faa47d4eb42b32b770263822c6e40dec",
+  "capacity_implementation_sha": "29228f6c59bcc464f5939c461ef361c78781d0d7",
+  "follow_up_red_sha": "62bec90ed8ecfc10f32add73bba956194a2f9b56",
+  "tested_product_head_sha": "5caa86e81dcdaa21d35faacac03a21e49e9725ce",
+  "selector": {
+    "flag": "--output-capacity-profile",
+    "value": "local-snapshot-64m-v1",
+    "standard_maximum_bytes_including_lf": 33554432,
+    "selected_maximum_bytes_including_lf": 67108864,
+    "explicit_only": true,
+    "semantic_configuration_unchanged": true,
+    "serialization_precedes_publication": true
+  },
+  "test_driven_evidence": {
+    "initial_red": "crates/noesis/tests/evidence/s4/r9-output-capacity/red-observation.json",
+    "follow_up_red": "crates/noesis/tests/evidence/s4/r9-output-capacity/follow-up-correction-observation.json",
+    "focused_green": {
+      "command": "cargo test -p codenoesis-domain -p codenoesis-contracts -p noesis --all-targets --all-features --locked",
+      "exit_code": 0,
+      "log": "crates/noesis/tests/evidence/s4/r9-output-capacity/focused-green.log",
+      "byte_length": 26984,
+      "sha256": "f8b3d7957164bbc34aef8c38647064e88c5e002784ce9a25975e495c0a9f0e36",
+      "coverage": "R0-R8 selector-absent regressions, K1 capacity max/plus-one, strict composition, privacy, CSP, portable reimport, and the R9 inert-source-spelling correction"
+    },
+    "complete_repository_gate": "not run at this evidence checkpoint; run on the final review head and retain through the pull request and GitHub Actions"
+  },
+  "pinned_lekton": {
+    "repository": "https://github.com/dghilardi/lekton",
+    "revision": "247b8f42fb045db41166d70a276a41c2e079b6eb",
+    "tree": "55ba428493a4ffae86ba492422a049f46d567a30",
+    "repository_id": "urn:codenoesis:pilot:lekton:k1-r9",
+    "source_worktree_status_bytes_after_journey": 0,
+    "external_source_vendored": false,
+    "command": "noesis scan --repository <lekton-checkout> --repository-id urn:codenoesis:pilot:lekton:k1-r9 --revision 247b8f42fb045db41166d70a276a41c2e079b6eb --profile standard-local-s4 --acquisition-profile local-git-sha1-packed-v1 --workspace-profile cargo-root-package-v1 --manifest-profile cargo-manifest-facts-v1 --rust-semantic-profile rust-semantic-depth-v1 --rust-framework-profile rust-framework-declarations-v1 --rust-callable-profile rust-callable-semantics-v1 --output-capacity-profile local-snapshot-64m-v1 --store <fresh-store-n> --format json",
+    "runs": [
+      {
+        "attempt": 1,
+        "exit_code": 0,
+        "stdout_bytes": 57394837,
+        "stdout_sha256": "11b5c73c78dba47c409f6ed59debef19a52f9bbb13ee7dda722b52f78bac28a0",
+        "wall_seconds": 48.29,
+        "stderr_bytes": 0,
+        "visible_heads": 1,
+        "snapshots": 1
+      },
+      {
+        "attempt": 2,
+        "exit_code": 0,
+        "stdout_bytes": 57394837,
+        "stdout_sha256": "40ab02a37df058fbd6b8cc71c1cbf0026c249c2b0d6f0de931c09db57397e65b",
+        "wall_seconds": 48.13,
+        "stderr_bytes": 0,
+        "visible_heads": 1,
+        "snapshots": 1
+      }
+    ],
+    "replay_equivalence": {
+      "snapshot_id": "urn:codenoesis:snapshot:blake3:77a914af4f588b4a3e356a0e97b2524d7443bd7394137b6a632b77141c7e20a1",
+      "semantic_hash": "63cb95f694b7a6559565256fefc26dd8995e2d5b2599274f13910d59c7ecb412",
+      "semantic_bytes_without_lf": 57394535,
+      "semantic_sha256": "dd17c7a5efdf079f3b4a62c35007b4a28c6f01b872a8e07255367efc6de01313",
+      "without_envelope_sha256": "89bfeacdbaa5791d5275fad2b0a44a6d7f0dedac960522cd69fda909daaa1166",
+      "semantic_bytes_identical": true,
+      "semantic_hash_identical": true,
+      "without_envelope_bytes_identical": true,
+      "differences_only_in_permitted_envelope": true
+    }
+  },
+  "follow_up_journey": {
+    "docs": {
+      "exit_code": 0,
+      "stdout_bytes": 10020634,
+      "stdout_sha256": "e0f5fcd3c8dde800120aa732e4cd9da9b8310cdbed396cf0f6fe4db6b36682bb",
+      "stderr_bytes": 0
+    },
+    "exact_id_query": {
+      "requested_id": "urn:codenoesis:entity:blake3:0056c197d4059c9615de4279a2de360daaacdcebc3355ea7a44235e084e8ac13",
+      "schema_version": "codenoesis.local-query-result/v6",
+      "exit_code": 0,
+      "stdout_bytes": 3200,
+      "stdout_sha256": "eaed687f0e2bd94fea104d060d1ea94e73736e06fd8d6739801f3e0b70d5896e",
+      "stderr_bytes": 0
+    },
+    "portable_graph_v2": {
+      "exit_code": 0,
+      "stdout_bytes": 37864377,
+      "stdout_sha256": "5edb132f59df129e656e33038b31ec8e645eab12eae986e6b2bfc89e25df79da",
+      "wall_seconds": 35.35,
+      "stderr_bytes": 0,
+      "entities": 9813,
+      "relationships": 9932,
+      "claims": 19745,
+      "evidence": 11457,
+      "diagnostics": 4211,
+      "coverage_gaps": 10845,
+      "documents": 237,
+      "document_statements": 24622,
+      "literal_script_close_occurrences_as_inert_json_data": 4,
+      "forbidden_private_field_occurrences": 0
+    },
+    "local_explorer_v2": {
+      "exit_code": 0,
+      "stdout_bytes": 1075,
+      "stdout_sha256": "6c2e344829b7990e45087c52573bf825e99b927e23c2a23bda193f4f783001a0",
+      "wall_seconds": 2.64,
+      "stderr_bytes": 0,
+      "portable_graph_sha256": "5edb132f59df129e656e33038b31ec8e645eab12eae986e6b2bfc89e25df79da",
+      "viewer_sha256": "d0b633b29e6494d6494a35b5553d72c3dd04a747eeef219ca33a9f5fe2a1f4fa",
+      "text_content_assignments": 8,
+      "inner_html_occurrences": 0,
+      "remote_http_occurrences": 0,
+      "network": false,
+      "dynamic_code": false,
+      "storage": false,
+      "telemetry": false
+    }
+  },
+  "corrections": [
+    "Lekton observed local stdout length aligned from pre-#146 provenance 53031841 to current-baseline 57394837 bytes",
+    "ordinary replay aligned with immutable volatile-envelope semantics while preserving byte-identical semantic and non-envelope projections",
+    "PortableGraphV2 no longer treats literal script-close source spelling in separately loaded JSON as embedded active HTML; private-field rejection, separate-file loading, CSP, and textContent-only rendering remain Green"
+  ],
+  "unchanged": {
+    "standard_32_mib_limit": true,
+    "ontology": true,
+    "schemas": true,
+    "identity_domains": true,
+    "error_versions": true,
+    "dependencies": true,
+    "historical_goldens": true,
+    "viewer_asset": true,
+    "source_repository": true,
+    "network_model_target_execution_authority": true
+  },
+  "environment": {
+    "os": "macOS 26.5.2",
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "features": "all features for focused domain/contracts/noesis validation; deterministic local path with no model provider"
+  },
+  "agent": {
+    "product": "OpenAI Codex",
+    "model_identity": "not exposed by the runtime",
+    "run_identifier": "not exposed by the runtime",
+    "duration": "individual retained command timings recorded; aggregate not exposed",
+    "cost": "not exposed by the runtime",
+    "policy": "repository AGENTS.md at tested product head"
+  },
+  "human_approvals": [
+    "https://github.com/smutti/codenoesis/issues/148#issuecomment-5227972141",
+    "https://github.com/smutti/codenoesis/issues/148#issuecomment-5228191122",
+    "https://github.com/smutti/codenoesis/issues/148#issuecomment-5230481060"
+  ],
+  "rollback": "revert the complete issue #148 package; no state migration or historical rewrite",
+  "known_limitations": [
+    "The retained real-repository pilot is local macOS arm64 evidence; cross-platform behavior is delegated to GitHub Actions.",
+    "The R9 amendment remains Proposed and must not be called Verified before protected merge and independent review."
+  ]
+}
