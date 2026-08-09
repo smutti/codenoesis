@@ -1,0 +1,63 @@
+issue=https://github.com/smutti/codenoesis/issues/155
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+tested_implementation_commit=50e002dbe3f6b182652e499b3c70d4243001127c
+tested_tree=7c03d47b606498a2ab05750b3af49074f5dfe109
+completed_at_utc=2026-08-09T19:42:26Z
+
+command=python3 -m unittest scripts.tests.test_s4_r11_k1_repository_boundary_composition_contract
+exit=0
+tests_passed=4
+
+command=cargo test -p codenoesis-domain --test s4_r11_k1_repository_boundary_composition --locked
+exit=0
+tests_passed=2
+
+command=cargo test -p codenoesis-lang-rust --test s4_r11_k1_repository_boundary_composition --locked
+exit=0
+tests_passed=2
+determinism=50 permutations and 10 schedules
+
+command=cargo test -p codenoesis-application --test s4_r11_k1_repository_boundary_composition --locked
+exit=0
+tests_passed=1
+
+command=cargo test -p codenoesis-contracts --test s4_r11_k1_repository_boundary_composition --locked
+exit=0
+tests_passed=4
+
+command=cargo test -p codenoesis-contracts --lib --locked s4_r11::tests
+exit=0
+tests_passed=4
+
+command=cargo test -p noesis --test e2e_fr_ext_012_k1_repository_boundaries --locked
+exit=0
+tests_passed=6
+journey=scan -> docs -> exact-ID query -> export -> strict reimport -> explore
+
+command=cargo test -p noesis --test e2e_fr_ext_012_k1_output_capacity conf_fr_cli_001_output_capacity_composition_is_closed --locked -- --exact
+exit=0
+tests_passed=1
+correction=authorized boundary+64m oracle emits V13 with an empty R2 report when no gitlink exists
+
+command=cargo test -p noesis --test e2e_fr_ext_012_rust_callable_semantics --locked
+exit=0
+tests_passed=3
+legacy=K1 selector absence and V11 journey unchanged
+
+command=cargo test -p noesis --test e2e_fr_acq_005_gitlink_boundaries --locked
+exit=0
+tests_passed=13
+legacy=R2 boundary behavior unchanged
+
+command=cargo test -p noesis --test e2e_fr_ext_013_cfg_declaration_alternatives --locked
+exit=0
+tests_passed=11
+legacy=R10 behavior unchanged
+
+rust_tests_passed=47
+python_tests_passed=4
+raw_local_log_bytes=10688
+raw_local_log_sha256=cc470a3a02addc9da0f23f3e8f63ce3365fd1a3e19a1de7724811c5da873a74c
+result=green
