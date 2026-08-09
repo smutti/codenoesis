@@ -1,6 +1,6 @@
 use codenoesis_contracts::{
-    K1ContractError, K1_ONTOLOGY_VERSION, K1_PORTABLE_GRAPH_VERSION, K1_QUERY_VERSION,
-    K1_SNAPSHOT_VERSION, PortableGraphV2, RepositorySnapshotV11, RepositorySnapshotV11Error,
+    K1_ONTOLOGY_VERSION, K1_PORTABLE_GRAPH_VERSION, K1_QUERY_VERSION, K1_SNAPSHOT_VERSION,
+    K1ContractError, PortableGraphV2, RepositorySnapshotV11, RepositorySnapshotV11Error,
 };
 use codenoesis_domain::{K1OutputCapacityProfile, LOCAL_SNAPSHOT_64M_V1, STANDARD_LOCAL_S1_LIMITS};
 use serde_json::{Map, Value, json};

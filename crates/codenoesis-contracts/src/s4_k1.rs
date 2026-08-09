@@ -1512,11 +1512,6 @@ fn validate_private_fields(value: &Value) -> Result<(), K1ContractError> {
                 validate_private_fields(value)?;
             }
         }
-        Value::String(value) if value.to_ascii_lowercase().contains("</script") => {
-            return Err(K1ContractError::UnsafePayload {
-                reason: "script_close_sequence",
-            });
-        }
         Value::Null | Value::Bool(_) | Value::Number(_) | Value::String(_) => {}
     }
     Ok(())
