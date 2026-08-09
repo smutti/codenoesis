@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/codenoesis-error-v17.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "code", "stage", "message", "retryable", "context"],
+  "properties": {
+    "schema_version": {"const": "codenoesis.error/v17"},
+    "code": {
+      "enum": [
+        "input.invalid_rust_cfg_alternatives_profile",
+        "input.unsupported_rust_cfg_alternatives_composition",
+        "input.unsafe_output_path",
+        "extraction.invalid_rust_source",
+        "extraction.rust_cfg_alternative_identity_mismatch",
+        "extraction.rust_cfg_alternative_duplicate",
+        "extraction.rust_cfg_alternative_overlap",
+        "extraction.rust_cfg_alternative_cross_source",
+        "extraction.rust_cfg_alternative_limit_exceeded",
+        "snapshot.invalid_v12",
+        "query.invalid_v12",
+        "export.invalid_snapshot",
+        "export.invalid_portable_graph_v3",
+        "export.limit_exceeded",
+        "explorer.asset_integrity_mismatch",
+        "explorer.limit_exceeded",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {"enum": ["input", "extraction", "snapshot", "query", "export", "explorer", "internal"]},
+    "message": {"type": "string", "minLength": 1, "maxLength": 256},
+    "retryable": {"const": false},
+    "context": {"type": "object"}
+  }
+}

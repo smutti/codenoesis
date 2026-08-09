@@ -1,0 +1,105 @@
+{
+  "schema_version": "codenoesis.acceptance-test/v1",
+  "requirement_ids": [
+    "FR-EXT-013",
+    "FR-EXP-003",
+    "FR-QRY-001",
+    "FR-CLI-001",
+    "FR-DOC-001",
+    "FR-DOC-002",
+    "FR-DOC-003",
+    "NFR-DET-001",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "requirement_status": "Proposed branch-scoped candidate",
+  "slice": "S4",
+  "issue": 152,
+  "risk": "high",
+  "exact_base": "dae3860ded12202bdf6bbb1134a08f28098f3c9a",
+  "fixture": {
+    "root": "tests/fixtures/s4/rust-cfg-declaration-alternatives-v1",
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-cfg-declaration-alternatives-v1",
+    "tree_oid": "6aa31d889f4c87b2b7dfbff3fef3b32ee7fa0363",
+    "commit_oid": "d5a44bb5bb12ddb6f71ea4dd0c88944dc41eefec",
+    "external_source_vendored": false
+  },
+  "command": [
+    "noesis",
+    "scan",
+    "--repository",
+    "<fixture>",
+    "--repository-id",
+    "urn:codenoesis:fixture:s4-rust-cfg-declaration-alternatives-v1",
+    "--revision",
+    "d5a44bb5bb12ddb6f71ea4dd0c88944dc41eefec",
+    "--profile",
+    "standard-local-s4",
+    "--workspace-profile",
+    "cargo-root-package-v1",
+    "--manifest-profile",
+    "cargo-manifest-facts-v1",
+    "--rust-semantic-profile",
+    "rust-cfg-declaration-alternatives-v1",
+    "--store",
+    "<fresh-store>",
+    "--format",
+    "json"
+  ],
+  "expected_red": {
+    "test_command": "cargo test -p noesis --test e2e_fr_ext_013_cfg_declaration_alternatives e2e_fr_ext_013_cfg_method_alternatives_publish_declarations -- --exact",
+    "exit_code": 2,
+    "stdout_bytes": 0,
+    "store_exists": false,
+    "error_schema": "codenoesis.error/v12",
+    "error_code": "input.invalid_rust_semantic_profile",
+    "stderr_bytes": 233,
+    "stderr_sha256": "dda30410fb0e9ea21d098ac38074c69d6316d777ee16340175ad7db00aa26be1",
+    "reason": "the exact authorized base has no R10 selector or V9/V12 production path"
+  },
+  "expected_green": {
+    "snapshot": "codenoesis.repository-snapshot/v12",
+    "configuration": "codenoesis.configuration/v9",
+    "graph": "codenoesis.knowledge-graph/v9",
+    "ontology": "codenoesis.ontology/rust/v9",
+    "error": "codenoesis.error/v17",
+    "query": "codenoesis.local-query-result/v7",
+    "portable": "codenoesis.portable-graph/v3",
+    "explorer": "codenoesis.local-explorer/v3",
+    "logical_method_id": "urn:codenoesis:entity:blake3:437b0bfcd3821ae91eabe8c395d99c80ec54cc53e6f1e6ca6e24098b20bf4b45",
+    "alternative_entity_ids": [
+      "urn:codenoesis:entity:blake3:452f8e5e1fe8f0e22b43d49b7393c1b224261b8b2f47452ebaee4ca19794542d",
+      "urn:codenoesis:entity:blake3:df85456dbd86d6ded1dd8a752c159e8d838ebf954feb556f47c6200e9a2843c6"
+    ],
+    "alternative_relationship_ids": [
+      "urn:codenoesis:relationship:blake3:b7f0fc978d2ec344f7e28d7dbc24d357c5a53eb63588c478a746e0d507cd5408",
+      "urn:codenoesis:relationship:blake3:e66eb376e7e7191599ab4db84d82d52c31c9b25ee41c1edb002d0683695afcaf"
+    ],
+    "journey": ["scan", "docs", "query", "export", "strict_reimport", "explore"],
+    "homogeneous_alternatives": true,
+    "permutations": 50,
+    "parallel_schedules": 10,
+    "legacy_bytes_unchanged": true,
+    "target_execution": false,
+    "network": false,
+    "model": false,
+    "browser_launch": false
+  },
+  "legacy_r5_diagnostic": {
+    "exit_code": 11,
+    "stdout_bytes": 0,
+    "store_exists": false,
+    "error_schema": "codenoesis.error/v12",
+    "error_code": "extraction.rust_semantic_identity_conflict",
+    "stderr_bytes": 366,
+    "stderr_sha256": "b5c9f9edd1c4d38220f5f20992a3cf2bc4e693ea6bcacab1b44d3b2dcbe62663"
+  },
+  "rustdesk_diagnostic": {
+    "repository": "https://github.com/rustdesk/rustdesk",
+    "commit_oid": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+    "tree_oid": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+    "replays": 2,
+    "expected": "byte-identical success or the same next typed failure after try_start_clipboard",
+    "golden_authority": false
+  }
+}

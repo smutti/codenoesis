@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/knowledge-graph-v9.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ontology_version",
+    "extractor_versions",
+    "repository_identity",
+    "commit_oid",
+    "entities",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage",
+    "declaration_alternative_index",
+    "semantic_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "codenoesis.knowledge-graph/v9"},
+    "ontology_version": {"const": "codenoesis.ontology/rust/v9"},
+    "extractor_versions": {"type": "array", "contains": {"const": "codenoesis.rust-cfg-alternatives/s4-r10-v1"}},
+    "repository_identity": {"type": "string", "pattern": "^urn:codenoesis:"},
+    "commit_oid": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "entities": {"$ref": "#/$defs/family"},
+    "relationships": {"$ref": "#/$defs/family"},
+    "claims": {"$ref": "#/$defs/family"},
+    "evidence": {"$ref": "#/$defs/family"},
+    "diagnostics": {"$ref": "#/$defs/family"},
+    "coverage": {"$ref": "#/$defs/family"},
+    "declaration_alternative_index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "profile", "logical_method_ids", "alternative_entity_ids", "alternative_relationship_ids"],
+      "properties": {
+        "schema_version": {"const": "codenoesis.rust-cfg-alternative-index/v1"},
+        "profile": {"const": "rust-cfg-declaration-alternatives-v1"},
+        "logical_method_ids": {"$ref": "#/$defs/ids"},
+        "alternative_entity_ids": {"$ref": "#/$defs/ids"},
+        "alternative_relationship_ids": {"$ref": "#/$defs/ids"}
+      }
+    },
+    "semantic_hash": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "family": {"type": "array", "items": {"type": "object", "required": ["id"], "properties": {"id": {"type": "string", "minLength": 1}}}},
+    "ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {"const": "blake3-256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "schema_version": "codenoesis.rust-cfg-declaration-alternatives-subset/v1",
+  "profile": "rust-cfg-declaration-alternatives-v1",
+  "base_semantics": "codenoesis.ontology/rust/v5",
+  "accepted_subject": {
+    "kinds": ["function_item", "function_signature_item"],
+    "ontology_kind": "rust.method",
+    "minimum_occurrences": 2,
+    "required_presence": "conditional_unknown",
+    "required_direct_attribute": "cfg",
+    "cfg_attr_alone_accepted": false,
+    "same_repository": true,
+    "same_crate": true,
+    "same_module": true,
+    "same_nfc_name": true,
+    "same_owner": true,
+    "same_visibility": true,
+    "same_implementation_context": true,
+    "same_trait_context": true,
+    "same_source_file": true,
+    "same_source_blob": true,
+    "distinct_declaration_evidence": true,
+    "pairwise_non_overlapping": true
+  },
+  "logical_entity": {
+    "identity_domain": "codenoesis.entity-id/rust-member/v1",
+    "identity_unchanged": true,
+    "declaration_state": "alternatives",
+    "alternative_ids_order": "raw_utf8",
+    "forbidden_occurrence_properties": [
+      "receiver_present",
+      "declared_signature",
+      "compilation_presence",
+      "attributes"
+    ]
+  },
+  "alternative_entity": {
+    "kind": "rust.declaration_alternative",
+    "identity_domain": "codenoesis.entity-id/rust-declaration-alternative/v1",
+    "identity_preimage": [
+      "domain",
+      "repository_identity",
+      "logical_method_id",
+      "declaration_evidence_id"
+    ],
+    "required_properties": [
+      "declaration_kind",
+      "implementation_context",
+      "trait_context_id",
+      "visibility",
+      "receiver_present",
+      "declared_signature",
+      "compilation_presence",
+      "declaration_evidence_id",
+      "attributes"
+    ],
+    "claim_state": "deterministic_fact"
+  },
+  "alternative_relationship": {
+    "kind": "HAS_DECLARATION_ALTERNATIVE",
+    "identity_domain": "codenoesis.relationship-id/rust-declaration-alternative/v1",
+    "identity_preimage": ["domain", "kind", "logical_method_id", "alternative_entity_id"],
+    "claim_state": "deterministic_fact"
+  },
+  "forbidden_semantics": [
+    "cfg_predicate_parsing",
+    "cfg_predicate_evaluation",
+    "active_target_selection",
+    "mutual_exclusion_claim",
+    "exhaustiveness_claim",
+    "macro_expansion",
+    "type_inference",
+    "value_inference",
+    "body_or_call_semantics",
+    "compiler_or_runtime_meaning",
+    "cross_file_coalescing"
+  ],
+  "limits": {
+    "alternatives_per_logical_method": 32,
+    "alternatives_per_source": 4096,
+    "alternatives_per_snapshot": 200000,
+    "attributes_per_declaration": 128,
+    "attribute_token_bytes": 16384,
+    "declared_signature_bytes": 4096,
+    "snapshot_stdout_bytes_including_lf": 33554432,
+    "query_bytes": 4194304,
+    "portable_graph_bytes": 268435456,
+    "permutations": 50,
+    "parallel_schedules": 10
+  }
+}

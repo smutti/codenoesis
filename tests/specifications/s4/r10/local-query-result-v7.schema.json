@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/local-query-result-v7.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "repository_identity",
+    "snapshot_id",
+    "requested_id",
+    "result_kind",
+    "entity",
+    "relationship",
+    "claims",
+    "evidence",
+    "diagnostic",
+    "coverage_gap",
+    "document",
+    "document_statements",
+    "linked_r10_entities",
+    "linked_r10_relationships"
+  ],
+  "properties": {
+    "schema_version": {"const": "codenoesis.local-query-result/v7"},
+    "repository_identity": {"type": "string", "pattern": "^urn:codenoesis:"},
+    "snapshot_id": {"type": "string", "pattern": "^urn:codenoesis:snapshot:blake3:[0-9a-f]{64}$"},
+    "requested_id": {"type": "string", "minLength": 1},
+    "result_kind": {"enum": ["entity", "relationship", "claim", "evidence", "diagnostic", "coverage_gap", "document"]},
+    "entity": {"type": ["object", "null"]},
+    "relationship": {"type": ["object", "null"]},
+    "claims": {"type": "array"},
+    "evidence": {"type": "array"},
+    "diagnostic": {"type": ["object", "null"]},
+    "coverage_gap": {"type": ["object", "null"]},
+    "document": {"type": ["object", "null"]},
+    "document_statements": {"type": "array"},
+    "linked_r10_entities": {"type": "array"},
+    "linked_r10_relationships": {"type": "array"}
+  }
+}
