@@ -628,6 +628,7 @@ pub(super) struct GraphIndex {
     framework_declarations: bool,
     compiler_index: bool,
     callable_semantics: bool,
+    repository_boundaries: Option<Value>,
     pub(super) entities: BTreeMap<String, Value>,
     relationships: Vec<Value>,
     pub(super) relationships_by_id: BTreeMap<String, Value>,
@@ -639,6 +640,7 @@ pub(super) struct GraphIndex {
 }
 
 impl GraphIndex {
+    #[allow(clippy::too_many_lines)]
     pub(super) fn new(semantic: &Value) -> Result<Self, DocumentationContractError> {
         let repository_identity = semantic
             .pointer("/repository/identity")
@@ -648,35 +650,63 @@ impl GraphIndex {
         let graph = semantic
             .get("knowledge_graph")
             .ok_or(DocumentationContractError::InvalidSnapshot)?;
+        let graph_schema_version = string_field(graph, "schema_version").ok();
         let cargo_manifest_declarations = matches!(
-            string_field(graph, "schema_version"),
-            Ok("codenoesis.knowledge-graph/v4"
-                | "codenoesis.knowledge-graph/v5"
-                | "codenoesis.knowledge-graph/v6"
-                | "codenoesis.knowledge-graph/v7"
-                | "codenoesis.knowledge-graph/v8"
-                | "codenoesis.knowledge-graph/v9")
+            graph_schema_version,
+            Some(
+                "codenoesis.knowledge-graph/v4"
+                    | "codenoesis.knowledge-graph/v5"
+                    | "codenoesis.knowledge-graph/v6"
+                    | "codenoesis.knowledge-graph/v7"
+                    | "codenoesis.knowledge-graph/v8"
+                    | "codenoesis.knowledge-graph/v9"
+                    | "codenoesis.knowledge-graph/v10"
+            )
         );
         let rust_semantic_depth = matches!(
-            string_field(graph, "schema_version"),
-            Ok("codenoesis.knowledge-graph/v5"
-                | "codenoesis.knowledge-graph/v6"
-                | "codenoesis.knowledge-graph/v7"
-                | "codenoesis.knowledge-graph/v8"
-                | "codenoesis.knowledge-graph/v9")
+            graph_schema_version,
+            Some(
+                "codenoesis.knowledge-graph/v5"
+                    | "codenoesis.knowledge-graph/v6"
+                    | "codenoesis.knowledge-graph/v7"
+                    | "codenoesis.knowledge-graph/v8"
+                    | "codenoesis.knowledge-graph/v9"
+                    | "codenoesis.knowledge-graph/v10"
+            )
         );
         let declaration_alternatives =
-            string_field(graph, "schema_version") == Ok("codenoesis.knowledge-graph/v9");
+            graph_schema_version == Some("codenoesis.knowledge-graph/v9");
         let framework_declarations = matches!(
-            string_field(graph, "schema_version"),
-            Ok("codenoesis.knowledge-graph/v6"
-                | "codenoesis.knowledge-graph/v7"
-                | "codenoesis.knowledge-graph/v8")
+            graph_schema_version,
+            Some(
+                "codenoesis.knowledge-graph/v6"
+                    | "codenoesis.knowledge-graph/v7"
+                    | "codenoesis.knowledge-graph/v8"
+                    | "codenoesis.knowledge-graph/v10"
+            )
         );
-        let compiler_index =
-            string_field(graph, "schema_version") == Ok("codenoesis.knowledge-graph/v7");
-        let callable_semantics =
-            string_field(graph, "schema_version") == Ok("codenoesis.knowledge-graph/v8");
+        let compiler_index = graph_schema_version == Some("codenoesis.knowledge-graph/v7");
+        let callable_semantics = matches!(
+            graph_schema_version,
+            Some("codenoesis.knowledge-graph/v8" | "codenoesis.knowledge-graph/v10")
+        );
+        let repository_boundaries = if graph_schema_version
+            == Some("codenoesis.knowledge-graph/v10")
+        {
+            let boundaries = semantic
+                .get("repository_boundaries")
+                .cloned()
+                .ok_or(DocumentationContractError::InvalidSnapshot)?;
+            if boundaries.get("schema_version").and_then(Value::as_str)
+                != Some("codenoesis.repository-boundaries/v1")
+                || boundaries.get("profile").and_then(Value::as_str) != Some("local-gitlinks-v1")
+            {
+                return Err(DocumentationContractError::InvalidSnapshot);
+            }
+            Some(boundaries)
+        } else {
+            None
+        };
         let diagnostics = if rust_semantic_depth {
             id_map(graph, "diagnostics")?
         } else {
@@ -715,6 +745,7 @@ impl GraphIndex {
             framework_declarations,
             compiler_index,
             callable_semantics,
+            repository_boundaries,
             entities,
             relationships,
             relationships_by_id,
@@ -980,6 +1011,14 @@ fn overview_document(index: &GraphIndex) -> Result<DocumentDraft, DocumentationC
     if index.compiler_index {
         append_compiler_index_documentation(index, &document_id, &mut content, &mut statements)?;
     }
+    if index.repository_boundaries.is_some() {
+        append_repository_boundary_documentation(
+            index,
+            &document_id,
+            &mut content,
+            &mut statements,
+        )?;
+    }
     Ok(DocumentDraft {
         document_id,
         kind: "overview",
@@ -988,6 +1027,188 @@ fn overview_document(index: &GraphIndex) -> Result<DocumentDraft, DocumentationC
         bytes: content.into_bytes(),
         statements,
     })
+}
+
+#[allow(clippy::too_many_lines)]
+fn append_repository_boundary_documentation(
+    index: &GraphIndex,
+    document_id: &str,
+    content: &mut String,
+    statements: &mut Vec<Value>,
+) -> Result<(), DocumentationContractError> {
+    let report = index
+        .repository_boundaries
+        .as_ref()
+        .ok_or(DocumentationContractError::InvalidSnapshot)?;
+    let boundaries = report
+        .get("boundaries")
+        .and_then(Value::as_array)
+        .ok_or(DocumentationContractError::InvalidSnapshot)?;
+    let declarations = report
+        .get("declarations")
+        .and_then(Value::as_array)
+        .ok_or(DocumentationContractError::InvalidSnapshot)?;
+    let evidence = report
+        .get("evidence")
+        .and_then(Value::as_array)
+        .ok_or(DocumentationContractError::InvalidSnapshot)?;
+    let gaps = report
+        .get("coverage_gaps")
+        .and_then(Value::as_array)
+        .ok_or(DocumentationContractError::InvalidSnapshot)?;
+    let evidence_ids = evidence
+        .iter()
+        .map(|record| string_field(record, "evidence_id").map(str::to_owned))
+        .collect::<Result<BTreeSet<_>, _>>()?;
+    let gap_ids = gaps
+        .iter()
+        .map(|record| string_field(record, "gap_id").map(str::to_owned))
+        .collect::<Result<BTreeSet<_>, _>>()?;
+    let declaration_ids = declarations
+        .iter()
+        .map(|record| string_field(record, "declaration_id").map(str::to_owned))
+        .collect::<Result<BTreeSet<_>, _>>()?;
+    content.push_str("\n## Repository boundaries\n\n");
+    if boundaries.is_empty() {
+        content
+            .push_str("No external repository boundary is present in the committed root tree.\n");
+        return Ok(());
+    }
+
+    let mut summary_subject_ids = Vec::new();
+    let mut summary_evidence_ids = BTreeSet::new();
+    for boundary in boundaries {
+        let boundary_id = string_field(boundary, "boundary_id")?;
+        summary_subject_ids.push(boundary_id.to_owned());
+        if let Some(declaration_id) = boundary.get("declaration_id").and_then(Value::as_str) {
+            if !declaration_ids.contains(declaration_id) {
+                return Err(DocumentationContractError::InvalidSnapshot);
+            }
+            summary_subject_ids.push(declaration_id.to_owned());
+        }
+        for evidence_id in string_array(boundary, "evidence_ids")? {
+            if !evidence_ids.contains(&evidence_id) {
+                return Err(DocumentationContractError::InvalidSnapshot);
+            }
+            summary_evidence_ids.insert(evidence_id);
+        }
+        for gap_id in string_array(boundary, "coverage_gap_ids")? {
+            if !gap_ids.contains(&gap_id) {
+                return Err(DocumentationContractError::InvalidSnapshot);
+            }
+            summary_subject_ids.push(gap_id);
+        }
+    }
+    if summary_evidence_ids.is_empty() {
+        return Err(DocumentationContractError::InvalidSnapshot);
+    }
+    let summary_statement = statement_value(
+        document_id,
+        "repository_boundary_summary",
+        &index.repository_identity,
+        0,
+        "derived_fact",
+        summary_subject_ids,
+        summary_evidence_ids.into_iter().collect(),
+        Vec::new(),
+    );
+    writeln!(
+        content,
+        "External repository boundaries: {}. {}\n",
+        boundaries.len(),
+        statement_marker(&summary_statement)?
+    )
+    .expect("writing Markdown to a String cannot fail");
+    statements.push(summary_statement);
+
+    for (ordinal, boundary) in boundaries.iter().enumerate() {
+        let boundary_id = string_field(boundary, "boundary_id")?;
+        let path = string_field(boundary, "path")?;
+        let state = string_field(boundary, "state")?;
+        let state_label = match state {
+            "declared_unbound" => "declared and unbound",
+            "undeclared_unbound" => "undeclared and unbound",
+            "explicitly_bound" => "explicitly bound",
+            _ => return Err(DocumentationContractError::InvalidSnapshot),
+        };
+        let boundary_evidence_ids = string_array(boundary, "evidence_ids")?;
+        if boundary_evidence_ids.is_empty()
+            || boundary_evidence_ids
+                .iter()
+                .any(|id| !evidence_ids.contains(id))
+        {
+            return Err(DocumentationContractError::InvalidSnapshot);
+        }
+        let mut subject_ids = vec![boundary_id.to_owned()];
+        if let Some(declaration_id) = boundary.get("declaration_id").and_then(Value::as_str) {
+            subject_ids.push(declaration_id.to_owned());
+        }
+        subject_ids.extend(boundary_evidence_ids.iter().cloned());
+        let detail_statement = statement_value(
+            document_id,
+            "repository_boundary_detail",
+            boundary_id,
+            ordinal,
+            "deterministic_fact",
+            subject_ids,
+            boundary_evidence_ids,
+            Vec::new(),
+        );
+        writeln!(
+            content,
+            "- `{}` is an external repository boundary in state `{}` ({state_label}). {}",
+            markdown_code(path),
+            markdown_code(state),
+            statement_marker(&detail_statement)?
+        )
+        .expect("writing Markdown to a String cannot fail");
+        statements.push(detail_statement);
+
+        for (gap_ordinal, gap_id) in string_array(boundary, "coverage_gap_ids")?
+            .into_iter()
+            .enumerate()
+        {
+            let gap = gaps
+                .iter()
+                .find(|record| record.get("gap_id").and_then(Value::as_str) == Some(&gap_id))
+                .ok_or(DocumentationContractError::InvalidSnapshot)?;
+            let gap_subject_id = string_field(gap, "subject_id")?;
+            let declaration_id = boundary.get("declaration_id").and_then(Value::as_str);
+            if gap_subject_id != boundary_id && declaration_id != Some(gap_subject_id) {
+                return Err(DocumentationContractError::InvalidSnapshot);
+            }
+            let code = string_field(gap, "code")?;
+            let gap_evidence_ids = string_array(gap, "evidence_ids")?;
+            if gap_evidence_ids.is_empty()
+                || gap_evidence_ids.iter().any(|id| !evidence_ids.contains(id))
+            {
+                return Err(DocumentationContractError::InvalidSnapshot);
+            }
+            let mut gap_subject_ids = vec![boundary_id.to_owned(), gap_id.clone()];
+            if gap_subject_id != boundary_id {
+                gap_subject_ids.push(gap_subject_id.to_owned());
+            }
+            let gap_statement = statement_value(
+                document_id,
+                "repository_boundary_limitation",
+                &gap_id,
+                gap_ordinal,
+                "unsupported",
+                gap_subject_ids,
+                Vec::new(),
+                vec![gap_id.clone()],
+            );
+            writeln!(
+                content,
+                "  Nested source is not analyzed: `{}`. {}",
+                markdown_code(code),
+                statement_marker(&gap_statement)?
+            )
+            .expect("writing Markdown to a String cannot fail");
+            statements.push(gap_statement);
+        }
+    }
+    Ok(())
 }
 
 #[allow(clippy::too_many_lines)]

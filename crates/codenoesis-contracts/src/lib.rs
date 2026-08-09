@@ -5,6 +5,7 @@ mod s1_packed;
 mod s4;
 mod s4_k1;
 mod s4_r10;
+mod s4_r11;
 mod s4_r3;
 mod s4_r4;
 mod s4_r5;
@@ -25,6 +26,7 @@ pub use s4_r6::*;
 pub use s4_r7::*;
 pub use s4_r8::*;
 pub use s4_r10::*;
+pub use s4_r11::*;
 pub use s5::*;
 pub use s6::*;
 
@@ -557,6 +559,7 @@ fn publication_candidate(value: &Value) -> Result<PublicationCandidate, Publicat
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V10
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V11
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V12
+            | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V13
     );
     let semantic = required_field(value, "semantic", "semantic")?;
     let repository = required_field(semantic, "repository", "semantic.repository")?;
@@ -668,6 +671,8 @@ fn publication_artifacts(
         );
         let chunk_id = if embedded_domains_required {
             required_str(chunk, "chunk_id", "extraction_chunk.chunk_id")?
+        } else if let Some(source_file_id) = chunk.get("source_file_id").and_then(Value::as_str) {
+            source_file_id
         } else if matches!(
             chunk["schema_version"].as_str(),
             Some(
@@ -676,6 +681,8 @@ fn publication_artifacts(
                     | "codenoesis.extraction-chunk/v6"
                     | "codenoesis.extraction-chunk/v7"
                     | "codenoesis.extraction-chunk/v8"
+                    | "codenoesis.extraction-chunk/v9"
+                    | "codenoesis.extraction-chunk/v10"
             )
         ) {
             let subject = required_field(chunk, "subject", "extraction_chunk.subject")?;
@@ -697,7 +704,9 @@ fn publication_artifacts(
                 }
             }
         } else {
-            required_str(chunk, "source_file_id", "extraction_chunk.source_file_id")?
+            return Err(PublicationCandidateError::InvalidContract(
+                "extraction_chunk.source_file_id",
+            ));
         };
         extraction_rows.push(ExtractionRow {
             ordinal,

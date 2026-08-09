@@ -1,0 +1,12 @@
+pub const R11_CONFIGURATION_VERSION: &str = "codenoesis.configuration/v10";
+pub const R11_SNAPSHOT_VERSION: &str = "codenoesis.repository-snapshot/v13";
+pub const R11_EXTRACTION_CHUNK_VERSION: &str = "codenoesis.extraction-chunk/v10";
+pub const R11_GRAPH_VERSION: &str = "codenoesis.knowledge-graph/v10";
+pub const R11_ONTOLOGY_VERSION: &str = "codenoesis.ontology/rust/v10";
+pub const R11_PIPELINE_VERSION: &str = "codenoesis.pipeline/s4-r11-v1";
+pub const R11_EXTRACTION_CONTRACT_VERSION: &str = "codenoesis.extraction/v10";
+pub const R11_COMPOSITION_VERSION: &str = "codenoesis.rust-callable-boundary-composition/s4-r11-v1";
+pub const R11_ERROR_VERSION: &str = "codenoesis.error/v18";
+pub const R11_QUERY_VERSION: &str = "codenoesis.local-query-result/v8";
+pub const R11_PORTABLE_GRAPH_VERSION: &str = "codenoesis.portable-graph/v4";
+pub const R11_LOCAL_EXPLORER_VERSION: &str = "codenoesis.local-explorer/v4";

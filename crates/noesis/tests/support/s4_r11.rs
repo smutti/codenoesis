@@ -3,6 +3,10 @@ use std::fmt::Write as _;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
+#[cfg(windows)]
+use std::sync::atomic::{AtomicU64, Ordering};
+#[cfg(windows)]
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde_json::Value;
 use sha2::{Digest as _, Sha256};
@@ -18,6 +22,8 @@ pub const NESTED_TREE_OID: &str = "4b825dc642cb6eb9a060e54bf8d69288fbee4904";
 pub const NESTED_COMMIT_OID: &str = "6ecf94267842da776e35406a9ebcb85e058a3181";
 pub const BOUNDARY_ID: &str = "urn:codenoesis:repository-boundary:sha256:7f8f79973410e908962009f651f418416b57a4921c6b27e539dbed2696c45fd1";
 pub const BOUNDARY_EVIDENCE_ID: &str = "urn:codenoesis:boundary-evidence:sha256:b56a73f0140dcff3e8bd36d676201f018ff2cdb4c1b5fb2687d78a0e0927ede3";
+#[cfg(windows)]
+static R11_TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 pub struct MaterializedCallableBoundaryRepository {
     pub root: PathBuf,
@@ -26,11 +32,12 @@ pub struct MaterializedCallableBoundaryRepository {
     pub documents: PathBuf,
     pub portable: PathBuf,
     pub explorer: PathBuf,
+    pub commit_oid: String,
 }
 
 impl MaterializedCallableBoundaryRepository {
     pub fn fixture() -> Self {
-        let root = unique_temp_root();
+        let root = r11_temp_root();
         let worktree = root.join("repository");
         let store = root.join("store");
         let documents = root.join("documents");
@@ -128,6 +135,7 @@ impl MaterializedCallableBoundaryRepository {
             documents,
             portable,
             explorer,
+            commit_oid,
         }
     }
 
@@ -135,6 +143,14 @@ impl MaterializedCallableBoundaryRepository {
         self.scan_command(&self.store, None)
             .output()
             .expect("launch unbound R11 scan")
+    }
+
+    pub fn scan_unbound_with_large_output_capacity(&self) -> Output {
+        let mut command = self.scan_command(&self.store, None);
+        command.args(["--output-capacity-profile", "local-snapshot-64m-v1"]);
+        command
+            .output()
+            .expect("launch large-output-capacity R11 scan")
     }
 
     pub fn scan_bound(&self) -> Output {
@@ -149,6 +165,84 @@ impl MaterializedCallableBoundaryRepository {
         self.scan_command(&self.store, Some(&manifest))
             .output()
             .expect("launch bound R11 scan")
+    }
+
+    pub fn scan_with_extra_options(&self, options: &[&str]) -> Output {
+        let mut command = self.scan_command(&self.store, None);
+        command.args(options);
+        command.output().expect("launch invalid R11 composition")
+    }
+
+    pub fn replace_source_and_commit(&mut self, source: &[u8]) {
+        self.replace_committed_file(
+            "src/lib.rs",
+            source,
+            b"R11 semantic identity conflict fixture\n",
+            "2026-08-09T19:00:00Z",
+        );
+    }
+
+    pub fn replace_root_manifest_and_commit(&mut self, manifest: &[u8]) {
+        self.replace_committed_file(
+            "Cargo.toml",
+            manifest,
+            b"R11 external workspace member fixture\n",
+            "2026-08-09T19:01:00Z",
+        );
+    }
+
+    pub fn replace_gitmodules_and_commit(&mut self, gitmodules: &[u8]) {
+        self.replace_committed_file(
+            ".gitmodules",
+            gitmodules,
+            b"R11 unsupported gitmodules key fixture\n",
+            "2026-08-09T19:02:00Z",
+        );
+    }
+
+    pub fn materialize_unbound_nested_worktree_canary(&self) {
+        let nested_source = self.worktree.join("external/nested-model/src");
+        fs::create_dir_all(&nested_source).expect("create unbound nested worktree canary root");
+        fs::write(
+            nested_source.join("lib.rs"),
+            b"pub const NESTED_SOURCE_MUST_NOT_BE_READ: &str = \"nested-source-canary\";\n",
+        )
+        .expect("write unbound nested worktree canary");
+    }
+
+    fn replace_committed_file(
+        &mut self,
+        path: &str,
+        bytes: &[u8],
+        message: &[u8],
+        timestamp: &str,
+    ) {
+        fs::write(self.worktree.join(path), bytes).expect("replace R11 committed fixture file");
+        let global_config = self.root.join("global.gitconfig");
+        let blob_oid = hash_object(&self.worktree, &global_config, bytes);
+        update_index(&self.worktree, &global_config, "100644", &blob_oid, path);
+        let mut write_tree = git_command(&global_config);
+        write_tree.arg("-C").arg(&self.worktree).arg("write-tree");
+        let tree_oid = stdout_line(successful_output(write_tree, None));
+        let mut make_commit = git_command(&global_config);
+        make_commit
+            .arg("-C")
+            .arg(&self.worktree)
+            .args(["commit-tree", &tree_oid, "-F", "-"])
+            .env("GIT_AUTHOR_NAME", "CodeNoesis")
+            .env("GIT_AUTHOR_EMAIL", "fixture@codenoesis.invalid")
+            .env("GIT_AUTHOR_DATE", timestamp)
+            .env("GIT_COMMITTER_NAME", "CodeNoesis")
+            .env("GIT_COMMITTER_EMAIL", "fixture@codenoesis.invalid")
+            .env("GIT_COMMITTER_DATE", timestamp);
+        self.commit_oid = stdout_line(successful_output(make_commit, Some(message)));
+        let mut update_ref = git_command(&global_config);
+        update_ref.arg("-C").arg(&self.worktree).args([
+            "update-ref",
+            "refs/heads/main",
+            &self.commit_oid,
+        ]);
+        successful_output(update_ref, None);
     }
 
     pub fn docs(&self) -> Output {
@@ -215,12 +309,8 @@ impl MaterializedCallableBoundaryRepository {
             .current_dir(&self.root)
             .args(["scan", "--repository"])
             .arg(&self.worktree)
-            .args([
-                "--repository-id",
-                REPOSITORY_ID,
-                "--revision",
-                FIXTURE_COMMIT_OID,
-            ])
+            .args(["--repository-id", REPOSITORY_ID, "--revision"])
+            .arg(&self.commit_oid)
             .args([
                 "--profile",
                 "standard-local-s4",
@@ -266,6 +356,49 @@ impl MaterializedCallableBoundaryRepository {
         successful_output(update_ref, None);
         nested
     }
+}
+
+#[cfg(not(windows))]
+fn r11_temp_root() -> PathBuf {
+    fs::canonicalize(unique_temp_root()).expect("canonicalize R11 temporary root")
+}
+
+#[cfg(windows)]
+fn r11_temp_root() -> PathBuf {
+    let workspace = std::env::current_dir().expect("resolve R11 E2E workspace");
+    let mut candidates = vec![workspace.join("target")];
+    if let Some(volume_root) = workspace.ancestors().last()
+        && candidates.iter().all(|candidate| candidate != volume_root)
+    {
+        candidates.push(volume_root.to_path_buf());
+    }
+    let sequence = R11_TEMP_SEQUENCE.fetch_add(1, Ordering::Relaxed);
+    let timestamp = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .expect("R11 E2E clock follows Unix epoch")
+        .as_nanos();
+    for candidate in candidates {
+        let root = candidate.join(format!(
+            "codenoesis-r11-e2e-{}-{timestamp}-{sequence}",
+            std::process::id()
+        ));
+        if fs::create_dir(&root).is_err() {
+            continue;
+        }
+        let authority = root.join("authority-probe");
+        if fs::create_dir(&authority).is_ok()
+            && noesis::portable_explorer::validate_r11_export_output_root(
+                &authority,
+                &root.join("output-probe"),
+            )
+            .is_ok()
+            && fs::remove_dir(&authority).is_ok()
+        {
+            return root;
+        }
+        let _ = fs::remove_dir_all(&root);
+    }
+    panic!("no validated R11 E2E test authority")
 }
 
 pub fn expected_unbound_boundaries() -> Value {

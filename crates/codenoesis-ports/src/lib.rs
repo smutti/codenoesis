@@ -9,6 +9,7 @@ use codenoesis_domain::s1_boundaries::{
     RepositoryBoundaryAcquisitionError,
 };
 use codenoesis_domain::s4::{RustWorkspaceKnowledge, WorkspaceError};
+use codenoesis_domain::s4_k1::{CallableSemanticsError, CallableSemanticsExtraction};
 use codenoesis_domain::s4_r3::{
     ExternalWorkspaceBoundary, RootPackageWorkspaceError, RootPackageWorkspaceExtraction,
 };
@@ -195,6 +196,19 @@ pub trait RustCfgDeclarationAlternativesExtractor {
         external_boundaries: &[ExternalWorkspaceBoundary],
         cache_entries: &[AnalysisCacheEntry],
     ) -> Result<RustCfgDeclarationAlternativesExtraction, RustCfgDeclarationAlternativesError>;
+}
+
+pub trait RustCallableBoundaryCompositionExtractor {
+    /// Extracts K1 callable semantics over an explicitly boundary-aware R6 lineage.
+    ///
+    /// # Errors
+    ///
+    /// Returns an inherited R6 or typed K1 failure without traversing nested source.
+    fn extract_rust_callable_semantics_with_boundaries(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+    ) -> Result<CallableSemanticsExtraction, CallableSemanticsError>;
 }
 
 pub trait RustFrameworkDeclarationExtractor {
