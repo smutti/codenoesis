@@ -90,8 +90,8 @@ only as history. The R8 pre-merge roadmap said "R0-R7 are implemented" and
 and declared "R8 governance is Approved". Those markers likewise remain only
 as immutable guard history.
 
-R0-R8 and K1 are implemented, but remain not Verified until their complete
-retained evidence is independently accepted. R7 static import still grants no
+R0-R8 are implemented, and K1 is implemented, but all remain not Verified
+until their complete retained evidence is independently accepted. R7 static import still grants no
 index generation authority. The next R9 prerequisite is the Proposed explicit
 64 MiB K1 output-capacity envelope needed to complete the pinned Lekton pilot;
 it changes no ontology or standard-profile limit. Protected review and manual
