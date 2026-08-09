@@ -8,6 +8,31 @@ use support::s4_r4::MaterializedCargoManifestRepository;
 use support::s4_r5::MaterializedRustSemanticRepository;
 
 const PRE_R5_STDERR: &[u8] = b"{\"code\":\"input.invalid_revision\",\"context\":{},\"message\":\"invalid revision\",\"retryable\":false,\"schema_version\":\"codenoesis.error/v4\",\"stage\":\"input\"}\n";
+const CFG_OWNER_ALTERNATIVES_SOURCE: &[u8] = br#"#[cfg(feature = "desktop")]
+pub struct ConditionalOwner;
+
+#[cfg(not(feature = "desktop"))]
+pub struct ConditionalOwner {
+    pub context: String,
+}
+
+#[cfg(windows)]
+const BIN_DATA: &[u8] = include_bytes!("data.bin");
+
+#[cfg(not(windows))]
+const BIN_DATA: &[u8] = &[];
+"#;
+const HETEROGENEOUS_CFG_METHOD_ALTERNATIVES_SOURCE: &[u8] = br"pub struct Client;
+pub struct Context;
+
+impl Client {
+    #[cfg(unix)]
+    fn try_start_clipboard(&self, _ctx: Option<Context>) {}
+
+    #[cfg(windows)]
+    fn try_start_clipboard(&self, _p: Option<()>) {}
+}
+";
 
 #[test]
 fn e2e_fr_ext_010_rust_semantic_depth() {
@@ -99,6 +124,88 @@ fn e2e_fr_ext_010_rust_semantic_depth() {
         entity["id"]
             == "urn:codenoesis:entity:blake3:ab24c82375e533b482ef71fe657a00b190ecf49712498cdc772c8d9db946b9d4"
     }));
+}
+
+#[test]
+fn e2e_fr_ext_010_cfg_owner_alternatives_publish_one_logical_owner() {
+    let mut repository = MaterializedRustSemanticRepository::fixture();
+    repository.replace_source_and_commit(CFG_OWNER_ALTERNATIVES_SOURCE);
+    let output = repository.scan();
+    assert!(
+        output.status.success(),
+        "cfg-alternative R5 scan failed: status={:?}, stderr={}",
+        output.status.code(),
+        String::from_utf8_lossy(&output.stderr)
+    );
+    assert!(output.stderr.is_empty());
+    assert!(!repository.build_sentinel().exists());
+
+    let snapshot: Value =
+        serde_json::from_slice(&output.stdout).expect("parse cfg-alternative V8 snapshot");
+    let graph = &snapshot["semantic"]["knowledge_graph"];
+    let entities = graph["entities"]
+        .as_array()
+        .expect("cfg-alternative graph entities");
+    assert_eq!(
+        entities
+            .iter()
+            .filter(|entity| {
+                entity["kind"] == "rust.struct" && entity["name"] == "ConditionalOwner"
+            })
+            .count(),
+        1
+    );
+    assert!(entities.iter().any(|entity| {
+        entity["kind"] == "rust.field"
+            && entity["name"] == "context"
+            && entity["compilation_presence"] == "conditional_unknown"
+    }));
+    let constants = entities
+        .iter()
+        .filter(|entity| entity["kind"] == "rust.constant" && entity["name"] == "BIN_DATA")
+        .collect::<Vec<_>>();
+    assert_eq!(constants.len(), 1);
+    assert_eq!(constants[0]["compilation_presence"], "conditional_unknown");
+    let constant_attributes = constants[0]["properties"]["attributes"]
+        .as_array()
+        .expect("BIN_DATA attributes");
+    assert_eq!(constant_attributes.len(), 2);
+    assert!(
+        constant_attributes
+            .iter()
+            .all(|attribute| attribute["kind"] == "cfg")
+    );
+
+    let cfg_diagnostics = graph["diagnostics"]
+        .as_array()
+        .expect("cfg-alternative diagnostics")
+        .iter()
+        .filter(|diagnostic| diagnostic["code"] == "rust.cfg_presence_unresolved")
+        .collect::<Vec<_>>();
+    assert_eq!(cfg_diagnostics.len(), 4);
+    let evidence_ids = graph["evidence"]
+        .as_array()
+        .expect("cfg-alternative evidence")
+        .iter()
+        .filter_map(|evidence| evidence["id"].as_str())
+        .collect::<BTreeSet<_>>();
+    assert!(cfg_diagnostics.iter().all(|diagnostic| {
+        diagnostic["evidence_ids"]
+            .as_array()
+            .is_some_and(|identifiers| {
+                identifiers.iter().all(|identifier| {
+                    identifier
+                        .as_str()
+                        .is_some_and(|identifier| evidence_ids.contains(identifier))
+                })
+            })
+    }));
+    assert!(constant_attributes.iter().all(|attribute| {
+        attribute["evidence_id"]
+            .as_str()
+            .is_some_and(|identifier| evidence_ids.contains(identifier))
+    }));
+    assert!(repository.store.exists());
 }
 
 #[test]
@@ -371,6 +478,40 @@ fn sec_fr_ext_010_malformed_has_error_v12_no_publication() {
         output.stderr,
         b"{\"code\":\"extraction.invalid_rust_semantic_declaration\",\"context\":{\"declaration_kind\":\"syntax_error\",\"path\":\"src/lib.rs\",\"start_byte\":0},\"message\":\"invalid rust semantic declaration\",\"retryable\":false,\"schema_version\":\"codenoesis.error/v12\",\"stage\":\"extraction\"}\n"
     );
+    assert!(!repository.store.exists());
+    assert!(!repository.documents.exists());
+    assert!(!repository.build_sentinel().exists());
+}
+
+#[test]
+fn sec_fr_ext_010_unconditional_owner_duplicates_keep_error_v12() {
+    let mut repository = MaterializedRustSemanticRepository::fixture();
+    repository.replace_source_and_commit(b"pub struct Repeated;\npub struct Repeated;\n");
+    let output = repository.scan();
+    assert_eq!(output.status.code(), Some(11));
+    assert!(output.stdout.is_empty());
+    let error: Value = serde_json::from_slice(&output.stderr).expect("parse ErrorV12");
+    assert_eq!(error["schema_version"], "codenoesis.error/v12");
+    assert_eq!(error["code"], "extraction.rust_semantic_identity_conflict");
+    assert_eq!(error["context"]["member_kind"], "rust.struct");
+    assert_eq!(error["context"]["normalized_member"], "Repeated");
+    assert!(!repository.store.exists());
+    assert!(!repository.documents.exists());
+    assert!(!repository.build_sentinel().exists());
+}
+
+#[test]
+fn sec_fr_ext_010_heterogeneous_cfg_method_alternatives_keep_error_v12() {
+    let mut repository = MaterializedRustSemanticRepository::fixture();
+    repository.replace_source_and_commit(HETEROGENEOUS_CFG_METHOD_ALTERNATIVES_SOURCE);
+    let output = repository.scan();
+    assert_eq!(output.status.code(), Some(11));
+    assert!(output.stdout.is_empty());
+    let error: Value = serde_json::from_slice(&output.stderr).expect("parse ErrorV12");
+    assert_eq!(error["schema_version"], "codenoesis.error/v12");
+    assert_eq!(error["code"], "extraction.rust_semantic_identity_conflict");
+    assert_eq!(error["context"]["member_kind"], "rust.method");
+    assert_eq!(error["context"]["normalized_member"], "try_start_clipboard");
     assert!(!repository.store.exists());
     assert!(!repository.documents.exists());
     assert!(!repository.build_sentinel().exists());

@@ -1,0 +1,55 @@
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.02s
+     Running unittests src/lib.rs (target/debug/deps/codenoesis_lang_rust-de7c05493c7eb381)
+
+running 10 tests
+test semantic_depth::tests::sec_fr_ext_010_cross_file_cfg_owner_alternatives_remain_conflicts ... ok
+test semantic_depth::tests::sec_fr_ext_010_cross_chunk_cfg_member_alternatives_remain_conflicts ... ok
+test tests::gt_dr_idn_001_unicode_normalization_collision ... ok
+test tests::gt_fr_ext_002_malformed_syntax_is_explicit ... ok
+test tests::gt_fr_ext_002_reviewed_rust_graph ... ok
+test tests::fz_fr_ext_001_extraction_contract_seed_corpus ... ok
+test tests::conf_fr_ext_001_extraction_chunk_v1 ... ok
+test tests::pt_fr_knw_001_graph_invariants ... ok
+test tests::pt_fr_knw_003_rule_provenance_replays ... ok
+test tests::fz_fr_ext_002_rust_parser_seed_corpus ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.50s
+
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.02s
+     Running tests/s4_rust_semantic_depth.rs (target/debug/deps/s4_rust_semantic_depth-e62b9befc65a83df)
+
+running 13 tests
+test gt_fr_ext_010_cfg_member_alternatives_merge_attribute_evidence ... ok
+test gt_fr_ext_010_cfg_owner_alternatives_preserve_uncertainty ... ok
+test gt_fr_ext_010_cfg_alternatives_cover_every_r5_member_kind ... ok
+test gt_fr_ext_010_fields_and_variants_are_owned ... ok
+test gt_fr_ext_010_attributes_preserve_declarations_and_gaps ... ok
+test gt_fr_ext_010_method_context_prevents_trait_collisions ... ok
+test sec_fr_ext_010_malformed_and_limit_plus_one_fail_closed ... ok
+test gt_fr_ext_010_constants_statics_and_associated_types ... ok
+test sec_fr_ext_010_cfg_owner_alternative_boundary_failures_remain_typed ... ok
+test sec_fr_ext_010_cfg_member_attribute_maximum_and_plus_one_are_typed ... ok
+test sec_fr_ext_010_never_executes_or_interprets_target_worlds ... ok
+test pt_nfr_det_001_cfg_alternatives_are_permutation_and_schedule_invariant ... ok
+test pt_nfr_det_001_r5_permutation_and_schedule_invariant ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.64s
+
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running tests/e2e_fr_ext_010_rust_semantic_depth.rs (target/debug/deps/e2e_fr_ext_010_rust_semantic_depth-b18ba5840c1b4727)
+
+running 9 tests
+test reg_fr_cli_001_r5_selector_absence_is_byte_identical ... ok
+test sec_fr_ext_010_malformed_has_error_v12_no_publication ... ok
+test sec_fr_ext_010_unconditional_owner_duplicates_keep_error_v12 ... ok
+test sec_fr_ext_010_heterogeneous_cfg_method_alternatives_keep_error_v12 ... ok
+test e2e_fr_ext_010_cfg_owner_alternatives_publish_one_logical_owner ... ok
+test sec_fr_ext_010_invalid_composition_precedes_acquisition ... ok
+test e2e_fr_ext_010_rust_semantic_depth ... ok
+test e2e_fr_doc_001_r5_declared_and_unresolved_are_documented ... ok
+test e2e_fr_qry_001_r5_exact_id_results ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.45s

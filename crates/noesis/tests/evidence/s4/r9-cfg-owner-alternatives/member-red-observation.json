@@ -1,0 +1,42 @@
+{
+  "schema_version": "codenoesis.r9-cfg-member-alternatives-red-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/151",
+  "requirement_ids": [
+    "FR-EXT-010",
+    "NFR-DET-001",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "requirement_status": "FR-EXT-010 Approved and Implemented, not Verified; minimal member-alternative expansion explicitly authorized",
+  "slice": "S4",
+  "risk": "high",
+  "base_commit_sha": "bd38f831184661dc30958760d886131a50bff26b",
+  "observed_at_utc": "2026-08-09T09:41:09Z",
+  "member_merge_source_modified_before_red": false,
+  "command": "cargo test -p codenoesis-lang-rust --test s4_rust_semantic_depth gt_fr_ext_010_cfg_member_alternatives_merge_attribute_evidence -- --exact",
+  "expected_failure": "The second direct-cfg R5 member with identical non-attribute properties fails with RustSemanticError::IdentityConflict before member merge implementation.",
+  "actual_failure": "IdentityConflict for rust.constant BIN_DATA under the unchanged module owner.",
+  "exit_code": 101,
+  "wall_seconds": 2.5,
+  "log": {
+    "path": "crates/noesis/tests/evidence/s4/r9-cfg-owner-alternatives/member-red.log",
+    "byte_length": 2070,
+    "sha256": "715da47bd9fa14e24e5631328b6e43fab6e1526f0e86473d909368addb56ecb2",
+    "normalization": "Absolute workspace prefixes were replaced with <workspace>; all remaining captured stdout/stderr bytes were retained."
+  },
+  "fixture": {
+    "shape": "two same-file BIN_DATA constants with direct complementary-looking cfg syntax, identical R5 non-attribute properties, and distinct unresolved initializer expressions",
+    "location": "inline project-owned source in crates/codenoesis-lang-rust/tests/s4_rust_semantic_depth.rs",
+    "external_source_vendored": false
+  },
+  "environment": {
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "host": "aarch64-apple-darwin",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "features": "focused test target defaults; no repository target, compiler, build script, network, or model provider executed"
+  },
+  "human_approval": "Autorizzo l’espansione minima dell’issue #151 alle alternative dirette cfg dei membri R5 con proprietà non-attributo identiche, stesso file/blob, span non sovrapposti e merge deterministico dei soli attributi/evidence; restano invariati rischio high, percorsi, dipendenze, schema, identità, golden, budget e stop conditions.",
+  "stop_conditions_triggered": []
+}

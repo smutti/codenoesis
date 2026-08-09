@@ -4,11 +4,11 @@ use std::fs;
 use std::path::Path;
 use std::thread;
 
-use codenoesis_domain::knowledge::RelationshipKind;
+use codenoesis_domain::knowledge::{EntityKind, RelationshipKind};
 use codenoesis_domain::s4_r5::{
-    CompilationPresence, R5_DETERMINISM_PERMUTATIONS, RustMethodContext, RustSemanticEntityKind,
-    RustSemanticError, RustSemanticLimit, RustSemanticProperties, capability_state,
-    r5_entity_counts,
+    CompilationPresence, R5_DETERMINISM_PERMUTATIONS, RustMethodContext, RustSemanticAttributeKind,
+    RustSemanticEntityKind, RustSemanticError, RustSemanticLimit, RustSemanticProperties,
+    capability_state, r5_entity_counts,
 };
 use codenoesis_domain::{
     AcquiredFile, AcquiredRepository, BoundRevision, ObjectId, RegularFileMode, RepositoryIdentity,
@@ -26,6 +26,79 @@ const FIXTURE_FILES: [(&str, &str); 4] = [
     ("src/lib.rs", "568a344c63d688a4c4b5b391d106848a39f25a04"),
     ("src/model.rs", "486549154e06c2a7c9d017109a00cadf1e6eaa69"),
 ];
+const CFG_OWNER_ALTERNATIVES_SOURCE: &str = r#"
+#[cfg(feature = "desktop")]
+pub struct ConditionalOwner;
+
+#[cfg(not(feature = "desktop"))]
+pub struct ConditionalOwner {
+    pub context: String,
+}
+
+#[cfg(feature = "desktop")]
+pub enum ConditionalEnum {
+    Desktop,
+}
+
+#[cfg(not(feature = "desktop"))]
+pub enum ConditionalEnum {
+    Headless,
+}
+
+#[cfg(feature = "desktop")]
+pub trait ConditionalTrait {
+    fn render(&self);
+}
+
+#[cfg(not(feature = "desktop"))]
+pub trait ConditionalTrait {
+    fn serialize(&self);
+}
+"#;
+const CFG_MEMBER_ALTERNATIVES_SOURCE: &str = r#"
+#[cfg(windows)]
+const BIN_DATA: &[u8] = include_bytes!("data.bin");
+
+#[cfg(not(windows))]
+const BIN_DATA: &[u8] = &[];
+"#;
+const CFG_ALL_MEMBER_KINDS_SOURCE: &str = r"
+pub struct ConditionalFields {
+    #[cfg(unix)]
+    pub value: u8,
+    #[cfg(windows)]
+    pub value: u8,
+}
+
+pub enum ConditionalVariants {
+    #[cfg(unix)]
+    Value,
+    #[cfg(windows)]
+    Value,
+}
+
+pub trait ConditionalMembers {
+    #[cfg(unix)]
+    const LIMIT: u8 = 1;
+    #[cfg(windows)]
+    const LIMIT: u8 = 2;
+
+    #[cfg(unix)]
+    type Output;
+    #[cfg(windows)]
+    type Output;
+
+    #[cfg(unix)]
+    fn render(&self);
+    #[cfg(windows)]
+    fn render(&self);
+}
+
+#[cfg(unix)]
+static STATE: u8 = 1;
+#[cfg(windows)]
+static STATE: u8 = 2;
+";
 
 #[test]
 fn gt_fr_ext_010_fields_and_variants_are_owned() {
@@ -150,6 +223,347 @@ fn gt_fr_ext_010_attributes_preserve_declarations_and_gaps() {
         ))
         .collect::<BTreeSet<_>>()
     );
+}
+
+#[test]
+fn gt_fr_ext_010_cfg_owner_alternatives_preserve_uncertainty() {
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_semantic_depth_incremental(
+            &synthetic_inventory(CFG_OWNER_ALTERNATIVES_SOURCE),
+            &[],
+            &[],
+        )
+        .expect("extract cfg-conditional owner alternatives");
+    let graph = &extraction.knowledge.graph;
+
+    for (kind, name) in [
+        (EntityKind::RustStruct, "ConditionalOwner"),
+        (EntityKind::RustEnum, "ConditionalEnum"),
+        (EntityKind::RustTrait, "ConditionalTrait"),
+    ] {
+        assert_eq!(
+            graph
+                .legacy_entities
+                .iter()
+                .filter(|entity| entity.kind == kind && entity.name == name)
+                .count(),
+            1,
+            "cfg alternatives must retain one logical {name} owner"
+        );
+    }
+
+    for (kind, name) in [
+        (RustSemanticEntityKind::Field, "context"),
+        (RustSemanticEntityKind::EnumVariant, "Desktop"),
+        (RustSemanticEntityKind::EnumVariant, "Headless"),
+        (RustSemanticEntityKind::Method, "render"),
+        (RustSemanticEntityKind::Method, "serialize"),
+    ] {
+        assert!(graph.entities.iter().any(|entity| {
+            entity.kind == kind
+                && entity.name == name
+                && entity.compilation_presence == CompilationPresence::ConditionalUnknown
+        }));
+    }
+
+    let cfg_evidence_ids = graph
+        .diagnostics
+        .iter()
+        .filter(|diagnostic| diagnostic.code == "rust.cfg_presence_unresolved")
+        .flat_map(|diagnostic| diagnostic.evidence_ids.iter().cloned())
+        .collect::<BTreeSet<_>>();
+    assert_eq!(cfg_evidence_ids.len(), 6);
+    let evidence_ids = graph
+        .evidence
+        .iter()
+        .map(|evidence| evidence.id.as_str())
+        .collect::<BTreeSet<_>>();
+    assert!(
+        cfg_evidence_ids
+            .iter()
+            .all(|identifier| evidence_ids.contains(identifier.as_str()))
+    );
+}
+
+#[test]
+fn gt_fr_ext_010_cfg_member_alternatives_merge_attribute_evidence() {
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_semantic_depth_incremental(
+            &synthetic_inventory(CFG_MEMBER_ALTERNATIVES_SOURCE),
+            &[],
+            &[],
+        )
+        .expect("extract cfg-conditional member alternatives");
+    let graph = &extraction.knowledge.graph;
+    let members = graph
+        .entities
+        .iter()
+        .filter(|entity| {
+            entity.kind == RustSemanticEntityKind::Constant && entity.name == "BIN_DATA"
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(members.len(), 1);
+    let member = members[0];
+    assert_eq!(
+        member.compilation_presence,
+        CompilationPresence::ConditionalUnknown
+    );
+    assert_eq!(member.attributes().len(), 2);
+    assert_eq!(
+        member
+            .attributes()
+            .iter()
+            .map(|attribute| attribute.token_text.as_str())
+            .collect::<BTreeSet<_>>(),
+        BTreeSet::from(["#[cfg(not(windows))]", "#[cfg(windows)]"])
+    );
+    let evidence_ids = graph
+        .evidence
+        .iter()
+        .map(|evidence| evidence.id.as_str())
+        .collect::<BTreeSet<_>>();
+    assert!(
+        member
+            .attributes()
+            .iter()
+            .all(|attribute| evidence_ids.contains(attribute.evidence_id.as_str()))
+    );
+    assert_eq!(
+        graph
+            .diagnostics
+            .iter()
+            .filter(|diagnostic| diagnostic.code == "rust.cfg_presence_unresolved")
+            .count(),
+        2
+    );
+}
+
+#[test]
+fn gt_fr_ext_010_cfg_alternatives_cover_every_r5_member_kind() {
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_semantic_depth_incremental(
+            &synthetic_inventory(CFG_ALL_MEMBER_KINDS_SOURCE),
+            &[],
+            &[],
+        )
+        .expect("extract all homogeneous cfg member alternatives");
+    let graph = &extraction.knowledge.graph;
+    for (kind, name) in [
+        (RustSemanticEntityKind::Field, "value"),
+        (RustSemanticEntityKind::EnumVariant, "Value"),
+        (RustSemanticEntityKind::Constant, "LIMIT"),
+        (RustSemanticEntityKind::Static, "STATE"),
+        (RustSemanticEntityKind::AssociatedType, "Output"),
+        (RustSemanticEntityKind::Method, "render"),
+    ] {
+        let members = graph
+            .entities
+            .iter()
+            .filter(|entity| entity.kind == kind && entity.name == name)
+            .collect::<Vec<_>>();
+        assert_eq!(
+            members.len(),
+            1,
+            "unexpected logical member count for {name}"
+        );
+        assert_eq!(
+            members[0].compilation_presence,
+            CompilationPresence::ConditionalUnknown
+        );
+        assert_eq!(members[0].attributes().len(), 2);
+        assert!(
+            members[0]
+                .attributes()
+                .iter()
+                .all(|attribute| attribute.kind == RustSemanticAttributeKind::Cfg)
+        );
+    }
+}
+
+#[test]
+fn sec_fr_ext_010_cfg_owner_alternative_boundary_failures_remain_typed() {
+    for (label, source, member_kind, normalized_member) in [
+        (
+            "unconditional duplicates",
+            "pub struct Repeated;\npub struct Repeated;\n",
+            "rust.struct",
+            "Repeated",
+        ),
+        (
+            "mixed unconditional and cfg",
+            "pub struct Repeated;\n#[cfg(feature = \"desktop\")] pub struct Repeated;\n",
+            "rust.struct",
+            "Repeated",
+        ),
+        (
+            "cfg_attr only",
+            "#[cfg_attr(feature = \"desktop\", repr(C))] pub struct Repeated;\n#[cfg_attr(not(feature = \"desktop\"), repr(transparent))] pub struct Repeated;\n",
+            "rust.struct",
+            "Repeated",
+        ),
+        (
+            "visibility mismatch",
+            "#[cfg(feature = \"desktop\")] pub struct Repeated;\n#[cfg(not(feature = \"desktop\"))] struct Repeated;\n",
+            "rust.struct",
+            "Repeated",
+        ),
+        (
+            "module alternatives",
+            "#[cfg(feature = \"desktop\")] mod repeated {}\n#[cfg(not(feature = \"desktop\"))] mod repeated {}\n",
+            "rust.module",
+            "repeated",
+        ),
+        (
+            "duplicate member preimage",
+            "#[cfg(feature = \"desktop\")] pub struct Repeated { pub value: u8 }\n#[cfg(not(feature = \"desktop\"))] pub struct Repeated { pub value: u16 }\n",
+            "rust.field",
+            "value",
+        ),
+        (
+            "direct cfg member type mismatch",
+            "pub struct Holder {\n#[cfg(unix)] pub value: u8,\n#[cfg(windows)] pub value: u16,\n}\n",
+            "rust.field",
+            "value",
+        ),
+        (
+            "direct cfg method signature mismatch",
+            "pub trait Clipboard {\n#[cfg(unix)] fn start(&self, value: u8);\n#[cfg(windows)] fn start(&self, value: u16);\n}\n",
+            "rust.method",
+            "start",
+        ),
+        (
+            "direct cfg member visibility mismatch",
+            "#[cfg(unix)] pub const VALUE: u8 = 1;\n#[cfg(windows)] const VALUE: u8 = 2;\n",
+            "rust.constant",
+            "VALUE",
+        ),
+        (
+            "cfg_attr-only members",
+            "pub struct Holder {\n#[cfg_attr(unix, allow(dead_code))] pub value: u8,\n#[cfg_attr(windows, allow(dead_code))] pub value: u8,\n}\n",
+            "rust.field",
+            "value",
+        ),
+        (
+            "mixed unconditional and direct cfg members",
+            "const VALUE: u8 = 1;\n#[cfg(windows)] const VALUE: u8 = 2;\n",
+            "rust.constant",
+            "VALUE",
+        ),
+    ] {
+        let error = TreeSitterRustWorkspaceExtractor::new()
+            .extract_rust_semantic_depth_incremental(&synthetic_inventory(source), &[], &[])
+            .expect_err(label);
+        assert!(
+            matches!(
+                &error,
+                RustSemanticError::IdentityConflict {
+                    member_kind: actual_kind,
+                    normalized_member: actual_member,
+                    ..
+                } if actual_kind == member_kind && actual_member == normalized_member
+            ),
+            "unexpected {label} error: {error:?}"
+        );
+    }
+}
+
+#[test]
+fn sec_fr_ext_010_cfg_member_attribute_maximum_and_plus_one_are_typed() {
+    let maximum = cfg_member_attribute_source(63, 63);
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_semantic_depth_incremental(&synthetic_inventory(&maximum), &[], &[])
+        .expect("combined cfg member attribute maximum must succeed");
+    let member = extraction
+        .knowledge
+        .graph
+        .entities
+        .iter()
+        .find(|entity| entity.name == "BOUNDED")
+        .expect("bounded cfg member");
+    assert_eq!(member.attributes().len(), 128);
+
+    let plus_one = cfg_member_attribute_source(63, 64);
+    let error = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_semantic_depth_incremental(&synthetic_inventory(&plus_one), &[], &[])
+        .expect_err("combined cfg member attribute maximum plus one must fail");
+    assert_eq!(
+        error,
+        RustSemanticError::LimitExceeded {
+            limit: RustSemanticLimit::OuterAttributesPerDeclaration,
+            maximum: 128,
+            observed: 129,
+        }
+    );
+}
+
+#[test]
+fn pt_nfr_det_001_cfg_alternatives_are_permutation_and_schedule_invariant() {
+    for source in [
+        CFG_OWNER_ALTERNATIVES_SOURCE,
+        CFG_MEMBER_ALTERNATIVES_SOURCE,
+        CFG_ALL_MEMBER_KINDS_SOURCE,
+    ] {
+        assert_cfg_alternative_determinism(source);
+    }
+}
+
+fn assert_cfg_alternative_determinism(source: &str) {
+    let expected = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_semantic_depth_incremental(
+            &synthetic_inventory_with_order(source, false),
+            &[],
+            &[],
+        )
+        .expect("extract cfg alternatives baseline")
+        .knowledge;
+    for permutation in 0..R5_DETERMINISM_PERMUTATIONS {
+        let actual = TreeSitterRustWorkspaceExtractor::new()
+            .extract_rust_semantic_depth_incremental(
+                &synthetic_inventory_with_order(source, permutation % 2 == 1),
+                &[],
+                &[],
+            )
+            .expect("extract cfg alternatives permutation")
+            .knowledge;
+        assert_eq!(
+            actual, expected,
+            "cfg permutation {permutation} changed knowledge"
+        );
+    }
+    thread::scope(|scope| {
+        let handles = (0..8)
+            .map(|worker| {
+                scope.spawn(move || {
+                    TreeSitterRustWorkspaceExtractor::new()
+                        .extract_rust_semantic_depth_incremental(
+                            &synthetic_inventory_with_order(source, worker % 2 == 1),
+                            &[],
+                            &[],
+                        )
+                        .expect("extract cfg alternatives schedule")
+                        .knowledge
+                })
+            })
+            .collect::<Vec<_>>();
+        for handle in handles {
+            assert_eq!(handle.join().expect("cfg replay worker"), expected);
+        }
+    });
+}
+
+fn cfg_member_attribute_source(first_other: usize, second_other: usize) -> String {
+    let mut source = String::new();
+    for index in 0..first_other {
+        writeln!(&mut source, "#[first_{index}]")
+            .expect("writing Rust source to a String cannot fail");
+    }
+    source.push_str("#[cfg(unix)]\nconst BOUNDED: u8 = 1;\n");
+    for index in 0..second_other {
+        writeln!(&mut source, "#[second_{index}]")
+            .expect("writing Rust source to a String cannot fail");
+    }
+    source.push_str("#[cfg(windows)]\nconst BOUNDED: u8 = 2;\n");
+    source
 }
 
 #[test]
@@ -305,6 +719,28 @@ fn fixture_inventory(rotation: usize, reverse: bool) -> RepositoryInventory {
 }
 
 fn synthetic_inventory(source: &str) -> RepositoryInventory {
+    synthetic_inventory_with_order(source, false)
+}
+
+fn synthetic_inventory_with_order(source: &str, reverse: bool) -> RepositoryInventory {
+    let mut files = vec![
+        AcquiredFile::new(
+            "Cargo.toml".to_owned(),
+            RegularFileMode::Regular,
+            ObjectId::parse_sha1(&"c".repeat(40)).expect("synthetic manifest OID"),
+            b"[package]\nname = \"fail-closed\"\nversion = \"0.1.0\"\nedition = \"2024\"\n\n[lib]\npath = \"src/lib.rs\"\n"
+                .to_vec(),
+        ),
+        AcquiredFile::new(
+            "src/lib.rs".to_owned(),
+            RegularFileMode::Regular,
+            ObjectId::parse_sha1(&"d".repeat(40)).expect("synthetic source OID"),
+            source.as_bytes().to_vec(),
+        ),
+    ];
+    if reverse {
+        files.reverse();
+    }
     RepositoryInventory::classify(AcquiredRepository::new(
         BoundRevision::new(
             RepositoryIdentity::parse("urn:codenoesis:test:r5-fail-closed")
@@ -312,22 +748,8 @@ fn synthetic_inventory(source: &str) -> RepositoryInventory {
             ObjectId::parse_sha1(&"a".repeat(40)).expect("synthetic commit OID"),
             ObjectId::parse_sha1(&"b".repeat(40)).expect("synthetic tree OID"),
         ),
-        2,
-        vec![
-            AcquiredFile::new(
-                "Cargo.toml".to_owned(),
-                RegularFileMode::Regular,
-                ObjectId::parse_sha1(&"c".repeat(40)).expect("synthetic manifest OID"),
-                b"[package]\nname = \"fail-closed\"\nversion = \"0.1.0\"\nedition = \"2024\"\n\n[lib]\npath = \"src/lib.rs\"\n"
-                    .to_vec(),
-            ),
-            AcquiredFile::new(
-                "src/lib.rs".to_owned(),
-                RegularFileMode::Regular,
-                ObjectId::parse_sha1(&"d".repeat(40)).expect("synthetic source OID"),
-                source.as_bytes().to_vec(),
-            ),
-        ],
+        u64::try_from(files.len()).expect("synthetic file count"),
+        files,
     ))
 }
 

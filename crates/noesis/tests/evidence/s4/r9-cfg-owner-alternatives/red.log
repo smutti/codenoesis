@@ -1,0 +1,38 @@
+issue=https://github.com/smutti/codenoesis/issues/151
+requirement=FR-EXT-010
+slice=S4
+risk=high
+base_sha=bd38f831184661dc30958760d886131a50bff26b
+branch=codex/151-cfg-owner-alternatives
+date=2026-08-09
+os=Darwin 25.5.0 arm64
+host=aarch64-apple-darwin
+rustc=rustc 1.97.1 (8bab26f4f 2026-07-14)
+cargo=cargo 1.97.1 (c980f4866 2026-06-30)
+command=cargo test -p codenoesis-lang-rust --test s4_rust_semantic_depth gt_fr_ext_010_cfg_owner_alternatives_preserve_uncertainty -- --exact
+expected=second cfg-conditional logical owner fails with RustSemanticError::IdentityConflict before production correction
+exit=101
+
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling codenoesis-lang-rust v0.1.0 (<workspace>/crates/codenoesis-lang-rust)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.85s
+     Running tests/s4_rust_semantic_depth.rs (target/debug/deps/s4_rust_semantic_depth-e62b9befc65a83df)
+
+running 1 test
+test gt_fr_ext_010_cfg_owner_alternatives_preserve_uncertainty ... FAILED
+
+failures:
+
+---- gt_fr_ext_010_cfg_owner_alternatives_preserve_uncertainty stdout ----
+
+thread 'gt_fr_ext_010_cfg_owner_alternatives_preserve_uncertainty' (4017988) panicked at crates/codenoesis-lang-rust/tests/s4_rust_semantic_depth.rs:188:10:
+extract cfg-conditional owner alternatives: IdentityConflict { owner_id: "urn:codenoesis:entity:blake3:8b4dd244e08d99ef5096a4d55ebf4bacfe5fa8410339a2e5383559c508b76cd4", member_kind: "rust.struct", normalized_member: "ConditionalOwner" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    gt_fr_ext_010_cfg_owner_alternatives_preserve_uncertainty
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p codenoesis-lang-rust --test s4_rust_semantic_depth`

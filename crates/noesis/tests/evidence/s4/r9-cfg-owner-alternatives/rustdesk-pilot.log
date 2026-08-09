@@ -1,0 +1,67 @@
+issue=https://github.com/smutti/codenoesis/issues/151
+requirement=FR-EXT-010
+slice=S4
+risk=high
+observed_at_utc=2026-08-09T09:58:04Z
+binary_source=rebuilt current worktree on base bd38f831184661dc30958760d886131a50bff26b
+repository=https://github.com/rustdesk/rustdesk
+revision=d412d198720aa56f6cfed2dfad262e8fb1322fb7
+tree=df8d4c292c9d256a445480eb878e507df3de1dc4
+source_files=941
+gitlinks=1
+source_shallow=false
+source_status_bytes_before=0
+source_status_bytes_after=0
+external_source_vendored=false
+command=target/debug/noesis scan --repository <rustdesk> --repository-id urn:codenoesis:pilot:rustdesk:r9-issue-151 --revision d412d198720aa56f6cfed2dfad262e8fb1322fb7 --profile standard-local-s4 --acquisition-profile local-git-sha1-packed-v1 --repository-boundary-profile local-gitlinks-v1 --workspace-profile cargo-root-package-v1 --manifest-profile cargo-manifest-facts-v1 --rust-semantic-profile rust-semantic-depth-v1 --rust-framework-profile rust-framework-declarations-v1 --store <fresh-store> --format json
+
+corrected_owner_path=src/client.rs
+corrected_owner_blob=f711c227c72079eb7ba40a9f4096adbd305a47ea
+corrected_owner_name=ClientClipboardContext
+corrected_owner_declaration_bytes=5121,5256
+corrected_member_path=libs/portable/src/bin_reader.rs
+corrected_member_blob=9effbc5893b711303d4d96b7778be7f729da4922
+corrected_member_name=BIN_DATA
+corrected_member_declaration_bytes=87,163
+
+run=1
+exit=11
+stdout_bytes=0
+stderr_bytes=366
+stderr_sha256=0b90dbc10745cac880cb3a68c38cde204cdf3938ab80b6c8cd3bff0f7c241bf8
+store_exists=false
+visible_head=false
+real_seconds=15.97
+user_seconds=14.83
+sys_seconds=0.31
+
+run=2
+exit=11
+stdout_bytes=0
+stderr_bytes=366
+stderr_sha256=0b90dbc10745cac880cb3a68c38cde204cdf3938ab80b6c8cd3bff0f7c241bf8
+store_exists=false
+visible_head=false
+real_seconds=15.48
+user_seconds=15.16
+sys_seconds=0.30
+
+stderr_byte_identical=true
+error_schema=codenoesis.error/v12
+error_code=extraction.rust_semantic_identity_conflict
+error_member_kind=rust.method
+error_normalized_member=try_start_clipboard
+error_owner_id=urn:codenoesis:entity:blake3:faea57c5efc879221e6a00dae6e4dcf9ecdb7a3380deab2f8eb6eb12facc5288
+terminal_path=src/client.rs
+terminal_blob=f711c227c72079eb7ba40a9f4096adbd305a47ea
+terminal_cfg_bytes=36466,38669
+terminal_declaration_bytes=36529,38703
+terminal_parameter_shapes=Option<ClientClipboardContext>,Option<()>
+full_rustdesk_r6_complete=false
+next_boundary=heterogeneous cfg declaration alternatives require a separate additive-schema issue
+nested_repository_traversal=false
+target_build_script_network_model_execution=false
+
+invalidated_orchestration=r6-final-1 ended before exit capture because the harness script assigned zsh reserved variable status; not acceptance evidence
+invalidated_orchestration=r6-validated-1 and r6-validated-2 exited 127 because zsh time parsed -p as a command; not product runs and not acceptance evidence
+retry_policy=only the two fresh r6-authority runs above are acceptance evidence; invalidated attempts were not used to turn a product failure into accepted evidence
