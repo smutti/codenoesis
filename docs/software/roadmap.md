@@ -88,7 +88,8 @@ pre-merge roadmap said "R0-R6 are implemented" and used the exact marker
 only as history. The R8 pre-merge roadmap said "R0-R7 are implemented" and
 "R7 is implemented but not yet Verified", used the sequence "R7 → R8 → R9",
 and declared "R8 governance is Approved". Those markers likewise remain only
-as immutable guard history.
+as immutable guard history. The K1 pre-merge roadmap said
+"R0-R8 are implemented"; that marker is retained only as history.
 
 R0-R9 and K1 are implemented but remain not Verified until their complete
 retained evidence is independently accepted. R7 static import still grants no
