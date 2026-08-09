@@ -1,0 +1,60 @@
+{
+  "schema_version": "codenoesis.red-observation/v1",
+  "issue": 152,
+  "authorization": "https://github.com/smutti/codenoesis/issues/152#issuecomment-5231484345",
+  "requirement_ids": ["FR-EXT-013", "FR-EXP-003", "NFR-TST-001", "NFR-TST-002"],
+  "requirement_status": "Proposed branch-scoped candidate",
+  "slice": "S4",
+  "risk": "high",
+  "exact_base_sha": "dae3860ded12202bdf6bbb1134a08f28098f3c9a",
+  "governance_checkpoint_sha": "9369e6a2e3ca064006f1d9997b687ab6b42a5900",
+  "production_source_changed_before_red": false,
+  "command": "cargo test -p noesis --test e2e_fr_ext_013_cfg_declaration_alternatives e2e_fr_ext_013_cfg_method_alternatives_publish_declarations -- --exact",
+  "environment_overrides": {
+    "CARGO_TERM_COLOR": "never",
+    "RUST_BACKTRACE": "0"
+  },
+  "test_process": {
+    "exit_code": 101,
+    "duration_seconds": 5.6825335,
+    "result": "expected_red"
+  },
+  "subject_process": {
+    "exit_code": 2,
+    "stdout_bytes": 0,
+    "stderr_bytes": 233,
+    "stderr_sha256": "dda30410fb0e9ea21d098ac38074c69d6316d777ee16340175ad7db00aa26be1",
+    "error_schema": "codenoesis.error/v12",
+    "error_code": "input.invalid_rust_semantic_profile",
+    "store_exists": false,
+    "build_sentinel_exists": false
+  },
+  "expected_failure": "the exact authorized base has no rust-cfg-declaration-alternatives-v1 selector or V9/V12 production path",
+  "actual_failure": "the focused test compiled, verified the frozen ErrorV12 bytes and absent store, then failed its V12-success expectation",
+  "log": {
+    "path": "crates/noesis/tests/evidence/s4/r10-cfg-declaration-alternatives/red.log",
+    "byte_length": 1454,
+    "sha256": "d590018f7e07b11361047cc8d21d18ce71aaa888d4ba595899186281310ad63f"
+  },
+  "environment": {
+    "os": "macOS 26.5.2",
+    "architecture": "arm64",
+    "host": "aarch64-apple-darwin",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "llvm": "22.1.6",
+    "features": "workspace defaults for the noesis integration-test target"
+  },
+  "agent": {
+    "system": "OpenAI Codex",
+    "model": "not exposed by the runtime",
+    "policy": "repository AGENTS.md at checkpoint 9369e6a2e3ca064006f1d9997b687ab6b42a5900",
+    "run_id": "issue-152-r10-checkpoint-red",
+    "cost": "not available"
+  },
+  "known_non_blocking_output": [
+    "Cargo warned that semver metadata in the already-pinned toml requirement is ignored"
+  ],
+  "correction_round": 0,
+  "retry_used_as_evidence": false
+}
