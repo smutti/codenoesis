@@ -1,0 +1,109 @@
+{
+  "schema_version": "codenoesis.r9-k1-output-capacity-oracle/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/148",
+  "required_base": "aadd065defba2d4f8d202583c7da9ff70e92ece8",
+  "requirement_ids": [
+    "FR-EXT-012",
+    "FR-CLI-001",
+    "INV-BND-001",
+    "NFR-DET-001",
+    "NFR-TST-001",
+    "NFR-TST-002",
+    "OD-LIM-001"
+  ],
+  "requirement_status": {
+    "existing_k1": "Approved and Implemented",
+    "capacity_amendment": "Proposed until protected merge"
+  },
+  "slice": "S4",
+  "risk": "high",
+  "risk_owner": "@smutti",
+  "correction_rounds": 5,
+  "dependencies": [],
+  "selector": {
+    "flag": "--output-capacity-profile",
+    "value": "local-snapshot-64m-v1",
+    "implicit_selection": false,
+    "required_command": "scan",
+    "required_profile": "standard-local-s4",
+    "required_k1_profile": "rust-callable-semantics-v1",
+    "compiler_index_composition": false,
+    "repository_boundary_composition": false
+  },
+  "limits": {
+    "standard_canonical_output_bytes_including_lf": 33554432,
+    "large_canonical_output_bytes_including_lf": 67108864,
+    "observed_value_is_capped_at_maximum_plus_one": true,
+    "serialization_precedes_publication": true
+  },
+  "invariants": {
+    "semantic_bytes_unchanged": true,
+    "configuration_bytes_unchanged": true,
+    "ontology_unchanged": true,
+    "schemas_unchanged": true,
+    "identity_domains_unchanged": true,
+    "error_versions_unchanged": true,
+    "standard_profile_unchanged": true,
+    "historical_goldens_unchanged": true,
+    "other_resource_limits_unchanged": true
+  },
+  "invalid_compositions": [
+    "unknown_profile",
+    "duplicate_profile",
+    "missing_profile_value",
+    "missing_k1_lineage",
+    "compiler_index",
+    "repository_boundary",
+    "docs",
+    "query",
+    "export",
+    "explore"
+  ],
+  "invalid_error": {
+    "schema_version": "codenoesis.error/v16",
+    "code": "input.unsupported_rust_callable_composition",
+    "stdout_bytes": 0,
+    "store_mutation": false
+  },
+  "pinned_lekton": {
+    "repository": "https://github.com/dghilardi/lekton",
+    "revision": "247b8f42fb045db41166d70a276a41c2e079b6eb",
+    "tree": "55ba428493a4ffae86ba492422a049f46d567a30",
+    "observed_local_output_bytes": 57394837,
+    "output_length_role": "retained local observation including the volatile envelope, not cross-environment canonical identity",
+    "replay_equivalence": {
+      "whole_stdout_byte_identical": false,
+      "semantic_bytes_identical": true,
+      "semantic_hash_identical": true,
+      "without_envelope_bytes_identical": true,
+      "allowed_stdout_differences": [
+        "envelope.created_at",
+        "envelope.job_id",
+        "envelope.correlation_id"
+      ]
+    },
+    "attempts": 2,
+    "expected_exit_code": 0,
+    "maximum_wall_seconds": 60,
+    "external_source_vendored": false,
+    "follow_up_commands": ["docs", "query", "export", "explore"]
+  },
+  "required_test_names": [
+    "conf_fr_ext_012_k1_output_capacity_profile_is_additive",
+    "pt_inv_bnd_001_k1_output_capacity_maximum_plus_one",
+    "reg_fr_cli_001_k1_output_capacity_preserves_small_bytes",
+    "e2e_fr_ext_012_explicit_output_capacity_profile",
+    "conf_fr_cli_001_output_capacity_composition_is_closed",
+    "reg_fr_exp_002_k1_script_close_source_spelling_is_inert_data"
+  ],
+  "expected_red": [
+    {
+      "command": "cargo test -p codenoesis-contracts --test s4_r9_output_capacity_contracts --locked",
+      "reason": "RepositorySnapshotV11 exposes only the inherited standard serializer"
+    },
+    {
+      "command": "cargo test -p noesis --test e2e_fr_ext_012_k1_output_capacity --locked",
+      "reason": "the CLI rejects --output-capacity-profile before K1 execution"
+    }
+  ]
+}

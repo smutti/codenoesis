@@ -1,0 +1,33 @@
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling noesis v0.1.0 (<workspace>/crates/noesis)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.63s
+     Running tests/e2e_fr_ext_012_k1_output_capacity.rs (target/debug/deps/e2e_fr_ext_012_k1_output_capacity-55382e915faa6212)
+
+running 2 tests
+test conf_fr_cli_001_output_capacity_composition_is_closed ... FAILED
+test e2e_fr_ext_012_explicit_output_capacity_profile ... FAILED
+
+failures:
+
+---- conf_fr_cli_001_output_capacity_composition_is_closed stdout ----
+
+thread 'conf_fr_cli_001_output_capacity_composition_is_closed' (3266577) panicked at crates/noesis/tests/e2e_fr_ext_012_k1_output_capacity.rs:151:5:
+assertion `left == right` failed
+  left: Some(2)
+ right: Some(11)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- e2e_fr_ext_012_explicit_output_capacity_profile stdout ----
+
+thread 'e2e_fr_ext_012_explicit_output_capacity_profile' (3266578) panicked at crates/noesis/tests/e2e_fr_ext_012_k1_output_capacity.rs:133:5:
+large-output K1 scan failed: status=Some(2), stderr={"code":"input.invalid_revision","context":{},"message":"invalid revision","retryable":false,"schema_version":"codenoesis.error/v4","stage":"input"}
+
+
+
+failures:
+    conf_fr_cli_001_output_capacity_composition_is_closed
+    e2e_fr_ext_012_explicit_output_capacity_profile
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.73s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_ext_012_k1_output_capacity`

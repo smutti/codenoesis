@@ -31,6 +31,26 @@ pub const STANDARD_LOCAL_S1_LIMITS: StandardLocalS1Limits = StandardLocalS1Limit
     scan_wall_milliseconds: 60_000,
 };
 
+pub const LOCAL_SNAPSHOT_64M_V1: &str = "local-snapshot-64m-v1";
+pub const LOCAL_SNAPSHOT_64M_CANONICAL_OUTPUT_BYTES: u64 = 67_108_864;
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+pub enum K1OutputCapacityProfile {
+    #[default]
+    Standard,
+    LocalSnapshot64MV1,
+}
+
+impl K1OutputCapacityProfile {
+    #[must_use]
+    pub const fn maximum_bytes(self) -> u64 {
+        match self {
+            Self::Standard => STANDARD_LOCAL_S1_LIMITS.canonical_output_bytes,
+            Self::LocalSnapshot64MV1 => LOCAL_SNAPSHOT_64M_CANONICAL_OUTPUT_BYTES,
+        }
+    }
+}
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct StandardLocalS1Limits {
     pub regular_files: u64,

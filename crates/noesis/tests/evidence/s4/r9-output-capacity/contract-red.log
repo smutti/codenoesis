@@ -1,0 +1,19 @@
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling codenoesis-contracts v0.1.0 (<workspace>/crates/codenoesis-contracts)
+error[E0432]: unresolved imports `codenoesis_domain::K1OutputCapacityProfile`, `codenoesis_domain::LOCAL_SNAPSHOT_64M_V1`
+ --> crates/codenoesis-contracts/tests/s4_r9_output_capacity_contracts.rs:2:25
+  |
+2 | use codenoesis_domain::{K1OutputCapacityProfile, LOCAL_SNAPSHOT_64M_V1, STANDARD_LOCAL_S1_LIMITS};
+  |                         ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^ no `LOCAL_SNAPSHOT_64M_V1` in the root
+  |                         |
+  |                         no `K1OutputCapacityProfile` in the root
+
+error[E0599]: no associated function or constant named `canonical_stdout_with_output_capacity` found for struct `RepositorySnapshotV11` in the current scope
+  --> crates/codenoesis-contracts/tests/s4_r9_output_capacity_contracts.rs:21:32
+   |
+21 |         RepositorySnapshotV11::canonical_stdout_with_output_capacity;
+   |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ associated function or constant not found in `RepositorySnapshotV11`
+
+Some errors have detailed explanations: E0432, E0599.
+For more information about an error, try `rustc --explain E0432`.
+error: could not compile `codenoesis-contracts` (test "s4_r9_output_capacity_contracts") due to 2 previous errors
