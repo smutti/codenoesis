@@ -23,12 +23,12 @@
   "slice": "S4",
   "risk": "high",
   "risk_owner": "@smutti",
-  "observed_at_utc": "2026-08-09T14:56:30Z",
+  "observed_at_utc": "2026-08-09T15:17:39Z",
   "base_commit_sha": "dae3860ded12202bdf6bbb1134a08f28098f3c9a",
   "governance_checkpoint_sha": "9369e6a2e3ca064006f1d9997b687ab6b42a5900",
   "red_evidence_commit_sha": "7fc6336c743395411a2b9df3354d721c24f97f56",
   "implementation_commit_sha": "eaf175619f9af33e23bbf8c6453f861c95acb6df",
-  "tested_implementation_head": "d50156a4e0bb1d03e86675c516d91c9b84439ac1",
+  "tested_implementation_head": "f8d0a2af2f6d134396bad84f349069064fb1e7f6",
   "final_review_head": "recorded by the pull request after this evidence commit; a commit cannot contain its own SHA",
   "branch": "codex/152-r10-cfg-declaration-alternatives",
   "authorization": {
@@ -37,7 +37,7 @@
     "maintainer_supervised_interactive_lane": true,
     "governance_and_code_single_pr": true,
     "correction_budget": 5,
-    "correction_rounds_used": 2,
+    "correction_rounds_used": 3,
     "manual_independent_review_and_merge_required": true,
     "control_plane_effect": "none",
     "release_effect": "none"
@@ -159,7 +159,7 @@
       "sha256": "d590018f7e07b11361047cc8d21d18ce71aaa888d4ba595899186281310ad63f"
     },
     "focused_green": {
-      "tested_head": "d50156a4e0bb1d03e86675c516d91c9b84439ac1",
+      "tested_head": "f8d0a2af2f6d134396bad84f349069064fb1e7f6",
       "commands": [
         "cargo test -p codenoesis-domain --test s4_r10_cfg_declaration_alternatives --locked",
         "cargo test -p codenoesis-lang-rust --test s4_r10_cfg_declaration_alternatives --locked",
@@ -168,13 +168,13 @@
         "cargo test -p noesis --test e2e_fr_ext_013_cfg_declaration_alternatives --locked"
       ],
       "exit_code": 0,
-      "tests_passed": 27,
+      "tests_passed": 28,
       "log": "crates/noesis/tests/evidence/s4/r10-cfg-declaration-alternatives/focused-green.log",
       "byte_length": 1684,
-      "sha256": "eb28773ba47d2f9917165153f1b0854b15c14b57be95432924bbd36fb042eb35"
+      "sha256": "9c87d18219e6046c2bca084af774430a54e3a61f50e9343d0ab10804a46ea0d7"
     },
     "complete_repository_gate": {
-      "tested_head": "d50156a4e0bb1d03e86675c516d91c9b84439ac1",
+      "tested_head": "f8d0a2af2f6d134396bad84f349069064fb1e7f6",
       "commands": [
         "actionlint -no-color",
         "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
@@ -187,14 +187,25 @@
         "cargo bench --workspace --all-features --no-run --locked"
       ],
       "exit_code": 0,
-      "workspace_tests_passed": 416,
+      "workspace_tests_passed": 417,
       "python_tests_passed": 281,
       "summary": "crates/noesis/tests/evidence/s4/r10-cfg-declaration-alternatives/complete-gate-summary.log",
-      "summary_byte_length": 2380,
-      "summary_sha256": "a3ac33def9e66c7db8a70771b928c9b293bb070cc9aa9ec371c96c3cf76bd414",
-      "raw_local_log_byte_length": 49458,
-      "raw_local_log_sha256": "3844f5308d93fc5faab382c96857714a042084b481ef6a519ce84e8047cd2022",
+      "summary_byte_length": 3513,
+      "summary_sha256": "42e3a6ff9026e95973dfa687da7abeacee3c9d7b8b7233e9db2d776ea287a19f",
+      "raw_local_log_byte_length": 49763,
+      "raw_local_log_sha256": "ffad134135ddaf23b4d18ca484ee35030bbfab05272eec09fbc699bdb95ee982",
       "final_review_tree": "rerun after this evidence commit and bind the immutable head in the pull request"
+    },
+    "windows_ci_diagnostic": {
+      "failed_head": "b6d94566c607afd871c630bc843902ad3a86bae2",
+      "run": "https://github.com/smutti/codenoesis/actions/runs/31320289947",
+      "job": "https://github.com/smutti/codenoesis/actions/runs/31320289947/job/93262039313",
+      "failure": "windows-latest transported the reviewed source fixture as CRLF, changing declaration evidence and the two derived alternative IDs",
+      "correction_head": "f8d0a2af2f6d134396bad84f349069064fb1e7f6",
+      "correction": "normalize only CRLF transport in the adapter-only reviewed fixture reader and reject bare carriage returns",
+      "product_or_oracle_changed": false,
+      "local_regression_tests_passed": 12,
+      "github_recheck": "pending after evidence commit and push"
     }
   },
   "fixture": {
@@ -323,6 +334,11 @@
       "commit": "d50156a4e0bb1d03e86675c516d91c9b84439ac1",
       "reason": "the preliminary complete gate exposed immutable decision-index bytes and the exact historical K1 roadmap marker",
       "scope": "restore the decision index to base bytes and retain the historical marker without changing current R10 semantics or any test"
+    },
+    {
+      "commit": "f8d0a2af2f6d134396bad84f349069064fb1e7f6",
+      "reason": "windows-latest transported the project-owned reviewed fixture with CRLF and therefore changed evidence-derived alternative IDs",
+      "scope": "normalize only checkout-transport CRLF to canonical LF in the R10 adapter test reader, reject bare carriage returns, and leave product acquisition, fixture, oracle, identities, golden, viewer, and dependencies unchanged"
     }
   ],
   "rollback": "revert the complete issue #152 package; no migration, historical rewrite, store repair, dependency rollback, or release action",
