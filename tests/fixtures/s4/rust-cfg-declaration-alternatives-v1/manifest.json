@@ -1,0 +1,39 @@
+{
+  "schema_version": "codenoesis.fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-cfg-declaration-alternatives-v1",
+  "object_format": "sha1",
+  "tree_oid": "6aa31d889f4c87b2b7dfbff3fef3b32ee7fa0363",
+  "commit_oid": "d5a44bb5bb12ddb6f71ea4dd0c88944dc41eefec",
+  "commit": {
+    "author_name": "CodeNoesis",
+    "author_email": "fixture@codenoesis.invalid",
+    "timestamp": "2026-08-09T12:00:00Z",
+    "message": "R10 project-owned cfg declaration alternatives fixture"
+  },
+  "files": [
+    {
+      "path": "repository/Cargo.toml",
+      "byte_length": 158,
+      "sha256": "695168e24229e458533199d782f64065f4fdfab49679aae5d2248997c48d979c",
+      "git_blob_oid": "cf6685001d2ced704c6bd3beafb0afd8acdd3589"
+    },
+    {
+      "path": "repository/build.rs",
+      "byte_length": 100,
+      "sha256": "dedfca9cd2971cd046856d6326469f2f8d3ee075c1ba5b9e9f4ee103f62bb48c",
+      "git_blob_oid": "e7a4889f33043633039b7e1a1222fc0725f9bd3d"
+    },
+    {
+      "path": "repository/src/lib.rs",
+      "byte_length": 591,
+      "sha256": "c543a0057b9df21cecb5b4ac8976a02ad1047c9aee165f8c74a51251d70c04e8",
+      "git_blob_oid": "d3d391d139dd8349762c533ce00b5ff063fcc8e1"
+    }
+  ],
+  "reviewed_spans": {
+    "unix_cfg": [80, 110],
+    "unix_method": [115, 177],
+    "windows_cfg": [183, 216],
+    "windows_method": [221, 276]
+  }
+}

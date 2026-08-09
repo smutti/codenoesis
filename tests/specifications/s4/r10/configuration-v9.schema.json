@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/configuration-v9.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile",
+    "workspace_profile",
+    "manifest_profile",
+    "rust_semantic_profile",
+    "repository_boundary_profile",
+    "semantic_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "codenoesis.configuration/v9"},
+    "profile": {"const": "standard-local-s4"},
+    "workspace_profile": {"const": "cargo-root-package-v1"},
+    "manifest_profile": {"const": "cargo-manifest-facts-v1"},
+    "rust_semantic_profile": {"const": "rust-cfg-declaration-alternatives-v1"},
+    "repository_boundary_profile": {"enum": [null, "local-gitlinks-v1"]},
+    "semantic_hash": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {"const": "blake3-256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

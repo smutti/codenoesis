@@ -3,6 +3,7 @@
 mod s1_boundaries;
 mod s4;
 mod s4_k1;
+mod s4_r10;
 mod s4_r3;
 mod s4_r4;
 mod s4_r5;
@@ -22,6 +23,7 @@ pub use s4_r4::{CargoManifestScanError, S4R4ScanOutput};
 pub use s4_r5::{RustSemanticScanError, S4R5ScanOutput};
 pub use s4_r6::{FrameworkScanError, S4R6ScanOutput};
 pub use s4_r7::{CompilerIndexScanError, S4R7ScanOutput};
+pub use s4_r10::{RustCfgAlternativesScanError, S4R10ScanOutput};
 pub use s5::{RefreshError, RefreshPlan, RefreshService};
 pub use s6::{FederationRequest, FederationService, FederationServiceError};
 

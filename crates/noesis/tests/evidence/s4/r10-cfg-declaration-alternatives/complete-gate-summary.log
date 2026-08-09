@@ -1,0 +1,86 @@
+issue=https://github.com/smutti/codenoesis/issues/152
+requirements=FR-EXT-013,FR-EXP-003,NFR-TST-001,NFR-TST-002
+requirement_status=Proposed branch-scoped candidate; manual protected merge required
+slice=S4
+risk=high
+gate=complete repository bootstrap gate
+observed_at_utc=2026-08-09T15:36:41Z
+tested_head=eba5d77000b5594a04e34c5e5852eec98cb93957
+
+command=actionlint -no-color
+exit=0
+duration_seconds=0
+actionlint_version=1.7.12
+
+command=python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json
+exit=0
+duration_seconds=0
+policy_status=valid
+approved_requirement_count=39
+hard_protected_pattern_count=13
+
+command=cargo fmt --all --check
+exit=0
+duration_seconds=0
+
+command=cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+exit=0
+duration_seconds=6
+
+command=cargo test --workspace --all-targets --all-features --locked
+exit=0
+duration_seconds=168
+tests_passed=417
+test_result_groups=76
+
+command=cargo test --workspace --doc --all-features --locked
+exit=0
+duration_seconds=5
+tests_passed=0
+test_result_groups=11
+
+command=python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+exit=0
+duration_seconds=2
+tests_passed=281
+
+command=python3 scripts/validate_benchmark_assets.py
+exit=0
+duration_seconds=0
+benchmark_assets=status=scaffold,suites=0
+
+command=cargo bench --workspace --all-features --no-run --locked
+exit=0
+duration_seconds=0
+
+overall_exit=0
+raw_local_log_bytes=49288
+raw_local_log_sha256=5a84e948ea51f38de23e70bd4c64153213d54f8b55a7b2b69da7afa050eea10a
+raw_local_log_retention=ephemeral local log; commands, exits, durations, counts, and digest retained here
+final_review_head_gate=rerun after this evidence commit and bind the immutable pull-request head in the PR record
+
+discarded_gate_attempt_head=63f942d984df12af583d8e1e94d5bf4e7046ff46
+discarded_gate_attempt_result=all Rust checks Green; Python suite exposed three legacy governance guards after the candidate decision-index and roadmap edits
+discarded_gate_attempt_raw_bytes=93390
+discarded_gate_attempt_raw_sha256=22f2043292989b3a0f457bf91a886d1bc21a93357ac9660c34181763a70e7aff
+correction=restore the immutable decision index bytes and retain the exact historical K1 roadmap marker without changing current R10 semantics
+
+github_windows_ci_diagnostic_head=b6d94566c607afd871c630bc843902ad3a86bae2
+github_windows_ci_run=31320289947
+github_windows_ci_job=93262039313
+github_windows_ci_result=the reviewed heterogeneous fixture produced CRLF-dependent alternative IDs on windows-latest
+github_windows_ci_actual_ids=urn:codenoesis:entity:blake3:a09b7aee0eea610737cbb2970f993ef1d79fbb2a5b2f0e9da410cabb8f6d4ca5,urn:codenoesis:entity:blake3:b66b330773f301ce42fcfc63e8082d37c861ae47586f30581e01cc303e8fcdea
+github_windows_ci_expected_ids=urn:codenoesis:entity:blake3:452f8e5e1fe8f0e22b43d49b7393c1b224261b8b2f47452ebaee4ca19794542d,urn:codenoesis:entity:blake3:df85456dbd86d6ded1dd8a752c159e8d838ebf954feb556f47c6200e9a2843c6
+github_windows_ci_root_cause=checkout transport converted the reviewed LF fixture to CRLF before the adapter-only inventory was built
+github_windows_ci_correction_head=f8d0a2af2f6d134396bad84f349069064fb1e7f6
+github_windows_ci_correction=normalize only uniformly CRLF-transported first-party reviewed test text to LF, reject bare carriage returns, and leave product acquisition, fixture, oracle, identities, and golden bytes unchanged
+github_windows_test_authority_diagnostic_head=393c3654a63bdbe477cf1d400bc4e2308680ee88
+github_windows_test_authority_run=31320907025
+github_windows_test_authority_job=93263624900
+github_windows_test_authority_result=the reviewed fixture-byte test passed, then ten R10 journeys failed before acquisition while Git initialized their isolated repositories
+github_windows_test_authority_root_cause=fs::canonicalize transported the Windows test root as a verbatim path through GIT_CONFIG_GLOBAL, --template, and the worktree argument; Git for Windows failed closed while reading configuration
+github_windows_test_authority_correction_head=eba5d77000b5594a04e34c5e5852eec98cb93957
+github_windows_test_authority_correction=retain canonical temporary roots on non-Windows; on Windows select only bounded workspace-target or volume-root authorities validated through the unchanged public output boundary and preserve non-verbatim absolute spelling
+github_windows_test_authority_recheck=pending exact-head native Windows CI after evidence commit and push
+correction_rounds_used=4_of_5
+retry_policy=the failed preliminary gate is diagnostic only; only the complete Green gate above is acceptance evidence

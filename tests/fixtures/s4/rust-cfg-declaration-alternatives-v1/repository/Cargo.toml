@@ -1,0 +1,9 @@
+[package]
+name = "rust-cfg-declaration-alternatives-fixture"
+version = "0.1.0"
+edition = "2024"
+build = "build.rs"
+publish = false
+
+[lib]
+path = "src/lib.rs"

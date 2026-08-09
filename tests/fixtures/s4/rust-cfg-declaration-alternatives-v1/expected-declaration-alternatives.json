@@ -1,0 +1,44 @@
+{
+  "schema_version": "codenoesis.r10-cfg-declaration-alternatives-fixture/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-cfg-declaration-alternatives-v1",
+  "crate_id": "urn:codenoesis:entity:blake3:219e44699353c0db4f19df702035b0236577bccfaf98ff363f16c3871e661800",
+  "source_file_id": "urn:codenoesis:entity:blake3:23243f55324904d3a181be7274ad5d38abbecd1a3d3a094d73b20717a55d4039",
+  "owner_id": "urn:codenoesis:entity:blake3:0ca1a2b9b167957e004a4ef6a3d9fe06a33bd439cfc713a5ef039b08dc801b15",
+  "logical_method": {
+    "id": "urn:codenoesis:entity:blake3:437b0bfcd3821ae91eabe8c395d99c80ec54cc53e6f1e6ca6e24098b20bf4b45",
+    "kind": "rust.method",
+    "name": "try_start_clipboard",
+    "declaration_state": "alternatives",
+    "declaration_alternative_ids": [
+      "urn:codenoesis:entity:blake3:452f8e5e1fe8f0e22b43d49b7393c1b224261b8b2f47452ebaee4ca19794542d",
+      "urn:codenoesis:entity:blake3:df85456dbd86d6ded1dd8a752c159e8d838ebf954feb556f47c6200e9a2843c6"
+    ]
+  },
+  "alternatives": [
+    {
+      "id": "urn:codenoesis:entity:blake3:452f8e5e1fe8f0e22b43d49b7393c1b224261b8b2f47452ebaee4ca19794542d",
+      "relationship_id": "urn:codenoesis:relationship:blake3:b7f0fc978d2ec344f7e28d7dbc24d357c5a53eb63588c478a746e0d507cd5408",
+      "cfg_evidence_id": "urn:codenoesis:evidence:blake3:02744a26a2d8c960e9b2e89b8db2a4d133f7d58c792842eac3975c801c6a41e9",
+      "declaration_evidence_id": "urn:codenoesis:evidence:blake3:6390dfef60968e233c891126013da8d58faa2b38dd6573fe0729b88b040bf5a7",
+      "declared_signature": "pub fn try_start_clipboard(&self, context: Option<Context>)",
+      "declaration_span": [115, 177],
+      "cfg_span": [80, 110]
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:df85456dbd86d6ded1dd8a752c159e8d838ebf954feb556f47c6200e9a2843c6",
+      "relationship_id": "urn:codenoesis:relationship:blake3:e66eb376e7e7191599ab4db84d82d52c31c9b25ee41c1edb002d0683695afcaf",
+      "cfg_evidence_id": "urn:codenoesis:evidence:blake3:dc4bc62042f9308c672eef08dcfec950075debebd05e3dea0ffd61af8df7f70d",
+      "declaration_evidence_id": "urn:codenoesis:evidence:blake3:c7366514072cddc09890213650e2fa11aaef48645e780c9cbedaa45eae295037",
+      "declared_signature": "pub fn try_start_clipboard(&self, value: Option<()>)",
+      "declaration_span": [221, 276],
+      "cfg_span": [183, 216]
+    }
+  ],
+  "forbidden_claims": [
+    "active_cfg_world",
+    "cfg_exhaustiveness",
+    "cfg_mutual_exclusion",
+    "runtime_presence",
+    "inferred_type_or_value"
+  ]
+}

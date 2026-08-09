@@ -1,0 +1,24 @@
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling codenoesis-lang-rust v0.1.0 (/Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust)
+   Compiling noesis v0.1.0 (/Users/smutti/Documents/personal/codenoesis/crates/noesis)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.60s
+     Running tests/e2e_fr_ext_013_cfg_declaration_alternatives.rs (target/debug/deps/e2e_fr_ext_013_cfg_declaration_alternatives-95f5281823489cb0)
+
+running 1 test
+test e2e_fr_ext_013_cfg_method_alternatives_publish_declarations ... FAILED
+
+failures:
+
+---- e2e_fr_ext_013_cfg_method_alternatives_publish_declarations stdout ----
+
+thread 'e2e_fr_ext_013_cfg_method_alternatives_publish_declarations' (4352683) panicked at crates/noesis/tests/e2e_fr_ext_013_cfg_declaration_alternatives.rs:40:9:
+expected RepositorySnapshotV12 success; observed frozen missing-profile Red
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    e2e_fr_ext_013_cfg_method_alternatives_publish_declarations
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 1.01s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_ext_013_cfg_declaration_alternatives`

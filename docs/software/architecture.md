@@ -123,6 +123,39 @@ The canonical representation is a typed property graph scoped to an immutable re
 
 An LLM response cannot directly create `deterministic_fact` or `confirmed` state.
 
+### R10 declaration-alternative boundary
+
+The explicit `rust-cfg-declaration-alternatives-v1` S4 profile is an additive
+source-only branch over the R5 declaration model. It is not layered on R6,
+R7, or K1. The adapter first extracts the same R5 method occurrences and exact
+evidence, then an inward-owned deterministic rule groups only repeated methods
+that share the complete logical identity/context and satisfy the direct-`cfg`,
+same-file/blob, non-overlap, and resource predicates fixed by Decision 0021.
+
+The canonical V9 graph keeps one existing R5 logical `rust.method`. It removes
+occurrence-specific shape from that logical node, records
+`declaration_state = alternatives`, and links sorted
+`rust.declaration_alternative` entities through
+`HAS_DECLARATION_ALTERNATIVE`. Each alternative is independently grounded by
+its declaration and attribute evidence. Existing logical and `DEFINES` subject
+identities stay stable while their claims aggregate all declaration evidence.
+No source order or ordinal enters alternative identity.
+
+This boundary deliberately models syntax rather than a configuration solver.
+It does not evaluate `cfg`, choose an active declaration, prove predicates
+exclusive or exhaustive, invoke Cargo or `rustc`, expand macros, infer types or
+values, or manufacture compiler/runtime truth. Invalid grouping is a typed
+ErrorV17 failure before publication, never a best-effort merge.
+
+RepositorySnapshotV12, KnowledgeGraphV9, and ExtractionChunkV9 receive new
+semantic hash domains and are stored through the existing atomic local-store
+protocol. LocalQueryResultV7 exposes direct alternative neighborhoods.
+PortableGraphV3 performs a lossless strict projection; LocalExplorerV3 reuses
+the immutable first-party K1 viewer bytes under a new manifest without gaining
+network, mutation, browser-launch, or execution authority. Older snapshot,
+query, portable, explorer, identity, hash, error, fixture, golden, and viewer
+bytes remain separate dispatch families.
+
 ## Versioned artifacts and identity
 
 All public artifact types include `schema_version`, repository commit, configuration hash, pipeline version, ontology version, extractor versions, creation time, and a BLAKE3 content hash.

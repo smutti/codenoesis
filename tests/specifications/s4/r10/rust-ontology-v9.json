@@ -1,0 +1,47 @@
+{
+  "schema_version": "codenoesis.ontology-definition/v1",
+  "ontology_version": "codenoesis.ontology/rust/v9",
+  "extends": ["codenoesis.ontology/rust/v5"],
+  "entity_kinds": {
+    "rust.declaration_alternative": {
+      "subject_kind": "rust.method",
+      "identity": "repository_plus_logical_method_plus_declaration_evidence",
+      "claim_state": "deterministic_fact",
+      "required_properties": [
+        "declaration_kind",
+        "implementation_context",
+        "trait_context_id",
+        "visibility",
+        "receiver_present",
+        "declared_signature",
+        "compilation_presence",
+        "declaration_evidence_id",
+        "attributes"
+      ]
+    }
+  },
+  "relationship_kinds": {
+    "HAS_DECLARATION_ALTERNATIVE": "logical_method_to_declaration_alternative"
+  },
+  "logical_method_alternative_properties": [
+    "implementation_context",
+    "trait_context_id",
+    "declaration_state",
+    "declaration_alternative_ids"
+  ],
+  "logical_method_forbidden_occurrence_properties": [
+    "receiver_present",
+    "declared_signature",
+    "compilation_presence",
+    "attributes"
+  ],
+  "identity_domains": {
+    "alternative_entity": "codenoesis.entity-id/rust-declaration-alternative/v1",
+    "alternative_relationship": "codenoesis.relationship-id/rust-declaration-alternative/v1"
+  },
+  "preserves_r5_logical_method_ids": true,
+  "preserves_existing_relationship_ids": true,
+  "normalization": "NFC",
+  "ordering": "raw_utf8_identity",
+  "cfg_semantics": "uninterpreted_committed_syntax"
+}

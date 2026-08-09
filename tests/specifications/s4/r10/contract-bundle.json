@@ -1,0 +1,28 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {"path": "LICENSE", "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"},
+    {"path": "docs/software/decisions/0021-s4-r10-cfg-declaration-alternatives-contract.md", "sha256": "f880a87847cf4356b324dd32c8372dd2feee20d3ad4df32a39de3b3057d788a9"},
+    {"path": "tests/fixtures/s4/rust-cfg-declaration-alternatives-v1/README.md", "sha256": "e6fc57f9c0ddabc2e10e5c43244af67dd65528d956c0d387d8539c72a12085cf"},
+    {"path": "tests/fixtures/s4/rust-cfg-declaration-alternatives-v1/expected-declaration-alternatives.json", "sha256": "cc5a76b1a280687f6e699b2072f76059ea87e59aefccc389dad62b12c9ddab8c"},
+    {"path": "tests/fixtures/s4/rust-cfg-declaration-alternatives-v1/manifest.json", "sha256": "fa121316442be6f343f3ea72551199ff82538e545edf9e5a2bb16999a97e630e"},
+    {"path": "tests/fixtures/s4/rust-cfg-declaration-alternatives-v1/repository/Cargo.toml", "sha256": "695168e24229e458533199d782f64065f4fdfab49679aae5d2248997c48d979c"},
+    {"path": "tests/fixtures/s4/rust-cfg-declaration-alternatives-v1/repository/build.rs", "sha256": "dedfca9cd2971cd046856d6326469f2f8d3ee075c1ba5b9e9f4ee103f62bb48c"},
+    {"path": "tests/fixtures/s4/rust-cfg-declaration-alternatives-v1/repository/src/lib.rs", "sha256": "c543a0057b9df21cecb5b4ac8976a02ad1047c9aee165f8c74a51251d70c04e8"},
+    {"path": "tests/specifications/s4/r10/cfg-declaration-alternatives-subset-v1.json", "sha256": "6e298470b8958f5b2e8c5b3c03eab3e1e7c410a39a1f4d0c853aa50fb78acab0"},
+    {"path": "tests/specifications/s4/r10/codenoesis-error-v17.schema.json", "sha256": "25d2a1506522066dfab9b80b8bb68c46a619abaf76f955fa4e0bc80feb2a79ab"},
+    {"path": "tests/specifications/s4/r10/configuration-v9.schema.json", "sha256": "0bf447a157188c1a6436f52112cc466f7c720daf826737340bf54367c821d0df"},
+    {"path": "tests/specifications/s4/r10/e2e_fr_ext_013_cfg_declaration_alternatives.json", "sha256": "7f86c239a3b8173ad919b40ee3a2328608de86dfc756afc1cc80eb262b361d48"},
+    {"path": "tests/specifications/s4/r10/extraction-chunk-v9.schema.json", "sha256": "937bc8ba39189e760e4c2a0b5dd0ad3758d138238bf9f2f745d0f17f3a67e487"},
+    {"path": "tests/specifications/s4/r10/invalid-cases-v1.json", "sha256": "89b5b0fe57a9cb7ed96182983e75d9675e6bc1b0289f553e8f5506e34245b9fb"},
+    {"path": "tests/specifications/s4/r10/knowledge-graph-v9.schema.json", "sha256": "22fc0ae8310b12e621edd6306e53a8fb41fe4e3db33d7d7c6fc220efaf192559"},
+    {"path": "tests/specifications/s4/r10/local-explorer-manifest-v3.schema.json", "sha256": "17ca29e82cbf6f0c79fff61b21a0bd553e1048bbc70ae36b83389cd20c45e95b"},
+    {"path": "tests/specifications/s4/r10/local-query-result-v7.schema.json", "sha256": "ca84ac618150b392601e1463f68160f30048a07c712d0ea2416196f652a17fa8"},
+    {"path": "tests/specifications/s4/r10/portable-graph-v3.schema.json", "sha256": "c123193c14d385379eb4674e92410046231c2ae3f59682617daab0b825e6482e"},
+    {"path": "tests/specifications/s4/r10/repository-snapshot-v12.schema.json", "sha256": "60ea2f9a7d61605e5466df4ef9827f04e59ce68e70340bb42876e5a98412b7d8"},
+    {"path": "tests/specifications/s4/r10/rust-ontology-v9.json", "sha256": "584315648b6df4aa117b02916f04ec519266502b24a6db0a7bfa7d45c58f921b"},
+    {"path": "tests/specifications/s4/r10/semantic-hash-contract-v8.json", "sha256": "31cecc0ca34876fd6493d32dd83732b4dce0f92712cb3a33a848515dc646458e"},
+    {"path": "tests/specifications/s4/r5/contract-bundle.json", "sha256": "6491386c0fc8ec21dd3bf5112c2460eed56e33b976bb3afb1ac55fa4a8308509"}
+  ],
+  "bundle_sha256": "04969c3f0eb8ae04ec6dc3be8e4ab71963dbf7a37ef7c483372122fcf160ffb3"
+}

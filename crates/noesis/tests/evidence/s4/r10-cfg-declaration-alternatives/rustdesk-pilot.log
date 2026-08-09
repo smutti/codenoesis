@@ -1,0 +1,98 @@
+issue=https://github.com/smutti/codenoesis/issues/152
+requirements=FR-EXT-013,FR-EXP-003,NFR-DET-001
+requirement_status=Proposed branch-scoped candidate; diagnostic public-repository evidence only
+slice=S4
+risk=high
+observed_at_utc=2026-08-09T14:42:30Z
+binary_source_head=63f942d984df12af583d8e1e94d5bf4e7046ff46
+later_head_difference=d50156a4e0bb1d03e86675c516d91c9b84439ac1 changes governance documentation only
+repository=https://github.com/rustdesk/rustdesk
+revision=d412d198720aa56f6cfed2dfad262e8fb1322fb7
+tree=df8d4c292c9d256a445480eb878e507df3de1dc4
+repository_identity=urn:codenoesis:pilot:rustdesk:r10-issue-152
+external_source_vendored=false
+source_clean_before_and_after=true
+
+command=target/debug/noesis scan --repository <rustdesk> --repository-id urn:codenoesis:pilot:rustdesk:r10-issue-152 --revision d412d198720aa56f6cfed2dfad262e8fb1322fb7 --profile standard-local-s4 --acquisition-profile local-git-sha1-packed-v1 --repository-boundary-profile local-gitlinks-v1 --workspace-profile cargo-root-package-v1 --manifest-profile cargo-manifest-facts-v1 --rust-semantic-profile rust-cfg-declaration-alternatives-v1 --store <fresh-store> --format json
+
+run=1
+exit=0
+duration_seconds=28
+stdout_bytes=11797338
+stdout_sha256=90d2577cf909e634d830f482211ffaec80ce9a441038d5d2c45c4590c83f8bf0
+stderr_bytes=0
+stderr_sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+store_exists=true
+
+run=2
+exit=0
+duration_seconds=27
+stdout_bytes=11797338
+stdout_sha256=24ab19f8dc45106f7256c9f0c410ee08563fce6d4abe037b31128beb90c00332
+stderr_bytes=0
+stderr_sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+store_exists=true
+
+whole_stdout_byte_identical=false
+permitted_difference=envelope.created_at and envelope.correlation_id only
+semantic_byte_identical=true
+semantic_sha256=cee0d125c079e7ecf93be71b4136b9eee809be9ced34f703f092648482241a18
+semantic_hash_1=f2fa710157d7363c9f5dfbb87fffb4bf4f397a46f24c6cfb43032c519eb8c5f2
+semantic_hash_2=f2fa710157d7363c9f5dfbb87fffb4bf4f397a46f24c6cfb43032c519eb8c5f2
+projection_without_envelope_byte_identical=true
+projection_without_envelope_sha256=137144731f2c12409c1d8caf256460d03b910aeee3c5847a2c27bb6a556f7a30
+
+graph_entities=2035
+graph_relationships=2114
+graph_evidence=2765
+graph_claims=4149
+graph_diagnostics=1058
+graph_coverage_gaps=0
+logical_method_id=urn:codenoesis:entity:blake3:2c5b92d2943a2349a7b4be1821612763deb12e380ef5222796510d4a15ab9c75
+logical_method_state=alternatives
+logical_method_active_world_selected=false
+alternative_1_id=urn:codenoesis:entity:blake3:5592122d46154143a8babed968d4582d1cecceffe1aa44d71bbe74c9b21a3cc2
+alternative_1_relationship=urn:codenoesis:relationship:blake3:a755324e5f7f316ca71454a3673f60c282041c189ee3f979626fca5bc60baa1f
+alternative_1_signature=fn try_start_clipboard(_p: Option<()>) -> Option<UnboundedReceiver<()>>
+alternative_1_evidence=src/client.rs:f711c227c72079eb7ba40a9f4096adbd305a47ea:38703:39777
+alternative_2_id=urn:codenoesis:entity:blake3:822ebf5d1e1ec6fd18bcca288644933dbf4f83668ae680037311978016252322
+alternative_2_relationship=urn:codenoesis:relationship:blake3:e7b334fff380c707bfa7ccdf6684241230c2405cc99d76bde0a5225283541ed6
+alternative_2_signature=fn try_start_clipboard(_client_clip_ctx: Option<ClientClipboardContext>) -> Option<UnboundedReceiver<()>>
+alternative_2_evidence=src/client.rs:f711c227c72079eb7ba40a9f4096adbd305a47ea:36529:38663
+linked_alternative_count=2
+linked_relationship_count=2
+
+command=target/debug/noesis docs --store <store-1> --repository-id urn:codenoesis:pilot:rustdesk:r10-issue-152 --output <documents> --format json
+exit=0
+duration_seconds=7
+stdout_bytes=2236508
+stdout_sha256=80f11c0f4e7def799cd948fff02b40a3b917d17007bde1a77987b30076b857a7
+stderr_bytes=0
+
+command=target/debug/noesis export --store <store-1> --repository-id urn:codenoesis:pilot:rustdesk:r10-issue-152 --output <portable> --portable-profile rust-cfg-declaration-alternatives-v1 --format json
+exit=0
+duration_seconds=6
+stdout_bytes=8560520
+stdout_sha256=6f1a46e10ad4b601a817fadad90dd7ca23522614eea009ef2beb8a5cd71f4716
+portable_graph_bytes=8560520
+portable_graph_sha256=6f1a46e10ad4b601a817fadad90dd7ca23522614eea009ef2beb8a5cd71f4716
+stderr_bytes=0
+
+command=target/debug/noesis explore --input <portable>/portable-graph.json --output <explorer> --explorer-profile rust-cfg-declaration-alternatives-v1 --format json
+exit=0
+duration_seconds=1
+stdout_bytes=1097
+stdout_sha256=966dae474a55813ac9521f40e91657e625a564f04851c8cd75c1c99ba06b73b4
+stderr_bytes=0
+explorer_schema=codenoesis.local-explorer/v3
+viewer_sha256=d0b633b29e6494d6494a35b5553d72c3dd04a747eeef219ca33a9f5fe2a1f4fa
+viewer_matches_immutable_k1_bytes=true
+
+nested_repository_traversal=false
+target_build_script_process_network_model_browser_execution=false
+source_mutation=false
+
+diagnostic_attempt=an initial invocation omitted local-git-sha1-packed-v1 and failed before store with ErrorV4 acquisition.unsupported_repository_shape for packed_object_database; it is not acceptance evidence
+invalidated_wrapper=one fresh public-chain wrapper stopped after a successful docs command because it assigned the reserved zsh variable status; a new output root was used
+reporting_correction=the successful public-chain wrapper looked for manifest.json after all product commands succeeded; read-only inspection found the canonical explorer-manifest.json and retained its schema
+retry_policy=only the two fresh scans and the complete Green docs/export/explore chain above are acceptance evidence; no retry converts a product failure into accepted evidence
