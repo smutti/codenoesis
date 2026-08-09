@@ -1,0 +1,16 @@
+{
+  "schema_version": "codenoesis.repository-boundary-input/v1",
+  "root": {
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1",
+    "commit_oid": "1c8921919b50f565db49acdbf344cc7e1e864dd1"
+  },
+  "nested_repositories": [
+    {
+      "boundary_path": "external/nested-model",
+      "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1-nested-model",
+      "repository_root": "generated/nested-model",
+      "revision": "6ecf94267842da776e35406a9ebcb85e058a3181",
+      "acquisition_profile": "verified-loose-sha1-v1"
+    }
+  ]
+}

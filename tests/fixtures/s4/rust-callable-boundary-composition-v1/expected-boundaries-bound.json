@@ -1,0 +1,89 @@
+{
+  "boundaries": [
+    {
+      "boundary_id": "urn:codenoesis:repository-boundary:sha256:7f8f79973410e908962009f651f418416b57a4921c6b27e539dbed2696c45fd1",
+      "coverage_gap_ids": [
+        "urn:codenoesis:boundary-gap:sha256:bda85f06a4c036f9ec21442354daf8fa577a39086a17b2cc06727a846a58ae6e"
+      ],
+      "declaration_id": "urn:codenoesis:gitmodules-declaration:sha256:93dfbd7f8ed185803bbddd02bdf3f6523c31c0f827f76e4a20977c586ca6e7d0",
+      "evidence_ids": [
+        "urn:codenoesis:boundary-evidence:sha256:b56a73f0140dcff3e8bd36d676201f018ff2cdb4c1b5fb2687d78a0e0927ede3",
+        "urn:codenoesis:boundary-evidence:sha256:3a173715dcbd634ed221d5606677cc2b4a044833c25adc3e115f33328bc22460"
+      ],
+      "gitlink_oid": "6ecf94267842da776e35406a9ebcb85e058a3181",
+      "nested_repository": {
+        "commit_oid": "6ecf94267842da776e35406a9ebcb85e058a3181",
+        "identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1-nested-model",
+        "object_format": "sha1",
+        "tree_oid": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+        "vcs": "git"
+      },
+      "path": "external/nested-model",
+      "state": "explicitly_bound"
+    }
+  ],
+  "coverage_gaps": [
+    {
+      "code": "boundary.nested_repository_not_analyzed",
+      "evidence_ids": [
+        "urn:codenoesis:boundary-evidence:sha256:b56a73f0140dcff3e8bd36d676201f018ff2cdb4c1b5fb2687d78a0e0927ede3"
+      ],
+      "gap_id": "urn:codenoesis:boundary-gap:sha256:bda85f06a4c036f9ec21442354daf8fa577a39086a17b2cc06727a846a58ae6e",
+      "path": "external/nested-model",
+      "subject_id": "urn:codenoesis:repository-boundary:sha256:7f8f79973410e908962009f651f418416b57a4921c6b27e539dbed2696c45fd1"
+    }
+  ],
+  "declarations": [
+    {
+      "boundary_id": "urn:codenoesis:repository-boundary:sha256:7f8f79973410e908962009f651f418416b57a4921c6b27e539dbed2696c45fd1",
+      "declaration_id": "urn:codenoesis:gitmodules-declaration:sha256:93dfbd7f8ed185803bbddd02bdf3f6523c31c0f827f76e4a20977c586ca6e7d0",
+      "evidence_id": "urn:codenoesis:boundary-evidence:sha256:3a173715dcbd634ed221d5606677cc2b4a044833c25adc3e115f33328bc22460",
+      "name_sha256": "ca74540c1020f0302f0f371bc58ba168639ed864643b58da41e3bdf685972026",
+      "path": "external/nested-model",
+      "unsupported_keys": [],
+      "url_kind": "https",
+      "url_sha256": "ee59322d4d925cf16b2c1e2299b74e50597d9446dffbd2b5d1d0f69c34e01212"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "urn:codenoesis:boundary-evidence:sha256:b56a73f0140dcff3e8bd36d676201f018ff2cdb4c1b5fb2687d78a0e0927ede3",
+      "kind": "git_tree_entry",
+      "mode": "160000",
+      "object_oid": "6ecf94267842da776e35406a9ebcb85e058a3181",
+      "path": "external/nested-model",
+      "repository": {
+        "commit_oid": "1c8921919b50f565db49acdbf344cc7e1e864dd1",
+        "identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1"
+      },
+      "tree_oid": "3ee7026beba4578478d73788368adc793e975ca0"
+    },
+    {
+      "blob_oid": "204d65a4ed6a58dd265349f8a1579a4522dc4f7d",
+      "evidence_id": "urn:codenoesis:boundary-evidence:sha256:3a173715dcbd634ed221d5606677cc2b4a044833c25adc3e115f33328bc22460",
+      "kind": "gitmodules_declaration",
+      "path": ".gitmodules",
+      "repository": {
+        "commit_oid": "1c8921919b50f565db49acdbf344cc7e1e864dd1",
+        "identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1"
+      },
+      "span": {"end": 116, "start": 0, "unit": "byte"}
+    }
+  ],
+  "profile": "local-gitlinks-v1",
+  "root_repository": {
+    "commit_oid": "1c8921919b50f565db49acdbf344cc7e1e864dd1",
+    "identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1",
+    "object_format": "sha1",
+    "tree_oid": "289bc8a5abcc2f45fa7e2aa9d787a97305975b71",
+    "vcs": "git"
+  },
+  "schema_version": "codenoesis.repository-boundaries/v1",
+  "summary": {
+    "bound_count": 1,
+    "boundary_count": 1,
+    "coverage_gap_count": 1,
+    "declaration_count": 1,
+    "unbound_count": 0
+  }
+}
