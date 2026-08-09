@@ -1,13 +1,22 @@
 use std::collections::BTreeMap;
 use std::fmt::Write as _;
 use std::fs;
+#[cfg(windows)]
+use std::path::{Component, Prefix};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
+#[cfg(windows)]
+use std::sync::atomic::{AtomicU64, Ordering};
+#[cfg(windows)]
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde_json::Value;
 use sha2::{Digest as _, Sha256};
 
 use super::{git_command, read_repository_text, stdout_line, successful_output, unique_temp_root};
+
+#[cfg(windows)]
+static R10_TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 pub const REPOSITORY_ID: &str = "urn:codenoesis:fixture:s4-rust-cfg-declaration-alternatives-v1";
 pub const FIXTURE_TREE_OID: &str = "6aa31d889f4c87b2b7dfbff3fef3b32ee7fa0363";
@@ -33,7 +42,7 @@ impl MaterializedCfgAlternativesRepository {
         .expect("parse R10 fixture manifest");
         assert_eq!(manifest["repository_identity"], REPOSITORY_ID);
 
-        let root = fs::canonicalize(unique_temp_root()).expect("canonicalize R10 fixture root");
+        let root = r10_temp_root();
         let worktree = root.join("repository");
         let store = root.join("store");
         let documents = root.join("documents");
@@ -226,6 +235,84 @@ impl Drop for MaterializedCfgAlternativesRepository {
 pub fn fixture_root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("../../tests/fixtures/s4/rust-cfg-declaration-alternatives-v1")
+}
+
+fn r10_temp_root() -> PathBuf {
+    #[cfg(not(windows))]
+    {
+        fs::canonicalize(unique_temp_root()).expect("canonicalize R10 fixture root")
+    }
+    #[cfg(windows)]
+    {
+        validated_windows_temp_root()
+    }
+}
+
+#[cfg(windows)]
+fn validated_windows_temp_root() -> PathBuf {
+    let workspace = std::env::current_dir().expect("resolve R10 E2E workspace");
+    let mut candidates = vec![("workspace", workspace.join("target"))];
+    if let Some(volume_root) = workspace.ancestors().last() {
+        if candidates
+            .iter()
+            .all(|(_, candidate)| candidate != volume_root)
+        {
+            candidates.push(("windows-volume", volume_root.to_path_buf()));
+        }
+    }
+    let sequence = R10_TEMP_SEQUENCE.fetch_add(1, Ordering::Relaxed);
+    let timestamp = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .expect("R10 E2E clock must follow the Unix epoch")
+        .as_nanos();
+    let candidate_count = candidates.len();
+    for (authority, candidate) in candidates {
+        if windows_verbatim_path(&candidate) {
+            continue;
+        }
+        let root = candidate.join(format!(
+            "codenoesis-r10-e2e-{authority}-{}-{timestamp}-{sequence}",
+            std::process::id()
+        ));
+        if fs::create_dir(&root).is_err() {
+            continue;
+        }
+        let probe_authority = root.join("authority-probe");
+        if fs::create_dir(&probe_authority).is_err() {
+            remove_rejected_windows_root(&root);
+            continue;
+        }
+        let probe_output = root.join("output-probe");
+        let validated =
+            noesis::portable_explorer::validate_export_output_root(&probe_authority, &probe_output)
+                .is_ok();
+        let probe_removed = fs::remove_dir(&probe_authority).is_ok();
+        if validated && probe_removed {
+            return root;
+        }
+        remove_rejected_windows_root(&root);
+    }
+    panic!("no validated R10 E2E authority across {candidate_count} bounded candidates");
+}
+
+#[cfg(windows)]
+fn windows_verbatim_path(path: &Path) -> bool {
+    matches!(
+        path.components().next(),
+        Some(Component::Prefix(prefix))
+            if matches!(
+                prefix.kind(),
+                Prefix::Verbatim(_)
+                    | Prefix::VerbatimUNC(..)
+                    | Prefix::VerbatimDisk(_)
+                    | Prefix::DeviceNS(_)
+            )
+    )
+}
+
+#[cfg(windows)]
+fn remove_rejected_windows_root(root: &Path) {
+    fs::remove_dir_all(root).expect("remove rejected R10 E2E authority candidate");
 }
 
 fn assert_reviewed_bytes(file: &Value, bytes: &[u8], path: &str) {
