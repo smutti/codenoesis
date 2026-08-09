@@ -1,0 +1,38 @@
+issue=https://github.com/smutti/codenoesis/issues/151
+requirement=FR-EXT-010
+slice=S4
+risk=high
+base_sha=bd38f831184661dc30958760d886131a50bff26b
+branch=codex/151-cfg-owner-alternatives
+date=2026-08-09
+os=Darwin 25.5.0 arm64
+host=aarch64-apple-darwin
+rustc=rustc 1.97.1 (8bab26f4f 2026-07-14)
+cargo=cargo 1.97.1 (c980f4866 2026-06-30)
+command=cargo test -p codenoesis-lang-rust --test s4_rust_semantic_depth gt_fr_ext_010_cfg_member_alternatives_merge_attribute_evidence -- --exact
+expected=second direct-cfg R5 member with identical non-attribute properties fails with RustSemanticError::IdentityConflict before member merge implementation
+exit=101
+
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling codenoesis-lang-rust v0.1.0 (<workspace>/crates/codenoesis-lang-rust)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.16s
+     Running tests/s4_rust_semantic_depth.rs (target/debug/deps/s4_rust_semantic_depth-e62b9befc65a83df)
+
+running 1 test
+test gt_fr_ext_010_cfg_member_alternatives_merge_attribute_evidence ... FAILED
+
+failures:
+
+---- gt_fr_ext_010_cfg_member_alternatives_merge_attribute_evidence stdout ----
+
+thread 'gt_fr_ext_010_cfg_member_alternatives_merge_attribute_evidence' (4039159) panicked at crates/codenoesis-lang-rust/tests/s4_rust_semantic_depth.rs:259:10:
+extract cfg-conditional member alternatives: IdentityConflict { owner_id: "urn:codenoesis:entity:blake3:d82116797c9c2bc9f439da47d88f7453b814e7b111ce4c0e2f74b912478b110b", member_kind: "rust.constant", normalized_member: "BIN_DATA" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    gt_fr_ext_010_cfg_member_alternatives_merge_attribute_evidence
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p codenoesis-lang-rust --test s4_rust_semantic_depth`

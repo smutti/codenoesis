@@ -1,0 +1,190 @@
+{
+  "schema_version": "codenoesis.r9-cfg-owner-alternatives-implementation-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/151",
+  "requirement_ids": [
+    "FR-EXT-010",
+    "FR-EXT-011",
+    "FR-EXT-012",
+    "NFR-DET-001",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "requirement_status": "FR-EXT-010 Approved and Implemented, not Verified; this high-risk S4 package corrects conformance without changing the requirement or public contract",
+  "slice": "S4",
+  "risk": "high",
+  "risk_owner": "@smutti",
+  "observed_at_utc": "2026-08-09T09:58:04Z",
+  "base_commit_sha": "bd38f831184661dc30958760d886131a50bff26b",
+  "final_review_head": "recorded by the pull request after publication; a commit cannot contain its own SHA",
+  "branch": "codex/151-cfg-owner-alternatives",
+  "authorization": {
+    "ready_issue": "https://github.com/smutti/codenoesis/issues/151",
+    "original_package": "https://github.com/smutti/codenoesis/issues/151#issuecomment-5230804235",
+    "homogeneous_member_expansion": "https://github.com/smutti/codenoesis/issues/151#issuecomment-5230850241",
+    "corrected_rustdesk_oracle": "https://github.com/smutti/codenoesis/issues/151#issuecomment-5230878220",
+    "maintainer_supervised_interactive_lane": true,
+    "correction_budget": 5,
+    "manual_independent_review_and_merge_required": true
+  },
+  "allowed_and_actual_paths": [
+    "crates/codenoesis-lang-rust/src/semantic_depth.rs",
+    "crates/codenoesis-lang-rust/tests/s4_rust_semantic_depth.rs",
+    "crates/noesis/tests/e2e_fr_ext_010_rust_semantic_depth.rs",
+    "crates/noesis/tests/evidence/s4/r9-cfg-owner-alternatives/**"
+  ],
+  "test_driven_evidence": {
+    "owner_red": {
+      "command": "cargo test -p codenoesis-lang-rust --test s4_rust_semantic_depth gt_fr_ext_010_cfg_owner_alternatives_preserve_uncertainty -- --exact",
+      "expected_and_actual_failure": "the second direct-cfg ConditionalOwner reaches RustSemanticError::IdentityConflict before production correction",
+      "exit_code": 101,
+      "log": "crates/noesis/tests/evidence/s4/r9-cfg-owner-alternatives/red.log",
+      "byte_length": 2012,
+      "sha256": "fea9c6cae1a06abbb62ef6d7c2d2ccae59f69ca82cc15adee4b3d76547e45896"
+    },
+    "member_red": {
+      "command": "cargo test -p codenoesis-lang-rust --test s4_rust_semantic_depth gt_fr_ext_010_cfg_member_alternatives_merge_attribute_evidence -- --exact",
+      "expected_and_actual_failure": "the second same-file direct-cfg BIN_DATA reaches RustSemanticError::IdentityConflict before homogeneous member merge implementation",
+      "exit_code": 101,
+      "log": "crates/noesis/tests/evidence/s4/r9-cfg-owner-alternatives/member-red.log",
+      "byte_length": 2070,
+      "sha256": "715da47bd9fa14e24e5631328b6e43fab6e1526f0e86473d909368addb56ecb2"
+    },
+    "focused_green": {
+      "commands": [
+        "cargo test -p codenoesis-lang-rust --lib --locked",
+        "cargo test -p codenoesis-lang-rust --test s4_rust_semantic_depth --locked",
+        "cargo test -p noesis --test e2e_fr_ext_010_rust_semantic_depth --locked"
+      ],
+      "exit_code": 0,
+      "tests_passed": 32,
+      "log": "crates/noesis/tests/evidence/s4/r9-cfg-owner-alternatives/focused-green.log",
+      "byte_length": 3743,
+      "sha256": "870a8b1427a5ee68c112362efd148273d6ee8e4a463df59872b59900a43d57b8",
+      "normalization": "absolute workspace prefixes replaced with <workspace>"
+    },
+    "complete_repository_gate": {
+      "preliminary_status": "passed after two bounded lint corrections",
+      "observed_at_utc": "2026-08-09T10:08:21Z",
+      "commands": [
+        "actionlint -no-color",
+        "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+        "cargo fmt --all --check",
+        "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+        "cargo test --workspace --all-targets --all-features --locked",
+        "cargo test --workspace --doc --all-features --locked",
+        "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+        "python3 scripts/validate_benchmark_assets.py",
+        "cargo bench --workspace --all-features --no-run --locked"
+      ],
+      "exit_code": 0,
+      "summary": "crates/noesis/tests/evidence/s4/r9-cfg-owner-alternatives/complete-gate-summary.log",
+      "raw_local_log_byte_length": 46880,
+      "raw_local_log_sha256": "bca2212b0d721de0d6d8db83a1de2db788e418db9eadce33ecf4b015b8b8df1e",
+      "final_review_tree": "rerun after every committed evidence file is present and record on the immutable pull-request head"
+    }
+  },
+  "closed_behavior": {
+    "owners": "same-file direct-cfg struct, enum, and trait occurrences retain one existing logical owner while every occurrence is traversed",
+    "members": "same-file direct-cfg R5 members with identical non-attribute properties retain one existing logical member and deterministically merge only bounded attributes/evidence",
+    "covered_member_kinds": [
+      "rust.field",
+      "rust.enum_variant",
+      "rust.constant",
+      "rust.static",
+      "rust.associated_type",
+      "rust.method"
+    ],
+    "maximum_combined_attributes": 128,
+    "maximum_case": "128 succeeds",
+    "maximum_plus_one_case": "129 returns typed OuterAttributesPerDeclaration limit failure",
+    "determinism_permutations_per_fixture": 50,
+    "parallel_workers_per_fixture": 8,
+    "logical_identity_changed": false,
+    "cfg_predicates_evaluated": false,
+    "initializers_or_bodies_evaluated": false
+  },
+  "negative_boundaries": [
+    "unconditional or mixed owner duplicates",
+    "cfg-attr-only alternatives",
+    "module alternatives",
+    "visibility mismatch",
+    "cross-file or cross-chunk alternatives",
+    "overlapping spans",
+    "different member type, signature, owner, trait context, form, mutability, initializer/discriminant/bounds/default presence",
+    "heterogeneous rust.method try_start_clipboard alternatives"
+  ],
+  "project_owned_oracles": {
+    "locations": [
+      "crates/codenoesis-lang-rust/tests/s4_rust_semantic_depth.rs",
+      "crates/noesis/tests/e2e_fr_ext_010_rust_semantic_depth.rs"
+    ],
+    "source_bytes": "the exact inline Rust byte/string constants are version-controlled in the two allowed test files",
+    "expected_public_result": "one unchanged ConditionalOwner, one conditional context field, one unchanged BIN_DATA member with two cfg attribute evidence records, four unresolved cfg diagnostics, and a published V8 store",
+    "expected_heterogeneous_result": "ErrorV12 extraction.rust_semantic_identity_conflict for rust.method try_start_clipboard, empty stdout, and no store",
+    "external_source_vendored": false
+  },
+  "rustdesk_pilot": {
+    "log": "crates/noesis/tests/evidence/s4/r9-cfg-owner-alternatives/rustdesk-pilot.log",
+    "byte_length": 3041,
+    "sha256": "eada3996aa79cd8de81c4bf090bbfc6bf1a9eb8a0cc2b4af86fbd58a0885549a",
+    "repository": "https://github.com/rustdesk/rustdesk",
+    "revision": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+    "tree": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+    "attempts": 2,
+    "exit_code": 11,
+    "stdout_bytes": 0,
+    "stderr_bytes": 366,
+    "stderr_sha256": "0b90dbc10745cac880cb3a68c38cde204cdf3938ab80b6c8cd3bff0f7c241bf8",
+    "stderr_byte_identical": true,
+    "store_or_visible_head": false,
+    "source_status_bytes_before_and_after": 0,
+    "corrected_boundaries_passed": [
+      "rust.struct ClientClipboardContext",
+      "rust.constant BIN_DATA"
+    ],
+    "typed_terminal_boundary": "rust.method try_start_clipboard",
+    "full_r6_complete": false,
+    "k1_complete": false
+  },
+  "unchanged": {
+    "schemas": true,
+    "ontology": true,
+    "identity_and_hash_domains": true,
+    "error_versions_and_codes": true,
+    "historical_fixtures_and_goldens": true,
+    "selectors_and_composition": true,
+    "dependencies_and_lockfile": true,
+    "workflows_control_plane_permissions_and_release": true,
+    "network_model_target_execution_authority": true
+  },
+  "environment": {
+    "os": "macOS 26.5.2",
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "host": "aarch64-apple-darwin",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "toolchain": "1.97.1-aarch64-apple-darwin pinned by rust-toolchain.toml",
+    "features": "focused default targets followed by the complete all-target/all-feature repository gate; deterministic local path with no model provider"
+  },
+  "agent": {
+    "product": "OpenAI Codex",
+    "model_identity": "not exposed by the runtime",
+    "run_identifier": "not exposed by the runtime",
+    "duration": "individual retained command timings recorded; aggregate not exposed",
+    "cost": "not exposed by the runtime",
+    "policy": "AGENTS.md sha256:07c4385775f37be9e5d2ba09f7e9edfe3936f800a2188e4155f166eef3299c71"
+  },
+  "bounded_corrections": [
+    "removed unnecessary raw-string hashes from the all-member-kinds project-owned test literal after the first preliminary clippy run",
+    "removed unnecessary raw-byte-string hashes from the heterogeneous-method E2E literal after the second preliminary clippy run"
+  ],
+  "rollback": "revert the complete issue #151 package; no migration, historical rewrite, or store repair",
+  "known_limitations": [
+    "Full RustDesk R6 and K1 remain incomplete at the heterogeneous try_start_clipboard boundary.",
+    "Heterogeneous cfg declaration alternatives require a separately authorized additive-schema package.",
+    "The retained real-repository pilot is local macOS arm64 evidence; cross-platform behavior is delegated to the final GitHub Actions review head.",
+    "FR-EXT-010 remains not Verified until protected merge and independent review."
+  ],
+  "stop_conditions_triggered": []
+}

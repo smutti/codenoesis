@@ -1,0 +1,43 @@
+issue=https://github.com/smutti/codenoesis/issues/151
+requirement=FR-EXT-010
+slice=S4
+risk=high
+gate=complete repository bootstrap gate
+observed_at_utc=2026-08-09T10:08:21Z
+tested_tree=working tree rooted at base bd38f831184661dc30958760d886131a50bff26b with the complete issue #151 implementation and evidence except this summary
+
+command=actionlint -no-color
+exit=0
+command=python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json
+exit=0
+policy_status=valid
+approved_requirement_count=39
+hard_protected_pattern_count=13
+command=cargo fmt --all --check
+exit=0
+command=cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+exit=0
+command=cargo test --workspace --all-targets --all-features --locked
+exit=0
+command=cargo test --workspace --doc --all-features --locked
+exit=0
+rust_tests_passed_in_combined_workspace_and_doc_output=381
+command=python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+exit=0
+python_tests_passed=281
+command=python3 scripts/validate_benchmark_assets.py
+exit=0
+benchmark_assets=status=scaffold,suites=0
+command=cargo bench --workspace --all-features --no-run --locked
+exit=0
+
+raw_local_log_bytes=46880
+raw_local_log_sha256=bca2212b0d721de0d6d8db83a1de2db788e418db9eadce33ecf4b015b8b8df1e
+raw_local_log_retention=ephemeral local log; digest, commands, exits, and result counts retained by this committed summary
+preliminary_gate_status=passed
+final_review_tree_gate=rerun the same complete gate after this summary is present and record the immutable review head and result in the pull request without modifying that head
+
+discarded_gate_attempt=first preliminary attempt stopped at clippy needless_raw_string_hashes in the project-owned all-member-kinds test literal
+discarded_gate_attempt=second preliminary attempt stopped at clippy needless_raw_string_hashes in the project-owned heterogeneous-method E2E literal
+correction_scope=only raw-string delimiters changed; represented Rust source bytes and product behavior remained identical
+retry_policy=failed preliminary lint attempts are diagnostic only and are not acceptance evidence

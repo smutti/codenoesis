@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::{BTreeMap, BTreeSet, btree_map::Entry};
 
 use codenoesis_domain::knowledge::{ClaimSubjectKind, EntityKind, RelationshipKind};
 use codenoesis_domain::s4::{
@@ -51,6 +51,7 @@ struct OwnerRecord {
     span: ByteRange,
     visibility: RustSemanticVisibility,
     module_owner_id: String,
+    direct_cfg: bool,
     attributes: Vec<AttributeDraft>,
 }
 
@@ -82,11 +83,19 @@ impl OwnerCatalog {
 
     fn insert(&mut self, record: OwnerRecord) -> Result<(), RustSemanticError> {
         if let Some(existing) = self.records.get(&record.key) {
-            return Err(RustSemanticError::IdentityConflict {
-                owner_id: existing.module_owner_id.clone(),
-                member_kind: record_kind(record.key.kind).to_owned(),
-                normalized_member: record.key.name.clone(),
-            });
+            if !closed_cfg_owner_alternative(existing, &record) {
+                return Err(RustSemanticError::IdentityConflict {
+                    owner_id: existing.module_owner_id.clone(),
+                    member_kind: record_kind(record.key.kind).to_owned(),
+                    normalized_member: record.key.name.clone(),
+                });
+            }
+            let replace =
+                (record.span.start, record.span.end) < (existing.span.start, existing.span.end);
+            if replace {
+                self.records.insert(record.key.clone(), record);
+            }
+            return Ok(());
         }
         if self
             .by_id
@@ -158,12 +167,26 @@ impl OwnerCatalog {
     }
 }
 
+fn closed_cfg_owner_alternative(existing: &OwnerRecord, candidate: &OwnerRecord) -> bool {
+    matches!(
+        existing.key.kind,
+        EntityKind::RustStruct | EntityKind::RustEnum | EntityKind::RustTrait
+    ) && existing.direct_cfg
+        && candidate.direct_cfg
+        && existing.id == candidate.id
+        && existing.source_file_id == candidate.source_file_id
+        && existing.visibility == candidate.visibility
+        && existing.module_owner_id == candidate.module_owner_id
+        && (existing.span.end <= candidate.span.start || candidate.span.end <= existing.span.start)
+}
+
 struct ChunkBuilder<'a> {
     repository_identity: &'a str,
     commit_oid: &'a str,
     context: &'a SourceContext<'a>,
     legacy_entities: BTreeMap<String, WorkspaceEntity>,
     entities: BTreeMap<String, RustSemanticEntity>,
+    entity_evidence: BTreeMap<String, String>,
     relationships: BTreeMap<String, WorkspaceRelationship>,
     claims: BTreeMap<String, codenoesis_domain::s4::WorkspaceClaim>,
     evidence: BTreeMap<String, WorkspaceEvidence>,
@@ -183,6 +206,7 @@ impl<'a> ChunkBuilder<'a> {
             context,
             legacy_entities: BTreeMap::new(),
             entities: BTreeMap::new(),
+            entity_evidence: BTreeMap::new(),
             relationships: BTreeMap::new(),
             claims: BTreeMap::new(),
             evidence: BTreeMap::new(),
@@ -311,13 +335,49 @@ impl<'a> ChunkBuilder<'a> {
         entity: RustSemanticEntity,
         evidence_id: String,
     ) -> Result<(), RustSemanticError> {
-        if self.entities.contains_key(&entity.id) {
+        if let Some(existing) = self.entities.get(&entity.id).cloned() {
             let normalized_member = entity.identity_member();
-            return Err(RustSemanticError::IdentityConflict {
-                owner_id: entity.owner_id.clone(),
-                member_kind: entity.kind.as_str().to_owned(),
-                normalized_member,
+            let existing_evidence = self
+                .entity_evidence
+                .get(&entity.id)
+                .and_then(|identifier| self.evidence.get(identifier))
+                .ok_or(RustSemanticError::ContractInvalid)?;
+            let candidate_evidence = self
+                .evidence
+                .get(&evidence_id)
+                .ok_or(RustSemanticError::ContractInvalid)?;
+            if !closed_cfg_member_alternative(
+                &existing,
+                &entity,
+                existing_evidence,
+                candidate_evidence,
+            ) {
+                return Err(RustSemanticError::IdentityConflict {
+                    owner_id: entity.owner_id.clone(),
+                    member_kind: entity.kind.as_str().to_owned(),
+                    normalized_member,
+                });
+            }
+            let mut attributes = existing.attributes().to_vec();
+            attributes.extend_from_slice(entity.attributes());
+            attributes.sort_by(|left, right| {
+                (left.kind, &left.token_text, &left.evidence_id).cmp(&(
+                    right.kind,
+                    &right.token_text,
+                    &right.evidence_id,
+                ))
             });
+            attributes.dedup();
+            enforce_count(
+                RustSemanticLimit::OuterAttributesPerDeclaration,
+                attributes.len(),
+            )?;
+            let existing = self
+                .entities
+                .get_mut(&entity.id)
+                .ok_or(RustSemanticError::ContractInvalid)?;
+            *member_attributes_mut(existing) = attributes;
+            return Ok(());
         }
         self.add_claim(
             ClaimSubjectKind::Entity,
@@ -328,8 +388,15 @@ impl<'a> ChunkBuilder<'a> {
             RelationshipKind::Defines,
             entity.owner_id.clone(),
             entity.id.clone(),
-            evidence_id,
+            evidence_id.clone(),
         )?;
+        if self
+            .entity_evidence
+            .insert(entity.id.clone(), evidence_id)
+            .is_some()
+        {
+            return Err(RustSemanticError::ContractInvalid);
+        }
         self.entities.insert(entity.id.clone(), entity);
         Ok(())
     }
@@ -380,6 +447,46 @@ impl<'a> ChunkBuilder<'a> {
             evidence: self.evidence.into_values().collect(),
             diagnostics: self.diagnostics.into_values().collect(),
             coverage: self.coverage.into_values().collect(),
+        }
+    }
+}
+
+fn closed_cfg_member_alternative(
+    existing: &RustSemanticEntity,
+    candidate: &RustSemanticEntity,
+    existing_evidence: &WorkspaceEvidence,
+    candidate_evidence: &WorkspaceEvidence,
+) -> bool {
+    existing.compilation_presence == CompilationPresence::ConditionalUnknown
+        && candidate.compilation_presence == CompilationPresence::ConditionalUnknown
+        && existing
+            .attributes()
+            .iter()
+            .any(|attribute| attribute.kind == RustSemanticAttributeKind::Cfg)
+        && candidate
+            .attributes()
+            .iter()
+            .any(|attribute| attribute.kind == RustSemanticAttributeKind::Cfg)
+        && member_without_attributes(existing) == member_without_attributes(candidate)
+        && existing_evidence.path == candidate_evidence.path
+        && existing_evidence.blob_oid == candidate_evidence.blob_oid
+        && (existing_evidence.end_byte <= candidate_evidence.start_byte
+            || candidate_evidence.end_byte <= existing_evidence.start_byte)
+}
+
+fn member_without_attributes(entity: &RustSemanticEntity) -> RustSemanticEntity {
+    let mut entity = entity.clone();
+    member_attributes_mut(&mut entity).clear();
+    entity
+}
+
+fn member_attributes_mut(entity: &mut RustSemanticEntity) -> &mut Vec<RustSemanticAttribute> {
+    match &mut entity.properties {
+        codenoesis_domain::s4_r5::RustSemanticProperties::Member(properties) => {
+            &mut properties.attributes
+        }
+        codenoesis_domain::s4_r5::RustSemanticProperties::Method(properties) => {
+            &mut properties.attributes
         }
     }
 }
@@ -675,6 +782,9 @@ fn collect_owners(
 ) -> Result<(), RustSemanticError> {
     for (node, attributes) in attributed_children(scope, source, &context.path)? {
         let presence = compilation_presence(inherited_presence, &attributes);
+        let direct_cfg = attributes
+            .iter()
+            .any(|attribute| attribute.kind == RustSemanticAttributeKind::Cfg);
         match node.kind() {
             "mod_item" => {
                 let name = normalized_node_name(node, source, &context.path)?;
@@ -696,6 +806,7 @@ fn collect_owners(
                     span: node_range(node),
                     visibility: visibility(node, source),
                     module_owner_id: module_owner_id.to_owned(),
+                    direct_cfg,
                     attributes,
                 })?;
                 if let Some(body) = node.child_by_field_name("body") {
@@ -729,6 +840,7 @@ fn collect_owners(
                     span: node_range(node),
                     visibility: visibility(node, source),
                     module_owner_id: module_owner_id.to_owned(),
+                    direct_cfg,
                     attributes,
                 })?;
             }
@@ -1582,7 +1694,7 @@ fn aggregate_graph(
         extend_unique(&mut legacy_entities, &chunk.legacy_entities, |value| {
             &value.id
         })?;
-        extend_unique(&mut entities, &chunk.entities, |value| &value.id)?;
+        extend_semantic_entities(&mut entities, &chunk.entities)?;
         extend_unique(&mut relationships, &chunk.relationships, |value| &value.id)?;
         extend_unique(&mut claims, &chunk.claims, |value| &value.id)?;
         for value in &chunk.evidence {
@@ -1620,6 +1732,27 @@ fn aggregate_graph(
         coverage: coverage.into_values().collect(),
         index,
     })
+}
+
+fn extend_semantic_entities(
+    target: &mut BTreeMap<String, RustSemanticEntity>,
+    values: &[RustSemanticEntity],
+) -> Result<(), RustSemanticError> {
+    for value in values {
+        match target.entry(value.id.clone()) {
+            Entry::Vacant(entry) => {
+                entry.insert(value.clone());
+            }
+            Entry::Occupied(_) => {
+                return Err(RustSemanticError::IdentityConflict {
+                    owner_id: value.owner_id.clone(),
+                    member_kind: value.kind.as_str().to_owned(),
+                    normalized_member: value.identity_member(),
+                });
+            }
+        }
+    }
+    Ok(())
 }
 
 fn extend_unique<T: Clone>(
@@ -1921,5 +2054,96 @@ fn record_kind(kind: EntityKind) -> &'static str {
         EntityKind::RustEnum => "rust.enum",
         EntityKind::RustTrait => "rust.trait",
         _ => "rust.declaration",
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn sec_fr_ext_010_cross_file_cfg_owner_alternatives_remain_conflicts() {
+        let mut catalog = OwnerCatalog::new();
+        catalog
+            .insert(cfg_owner_record("source-a", 10, 40))
+            .expect("first cfg owner is valid");
+        let error = catalog
+            .insert(cfg_owner_record("source-b", 50, 80))
+            .expect_err("cross-file cfg owner must remain a conflict");
+        assert!(matches!(
+            error,
+            RustSemanticError::IdentityConflict {
+                member_kind,
+                normalized_member,
+                ..
+            } if member_kind == "rust.struct" && normalized_member == "ConditionalOwner"
+        ));
+    }
+
+    #[test]
+    fn sec_fr_ext_010_cross_chunk_cfg_member_alternatives_remain_conflicts() {
+        let entity = RustSemanticEntity::new_member(
+            "urn:codenoesis:test:cross-chunk-cfg-member",
+            RustSemanticEntityKind::Constant,
+            "crate-id".to_owned(),
+            "crate".to_owned(),
+            "BIN_DATA".to_owned(),
+            "BIN_DATA",
+            RustSemanticVisibility::Private,
+            "module-owner-id".to_owned(),
+            None,
+            CompilationPresence::ConditionalUnknown,
+            RustMemberProperties {
+                owner_kind: RustSemanticOwnerKind::Module,
+                form: RustSemanticForm::Constant,
+                declared_name: Some("BIN_DATA".to_owned()),
+                tuple_index: None,
+                declared_type_or_header: Some("&[u8]".to_owned()),
+                mutable: None,
+                initializer_present: Some(true),
+                discriminant_present: None,
+                bounds_present: None,
+                default_present: None,
+                attributes: Vec::new(),
+            },
+        );
+        let mut entities = BTreeMap::new();
+        extend_semantic_entities(&mut entities, std::slice::from_ref(&entity))
+            .expect("first cfg member chunk is valid");
+        let error = extend_semantic_entities(&mut entities, &[entity])
+            .expect_err("cross-chunk cfg member must remain a conflict");
+        assert!(matches!(
+            error,
+            RustSemanticError::IdentityConflict {
+                member_kind,
+                normalized_member,
+                ..
+            } if member_kind == "rust.constant" && normalized_member == "BIN_DATA"
+        ));
+    }
+
+    fn cfg_owner_record(source_file_id: &str, start: usize, end: usize) -> OwnerRecord {
+        OwnerRecord {
+            key: OwnerKey {
+                crate_id: "crate-id".to_owned(),
+                module_path: "crate".to_owned(),
+                kind: EntityKind::RustStruct,
+                name: "ConditionalOwner".to_owned(),
+            },
+            id: "owner-id".to_owned(),
+            source_file_id: source_file_id.to_owned(),
+            span: ByteRange { start, end },
+            visibility: RustSemanticVisibility::Public,
+            module_owner_id: "module-owner-id".to_owned(),
+            direct_cfg: true,
+            attributes: vec![AttributeDraft {
+                kind: RustSemanticAttributeKind::Cfg,
+                token_text: "#[cfg(feature = \"desktop\")]".to_owned(),
+                span: ByteRange {
+                    start: start.saturating_sub(5),
+                    end: start,
+                },
+            }],
+        }
     }
 }

@@ -1,0 +1,50 @@
+{
+  "schema_version": "codenoesis.r9-cfg-owner-alternatives-red-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/151",
+  "requirement_ids": [
+    "FR-EXT-010",
+    "FR-EXT-011",
+    "FR-EXT-012",
+    "NFR-DET-001",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "requirement_status": "FR-EXT-010 Approved and Implemented, not Verified; inherited R6 and K1 compatibility only",
+  "slice": "S4",
+  "risk": "high",
+  "base_commit_sha": "bd38f831184661dc30958760d886131a50bff26b",
+  "observed_at_utc": "2026-08-09T09:29:53Z",
+  "production_source_modified_before_red": false,
+  "command": "cargo test -p codenoesis-lang-rust --test s4_rust_semantic_depth gt_fr_ext_010_cfg_owner_alternatives_preserve_uncertainty -- --exact",
+  "expected_failure": "The second cfg-conditional logical owner fails with RustSemanticError::IdentityConflict before the production correction.",
+  "actual_failure": "IdentityConflict for rust.struct ConditionalOwner under the unchanged module owner.",
+  "exit_code": 101,
+  "wall_seconds": 5.2,
+  "log": {
+    "path": "crates/noesis/tests/evidence/s4/r9-cfg-owner-alternatives/red.log",
+    "byte_length": 2012,
+    "sha256": "fea9c6cae1a06abbb62ef6d7c2d2ccae59f69ca82cc15adee4b3d76547e45896",
+    "normalization": "Absolute workspace prefixes were replaced with <workspace>; all remaining captured stdout/stderr bytes were retained."
+  },
+  "fixture": {
+    "location": "inline project-owned source in crates/codenoesis-lang-rust/tests/s4_rust_semantic_depth.rs",
+    "external_source_vendored": false
+  },
+  "environment": {
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "host": "aarch64-apple-darwin",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "features": "focused test target defaults; no repository target, compiler, build script, network, or model provider executed"
+  },
+  "agent": {
+    "product": "OpenAI Codex",
+    "model_identity": "not exposed by the runtime",
+    "run_identifier": "not exposed by the runtime",
+    "cost": "not exposed by the runtime",
+    "policy": "AGENTS.md sha256:07c4385775f37be9e5d2ba09f7e9edfe3936f800a2188e4155f166eef3299c71"
+  },
+  "human_approval": "Autorizzo issue #151 e il pacchetto completo high-risk R9/S4 cfg-owner-alternatives descritto, inclusi percorsi consentiti, nessuna nuova dipendenza, identità/schema/golden immutabili e cinque correzioni.",
+  "stop_conditions_triggered": []
+}
