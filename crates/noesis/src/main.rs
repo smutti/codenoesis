@@ -4537,10 +4537,10 @@ fn rust_callable_scip_requested(arguments: &[OsString]) -> bool {
     option_requested(arguments, "--rust-callable-profile")
         && compiler_profile
         && (!option_requested(arguments, "--output-capacity-profile") || compiler_binding)
-        && !legacy_boundary_lineage_precedes_compiler(arguments)
+        && !legacy_r13_lineage_precedes_compiler(arguments)
 }
 
-fn legacy_boundary_lineage_precedes_compiler(arguments: &[OsString]) -> bool {
+fn legacy_r13_lineage_precedes_compiler(arguments: &[OsString]) -> bool {
     let boundary = first_option_position(
         arguments,
         &[
@@ -4548,13 +4548,32 @@ fn legacy_boundary_lineage_precedes_compiler(arguments: &[OsString]) -> bool {
             "--repository-boundary-manifest",
         ],
     );
+    let output_capacity = first_option_position(arguments, &["--output-capacity-profile"]);
+    let cfg_alternatives = arguments
+        .get(2..)
+        .unwrap_or_default()
+        .chunks(2)
+        .position(|pair| {
+            pair.first()
+                .is_some_and(|flag| flag == "--rust-semantic-profile")
+                && pair
+                    .get(1)
+                    .and_then(|value| value.to_str())
+                    .is_some_and(|value| {
+                        value == R10_PROFILE
+                            || value.starts_with("rust-cfg-declaration-alternatives")
+                    })
+        });
     let compiler = first_option_position(
         arguments,
         &["--compiler-index-profile", "--compiler-index-binding"],
     );
-    boundary
+    [boundary, output_capacity, cfg_alternatives]
+        .into_iter()
+        .flatten()
+        .min()
         .zip(compiler)
-        .is_some_and(|(boundary, compiler)| boundary < compiler)
+        .is_some_and(|(legacy, compiler)| legacy < compiler)
 }
 
 fn first_option_position(arguments: &[OsString], expected: &[&str]) -> Option<usize> {
