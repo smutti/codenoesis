@@ -4537,6 +4537,35 @@ fn rust_callable_scip_requested(arguments: &[OsString]) -> bool {
     option_requested(arguments, "--rust-callable-profile")
         && compiler_profile
         && (!option_requested(arguments, "--output-capacity-profile") || compiler_binding)
+        && !legacy_boundary_lineage_precedes_compiler(arguments)
+}
+
+fn legacy_boundary_lineage_precedes_compiler(arguments: &[OsString]) -> bool {
+    let boundary = first_option_position(
+        arguments,
+        &[
+            "--repository-boundary-profile",
+            "--repository-boundary-manifest",
+        ],
+    );
+    let compiler = first_option_position(
+        arguments,
+        &["--compiler-index-profile", "--compiler-index-binding"],
+    );
+    boundary
+        .zip(compiler)
+        .is_some_and(|(boundary, compiler)| boundary < compiler)
+}
+
+fn first_option_position(arguments: &[OsString], expected: &[&str]) -> Option<usize> {
+    arguments
+        .get(2..)
+        .unwrap_or_default()
+        .chunks(2)
+        .position(|pair| {
+            pair.first()
+                .is_some_and(|flag| expected.iter().any(|expected| flag == OsStr::new(expected)))
+        })
 }
 
 fn r10_profile_requested(arguments: &[OsString]) -> bool {
