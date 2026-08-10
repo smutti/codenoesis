@@ -1,0 +1,177 @@
+{
+  "schema_version": "codenoesis.r14-rust-expression-bindings-implementation-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/162",
+  "requirement_ids": [
+    "FR-EXT-016",
+    "FR-EXP-006",
+    "FR-EXT-012",
+    "FR-EXP-002",
+    "FR-QRY-001",
+    "FR-CLI-001",
+    "FR-DOC-001",
+    "FR-DOC-002",
+    "FR-DOC-003",
+    "NFR-DET-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-PRV-002",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "requirement_status": {
+    "candidate": "FR-EXT-016, FR-EXP-006, and the bounded R14 amendments remain Proposed branch-scoped candidates",
+    "inherited_r0_r13_k1": "Approved and Implemented, not Verified",
+    "main_effect": "none before accountable-maintainer protected manual merge",
+    "verification": "not Verified"
+  },
+  "slice": "S4",
+  "risk": "high",
+  "risk_owner": "@smutti",
+  "observed_at_utc": "2026-08-10T16:39:01Z",
+  "base_commit_sha": "e32428ecac33df384b2e8b6eed3d257da06e18fe",
+  "governance_checkpoint_sha": "b4bd9cde39259e4240efb6ff4ec009e83c643f5d",
+  "red_evidence_commit_sha": "6f87915a5ec9d0bfe16a25365bc6f308ea0200d4",
+  "corrected_governance_checkpoint_sha": "e61c849b2878c2ce2a0694c006f9bab67874ffb9",
+  "corrected_red_evidence_commit_sha": "7871b7f7c85423d869b1293392d4346f6c7168ad",
+  "implementation_commit_sha": "0843d7ba0848ea66cace4fee0a299a268a9c0c08",
+  "tested_implementation_tree": "5f2e8a937f5c5ca410f99bbc46b75c01791c82bc",
+  "final_review_head": "recorded by the pull request after this evidence commit; a commit cannot contain its own SHA",
+  "branch": "codex/162-r14-expression-bindings",
+  "authorization": {
+    "ready_issue": "https://github.com/smutti/codenoesis/issues/162",
+    "complete_package_decision": "https://github.com/smutti/codenoesis/issues/162#issuecomment-5239994397",
+    "lexical_depth_correction": "https://github.com/smutti/codenoesis/issues/162#issuecomment-5240550261",
+    "maintainer_supervised_interactive_lane": true,
+    "governance_and_code_single_pr": true,
+    "correction_budget": 5,
+    "correction_rounds_used": 1,
+    "manual_independent_review_and_merge_required": true,
+    "control_plane_effect": "none",
+    "release_effect": "none"
+  },
+  "contracts": {
+    "callable_profile": "rust-callable-semantics-v1",
+    "expression_profile": "rust-expression-bindings-v1",
+    "configuration": "codenoesis.configuration/v13",
+    "snapshot": "codenoesis.repository-snapshot/v16",
+    "extraction_contract": "codenoesis.extraction/v13",
+    "extraction_chunk": "codenoesis.extraction-chunk/v13",
+    "knowledge_graph": "codenoesis.knowledge-graph/v13",
+    "ontology": "codenoesis.ontology/rust/v13",
+    "semantic_hash": "codenoesis.semantic-hash-contract/v12",
+    "error": "codenoesis.error/v21",
+    "query": "codenoesis.local-query-result/v11",
+    "portable": "codenoesis.portable-graph/v7",
+    "explorer": "codenoesis.local-explorer/v7",
+    "pipeline": "codenoesis.pipeline/s4-r14-v1",
+    "extractor": "codenoesis.rust-expression-bindings/s4-r14-v1",
+    "index": "codenoesis.expression-binding-index/v1",
+    "contract_bundle_internal_sha256": "2b278689b5f5ba2b91c48bf345b5b44e38de562b7384557edfa3c50e2146b1b5",
+    "contract_bundle_file_sha256": "e5a0b1b157b540aff6a10e8748de485f2b0106912124727fe7d87c3257fdc393"
+  },
+  "test_driven_evidence": {
+    "corrected_red": {
+      "checkpoint": "e61c849b2878c2ce2a0694c006f9bab67874ffb9",
+      "command": "cargo test -p noesis --test e2e_fr_ext_016_rust_expression_bindings e2e_fr_ext_016_rust_expression_bindings_complete_local_journey -- --exact",
+      "test_exit_code": 101,
+      "product_exit_code": 2,
+      "expected_and_actual_failure": "ErrorV4 input.invalid_revision before acquisition because the corrected governance checkpoint had no R14 production path",
+      "product_stdout_bytes": 0,
+      "product_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "store_exists": false,
+      "log": "tests/specifications/s4/r14/red/lexical-depth-governance-red.log",
+      "log_sha256": "e02c0496bf83c55e78561940a958775fc46e5441c43abfd05a0188c5cc115cd1"
+    },
+    "focused_green": {
+      "tested_commit": "0843d7ba0848ea66cace4fee0a299a268a9c0c08",
+      "rust_tests_passed": 21,
+      "python_tests_passed": 5,
+      "summary": "crates/noesis/tests/evidence/s4/r14-rust-expression-bindings/focused-green.log",
+      "raw_local_log_bytes": 5696,
+      "raw_local_log_sha256": "aef2b1ce690d8a657785dc993b290ade419010bc1e8ca0316678d0bc1740fc50"
+    },
+    "complete_repository_gate": {
+      "status": "pending on the evidence head"
+    }
+  },
+  "fixture": {
+    "root": "tests/fixtures/s4/rust-expression-bindings-v1",
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1",
+    "tree_oid": "ead855e0545cc26b351b305fcad39f2e491b285d",
+    "commit_oid": "9a7bb3adaa5bf30eef3bc9bc656c81f42fbdb845",
+    "lib_rs_bytes": 1928,
+    "lib_rs_sha256": "07d2b8f9f3a1a0576b90bd820b5af9ef79511bcdaaca222d4d8f0c61ae815ff5",
+    "model_rs_bytes": 156,
+    "model_rs_sha256": "9dd6db028abed787998c4b46d7a14a6a6e96f9c5610d0bba0ce762116c090851",
+    "expected_descriptor_bytes": 224598,
+    "expected_descriptor_sha256": "7b390212d12538c74765c29b5a77969ca5d51c2d54eac5db24eb3c6123ec1399",
+    "external_source_vendored": false
+  },
+  "observed_oracle": {
+    "baseline": {
+      "entities": 91,
+      "relationships": 96,
+      "evidence": 99,
+      "claims": 187,
+      "diagnostics": 8,
+      "coverage_records": 93
+    },
+    "additive": {
+      "entities": 104,
+      "relationships": 207,
+      "evidence": 86,
+      "claims": 311,
+      "diagnostics": 0,
+      "coverage_records": 0,
+      "expressions": 73,
+      "arguments": 8,
+      "bindings": 23,
+      "reads": 29,
+      "writes": 7
+    },
+    "complete": {
+      "entities": 195,
+      "relationships": 303,
+      "evidence": 185,
+      "claims": 498,
+      "diagnostics": 8,
+      "coverage_records": 93
+    },
+    "lexical_depth_distribution": {
+      "0": 35,
+      "1": 32,
+      "2": 6
+    },
+    "connected_components": 1,
+    "duplicate_identities": 0,
+    "dangling_relationships": 0
+  },
+  "security_and_determinism": {
+    "network_used": false,
+    "model_provider_used": false,
+    "source_or_build_execution_used": false,
+    "portable_private_payload_rejected": true,
+    "portable_hash_and_reference_validation": true,
+    "mutable_input_and_output_replacement_races_rejected": true,
+    "inventory_permutations": 50,
+    "parallel_schedules": 10,
+    "immutable_k1_viewer_sha256": "d0b633b29e6494d6494a35b5553d72c3dd04a747eeef219ca33a9f5fe2a1f4fa"
+  },
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "python": "3.9.6",
+    "agent": "OpenAI Codex coding agent",
+    "model": "not exposed in the session",
+    "run_identifier": "not available",
+    "duration": "not tracked as one aggregate",
+    "cost": "not available"
+  },
+  "known_limitations": [
+    "R14 facts are syntax- and committed-source-bound and do not infer type, dispatch, borrow, ownership, control flow, data flow, side effects, runtime behavior, or value evaluation.",
+    "The local evidence environment is Darwin arm64; Windows behavior remains subject to the required GitHub Actions matrix on the final pull-request head.",
+    "The Proposed candidate is not Verified and has no effect on main before independent review and protected manual merge."
+  ]
+}

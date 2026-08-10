@@ -1,0 +1,55 @@
+issue=https://github.com/smutti/codenoesis/issues/162
+requirements=FR-EXT-016,FR-EXP-006,FR-EXT-012,FR-EXP-002,FR-QRY-001,FR-CLI-001,FR-DOC-001,FR-DOC-002,FR-DOC-003,NFR-DET-001,NFR-SEC-001,NFR-SEC-005,NFR-PRV-002,NFR-TST-001,NFR-TST-002
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+tested_implementation_commit=0843d7ba0848ea66cace4fee0a299a268a9c0c08
+tested_tree=5f2e8a937f5c5ca410f99bbc46b75c01791c82bc
+completed_at_utc=2026-08-10T16:39:01Z
+
+command=python3 -m unittest scripts.tests.test_s4_r14_rust_expression_bindings_contract
+exit=0
+tests_passed=5
+
+command=cargo test -p codenoesis-domain --test s4_r14_rust_expression_bindings --locked
+exit=0
+tests_passed=4
+coverage=contract versions, additive hash domains, reviewed identities, and all eight maximum plus maximum-plus-one limits
+
+command=cargo test -p codenoesis-lang-rust --test s4_r14_rust_expression_bindings --locked
+exit=0
+tests_passed=5
+coverage=exact fixture oracle, typed unsupported coverage, ambiguous shadowing, corrupt graph failures, 50 permutations, and 10 schedules
+
+command=cargo test -p codenoesis-contracts --test s4_r14_rust_expression_bindings --locked
+exit=0
+tests_passed=6
+coverage=ErrorV21, V16/V11/V7 strict contracts, canonicality, privacy, references, hashes, viewer, and CSP
+
+command=cargo test -p codenoesis-application --test s4_r14_rust_expression_bindings --locked
+exit=0
+tests_passed=1
+coverage=single acquisition, typed R14 failure propagation, and no snapshot publication
+
+command=cargo test -p noesis --lib --locked r14
+exit=0
+tests_passed=2
+coverage=mutable portable input and output-replacement races fail closed
+
+command=cargo test -p noesis --test e2e_fr_ext_016_rust_expression_bindings --locked
+exit=0
+tests_passed=3
+journey=scan -> docs -> four exact-ID query subjects -> export -> strict reimport -> explore
+oracle=195 entities, 303 relationships, 185 evidence, 498 claims, 8 diagnostics, 93 coverage records
+additive_oracle=73 expressions, 8 arguments, 23 bindings, 29 READS, 7 WRITES, 0 additive diagnostics, 0 additive coverage records
+determinism=50 argument permutations and 10 parallel schedules have identical semantic bytes
+selector_compatibility=R14 intent emits ErrorV21 while K1-only and forbidden historical lineages retain their closed dispatch
+
+rust_tests_passed=21
+python_tests_passed=5
+raw_local_log_bytes=5696
+raw_local_log_sha256=aef2b1ce690d8a657785dc993b290ade419010bc1e8ca0316678d0bc1740fc50
+environment=Darwin 25.5.0 arm64; rustc 1.97.1 (8bab26f4f 2026-07-14); cargo 1.97.1 (c980f4866 2026-06-30); Python 3.9.6
+known_warning=the pre-existing exact toml dependency requirement includes ignored semver metadata; no R14 manifest or dependency changed
+correction_rounds_used=1
+result=green
