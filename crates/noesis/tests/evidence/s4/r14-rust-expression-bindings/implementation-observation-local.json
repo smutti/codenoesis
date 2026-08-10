@@ -116,6 +116,17 @@
       "summary": "crates/noesis/tests/evidence/s4/r14-rust-expression-bindings/windows-ci-correction.log",
       "raw_local_log_bytes": 1662,
       "raw_local_log_sha256": "8393b21138c3325863d8006169a635b542b5c8f1aa4bb8aff6b96ffe57a47e7f",
+      "correction_commit": "8ef9595542469fc4494613d7b2c3ccb93bcd513a",
+      "correction_tree": "7eb435d9f6a936b702f1a62e266fe0dda39fe0c8",
+      "complete_gate": {
+        "started_at_utc": "2026-08-10T20:26:44Z",
+        "completed_at_utc": "2026-08-10T20:31:26Z",
+        "exit_code": 0,
+        "workspace_tests_passed": 503,
+        "python_tests_passed": 299,
+        "raw_local_log_bytes": 59980,
+        "raw_local_log_sha256": "306ef223dacb5b366c150f474bc0aec2547c25a8f87d818819e2e6f7a6d998dd"
+      },
       "windows_ci_rerun": "pending on the corrected pull-request head"
     }
   },
