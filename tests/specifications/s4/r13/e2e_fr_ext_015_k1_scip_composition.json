@@ -1,0 +1,101 @@
+{
+  "schema_version": "codenoesis.e2e-specification/v1",
+  "issue": 160,
+  "requirements": [
+    "FR-EXT-005",
+    "FR-EXT-012",
+    "FR-EXT-015",
+    "FR-EXP-001",
+    "FR-EXP-005",
+    "FR-CLI-001",
+    "FR-DOC-001",
+    "FR-DOC-002",
+    "FR-DOC-003",
+    "FR-QRY-001",
+    "NFR-DET-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-PRV-002",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "requirement_status": "Proposed branch-scoped candidate until protected manual merge",
+  "slice": "S4",
+  "risk": "high",
+  "base_sha": "cc25dec49343c510f124585c91d459982e827c68",
+  "authorization": [
+    "https://github.com/smutti/codenoesis/issues/160#issuecomment-5237555163",
+    "https://github.com/smutti/codenoesis/issues/160#issuecomment-5237601867"
+  ],
+  "fixture": {
+    "descriptor": "tests/fixtures/s4/rust-callable-scip-composition-v1/manifest.json",
+    "source_root": "tests/fixtures/s4/compiler-index-v1",
+    "repository_identity": "urn:codenoesis:fixture:s4-compiler-index-v1",
+    "tree_oid": "d117f2f0924cbef9e7396b97ee46c76bd5261e00",
+    "commit_oid": "2203600cce0f0904aefc66dcb49dd0dbc7fd5fd3",
+    "artifact_sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92",
+    "external_source_vendored": false
+  },
+  "scan_selectors": [
+    "--profile",
+    "standard-local-s4",
+    "--workspace-profile",
+    "cargo-root-package-v1",
+    "--manifest-profile",
+    "cargo-manifest-facts-v1",
+    "--rust-semantic-profile",
+    "rust-semantic-depth-v1",
+    "--rust-framework-profile",
+    "rust-framework-declarations-v1",
+    "--compiler-index-profile",
+    "scip-rust-v0.9.0-import-v1",
+    "--compiler-index-binding",
+    "compiler-index/compiler-index-binding.json",
+    "--rust-callable-profile",
+    "rust-callable-semantics-v1"
+  ],
+  "expected_red": {
+    "exit_code": 11,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 309,
+    "stderr_sha256": "2573e0f364350b300218c6d1940e6eb33f4f0bc70b7ba92dd9b2821f5bf97013",
+    "error_schema": "codenoesis.error/v16",
+    "error_code": "input.unsupported_rust_callable_composition",
+    "store_exists": false
+  },
+  "green_journey": [
+    "scan",
+    "docs",
+    "query_callable",
+    "query_signature",
+    "query_compiler_symbol",
+    "query_join_relationship",
+    "export",
+    "strict_reimport",
+    "explore"
+  ],
+  "expected_contracts": {
+    "configuration": "codenoesis.configuration/v12",
+    "snapshot": "codenoesis.repository-snapshot/v15",
+    "graph": "codenoesis.knowledge-graph/v12",
+    "ontology": "codenoesis.ontology/rust/v12",
+    "query": "codenoesis.local-query-result/v10",
+    "portable": "codenoesis.portable-graph/v6",
+    "explorer": "codenoesis.local-explorer/v6",
+    "error": "codenoesis.error/v20"
+  },
+  "acceptance": {
+    "exact_identity_union": true,
+    "callable_compiler_joins": 5,
+    "unresolved_call_sites": 2,
+    "new_calls": 0,
+    "family_counts_exact": true,
+    "portable_reimport_lossless": true,
+    "viewer_bytes_immutable": true,
+    "legacy_bytes_immutable": true,
+    "permutations": 50,
+    "parallel_schedules": 10
+  }
+}
+

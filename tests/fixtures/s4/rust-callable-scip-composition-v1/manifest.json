@@ -1,0 +1,64 @@
+{
+  "schema_version": "codenoesis.r13-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-compiler-index-v1",
+  "source_fixture": "tests/fixtures/s4/compiler-index-v1",
+  "external_source_vendored": false,
+  "materialization": {
+    "object_format": "sha1",
+    "tree_oid": "d117f2f0924cbef9e7396b97ee46c76bd5261e00",
+    "commit_oid": "2203600cce0f0904aefc66dcb49dd0dbc7fd5fd3",
+    "commit_recipe": "immutable compiler-index-v1 fixture"
+  },
+  "immutable_inputs": [
+    {
+      "path": "tests/fixtures/s4/compiler-index-v1/manifest.json",
+      "byte_length": 3687,
+      "sha256": "b84efb1a1eb6911156654b081b2164fe6dbc1963265d3b682ace88a228129a48"
+    },
+    {
+      "path": "tests/fixtures/s4/compiler-index-v1/compiler-index-binding.json",
+      "byte_length": 2460,
+      "sha256": "2885d72887046edaa4dbbcc273ed7c8b42ed804e169296b2a0c092edbfc0d04c"
+    },
+    {
+      "path": "tests/fixtures/s4/compiler-index-v1/compiler-index-source.json",
+      "byte_length": 13380,
+      "sha256": "12699c82058916f61e20b3e219929c35308e777f7b0bcf995dd60e835b87c113"
+    },
+    {
+      "path": "tests/fixtures/s4/compiler-index-v1/expected-compiler-overlay.json",
+      "byte_length": 28180,
+      "sha256": "e533cdaac30b9257bbc33a1cdcfbb54bfeb3bf9871e33faad0b72a892e8807a0"
+    },
+    {
+      "path": "tests/fixtures/s4/compiler-index-v1/index.scip",
+      "byte_length": 3733,
+      "sha256": "e1d3b4ca3c55b1a2779f7bea644fddc9557ddd30417fe8e4cf589e4089153a92"
+    }
+  ],
+  "expected_composition": {
+    "path": "tests/fixtures/s4/rust-callable-scip-composition-v1/expected-composition.json",
+    "byte_length": 5532,
+    "sha256": "1b8e794a845240b01cb198db493b68cc67a16fe285e566287890cc6aa2a094b3"
+  },
+  "expected_counts": {
+    "entities": 61,
+    "relationships": 53,
+    "evidence": 80,
+    "claims": 114,
+    "diagnostics": 4,
+    "coverage": 52,
+    "callable_compiler_joins": 5,
+    "new_calls": 0
+  },
+  "sentinels": {
+    "build_script_path": "tests/fixtures/s4/compiler-index-v1/repository/build.rs",
+    "build_forbidden_output": "BUILD_SENTINEL_EXECUTED",
+    "indexer_forbidden_output": "INDEXER_SENTINEL_EXECUTED",
+    "process_execution_permitted": false,
+    "network_access_permitted": false,
+    "compiler_execution_permitted": false,
+    "index_generation_permitted": false,
+    "model_provider_permitted": false
+  }
+}

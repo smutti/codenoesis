@@ -1,0 +1,70 @@
+{
+  "schema_version": "codenoesis.r13-callable-scip-composition/v1",
+  "profiles": {
+    "semantic": "rust-semantic-depth-v1",
+    "framework": "rust-framework-declarations-v1",
+    "compiler": "scip-rust-v0.9.0-import-v1",
+    "callable": "rust-callable-semantics-v1",
+    "boundary": null,
+    "output_capacity": "standard"
+  },
+  "lineage": {
+    "configuration": "codenoesis.configuration/v12",
+    "snapshot": "codenoesis.repository-snapshot/v15",
+    "extraction": "codenoesis.extraction/v12",
+    "chunk": "codenoesis.extraction-chunk/v12",
+    "graph": "codenoesis.knowledge-graph/v12",
+    "ontology": "codenoesis.ontology/rust/v12",
+    "query": "codenoesis.local-query-result/v10",
+    "portable": "codenoesis.portable-graph/v6",
+    "explorer": "codenoesis.local-explorer/v6",
+    "error": "codenoesis.error/v20"
+  },
+  "join": {
+    "relationship_kind": "HAS_COMPILER_SYMBOL",
+    "relationship_domain": "codenoesis.relationship-id/rust-callable-scip-composition/v1",
+    "index": "codenoesis.callable-compiler-join-index/v1",
+    "source_kinds": ["rust.function", "rust.method"],
+    "target_kind": "compiler.symbol",
+    "required_binding_state": "in_repository_bound",
+    "signatures_per_callable": 1,
+    "compiler_symbols_per_callable": 1,
+    "evidence_per_relationship": 2,
+    "maximum_joins": 200000,
+    "identity_union_requires_equal_record": true
+  },
+  "inference": {
+    "call_site_promoted": false,
+    "method_dispatch_inferred": false,
+    "type_inferred": false,
+    "cfg_evaluated": false,
+    "compiler_index_generated": false,
+    "runtime_behavior_inferred": false
+  },
+  "dispatch": {
+    "r7_without_k1": "codenoesis.repository-snapshot/v10",
+    "k1_without_r7": "codenoesis.repository-snapshot/v11",
+    "r7_plus_k1": "codenoesis.repository-snapshot/v15",
+    "portable_profile": "rust-callable-semantics-v1",
+    "explorer_profile": "rust-callable-semantics-v1"
+  },
+  "determinism": {
+    "permutations": 50,
+    "parallel_schedules": 10,
+    "ordering": "raw_utf8_identity",
+    "volatile_envelope_excluded": true
+  },
+  "privacy": {
+    "source_contents": false,
+    "source_snippets": false,
+    "body_text": false,
+    "initializer_text": false,
+    "absolute_roots": false,
+    "raw_urls": false,
+    "credentials": false,
+    "environment": false,
+    "producer_arguments": false,
+    "telemetry": false
+  }
+}
+

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/portable-graph-v6.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "repository",
+    "source_snapshot",
+    "ontology_version",
+    "query_contract_version",
+    "projection",
+    "entities",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage_gaps",
+    "documents",
+    "document_statements"
+  ],
+  "properties": {
+    "schema_version": {"const": "codenoesis.portable-graph/v6"},
+    "repository": {"type": "object"},
+    "source_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "snapshot_id", "semantic_hash"],
+      "properties": {
+        "schema_version": {"const": "codenoesis.repository-snapshot/v15"},
+        "snapshot_id": {"type": "string"},
+        "semantic_hash": {"type": "object"}
+      }
+    },
+    "ontology_version": {"const": "codenoesis.ontology/rust/v12"},
+    "query_contract_version": {"const": "codenoesis.local-query-result/v10"},
+    "projection": {"type": "object"},
+    "entities": {"$ref": "#/$defs/family"},
+    "relationships": {"$ref": "#/$defs/family"},
+    "claims": {"$ref": "#/$defs/family"},
+    "evidence": {"$ref": "#/$defs/family"},
+    "diagnostics": {"$ref": "#/$defs/family"},
+    "coverage_gaps": {"$ref": "#/$defs/family"},
+    "documents": {"type": "array"},
+    "document_statements": {"type": "array"}
+  },
+  "$defs": {"family": {"type": "array", "items": {"type": "object"}}}
+}
+

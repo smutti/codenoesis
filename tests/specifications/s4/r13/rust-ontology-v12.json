@@ -1,0 +1,71 @@
+{
+  "schema_version": "codenoesis.ontology-definition/v1",
+  "ontology_version": "codenoesis.ontology/rust/v12",
+  "extends": [
+    "codenoesis.ontology/rust/v7",
+    "codenoesis.ontology/rust/v8"
+  ],
+  "composition": {
+    "profile": "codenoesis.rust-callable-scip-composition/s4-r13-v1",
+    "same_repository_revision_required": true,
+    "same_source_identity_required": true,
+    "compiler_symbol_binding_state": "in_repository_bound",
+    "one_signature_per_joined_callable": true,
+    "one_compiler_symbol_per_joined_callable": true,
+    "call_site_resolution_promoted": false,
+    "type_or_dispatch_inference": false,
+    "cfg_selection": false,
+    "runtime_behavior_inference": false,
+    "index_generation": false
+  },
+  "entity_kinds": {
+    "rust.callable_signature": {
+      "identity": "unchanged_k1_v1",
+      "claim_state": "deterministic_fact"
+    },
+    "rust.parameter": {
+      "identity": "unchanged_k1_v1",
+      "claim_state": "deterministic_fact"
+    },
+    "rust.call_site": {
+      "identity": "unchanged_k1_v1",
+      "claim_state": "deterministic_fact_or_candidate"
+    },
+    "compiler.symbol": {
+      "identity": "unchanged_r7_v1",
+      "claim_state": "compiler_assertion"
+    }
+  },
+  "relationship_kinds": {
+    "HAS_SIGNATURE": "unchanged_k1_callable_to_signature",
+    "HAS_COMPILER_SYMBOL": {
+      "source": ["rust.function", "rust.method"],
+      "target": "compiler.symbol",
+      "meaning": "validated_revision_bound_definition_correspondence",
+      "evidence_count": 2,
+      "provenance": "validated_scip_v0.9.0"
+    },
+    "RESOLVES_TO": "unchanged_r7_compiler_assertion",
+    "REFERENCES": "unchanged_r7_compiler_assertion",
+    "IMPLEMENTS": "unchanged_source_or_r7_assertion",
+    "TYPE_DEFINITION": "unchanged_r7_compiler_assertion",
+    "CALLS": "unchanged_k1_unique_local_source_rule_only"
+  },
+  "identity_domains": {
+    "callable_entity": "codenoesis.entity-id/rust-callable-semantics/v1",
+    "callable_relationship": "codenoesis.relationship-id/rust-callable-semantics/v1",
+    "compiler_symbol": "codenoesis.entity-id/compiler-symbol/v1",
+    "compiler_relationship": "codenoesis.relationship-id/compiler-index/v1",
+    "callable_compiler_relationship": "codenoesis.relationship-id/rust-callable-scip-composition/v1"
+  },
+  "forbidden_relationship_kinds": [
+    "EXECUTES",
+    "REACHES",
+    "READS",
+    "WRITES"
+  ],
+  "normalization": "NFC",
+  "ordering": "raw_utf8_identity",
+  "existing_identity_domains_immutable": true
+}
+
