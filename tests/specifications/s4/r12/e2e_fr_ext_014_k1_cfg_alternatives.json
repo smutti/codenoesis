@@ -50,6 +50,17 @@
     ["--repository-boundary-profile", "local-gitlinks-v1"],
     ["--output-capacity-profile", "local-snapshot-64m-v1"]
   ],
+  "selector_error_dispatch": {
+    "r10_plus_r6_without_k1": {
+      "schema_version": "codenoesis.error/v17",
+      "code": "input.unsupported_rust_cfg_alternatives_composition"
+    },
+    "r10_plus_k1_without_r6": {
+      "schema_version": "codenoesis.error/v17",
+      "code": "input.unsupported_rust_cfg_alternatives_composition"
+    },
+    "complete_r10_r6_k1_intent": "codenoesis.error/v19"
+  },
   "expected_red": {
     "exit_code": 2,
     "stdout_bytes": 0,

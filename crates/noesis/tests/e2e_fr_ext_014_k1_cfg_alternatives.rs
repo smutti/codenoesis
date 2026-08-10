@@ -3,7 +3,7 @@ mod support;
 use std::collections::BTreeMap;
 use std::fmt::Write as _;
 use std::fs;
-use std::process::Output;
+use std::process::{Command, Output};
 
 use serde_json::Value;
 use sha2::{Digest as _, Sha256};
@@ -271,6 +271,100 @@ fn e2e_fr_ext_014_k1_cfg_alternatives_complete_local_journey() {
     );
 }
 
+#[test]
+fn e2e_fr_cli_001_r12_invalid_selector_matrix_fails_before_acquisition() {
+    let cases = [
+        (
+            vec![
+                "--rust-semantic-profile",
+                "rust-cfg-declaration-alternatives-v1",
+                "--rust-callable-profile",
+                "rust-callable-semantics-v1",
+            ],
+            "codenoesis.error/v17",
+            "input.unsupported_rust_cfg_alternatives_composition",
+        ),
+        (
+            vec![
+                "--rust-semantic-profile",
+                "rust-cfg-declaration-alternatives-v1",
+                "--rust-framework-profile",
+                "rust-framework-declarations-v1",
+            ],
+            "codenoesis.error/v17",
+            "input.unsupported_rust_cfg_alternatives_composition",
+        ),
+        (
+            vec![
+                "--rust-semantic-profile",
+                "rust-cfg-declaration-alternatives-v1",
+                "--rust-framework-profile",
+                "rust-framework-declarations-v1",
+                "--rust-callable-profile",
+                "rust-callable-semantics-v1",
+                "--compiler-index-profile",
+                "scip-rust-v0.9.0-import-v1",
+            ],
+            "codenoesis.error/v19",
+            "input.unsupported_rust_callable_cfg_alternatives_composition",
+        ),
+        (
+            vec![
+                "--rust-semantic-profile",
+                "rust-cfg-declaration-alternatives-v1",
+                "--rust-framework-profile",
+                "rust-framework-declarations-v1",
+                "--rust-callable-profile",
+                "rust-callable-semantics-v1",
+                "--repository-boundary-manifest",
+                "missing.json",
+            ],
+            "codenoesis.error/v19",
+            "input.invalid_repository_boundary_manifest",
+        ),
+        (
+            vec![
+                "--rust-semantic-profile",
+                "rust-cfg-declaration-alternatives-invalid",
+                "--rust-framework-profile",
+                "rust-framework-declarations-v1",
+                "--rust-callable-profile",
+                "rust-callable-semantics-v1",
+            ],
+            "codenoesis.error/v19",
+            "input.invalid_rust_cfg_alternatives_profile",
+        ),
+        (
+            vec![
+                "--rust-semantic-profile",
+                "rust-cfg-declaration-alternatives-v1",
+                "--rust-framework-profile",
+                "rust-framework-declarations-v1",
+                "--rust-callable-profile",
+                "rust-callable-semantics-invalid",
+            ],
+            "codenoesis.error/v19",
+            "input.invalid_rust_callable_profile",
+        ),
+    ];
+
+    for (arguments, expected_schema, expected_code) in cases {
+        let repository = MaterializedCallableCfgAlternativesRepository::fixture();
+        let output = scan_with_rust_arguments(&repository, &arguments);
+        assert_eq!(output.status.code(), Some(2), "R12 invalid selector status");
+        assert!(output.stdout.is_empty(), "R12 invalid selector stdout");
+        let error = parse_single_document(&output.stderr);
+        assert_eq!(error["schema_version"], expected_schema);
+        assert_eq!(error["code"], expected_code);
+        assert_eq!(error["retryable"], false);
+        assert!(
+            !repository.store.exists(),
+            "R12 invalid selector mutated store"
+        );
+        assert!(!repository.build_sentinel().exists());
+    }
+}
+
 fn callable_counts<'a>(graph: &'a Value) -> BTreeMap<&'a str, u64> {
     count_by(graph, "entities", "kind")
         .into_iter()
@@ -331,6 +425,37 @@ fn assert_success(output: &Output, subject: &str) {
         output.status.code(),
         String::from_utf8_lossy(&output.stderr)
     );
+}
+
+fn scan_with_rust_arguments(
+    repository: &MaterializedCallableCfgAlternativesRepository,
+    rust_arguments: &[&str],
+) -> Output {
+    let mut command = Command::new(env!("CARGO_BIN_EXE_noesis"));
+    command
+        .current_dir(&repository.root)
+        .args(["scan", "--repository"])
+        .arg(&repository.worktree)
+        .args([
+            "--repository-id",
+            support::s4_r12::REPOSITORY_ID,
+            "--revision",
+        ])
+        .arg(&repository.commit_oid)
+        .args([
+            "--profile",
+            "standard-local-s4",
+            "--workspace-profile",
+            "cargo-root-package-v1",
+            "--manifest-profile",
+            "cargo-manifest-facts-v1",
+        ])
+        .args(rust_arguments)
+        .arg("--store")
+        .arg(&repository.store)
+        .args(["--format", "json"])
+        .output()
+        .expect("launch invalid R12 selector matrix")
 }
 
 fn hex_sha256(bytes: &[u8]) -> String {

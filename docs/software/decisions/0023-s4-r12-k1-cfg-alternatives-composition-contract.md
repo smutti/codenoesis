@@ -126,11 +126,15 @@ authority.
 ## Errors, limits, and atomicity
 
 `CodeNoesisErrorV19` composes R10, K1, R6, and optional R2 failures. Invalid
-selector pairings fail before acquisition. Missing, duplicate, direct-logical,
-or mismatched occurrence signatures; invalid evidence containment; malformed,
-overlapping, or cross-source alternatives; ambiguous calls; reference, hash,
-order, privacy, path, race, and resource failures publish no partial output or
-visible head.
+complete-R12 selector pairings fail before acquisition. The incomplete
+`R10 + R6` and `R10 + K1` combinations remain in the immutable R10 dispatch
+lane and retain ErrorV17
+`input.unsupported_rust_cfg_alternatives_composition`; ErrorV19 begins only
+when all three R10, R6, and K1 selector flags express R12 intent. Missing,
+duplicate, direct-logical, or mismatched occurrence signatures; invalid
+evidence containment; malformed, overlapping, or cross-source alternatives;
+ambiguous calls; reference, hash, order, privacy, path, race, and resource
+failures publish no partial output or visible head.
 
 R12 inherits every R10, K1, R6, and applicable R2 limit. Standard V14 stdout
 remains `33,554,432` bytes including LF; the explicit capacity selector permits
@@ -151,6 +155,8 @@ projection, explorer manifest, and viewer byte remains immutable. K1 alone
 stays V11, R10 alone stays V12, and K1 plus boundary without R10 stays V13.
 Only the complete R10 plus R6 plus K1 selector matrix emits V14. Boundary and
 capacity selectors are optional. R7/SCIP does not compose in R12.
+Incomplete R10 plus only R6 or only K1 invocations remain byte-identical R10
+failures under ErrorV17; they do not select the additive R12 error family.
 
 ## Verification
 

@@ -1,8 +1,8 @@
 {
   "schema_version": "codenoesis.r12-invalid-cases/v1",
   "cases": [
-    {"id": "missing_framework_profile", "expected": "input.unsupported_rust_callable_cfg_alternatives_composition"},
-    {"id": "missing_callable_profile", "expected": "input.unsupported_rust_callable_cfg_alternatives_composition"},
+    {"id": "missing_framework_profile", "error_schema": "codenoesis.error/v17", "expected": "input.unsupported_rust_cfg_alternatives_composition", "dispatch": "legacy_r10"},
+    {"id": "missing_callable_profile", "error_schema": "codenoesis.error/v17", "expected": "input.unsupported_rust_cfg_alternatives_composition", "dispatch": "legacy_r10"},
     {"id": "compiler_profile_composition", "expected": "input.unsupported_rust_callable_cfg_alternatives_composition"},
     {"id": "boundary_manifest_without_profile", "expected": "input.invalid_repository_boundary_manifest"},
     {"id": "malformed_alternative", "expected": "extraction.invalid_rust_source"},

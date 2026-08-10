@@ -205,8 +205,10 @@ LocalExplorerV5 reuses immutable K1 viewer bytes.
 The existing R2 boundary report and R9 output capacity are optional in R12.
 They grant no nested-source or semantic authority. K1 alone remains V11, R10
 alone remains V12, and K1 plus boundaries without R10 remains V13. R7/SCIP does
-not compose. Invalid joins or selector combinations are typed ErrorV19 and
-cannot publish a partial head.
+not compose. Once all R10, R6, and K1 selector flags express R12 intent,
+invalid joins or selector combinations are typed ErrorV19 and cannot publish a
+partial head. Incomplete R10 plus only R6 or only K1 combinations remain in the
+immutable R10 ErrorV17 dispatch lane.
 
 ## Versioned artifacts and identity
 

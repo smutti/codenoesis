@@ -79,6 +79,29 @@ class R12ContractTest(unittest.TestCase):
         self.assertFalse(composition["inference"]["cfg_evaluated"])
         self.assertFalse(composition["inference"]["method_dispatch_inferred"])
 
+        invalid_cases = {
+            case["id"]: case
+            for case in load_json(SPEC / "invalid-cases-v1.json")["cases"]
+        }
+        for case_id in ("missing_framework_profile", "missing_callable_profile"):
+            self.assertEqual(
+                invalid_cases[case_id],
+                {
+                    "id": case_id,
+                    "error_schema": "codenoesis.error/v17",
+                    "expected": "input.unsupported_rust_cfg_alternatives_composition",
+                    "dispatch": "legacy_r10",
+                },
+            )
+
+        selector_dispatch = load_json(
+            SPEC / "e2e_fr_ext_014_k1_cfg_alternatives.json"
+        )["selector_error_dispatch"]
+        self.assertEqual(
+            selector_dispatch["complete_r10_r6_k1_intent"],
+            "codenoesis.error/v19",
+        )
+
     def test_exact_fixture_objects_and_spans(self):
         manifest = load_json(FIXTURE / "manifest.json")
         self.assertEqual(
