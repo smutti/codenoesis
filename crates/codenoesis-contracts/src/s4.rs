@@ -630,6 +630,7 @@ pub(super) struct GraphIndex {
     callable_semantics: bool,
     callable_scip_composition: bool,
     callable_cfg_alternatives: bool,
+    expression_bindings: bool,
     repository_boundaries: Option<Value>,
     pub(super) entities: BTreeMap<String, Value>,
     relationships: Vec<Value>,
@@ -665,6 +666,7 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v10"
                     | "codenoesis.knowledge-graph/v11"
                     | "codenoesis.knowledge-graph/v12"
+                    | "codenoesis.knowledge-graph/v13"
             )
         );
         let rust_semantic_depth = matches!(
@@ -678,6 +680,7 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v10"
                     | "codenoesis.knowledge-graph/v11"
                     | "codenoesis.knowledge-graph/v12"
+                    | "codenoesis.knowledge-graph/v13"
             )
         );
         let declaration_alternatives = matches!(
@@ -693,6 +696,7 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v10"
                     | "codenoesis.knowledge-graph/v11"
                     | "codenoesis.knowledge-graph/v12"
+                    | "codenoesis.knowledge-graph/v13"
             )
         );
         let compiler_index = matches!(
@@ -706,12 +710,14 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v10"
                     | "codenoesis.knowledge-graph/v11"
                     | "codenoesis.knowledge-graph/v12"
+                    | "codenoesis.knowledge-graph/v13"
             )
         );
         let callable_scip_composition =
             graph_schema_version == Some("codenoesis.knowledge-graph/v12");
         let callable_cfg_alternatives =
             graph_schema_version == Some("codenoesis.knowledge-graph/v11");
+        let expression_bindings = graph_schema_version == Some("codenoesis.knowledge-graph/v13");
         let repository_boundaries = if matches!(
             graph_schema_version,
             Some("codenoesis.knowledge-graph/v10" | "codenoesis.knowledge-graph/v11")
@@ -777,6 +783,7 @@ impl GraphIndex {
             callable_semantics,
             callable_scip_composition,
             callable_cfg_alternatives,
+            expression_bindings,
             repository_boundaries,
             entities,
             relationships,
@@ -1769,6 +1776,15 @@ fn module_document(
             &mut statements,
         )?;
     }
+    if index.expression_bindings {
+        append_expression_bindings(
+            index,
+            &document_id,
+            source_path,
+            &mut content,
+            &mut statements,
+        )?;
+    }
     Ok(DocumentDraft {
         document_id,
         kind: "module",
@@ -1858,6 +1874,103 @@ fn append_callable_semantics(
         statements.push(statement);
     }
     Ok(())
+}
+
+fn append_expression_bindings(
+    index: &GraphIndex,
+    document_id: &str,
+    source_path: &str,
+    content: &mut String,
+    statements: &mut Vec<Value>,
+) -> Result<(), DocumentationContractError> {
+    let mut entities = index
+        .entities
+        .values()
+        .filter(|entity| {
+            string_field(entity, "kind").is_ok_and(|kind| {
+                matches!(
+                    kind,
+                    "rust.expression" | "rust.call_argument" | "rust.pattern_binding"
+                )
+            }) && entity.pointer("/locator/path").and_then(Value::as_str) == Some(source_path)
+        })
+        .collect::<Vec<_>>();
+    entities.sort_by(|left, right| {
+        string_field(left, "id")
+            .unwrap_or_default()
+            .cmp(string_field(right, "id").unwrap_or_default())
+    });
+    if entities.is_empty() {
+        return Ok(());
+    }
+    content.push_str(
+        "\n## Lexical expression and binding facts\n\nEach record is a syntax occurrence; not data flow or runtime behavior. No type, ownership, borrow, side-effect, reachability, or execution claim is implied.\n\n",
+    );
+    for (ordinal, entity) in entities.into_iter().enumerate() {
+        let identifier = string_field(entity, "id")?;
+        let claim = index.claim("entity", identifier)?;
+        let statement = statement_value(
+            document_id,
+            "expression_binding",
+            identifier,
+            ordinal,
+            "deterministic_fact",
+            vec![identifier.to_owned()],
+            string_array(claim, "evidence_ids")?,
+            Vec::new(),
+        );
+        writeln!(
+            content,
+            "- `{}` `{}`: {}. {}",
+            markdown_code(string_field(entity, "kind")?),
+            markdown_code(string_field(entity, "name")?),
+            describe_expression_binding(entity)?,
+            statement_marker(&statement)?
+        )
+        .expect("writing Markdown to a String cannot fail");
+        statements.push(statement);
+    }
+    Ok(())
+}
+
+fn describe_expression_binding(entity: &Value) -> Result<String, DocumentationContractError> {
+    let properties = entity
+        .get("properties")
+        .ok_or(DocumentationContractError::InvalidSnapshot)?;
+    Ok(match string_field(entity, "kind")? {
+        "rust.expression" => format!(
+            "syntax `{}`, lexical depth {}, roles `{}`",
+            markdown_code(string_field(properties, "syntax_kind")?),
+            properties
+                .get("lexical_depth")
+                .and_then(Value::as_u64)
+                .ok_or(DocumentationContractError::InvalidSnapshot)?,
+            markdown_code(&string_array(properties, "roles")?.join(", "))
+        ),
+        "rust.call_argument" => format!(
+            "argument {} of call `{}` with value expression `{}`",
+            properties
+                .get("ordinal")
+                .and_then(Value::as_u64)
+                .ok_or(DocumentationContractError::InvalidSnapshot)?,
+            markdown_code(string_field(properties, "call_expression_id")?),
+            markdown_code(string_field(properties, "expression_id")?)
+        ),
+        "rust.pattern_binding" => format!(
+            "origin `{}`, modifier `{}`, lexical scope bytes {}..{}",
+            markdown_code(string_field(properties, "origin")?),
+            markdown_code(string_field(properties, "modifier")?),
+            properties
+                .get("scope_start_byte")
+                .and_then(Value::as_u64)
+                .ok_or(DocumentationContractError::InvalidSnapshot)?,
+            properties
+                .get("scope_end_byte")
+                .and_then(Value::as_u64)
+                .ok_or(DocumentationContractError::InvalidSnapshot)?
+        ),
+        _ => return Err(DocumentationContractError::InvalidSnapshot),
+    })
 }
 
 fn describe_k1_entity(entity: &Value) -> Result<String, DocumentationContractError> {

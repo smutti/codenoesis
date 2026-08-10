@@ -77,7 +77,7 @@ fn e2e_fr_ext_016_rust_expression_bindings_complete_local_journey() {
     }
 
     let actual_entities = graph["entities"].as_array().expect("R14 graph entities");
-    let expected_entities = expected["expressions"]
+    let mut expected_entities = expected["expressions"]
         .as_array()
         .expect("R14 expressions")
         .iter()
@@ -85,6 +85,7 @@ fn e2e_fr_ext_016_rust_expression_bindings_complete_local_journey() {
         .chain(expected["bindings"].as_array().expect("R14 bindings"))
         .cloned()
         .collect::<Vec<_>>();
+    expected_entities.sort_by(|left, right| left["id"].as_str().cmp(&right["id"].as_str()));
     let mut actual_additive = actual_entities
         .iter()
         .filter(|entity| {
@@ -230,6 +231,82 @@ fn e2e_fr_ext_016_rust_expression_bindings_complete_local_journey() {
     assert!(!repository.build_sentinel().exists());
 }
 
+#[test]
+fn conf_fr_cli_001_r14_selector_dispatch_is_closed_and_side_effect_free() {
+    let repository = MaterializedExpressionBindingRepository::fixture();
+    let missing_callable = repository.scan_with_profiles(false, true, &[]);
+    assert_typed_error(
+        &missing_callable,
+        2,
+        "codenoesis.error/v21",
+        "input.unsupported_rust_expression_composition",
+    );
+    for extra_options in [
+        ["--repository-boundary-profile", "local-gitlinks-v1"],
+        [
+            "--rust-semantic-profile",
+            "rust-cfg-declaration-alternatives-v1",
+        ],
+        ["--compiler-index-profile", "scip-rust-v0.9.0-import-v1"],
+    ] {
+        let output = repository.scan_with_profiles(true, true, &extra_options);
+        assert_typed_error(
+            &output,
+            2,
+            "codenoesis.error/v21",
+            "input.unsupported_rust_expression_composition",
+        );
+    }
+    assert!(
+        !repository.store().exists(),
+        "invalid R14 selectors mutated the store"
+    );
+
+    let legacy = MaterializedExpressionBindingRepository::fixture();
+    let k1 = legacy.scan_with_profiles(true, false, &[]);
+    assert_success(&k1, "legacy K1 selector dispatch");
+    assert_eq!(
+        parse_single_document(&k1.stdout)["schema_version"],
+        "codenoesis.repository-snapshot/v11"
+    );
+    assert!(!legacy.build_sentinel().exists());
+}
+
+#[test]
+fn pt_nfr_det_001_r14_fifty_permutations_and_ten_schedules_are_identical() {
+    let repository = MaterializedExpressionBindingRepository::fixture();
+    let mut expected_semantic = None;
+    for seed in 0..50 {
+        let output = repository
+            .permuted_scan_command(seed)
+            .output()
+            .expect("run R14 argument permutation");
+        let semantic = semantic_projection(&output);
+        if let Some(expected) = &expected_semantic {
+            assert_eq!(&semantic, expected, "R14 semantic permutation {seed}");
+        } else {
+            expected_semantic = Some(semantic);
+        }
+    }
+
+    let schedules = (100..110)
+        .map(|seed| {
+            let mut command = repository.permuted_scan_command(seed);
+            std::thread::spawn(move || command.output().expect("run R14 parallel schedule"))
+        })
+        .collect::<Vec<_>>();
+    let expected_semantic = expected_semantic.expect("R14 semantic oracle");
+    for (schedule, handle) in schedules.into_iter().enumerate() {
+        let output = handle.join().expect("join R14 parallel schedule");
+        assert_eq!(
+            semantic_projection(&output),
+            expected_semantic,
+            "R14 semantic schedule {schedule}"
+        );
+    }
+    assert!(!repository.build_sentinel().exists());
+}
+
 fn count_by<'a>(values: &'a [Value], field: &str) -> BTreeMap<&'a str, u64> {
     let mut counts = BTreeMap::new();
     for value in values {
@@ -241,14 +318,24 @@ fn count_by<'a>(values: &'a [Value], field: &str) -> BTreeMap<&'a str, u64> {
 }
 
 fn generated_markdown(root: &std::path::Path) -> String {
-    let mut output = String::new();
+    let mut paths = Vec::new();
+    collect_markdown_paths(root, &mut paths);
+    paths.sort();
+    paths.into_iter().fold(String::new(), |mut output, path| {
+        output.push_str(&fs::read_to_string(path).expect("read R14 documentation"));
+        output
+    })
+}
+
+fn collect_markdown_paths(root: &std::path::Path, paths: &mut Vec<std::path::PathBuf>) {
     for entry in fs::read_dir(root).expect("read R14 documentation root") {
         let path = entry.expect("R14 documentation entry").path();
-        if path.extension().is_some_and(|extension| extension == "md") {
-            output.push_str(&fs::read_to_string(path).expect("read R14 documentation"));
+        if path.is_dir() {
+            collect_markdown_paths(&path, paths);
+        } else if path.extension().and_then(std::ffi::OsStr::to_str) == Some("md") {
+            paths.push(path);
         }
     }
-    output
 }
 
 fn assert_private(value: &Value) {
@@ -277,6 +364,20 @@ fn assert_success(output: &Output, label: &str) {
         "{label} failed: {}",
         String::from_utf8_lossy(&output.stderr)
     );
+}
+
+fn assert_typed_error(output: &Output, exit_code: i32, schema: &str, code: &str) {
+    assert_eq!(output.status.code(), Some(exit_code));
+    assert!(output.stdout.is_empty());
+    let error = parse_single_document(&output.stderr);
+    assert_eq!(error["schema_version"], schema);
+    assert_eq!(error["code"], code);
+}
+
+fn semantic_projection(output: &Output) -> Vec<u8> {
+    assert_success(output, "R14 deterministic scan");
+    serde_json::to_vec(&parse_single_document(&output.stdout)["semantic"])
+        .expect("serialize R14 semantic projection")
 }
 
 fn hex_sha256(bytes: &[u8]) -> String {

@@ -1,3 +1,4 @@
+use std::ffi::OsString;
 use std::fs;
 use std::path::Path;
 use std::process::{Command, Output};
@@ -21,7 +22,89 @@ impl MaterializedExpressionBindingRepository {
     }
 
     pub fn scan(&self) -> Output {
-        Command::new(env!("CARGO_BIN_EXE_noesis"))
+        self.scan_command(true, true)
+            .output()
+            .expect("launch R14 expression-binding scan")
+    }
+
+    pub fn scan_with_profiles(
+        &self,
+        callable_profile: bool,
+        expression_profile: bool,
+        extra_options: &[&str],
+    ) -> Output {
+        let mut command = self.scan_command(callable_profile, expression_profile);
+        command.args(extra_options);
+        command.output().expect("launch R14 selector matrix scan")
+    }
+
+    pub fn permuted_scan_command(&self, seed: u64) -> Command {
+        let store = self.inner.root.join(format!("permuted-store-{seed}"));
+        let mut options = vec![
+            (
+                OsString::from("--repository"),
+                self.inner.worktree.clone().into_os_string(),
+            ),
+            (
+                OsString::from("--repository-id"),
+                OsString::from(REPOSITORY_ID),
+            ),
+            (
+                OsString::from("--revision"),
+                OsString::from(&self.inner.commit_oid),
+            ),
+            (
+                OsString::from("--profile"),
+                OsString::from("standard-local-s4"),
+            ),
+            (
+                OsString::from("--workspace-profile"),
+                OsString::from("cargo-root-package-v1"),
+            ),
+            (
+                OsString::from("--manifest-profile"),
+                OsString::from("cargo-manifest-facts-v1"),
+            ),
+            (
+                OsString::from("--rust-semantic-profile"),
+                OsString::from("rust-semantic-depth-v1"),
+            ),
+            (
+                OsString::from("--rust-framework-profile"),
+                OsString::from("rust-framework-declarations-v1"),
+            ),
+            (
+                OsString::from("--rust-callable-profile"),
+                OsString::from(K1_PROFILE),
+            ),
+            (
+                OsString::from("--rust-expression-profile"),
+                OsString::from(R14_PROFILE),
+            ),
+            (OsString::from("--store"), store.into_os_string()),
+            (OsString::from("--format"), OsString::from("json")),
+        ];
+        let mut state = seed.wrapping_add(0x9e37_79b9_7f4a_7c15);
+        for position in (1..options.len()).rev() {
+            state = state
+                .wrapping_mul(6_364_136_223_846_793_005)
+                .wrapping_add(1_442_695_040_888_963_407);
+            let divisor = u64::try_from(position + 1).expect("R14 option count fits u64");
+            let selected =
+                usize::try_from(state % divisor).expect("R14 selected option index fits usize");
+            options.swap(position, selected);
+        }
+        let mut command = Command::new(env!("CARGO_BIN_EXE_noesis"));
+        command.current_dir(&self.inner.root).arg("scan");
+        for (flag, value) in options {
+            command.arg(flag).arg(value);
+        }
+        command
+    }
+
+    fn scan_command(&self, callable_profile: bool, expression_profile: bool) -> Command {
+        let mut command = Command::new(env!("CARGO_BIN_EXE_noesis"));
+        command
             .current_dir(&self.inner.root)
             .args(["scan", "--repository"])
             .arg(&self.inner.worktree)
@@ -38,16 +121,17 @@ impl MaterializedExpressionBindingRepository {
                 "rust-semantic-depth-v1",
                 "--rust-framework-profile",
                 "rust-framework-declarations-v1",
-                "--rust-callable-profile",
-                K1_PROFILE,
-                "--rust-expression-profile",
-                R14_PROFILE,
             ])
             .arg("--store")
             .arg(&self.inner.store)
-            .args(["--format", "json"])
-            .output()
-            .expect("launch R14 expression-binding scan")
+            .args(["--format", "json"]);
+        if callable_profile {
+            command.args(["--rust-callable-profile", K1_PROFILE]);
+        }
+        if expression_profile {
+            command.args(["--rust-expression-profile", R14_PROFILE]);
+        }
+        command
     }
 
     pub fn docs(&self) -> Output {
