@@ -1,0 +1,118 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "docs/software/decisions/0023-s4-r12-k1-cfg-alternatives-composition-contract.md",
+      "sha256": "9a709596a7245e9c7c609c4b7bc899656d8f7d353d5ff17a79567348648289ba"
+    },
+    {
+      "path": "scripts/tests/test_s4_r12_k1_cfg_alternatives_contract.py",
+      "sha256": "8f3a432cc1f7698827e6bcd78a84d6936f7178e0c4895ce40ab4abd817bd07d9"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-callable-cfg-alternatives-v1/README.md",
+      "sha256": "c659ac3a31d12055355ca270205f552897d11aba92cb2770e779df989ba2e1fa"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-callable-cfg-alternatives-v1/expected-composition.json",
+      "sha256": "6666755ca88104d3feffc3228c36551b5e0f865734ec0fe0a631b86f261d5ac1"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-callable-cfg-alternatives-v1/manifest.json",
+      "sha256": "66536bda2b91d8e45e56f47922d070f73801ddafd895316b47e6921eb7847108"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-callable-cfg-alternatives-v1/repository/Cargo.toml",
+      "sha256": "895cdb86e3b4ad787a30a1e54d728e0ad279ed4898d2291a91f20472259e5a41"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-callable-cfg-alternatives-v1/repository/build.rs",
+      "sha256": "b85d180a41257dbee60d5919f5b61c5b28128b9df50cf27c438cdbd3358be4dd"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-callable-cfg-alternatives-v1/repository/src/lib.rs",
+      "sha256": "07d2b8f9f3a1a0576b90bd820b5af9ef79511bcdaaca222d4d8f0c61ae815ff5"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-callable-cfg-alternatives-v1/repository/src/model.rs",
+      "sha256": "943e4e1e84d1433250fbb8c4d3f2c14f53ba85ace17eaec7e0293ee2e2f66685"
+    },
+    {
+      "path": "tests/specifications/s1/gitlink-boundary-contract-bundle.json",
+      "sha256": "710a640fd6bf43ee87cc4a4c2eb159093dbb6c6654ba4baf5fcbc3adf8e5970e"
+    },
+    {
+      "path": "tests/specifications/s4/k1/contract-bundle.json",
+      "sha256": "a0428d0a03754aa45b0f04c07e153579ab4dc8589e23d9e2c174282f2bff0833"
+    },
+    {
+      "path": "tests/specifications/s4/r10/contract-bundle.json",
+      "sha256": "765caf446bbbd6d0300307f62098bceddac39daff541fd18b0130afbbfc0b5d5"
+    },
+    {
+      "path": "tests/specifications/s4/r11/contract-bundle.json",
+      "sha256": "20b2d6281101a457b30cfe4bbb2523d8a69ff6af199e0b8408160d21be2845a2"
+    },
+    {
+      "path": "tests/specifications/s4/r12/callable-cfg-alternatives-composition-v1.json",
+      "sha256": "013f0261a3358a0dffb092815bb26f663f85bb4abbe596bfe79c20568224910c"
+    },
+    {
+      "path": "tests/specifications/s4/r12/codenoesis-error-v19.schema.json",
+      "sha256": "35ca5846cb192b310bbfd97305eb1db4bc9107e9cbd527398615b8fb2188d52e"
+    },
+    {
+      "path": "tests/specifications/s4/r12/configuration-v11.schema.json",
+      "sha256": "dc7bb376ab61ba63a36b18074162078dc70eaf81898da71f91db2a842831c717"
+    },
+    {
+      "path": "tests/specifications/s4/r12/e2e_fr_ext_014_k1_cfg_alternatives.json",
+      "sha256": "790ebab45907d6b91d000e9b083bbe771c81f43c840d9fe70c57e4c8eef948ea"
+    },
+    {
+      "path": "tests/specifications/s4/r12/extraction-chunk-v11.schema.json",
+      "sha256": "a9928fd57da3cb040d6f536f06570621a41329c3a0694ce12f9bed58402d11a3"
+    },
+    {
+      "path": "tests/specifications/s4/r12/invalid-cases-v1.json",
+      "sha256": "c9dcf47e098599974d5d4f4322d8a463b50d76f88ca6c8012a0032792894b686"
+    },
+    {
+      "path": "tests/specifications/s4/r12/knowledge-graph-v11.schema.json",
+      "sha256": "1cf87d731504f1a1f4a6e290677e06ddedcf5b5acd239137cfd9de15ac049525"
+    },
+    {
+      "path": "tests/specifications/s4/r12/local-explorer-manifest-v5.schema.json",
+      "sha256": "04bcffa947f6408da8a853518e52a4976adf51a6a535f91d670a273019661c50"
+    },
+    {
+      "path": "tests/specifications/s4/r12/local-query-result-v9.schema.json",
+      "sha256": "ca8f6690363aecd08eb4b12a824cbc4688783d3593cb3b530e9bf6a477c45c1c"
+    },
+    {
+      "path": "tests/specifications/s4/r12/portable-graph-v5.schema.json",
+      "sha256": "05799ca946f6388aaad5c86b1e60bf12e8fe5f67bdbe8df5628c61bd3c8d17ba"
+    },
+    {
+      "path": "tests/specifications/s4/r12/repository-snapshot-v14.schema.json",
+      "sha256": "dee73fabe6cc71c2445a3e183e558cb7351cee794a7aee45af7ac717e2659ab6"
+    },
+    {
+      "path": "tests/specifications/s4/r12/rust-ontology-v11.json",
+      "sha256": "a44bcd92445e72d385f1eae340882ebfc90da1c6a26f0d16265e285f20342a2b"
+    },
+    {
+      "path": "tests/specifications/s4/r12/semantic-hash-contract-v10.json",
+      "sha256": "5aae0f2925f724db06f0c111ced6eb482961e22cd74260e544d8a365462cb3ed"
+    },
+    {
+      "path": "tests/specifications/s4/r6/contract-bundle.json",
+      "sha256": "bab8814735d02a4f76ff94d4cf67036fefa19e5f81460fca99177e2c64823e70"
+    }
+  ],
+  "bundle_sha256": "73d4a54f8f6ac7e4157f1221a7d5c67a37bca68e87703fd15b916a2622e67241"
+}

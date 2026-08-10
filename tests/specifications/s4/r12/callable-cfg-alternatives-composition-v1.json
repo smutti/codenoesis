@@ -1,0 +1,68 @@
+{
+  "schema_version": "codenoesis.r12-callable-cfg-alternatives-composition/v1",
+  "profiles": {
+    "semantic": "rust-cfg-declaration-alternatives-v1",
+    "framework": "rust-framework-declarations-v1",
+    "callable": "rust-callable-semantics-v1",
+    "boundary": [null, "local-gitlinks-v1"],
+    "output_capacity": ["standard", "local-snapshot-64m-v1"]
+  },
+  "lineage": {
+    "configuration": "codenoesis.configuration/v11",
+    "snapshot": "codenoesis.repository-snapshot/v14",
+    "extraction": "codenoesis.extraction/v11",
+    "chunk": "codenoesis.extraction-chunk/v11",
+    "graph": "codenoesis.knowledge-graph/v11",
+    "ontology": "codenoesis.ontology/rust/v11",
+    "query": "codenoesis.local-query-result/v9",
+    "portable": "codenoesis.portable-graph/v5",
+    "explorer": "codenoesis.local-explorer/v5",
+    "error": "codenoesis.error/v19"
+  },
+  "subject_mapping": {
+    "logical_method_identity_preserved": true,
+    "logical_method_direct_callable_shape": false,
+    "alternative_is_callable_subject": true,
+    "one_signature_per_alternative": true,
+    "k1_preimages_reused": true,
+    "source_order_in_identity": false,
+    "occurrence_ordinal_in_identity": false,
+    "ordinary_k1_subjects_preserved": true,
+    "declared_value_subjects_preserved": true,
+    "framework_declarations_preserved": true
+  },
+  "inference": {
+    "cfg_evaluated": false,
+    "active_alternative_selected": false,
+    "target_resolved": false,
+    "method_dispatch_inferred": false,
+    "compiler_facts_inferred": false,
+    "runtime_behavior_inferred": false,
+    "unique_local_free_function_calls_only": true
+  },
+  "dispatch": {
+    "k1_without_r10": "codenoesis.repository-snapshot/v11",
+    "r10_without_k1": "codenoesis.repository-snapshot/v12",
+    "k1_boundary_without_r10": "codenoesis.repository-snapshot/v13",
+    "r10_r6_k1": "codenoesis.repository-snapshot/v14",
+    "portable_profile": "rust-callable-semantics-v1",
+    "explorer_profile": "rust-callable-semantics-v1"
+  },
+  "determinism": {
+    "permutations": 50,
+    "parallel_schedules": 10,
+    "ordering": "raw_utf8_identity",
+    "volatile_envelope_excluded": true
+  },
+  "privacy": {
+    "source_contents": false,
+    "source_snippets": false,
+    "body_text": false,
+    "initializer_text": false,
+    "absolute_roots": false,
+    "raw_urls": false,
+    "credentials": false,
+    "environment": false,
+    "telemetry": false
+  }
+}

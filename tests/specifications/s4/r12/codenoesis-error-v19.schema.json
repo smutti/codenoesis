@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/codenoesis-error-v19.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "code", "stage", "message", "retryable", "context"],
+  "properties": {
+    "schema_version": {"const": "codenoesis.error/v19"},
+    "code": {
+      "enum": [
+        "input.invalid_rust_cfg_alternatives_profile",
+        "input.invalid_rust_callable_profile",
+        "input.unsupported_rust_callable_cfg_alternatives_composition",
+        "input.invalid_repository_boundary_profile",
+        "input.invalid_repository_boundary_manifest",
+        "input.unsafe_output_path",
+        "acquisition.repository_boundary_metadata_invalid",
+        "acquisition.nested_repository_mismatch",
+        "acquisition.nested_repository_unavailable",
+        "acquisition.nested_repository_changed",
+        "acquisition.repository_boundary_limit_exceeded",
+        "acquisition.limit_exceeded",
+        "extraction.invalid_rust_source",
+        "extraction.rust_semantic_identity_conflict",
+        "extraction.rust_cfg_alternative_identity_mismatch",
+        "extraction.rust_cfg_alternative_duplicate",
+        "extraction.rust_cfg_alternative_overlap",
+        "extraction.rust_cfg_alternative_cross_source",
+        "extraction.rust_cfg_alternative_limit_exceeded",
+        "extraction.invalid_callable_syntax",
+        "extraction.callable_identity_conflict",
+        "extraction.callable_limit_exceeded",
+        "extraction.callable_cfg_alternative_subject_mismatch",
+        "extraction.callable_cfg_alternative_signature_missing",
+        "extraction.callable_cfg_alternative_signature_duplicate",
+        "extraction.callable_cfg_logical_shape_forbidden",
+        "extraction.callable_cfg_evidence_invalid",
+        "snapshot.invalid_v14",
+        "query.invalid_v14",
+        "export.invalid_snapshot",
+        "export.invalid_portable_graph_v5",
+        "export.limit_exceeded",
+        "explorer.asset_integrity_mismatch",
+        "explorer.limit_exceeded",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {"enum": ["input", "acquisition", "extraction", "snapshot", "query", "export", "explorer", "internal"]},
+    "message": {"type": "string", "minLength": 1, "maxLength": 256},
+    "retryable": {"const": false},
+    "context": {"type": "object"}
+  }
+}

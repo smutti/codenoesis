@@ -178,6 +178,36 @@ semantic hash domains. K1 without the boundary selector remains V11. R10 and
 R7 do not compose in R11. Invalid composition or any boundary/acquisition
 failure is typed ErrorV18 and cannot publish a partial head.
 
+### R12 callable cfg-alternatives composition
+
+The explicit R12 S4 composition combines the existing R10 declaration-
+alternative lineage, R6 framework declaration projection, and K1 callable
+semantics without changing any extractor's truth rules. R10 remains the
+authority for one logical method and its evidence-backed declaration
+alternatives. The application layer maps each accepted callable occurrence to
+its exact alternative and uses that alternative ID as the K1 callable subject.
+
+An alternative-bearing logical method receives no direct signature, parameter,
+body fact, or `CALLS` edge. Each alternative has exactly one signature and its
+own ordered parameters and body-syntax facts. Existing K1 preimages are reused
+with the alternative subject, so no source order or occurrence ordinal enters
+identity. Non-alternative K1 subjects and R6 declarations remain unchanged.
+`CALLS` still requires one uniquely known local free-function target and does
+not imply an active `cfg` world or method dispatch.
+
+RepositorySnapshotV14 carries both inherited indexes plus the exact
+`codenoesis.callable-cfg-alternatives-index/v1` join projection.
+KnowledgeGraphV11, ExtractionChunkV11, and ConfigurationV11 use new semantic
+hash domains. LocalQueryResultV9 exposes direct logical/alternative/callable
+neighborhoods. PortableGraphV5 is a lossless private projection and
+LocalExplorerV5 reuses immutable K1 viewer bytes.
+
+The existing R2 boundary report and R9 output capacity are optional in R12.
+They grant no nested-source or semantic authority. K1 alone remains V11, R10
+alone remains V12, and K1 plus boundaries without R10 remains V13. R7/SCIP does
+not compose. Invalid joins or selector combinations are typed ErrorV19 and
+cannot publish a partial head.
+
 ## Versioned artifacts and identity
 
 All public artifact types include `schema_version`, repository commit, configuration hash, pipeline version, ontology version, extractor versions, creation time, and a BLAKE3 content hash.

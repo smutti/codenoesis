@@ -1,0 +1,108 @@
+{
+  "schema_version": "codenoesis.e2e-specification/v1",
+  "issue": 158,
+  "requirements": [
+    "FR-ACQ-005",
+    "FR-EXT-011",
+    "FR-EXT-012",
+    "FR-EXT-013",
+    "FR-EXT-014",
+    "FR-EXP-004",
+    "FR-CLI-001",
+    "FR-DOC-001",
+    "FR-DOC-002",
+    "FR-DOC-003",
+    "FR-QRY-001",
+    "NFR-DET-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-PRV-002",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "requirement_status": "Proposed branch-scoped candidate until protected manual merge",
+  "slice": "S4",
+  "risk": "high",
+  "base_sha": "e4ab3faa609da32e0f1b72e3382209dddf5ed5fb",
+  "authorization": "https://github.com/smutti/codenoesis/issues/158#issuecomment-5236032172",
+  "fixture": {
+    "root": "tests/fixtures/s4/rust-callable-cfg-alternatives-v1",
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1",
+    "tree_oid": "c43f0c6e91c8e3e27abbba94cdd666d6c3598414",
+    "commit_oid": "637091858d6582fbe7f0c75b7c62d4fd9c2d87ca",
+    "external_source_vendored": false
+  },
+  "scan_selectors": [
+    "--profile",
+    "standard-local-s4",
+    "--workspace-profile",
+    "cargo-root-package-v1",
+    "--manifest-profile",
+    "cargo-manifest-facts-v1",
+    "--rust-semantic-profile",
+    "rust-cfg-declaration-alternatives-v1",
+    "--rust-framework-profile",
+    "rust-framework-declarations-v1",
+    "--rust-callable-profile",
+    "rust-callable-semantics-v1"
+  ],
+  "optional_selectors": [
+    ["--repository-boundary-profile", "local-gitlinks-v1"],
+    ["--output-capacity-profile", "local-snapshot-64m-v1"]
+  ],
+  "expected_red": {
+    "exit_code": 2,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 344,
+    "stderr_sha256": "dbe134dbc101765a8ebdc2ffe917f4776fddb42d10e3dfe1957e2aa819adb70c",
+    "error_schema": "codenoesis.error/v17",
+    "error_code": "input.unsupported_rust_cfg_alternatives_composition",
+    "store_exists": false
+  },
+  "green_journey": [
+    "scan",
+    "docs",
+    "query_logical_method",
+    "query_declaration_alternative",
+    "query_callable_signature",
+    "export",
+    "strict_reimport",
+    "explore",
+    "scan_optional_boundary",
+    "scan_optional_capacity"
+  ],
+  "expected_contracts": {
+    "configuration": "codenoesis.configuration/v11",
+    "snapshot": "codenoesis.repository-snapshot/v14",
+    "graph": "codenoesis.knowledge-graph/v11",
+    "ontology": "codenoesis.ontology/rust/v11",
+    "query": "codenoesis.local-query-result/v9",
+    "portable": "codenoesis.portable-graph/v5",
+    "explorer": "codenoesis.local-explorer/v5",
+    "error": "codenoesis.error/v19"
+  },
+  "acceptance": {
+    "logical_method_identity_preserved": true,
+    "logical_method_direct_callable_shape": false,
+    "alternative_subject_mapping_exact": true,
+    "callable_counts_exact": true,
+    "framework_lineage_preserved": true,
+    "optional_boundary_exact": true,
+    "optional_capacity_non_semantic": true,
+    "portable_reimport_lossless": true,
+    "viewer_bytes_immutable": true,
+    "legacy_bytes_immutable": true,
+    "permutations": 50,
+    "parallel_schedules": 10
+  },
+  "rustdesk_diagnostic": {
+    "repository": "https://github.com/rustdesk/rustdesk",
+    "commit_oid": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+    "tree_oid": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+    "former_conflict_kind": "rust.method",
+    "former_conflict_member": "try_start_clipboard",
+    "must_advance_beyond_former_conflict": true,
+    "full_v14_completion_required": false
+  }
+}

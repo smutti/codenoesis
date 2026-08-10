@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/extraction-chunk-v11.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_file_id",
+    "entities",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage",
+    "declaration_alternatives_profile",
+    "callable_semantics_profile",
+    "callable_cfg_alternatives_profile",
+    "semantic_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "codenoesis.extraction-chunk/v11"},
+    "source_file_id": {"type": "string", "pattern": "^urn:codenoesis:entity:blake3:[0-9a-f]{64}$"},
+    "entities": {"$ref": "#/$defs/family"},
+    "relationships": {"$ref": "#/$defs/family"},
+    "claims": {"$ref": "#/$defs/family"},
+    "evidence": {"$ref": "#/$defs/family"},
+    "diagnostics": {"$ref": "#/$defs/family"},
+    "coverage": {"$ref": "#/$defs/family"},
+    "declaration_alternatives_profile": {"const": "rust-cfg-declaration-alternatives-v1"},
+    "callable_semantics_profile": {"const": "rust-callable-semantics-v1"},
+    "callable_cfg_alternatives_profile": {"const": "codenoesis.rust-callable-cfg-alternatives/s4-r12-v1"},
+    "semantic_hash": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "family": {"type": "array", "items": {"type": "object", "required": ["id"], "properties": {"id": {"type": "string", "minLength": 1}}}},
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {"const": "blake3-256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}
