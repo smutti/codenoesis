@@ -17,9 +17,16 @@ use codenoesis_domain::s4_k1::{
     callable_signature_id, declared_value_id, enforce_limit, k1_digest,
 };
 use codenoesis_domain::s4_r3::ExternalWorkspaceBoundary;
-use codenoesis_domain::s4_r5::{RustSemanticEntityKind, rust_semantic_member_id};
+use codenoesis_domain::s4_r5::{
+    RustSemanticDepthExtraction, RustSemanticEntityKind, rust_semantic_member_id,
+};
+use codenoesis_domain::s4_r10::{
+    RustCfgDeclarationAlternativesExtraction, RustCfgDeclarationAlternativesKnowledge,
+};
+use codenoesis_domain::s4_r12::{CallableCfgAlternativesError, CallableCfgAlternativesExtraction};
 use codenoesis_ports::{
-    RustCallableBoundaryCompositionExtractor, RustFrameworkDeclarationExtractor,
+    RustCallableBoundaryCompositionExtractor, RustCallableCfgAlternativesCompositionExtractor,
+    RustCfgDeclarationAlternativesExtractor, RustFrameworkDeclarationExtractor,
 };
 use tree_sitter::Node;
 use unicode_normalization::UnicodeNormalization as _;
@@ -42,10 +49,21 @@ struct FreeFunctionKey {
     name: String,
 }
 
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+struct AlternativeOccurrenceKey {
+    logical_method_id: String,
+    source_file_id: String,
+    start_byte: u64,
+    end_byte: u64,
+}
+
 struct ExistingCatalog {
     owners: BTreeMap<OwnerKey, String>,
     free_functions: BTreeMap<FreeFunctionKey, String>,
     semantic_ids: BTreeSet<String>,
+    alternative_occurrences: BTreeMap<AlternativeOccurrenceKey, String>,
+    alternative_logical_method_ids: BTreeSet<String>,
+    alternative_subject_ids: BTreeSet<String>,
 }
 
 impl ExistingCatalog {
@@ -115,7 +133,77 @@ impl ExistingCatalog {
             owners,
             free_functions,
             semantic_ids,
+            alternative_occurrences: BTreeMap::new(),
+            alternative_logical_method_ids: BTreeSet::new(),
+            alternative_subject_ids: BTreeSet::new(),
         }
+    }
+
+    fn from_r12(
+        framework: &codenoesis_domain::s4_r6::FrameworkExtraction,
+        alternatives: &RustCfgDeclarationAlternativesKnowledge,
+    ) -> Result<Self, CallableSemanticsError> {
+        let mut catalog = Self::from_extraction(framework);
+        let evidence = alternatives
+            .semantic
+            .graph
+            .evidence
+            .iter()
+            .map(|value| (value.id.as_str(), value))
+            .collect::<BTreeMap<_, _>>();
+        for alternative in &alternatives.graph.alternatives {
+            let occurrence = evidence
+                .get(alternative.properties.declaration_evidence_id.as_str())
+                .ok_or(CallableSemanticsError::ContractInvalid)?;
+            let key = AlternativeOccurrenceKey {
+                logical_method_id: alternative.subject_id.clone(),
+                source_file_id: alternative.source_file_id.clone(),
+                start_byte: occurrence.start_byte,
+                end_byte: occurrence.end_byte,
+            };
+            if catalog
+                .alternative_occurrences
+                .insert(key, alternative.id.clone())
+                .is_some()
+            {
+                return Err(CallableSemanticsError::ContractInvalid);
+            }
+            catalog
+                .alternative_logical_method_ids
+                .insert(alternative.subject_id.clone());
+            catalog
+                .alternative_subject_ids
+                .insert(alternative.id.clone());
+        }
+        Ok(catalog)
+    }
+
+    fn callable_subject(
+        &self,
+        logical_callable_id: String,
+        source_file_id: &str,
+        start_byte: usize,
+        end_byte: usize,
+    ) -> Result<String, CallableSemanticsError> {
+        if !self
+            .alternative_logical_method_ids
+            .contains(&logical_callable_id)
+        {
+            return Ok(logical_callable_id);
+        }
+        let start_byte =
+            u64::try_from(start_byte).map_err(|_| CallableSemanticsError::ContractInvalid)?;
+        let end_byte =
+            u64::try_from(end_byte).map_err(|_| CallableSemanticsError::ContractInvalid)?;
+        self.alternative_occurrences
+            .get(&AlternativeOccurrenceKey {
+                logical_method_id: logical_callable_id,
+                source_file_id: source_file_id.to_owned(),
+                start_byte,
+                end_byte,
+            })
+            .cloned()
+            .ok_or(CallableSemanticsError::ContractInvalid)
     }
 
     fn owner(
@@ -480,6 +568,14 @@ impl TreeSitterRustWorkspaceExtractor {
             .extract_rust_framework_declarations_incremental(inventory, external_boundaries, &[])
             .map_err(CallableSemanticsError::Source)?;
         let catalog = ExistingCatalog::from_extraction(&framework);
+        Self::extract_callable_semantics_from_framework(inventory, framework, &catalog)
+    }
+
+    fn extract_callable_semantics_from_framework(
+        inventory: &RepositoryInventory,
+        framework: codenoesis_domain::s4_r6::FrameworkExtraction,
+        catalog: &ExistingCatalog,
+    ) -> Result<CallableSemanticsExtraction, CallableSemanticsError> {
         let contexts = source_contexts(&framework.knowledge.semantic.manifest, inventory)
             .map_err(|_| CallableSemanticsError::ContractInvalid)?;
         let repository_identity = inventory.bound_revision().repository_identity().as_str();
@@ -498,7 +594,7 @@ impl TreeSitterRustWorkspaceExtractor {
                 &context.path,
                 context.file.blob_oid().as_str(),
                 text,
-                &catalog,
+                catalog,
             );
             process_scope(
                 tree.root_node(),
@@ -518,8 +614,52 @@ impl TreeSitterRustWorkspaceExtractor {
         let parser_invocation_count = u64::try_from(chunks.len()).unwrap_or(u64::MAX);
         let extraction =
             CallableSemanticsExtraction::from_r6(framework, chunks, graph, parser_invocation_count);
-        extraction.knowledge.validate()?;
+        extraction
+            .knowledge
+            .validate_with_additional_subjects(&catalog.alternative_subject_ids)?;
         Ok(extraction)
+    }
+
+    /// Extracts the R12 R10 + R6 + K1 composition without selecting a cfg alternative.
+    ///
+    /// # Errors
+    ///
+    /// Returns an inherited extraction failure or a typed cross-lineage contract failure.
+    pub fn extract_rust_callable_cfg_alternatives(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+    ) -> Result<CallableCfgAlternativesExtraction, CallableCfgAlternativesError> {
+        let alternatives = self
+            .extract_rust_cfg_declaration_alternatives_incremental(
+                inventory,
+                external_boundaries,
+                &[],
+            )
+            .map_err(CallableCfgAlternativesError::Alternatives)?;
+        Self::compose_callable_cfg_alternatives(inventory, alternatives)
+    }
+
+    fn compose_callable_cfg_alternatives(
+        inventory: &RepositoryInventory,
+        alternatives: RustCfgDeclarationAlternativesExtraction,
+    ) -> Result<CallableCfgAlternativesExtraction, CallableCfgAlternativesError> {
+        let r5 = RustSemanticDepthExtraction {
+            knowledge: alternatives.knowledge.semantic.clone(),
+            cache_entries: alternatives.cache_entries.clone(),
+            source_records: alternatives.source_records.clone(),
+            parser_invocation_count: alternatives.parser_invocation_count,
+        };
+        let framework =
+            Self::extract_framework_declarations_from_r5(inventory, r5).map_err(|error| {
+                CallableCfgAlternativesError::Callable(CallableSemanticsError::Source(error))
+            })?;
+        let catalog = ExistingCatalog::from_r12(&framework, &alternatives.knowledge)
+            .map_err(CallableCfgAlternativesError::Callable)?;
+        let callable =
+            Self::extract_callable_semantics_from_framework(inventory, framework, &catalog)
+                .map_err(CallableCfgAlternativesError::Callable)?;
+        CallableCfgAlternativesExtraction::compose(alternatives, callable)
     }
 }
 
@@ -530,6 +670,16 @@ impl RustCallableBoundaryCompositionExtractor for TreeSitterRustWorkspaceExtract
         external_boundaries: &[ExternalWorkspaceBoundary],
     ) -> Result<CallableSemanticsExtraction, CallableSemanticsError> {
         (*self).extract_rust_callable_semantics_for_boundaries(inventory, external_boundaries)
+    }
+}
+
+impl RustCallableCfgAlternativesCompositionExtractor for TreeSitterRustWorkspaceExtractor {
+    fn extract_rust_callable_cfg_alternatives_with_boundaries(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+    ) -> Result<CallableCfgAlternativesExtraction, CallableCfgAlternativesError> {
+        self.extract_rust_callable_cfg_alternatives(inventory, external_boundaries)
     }
 }
 
@@ -800,7 +950,7 @@ fn process_callable(
     builder: &mut ChunkBuilder<'_>,
 ) -> Result<(), CallableSemanticsError> {
     let name = normalized_name(node, builder.source, builder.path)?;
-    let callable_id = if let Some((owner_id, trait_context_id)) = owner.method_context() {
+    let logical_callable_id = if let Some((owner_id, trait_context_id)) = owner.method_context() {
         rust_semantic_member_id(
             builder.repository_identity,
             builder.crate_id,
@@ -818,7 +968,17 @@ fn process_callable(
             &name,
         )
     };
+    let callable_id = builder.catalog.callable_subject(
+        logical_callable_id,
+        builder.source_file_id,
+        node.start_byte(),
+        node.end_byte(),
+    )?;
     let callable_known = builder.catalog.semantic_ids.contains(&callable_id)
+        || builder
+            .catalog
+            .alternative_subject_ids
+            .contains(&callable_id)
         || builder
             .catalog
             .free_functions

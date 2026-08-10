@@ -628,6 +628,7 @@ pub(super) struct GraphIndex {
     framework_declarations: bool,
     compiler_index: bool,
     callable_semantics: bool,
+    callable_cfg_alternatives: bool,
     repository_boundaries: Option<Value>,
     pub(super) entities: BTreeMap<String, Value>,
     relationships: Vec<Value>,
@@ -661,6 +662,7 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v8"
                     | "codenoesis.knowledge-graph/v9"
                     | "codenoesis.knowledge-graph/v10"
+                    | "codenoesis.knowledge-graph/v11"
             )
         );
         let rust_semantic_depth = matches!(
@@ -672,10 +674,13 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v8"
                     | "codenoesis.knowledge-graph/v9"
                     | "codenoesis.knowledge-graph/v10"
+                    | "codenoesis.knowledge-graph/v11"
             )
         );
-        let declaration_alternatives =
-            graph_schema_version == Some("codenoesis.knowledge-graph/v9");
+        let declaration_alternatives = matches!(
+            graph_schema_version,
+            Some("codenoesis.knowledge-graph/v9" | "codenoesis.knowledge-graph/v11")
+        );
         let framework_declarations = matches!(
             graph_schema_version,
             Some(
@@ -683,27 +688,42 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v7"
                     | "codenoesis.knowledge-graph/v8"
                     | "codenoesis.knowledge-graph/v10"
+                    | "codenoesis.knowledge-graph/v11"
             )
         );
         let compiler_index = graph_schema_version == Some("codenoesis.knowledge-graph/v7");
         let callable_semantics = matches!(
             graph_schema_version,
-            Some("codenoesis.knowledge-graph/v8" | "codenoesis.knowledge-graph/v10")
+            Some(
+                "codenoesis.knowledge-graph/v8"
+                    | "codenoesis.knowledge-graph/v10"
+                    | "codenoesis.knowledge-graph/v11"
+            )
         );
-        let repository_boundaries = if graph_schema_version
-            == Some("codenoesis.knowledge-graph/v10")
-        {
+        let callable_cfg_alternatives =
+            graph_schema_version == Some("codenoesis.knowledge-graph/v11");
+        let repository_boundaries = if matches!(
+            graph_schema_version,
+            Some("codenoesis.knowledge-graph/v10" | "codenoesis.knowledge-graph/v11")
+        ) {
             let boundaries = semantic
                 .get("repository_boundaries")
                 .cloned()
                 .ok_or(DocumentationContractError::InvalidSnapshot)?;
-            if boundaries.get("schema_version").and_then(Value::as_str)
-                != Some("codenoesis.repository-boundaries/v1")
-                || boundaries.get("profile").and_then(Value::as_str) != Some("local-gitlinks-v1")
+            if boundaries.is_null()
+                && graph_schema_version == Some("codenoesis.knowledge-graph/v11")
             {
-                return Err(DocumentationContractError::InvalidSnapshot);
+                None
+            } else {
+                if boundaries.get("schema_version").and_then(Value::as_str)
+                    != Some("codenoesis.repository-boundaries/v1")
+                    || boundaries.get("profile").and_then(Value::as_str)
+                        != Some("local-gitlinks-v1")
+                {
+                    return Err(DocumentationContractError::InvalidSnapshot);
+                }
+                Some(boundaries)
             }
-            Some(boundaries)
         } else {
             None
         };
@@ -745,6 +765,7 @@ impl GraphIndex {
             framework_declarations,
             compiler_index,
             callable_semantics,
+            callable_cfg_alternatives,
             repository_boundaries,
             entities,
             relationships,
@@ -1702,29 +1723,54 @@ fn append_callable_semantics(
     content.push_str(
         "\n## Callable semantics (K1)\n\nCommitted Rust syntax only; compiler, CFG, data-flow, side-effect, and runtime meaning remain unresolved. Body and arbitrary initializer text are not reproduced.\n\n",
     );
+    if index.callable_cfg_alternatives {
+        content.push_str(
+            "For conditional methods, each occurrence-specific fact names its declaration-alternative callable subject; no active target is selected.\n\n",
+        );
+    }
     for (ordinal, entity) in entities.into_iter().enumerate() {
         let id = string_field(entity, "id")?;
         let kind = string_field(entity, "kind")?;
         let claim = index.claim("entity", id)?;
+        let callable_subject = string_field(entity, "subject_id")?;
+        let subject_ids = if index.callable_cfg_alternatives {
+            vec![id.to_owned(), callable_subject.to_owned()]
+        } else {
+            vec![id.to_owned()]
+        };
         let statement = statement_value(
             document_id,
             "callable_semantics",
             id,
             ordinal,
             "deterministic_fact",
-            vec![id.to_owned()],
+            subject_ids,
             string_array(claim, "evidence_ids")?,
             Vec::new(),
         );
-        writeln!(
-            content,
-            "- `{}` `{}`: {}. {}",
-            markdown_code(kind),
-            markdown_code(string_field(entity, "name")?),
-            describe_k1_entity(entity)?,
-            statement_marker(&statement)?
-        )
-        .expect("writing Markdown to a String cannot fail");
+        if index.callable_cfg_alternatives {
+            writeln!(
+                content,
+                "- `{}` `{}` (`{}`) for callable subject `{}`: {}. {}",
+                markdown_code(kind),
+                markdown_code(string_field(entity, "name")?),
+                markdown_code(id),
+                markdown_code(callable_subject),
+                describe_k1_entity(entity)?,
+                statement_marker(&statement)?
+            )
+            .expect("writing Markdown to a String cannot fail");
+        } else {
+            writeln!(
+                content,
+                "- `{}` `{}`: {}. {}",
+                markdown_code(kind),
+                markdown_code(string_field(entity, "name")?),
+                describe_k1_entity(entity)?,
+                statement_marker(&statement)?
+            )
+            .expect("writing Markdown to a String cannot fail");
+        }
         statements.push(statement);
     }
     Ok(())

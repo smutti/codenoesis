@@ -7,7 +7,9 @@ use codenoesis_domain::s4::{
     workspace_declaration_id, workspace_module_id,
 };
 use codenoesis_domain::s4_r3::ExternalWorkspaceBoundary;
-use codenoesis_domain::s4_r5::{CompilationPresence, RustSemanticError, RustSemanticLimit};
+use codenoesis_domain::s4_r5::{
+    CompilationPresence, RustSemanticDepthExtraction, RustSemanticError, RustSemanticLimit,
+};
 use codenoesis_domain::s4_r6::{
     FrameworkCoverageGap, FrameworkDeclaration, FrameworkDeclarationIndex, FrameworkDiagnostic,
     FrameworkEpistemicState, FrameworkError, FrameworkExtraction, FrameworkGraph, FrameworkLimit,
@@ -379,7 +381,6 @@ struct BuilderSegment<'tree> {
 }
 
 impl RustFrameworkDeclarationExtractor for TreeSitterRustWorkspaceExtractor {
-    #[allow(clippy::too_many_lines)]
     fn extract_rust_framework_declarations_incremental(
         &self,
         inventory: &RepositoryInventory,
@@ -394,6 +395,17 @@ impl RustFrameworkDeclarationExtractor for TreeSitterRustWorkspaceExtractor {
             cache_entries,
         )
         .map_err(map_semantic_error)?;
+        Self::extract_framework_declarations_from_r5(inventory, r5)
+    }
+}
+
+impl TreeSitterRustWorkspaceExtractor {
+    #[allow(clippy::too_many_lines)]
+    pub(crate) fn extract_framework_declarations_from_r5(
+        inventory: &RepositoryInventory,
+        r5: RustSemanticDepthExtraction,
+    ) -> Result<FrameworkExtraction, FrameworkError> {
+        validate_framework_inventory_paths(inventory)?;
         let repository_identity = inventory.bound_revision().repository_identity().as_str();
         let commit_oid = inventory.bound_revision().commit_oid().as_str();
         let contexts = source_contexts(r5.knowledge.semantic_manifest(), inventory)

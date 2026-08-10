@@ -3,6 +3,7 @@ mod support;
 use std::collections::BTreeMap;
 use std::fmt::Write as _;
 use std::fs;
+use std::path::Path;
 use std::process::{Command, Output};
 
 use serde_json::Value;
@@ -104,9 +105,12 @@ fn e2e_fr_ext_014_k1_cfg_alternatives_complete_local_journey() {
             .as_array()
             .expect("R12 unresolved calls")
             .len(),
-        expected["unresolved_call_sites"]
-            .as_u64()
-            .expect("R12 expected unresolved calls") as usize
+        usize::try_from(
+            expected["unresolved_call_sites"]
+                .as_u64()
+                .expect("R12 expected unresolved calls"),
+        )
+        .expect("R12 unresolved call count fits usize")
     );
 
     let logical_id = expected["logical_method"]["id"]
@@ -201,6 +205,23 @@ fn e2e_fr_ext_014_k1_cfg_alternatives_complete_local_journey() {
 
     assert_success(&repository.docs(), "R12 documentation generation");
     let first_alternative = &expected["alternatives"][0];
+    let documentation = generated_markdown(&repository.documents);
+    assert!(documentation.contains("Conditional declaration alternatives"));
+    assert!(documentation.contains("no active target is selected"));
+    assert!(
+        documentation.contains(
+            first_alternative["id"]
+                .as_str()
+                .expect("R12 documented alternative ID")
+        )
+    );
+    assert!(
+        documentation.contains(
+            first_alternative["callable_signature_id"]
+                .as_str()
+                .expect("R12 documented signature ID")
+        )
+    );
     for requested_id in [
         logical_id,
         first_alternative["id"]
@@ -212,10 +233,35 @@ fn e2e_fr_ext_014_k1_cfg_alternatives_complete_local_journey() {
     ] {
         let query = repository.query(requested_id);
         assert_success(&query, "R12 exact-ID query");
-        assert_eq!(
-            parse_single_document(&query.stdout)["schema_version"],
-            "codenoesis.local-query-result/v9"
-        );
+        let result = parse_single_document(&query.stdout);
+        assert_eq!(result["schema_version"], "codenoesis.local-query-result/v9");
+        if requested_id == logical_id {
+            assert!(
+                result["linked_r10_entities"]
+                    .as_array()
+                    .expect("R12 logical linked alternatives")
+                    .iter()
+                    .any(|entity| entity["id"] == first_alternative["id"])
+            );
+        } else if requested_id == first_alternative["id"] {
+            assert!(
+                result["linked_k1_entities"]
+                    .as_array()
+                    .expect("R12 alternative linked callable facts")
+                    .iter()
+                    .any(|entity| entity["id"] == first_alternative["callable_signature_id"])
+            );
+        } else {
+            assert_eq!(
+                result["linked_k1_entities"]
+                    .as_array()
+                    .expect("R12 signature linked parameters")
+                    .iter()
+                    .filter(|entity| entity["kind"] == "rust.parameter")
+                    .count(),
+                2
+            );
+        }
     }
 
     let export = repository.export();
@@ -365,7 +411,7 @@ fn e2e_fr_cli_001_r12_invalid_selector_matrix_fails_before_acquisition() {
     }
 }
 
-fn callable_counts<'a>(graph: &'a Value) -> BTreeMap<&'a str, u64> {
+fn callable_counts(graph: &Value) -> BTreeMap<&str, u64> {
     count_by(graph, "entities", "kind")
         .into_iter()
         .filter(|(kind, _)| {
@@ -456,6 +502,27 @@ fn scan_with_rust_arguments(
         .args(["--format", "json"])
         .output()
         .expect("launch invalid R12 selector matrix")
+}
+
+fn generated_markdown(root: &Path) -> String {
+    let mut paths = Vec::new();
+    collect_markdown_paths(root, &mut paths);
+    paths.sort();
+    paths.into_iter().fold(String::new(), |mut content, path| {
+        content.push_str(&fs::read_to_string(path).expect("read R12 generated Markdown"));
+        content
+    })
+}
+
+fn collect_markdown_paths(root: &Path, paths: &mut Vec<std::path::PathBuf>) {
+    for entry in fs::read_dir(root).expect("read R12 documentation root") {
+        let path = entry.expect("read R12 documentation entry").path();
+        if path.is_dir() {
+            collect_markdown_paths(&path, paths);
+        } else if path.extension().and_then(std::ffi::OsStr::to_str) == Some("md") {
+            paths.push(path);
+        }
+    }
 }
 
 fn hex_sha256(bytes: &[u8]) -> String {
