@@ -1,0 +1,46 @@
+issue=https://github.com/smutti/codenoesis/issues/162
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+tested_evidence_commit=e81472dd787b87ded177a684f041ad3a79d0ba24
+tested_tree=0b1faeccaa7d67b3d35fb8bf56be2f8fff189ac9
+started_at_utc=2026-08-10T17:19:57Z
+completed_at_utc=2026-08-10T17:28:31Z
+
+command=actionlint -no-color
+exit=0
+
+command=python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json
+exit=0
+result={"approved_requirement_count":39,"hard_protected_pattern_count":13,"status":"valid","version":1}
+
+command=cargo fmt --all --check
+exit=0
+
+command=cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+exit=0
+
+command=cargo test --workspace --all-targets --all-features --locked
+exit=0
+tests_passed=503
+
+command=cargo test --workspace --doc --all-features --locked
+exit=0
+
+command=python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+exit=0
+tests_passed=299
+
+command=python3 scripts/validate_benchmark_assets.py
+exit=0
+result=benchmark assets valid: status=scaffold, suites=0
+
+command=cargo bench --workspace --all-features --no-run --locked
+exit=0
+
+raw_local_log_bytes=62461
+raw_local_log_sha256=9b0f7722e6f9db4ee8619e74525ec87351e8f2417359d7048f5ed1791ebdae8d
+environment=Darwin 25.5.0 arm64; rustc 1.97.1 (8bab26f4f 2026-07-14); cargo 1.97.1 (c980f4866 2026-06-30); Python 3.9.6
+known_warning=the pre-existing exact toml dependency requirement includes ignored semver metadata; no R14 manifest or dependency changed
+result=green
+final_review_head_gate=pending after this evidence commit; retain the exact head and result in the pull request and base-controlled GitHub Actions

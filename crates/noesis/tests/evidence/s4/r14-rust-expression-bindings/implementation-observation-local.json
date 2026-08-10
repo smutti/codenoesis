@@ -91,7 +91,15 @@
       "raw_local_log_sha256": "aef2b1ce690d8a657785dc993b290ade419010bc1e8ca0316678d0bc1740fc50"
     },
     "complete_repository_gate": {
-      "status": "pending on the evidence head"
+      "tested_commit": "e81472dd787b87ded177a684f041ad3a79d0ba24",
+      "tested_tree": "0b1faeccaa7d67b3d35fb8bf56be2f8fff189ac9",
+      "exit_code": 0,
+      "workspace_tests_passed": 503,
+      "python_tests_passed": 299,
+      "summary": "crates/noesis/tests/evidence/s4/r14-rust-expression-bindings/complete-gate-summary.log",
+      "raw_local_log_bytes": 62461,
+      "raw_local_log_sha256": "9b0f7722e6f9db4ee8619e74525ec87351e8f2417359d7048f5ed1791ebdae8d",
+      "final_review_head": "rerun after this evidence commit and bind the immutable head in the pull request"
     }
   },
   "fixture": {
