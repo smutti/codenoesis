@@ -1,0 +1,66 @@
+issue=https://github.com/smutti/codenoesis/issues/158
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+tested_implementation_commit=f4fda32720f1fc7561b5517364fabfc504189ca1
+tested_tree=08f646965f8cf8a822f2e6c51b7f2e32a0783ab5
+completed_at_utc=2026-08-10T06:52:27Z
+
+command=python3 -m unittest scripts.tests.test_s4_r12_k1_cfg_alternatives_contract
+exit=0
+tests_passed=4
+
+command=cargo test -p codenoesis-domain --test s4_r12_k1_cfg_alternatives --locked
+exit=0
+tests_passed=2
+
+command=cargo test -p codenoesis-lang-rust --test s4_r12_k1_cfg_alternatives --locked
+exit=0
+tests_passed=6
+determinism=50 inventory permutations and 10 parallel schedules
+
+command=cargo test -p codenoesis-application --test s4_r12_k1_cfg_alternatives --locked
+exit=0
+tests_passed=1
+
+command=cargo test -p codenoesis-contracts --test s4_r12_k1_cfg_alternatives --locked
+exit=0
+tests_passed=7
+
+command=cargo test -p noesis --lib --locked portable_explorer::tests
+exit=0
+tests_passed=9
+security=V5 mutable-input and output-replacement races fail closed; immutable viewer transport remains canonical
+
+command=cargo test -p noesis --test e2e_fr_ext_014_k1_cfg_alternatives --locked
+exit=0
+tests_passed=2
+journey=scan -> docs -> exact-ID query -> export -> strict reimport -> explore
+selector_compatibility=only complete R10+R6+K1 intent selects ErrorV19; incomplete combinations retain R10 ErrorV17
+
+command=cargo test -p noesis --test e2e_fr_ext_012_rust_callable_semantics --locked
+exit=0
+tests_passed=3
+legacy=K1 V11 journey and selector absence unchanged
+
+command=cargo test -p noesis --test e2e_fr_ext_013_cfg_declaration_alternatives --locked
+exit=0
+tests_passed=11
+legacy=R10 V12 behavior unchanged
+
+command=cargo test -p noesis --test e2e_fr_ext_012_k1_repository_boundaries --locked
+exit=0
+tests_passed=7
+legacy=R11 V13 behavior unchanged
+
+command=cargo test -p noesis --test e2e_fr_ext_012_k1_output_capacity --locked
+exit=0
+tests_passed=2
+legacy=K1 output-capacity behavior unchanged
+
+rust_tests_passed=50
+python_tests_passed=4
+raw_local_log_bytes=11630
+raw_local_log_sha256=d2bb80044460a0abd308a4e743b3788038f462c7e3432e10081d3ee62164758e
+known_warning=the pre-existing exact toml dependency requirement includes ignored semver metadata; no R12 manifest or dependency changed
+result=green
