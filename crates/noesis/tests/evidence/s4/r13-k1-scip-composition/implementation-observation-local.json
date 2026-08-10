@@ -27,25 +27,26 @@
   "slice": "S4",
   "risk": "high",
   "risk_owner": "@smutti",
-  "observed_at_utc": "2026-08-10T09:55:48Z",
+  "observed_at_utc": "2026-08-10T10:32:26Z",
   "base_commit_sha": "cc25dec49343c510f124585c91d459982e827c68",
   "governance_checkpoint_sha": "3080c58fe8465a043fbeccbca3a288bf31ef86bb",
   "governance_checkpoint_tree": "2bcbec10bfe9ea132a708e8aa16b317003690c3b",
   "red_evidence_commit_sha": "967cf29c4a4b90a16642af492bf5eef1a5282266",
   "implementation_commit_sha": "84da1aec378ec5134f12fbc261eff8e141836e7b",
-  "tested_correction_commit_sha": "610cdd41b041680eb7cb8042ca54c36517da8db6",
-  "tested_implementation_tree": "46d0b1ac47d7af44a5ebda5560f495ba90081f23",
+  "tested_correction_commit_sha": "509c12752371548f746ffa0a25bf0c9b3bd10857",
+  "tested_implementation_tree": "753fa766446362e0a141a6c6861d78781940cfaa",
   "final_review_head": "recorded by the pull request after this evidence commit; a commit cannot contain its own SHA",
   "branch": "codex/160-r13-k1-scip-composition",
   "authorization": {
     "ready_issue": "https://github.com/smutti/codenoesis/issues/160",
     "complete_package_decision": "https://github.com/smutti/codenoesis/issues/160#issuecomment-5237555163",
     "coverage_oracle_correction": "https://github.com/smutti/codenoesis/issues/160#issuecomment-5237601867",
+    "windows_test_root_correction": "https://github.com/smutti/codenoesis/issues/160#issuecomment-5238965764",
     "maintainer_supervised_interactive_lane": true,
     "governance_and_code_single_pr": true,
-    "correction_budget": 5,
-    "correction_rounds_used": 5,
-    "correction_budget_status": "exhausted on the final Green head; any further correction requires a new accountable-maintainer decision",
+    "correction_budget": 6,
+    "correction_rounds_used": 6,
+    "correction_budget_status": "exhausted by the exceptional final Windows test-root correction; any further correction requires a new accountable-maintainer decision",
     "manual_independent_review_and_merge_required": true,
     "control_plane_effect": "none",
     "release_effect": "none"
@@ -90,6 +91,7 @@
     "crates/noesis/tests/evidence/s4/r13-k1-scip-composition/complete-gate-summary.log",
     "crates/noesis/tests/evidence/s4/r13-k1-scip-composition/focused-green.log",
     "crates/noesis/tests/evidence/s4/r13-k1-scip-composition/implementation-observation-local.json",
+    "crates/noesis/tests/evidence/s4/r13-k1-scip-composition/windows-ci-test-root-correction.log",
     "crates/noesis/tests/support/mod.rs",
     "crates/noesis/tests/support/s4_r13.rs",
     "docs/software/architecture.md",
@@ -152,6 +154,21 @@
       "raw_local_log_bytes": 58270,
       "raw_local_log_sha256": "4010a60dbe908d9b87c1413db8b21dc223a1c7e24e12984da0de1eee83df393c",
       "final_review_tree": "rerun after this evidence commit and bind the immutable head in the pull request"
+    },
+    "windows_test_root_correction": {
+      "failed_head": "17d16db8c6cdd6179ab4640b2cfd80c254666ec4",
+      "correction_commit": "509c12752371548f746ffa0a25bf0c9b3bd10857",
+      "failed_run": "https://github.com/smutti/codenoesis/actions/runs/31377512717",
+      "failed_job": "https://github.com/smutti/codenoesis/actions/runs/31377512717/job/93420016944",
+      "failure_boundary": "R13 fixture Git initialization before acquisition; product and 52-coverage oracle were not reached",
+      "correction": "preserve canonical temporary roots on non-Windows and select one bounded, absolute, parent-free, non-verbatim, R13-validated test authority on Windows",
+      "local_focused_command": "cargo test -p noesis --test e2e_fr_ext_015_k1_scip_composition --locked",
+      "local_focused_exit_code": 0,
+      "local_focused_tests_passed": 3,
+      "local_focused_log_bytes": 895,
+      "local_focused_log_sha256": "ac182303e4b5af09220fe36d987171e4453430fd1c998d477bd4ad3998c61f27",
+      "local_windows_cross_check": "not available: the installed Rust MSVC target cannot compile C dependencies on Darwin without a Windows C SDK; log retained by digest and not treated as product evidence",
+      "github_windows_recheck": "required on the final pull-request head and retained by GitHub Actions"
     }
   },
   "corrections": [
@@ -166,6 +183,12 @@
       "finding": "legacy R12-first forbidden composition was misclassified as R13",
       "correction_commit": "610cdd41b041680eb7cb8042ca54c36517da8db6",
       "result": "ErrorV19 is preserved when historical cfg lineage precedes compiler intent; R13-first forbidden cfg intent remains ErrorV20"
+    },
+    {
+      "failed_head": "17d16db8c6cdd6179ab4640b2cfd80c254666ec4",
+      "finding": "R13 test support canonicalized its temporary root to a Windows verbatim path that Git for Windows rejected before fixture acquisition",
+      "correction_commit": "509c12752371548f746ffa0a25bf0c9b3bd10857",
+      "result": "only Windows test-root selection changes; Unix canonicalization and every product, oracle, schema, identity, fixture, dependency, and risk value remain unchanged"
     }
   ],
   "fixture": {
