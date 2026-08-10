@@ -3,7 +3,7 @@
 - Status: Proposed branch-scoped candidate
 - Date: 2026-08-10
 - Issue: [#162](https://github.com/smutti/codenoesis/issues/162)
-- Authorization: [accountable-maintainer authorization](https://github.com/smutti/codenoesis/issues/162#issuecomment-5239994397)
+- Authorization: [accountable-maintainer authorization](https://github.com/smutti/codenoesis/issues/162#issuecomment-5239994397) and [lexical-depth oracle correction](https://github.com/smutti/codenoesis/issues/162#issuecomment-5240550261)
 - Exact base: `e32428ecac33df384b2e8b6eed3d257da06e18fe`
 - Slice: `S4`
 - Risk: high
@@ -57,6 +57,11 @@ exact committed-source locator, callable owner, selected direct parent, lexical
 depth, sorted parse-position roles, normalized identifier/scoped spelling when
 applicable, fixed operator when applicable, BLAKE3 source-byte digest, and byte
 length. It stores no raw expression text or literal lexeme.
+
+Lexical depth is exactly the number of direct selected
+`CONTAINS_EXPRESSION` ancestors: a selected root has depth `0` and every
+selected child has its selected parent's depth plus one. This is expression-tree
+nesting only, not control-flow, scope, evaluation, or runtime depth.
 
 Every expression has one `HAS_EXPRESSION`. `CONTAINS_EXPRESSION` exists only
 between direct selected AST parent and child. Calls own zero-based contiguous

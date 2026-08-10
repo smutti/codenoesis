@@ -3,7 +3,8 @@
 This descriptor reuses the immutable project-owned `rust-callable-semantics-v1`
 Git fixture without changing any K1 byte, identity, tree, commit, or expected
 fact. `expected-expression-bindings.json` freezes every additive R14 entity,
-relationship, evidence locator, source span, role, scope, modifier, and endpoint.
+relationship, evidence locator, source span, role, selected-ancestor lexical
+depth, scope, modifier, and endpoint.
 
 The fixture is synthetic and project-owned. It authorizes no process, network,
 Cargo, rustc, build script, macro, target, model, browser, nested repository, or

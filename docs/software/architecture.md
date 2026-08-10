@@ -263,6 +263,8 @@ committed-source evidence. The domain validates selected parenthood, callable
 ownership, contiguous argument ordinals, scope, evidence, endpoints, limits,
 canonical order, and the exact `codenoesis.expression-binding-index/v1`
 projection before the application layer may compose it with K1.
+Expression lexical depth is derived solely as the direct selected-parent
+ancestor count, with root `0`; it is not control-flow or runtime depth.
 
 `READS` and `WRITES` are emitted only for identifier/self expression
 occurrences that resolve uniquely under the closed lexical scope model. A

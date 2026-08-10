@@ -7,23 +7,23 @@
     },
     {
       "path": "docs/software/decisions/0025-s4-r14-rust-expression-bindings-contract.md",
-      "sha256": "1da0269194ea017293a9d00b04d2f8ab25ca2f29cfcf5e2e56cc1cc7e60311ab"
+      "sha256": "da0da4a3d9ace0a0e58dee5d747e8c5557250f712040fd52f7c1e57f1fd699ad"
     },
     {
       "path": "scripts/tests/test_s4_r14_rust_expression_bindings_contract.py",
-      "sha256": "4b5c22ba488783af4cdc8e2e268efe0e8db8ae15f264319e112469f98ae2d174"
+      "sha256": "b143f2ba3810f7a85e591d9c7e11b490aa8c1fca6cf909f28694d4cbd309ac3e"
     },
     {
       "path": "tests/fixtures/s4/rust-expression-bindings-v1/README.md",
-      "sha256": "8615a3922dbbf31fa4e3d35d36b4c4b00c3aa45ede5f7ece32786715938d0b56"
+      "sha256": "edb06137eda4b105a5994df075dd8f999fcc959b1830da63524070ecf003fe59"
     },
     {
       "path": "tests/fixtures/s4/rust-expression-bindings-v1/expected-expression-bindings.json",
-      "sha256": "108857f8f93266b6d0c889a44ae0df314d13c323959db8ba9c561f65a19c0ba2"
+      "sha256": "7b390212d12538c74765c29b5a77969ca5d51c2d54eac5db24eb3c6123ec1399"
     },
     {
       "path": "tests/fixtures/s4/rust-expression-bindings-v1/manifest.json",
-      "sha256": "a5f51cfe2e7c0b491e090325c3c73456b9a5dcc029b446f5b556a99719920ab0"
+      "sha256": "d8d00c9ed07c5e7df15cb9c89f3c8f818b5ea7df78a0268e444acfc4af3da096"
     },
     {
       "path": "tests/specifications/s4/k1/contract-bundle.json",
@@ -39,11 +39,11 @@
     },
     {
       "path": "tests/specifications/s4/r14/e2e_fr_ext_016_rust_expression_bindings.json",
-      "sha256": "f1f458630468d9d42e02056d107d07c2bff98773b5da2ef74cfe1ded0ea61114"
+      "sha256": "98e90308204bdda24bfd7a8ef85e53a7447ca248640f654b8eefc0ba94bd9378"
     },
     {
       "path": "tests/specifications/s4/r14/expression-bindings-v1.json",
-      "sha256": "74245c41dc9fc93a52720f1296eabdd1e18a889de6b3f1e8d5ff2975bb0bfbe0"
+      "sha256": "59f5c01adbfeac69c84b99ac8bc4f1c164f3a2c81a8f8c9ceb4d9aba9d71173c"
     },
     {
       "path": "tests/specifications/s4/r14/extraction-chunk-v13.schema.json",
@@ -82,5 +82,5 @@
       "sha256": "dcb3d31ae4195a6811da26e65a075699f244a6a6338f3190f55fedb03e18dcdd"
     }
   ],
-  "bundle_sha256": "a579ef2779ec37db51212cce2d1fff5f80ea216ef4cb880ca4c5d94a2f49379c"
+  "bundle_sha256": "2b278689b5f5ba2b91c48bf345b5b44e38de562b7384557edfa3c50e2146b1b5"
 }

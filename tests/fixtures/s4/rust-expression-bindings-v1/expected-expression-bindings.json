@@ -74,6 +74,7 @@
         "end_byte": 1526
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [],
@@ -97,6 +98,7 @@
         "end_byte": 1468
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -122,6 +124,7 @@
         "end_byte": 575
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": "+",
         "parent_expression_id": null,
         "roles": [
@@ -147,6 +150,7 @@
         "end_byte": 863
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:c85be2d6b7976342c4f18941e6f80a832e474c24136da51e28b0483d6fbd9973",
         "roles": [
@@ -173,6 +177,7 @@
         "end_byte": 1729
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -198,6 +203,7 @@
         "end_byte": 1500
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -223,6 +229,7 @@
         "end_byte": 1327
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -248,6 +255,7 @@
         "end_byte": 650
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -273,6 +281,7 @@
         "end_byte": 575
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:09e8112399f95ac8ed1db5ce6772623b7b525d9c9269631514609a2657f72534",
         "roles": [
@@ -298,6 +307,7 @@
         "end_byte": 901
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -323,6 +333,7 @@
         "end_byte": 926
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:ac6a3161b7c5edf7a6614c56e30f5687a9541716186659a498f18e40cea29012",
         "roles": [
@@ -349,6 +360,7 @@
         "end_byte": 980
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:8a309942ce9185e8792cd97285fa278f68e86a879e05d42a8f87f7f80f4109b6",
         "roles": [
@@ -375,6 +387,7 @@
         "end_byte": 1012
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:c8a08076ecf1d4f8e81e244b01cc12e0c0833ee5f728eef671fdce4cdce65f60",
         "roles": [
@@ -401,6 +414,7 @@
         "end_byte": 1187
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:d88c5f65986c0557d9a8c6508771de497eba80036b01fcabad004010dc14c424",
         "roles": [
@@ -427,6 +441,7 @@
         "end_byte": 831
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:b3073c25b38f4a7e29329ca9878a2d6dac7bcee3bd3d23640312f9a44a6f76b6",
         "roles": [
@@ -452,6 +467,7 @@
         "end_byte": 1304
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -477,6 +493,7 @@
         "end_byte": 140
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:74b2573e69e0163eb7cd355458ef5b403d73323b322629e89897e25da84acacb",
         "roles": [
@@ -503,6 +520,7 @@
         "end_byte": 856
       },
       "properties": {
+        "lexical_depth": 2,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:1098ddccaa2af149ce215778ce29978c17fffc0cab64b51d32f35cd2b5be2d3a",
         "roles": [
@@ -529,6 +547,7 @@
         "end_byte": 1240
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": "+=",
         "parent_expression_id": null,
         "roles": [],
@@ -552,6 +571,7 @@
         "end_byte": 1469
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -577,6 +597,7 @@
         "end_byte": 862
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -602,6 +623,7 @@
         "end_byte": 1534
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:4b40d47df7e4ae23f929d8f220ca4d78da7fa1382b967b34265c677761710779",
         "roles": [
@@ -628,6 +650,7 @@
         "end_byte": 1541
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -653,6 +676,7 @@
         "end_byte": 1524
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:009d3bab64a9a7c9b90ac1c7dd05bf8c423ad78679f1f7a94f2771dc844a4b9f",
         "roles": [
@@ -679,6 +703,7 @@
         "end_byte": 571
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:09e8112399f95ac8ed1db5ce6772623b7b525d9c9269631514609a2657f72534",
         "roles": [
@@ -704,6 +729,7 @@
         "end_byte": 1216
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -729,6 +755,7 @@
         "end_byte": 1178
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:d88c5f65986c0557d9a8c6508771de497eba80036b01fcabad004010dc14c424",
         "roles": [
@@ -755,6 +782,7 @@
         "end_byte": 1076
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:bf89ce95a2a55064b0a48950c559d59084018667f7f1bfc15fd677ca4aff8b9a",
         "roles": [
@@ -780,6 +808,7 @@
         "end_byte": 1320
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:173138f4bae93761b348524e014075a63ae723f1b816ae349bb650472baea310",
         "roles": [
@@ -806,6 +835,7 @@
         "end_byte": 147
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -831,6 +861,7 @@
         "end_byte": 1619
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -856,6 +887,7 @@
         "end_byte": 1498
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:159cc4764cc07dc3c5c9ddf1200a0c8a1b9dd11010963088cd738d905e9a79ec",
         "roles": [
@@ -882,6 +914,7 @@
         "end_byte": 989
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:8a309942ce9185e8792cd97285fa278f68e86a879e05d42a8f87f7f80f4109b6",
         "roles": [
@@ -908,6 +941,7 @@
         "end_byte": 989
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": "+=",
         "parent_expression_id": null,
         "roles": [],
@@ -931,6 +965,7 @@
         "end_byte": 1072
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:bf89ce95a2a55064b0a48950c559d59084018667f7f1bfc15fd677ca4aff8b9a",
         "roles": [
@@ -956,6 +991,7 @@
         "end_byte": 826
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:b3073c25b38f4a7e29329ca9878a2d6dac7bcee3bd3d23640312f9a44a6f76b6",
         "roles": [
@@ -981,6 +1017,7 @@
         "end_byte": 1280
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:b31914f0026af901a5796ea71934d33d1e6b6ffc0e431747f8e3fc6ba236ec25",
         "roles": [
@@ -1006,6 +1043,7 @@
         "end_byte": 146
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -1031,6 +1069,7 @@
         "end_byte": 917
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:ac6a3161b7c5edf7a6614c56e30f5687a9541716186659a498f18e40cea29012",
         "roles": [
@@ -1057,6 +1096,7 @@
         "end_byte": 1461
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:096a7f18c45ed05eaa698601f87c0c5496b429fd786e694729f1eae04785b410",
         "roles": [
@@ -1082,6 +1122,7 @@
         "end_byte": 1017
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:c8a08076ecf1d4f8e81e244b01cc12e0c0833ee5f728eef671fdce4cdce65f60",
         "roles": [
@@ -1108,6 +1149,7 @@
         "end_byte": 1492
       },
       "properties": {
+        "lexical_depth": 2,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:7c5dc5198d18527e5ae476200ddcb40b0761d936fb1b74fe0849b29204996d72",
         "roles": [
@@ -1134,6 +1176,7 @@
         "end_byte": 926
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": "+=",
         "parent_expression_id": null,
         "roles": [],
@@ -1157,6 +1200,7 @@
         "end_byte": 517
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -1182,6 +1226,7 @@
         "end_byte": 1273
       },
       "properties": {
+        "lexical_depth": 2,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:94bfe4edc15630f7463a7a7b739bda4fdb98bdd6973084e17b891f69e42219ad",
         "roles": [
@@ -1208,6 +1253,7 @@
         "end_byte": 1540
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -1233,6 +1279,7 @@
         "end_byte": 831
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": "==",
         "parent_expression_id": null,
         "roles": [
@@ -1258,6 +1305,7 @@
         "end_byte": 1281
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -1283,6 +1331,7 @@
         "end_byte": 644
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:dda54ea7fa2da79d3b2d3a7293feb5a9eb6f1552049bfdb6bad22355f951c3b4",
         "roles": [
@@ -1309,6 +1358,7 @@
         "end_byte": 1232
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:3a7c31e106f879d8f175e984462661674fd2a70472126190343a9d55adb46569",
         "roles": [
@@ -1335,6 +1385,7 @@
         "end_byte": 1718
       },
       "properties": {
+        "lexical_depth": 2,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:cc31bfce7bd96477d787f435b7f276c8e740556802e00b2b8577a194412f6790",
         "roles": [
@@ -1361,6 +1412,7 @@
         "end_byte": 1162
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -1386,6 +1438,7 @@
         "end_byte": 1076
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": "<",
         "parent_expression_id": null,
         "roles": [
@@ -1411,6 +1464,7 @@
         "end_byte": 1156
       },
       "properties": {
+        "lexical_depth": 2,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:ee02d797db06fadb66e9be3ce120aec6f4862c4987730a3b9f9457ba9df4fd45",
         "roles": [
@@ -1437,6 +1491,7 @@
         "end_byte": 863
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": "=",
         "parent_expression_id": null,
         "roles": [],
@@ -1460,6 +1515,7 @@
         "end_byte": 1017
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": "+=",
         "parent_expression_id": null,
         "roles": [],
@@ -1483,6 +1539,7 @@
         "end_byte": 1727
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:11ce788e08e07a42c335dae45085046e9cc4ede4ec51f8f6baa43712804f774f",
         "roles": [
@@ -1509,6 +1566,7 @@
         "end_byte": 1455
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:41d6d825f2bce195fbd4a20369879514333c2772bf0f409da4edcb3450df45bb",
         "roles": [
@@ -1535,6 +1593,7 @@
         "end_byte": 847
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:c85be2d6b7976342c4f18941e6f80a832e474c24136da51e28b0483d6fbd9973",
         "roles": [
@@ -1561,6 +1620,7 @@
         "end_byte": 1240
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:3a7c31e106f879d8f175e984462661674fd2a70472126190343a9d55adb46569",
         "roles": [
@@ -1587,6 +1647,7 @@
         "end_byte": 1293
       },
       "properties": {
+        "lexical_depth": 2,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:f7cd8d3e8ff9de0eb8507238561da33d27fb45842a295b6caf3d98226ecbbb72",
         "roles": [
@@ -1613,6 +1674,7 @@
         "end_byte": 1187
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": "+=",
         "parent_expression_id": null,
         "roles": [],
@@ -1636,6 +1698,7 @@
         "end_byte": 1279
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -1661,6 +1724,7 @@
         "end_byte": 651
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -1686,6 +1750,7 @@
         "end_byte": 1097
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:fb11253f29a855b569f4fa6744948e461c3711941e2b47d87f98758f7ef63001",
         "roles": [
@@ -1712,6 +1777,7 @@
         "end_byte": 1305
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [],
@@ -1735,6 +1801,7 @@
         "end_byte": 1160
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:be968f8d9d92399e35a11f5533788502ce8c9857af5c13b4ee8a674110c7a643",
         "roles": [
@@ -1761,6 +1828,7 @@
         "end_byte": 1092
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:fb11253f29a855b569f4fa6744948e461c3711941e2b47d87f98758f7ef63001",
         "roles": [
@@ -1787,6 +1855,7 @@
         "end_byte": 1297
       },
       "properties": {
+        "lexical_depth": 1,
         "operator": null,
         "parent_expression_id": "urn:codenoesis:entity:blake3:e371b44adf32711897c465a97c26c9191078f42ed24e15f3241492828ee7bb8e",
         "roles": [
@@ -1813,6 +1882,7 @@
         "end_byte": 1326
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -1838,6 +1908,7 @@
         "end_byte": 1097
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": "+=",
         "parent_expression_id": null,
         "roles": [],
@@ -1861,6 +1932,7 @@
         "end_byte": 812
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [
@@ -1886,6 +1958,7 @@
         "end_byte": 949
       },
       "properties": {
+        "lexical_depth": 0,
         "operator": null,
         "parent_expression_id": null,
         "roles": [

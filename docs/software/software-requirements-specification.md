@@ -2034,6 +2034,9 @@ The closed model adds only `rust.expression`, `rust.call_argument`, and
 are lexical syntax-occurrence facts, never def-use, data-flow, mutation-success,
 side-effect, ownership-transfer, or runtime claims. Unsupported and ambiguous
 patterns or scopes produce typed coverage without guessed edges.
+Expression `lexical_depth` is the exact count of direct selected
+`CONTAINS_EXPRESSION` ancestors, with selected roots at zero; it carries no
+control-flow, scope, evaluation, or runtime meaning.
 
 R14 inherits every K1 bound and adds 16,384 expressions per callable, depth
 256, 256 arguments per call, 4,096 bindings per callable, 400,000 total
@@ -2057,7 +2060,7 @@ empty stdout, absent store, and 149-byte stderr SHA-256
 Only retained expected Red permits implementation.
 
 The R14 semantic checkpoint and immutable K1 dependency are bound by contract
-bundle `sha256:a579ef2779ec37db51212cce2d1fff5f80ea216ef4cb880ca4c5d94a2f49379c`. The SRS, architecture, roadmap, retained
+bundle `sha256:2b278689b5f5ba2b91c48bf345b5b44e38de562b7384557edfa3c50e2146b1b5`. The SRS, architecture, roadmap, retained
 Red, production source, and implementation evidence are excluded from that
 semantic digest.
 

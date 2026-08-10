@@ -48,6 +48,11 @@ class R14ContractTest(unittest.TestCase):
         ])
         self.assertEqual(profile["access"]["compound_assignment_target"], ["READS", "WRITES"])
         self.assertFalse(profile["access"]["declaration_is_write"])
+        self.assertEqual(profile["expression_depth"], {
+            "root": 0,
+            "definition": "direct_selected_contains_expression_ancestor_count",
+            "maximum": 256,
+        })
         self.assertTrue(all(value is False for value in profile["inference"].values()))
         self.assertEqual(profile["limits"], {
             "expressions_per_callable": 16384,
@@ -131,6 +136,18 @@ class R14ContractTest(unittest.TestCase):
         self.assertEqual(len(expected["relationships"]), 207)
         self.assertEqual(len(expected["new_evidence_ids"]), 86)
         self.assertEqual(sum(binding["properties"]["modifier"] == "explicit_mut" for binding in expected["bindings"]), 2)
+        expressions_by_id = {expression["id"]: expression for expression in expected["expressions"]}
+        depth_counts = {}
+        for expression in expected["expressions"]:
+            depth = expression["properties"]["lexical_depth"]
+            depth_counts[depth] = depth_counts.get(depth, 0) + 1
+            parent_id = expression["properties"]["parent_expression_id"]
+            if parent_id is None:
+                self.assertEqual(depth, 0)
+            else:
+                self.assertIn(parent_id, expressions_by_id)
+                self.assertEqual(depth, expressions_by_id[parent_id]["properties"]["lexical_depth"] + 1)
+        self.assertEqual(depth_counts, {0: 35, 1: 32, 2: 6})
 
         entity_pattern = re.compile(r"^urn:codenoesis:entity:blake3:[0-9a-f]{64}$")
         relationship_pattern = re.compile(r"^urn:codenoesis:relationship:blake3:[0-9a-f]{64}$")

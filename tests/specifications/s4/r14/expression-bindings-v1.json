@@ -91,6 +91,11 @@
     "return_value",
     "nested"
   ],
+  "expression_depth": {
+    "root": 0,
+    "definition": "direct_selected_contains_expression_ancestor_count",
+    "maximum": 256
+  },
   "binding_origins": [
     "parameter",
     "local_let",

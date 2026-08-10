@@ -23,7 +23,8 @@
   "risk": "high",
   "base_sha": "e32428ecac33df384b2e8b6eed3d257da06e18fe",
   "authorization": [
-    "https://github.com/smutti/codenoesis/issues/162#issuecomment-5239994397"
+    "https://github.com/smutti/codenoesis/issues/162#issuecomment-5239994397",
+    "https://github.com/smutti/codenoesis/issues/162#issuecomment-5240550261"
   ],
   "fixture": {
     "descriptor": "tests/fixtures/s4/rust-expression-bindings-v1/manifest.json",
@@ -112,6 +113,11 @@
       "coverage": 93
     },
     "expressions": 73,
+    "expression_lexical_depth_counts": {
+      "0": 35,
+      "1": 32,
+      "2": 6
+    },
     "arguments": 8,
     "bindings": 23,
     "reads": 29,
