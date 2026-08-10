@@ -2,11 +2,21 @@ use std::ffi::OsString;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
+#[cfg(windows)]
+use std::{
+    path::{Component, Prefix},
+    sync::atomic::{AtomicU64, Ordering},
+    time::{SystemTime, UNIX_EPOCH},
+};
 
 use serde_json::Value;
 
 use super::s4_r7::{BINDING_RELATIVE_PATH, MaterializedCompilerIndexRepository};
+#[cfg(not(windows))]
 use super::unique_temp_root;
+
+#[cfg(windows)]
+static R13_TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 pub const REPOSITORY_ID: &str = "urn:codenoesis:fixture:s4-compiler-index-v1";
 pub const R5_PROFILE: &str = "rust-semantic-depth-v1";
@@ -22,7 +32,7 @@ pub struct MaterializedCallableScipRepository {
 
 impl MaterializedCallableScipRepository {
     pub fn fixture() -> Self {
-        let root = fs::canonicalize(unique_temp_root()).expect("canonicalize R13 temporary root");
+        let root = r13_temp_root();
         let inner = MaterializedCompilerIndexRepository::fixture_in(root);
         let portable = inner.root.join("portable");
         let explorer = inner.root.join("explorer");
@@ -205,6 +215,84 @@ impl MaterializedCallableScipRepository {
     pub fn indexer_sentinel(&self) -> PathBuf {
         self.inner.indexer_sentinel()
     }
+}
+
+#[cfg(not(windows))]
+fn r13_temp_root() -> PathBuf {
+    fs::canonicalize(unique_temp_root()).expect("canonicalize R13 temporary root")
+}
+
+#[cfg(windows)]
+fn r13_temp_root() -> PathBuf {
+    let workspace = std::env::current_dir().expect("resolve R13 E2E workspace");
+    let mut candidates = vec![("workspace", workspace.join("target"))];
+    if let Some(volume_root) = workspace.ancestors().last()
+        && candidates
+            .iter()
+            .all(|(_, candidate)| candidate != volume_root)
+    {
+        candidates.push(("windows-volume", volume_root.to_path_buf()));
+    }
+    let sequence = R13_TEMP_SEQUENCE.fetch_add(1, Ordering::Relaxed);
+    let timestamp = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .expect("R13 E2E clock must follow the Unix epoch")
+        .as_nanos();
+    let candidate_count = candidates.len();
+    for (authority, candidate) in candidates {
+        if !candidate.is_absolute()
+            || windows_verbatim_path(&candidate)
+            || candidate
+                .components()
+                .any(|component| matches!(component, Component::ParentDir))
+        {
+            continue;
+        }
+        let root = candidate.join(format!(
+            "codenoesis-r13-e2e-{authority}-{}-{timestamp}-{sequence}",
+            std::process::id()
+        ));
+        if fs::create_dir(&root).is_err() {
+            continue;
+        }
+        let probe_authority = root.join("authority-probe");
+        if fs::create_dir(&probe_authority).is_err() {
+            remove_rejected_windows_root(&root);
+            continue;
+        }
+        let probe_output = root.join("output-probe");
+        let validated = noesis::portable_explorer::validate_r13_export_output_root(
+            &probe_authority,
+            &probe_output,
+        )
+        .is_ok();
+        let probe_removed = fs::remove_dir(&probe_authority).is_ok();
+        if validated && probe_removed {
+            return root;
+        }
+        remove_rejected_windows_root(&root);
+    }
+    panic!("no validated non-verbatim R13 E2E authority across {candidate_count} candidates");
+}
+
+#[cfg(windows)]
+fn windows_verbatim_path(path: &Path) -> bool {
+    matches!(
+        path.components().next(),
+        Some(Component::Prefix(prefix))
+            if matches!(
+                prefix.kind(),
+                Prefix::Verbatim(_)
+                    | Prefix::VerbatimUNC(..)
+                    | Prefix::VerbatimDisk(_)
+                    | Prefix::DeviceNS(_)
+            )
+    )
+}
+
+#[cfg(windows)]
+fn remove_rejected_windows_root(root: &Path) {
+    fs::remove_dir_all(root).expect("remove rejected R13 E2E authority candidate");
 }
 
 pub fn expected_composition() -> Value {
