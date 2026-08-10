@@ -1,0 +1,39 @@
+{
+  "schema_version": "codenoesis.red-observation/v1",
+  "issue": 158,
+  "requirements": ["FR-CLI-001", "NFR-TST-001", "NFR-TST-002"],
+  "requirement_status": "Proposed branch-scoped candidate until protected manual merge",
+  "slice": "S4",
+  "risk": "high",
+  "base_sha": "e4ab3faa609da32e0f1b72e3382209dddf5ed5fb",
+  "checkpoint_sha": "297e0482848298d64a1fce55afb25ebdd0542eed",
+  "authorization": "https://github.com/smutti/codenoesis/issues/158#issuecomment-5236671188",
+  "command": "cargo test -p noesis --test e2e_fr_ext_014_k1_cfg_alternatives e2e_fr_cli_001_r12_invalid_selector_matrix_fails_before_acquisition -- --exact",
+  "exit_status": 101,
+  "expected_failure": {
+    "reason": "complete R10+R6+K1 invalid-selector intent is not yet dispatched to ErrorV19",
+    "observed_schema": "codenoesis.error/v17",
+    "required_schema": "codenoesis.error/v19"
+  },
+  "log": {
+    "path": "tests/specifications/s4/r12/red/selector-amendment-red.log",
+    "byte_length": 1276,
+    "sha256": "3d848524406589b18dab225fb4b49793811c6da7e1a938d23558f5eaf70885a9"
+  },
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "features": "default test target"
+  },
+  "agent": {
+    "identity": "OpenAI Codex coding agent",
+    "model": "not exposed",
+    "policy": "repository AGENTS.md plus issue #158 branch-scoped authority",
+    "run_identifier": "issue-158-selector-amendment",
+    "duration_seconds": 1.1,
+    "cost": "not available"
+  },
+  "result": "expected_red"
+}

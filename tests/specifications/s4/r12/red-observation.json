@@ -1,0 +1,76 @@
+{
+  "schema_version": "codenoesis.red-observation/v1",
+  "issue": 158,
+  "requirements": [
+    "FR-EXT-011",
+    "FR-EXT-012",
+    "FR-EXT-013",
+    "FR-EXT-014",
+    "FR-EXP-004",
+    "NFR-TST-001"
+  ],
+  "requirement_status": "Proposed branch-scoped candidate",
+  "slice": "S4",
+  "risk": "high",
+  "base_sha": "e4ab3faa609da32e0f1b72e3382209dddf5ed5fb",
+  "checkpoint_sha": "2a9f1a08c9651f663f295c394eb8b897d59e0e25",
+  "run_id": "issue-158-governance-red-1",
+  "command": "cargo test -p noesis --test e2e_fr_ext_014_k1_cfg_alternatives e2e_fr_ext_014_k1_cfg_alternatives_complete_local_journey -- --exact",
+  "expected_failure": {
+    "product_exit_code": 2,
+    "code": "input.unsupported_rust_cfg_alternatives_composition",
+    "stage": "input",
+    "schema_version": "codenoesis.error/v17",
+    "stdout_bytes": 0,
+    "store_exists": false
+  },
+  "actual": {
+    "test_exit_code": 101,
+    "test_exit_source": "diagnostic replay after the first wrapper failed only while assigning zsh's read-only status variable",
+    "product_exit_code": 2,
+    "code": "input.unsupported_rust_cfg_alternatives_composition",
+    "stage": "input",
+    "schema_version": "codenoesis.error/v17",
+    "product_stdout_bytes": 0,
+    "product_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "product_stderr_bytes": 344,
+    "product_stderr_sha256": "dbe134dbc101765a8ebdc2ffe917f4776fddb42d10e3dfe1957e2aa819adb70c",
+    "store_exists": false,
+    "failure_reason_matches": true
+  },
+  "retained_log": {
+    "path": "tests/specifications/s4/r12/red/governance-red.log",
+    "bytes": 1204,
+    "sha256": "6eecd3da7bd100cd2737289d60311e51a2c49bda970428db71418977642aa650",
+    "finished_at": "2026-08-10T05:10:59Z",
+    "test_exit_capture": "not captured by the first wrapper after the completed Cargo command; the complete failing log is retained unchanged"
+  },
+  "diagnostic_replay": {
+    "reason": "capture the command exit after the first wrapper metadata error; it does not replace or convert the first Red",
+    "path": "tests/specifications/s4/r12/red/governance-red-replay.log",
+    "bytes": 1204,
+    "sha256": "20a1d5a751ee2954ea593bb29c48d9a4b3137451452f4076994b9a388408a680",
+    "started_at": "2026-08-10T05:11:25Z",
+    "finished_at": "2026-08-10T05:11:26Z",
+    "wall_seconds": 1,
+    "test_exit_code": 101,
+    "same_expected_failure": true
+  },
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "features": "noesis integration-test defaults; workspace lockfile",
+    "policy_path": "AGENTS.md",
+    "policy_sha256": "07c4385775f37be9e5d2ba09f7e9edfe3936f800a2188e4155f166eef3299c71"
+  },
+  "agent": {
+    "identity": "OpenAI Codex coding agent",
+    "model": "not exposed to repository process",
+    "cost": "not available"
+  },
+  "production_source_modified_before_red": false,
+  "first_red_log_retained": true,
+  "accepted_as_green": false
+}

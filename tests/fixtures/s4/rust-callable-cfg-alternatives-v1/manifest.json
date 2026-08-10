@@ -1,0 +1,68 @@
+{
+  "schema_version": "codenoesis.r12-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1",
+  "source": "project-owned synthetic bytes",
+  "external_source_vendored": false,
+  "materialization": {
+    "object_format": "sha1",
+    "tree_oid": "c43f0c6e91c8e3e27abbba94cdd666d6c3598414",
+    "commit_oid": "637091858d6582fbe7f0c75b7c62d4fd9c2d87ca",
+    "author": "CodeNoesis <fixture@codenoesis.invalid>",
+    "timestamp": "2026-08-10T06:00:00Z",
+    "message": "R12 project-owned callable cfg alternatives fixture"
+  },
+  "files": [
+    {
+      "path": "repository/Cargo.toml",
+      "mode": "100644",
+      "byte_length": 162,
+      "sha256": "895cdb86e3b4ad787a30a1e54d728e0ad279ed4898d2291a91f20472259e5a41",
+      "git_blob_oid": "cdf88f6e5c3f0bc5444379612ed5bc21796c8036"
+    },
+    {
+      "path": "repository/build.rs",
+      "mode": "100644",
+      "byte_length": 168,
+      "sha256": "b85d180a41257dbee60d5919f5b61c5b28128b9df50cf27c438cdbd3358be4dd",
+      "git_blob_oid": "9ab1798b7d4af3395e972d6838ff07d3e7538375"
+    },
+    {
+      "path": "repository/src/lib.rs",
+      "mode": "100644",
+      "byte_length": 1928,
+      "sha256": "07d2b8f9f3a1a0576b90bd820b5af9ef79511bcdaaca222d4d8f0c61ae815ff5",
+      "git_blob_oid": "c715d312552e61ed74c8a9a33a04bbdbe9d28354"
+    },
+    {
+      "path": "repository/src/model.rs",
+      "mode": "100644",
+      "byte_length": 317,
+      "sha256": "943e4e1e84d1433250fbb8c4d3f2c14f53ba85ace17eaec7e0293ee2e2f66685",
+      "git_blob_oid": "91215cbdeba2e2ed0803bfe870fba1da59ebcdfc"
+    }
+  ],
+  "reviewed_spans": {
+    "unix_cfg": [80, 110],
+    "unix_method": [115, 188],
+    "unix_header": [115, 152],
+    "unix_body": [152, 188],
+    "windows_cfg": [194, 227],
+    "windows_method": [232, 314],
+    "windows_header": [232, 271],
+    "windows_body": [271, 314]
+  },
+  "expected_facts": {
+    "path": "expected-composition.json",
+    "byte_length": 4231,
+    "sha256": "6666755ca88104d3feffc3228c36551b5e0f865734ec0fe0a631b86f261d5ac1"
+  },
+  "sentinels": {
+    "build_script_path": "repository/build.rs",
+    "forbidden_output": "K1_BUILD_SENTINEL_EXECUTED",
+    "process_execution_permitted": false,
+    "network_access_permitted": false,
+    "target_execution_permitted": false,
+    "compiler_execution_permitted": false,
+    "model_provider_permitted": false
+  }
+}

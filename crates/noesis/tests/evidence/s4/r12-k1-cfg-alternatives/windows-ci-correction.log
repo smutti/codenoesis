@@ -1,0 +1,36 @@
+issue=https://github.com/smutti/codenoesis/issues/158
+pull_request=https://github.com/smutti/codenoesis/pull/159
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+correction_round=2
+correction_budget=5
+failed_head=7b9ed6a3e6eda9dbb87ebe9c09e70f8ff9ebf8ad
+run=https://github.com/smutti/codenoesis/actions/runs/31364324458
+job=https://github.com/smutti/codenoesis/actions/runs/31364324458/job/93379369404
+job_started_at_utc=2026-08-10T07:03:33Z
+job_completed_at_utc=2026-08-10T07:06:48Z
+job_conclusion=failure
+
+failed_suite=codenoesis-lang-rust/tests/s4_r12_k1_cfg_alternatives.rs
+failed_tests=gt_fr_ext_014_cfg_occurrences_are_k1_callable_subjects,ft_fr_ext_014_cross_layer_shape_failures_are_typed,ft_fr_ext_014_cross_occurrence_evidence_is_rejected
+observed_alternative_ids=urn:codenoesis:entity:blake3:797e84f1b4e5e9a06a7e94aa954c4c8341aa543fc1d89d92175eb7e7b33da2a5,urn:codenoesis:entity:blake3:b1f3f0fb390ecb1c238acc9b9eb96d4ba7753e4699c4fa40e509d08c788960fc
+expected_alternative_ids=urn:codenoesis:entity:blake3:7693e8447f232a6dc09cc48a62f6551805053fad9a9c2cbadb293b597fe47c75,urn:codenoesis:entity:blake3:83bf1b64052dafd598f5fc1b02dddfe2d7d790488051d9c3fefaa1f1ca465a88
+root_cause=Git for Windows transported the project-owned reviewed R12 source fixture as CRLF; the adapter-only test inventory read checkout bytes directly, changing evidence spans and derived alternative/signature IDs
+correction=normalize only uniformly CRLF-transported reviewed test fixture text to canonical LF before constructing the adapter-only inventory; reject bare carriage returns
+changed_product_behavior=false
+changed_contract_or_oracle=false
+changed_fixture_or_golden_bytes=false
+changed_identity_or_hash_preimage=false
+changed_dependency_or_control_plane=false
+changed_path=crates/codenoesis-lang-rust/tests/s4_r12_k1_cfg_alternatives.rs
+
+local_command=cargo fmt --all --check
+local_exit=0
+local_command=cargo test -p codenoesis-lang-rust --test s4_r12_k1_cfg_alternatives --locked
+local_exit=0
+local_tests_passed=7
+transport_test=conf_fr_ext_014_reviewed_fixture_newlines_are_platform_neutral
+raw_failed_job_log_bytes=81939
+raw_failed_job_log_sha256=f530f678f7127064497be0668b2d5861c2fdbe273c2becf5831a21343ed73a57
+github_recheck=pending after correction commit and push

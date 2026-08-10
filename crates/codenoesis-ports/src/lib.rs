@@ -20,6 +20,7 @@ use codenoesis_domain::s4_r7::{CompilerIndexError, CompilerIndexOverlay};
 use codenoesis_domain::s4_r10::{
     RustCfgDeclarationAlternativesError, RustCfgDeclarationAlternativesExtraction,
 };
+use codenoesis_domain::s4_r12::{CallableCfgAlternativesError, CallableCfgAlternativesExtraction};
 use codenoesis_domain::s5::{AnalysisCacheEntry, IncrementalWorkspaceExtraction};
 use codenoesis_domain::s6::{ContractError, OpenApiContractInput, ProviderContract};
 use codenoesis_domain::storage::{
@@ -209,6 +210,20 @@ pub trait RustCallableBoundaryCompositionExtractor {
         inventory: &RepositoryInventory,
         external_boundaries: &[ExternalWorkspaceBoundary],
     ) -> Result<CallableSemanticsExtraction, CallableSemanticsError>;
+}
+
+pub trait RustCallableCfgAlternativesCompositionExtractor {
+    /// Composes R10 occurrence authority, R6 declarations, and K1 callable facts.
+    ///
+    /// # Errors
+    ///
+    /// Returns an inherited extraction failure or a typed cross-lineage contract failure
+    /// without evaluating cfg, selecting a target, or executing repository content.
+    fn extract_rust_callable_cfg_alternatives_with_boundaries(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+    ) -> Result<CallableCfgAlternativesExtraction, CallableCfgAlternativesError>;
 }
 
 pub trait RustFrameworkDeclarationExtractor {

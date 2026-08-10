@@ -1,0 +1,24 @@
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running tests/e2e_fr_ext_014_k1_cfg_alternatives.rs (target/debug/deps/e2e_fr_ext_014_k1_cfg_alternatives-293b91e0c14f91c4)
+
+running 1 test
+test e2e_fr_cli_001_r12_invalid_selector_matrix_fails_before_acquisition ... FAILED
+
+failures:
+
+---- e2e_fr_cli_001_r12_invalid_selector_matrix_fails_before_acquisition stdout ----
+
+thread 'e2e_fr_cli_001_r12_invalid_selector_matrix_fails_before_acquisition' (5937480) panicked at crates/noesis/tests/e2e_fr_ext_014_k1_cfg_alternatives.rs:357:9:
+assertion `left == right` failed
+  left: String("codenoesis.error/v17")
+ right: "codenoesis.error/v19"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    e2e_fr_cli_001_r12_invalid_selector_matrix_fails_before_acquisition
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.99s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_ext_014_k1_cfg_alternatives`

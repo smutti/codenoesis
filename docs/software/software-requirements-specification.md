@@ -1,10 +1,10 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9+r10 — S0 through S6 and R0-R9 plus K1 are implemented but not
-> Verified; one additive R10 declaration-alternative profile is proposed**.
-> Decision 0021 proposes evidence-backed heterogeneous direct-`cfg` method
-> alternatives in a new V9/V12 family while preserving every R0-K1 selector,
-> contract, identity, golden, and viewer byte.
+> Status: **0.9+r12 — S0 through S6 and R0-R11 plus K1 are implemented but not
+> Verified; one additive R12 callable-alternative composition is proposed**.
+> Decision 0023 proposes R10 declaration alternatives plus R6 framework and K1
+> callable semantics in a new V11/V14 family while preserving every R0-R11/K1
+> selector, contract, identity, golden, and viewer byte.
 
 ## 1. Document control
 
@@ -12,8 +12,8 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S6 and roadmap R0-R9 plus K1 are Approved and Implemented but not Verified. `FR-EXT-013`, `FR-EXP-003`, and bounded R10 amendments are Proposed and become Approved and Implemented only after the accountable maintainer manually merges the exact protected pull request for issue #152. |
-| Date | 2026-08-09 |
+| Status | S0 through S6 and roadmap R0-R11 plus K1 are Approved and Implemented but not Verified. `FR-EXT-014`, `FR-EXP-004`, and bounded R12 amendments are Proposed and become Approved and Implemented only after the accountable maintainer manually merges the exact protected pull request for issue #158. |
+| Date | 2026-08-10 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -48,6 +48,8 @@
 | `0.9+k1` | 2026-08-08 | Proposed the issue #142 single-PR K1 candidate: `FR-EXT-012`, `FR-EXP-002`, and bounded S4 amendments for complete Rust callable signatures, ordered parameters, declared scalar/value states, local bindings, call candidates, unique-local `CALLS`, syntactic control structure, RepositorySnapshotV11, KnowledgeGraphV8, LocalQueryResultV6, PortableGraphV2, LocalExplorerV2, ErrorV16, exact evidence, explicit uncertainty, and immutable R0-R8 compatibility. |
 | `0.9+r9-capacity` | 2026-08-08 | Recorded K1 product merge #143 and correction merge #146, then proposed issue #148 and Decision 0020 for an explicit `local-snapshot-64m-v1` K1 output-capacity selector. The selector raises only final canonical RepositorySnapshotV11 serialization from 32 MiB to 64 MiB, preserves all semantic/configuration bytes and standard behavior, and enables retained deterministic Lekton evidence without changing any ontology or historical contract. |
 | `0.9+r10` | 2026-08-09 | Recorded protected R9 capacity merge #150 and R5 cfg-alternative correction merge #153, then proposed issue #152 and Decision 0021 for the explicit `rust-cfg-declaration-alternatives-v1` profile. The candidate retains one R5 logical method identity while adding evidence-backed heterogeneous declaration alternatives, V9/V12 contracts, QueryV7, PortableGraphV3, and LocalExplorerV3 without changing R0-K1 bytes. |
+| `0.9+r11` | 2026-08-10 | Recorded protected R10 merge #154 and proposed issue #155 plus Decision 0022 for the exact K1 and `local-gitlinks-v1` composition. Protected merge #156 implemented additive V10/V13, QueryV8, PortableGraphV4, and LocalExplorerV4 while retaining nested-source no-traversal and immutable R0-R10/K1 bytes. |
+| `0.9+r12` | 2026-08-10 | Recorded protected R11 merge #156, then proposed issue #158 and Decision 0023 for the exact R10 plus R6 plus K1 composition. The candidate attaches occurrence-dependent K1 facts to evidence-backed declaration alternatives in V11/V14, with optional existing boundary and output-capacity selectors, without selecting an active `cfg` world or changing R0-R11/K1 bytes. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -1841,6 +1843,86 @@ contract bundle `sha256:25918dfcde5a595c82da25b51b6c41d8c51ec96065c5a80c8ace049e
 Red, production source, and implementation evidence are excluded from that
 semantic digest.
 
+### 2.23 S4 R12 K1 cfg-alternatives composition candidate register
+
+Issue [#158](https://github.com/smutti/codenoesis/issues/158), the accountable
+maintainer's [exact high-risk authorization](https://github.com/smutti/codenoesis/issues/158#issuecomment-5236032172),
+and [Decision 0023](decisions/0023-s4-r12-k1-cfg-alternatives-composition-contract.md)
+govern one maintainer-supervised package on exact base
+`e4ab3faa609da32e0f1b72e3382209dddf5ed5fb`. Governance, retained Red,
+candidate code, tests, documentation, and evidence become effective atomically
+only after protected manual merge. Until then every R12 amendment and
+implementation statement remains Proposed/candidate.
+
+The package targets exactly **S4 — Evidence-backed callable-alternative
+compatibility extension**. It composes approved
+`rust-cfg-declaration-alternatives-v1`, `rust-framework-declarations-v1`, and
+`rust-callable-semantics-v1`. The existing `local-gitlinks-v1` boundary report
+and `local-snapshot-64m-v1` output capacity are optional. R12 grants no active
+`cfg`, target, compiler, macro, runtime, nested-source, network, model, browser,
+control-plane, signing, publication, or release authority.
+
+| Requirement | Current state | Target after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| `FR-EXT-014` | Proposed | `Approved` only for the exact R10/R6/K1 occurrence-subject composition | `S4` | Decision 0023, [composition contract](../../tests/specifications/s4/r12/callable-cfg-alternatives-composition-v1.json), [machine oracle](../../tests/specifications/s4/r12/e2e_fr_ext_014_k1_cfg_alternatives.json), and [fixture](../../tests/fixtures/s4/rust-callable-cfg-alternatives-v1/README.md) |
+| `FR-EXP-004` | Proposed | `Approved` only for lossless V14 `PortableGraphV5` and read-only `LocalExplorerV5` | `S4` | V5 schemas, Decision 0023, and strict reimport oracle |
+| Bounded R12 amendment to `FR-EXT-011/012/013` | R6/K1/R10 Approved/Implemented | `Approved` for preserving R6 declarations, R10 logical alternatives, and K1 occurrence facts under the exact join | `S4` | Decision 0023 and exact subject-mapping oracle |
+| Bounded R12 amendment to `FR-ACQ-005` | R2 boundaries Approved/Implemented | `Approved` for optional exact R2 report composition with no nested-source traversal | `S4` | Decision 0023 and boundary regression oracle |
+| Bounded R12 amendments to `FR-DOC-001/002/003` | Prior S4 docs Approved | `Approved` for evidence-backed alternative-specific callable sections without active-world claims | `S4` | Decision 0023 and E2E journey |
+| Bounded R12 amendment to `FR-QRY-001` | LocalQueryResultV1-V8 Approved | `Approved` with additive LocalQueryResultV9 for logical, alternative, callable, and optional boundary subjects | `S4` | [LocalQueryResultV9 schema](../../tests/specifications/s4/r12/local-query-result-v9.schema.json) |
+| Bounded R12 amendment to `FR-CLI-001` | Prior local journeys Approved | `Approved` for the explicit R10+R6+K1 scan/docs/query/export/explore journey and ErrorV19 failures after complete R12 intent, while incomplete R10+R6 or R10+K1 retains ErrorV17 | `S4` | Decision 0023, ErrorV17/ErrorV19 dispatch, and machine oracle |
+| Bounded R12 amendments to `NFR-DET-001`, `NFR-SEC-001/005`, and `NFR-PRV-002` | Existing local controls Approved | `Approved` for 50 permutations, ten schedules, no execution/nested read/network, and private V5 projection | `S4` | Determinism, security, privacy, and race oracle |
+| Bounded R12 amendments to `NFR-TST-001/002` | Red-first deterministic evidence required | `Approved` with committed governance checkpoint, retained expected Red, focused/full Green, immutable regressions, and diagnostic RustDesk replay | `S4` | R12 evidence pack |
+
+The additive lineage is exactly `codenoesis.configuration/v11`,
+`codenoesis.repository-snapshot/v14`, `codenoesis.extraction/v11`,
+`codenoesis.extraction-chunk/v11`, `codenoesis.knowledge-graph/v11`,
+`codenoesis.ontology/rust/v11`, `codenoesis.semantic-hash-contract/v10`,
+`codenoesis.error/v19`, `codenoesis.local-query-result/v9`,
+`codenoesis.portable-graph/v5`, and `codenoesis.local-explorer/v5`. The
+pipeline/composer are `codenoesis.pipeline/s4-r12-v1` and
+`codenoesis.rust-callable-cfg-alternatives-composition/s4-r12-v1`; the join
+extractor/index are `codenoesis.rust-callable-cfg-alternatives/s4-r12-v1` and
+`codenoesis.callable-cfg-alternatives-index/v1`.
+
+R12 intent begins only when all three R10, R6, and K1 selector flags are
+present. The incomplete `R10 + R6` and `R10 + K1` combinations remain exact
+legacy R10 failures under ErrorV17
+`input.unsupported_rust_cfg_alternatives_composition`; complete-R12 invalid
+compositions use ErrorV19. This dispatch rule preserves historical errors
+without making argument order authoritative.
+
+One unchanged R5 logical `rust.method` retains its exact R10 alternatives and
+has no direct occurrence signature, parameter, body fact, or `CALLS` edge.
+Each `rust.declaration_alternative` becomes the K1 callable subject for that
+occurrence. Existing K1 preimages are reused with the alternative ID; ordinary
+non-alternative K1 subjects and declared-value subjects remain unchanged. The
+join index must exactly equal the graph projection and every alternative has
+one signature. No source order or occurrence ordinal enters identity.
+
+R12 inherits every R10, K1, R6, and applicable R2 limit. Standard stdout
+remains `33,554,432` bytes including LF and the explicit capacity selector
+remains `67,108,864` bytes without entering semantics. Portable V5 remains
+`268,435,456` bytes. Every applicable maximum and plus-one, 50 permutations,
+ten schedules, malformed, evidence, reference, privacy, path, symlink, and race
+case is required. No truncation, repair, sampling, retry-as-evidence, child
+process, network, Git/Cargo/rustc/build execution, URL resolution, browser
+launch, model call, active-world selection, or nested-source traversal is
+permitted.
+
+The first branch commit contains Decision 0023, schemas, fixture, oracle,
+traceability, and executable E2E without production source. Expected Red on
+the exact base is ErrorV17
+`input.unsupported_rust_cfg_alternatives_composition`, exit `2`, empty stdout,
+absent store, and stderr SHA-256
+`dbe134dbc101765a8ebdc2ffe917f4776fddb42d10e3dfe1957e2aa819adb70c`.
+Only retained expected Red permits implementation.
+
+The R12 semantic checkpoint and immutable R10/R6/K1 dependencies are bound by
+contract bundle `sha256:d66a3e9ab722665bba21bdd1191b7d701973b0b0ecfab9904fbb0a11150b3399`.
+SRS, roadmap, retained Red, production source, and implementation evidence are
+excluded from that semantic digest.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,
@@ -1982,6 +2064,7 @@ cannot replace their verification.
 | `FR-EXT-011` | P0 | `0.1` | An explicitly selected S4 framework-declarations profile MUST represent only the approved bounded framework-neutral component, service, configuration, endpoint, route, and handler source declarations or unresolved candidates with exact committed evidence, disjoint NFC identities, inherited compilation presence, and unique-local-target binding, while keeping declaration syntax, macro/attribute candidate meaning, and unsupported runtime behavior schema-distinct and MUST NOT execute or infer cfg, macros, generated code, compiler facts, reachability, serving, startup, active configuration, handler execution, or any equivalent runtime relation. | The reviewed two-style R6 fixture matches strict V9/ontology-v6 entities, `DEFINES` ownership, claims, byte spans, candidate diagnostics/gaps, non-runtime docs, and LocalQueryResultV4; comments, strings, docs, imports, names, unused builders, generated/target/build sentinels, malformed/Unicode/NFC-collision/ambiguity/path/privacy cases, every maximum and maximum-plus-one, 50 permutations plus isolated replay, selector-absent V3/V2/V1 bytes, zero execution/network/model authority, and pinned non-vendored motivation-only Lekton/RustDesk pilots pass. `GT`, `SEC`, `E2E`, `PT`, `CONF` |
 | `FR-EXT-012` | P0 | `0.1` | The explicit K1 `rust-callable-semantics-v1` profile MUST represent complete reviewed Rust callable signatures, ordered parameters, explicit declared-value metadata, the closed normalized scalar subset, local bindings, direct/method call syntax, syntactic control structure, lexical nesting, and exact committed evidence. It MUST emit `CALLS` only for one uniquely proven already-known local free-function target and MUST keep every compiler-, macro-, cfg-, dispatch-, type-, CFG-, reachability-, data-flow-, side-effect-, ownership-, and runtime-dependent meaning unresolved without executing target or toolchain code. | The project-owned K1 fixture matches RepositorySnapshotV11/KnowledgeGraphV8 identities, counts, values, body digests/spans, four unique-local calls, five unresolved candidates, all eleven control kinds, exact query/docs/export/explorer behavior, invalid/limit/privacy cases, 50 permutations, ten schedules, and immutable selector-absent R0-R8 bytes. `GT`, `E2E`, `CONF`, `PT`, `SEC` |
 | `FR-EXT-013` | P0 | `0.1` | The explicit R10 `rust-cfg-declaration-alternatives-v1` profile MUST preserve one unchanged R5 logical method identity while representing every accepted homogeneous or heterogeneous repeated direct-`cfg` declaration as a distinct evidence-backed `rust.declaration_alternative`. It MUST NOT select an occurrence shape on the logical entity, interpret `cfg`, choose a target, or infer compiler/runtime meaning. | The exact project-owned fixture emits the reviewed V9/V12 logical method, two alternatives, two relationships, evidence and identities; homogeneous, malformed, mixed, overlap, cross-file/blob, duplicate, limit, determinism, no-execution, compatibility, and diagnostic RustDesk cases match Decision 0021. `GT`, `E2E`, `CONF`, `PT`, `SEC` |
+| `FR-EXT-014` | P0 | `0.1` | The explicit R12 composition MUST preserve each R10 alternative-bearing logical method without direct occurrence shape and MUST attach every occurrence-dependent K1 signature, parameter, body fact, and uniquely proven local `CALLS` relationship to the exact evidence-backed `rust.declaration_alternative` subject. It MUST preserve R6 declarations and ordinary K1 identities, validate the join index exactly, and MUST NOT select an active `cfg` world or infer compiler, target, dispatch, type, CFG, data-flow, or runtime meaning. | The project-owned R12 fixture matches RepositorySnapshotV14/KnowledgeGraphV11 logical, alternative, signature, parameter, body-fact, call, evidence, index, count, query/docs/export/explorer, optional-boundary/capacity, invalid/limit/privacy, 50-permutation, ten-schedule, legacy-byte, and diagnostic RustDesk oracles in Decision 0023. `GT`, `E2E`, `CONF`, `PT`, `SEC` |
 
 ### 9.3 Knowledge graph, claims, and snapshots
 
@@ -1998,9 +2081,9 @@ cannot replace their verification.
 
 | ID | Pri. | Target | Normative requirement | Acceptance evidence |
 |---|---:|---:|---|---|
-| `FR-DOC-001` | P0 | `0.1` | The local product MUST generate deterministic overview and module documentation from validated claims and evidence. GraphV9 documentation MUST expose declaration alternatives without choosing an active configuration. | Repeated generation is byte-identical apart from explicitly non-canonical envelope data; every R10 alternative is discoverable with its explicit uncertainty. `GT`, `E2E` |
-| `FR-DOC-002` | P0 | `0.1` | Every material generated statement MUST resolve to valid evidence or be rendered as unknown, contradictory, or unsupported. R10 alternative statements MUST resolve to their declaration and attribute evidence. | Deleting or corrupting evidence blocks the claim or changes its explicit state; no unsupported prose or inferred active `cfg` world remains. `PT`, `E2E` |
-| `FR-DOC-003` | P0 | `0.1` | Generated output MUST be confined to a configured generated-document location and MUST NOT overwrite hand-written documentation. The same marker-owned atomic rule applies to R10 docs, portable, and explorer roots. | Checksums of manual files remain unchanged after generation and failure recovery; path/symlink/race cases fail without partial R10 output. `E2E`, `SEC` |
+| `FR-DOC-001` | P0 | `0.1` | The local product MUST generate deterministic overview and module documentation from validated claims and evidence. GraphV9 documentation MUST expose declaration alternatives without choosing an active configuration; GraphV11 documentation MUST expose occurrence-specific callable facts under those alternatives without treating the logical method as one active occurrence. | Repeated generation is byte-identical apart from explicitly non-canonical envelope data; every R10/R12 alternative and its callable facts are discoverable with explicit uncertainty. `GT`, `E2E` |
+| `FR-DOC-002` | P0 | `0.1` | Every material generated statement MUST resolve to valid evidence or be rendered as unknown, contradictory, or unsupported. R10/R12 alternative statements MUST resolve to their declaration, attribute, signature, parameter, and body-syntax evidence as applicable. | Deleting or corrupting evidence blocks the claim or changes its explicit state; no unsupported prose or inferred active `cfg` world remains. `PT`, `E2E` |
+| `FR-DOC-003` | P0 | `0.1` | Generated output MUST be confined to a configured generated-document location and MUST NOT overwrite hand-written documentation. The same marker-owned atomic rule applies to R10/R12 docs, portable, and explorer roots. | Checksums of manual files remain unchanged after generation and failure recovery; path/symlink/race cases fail without partial R10/R12 output. `E2E`, `SEC` |
 | `FR-DOC-004` | P1 | `1.0` | Approved views MUST cover architecture, modules, APIs/events, data, configuration, integrations, deployment, operations, onboarding, and change impact when sufficient evidence exists. | A view capability matrix maps every emitted section to evidence and reports missing views without fabrication. `GT`, `E2E` |
 
 ### 9.5 Incremental refresh, federation, and impact
@@ -2025,9 +2108,10 @@ cannot replace their verification.
 | `FR-EXP-001` | P0 | `0.2` | The local CLI MUST export one validated visible RepositorySnapshotV10 as deterministic `PortableGraphV1` and MUST generate a read-only offline `LocalExplorerV1` without identity, reference, claim-state, evidence-lineage, diagnostic, coverage-gap, document, or statement loss. Reimport MUST fail closed on unsupported schema, non-canonical order, duplication, loss, ambiguity, hash/reference mismatch, unresolved evidence, unsafe path, or resource excess; source contents and snippets MUST be absent from portable v1. | Black-box export/explore, schema, 50-permutation, lossless reimport, CSP/XSS/privacy/path/symlink, corruption, maximum-plus-one, atomic publication, and R7 compatibility suites match Decision 0018 and the canonical project-owned fixture. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
 | `FR-EXP-002` | P0 | `0.2` | The explicit K1 export profile MUST project one validated visible RepositorySnapshotV11 and its deterministic documentation as canonical `PortableGraphV2`, then generate read-only offline `LocalExplorerV2`, preserving every K1 identity, relationship, claim state, evidence locator, diagnostic, coverage gap, document, and statement without raw body text, arbitrary initializer text, source contents, or snippets. Reimport MUST fail closed rather than repair, infer, deduplicate, or truncate. | The K1 black-box journey, exact family digests, lossless reimport, duplicate/reference/hash/order rejection, CSP/XSS/privacy/path/race/limit cases, 50 permutations, and selector-absent PortableGraphV1/LocalExplorerV1 regressions match Decision 0019. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
 | `FR-EXP-003` | P0 | `0.2` | The explicit R10 export profile MUST project one validated visible RepositorySnapshotV12 and deterministic documents as canonical `PortableGraphV3`, then generate read-only offline `LocalExplorerV3`, losslessly preserving every R10 family without source contents or selecting an active `cfg` world. Reimport MUST reject rather than repair, infer, reorder, deduplicate, or truncate. | The R10 black-box journey, exact family digests, strict reimport, duplicate/reference/evidence/hash/order/privacy/path/race/limit cases, 50 permutations, immutable K1 viewer bytes, and PortableGraphV1/V2 regressions match Decision 0021. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
-| `FR-QRY-001` | P0 | `0.1` | Local queries MUST retrieve every approved entity, relationship, claim, evidence, diagnostic, coverage gap, and document by stable identity, expose unknown or contradictory states, and select a versioned result contract from the validated snapshot without changing prior result versions. R8 MAY expose the same exact subjects in a validated read-only portable projection. K1 adds LocalQueryResultV6 for V11; R10 adds LocalQueryResultV7 for V12 and directly linked declaration alternatives, while V1-V6 bytes and authority remain unchanged. | CLI black-box scenarios return the reviewed typed result and stable exit status; V12 exercises every R10 subject after restart, V11 exercises K1, V10 exercises all seven V5 kinds, V4-V9 retain approved dispatch/bytes, and portable family digests prove exact preservation. `E2E`, `CONF` |
+| `FR-EXP-004` | P0 | `0.2` | The explicit R12 export profile MUST project one validated visible RepositorySnapshotV14 and deterministic documents as canonical `PortableGraphV5`, then generate read-only offline `LocalExplorerV5`, losslessly preserving logical methods, declaration alternatives, alternative-subject callable facts, optional boundary evidence, and every claim/evidence family without source contents, body text, initializer text, snippets, or active-`cfg` selection. Reimport MUST reject rather than repair, infer, reorder, deduplicate, truncate, or select an occurrence. | The R12 black-box journey, exact family and join-index digests, strict reimport, duplicate/reference/evidence/hash/order/privacy/path/race/limit cases, 50 permutations, immutable K1 viewer bytes, and PortableGraphV1-V4 regressions match Decision 0023. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
+| `FR-QRY-001` | P0 | `0.1` | Local queries MUST retrieve every approved entity, relationship, claim, evidence, diagnostic, coverage gap, and document by stable identity, expose unknown or contradictory states, and select a versioned result contract from the validated snapshot without changing prior result versions. R8 MAY expose the same exact subjects in a validated read-only portable projection. K1 adds LocalQueryResultV6 for V11; R10 adds LocalQueryResultV7 for V12; R11 adds LocalQueryResultV8 for V13 boundary composition; and R12 adds LocalQueryResultV9 for V14 logical, alternative, callable, and optional boundary subjects, while V1-V8 bytes and authority remain unchanged. | CLI black-box scenarios return the reviewed typed result and stable exit status; V14 exercises every R12 subject after restart, V13 exercises R11, V12 exercises R10, V11 exercises K1, V10 exercises all seven V5 kinds, earlier heads retain approved dispatch/bytes, and portable family digests prove exact preservation. `E2E`, `CONF` |
 | `FR-QRY-002` | P1 | `0.2` | Graph traversal MUST enforce configurable depth, result, time, and resource limits with cycle handling. The bounded R8 subset is deterministic breadth-first read-only traversal over one validated PortableGraphV1 with default depth 1, maximum depth 2, at most 256 subjects and 512 relationships, and explicit display truncation. Broader canonical/server traversal remains Proposed. | Cyclic and adversarial queries terminate within the configured bound without starving unrelated work; R8 permutation and maximum-plus-one cases return identical bounded neighborhoods or typed failures without mutating the graph. `PT`, `PERF`, `SEC` |
-| `FR-CLI-001` | P0 | `0.1` | The CLI MUST provide local `scan`, `docs`, `query`, `export`, and `explore` journeys with human-readable and versioned JSON output. R8, K1, and R10 behavior MUST be explicitly selected, preserve accepted command bytes, use marker-owned atomic output roots, and reject unsupported profile composition before acquisition. | The R8, K1, and R10 black-box fixtures each complete scan -> docs -> query -> export -> explore without network, child process, browser auto-launch, target/toolchain execution, repository mutation, or unintended store mutation; forbidden R10 composition returns ErrorV17. `E2E`, `CONF`, `SEC`, `FT` |
+| `FR-CLI-001` | P0 | `0.1` | The CLI MUST provide local `scan`, `docs`, `query`, `export`, and `explore` journeys with human-readable and versioned JSON output. R8, K1, R10, R11, and R12 behavior MUST be explicitly selected, preserve accepted command bytes, use marker-owned atomic output roots, and reject unsupported profile composition before acquisition. | The R8 through R12 black-box fixtures each complete scan -> docs -> query -> export -> explore without network, child process, browser auto-launch, target/toolchain execution, repository mutation, or unintended store mutation; complete forbidden R12 composition returns ErrorV19, incomplete R10 plus only R6 or K1 retains ErrorV17, and every historical error family remains unchanged. `E2E`, `CONF`, `SEC`, `FT` |
 | `FR-CLI-002` | P1 | `1.0` | Approved CLI commands MUST have stable exit codes, error codes, configuration precedence, and local/remote capability behaviour. | Golden compatibility tests cover output schema, error catalog, precedence, and server parity. `CONF`, `E2E` |
 | `FR-CLI-003` | P0 | `0.1` | The S0 CLI MUST provide a local `noesis scan` JSON journey that accepts an explicit repository identity and revision and emits either `RepositorySnapshotV1` or `CodeNoesisErrorV1` with the ratified S0 stream and exit semantics. | S0 black-box tests validate success, non-Git input, missing and inconsistent objects, schema, stdout/stderr separation, and exit status. `E2E`, `CONF` |
 | `FR-CLI-004` | P1 | `0.2` | The local CLI MUST provide `noesis refresh` with explicit repository, repository identity, revision, store, and `standard-local-s5` profile inputs; success emits strict canonical `IncrementalRefreshReportV1` on stdout and failure emits strict `CodeNoesisErrorV7` on stderr without a partial head. | Black-box and conformance tests validate exact command parsing, streams, exits, report/error schemas, no-change retry, concurrent-head failure, limits, and S4 cold equivalence. `E2E`, `CONF`, `FT` |

@@ -1,0 +1,79 @@
+{
+  "schema_version": "codenoesis.r12-callable-cfg-alternatives-fixture/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1",
+  "crate_id": "urn:codenoesis:entity:blake3:147755ace3b65b518c52388562d0f74d0ea5467fe1756cb173b591e21295bdac",
+  "source_file_id": "urn:codenoesis:entity:blake3:5b6a625a75dfc183435fbb32c7db625c7441e0ba62e838078a34a0f5e7d473c4",
+  "owner_id": "urn:codenoesis:entity:blake3:928bab6ebd620663a6ee7f3d681f5f270da8a8d39f610eabd4b8e0d7aa01be66",
+  "logical_method": {
+    "id": "urn:codenoesis:entity:blake3:9c1ccda385d9531f06c53d1b1f92e5761c73a8eaa8f4b6d149035309bad5a1f4",
+    "kind": "rust.method",
+    "name": "run",
+    "declaration_state": "alternatives",
+    "direct_callable_shape": false,
+    "declaration_alternative_ids": [
+      "urn:codenoesis:entity:blake3:7693e8447f232a6dc09cc48a62f6551805053fad9a9c2cbadb293b597fe47c75",
+      "urn:codenoesis:entity:blake3:83bf1b64052dafd598f5fc1b02dddfe2d7d790488051d9c3fefaa1f1ca465a88"
+    ]
+  },
+  "helper_target_id": "urn:codenoesis:entity:blake3:ce001b20d4052f362ab4211263ed1ebe4a5e28f5a2d770308c465088b1132a27",
+  "alternatives": [
+    {
+      "label": "unix",
+      "id": "urn:codenoesis:entity:blake3:7693e8447f232a6dc09cc48a62f6551805053fad9a9c2cbadb293b597fe47c75",
+      "relationship_id": "urn:codenoesis:relationship:blake3:f5f0ea56a76b45904b2e4a9883c8ca2946ca1c965ea3ddcb0f7efe9053183a6d",
+      "declaration_evidence_id": "urn:codenoesis:evidence:blake3:2f0a5b53b599d23e926708f689cdad713ef414e9e3ba21c56ff891d5b2154727",
+      "declared_signature": "pub fn run(&self, input: i32) -> i32",
+      "declaration_span": [115, 188],
+      "cfg_span": [80, 110],
+      "callable_signature_id": "urn:codenoesis:entity:blake3:f0acfdb5ee201b238adb475a85ec3803fcd599b024d1ab33ed86b3fece011960",
+      "parameter_ids": [
+        "urn:codenoesis:entity:blake3:6c95719baf1a0907eca48e3d68c481ac255e09ca4876ed1247e5eecbaa1cfed8",
+        "urn:codenoesis:entity:blake3:c79fc36edb7d1d57e35f7dd37a8cdfd166b950a84c4c022b1e064a65b2e5d9f5"
+      ],
+      "call_site_id": "urn:codenoesis:entity:blake3:3ec35e90c8a9266ee4a7612112974a6161ff8570c8f4923de9f3fee2e6bc966c",
+      "body_digest": "2259493ad8fd40acb47e7361f355dd3d9a48d8bcb8dcc4819d6f609dd40ec52d",
+      "calls_relationship_id": "urn:codenoesis:relationship:blake3:408f70f98873a92bf2fca9c06e0a9f24a5f7a49203b506442877b5ead488a4ea"
+    },
+    {
+      "label": "windows",
+      "id": "urn:codenoesis:entity:blake3:83bf1b64052dafd598f5fc1b02dddfe2d7d790488051d9c3fefaa1f1ca465a88",
+      "relationship_id": "urn:codenoesis:relationship:blake3:c1c367631d6a3ea1a1eea5ffc346648c3d141caedae5a4156e96840bb86482a7",
+      "declaration_evidence_id": "urn:codenoesis:evidence:blake3:a75c0314f24536845026fd1e2ed92d91d8b141454eaf0005c1efe75d9484207d",
+      "declared_signature": "pub fn run(&self, value: usize) -> i32",
+      "declaration_span": [232, 314],
+      "cfg_span": [194, 227],
+      "callable_signature_id": "urn:codenoesis:entity:blake3:d4b3dffd96e9cfbe85e21013950b4e92097bb989853a2731095f84b0d64b79b3",
+      "parameter_ids": [
+        "urn:codenoesis:entity:blake3:628f6beb542e22faafa2321fe631f0167603993f2487bdd11abfb352bb6837ff",
+        "urn:codenoesis:entity:blake3:2dea1ef1e3027d1943981c71a416ddb71101504135421f9b3686607d75200c55"
+      ],
+      "call_site_id": "urn:codenoesis:entity:blake3:4f5d571ead5e52adb0197d434db2ddb3b6a745f58ddbfd941c6f051e4edf06ab",
+      "body_digest": "9baa095dd93e8e2f444a8f42d3f0f1106f957bee06c9b0a6aacaf9a1fd10ef11",
+      "calls_relationship_id": "urn:codenoesis:relationship:blake3:b41f4b953bf7199ce2fe45f8805f6b8242e9d21970d31d050b0a95abf3f8a456"
+    }
+  ],
+  "callable_entity_counts": {
+    "rust.callable_signature": 10,
+    "rust.parameter": 17,
+    "rust.declared_value": 10,
+    "rust.local_binding": 4,
+    "rust.call_site": 10,
+    "rust.control": 11
+  },
+  "callable_relationship_counts": {
+    "HAS_SIGNATURE": 10,
+    "HAS_PARAMETER": 17,
+    "DECLARES_VALUE": 10,
+    "HAS_BODY_FACT": 25,
+    "CALLS": 5
+  },
+  "unresolved_call_sites": 5,
+  "forbidden_claims": [
+    "active_cfg_world",
+    "cfg_exhaustiveness",
+    "cfg_mutual_exclusion",
+    "method_dispatch",
+    "runtime_presence",
+    "inferred_type_or_value"
+  ]
+}

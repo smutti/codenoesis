@@ -1,0 +1,88 @@
+{
+  "schema_version": "codenoesis.ontology-definition/v1",
+  "ontology_version": "codenoesis.ontology/rust/v11",
+  "extends": [
+    "codenoesis.ontology/rust/v6",
+    "codenoesis.ontology/rust/v8",
+    "codenoesis.ontology/rust/v9"
+  ],
+  "optional_incompatible_overlay": "codenoesis.ontology/rust/v7",
+  "composition": {
+    "profile": "codenoesis.rust-callable-cfg-alternatives-composition/s4-r12-v1",
+    "logical_method_direct_callable_shape": false,
+    "alternative_is_callable_subject": true,
+    "active_cfg_selection": false,
+    "method_dispatch_inference": false,
+    "optional_repository_boundary_schema": "codenoesis.repository-boundaries/v1",
+    "nested_source_traversal": false,
+    "boundary_as_code_entity": false
+  },
+  "entity_kinds": {
+    "rust.declaration_alternative": {
+      "subject_kind": "rust.method",
+      "identity": "repository_plus_logical_method_plus_declaration_evidence",
+      "claim_state": "deterministic_fact"
+    },
+    "rust.callable_signature": {
+      "identity": "one_per_callable_subject",
+      "alternative_subject_permitted": true,
+      "claim_state": "deterministic_fact"
+    },
+    "rust.parameter": {
+      "identity": "callable_subject_plus_ordinal_plus_nfc_pattern",
+      "claim_state": "deterministic_fact"
+    },
+    "rust.declared_value": {
+      "identity": "one_per_existing_declaration",
+      "claim_state": "deterministic_fact"
+    },
+    "rust.local_binding": {
+      "identity": "callable_subject_plus_evidence",
+      "claim_state": "deterministic_fact"
+    },
+    "rust.call_site": {
+      "identity": "callable_subject_plus_evidence",
+      "claim_state": "deterministic_fact_or_candidate"
+    },
+    "rust.control": {
+      "identity": "callable_subject_plus_control_kind_plus_evidence",
+      "claim_state": "deterministic_fact"
+    }
+  },
+  "relationship_kinds": {
+    "HAS_DECLARATION_ALTERNATIVE": "logical_method_to_declaration_alternative",
+    "HAS_SIGNATURE": "callable_subject_to_signature",
+    "HAS_PARAMETER": "signature_to_parameter",
+    "DECLARES_VALUE": "existing_declaration_to_value",
+    "HAS_BODY_FACT": "callable_subject_to_body_fact",
+    "CALLS": "callable_subject_to_unique_local_free_function"
+  },
+  "logical_method_forbidden_occurrence_properties": [
+    "receiver_present",
+    "declared_signature",
+    "compilation_presence",
+    "attributes",
+    "callable_signature_id",
+    "parameter_ids",
+    "body_fact_ids"
+  ],
+  "forbidden_relationship_kinds": [
+    "EXECUTES",
+    "REACHES",
+    "READS",
+    "WRITES"
+  ],
+  "identity_domains": {
+    "alternative_entity": "codenoesis.entity-id/rust-declaration-alternative/v1",
+    "alternative_relationship": "codenoesis.relationship-id/rust-declaration-alternative/v1",
+    "callable_entity": "codenoesis.entity-id/rust-callable-semantics/v1",
+    "callable_relationship": "codenoesis.relationship-id/rust-callable-semantics/v1",
+    "diagnostic": "codenoesis.diagnostic-id/rust-callable-semantics/v1",
+    "coverage_gap": "codenoesis.coverage-gap-id/rust-callable-semantics/v1"
+  },
+  "preserves_r5_logical_method_ids": true,
+  "preserves_non_alternative_k1_ids": true,
+  "normalization": "NFC",
+  "ordering": "raw_utf8_identity",
+  "cfg_semantics": "uninterpreted_committed_syntax"
+}

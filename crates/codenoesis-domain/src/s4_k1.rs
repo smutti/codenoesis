@@ -515,6 +515,20 @@ impl CallableSemanticsKnowledge {
     /// resource contract failure.
     #[allow(clippy::too_many_lines)]
     pub fn validate(&self) -> Result<(), CallableSemanticsError> {
+        self.validate_with_additional_subjects(&BTreeSet::new())
+    }
+
+    /// Validates K1 while admitting explicitly composed, evidence-backed callable subjects.
+    ///
+    /// # Errors
+    ///
+    /// Returns the first source, identity, ordering, evidence, reference, or
+    /// resource contract failure.
+    #[allow(clippy::too_many_lines)]
+    pub fn validate_with_additional_subjects(
+        &self,
+        additional_subject_ids: &BTreeSet<String>,
+    ) -> Result<(), CallableSemanticsError> {
         self.framework
             .validate()
             .map_err(CallableSemanticsError::Source)?;
@@ -608,6 +622,7 @@ impl CallableSemanticsKnowledge {
                     .map(|value| value.id.as_str()),
             )
             .collect::<BTreeSet<_>>();
+        base_ids.extend(additional_subject_ids.iter().map(String::as_str));
         let entity_ids = self
             .graph
             .entities

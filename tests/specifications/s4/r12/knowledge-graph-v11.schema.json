@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/knowledge-graph-v11.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ontology_version",
+    "extractor_versions",
+    "repository_identity",
+    "commit_oid",
+    "entities",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage",
+    "framework_declaration_index",
+    "declaration_alternative_index",
+    "callable_semantics_index",
+    "callable_cfg_alternatives_index",
+    "semantic_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "codenoesis.knowledge-graph/v11"},
+    "ontology_version": {"const": "codenoesis.ontology/rust/v11"},
+    "extractor_versions": {
+      "type": "array",
+      "allOf": [
+        {"contains": {"const": "codenoesis.rust-framework/s4-r6-v1"}},
+        {"contains": {"const": "codenoesis.rust-cfg-alternatives/s4-r10-v1"}},
+        {"contains": {"const": "codenoesis.rust-callable/s4-k1-v1"}},
+        {"contains": {"const": "codenoesis.rust-callable-cfg-alternatives/s4-r12-v1"}}
+      ]
+    },
+    "repository_identity": {"type": "string", "pattern": "^urn:codenoesis:"},
+    "commit_oid": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "entities": {"$ref": "#/$defs/family"},
+    "relationships": {"$ref": "#/$defs/family"},
+    "claims": {"$ref": "#/$defs/family"},
+    "evidence": {"$ref": "#/$defs/family"},
+    "diagnostics": {"$ref": "#/$defs/family"},
+    "coverage": {"$ref": "#/$defs/family"},
+    "framework_declaration_index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "profile", "entity_ids", "declared_registration_ids", "candidate_unresolved_ids"],
+      "properties": {
+        "schema_version": {"const": "codenoesis.framework-declaration-index/v1"},
+        "profile": {"const": "rust-framework-declarations-v1"},
+        "entity_ids": {"$ref": "#/$defs/ids"},
+        "declared_registration_ids": {"$ref": "#/$defs/ids"},
+        "candidate_unresolved_ids": {"$ref": "#/$defs/ids"}
+      }
+    },
+    "declaration_alternative_index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "profile", "logical_method_ids", "alternative_entity_ids", "alternative_relationship_ids"],
+      "properties": {
+        "schema_version": {"const": "codenoesis.rust-cfg-alternative-index/v1"},
+        "profile": {"const": "rust-cfg-declaration-alternatives-v1"},
+        "logical_method_ids": {"$ref": "#/$defs/ids"},
+        "alternative_entity_ids": {"$ref": "#/$defs/ids"},
+        "alternative_relationship_ids": {"$ref": "#/$defs/ids"}
+      }
+    },
+    "callable_semantics_index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "profile",
+        "signature_ids",
+        "parameter_ids",
+        "declared_value_ids",
+        "body_fact_ids",
+        "resolved_call_relationship_ids",
+        "unresolved_call_site_ids"
+      ],
+      "properties": {
+        "schema_version": {"const": "codenoesis.callable-semantics-index/v1"},
+        "profile": {"const": "rust-callable-semantics-v1"},
+        "signature_ids": {"$ref": "#/$defs/ids"},
+        "parameter_ids": {"$ref": "#/$defs/ids"},
+        "declared_value_ids": {"$ref": "#/$defs/ids"},
+        "body_fact_ids": {"$ref": "#/$defs/ids"},
+        "resolved_call_relationship_ids": {"$ref": "#/$defs/ids"},
+        "unresolved_call_site_ids": {"$ref": "#/$defs/ids"}
+      }
+    },
+    "callable_cfg_alternatives_index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "logical_method_ids", "alternative_callable_subject_ids", "signature_ids"],
+      "properties": {
+        "schema_version": {"const": "codenoesis.callable-cfg-alternatives-index/v1"},
+        "logical_method_ids": {"$ref": "#/$defs/ids"},
+        "alternative_callable_subject_ids": {"$ref": "#/$defs/ids"},
+        "signature_ids": {"$ref": "#/$defs/ids"}
+      }
+    },
+    "semantic_hash": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "family": {"type": "array", "items": {"type": "object", "required": ["id"], "properties": {"id": {"type": "string", "minLength": 1}}}},
+    "ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {"const": "blake3-256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}
