@@ -233,33 +233,25 @@ fn ft_fr_ext_016_corrupt_expression_graph_fails_with_exact_typed_errors() {
     );
     assert_invalid_knowledge(
         |knowledge| {
-            let relationship = knowledge
+            let relationship_index = knowledge
                 .graph
                 .relationships
                 .iter()
-                .find(|relationship| relationship.kind == ExpressionRelationshipKind::Reads)
+                .position(|relationship| relationship.kind == ExpressionRelationshipKind::Reads)
                 .expect("R14 read relationship");
-            let source = relationship.source.clone();
-            let target = relationship.target.clone();
-            let source_end = knowledge
+            let unrelated = knowledge
                 .graph
-                .entities
+                .evidence
                 .iter()
-                .find(|entity| entity.id == source)
-                .expect("R14 read source")
-                .locator
-                .end_byte;
-            let properties = knowledge
-                .graph
-                .entities
-                .iter_mut()
-                .find(|entity| entity.id == target)
-                .and_then(|entity| match &mut entity.properties {
-                    ExpressionEntityProperties::PatternBinding(properties) => Some(properties),
-                    _ => None,
+                .find(|evidence| {
+                    !knowledge.graph.relationships[relationship_index]
+                        .evidence_ids
+                        .contains(&evidence.id)
                 })
-                .expect("R14 read target binding");
-            properties.scope_start_byte = source_end.saturating_add(1);
+                .expect("unrelated R14 read evidence")
+                .id
+                .clone();
+            knowledge.graph.relationships[relationship_index].evidence_ids = vec![unrelated];
         },
         ExpressionBindingError::AccessResolutionInvalid,
     );

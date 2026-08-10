@@ -44,7 +44,7 @@
     "maintainer_supervised_interactive_lane": true,
     "governance_and_code_single_pr": true,
     "correction_budget": 5,
-    "correction_rounds_used": 1,
+    "correction_rounds_used": 2,
     "manual_independent_review_and_merge_required": true,
     "control_plane_effect": "none",
     "release_effect": "none"
@@ -100,6 +100,23 @@
       "raw_local_log_bytes": 62461,
       "raw_local_log_sha256": "9b0f7722e6f9db4ee8619e74525ec87351e8f2417359d7048f5ed1791ebdae8d",
       "final_review_head": "rerun after this evidence commit and bind the immutable head in the pull request"
+    },
+    "windows_ci_correction": {
+      "correction_round": 2,
+      "failed_head": "150a351e251dc4772823b59cb5896958ff1341a9",
+      "failed_run": "https://github.com/smutti/codenoesis/actions/runs/31420727169",
+      "failed_job": "https://github.com/smutti/codenoesis/actions/runs/31420727169/job/93560527764",
+      "failed_test": "ft_fr_ext_016_corrupt_expression_graph_fails_with_exact_typed_errors",
+      "expected_error": "AccessResolutionInvalid",
+      "actual_error": "BindingScopeInvalid",
+      "root_cause": "the first ID-sorted READS relationship is byte-order-sensitive across LF and Windows CRLF fixture checkouts, and advancing its target binding scope_start did not isolate access validation",
+      "correction": "use an existing but unrelated evidence ID so the READS relationship violates only the access single-evidence invariant",
+      "product_or_contract_change": false,
+      "focused_tests_passed": 6,
+      "summary": "crates/noesis/tests/evidence/s4/r14-rust-expression-bindings/windows-ci-correction.log",
+      "raw_local_log_bytes": 1662,
+      "raw_local_log_sha256": "8393b21138c3325863d8006169a635b542b5c8f1aa4bb8aff6b96ffe57a47e7f",
+      "windows_ci_rerun": "pending on the corrected pull-request head"
     }
   },
   "fixture": {
@@ -179,7 +196,7 @@
   },
   "known_limitations": [
     "R14 facts are syntax- and committed-source-bound and do not infer type, dispatch, borrow, ownership, control flow, data flow, side effects, runtime behavior, or value evaluation.",
-    "The local evidence environment is Darwin arm64; Windows behavior remains subject to the required GitHub Actions matrix on the final pull-request head.",
+    "The correction is locally Green on Darwin arm64; the base-controlled Windows matrix rerun remains pending on the corrected pull-request head.",
     "The Proposed candidate is not Verified and has no effect on main before independent review and protected manual merge."
   ]
 }
