@@ -210,6 +210,43 @@ invalid joins or selector combinations are typed ErrorV19 and cannot publish a
 partial head. Incomplete R10 plus only R6 or only K1 combinations remain in the
 immutable R10 ErrorV17 dispatch lane.
 
+### R13 callable and revision-bound SCIP composition
+
+The explicit R13 S4 composition combines the existing K1
+`rust-callable-semantics-v1` source projection with one already validated R7
+`scip-rust-v0.9.0-import-v1` overlay over the same immutable repository,
+revision, root tree, inventory, and R6 source lineage. Neither extractor gains
+new truth authority and CodeNoesis does not generate the compiler index.
+
+One additive `HAS_COMPILER_SYMBOL` relationship is emitted only when an R7
+`in_repository_bound` compiler symbol already identifies one exact K1
+`rust.function` or `rust.method`, that callable has exactly one K1
+`HAS_SIGNATURE`, the symbol has one committed definition locator and one
+compiler definition locator, and no second compiler symbol claims the same
+callable. The relationship carries those exact two evidence IDs. Its meaning is
+limited to revision-bound definition correspondence; it does not prove type
+equivalence, call resolution, dispatch, active configuration, generated source,
+control flow, data flow, reachability, side effects, ownership, or runtime
+behavior.
+
+RepositorySnapshotV15 and KnowledgeGraphV12 are canonical identity-unions of
+the complete unchanged K1 and R7 families plus the additive joins. A duplicate
+identity is accepted only when its complete canonical JSON record is equal;
+otherwise composition fails before publication. The sorted
+`codenoesis.callable-compiler-join-index/v1` projection records the source
+callable, its K1 signature, compiler symbol, and join relationship and must
+equal the graph projection exactly. ConfigurationV12, ExtractionChunkV12, and
+the V15/V12 family use separate semantic hash domains.
+
+LocalQueryResultV10 exposes callable, signature, compiler-symbol, and join
+neighborhoods. PortableGraphV6 is a lossless private V15 projection and
+LocalExplorerV6 reuses the immutable K1 viewer bytes. R7 alone remains V10 and
+K1 alone remains V11. R10/R12 declaration alternatives, R2/R11 repository
+boundaries, nested source, and the R9 output-capacity selector do not compose in
+R13. Complete R7 plus K1 intent selects typed ErrorV20 failures and cannot
+publish a partial head; incomplete or selector-absent intent retains the
+immutable prior dispatch families.
+
 ## Versioned artifacts and identity
 
 All public artifact types include `schema_version`, repository commit, configuration hash, pipeline version, ontology version, extractor versions, creation time, and a BLAKE3 content hash.

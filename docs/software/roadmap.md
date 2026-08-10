@@ -91,12 +91,11 @@ and declared "R8 governance is Approved". Those markers likewise remain only
 as immutable guard history. The K1 pre-merge roadmap said
 "R0-R8 are implemented"; that marker is retained only as history.
 
-R0-R11 and K1 are implemented but remain not Verified until their complete
+R0-R12 and K1 are implemented but remain not Verified until their complete
 retained evidence is independently accepted. R7 static import still grants no
-index generation authority. R12 is the next bounded compatibility package: it
-proposes an explicit V11/V14 composition of R10 declaration alternatives, R6
-framework declarations, and K1 callable facts, with optional existing boundary
-and output-capacity selectors. Protected review and manual merge remain
+index generation authority. R13 is the next bounded compatibility package: it
+proposes an explicit V12/V15 composition of K1 callable facts and one exact
+revision-bound R7 SCIP overlay. Protected review and manual merge remain
 authoritative.
 
 | Order | Planning item | Outcome | Governance dependency | Candidate acceptance gate |
@@ -114,14 +113,15 @@ authoritative.
 | `R9` | Multi-repository pilot and publication evidence | Implemented but not Verified: the explicit `local-snapshot-64m-v1` selector raises only final K1 V11 serialization capacity, enabling complete pinned Lekton scan/docs/query/export/explorer evidence without changing ontology semantics. | Issue #148, Decision 0020, and protected merge #150; conference hypotheses and analysis remain under `docs/research/`. | Standard 32 MiB behavior stays byte-identical; pinned runs retain byte-identical semantic/non-envelope projections, only permitted volatile-envelope differences, and one complete visible head. |
 | `R10` | Honest cfg declaration alternatives | Implemented but not Verified: retain one R5 logical method identity while representing homogeneous and heterogeneous repeated direct-`cfg` method declarations as distinct evidence-backed alternatives in V9/V12, QueryV7, PortableGraphV3, and LocalExplorerV3. | Issue #152, Decision 0021, and protected merge #154; immutable verification remains open. | The project-owned fixture and homogeneous regression complete scan → docs → query → export → strict reimport → explore; exact identities/evidence, malformed and maximum-plus-one failures, 50 permutations, ten schedules, no execution, legacy bytes, and two diagnostic RustDesk runs pass without choosing an active `cfg` world. |
 | `R11` | K1 repository-boundary composition | Implemented but not Verified: emit the complete root K1 callable ontology with exact unbound or explicitly-bound R2 gitlink evidence in additive V10/V13, QueryV8, PortableGraphV4, and LocalExplorerV4. | Issue #155, Decision 0022, and protected merge #156; immutable verification remains open. | The project-owned fixture completes scan → docs → callable/boundary query → export → strict reimport → explore for unbound and bound cases; nested source remains unread, exact identities/limits/security/determinism pass, and RustDesk advances only to the separately governed K1+R10 blocker. |
-| `R12` | K1 cfg-alternatives composition | Proposed branch-scoped candidate: preserve one R10 logical method while attaching occurrence-specific K1 signatures, parameters, body facts, and uniquely proven local calls to exact declaration-alternative subjects in additive V11/V14, QueryV9, PortableGraphV5, and LocalExplorerV5. | Issue #158 and Decision 0023; high-risk supervised single-PR package, no new dependency, immutable R0-R11/K1 contracts/goldens/viewer. | The project-owned fixture completes scan → docs → logical/alternative/signature query → export → strict reimport → explore; exact subject mapping, optional boundary/capacity, limits/security/determinism pass, and RustDesk advances beyond the former `try_start_clipboard` conflict without choosing an active `cfg` world. |
+| `R12` | K1 cfg-alternatives composition | Implemented but not Verified: preserve one R10 logical method while attaching occurrence-specific K1 signatures, parameters, body facts, and uniquely proven local calls to exact declaration-alternative subjects in additive V11/V14, QueryV9, PortableGraphV5, and LocalExplorerV5. | Issue #158, Decision 0023, and protected merge #159; complete immutable verification remains open. | The project-owned fixture completes scan → docs → logical/alternative/signature query → export → strict reimport → explore; exact subject mapping, optional boundary/capacity, limits/security/determinism pass, and RustDesk advances beyond the former `try_start_clipboard` conflict without choosing an active `cfg` world. |
+| `R13` | K1 and revision-bound SCIP composition | Proposed branch-scoped candidate: preserve complete K1 and R7 facts while adding only evidence-backed `HAS_COMPILER_SYMBOL` correspondence from exact K1 functions/methods to exact in-repository compiler symbols in additive V12/V15, QueryV10, PortableGraphV6, and LocalExplorerV6. | Issue #160 and Decision 0024; high-risk supervised single-PR package, no new dependency, immutable R0-R12/K1 contracts, goldens, and viewer bytes. | The immutable compiler-index fixture completes scan → docs → callable/signature/compiler/join query → export → strict reimport → explore with five exact joins, two unchanged unresolved calls, zero new `CALLS`, 52 coverage records, and deterministic security/limit regressions. |
 
 ### Earliest useful real-world checkpoint
 
 `R1`–`R3` are the minimum path to analyzing ordinary packed clones with safe
 gitlink boundaries and common virtual or non-virtual Cargo workspace layouts.
 At that checkpoint CodeNoesis should create and query a partial but honest
-ontology and generate evidence-backed documentation. `R4`–`R12` increase
+ontology and generate evidence-backed documentation. `R4`–`R13` increase
 semantic coverage and make the graph easier to inspect; they are not permitted
 to hide unsupported meaning.
 

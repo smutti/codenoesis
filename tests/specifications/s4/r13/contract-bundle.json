@@ -1,0 +1,90 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "docs/software/decisions/0024-s4-r13-k1-scip-composition-contract.md",
+      "sha256": "fad8b1f441f6afbd9015e7f0109e13ef7197a33d64834dc916f55215df40c793"
+    },
+    {
+      "path": "scripts/tests/test_s4_r13_k1_scip_composition_contract.py",
+      "sha256": "057de205340e3992b1882fa6bb1ffb5bd983aecdb017632b3313ffa2d69ed090"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-callable-scip-composition-v1/README.md",
+      "sha256": "42f0eca8967d29c87c637508f31ecc153e701fb869ecd59fcdfc2d10168ae714"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-callable-scip-composition-v1/expected-composition.json",
+      "sha256": "1b8e794a845240b01cb198db493b68cc67a16fe285e566287890cc6aa2a094b3"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-callable-scip-composition-v1/manifest.json",
+      "sha256": "b9fea29ded65b9982b5cef3b288125df280223e3f77a94d58731b0fe9855af26"
+    },
+    {
+      "path": "tests/specifications/s4/k1/contract-bundle.json",
+      "sha256": "a0428d0a03754aa45b0f04c07e153579ab4dc8589e23d9e2c174282f2bff0833"
+    },
+    {
+      "path": "tests/specifications/s4/r13/callable-scip-composition-v1.json",
+      "sha256": "32838e69ff39f078527a0b5027abe5c96e1f15446a26bc1eb60e3aa42a756858"
+    },
+    {
+      "path": "tests/specifications/s4/r13/codenoesis-error-v20.schema.json",
+      "sha256": "f02edf01af277ee97ad8be371f68ec5e3a2370f07e1b2945525e22c01a9da7d6"
+    },
+    {
+      "path": "tests/specifications/s4/r13/configuration-v12.schema.json",
+      "sha256": "6f60e588d3cd86eb92611e117058df80dd1cf5e5508583a8a868bf1d928d7a81"
+    },
+    {
+      "path": "tests/specifications/s4/r13/e2e_fr_ext_015_k1_scip_composition.json",
+      "sha256": "442252cf3eda5f8c38b198671517f44ed4d2cf810c157acb73c02a9099eb28a6"
+    },
+    {
+      "path": "tests/specifications/s4/r13/extraction-chunk-v12.schema.json",
+      "sha256": "ee4800db32b95029aef6da4e9c82d639062f1d339cecf5568ce35db7fcd24b9a"
+    },
+    {
+      "path": "tests/specifications/s4/r13/invalid-cases-v1.json",
+      "sha256": "9e144b861aaf00ad64cd820cd24ad87cb275b6587f838d66f054d83c70e91e3c"
+    },
+    {
+      "path": "tests/specifications/s4/r13/knowledge-graph-v12.schema.json",
+      "sha256": "b6155a6191b896ab6421bd2bf27f9321757d694ebf22f9fc5253f72a3e835774"
+    },
+    {
+      "path": "tests/specifications/s4/r13/local-explorer-manifest-v6.schema.json",
+      "sha256": "2dd97c93dd0540122f36966d972b04f2971d4cef34fa3864c4e184af171edd09"
+    },
+    {
+      "path": "tests/specifications/s4/r13/local-query-result-v10.schema.json",
+      "sha256": "f0afa68f2f5883fc7422287debed926ccbb2a3dc9317ec6ab5343bfe59e30fd3"
+    },
+    {
+      "path": "tests/specifications/s4/r13/portable-graph-v6.schema.json",
+      "sha256": "060f25b48a077febf1822f0ebeb65ac77bbe611ffb7a0c0fa7dbff0928acc7ed"
+    },
+    {
+      "path": "tests/specifications/s4/r13/repository-snapshot-v15.schema.json",
+      "sha256": "3c3cf31ba6713a2f23609d116bbb4b360b504d6fe8783c18564b9efe8ecfcd22"
+    },
+    {
+      "path": "tests/specifications/s4/r13/rust-ontology-v12.json",
+      "sha256": "3477bd73a1db4b0be3758f60388e0798f974ed1fedb39df2c646e595b40ab772"
+    },
+    {
+      "path": "tests/specifications/s4/r13/semantic-hash-contract-v11.json",
+      "sha256": "4889d3e469515a2b9aecd215a8fda9823681f2e17f199d53fae31a20de1de801"
+    },
+    {
+      "path": "tests/specifications/s4/r7/contract-bundle.json",
+      "sha256": "aa3c8384f3ef48499d7ae51652774177739a720fc20c329f22d387ee4f040e8e"
+    }
+  ],
+  "bundle_sha256": "e1840d461643542db76c4a66442543030e09f56894c5f0f164b5bedeb9afb9d7"
+}
