@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/local-explorer-manifest-v7.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "portable_graph",
+    "entrypoint",
+    "security",
+    "capabilities",
+    "limits"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.local-explorer/v7"
+    },
+    "portable_graph": {
+      "type": "object"
+    },
+    "entrypoint": {
+      "type": "object"
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "content_security_policy",
+        "network",
+        "dynamic_code",
+        "storage",
+        "telemetry"
+      ],
+      "properties": {
+        "profile": {
+          "const": "codenoesis.local-explorer-security/v7"
+        },
+        "content_security_policy": {
+          "type": "string"
+        },
+        "network": {
+          "const": false
+        },
+        "dynamic_code": {
+          "const": false
+        },
+        "storage": {
+          "const": false
+        },
+        "telemetry": {
+          "const": false
+        }
+      }
+    },
+    "capabilities": {
+      "type": "object"
+    },
+    "limits": {
+      "type": "object"
+    }
+  }
+}

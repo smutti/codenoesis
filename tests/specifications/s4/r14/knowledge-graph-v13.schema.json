@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/knowledge-graph-v13.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ontology_version",
+    "extractor_versions",
+    "repository",
+    "workspace",
+    "manifest_index",
+    "rust_semantic_index",
+    "framework_declaration_index",
+    "callable_semantics_index",
+    "expression_binding_index",
+    "entities",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage",
+    "semantic_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.knowledge-graph/v13"
+    },
+    "ontology_version": {
+      "const": "codenoesis.ontology/rust/v13"
+    },
+    "extractor_versions": {
+      "type": "array",
+      "allOf": [
+        {
+          "contains": {
+            "const": "codenoesis.rust-callable/s4-k1-v1"
+          }
+        },
+        {
+          "contains": {
+            "const": "codenoesis.rust-expression-bindings/s4-r14-v1"
+          }
+        }
+      ]
+    },
+    "repository": {
+      "type": "object"
+    },
+    "workspace": {
+      "type": "object"
+    },
+    "manifest_index": {
+      "type": "object"
+    },
+    "rust_semantic_index": {
+      "type": "object"
+    },
+    "framework_declaration_index": {
+      "type": "object"
+    },
+    "callable_semantics_index": {
+      "type": "object"
+    },
+    "expression_binding_index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "expression_entity_ids",
+        "argument_entity_ids",
+        "binding_entity_ids",
+        "read_relationship_ids",
+        "write_relationship_ids",
+        "call_site_relationship_ids"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "codenoesis.expression-binding-index/v1"
+        },
+        "expression_entity_ids": {
+          "type": "array",
+          "maxItems": 400000,
+          "items": {
+            "type": "string",
+            "pattern": "^urn:codenoesis:entity:blake3:[0-9a-f]{64}$"
+          }
+        },
+        "argument_entity_ids": {
+          "type": "array",
+          "maxItems": 200000,
+          "items": {
+            "type": "string",
+            "pattern": "^urn:codenoesis:entity:blake3:[0-9a-f]{64}$"
+          }
+        },
+        "binding_entity_ids": {
+          "type": "array",
+          "maxItems": 200000,
+          "items": {
+            "type": "string",
+            "pattern": "^urn:codenoesis:entity:blake3:[0-9a-f]{64}$"
+          }
+        },
+        "read_relationship_ids": {
+          "type": "array",
+          "maxItems": 1000000,
+          "items": {
+            "type": "string",
+            "pattern": "^urn:codenoesis:relationship:blake3:[0-9a-f]{64}$"
+          }
+        },
+        "write_relationship_ids": {
+          "type": "array",
+          "maxItems": 1000000,
+          "items": {
+            "type": "string",
+            "pattern": "^urn:codenoesis:relationship:blake3:[0-9a-f]{64}$"
+          }
+        },
+        "call_site_relationship_ids": {
+          "type": "array",
+          "maxItems": 400000,
+          "items": {
+            "type": "string",
+            "pattern": "^urn:codenoesis:relationship:blake3:[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "entities": {
+      "$ref": "#/$defs/family"
+    },
+    "relationships": {
+      "$ref": "#/$defs/family"
+    },
+    "claims": {
+      "$ref": "#/$defs/family"
+    },
+    "evidence": {
+      "$ref": "#/$defs/family"
+    },
+    "diagnostics": {
+      "$ref": "#/$defs/family"
+    },
+    "coverage": {
+      "$ref": "#/$defs/family"
+    },
+    "semantic_hash": {
+      "$ref": "#/$defs/hash"
+    }
+  },
+  "$defs": {
+    "family": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "value"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "blake3-256"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    }
+  }
+}

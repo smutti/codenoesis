@@ -1,0 +1,138 @@
+{
+  "schema_version": "codenoesis.ontology-definition/v1",
+  "ontology_version": "codenoesis.ontology/rust/v13",
+  "extends": [
+    "codenoesis.ontology/rust/v8"
+  ],
+  "profile": "rust-expression-bindings-v1",
+  "extractor": "codenoesis.rust-expression-bindings/s4-r14-v1",
+  "entity_kinds": {
+    "rust.expression": {
+      "identity": "codenoesis.entity-id/rust-expression-bindings/v1",
+      "claim_state": "deterministic_fact",
+      "syntax_kinds": [
+        "array_expression",
+        "assignment_expression",
+        "await_expression",
+        "binary_expression",
+        "boolean_literal",
+        "char_literal",
+        "float_literal",
+        "integer_literal",
+        "raw_string_literal",
+        "string_literal",
+        "call_expression",
+        "compound_assignment_expr",
+        "field_expression",
+        "generic_function",
+        "identifier",
+        "self",
+        "scoped_identifier",
+        "index_expression",
+        "parenthesized_expression",
+        "range_expression",
+        "reference_expression",
+        "struct_expression",
+        "try_expression",
+        "tuple_expression",
+        "type_cast_expression",
+        "unary_expression",
+        "unit_expression"
+      ],
+      "roles": [
+        "body_tail",
+        "condition",
+        "pattern_input",
+        "iterator",
+        "initializer",
+        "assignment_target",
+        "assignment_value",
+        "callee",
+        "argument",
+        "receiver",
+        "return_value",
+        "nested"
+      ],
+      "raw_text": false
+    },
+    "rust.call_argument": {
+      "identity": "codenoesis.entity-id/rust-expression-bindings/v1",
+      "claim_state": "deterministic_fact",
+      "ordinal": "zero_based_contiguous"
+    },
+    "rust.pattern_binding": {
+      "identity": "codenoesis.entity-id/rust-expression-bindings/v1",
+      "claim_state": "deterministic_fact",
+      "origins": [
+        "parameter",
+        "local_let",
+        "if_let",
+        "while_let",
+        "for",
+        "match_arm"
+      ],
+      "modifiers": [
+        "none",
+        "explicit_mut",
+        "explicit_ref",
+        "explicit_ref_mut"
+      ]
+    }
+  },
+  "relationship_kinds": {
+    "HAS_EXPRESSION": {
+      "identity": "codenoesis.relationship-id/rust-expression-bindings/v1",
+      "meaning": "syntax_only"
+    },
+    "CONTAINS_EXPRESSION": {
+      "identity": "codenoesis.relationship-id/rust-expression-bindings/v1",
+      "meaning": "syntax_only"
+    },
+    "HAS_ARGUMENT": {
+      "identity": "codenoesis.relationship-id/rust-expression-bindings/v1",
+      "meaning": "syntax_only"
+    },
+    "ARGUMENT_VALUE": {
+      "identity": "codenoesis.relationship-id/rust-expression-bindings/v1",
+      "meaning": "syntax_only"
+    },
+    "HAS_RECEIVER": {
+      "identity": "codenoesis.relationship-id/rust-expression-bindings/v1",
+      "meaning": "syntax_only"
+    },
+    "REPRESENTS_CALL_SITE": {
+      "identity": "codenoesis.relationship-id/rust-expression-bindings/v1",
+      "meaning": "syntax_only"
+    },
+    "DECLARES_BINDING": {
+      "identity": "codenoesis.relationship-id/rust-expression-bindings/v1",
+      "meaning": "syntax_only"
+    },
+    "BINDS_FROM": {
+      "identity": "codenoesis.relationship-id/rust-expression-bindings/v1",
+      "meaning": "syntax_only"
+    },
+    "READS": {
+      "identity": "codenoesis.relationship-id/rust-expression-bindings/v1",
+      "meaning": "syntax_only"
+    },
+    "WRITES": {
+      "identity": "codenoesis.relationship-id/rust-expression-bindings/v1",
+      "meaning": "syntax_only"
+    }
+  },
+  "identity_domains": {
+    "entity": "codenoesis.entity-id/rust-expression-bindings/v1",
+    "relationship": "codenoesis.relationship-id/rust-expression-bindings/v1",
+    "existing_k1": "unchanged"
+  },
+  "access_epistemology": {
+    "READS": "lexically_resolved_value_position_syntax",
+    "WRITES": "lexically_resolved_direct_assignment_target_syntax",
+    "data_flow": false,
+    "runtime": false
+  },
+  "normalization": "NFC",
+  "ordering": "raw_utf8_identity",
+  "existing_identity_domains_immutable": true
+}

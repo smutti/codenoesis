@@ -1,0 +1,126 @@
+{
+  "schema_version": "codenoesis.e2e-specification/v1",
+  "issue": 162,
+  "requirements": [
+    "FR-EXT-012",
+    "FR-EXT-016",
+    "FR-EXP-002",
+    "FR-EXP-006",
+    "FR-QRY-001",
+    "FR-CLI-001",
+    "FR-DOC-001",
+    "FR-DOC-002",
+    "FR-DOC-003",
+    "NFR-DET-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-PRV-002",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "requirement_status": "Proposed branch-scoped candidate until protected manual merge",
+  "slice": "S4",
+  "risk": "high",
+  "base_sha": "e32428ecac33df384b2e8b6eed3d257da06e18fe",
+  "authorization": [
+    "https://github.com/smutti/codenoesis/issues/162#issuecomment-5239994397"
+  ],
+  "fixture": {
+    "descriptor": "tests/fixtures/s4/rust-expression-bindings-v1/manifest.json",
+    "source_root": "tests/fixtures/s4/rust-callable-semantics-v1",
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1",
+    "tree_oid": "ead855e0545cc26b351b305fcad39f2e491b285d",
+    "commit_oid": "9a7bb3adaa5bf30eef3bc9bc656c81f42fbdb845",
+    "external_source_vendored": false
+  },
+  "scan_selectors": [
+    "--profile",
+    "standard-local-s4",
+    "--workspace-profile",
+    "cargo-root-package-v1",
+    "--manifest-profile",
+    "cargo-manifest-facts-v1",
+    "--rust-semantic-profile",
+    "rust-semantic-depth-v1",
+    "--rust-framework-profile",
+    "rust-framework-declarations-v1",
+    "--rust-callable-profile",
+    "rust-callable-semantics-v1",
+    "--rust-expression-profile",
+    "rust-expression-bindings-v1"
+  ],
+  "expected_red": {
+    "exit_code": 2,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 149,
+    "stderr_sha256": "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe",
+    "error_schema": "codenoesis.error/v4",
+    "error_code": "input.invalid_revision",
+    "store_exists": false
+  },
+  "green_journey": [
+    "scan",
+    "docs",
+    "query_expression",
+    "query_argument",
+    "query_binding",
+    "query_access",
+    "export",
+    "strict_reimport",
+    "explore"
+  ],
+  "expected_contracts": {
+    "configuration": "codenoesis.configuration/v13",
+    "snapshot": "codenoesis.repository-snapshot/v16",
+    "extraction": "codenoesis.extraction/v13",
+    "chunk": "codenoesis.extraction-chunk/v13",
+    "graph": "codenoesis.knowledge-graph/v13",
+    "ontology": "codenoesis.ontology/rust/v13",
+    "semantic_hash": "codenoesis.semantic-hash-contract/v12",
+    "error": "codenoesis.error/v21",
+    "query": "codenoesis.local-query-result/v11",
+    "portable": "codenoesis.portable-graph/v7",
+    "explorer": "codenoesis.local-explorer/v7",
+    "pipeline": "codenoesis.pipeline/s4-r14-v1",
+    "extractor": "codenoesis.rust-expression-bindings/s4-r14-v1",
+    "index": "codenoesis.expression-binding-index/v1"
+  },
+  "acceptance": {
+    "baseline_counts": {
+      "entities": 91,
+      "relationships": 96,
+      "evidence": 99,
+      "claims": 187,
+      "diagnostics": 8,
+      "coverage": 93
+    },
+    "additive_counts": {
+      "entities": 104,
+      "relationships": 207,
+      "evidence": 86,
+      "claims": 311,
+      "diagnostics": 0,
+      "coverage": 0
+    },
+    "complete_counts": {
+      "entities": 195,
+      "relationships": 303,
+      "evidence": 185,
+      "claims": 498,
+      "diagnostics": 8,
+      "coverage": 93
+    },
+    "expressions": 73,
+    "arguments": 8,
+    "bindings": 23,
+    "reads": 29,
+    "writes": 7,
+    "call_site_correspondences": 9,
+    "portable_reimport_lossless": true,
+    "viewer_bytes_immutable": true,
+    "legacy_bytes_immutable": true,
+    "permutations": 50,
+    "parallel_schedules": 10
+  }
+}

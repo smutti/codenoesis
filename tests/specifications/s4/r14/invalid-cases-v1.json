@@ -1,0 +1,137 @@
+{
+  "schema_version": "codenoesis.r14-invalid-cases/v1",
+  "cases": [
+    {
+      "id": "missing_callable_profile",
+      "expected": "input.unsupported_rust_expression_composition"
+    },
+    {
+      "id": "missing_expression_profile",
+      "dispatch": "legacy_k1"
+    },
+    {
+      "id": "boundary_profile",
+      "expected": "input.unsupported_rust_expression_composition"
+    },
+    {
+      "id": "cfg_alternatives_profile",
+      "expected": "input.unsupported_rust_expression_composition"
+    },
+    {
+      "id": "compiler_profile",
+      "expected": "input.unsupported_rust_expression_composition"
+    },
+    {
+      "id": "nested_function",
+      "expected": "typed_coverage"
+    },
+    {
+      "id": "closure_capture",
+      "expected": "typed_coverage"
+    },
+    {
+      "id": "unsupported_pattern",
+      "expected": "typed_coverage"
+    },
+    {
+      "id": "ambiguous_shadowing",
+      "expected": "typed_coverage"
+    },
+    {
+      "id": "duplicate_expression_identity",
+      "expected": "extraction.expression_identity_conflict"
+    },
+    {
+      "id": "invalid_parent",
+      "expected": "extraction.expression_parent_invalid"
+    },
+    {
+      "id": "invalid_role",
+      "expected": "extraction.expression_role_invalid"
+    },
+    {
+      "id": "invalid_operator",
+      "expected": "extraction.expression_operator_invalid"
+    },
+    {
+      "id": "argument_gap",
+      "expected": "extraction.argument_ordinal_invalid"
+    },
+    {
+      "id": "binding_scope_invalid",
+      "expected": "extraction.binding_scope_invalid"
+    },
+    {
+      "id": "forward_access",
+      "expected": "extraction.access_resolution_invalid"
+    },
+    {
+      "id": "call_site_evidence_disagreement",
+      "expected": "extraction.call_site_evidence_mismatch"
+    },
+    {
+      "id": "index_graph_disagreement",
+      "expected": "extraction.expression_index_mismatch"
+    },
+    {
+      "id": "depth_max_plus_one",
+      "expected": "extraction.expression_limit_exceeded"
+    },
+    {
+      "id": "expressions_per_callable_max_plus_one",
+      "expected": "extraction.expression_limit_exceeded"
+    },
+    {
+      "id": "arguments_per_call_max_plus_one",
+      "expected": "extraction.expression_limit_exceeded"
+    },
+    {
+      "id": "bindings_per_callable_max_plus_one",
+      "expected": "extraction.expression_limit_exceeded"
+    },
+    {
+      "id": "total_expression_max_plus_one",
+      "expected": "extraction.expression_limit_exceeded"
+    },
+    {
+      "id": "portable_unknown_field",
+      "expected": "export.invalid_portable_graph_v7"
+    },
+    {
+      "id": "portable_noncanonical_order",
+      "expected": "export.invalid_portable_graph_v7"
+    },
+    {
+      "id": "portable_expression_text",
+      "expected": "export.invalid_portable_graph_v7"
+    },
+    {
+      "id": "portable_literal_lexeme",
+      "expected": "export.invalid_portable_graph_v7"
+    },
+    {
+      "id": "portable_absolute_root",
+      "expected": "export.invalid_portable_graph_v7"
+    },
+    {
+      "id": "output_parent_symlink",
+      "expected": "input.unsafe_output_path"
+    },
+    {
+      "id": "output_race_replacement",
+      "expected": "input.unsafe_output_path"
+    },
+    {
+      "id": "html_script_close",
+      "expected": "explorer.asset_integrity_mismatch"
+    },
+    {
+      "id": "remote_resource",
+      "expected": "explorer.asset_integrity_mismatch"
+    },
+    {
+      "id": "dynamic_code",
+      "expected": "explorer.asset_integrity_mismatch"
+    }
+  ]
+}
