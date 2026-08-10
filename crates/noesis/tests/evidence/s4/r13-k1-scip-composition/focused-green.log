@@ -1,0 +1,44 @@
+issue=https://github.com/smutti/codenoesis/issues/160
+requirements=FR-EXT-005,FR-EXT-012,FR-EXT-015,FR-EXP-005,FR-QRY-001,FR-CLI-001,FR-DOC-001,FR-DOC-002,FR-DOC-003,NFR-DET-001,NFR-SEC-001,NFR-SEC-005,NFR-PRV-002,NFR-TST-001,NFR-TST-002
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+tested_implementation_commit=610cdd41b041680eb7cb8042ca54c36517da8db6
+tested_tree=46d0b1ac47d7af44a5ebda5560f495ba90081f23
+completed_at_utc=2026-08-10T09:55:48Z
+
+command=python3 -m unittest scripts.tests.test_s4_r13_k1_scip_composition_contract
+exit=0
+tests_passed=5
+
+command=cargo test -p codenoesis-domain --test s4_r13_k1_scip_composition --locked
+exit=0
+tests_passed=3
+coverage=version and hash domains, reviewed identity preimage, 200000 join maximum and 200001 rejection
+
+command=cargo test -p codenoesis-contracts --test s4_r13_k1_scip_composition --locked
+exit=0
+tests_passed=9
+coverage=ErrorV20, V15/V12/V10/V6 strict contracts, canonicality, privacy, references, join lineage, viewer and CSP
+
+command=cargo test -p noesis --lib --locked r13
+exit=0
+tests_passed=2
+coverage=mutable portable input and output-replacement races fail closed
+
+command=cargo test -p noesis --test e2e_fr_ext_015_k1_scip_composition --locked
+exit=0
+tests_passed=3
+journey=scan -> docs -> four exact-ID query subjects -> export -> strict reimport -> explore
+oracle=61 entities, 53 relationships, 80 evidence, 114 claims, 4 diagnostics, 52 coverage records
+joins=5 HAS_COMPILER_SYMBOL relationships with exactly one signature and two evidence IDs each
+call_semantics=2 call sites remain candidate_unresolved and no CALLS relationship is added
+determinism=50 argument permutations and 10 parallel schedules have identical semantic bytes
+selector_compatibility=complete R13 intent uses ErrorV20 while earlier R11 and R12 lineage keeps its historical typed error family
+
+rust_tests_passed=17
+python_tests_passed=5
+raw_local_log_bytes=4127
+raw_local_log_sha256=3b254766200937df73756c78ee2472eec851a0dc816b63d93df98f44092c7b92
+known_warning=the pre-existing exact toml dependency requirement includes ignored semver metadata; no R13 manifest or dependency changed
+result=green

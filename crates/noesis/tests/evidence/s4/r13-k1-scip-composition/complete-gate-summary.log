@@ -1,0 +1,61 @@
+issue=https://github.com/smutti/codenoesis/issues/160
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+tested_implementation_commit=610cdd41b041680eb7cb8042ca54c36517da8db6
+tested_tree=46d0b1ac47d7af44a5ebda5560f495ba90081f23
+completed_at_utc=2026-08-10T09:54:04Z
+
+command=actionlint -no-color
+exit=0
+
+command=python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json
+exit=0
+result={"approved_requirement_count":39,"hard_protected_pattern_count":13,"status":"valid","version":1}
+
+command=cargo fmt --all --check
+exit=0
+
+command=cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+exit=0
+
+command=cargo test --workspace --all-targets --all-features --locked
+exit=0
+tests_passed=481
+
+command=cargo test --workspace --doc --all-features --locked
+exit=0
+
+command=python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+exit=0
+tests_passed=294
+
+command=python3 scripts/validate_benchmark_assets.py
+exit=0
+result=benchmark assets valid: status=scaffold, suites=0
+
+command=cargo bench --workspace --all-features --no-run --locked
+exit=0
+
+raw_local_log_bytes=58270
+raw_local_log_sha256=4010a60dbe908d9b87c1413db8b21dc223a1c7e24e12984da0de1eee83df393c
+environment=Darwin 25.5.0 arm64; rustc 1.97.1 (8bab26f4f 2026-07-14); cargo 1.97.1 (c980f4866 2026-06-30); Python 3.9.6
+known_warning=the pre-existing exact toml dependency requirement includes ignored semver metadata; no R13 manifest or dependency changed
+
+failed_gate_head=84da1aec378ec5134f12fbc261eff8e141836e7b
+failed_gate_test=ft_fr_cli_001_r11_forbidden_composition_fails_before_store_creation
+failed_gate_reason=R13 initially claimed a legacy R11-first invalid selector and returned exit 2 instead of immutable ErrorV18 exit 11
+failed_gate_raw_log_bytes=46578
+failed_gate_raw_log_sha256=2e9da3a9a4b014f2c65339de6c666f4c21fadc2897d9e6bd7bd4192920899f0d
+correction_commit=c95deb30d542ff0265e10048c002c4c6a142a914
+
+failed_gate_head=c95deb30d542ff0265e10048c002c4c6a142a914
+failed_gate_test=e2e_fr_cli_001_r12_invalid_selector_matrix_fails_before_acquisition
+failed_gate_reason=R13 initially claimed a legacy R12-first invalid selector and returned ErrorV20 instead of immutable ErrorV19
+failed_gate_raw_log=not retained because the final audit log reused the local path; exact failure output remains in the supervised task transcript
+correction_commit=610cdd41b041680eb7cb8042ca54c36517da8db6
+
+correction_budget=5
+correction_rounds_used=5
+result=green
+final_review_head_gate=pending after the evidence commit; retain its exact head and result in the pull request and GitHub Actions
