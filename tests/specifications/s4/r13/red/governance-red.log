@@ -1,0 +1,22 @@
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s
+     Running tests/e2e_fr_ext_015_k1_scip_composition.rs (target/debug/deps/e2e_fr_ext_015_k1_scip_composition-d32e8fc752686417)
+
+running 1 test
+test e2e_fr_ext_015_k1_scip_composition_complete_local_journey ... FAILED
+
+failures:
+
+---- e2e_fr_ext_015_k1_scip_composition_complete_local_journey stdout ----
+
+thread 'e2e_fr_ext_015_k1_scip_composition_complete_local_journey' (6352583) panicked at crates/noesis/tests/e2e_fr_ext_015_k1_scip_composition.rs:44:9:
+expected RepositorySnapshotV15 success; observed frozen composition Red
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    e2e_fr_ext_015_k1_scip_composition_complete_local_journey
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.04s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_ext_015_k1_scip_composition`
