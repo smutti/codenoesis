@@ -1,0 +1,36 @@
+issue=https://github.com/smutti/codenoesis/issues/158
+pull_request=https://github.com/smutti/codenoesis/pull/159
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+correction_round=3
+correction_budget=5
+failed_head=36bef2ce6836923a7eefa6425ac92fd54ca9c1e6
+run=https://github.com/smutti/codenoesis/actions/runs/31365044858
+job=https://github.com/smutti/codenoesis/actions/runs/31365044858/job/93381510746
+job_started_at_utc=2026-08-10T07:14:19Z
+job_completed_at_utc=2026-08-10T07:25:35Z
+job_conclusion=failure
+
+prior_language_fixture_correction_result=Windows R12 language adapter suite passed 7/7, including conf_fr_ext_014_reviewed_fixture_newlines_are_platform_neutral
+failed_suite=noesis/tests/e2e_fr_ext_014_k1_cfg_alternatives.rs
+failed_test=e2e_fr_ext_014_k1_cfg_alternatives_complete_local_journey
+failed_assertion_line=286
+root_cause=the R12 journey succeeded through LocalExplorerV5, then compared the published canonical LF viewer with Git-for-Windows CRLF checkout transport bytes from the immutable K1 asset
+correction=normalize only CRLF checkout transport in the R12 test before comparing with the already canonical published immutable K1 viewer, matching the existing R10 and R11 oracle
+changed_product_behavior=false
+changed_contract_or_oracle=false
+changed_viewer_or_golden_bytes=false
+changed_identity_or_hash_preimage=false
+changed_dependency_or_control_plane=false
+changed_path=crates/noesis/tests/e2e_fr_ext_014_k1_cfg_alternatives.rs
+
+local_command=cargo fmt --all --check
+local_exit=0
+local_command=cargo test -p noesis --test e2e_fr_ext_014_k1_cfg_alternatives --locked
+local_exit=0
+local_tests_passed=3
+transport_test=conf_nfr_det_001_r12_viewer_checkout_transport_is_platform_neutral
+raw_failed_job_log_bytes=227780
+raw_failed_job_log_sha256=b050c28a81dffa728978bf25aec09d3babf3d2235e018c379e1641bb3b264d60
+github_recheck=pending after correction commit and push

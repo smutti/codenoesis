@@ -46,7 +46,7 @@
     "maintainer_supervised_interactive_lane": true,
     "governance_and_code_single_pr": true,
     "correction_budget": 5,
-    "correction_rounds_used": 2,
+    "correction_rounds_used": 3,
     "manual_independent_review_and_merge_required": true,
     "control_plane_effect": "none",
     "release_effect": "none"
@@ -98,6 +98,7 @@
     "crates/noesis/tests/evidence/s4/r12-k1-cfg-alternatives/implementation-observation-local.json",
     "crates/noesis/tests/evidence/s4/r12-k1-cfg-alternatives/rustdesk-pilot.log",
     "crates/noesis/tests/evidence/s4/r12-k1-cfg-alternatives/windows-ci-correction.log",
+    "crates/noesis/tests/evidence/s4/r12-k1-cfg-alternatives/windows-ci-viewer-correction.log",
     "crates/noesis/tests/support/mod.rs",
     "crates/noesis/tests/support/s4_r12.rs",
     "docs/software/architecture.md",
@@ -196,6 +197,23 @@
       "summary_bytes": 2283,
       "summary_sha256": "7b373370823a857c116c4f661b3d3cb0def52e0abc4ff7c8a50b0d5520304610",
       "github_recheck": "pending after correction commit and push"
+    },
+    "windows_ci_viewer_correction": {
+      "failed_head": "36bef2ce6836923a7eefa6425ac92fd54ca9c1e6",
+      "run": "https://github.com/smutti/codenoesis/actions/runs/31365044858",
+      "job": "https://github.com/smutti/codenoesis/actions/runs/31365044858/job/93381510746",
+      "prior_correction_result": "the Windows R12 language adapter suite passed 7/7",
+      "failure": "the complete R12 journey succeeded through LocalExplorerV5, then compared its canonical LF viewer with Git-for-Windows CRLF checkout transport bytes",
+      "failed_tests": 1,
+      "correction": "normalize only CRLF checkout transport in the R12 test before comparing with the already canonical immutable K1 viewer, matching the existing R10 and R11 oracle",
+      "product_or_contract_changed": false,
+      "local_tests_passed": 3,
+      "raw_job_log_bytes": 227780,
+      "raw_job_log_sha256": "b050c28a81dffa728978bf25aec09d3babf3d2235e018c379e1641bb3b264d60",
+      "summary": "crates/noesis/tests/evidence/s4/r12-k1-cfg-alternatives/windows-ci-viewer-correction.log",
+      "summary_bytes": 1909,
+      "summary_sha256": "c8e3dcdb83b02d29df0695c7a5117b113c6ee738da5dcdfad26288a2dd29ad55",
+      "github_recheck": "pending after correction commit and push"
     }
   },
   "fixture": {
@@ -263,7 +281,8 @@
   },
   "corrections": [
     "preserved legacy R10 ErrorV17 for incomplete R10+R6 and R10+K1 selectors while selecting R12 ErrorV19 only for complete R10+R6+K1 intent; no argument-order heuristic was introduced",
-    "normalized only Git-for-Windows CRLF checkout transport in the R12 adapter-only reviewed fixture reader and rejected bare carriage returns; product acquisition, fixture bytes, contracts, identities, and goldens remain unchanged"
+    "normalized only Git-for-Windows CRLF checkout transport in the R12 adapter-only reviewed fixture reader and rejected bare carriage returns; product acquisition, fixture bytes, contracts, identities, and goldens remain unchanged",
+    "normalized only Git-for-Windows CRLF checkout transport in the R12 immutable-viewer test comparison, matching the existing R10 and R11 oracle without changing product or viewer bytes"
   ],
   "unchanged": {
     "r0_r11_and_k1_contracts": true,
