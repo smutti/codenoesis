@@ -156,6 +156,28 @@ network, mutation, browser-launch, or execution authority. Older snapshot,
 query, portable, explorer, identity, hash, error, fixture, golden, and viewer
 bytes remain separate dispatch families.
 
+### R11 callable repository-boundary composition
+
+The explicit R11 S4 composition combines the existing
+`rust-callable-semantics-v1` source profile with `local-gitlinks-v1` without
+changing either extractor's truth rules. The application layer acquires and
+validates the R2 report first, passes only canonical external path/boundary-ID
+pairs into the R6 lineage used by K1, and then publishes one additive V13
+snapshot. Nested repository source never enters inventory or extraction.
+
+RepositorySnapshotV13 carries the exact boundary report beside the complete
+root K1 projection. KnowledgeGraphV10 preserves K1 kinds and identities; a
+boundary is not converted into a code entity and no edge crosses into nested
+source. QueryV8 and deterministic docs expose boundary state and evidence.
+PortableGraphV4 preserves that validated report without source contents,
+snippets, raw URLs, credentials, or absolute roots. LocalExplorerV4 reuses the
+immutable K1 viewer bytes.
+
+ConfigurationV10, ExtractionChunkV10, KnowledgeGraphV10, and V13 use separate
+semantic hash domains. K1 without the boundary selector remains V11. R10 and
+R7 do not compose in R11. Invalid composition or any boundary/acquisition
+failure is typed ErrorV18 and cannot publish a partial head.
+
 ## Versioned artifacts and identity
 
 All public artifact types include `schema_version`, repository commit, configuration hash, pipeline version, ontology version, extractor versions, creation time, and a BLAKE3 content hash.

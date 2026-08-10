@@ -1,0 +1,42 @@
+{
+  "schema_version": "codenoesis.r11-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1",
+  "source": "project-owned synthetic K1 bytes plus project-owned R2 overlay",
+  "external_source_vendored": false,
+  "inherited_k1_fixture": "tests/fixtures/s4/rust-callable-semantics-v1",
+  "materialization": {
+    "object_format": "sha1",
+    "tree_oid": "289bc8a5abcc2f45fa7e2aa9d787a97305975b71",
+    "commit_oid": "1c8921919b50f565db49acdbf344cc7e1e864dd1",
+    "author": "CodeNoesis <fixture@codenoesis.invalid>",
+    "timestamp": "2026-08-09T18:00:00Z",
+    "message": "R11 project-owned callable boundary composition fixture"
+  },
+  "overlay": {
+    "gitmodules_path": "revision-overlay/.gitmodules",
+    "gitmodules_bytes": 116,
+    "gitmodules_sha256": "1f5b8be2b1398183bb02369231938556f9f02aba714cf1aa134b96bd0cdabab8",
+    "gitmodules_blob_oid": "204d65a4ed6a58dd265349f8a1579a4522dc4f7d",
+    "external_tree_oid": "3ee7026beba4578478d73788368adc793e975ca0",
+    "gitlink_path": "external/nested-model",
+    "gitlink_oid": "6ecf94267842da776e35406a9ebcb85e058a3181",
+    "nested_tree_oid": "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+  },
+  "boundary_input": {
+    "path": "boundary-input-matching.json",
+    "byte_length": 584,
+    "sha256": "26a21e2a3847d709d185f49deb86aa05b17a0fa7e954b35cc6172c3b8aa4fee1"
+  },
+  "goldens": {
+    "unbound": "expected-boundaries-unbound.json",
+    "bound": "expected-boundaries-bound.json",
+    "callable_facts": "../rust-callable-semantics-v1/expected-callable-semantics.json"
+  },
+  "sentinels": {
+    "build_script": "../rust-callable-semantics-v1/repository/build.rs",
+    "nested_source_committed": false,
+    "product_git_process_allowed": false,
+    "product_network_allowed": false,
+    "product_nested_traversal_allowed": false
+  }
+}

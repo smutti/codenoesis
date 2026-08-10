@@ -1,0 +1,50 @@
+issue=https://github.com/smutti/codenoesis/issues/155
+requirement=FR-EXT-012
+slice=S4
+risk=high
+observed_at_utc=not recorded by the pilot harness
+repository=https://github.com/rustdesk/rustdesk
+revision=d412d198720aa56f6cfed2dfad262e8fb1322fb7
+tree=df8d4c292c9d256a445480eb878e507df3de1dc4
+source_files=941
+gitlinks=1
+source_status_bytes_after=0
+source_status_bytes_before=not separately retained
+external_source_vendored=false
+binary_source=R11 candidate production bytes later committed as 50e002dbe3f6b182652e499b3c70d4243001127c; exact binary digest was not retained
+command=target/debug/noesis scan --repository <rustdesk> --repository-id urn:codenoesis:pilot:rustdesk:r11-issue-155 --revision d412d198720aa56f6cfed2dfad262e8fb1322fb7 --profile standard-local-s4 --acquisition-profile local-git-sha1-packed-v1 --workspace-profile cargo-root-package-v1 --manifest-profile cargo-manifest-facts-v1 --rust-semantic-profile rust-semantic-depth-v1 --rust-framework-profile rust-framework-declarations-v1 --rust-callable-profile rust-callable-semantics-v1 --repository-boundary-profile local-gitlinks-v1 --output-capacity-profile local-snapshot-64m-v1 --store <fresh-store> --format json
+
+run=1
+exit=11
+stdout_bytes=0
+stdout_sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+stderr_bytes=366
+stderr_sha256=5f6aa12f7ce0c23c35c5c2a21be2cc171f1893c72dca920128471c17a1c25027
+store_exists=false
+wall_seconds=not recorded by the pilot harness
+
+run=2
+exit=11
+stdout_bytes=0
+stdout_sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+stderr_bytes=366
+stderr_sha256=5f6aa12f7ce0c23c35c5c2a21be2cc171f1893c72dca920128471c17a1c25027
+store_exists=false
+wall_seconds=not recorded by the pilot harness
+
+stdout_byte_identical=true
+stderr_byte_identical=true
+error_schema=codenoesis.error/v18
+error_code=extraction.rust_semantic_identity_conflict
+error_stage=extraction
+error_member_kind=rust.method
+error_normalized_member=try_start_clipboard
+error_owner_id=urn:codenoesis:entity:blake3:ec9560060b9b0dd727022bc099c42b42b6c46dc8b0af7a93a5b297db2cf6ecb0
+full_rustdesk_r11_complete=false
+expected_terminal_diagnostic_matched=true
+boundary_manifest_supplied=false
+nested_repository_read_authority=false
+target_build_script_network_model_execution_authority=false
+
+invalidated_orchestration=one earlier wrapper assigned the zsh reserved variable status after one product invocation; that diagnostic attempt is not acceptance evidence
+retry_policy=only the two fresh numbered runs above are acceptance evidence; no retry converted a product failure into accepted success

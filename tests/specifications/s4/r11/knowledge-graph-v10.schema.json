@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/knowledge-graph-v10.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ontology_version",
+    "extractor_versions",
+    "repository_identity",
+    "commit_oid",
+    "entities",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage",
+    "callable_semantics_index",
+    "semantic_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "codenoesis.knowledge-graph/v10"},
+    "ontology_version": {"const": "codenoesis.ontology/rust/v10"},
+    "extractor_versions": {"type": "array", "minItems": 8, "items": {"type": "string"}},
+    "repository_identity": {"type": "string", "pattern": "^urn:codenoesis:"},
+    "commit_oid": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "entities": {"$ref": "#/$defs/family"},
+    "relationships": {"$ref": "#/$defs/family"},
+    "claims": {"$ref": "#/$defs/family"},
+    "evidence": {"$ref": "#/$defs/family"},
+    "diagnostics": {"$ref": "#/$defs/family"},
+    "coverage": {"$ref": "#/$defs/family"},
+    "callable_semantics_index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "profile",
+        "signature_ids",
+        "parameter_ids",
+        "declared_value_ids",
+        "body_fact_ids",
+        "resolved_call_relationship_ids",
+        "unresolved_call_site_ids"
+      ],
+      "properties": {
+        "schema_version": {"const": "codenoesis.callable-semantics-index/v1"},
+        "profile": {"const": "rust-callable-semantics-v1"},
+        "signature_ids": {"$ref": "#/$defs/ids"},
+        "parameter_ids": {"$ref": "#/$defs/ids"},
+        "declared_value_ids": {"$ref": "#/$defs/ids"},
+        "body_fact_ids": {"$ref": "#/$defs/ids"},
+        "resolved_call_relationship_ids": {"$ref": "#/$defs/ids"},
+        "unresolved_call_site_ids": {"$ref": "#/$defs/ids"}
+      }
+    },
+    "semantic_hash": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "record": {"type": "object", "required": ["id"], "properties": {"id": {"type": "string", "minLength": 1}}},
+    "family": {"type": "array", "items": {"$ref": "#/$defs/record"}},
+    "ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {"const": "blake3-256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

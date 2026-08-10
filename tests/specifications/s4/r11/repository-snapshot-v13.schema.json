@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/repository-snapshot-v13.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "semantic_hash", "semantic", "envelope"],
+  "properties": {
+    "schema_version": {"const": "codenoesis.repository-snapshot/v13"},
+    "semantic_hash": {"$ref": "#/$defs/hash"},
+    "semantic": {
+      "type": "object",
+      "required": [
+        "repository",
+        "configuration",
+        "pipeline_version",
+        "ontology_version",
+        "extractor_contract_version",
+        "extractor_versions",
+        "extraction_chunks",
+        "knowledge_graph",
+        "repository_boundaries"
+      ],
+      "properties": {
+        "configuration": {"$ref": "configuration-v10.schema.json"},
+        "pipeline_version": {"const": "codenoesis.pipeline/s4-r11-v1"},
+        "ontology_version": {"const": "codenoesis.ontology/rust/v10"},
+        "extractor_contract_version": {"const": "codenoesis.extraction/v10"},
+        "extraction_chunks": {"type": "array", "items": {"$ref": "extraction-chunk-v10.schema.json"}},
+        "knowledge_graph": {"$ref": "knowledge-graph-v10.schema.json"},
+        "repository_boundaries": {"$ref": "../../s1/external-repository-boundary-v1.schema.json"}
+      }
+    },
+    "envelope": {"type": "object"}
+  },
+  "$defs": {
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {"const": "blake3-256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

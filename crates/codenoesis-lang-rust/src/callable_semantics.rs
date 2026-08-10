@@ -16,8 +16,11 @@ use codenoesis_domain::s4_k1::{
     NormalizedScalarValue, callable_body_fact_id, callable_claim, callable_parameter_id,
     callable_signature_id, declared_value_id, enforce_limit, k1_digest,
 };
+use codenoesis_domain::s4_r3::ExternalWorkspaceBoundary;
 use codenoesis_domain::s4_r5::{RustSemanticEntityKind, rust_semantic_member_id};
-use codenoesis_ports::RustFrameworkDeclarationExtractor;
+use codenoesis_ports::{
+    RustCallableBoundaryCompositionExtractor, RustFrameworkDeclarationExtractor,
+};
 use tree_sitter::Node;
 use unicode_normalization::UnicodeNormalization as _;
 
@@ -465,8 +468,16 @@ impl TreeSitterRustWorkspaceExtractor {
         &self,
         inventory: &RepositoryInventory,
     ) -> Result<CallableSemanticsExtraction, CallableSemanticsError> {
+        (*self).extract_rust_callable_semantics_for_boundaries(inventory, &[])
+    }
+
+    fn extract_rust_callable_semantics_for_boundaries(
+        self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+    ) -> Result<CallableSemanticsExtraction, CallableSemanticsError> {
         let framework = self
-            .extract_rust_framework_declarations_incremental(inventory, &[], &[])
+            .extract_rust_framework_declarations_incremental(inventory, external_boundaries, &[])
             .map_err(CallableSemanticsError::Source)?;
         let catalog = ExistingCatalog::from_extraction(&framework);
         let contexts = source_contexts(&framework.knowledge.semantic.manifest, inventory)
@@ -509,6 +520,16 @@ impl TreeSitterRustWorkspaceExtractor {
             CallableSemanticsExtraction::from_r6(framework, chunks, graph, parser_invocation_count);
         extraction.knowledge.validate()?;
         Ok(extraction)
+    }
+}
+
+impl RustCallableBoundaryCompositionExtractor for TreeSitterRustWorkspaceExtractor {
+    fn extract_rust_callable_semantics_with_boundaries(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+    ) -> Result<CallableSemanticsExtraction, CallableSemanticsError> {
+        (*self).extract_rust_callable_semantics_for_boundaries(inventory, external_boundaries)
     }
 }
 

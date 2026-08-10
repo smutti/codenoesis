@@ -98,10 +98,22 @@ fn conf_fr_cli_001_output_capacity_composition_is_closed() {
     let mut boundary = k1_scan_command(&repository, &boundary_store);
     boundary.args(["--repository-boundary-profile", "local-gitlinks-v1"]);
     boundary.args(["--output-capacity-profile", OUTPUT_CAPACITY_PROFILE]);
-    assert_unsupported(
-        &boundary.output().expect("run boundary composition"),
-        &boundary_store,
+    let boundary_output = boundary.output().expect("run boundary composition");
+    assert_success(&boundary_output, "R11 boundary output-capacity composition");
+    let snapshot = parse_single_document(&boundary_output.stdout);
+    assert_eq!(
+        snapshot["schema_version"],
+        "codenoesis.repository-snapshot/v13"
     );
+    for collection in ["boundaries", "declarations", "evidence", "coverage_gaps"] {
+        assert_eq!(
+            snapshot["semantic"]["repository_boundaries"][collection]
+                .as_array()
+                .map(Vec::len),
+            Some(0),
+            "empty R11 repository must retain an empty {collection} collection"
+        );
+    }
 }
 
 fn k1_scan_command(repository: &MaterializedCallableRepository, store: &Path) -> Command {

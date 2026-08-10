@@ -1775,6 +1775,72 @@ bundle `sha256:04969c3f0eb8ae04ec6dc3be8e4ab71963dbf7a37ef7c483372122fcf160ffb3`
 SRS, roadmap, retained Red, production source, and implementation evidence are
 excluded from that semantic digest.
 
+### 2.22 S4 R11 K1 repository-boundary composition candidate register
+
+Issue [#155](https://github.com/smutti/codenoesis/issues/155), the accountable
+maintainer's [exact high-risk authorization](https://github.com/smutti/codenoesis/issues/155#issuecomment-5232792403),
+and [Decision 0022](decisions/0022-s4-r11-k1-repository-boundary-composition-contract.md)
+govern one maintainer-supervised package on exact base
+`4fd0abb6d663d90ca35af4dee5eaf932f8f9ed94`. Governance, retained Red,
+candidate code, tests, documentation, and evidence become effective atomically
+only after protected manual merge. Until then every R11 amendment and
+implementation statement remains Proposed/candidate.
+
+The package targets exactly **S4 — Evidence-backed workspace docs compatibility
+extension**. It composes approved `rust-callable-semantics-v1` with approved
+`local-gitlinks-v1`. It does not compose with R10 or R7 and grants no nested
+source, target, compiler, macro, runtime, network, model, browser, control-plane,
+signing, publication, or release authority.
+
+| Requirement | Current state | Target after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| Bounded R11 amendment to `FR-ACQ-005` | R2 boundaries Approved/Implemented | `Approved` for exact R2 report composition with K1 while preserving no-traversal authority | `S4` | Decision 0022, [fixture](../../tests/fixtures/s4/rust-callable-boundary-composition-v1/README.md), and unbound/bound goldens |
+| Bounded R11 amendment to `FR-EXT-012` | K1 source semantics Approved/Implemented | `Approved` for K1 extraction over the boundary-aware R6 root lineage without changing callable truth rules | `S4` | [composition contract](../../tests/specifications/s4/r11/callable-boundary-composition-v1.json) and machine oracle |
+| Bounded R11 amendment to `FR-EXP-002` | PortableGraphV2/ExplorerV2 Approved | `Approved` for lossless V13 `PortableGraphV4` and read-only `LocalExplorerV4`; V2 remains byte-identical | `S4` | V4 schemas, Decision 0022, and strict reimport oracle |
+| Bounded R11 amendments to `FR-DOC-001/002/003` | Prior S4 docs Approved | `Approved` for evidence-backed boundary status in marker-owned deterministic docs | `S4` | Decision 0022 and E2E journey |
+| Bounded R11 amendment to `FR-QRY-001` | LocalQueryResultV1-V7 Approved | `Approved` with additive LocalQueryResultV8 for K1 and exact boundary subjects | `S4` | [LocalQueryResultV8 schema](../../tests/specifications/s4/r11/local-query-result-v8.schema.json) |
+| Bounded R11 amendment to `FR-CLI-001` | Prior local journeys Approved | `Approved` for the explicit K1+boundary scan/docs/query/export/explore journey and ErrorV18 failures | `S4` | Decision 0022, ErrorV18, and machine oracle |
+| Bounded R11 amendments to `NFR-DET-001`, `NFR-SEC-001/005`, and `NFR-PRV-002` | Existing local controls Approved | `Approved` for 50 permutations, ten schedules, no nested read/execution/network, and private V4 projection | `S4` | Determinism, security, privacy, and race oracle |
+| Bounded R11 amendments to `NFR-TST-001/002` | Red-first deterministic evidence required | `Approved` with committed governance checkpoint, retained expected Red, focused/full Green, immutable regressions, and diagnostic RustDesk replay | `S4` | R11 evidence pack |
+
+The additive lineage is exactly `codenoesis.configuration/v10`,
+`codenoesis.repository-snapshot/v13`, `codenoesis.extraction/v10`,
+`codenoesis.extraction-chunk/v10`, `codenoesis.knowledge-graph/v10`,
+`codenoesis.ontology/rust/v10`, `codenoesis.semantic-hash-contract/v9`,
+`codenoesis.error/v18`, `codenoesis.local-query-result/v8`,
+`codenoesis.portable-graph/v4`, and `codenoesis.local-explorer/v4`. The
+pipeline/composer are `codenoesis.pipeline/s4-r11-v1` and
+`codenoesis.rust-callable-boundary-composition/s4-r11-v1`; existing K1 and R2
+extractor/identity versions remain unchanged.
+
+V13 contains the exact R2 report, boundary-aware root workspace, and complete
+K1 projection. Declared-unbound and explicitly-bound states remain distinct;
+the latter still carries `boundary.nested_repository_not_analyzed`. Nested
+source never enters inventory, graph, docs, query-as-source, or portable
+output. QueryV8 exposes exact boundary/declaration/evidence/gap subjects. V4
+export excludes source contents, snippets, absolute roots, raw URLs,
+credentials, environment, and telemetry.
+
+R11 inherits every R2 and K1 limit. Standard stdout remains `33,554,432` bytes
+including LF and the explicit capacity selector remains `67,108,864` bytes
+without entering semantics. Portable V4 remains `268,435,456` bytes. Every
+applicable maximum and plus-one, 50 permutations, ten schedules, malformed,
+privacy, path, symlink, and race case is required. No truncation, repair,
+sampling, retry-as-evidence, child process, network, Git/Cargo/rustc/build
+execution, URL resolution, browser launch, or model call is permitted.
+
+The first branch commit contains Decision 0022, schemas, fixture, oracle,
+traceability, and executable E2E without production source. Expected Red on
+the exact base is ErrorV16 `input.unsupported_rust_callable_composition`, exit
+`11`, empty stdout, absent store, and stderr SHA-256
+`2573e0f364350b300218c6d1940e6eb33f4f0bc70b7ba92dd9b2821f5bf97013`.
+Only retained expected Red permits implementation.
+
+The R11 semantic checkpoint and immutable K1/R2 dependencies are bound by
+contract bundle `sha256:25918dfcde5a595c82da25b51b6c41d8c51ec96065c5a80c8ace049e7be57d1b`. SRS, roadmap, retained
+Red, production source, and implementation evidence are excluded from that
+semantic digest.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,

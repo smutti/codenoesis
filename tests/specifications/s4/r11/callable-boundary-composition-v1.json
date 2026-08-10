@@ -1,0 +1,54 @@
+{
+  "schema_version": "codenoesis.r11-callable-boundary-composition/v1",
+  "profile": {
+    "source": "rust-callable-semantics-v1",
+    "boundary": "local-gitlinks-v1",
+    "output_capacity": ["standard", "local-snapshot-64m-v1"]
+  },
+  "lineage": {
+    "configuration": "codenoesis.configuration/v10",
+    "snapshot": "codenoesis.repository-snapshot/v13",
+    "extraction": "codenoesis.extraction/v10",
+    "chunk": "codenoesis.extraction-chunk/v10",
+    "graph": "codenoesis.knowledge-graph/v10",
+    "ontology": "codenoesis.ontology/rust/v10",
+    "query": "codenoesis.local-query-result/v8",
+    "portable": "codenoesis.portable-graph/v4",
+    "explorer": "codenoesis.local-explorer/v4",
+    "error": "codenoesis.error/v18"
+  },
+  "composition": {
+    "root_source_analyzed": true,
+    "boundary_report_required": true,
+    "declared_unbound_preserved": true,
+    "explicit_bound_identity_preserved": true,
+    "nested_source_analyzed": false,
+    "nested_source_exported": false,
+    "raw_url_exported": false,
+    "boundary_as_code_entity": false,
+    "r10_composition": false,
+    "r7_composition": false
+  },
+  "dispatch": {
+    "k1_without_boundary": "codenoesis.repository-snapshot/v11",
+    "k1_with_boundary": "codenoesis.repository-snapshot/v13",
+    "portable_profile": "rust-callable-semantics-v1",
+    "explorer_profile": "rust-callable-semantics-v1"
+  },
+  "determinism": {
+    "permutations": 50,
+    "parallel_schedules": 10,
+    "ordering": "raw_utf8_identity",
+    "volatile_envelope_excluded": true
+  },
+  "privacy": {
+    "source_contents": false,
+    "source_snippets": false,
+    "absolute_roots": false,
+    "boundary_manifest_roots": false,
+    "raw_urls": false,
+    "credentials": false,
+    "environment": false,
+    "telemetry": false
+  }
+}
