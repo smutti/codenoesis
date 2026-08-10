@@ -83,6 +83,28 @@ fn e2e_fr_ext_015_k1_scip_composition_complete_local_journey() {
         count_by(graph, "relationships", "kind").get("HAS_COMPILER_SYMBOL"),
         Some(&5)
     );
+    for (kind, expected_count) in expected["callable_counts"]
+        .as_object()
+        .expect("R13 callable counts")
+    {
+        let expected_count = expected_count.as_u64().expect("R13 callable count");
+        assert_eq!(
+            count_by(graph, "entities", "kind")
+                .get(kind.as_str())
+                .copied(),
+            Some(expected_count),
+            "R13 callable count {kind}"
+        );
+    }
+    assert_eq!(
+        count_by(graph, "relationships", "kind")
+            .get("CALLS")
+            .copied()
+            .unwrap_or(0),
+        expected["new_calls_relationships"]
+            .as_u64()
+            .expect("R13 new CALLS count")
+    );
 
     let entities = graph["entities"].as_array().expect("R13 graph entities");
     let relationships = graph["relationships"]
@@ -125,7 +147,21 @@ fn e2e_fr_ext_015_k1_scip_composition_complete_local_journey() {
     );
     assert_eq!(
         graph["callable_compiler_join_index"]["joins"],
-        expected["joins"]
+        Value::Array(
+            expected["joins"]
+                .as_array()
+                .expect("R13 expected joins")
+                .iter()
+                .map(|join| {
+                    serde_json::json!({
+                        "source_callable_id": join["source_callable_id"],
+                        "signature_id": join["signature_id"],
+                        "compiler_symbol_id": join["compiler_symbol_id"],
+                        "relationship_id": join["relationship_id"]
+                    })
+                })
+                .collect()
+        )
     );
     assert_eq!(
         graph["callable_semantics_index"]["unresolved_call_site_ids"]
@@ -134,6 +170,25 @@ fn e2e_fr_ext_015_k1_scip_composition_complete_local_journey() {
             .len(),
         2
     );
+    for unresolved in expected["unresolved_call_sites"]
+        .as_array()
+        .expect("R13 unresolved call sites")
+    {
+        let entity = entities
+            .iter()
+            .find(|entity| entity["id"] == unresolved["id"])
+            .expect("R13 unresolved call-site entity");
+        assert_eq!(entity["name"], unresolved["name"]);
+        assert_eq!(
+            entity["properties"]["resolution_state"],
+            unresolved["resolution_state"]
+        );
+        assert_eq!(
+            entity["properties"]["resolved_target_id"],
+            unresolved["resolved_target_id"]
+        );
+        assert_eq!(entity["evidence_ids"], unresolved["evidence_ids"]);
+    }
 
     assert_success(&repository.docs(), "R13 documentation generation");
     let documentation = generated_markdown(repository.documents());
@@ -187,6 +242,87 @@ fn e2e_fr_ext_015_k1_scip_composition_complete_local_journey() {
             .expect("read immutable K1 viewer"),
     );
     assert_eq!(viewer, immutable_viewer);
+    assert!(!repository.build_sentinel().exists());
+    assert!(!repository.indexer_sentinel().exists());
+}
+
+#[test]
+fn conf_fr_cli_001_r13_selector_dispatch_is_closed_and_side_effect_free() {
+    let repository = MaterializedCallableScipRepository::fixture();
+
+    let binding_only = repository.scan_with_compiler_selector(false, true, &[]);
+    assert_typed_error(
+        &binding_only,
+        11,
+        "codenoesis.error/v16",
+        "input.unsupported_rust_callable_composition",
+    );
+
+    let profile_only = repository.scan_with_compiler_selector(true, false, &[]);
+    assert_typed_error(
+        &profile_only,
+        2,
+        "codenoesis.error/v20",
+        "input.unsupported_rust_callable_scip_composition",
+    );
+
+    for extra_options in [
+        ["--repository-boundary-profile", "local-gitlinks-v1"],
+        ["--output-capacity-profile", "local-snapshot-64m-v1"],
+        [
+            "--rust-semantic-profile",
+            "rust-cfg-declaration-alternatives-v1",
+        ],
+    ] {
+        let output = repository.scan_with_compiler_selector(true, true, extra_options.as_slice());
+        assert_typed_error(
+            &output,
+            2,
+            "codenoesis.error/v20",
+            "input.unsupported_rust_callable_scip_composition",
+        );
+    }
+
+    assert!(
+        !repository.store().exists(),
+        "invalid R13 selectors mutated the store"
+    );
+    assert!(!repository.build_sentinel().exists());
+    assert!(!repository.indexer_sentinel().exists());
+}
+
+#[test]
+fn pt_nfr_det_001_r13_fifty_permutations_and_ten_schedules_are_identical() {
+    let repository = MaterializedCallableScipRepository::fixture();
+    let mut expected_semantic = None;
+    for seed in 0..50 {
+        let output = repository
+            .permuted_scan_command(seed)
+            .output()
+            .expect("run R13 argument permutation");
+        let semantic = semantic_projection(&output);
+        if let Some(expected) = &expected_semantic {
+            assert_eq!(&semantic, expected, "R13 semantic permutation {seed}");
+        } else {
+            expected_semantic = Some(semantic);
+        }
+    }
+
+    let schedules = (100..110)
+        .map(|seed| {
+            let mut command = repository.permuted_scan_command(seed);
+            std::thread::spawn(move || command.output().expect("run R13 parallel schedule"))
+        })
+        .collect::<Vec<_>>();
+    let expected_semantic = expected_semantic.expect("R13 semantic oracle");
+    for (schedule, handle) in schedules.into_iter().enumerate() {
+        let output = handle.join().expect("join R13 parallel schedule");
+        assert_eq!(
+            semantic_projection(&output),
+            expected_semantic,
+            "R13 semantic schedule {schedule}"
+        );
+    }
     assert!(!repository.build_sentinel().exists());
     assert!(!repository.indexer_sentinel().exists());
 }
@@ -247,8 +383,11 @@ fn normalize_lf(bytes: &[u8]) -> Vec<u8> {
 fn hex_sha256(bytes: &[u8]) -> String {
     Sha256::digest(bytes)
         .iter()
-        .map(|byte| format!("{byte:02x}"))
-        .collect()
+        .fold(String::with_capacity(64), |mut output, byte| {
+            use std::fmt::Write as _;
+            write!(&mut output, "{byte:02x}").expect("write R13 SHA-256 hex");
+            output
+        })
 }
 
 fn assert_success(output: &Output, subject: &str) {
@@ -258,4 +397,18 @@ fn assert_success(output: &Output, subject: &str) {
         output.status.code(),
         String::from_utf8_lossy(&output.stderr)
     );
+}
+
+fn assert_typed_error(output: &Output, exit_code: i32, schema: &str, code: &str) {
+    assert_eq!(output.status.code(), Some(exit_code));
+    assert!(output.stdout.is_empty());
+    let error = parse_single_document(&output.stderr);
+    assert_eq!(error["schema_version"], schema);
+    assert_eq!(error["code"], code);
+}
+
+fn semantic_projection(output: &Output) -> Vec<u8> {
+    assert_success(output, "R13 deterministic scan");
+    let snapshot = parse_single_document(&output.stdout);
+    serde_json::to_vec(&snapshot["semantic"]).expect("serialize R13 semantic projection")
 }

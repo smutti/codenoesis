@@ -628,6 +628,7 @@ pub(super) struct GraphIndex {
     framework_declarations: bool,
     compiler_index: bool,
     callable_semantics: bool,
+    callable_scip_composition: bool,
     callable_cfg_alternatives: bool,
     repository_boundaries: Option<Value>,
     pub(super) entities: BTreeMap<String, Value>,
@@ -663,6 +664,7 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v9"
                     | "codenoesis.knowledge-graph/v10"
                     | "codenoesis.knowledge-graph/v11"
+                    | "codenoesis.knowledge-graph/v12"
             )
         );
         let rust_semantic_depth = matches!(
@@ -675,6 +677,7 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v9"
                     | "codenoesis.knowledge-graph/v10"
                     | "codenoesis.knowledge-graph/v11"
+                    | "codenoesis.knowledge-graph/v12"
             )
         );
         let declaration_alternatives = matches!(
@@ -689,17 +692,24 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v8"
                     | "codenoesis.knowledge-graph/v10"
                     | "codenoesis.knowledge-graph/v11"
+                    | "codenoesis.knowledge-graph/v12"
             )
         );
-        let compiler_index = graph_schema_version == Some("codenoesis.knowledge-graph/v7");
+        let compiler_index = matches!(
+            graph_schema_version,
+            Some("codenoesis.knowledge-graph/v7" | "codenoesis.knowledge-graph/v12")
+        );
         let callable_semantics = matches!(
             graph_schema_version,
             Some(
                 "codenoesis.knowledge-graph/v8"
                     | "codenoesis.knowledge-graph/v10"
                     | "codenoesis.knowledge-graph/v11"
+                    | "codenoesis.knowledge-graph/v12"
             )
         );
+        let callable_scip_composition =
+            graph_schema_version == Some("codenoesis.knowledge-graph/v12");
         let callable_cfg_alternatives =
             graph_schema_version == Some("codenoesis.knowledge-graph/v11");
         let repository_boundaries = if matches!(
@@ -765,6 +775,7 @@ impl GraphIndex {
             framework_declarations,
             compiler_index,
             callable_semantics,
+            callable_scip_composition,
             callable_cfg_alternatives,
             repository_boundaries,
             entities,
@@ -1031,6 +1042,9 @@ fn overview_document(index: &GraphIndex) -> Result<DocumentDraft, DocumentationC
     }
     if index.compiler_index {
         append_compiler_index_documentation(index, &document_id, &mut content, &mut statements)?;
+    }
+    if index.callable_scip_composition {
+        append_callable_scip_composition(index, &document_id, &mut content, &mut statements)?;
     }
     if index.repository_boundaries.is_some() {
         append_repository_boundary_documentation(
@@ -1432,6 +1446,76 @@ fn append_compiler_index_documentation(
             "- `{}` is `{}`; no omitted, generated, producer, call, or runtime fact is inferred. {}",
             markdown_code(capability),
             markdown_code(state),
+            statement_marker(&statement)?
+        )
+        .expect("writing Markdown to a String cannot fail");
+        statements.push(statement);
+    }
+    Ok(())
+}
+
+fn append_callable_scip_composition(
+    index: &GraphIndex,
+    document_id: &str,
+    content: &mut String,
+    statements: &mut Vec<Value>,
+) -> Result<(), DocumentationContractError> {
+    let mut joins = index
+        .relationships
+        .iter()
+        .filter(|relationship| string_field(relationship, "kind") == Ok("HAS_COMPILER_SYMBOL"))
+        .collect::<Vec<_>>();
+    joins.sort_by(|left, right| {
+        string_field(left, "id")
+            .unwrap_or_default()
+            .cmp(string_field(right, "id").unwrap_or_default())
+    });
+    if joins.is_empty() {
+        return Ok(());
+    }
+    content.push_str("\n## Compiler symbol correspondence\n\n");
+    content.push_str(
+        "Each item is a validated, revision-bound artifact assertion over the same committed declaration; this correspondence does not prove runtime behavior.\n\n",
+    );
+    for (ordinal, relationship) in joins.into_iter().enumerate() {
+        let relationship_id = string_field(relationship, "id")?;
+        let source_id = string_field(relationship, "source")?;
+        let target_id = string_field(relationship, "target")?;
+        let source = index
+            .entities
+            .get(source_id)
+            .ok_or(DocumentationContractError::InvalidSnapshot)?;
+        let target = index
+            .entities
+            .get(target_id)
+            .ok_or(DocumentationContractError::InvalidSnapshot)?;
+        if !matches!(
+            string_field(source, "kind")?,
+            "rust.function" | "rust.method"
+        ) || string_field(target, "kind")? != "compiler.symbol"
+        {
+            return Err(DocumentationContractError::InvalidSnapshot);
+        }
+        let claim = index.claim("relationship", relationship_id)?;
+        let statement = statement_value(
+            document_id,
+            "compiler_symbol_correspondence",
+            relationship_id,
+            ordinal,
+            "deterministic_fact",
+            vec![
+                source_id.to_owned(),
+                target_id.to_owned(),
+                relationship_id.to_owned(),
+            ],
+            string_array(claim, "evidence_ids")?,
+            Vec::new(),
+        );
+        writeln!(
+            content,
+            "- Source callable `{}` corresponds to compiler symbol `{}`. {}",
+            markdown_code(string_field(source, "name")?),
+            markdown_code(string_field(target, "display_name")?),
             statement_marker(&statement)?
         )
         .expect("writing Markdown to a String cannot fail");

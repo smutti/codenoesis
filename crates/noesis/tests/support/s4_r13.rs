@@ -1,3 +1,4 @@
+use std::ffi::OsString;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
@@ -5,6 +6,7 @@ use std::process::{Command, Output};
 use serde_json::Value;
 
 use super::s4_r7::{BINDING_RELATIVE_PATH, MaterializedCompilerIndexRepository};
+use super::unique_temp_root;
 
 pub const REPOSITORY_ID: &str = "urn:codenoesis:fixture:s4-compiler-index-v1";
 pub const R5_PROFILE: &str = "rust-semantic-depth-v1";
@@ -20,7 +22,8 @@ pub struct MaterializedCallableScipRepository {
 
 impl MaterializedCallableScipRepository {
     pub fn fixture() -> Self {
-        let inner = MaterializedCompilerIndexRepository::fixture();
+        let root = fs::canonicalize(unique_temp_root()).expect("canonicalize R13 temporary root");
+        let inner = MaterializedCompilerIndexRepository::fixture_in(root);
         let portable = inner.root.join("portable");
         let explorer = inner.root.join("explorer");
         Self {
@@ -31,7 +34,93 @@ impl MaterializedCallableScipRepository {
     }
 
     pub fn scan(&self) -> Output {
-        Command::new(env!("CARGO_BIN_EXE_noesis"))
+        self.scan_command(true, true)
+            .output()
+            .expect("launch R13 callable/SCIP scan")
+    }
+
+    pub fn scan_with_compiler_selector(
+        &self,
+        compiler_profile: bool,
+        compiler_binding: bool,
+        extra_options: &[&str],
+    ) -> Output {
+        let mut command = self.scan_command(compiler_profile, compiler_binding);
+        command.args(extra_options);
+        command.output().expect("launch R13 selector matrix scan")
+    }
+
+    pub fn permuted_scan_command(&self, seed: u64) -> Command {
+        let store = self.inner.root.join(format!("permuted-store-{seed}"));
+        let mut options = vec![
+            (
+                OsString::from("--repository"),
+                self.inner.worktree.clone().into_os_string(),
+            ),
+            (
+                OsString::from("--repository-id"),
+                OsString::from(REPOSITORY_ID),
+            ),
+            (
+                OsString::from("--revision"),
+                OsString::from(&self.inner.commit_oid),
+            ),
+            (
+                OsString::from("--profile"),
+                OsString::from("standard-local-s4"),
+            ),
+            (
+                OsString::from("--workspace-profile"),
+                OsString::from("cargo-root-package-v1"),
+            ),
+            (
+                OsString::from("--manifest-profile"),
+                OsString::from("cargo-manifest-facts-v1"),
+            ),
+            (
+                OsString::from("--rust-semantic-profile"),
+                OsString::from(R5_PROFILE),
+            ),
+            (
+                OsString::from("--rust-framework-profile"),
+                OsString::from(R6_PROFILE),
+            ),
+            (
+                OsString::from("--compiler-index-profile"),
+                OsString::from(R7_PROFILE),
+            ),
+            (
+                OsString::from("--compiler-index-binding"),
+                OsString::from(BINDING_RELATIVE_PATH),
+            ),
+            (
+                OsString::from("--rust-callable-profile"),
+                OsString::from(K1_PROFILE),
+            ),
+            (OsString::from("--store"), store.into_os_string()),
+            (OsString::from("--format"), OsString::from("json")),
+        ];
+        let mut state = seed.wrapping_add(0x9e37_79b9_7f4a_7c15);
+        for position in (1..options.len()).rev() {
+            state = state
+                .wrapping_mul(6_364_136_223_846_793_005)
+                .wrapping_add(1_442_695_040_888_963_407);
+            let divisor = u64::try_from(position + 1).expect("R13 option count fits u64");
+            let selected =
+                usize::try_from(state % divisor).expect("R13 selected option index fits usize");
+            options.swap(position, selected);
+        }
+        let mut command = Command::new(env!("CARGO_BIN_EXE_noesis"));
+        command.current_dir(&self.inner.root).arg("scan");
+        for (flag, value) in options {
+            command.arg(flag).arg(value);
+        }
+        command
+    }
+
+    fn scan_command(&self, compiler_profile: bool, compiler_binding: bool) -> Command {
+        let mut command = Command::new(env!("CARGO_BIN_EXE_noesis"));
+        command
             .current_dir(&self.inner.root)
             .args(["scan", "--repository"])
             .arg(&self.inner.worktree)
@@ -48,18 +137,19 @@ impl MaterializedCallableScipRepository {
                 R5_PROFILE,
                 "--rust-framework-profile",
                 R6_PROFILE,
-                "--compiler-index-profile",
-                R7_PROFILE,
-                "--compiler-index-binding",
-                BINDING_RELATIVE_PATH,
                 "--rust-callable-profile",
                 K1_PROFILE,
             ])
             .arg("--store")
             .arg(&self.inner.store)
-            .args(["--format", "json"])
-            .output()
-            .expect("launch R13 callable/SCIP scan")
+            .args(["--format", "json"]);
+        if compiler_profile {
+            command.args(["--compiler-index-profile", R7_PROFILE]);
+        }
+        if compiler_binding {
+            command.args(["--compiler-index-binding", BINDING_RELATIVE_PATH]);
+        }
+        command
     }
 
     pub fn docs(&self) -> Output {
