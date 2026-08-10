@@ -144,6 +144,18 @@ fn gt_fr_ext_014_callable_counts_match_reviewed_oracle() {
 }
 
 #[test]
+fn conf_fr_ext_014_reviewed_fixture_newlines_are_platform_neutral() {
+    assert_eq!(
+        normalize_reviewed_fixture_bytes(b"#[cfg(unix)]\r\nfn run() {}\r\n"),
+        Ok(b"#[cfg(unix)]\nfn run() {}\n".to_vec())
+    );
+    assert_eq!(
+        normalize_reviewed_fixture_bytes(b"#[cfg(unix)]\rfn run() {}\n"),
+        Err("reviewed fixture contains a bare carriage return")
+    );
+}
+
+#[test]
 fn ft_fr_ext_014_cross_layer_shape_failures_are_typed() {
     let mut subject_mismatch = extract_fixture(0, false).knowledge;
     subject_mismatch
@@ -290,7 +302,7 @@ fn fixture_inventory(rotation: usize, reverse: bool) -> RepositoryInventory {
                 path.to_owned(),
                 RegularFileMode::Regular,
                 ObjectId::parse_sha1(blob_oid).expect("reviewed R12 blob OID"),
-                fs::read(root.join(path)).expect("read reviewed R12 fixture"),
+                read_reviewed_fixture(&root.join(path)),
             )
         })
         .collect::<Vec<_>>();
@@ -308,4 +320,31 @@ fn fixture_inventory(rotation: usize, reverse: bool) -> RepositoryInventory {
         u64::try_from(files.len()).expect("reviewed R12 file count"),
         files,
     ))
+}
+
+fn read_reviewed_fixture(path: &Path) -> Vec<u8> {
+    let bytes = fs::read(path).unwrap_or_else(|error| {
+        panic!("read reviewed R12 fixture file {}: {error}", path.display())
+    });
+    normalize_reviewed_fixture_bytes(&bytes).unwrap_or_else(|reason| {
+        panic!("invalid reviewed R12 fixture {}: {reason}", path.display())
+    })
+}
+
+fn normalize_reviewed_fixture_bytes(bytes: &[u8]) -> Result<Vec<u8>, &'static str> {
+    let mut normalized = Vec::with_capacity(bytes.len());
+    let mut index = 0;
+    while index < bytes.len() {
+        if bytes[index] != b'\r' {
+            normalized.push(bytes[index]);
+            index += 1;
+            continue;
+        }
+        if bytes.get(index + 1) != Some(&b'\n') {
+            return Err("reviewed fixture contains a bare carriage return");
+        }
+        normalized.push(b'\n');
+        index += 2;
+    }
+    Ok(normalized)
 }

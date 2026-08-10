@@ -46,7 +46,7 @@
     "maintainer_supervised_interactive_lane": true,
     "governance_and_code_single_pr": true,
     "correction_budget": 5,
-    "correction_rounds_used": 1,
+    "correction_rounds_used": 2,
     "manual_independent_review_and_merge_required": true,
     "control_plane_effect": "none",
     "release_effect": "none"
@@ -97,6 +97,7 @@
     "crates/noesis/tests/evidence/s4/r12-k1-cfg-alternatives/focused-green.log",
     "crates/noesis/tests/evidence/s4/r12-k1-cfg-alternatives/implementation-observation-local.json",
     "crates/noesis/tests/evidence/s4/r12-k1-cfg-alternatives/rustdesk-pilot.log",
+    "crates/noesis/tests/evidence/s4/r12-k1-cfg-alternatives/windows-ci-correction.log",
     "crates/noesis/tests/support/mod.rs",
     "crates/noesis/tests/support/s4_r12.rs",
     "docs/software/architecture.md",
@@ -179,6 +180,22 @@
       "raw_local_log_bytes": 56085,
       "raw_local_log_sha256": "d30f092dacc6fafcb85b88a86d8df9ab51316791b3d9e13f0d7927cbb8cf53ae",
       "final_review_tree": "rerun after this evidence commit and bind the immutable head in the pull request"
+    },
+    "windows_ci_correction": {
+      "failed_head": "7b9ed6a3e6eda9dbb87ebe9c09e70f8ff9ebf8ad",
+      "run": "https://github.com/smutti/codenoesis/actions/runs/31364324458",
+      "job": "https://github.com/smutti/codenoesis/actions/runs/31364324458/job/93379369404",
+      "failure": "Git for Windows transported the reviewed R12 fixture as CRLF, changing evidence spans and derived alternative/signature IDs in the adapter-only language test inventory",
+      "failed_tests": 3,
+      "correction": "normalize only uniformly CRLF-transported reviewed test fixture text to canonical LF and reject bare carriage returns, matching the existing R10 and R6 test-oracle pattern",
+      "product_or_contract_changed": false,
+      "local_tests_passed": 7,
+      "raw_job_log_bytes": 81939,
+      "raw_job_log_sha256": "f530f678f7127064497be0668b2d5861c2fdbe273c2becf5831a21343ed73a57",
+      "summary": "crates/noesis/tests/evidence/s4/r12-k1-cfg-alternatives/windows-ci-correction.log",
+      "summary_bytes": 2283,
+      "summary_sha256": "7b373370823a857c116c4f661b3d3cb0def52e0abc4ff7c8a50b0d5520304610",
+      "github_recheck": "pending after correction commit and push"
     }
   },
   "fixture": {
@@ -245,7 +262,8 @@
     "compiler_macro_runtime_or_dataflow_inference": false
   },
   "corrections": [
-    "preserved legacy R10 ErrorV17 for incomplete R10+R6 and R10+K1 selectors while selecting R12 ErrorV19 only for complete R10+R6+K1 intent; no argument-order heuristic was introduced"
+    "preserved legacy R10 ErrorV17 for incomplete R10+R6 and R10+K1 selectors while selecting R12 ErrorV19 only for complete R10+R6+K1 intent; no argument-order heuristic was introduced",
+    "normalized only Git-for-Windows CRLF checkout transport in the R12 adapter-only reviewed fixture reader and rejected bare carriage returns; product acquisition, fixture bytes, contracts, identities, and goldens remain unchanged"
   ],
   "unchanged": {
     "r0_r11_and_k1_contracts": true,
