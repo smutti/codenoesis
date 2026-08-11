@@ -1,0 +1,61 @@
+issue=https://github.com/smutti/codenoesis/issues/166
+pull_request=https://github.com/smutti/codenoesis/pull/167
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+correction_round=4/5
+observed_at_utc=2026-08-11T16:17:39Z
+base_commit_sha=011057c84258a26b08b12ced7ae1df478dbb5048
+failed_head_sha=ca08ae38ac8477bd5922229233b2f0ed1ff4590e
+
+failed_workflow_run=https://github.com/smutti/codenoesis/actions/runs/31509462394
+failed_windows_job_attempt_1=https://github.com/smutti/codenoesis/actions/runs/31509462394/job/93839303877
+windows_job_conclusion=cancelled at the base-controlled 20-minute portability timeout after every test completed successfully
+windows_raw_log_bytes=126323
+windows_raw_log_sha256=8fd81f4777eb75e706e263b0bd5ef41bc0df55c4149df9bd6f108d6f9a0b290c
+
+diagnosis=R15 passed 4 of 4 in 37.33 seconds, S6 passed 15 of 15, incremental passed 10 of 10, inventory passed 14 of 14, storage passed 12 of 12, and all remaining workspace tests passed before the runner was cancelled during final cleanup
+root_cause=round 3 recovered 17.50 seconds in R15 and made the complete test oracle Green, but twenty store initializations left insufficient deterministic post-test cleanup margin
+correction=retain every public noesis invocation while reducing the nonconcurrently reused store set from twenty to eleven; the first forty-eight non-baseline permutations complete before seed forty-nine runs with ten schedules on distinct stores
+store_slot_concurrent_reuse=false
+total_store_slots=11
+public_noesis_invocations=60
+inventory_permutations=50
+parallel_schedules=10
+seed_set_changed=false
+argument_permutation_changed=false
+semantic_comparison_oracle_changed=false
+product_changed=false
+contract_changed=false
+schema_changed=false
+fixture_changed=false
+dependency_changed=false
+workflow_or_timeout_changed=false
+
+command=cargo fmt --all --check
+exit=0
+duration_seconds=1.31
+log_sha256=66678a97fd93758176bdfe34128d6a750d9bcda036aabdd9104ed0779112fc2e
+
+command=cargo clippy -p noesis --test e2e_fr_ext_017_rust_local_flow --all-features --locked -- -D warnings
+exit=0
+duration_seconds=1.22
+log_sha256=4bc261f754950c58d06fafead0a2504eadd0f67509547e12d6793f4030bbb266
+
+command=cargo test -p noesis --test e2e_fr_ext_017_rust_local_flow pt_nfr_det_001_r15_fifty_permutations_and_ten_schedules_are_identical --locked -- --exact
+attempts=3
+exit_codes=0,0,0
+test_duration_seconds=4.81,4.84,4.72
+log_sha256=5da552048de3c62b46416c160a05b915ebe0cab563fded71ca70857c7ba2b180,1c0cfd23b1c12e2645958c34d141bfffbe1a6aa830bd32639f6db0ac32d0aefc,38b42722ce8634e2cd8818101a14de368bee5cf041a98a5d61904feeb386739b
+
+command=cargo test -p noesis --test e2e_fr_ext_017_rust_local_flow --locked
+exit=0
+tests_passed=4
+test_duration_seconds=4.84
+log_sha256=f73714267a1d5b6d55fdffd0f02501165d8921baa69e136542df91dbeeaf9257
+
+focused_raw_logs_order=fmt,clippy,determinism-1,determinism-2,determinism-3,full-r15
+focused_raw_logs_bytes=3479
+focused_raw_logs_sha256=87243593ba2c6b34d71d48df7f154d74df94534b5eaff21b3e4783942320097e
+final_review_head_gate=run after the evidence commit and bind the immutable result in the pull request
+result=green locally; base-controlled GitHub Actions pending on the corrected head

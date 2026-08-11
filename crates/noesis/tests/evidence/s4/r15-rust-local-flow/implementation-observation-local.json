@@ -28,7 +28,7 @@
   "slice": "S4",
   "risk": "high",
   "risk_owner": "@smutti",
-  "observed_at_utc": "2026-08-11T15:44:08Z",
+  "observed_at_utc": "2026-08-11T16:17:39Z",
   "base_commit_sha": "011057c84258a26b08b12ced7ae1df478dbb5048",
   "governance_checkpoint_sha": "1e29d0ff13506c3d6446f24c4d2f810b186bfef4",
   "red_evidence_commit_sha": "878a4b0bd6e1c007bb6889bfc229a271a102e5d4",
@@ -43,7 +43,7 @@
     "maintainer_supervised_interactive_lane": true,
     "governance_and_code_single_pr": true,
     "correction_budget": 5,
-    "correction_rounds_used": 3,
+    "correction_rounds_used": 4,
     "manual_independent_review_and_merge_required": true,
     "control_plane_effect": "none",
     "release_effect": "none"
@@ -129,6 +129,21 @@
       "product_contract_or_oracle_change": false,
       "focused_attempts_passed": 3,
       "summary": "crates/noesis/tests/evidence/s4/r15-rust-local-flow/windows-ci-store-pool-correction.log"
+    },
+    "windows_ci_cleanup_margin_correction": {
+      "round": 4,
+      "failed_head": "ca08ae38ac8477bd5922229233b2f0ed1ff4590e",
+      "failed_workflow_run": "https://github.com/smutti/codenoesis/actions/runs/31509462394",
+      "failed_windows_job": "https://github.com/smutti/codenoesis/actions/runs/31509462394/job/93839303877",
+      "root_cause": "all workspace tests passed, but twenty store initializations left no deterministic Windows cleanup margin before the fixed job timeout",
+      "correction": "reduce the nonconcurrently reused store set to eleven while retaining all sixty public invocations",
+      "public_noesis_invocations": 60,
+      "inventory_permutations": 50,
+      "parallel_schedules": 10,
+      "concurrent_store_reuse": false,
+      "product_contract_or_oracle_change": false,
+      "focused_attempts_passed": 3,
+      "summary": "crates/noesis/tests/evidence/s4/r15-rust-local-flow/windows-ci-cleanup-margin-correction.log"
     },
     "complete_repository_gate": {
       "tested_commit": "cc5baa4a963647fe6f3ccc727f9b52e5ab97b504",

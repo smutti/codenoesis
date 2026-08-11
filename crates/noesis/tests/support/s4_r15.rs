@@ -171,7 +171,12 @@ impl MaterializedLocalFlowRepository {
 
     pub fn permuted_scan_command(&self, seed: u64) -> Command {
         let store_slot = if seed >= 100 {
-            10_u64.saturating_add(seed % 10)
+            let schedule_slot = seed % 10;
+            if schedule_slot == 9 {
+                10
+            } else {
+                schedule_slot
+            }
         } else {
             seed % 10
         };
