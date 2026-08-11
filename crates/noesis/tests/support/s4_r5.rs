@@ -245,6 +245,7 @@ pub struct MaterializedEmptyRustSemanticRepository {
 }
 
 impl MaterializedEmptyRustSemanticRepository {
+    #[allow(clippy::too_many_lines)]
     pub fn fixture() -> Self {
         let fixture = empty_fixture_root();
         let manifest: Value = serde_json::from_slice(

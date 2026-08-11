@@ -198,6 +198,7 @@ fn conf_fr_ext_010_empty_semantic_extension_checkpoint_is_bound() {
 }
 
 #[test]
+#[allow(clippy::too_many_lines)]
 fn e2e_fr_ext_010_empty_semantic_extension_reaches_r14() {
     let repository = MaterializedEmptyRustSemanticRepository::fixture();
     assert!(!repository.build_sentinel().exists());
@@ -440,19 +441,17 @@ fn reg_fr_ext_010_paired_constant_reaches_r14_without_silent_drop() {
 #[test]
 fn pt_nfr_det_001_empty_semantic_extension_has_fifty_permutations_and_ten_schedules() {
     let repository = MaterializedEmptyRustSemanticRepository::fixture();
-    let baseline = deterministic_semantic(
-        repository
-            .permuted_scan_command(0)
-            .output()
-            .expect("run empty R5 permutation zero"),
-    );
+    let baseline_output = repository
+        .permuted_scan_command(0)
+        .output()
+        .expect("run empty R5 permutation zero");
+    let baseline = deterministic_semantic(&baseline_output);
     for seed in 1..50 {
-        let semantic = deterministic_semantic(
-            repository
-                .permuted_scan_command(seed)
-                .output()
-                .expect("run empty R5 input permutation"),
-        );
+        let output = repository
+            .permuted_scan_command(seed)
+            .output()
+            .expect("run empty R5 input permutation");
+        let semantic = deterministic_semantic(&output);
         assert_eq!(semantic, baseline, "empty R5 permutation {seed}");
     }
 
@@ -464,7 +463,8 @@ fn pt_nfr_det_001_empty_semantic_extension_has_fifty_permutations_and_ten_schedu
             })
             .collect::<Vec<_>>();
         for (schedule, handle) in handles.into_iter().enumerate() {
-            let semantic = deterministic_semantic(handle.join().expect("join empty R5 schedule"));
+            let output = handle.join().expect("join empty R5 schedule");
+            let semantic = deterministic_semantic(&output);
             assert_eq!(semantic, baseline, "empty R5 schedule {schedule}");
         }
     });
@@ -870,7 +870,7 @@ fn sha256_hex(bytes: &[u8]) -> String {
     output
 }
 
-fn deterministic_semantic(output: std::process::Output) -> Vec<u8> {
+fn deterministic_semantic(output: &std::process::Output) -> Vec<u8> {
     assert!(
         output.status.success(),
         "deterministic empty R5 scan failed: {}",
