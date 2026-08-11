@@ -170,7 +170,12 @@ impl MaterializedLocalFlowRepository {
     }
 
     pub fn permuted_scan_command(&self, seed: u64) -> Command {
-        let store = self.root.join(format!("permuted-store-{seed}"));
+        let store_slot = if seed >= 100 {
+            10_u64.saturating_add(seed % 10)
+        } else {
+            seed % 10
+        };
+        let store = self.root.join(format!("permuted-store-{store_slot}"));
         let mut options = vec![
             (
                 OsString::from("--repository"),

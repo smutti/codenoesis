@@ -1,0 +1,62 @@
+issue=https://github.com/smutti/codenoesis/issues/166
+pull_request=https://github.com/smutti/codenoesis/pull/167
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+correction_round=3/5
+observed_at_utc=2026-08-11T15:44:08Z
+base_commit_sha=011057c84258a26b08b12ced7ae1df478dbb5048
+failed_head_sha=ef6012d21f4912a008026944e02c743210511101
+
+failed_workflow_run=https://github.com/smutti/codenoesis/actions/runs/31506028797
+failed_windows_job=https://github.com/smutti/codenoesis/actions/runs/31506028797/job/93827700695
+windows_job_conclusion=cancelled at the base-controlled 20-minute portability timeout
+windows_raw_log_bytes=124094
+windows_raw_log_sha256=d316e7ab2438e9a54d85127959da80f01176cf537234be064e9c59616717e092
+
+diagnosis=all four R15 end-to-end tests passed in 54.83 seconds, S6 passed 15 of 15, incremental passed 10 of 10, inventory passed 14 of 14, and storage passed 10 of 12 before cancellation
+root_cause=the wider permutation batch preserved the complete oracle but did not reduce total Windows CPU and store-initialization cost enough to recover the global workspace-test margin
+correction=retain every public noesis invocation while serially reusing ten store slots across non-overlapping permutation batches and running the ten independent schedule stores with the final nine permutations
+store_slot_concurrent_reuse=false
+permutation_store_slots=10
+schedule_store_slots=10
+public_noesis_invocations=60
+inventory_permutations=50
+parallel_schedules=10
+seed_set_changed=false
+argument_permutation_changed=false
+semantic_comparison_oracle_changed=false
+product_changed=false
+contract_changed=false
+schema_changed=false
+fixture_changed=false
+dependency_changed=false
+workflow_or_timeout_changed=false
+
+command=cargo fmt --all --check
+exit=0
+duration_seconds=1.30
+log_sha256=b10d9e6b1a38b8477bcf3b9a1cf980732927be0b1e71bcd50f124dab8b665e70
+
+command=cargo clippy -p noesis --test e2e_fr_ext_017_rust_local_flow --all-features --locked -- -D warnings
+exit=0
+duration_seconds=1.86
+log_sha256=e83fd97123a9ea481dadfa8a7082ec382f995aefaf7c57dd6d93b3c70bf88334
+
+command=cargo test -p noesis --test e2e_fr_ext_017_rust_local_flow pt_nfr_det_001_r15_fifty_permutations_and_ten_schedules_are_identical --locked -- --exact
+attempts=3
+exit_codes=0,0,0
+test_duration_seconds=4.84,4.61,4.53
+log_sha256=91d29f44257375ec0a6bc66f7b7a132262e2020e51baa15a2e27e8955a1b93e4,c82ecd8e23def0b0e3a94d57bade20076df801dca45003b3634c0128e79250d8,5d402e88abba019dcf6ea4a376d01d2d97716faca86be276c7882c3ee6e62925
+
+command=cargo test -p noesis --test e2e_fr_ext_017_rust_local_flow --locked
+exit=0
+tests_passed=4
+test_duration_seconds=4.76
+log_sha256=66bc9e91dd9cd2715a229c3abd8865e7a9d84aebd7b0d2623331e9e89e42b21e
+
+focused_raw_logs_order=fmt,clippy,determinism-1,determinism-2,determinism-3,full-r15
+focused_raw_logs_bytes=3479
+focused_raw_logs_sha256=3349547f1b3e54ac3e43437f51e8121d2924353d57888e3fd1a01385075f1372
+final_review_head_gate=run after the evidence commit and bind the immutable result in the pull request
+result=green locally; base-controlled GitHub Actions pending on the corrected head

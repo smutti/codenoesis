@@ -458,8 +458,8 @@ fn pt_nfr_det_001_r15_fifty_permutations_and_ten_schedules_are_identical() {
             .output()
             .expect("run R15 argument permutation 0"),
     );
-    for batch_start in (1_u64..50).step_by(49) {
-        let batch_end = batch_start.saturating_add(49).min(50);
+    for batch_start in (1_u64..41).step_by(10) {
+        let batch_end = batch_start.saturating_add(10).min(41);
         let permutations = (batch_start..batch_end)
             .map(|seed| {
                 let mut command = repository.permuted_scan_command(seed);
@@ -480,18 +480,25 @@ fn pt_nfr_det_001_r15_fifty_permutations_and_ten_schedules_are_identical() {
             );
         }
     }
-    let schedules = (100..110)
-        .map(|seed| {
+    let final_permutations = (41_u64..50).map(|seed| ("permutation", seed));
+    let schedules = (100_u64..110).map(|seed| ("schedule", seed));
+    let final_batch = final_permutations
+        .chain(schedules)
+        .map(|(kind, seed)| {
             let mut command = repository.permuted_scan_command(seed);
-            std::thread::spawn(move || command.output().expect("run R15 parallel schedule"))
+            (
+                kind,
+                seed,
+                std::thread::spawn(move || command.output().expect("run R15 final batch")),
+            )
         })
         .collect::<Vec<_>>();
-    for (schedule, handle) in schedules.into_iter().enumerate() {
-        let output = handle.join().expect("join R15 parallel schedule");
+    for (kind, seed, handle) in final_batch {
+        let output = handle.join().expect("join R15 final batch");
         assert_eq!(
             semantic_projection(&output),
             expected_semantic,
-            "R15 semantic schedule {schedule}"
+            "R15 semantic {kind} {seed}"
         );
     }
     assert!(!repository.build_sentinel().exists());
