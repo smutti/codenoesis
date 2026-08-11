@@ -44,7 +44,7 @@
     "maintainer_supervised_interactive_lane": true,
     "governance_and_code_single_pr": true,
     "correction_budget": 5,
-    "correction_rounds_used": 2,
+    "correction_rounds_used": 3,
     "manual_independent_review_and_merge_required": true,
     "control_plane_effect": "none",
     "release_effect": "none"
@@ -128,6 +128,26 @@
         "raw_local_log_sha256": "306ef223dacb5b366c150f474bc0aec2547c25a8f87d818819e2e6f7a6d998dd"
       },
       "windows_ci_rerun": "pending on the corrected pull-request head"
+    },
+    "windows_ci_viewer_correction": {
+      "correction_round": 3,
+      "failed_head": "7b2de99397028001e0511625ec93572643c9c875",
+      "failed_run": "https://github.com/smutti/codenoesis/actions/runs/31429898885",
+      "failed_job": "https://github.com/smutti/codenoesis/actions/runs/31429898885/job/93590475174",
+      "failed_test": "e2e_fr_ext_016_rust_expression_bindings_complete_local_journey",
+      "failed_assertion": "R14 viewer bytes changed",
+      "root_cause": "the published LocalExplorerV7 viewer was canonical LF but the R14 test compared it with Git-for-Windows CRLF checkout transport bytes from the immutable K1 asset",
+      "correction": "normalize only CRLF checkout transport in the R14 test before immutable viewer comparison, matching the established R11 through R13 oracle",
+      "product_or_contract_change": false,
+      "focused_rust_tests_passed": 4,
+      "focused_python_tests_passed": 5,
+      "summary": "crates/noesis/tests/evidence/s4/r14-rust-expression-bindings/windows-ci-viewer-correction.log",
+      "raw_failed_job_log_bytes": 284578,
+      "raw_failed_job_log_sha256": "bdd16a5fbf44883e4d2afd3c87b20df93b0048417c4725c69ff81322c6cb16f0",
+      "raw_local_log_bytes": 1079,
+      "raw_local_log_sha256": "c7bf4fb2bea613061205be1ff8fbff15336c6df59f9f391453795a2fe9a7ab7b",
+      "complete_local_gate": "pending after correction commit",
+      "windows_ci_rerun": "pending on the corrected pull-request head"
     }
   },
   "fixture": {
@@ -207,7 +227,7 @@
   },
   "known_limitations": [
     "R14 facts are syntax- and committed-source-bound and do not infer type, dispatch, borrow, ownership, control flow, data flow, side effects, runtime behavior, or value evaluation.",
-    "The correction is locally Green on Darwin arm64; the base-controlled Windows matrix rerun remains pending on the corrected pull-request head.",
+    "The access-oracle and viewer-transport corrections are locally Green on Darwin arm64; the base-controlled Windows matrix rerun remains pending on the corrected pull-request head.",
     "The Proposed candidate is not Verified and has no effect on main before independent review and protected manual merge."
   ]
 }

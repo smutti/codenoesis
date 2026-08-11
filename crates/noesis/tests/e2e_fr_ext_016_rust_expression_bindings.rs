@@ -14,6 +14,12 @@ const EXPECTED_RED_STDERR_SHA256: &str =
     "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe";
 
 #[test]
+fn conf_nfr_det_001_r14_viewer_checkout_transport_is_platform_neutral() {
+    assert_eq!(normalize_lf(b"first\r\nsecond\r\n"), b"first\nsecond\n");
+    assert_eq!(normalize_lf(b"first\nsecond\n"), b"first\nsecond\n");
+}
+
+#[test]
 #[allow(clippy::too_many_lines)]
 fn e2e_fr_ext_016_rust_expression_bindings_complete_local_journey() {
     let repository = MaterializedExpressionBindingRepository::fixture();
@@ -224,9 +230,11 @@ fn e2e_fr_ext_016_rust_expression_bindings_complete_local_journey() {
     assert_eq!(manifest["security"]["network"], false);
     assert_eq!(manifest["security"]["dynamic_code"], false);
     let viewer = fs::read(repository.inner.explorer.join("index.html")).expect("read R14 viewer");
-    let immutable =
+    let immutable = normalize_lf(
         fs::read(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("assets/s4/k1/index.html"))
-            .expect("read immutable K1 viewer");
+            .expect("read immutable K1 viewer")
+            .as_slice(),
+    );
     assert_eq!(viewer, immutable, "R14 viewer bytes changed");
     assert!(!repository.build_sentinel().exists());
 }
@@ -378,6 +386,21 @@ fn semantic_projection(output: &Output) -> Vec<u8> {
     assert_success(output, "R14 deterministic scan");
     serde_json::to_vec(&parse_single_document(&output.stdout)["semantic"])
         .expect("serialize R14 semantic projection")
+}
+
+fn normalize_lf(bytes: &[u8]) -> Vec<u8> {
+    let mut normalized = Vec::with_capacity(bytes.len());
+    let mut index = 0;
+    while index < bytes.len() {
+        if bytes[index] == b'\r' && bytes.get(index + 1) == Some(&b'\n') {
+            normalized.push(b'\n');
+            index += 2;
+        } else {
+            normalized.push(bytes[index]);
+            index += 1;
+        }
+    }
+    normalized
 }
 
 fn hex_sha256(bytes: &[u8]) -> String {
