@@ -1,0 +1,33 @@
+issue=https://github.com/smutti/codenoesis/issues/166
+authorization=https://github.com/smutti/codenoesis/issues/166#issuecomment-5254310440
+correction_round=1_of_5
+scope=crates/noesis/tests/e2e_fr_fed_001_openapi_federation.rs only
+product_changed=false
+contracts_changed=false
+oracle_changed=false
+
+initial_full_gate_command=cargo test --workspace --all-targets --all-features --locked
+initial_full_gate_exit=101
+initial_full_gate_duration_seconds=493
+initial_full_gate_log_sha256=c7be2208955a435e053a9e98ef6a71cc2d5e3e8b2a0a3cc568ed28c9398e247f
+failed_test=conf_fr_cli_005_stdout_failure_uses_internal_error_v8
+expected_exit=70
+observed_exit=0
+
+diagnostic_retry_command=cargo test -p noesis --test e2e_fr_fed_001_openapi_federation conf_fr_cli_005_stdout_failure_uses_internal_error_v8 --locked -- --exact --nocapture
+diagnostic_retry_exit=0
+diagnostic_retry_log_bytes=638
+diagnostic_retry_log_sha256=75d6f77f4d00a89e4522f8fb809916fd94ca0c2f7e245ebff92c77a9a5ac08e3
+diagnosis=the original harness created the pipe during spawn and dropped its reader afterward, so the child could complete its write before the parent closed the read end
+
+correction=create std::io::pipe before spawn, drop the reader before spawn, and pass the writer as child stdout
+portability=std-only anonymous pipe supported by the repository-pinned Rust toolchain; no OS-specific API, unsafe, or dependency
+oracle=ErrorV8 internal.unexpected with exit 70 and empty captured stdout remains exact
+
+determinism_runs=20
+determinism_successes=20
+determinism_failures=0
+determinism_logs_bytes=12847
+determinism_logs_sha256=031f33376f0d2bc2b8ee1d0dc3285c868fb278904999eb9d698a12ab10f91953
+complete_repository_gate_exit=0
+result=green

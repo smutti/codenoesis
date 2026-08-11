@@ -1,0 +1,66 @@
+issue=https://github.com/smutti/codenoesis/issues/166
+requirements=FR-EXT-017,FR-EXP-007,FR-EXT-012,FR-EXT-016,FR-KNW-003,FR-QRY-001,FR-CLI-001,FR-DOC-001,FR-DOC-002,FR-DOC-003,NFR-DET-001,NFR-SEC-001,NFR-SEC-005,NFR-PRV-002,NFR-TST-001,NFR-TST-002
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+tested_implementation_commit=cc5baa4a963647fe6f3ccc727f9b52e5ab97b504
+tested_tree=41806bb34be6a839de1105efbf17a76c0e6e923d
+started_at_utc=2026-08-11T14:23:50Z
+completed_at_utc=2026-08-11T14:24:21Z
+duration_seconds=31
+
+command=cargo fmt --all --check
+exit=0
+
+command=cargo test -p codenoesis-domain --test s4_r15_rust_local_flow --locked
+exit=0
+tests_passed=2
+coverage=contract constants, reviewed identities, and every maximum plus maximum-plus-one domain limit
+
+command=cargo test -p codenoesis-lang-rust --test s4_r15_rust_local_flow --locked
+exit=0
+tests_passed=6
+coverage=closed fixture oracle, one-arm and compound assignments, hard-negative whole-callable rejection, validator corruption, 64/65 nested-branch boundary, and deterministic nested flow
+
+command=cargo test -p codenoesis-contracts --test s4_r15_rust_local_flow --locked
+exit=0
+tests_passed=5
+coverage=ErrorV22, V17/V12/V8 strict contracts, derivation inputs, canonicality, privacy, references, hashes, viewer, and CSP
+
+command=cargo test -p codenoesis-application --test s4_r15_rust_local_flow --locked
+exit=0
+tests_passed=1
+coverage=single acquisition and extraction, typed R15 failure propagation, and no partial publication
+
+command=cargo test -p noesis --test e2e_fr_ext_017_rust_local_flow --locked
+exit=0
+tests_passed=4
+journey=scan -> docs -> block/condition/reachability/def-use query -> export -> strict reimport -> explore
+oracle=37 entities, 85 relationships, 39 evidence, 122 claims, 0 diagnostics, 15 coverage records
+additive_oracle=5 syntax blocks, 9 flow-node links, 1 condition, 5 direct syntax edges, 9 reachability edges, 5 must-reach edges, 2 may-reach edges
+determinism=50 input permutations and 10 schedules have byte-identical semantic output
+selector_compatibility=R14 selector absence remains byte-identical and forbidden R15 compositions fail before acquisition
+
+command=cargo test -p noesis --lib race_nfr_sec_005_r15 --locked -- --nocapture
+exit=0
+tests_passed=2
+coverage=mutable portable input and output-replacement races fail closed
+
+command=python3 -m unittest scripts.tests.test_s4_r15_rust_local_flow_contract
+exit=0
+tests_passed=5
+
+command=cargo test -p noesis --test e2e_fr_fed_001_openapi_federation conf_fr_cli_005_stdout_failure_uses_internal_error_v8 --locked -- --exact
+exit=0
+tests_passed=1
+coverage=the amended S6 stdout-failure harness retains the exact ErrorV8 oracle without a post-spawn close race
+
+r15_rust_tests_passed=20
+amended_s6_rust_tests_passed=1
+python_tests_passed=5
+raw_local_log_bytes=6541
+raw_local_log_sha256=b6020fab135a995e7b9b189b1de6c74f93e3f91d38a0c97456cd6dd526e8d9f6
+environment=Darwin 25.5.0 arm64; rustc 1.97.1 (8bab26f4f 2026-07-14); cargo 1.97.1 (c980f4866 2026-06-30); Python 3.9.6
+known_warning=the pre-existing exact toml dependency requirement includes ignored semver metadata; no workspace manifest or dependency changed
+correction_rounds_used=1
+result=green
