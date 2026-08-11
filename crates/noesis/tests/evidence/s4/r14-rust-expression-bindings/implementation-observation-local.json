@@ -177,7 +177,17 @@
       "raw_cancelled_job_log_sha256": "dab1a3541eef1e91c88796ada98f14a288cb3cbaf9b2ac26871bc47b272c2f7f",
       "raw_local_log_bytes": 771,
       "raw_local_log_sha256": "d554e1968ef6ddc0629842cf9f2713d8a3d904aa06a679cdd4335f9c06098fdb",
-      "complete_local_gate": "pending after correction commit",
+      "correction_commit": "6e1b8756c04a7b182536b25e7c83e8ad940d63cd",
+      "correction_tree": "17142fe6236201954ed1d5a6a8bcb95f9f57c27c",
+      "complete_gate": {
+        "started_at_utc": "2026-08-11T06:04:36Z",
+        "completed_at_utc": "2026-08-11T06:07:57Z",
+        "exit_code": 0,
+        "workspace_tests_passed": 504,
+        "python_tests_passed": 299,
+        "raw_local_log_bytes": 59916,
+        "raw_local_log_sha256": "3b80c76350eb6fabd55b069a9484cdbe5d9d3f6d2896f46d6ea6824180959ed5"
+      },
       "windows_ci_rerun": "pending on the corrected pull-request head"
     }
   },
