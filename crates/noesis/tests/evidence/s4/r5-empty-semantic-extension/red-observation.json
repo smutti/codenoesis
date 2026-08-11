@@ -1,0 +1,80 @@
+{
+  "schema_version": "codenoesis.r5-empty-semantic-extension-red-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/164",
+  "authorization": [
+    "https://github.com/smutti/codenoesis/issues/164#issuecomment-5250715942",
+    "https://github.com/smutti/codenoesis/issues/164#issuecomment-5250970994"
+  ],
+  "requirement_ids": [
+    "FR-EXT-010",
+    "FR-EXT-012",
+    "FR-EXT-016",
+    "FR-CLI-001",
+    "NFR-DET-001",
+    "NFR-SEC-001",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "requirement_status": "approved FR-EXT-010 with a branch-authorized correction candidate until protected manual merge",
+  "slice": "S4",
+  "risk": "high",
+  "base_sha": "408e4021044cf6b3628b6a8873787148de719341",
+  "governance_checkpoint_sha": "6c000b934bc1848740a541d6284ddfad6739919f",
+  "command": "cargo test -p noesis --test e2e_fr_ext_010_rust_semantic_depth e2e_fr_ext_010_empty_semantic_extension_reaches_r14 -- --exact",
+  "observed_at": "2026-08-11T10:56:46+0200",
+  "duration_seconds": 1,
+  "cargo_test_exit_code": 101,
+  "underlying_scan": {
+    "exit_code": 11,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 196,
+    "stderr_sha256": "9b284f4bb7368bb0d11c5b33725c109ee469845aac00081e51175413adec4e3c",
+    "error_schema": "codenoesis.error/v21",
+    "error_code": "internal.unexpected",
+    "error_stage": "internal",
+    "context_stage": "expression_extraction",
+    "store_exists": false,
+    "typed_root_cause": "RustSemanticError::ContractInvalid from the additive R5 entity non-emptiness check"
+  },
+  "failed_for_expected_reason": true,
+  "production_source_changed_before_red": false,
+  "checkpoint_changed_paths": [
+    "README.md",
+    "crates/noesis/tests/e2e_fr_ext_010_rust_semantic_depth.rs",
+    "crates/noesis/tests/support/s4_r5.rs",
+    "docs/software/architecture.md",
+    "docs/software/decisions/0026-s4-empty-semantic-extension-neutrality.md",
+    "docs/software/roadmap.md",
+    "docs/software/software-requirements-specification.md",
+    "tests/fixtures/s4/rust-empty-semantic-extension-v1/README.md",
+    "tests/fixtures/s4/rust-empty-semantic-extension-v1/manifest.json",
+    "tests/fixtures/s4/rust-empty-semantic-extension-v1/repository/Cargo.toml",
+    "tests/fixtures/s4/rust-empty-semantic-extension-v1/repository/src/lib.rs",
+    "tests/specifications/s4/r5/empty-semantic-extension-v1.json"
+  ],
+  "raw_log": {
+    "path": "crates/noesis/tests/evidence/s4/r5-empty-semantic-extension/governance-red.log",
+    "bytes": 1194,
+    "sha256": "f598b43d39b052421cd80ab03a800bcf031e27b7ac3283a324d08a74f2f9405b"
+  },
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "features": "default test features",
+    "network_or_model_required": false
+  },
+  "ai_participation": {
+    "agent": "OpenAI Codex",
+    "model": "not exposed to the repository runtime",
+    "policy": "root AGENTS.md at governance checkpoint",
+    "run_id": "issue-164-supervised-red-1",
+    "cost": "not available"
+  },
+  "known_limitations": [
+    "This is local expected-Red evidence and is not independent verification.",
+    "Decision 0025 and the R14 contract bundle remain byte-identical under the authorized clarification."
+  ]
+}

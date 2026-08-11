@@ -249,6 +249,12 @@ immutable prior dispatch families.
 
 ### R14 Rust expression and lexical bindings
 
+Protected merge #163 made this profile Approved and Implemented, but it remains
+not Verified pending independent acceptance of the complete retained evidence.
+Decision 0025 and its semantic bundle remain byte-identical historical
+checkpoint artifacts; Decision 0026 records the post-merge lifecycle and the
+bounded R5 neutral-element correction.
+
 The explicit R14 S4 profile extends only the complete K1 source-only lineage.
 The Rust adapter walks each already accepted callable body with the pinned
 tree-sitter grammar and emits a closed set of selected expression nodes,
@@ -284,6 +290,24 @@ bytes. K1 alone remains V11. The optional existing 64 MiB selector changes only
 final snapshot capacity; repository-boundary, cfg-alternative, compiler/SCIP,
 nested-source, generated-source, and R11-R13 compositions fail with ErrorV21
 before acquisition or publication.
+
+### Empty R5 additive neutral element
+
+R5 is an additive declaration layer over complete R4 knowledge, not an
+independent repository-existence proof. A valid inherited R4 graph with at
+least one source extraction chunk may therefore have zero additive R5 member
+entities, relationships, and claims when both R5 index families are empty and
+all existing evidence, capability, ordering, identity, reference, and index
+invariants hold. This is the algebraic neutral element for the R5 overlay.
+
+The language adapter remains responsible for emitting every supported field,
+variant, constant/static, associated type, and implementation-context method.
+The domain accepts an empty overlay only after validating the complete inherited
+knowledge and chunks; it never creates a placeholder. R6, K1, and R14 consume
+that validated neutral result normally and may add only their own
+evidence-backed facts. Missing inherited knowledge, missing chunks,
+inconsistent empty collections, omitted declarations, dangling evidence, or
+invalid indexes still fail before publication.
 
 ## Versioned artifacts and identity
 

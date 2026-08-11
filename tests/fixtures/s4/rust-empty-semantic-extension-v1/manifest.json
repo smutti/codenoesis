@@ -1,0 +1,40 @@
+{
+  "schema_version": "codenoesis.r5-empty-semantic-extension-fixture/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-empty-semantic-extension-v1",
+  "source": "project-owned synthetic bytes",
+  "external_source_vendored": false,
+  "materialization": {
+    "object_format": "sha1",
+    "tree_oid": "d13008ae7c7dbf9807b9599eb9c1b1213b4b94f4",
+    "commit_oid": "c780476957a29db6ede1cefb408140763990e829",
+    "author_name": "CodeNoesis Fixture",
+    "author_email": "fixture@codenoesis.invalid",
+    "git_timestamp": "1786432214 +0200",
+    "message": "fixture"
+  },
+  "files": [
+    {
+      "path": "repository/Cargo.toml",
+      "mode": "100644",
+      "byte_length": 101,
+      "sha256": "0d79c8e33244e48e81d13ed5cceb0134ad0f630651e132aab352d70b9bee6734",
+      "git_blob_oid": "7fcc92476073521d8335447855ce199740005e21"
+    },
+    {
+      "path": "repository/src/lib.rs",
+      "mode": "100644",
+      "byte_length": 180,
+      "sha256": "87197f0a71c9d27e442236d381bd115555734fa1b67523396b3fb11d6823575c",
+      "git_blob_oid": "181e12994908a703de9866e2f82c1a3a40c91dec"
+    }
+  ],
+  "authority": {
+    "git_process_for_fixture_materialization_only": true,
+    "product_process_execution": false,
+    "network_access": false,
+    "build_or_target_execution": false,
+    "compiler_or_index_generation": false,
+    "model_or_browser_access": false,
+    "source_mutation": false
+  }
+}

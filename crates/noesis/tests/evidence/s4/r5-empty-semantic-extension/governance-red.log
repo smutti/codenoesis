@@ -1,0 +1,22 @@
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running tests/e2e_fr_ext_010_rust_semantic_depth.rs (target/debug/deps/e2e_fr_ext_010_rust_semantic_depth-b18ba5840c1b4727)
+
+running 1 test
+test e2e_fr_ext_010_empty_semantic_extension_reaches_r14 ... FAILED
+
+failures:
+
+---- e2e_fr_ext_010_empty_semantic_extension_reaches_r14 stdout ----
+
+thread 'e2e_fr_ext_010_empty_semantic_extension_reaches_r14' (202230) panicked at crates/noesis/tests/e2e_fr_ext_010_rust_semantic_depth.rs:207:9:
+expected RepositorySnapshotV16 success; observed invalid empty additive R5 rejection
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    e2e_fr_ext_010_empty_semantic_extension_reaches_r14
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.97s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_ext_010_rust_semantic_depth`

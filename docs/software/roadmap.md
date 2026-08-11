@@ -91,12 +91,13 @@ and declared "R8 governance is Approved". Those markers likewise remain only
 as immutable guard history. The K1 pre-merge roadmap said
 "R0-R8 are implemented"; that marker is retained only as history.
 
-R0-R13 and K1 are implemented but remain not Verified until their complete
+R0-R14 and K1 are implemented but remain not Verified until their complete
 retained evidence is independently accepted. R7 static import still grants no
-index generation authority. R14 is the next bounded compatibility package: it
-proposes an explicit V13/V16 committed-source expression and lexical-binding
-layer over exact K1 without compiler, data-flow, ownership, or runtime meaning.
-Protected review and manual merge remain authoritative.
+index generation authority. Protected merge #163 made the explicit V13/V16
+committed-source expression and lexical-binding layer effective without adding
+compiler, data-flow, ownership, or runtime meaning. Issue #164 is the immediate
+correctness gate before further CFG/data-flow work: it permits a valid empty
+additive R5 layer without changing any public R0-R14 contract or byte.
 
 | Order | Planning item | Outcome | Governance dependency | Candidate acceptance gate |
 |---|---|---|---|---|
@@ -115,7 +116,7 @@ Protected review and manual merge remain authoritative.
 | `R11` | K1 repository-boundary composition | Implemented but not Verified: emit the complete root K1 callable ontology with exact unbound or explicitly-bound R2 gitlink evidence in additive V10/V13, QueryV8, PortableGraphV4, and LocalExplorerV4. | Issue #155, Decision 0022, and protected merge #156; immutable verification remains open. | The project-owned fixture completes scan → docs → callable/boundary query → export → strict reimport → explore for unbound and bound cases; nested source remains unread, exact identities/limits/security/determinism pass, and RustDesk advances only to the separately governed K1+R10 blocker. |
 | `R12` | K1 cfg-alternatives composition | Implemented but not Verified: preserve one R10 logical method while attaching occurrence-specific K1 signatures, parameters, body facts, and uniquely proven local calls to exact declaration-alternative subjects in additive V11/V14, QueryV9, PortableGraphV5, and LocalExplorerV5. | Issue #158, Decision 0023, and protected merge #159; complete immutable verification remains open. | The project-owned fixture completes scan → docs → logical/alternative/signature query → export → strict reimport → explore; exact subject mapping, optional boundary/capacity, limits/security/determinism pass, and RustDesk advances beyond the former `try_start_clipboard` conflict without choosing an active `cfg` world. |
 | `R13` | K1 and revision-bound SCIP composition | Implemented but not Verified: preserve complete K1 and R7 facts while adding only evidence-backed `HAS_COMPILER_SYMBOL` correspondence from exact K1 functions/methods to exact in-repository compiler symbols in additive V12/V15, QueryV10, PortableGraphV6, and LocalExplorerV6. | Issue #160, Decision 0024, and protected merge #161; complete immutable verification remains open. | The immutable compiler-index fixture completes scan → docs → callable/signature/compiler/join query → export → strict reimport → explore with five exact joins, two unchanged unresolved calls, zero new `CALLS`, 52 coverage records, and deterministic security/limit regressions. |
-| `R14` | Rust expression and lexical bindings | Proposed branch-scoped candidate: preserve complete K1 while adding only closed committed-source expressions, ordered arguments, receivers, supported pattern bindings, explicit modifiers, and syntax-only lexical `READS`/`WRITES` in V13/V16, QueryV11, PortableGraphV7, and LocalExplorerV7. | Issue #162 and Decision 0025; high-risk supervised single-PR package, existing tree-sitter dependencies only, immutable R0-R13/K1 contracts, fixtures, goldens, and viewer bytes. | The immutable K1 fixture completes scan → docs → expression/argument/binding/access query → export → strict reimport → explore with 73 expressions, 23 bindings, 29 reads, 7 writes, exact spans/scopes, and deterministic invalid/limit/security regressions without type, data-flow, ownership, or runtime claims. |
+| `R14` | Rust expression and lexical bindings | Implemented but not Verified after protected merge #163: preserves complete K1 while adding only closed committed-source expressions, ordered arguments, receivers, supported pattern bindings, explicit modifiers, and syntax-only lexical `READS`/`WRITES` in V13/V16, QueryV11, PortableGraphV7, and LocalExplorerV7. | Issue #162, Decision 0025, and protected merge #163; Decision 0026 and issue #164 correct only empty additive R5 neutrality while keeping the R14 bundle immutable. | The immutable K1 fixture completes scan → docs → expression/argument/binding/access query → export → strict reimport → explore with 73 expressions, 23 bindings, 29 reads, 7 writes, exact spans/scopes, and deterministic invalid/limit/security regressions without type, data-flow, ownership, or runtime claims. |
 
 ### Earliest useful real-world checkpoint
 

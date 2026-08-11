@@ -532,14 +532,16 @@ impl RustSemanticKnowledge {
             )
             .collect::<BTreeSet<_>>();
 
-        if self.graph.entities.is_empty()
-            || !ordered_unique(
-                self.graph
-                    .legacy_entities
-                    .iter()
-                    .map(|entity| entity.id.as_str()),
-            )
-            || !ordered_unique(self.graph.entities.iter().map(|entity| entity.id.as_str()))
+        if !additive_collection_shape_is_valid(
+            self.graph.entities.len(),
+            self.graph.relationships.len(),
+            self.graph.claims.len(),
+        ) || !ordered_unique(
+            self.graph
+                .legacy_entities
+                .iter()
+                .map(|entity| entity.id.as_str()),
+        ) || !ordered_unique(self.graph.entities.iter().map(|entity| entity.id.as_str()))
             || !ordered_unique(
                 self.graph
                     .relationships
@@ -837,6 +839,14 @@ fn valid_capability(capability: &str) -> bool {
     capability_state(capability).is_some()
 }
 
+const fn additive_collection_shape_is_valid(
+    entity_count: usize,
+    relationship_count: usize,
+    claim_count: usize,
+) -> bool {
+    entity_count != 0 || (relationship_count == 0 && claim_count == 0)
+}
+
 fn ordered_unique<'a>(values: impl IntoIterator<Item = &'a str>) -> bool {
     let mut previous = None;
     for value in values {
@@ -932,4 +942,18 @@ pub fn deterministic_claim(
         ClaimState::DeterministicFact,
         vec![evidence_id],
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::additive_collection_shape_is_valid;
+
+    #[test]
+    fn ut_fr_ext_010_empty_additive_collections_are_neutral_only_together() {
+        assert!(additive_collection_shape_is_valid(0, 0, 0));
+        assert!(additive_collection_shape_is_valid(1, 1, 1));
+        assert!(!additive_collection_shape_is_valid(0, 1, 0));
+        assert!(!additive_collection_shape_is_valid(0, 0, 1));
+        assert!(!additive_collection_shape_is_valid(0, 1, 1));
+    }
 }

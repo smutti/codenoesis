@@ -1,0 +1,192 @@
+{
+  "schema_version": "codenoesis.r5-empty-semantic-extension-implementation-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/164",
+  "authorization": [
+    "https://github.com/smutti/codenoesis/issues/164#issuecomment-5250715942",
+    "https://github.com/smutti/codenoesis/issues/164#issuecomment-5250970994"
+  ],
+  "requirement_ids": [
+    "FR-EXT-010",
+    "FR-EXT-012",
+    "FR-EXT-016",
+    "FR-CLI-001",
+    "NFR-DET-001",
+    "NFR-SEC-001",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "requirement_status": "approved FR-EXT-010 with an implemented branch candidate; effective only after protected manual merge and not independently Verified",
+  "slice": "S4",
+  "risk": "high",
+  "base_sha": "408e4021044cf6b3628b6a8873787148de719341",
+  "governance_checkpoint_sha": "6c000b934bc1848740a541d6284ddfad6739919f",
+  "red_evidence_sha": "5ca0158414b322fe5e208b398a55a13b68fd2b44",
+  "implementation_sha": "c7bc7ddc5cb120cbcfff5085b9f23a767d1cb76f",
+  "green_head_sha": "d38f2558388ee5c02ba21fa99117efc81f324ff5",
+  "observed_at": "2026-08-11T11:16:43+0200",
+  "implementation": {
+    "root_cause": "RustSemanticKnowledge unconditionally rejected an empty additive R5 entity collection",
+    "correction": "accept zero R5 entities only when additive R5 relationships and claims are also empty; preserve every inherited, chunk, evidence, ordering, identity, reference, limit, and index validation",
+    "production_files": [
+      "crates/codenoesis-domain/src/s4_r5.rs"
+    ],
+    "new_dependencies": [],
+    "manifest_or_lockfile_changed": false,
+    "public_contract_or_version_changed": false,
+    "migration_or_release_effect": false
+  },
+  "acceptance": {
+    "r5": {
+      "extraction_chunks": 1,
+      "additive_entities": 0,
+      "additive_relationships": 0,
+      "additive_claims": 0,
+      "member_entity_ids": 0,
+      "implementation_context_method_ids": 0,
+      "capability_records": 8,
+      "synthetic_placeholders": 0
+    },
+    "r14_complete_counts": {
+      "entities": 27,
+      "relationships": 38,
+      "evidence": 29,
+      "claims": 65,
+      "diagnostics": 0,
+      "coverage": 15
+    },
+    "r14_entity_kinds": {
+      "rust.function": 1,
+      "rust.callable_signature": 1,
+      "rust.parameter": 2,
+      "rust.local_binding": 2,
+      "rust.control": 1,
+      "rust.expression": 9,
+      "rust.pattern_binding": 4,
+      "rust.constant": 0,
+      "rust.declared_value": 0
+    },
+    "r14_relationship_kinds": {
+      "HAS_EXPRESSION": 9,
+      "CONTAINS_EXPRESSION": 4,
+      "DECLARES_BINDING": 4,
+      "BINDS_FROM": 2,
+      "READS": 5,
+      "WRITES": 1,
+      "DECLARES_VALUE": 0
+    },
+    "journey": [
+      "scan",
+      "docs",
+      "exact-id-query",
+      "export",
+      "strict-reimport",
+      "explore"
+    ],
+    "paired_constant": {
+      "rust.constant": 1,
+      "rust.declared_value": 1,
+      "DECLARES_VALUE": 1
+    },
+    "permutations": 50,
+    "schedules": 10,
+    "source_or_target_execution": false,
+    "network_model_or_browser_authority": false,
+    "partial_publication": false
+  },
+  "focused_green": [
+    {
+      "command": "cargo test -p codenoesis-domain --lib",
+      "status": 0,
+      "coverage": "direct empty-additive collection-shape unit plus complete domain unit suite"
+    },
+    {
+      "command": "cargo test -p codenoesis-lang-rust --test s4_rust_semantic_depth --locked",
+      "status": 0,
+      "coverage": "15 adapter tests including neutral extension, invalid chunks/index/evidence, paired constant, limits, security, permutations, and schedules"
+    },
+    {
+      "command": "cargo test -p noesis --test e2e_fr_ext_010_rust_semantic_depth --locked",
+      "status": 0,
+      "coverage": "13 public tests including complete R14 journey, strict reimport, paired constant, 50 permutations, and ten schedules"
+    },
+    {
+      "command": "cargo test -p noesis --test e2e_fr_ext_011_framework_declarations --locked",
+      "status": 0,
+      "coverage": "six R6 regressions"
+    },
+    {
+      "command": "cargo test -p noesis --test e2e_fr_ext_012_rust_callable_semantics --locked",
+      "status": 0,
+      "coverage": "three K1 regressions"
+    },
+    {
+      "command": "cargo test -p noesis --test e2e_fr_ext_016_rust_expression_bindings --locked",
+      "status": 0,
+      "coverage": "four R14 regressions including its existing 50 permutations and ten schedules"
+    }
+  ],
+  "full_gate": {
+    "head_sha": "d38f2558388ee5c02ba21fa99117efc81f324ff5",
+    "exit_code": 0,
+    "duration_seconds": 501,
+    "commands": [
+      "actionlint -no-color",
+      "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+      "cargo fmt --all --check",
+      "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "cargo test --workspace --all-targets --all-features --locked",
+      "cargo test --workspace --doc --all-features --locked",
+      "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "python3 scripts/validate_benchmark_assets.py",
+      "cargo bench --workspace --all-features --no-run --locked"
+    ],
+    "all_commands_passed": true,
+    "python_tests": 299,
+    "benchmark_assets": "valid: status=scaffold, suites=0",
+    "raw_log": {
+      "path": "crates/noesis/tests/evidence/s4/r5-empty-semantic-extension/full-gate.log",
+      "bytes": 62869,
+      "sha256": "dbc43aed082411d3a40b1194cdaafb77ac6703ac3c855f478755fd782e7cc222"
+    }
+  },
+  "corrections": {
+    "budget": 5,
+    "used": 1,
+    "first_full_gate": {
+      "exit_code": 101,
+      "duration_seconds": 35,
+      "raw_log_bytes": 4852,
+      "raw_log_sha256": "0f5185e4734a7035643c8a30aaa83bed71f94b2b73231e820a59942530753a0e",
+      "reason": "three test-harness Clippy findings: two too_many_lines and one needless_pass_by_value"
+    },
+    "correction_sha": "d38f2558388ee5c02ba21fa99117efc81f324ff5",
+    "semantic_or_scope_change": false
+  },
+  "immutability": {
+    "decision_0025_sha256": "da0da4a3d9ace0a0e58dee5d747e8c5557250f712040fd52f7c1e57f1fd699ad",
+    "r14_contract_bundle_file_sha256": "e5a0b1b157b540aff6a10e8748de485f2b0106912124727fe7d87c3257fdc393",
+    "r14_contract_bundle_semantic_sha256": "2b278689b5f5ba2b91c48bf345b5b44e38de562b7384557edfa3c50e2146b1b5",
+    "existing_schema_fixture_golden_viewer_changes": []
+  },
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "features": "all features for complete gate",
+    "network_or_model_required": false
+  },
+  "ai_participation": {
+    "agent": "OpenAI Codex",
+    "model": "not exposed to the repository runtime",
+    "policy": "root AGENTS.md at the authorized base",
+    "run_id": "issue-164-supervised-implementation-1",
+    "cost": "not available"
+  },
+  "known_limitations": [
+    "This evidence was produced locally on macOS arm64 and is not independent verification.",
+    "Base-controlled GitHub checks and independent review remain required before manual merge.",
+    "The existing Cargo semver-metadata warning is unchanged and non-failing.",
+    "The unrelated untracked graphify output directories were neither read as product input nor modified."
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "schema_version": "codenoesis.empty-semantic-extension-oracle/v1",
+  "issue": 164,
+  "issue_url": "https://github.com/smutti/codenoesis/issues/164",
+  "authorization": [
+    "https://github.com/smutti/codenoesis/issues/164#issuecomment-5250715942",
+    "https://github.com/smutti/codenoesis/issues/164#issuecomment-5250970994"
+  ],
+  "base_sha": "408e4021044cf6b3628b6a8873787148de719341",
+  "slice": "S4",
+  "risk": "high",
+  "requirement_ids": [
+    "FR-EXT-010",
+    "FR-EXT-012",
+    "FR-EXT-016",
+    "FR-CLI-001",
+    "NFR-DET-001",
+    "NFR-SEC-001",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "requirement_status": {
+    "FR-EXT-010": "Approved and Implemented but not Verified",
+    "R14": "Approved and Implemented after protected merge #163 but not Verified",
+    "correction": "branch-authorized candidate until protected manual merge"
+  },
+  "selector_matrix": {
+    "profile": "standard-local-s4",
+    "workspace_profile": "cargo-root-package-v1",
+    "manifest_profile": "cargo-manifest-facts-v1",
+    "rust_semantic_profile": "rust-semantic-depth-v1",
+    "rust_framework_profile": "rust-framework-declarations-v1",
+    "rust_callable_profile": "rust-callable-semantics-v1",
+    "rust_expression_profile": "rust-expression-bindings-v1"
+  },
+  "fixture": {
+    "path": "tests/fixtures/s4/rust-empty-semantic-extension-v1",
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-empty-semantic-extension-v1",
+    "commit_oid": "c780476957a29db6ede1cefb408140763990e829",
+    "tree_oid": "d13008ae7c7dbf9807b9599eb9c1b1213b4b94f4",
+    "files": [
+      {
+        "path": "repository/Cargo.toml",
+        "byte_length": 101,
+        "git_blob_oid": "7fcc92476073521d8335447855ce199740005e21",
+        "sha256": "0d79c8e33244e48e81d13ed5cceb0134ad0f630651e132aab352d70b9bee6734"
+      },
+      {
+        "path": "repository/src/lib.rs",
+        "byte_length": 180,
+        "git_blob_oid": "181e12994908a703de9866e2f82c1a3a40c91dec",
+        "sha256": "87197f0a71c9d27e442236d381bd115555734fa1b67523396b3fb11d6823575c"
+      }
+    ]
+  },
+  "contracts": {
+    "configuration": "codenoesis.configuration/v13",
+    "snapshot": "codenoesis.repository-snapshot/v16",
+    "extraction_chunk": "codenoesis.extraction-chunk/v13",
+    "graph": "codenoesis.knowledge-graph/v13",
+    "ontology": "codenoesis.ontology/rust/v13",
+    "error": "codenoesis.error/v21",
+    "query": "codenoesis.local-query-result/v11",
+    "portable": "codenoesis.portable-graph/v7",
+    "explorer": "codenoesis.local-explorer/v7",
+    "versions_changed": false
+  },
+  "expected_red": {
+    "command": "cargo test -p noesis --test e2e_fr_ext_010_rust_semantic_depth e2e_fr_ext_010_empty_semantic_extension_reaches_r14 -- --exact",
+    "underlying_scan_exit_code": 11,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 196,
+    "stderr_sha256": "9b284f4bb7368bb0d11c5b33725c109ee469845aac00081e51175413adec4e3c",
+    "error_schema": "codenoesis.error/v21",
+    "error_code": "internal.unexpected",
+    "error_stage": "internal",
+    "context_stage": "expression_extraction",
+    "store_exists": false,
+    "root_cause": "RustSemanticKnowledge rejects an empty additive R5 entity collection"
+  },
+  "acceptance": {
+    "r5": {
+      "extraction_chunks": 1,
+      "additive_entities": 0,
+      "additive_relationships": 0,
+      "additive_claims": 0,
+      "member_entity_ids": 0,
+      "implementation_context_method_ids": 0,
+      "capability_records": 8,
+      "synthetic_placeholders": 0
+    },
+    "r14_complete_counts": {
+      "entities": 27,
+      "relationships": 38,
+      "evidence": 29,
+      "claims": 65,
+      "diagnostics": 0,
+      "coverage": 15
+    },
+    "r14_entity_kinds": {
+      "rust.function": 1,
+      "rust.callable_signature": 1,
+      "rust.parameter": 2,
+      "rust.local_binding": 2,
+      "rust.control": 1,
+      "rust.expression": 9,
+      "rust.pattern_binding": 4,
+      "rust.constant": 0,
+      "rust.declared_value": 0
+    },
+    "r14_relationship_kinds": {
+      "HAS_EXPRESSION": 9,
+      "CONTAINS_EXPRESSION": 4,
+      "DECLARES_BINDING": 4,
+      "BINDS_FROM": 2,
+      "READS": 5,
+      "WRITES": 1,
+      "DECLARES_VALUE": 0
+    },
+    "coverage_capabilities": [
+      "cargo.active_target_not_resolved",
+      "rust.attribute_semantics_not_interpreted",
+      "rust.cfg_presence_unresolved",
+      "rust.compiler_cfg_not_computed",
+      "rust.data_flow_not_computed",
+      "rust.foreign_block_unsupported",
+      "rust.macro_generated_items_not_analyzed",
+      "rust.ownership_flow_not_computed",
+      "rust.reachability_not_computed",
+      "rust.runtime_behavior_not_observed",
+      "rust.side_effects_not_computed",
+      "rust.type_resolution_not_performed",
+      "rust.union_unsupported",
+      "rust.unsupported_impl_header",
+      "rust.value_not_evaluated"
+    ],
+    "journey": [
+      "scan",
+      "docs",
+      "exact-id-query",
+      "export",
+      "strict-reimport",
+      "explore"
+    ],
+    "permutations": 50,
+    "schedules": 10
+  },
+  "immutability": {
+    "decision_0025_sha256": "da0da4a3d9ace0a0e58dee5d747e8c5557250f712040fd52f7c1e57f1fd699ad",
+    "r14_contract_bundle_changed": false,
+    "existing_contracts_schemas_identities_fixtures_goldens_evidence_assets_viewer_changed": false
+  },
+  "forbidden": [
+    "empty inherited R4 graph",
+    "missing extraction chunks",
+    "inconsistent empty collections or indexes",
+    "omitted supported R5 declarations",
+    "placeholder R5 entities",
+    "repair fallback truncation or best effort",
+    "process network compiler build target model or browser authority",
+    "source mutation or partial store publication"
+  ]
+}
