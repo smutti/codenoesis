@@ -458,8 +458,8 @@ fn pt_nfr_det_001_r15_fifty_permutations_and_ten_schedules_are_identical() {
             .output()
             .expect("run R15 argument permutation 0"),
     );
-    for batch_start in (1_u64..50).step_by(10) {
-        let batch_end = batch_start.saturating_add(10).min(50);
+    for batch_start in (1_u64..50).step_by(49) {
+        let batch_end = batch_start.saturating_add(49).min(50);
         let permutations = (batch_start..batch_end)
             .map(|seed| {
                 let mut command = repository.permuted_scan_command(seed);
