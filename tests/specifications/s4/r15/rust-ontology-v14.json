@@ -1,0 +1,48 @@
+{
+  "schema_version": "codenoesis.ontology-definition/v1",
+  "ontology_version": "codenoesis.ontology/rust/v14",
+  "extends": ["codenoesis.ontology/rust/v13"],
+  "profile": "rust-local-flow-v1",
+  "extractor": "codenoesis.rust-local-flow/s4-r15-v1",
+  "entity_kinds": {
+    "rust.syntax_basic_block": {
+      "identity": "codenoesis.entity-id/rust-local-flow/v1",
+      "evidence_identity": "codenoesis.evidence-id/rust-local-flow/v1",
+      "claim_state": "deterministic_fact",
+      "roles": ["entry", "condition", "then_branch", "else_branch", "join"],
+      "flow_world": "syntax_normal_completion",
+      "raw_text": false
+    }
+  },
+  "relationship_kinds": {
+    "HAS_SYNTAX_BLOCK": {"claim_state": "deterministic_fact", "meaning": "syntax_only"},
+    "CONTAINS_FLOW_NODE": {"claim_state": "deterministic_fact", "meaning": "syntax_only"},
+    "HAS_CONDITION": {"claim_state": "deterministic_fact", "meaning": "syntax_only"},
+    "SYNTAX_NEXT": {"claim_state": "deterministic_fact", "meaning": "possible_normal_source_progression"},
+    "SYNTAX_TRUE_BRANCH": {"claim_state": "deterministic_fact", "meaning": "possible_normal_source_progression"},
+    "SYNTAX_FALSE_BRANCH": {"claim_state": "deterministic_fact", "meaning": "possible_normal_source_progression"},
+    "SYNTAX_REACHES": {"claim_state": "derived_fact", "meaning": "strict_source_transitive_closure"},
+    "LEXICAL_MUST_REACHES_READ": {"claim_state": "derived_fact", "meaning": "closed_lexical_rule"},
+    "LEXICAL_MAY_REACHES_READ": {"claim_state": "derived_fact", "meaning": "closed_lexical_rule"}
+  },
+  "identity_domains": {
+    "entity": "codenoesis.entity-id/rust-local-flow/v1",
+    "relationship": "codenoesis.relationship-id/rust-local-flow/v1",
+    "evidence": "codenoesis.evidence-id/rust-local-flow/v1",
+    "existing_r14": "unchanged"
+  },
+  "epistemology": {
+    "source_normal_flow": true,
+    "lexical_reaching_definitions": true,
+    "compiler_cfg": false,
+    "compiler_data_flow": false,
+    "runtime": false,
+    "values": false,
+    "types": false,
+    "ownership": false,
+    "side_effects": false
+  },
+  "normalization": "NFC",
+  "ordering": "raw_utf8_identity",
+  "existing_identity_domains_immutable": true
+}

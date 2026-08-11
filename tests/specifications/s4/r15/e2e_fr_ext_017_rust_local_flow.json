@@ -1,0 +1,78 @@
+{
+  "schema_version": "codenoesis.e2e-spec/v1",
+  "id": "e2e_fr_ext_017_rust_local_flow_complete_local_journey",
+  "requirements": [
+    "FR-EXT-017", "FR-EXP-007", "FR-EXT-012", "FR-EXT-016",
+    "FR-KNW-003", "FR-QRY-001", "FR-CLI-001", "FR-DOC-001",
+    "FR-DOC-002", "FR-DOC-003", "NFR-DET-001", "NFR-SEC-001",
+    "NFR-SEC-005", "NFR-PRV-002", "NFR-TST-001", "NFR-TST-002"
+  ],
+  "status": "Proposed branch-scoped candidate",
+  "slice": "S4",
+  "risk": "high",
+  "exact_base": "011057c84258a26b08b12ced7ae1df478dbb5048",
+  "fixture": "urn:codenoesis:fixture:s4-rust-local-flow-v1",
+  "selector": "--rust-flow-profile rust-local-flow-v1",
+  "journey": ["scan", "docs", "query", "export", "strict_reimport", "explore"],
+  "expected_red": {
+    "command": "cargo test -p noesis --test e2e_fr_ext_017_rust_local_flow e2e_fr_ext_017_rust_local_flow_complete_local_journey -- --exact",
+    "underlying_scan_exit": 2,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 149,
+    "stderr_sha256": "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe",
+    "schema_version": "codenoesis.error/v4",
+    "code": "input.invalid_revision",
+    "stage": "input",
+    "store": "absent"
+  },
+  "expected_green": {
+    "configuration": "codenoesis.configuration/v14",
+    "snapshot": "codenoesis.repository-snapshot/v17",
+    "graph": "codenoesis.knowledge-graph/v14",
+    "ontology": "codenoesis.ontology/rust/v14",
+    "query": "codenoesis.local-query-result/v12",
+    "portable": "codenoesis.portable-graph/v8",
+    "explorer": "codenoesis.local-explorer/v8",
+    "counts": {
+      "entities": 37,
+      "relationships": 85,
+      "evidence": 39,
+      "claims": 122,
+      "diagnostics": 0,
+      "coverage": 15
+    },
+    "additive": {
+      "blocks": 5,
+      "flow_node_links": 9,
+      "condition_links": 1,
+      "direct_syntax_edges": 5,
+      "reachability_edges": 9,
+      "must_reach_edges": 5,
+      "may_reach_edges": 2,
+      "deterministic_claims": 25,
+      "derived_claims": 16,
+      "evidence": 5
+    },
+    "inherited_coverage": [
+      "rust.reachability_not_computed",
+      "rust.data_flow_not_computed"
+    ],
+    "connected_components": 1,
+    "duplicate_ids": 0,
+    "dangling_references": 0,
+    "portable_reimport_lossless": true,
+    "viewer_bytes_immutable": true,
+    "permutations": 50,
+    "parallel_schedules": 10
+  },
+  "oracle": "tests/fixtures/s4/rust-local-flow-v1/expected-local-flow.json",
+  "failure": {
+    "schema": "codenoesis.error/v22",
+    "stdout": "empty",
+    "publication": "none",
+    "repair": false,
+    "truncation": false,
+    "partial_callable_flow": false
+  }
+}

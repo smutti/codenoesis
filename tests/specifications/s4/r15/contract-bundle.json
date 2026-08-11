@@ -1,0 +1,28 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {"path": "LICENSE", "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"},
+    {"path": "docs/software/decisions/0027-s4-r15-rust-local-flow-contract.md", "sha256": "95f336df90a00b7899bb180449f11e2397c428c36a839dbcbb96353fe2ce6709"},
+    {"path": "scripts/tests/test_s4_r15_rust_local_flow_contract.py", "sha256": "3a85be0e0b61f7dc7e2fc99ac1509836e46799eb4c786a53f6f30e7c5bc10e10"},
+    {"path": "tests/fixtures/s4/rust-local-flow-v1/README.md", "sha256": "53f2f97fbb45b2a57d4cfcb3e5e3168bf1c9b205e309a83d0918eecad9e4716f"},
+    {"path": "tests/fixtures/s4/rust-local-flow-v1/expected-local-flow.json", "sha256": "364a393d08bfd04a94d5871fb0666044dd58c3276248d3a193daa34e738fad97"},
+    {"path": "tests/fixtures/s4/rust-local-flow-v1/manifest.json", "sha256": "2646d9def58e9fd869f1a71a72043f3ff740717e4fef219c2bc949f32ba0988c"},
+    {"path": "tests/fixtures/s4/rust-local-flow-v1/repository/Cargo.toml", "sha256": "7361229e951665374b726accc41576721b0c31cab9d03da48b06a4329344aa5f"},
+    {"path": "tests/fixtures/s4/rust-local-flow-v1/repository/src/lib.rs", "sha256": "743ad3d6ff6d502f7a6a1b5aa9b462f5957533e017c11e60ca5c5242b9f451c5"},
+    {"path": "tests/specifications/s4/r14/contract-bundle.json", "sha256": "e5a0b1b157b540aff6a10e8748de485f2b0106912124727fe7d87c3257fdc393"},
+    {"path": "tests/specifications/s4/r15/codenoesis-error-v22.schema.json", "sha256": "5e9c7ad804f145b3158b950c384bd627e0210f3bace18597b65038ee02524463"},
+    {"path": "tests/specifications/s4/r15/configuration-v14.schema.json", "sha256": "aa0868707c2cf6daba28f317e8c57d5be3b0387000491ac86fb1f752e7e2fb0e"},
+    {"path": "tests/specifications/s4/r15/e2e_fr_ext_017_rust_local_flow.json", "sha256": "54a3de2f244e28652354d545400f30088c54db4255ce42c0c82097cfcbaae799"},
+    {"path": "tests/specifications/s4/r15/extraction-chunk-v14.schema.json", "sha256": "a680d42701cf3da2b6bd2607caf61a6751cc658db5bbd570a8dc13d9077b1356"},
+    {"path": "tests/specifications/s4/r15/invalid-cases-v1.json", "sha256": "9f16fb224a7467749b5d3688c610e7ac413be931305b71805508e544e2f19291"},
+    {"path": "tests/specifications/s4/r15/knowledge-graph-v14.schema.json", "sha256": "8b399f35365c8c437030614541725d7afbadae7031617c5c48f10e9daa89ca75"},
+    {"path": "tests/specifications/s4/r15/local-explorer-manifest-v8.schema.json", "sha256": "aacad314dcd658262e0979e621927516970e8d6992d3c01b7ef06f0592968b08"},
+    {"path": "tests/specifications/s4/r15/local-flow-v1.json", "sha256": "da6c2b6c5208e9173a872f33b4e6cd5135a16c57044fc36f4f286fd81c3bce40"},
+    {"path": "tests/specifications/s4/r15/local-query-result-v12.schema.json", "sha256": "79d430fb60278e2699cd38b2a464ebad7634c4194852c7c4427d69752d7ac584"},
+    {"path": "tests/specifications/s4/r15/portable-graph-v8.schema.json", "sha256": "fda27e1db24de30086fb0891a6c39230e68be7bf87d35ef381680090eddfe811"},
+    {"path": "tests/specifications/s4/r15/repository-snapshot-v17.schema.json", "sha256": "9f9a101fb9f84f46b0719932e8113f3ca09a2aa9d1ae8a5a5fd1c99bea4f43cf"},
+    {"path": "tests/specifications/s4/r15/rust-ontology-v14.json", "sha256": "992032d322b6cd28251cda7a96da69cfb147b057fad2571b269331dab4255b13"},
+    {"path": "tests/specifications/s4/r15/semantic-hash-contract-v13.json", "sha256": "3bf38126b80c0457269851a6562445df87ce34e45fa7bb62ec8c73e7b75e69a7"}
+  ],
+  "bundle_sha256": "17176e82d61d119ba79db387f7cc18937c707cac8edcfeed254dd91fdcf3ebee"
+}

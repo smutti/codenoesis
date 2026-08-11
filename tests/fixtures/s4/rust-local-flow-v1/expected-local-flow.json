@@ -1,0 +1,554 @@
+{
+  "schema_version": "codenoesis.r15-local-flow-oracle/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-local-flow-v1",
+  "revision": "552a8cdc76b2dd80dc26ad1e3b381fc0de9eab24",
+  "source_file_id": "urn:codenoesis:entity:blake3:14a3d8d24f4cd60fd3dc13bd66cda07bc56fc08e162d72c025013fabef1f18f7",
+  "callable_id": "urn:codenoesis:entity:blake3:2faedf3d82c8379dec454da67efa6535cda76d3eccadea1cf45df46e927cb211",
+  "contracts": {
+    "configuration": "codenoesis.configuration/v14",
+    "snapshot": "codenoesis.repository-snapshot/v17",
+    "graph": "codenoesis.knowledge-graph/v14",
+    "ontology": "codenoesis.ontology/rust/v14",
+    "query": "codenoesis.local-query-result/v12",
+    "portable": "codenoesis.portable-graph/v8",
+    "explorer": "codenoesis.local-explorer/v8",
+    "pipeline": "codenoesis.pipeline/s4-r15-v1",
+    "extractor": "codenoesis.rust-local-flow/s4-r15-v1",
+    "index": "codenoesis.local-flow-index/v1",
+    "rule": "codenoesis.rule/rust-local-flow/v1"
+  },
+  "baseline_semantic_hash": "9234051e60d266305da77fa5a750c64f42a22d719282a9b0afd7b93461213003",
+  "baseline_counts": {
+    "entities": 32,
+    "relationships": 49,
+    "evidence": 34,
+    "claims": 81,
+    "diagnostics": 0,
+    "coverage": 15
+  },
+  "additive_counts": {
+    "entities": 5,
+    "relationships": 36,
+    "evidence": 5,
+    "claims": 41,
+    "deterministic_claims": 25,
+    "derived_claims": 16
+  },
+  "complete_counts": {
+    "entities": 37,
+    "relationships": 85,
+    "evidence": 39,
+    "claims": 122,
+    "diagnostics": 0,
+    "coverage": 15,
+    "deterministic_claims": 101,
+    "derived_claims": 21
+  },
+  "blocks": [
+    {
+      "id": "urn:codenoesis:entity:blake3:1b9601fa1fc10bb313c69ed8ba725a841621690d666081bfa810dd4878e971cf",
+      "claim_id": "urn:codenoesis:claim:blake3:eed4b1ef163a56e39a708e50251813fd10f951f10f5430068760ccd4ed091a57",
+      "evidence_id": "urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63",
+      "ordinal": 0,
+      "role": "entry",
+      "start_byte": 78,
+      "end_byte": 100,
+      "flow_world": "syntax_normal_completion",
+      "flow_node_ids": [
+        "urn:codenoesis:entity:blake3:c3c7ed8f8a6e72ef152a7029b865ae509468d124531f8020fe6258b2408f51d1",
+        "urn:codenoesis:entity:blake3:5071e3b53c0da49ba39e25e0623b61b6b313d879255c0a68823b3a9d3e94db13"
+      ]
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd",
+      "claim_id": "urn:codenoesis:claim:blake3:9ee196b821aafe8ae35bb40135215cd238550e63a3eea51a0e95917aa2090839",
+      "evidence_id": "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91",
+      "ordinal": 1,
+      "role": "condition",
+      "start_byte": 108,
+      "end_byte": 115,
+      "flow_world": "syntax_normal_completion",
+      "flow_node_ids": [
+        "urn:codenoesis:entity:blake3:54416e6f3df8b57cc96ece4c7b71b2ac5d746e197617a766d9bdd6f5fca5671c",
+        "urn:codenoesis:entity:blake3:515a864d64d40b1cfb1d4c50b15fbf00164a87d71b0170d9c1904cfd92b4541d"
+      ]
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:ce3036ed35aa1a0497cf1af4a564db588c47eda068a3d231b1de1c8b7a0c98ff",
+      "claim_id": "urn:codenoesis:claim:blake3:5577046e7f91021dea7a231d1b72c83a616190e80f8dc9219083912019c0d148",
+      "evidence_id": "urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d",
+      "ordinal": 2,
+      "role": "then_branch",
+      "start_byte": 126,
+      "end_byte": 143,
+      "flow_world": "syntax_normal_completion",
+      "flow_node_ids": [
+        "urn:codenoesis:entity:blake3:c73d683ba65230f00cf71e2878908d5dc43e67b3b7ca88e49be4ed862be5558b"
+      ]
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:879c4b9d01e2775acc30ae731c469a7be2aa22290ac096cdce06f4be789acc42",
+      "claim_id": "urn:codenoesis:claim:blake3:1ad05cd5dca8e58e77e7ede97860d6c27d9d9df5bd968a628ab40e8862de6865",
+      "evidence_id": "urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c",
+      "ordinal": 3,
+      "role": "else_branch",
+      "start_byte": 166,
+      "end_byte": 183,
+      "flow_world": "syntax_normal_completion",
+      "flow_node_ids": [
+        "urn:codenoesis:entity:blake3:62401b3cbe0976c70d89b107d8d6276ce21fe2fa98ba3827336a9dca5e5754b3"
+      ]
+    },
+    {
+      "id": "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603",
+      "claim_id": "urn:codenoesis:claim:blake3:82deeae00b78055738b3d56363ad42146eec880974baa9652aad3f0cd07e41bb",
+      "evidence_id": "urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5",
+      "ordinal": 4,
+      "role": "join",
+      "start_byte": 195,
+      "end_byte": 225,
+      "flow_world": "syntax_normal_completion",
+      "flow_node_ids": [
+        "urn:codenoesis:entity:blake3:4980e5b4e7f84d0758bcda21f80ece98c94988e5aa53ca5d0b5a6e680a6b14ba",
+        "urn:codenoesis:entity:blake3:4f27412cbb7b2133b9cc6d428eae5bee8d2feb3ae755f31f8752bbcfcf485d03",
+        "urn:codenoesis:entity:blake3:e83af58ceff955305280c41f94fe21e67899ee35fd18acbc42d740dac059f8c0"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "urn:codenoesis:relationship:blake3:d3634dad074be9ce54049871a1460f8a6085857447cf5be79fe49956abfbab80",
+      "claim_id": "urn:codenoesis:claim:blake3:5fa24e297b91bdbc246ab812fbb3524acbac700c222a2b021036e22bd4237343",
+      "kind": "HAS_SYNTAX_BLOCK",
+      "source": "urn:codenoesis:entity:blake3:2faedf3d82c8379dec454da67efa6535cda76d3eccadea1cf45df46e927cb211",
+      "target": "urn:codenoesis:entity:blake3:1b9601fa1fc10bb313c69ed8ba725a841621690d666081bfa810dd4878e971cf",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:59bb312ca6d6c4e82e42eec7e3a4250e8885c82717e6c1939cd66da7d7053788",
+      "claim_id": "urn:codenoesis:claim:blake3:365f9dccd17a0f29111a092cd2b951adf8ab0c59564abf79e1e3cead7b177fd4",
+      "kind": "HAS_SYNTAX_BLOCK",
+      "source": "urn:codenoesis:entity:blake3:2faedf3d82c8379dec454da67efa6535cda76d3eccadea1cf45df46e927cb211",
+      "target": "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:3e49c682d84b8310d0ac21586250d29866f0ce31393fb5856821c4862b900299",
+      "claim_id": "urn:codenoesis:claim:blake3:3d281e2c6ca606019e4d8ccbe2c5c06e8d16518d6a7e53336cd6c63e54ed4bbc",
+      "kind": "HAS_SYNTAX_BLOCK",
+      "source": "urn:codenoesis:entity:blake3:2faedf3d82c8379dec454da67efa6535cda76d3eccadea1cf45df46e927cb211",
+      "target": "urn:codenoesis:entity:blake3:ce3036ed35aa1a0497cf1af4a564db588c47eda068a3d231b1de1c8b7a0c98ff",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:10864deaf90bbe587b58148a4f4f93299c0506a0ed11285cee0ebc4ba39230fd",
+      "claim_id": "urn:codenoesis:claim:blake3:ce1b06d7d339c7a2ea426d058ff1f9fc7e0e4d733d3dea84a80d0b7e96ecbf0a",
+      "kind": "HAS_SYNTAX_BLOCK",
+      "source": "urn:codenoesis:entity:blake3:2faedf3d82c8379dec454da67efa6535cda76d3eccadea1cf45df46e927cb211",
+      "target": "urn:codenoesis:entity:blake3:879c4b9d01e2775acc30ae731c469a7be2aa22290ac096cdce06f4be789acc42",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:68aadb9eca4a77e8051f6691a83055f2d88465ab3d56ac2c96818e6c195158ec",
+      "claim_id": "urn:codenoesis:claim:blake3:2194ecdcad486d33199a263e8fba4dd579dbdd1f3979a767ae1cc62115558a9c",
+      "kind": "HAS_SYNTAX_BLOCK",
+      "source": "urn:codenoesis:entity:blake3:2faedf3d82c8379dec454da67efa6535cda76d3eccadea1cf45df46e927cb211",
+      "target": "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:661bc6dad6b333b55686a55bd09418eb8ea9207b6b7ea890398ce86e98d501ec",
+      "claim_id": "urn:codenoesis:claim:blake3:e8fa76d7633208bc2bd9b15923f15dd6af1f44a71792389b135b79f624f25924",
+      "kind": "CONTAINS_FLOW_NODE",
+      "source": "urn:codenoesis:entity:blake3:1b9601fa1fc10bb313c69ed8ba725a841621690d666081bfa810dd4878e971cf",
+      "target": "urn:codenoesis:entity:blake3:c3c7ed8f8a6e72ef152a7029b865ae509468d124531f8020fe6258b2408f51d1",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:87db603652227f768e26c7c2489893844b8148cbbbd902f48a5134b16a9d1894", "urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:aa0393806e0708e0be873f42e145ff30b18a1027e84c8afd7fc1be525edd46a9",
+      "claim_id": "urn:codenoesis:claim:blake3:489aa64af4b08f6aebc6cf367a9ff12198a8e6acc263d291f7fcfe6ed511c2e5",
+      "kind": "CONTAINS_FLOW_NODE",
+      "source": "urn:codenoesis:entity:blake3:1b9601fa1fc10bb313c69ed8ba725a841621690d666081bfa810dd4878e971cf",
+      "target": "urn:codenoesis:entity:blake3:5071e3b53c0da49ba39e25e0623b61b6b313d879255c0a68823b3a9d3e94db13",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:72441a6199e09caaf1d01d21ff0deecc66b4fee8f56b0083f941ec615ea9e329", "urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:1c732a5e82ba9a5eb594f6944dc6bdb492a678fbf4189e8080c21e168d2c71f3",
+      "claim_id": "urn:codenoesis:claim:blake3:675ee44f9e85db508bf055bb5cd52b7ef6b1c0561937d310a7a59042cddfc731",
+      "kind": "CONTAINS_FLOW_NODE",
+      "source": "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd",
+      "target": "urn:codenoesis:entity:blake3:54416e6f3df8b57cc96ece4c7b71b2ac5d746e197617a766d9bdd6f5fca5671c",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:1ae3d8c1fac3fc71efa443b4630d2e01962c9f037d167de93e6d7b33ad565b31", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:53b090fdad64e4f47026b779249f841c77d5ff6f06694f092f5f16c91025a2c5",
+      "claim_id": "urn:codenoesis:claim:blake3:4a7553dc6267217f38e2b55ea60d33f4e85b18e9a465987cb3222859c64a007c",
+      "kind": "CONTAINS_FLOW_NODE",
+      "source": "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd",
+      "target": "urn:codenoesis:entity:blake3:515a864d64d40b1cfb1d4c50b15fbf00164a87d71b0170d9c1904cfd92b4541d",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91", "urn:codenoesis:evidence:blake3:7e08ae2dc4042393a31a7491f7fbd2d84e487d04bceae1dd176810c2f3ae46bc"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:6b3811eac404da809ee1b4fab1262b1dda44786a0dc0134a3244256fb17f7137",
+      "claim_id": "urn:codenoesis:claim:blake3:83fbec2acd253ea574c785119832a698e66c62d76dd076a9cec05f149cffb931",
+      "kind": "CONTAINS_FLOW_NODE",
+      "source": "urn:codenoesis:entity:blake3:ce3036ed35aa1a0497cf1af4a564db588c47eda068a3d231b1de1c8b7a0c98ff",
+      "target": "urn:codenoesis:entity:blake3:c73d683ba65230f00cf71e2878908d5dc43e67b3b7ca88e49be4ed862be5558b",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d", "urn:codenoesis:evidence:blake3:2b6a4ceb8382ff4ae6c126c89ca6ebd17a53b6b6bcc267037c567b650941ae11"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:adb2cab6408bdbffa99767bd8825d8841bd2baf8854be965c45253c84c7dda55",
+      "claim_id": "urn:codenoesis:claim:blake3:aafd20cbbc39acc835e6266d1b63cbeb920b42e4ce86da6096b9936d835b02d2",
+      "kind": "CONTAINS_FLOW_NODE",
+      "source": "urn:codenoesis:entity:blake3:879c4b9d01e2775acc30ae731c469a7be2aa22290ac096cdce06f4be789acc42",
+      "target": "urn:codenoesis:entity:blake3:62401b3cbe0976c70d89b107d8d6276ce21fe2fa98ba3827336a9dca5e5754b3",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c", "urn:codenoesis:evidence:blake3:6b045c8614e7ec39256760381d637c1afb88074d9c05cdca2bd64b5b4f83a04c"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:e7b861a4877d5ac2836750bb1881353d494773d8d81957b25f38ec98cb32970c",
+      "claim_id": "urn:codenoesis:claim:blake3:82f2e9242756e3dcaacf9109e841c3abf81ed7899fb3113592357b6de80729b3",
+      "kind": "CONTAINS_FLOW_NODE",
+      "source": "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603",
+      "target": "urn:codenoesis:entity:blake3:4980e5b4e7f84d0758bcda21f80ece98c94988e5aa53ca5d0b5a6e680a6b14ba",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5", "urn:codenoesis:evidence:blake3:e530f11c9239383a81ef34fd56e3ba0da319c98e17c2fbed1985c8061f6c02c2"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:0a885457f6d0a89bd677fc1a8c1569912c0b9e59a1041bdb3d0a28dadd2d318d",
+      "claim_id": "urn:codenoesis:claim:blake3:69a32386602819b6e4f411179764197852fbf91af6d825613c690f055de079ea",
+      "kind": "CONTAINS_FLOW_NODE",
+      "source": "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603",
+      "target": "urn:codenoesis:entity:blake3:4f27412cbb7b2133b9cc6d428eae5bee8d2feb3ae755f31f8752bbcfcf485d03",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:00aa6fb0e2a83449c0a668f4d4a117e1fadacebbf251574bf954d3a90acd6004", "urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:be5fba5b19cdda85e80f73eab03e127abf82fb53a506728d02687664f0e2988d",
+      "claim_id": "urn:codenoesis:claim:blake3:e67c1f209f5edc11813d41b96fc4b1101dcc5613af85488fdba1eaf3313f06d0",
+      "kind": "CONTAINS_FLOW_NODE",
+      "source": "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603",
+      "target": "urn:codenoesis:entity:blake3:e83af58ceff955305280c41f94fe21e67899ee35fd18acbc42d740dac059f8c0",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5", "urn:codenoesis:evidence:blake3:8a1379479eb8d023dee7e32cfaad5f0a1a2b955c1ca645454f7e47c4d30cb623"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:99ab30fe42f745fbe4a329cb17c5738f9c90834e1d4256c7edcba39164eb1bff",
+      "claim_id": "urn:codenoesis:claim:blake3:ff071318b712c1a8e071fcb54f26e89a4f40b2b5a7977c6b9152e6ca02f3e56f",
+      "kind": "HAS_CONDITION",
+      "source": "urn:codenoesis:entity:blake3:54416e6f3df8b57cc96ece4c7b71b2ac5d746e197617a766d9bdd6f5fca5671c",
+      "target": "urn:codenoesis:entity:blake3:515a864d64d40b1cfb1d4c50b15fbf00164a87d71b0170d9c1904cfd92b4541d",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:1ae3d8c1fac3fc71efa443b4630d2e01962c9f037d167de93e6d7b33ad565b31", "urn:codenoesis:evidence:blake3:7e08ae2dc4042393a31a7491f7fbd2d84e487d04bceae1dd176810c2f3ae46bc"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:430b0e9ea57dea2f0b418d99c001e773d675dff0c30fdd3671fb7f83cb9c402d",
+      "claim_id": "urn:codenoesis:claim:blake3:a70b5bd1e3e0acd80a16a61de56aef9fa9a22a9702494a00fbcd6f91ea6095d4",
+      "kind": "SYNTAX_NEXT",
+      "source": "urn:codenoesis:entity:blake3:1b9601fa1fc10bb313c69ed8ba725a841621690d666081bfa810dd4878e971cf",
+      "target": "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91", "urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:f350e91d0a93a48fe91c992a20e8ef2ade6e3e3c1807b85875033468cc6c81b3",
+      "claim_id": "urn:codenoesis:claim:blake3:6b4b351737bf940b47feeba5727c8db3c1724030702b84ab7fabfa1386ee23c2",
+      "kind": "SYNTAX_TRUE_BRANCH",
+      "source": "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd",
+      "target": "urn:codenoesis:entity:blake3:ce3036ed35aa1a0497cf1af4a564db588c47eda068a3d231b1de1c8b7a0c98ff",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:3b05ee81549fa094ba7450033a3f049731cefdc341e117599a827c73470bf45b",
+      "claim_id": "urn:codenoesis:claim:blake3:f7ad168a87dbebbc4a33c57bafe554e9c9f62177f3388becd3c4d7e967d2b829",
+      "kind": "SYNTAX_FALSE_BRANCH",
+      "source": "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd",
+      "target": "urn:codenoesis:entity:blake3:879c4b9d01e2775acc30ae731c469a7be2aa22290ac096cdce06f4be789acc42",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:9a5e85d5306b4fdb50e8ed196fbe008fcb3d2dbb3b812c94550652b82d6f63c1",
+      "claim_id": "urn:codenoesis:claim:blake3:497c8c1dcb3aed07f531fcb542568edb7bdd78f98928238303bbc4ff968b816e",
+      "kind": "SYNTAX_NEXT",
+      "source": "urn:codenoesis:entity:blake3:ce3036ed35aa1a0497cf1af4a564db588c47eda068a3d231b1de1c8b7a0c98ff",
+      "target": "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d", "urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:04374e91e111ba7e440cb5e79b221c0f6f268fcba2652acdc64ba7955d9be3e1",
+      "claim_id": "urn:codenoesis:claim:blake3:cd013de3ac6f920196795d2e735f83bd6a79647316478bac965c2f9db4259be5",
+      "kind": "SYNTAX_NEXT",
+      "source": "urn:codenoesis:entity:blake3:879c4b9d01e2775acc30ae731c469a7be2aa22290ac096cdce06f4be789acc42",
+      "target": "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603",
+      "state": "deterministic_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5", "urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c"]
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:cc851f0cd89d598dcd6ac254c73bcfd1c3e8633fc7b62387a8b210c48d21f863",
+      "claim_id": "urn:codenoesis:claim:blake3:f395c2b0aa0d4f14857ca38bea895416ae50a7e5bfd780909b2807266dc368e2",
+      "kind": "SYNTAX_REACHES",
+      "source": "urn:codenoesis:entity:blake3:1b9601fa1fc10bb313c69ed8ba725a841621690d666081bfa810dd4878e971cf",
+      "target": "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd",
+      "state": "derived_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91", "urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63"],
+      "inputs": {
+        "entity_ids": ["urn:codenoesis:entity:blake3:1b9601fa1fc10bb313c69ed8ba725a841621690d666081bfa810dd4878e971cf", "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd"],
+        "relationship_ids": ["urn:codenoesis:relationship:blake3:430b0e9ea57dea2f0b418d99c001e773d675dff0c30fdd3671fb7f83cb9c402d"],
+        "evidence_ids": ["urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91", "urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63"]
+      }
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:ffd7aeb84cacf50673b11e9a6abfa749ca5ed39344768d224a5514a12f4156c7",
+      "claim_id": "urn:codenoesis:claim:blake3:1670421a95b08e9f1462b888bfb0e514618a6ef062f6d30af895ae6e97db8372",
+      "kind": "SYNTAX_REACHES",
+      "source": "urn:codenoesis:entity:blake3:1b9601fa1fc10bb313c69ed8ba725a841621690d666081bfa810dd4878e971cf",
+      "target": "urn:codenoesis:entity:blake3:ce3036ed35aa1a0497cf1af4a564db588c47eda068a3d231b1de1c8b7a0c98ff",
+      "state": "derived_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d", "urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63"],
+      "inputs": {
+        "entity_ids": ["urn:codenoesis:entity:blake3:1b9601fa1fc10bb313c69ed8ba725a841621690d666081bfa810dd4878e971cf", "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd", "urn:codenoesis:entity:blake3:ce3036ed35aa1a0497cf1af4a564db588c47eda068a3d231b1de1c8b7a0c98ff"],
+        "relationship_ids": ["urn:codenoesis:relationship:blake3:430b0e9ea57dea2f0b418d99c001e773d675dff0c30fdd3671fb7f83cb9c402d", "urn:codenoesis:relationship:blake3:f350e91d0a93a48fe91c992a20e8ef2ade6e3e3c1807b85875033468cc6c81b3"],
+        "evidence_ids": ["urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91", "urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63"]
+      }
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:393a04ec1ea080e907203128b0eded9aa039a5d58aa73d5bbd8e1edfbb26a309",
+      "claim_id": "urn:codenoesis:claim:blake3:4d35794ef692e2ca7f4c8aa4cf5e2171325861355915f7bf2527ca0cd49e2170",
+      "kind": "SYNTAX_REACHES",
+      "source": "urn:codenoesis:entity:blake3:1b9601fa1fc10bb313c69ed8ba725a841621690d666081bfa810dd4878e971cf",
+      "target": "urn:codenoesis:entity:blake3:879c4b9d01e2775acc30ae731c469a7be2aa22290ac096cdce06f4be789acc42",
+      "state": "derived_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c", "urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63"],
+      "inputs": {
+        "entity_ids": ["urn:codenoesis:entity:blake3:1b9601fa1fc10bb313c69ed8ba725a841621690d666081bfa810dd4878e971cf", "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd", "urn:codenoesis:entity:blake3:879c4b9d01e2775acc30ae731c469a7be2aa22290ac096cdce06f4be789acc42"],
+        "relationship_ids": ["urn:codenoesis:relationship:blake3:3b05ee81549fa094ba7450033a3f049731cefdc341e117599a827c73470bf45b", "urn:codenoesis:relationship:blake3:430b0e9ea57dea2f0b418d99c001e773d675dff0c30fdd3671fb7f83cb9c402d"],
+        "evidence_ids": ["urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91", "urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63"]
+      }
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:c9167b3530a2988b7718fb54e1958d0023e6e85fc520215051bca23573d5d404",
+      "claim_id": "urn:codenoesis:claim:blake3:0c5c83800cafe6997d1b4efc32ecac933f6066b3b4a66d9973d6a75322790206",
+      "kind": "SYNTAX_REACHES",
+      "source": "urn:codenoesis:entity:blake3:1b9601fa1fc10bb313c69ed8ba725a841621690d666081bfa810dd4878e971cf",
+      "target": "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603",
+      "state": "derived_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5", "urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63"],
+      "inputs": {
+        "entity_ids": ["urn:codenoesis:entity:blake3:1b9601fa1fc10bb313c69ed8ba725a841621690d666081bfa810dd4878e971cf", "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd", "urn:codenoesis:entity:blake3:879c4b9d01e2775acc30ae731c469a7be2aa22290ac096cdce06f4be789acc42", "urn:codenoesis:entity:blake3:ce3036ed35aa1a0497cf1af4a564db588c47eda068a3d231b1de1c8b7a0c98ff", "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603"],
+        "relationship_ids": ["urn:codenoesis:relationship:blake3:04374e91e111ba7e440cb5e79b221c0f6f268fcba2652acdc64ba7955d9be3e1", "urn:codenoesis:relationship:blake3:3b05ee81549fa094ba7450033a3f049731cefdc341e117599a827c73470bf45b", "urn:codenoesis:relationship:blake3:430b0e9ea57dea2f0b418d99c001e773d675dff0c30fdd3671fb7f83cb9c402d", "urn:codenoesis:relationship:blake3:9a5e85d5306b4fdb50e8ed196fbe008fcb3d2dbb3b812c94550652b82d6f63c1", "urn:codenoesis:relationship:blake3:f350e91d0a93a48fe91c992a20e8ef2ade6e3e3c1807b85875033468cc6c81b3"],
+        "evidence_ids": ["urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d", "urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5", "urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91", "urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63"]
+      }
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:bca87ee1d5cc0cf0bfde7f5befb13ed38ffdf60cbc885673074b75eb5bcb2301",
+      "claim_id": "urn:codenoesis:claim:blake3:0d85d870f2b2ed1aac21287a093a72bf5f70bcd66054eb6a1b702ef846fd55ed",
+      "kind": "SYNTAX_REACHES",
+      "source": "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd",
+      "target": "urn:codenoesis:entity:blake3:ce3036ed35aa1a0497cf1af4a564db588c47eda068a3d231b1de1c8b7a0c98ff",
+      "state": "derived_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91"],
+      "inputs": {
+        "entity_ids": ["urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd", "urn:codenoesis:entity:blake3:ce3036ed35aa1a0497cf1af4a564db588c47eda068a3d231b1de1c8b7a0c98ff"],
+        "relationship_ids": ["urn:codenoesis:relationship:blake3:f350e91d0a93a48fe91c992a20e8ef2ade6e3e3c1807b85875033468cc6c81b3"],
+        "evidence_ids": ["urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91"]
+      }
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:2a9a3af48271559ea49e9b2027b3b1b95e8e030284958f09383b3e997de842f0",
+      "claim_id": "urn:codenoesis:claim:blake3:7602950ad88854d4485ab53a6e529a1374c36213a0f894218165f0a918c8fa82",
+      "kind": "SYNTAX_REACHES",
+      "source": "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd",
+      "target": "urn:codenoesis:entity:blake3:879c4b9d01e2775acc30ae731c469a7be2aa22290ac096cdce06f4be789acc42",
+      "state": "derived_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91"],
+      "inputs": {
+        "entity_ids": ["urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd", "urn:codenoesis:entity:blake3:879c4b9d01e2775acc30ae731c469a7be2aa22290ac096cdce06f4be789acc42"],
+        "relationship_ids": ["urn:codenoesis:relationship:blake3:3b05ee81549fa094ba7450033a3f049731cefdc341e117599a827c73470bf45b"],
+        "evidence_ids": ["urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91"]
+      }
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:d91e0de25d9983ed6622e9d5f67cbd9b982c51ea2b62a48d87cfc000e26fe749",
+      "claim_id": "urn:codenoesis:claim:blake3:44222cb66cf21d8b4e730d463f85be7c3677c7f9838fa114c1039e413749c3ed",
+      "kind": "SYNTAX_REACHES",
+      "source": "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd",
+      "target": "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603",
+      "state": "derived_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91"],
+      "inputs": {
+        "entity_ids": ["urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd", "urn:codenoesis:entity:blake3:879c4b9d01e2775acc30ae731c469a7be2aa22290ac096cdce06f4be789acc42", "urn:codenoesis:entity:blake3:ce3036ed35aa1a0497cf1af4a564db588c47eda068a3d231b1de1c8b7a0c98ff", "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603"],
+        "relationship_ids": ["urn:codenoesis:relationship:blake3:04374e91e111ba7e440cb5e79b221c0f6f268fcba2652acdc64ba7955d9be3e1", "urn:codenoesis:relationship:blake3:3b05ee81549fa094ba7450033a3f049731cefdc341e117599a827c73470bf45b", "urn:codenoesis:relationship:blake3:9a5e85d5306b4fdb50e8ed196fbe008fcb3d2dbb3b812c94550652b82d6f63c1", "urn:codenoesis:relationship:blake3:f350e91d0a93a48fe91c992a20e8ef2ade6e3e3c1807b85875033468cc6c81b3"],
+        "evidence_ids": ["urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d", "urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5", "urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91"]
+      }
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:d9a7cea9c23b145e22cd054586cae64d98430d0b5ee69c25cbcf0d2774f7094d",
+      "claim_id": "urn:codenoesis:claim:blake3:30f65eba493096e5eac84114b0b9b31cfdc50f13117afa4c2336f3c784341eac",
+      "kind": "SYNTAX_REACHES",
+      "source": "urn:codenoesis:entity:blake3:ce3036ed35aa1a0497cf1af4a564db588c47eda068a3d231b1de1c8b7a0c98ff",
+      "target": "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603",
+      "state": "derived_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d", "urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5"],
+      "inputs": {
+        "entity_ids": ["urn:codenoesis:entity:blake3:ce3036ed35aa1a0497cf1af4a564db588c47eda068a3d231b1de1c8b7a0c98ff", "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603"],
+        "relationship_ids": ["urn:codenoesis:relationship:blake3:9a5e85d5306b4fdb50e8ed196fbe008fcb3d2dbb3b812c94550652b82d6f63c1"],
+        "evidence_ids": ["urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d", "urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5"]
+      }
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:4062fdd06b0bf276277a9dd7ade78a11b77f097fc45b2e9966bf7255cb7e9e52",
+      "claim_id": "urn:codenoesis:claim:blake3:d4dfd8dfb6845b1f8e0c2a66f423fa9778e27922477c96b9a6712751c7dd304b",
+      "kind": "SYNTAX_REACHES",
+      "source": "urn:codenoesis:entity:blake3:879c4b9d01e2775acc30ae731c469a7be2aa22290ac096cdce06f4be789acc42",
+      "target": "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603",
+      "state": "derived_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5", "urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c"],
+      "inputs": {
+        "entity_ids": ["urn:codenoesis:entity:blake3:879c4b9d01e2775acc30ae731c469a7be2aa22290ac096cdce06f4be789acc42", "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603"],
+        "relationship_ids": ["urn:codenoesis:relationship:blake3:04374e91e111ba7e440cb5e79b221c0f6f268fcba2652acdc64ba7955d9be3e1"],
+        "evidence_ids": ["urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5", "urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c"]
+      }
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:b5b760e4535c23dcf17028cd36cebc24ef7a372b5ece514ec798d4cbdddc2731",
+      "claim_id": "urn:codenoesis:claim:blake3:466e92876174c7a81ff26053d06e734f0e6bda658ddf8c1a9fee71bdaaff172b",
+      "kind": "LEXICAL_MUST_REACHES_READ",
+      "source": "urn:codenoesis:entity:blake3:1464aa8f616eb7828a94cf7ee538fa99f110c9081c5e21f41184095e17d44ae4",
+      "target": "urn:codenoesis:entity:blake3:5071e3b53c0da49ba39e25e0623b61b6b313d879255c0a68823b3a9d3e94db13",
+      "state": "derived_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:381a8c9943fd2b3a6b72a52cb76aa1c2cb02866df9c70d4df815540bf455926b", "urn:codenoesis:evidence:blake3:72441a6199e09caaf1d01d21ff0deecc66b4fee8f56b0083f941ec615ea9e329"],
+      "inputs": {
+        "entity_ids": ["urn:codenoesis:entity:blake3:1464aa8f616eb7828a94cf7ee538fa99f110c9081c5e21f41184095e17d44ae4", "urn:codenoesis:entity:blake3:1b9601fa1fc10bb313c69ed8ba725a841621690d666081bfa810dd4878e971cf", "urn:codenoesis:entity:blake3:5071e3b53c0da49ba39e25e0623b61b6b313d879255c0a68823b3a9d3e94db13"],
+        "relationship_ids": ["urn:codenoesis:relationship:blake3:aa0393806e0708e0be873f42e145ff30b18a1027e84c8afd7fc1be525edd46a9", "urn:codenoesis:relationship:blake3:f040a2b4356ef55c1e5b18354bc5ee3fab95b688470c13e6f897dddd5d6c8b33"],
+        "evidence_ids": ["urn:codenoesis:evidence:blake3:381a8c9943fd2b3a6b72a52cb76aa1c2cb02866df9c70d4df815540bf455926b", "urn:codenoesis:evidence:blake3:72441a6199e09caaf1d01d21ff0deecc66b4fee8f56b0083f941ec615ea9e329", "urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63"]
+      }
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:f4cd8884868ee9e3cfe5e863f4ebd5e829459e95cb80dcf21cfb300181f6744e",
+      "claim_id": "urn:codenoesis:claim:blake3:8940cf7b3e5ffe31fa1fe5e66231fd68b7e011ba5669b4fa5eec4b3e0647627b",
+      "kind": "LEXICAL_MUST_REACHES_READ",
+      "source": "urn:codenoesis:entity:blake3:b97bd3967451998992219da2e195f6cd8333545c22d1669728a1d7af7039f19f",
+      "target": "urn:codenoesis:entity:blake3:515a864d64d40b1cfb1d4c50b15fbf00164a87d71b0170d9c1904cfd92b4541d",
+      "state": "derived_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:18dfebbd3021d63bcd8cf02a188328afd2100b676b239fdc3f8fbd491e8b5723", "urn:codenoesis:evidence:blake3:7e08ae2dc4042393a31a7491f7fbd2d84e487d04bceae1dd176810c2f3ae46bc"],
+      "inputs": {
+        "entity_ids": ["urn:codenoesis:entity:blake3:515a864d64d40b1cfb1d4c50b15fbf00164a87d71b0170d9c1904cfd92b4541d", "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd", "urn:codenoesis:entity:blake3:b97bd3967451998992219da2e195f6cd8333545c22d1669728a1d7af7039f19f"],
+        "relationship_ids": ["urn:codenoesis:relationship:blake3:28e12a3cc4fa1e2eee29667d1e881aacd461b8921cdb60c928888981bcfe4e66", "urn:codenoesis:relationship:blake3:53b090fdad64e4f47026b779249f841c77d5ff6f06694f092f5f16c91025a2c5"],
+        "evidence_ids": ["urn:codenoesis:evidence:blake3:18dfebbd3021d63bcd8cf02a188328afd2100b676b239fdc3f8fbd491e8b5723", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91", "urn:codenoesis:evidence:blake3:7e08ae2dc4042393a31a7491f7fbd2d84e487d04bceae1dd176810c2f3ae46bc"]
+      }
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:d8eda642fb1faa03feaf2d8d7625e5249f473bf4ac5cdb2de4af93a3741c5521",
+      "claim_id": "urn:codenoesis:claim:blake3:bedbf3c6c81e2feb2611f284fa152d3aa2650e4a1dafd8c91f85fc3d9699fb02",
+      "kind": "LEXICAL_MUST_REACHES_READ",
+      "source": "urn:codenoesis:entity:blake3:c3c7ed8f8a6e72ef152a7029b865ae509468d124531f8020fe6258b2408f51d1",
+      "target": "urn:codenoesis:entity:blake3:d16a056cf3127f58ad97dc84c14e048030daad1f9b86f9dbe4bb7505a466142b",
+      "state": "derived_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:4c8375319a9a236cac3e97bf9b5fe995255606eb45b1d96d2430fd30d02451bf", "urn:codenoesis:evidence:blake3:87db603652227f768e26c7c2489893844b8148cbbbd902f48a5134b16a9d1894"],
+      "inputs": {
+        "entity_ids": ["urn:codenoesis:entity:blake3:1b9601fa1fc10bb313c69ed8ba725a841621690d666081bfa810dd4878e971cf", "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd", "urn:codenoesis:entity:blake3:c3c7ed8f8a6e72ef152a7029b865ae509468d124531f8020fe6258b2408f51d1", "urn:codenoesis:entity:blake3:ce3036ed35aa1a0497cf1af4a564db588c47eda068a3d231b1de1c8b7a0c98ff", "urn:codenoesis:entity:blake3:d16a056cf3127f58ad97dc84c14e048030daad1f9b86f9dbe4bb7505a466142b"],
+        "relationship_ids": ["urn:codenoesis:relationship:blake3:304f7116d93b9642273475089d68837c885566681e21eb6dc28ce45eb559465c", "urn:codenoesis:relationship:blake3:430b0e9ea57dea2f0b418d99c001e773d675dff0c30fdd3671fb7f83cb9c402d", "urn:codenoesis:relationship:blake3:661bc6dad6b333b55686a55bd09418eb8ea9207b6b7ea890398ce86e98d501ec", "urn:codenoesis:relationship:blake3:f350e91d0a93a48fe91c992a20e8ef2ade6e3e3c1807b85875033468cc6c81b3"],
+        "evidence_ids": ["urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d", "urn:codenoesis:evidence:blake3:4c8375319a9a236cac3e97bf9b5fe995255606eb45b1d96d2430fd30d02451bf", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91", "urn:codenoesis:evidence:blake3:87db603652227f768e26c7c2489893844b8148cbbbd902f48a5134b16a9d1894", "urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63"]
+      }
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:ae9713560f61570edeaa7202056290ad1e22ef21d8532c20cb68b439e42289eb",
+      "claim_id": "urn:codenoesis:claim:blake3:5466896e0c62b74533bf9ef7e30359deac2938dbaa3b9999ad59cf2d5abe757e",
+      "kind": "LEXICAL_MUST_REACHES_READ",
+      "source": "urn:codenoesis:entity:blake3:c3c7ed8f8a6e72ef152a7029b865ae509468d124531f8020fe6258b2408f51d1",
+      "target": "urn:codenoesis:entity:blake3:953d7d43d4de0bef4c4e16141a055b3ae6b8698a57259bcf1d5fab2736ff7cba",
+      "state": "derived_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:87db603652227f768e26c7c2489893844b8148cbbbd902f48a5134b16a9d1894", "urn:codenoesis:evidence:blake3:99a63eb25e3dff7d287cbbd06ff0eedfbe4b110bcbfc86eb7a5b2e9f0df4d8de"],
+      "inputs": {
+        "entity_ids": ["urn:codenoesis:entity:blake3:1b9601fa1fc10bb313c69ed8ba725a841621690d666081bfa810dd4878e971cf", "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd", "urn:codenoesis:entity:blake3:879c4b9d01e2775acc30ae731c469a7be2aa22290ac096cdce06f4be789acc42", "urn:codenoesis:entity:blake3:953d7d43d4de0bef4c4e16141a055b3ae6b8698a57259bcf1d5fab2736ff7cba", "urn:codenoesis:entity:blake3:c3c7ed8f8a6e72ef152a7029b865ae509468d124531f8020fe6258b2408f51d1"],
+        "relationship_ids": ["urn:codenoesis:relationship:blake3:3b05ee81549fa094ba7450033a3f049731cefdc341e117599a827c73470bf45b", "urn:codenoesis:relationship:blake3:430b0e9ea57dea2f0b418d99c001e773d675dff0c30fdd3671fb7f83cb9c402d", "urn:codenoesis:relationship:blake3:4a659b56b3c1d9905457e939aa478419c77823219ab054a18fa50e109c473ce1", "urn:codenoesis:relationship:blake3:661bc6dad6b333b55686a55bd09418eb8ea9207b6b7ea890398ce86e98d501ec"],
+        "evidence_ids": ["urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91", "urn:codenoesis:evidence:blake3:87db603652227f768e26c7c2489893844b8148cbbbd902f48a5134b16a9d1894", "urn:codenoesis:evidence:blake3:99a63eb25e3dff7d287cbbd06ff0eedfbe4b110bcbfc86eb7a5b2e9f0df4d8de", "urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63"]
+      }
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:d978e1474777ac251b14f4bbec2d77fca995d9e980ddc1d5f5584ed2bf80e765",
+      "claim_id": "urn:codenoesis:claim:blake3:968db74b198f7998ef78c1184c93ff3a036998a0d75a66c1108a6fb22c0c1b3f",
+      "kind": "LEXICAL_MUST_REACHES_READ",
+      "source": "urn:codenoesis:entity:blake3:4980e5b4e7f84d0758bcda21f80ece98c94988e5aa53ca5d0b5a6e680a6b14ba",
+      "target": "urn:codenoesis:entity:blake3:e83af58ceff955305280c41f94fe21e67899ee35fd18acbc42d740dac059f8c0",
+      "state": "derived_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:8a1379479eb8d023dee7e32cfaad5f0a1a2b955c1ca645454f7e47c4d30cb623", "urn:codenoesis:evidence:blake3:e530f11c9239383a81ef34fd56e3ba0da319c98e17c2fbed1985c8061f6c02c2"],
+      "inputs": {
+        "entity_ids": ["urn:codenoesis:entity:blake3:4980e5b4e7f84d0758bcda21f80ece98c94988e5aa53ca5d0b5a6e680a6b14ba", "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603", "urn:codenoesis:entity:blake3:e83af58ceff955305280c41f94fe21e67899ee35fd18acbc42d740dac059f8c0"],
+        "relationship_ids": ["urn:codenoesis:relationship:blake3:be5fba5b19cdda85e80f73eab03e127abf82fb53a506728d02687664f0e2988d", "urn:codenoesis:relationship:blake3:e7b861a4877d5ac2836750bb1881353d494773d8d81957b25f38ec98cb32970c", "urn:codenoesis:relationship:blake3:ffc720a40883e1d11802d284e8b3cd0c28aef6ff61c0f102a9615dab865ce651"],
+        "evidence_ids": ["urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5", "urn:codenoesis:evidence:blake3:8a1379479eb8d023dee7e32cfaad5f0a1a2b955c1ca645454f7e47c4d30cb623", "urn:codenoesis:evidence:blake3:e530f11c9239383a81ef34fd56e3ba0da319c98e17c2fbed1985c8061f6c02c2"]
+      }
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:d12ac89a161581777575e7649f52db37dbf5df452be5f4aa04989114a51f4baf",
+      "claim_id": "urn:codenoesis:claim:blake3:a848377c57aca6a7a474db6d56d6d4df92a1e3ba1c441d67f449200c0682a80e",
+      "kind": "LEXICAL_MAY_REACHES_READ",
+      "source": "urn:codenoesis:entity:blake3:05c76c4defb6ee362da9e19b7f17c860341cfadc32809d8016284b39df7e5b04",
+      "target": "urn:codenoesis:entity:blake3:4f27412cbb7b2133b9cc6d428eae5bee8d2feb3ae755f31f8752bbcfcf485d03",
+      "state": "derived_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:00aa6fb0e2a83449c0a668f4d4a117e1fadacebbf251574bf954d3a90acd6004", "urn:codenoesis:evidence:blake3:0e6227228278f9c792ba94f1eb6b32f09bd4d4f8de05ea1ace7fc6a18a583ea5"],
+      "inputs": {
+        "entity_ids": ["urn:codenoesis:entity:blake3:05c76c4defb6ee362da9e19b7f17c860341cfadc32809d8016284b39df7e5b04", "urn:codenoesis:entity:blake3:4f27412cbb7b2133b9cc6d428eae5bee8d2feb3ae755f31f8752bbcfcf485d03", "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd", "urn:codenoesis:entity:blake3:879c4b9d01e2775acc30ae731c469a7be2aa22290ac096cdce06f4be789acc42", "urn:codenoesis:entity:blake3:c3c7ed8f8a6e72ef152a7029b865ae509468d124531f8020fe6258b2408f51d1", "urn:codenoesis:entity:blake3:ce3036ed35aa1a0497cf1af4a564db588c47eda068a3d231b1de1c8b7a0c98ff", "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603", "urn:codenoesis:entity:blake3:e63ff427351d9017d675b3c828de15d4444d438ee4a1179ab48b3c48149546cf"],
+        "relationship_ids": ["urn:codenoesis:relationship:blake3:04374e91e111ba7e440cb5e79b221c0f6f268fcba2652acdc64ba7955d9be3e1", "urn:codenoesis:relationship:blake3:3b05ee81549fa094ba7450033a3f049731cefdc341e117599a827c73470bf45b", "urn:codenoesis:relationship:blake3:61e297d89be0acea43765b968edae155ed5beddf41e65c9bd60b5964f6f38f9c", "urn:codenoesis:relationship:blake3:7edb29ced438fcc0d551865a3ba2ff3b8b4967dd7741bc773e8b49256cd22f31", "urn:codenoesis:relationship:blake3:9a5e85d5306b4fdb50e8ed196fbe008fcb3d2dbb3b812c94550652b82d6f63c1", "urn:codenoesis:relationship:blake3:c3a786a28e9a7c222fc5a234fced7ec84f55334f368d7007feb2a62ca6669ae2", "urn:codenoesis:relationship:blake3:f350e91d0a93a48fe91c992a20e8ef2ade6e3e3c1807b85875033468cc6c81b3"],
+        "evidence_ids": ["urn:codenoesis:evidence:blake3:00aa6fb0e2a83449c0a668f4d4a117e1fadacebbf251574bf954d3a90acd6004", "urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d", "urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5", "urn:codenoesis:evidence:blake3:0e6227228278f9c792ba94f1eb6b32f09bd4d4f8de05ea1ace7fc6a18a583ea5", "urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91", "urn:codenoesis:evidence:blake3:87db603652227f768e26c7c2489893844b8148cbbbd902f48a5134b16a9d1894", "urn:codenoesis:evidence:blake3:ac85c5e47e535fba01589aa9fed3d61e3dd6404857ba52ecb739835fc559a189"]
+      }
+    },
+    {
+      "id": "urn:codenoesis:relationship:blake3:f21c5642f861de8616acef78857a5eb3f68a70dc41a2347ef46c93e72ea5569e",
+      "claim_id": "urn:codenoesis:claim:blake3:cc350cd5e2cf31b23114b9e55c350059c80b1928b8989ab7beb7bdc1fc4d6da5",
+      "kind": "LEXICAL_MAY_REACHES_READ",
+      "source": "urn:codenoesis:entity:blake3:e63ff427351d9017d675b3c828de15d4444d438ee4a1179ab48b3c48149546cf",
+      "target": "urn:codenoesis:entity:blake3:4f27412cbb7b2133b9cc6d428eae5bee8d2feb3ae755f31f8752bbcfcf485d03",
+      "state": "derived_fact",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:00aa6fb0e2a83449c0a668f4d4a117e1fadacebbf251574bf954d3a90acd6004", "urn:codenoesis:evidence:blake3:ac85c5e47e535fba01589aa9fed3d61e3dd6404857ba52ecb739835fc559a189"],
+      "inputs": {
+        "entity_ids": ["urn:codenoesis:entity:blake3:05c76c4defb6ee362da9e19b7f17c860341cfadc32809d8016284b39df7e5b04", "urn:codenoesis:entity:blake3:4f27412cbb7b2133b9cc6d428eae5bee8d2feb3ae755f31f8752bbcfcf485d03", "urn:codenoesis:entity:blake3:748278611674ebe39568757d86243c423a7f093b7cd31bf029d1e2aa371e4ccd", "urn:codenoesis:entity:blake3:879c4b9d01e2775acc30ae731c469a7be2aa22290ac096cdce06f4be789acc42", "urn:codenoesis:entity:blake3:c3c7ed8f8a6e72ef152a7029b865ae509468d124531f8020fe6258b2408f51d1", "urn:codenoesis:entity:blake3:ce3036ed35aa1a0497cf1af4a564db588c47eda068a3d231b1de1c8b7a0c98ff", "urn:codenoesis:entity:blake3:dc0be7f7e80bc82fc30e4e99933509563e492f8ba86418c27805eaece11fd603", "urn:codenoesis:entity:blake3:e63ff427351d9017d675b3c828de15d4444d438ee4a1179ab48b3c48149546cf"],
+        "relationship_ids": ["urn:codenoesis:relationship:blake3:04374e91e111ba7e440cb5e79b221c0f6f268fcba2652acdc64ba7955d9be3e1", "urn:codenoesis:relationship:blake3:3b05ee81549fa094ba7450033a3f049731cefdc341e117599a827c73470bf45b", "urn:codenoesis:relationship:blake3:61e297d89be0acea43765b968edae155ed5beddf41e65c9bd60b5964f6f38f9c", "urn:codenoesis:relationship:blake3:7edb29ced438fcc0d551865a3ba2ff3b8b4967dd7741bc773e8b49256cd22f31", "urn:codenoesis:relationship:blake3:9a5e85d5306b4fdb50e8ed196fbe008fcb3d2dbb3b812c94550652b82d6f63c1", "urn:codenoesis:relationship:blake3:c3a786a28e9a7c222fc5a234fced7ec84f55334f368d7007feb2a62ca6669ae2", "urn:codenoesis:relationship:blake3:f350e91d0a93a48fe91c992a20e8ef2ade6e3e3c1807b85875033468cc6c81b3"],
+        "evidence_ids": ["urn:codenoesis:evidence:blake3:00aa6fb0e2a83449c0a668f4d4a117e1fadacebbf251574bf954d3a90acd6004", "urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d", "urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5", "urn:codenoesis:evidence:blake3:0e6227228278f9c792ba94f1eb6b32f09bd4d4f8de05ea1ace7fc6a18a583ea5", "urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c", "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91", "urn:codenoesis:evidence:blake3:87db603652227f768e26c7c2489893844b8148cbbbd902f48a5134b16a9d1894", "urn:codenoesis:evidence:blake3:ac85c5e47e535fba01589aa9fed3d61e3dd6404857ba52ecb739835fc559a189"]
+      }
+    }
+  ],
+  "evidence": [
+    {"id": "urn:codenoesis:evidence:blake3:f06f4ba33cf43f9899f72829da5447325031357c2f520eed39e9e8d2ca4e4e63", "path": "src/lib.rs", "blob_oid": "36be3c129a00aee60e6c312fdb4de133ad57b7bb", "start_byte": 78, "end_byte": 100},
+    {"id": "urn:codenoesis:evidence:blake3:627eb2347c84da59b9a60eed0a29c74a9b2ca4b3ac993a7668102f974dfcef91", "path": "src/lib.rs", "blob_oid": "36be3c129a00aee60e6c312fdb4de133ad57b7bb", "start_byte": 108, "end_byte": 115},
+    {"id": "urn:codenoesis:evidence:blake3:05bc87678e9bb23da6c377bdca16601ef48142efbdf8cd2e8d3c029788eaf67d", "path": "src/lib.rs", "blob_oid": "36be3c129a00aee60e6c312fdb4de133ad57b7bb", "start_byte": 126, "end_byte": 143},
+    {"id": "urn:codenoesis:evidence:blake3:148d7bf40ee78785233d1184c0a955e9b78ed51322a901461148661450f4342c", "path": "src/lib.rs", "blob_oid": "36be3c129a00aee60e6c312fdb4de133ad57b7bb", "start_byte": 166, "end_byte": 183},
+    {"id": "urn:codenoesis:evidence:blake3:0831e97a6df7d1ee41e385fff54312c3aac98d59683078378c7153e5cb2113a5", "path": "src/lib.rs", "blob_oid": "36be3c129a00aee60e6c312fdb4de133ad57b7bb", "start_byte": 195, "end_byte": 225}
+  ],
+  "relationship_kind_counts": {
+    "HAS_SYNTAX_BLOCK": 5,
+    "CONTAINS_FLOW_NODE": 9,
+    "HAS_CONDITION": 1,
+    "SYNTAX_NEXT": 3,
+    "SYNTAX_TRUE_BRANCH": 1,
+    "SYNTAX_FALSE_BRANCH": 1,
+    "SYNTAX_REACHES": 9,
+    "LEXICAL_MUST_REACHES_READ": 5,
+    "LEXICAL_MAY_REACHES_READ": 2
+  },
+  "required_inherited_coverage": [
+    "rust.reachability_not_computed",
+    "rust.data_flow_not_computed"
+  ],
+  "family_id_sha256": {
+    "entities": "a1bbf9501138245103339fc0cc2816c3bf1ff61cca5f54eb379b9baf1f43fdc9",
+    "relationships": "741c2ecd2b3cfcd54113bb6b4acb288f87e174ee546517e6c6c9d46589450c68",
+    "claims": "a4759a1442eaa4d8ad7ce9dbb5b7a1da15de572103ab47a1ae3a27c80aaf03c5",
+    "evidence": "c56d520ac4e0a7513f4a90b9dabc8a74988e878652ab9aa914c22f8d7f1051b4",
+    "derivations": "3d37355836c8fb885084ff81a284eacb59a839c604ebf281eb7cb6de2c88e1fe"
+  },
+  "canonical_order": "raw_utf8_id_ascending"
+}

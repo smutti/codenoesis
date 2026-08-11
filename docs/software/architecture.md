@@ -1,6 +1,9 @@
 # CodeNoesis Software Architecture
 
-> Status: **planned architecture, not an implementation description**. At the time of writing, the repository contains no working CodeNoesis crates, binaries, API, migrations, or deployments.
+> Status: **implementation architecture through the local R14 baseline, with
+> R15 a Proposed branch-scoped candidate**. The repository contains working
+> Rust crates and the `noesis` local CLI, but no production server deployment
+> or production-ready release.
 
 This document is the implementation baseline for the [CodeNoesis software track](README.md). Research-only ideas must first define an experiment and acceptance evidence in the [research track](../research/README.md); they enter this architecture only through an explicit engineering decision.
 
@@ -308,6 +311,39 @@ that validated neutral result normally and may add only their own
 evidence-backed facts. Missing inherited knowledge, missing chunks,
 inconsistent empty collections, omitted declarations, dangling evidence, or
 invalid indexes still fail before publication.
+
+### R15 closed Rust local flow
+
+Issue #166 and Decision 0027 define a Proposed high-risk S4 candidate over the
+exact R14 source-only lineage. Before protected manual merge it is branch-
+scoped implementation authority, not an Approved or Implemented fact on
+`main`. The explicit selector is `rust-local-flow-v1`.
+
+The language adapter parses each already accepted R14 callable as one closed
+unit. A callable that contains only initialized single-binding lets, direct or
+compound assignment, normal R14 expression statements or tails, and explicit
+non-empty `if`/`else` branches receives a `LocalFlowKnowledge` overlay. Any
+unsupported or ambiguous construct rejects the whole callable from R15 while
+preserving inherited facts and adding typed coverage. Partial control-flow
+graphs are forbidden.
+
+The domain owns `rust.syntax_basic_block`, direct block membership and
+condition edges, possible normal source-successor edges, their strict
+transitive closure, and lexical must/may reaching-definition facts over exact
+R14 `READS`/`WRITES`. It validates disjoint identities and evidence, block
+partitioning, acyclicity, closure, reaching sets, canonical order, limits, and
+the complete `codenoesis.local-flow-index/v1` derivation projection before the
+application layer may publish V17.
+
+ConfigurationV14, ExtractionChunkV14, KnowledgeGraphV14, and
+RepositorySnapshotV17 use new semantic hash domains and preserve the complete
+R14 graph. LocalQueryResultV12 exposes flow neighborhoods and derivation
+inputs. PortableGraphV8 retains the local-flow index losslessly, and
+LocalExplorerV8 reuses immutable K1 viewer bytes. Omitting the selector remains
+byte-identical R14. The inherited compiler/runtime reachability and data-flow
+gaps remain present because syntax-normal progression and lexical reaching
+definitions do not establish compiler CFG, executable validity, runtime
+execution, values, types, ownership, aliasing, or side effects.
 
 ## Versioned artifacts and identity
 

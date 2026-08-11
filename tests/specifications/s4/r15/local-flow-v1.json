@@ -1,0 +1,98 @@
+{
+  "schema_version": "codenoesis.rust-local-flow-profile/v1",
+  "profile": "rust-local-flow-v1",
+  "requires_profiles": [
+    "standard-local-s4",
+    "cargo-root-package-v1",
+    "cargo-manifest-facts-v1",
+    "rust-semantic-depth-v1",
+    "rust-framework-declarations-v1",
+    "rust-callable-semantics-v1",
+    "rust-expression-bindings-v1"
+  ],
+  "contracts": {
+    "configuration": "codenoesis.configuration/v14",
+    "snapshot": "codenoesis.repository-snapshot/v17",
+    "extraction": "codenoesis.extraction/v14",
+    "chunk": "codenoesis.extraction-chunk/v14",
+    "graph": "codenoesis.knowledge-graph/v14",
+    "ontology": "codenoesis.ontology/rust/v14",
+    "semantic_hash": "codenoesis.semantic-hash-contract/v13",
+    "error": "codenoesis.error/v22",
+    "query": "codenoesis.local-query-result/v12",
+    "portable": "codenoesis.portable-graph/v8",
+    "explorer": "codenoesis.local-explorer/v8",
+    "pipeline": "codenoesis.pipeline/s4-r15-v1",
+    "extractor": "codenoesis.rust-local-flow/s4-r15-v1",
+    "index": "codenoesis.local-flow-index/v1",
+    "rule": "codenoesis.rule/rust-local-flow/v1"
+  },
+  "entity_kinds": ["rust.syntax_basic_block"],
+  "block_roles": ["entry", "condition", "then_branch", "else_branch", "join"],
+  "flow_world": "syntax_normal_completion",
+  "relationship_kinds": [
+    "HAS_SYNTAX_BLOCK",
+    "CONTAINS_FLOW_NODE",
+    "HAS_CONDITION",
+    "SYNTAX_NEXT",
+    "SYNTAX_TRUE_BRANCH",
+    "SYNTAX_FALSE_BRANCH",
+    "SYNTAX_REACHES",
+    "LEXICAL_MUST_REACHES_READ",
+    "LEXICAL_MAY_REACHES_READ"
+  ],
+  "claim_states": {
+    "blocks_membership_condition_direct_edges": "deterministic_fact",
+    "reachability_and_reaching_definitions": "derived_fact"
+  },
+  "closed_callable": {
+    "whole_callable_or_zero_facts": true,
+    "initialized_single_binding_let": true,
+    "direct_or_compound_unique_assignment": true,
+    "normal_r14_expression_statement_or_tail": true,
+    "explicit_non_empty_if_else": true,
+    "maximum_nested_branches": 64,
+    "forbidden": [
+      "loop", "while", "while_let", "for", "match", "break", "continue",
+      "return", "try", "await", "closure", "nested_function", "async_block",
+      "unsafe_block", "const_block", "macro", "missing_else", "empty_branch",
+      "label", "destructuring_assignment", "indirect_write", "captured_binding",
+      "ambiguous_scope", "direct_cfg_uncertainty", "generated_source",
+      "malformed_syntax", "unsupported_r14_coverage"
+    ]
+  },
+  "lexical_reaching_definitions": {
+    "definitions": ["r14_pattern_binding_activation", "r14_writes_occurrence"],
+    "reads": ["r14_reads_occurrence"],
+    "branch_join": "exact_path_union_and_intersection",
+    "direct_assignment_order": "rhs_reads_before_target_replacement",
+    "compound_assignment_order": "target_read_before_new_definition"
+  },
+  "identity_domains": {
+    "entity": "codenoesis.entity-id/rust-local-flow/v1",
+    "relationship": "codenoesis.relationship-id/rust-local-flow/v1",
+    "evidence": "codenoesis.evidence-id/rust-local-flow/v1",
+    "existing_r14": "unchanged"
+  },
+  "inference": {
+    "compiler_cfg": false,
+    "runtime_reachability": false,
+    "panic_or_unwind": false,
+    "active_branch": false,
+    "type_or_dispatch": false,
+    "borrow_or_ownership": false,
+    "alias_or_side_effect": false,
+    "value_or_execution": false
+  },
+  "limits": {
+    "blocks_per_callable": 4096,
+    "nested_branches": 64,
+    "flow_nodes_per_block": 4096,
+    "reachability_pairs_per_callable": 262144,
+    "total_blocks": 200000,
+    "total_relationships": 1000000,
+    "derivation_input_references": 1000000,
+    "standard_snapshot_bytes": 33554432,
+    "optional_snapshot_bytes": 67108864
+  }
+}
