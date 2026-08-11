@@ -6,6 +6,7 @@ use std::collections::BTreeSet;
 use std::fmt::Write as _;
 use std::fs;
 use std::path::Path;
+use std::thread;
 
 use support::s4_r4::MaterializedCargoManifestRepository;
 use support::s4_r5::{MaterializedEmptyRustSemanticRepository, MaterializedRustSemanticRepository};
@@ -34,6 +35,19 @@ impl Client {
 
     #[cfg(windows)]
     fn try_start_clipboard(&self, _p: Option<()>) {}
+}
+";
+const PAIRED_CONSTANT_EXTENSION_SOURCE: &[u8] = br"#![allow(dead_code)]
+
+pub const MARKER: u8 = 1;
+
+pub fn choose(value: i32, flag: bool) -> i32 {
+    let mut total = value;
+    if flag {
+        total = total + 1;
+    }
+    let result = total;
+    result
 }
 ";
 
@@ -374,6 +388,86 @@ fn e2e_fr_ext_010_empty_semantic_extension_reaches_r14() {
     );
     let explorer: Value = serde_json::from_slice(&explore.stdout).expect("parse V7 explorer");
     assert_eq!(explorer["schema_version"], "codenoesis.local-explorer/v7");
+    assert!(!repository.build_sentinel().exists());
+}
+
+#[test]
+fn reg_fr_ext_010_paired_constant_reaches_r14_without_silent_drop() {
+    let mut repository = MaterializedEmptyRustSemanticRepository::fixture();
+    repository.replace_source_and_commit(PAIRED_CONSTANT_EXTENSION_SOURCE);
+    let scan = repository.scan_r14();
+    assert!(
+        scan.status.success(),
+        "paired R5 constant scan failed: {}",
+        String::from_utf8_lossy(&scan.stderr)
+    );
+    let snapshot: Value = serde_json::from_slice(&scan.stdout).expect("parse paired R14 V16");
+    let graph = &snapshot["semantic"]["knowledge_graph"];
+    let entities = graph["entities"].as_array().expect("paired graph entities");
+    assert_eq!(
+        entities
+            .iter()
+            .filter(|entity| entity["kind"] == "rust.constant" && entity["name"] == "MARKER")
+            .count(),
+        1
+    );
+    assert_eq!(
+        entities
+            .iter()
+            .filter(|entity| entity["kind"] == "rust.declared_value")
+            .count(),
+        1
+    );
+    assert_eq!(
+        graph["relationships"]
+            .as_array()
+            .expect("paired graph relationships")
+            .iter()
+            .filter(|relationship| relationship["kind"] == "DECLARES_VALUE")
+            .count(),
+        1
+    );
+    assert_eq!(
+        graph["rust_semantic_index"]["member_entity_ids"]
+            .as_array()
+            .expect("paired R5 index")
+            .len(),
+        1
+    );
+    assert!(!repository.build_sentinel().exists());
+}
+
+#[test]
+fn pt_nfr_det_001_empty_semantic_extension_has_fifty_permutations_and_ten_schedules() {
+    let repository = MaterializedEmptyRustSemanticRepository::fixture();
+    let baseline = deterministic_semantic(
+        repository
+            .permuted_scan_command(0)
+            .output()
+            .expect("run empty R5 permutation zero"),
+    );
+    for seed in 1..50 {
+        let semantic = deterministic_semantic(
+            repository
+                .permuted_scan_command(seed)
+                .output()
+                .expect("run empty R5 input permutation"),
+        );
+        assert_eq!(semantic, baseline, "empty R5 permutation {seed}");
+    }
+
+    thread::scope(|scope| {
+        let handles = (0..10)
+            .map(|schedule| {
+                let mut command = repository.permuted_scan_command(50 + schedule);
+                scope.spawn(move || command.output().expect("run empty R5 schedule"))
+            })
+            .collect::<Vec<_>>();
+        for (schedule, handle) in handles.into_iter().enumerate() {
+            let semantic = deterministic_semantic(handle.join().expect("join empty R5 schedule"));
+            assert_eq!(semantic, baseline, "empty R5 schedule {schedule}");
+        }
+    });
     assert!(!repository.build_sentinel().exists());
 }
 
@@ -774,4 +868,14 @@ fn sha256_hex(bytes: &[u8]) -> String {
         write!(&mut output, "{byte:02x}").expect("write SHA-256");
     }
     output
+}
+
+fn deterministic_semantic(output: std::process::Output) -> Vec<u8> {
+    assert!(
+        output.status.success(),
+        "deterministic empty R5 scan failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let snapshot: Value = serde_json::from_slice(&output.stdout).expect("parse deterministic V16");
+    serde_json::to_vec(&snapshot["semantic"]).expect("serialize deterministic V16 semantic")
 }

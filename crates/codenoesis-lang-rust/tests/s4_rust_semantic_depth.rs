@@ -26,6 +26,30 @@ const FIXTURE_FILES: [(&str, &str); 4] = [
     ("src/lib.rs", "568a344c63d688a4c4b5b391d106848a39f25a04"),
     ("src/model.rs", "486549154e06c2a7c9d017109a00cadf1e6eaa69"),
 ];
+const EMPTY_SEMANTIC_EXTENSION_SOURCE: &str = r"#![allow(dead_code)]
+
+pub fn choose(value: i32, flag: bool) -> i32 {
+    let mut total = value;
+    if flag {
+        total = total + 1;
+    }
+    let result = total;
+    result
+}
+";
+const PAIRED_CONSTANT_EXTENSION_SOURCE: &str = r"#![allow(dead_code)]
+
+pub const MARKER: u8 = 1;
+
+pub fn choose(value: i32, flag: bool) -> i32 {
+    let mut total = value;
+    if flag {
+        total = total + 1;
+    }
+    let result = total;
+    result
+}
+";
 const CFG_OWNER_ALTERNATIVES_SOURCE: &str = r#"
 #[cfg(feature = "desktop")]
 pub struct ConditionalOwner;
@@ -129,6 +153,82 @@ fn gt_fr_ext_010_fields_and_variants_are_owned() {
             && entity.kind == RustSemanticEntityKind::Field
             && entity.name == "key"
     }));
+}
+
+#[test]
+fn gt_fr_ext_010_empty_additive_extension_is_valid_and_fail_closed() {
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_semantic_depth_incremental(
+            &synthetic_inventory(EMPTY_SEMANTIC_EXTENSION_SOURCE),
+            &[],
+            &[],
+        )
+        .expect("extract valid empty additive R5 extension");
+    let knowledge = &extraction.knowledge;
+    assert_eq!(knowledge.extraction_chunks.len(), 1);
+    assert!(knowledge.graph.entities.is_empty());
+    assert!(knowledge.graph.relationships.is_empty());
+    assert!(knowledge.graph.claims.is_empty());
+    assert!(knowledge.graph.index.member_entity_ids.is_empty());
+    assert!(
+        knowledge
+            .graph
+            .index
+            .implementation_context_method_ids
+            .is_empty()
+    );
+    assert_eq!(knowledge.graph.coverage.len(), 8);
+    assert_eq!(knowledge.validate(), Ok(()));
+
+    let mut missing_chunks = knowledge.clone();
+    missing_chunks.extraction_chunks.clear();
+    assert_eq!(
+        missing_chunks.validate(),
+        Err(RustSemanticError::ContractInvalid)
+    );
+
+    let mut invalid_index = knowledge.clone();
+    invalid_index
+        .graph
+        .index
+        .member_entity_ids
+        .push("urn:codenoesis:entity:blake3:invalid".to_owned());
+    assert_eq!(
+        invalid_index.validate(),
+        Err(RustSemanticError::ContractInvalid)
+    );
+
+    let mut dangling_evidence = knowledge.clone();
+    dangling_evidence.graph.coverage[0].evidence_ids = vec![
+        "urn:codenoesis:evidence:sha256:0000000000000000000000000000000000000000000000000000000000000000"
+            .to_owned(),
+    ];
+    assert_eq!(
+        dangling_evidence.validate(),
+        Err(RustSemanticError::ContractInvalid)
+    );
+}
+
+#[test]
+fn gt_fr_ext_010_paired_constant_still_emits_supported_r5_member() {
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_semantic_depth_incremental(
+            &synthetic_inventory(PAIRED_CONSTANT_EXTENSION_SOURCE),
+            &[],
+            &[],
+        )
+        .expect("extract paired supported R5 constant");
+    let graph = &extraction.knowledge.graph;
+    assert_eq!(graph.entities.len(), 1);
+    assert_eq!(graph.entities[0].kind, RustSemanticEntityKind::Constant);
+    assert_eq!(graph.entities[0].name, "MARKER");
+    assert_eq!(graph.relationships.len(), 1);
+    assert_eq!(graph.claims.len(), 2);
+    assert_eq!(
+        graph.index.member_entity_ids,
+        vec![graph.entities[0].id.clone()]
+    );
+    assert!(graph.index.implementation_context_method_ids.is_empty());
 }
 
 #[test]

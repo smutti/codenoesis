@@ -1,3 +1,4 @@
+use std::ffi::OsString;
 use std::fmt::Write as _;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -252,7 +253,8 @@ impl MaterializedEmptyRustSemanticRepository {
         .expect("parse empty R5 fixture manifest");
         assert_eq!(manifest["repository_identity"], EMPTY_REPOSITORY_ID);
 
-        let root = unique_temp_root();
+        let root =
+            fs::canonicalize(unique_temp_root()).expect("canonicalize empty semantic fixture root");
         let worktree = root.join("repository");
         let store = root.join("store");
         let documents = root.join("documents");
@@ -404,6 +406,113 @@ impl MaterializedEmptyRustSemanticRepository {
             .args(["--format", "json"])
             .output()
             .expect("launch empty R5 through R14 scan")
+    }
+
+    pub fn permuted_scan_command(&self, seed: u64) -> Command {
+        let store = self.root.join(format!("permuted-store-{seed}"));
+        let mut options = vec![
+            (
+                OsString::from("--repository"),
+                self.worktree.clone().into_os_string(),
+            ),
+            (
+                OsString::from("--repository-id"),
+                OsString::from(EMPTY_REPOSITORY_ID),
+            ),
+            (
+                OsString::from("--revision"),
+                OsString::from(&self.commit_oid),
+            ),
+            (
+                OsString::from("--profile"),
+                OsString::from("standard-local-s4"),
+            ),
+            (
+                OsString::from("--workspace-profile"),
+                OsString::from("cargo-root-package-v1"),
+            ),
+            (
+                OsString::from("--manifest-profile"),
+                OsString::from("cargo-manifest-facts-v1"),
+            ),
+            (
+                OsString::from("--rust-semantic-profile"),
+                OsString::from("rust-semantic-depth-v1"),
+            ),
+            (
+                OsString::from("--rust-framework-profile"),
+                OsString::from("rust-framework-declarations-v1"),
+            ),
+            (
+                OsString::from("--rust-callable-profile"),
+                OsString::from("rust-callable-semantics-v1"),
+            ),
+            (
+                OsString::from("--rust-expression-profile"),
+                OsString::from("rust-expression-bindings-v1"),
+            ),
+            (OsString::from("--store"), store.into_os_string()),
+            (OsString::from("--format"), OsString::from("json")),
+        ];
+        let mut state = seed.wrapping_add(0x9e37_79b9_7f4a_7c15);
+        for position in (1..options.len()).rev() {
+            state = state
+                .wrapping_mul(6_364_136_223_846_793_005)
+                .wrapping_add(1_442_695_040_888_963_407);
+            let divisor = u64::try_from(position + 1).expect("option count fits u64");
+            let selected =
+                usize::try_from(state % divisor).expect("selected option index fits usize");
+            options.swap(position, selected);
+        }
+        let mut command = Command::new(env!("CARGO_BIN_EXE_noesis"));
+        command.current_dir(&self.root).arg("scan");
+        for (flag, value) in options {
+            command.arg(flag).arg(value);
+        }
+        command
+    }
+
+    pub fn replace_source_and_commit(&mut self, source: &[u8]) {
+        fs::write(self.worktree.join("src/lib.rs"), source)
+            .expect("replace empty-extension source fixture");
+        let global_config = self.root.join("global.gitconfig");
+        let mut hash = git_command(&global_config);
+        hash.arg("-C")
+            .arg(&self.worktree)
+            .args(["hash-object", "-w", "--stdin"]);
+        let blob_oid = stdout_line(successful_output(hash, Some(source)));
+        update_index(
+            &self.worktree,
+            &global_config,
+            "100644",
+            &blob_oid,
+            "src/lib.rs",
+        );
+        let mut write_tree = git_command(&global_config);
+        write_tree.arg("-C").arg(&self.worktree).arg("write-tree");
+        let tree_oid = stdout_line(successful_output(write_tree, None));
+        let mut make_commit = git_command(&global_config);
+        make_commit
+            .arg("-C")
+            .arg(&self.worktree)
+            .args(["commit-tree", &tree_oid, "-F", "-"])
+            .env("GIT_AUTHOR_NAME", "CodeNoesis Fixture")
+            .env("GIT_AUTHOR_EMAIL", "fixture@codenoesis.invalid")
+            .env("GIT_AUTHOR_DATE", "1786432215 +0200")
+            .env("GIT_COMMITTER_NAME", "CodeNoesis Fixture")
+            .env("GIT_COMMITTER_EMAIL", "fixture@codenoesis.invalid")
+            .env("GIT_COMMITTER_DATE", "1786432215 +0200");
+        self.commit_oid = stdout_line(successful_output(
+            make_commit,
+            Some(b"paired supported constant fixture\n"),
+        ));
+        let mut update_ref = git_command(&global_config);
+        update_ref.arg("-C").arg(&self.worktree).args([
+            "update-ref",
+            "refs/heads/main",
+            &self.commit_oid,
+        ]);
+        successful_output(update_ref, None);
     }
 
     pub fn docs(&self) -> Output {
