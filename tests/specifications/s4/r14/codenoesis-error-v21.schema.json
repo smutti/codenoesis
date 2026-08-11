@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/codenoesis-error-v21.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v21"
+    },
+    "code": {
+      "enum": [
+        "input.invalid_rust_expression_profile",
+        "input.unsupported_rust_expression_composition",
+        "input.unsafe_output_path",
+        "acquisition.limit_exceeded",
+        "extraction.invalid_rust_source",
+        "extraction.invalid_expression_syntax",
+        "extraction.expression_identity_conflict",
+        "extraction.expression_parent_invalid",
+        "extraction.expression_operator_invalid",
+        "extraction.expression_role_invalid",
+        "extraction.expression_limit_exceeded",
+        "extraction.argument_ordinal_invalid",
+        "extraction.pattern_unsupported",
+        "extraction.binding_scope_invalid",
+        "extraction.binding_ambiguous",
+        "extraction.access_resolution_invalid",
+        "extraction.call_site_evidence_mismatch",
+        "extraction.expression_index_mismatch",
+        "snapshot.invalid_v16",
+        "query.invalid_v16",
+        "export.invalid_snapshot",
+        "export.invalid_portable_graph_v7",
+        "export.limit_exceeded",
+        "explorer.asset_integrity_mismatch",
+        "explorer.limit_exceeded",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "input",
+        "acquisition",
+        "extraction",
+        "snapshot",
+        "query",
+        "export",
+        "explorer",
+        "internal"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "retryable": {
+      "const": false
+    },
+    "context": {
+      "type": "object"
+    }
+  }
+}

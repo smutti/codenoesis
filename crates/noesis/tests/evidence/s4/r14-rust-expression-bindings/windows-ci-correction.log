@@ -1,0 +1,52 @@
+issue=https://github.com/smutti/codenoesis/issues/162
+pull_request=https://github.com/smutti/codenoesis/pull/163
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+correction_round=2_of_5
+failed_head=150a351e251dc4772823b59cb5896958ff1341a9
+failed_run=https://github.com/smutti/codenoesis/actions/runs/31420727169
+failed_job=https://github.com/smutti/codenoesis/actions/runs/31420727169/job/93560527764
+failed_environment=windows-latest; rustc 1.97.1 x86_64-pc-windows-msvc
+failed_command=cargo test --workspace --all-targets --all-features --locked
+failed_test=ft_fr_ext_016_corrupt_expression_graph_fails_with_exact_typed_errors
+failed_actual=BindingScopeInvalid
+failed_expected=AccessResolutionInvalid
+failed_exit=1
+
+root_cause=the corruption test selected the first ID-sorted READS relationship and advanced its target binding scope_start; byte-sensitive identity ordering differs for a Windows CRLF checkout, and the selected mutation could also invalidate the binding scope before access validation
+correction=replace the scope mutation with an existing-but-unrelated evidence ID on the selected READS relationship; generic evidence references remain valid while only the access relationship single-evidence invariant is violated
+product_code_changed=false
+governance_semantics_changed=false
+contracts_changed=false
+schema_changed=false
+identity_changed=false
+fixture_changed=false
+golden_changed=false
+dependency_changed=false
+
+command=cargo test -p codenoesis-lang-rust --test s4_r14_rust_expression_bindings ft_fr_ext_016_corrupt_expression_graph_fails_with_exact_typed_errors --locked -- --exact
+exit=0
+tests_passed=1
+
+command=cargo test -p codenoesis-lang-rust --test s4_r14_rust_expression_bindings --locked
+exit=0
+tests_passed=5
+started_at_utc=2026-08-10T20:25:25Z
+completed_at_utc=2026-08-10T20:25:27Z
+raw_local_log_bytes=1662
+raw_local_log_sha256=8393b21138c3325863d8006169a635b542b5c8f1aa4bb8aff6b96ffe57a47e7f
+correction_commit=8ef9595542469fc4494613d7b2c3ccb93bcd513a
+correction_tree=7eb435d9f6a936b702f1a62e266fe0dda39fe0c8
+
+complete_gate_started_at_utc=2026-08-10T20:26:44Z
+complete_gate_completed_at_utc=2026-08-10T20:31:26Z
+complete_gate_exit=0
+complete_gate_rust_tests_passed=503
+complete_gate_python_tests_passed=299
+complete_gate_raw_local_log_bytes=59980
+complete_gate_raw_local_log_sha256=306ef223dacb5b366c150f474bc0aec2547c25a8f87d818819e2e6f7a6d998dd
+complete_gate_commands=actionlint; policy validation; fmt; clippy; workspace all-target/all-feature tests; doc tests; Python tests; benchmark asset validation; bench compile
+windows_ci_rerun=passed 5/5 in the codenoesis-lang-rust R14 suite on head 7b2de99397028001e0511625ec93572643c9c875
+final_review_head_gate=pending after this evidence commit
+result=complete-local-green

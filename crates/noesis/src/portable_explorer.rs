@@ -8,15 +8,16 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use codenoesis_contracts::{
     K1_EXPLORER_MARKER, K1_PORTABLE_MARKER, K1ContractError, LocalExplorerManifestV1,
     LocalExplorerManifestV2, LocalExplorerManifestV3, LocalExplorerManifestV4,
-    LocalExplorerManifestV5, LocalExplorerManifestV6, MAX_K1_PORTABLE_GRAPH_BYTES,
-    MAX_R8_PORTABLE_GRAPH_BYTES, MAX_R10_PORTABLE_GRAPH_BYTES, MAX_R11_PORTABLE_GRAPH_BYTES,
-    MAX_R12_PORTABLE_GRAPH_BYTES, MAX_R13_PORTABLE_GRAPH_BYTES, PortableGraphV1, PortableGraphV2,
-    PortableGraphV3, PortableGraphV4, PortableGraphV5, PortableGraphV6, R8_EXPLORER_MARKER,
+    LocalExplorerManifestV5, LocalExplorerManifestV6, LocalExplorerManifestV7,
+    MAX_K1_PORTABLE_GRAPH_BYTES, MAX_R8_PORTABLE_GRAPH_BYTES, MAX_R10_PORTABLE_GRAPH_BYTES,
+    MAX_R11_PORTABLE_GRAPH_BYTES, MAX_R12_PORTABLE_GRAPH_BYTES, MAX_R13_PORTABLE_GRAPH_BYTES,
+    MAX_R14_PORTABLE_GRAPH_BYTES, PortableGraphV1, PortableGraphV2, PortableGraphV3,
+    PortableGraphV4, PortableGraphV5, PortableGraphV6, PortableGraphV7, R8_EXPLORER_MARKER,
     R8_PORTABLE_MARKER, R8ContractError, R10_EXPLORER_MARKER, R10_PORTABLE_MARKER,
     R10ContractError, R11_EXPLORER_MARKER, R11_PORTABLE_GRAPH_VERSION, R11_PORTABLE_MARKER,
     R11ContractError, R12_EXPLORER_MARKER, R12_PORTABLE_GRAPH_VERSION, R12_PORTABLE_MARKER,
     R12ContractError, R13_EXPLORER_MARKER, R13_PORTABLE_GRAPH_VERSION, R13_PORTABLE_MARKER,
-    R13ContractError,
+    R13ContractError, R14_EXPLORER_MARKER, R14_PORTABLE_MARKER, R14ContractError,
 };
 #[cfg(any(unix, windows))]
 use same_file::Handle as FileIdentity;
@@ -46,6 +47,10 @@ const R13_PORTABLE_MARKER_BYTES: &[u8] =
     b"{\"schema_version\":\"codenoesis.portable-graph-marker/v6\"}\n";
 const R13_EXPLORER_MARKER_BYTES: &[u8] =
     b"{\"schema_version\":\"codenoesis.local-explorer-marker/v6\"}\n";
+const R14_PORTABLE_MARKER_BYTES: &[u8] =
+    b"{\"schema_version\":\"codenoesis.portable-graph-marker/v7\"}\n";
+const R14_EXPLORER_MARKER_BYTES: &[u8] =
+    b"{\"schema_version\":\"codenoesis.local-explorer-marker/v7\"}\n";
 const VIEWER_SHA256: &str = "1caa2c0ca5675937eab674f61681883ba3c6a428feb6b1baa744a0cb7eecd044";
 const VIEWER_SOURCE_BYTES: &[u8] = include_bytes!("../assets/s4/r8/index.html");
 const K1_VIEWER_SHA256: &str = "d0b633b29e6494d6494a35b5553d72c3dd04a747eeef219ca33a9f5fe2a1f4fa";
@@ -65,6 +70,7 @@ pub enum PortableExplorerError {
     R11Contract(R11ContractError),
     R12Contract(R12ContractError),
     R13Contract(R13ContractError),
+    R14Contract(R14ContractError),
     Internal,
 }
 
@@ -101,6 +107,12 @@ impl From<R12ContractError> for PortableExplorerError {
 impl From<R13ContractError> for PortableExplorerError {
     fn from(error: R13ContractError) -> Self {
         Self::R13Contract(error)
+    }
+}
+
+impl From<R14ContractError> for PortableExplorerError {
+    fn from(error: R14ContractError) -> Self {
+        Self::R14Contract(error)
     }
 }
 
@@ -356,6 +368,48 @@ pub fn publish_portable_graph_v6(
     publish_files(
         prepared,
         OutputKind::R13Portable,
+        &[OwnedFile::new("portable-graph.json", bytes.clone())],
+    )?;
+    Ok(bytes)
+}
+
+/// Validates an R14 export destination without creating or changing it.
+///
+/// # Errors
+///
+/// Returns a typed error for aliasing, symlinks, escapes, or invalid ownership.
+pub fn validate_r14_export_output_root(
+    store: &Path,
+    output: &Path,
+) -> Result<(), PortableExplorerError> {
+    validate_output_root(store, output, OutputKind::R14Portable)
+}
+
+/// Creates an absent R14 export destination after complete validation.
+///
+/// # Errors
+///
+/// Returns a typed error when validation or directory creation fails.
+pub fn ensure_r14_export_output_root_for_boundary(
+    store: &Path,
+    output: &Path,
+) -> Result<PreparedOutputRoot, PortableExplorerError> {
+    ensure_output_root(store, output, OutputKind::R14Portable)
+}
+
+/// Publishes one validated R14 portable graph into its marker-owned destination.
+///
+/// # Errors
+///
+/// Returns a typed error for integrity, ownership, race, or I/O failures.
+pub fn publish_portable_graph_v7(
+    prepared: &PreparedOutputRoot,
+    portable: &PortableGraphV7,
+) -> Result<Vec<u8>, PortableExplorerError> {
+    let bytes = portable.canonical_file();
+    publish_files(
+        prepared,
+        OutputKind::R14Portable,
         &[OwnedFile::new("portable-graph.json", bytes.clone())],
     )?;
     Ok(bytes)
@@ -1009,6 +1063,105 @@ fn read_portable_graph_v6_with(
     Ok((portable, bytes))
 }
 
+/// Acquires and strictly validates one immutable R14 portable graph input.
+///
+/// # Errors
+///
+/// Returns a typed error for unsafe paths, input races, limits, or contract failures.
+pub fn read_portable_graph_v7(
+    input: &Path,
+) -> Result<(PortableGraphV7, Vec<u8>), PortableExplorerError> {
+    read_portable_graph_v7_with(input, || {})
+}
+
+fn read_portable_graph_v7_with(
+    input: &Path,
+    after_first_read: impl FnOnce(),
+) -> Result<(PortableGraphV7, Vec<u8>), PortableExplorerError> {
+    let input = absolute_without_parent_components(input)
+        .map_err(|_| PortableExplorerError::R14Contract(R14ContractError::InvalidProjection))?;
+    verify_existing_components(&input)?;
+    let path_metadata = fs::symlink_metadata(&input).map_err(|_| invalid_r14_input())?;
+    if !path_metadata.is_file() || unsafe_metadata(&path_metadata) {
+        return Err(invalid_r14_input());
+    }
+    let mut file = File::open(&input).map_err(|_| invalid_r14_input())?;
+    let before = file.metadata().map_err(|_| invalid_r14_input())?;
+    #[cfg(any(unix, windows))]
+    let identity = FileIdentity::from_file(file.try_clone().map_err(|_| invalid_r14_input())?)
+        .map_err(|_| invalid_r14_input())?;
+    let maximum = MAX_R14_PORTABLE_GRAPH_BYTES;
+    if before.len() > maximum {
+        return Err(R14ContractError::LimitExceeded {
+            limit: "portable_graph_bytes",
+            maximum,
+            observed: before.len(),
+        }
+        .into());
+    }
+    let capacity = usize::try_from(before.len()).map_err(|_| R14ContractError::LimitExceeded {
+        limit: "portable_graph_bytes",
+        maximum,
+        observed: u64::MAX,
+    })?;
+    let mut bytes = Vec::with_capacity(capacity);
+    std::io::Read::by_ref(&mut file)
+        .take(maximum.saturating_add(1))
+        .read_to_end(&mut bytes)
+        .map_err(|_| invalid_r14_input())?;
+    let observed = u64::try_from(bytes.len()).unwrap_or(u64::MAX);
+    if observed > maximum {
+        return Err(R14ContractError::LimitExceeded {
+            limit: "portable_graph_bytes",
+            maximum,
+            observed,
+        }
+        .into());
+    }
+    after_first_read();
+    verify_open_file_bytes(&mut file, &bytes).map_err(|_| invalid_r14_input())?;
+    let after = file.metadata().map_err(|_| invalid_r14_input())?;
+    let path_before_reopen = fs::symlink_metadata(&input).map_err(|_| invalid_r14_input())?;
+    if !path_before_reopen.is_file() || unsafe_metadata(&path_before_reopen) {
+        return Err(invalid_r14_input());
+    }
+    let mut reopened = File::open(&input).map_err(|_| invalid_r14_input())?;
+    let reopened_before = reopened.metadata().map_err(|_| invalid_r14_input())?;
+    if !reopened_before.is_file() {
+        return Err(invalid_r14_input());
+    }
+    #[cfg(any(unix, windows))]
+    let reopened_identity =
+        FileIdentity::from_file(reopened.try_clone().map_err(|_| invalid_r14_input())?)
+            .map_err(|_| invalid_r14_input())?;
+    verify_open_file_bytes(&mut reopened, &bytes).map_err(|_| invalid_r14_input())?;
+    let reopened_after = reopened.metadata().map_err(|_| invalid_r14_input())?;
+    let path_after = fs::symlink_metadata(&input).map_err(|_| invalid_r14_input())?;
+    #[cfg(any(unix, windows))]
+    let path_identity_matches =
+        FileIdentity::from_path(&input).is_ok_and(|path_identity| path_identity == identity);
+    #[cfg(not(any(unix, windows)))]
+    let path_identity_matches = true;
+    #[cfg(any(unix, windows))]
+    let reopened_identity_matches = reopened_identity == identity;
+    #[cfg(not(any(unix, windows)))]
+    let reopened_identity_matches = true;
+    if before.len() != observed
+        || unsafe_metadata(&path_after)
+        || !same_file_metadata(&before, &after)
+        || !same_file_metadata(&after, &path_before_reopen)
+        || !same_file_metadata(&path_before_reopen, &reopened_before)
+        || !same_file_metadata(&reopened_before, &reopened_after)
+        || !same_file_metadata(&reopened_after, &path_after)
+        || !reopened_identity_matches
+        || !path_identity_matches
+    {
+        return Err(invalid_r14_input());
+    }
+    let portable = PortableGraphV7::from_canonical_file(&bytes, sha256)?;
+    Ok((portable, bytes))
+}
+
 fn verify_open_file_bytes(file: &mut File, expected: &[u8]) -> std::io::Result<()> {
     file.rewind()?;
     let mut buffer = [0_u8; 16 * 1024];
@@ -1429,6 +1582,67 @@ pub fn publish_local_explorer_v6(
     Ok(manifest_bytes)
 }
 
+/// Validates an R14 explorer destination without creating or changing it.
+///
+/// # Errors
+///
+/// Returns a typed error for aliasing, symlinks, escapes, or invalid ownership.
+pub fn validate_r14_explorer_output_root(
+    input: &Path,
+    output: &Path,
+) -> Result<(), PortableExplorerError> {
+    validate_output_root(input, output, OutputKind::R14Explorer)
+}
+
+/// Creates an absent R14 explorer destination after complete validation.
+///
+/// # Errors
+///
+/// Returns a typed error when validation or directory creation fails.
+pub fn ensure_r14_explorer_output_root_for_boundary(
+    input: &Path,
+    output: &Path,
+) -> Result<PreparedOutputRoot, PortableExplorerError> {
+    ensure_output_root(input, output, OutputKind::R14Explorer)
+}
+
+/// Publishes the immutable K1 viewer bound to one validated R14 graph.
+///
+/// # Errors
+///
+/// Returns a typed error for asset, integrity, ownership, race, or I/O failures.
+pub fn publish_local_explorer_v7(
+    prepared: &PreparedOutputRoot,
+    portable: &PortableGraphV7,
+    portable_bytes: &[u8],
+) -> Result<Vec<u8>, PortableExplorerError> {
+    if portable.canonical_file() != portable_bytes {
+        return Err(R14ContractError::InvalidProjection.into());
+    }
+    let viewer_bytes =
+        normalize_checkout_text(K1_VIEWER_SOURCE_BYTES).ok_or(PortableExplorerError::Internal)?;
+    let manifest = LocalExplorerManifestV7::new(
+        portable,
+        &viewer_bytes,
+        K1_VIEWER_SHA256,
+        K1_CONTENT_SECURITY_POLICY,
+        sha256,
+    )?;
+    let manifest_bytes = manifest
+        .canonical_file()
+        .map_err(|_| PortableExplorerError::Internal)?;
+    publish_files(
+        prepared,
+        OutputKind::R14Explorer,
+        &[
+            OwnedFile::new("portable-graph.json", portable_bytes.to_vec()),
+            OwnedFile::new("index.html", viewer_bytes),
+            OwnedFile::new("explorer-manifest.json", manifest_bytes.clone()),
+        ],
+    )?;
+    Ok(manifest_bytes)
+}
+
 #[must_use]
 pub fn sha256(bytes: &[u8]) -> String {
     let digest = Sha256::digest(bytes);
@@ -1813,6 +2027,10 @@ fn invalid_r13_input() -> PortableExplorerError {
     PortableExplorerError::R13Contract(R13ContractError::InvalidProjection)
 }
 
+fn invalid_r14_input() -> PortableExplorerError {
+    PortableExplorerError::R14Contract(R14ContractError::InvalidProjection)
+}
+
 #[cfg(unix)]
 fn same_file_metadata(left: &Metadata, right: &Metadata) -> bool {
     use std::os::unix::fs::MetadataExt as _;
@@ -1900,6 +2118,8 @@ enum OutputKind {
     R12Explorer,
     R13Portable,
     R13Explorer,
+    R14Portable,
+    R14Explorer,
 }
 
 impl OutputKind {
@@ -1917,6 +2137,8 @@ impl OutputKind {
             Self::R12Explorer => R12_EXPLORER_MARKER,
             Self::R13Portable => R13_PORTABLE_MARKER,
             Self::R13Explorer => R13_EXPLORER_MARKER,
+            Self::R14Portable => R14_PORTABLE_MARKER,
+            Self::R14Explorer => R14_EXPLORER_MARKER,
         }
     }
 
@@ -1934,6 +2156,8 @@ impl OutputKind {
             Self::R12Explorer => R12_EXPLORER_MARKER_BYTES,
             Self::R13Portable => R13_PORTABLE_MARKER_BYTES,
             Self::R13Explorer => R13_EXPLORER_MARKER_BYTES,
+            Self::R14Portable => R14_PORTABLE_MARKER_BYTES,
+            Self::R14Explorer => R14_EXPLORER_MARKER_BYTES,
         }
     }
 
@@ -1981,6 +2205,13 @@ impl OutputKind {
                 "index.html",
                 "explorer-manifest.json",
             ]),
+            Self::R14Portable => BTreeSet::from([R14_PORTABLE_MARKER, "portable-graph.json"]),
+            Self::R14Explorer => BTreeSet::from([
+                R14_EXPLORER_MARKER,
+                "portable-graph.json",
+                "index.html",
+                "explorer-manifest.json",
+            ]),
         }
     }
 }
@@ -1994,7 +2225,7 @@ mod tests {
     use super::{
         OutputKind, OwnedFile, PortableExplorerError, publish_files_with,
         read_portable_graph_v3_with, read_portable_graph_v4_with, read_portable_graph_v5_with,
-        read_portable_graph_v6_with, read_portable_graph_with,
+        read_portable_graph_v6_with, read_portable_graph_v7_with, read_portable_graph_with,
     };
 
     const PORTABLE_FIXTURE_SOURCE: &[u8] =
@@ -2304,6 +2535,63 @@ mod tests {
             assert!(output.join("portable-graph.json").is_file());
         }
         fs::remove_dir_all(parent).expect("remove R13 output race fixture");
+    }
+
+    #[test]
+    fn race_nfr_sec_005_r14_mutable_input_is_rejected() {
+        let root = temporary_root("r14-mutable-input");
+        let input = root.join("portable-graph.json");
+        let initial = b"{}\n".to_vec();
+        fs::write(&input, &initial).expect("write R14 race input");
+        let mutation_ran = Cell::new(false);
+        let result = read_portable_graph_v7_with(&input, || {
+            fs::write(&input, b"[]\n").expect("rewrite R14 race input");
+            mutation_ran.set(true);
+        });
+        assert!(mutation_ran.get(), "R14 mutable-input schedule did not run");
+        assert!(matches!(result, Err(PortableExplorerError::R14Contract(_))));
+        fs::remove_dir_all(root).expect("remove R14 race fixture");
+    }
+
+    #[test]
+    fn race_nfr_sec_005_r14_output_replacement_is_rejected_or_blocked() {
+        let parent = temporary_root("r14-output-replacement");
+        let output = parent.join("output");
+        let attacker = parent.join("attacker");
+        let displaced = parent.join("displaced");
+        fs::create_dir(&output).expect("create R14 selected output");
+        fs::create_dir(&attacker).expect("create R14 attacker output");
+        let replaced = Cell::new(false);
+        let result = publish_files_with(
+            &output,
+            OutputKind::R14Portable,
+            &[OwnedFile::new(
+                "portable-graph.json",
+                b"reviewed\n".to_vec(),
+            )],
+            || {
+                if fs::rename(&output, &displaced).is_ok() {
+                    if fs::rename(&attacker, &output).is_ok() {
+                        replaced.set(true);
+                    } else {
+                        fs::rename(&displaced, &output)
+                            .expect("restore blocked R14 output replacement");
+                    }
+                }
+            },
+        );
+        if replaced.get() {
+            assert!(matches!(
+                result,
+                Err(PortableExplorerError::UnsafeOutput { .. })
+            ));
+            assert!(directory_is_empty(&output));
+            assert!(directory_is_empty(&displaced));
+        } else {
+            assert!(result.is_ok());
+            assert!(output.join("portable-graph.json").is_file());
+        }
+        fs::remove_dir_all(parent).expect("remove R14 output race fixture");
     }
 
     fn temporary_root(label: &str) -> PathBuf {

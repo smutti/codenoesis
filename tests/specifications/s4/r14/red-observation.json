@@ -1,0 +1,53 @@
+{
+  "schema_version": "codenoesis.red-observation/v1",
+  "issue": 162,
+  "requirements": ["FR-EXT-016", "FR-EXP-006"],
+  "slice": "S4",
+  "risk": "high",
+  "base_sha": "e32428ecac33df384b2e8b6eed3d257da06e18fe",
+  "checkpoint_sha": "b4bd9cde39259e4240efb6ff4ec009e83c643f5d",
+  "branch": "codex/162-r14-expression-bindings",
+  "authorization": "https://github.com/smutti/codenoesis/issues/162#issuecomment-5239994397",
+  "observed_at_utc": "2026-08-10T12:42:28Z",
+  "command": "cargo test -p noesis --test e2e_fr_ext_016_rust_expression_bindings e2e_fr_ext_016_rust_expression_bindings_complete_local_journey -- --exact",
+  "test_harness": {
+    "exit_code": 101,
+    "duration_seconds": 3,
+    "log_path": "tests/specifications/s4/r14/red/governance-red.log",
+    "log_bytes": 1241,
+    "log_sha256": "f4fad584fd5dd7c827e2003a21bd7bee819e02eaecd7ebee97720fa5df859354",
+    "failure_reason": "expected RepositorySnapshotV16 success; observed frozen selector Red"
+  },
+  "nested_scan": {
+    "exit_code": 2,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 149,
+    "stderr_sha256": "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe",
+    "error_schema": "codenoesis.error/v4",
+    "error_code": "input.invalid_revision",
+    "stage": "input",
+    "store_exists": false,
+    "repository_acquired": false
+  },
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "host": "aarch64-apple-darwin",
+    "features": "noesis integration-test defaults; workspace lockfile",
+    "network": "not used by product journey",
+    "model_provider": "not used by product journey"
+  },
+  "agent": {
+    "identity": "OpenAI Codex coding agent",
+    "model": "not available to runtime",
+    "policy_path": "AGENTS.md",
+    "policy_sha256": "07c4385775f37be9e5d2ba09f7e9edfe3936f800a2188e4155f166eef3299c71",
+    "run_id": "issue-162-r14-checkpoint-red-b4bd9cd",
+    "cost": "not available"
+  },
+  "production_source_changed_before_red": false,
+  "expected_red_confirmed": true
+}

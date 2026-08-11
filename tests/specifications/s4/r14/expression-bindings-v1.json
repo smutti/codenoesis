@@ -1,0 +1,190 @@
+{
+  "schema_version": "codenoesis.r14-expression-bindings-profile/v1",
+  "profile": "rust-expression-bindings-v1",
+  "requires": {
+    "base_profile": "standard-local-s4",
+    "workspace_profile": "cargo-root-package-v1",
+    "manifest_profile": "cargo-manifest-facts-v1",
+    "semantic_profile": "rust-semantic-depth-v1",
+    "framework_profile": "rust-framework-declarations-v1",
+    "callable_profile": "rust-callable-semantics-v1",
+    "optional_output_capacity_profile": "local-snapshot-64m-v1"
+  },
+  "contracts": {
+    "configuration": "codenoesis.configuration/v13",
+    "snapshot": "codenoesis.repository-snapshot/v16",
+    "extraction": "codenoesis.extraction/v13",
+    "chunk": "codenoesis.extraction-chunk/v13",
+    "graph": "codenoesis.knowledge-graph/v13",
+    "ontology": "codenoesis.ontology/rust/v13",
+    "semantic_hash": "codenoesis.semantic-hash-contract/v12",
+    "error": "codenoesis.error/v21",
+    "query": "codenoesis.local-query-result/v11",
+    "portable": "codenoesis.portable-graph/v7",
+    "explorer": "codenoesis.local-explorer/v7",
+    "pipeline": "codenoesis.pipeline/s4-r14-v1",
+    "extractor": "codenoesis.rust-expression-bindings/s4-r14-v1",
+    "index": "codenoesis.expression-binding-index/v1"
+  },
+  "identity_domains": {
+    "entity": "codenoesis.entity-id/rust-expression-bindings/v1",
+    "relationship": "codenoesis.relationship-id/rust-expression-bindings/v1",
+    "evidence": "codenoesis.evidence-id/v2"
+  },
+  "entity_kinds": [
+    "rust.expression",
+    "rust.call_argument",
+    "rust.pattern_binding"
+  ],
+  "selected_expression_kinds": [
+    "array_expression",
+    "assignment_expression",
+    "await_expression",
+    "binary_expression",
+    "boolean_literal",
+    "char_literal",
+    "float_literal",
+    "integer_literal",
+    "raw_string_literal",
+    "string_literal",
+    "call_expression",
+    "compound_assignment_expr",
+    "field_expression",
+    "generic_function",
+    "identifier",
+    "self",
+    "scoped_identifier",
+    "index_expression",
+    "parenthesized_expression",
+    "range_expression",
+    "reference_expression",
+    "struct_expression",
+    "try_expression",
+    "tuple_expression",
+    "type_cast_expression",
+    "unary_expression",
+    "unit_expression"
+  ],
+  "relationship_kinds": [
+    "HAS_EXPRESSION",
+    "CONTAINS_EXPRESSION",
+    "HAS_ARGUMENT",
+    "ARGUMENT_VALUE",
+    "HAS_RECEIVER",
+    "REPRESENTS_CALL_SITE",
+    "DECLARES_BINDING",
+    "BINDS_FROM",
+    "READS",
+    "WRITES"
+  ],
+  "roles": [
+    "body_tail",
+    "condition",
+    "pattern_input",
+    "iterator",
+    "initializer",
+    "assignment_target",
+    "assignment_value",
+    "callee",
+    "argument",
+    "receiver",
+    "return_value",
+    "nested"
+  ],
+  "expression_depth": {
+    "root": 0,
+    "definition": "direct_selected_contains_expression_ancestor_count",
+    "maximum": 256
+  },
+  "binding_origins": [
+    "parameter",
+    "local_let",
+    "if_let",
+    "while_let",
+    "for",
+    "match_arm"
+  ],
+  "binding_modifiers": [
+    "none",
+    "explicit_mut",
+    "explicit_ref",
+    "explicit_ref_mut"
+  ],
+  "scope": {
+    "parameter": "complete_callable_body",
+    "local_let": "after_initializer_in_containing_block",
+    "if_let": "if_body_only",
+    "while_let": "while_body_only",
+    "for": "loop_body_after_iterator",
+    "match_arm": "arm_value_only",
+    "resolution": "nearest_in_scope_prior_binding",
+    "unsupported_or_ambiguous": "typed_coverage_without_access_edge"
+  },
+  "access": {
+    "value_position": [
+      "READS"
+    ],
+    "direct_assignment_target": [
+      "WRITES"
+    ],
+    "compound_assignment_target": [
+      "READS",
+      "WRITES"
+    ],
+    "declaration_is_write": false,
+    "meaning": "syntax_occurrence_only"
+  },
+  "limits": {
+    "expressions_per_callable": 16384,
+    "selected_expression_depth": 256,
+    "arguments_per_call": 256,
+    "bindings_per_callable": 4096,
+    "total_expressions": 400000,
+    "total_bindings_and_arguments": 200000,
+    "total_relationships": 1000000,
+    "normalized_spelling_utf8_bytes": 4096,
+    "standard_snapshot_bytes": 33554432,
+    "optional_snapshot_bytes": 67108864
+  },
+  "forbidden_compositions": [
+    "repository_boundary",
+    "cfg_declaration_alternatives",
+    "callable_cfg_alternatives",
+    "compiler_index",
+    "callable_scip",
+    "nested_source",
+    "generated_source"
+  ],
+  "inference": {
+    "type": false,
+    "dispatch": false,
+    "borrow": false,
+    "ownership": false,
+    "move_copy": false,
+    "alias": false,
+    "side_effect": false,
+    "active_cfg": false,
+    "control_flow": false,
+    "data_flow": false,
+    "reachability": false,
+    "runtime": false,
+    "value_evaluation": false
+  },
+  "determinism": {
+    "permutations": 50,
+    "parallel_schedules": 10,
+    "ordering": "raw_utf8_identity",
+    "volatile_envelope_excluded": true
+  },
+  "privacy": {
+    "raw_expression_text": false,
+    "literal_lexeme": false,
+    "source_snippet": false,
+    "absolute_root": false,
+    "raw_url": false,
+    "credentials": false,
+    "environment": false,
+    "arguments": false,
+    "telemetry": false
+  }
+}

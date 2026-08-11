@@ -1,0 +1,93 @@
+issue=https://github.com/smutti/codenoesis/issues/162
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+tested_evidence_commit=e81472dd787b87ded177a684f041ad3a79d0ba24
+tested_tree=0b1faeccaa7d67b3d35fb8bf56be2f8fff189ac9
+started_at_utc=2026-08-10T17:19:57Z
+completed_at_utc=2026-08-10T17:28:31Z
+
+command=actionlint -no-color
+exit=0
+
+command=python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json
+exit=0
+result={"approved_requirement_count":39,"hard_protected_pattern_count":13,"status":"valid","version":1}
+
+command=cargo fmt --all --check
+exit=0
+
+command=cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+exit=0
+
+command=cargo test --workspace --all-targets --all-features --locked
+exit=0
+tests_passed=503
+
+command=cargo test --workspace --doc --all-features --locked
+exit=0
+
+command=python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+exit=0
+tests_passed=299
+
+command=python3 scripts/validate_benchmark_assets.py
+exit=0
+result=benchmark assets valid: status=scaffold, suites=0
+
+command=cargo bench --workspace --all-features --no-run --locked
+exit=0
+
+raw_local_log_bytes=62461
+raw_local_log_sha256=9b0f7722e6f9db4ee8619e74525ec87351e8f2417359d7048f5ed1791ebdae8d
+environment=Darwin 25.5.0 arm64; rustc 1.97.1 (8bab26f4f 2026-07-14); cargo 1.97.1 (c980f4866 2026-06-30); Python 3.9.6
+known_warning=the pre-existing exact toml dependency requirement includes ignored semver metadata; no R14 manifest or dependency changed
+result=green
+final_review_head_gate=pending after this evidence commit; retain the exact head and result in the pull request and base-controlled GitHub Actions
+
+correction_round=2_of_5
+correction_reason=Windows CI corruption test did not isolate AccessResolutionInvalid from BindingScopeInvalid
+tested_correction_commit=8ef9595542469fc4494613d7b2c3ccb93bcd513a
+tested_correction_tree=7eb435d9f6a936b702f1a62e266fe0dda39fe0c8
+started_at_utc=2026-08-10T20:26:44Z
+completed_at_utc=2026-08-10T20:31:26Z
+complete_gate_exit=0
+workspace_tests_passed=503
+python_tests_passed=299
+raw_local_log_bytes=59980
+raw_local_log_sha256=306ef223dacb5b366c150f474bc0aec2547c25a8f87d818819e2e6f7a6d998dd
+contracts_schema_identity_fixture_golden_dependencies_changed=false
+result=green
+final_review_head_gate=pending after the correction evidence commit; retain the exact head and result in the pull request and base-controlled GitHub Actions
+
+correction_round=3_of_5
+correction_reason=Windows CI compared canonical LF LocalExplorerV7 viewer bytes with CRLF checkout transport bytes
+tested_correction_commit=24e276dcf6a8b06f397ad8846f678b120b95f77a
+tested_correction_tree=88a87f538fedb40be0b93b238761e319928651af
+started_at_utc=2026-08-11T04:52:52Z
+completed_at_utc=2026-08-11T04:57:52Z
+complete_gate_exit=0
+workspace_tests_passed=504
+python_tests_passed=299
+raw_local_log_bytes=59916
+raw_local_log_sha256=2a8de216f9741c907c2b42562ae037e33be942c9337b89ce9790a3d3df6d05b7
+contracts_schema_identity_fixture_golden_dependencies_changed=false
+result=green
+final_review_head_gate=pending after the viewer-correction evidence commit; retain the exact head and result in the pull request and base-controlled GitHub Actions
+
+correction_round=4_of_5
+correction_reason=Windows R14 passed 4/4 but serial permutation runtime exhausted the fixed 20-minute portability job before downstream suites completed
+tested_correction_commit=6e1b8756c04a7b182536b25e7c83e8ad940d63cd
+tested_correction_tree=17142fe6236201954ed1d5a6a8bcb95f9f57c27c
+started_at_utc=2026-08-11T06:04:36Z
+completed_at_utc=2026-08-11T06:07:57Z
+complete_gate_exit=0
+workspace_tests_passed=504
+python_tests_passed=299
+raw_local_log_bytes=59916
+raw_local_log_sha256=3b80c76350eb6fabd55b069a9484cdbe5d9d3f6d2896f46d6ea6824180959ed5
+permutation_and_schedule_case_counts_changed=false
+workflow_timeout_changed=false
+contracts_schema_identity_fixture_golden_dependencies_changed=false
+result=green
+final_review_head_gate=pending after the timeout-correction evidence commit; retain the exact head and result in the pull request and base-controlled GitHub Actions

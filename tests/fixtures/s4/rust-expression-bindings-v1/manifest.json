@@ -1,0 +1,91 @@
+{
+  "schema_version": "codenoesis.r14-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-callable-semantics-v1",
+  "source_fixture": "tests/fixtures/s4/rust-callable-semantics-v1",
+  "external_source_vendored": false,
+  "materialization": {
+    "object_format": "sha1",
+    "tree_oid": "ead855e0545cc26b351b305fcad39f2e491b285d",
+    "commit_oid": "9a7bb3adaa5bf30eef3bc9bc656c81f42fbdb845",
+    "commit_recipe": "immutable rust-callable-semantics-v1 fixture"
+  },
+  "immutable_inputs": [
+    {
+      "path": "tests/fixtures/s4/rust-callable-semantics-v1/manifest.json",
+      "byte_length": 2091,
+      "sha256": "c4cf363c78014863941baf822ed158cbc1ab28c96acdb0b7e4e597fb4c6df405"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-callable-semantics-v1/expected-callable-semantics.json",
+      "byte_length": 2463,
+      "sha256": "ac87d7f54585a25b1bf24de46e7a93638f5e6eb7fcf4d93e8cc77735ac7422a7"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-callable-semantics-v1/repository/src/lib.rs",
+      "byte_length": 1928,
+      "sha256": "07d2b8f9f3a1a0576b90bd820b5af9ef79511bcdaaca222d4d8f0c61ae815ff5"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-callable-semantics-v1/repository/src/model.rs",
+      "byte_length": 156,
+      "sha256": "9dd6db028abed787998c4b46d7a14a6a6e96f9c5610d0bba0ce762116c090851"
+    }
+  ],
+  "expected_expression_bindings": {
+    "path": "tests/fixtures/s4/rust-expression-bindings-v1/expected-expression-bindings.json",
+    "byte_length": 224598,
+    "sha256": "7b390212d12538c74765c29b5a77969ca5d51c2d54eac5db24eb3c6123ec1399"
+  },
+  "expected_counts": {
+    "baseline_counts": {
+      "entities": 91,
+      "relationships": 96,
+      "evidence": 99,
+      "claims": 187,
+      "diagnostics": 8,
+      "coverage": 93
+    },
+    "additive_counts": {
+      "entities": 104,
+      "relationships": 207,
+      "evidence": 86,
+      "claims": 311,
+      "diagnostics": 0,
+      "coverage": 0
+    },
+    "complete_counts": {
+      "entities": 195,
+      "relationships": 303,
+      "evidence": 185,
+      "claims": 498,
+      "diagnostics": 8,
+      "coverage": 93
+    },
+    "expressions": 73,
+    "expression_lexical_depth_counts": {
+      "0": 35,
+      "1": 32,
+      "2": 6
+    },
+    "arguments": 8,
+    "bindings": 23,
+    "reads": 29,
+    "writes": 7,
+    "call_site_correspondences": 9,
+    "portable_reimport_lossless": true,
+    "viewer_bytes_immutable": true,
+    "legacy_bytes_immutable": true,
+    "permutations": 50,
+    "parallel_schedules": 10
+  },
+  "sentinels": {
+    "build_script_path": "tests/fixtures/s4/rust-callable-semantics-v1/repository/build.rs",
+    "build_forbidden_output": "K1_BUILD_SENTINEL_EXECUTED",
+    "process_execution_permitted": false,
+    "network_access_permitted": false,
+    "compiler_execution_permitted": false,
+    "macro_expansion_permitted": false,
+    "model_provider_permitted": false,
+    "browser_launch_permitted": false
+  }
+}

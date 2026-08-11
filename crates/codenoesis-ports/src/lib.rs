@@ -21,6 +21,7 @@ use codenoesis_domain::s4_r10::{
     RustCfgDeclarationAlternativesError, RustCfgDeclarationAlternativesExtraction,
 };
 use codenoesis_domain::s4_r12::{CallableCfgAlternativesError, CallableCfgAlternativesExtraction};
+use codenoesis_domain::s4_r14::{ExpressionBindingError, ExpressionBindingExtraction};
 use codenoesis_domain::s5::{AnalysisCacheEntry, IncrementalWorkspaceExtraction};
 use codenoesis_domain::s6::{ContractError, OpenApiContractInput, ProviderContract};
 use codenoesis_domain::storage::{
@@ -224,6 +225,19 @@ pub trait RustCallableCfgAlternativesCompositionExtractor {
         inventory: &RepositoryInventory,
         external_boundaries: &[ExternalWorkspaceBoundary],
     ) -> Result<CallableCfgAlternativesExtraction, CallableCfgAlternativesError>;
+}
+
+pub trait RustExpressionBindingsExtractor {
+    /// Extracts the closed R14 expression and lexical-binding overlay over K1.
+    ///
+    /// # Errors
+    ///
+    /// Returns an inherited K1 or typed expression, pattern, scope, identity, or limit failure
+    /// without executing repository content or inferring compiler/runtime meaning.
+    fn extract_rust_expression_bindings(
+        &self,
+        inventory: &RepositoryInventory,
+    ) -> Result<ExpressionBindingExtraction, ExpressionBindingError>;
 }
 
 pub trait RustFrameworkDeclarationExtractor {

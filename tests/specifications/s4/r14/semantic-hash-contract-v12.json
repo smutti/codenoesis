@@ -1,0 +1,13 @@
+{
+  "schema_version": "codenoesis.semantic-hash-contract/v12",
+  "canonicalization": "RFC8785",
+  "algorithm": "blake3-256",
+  "domains": {
+    "snapshot": "codenoesis.repository-snapshot.semantic.v16",
+    "knowledge_graph": "codenoesis.knowledge-graph.semantic.v13",
+    "extraction_chunk": "codenoesis.extraction-chunk.semantic.v13",
+    "configuration": "codenoesis.configuration.semantic.v13"
+  },
+  "transport_lf_excluded": true,
+  "existing_domains_immutable": true
+}

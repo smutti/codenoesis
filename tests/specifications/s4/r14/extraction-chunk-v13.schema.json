@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/extraction-chunk-v13.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ontology_version",
+    "repository_identity",
+    "subject",
+    "entities",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage",
+    "semantic_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.extraction-chunk/v13"
+    },
+    "ontology_version": {
+      "const": "codenoesis.ontology/rust/v13"
+    },
+    "repository_identity": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:"
+    },
+    "subject": {
+      "type": "object"
+    },
+    "source_file_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:entity:blake3:[0-9a-f]{64}$"
+    },
+    "callable_semantics_profile": {
+      "const": "rust-callable-semantics-v1"
+    },
+    "expression_bindings_profile": {
+      "const": "rust-expression-bindings-v1"
+    },
+    "entities": {
+      "$ref": "#/$defs/family"
+    },
+    "relationships": {
+      "$ref": "#/$defs/family"
+    },
+    "claims": {
+      "$ref": "#/$defs/family"
+    },
+    "evidence": {
+      "$ref": "#/$defs/family"
+    },
+    "diagnostics": {
+      "$ref": "#/$defs/family"
+    },
+    "coverage": {
+      "$ref": "#/$defs/family"
+    },
+    "semantic_hash": {
+      "$ref": "#/$defs/hash"
+    }
+  },
+  "$defs": {
+    "family": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "algorithm",
+        "value"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "blake3-256"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    }
+  }
+}

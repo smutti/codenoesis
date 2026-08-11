@@ -1,0 +1,57 @@
+issue=https://github.com/smutti/codenoesis/issues/162
+pull_request=https://github.com/smutti/codenoesis/pull/163
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+correction_round=3_of_5
+failed_head=7b2de99397028001e0511625ec93572643c9c875
+failed_run=https://github.com/smutti/codenoesis/actions/runs/31429898885
+failed_job=https://github.com/smutti/codenoesis/actions/runs/31429898885/job/93590475174
+failed_environment=windows-latest; rustc 1.97.1 x86_64-pc-windows-msvc
+failed_command=cargo test --workspace --all-targets --all-features --locked
+failed_suite=noesis/tests/e2e_fr_ext_016_rust_expression_bindings.rs
+failed_test=e2e_fr_ext_016_rust_expression_bindings_complete_local_journey
+failed_assertion=R14 viewer bytes changed
+failed_exit=1
+prior_access_correction_result=the Windows codenoesis-lang-rust R14 suite passed 5/5, including ft_fr_ext_016_corrupt_expression_graph_fails_with_exact_typed_errors
+raw_failed_job_log_bytes=284578
+raw_failed_job_log_sha256=bdd16a5fbf44883e4d2afd3c87b20df93b0048417c4725c69ff81322c6cb16f0
+
+root_cause=the published LocalExplorerV7 viewer remained canonical LF, while the R14 test compared it with Git-for-Windows CRLF checkout transport bytes from the immutable K1 asset
+correction=normalize only CRLF checkout transport in the R14 test before comparing with the already canonical published immutable K1 viewer, matching the established R11, R12, and R13 oracle
+changed_product_behavior=false
+changed_contract_or_oracle=false
+changed_viewer_or_golden_bytes=false
+changed_schema_identity_or_fixture=false
+changed_dependency_or_control_plane=false
+changed_path=crates/noesis/tests/e2e_fr_ext_016_rust_expression_bindings.rs
+
+command=cargo fmt --all --check
+exit=0
+
+command=cargo test -p noesis --test e2e_fr_ext_016_rust_expression_bindings --locked
+exit=0
+tests_passed=4
+transport_test=conf_nfr_det_001_r14_viewer_checkout_transport_is_platform_neutral
+
+command=python3 -m unittest scripts.tests.test_s4_r14_rust_expression_bindings_contract
+exit=0
+tests_passed=5
+started_at_utc=2026-08-11T04:50:44Z
+completed_at_utc=2026-08-11T04:51:44Z
+raw_local_log_bytes=1079
+raw_local_log_sha256=c7bf4fb2bea613061205be1ff8fbff15336c6df59f9f391453795a2fe9a7ab7b
+correction_commit=24e276dcf6a8b06f397ad8846f678b120b95f77a
+correction_tree=88a87f538fedb40be0b93b238761e319928651af
+
+complete_gate_started_at_utc=2026-08-11T04:52:52Z
+complete_gate_completed_at_utc=2026-08-11T04:57:52Z
+complete_gate_exit=0
+complete_gate_rust_tests_passed=504
+complete_gate_python_tests_passed=299
+complete_gate_raw_local_log_bytes=59916
+complete_gate_raw_local_log_sha256=2a8de216f9741c907c2b42562ae037e33be942c9337b89ce9790a3d3df6d05b7
+complete_gate_commands=actionlint; policy validation; fmt; clippy; workspace all-target/all-feature tests; doc tests; Python tests; benchmark asset validation; bench compile
+windows_ci_rerun=R14 noesis suite passed 4/4 on head 403a0f9c03eece0f4298a0d56b2bfca7dfeb45c5 before the downstream workspace timeout
+final_review_head_gate=pending after this evidence commit
+result=complete-local-green

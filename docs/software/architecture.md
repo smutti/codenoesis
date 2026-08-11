@@ -247,6 +247,44 @@ R13. Complete R7 plus K1 intent selects typed ErrorV20 failures and cannot
 publish a partial head; incomplete or selector-absent intent retains the
 immutable prior dispatch families.
 
+### R14 Rust expression and lexical bindings
+
+The explicit R14 S4 profile extends only the complete K1 source-only lineage.
+The Rust adapter walks each already accepted callable body with the pinned
+tree-sitter grammar and emits a closed set of selected expression nodes,
+ordered arguments, field-call receivers, supported pattern bindings, and
+uniquely proven lexical identifier access. It never invokes Cargo, rustc,
+macro expansion, a compiler index, a model, or target code.
+
+The language adapter produces an `ExpressionBindingKnowledge` overlay owned by
+the domain. Each `rust.expression`, `rust.call_argument`, and
+`rust.pattern_binding` carries a disjoint deterministic identity and exact
+committed-source evidence. The domain validates selected parenthood, callable
+ownership, contiguous argument ordinals, scope, evidence, endpoints, limits,
+canonical order, and the exact `codenoesis.expression-binding-index/v1`
+projection before the application layer may compose it with K1.
+Expression lexical depth is derived solely as the direct selected-parent
+ancestor count, with root `0`; it is not control-flow or runtime depth.
+
+`READS` and `WRITES` are emitted only for identifier/self expression
+occurrences that resolve uniquely under the closed lexical scope model. A
+direct assignment target writes; a compound target reads and writes; ordinary
+value positions read. These relationships describe parse position only. They
+do not establish def-use, reaching definitions, data flow, mutation success,
+side effects, borrow/ownership, dispatch, value evaluation, reachability, or
+runtime execution. Unsupported or ambiguous patterns/scopes remain explicit
+coverage gaps without guessed edges.
+
+RepositorySnapshotV16 and KnowledgeGraphV13 preserve every K1 record and append
+only the validated R14 overlay. ConfigurationV13, ExtractionChunkV13, and the
+V16/V13 family use new semantic hash domains. LocalQueryResultV11 exposes
+expression, argument, binding, and access neighborhoods. PortableGraphV7 is a
+lossless private V16 projection, and LocalExplorerV7 reuses immutable K1 viewer
+bytes. K1 alone remains V11. The optional existing 64 MiB selector changes only
+final snapshot capacity; repository-boundary, cfg-alternative, compiler/SCIP,
+nested-source, generated-source, and R11-R13 compositions fail with ErrorV21
+before acquisition or publication.
+
 ## Versioned artifacts and identity
 
 All public artifact types include `schema_version`, repository commit, configuration hash, pipeline version, ontology version, extractor versions, creation time, and a BLAKE3 content hash.
