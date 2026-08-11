@@ -1,0 +1,56 @@
+issue=https://github.com/smutti/codenoesis/issues/166
+pull_request=https://github.com/smutti/codenoesis/pull/167
+authorization=https://github.com/smutti/codenoesis/issues/166#issuecomment-5256896665
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+package_risk=high
+correction_risk=critical
+correction_round=5/5
+observed_at_utc=2026-08-11T17:57:22Z
+base_commit_sha=011057c84258a26b08b12ced7ae1df478dbb5048
+failed_head_sha=51b84103ec1d31256df5c6b3a90b4cb8f29a624e
+
+failed_workflow_run=https://github.com/smutti/codenoesis/actions/runs/31512383148
+failed_windows_job=https://github.com/smutti/codenoesis/actions/runs/31512383148/job/93849259053
+windows_job_conclusion=cancelled at the fixed 20-minute portability timeout after all four R15 tests passed
+windows_raw_log_bytes=122801
+windows_raw_log_sha256=a2622d459e1df5697b7518e05d6730ffe125a776e3c6973dee2a2151626893f4
+
+diagnosis=R15 passed 4 of 4 in 41.27 seconds, R14 passed 4 of 4 in 103.20 seconds, R13 completed in 129.60 seconds, S6 passed 15 of 15 in 96.72 seconds, and incremental passed 10 of 10 in 14.81 seconds before cancellation during the inherited inventory suite
+prior_attempt_observation=the preceding Windows attempt completed every workspace test successfully and was cancelled only during final runner cleanup at the same fixed 20-minute limit
+root_cause=the fixed 20-minute portability timeout is structurally below the observed complete Windows workspace duration under normal hosted-runner variance; removing R15 entirely would not provide reliable completion margin
+correction=increase only portability.timeout-minutes from 20 to 30
+authorized_changed_path=.github/workflows/ci.yml
+previous_timeout_minutes=20
+new_timeout_minutes=30
+workflow_permissions_changed=false
+workflow_triggers_changed=false
+workflow_authority_changed=false
+other_control_plane_changed=false
+product_changed=false
+contract_changed=false
+schema_changed=false
+fixture_changed=false
+dependency_changed=false
+oracle_changed=false
+
+command=actionlint -no-color
+exit=0
+
+command=python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json
+exit=0
+policy_status=valid
+approved_requirement_count=39
+hard_protected_pattern_count=13
+
+command=git diff --check
+exit=0
+
+focused_validation_log_bytes=279
+focused_validation_log_sha256=ead29ee31fea18e8ec4571ed1f1d554bf1e227c18c8a2704d79dc728b9bbf989
+head_authored_control_is_authority_for_same_pull_request=false
+same_pull_request_workflow_result=advisory
+activation=after accountable-maintainer protected manual merge only
+manual_independent_review_and_merge_required=true
+complete_repository_gate=run after this evidence commit and bind the immutable result in the pull request
+result=focused validation green; exact-final-head local gate and GitHub Actions pending

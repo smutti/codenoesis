@@ -28,7 +28,7 @@
   "slice": "S4",
   "risk": "high",
   "risk_owner": "@smutti",
-  "observed_at_utc": "2026-08-11T16:17:39Z",
+  "observed_at_utc": "2026-08-11T17:57:22Z",
   "base_commit_sha": "011057c84258a26b08b12ced7ae1df478dbb5048",
   "governance_checkpoint_sha": "1e29d0ff13506c3d6446f24c4d2f810b186bfef4",
   "red_evidence_commit_sha": "878a4b0bd6e1c007bb6889bfc229a271a102e5d4",
@@ -40,12 +40,13 @@
     "ready_issue": "https://github.com/smutti/codenoesis/issues/166",
     "complete_package_decision": "https://github.com/smutti/codenoesis/issues/166#issuecomment-5252891670",
     "s6_stdout_test_amendment": "https://github.com/smutti/codenoesis/issues/166#issuecomment-5254310440",
+    "windows_portability_timeout_amendment": "https://github.com/smutti/codenoesis/issues/166#issuecomment-5256896665",
     "maintainer_supervised_interactive_lane": true,
     "governance_and_code_single_pr": true,
     "correction_budget": 5,
-    "correction_rounds_used": 4,
+    "correction_rounds_used": 5,
     "manual_independent_review_and_merge_required": true,
-    "control_plane_effect": "none",
+    "control_plane_effect": "candidate portability timeout 20 to 30 minutes; inert as authority for this pull request and active only after protected manual merge",
     "release_effect": "none"
   },
   "contracts": {
@@ -145,6 +146,22 @@
       "focused_attempts_passed": 3,
       "summary": "crates/noesis/tests/evidence/s4/r15-rust-local-flow/windows-ci-cleanup-margin-correction.log"
     },
+    "windows_ci_portability_timeout_correction": {
+      "round": 5,
+      "risk": "critical",
+      "authorization": "https://github.com/smutti/codenoesis/issues/166#issuecomment-5256896665",
+      "failed_head": "51b84103ec1d31256df5c6b3a90b4cb8f29a624e",
+      "failed_workflow_run": "https://github.com/smutti/codenoesis/actions/runs/31512383148",
+      "failed_windows_job": "https://github.com/smutti/codenoesis/actions/runs/31512383148/job/93849259053",
+      "root_cause": "the fixed twenty-minute portability timeout is below the observed complete Windows workspace duration under normal runner variance",
+      "correction": "increase only portability.timeout-minutes from twenty to thirty",
+      "workflow_permissions_triggers_or_authority_changed": false,
+      "product_contract_schema_fixture_dependency_or_oracle_change": false,
+      "head_authored_control_is_authority_for_this_pull_request": false,
+      "activation": "after accountable-maintainer protected manual merge only",
+      "focused_validation": "green",
+      "summary": "crates/noesis/tests/evidence/s4/r15-rust-local-flow/windows-ci-portability-timeout-correction.log"
+    },
     "complete_repository_gate": {
       "tested_commit": "cc5baa4a963647fe6f3ccc727f9b52e5ab97b504",
       "tested_tree": "41806bb34be6a839de1105efbf17a76c0e6e923d",
@@ -232,6 +249,7 @@
     "immutable_k1_viewer_sha256": "d0b633b29e6494d6494a35b5553d72c3dd04a747eeef219ca33a9f5fe2a1f4fa"
   },
   "actual_changed_paths": [
+    ".github/workflows/ci.yml",
     "README.md",
     "crates/codenoesis-application/src/lib.rs",
     "crates/codenoesis-application/src/s4_r15.rs",
@@ -286,6 +304,7 @@
     "R15 is syntax-normal, source-only local flow and does not infer compiler CFG, panic or unwind behavior, types, dispatch, borrow, ownership, aliases, side effects, values, active branches, or runtime execution.",
     "Whole-callable R15 extraction is intentionally absent for every construct outside the frozen closed acyclic grammar; inherited broad reachability and data-flow gaps remain truthful.",
     "The Proposed candidate is not Verified and has no effect on main before independent review and protected manual merge.",
-    "Base-controlled GitHub Actions and independent review remain pending on the final pull-request head."
+    "The head-authored thirty-minute timeout is advisory for pull request 167 and cannot authorize or approve its own change.",
+    "GitHub Actions and independent review remain pending on the final pull-request head."
   ]
 }
