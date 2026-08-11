@@ -47,6 +47,6 @@ complete_gate_python_tests_passed=299
 complete_gate_raw_local_log_bytes=59980
 complete_gate_raw_local_log_sha256=306ef223dacb5b366c150f474bc0aec2547c25a8f87d818819e2e6f7a6d998dd
 complete_gate_commands=actionlint; policy validation; fmt; clippy; workspace all-target/all-feature tests; doc tests; Python tests; benchmark asset validation; bench compile
-windows_ci_rerun=pending on the corrected pull-request head
+windows_ci_rerun=passed 5/5 in the codenoesis-lang-rust R14 suite on head 7b2de99397028001e0511625ec93572643c9c875
 final_review_head_gate=pending after this evidence commit
 result=complete-local-green

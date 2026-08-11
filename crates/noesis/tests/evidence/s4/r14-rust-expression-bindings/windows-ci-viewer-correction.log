@@ -52,6 +52,6 @@ complete_gate_python_tests_passed=299
 complete_gate_raw_local_log_bytes=59916
 complete_gate_raw_local_log_sha256=2a8de216f9741c907c2b42562ae037e33be942c9337b89ce9790a3d3df6d05b7
 complete_gate_commands=actionlint; policy validation; fmt; clippy; workspace all-target/all-feature tests; doc tests; Python tests; benchmark asset validation; bench compile
-windows_ci_rerun=pending on the corrected pull-request head
+windows_ci_rerun=R14 noesis suite passed 4/4 on head 403a0f9c03eece0f4298a0d56b2bfca7dfeb45c5 before the downstream workspace timeout
 final_review_head_gate=pending after this evidence commit
 result=complete-local-green

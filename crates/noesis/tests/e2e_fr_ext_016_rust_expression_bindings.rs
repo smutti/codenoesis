@@ -283,17 +283,32 @@ fn conf_fr_cli_001_r14_selector_dispatch_is_closed_and_side_effect_free() {
 #[test]
 fn pt_nfr_det_001_r14_fifty_permutations_and_ten_schedules_are_identical() {
     let repository = MaterializedExpressionBindingRepository::fixture();
-    let mut expected_semantic = None;
-    for seed in 0..50 {
-        let output = repository
-            .permuted_scan_command(seed)
+    let expected_semantic = semantic_projection(
+        &repository
+            .permuted_scan_command(0)
             .output()
-            .expect("run R14 argument permutation");
-        let semantic = semantic_projection(&output);
-        if let Some(expected) = &expected_semantic {
-            assert_eq!(&semantic, expected, "R14 semantic permutation {seed}");
-        } else {
-            expected_semantic = Some(semantic);
+            .expect("run R14 argument permutation 0"),
+    );
+    for batch_start in (1_u64..50).step_by(10) {
+        let batch_end = batch_start.saturating_add(10).min(50);
+        let permutations = (batch_start..batch_end)
+            .map(|seed| {
+                let mut command = repository.permuted_scan_command(seed);
+                (
+                    seed,
+                    std::thread::spawn(move || {
+                        command.output().expect("run R14 argument permutation")
+                    }),
+                )
+            })
+            .collect::<Vec<_>>();
+        for (seed, handle) in permutations {
+            let output = handle.join().expect("join R14 argument permutation");
+            assert_eq!(
+                semantic_projection(&output),
+                expected_semantic,
+                "R14 semantic permutation {seed}"
+            );
         }
     }
 
@@ -303,7 +318,6 @@ fn pt_nfr_det_001_r14_fifty_permutations_and_ten_schedules_are_identical() {
             std::thread::spawn(move || command.output().expect("run R14 parallel schedule"))
         })
         .collect::<Vec<_>>();
-    let expected_semantic = expected_semantic.expect("R14 semantic oracle");
     for (schedule, handle) in schedules.into_iter().enumerate() {
         let output = handle.join().expect("join R14 parallel schedule");
         assert_eq!(
