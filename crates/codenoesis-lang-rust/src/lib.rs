@@ -17,6 +17,7 @@ use unicode_normalization::UnicodeNormalization as _;
 mod callable_semantics;
 mod expression_bindings;
 mod framework_declarations;
+mod local_flow;
 mod manifest_facts;
 mod root_package;
 mod semantic_depth;

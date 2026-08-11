@@ -234,6 +234,73 @@ fn e2e_fr_ext_017_rust_local_flow_complete_local_journey() {
             reviewed["inputs"]["evidence_ids"]
         );
     }
+    let additive_subject_ids = expected["blocks"]
+        .as_array()
+        .expect("R15 blocks")
+        .iter()
+        .chain(
+            expected["relationships"]
+                .as_array()
+                .expect("R15 relationships"),
+        )
+        .map(|value| value["id"].as_str().expect("R15 additive subject"))
+        .collect::<BTreeSet<_>>();
+    for (family, values) in [
+        ("entities", blocks.clone()),
+        (
+            "relationships",
+            relationships
+                .iter()
+                .filter(|relationship| {
+                    relationship["kind"]
+                        .as_str()
+                        .is_some_and(|kind| reviewed_kinds.contains_key(kind))
+                })
+                .collect::<Vec<_>>(),
+        ),
+        (
+            "claims",
+            claims
+                .iter()
+                .filter(|claim| {
+                    claim["subject_id"]
+                        .as_str()
+                        .is_some_and(|identifier| additive_subject_ids.contains(identifier))
+                })
+                .collect::<Vec<_>>(),
+        ),
+        ("evidence", additive_evidence.iter().collect::<Vec<_>>()),
+    ] {
+        assert_eq!(
+            family_id_digest(&values),
+            expected["family_id_sha256"][family]
+                .as_str()
+                .expect("reviewed R15 family digest"),
+            "R15 additive family ID digest {family}"
+        );
+    }
+    let derivation_projection = derivations
+        .iter()
+        .map(|derivation| {
+            json!({
+                "relationship_id": derivation["relationship_id"],
+                "inputs": {
+                    "entity_ids": derivation["input_entity_ids"],
+                    "relationship_ids": derivation["input_relationship_ids"],
+                    "evidence_ids": derivation["input_evidence_ids"]
+                }
+            })
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(
+        hex_sha256(
+            &serde_json::to_vec(&derivation_projection)
+                .expect("serialize R15 derivation projection")
+        ),
+        expected["family_id_sha256"]["derivations"]
+            .as_str()
+            .expect("reviewed R15 derivation digest")
+    );
 
     let coverage = graph["coverage"].as_array().expect("R15 coverage");
     for capability in expected["required_inherited_coverage"]
@@ -278,10 +345,39 @@ fn e2e_fr_ext_017_rust_local_flow_complete_local_journey() {
     ] {
         let query = repository.query(requested_id);
         assert_success(&query, "R15 exact-ID query");
+        let result = parse_single_document(&query.stdout);
         assert_eq!(
-            parse_single_document(&query.stdout)["schema_version"],
+            result["schema_version"],
             "codenoesis.local-query-result/v12"
         );
+        assert_eq!(result["requested_id"], requested_id);
+        assert!(!result["claims"].as_array().is_none_or(Vec::is_empty));
+        assert!(!result["evidence"].as_array().is_none_or(Vec::is_empty));
+        if requested_id
+            == expected["relationships"]
+                .as_array()
+                .expect("R15 relationships")
+                .iter()
+                .find(|value| value["kind"] == "SYNTAX_REACHES")
+                .and_then(|value| value["id"].as_str())
+                .expect("R15 reachability ID")
+            || requested_id
+                == expected["relationships"]
+                    .as_array()
+                    .expect("R15 relationships")
+                    .iter()
+                    .find(|value| value["kind"] == "LEXICAL_MAY_REACHES_READ")
+                    .and_then(|value| value["id"].as_str())
+                    .expect("R15 def-use ID")
+        {
+            assert!(
+                result["linked_derivations"]
+                    .as_array()
+                    .is_some_and(|values| values
+                        .iter()
+                        .any(|value| { value["relationship_id"].as_str() == Some(requested_id) }))
+            );
+        }
     }
 
     let export = repository.export();
@@ -327,7 +423,7 @@ fn conf_fr_cli_001_r15_selector_absence_is_exact_r14() {
         "codenoesis.repository-snapshot/v16"
     );
     assert_eq!(
-        snapshot["semantic_hash"]["value"],
+        snapshot["semantic"]["knowledge_graph"]["semantic_hash"]["value"],
         "9234051e60d266305da77fa5a750c64f42a22d719282a9b0afd7b93461213003"
     );
     assert!(
@@ -335,6 +431,21 @@ fn conf_fr_cli_001_r15_selector_absence_is_exact_r14() {
             .get("rust_flow_profile")
             .is_none()
     );
+    assert!(!repository.build_sentinel().exists());
+}
+
+#[test]
+fn conf_fr_cli_001_r15_forbidden_composition_fails_before_acquisition() {
+    let repository = MaterializedLocalFlowRepository::fixture();
+    let output =
+        repository.scan_with_options(&["--repository-boundary-profile", "root-gitlinks-v1"]);
+    assert_eq!(output.status.code(), Some(2));
+    assert!(output.stdout.is_empty());
+    let error = parse_single_document(&output.stderr);
+    assert_eq!(error["schema_version"], "codenoesis.error/v22");
+    assert_eq!(error["code"], "input.unsupported_rust_flow_composition");
+    assert_eq!(error["stage"], "input");
+    assert!(!repository.store.exists());
     assert!(!repository.build_sentinel().exists());
 }
 
@@ -523,4 +634,15 @@ fn hex_sha256(bytes: &[u8]) -> String {
             write!(&mut output, "{byte:02x}").expect("write R15 SHA-256 hex");
             output
         })
+}
+
+fn family_id_digest(values: &[&Value]) -> String {
+    let mut identifiers = values
+        .iter()
+        .map(|value| value["id"].as_str().expect("R15 family ID"))
+        .collect::<Vec<_>>();
+    identifiers.sort_unstable();
+    let mut payload = identifiers.join("\n").into_bytes();
+    payload.push(b'\n');
+    hex_sha256(&payload)
 }

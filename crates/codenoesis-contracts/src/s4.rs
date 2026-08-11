@@ -631,6 +631,7 @@ pub(super) struct GraphIndex {
     callable_scip_composition: bool,
     callable_cfg_alternatives: bool,
     expression_bindings: bool,
+    local_flow: bool,
     repository_boundaries: Option<Value>,
     pub(super) entities: BTreeMap<String, Value>,
     relationships: Vec<Value>,
@@ -667,6 +668,7 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v11"
                     | "codenoesis.knowledge-graph/v12"
                     | "codenoesis.knowledge-graph/v13"
+                    | "codenoesis.knowledge-graph/v14"
             )
         );
         let rust_semantic_depth = matches!(
@@ -681,6 +683,7 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v11"
                     | "codenoesis.knowledge-graph/v12"
                     | "codenoesis.knowledge-graph/v13"
+                    | "codenoesis.knowledge-graph/v14"
             )
         );
         let declaration_alternatives = matches!(
@@ -697,6 +700,7 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v11"
                     | "codenoesis.knowledge-graph/v12"
                     | "codenoesis.knowledge-graph/v13"
+                    | "codenoesis.knowledge-graph/v14"
             )
         );
         let compiler_index = matches!(
@@ -711,13 +715,18 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v11"
                     | "codenoesis.knowledge-graph/v12"
                     | "codenoesis.knowledge-graph/v13"
+                    | "codenoesis.knowledge-graph/v14"
             )
         );
         let callable_scip_composition =
             graph_schema_version == Some("codenoesis.knowledge-graph/v12");
         let callable_cfg_alternatives =
             graph_schema_version == Some("codenoesis.knowledge-graph/v11");
-        let expression_bindings = graph_schema_version == Some("codenoesis.knowledge-graph/v13");
+        let expression_bindings = matches!(
+            graph_schema_version,
+            Some("codenoesis.knowledge-graph/v13" | "codenoesis.knowledge-graph/v14")
+        );
+        let local_flow = graph_schema_version == Some("codenoesis.knowledge-graph/v14");
         let repository_boundaries = if matches!(
             graph_schema_version,
             Some("codenoesis.knowledge-graph/v10" | "codenoesis.knowledge-graph/v11")
@@ -784,6 +793,7 @@ impl GraphIndex {
             callable_scip_composition,
             callable_cfg_alternatives,
             expression_bindings,
+            local_flow,
             repository_boundaries,
             entities,
             relationships,
@@ -1785,6 +1795,15 @@ fn module_document(
             &mut statements,
         )?;
     }
+    if index.local_flow {
+        append_local_flow(
+            index,
+            &document_id,
+            source_path,
+            &mut content,
+            &mut statements,
+        )?;
+    }
     Ok(DocumentDraft {
         document_id,
         kind: "module",
@@ -1971,6 +1990,125 @@ fn describe_expression_binding(entity: &Value) -> Result<String, DocumentationCo
         ),
         _ => return Err(DocumentationContractError::InvalidSnapshot),
     })
+}
+
+fn append_local_flow(
+    index: &GraphIndex,
+    document_id: &str,
+    source_path: &str,
+    content: &mut String,
+    statements: &mut Vec<Value>,
+) -> Result<(), DocumentationContractError> {
+    let mut blocks = index
+        .entities
+        .values()
+        .filter(|entity| {
+            string_field(entity, "kind").is_ok_and(|kind| kind == "rust.syntax_basic_block")
+                && entity.pointer("/locator/path").and_then(Value::as_str) == Some(source_path)
+        })
+        .collect::<Vec<_>>();
+    blocks.sort_by(|left, right| {
+        string_field(left, "id")
+            .unwrap_or_default()
+            .cmp(string_field(right, "id").unwrap_or_default())
+    });
+    let mut relationships = index
+        .relationships
+        .iter()
+        .filter(|relationship| {
+            string_field(relationship, "kind").is_ok_and(is_local_flow_relationship_kind)
+        })
+        .filter(|relationship| {
+            string_array(relationship, "evidence_ids").is_ok_and(|identifiers| {
+                identifiers.iter().any(|identifier| {
+                    index.evidence.get(identifier).is_some_and(|evidence| {
+                        evidence.get("path").and_then(Value::as_str) == Some(source_path)
+                    })
+                })
+            })
+        })
+        .collect::<Vec<_>>();
+    relationships.sort_by(|left, right| {
+        string_field(left, "id")
+            .unwrap_or_default()
+            .cmp(string_field(right, "id").unwrap_or_default())
+    });
+    if blocks.is_empty() && relationships.is_empty() {
+        return Ok(());
+    }
+    content.push_str(
+        "\n## Syntax-normal local flow\n\nBlocks and edges describe only possible syntax-normal source progression and the reviewed lexical reaching-definition rule, not compiler or runtime control flow. They do not claim runtime reachability, values, ownership, aliases, side effects, or execution.\n\n",
+    );
+    for block in blocks {
+        let identifier = string_field(block, "id")?;
+        let claim = index.claim("entity", identifier)?;
+        let properties = block
+            .get("properties")
+            .ok_or(DocumentationContractError::InvalidSnapshot)?;
+        let statement = statement_value(
+            document_id,
+            "local_flow_block",
+            identifier,
+            statements.len(),
+            string_field(claim, "state")?,
+            vec![identifier.to_owned()],
+            string_array(claim, "evidence_ids")?,
+            Vec::new(),
+        );
+        writeln!(
+            content,
+            "- `rust.syntax_basic_block` ordinal {} role `{}` with {} direct flow nodes. {}",
+            properties
+                .get("ordinal")
+                .and_then(Value::as_u64)
+                .ok_or(DocumentationContractError::InvalidSnapshot)?,
+            markdown_code(string_field(properties, "role")?),
+            string_array(properties, "flow_node_ids")?.len(),
+            statement_marker(&statement)?
+        )
+        .expect("writing Markdown to a String cannot fail");
+        statements.push(statement);
+    }
+    for relationship in relationships {
+        let identifier = string_field(relationship, "id")?;
+        let claim = index.claim("relationship", identifier)?;
+        let statement = statement_value(
+            document_id,
+            "local_flow_relationship",
+            identifier,
+            statements.len(),
+            string_field(claim, "state")?,
+            vec![identifier.to_owned()],
+            string_array(claim, "evidence_ids")?,
+            Vec::new(),
+        );
+        writeln!(
+            content,
+            "- `{}` from `{}` to `{}`. {}",
+            markdown_code(string_field(relationship, "kind")?),
+            markdown_code(string_field(relationship, "source")?),
+            markdown_code(string_field(relationship, "target")?),
+            statement_marker(&statement)?
+        )
+        .expect("writing Markdown to a String cannot fail");
+        statements.push(statement);
+    }
+    Ok(())
+}
+
+fn is_local_flow_relationship_kind(kind: &str) -> bool {
+    matches!(
+        kind,
+        "HAS_SYNTAX_BLOCK"
+            | "CONTAINS_FLOW_NODE"
+            | "HAS_CONDITION"
+            | "SYNTAX_NEXT"
+            | "SYNTAX_TRUE_BRANCH"
+            | "SYNTAX_FALSE_BRANCH"
+            | "SYNTAX_REACHES"
+            | "LEXICAL_MUST_REACHES_READ"
+            | "LEXICAL_MAY_REACHES_READ"
+    )
 }
 
 fn describe_k1_entity(entity: &Value) -> Result<String, DocumentationContractError> {
