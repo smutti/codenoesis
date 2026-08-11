@@ -6,10 +6,13 @@ CodeNoesis is an early-stage project exploring how to turn software repositories
 
 ## Status
 
-**Project inception.** The problem space, architecture, research hypotheses,
-and evaluation strategy are being defined. A pinned, infrastructure-only Rust
-workspace now verifies CI and benchmark metadata, but there is no CodeNoesis
-product implementation or stable public interface yet.
+**Implemented local Rust analysis through R14, not yet production-ready or
+Verified.** The pinned Rust workspace now provides deterministic repository
+acquisition, evidence-backed Rust ontology extraction, local persistence,
+documentation, exact-ID query, portable export, and an offline explorer. The
+latest protected merge adds committed-source expression and lexical-binding
+facts. Complete independent evidence acceptance, broader language coverage,
+operations, and the remaining production-readiness slices are still pending.
 
 ## Two development tracks
 
