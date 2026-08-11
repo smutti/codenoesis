@@ -253,16 +253,16 @@ fn conf_fr_cli_005_invocation_and_digest_fail_without_stdout() {
 #[test]
 fn conf_fr_cli_005_stdout_failure_uses_internal_error_v8() {
     let materialized = materialize_reviewed_workspace("workspace-provider-only.json");
-    let mut child = Command::new(env!("CARGO_BIN_EXE_noesis"))
+    let (stdout_reader, stdout_writer) = std::io::pipe().unwrap();
+    drop(stdout_reader);
+    let output = Command::new(env!("CARGO_BIN_EXE_noesis"))
         .args(["federate", "--workspace-manifest"])
         .arg(&materialized.manifest)
         .args(["--profile", "standard-local-s6", "--format", "json"])
-        .stdout(Stdio::piped())
+        .stdout(Stdio::from(stdout_writer))
         .stderr(Stdio::piped())
-        .spawn()
+        .output()
         .unwrap();
-    drop(child.stdout.take());
-    let output = child.wait_with_output().unwrap();
     assert_error(&output, 70, "internal.unexpected");
 }
 

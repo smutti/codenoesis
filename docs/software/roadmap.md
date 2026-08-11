@@ -1,7 +1,7 @@
 # CodeNoesis Delivery Roadmap
 
 > Status: **Proposed planning companion — not implementation authority**.
-> Last updated: **2026-08-10**.
+> Last updated: **2026-08-11**.
 
 This roadmap sequences product and validation work without changing the
 normative meaning or approval status of the
@@ -95,9 +95,11 @@ R0-R14 and K1 are implemented but remain not Verified until their complete
 retained evidence is independently accepted. R7 static import still grants no
 index generation authority. Protected merge #163 made the explicit V13/V16
 committed-source expression and lexical-binding layer effective without adding
-compiler, data-flow, ownership, or runtime meaning. Issue #164 is the immediate
-correctness gate before further CFG/data-flow work: it permits a valid empty
-additive R5 layer without changing any public R0-R14 contract or byte.
+compiler, data-flow, ownership, or runtime meaning. Protected merge #165 accepts
+the valid empty additive R5 neutral element without changing any public
+R0-R14 contract or byte. Issue #166 now proposes the R15 closed source-only
+local-flow layer through the explicit `rust-local-flow-v1` selector; it remains
+a branch-scoped candidate until manual merge.
 
 | Order | Planning item | Outcome | Governance dependency | Candidate acceptance gate |
 |---|---|---|---|---|
@@ -117,13 +119,14 @@ additive R5 layer without changing any public R0-R14 contract or byte.
 | `R12` | K1 cfg-alternatives composition | Implemented but not Verified: preserve one R10 logical method while attaching occurrence-specific K1 signatures, parameters, body facts, and uniquely proven local calls to exact declaration-alternative subjects in additive V11/V14, QueryV9, PortableGraphV5, and LocalExplorerV5. | Issue #158, Decision 0023, and protected merge #159; complete immutable verification remains open. | The project-owned fixture completes scan → docs → logical/alternative/signature query → export → strict reimport → explore; exact subject mapping, optional boundary/capacity, limits/security/determinism pass, and RustDesk advances beyond the former `try_start_clipboard` conflict without choosing an active `cfg` world. |
 | `R13` | K1 and revision-bound SCIP composition | Implemented but not Verified: preserve complete K1 and R7 facts while adding only evidence-backed `HAS_COMPILER_SYMBOL` correspondence from exact K1 functions/methods to exact in-repository compiler symbols in additive V12/V15, QueryV10, PortableGraphV6, and LocalExplorerV6. | Issue #160, Decision 0024, and protected merge #161; complete immutable verification remains open. | The immutable compiler-index fixture completes scan → docs → callable/signature/compiler/join query → export → strict reimport → explore with five exact joins, two unchanged unresolved calls, zero new `CALLS`, 52 coverage records, and deterministic security/limit regressions. |
 | `R14` | Rust expression and lexical bindings | Implemented but not Verified after protected merge #163: preserves complete K1 while adding only closed committed-source expressions, ordered arguments, receivers, supported pattern bindings, explicit modifiers, and syntax-only lexical `READS`/`WRITES` in V13/V16, QueryV11, PortableGraphV7, and LocalExplorerV7. | Issue #162, Decision 0025, and protected merge #163; Decision 0026 and issue #164 correct only empty additive R5 neutrality while keeping the R14 bundle immutable. | The immutable K1 fixture completes scan → docs → expression/argument/binding/access query → export → strict reimport → explore with 73 expressions, 23 bindings, 29 reads, 7 writes, exact spans/scopes, and deterministic invalid/limit/security regressions without type, data-flow, ownership, or runtime claims. |
+| `R15` | Closed Rust local flow | Proposed branch-scoped candidate: preserve complete R14 while adding evidence-backed syntax basic blocks, explicit possible normal branch edges, strict source reachability, and lexical must/may reaching definitions in V14/V17, QueryV12, PortableGraphV8, and LocalExplorerV8. | Issue #166, Decision 0027, exact base `011057c84258a26b08b12ced7ae1df478dbb5048`; no new dependency and no compiler/runtime authority. | The project-owned fixture must complete scan → docs → block/condition/reachability/def-use query → export → strict reimport → explore with 5 blocks, 36 relations, exact derivations, 50 permutations, ten schedules, whole-callable rejection, inherited broad gaps, and immutable R0-R14/K1 bytes. |
 
 ### Earliest useful real-world checkpoint
 
 `R1`–`R3` are the minimum path to analyzing ordinary packed clones with safe
 gitlink boundaries and common virtual or non-virtual Cargo workspace layouts.
 At that checkpoint CodeNoesis should create and query a partial but honest
-ontology and generate evidence-backed documentation. `R4`–`R14` increase
+ontology and generate evidence-backed documentation. `R4`–`R15` increase
 semantic coverage and make the graph easier to inspect; they are not permitted
 to hide unsupported meaning.
 

@@ -22,6 +22,7 @@ use codenoesis_domain::s4_r10::{
 };
 use codenoesis_domain::s4_r12::{CallableCfgAlternativesError, CallableCfgAlternativesExtraction};
 use codenoesis_domain::s4_r14::{ExpressionBindingError, ExpressionBindingExtraction};
+use codenoesis_domain::s4_r15::{LocalFlowError, LocalFlowExtraction};
 use codenoesis_domain::s5::{AnalysisCacheEntry, IncrementalWorkspaceExtraction};
 use codenoesis_domain::s6::{ContractError, OpenApiContractInput, ProviderContract};
 use codenoesis_domain::storage::{
@@ -238,6 +239,19 @@ pub trait RustExpressionBindingsExtractor {
         &self,
         inventory: &RepositoryInventory,
     ) -> Result<ExpressionBindingExtraction, ExpressionBindingError>;
+}
+
+pub trait RustLocalFlowExtractor {
+    /// Extracts the closed R15 syntax-normal local-flow overlay over exact R14 facts.
+    ///
+    /// # Errors
+    ///
+    /// Returns an inherited R14 or typed block, edge, access, derivation, or limit failure
+    /// without executing repository content or inferring compiler/runtime meaning.
+    fn extract_rust_local_flow(
+        &self,
+        inventory: &RepositoryInventory,
+    ) -> Result<LocalFlowExtraction, LocalFlowError>;
 }
 
 pub trait RustFrameworkDeclarationExtractor {

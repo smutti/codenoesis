@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/repository-snapshot-v17.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "semantic_hash", "semantic", "envelope"],
+  "properties": {
+    "schema_version": {"const": "codenoesis.repository-snapshot/v17"},
+    "semantic_hash": {"$ref": "#/$defs/hash"},
+    "semantic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository", "configuration", "pipeline_version", "ontology_version",
+        "extractor_contract_version", "extractor_versions", "extraction_chunks",
+        "knowledge_graph"
+      ],
+      "properties": {
+        "repository": {"type": "object"},
+        "configuration": {"$ref": "configuration-v14.schema.json"},
+        "pipeline_version": {"const": "codenoesis.pipeline/s4-r15-v1"},
+        "ontology_version": {"const": "codenoesis.ontology/rust/v14"},
+        "extractor_contract_version": {"const": "codenoesis.extraction/v14"},
+        "extractor_versions": {
+          "type": "array",
+          "allOf": [
+            {"contains": {"const": "codenoesis.rust-callable/s4-k1-v1"}},
+            {"contains": {"const": "codenoesis.rust-expression-bindings/s4-r14-v1"}},
+            {"contains": {"const": "codenoesis.rust-local-flow/s4-r15-v1"}}
+          ]
+        },
+        "extraction_chunks": {"type": "array", "items": {"$ref": "extraction-chunk-v14.schema.json"}},
+        "knowledge_graph": {"$ref": "knowledge-graph-v14.schema.json"}
+      }
+    },
+    "envelope": {"type": "object"}
+  },
+  "$defs": {
+    "hash": {
+      "type": "object", "additionalProperties": false,
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {"const": "blake3-256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

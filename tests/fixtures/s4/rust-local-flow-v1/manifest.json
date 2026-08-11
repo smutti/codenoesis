@@ -1,0 +1,43 @@
+{
+  "schema_version": "codenoesis.r15-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-local-flow-v1",
+  "external_source_vendored": false,
+  "materialization": {
+    "object_format": "sha1",
+    "tree_oid": "6a97e7b14d29db6aa50416fd9ac76b9022298104",
+    "commit_oid": "552a8cdc76b2dd80dc26ad1e3b381fc0de9eab24",
+    "author_name": "CodeNoesis",
+    "author_email": "fixture@codenoesis.invalid",
+    "author_date": "1786406400 +0000",
+    "commit_message": "R15 local-flow fixture\n"
+  },
+  "files": [
+    {
+      "path": "repository/Cargo.toml",
+      "mode": "100644",
+      "byte_length": 105,
+      "blob_oid": "c8803b72ed28064208e7f3f95958b3f10c90f25b",
+      "sha256": "7361229e951665374b726accc41576721b0c31cab9d03da48b06a4329344aa5f"
+    },
+    {
+      "path": "repository/src/lib.rs",
+      "mode": "100644",
+      "byte_length": 228,
+      "blob_oid": "36be3c129a00aee60e6c312fdb4de133ad57b7bb",
+      "sha256": "743ad3d6ff6d502f7a6a1b5aa9b462f5957533e017c11e60ca5c5242b9f451c5"
+    }
+  ],
+  "expected_oracle": {
+    "path": "tests/fixtures/s4/rust-local-flow-v1/expected-local-flow.json",
+    "byte_length": 52422,
+    "sha256": "364a393d08bfd04a94d5871fb0666044dd58c3276248d3a193daa34e738fad97"
+  },
+  "sentinels": {
+    "process_execution_permitted": false,
+    "network_access_permitted": false,
+    "compiler_execution_permitted": false,
+    "macro_expansion_permitted": false,
+    "model_provider_permitted": false,
+    "browser_launch_permitted": false
+  }
+}

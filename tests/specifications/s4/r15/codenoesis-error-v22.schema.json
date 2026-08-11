@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/codenoesis-error-v22.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "code", "stage", "message", "retryable", "context"],
+  "properties": {
+    "schema_version": {"const": "codenoesis.error/v22"},
+    "code": {
+      "enum": [
+        "input.invalid_rust_flow_profile",
+        "input.unsupported_rust_flow_composition",
+        "input.unsafe_output_path",
+        "acquisition.limit_exceeded",
+        "extraction.invalid_rust_source",
+        "extraction.local_flow_syntax_unsupported",
+        "extraction.local_flow_identity_conflict",
+        "extraction.local_flow_block_invalid",
+        "extraction.local_flow_edge_invalid",
+        "extraction.local_flow_cycle",
+        "extraction.local_flow_reachability_mismatch",
+        "extraction.local_flow_access_mismatch",
+        "extraction.local_flow_derivation_mismatch",
+        "extraction.local_flow_index_mismatch",
+        "extraction.local_flow_limit_exceeded",
+        "snapshot.invalid_v17",
+        "query.invalid_v17",
+        "export.invalid_snapshot",
+        "export.invalid_portable_graph_v8",
+        "export.limit_exceeded",
+        "explorer.asset_integrity_mismatch",
+        "explorer.limit_exceeded",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {"enum": ["input", "acquisition", "extraction", "snapshot", "query", "export", "explorer", "internal"]},
+    "message": {"type": "string", "minLength": 1, "maxLength": 256},
+    "retryable": {"const": false},
+    "context": {"type": "object"}
+  }
+}

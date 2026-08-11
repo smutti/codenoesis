@@ -1,0 +1,49 @@
+issue=https://github.com/smutti/codenoesis/issues/166
+requirements=FR-EXT-017,FR-EXP-007,FR-EXT-012,FR-EXT-016,FR-KNW-003,FR-QRY-001,FR-CLI-001,FR-DOC-001,FR-DOC-002,FR-DOC-003,NFR-DET-001,NFR-SEC-001,NFR-SEC-005,NFR-PRV-002,NFR-TST-001,NFR-TST-002
+slice=S4
+risk=high
+base_sha=011057c84258a26b08b12ced7ae1df478dbb5048
+checkpoint_sha=1e29d0ff13506c3d6446f24c4d2f810b186bfef4
+branch=codex/166-r15-local-flow
+date=2026-08-11
+os=Darwin 25.5.0 arm64
+host=aarch64-apple-darwin
+rustc=rustc 1.97.1 (8bab26f4f 2026-07-14)
+cargo=cargo 1.97.1 (c980f4866 2026-06-30)
+command=cargo test -p noesis --test e2e_fr_ext_017_rust_local_flow e2e_fr_ext_017_rust_local_flow_complete_local_journey -- --exact
+expected=RepositorySnapshotV17 success is unavailable before production implementation because the frozen CLI rejects --rust-flow-profile as an invalid revision argument
+exit=101
+underlying_scan_exit=2
+underlying_stdout_bytes=0
+underlying_stderr_bytes=149
+underlying_stderr_sha256=7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe
+underlying_error_schema=codenoesis.error/v4
+underlying_error_code=input.invalid_revision
+underlying_error_stage=input
+store=absent
+production_source_modified_before_red=false
+raw_capture_bytes=1168
+raw_capture_sha256=40d10192e3935f8a29c865ace7f74933ed5df0d8b423160876e2461e514d5194
+
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running tests/e2e_fr_ext_017_rust_local_flow.rs (target/debug/deps/e2e_fr_ext_017_rust_local_flow-1c3f9a78261669a5)
+
+running 1 test
+test e2e_fr_ext_017_rust_local_flow_complete_local_journey ... FAILED
+
+failures:
+
+---- e2e_fr_ext_017_rust_local_flow_complete_local_journey stdout ----
+
+thread 'e2e_fr_ext_017_rust_local_flow_complete_local_journey' (<pid>) panicked at crates/noesis/tests/e2e_fr_ext_017_rust_local_flow.rs:37:9:
+expected RepositorySnapshotV17 success; observed frozen selector Red
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    e2e_fr_ext_017_rust_local_flow_complete_local_journey
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 2 filtered out; finished in <duration>
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_ext_017_rust_local_flow`

@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/knowledge-graph-v14.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "ontology_version", "extractor_versions", "repository",
+    "workspace", "manifest_index", "rust_semantic_index",
+    "framework_declaration_index", "callable_semantics_index",
+    "expression_binding_index", "local_flow_index", "entities", "relationships",
+    "claims", "evidence", "diagnostics", "coverage", "semantic_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "codenoesis.knowledge-graph/v14"},
+    "ontology_version": {"const": "codenoesis.ontology/rust/v14"},
+    "extractor_versions": {
+      "type": "array",
+      "allOf": [{"contains": {"const": "codenoesis.rust-local-flow/s4-r15-v1"}}]
+    },
+    "repository": {"type": "object"},
+    "workspace": {"type": "object"},
+    "manifest_index": {"type": "object"},
+    "rust_semantic_index": {"type": "object"},
+    "framework_declaration_index": {"type": "object"},
+    "callable_semantics_index": {"type": "object"},
+    "expression_binding_index": {"type": "object"},
+    "local_flow_index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "rule_version", "completed_callable_ids",
+        "block_entity_ids", "flow_node_relationship_ids",
+        "condition_relationship_ids", "direct_syntax_relationship_ids",
+        "reachability_relationship_ids", "must_reach_relationship_ids",
+        "may_reach_relationship_ids", "derivations"
+      ],
+      "properties": {
+        "schema_version": {"const": "codenoesis.local-flow-index/v1"},
+        "rule_version": {"const": "codenoesis.rule/rust-local-flow/v1"},
+        "completed_callable_ids": {"$ref": "#/$defs/entity_ids"},
+        "block_entity_ids": {"$ref": "#/$defs/entity_ids"},
+        "flow_node_relationship_ids": {"$ref": "#/$defs/relationship_ids"},
+        "condition_relationship_ids": {"$ref": "#/$defs/relationship_ids"},
+        "direct_syntax_relationship_ids": {"$ref": "#/$defs/relationship_ids"},
+        "reachability_relationship_ids": {"$ref": "#/$defs/relationship_ids"},
+        "must_reach_relationship_ids": {"$ref": "#/$defs/relationship_ids"},
+        "may_reach_relationship_ids": {"$ref": "#/$defs/relationship_ids"},
+        "derivations": {
+          "type": "array",
+          "maxItems": 1000000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "relationship_id", "rule_version", "input_entity_ids",
+              "input_relationship_ids", "input_evidence_ids"
+            ],
+            "properties": {
+              "relationship_id": {"type": "string", "pattern": "^urn:codenoesis:relationship:blake3:[0-9a-f]{64}$"},
+              "rule_version": {"const": "codenoesis.rule/rust-local-flow/v1"},
+              "input_entity_ids": {"$ref": "#/$defs/entity_ids"},
+              "input_relationship_ids": {"$ref": "#/$defs/relationship_ids"},
+              "input_evidence_ids": {"$ref": "#/$defs/evidence_ids"}
+            }
+          }
+        }
+      }
+    },
+    "entities": {"$ref": "#/$defs/family"},
+    "relationships": {"$ref": "#/$defs/family"},
+    "claims": {"$ref": "#/$defs/family"},
+    "evidence": {"$ref": "#/$defs/family"},
+    "diagnostics": {"$ref": "#/$defs/family"},
+    "coverage": {"$ref": "#/$defs/family"},
+    "semantic_hash": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "family": {"type": "array", "items": {"type": "object", "required": ["id"]}},
+    "entity_ids": {
+      "type": "array", "maxItems": 1000000,
+      "items": {"type": "string", "pattern": "^urn:codenoesis:entity:blake3:[0-9a-f]{64}$"}
+    },
+    "relationship_ids": {
+      "type": "array", "maxItems": 1000000,
+      "items": {"type": "string", "pattern": "^urn:codenoesis:relationship:blake3:[0-9a-f]{64}$"}
+    },
+    "evidence_ids": {
+      "type": "array", "maxItems": 1000000,
+      "items": {"type": "string", "pattern": "^urn:codenoesis:evidence:(blake3|sha256):[0-9a-f]{64}$"}
+    },
+    "hash": {
+      "type": "object", "additionalProperties": false,
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {"const": "blake3-256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

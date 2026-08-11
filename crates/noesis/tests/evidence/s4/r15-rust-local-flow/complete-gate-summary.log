@@ -1,0 +1,66 @@
+issue=https://github.com/smutti/codenoesis/issues/166
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+tested_implementation_commit=cc5baa4a963647fe6f3ccc727f9b52e5ab97b504
+tested_tree=41806bb34be6a839de1105efbf17a76c0e6e923d
+started_at_utc=2026-08-11T14:15:51Z
+completed_at_utc=2026-08-11T14:23:00Z
+
+command=actionlint -no-color
+exit=0
+duration_seconds=0
+log_sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+command=python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json
+exit=0
+duration_seconds=0
+log_sha256=d34c7e7d850f00e8a14956b58b3214b0d7202e57711796ed4119e340fa582d6f
+result={"approved_requirement_count":39,"hard_protected_pattern_count":13,"status":"valid","version":1}
+
+command=cargo fmt --all --check
+exit=0
+duration_seconds=2
+log_sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+command=cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+exit=0
+duration_seconds=2
+log_sha256=8675810ab2f2d99d78dbf2547bf52f68b3ebc915fcc534d3e7b7d6d4fb0dc7b0
+
+command=cargo test --workspace --all-targets --all-features --locked
+exit=0
+duration_seconds=396
+tests_passed=532
+log_sha256=f0b3e1f7554b73704d3314cf11f85c9d471888c2808112eabb6c74420a1d43a7
+
+command=cargo test --workspace --doc --all-features --locked
+exit=0
+duration_seconds=13
+doctests_passed=0
+log_sha256=cc778430b75746b38b23e9a55f4a8f4fb5503100bb6bb75781c0ad3f5f971cf0
+
+command=python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+exit=0
+duration_seconds=3
+tests_passed=304
+log_sha256=d64f431b30bd19fc48448fd3e7b2a8db55fa72f6ad83895614f375b4db19f66a
+
+command=python3 scripts/validate_benchmark_assets.py
+exit=0
+duration_seconds=0
+log_sha256=e43d02f19b4cbe74039362e76a1e2d78502a64637059a2c1bb7df67631e518cb
+result=benchmark assets valid: status=scaffold, suites=0
+
+command=cargo bench --workspace --all-features --no-run --locked
+exit=0
+duration_seconds=13
+log_sha256=f79c94e63d81ef96f384eff0bc3eec04e3630a7aa2bc9d7a4b0c8bf726d02266
+
+raw_local_logs_order=actionlint,policy,fmt,clippy,tests,doctests,python,benchmarks,bench-build
+raw_local_logs_bytes=63613
+raw_local_logs_sha256=f2be8bf2ee3b1015c50e97b3b26275013737bb37642fe4248c46073ebee22af2
+environment=Darwin 25.5.0 arm64; rustc 1.97.1 (8bab26f4f 2026-07-14); cargo 1.97.1 (c980f4866 2026-06-30); Python 3.9.6
+known_warning=the pre-existing exact toml dependency requirement includes ignored semver metadata; no workspace manifest or dependency changed
+result=green
+final_review_head_gate=rerun after this evidence commit; retain the exact immutable head and result in the pull request and base-controlled GitHub Actions

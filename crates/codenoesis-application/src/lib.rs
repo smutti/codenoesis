@@ -8,6 +8,7 @@ mod s4_r11;
 mod s4_r12;
 mod s4_r13;
 mod s4_r14;
+mod s4_r15;
 mod s4_r3;
 mod s4_r4;
 mod s4_r5;
@@ -32,6 +33,7 @@ pub use s4_r11::{CallableBoundaryCompositionScanError, S4R11ScanOutput};
 pub use s4_r12::{CallableCfgAlternativesScanError, S4R12ScanOutput};
 pub use s4_r13::{CallableScipScanError, S4R13ScanOutput};
 pub use s4_r14::{ExpressionBindingsScanError, S4R14ScanOutput};
+pub use s4_r15::{LocalFlowScanError, S4R15ScanOutput};
 pub use s5::{RefreshError, RefreshPlan, RefreshService};
 pub use s6::{FederationRequest, FederationService, FederationServiceError};
 

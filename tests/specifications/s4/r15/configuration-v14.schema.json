@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/configuration-v14.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "profile", "workspace_profile", "manifest_profile",
+    "rust_semantic_profile", "rust_framework_profile", "rust_callable_profile",
+    "rust_expression_profile", "rust_flow_profile", "output_capacity_profile",
+    "semantic_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "codenoesis.configuration/v14"},
+    "profile": {"const": "standard-local-s4"},
+    "workspace_profile": {"const": "cargo-root-package-v1"},
+    "manifest_profile": {"const": "cargo-manifest-facts-v1"},
+    "rust_semantic_profile": {"const": "rust-semantic-depth-v1"},
+    "rust_framework_profile": {"const": "rust-framework-declarations-v1"},
+    "rust_callable_profile": {"const": "rust-callable-semantics-v1"},
+    "rust_expression_profile": {"const": "rust-expression-bindings-v1"},
+    "rust_flow_profile": {"const": "rust-local-flow-v1"},
+    "output_capacity_profile": {"enum": [null, "local-snapshot-64m-v1"]},
+    "semantic_hash": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {"const": "blake3-256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

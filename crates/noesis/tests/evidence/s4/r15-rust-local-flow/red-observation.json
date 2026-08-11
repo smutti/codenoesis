@@ -1,0 +1,75 @@
+{
+  "schema_version": "codenoesis.r15-rust-local-flow-red-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/166",
+  "authorization": "https://github.com/smutti/codenoesis/issues/166#issuecomment-5252891670",
+  "requirement_ids": [
+    "FR-EXT-017",
+    "FR-EXP-007",
+    "FR-EXT-012",
+    "FR-EXT-016",
+    "FR-KNW-003",
+    "FR-QRY-001",
+    "FR-CLI-001",
+    "FR-DOC-001",
+    "FR-DOC-002",
+    "FR-DOC-003",
+    "NFR-DET-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-PRV-002",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "requirement_status": "Proposed branch-scoped candidate until manual protected merge",
+  "slice": "S4",
+  "risk": "high",
+  "base_commit_sha": "011057c84258a26b08b12ced7ae1df478dbb5048",
+  "governance_checkpoint_sha": "1e29d0ff13506c3d6446f24c4d2f810b186bfef4",
+  "observed_at_utc": "2026-08-11T12:40:02Z",
+  "production_source_modified_before_red": false,
+  "command": "cargo test -p noesis --test e2e_fr_ext_017_rust_local_flow e2e_fr_ext_017_rust_local_flow_complete_local_journey -- --exact",
+  "expected_failure": "The frozen R14 CLI has no rust-local-flow-v1 selector and parses --rust-flow-profile as the revision value before returning the immutable ErrorV4 invalid-revision result without publication.",
+  "actual_failure": "The public journey observed the frozen selector Red exactly: underlying scan exit 2, empty stdout, 149 stderr bytes with the reviewed digest, ErrorV4 input.invalid_revision at input, and absent store; the test harness then failed intentionally.",
+  "exit_code": 101,
+  "underlying_scan": {
+    "exit_code": 2,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 149,
+    "stderr_sha256": "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe",
+    "schema_version": "codenoesis.error/v4",
+    "code": "input.invalid_revision",
+    "stage": "input",
+    "store": "absent"
+  },
+  "log": {
+    "path": "crates/noesis/tests/evidence/s4/r15-rust-local-flow/red.log",
+    "byte_length": 2456,
+    "sha256": "2e4e02b574413183ebcbfa6c9ab0a94660a86301b4b534d22f31d9376bd47fe1",
+    "normalization": "The absolute workspace prefix, process identifier, and elapsed test duration were replaced with stable placeholders; all semantic failure fields and the raw-capture digest were retained."
+  },
+  "fixture": {
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-local-flow-v1",
+    "commit": "552a8cdc76b2dd80dc26ad1e3b381fc0de9eab24",
+    "tree": "6a97e7b14d29db6aa50416fd9ac76b9022298104",
+    "external_source_vendored": false
+  },
+  "environment": {
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "host": "aarch64-apple-darwin",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "features": "focused noesis integration target defaults; no target build, target execution, analysis network, or model provider"
+  },
+  "agent": {
+    "product": "OpenAI Codex",
+    "model_identity": "not exposed by the runtime",
+    "run_identifier": "not exposed by the runtime",
+    "duration": "focused command completed in under one second after build cache warm-up",
+    "cost": "not exposed by the runtime",
+    "policy": "AGENTS.md sha256:07c4385775f37be9e5d2ba09f7e9edfe3936f800a2188e4155f166eef3299c71"
+  },
+  "human_approval": "Autorizzo issue #166 e il pacchetto completo high-risk R15/S4 descritto sulla baseline 011057c84258a26b08b12ced7ae1df478dbb5048",
+  "stop_conditions_triggered": []
+}

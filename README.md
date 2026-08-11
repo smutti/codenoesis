@@ -10,8 +10,11 @@ CodeNoesis is an early-stage project exploring how to turn software repositories
 Verified.** The pinned Rust workspace now provides deterministic repository
 acquisition, evidence-backed Rust ontology extraction, local persistence,
 documentation, exact-ID query, portable export, and an offline explorer. The
-latest protected merge adds committed-source expression and lexical-binding
-facts. Complete independent evidence acceptance, broader language coverage,
+latest protected merges add committed-source expression and lexical-binding
+facts and accept a valid empty additive R5 layer without changing R14 bytes.
+Issue #166 and Decision 0027 define a Proposed R15 source-only local-flow
+candidate; it is not Approved or Implemented on `main` until manual merge.
+Complete independent evidence acceptance, broader language coverage,
 operations, and the remaining production-readiness slices are still pending.
 
 ## Two development tracks
