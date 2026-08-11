@@ -6,6 +6,7 @@ use std::collections::BTreeSet;
 use std::fmt::Write as _;
 use std::fs;
 use std::path::Path;
+use std::process::Command;
 use std::thread;
 
 use support::s4_r4::MaterializedCargoManifestRepository;
@@ -187,12 +188,22 @@ fn conf_fr_ext_010_empty_semantic_extension_checkpoint_is_bound() {
         assert!(text.contains(marker), "missing issue #164 marker in {path}");
     }
 
-    let decision_0025 = fs::read(
-        root.join("docs/software/decisions/0025-s4-r14-rust-expression-bindings-contract.md"),
-    )
-    .expect("read immutable Decision 0025");
+    let decision_0025 = Command::new("git")
+        .arg("-C")
+        .arg(&root)
+        .args([
+            "show",
+            "HEAD:docs/software/decisions/0025-s4-r14-rust-expression-bindings-contract.md",
+        ])
+        .output()
+        .expect("read immutable Decision 0025 Git blob");
+    assert!(
+        decision_0025.status.success(),
+        "read immutable Decision 0025 Git blob: {}",
+        String::from_utf8_lossy(&decision_0025.stderr)
+    );
     assert_eq!(
-        sha256_hex(&decision_0025),
+        sha256_hex(&decision_0025.stdout),
         "da0da4a3d9ace0a0e58dee5d747e8c5557250f712040fd52f7c1e57f1fd699ad"
     );
 }

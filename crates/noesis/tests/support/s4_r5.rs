@@ -254,8 +254,9 @@ impl MaterializedEmptyRustSemanticRepository {
         .expect("parse empty R5 fixture manifest");
         assert_eq!(manifest["repository_identity"], EMPTY_REPOSITORY_ID);
 
-        let root =
-            fs::canonicalize(unique_temp_root()).expect("canonicalize empty semantic fixture root");
+        let root = unique_temp_root();
+        #[cfg(not(windows))]
+        let root = fs::canonicalize(root).expect("canonicalize empty semantic fixture root");
         let worktree = root.join("repository");
         let store = root.join("store");
         let documents = root.join("documents");
