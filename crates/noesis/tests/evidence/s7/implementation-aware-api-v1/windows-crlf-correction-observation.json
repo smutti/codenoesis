@@ -1,0 +1,84 @@
+{
+  "schema_version": "codenoesis.s7-runtime-correction-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/168",
+  "pull_request": "https://github.com/smutti/codenoesis/pull/169",
+  "authorization": "https://github.com/smutti/codenoesis/issues/168#issuecomment-5262477228",
+  "slice": "S7",
+  "planning_outcome": "C0-C4",
+  "risk": "high",
+  "observed_at_utc": "2026-08-12T09:23:33Z",
+  "correction": {
+    "round": 4,
+    "budget": 5,
+    "remaining_after_correction": 1,
+    "commit": "23ad6e911267375bec7c3b92cca6f418c80d4cc5",
+    "changed_paths": [
+      "crates/noesis/tests/e2e_fr_imp_004_implementation_aware_api_diff.rs",
+      "crates/noesis/tests/support/s7.rs"
+    ]
+  },
+  "failed_ci_observation": {
+    "branch_head": "df45d469e315b1c49e02978bd43ce2b58da8b0fd",
+    "pull_request_merge_commit": "d898c9599daa2c0f23417e73395bad91abcf477d",
+    "workflow_run": "https://github.com/smutti/codenoesis/actions/runs/31580029069",
+    "job": "https://github.com/smutti/codenoesis/actions/runs/31580029069/job/94060748919",
+    "runner": "windows-2025-vs2026",
+    "runner_image_version": "20260803.193.1",
+    "architecture": "x86_64-pc-windows-msvc",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "command": "cargo test --workspace --all-targets --all-features --locked",
+    "exit": 1,
+    "failed_tests": [
+      "e2e_fr_imp_004_implementation_aware_api_diff",
+      "pt_nfr_det_001_s7_replays_and_schedules_are_byte_identical",
+      "sec_fr_cli_006_traversal_oversize_and_malformed_source_fail_closed"
+    ],
+    "observed_error_code": "impact.invalid_workspace",
+    "ubuntu_same_head": "passed including all four S7 tests present on that head",
+    "macos_same_head": "passed",
+    "quality_gate_same_head": "passed"
+  },
+  "root_cause": {
+    "component": "reviewed_fixture_checkout_transport",
+    "reason": "The S7 text fixtures had reviewed LF-bound SHA-256 values but no repository EOL projection. Git for Windows can materialize those tracked text files with CRLF; the test helper copied checkout bytes verbatim, so the output-only command correctly rejected the resulting bytes as an invalid digest-bound workspace before semantic analysis.",
+    "product_defect": false
+  },
+  "fix": {
+    "semantics": "Materialize reviewed S7 text inputs and read the reviewed golden through the existing S6-style CRLF-to-LF transport normalization, rejecting every bare carriage return.",
+    "new_test": "conf_fr_cli_006_s7_reviewed_fixture_materialization_is_platform_neutral",
+    "product_source_changed": false,
+    "requirements_changed": false,
+    "oracle_changed": false,
+    "fixture_changed": false,
+    "schema_changed": false,
+    "dependency_changed": false,
+    "authority_changed": false,
+    "risk_changed": false
+  },
+  "focused_green": {
+    "commands": [
+      "cargo clippy --locked -p noesis --all-targets --all-features -- -D warnings",
+      "cargo test --locked -p noesis --test e2e_fr_imp_004_implementation_aware_api_diff"
+    ],
+    "exits": [
+      0,
+      0
+    ],
+    "tests_passed": 5,
+    "tests_failed": 0
+  },
+  "complete_local_gate": {
+    "tested_product_head": "23ad6e911267375bec7c3b92cca6f418c80d4cc5",
+    "summary": "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/windows-crlf-correction-gate.log",
+    "status": "passed",
+    "rust_tests_passed": 550,
+    "python_tests_passed": 313,
+    "raw_local_log_bytes": 66495,
+    "raw_local_log_sha256": "2b512d56b0b0551d918e4d6f4093e8de938f1aaecd4d1090c2940aca9abc9592"
+  },
+  "required_follow_up": [
+    "Run the native Windows job on the corrected pull request head to confirm transport-neutral materialization.",
+    "Run the complete repository gate on the immutable final evidence head.",
+    "Independent review and protected manual merge remain required."
+  ]
+}
