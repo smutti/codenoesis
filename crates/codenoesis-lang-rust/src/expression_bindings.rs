@@ -515,7 +515,7 @@ fn process_callable(
 ) -> Result<(), ExpressionBindingError> {
     let body = node.child_by_field_name("body");
     let header_end = body.map_or(node.end_byte(), |value| value.start_byte());
-    let callable_id = builder
+    let Some(callable_id) = builder
         .existing
         .iter()
         .find(|entity| {
@@ -523,7 +523,9 @@ fn process_callable(
                 && entity.has_span(builder.path, node.start_byte(), header_end)
         })
         .map(|entity| entity.subject_id.clone())
-        .ok_or(ExpressionBindingError::CallSiteEvidenceMismatch)?;
+    else {
+        return Ok(());
+    };
     let mut bindings = Vec::new();
     if let Some(parameters) = node.child_by_field_name("parameters") {
         let mut cursor = parameters.walk();
@@ -798,37 +800,42 @@ fn add_call_facts(
         let mut cursor = arguments.walk();
         let values = arguments.named_children(&mut cursor).collect::<Vec<_>>();
         enforce_expression_limit(ExpressionBindingLimit::ArgumentsPerCall, values.len())?;
-        for (index, argument) in values.into_iter().enumerate() {
-            let value = expression_for_node(expressions, argument)?;
-            let ordinal =
-                u64::try_from(index).map_err(|_| ExpressionBindingError::ArgumentOrdinalInvalid)?;
-            let id = call_argument_entity_id(&call.entity.id, ordinal);
-            builder.arguments.push(ExpressionBindingEntity {
-                id: id.clone(),
-                kind: ExpressionEntityKind::CallArgument,
-                name: format!("argument:{ordinal}"),
-                callable_id: callable_id.to_owned(),
-                source_file_id: builder.source_file_id.to_owned(),
-                evidence_id: value.entity.evidence_id.clone(),
-                locator: value.entity.locator.clone(),
-                properties: ExpressionEntityProperties::CallArgument(CallArgumentProperties {
-                    call_expression_id: call.entity.id.clone(),
-                    ordinal,
-                    expression_id: value.entity.id.clone(),
-                }),
-            });
-            builder.add_relationship(ExpressionBindingRelationship::new(
-                ExpressionRelationshipKind::HasArgument,
-                call.entity.id.clone(),
-                id.clone(),
-                vec![value.entity.evidence_id.clone()],
-            ));
-            builder.add_relationship(ExpressionBindingRelationship::new(
-                ExpressionRelationshipKind::ArgumentValue,
-                id,
-                value.entity.id.clone(),
-                vec![value.entity.evidence_id.clone()],
-            ));
+        let values = values
+            .into_iter()
+            .map(|argument| expression_for_node(expressions, argument).ok())
+            .collect::<Option<Vec<_>>>();
+        if let Some(values) = values {
+            for (index, value) in values.into_iter().enumerate() {
+                let ordinal = u64::try_from(index)
+                    .map_err(|_| ExpressionBindingError::ArgumentOrdinalInvalid)?;
+                let id = call_argument_entity_id(&call.entity.id, ordinal);
+                builder.arguments.push(ExpressionBindingEntity {
+                    id: id.clone(),
+                    kind: ExpressionEntityKind::CallArgument,
+                    name: format!("argument:{ordinal}"),
+                    callable_id: callable_id.to_owned(),
+                    source_file_id: builder.source_file_id.to_owned(),
+                    evidence_id: value.entity.evidence_id.clone(),
+                    locator: value.entity.locator.clone(),
+                    properties: ExpressionEntityProperties::CallArgument(CallArgumentProperties {
+                        call_expression_id: call.entity.id.clone(),
+                        ordinal,
+                        expression_id: value.entity.id.clone(),
+                    }),
+                });
+                builder.add_relationship(ExpressionBindingRelationship::new(
+                    ExpressionRelationshipKind::HasArgument,
+                    call.entity.id.clone(),
+                    id.clone(),
+                    vec![value.entity.evidence_id.clone()],
+                ));
+                builder.add_relationship(ExpressionBindingRelationship::new(
+                    ExpressionRelationshipKind::ArgumentValue,
+                    id,
+                    value.entity.id.clone(),
+                    vec![value.entity.evidence_id.clone()],
+                ));
+            }
         }
         if let Some(function) = node.child_by_field_name("function")
             && function.kind() == "field_expression"
@@ -836,13 +843,14 @@ fn add_call_facts(
             let receiver_node = function
                 .child_by_field_name("value")
                 .ok_or(ExpressionBindingError::ContractInvalid)?;
-            let receiver = expression_for_node(expressions, receiver_node)?;
-            builder.add_relationship(ExpressionBindingRelationship::new(
-                ExpressionRelationshipKind::HasReceiver,
-                call.entity.id.clone(),
-                receiver.entity.id.clone(),
-                vec![receiver.entity.evidence_id.clone()],
-            ));
+            if let Ok(receiver) = expression_for_node(expressions, receiver_node) {
+                builder.add_relationship(ExpressionBindingRelationship::new(
+                    ExpressionRelationshipKind::HasReceiver,
+                    call.entity.id.clone(),
+                    receiver.entity.id.clone(),
+                    vec![receiver.entity.evidence_id.clone()],
+                ));
+            }
         }
         if let Some(call_site) = builder.existing.iter().find(|entity| {
             entity.kind == CallableSemanticEntityKind::CallSite
@@ -909,10 +917,7 @@ fn collect_body_bindings(
             };
             let value = match node.child_by_field_name("value") {
                 Some(value)
-                    if matches!(
-                        value.kind(),
-                        "closure_expression" | "macro_invocation" | "macro_definition"
-                    ) =>
+                    if !selected_expression(value) || excluded_identifier_context(value) =>
                 {
                     builder.add_gap("rust.pattern_input_unexpanded", &owner_id, value)?;
                     None

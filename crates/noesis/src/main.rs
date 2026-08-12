@@ -58,7 +58,6 @@ use codenoesis_contracts::{
     validate_stored_snapshot_semantic_v14, validate_stored_snapshot_semantic_v15,
     validate_stored_snapshot_semantic_v16, validate_stored_snapshot_semantic_v17,
 };
-use codenoesis_domain::AcquisitionError;
 use codenoesis_domain::knowledge::KnowledgeError;
 use codenoesis_domain::s1_boundaries::LOCAL_GITLINKS_V1;
 use codenoesis_domain::s1_boundaries::RepositoryBoundaryError;
@@ -88,9 +87,10 @@ use codenoesis_domain::storage::{
     SNAPSHOT_SCHEMA_VERSION_V15, SNAPSHOT_SCHEMA_VERSION_V16, SNAPSHOT_SCHEMA_VERSION_V17,
     StorageComponent, StorageError,
 };
+use codenoesis_domain::{AcquisitionError, EntryPolicy, UnsupportedFeature};
 use codenoesis_domain::{
-    InputError, K1OutputCapacityProfile, LOCAL_SNAPSHOT_64M_V1, LimitKind, RepositoryIdentity,
-    Revision, STANDARD_LOCAL_S1_LIMITS, limit_exceeded,
+    InputError, K1OutputCapacityProfile, LOCAL_SNAPSHOT_64M_V1, LOCAL_SNAPSHOT_256M_V1, LimitKind,
+    RepositoryIdentity, Revision, STANDARD_LOCAL_S1_LIMITS, limit_exceeded,
 };
 use codenoesis_lang_rust::{TreeSitterRustExtractor, TreeSitterRustWorkspaceExtractor};
 use codenoesis_ports::{AnalysisCacheStore, ArtifactStore, NoopPublicationObserver};
@@ -4457,6 +4457,14 @@ fn r13_scan_failure(error: CallableScipScanError) -> Failure {
 fn r14_scan_failure(error: ExpressionBindingsScanError) -> Failure {
     match error {
         ExpressionBindingsScanError::Scan(ScanError::Internal) => r14_internal_failure(),
+        ExpressionBindingsScanError::Scan(ScanError::Acquisition(error))
+            if is_gitlink_acquisition(&error) =>
+        {
+            r14_failure(
+                CodeNoesisErrorV21::unsupported_composition("repository_boundary_not_supported"),
+                2,
+            )
+        }
         ExpressionBindingsScanError::Scan(ScanError::Acquisition(error)) => {
             r14_failure(CodeNoesisErrorV21::acquisition_limit(&error), 10)
         }
@@ -4473,6 +4481,14 @@ fn r14_scan_failure(error: ExpressionBindingsScanError) -> Failure {
 fn r15_scan_failure(error: LocalFlowScanError) -> Failure {
     match error {
         LocalFlowScanError::Scan(ScanError::Internal) => r15_internal_failure(),
+        LocalFlowScanError::Scan(ScanError::Acquisition(error))
+            if is_gitlink_acquisition(&error) =>
+        {
+            r15_failure(
+                CodeNoesisErrorV22::unsupported_composition("repository_boundary_not_supported"),
+                2,
+            )
+        }
         LocalFlowScanError::Scan(ScanError::Acquisition(error)) => {
             r15_failure(CodeNoesisErrorV22::acquisition_limit(&error), 10)
         }
@@ -4488,6 +4504,12 @@ fn r15_scan_failure(error: LocalFlowScanError) -> Failure {
 
 fn r15_upgrade_limit_failure(failure: Failure) -> Failure {
     match failure {
+        Failure::Scan(ScanError::Acquisition(error)) if is_gitlink_acquisition(&error) => {
+            r15_failure(
+                CodeNoesisErrorV22::unsupported_composition("repository_boundary_not_supported"),
+                2,
+            )
+        }
         Failure::Scan(ScanError::Acquisition(error)) => {
             r15_failure(CodeNoesisErrorV22::acquisition_limit(&error), 10)
         }
@@ -4497,11 +4519,29 @@ fn r15_upgrade_limit_failure(failure: Failure) -> Failure {
 
 fn r14_upgrade_limit_failure(failure: Failure) -> Failure {
     match failure {
+        Failure::Scan(ScanError::Acquisition(error)) if is_gitlink_acquisition(&error) => {
+            r14_failure(
+                CodeNoesisErrorV21::unsupported_composition("repository_boundary_not_supported"),
+                2,
+            )
+        }
         Failure::Scan(ScanError::Acquisition(error)) => {
             r14_failure(CodeNoesisErrorV21::acquisition_limit(&error), 10)
         }
         other => other,
     }
+}
+
+fn is_gitlink_acquisition(error: &AcquisitionError) -> bool {
+    matches!(
+        error,
+        AcquisitionError::UnsupportedRepositoryShape {
+            feature: UnsupportedFeature::SubmoduleOrGitlink,
+        } | AcquisitionError::EntryPolicyViolation {
+            entry: EntryPolicy::Gitlink,
+            ..
+        }
+    )
 }
 
 fn r13_upgrade_limit_failure(failure: Failure) -> Failure {
@@ -6441,6 +6481,7 @@ fn parse_r14_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
     }
     let mut stripped = arguments.iter().take(2).cloned().collect::<Vec<_>>();
     let mut expression_profile = None;
+    let mut output_capacity_profile = None;
     let mut index = 2;
     while index < arguments.len() {
         let flag = &arguments[index];
@@ -6459,6 +6500,18 @@ fn parse_r14_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
                 return Err(InvocationError::InvalidR14Profile(String::new()));
             };
             expression_profile = Some(value.to_owned());
+        } else if flag == OsStr::new("--output-capacity-profile") {
+            if output_capacity_profile.is_some() {
+                return Err(InvocationError::InvalidR14Composition(
+                    "single_output_capacity_profile_required",
+                ));
+            }
+            let Some(value) = value.to_str() else {
+                return Err(InvocationError::InvalidR14Composition(
+                    "valid_output_capacity_profile_required",
+                ));
+            };
+            output_capacity_profile = Some(value.to_owned());
         } else {
             stripped.push(flag.clone());
             stripped.push(value.clone());
@@ -6473,6 +6526,16 @@ fn parse_r14_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
     if expression_profile != R14_PROFILE {
         return Err(InvocationError::InvalidR14Profile(expression_profile));
     }
+    let output_capacity_profile = match output_capacity_profile.as_deref() {
+        None => K1OutputCapacityProfile::Standard,
+        Some(LOCAL_SNAPSHOT_64M_V1) => K1OutputCapacityProfile::LocalSnapshot64MV1,
+        Some(LOCAL_SNAPSHOT_256M_V1) => K1OutputCapacityProfile::LocalSnapshot256MV1,
+        Some(_) => {
+            return Err(InvocationError::InvalidR14Composition(
+                "valid_output_capacity_profile_required",
+            ));
+        }
+    };
     let mut invocation = parse_k1_invocation(&stripped).map_err(|error| match error {
         InvocationError::Input(error) => InvocationError::Input(error),
         InvocationError::InvalidRustCallableProfile(profile) => {
@@ -6497,6 +6560,7 @@ fn parse_r14_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
             "r5_r6_k1_source_only_profiles_required",
         ));
     }
+    invocation.output_capacity_profile = output_capacity_profile;
     invocation.rust_expression_profile = true;
     Ok(invocation)
 }
@@ -7518,6 +7582,96 @@ mod s4_root_argument_tests {
     use super::*;
 
     #[test]
+    fn conf_fr_cli_001_r14_r15_256m_profile_has_an_exact_selector_matrix() {
+        let r14 = r14_256m_arguments();
+        let Ok(invocation) = parse_s4_invocation(r14.clone()) else {
+            panic!("valid R14 256 MiB selector");
+        };
+        assert!(invocation.rust_expression_profile);
+        assert!(!invocation.rust_flow_profile);
+        assert_eq!(
+            invocation.output_capacity_profile,
+            K1OutputCapacityProfile::LocalSnapshot256MV1
+        );
+
+        let mut r15 = r14.clone();
+        r15.extend([
+            OsString::from("--rust-flow-profile"),
+            OsString::from(R15_PROFILE),
+        ]);
+        let Ok(invocation) = parse_s4_invocation(r15) else {
+            panic!("valid R15 256 MiB selector");
+        };
+        assert!(invocation.rust_expression_profile);
+        assert!(invocation.rust_flow_profile);
+        assert_eq!(
+            invocation.output_capacity_profile,
+            K1OutputCapacityProfile::LocalSnapshot256MV1
+        );
+
+        let mut unknown = r14.clone();
+        replace_option_value(&mut unknown, "--output-capacity-profile", "unknown");
+        assert!(parse_s4_invocation(unknown).is_err());
+
+        let mut duplicate = r14.clone();
+        duplicate.extend([
+            OsString::from("--output-capacity-profile"),
+            OsString::from(LOCAL_SNAPSHOT_256M_V1),
+        ]);
+        assert!(parse_s4_invocation(duplicate).is_err());
+
+        let mut incomplete = r14.clone();
+        remove_option(&mut incomplete, "--output-capacity-profile");
+        incomplete.push(OsString::from("--output-capacity-profile"));
+        assert!(parse_s4_invocation(incomplete).is_err());
+
+        let mut k1 = r14.clone();
+        remove_option(&mut k1, "--rust-expression-profile");
+        assert!(parse_s4_invocation(k1).is_err());
+
+        let mut boundary = r14.clone();
+        boundary.extend([
+            OsString::from("--repository-boundary-profile"),
+            OsString::from(LOCAL_GITLINKS_V1),
+        ]);
+        assert!(parse_s4_invocation(boundary).is_err());
+
+        let mut r10 = r14.clone();
+        remove_option(&mut r10, "--rust-expression-profile");
+        remove_option(&mut r10, "--rust-callable-profile");
+        remove_option(&mut r10, "--rust-framework-profile");
+        replace_option_value(&mut r10, "--rust-semantic-profile", R10_PROFILE);
+        assert!(parse_s4_invocation(r10).is_err());
+
+        let mut r11 = r14.clone();
+        remove_option(&mut r11, "--rust-expression-profile");
+        r11.extend([
+            OsString::from("--repository-boundary-profile"),
+            OsString::from(LOCAL_GITLINKS_V1),
+        ]);
+        assert!(parse_s4_invocation(r11).is_err());
+
+        let mut r12 = r14.clone();
+        remove_option(&mut r12, "--rust-expression-profile");
+        replace_option_value(&mut r12, "--rust-semantic-profile", R10_PROFILE);
+        assert!(parse_s4_invocation(r12).is_err());
+
+        let mut compiler = r14.clone();
+        remove_option(&mut compiler, "--rust-expression-profile");
+        compiler.extend([
+            OsString::from("--compiler-index-profile"),
+            OsString::from(R7_COMPILER_INDEX_PROFILE),
+            OsString::from("--compiler-index-binding"),
+            OsString::from("fixture.scip"),
+        ]);
+        assert!(parse_s4_invocation(compiler).is_err());
+
+        let mut non_scan = r14;
+        non_scan[1] = OsString::from("query");
+        assert!(parse_s4_invocation(non_scan).is_err());
+    }
+
+    #[test]
     fn sec_fr_cli_001_docs_traversal_is_rejected_during_parsing() {
         let arguments = [
             "noesis",
@@ -7561,5 +7715,56 @@ mod s4_root_argument_tests {
             QueryInvocation::parse(arguments),
             Err(Failure::S4Input(_))
         ));
+    }
+
+    fn r14_256m_arguments() -> Vec<OsString> {
+        [
+            "noesis",
+            "scan",
+            "--repository",
+            ".",
+            "--repository-id",
+            "urn:codenoesis:test:r14-r15-output-capacity",
+            "--revision",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "--profile",
+            "standard-local-s4",
+            "--workspace-profile",
+            R3_WORKSPACE_PROFILE,
+            "--manifest-profile",
+            R4_MANIFEST_PROFILE,
+            "--rust-semantic-profile",
+            R5_RUST_SEMANTIC_PROFILE,
+            "--rust-framework-profile",
+            R6_FRAMEWORK_PROFILE,
+            "--rust-callable-profile",
+            K1_PROFILE,
+            "--rust-expression-profile",
+            R14_PROFILE,
+            "--output-capacity-profile",
+            LOCAL_SNAPSHOT_256M_V1,
+            "--store",
+            "store",
+            "--format",
+            "json",
+        ]
+        .map(OsString::from)
+        .to_vec()
+    }
+
+    fn replace_option_value(arguments: &mut [OsString], flag: &str, value: &str) {
+        let index = arguments
+            .iter()
+            .position(|argument| argument == flag)
+            .expect("reviewed option");
+        arguments[index + 1] = OsString::from(value);
+    }
+
+    fn remove_option(arguments: &mut Vec<OsString>, flag: &str) {
+        let index = arguments
+            .iter()
+            .position(|argument| argument == flag)
+            .expect("reviewed option");
+        arguments.drain(index..=index + 1);
     }
 }

@@ -450,7 +450,7 @@ impl RepositorySnapshotV17 {
         })
     }
 
-    /// Serializes V17 under its selected 32 MiB or 64 MiB output envelope.
+    /// Serializes V17 under its selected bounded output envelope.
     ///
     /// # Errors
     ///

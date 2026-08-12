@@ -207,7 +207,7 @@ fn verify_snapshot(bytes: &[u8], expected: &Value, include_flow: bool) {
             "{graph_family} count"
         );
         assert_eq!(
-            hex_sha256(&serde_json::to_vec(&graph[graph_family]).expect("serialize family")),
+            hex_sha256(&canonical_json_bytes(&graph[graph_family])),
             expected["family_canonical_sha256"][graph_family]
                 .as_str()
                 .expect("canonical family digest"),
@@ -331,6 +331,29 @@ fn assert_success(output: &Output, label: &str) {
         String::from_utf8_lossy(&output.stderr)
     );
     assert!(output.stderr.is_empty(), "{label} wrote stderr");
+}
+
+fn canonical_json_bytes(value: &Value) -> Vec<u8> {
+    let mut bytes =
+        serde_json::to_vec(&canonical_json_value(value)).expect("serialize canonical JSON");
+    bytes.push(b'\n');
+    bytes
+}
+
+fn canonical_json_value(value: &Value) -> Value {
+    match value {
+        Value::Array(values) => Value::Array(values.iter().map(canonical_json_value).collect()),
+        Value::Object(values) => {
+            let mut keys = values.keys().collect::<Vec<_>>();
+            keys.sort_unstable();
+            let mut canonical = serde_json::Map::new();
+            for key in keys {
+                canonical.insert(key.clone(), canonical_json_value(&values[key]));
+            }
+            Value::Object(canonical)
+        }
+        other => other.clone(),
+    }
 }
 
 fn hex_sha256(value: &[u8]) -> String {
