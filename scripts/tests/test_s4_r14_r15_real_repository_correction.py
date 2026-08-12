@@ -372,6 +372,8 @@ class R14R15RealRepositoryCorrectionTest(unittest.TestCase):
             "e2e_fr_ext_016_real_repository_shapes_are_fail_closed",
             "e2e_fr_ext_017_real_repository_shapes_are_fail_closed",
             "conf_fr_cli_001_r14_r15_256m_profile_is_explicit",
+            "sec_inv_bnd_001_r14_gitlink_is_typed_before_publication",
+            "sec_inv_bnd_001_r15_gitlink_is_typed_before_publication",
         ]:
             self.assertIn(name, source)
 

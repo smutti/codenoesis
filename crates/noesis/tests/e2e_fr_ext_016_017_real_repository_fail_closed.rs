@@ -76,6 +76,32 @@ fn conf_fr_cli_001_r14_r15_256m_profile_is_explicit() {
     verify_snapshot(&output.stdout, &expected_correction()["r14"], false);
 }
 
+#[test]
+fn sec_inv_bnd_001_r14_gitlink_is_typed_before_publication() {
+    let repository = MaterializedR14R15CorrectionRepository::fixture_with_gitlink();
+    let output = repository.scan_r14();
+    retain_boundary_red(&output, "codenoesis.error/v21", "R14");
+    assert_typed_boundary_failure(
+        &output,
+        "codenoesis.error/v21",
+        "input.unsupported_rust_expression_composition",
+        &repository.r14_store,
+    );
+}
+
+#[test]
+fn sec_inv_bnd_001_r15_gitlink_is_typed_before_publication() {
+    let repository = MaterializedR14R15CorrectionRepository::fixture_with_gitlink();
+    let output = repository.scan_r15();
+    retain_boundary_red(&output, "codenoesis.error/v22", "R15");
+    assert_typed_boundary_failure(
+        &output,
+        "codenoesis.error/v22",
+        "input.unsupported_rust_flow_composition",
+        &repository.r15_store,
+    );
+}
+
 fn retain_expected_red(
     output: &Output,
     exit: i32,
@@ -100,6 +126,39 @@ fn retain_expected_red(
     assert_eq!(error["code"], "internal.unexpected");
     assert_eq!(error["context"]["stage"], stage);
     panic!("expected corrected {profile} success; observed frozen internal extraction Red");
+}
+
+fn retain_boundary_red(output: &Output, schema: &str, profile: &str) {
+    if output.status.code() != Some(10) {
+        return;
+    }
+    assert!(
+        output.stdout.is_empty(),
+        "{profile} boundary Red wrote stdout"
+    );
+    let error = parse_single_document(&output.stderr);
+    assert_eq!(error["schema_version"], schema);
+    assert_eq!(error["code"], "internal.unexpected");
+    assert_eq!(error["context"]["stage"], "acquisition");
+    panic!("expected typed {profile} gitlink rejection; observed frozen acquisition Red");
+}
+
+fn assert_typed_boundary_failure(
+    output: &Output,
+    schema: &str,
+    code: &str,
+    store: &std::path::Path,
+) {
+    assert_eq!(output.status.code(), Some(2));
+    assert!(output.stdout.is_empty());
+    let error = parse_single_document(&output.stderr);
+    assert_eq!(error["schema_version"], schema);
+    assert_eq!(error["code"], code);
+    assert_eq!(
+        error["context"]["reason"],
+        "repository_boundary_not_supported"
+    );
+    assert!(!store.exists(), "typed boundary failure created store");
 }
 
 fn verify_snapshot(bytes: &[u8], expected: &Value, include_flow: bool) {

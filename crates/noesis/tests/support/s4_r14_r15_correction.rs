@@ -12,6 +12,7 @@ pub const REPOSITORY_ID: &str = "urn:codenoesis:fixture:s4-rust-real-repository-
 pub const FIXTURE_TREE_OID: &str = "389e22d33ed887e32da70c2d60ddd72893bf9c27";
 pub const FIXTURE_COMMIT_OID: &str = "accc966f2c2729dddc95fe7caf7036312a2a01e0";
 pub const OUTPUT_CAPACITY_PROFILE: &str = "local-snapshot-256m-v1";
+const GITLINK_OID: &str = "6ecf94267842da776e35406a9ebcb85e058a3181";
 
 pub struct MaterializedR14R15CorrectionRepository {
     pub root: PathBuf,
@@ -153,6 +154,55 @@ impl MaterializedR14R15CorrectionRepository {
             worktree,
             commit_oid,
         }
+    }
+
+    pub fn fixture_with_gitlink() -> Self {
+        let mut fixture = Self::fixture();
+        let global_config = fixture.root.join("global.gitconfig");
+        update_index(
+            &fixture.worktree,
+            &global_config,
+            "160000",
+            GITLINK_OID,
+            "vendor/nested",
+        );
+        let mut write_tree = git_command(&global_config);
+        write_tree
+            .arg("-C")
+            .arg(&fixture.worktree)
+            .arg("write-tree");
+        let tree_oid = stdout_line(successful_output(write_tree, None));
+        let mut make_commit = git_command(&global_config);
+        make_commit
+            .arg("-C")
+            .arg(&fixture.worktree)
+            .args([
+                "commit-tree",
+                &tree_oid,
+                "-p",
+                &fixture.commit_oid,
+                "-F",
+                "-",
+            ])
+            .env("GIT_AUTHOR_NAME", "CodeNoesis")
+            .env("GIT_AUTHOR_EMAIL", "fixture@codenoesis.invalid")
+            .env("GIT_AUTHOR_DATE", "1786492801 +0000")
+            .env("GIT_COMMITTER_NAME", "CodeNoesis")
+            .env("GIT_COMMITTER_EMAIL", "fixture@codenoesis.invalid")
+            .env("GIT_COMMITTER_DATE", "1786492801 +0000");
+        let commit_oid = stdout_line(successful_output(
+            make_commit,
+            Some(b"R14/R15 typed gitlink rejection fixture\n"),
+        ));
+        let mut update_ref = git_command(&global_config);
+        update_ref.arg("-C").arg(&fixture.worktree).args([
+            "update-ref",
+            "refs/heads/main",
+            &commit_oid,
+        ]);
+        successful_output(update_ref, None);
+        fixture.commit_oid = commit_oid;
+        fixture
     }
 
     pub fn scan_r14(&self) -> Output {
