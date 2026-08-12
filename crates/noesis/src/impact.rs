@@ -59,9 +59,9 @@ pub(crate) fn run(arguments: Vec<OsString>) -> Result<Vec<u8>, ImpactFailure> {
         manifest_bytes.len(),
     )?;
     let workspace = parse_impact_workspace(&manifest_bytes).map_err(workspace_failure)?;
-    let sources = ImpactSources::resolve(manifest_path, workspace.clone())?;
+    let sources = ImpactSources::resolve(&manifest_path, workspace.clone())?;
     noesis::install_s6_filesystem_boundary(
-        sources.workspace_manifest.as_os_str(),
+        sources.federation_report.path.as_os_str(),
         &sources.allowed_read_roots,
     )
     .map_err(|_| internal_failure())?;
@@ -314,7 +314,6 @@ impl ImpactInvocation {
 }
 
 struct ImpactSources {
-    workspace_manifest: PathBuf,
     allowed_read_roots: Vec<PathBuf>,
     provider_contracts: Vec<BoundInput>,
     provider_sources: Vec<BoundInput>,
@@ -324,7 +323,7 @@ struct ImpactSources {
 
 impl ImpactSources {
     fn resolve(
-        workspace_manifest: PathBuf,
+        workspace_manifest: &Path,
         workspace: ImpactWorkspaceV1,
     ) -> Result<Self, ImpactFailure> {
         let base = workspace_manifest.parent().ok_or_else(|| {
@@ -393,9 +392,7 @@ impl ImpactSources {
             "federation_report",
             FEDERATION_REPORT_BYTES_MAXIMUM,
         )?;
-        allowed_read_roots.insert(federation_report.path.clone());
         Ok(Self {
-            workspace_manifest,
             allowed_read_roots: allowed_read_roots.into_iter().collect(),
             provider_contracts,
             provider_sources,
