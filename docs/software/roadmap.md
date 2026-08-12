@@ -91,15 +91,16 @@ and declared "R8 governance is Approved". Those markers likewise remain only
 as immutable guard history. The K1 pre-merge roadmap said
 "R0-R8 are implemented"; that marker is retained only as history.
 
-R0-R15 and K1 are implemented but remain not Verified until their complete
+R0-R14 and K1 are implemented but remain not Verified until their complete
 retained evidence is independently accepted. R7 static import still grants no
 index generation authority. Protected merge #163 made the explicit V13/V16
 committed-source expression and lexical-binding layer effective without adding
 compiler, data-flow, ownership, or runtime meaning. Protected merge #165 accepts
 the valid empty additive R5 neutral element without changing any public
-R0-R14 contract or byte. Protected merge #167 made the closed R15 source-only
-local-flow layer effective through the explicit `rust-local-flow-v1` selector
-without adding compiler or runtime authority.
+R0-R14 contract or byte. R15 is likewise implemented but not Verified:
+protected merge #167 made its closed source-only local-flow layer effective
+through the explicit `rust-local-flow-v1` selector without adding compiler or
+runtime authority.
 
 | Order | Planning item | Outcome | Governance dependency | Candidate acceptance gate |
 |---|---|---|---|---|
