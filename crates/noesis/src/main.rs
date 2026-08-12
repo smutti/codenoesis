@@ -2,6 +2,7 @@
 
 mod compiler_index;
 mod federation;
+mod impact;
 mod repository_boundaries;
 
 use std::collections::BTreeMap;
@@ -28,34 +29,34 @@ use codenoesis_contracts::{
     CodeNoesisErrorV8, CodeNoesisErrorV9, CodeNoesisErrorV10, CodeNoesisErrorV11,
     CodeNoesisErrorV12, CodeNoesisErrorV13, CodeNoesisErrorV14, CodeNoesisErrorV15,
     CodeNoesisErrorV16, CodeNoesisErrorV17, CodeNoesisErrorV18, CodeNoesisErrorV19,
-    CodeNoesisErrorV20, CodeNoesisErrorV21, CodeNoesisErrorV22, DocumentationContractError,
-    IncrementalRefreshReportError, IncrementalRefreshReportInput, IncrementalRefreshReportV1,
-    K1ContractError, NestedRepositoryUnavailableReason, PortableGraphV1, PortableGraphV2,
-    PortableGraphV3, PortableGraphV4, PortableGraphV5, PortableGraphV6, PortableGraphV7,
-    PortableGraphV8, QueryContractError, R8ContractError, R10ContractError, R11ContractError,
-    R12_PORTABLE_GRAPH_VERSION, R12ContractError, R13_PORTABLE_GRAPH_VERSION, R13ContractError,
-    R14ContractError, R15ContractError, RepositorySnapshotV2Error, RepositorySnapshotV3,
-    RepositorySnapshotV3Error, RepositorySnapshotV4, RepositorySnapshotV4Error,
-    RepositorySnapshotV5, RepositorySnapshotV5Error, RepositorySnapshotV6,
-    RepositorySnapshotV6Error, RepositorySnapshotV7, RepositorySnapshotV7Error,
-    RepositorySnapshotV8, RepositorySnapshotV8Error, RepositorySnapshotV9,
-    RepositorySnapshotV9Error, RepositorySnapshotV10, RepositorySnapshotV10Error,
-    RepositorySnapshotV11, RepositorySnapshotV11Error, RepositorySnapshotV12,
-    RepositorySnapshotV12Error, RepositorySnapshotV13, RepositorySnapshotV13Error,
-    RepositorySnapshotV14, RepositorySnapshotV14Error, RepositorySnapshotV15,
-    RepositorySnapshotV15Error, RepositorySnapshotV16, RepositorySnapshotV16Error,
-    RepositorySnapshotV17, RepositorySnapshotV17Error, SnapshotEnvelopeV1, ValidatedS4Head,
-    generate_documentation_v1, local_query_result_v1, local_query_result_v2, local_query_result_v3,
-    local_query_result_v4, local_query_result_v5, local_query_result_v6, local_query_result_v7,
-    local_query_result_v8, local_query_result_v9, local_query_result_v10, local_query_result_v11,
-    local_query_result_v12, validate_stored_snapshot_semantic_v4,
-    validate_stored_snapshot_semantic_v5, validate_stored_snapshot_semantic_v6,
-    validate_stored_snapshot_semantic_v7, validate_stored_snapshot_semantic_v8,
-    validate_stored_snapshot_semantic_v9, validate_stored_snapshot_semantic_v10,
-    validate_stored_snapshot_semantic_v11, validate_stored_snapshot_semantic_v12,
-    validate_stored_snapshot_semantic_v13, validate_stored_snapshot_semantic_v14,
-    validate_stored_snapshot_semantic_v15, validate_stored_snapshot_semantic_v16,
-    validate_stored_snapshot_semantic_v17,
+    CodeNoesisErrorV20, CodeNoesisErrorV21, CodeNoesisErrorV22, CodeNoesisErrorV23,
+    DocumentationContractError, IncrementalRefreshReportError, IncrementalRefreshReportInput,
+    IncrementalRefreshReportV1, K1ContractError, NestedRepositoryUnavailableReason,
+    PortableGraphV1, PortableGraphV2, PortableGraphV3, PortableGraphV4, PortableGraphV5,
+    PortableGraphV6, PortableGraphV7, PortableGraphV8, QueryContractError, R8ContractError,
+    R10ContractError, R11ContractError, R12_PORTABLE_GRAPH_VERSION, R12ContractError,
+    R13_PORTABLE_GRAPH_VERSION, R13ContractError, R14ContractError, R15ContractError,
+    RepositorySnapshotV2Error, RepositorySnapshotV3, RepositorySnapshotV3Error,
+    RepositorySnapshotV4, RepositorySnapshotV4Error, RepositorySnapshotV5,
+    RepositorySnapshotV5Error, RepositorySnapshotV6, RepositorySnapshotV6Error,
+    RepositorySnapshotV7, RepositorySnapshotV7Error, RepositorySnapshotV8,
+    RepositorySnapshotV8Error, RepositorySnapshotV9, RepositorySnapshotV9Error,
+    RepositorySnapshotV10, RepositorySnapshotV10Error, RepositorySnapshotV11,
+    RepositorySnapshotV11Error, RepositorySnapshotV12, RepositorySnapshotV12Error,
+    RepositorySnapshotV13, RepositorySnapshotV13Error, RepositorySnapshotV14,
+    RepositorySnapshotV14Error, RepositorySnapshotV15, RepositorySnapshotV15Error,
+    RepositorySnapshotV16, RepositorySnapshotV16Error, RepositorySnapshotV17,
+    RepositorySnapshotV17Error, SnapshotEnvelopeV1, ValidatedS4Head, generate_documentation_v1,
+    local_query_result_v1, local_query_result_v2, local_query_result_v3, local_query_result_v4,
+    local_query_result_v5, local_query_result_v6, local_query_result_v7, local_query_result_v8,
+    local_query_result_v9, local_query_result_v10, local_query_result_v11, local_query_result_v12,
+    validate_stored_snapshot_semantic_v4, validate_stored_snapshot_semantic_v5,
+    validate_stored_snapshot_semantic_v6, validate_stored_snapshot_semantic_v7,
+    validate_stored_snapshot_semantic_v8, validate_stored_snapshot_semantic_v9,
+    validate_stored_snapshot_semantic_v10, validate_stored_snapshot_semantic_v11,
+    validate_stored_snapshot_semantic_v12, validate_stored_snapshot_semantic_v13,
+    validate_stored_snapshot_semantic_v14, validate_stored_snapshot_semantic_v15,
+    validate_stored_snapshot_semantic_v16, validate_stored_snapshot_semantic_v17,
 };
 use codenoesis_domain::AcquisitionError;
 use codenoesis_domain::knowledge::KnowledgeError;
@@ -188,6 +189,7 @@ fn main() -> ExitCode {
         && !r12_scan_requested
         && !r13_scan_requested;
     let federation_requested = federation::requested(&arguments);
+    let impact_requested = impact::requested(&arguments);
     let docs_requested = arguments.get(1).is_some_and(|value| value == "docs");
     let query_requested = arguments.get(1).is_some_and(|value| value == "query");
     let refresh_requested = arguments.get(1).is_some_and(|value| value == "refresh");
@@ -227,7 +229,9 @@ fn main() -> ExitCode {
     let s4_error_lineage = s4_requested || docs_requested || query_requested;
     let s3_error_lineage = s3_requested || s4_error_lineage;
     let s2_requested = requested_profile(&arguments, "standard-local-s2");
-    let result = if output_capacity_requested {
+    let result = if impact_requested {
+        impact::run(arguments).map_err(Failure::S7)
+    } else if output_capacity_requested {
         run_s4(arguments, scan_worker.as_mut())
     } else if export_requested {
         run_export(arguments)
@@ -265,6 +269,7 @@ fn main() -> ExitCode {
     match result {
         Ok(stdout) => match io::stdout().lock().write_all(&stdout) {
             Ok(()) => ExitCode::SUCCESS,
+            Err(_) if impact_requested => emit_internal_error_v23(),
             Err(_) if r15_requested => emit_internal_error_v22(),
             Err(_) if r14_requested => emit_internal_error_v21(),
             Err(_) if r13_scan_requested => emit_internal_error_v20(),
@@ -287,6 +292,7 @@ fn main() -> ExitCode {
             Err(_) if profiled => emit_internal_error_v2(),
             Err(_) => emit_internal_error_v1(),
         },
+        Err(Failure::S7(failure)) => emit_error_v23(&failure.error, failure.exit_code),
         Err(Failure::R15(failure)) => emit_error_v22(&failure.error, failure.exit_code),
         Err(Failure::R14(failure)) => emit_error_v21(&failure.error, failure.exit_code),
         Err(Failure::R13(failure)) => emit_error_v20(&failure.error, failure.exit_code),
@@ -5349,6 +5355,10 @@ fn emit_internal_error_v9() -> ExitCode {
     emit_error_v9(&CodeNoesisErrorV9::internal(), 70)
 }
 
+fn emit_internal_error_v23() -> ExitCode {
+    emit_error_v23(&CodeNoesisErrorV23::internal(), 1)
+}
+
 fn emit_error_v1(error: &CodeNoesisErrorV1, code: u8) -> ExitCode {
     if let Ok(bytes) = error.canonical_stderr() {
         let _ = io::stderr().lock().write_all(&bytes);
@@ -5431,6 +5441,17 @@ fn emit_error_v10(error: &CodeNoesisErrorV10, code: u8) -> ExitCode {
         ExitCode::from(code)
     } else {
         ExitCode::from(70)
+    }
+}
+
+fn emit_error_v23(error: &CodeNoesisErrorV23, code: u8) -> ExitCode {
+    let Ok(bytes) = error.canonical_stderr() else {
+        return ExitCode::from(1);
+    };
+    if io::stderr().lock().write_all(&bytes).is_ok() {
+        ExitCode::from(code)
+    } else {
+        ExitCode::from(1)
     }
 }
 
@@ -5644,6 +5665,7 @@ fn emit_query_error(error: QueryFailure) -> ExitCode {
 }
 
 enum Failure {
+    S7(impact::ImpactFailure),
     R15(R15Failure),
     R14(R14Failure),
     R13(R13Failure),
