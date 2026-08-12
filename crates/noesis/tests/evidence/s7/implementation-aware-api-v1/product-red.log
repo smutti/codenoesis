@@ -1,0 +1,22 @@
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in <duration>
+     Running tests/e2e_fr_imp_004_implementation_aware_api_diff.rs (target/debug/deps/e2e_fr_imp_004_implementation_aware_api_diff-b7038d4a9182a29c)
+
+running 1 test
+test e2e_fr_imp_004_implementation_aware_api_diff ... FAILED
+
+failures:
+
+---- e2e_fr_imp_004_implementation_aware_api_diff stdout ----
+
+thread 'e2e_fr_imp_004_implementation_aware_api_diff' (<pid>) panicked at crates/noesis/tests/e2e_fr_imp_004_implementation_aware_api_diff.rs:33:9:
+expected S7 impact success; observed the approved unsupported-semantics Red
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    e2e_fr_imp_004_implementation_aware_api_diff
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in <duration>
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_imp_004_implementation_aware_api_diff`

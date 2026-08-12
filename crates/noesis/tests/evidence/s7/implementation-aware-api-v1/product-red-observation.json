@@ -1,0 +1,101 @@
+{
+  "schema_version": "codenoesis.s7-runtime-product-red-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/168",
+  "authorization": "https://github.com/smutti/codenoesis/issues/168#issuecomment-5262477228",
+  "requirement_ids": [
+    "DR-SEM-001",
+    "FR-CLI-006",
+    "FR-EXT-018",
+    "FR-EXT-019",
+    "FR-IMP-004",
+    "FR-IMP-005"
+  ],
+  "requirement_status": {
+    "approved": [
+      "DR-SEM-001",
+      "FR-IMP-004",
+      "FR-IMP-005"
+    ],
+    "proposed_branch_scoped": [
+      "FR-CLI-006",
+      "FR-EXT-018",
+      "FR-EXT-019"
+    ]
+  },
+  "slice": "S7",
+  "risk": "high",
+  "base_commit_sha": "c212db5062ce28731f4aadc528a750d4ba33524f",
+  "governance_checkpoint_sha": "38100a6dda1667fc856905601c48bae5046dc7f4",
+  "governance_red_evidence_sha": "7f77b226ff13f1c2d7c02e1c585058e158437c00",
+  "test_first_sha": "29de5c3e89b1d8513d57f9f3e078dcc3b59555cc",
+  "minimal_interface_wiring_sha": "fa620c02952b597a32f6daa1e608f3d60c959c3e",
+  "accepted_red_head_sha": "0f406749494e755fa10191d3cc13ddb69b36deec",
+  "observed_at_utc": "2026-08-12T06:20:54Z",
+  "extractor_or_classifier_modified_before_red": false,
+  "command": "cargo test -p noesis --test e2e_fr_imp_004_implementation_aware_api_diff --locked -- --exact e2e_fr_imp_004_implementation_aware_api_diff",
+  "expected_failure": "After strict invocation, workspace, root, path, digest, source-bound, and S6 federation-report validation, the output-only command must return only ErrorV23 impact.unsupported_implementation_semantics with exit 2 and no report because provider/client extraction and semantic classification are not implemented.",
+  "actual_failure": "The black-box test asserted subject exit 2, empty stdout, one LF-terminated codenoesis.error/v23 document, stage impact, and code impact.unsupported_implementation_semantics before failing intentionally at the final success assertion.",
+  "test_process_exit_code": 101,
+  "subject": {
+    "exit_code": 2,
+    "stdout": "empty",
+    "stderr_schema_version": "codenoesis.error/v23",
+    "stderr_code": "impact.unsupported_implementation_semantics",
+    "stderr_stage": "impact",
+    "partial_report_emitted": false
+  },
+  "log": {
+    "path": "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/product-red.log",
+    "byte_length": 1172,
+    "sha256": "d9824e314ba390e273c51ed27935b0cb61c56b23d57f0f3f87dbe97fbbbd8e0b",
+    "normalization": "The absolute workspace prefix, process identifier, and elapsed durations were replaced with stable placeholders; the test target, assertion, and failure result were retained."
+  },
+  "raw_capture": {
+    "byte_length": 1196,
+    "sha256": "34ac3ae1ba7a64da51c4f55d63807c64768ef9a3cab4adf705fb1b34d8a1dce4"
+  },
+  "rejected_attempts": [
+    {
+      "head_sha": "fa620c02952b597a32f6daa1e608f3d60c959c3e",
+      "accepted_as_product_red": false,
+      "exit_code": 101,
+      "reason": "Compilation stopped before subject execution because sha2 0.11 output does not implement LowerHex.",
+      "raw_capture_sha256": "5a333d7011ed81f94d92f87043e45e8d0afa0fb96fc896f6a2d4db3a5ff6194b",
+      "normalized_log": {
+        "path": "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/product-red-rejected-compilation.log",
+        "byte_length": 1779,
+        "sha256": "3226c3102469d4a820136b327f63b64d1ebc8c06d93cbf34d64c79f37d6fedf5"
+      },
+      "correction": "Encode each SHA-256 byte with an explicit lowercase hexadecimal table; no requirement, oracle, path, dependency, authority, or risk changed."
+    }
+  ],
+  "immutable_oracle": {
+    "path": "tests/fixtures/s7/implementation-aware-api-v1/expected-semantic-compatibility-report.json",
+    "byte_length": 14991,
+    "sha256": "cfd9a8d4dcb2d04bcd9eaffd15f1ae947ffdaba80e07daee43375c9a67c15750"
+  },
+  "environment": {
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "host": "aarch64-apple-darwin",
+    "macos": "26.5.2",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "features": "focused locked noesis integration target; no analyzed target, network, build tool, plugin, model, or store execution"
+  },
+  "agent": {
+    "product": "OpenAI Codex",
+    "model_identity": "not exposed by the runtime",
+    "run_identifier": "not exposed by the runtime",
+    "duration": "accepted focused command completed in approximately three seconds with a warm build cache",
+    "cost": "not exposed by the runtime",
+    "policy": "AGENTS.md sha256:07c4385775f37be9e5d2ba09f7e9edfe3936f800a2188e4155f166eef3299c71"
+  },
+  "correction_rounds_used": 1,
+  "correction_rounds_remaining": 4,
+  "limitations": [
+    "This Red proves the interface-to-unsupported boundary only; it does not verify provider extraction, client extraction, classification, determinism, security, or the final golden.",
+    "This local evidence is not independent exact-head CI verification and must not be used to claim the requirements Verified."
+  ],
+  "stop_conditions_triggered": []
+}
