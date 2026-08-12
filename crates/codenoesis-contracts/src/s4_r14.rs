@@ -394,11 +394,12 @@ impl RepositorySnapshotV16 {
             .and_then(Value::as_object_mut)
             .ok_or(RepositorySnapshotV16Error::ContractInvalid)?;
         let capacity = match output_capacity_profile {
-            K1OutputCapacityProfile::Standard => Value::Null,
+            K1OutputCapacityProfile::Standard | K1OutputCapacityProfile::LocalSnapshot256MV1 => {
+                Value::Null
+            }
             K1OutputCapacityProfile::LocalSnapshot64MV1 => {
                 Value::String("local-snapshot-64m-v1".to_owned())
             }
-            K1OutputCapacityProfile::LocalSnapshot256MV1 => Value::Null,
         };
         let configuration_without_hash = json!({
             "schema_version": R14_CONFIGURATION_VERSION,
