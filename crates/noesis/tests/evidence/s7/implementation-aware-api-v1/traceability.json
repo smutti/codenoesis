@@ -1,0 +1,112 @@
+{
+  "schema_version": "codenoesis.s7-runtime-traceability/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/168",
+  "slice": "S7",
+  "risk": "high",
+  "requirement_status": {
+    "approved": [
+      "DR-SEM-001",
+      "FR-IMP-004",
+      "FR-IMP-005"
+    ],
+    "proposed_branch_scoped": [
+      "FR-CLI-006",
+      "FR-EXT-018",
+      "FR-EXT-019"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "DR-SEM-001",
+      "tests": [
+        "conf_fr_imp_004_stable_identity_preimages_match_golden",
+        "e2e_fr_imp_004_implementation_aware_api_diff",
+        "pt_nfr_det_001_s7_replays_and_schedules_are_byte_identical"
+      ],
+      "evidence": [
+        "tests/fixtures/s7/implementation-aware-api-v1/expected-semantic-compatibility-report.json",
+        "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/focused-green.log"
+      ]
+    },
+    {
+      "id": "FR-IMP-004",
+      "tests": [
+        "conf_fr_imp_004_projects_exact_s6_operation",
+        "conf_fr_imp_004_s6_authority_is_strictly_accepted",
+        "sec_fr_imp_004_s6_authority_rejects_unknown_fields_and_hash_tampering",
+        "e2e_fr_imp_004_implementation_aware_api_diff"
+      ],
+      "evidence": [
+        "tests/specifications/s7/e2e_fr_imp_004_implementation_aware_api_diff.json",
+        "tests/fixtures/s7/implementation-aware-api-v1/expected-semantic-compatibility-report.json"
+      ]
+    },
+    {
+      "id": "FR-IMP-005",
+      "tests": [
+        "conf_fr_ext_019_strict_safe_and_decoy_paths",
+        "e2e_fr_imp_004_implementation_aware_api_diff"
+      ],
+      "evidence": [
+        "tests/fixtures/s7/implementation-aware-api-v1/clients",
+        "tests/fixtures/s7/implementation-aware-api-v1/expected-semantic-compatibility-report.json"
+      ]
+    },
+    {
+      "id": "FR-EXT-018",
+      "tests": [
+        "conf_fr_ext_018_direct_map_presence_and_custom_gap",
+        "sec_fr_ext_018_dynamic_key_and_loop_fail_closed",
+        "sec_fr_ext_018_helper_mutation_and_non_terminal_publication_fail_closed"
+      ],
+      "evidence": [
+        "tests/fixtures/s7/implementation-aware-api-v1/provider",
+        "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/focused-green.log"
+      ]
+    },
+    {
+      "id": "FR-EXT-019",
+      "tests": [
+        "conf_fr_ext_019_strict_safe_and_decoy_paths",
+        "sec_fr_ext_019_dynamic_path_and_unguarded_index_fail_closed",
+        "sec_fr_ext_019_throwing_safe_chain_and_indirect_call_fail_closed"
+      ],
+      "evidence": [
+        "tests/fixtures/s7/implementation-aware-api-v1/clients",
+        "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/dependency-review.json"
+      ]
+    },
+    {
+      "id": "FR-CLI-006",
+      "tests": [
+        "pt_fr_cli_006_workspace_path_and_symbol_limits_are_typed",
+        "race_fr_cli_006_mutable_input_is_rejected",
+        "sec_fr_cli_006_traversal_oversize_and_malformed_source_fail_closed",
+        "sec_fr_cli_006_symlinked_source_is_rejected",
+        "e2e_fr_imp_004_implementation_aware_api_diff"
+      ],
+      "evidence": [
+        "tests/specifications/s7/runtime-v1/impact-workspace-v1.schema.json",
+        "tests/specifications/s7/runtime-v1/codenoesis-error-v23.schema.json",
+        "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/complete-gate-summary.log"
+      ]
+    }
+  ],
+  "test_first": {
+    "governance_checkpoint": "38100a6dda1667fc856905601c48bae5046dc7f4",
+    "governance_red_commit": "7f77b226ff13f1c2d7c02e1c585058e158437c00",
+    "governance_red_observation": "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/governance-red-observation.json",
+    "acceptance_test_commit": "29de5c3e89b1d8513d57f9f3e078dcc3b59555cc",
+    "unsupported_boundary_commit": "fa620c02952b597a32f6daa1e608f3d60c959c3e",
+    "accepted_product_red_head": "0f406749494e755fa10191d3cc13ddb69b36deec",
+    "product_red_evidence_commit": "f2d13680c49d3b11278bc1c8ebc3fb2cebcea953",
+    "product_red_observation": "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/product-red-observation.json"
+  },
+  "immutable_contract": {
+    "golden_bytes": 14991,
+    "golden_sha256": "cfd9a8d4dcb2d04bcd9eaffd15f1ae947ffdaba80e07daee43375c9a67c15750",
+    "frozen_s7_artifacts_changed": false,
+    "r0_through_r15_k1_s5_s6_artifacts_changed": false
+  },
+  "review_constraint": "Local and CI evidence make the Proposed branch-scoped candidates reviewable but do not mark them Approved, Implemented on main, or Verified; independent review and protected manual merge remain required."
+}
