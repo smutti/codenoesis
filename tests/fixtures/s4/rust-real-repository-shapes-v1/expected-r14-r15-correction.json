@@ -1,0 +1,207 @@
+{
+  "schema_version": "codenoesis.r14-r15-real-repository-correction-oracle/v1",
+  "status": "Proposed branch-scoped candidate",
+  "issue": "https://github.com/smutti/codenoesis/issues/170",
+  "authorization": "https://github.com/smutti/codenoesis/issues/170#issuecomment-5266803744",
+  "exact_base": "559fec3863830beef9fb4962d936c681a79c258e",
+  "repository": {
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-real-repository-shapes-v1",
+    "commit_oid": "accc966f2c2729dddc95fe7caf7036312a2a01e0",
+    "tree_oid": "389e22d33ed887e32da70c2d60ddd72893bf9c27",
+    "source_blob_oid": "0d76928d136d1127ecd818c2b4719b4d3f52df30",
+    "raw_url_source_span": {
+      "path": "src/lib.rs",
+      "start_byte": 368,
+      "end_byte": 391,
+      "token": "https://fixture.invalid"
+    }
+  },
+  "contracts": {
+    "r14_snapshot": "codenoesis.repository-snapshot/v16",
+    "r14_graph": "codenoesis.knowledge-graph/v13",
+    "r15_snapshot": "codenoesis.repository-snapshot/v17",
+    "r15_graph": "codenoesis.knowledge-graph/v14",
+    "output_capacity_profile": "local-snapshot-256m-v1",
+    "maximum_canonical_output_bytes": 268435456,
+    "maximum_peak_rss_bytes": 4294967296,
+    "extraction_deadline_ms": 60000,
+    "semantic_output_capacity_profile": null,
+    "schema_change": false
+  },
+  "r14": {
+    "canonical_stdout_bytes": 506866,
+    "semantic_hash": "e4b197412a9d23c10efa9b3b1d118d8d858fd259add0f6b70603bee882993355",
+    "configuration_semantic_hash": "7c0435160282c78deb667adb90045c0cda5839e8e7ba1f5b099ac8190c1c17b8",
+    "counts": {
+      "entities": 83,
+      "relationships": 139,
+      "claims": 222,
+      "evidence": 77,
+      "diagnostics": 7,
+      "coverage": 31
+    },
+    "family_canonical_sha256": {
+      "entities": "9971ab0e78be597dc57482fbe5139b1a75e201932f1d49e6a6c98cceeb92e8ed",
+      "relationships": "48e14d2402499b14d58c7e23857958b441d5dbec3abd2fad6af2b93d79b0f765",
+      "claims": "931c2b156c1d844131e460d200e713402e754800ac1a8ce7886e11230448fdd7",
+      "evidence": "ac59cd9c3ec4cac37d3a0b1900249b0ef5c3618f2aeb5fe59de2aaad8c9f2b00",
+      "diagnostics": "7e5299478ddba23502487c3fe59e2d9f3caed4d30c299ce6131c9c255a333fab",
+      "coverage": "37d55e60a5f555f90952f02348db972c9b2c330a7f94f0ab707200554973f237"
+    },
+    "family_id_sha256": {
+      "entities": "6719d95f027dd132c6a4cffaf47d28aaa4fc11667bb1827ece8213afb59d3ff6",
+      "relationships": "fccb133b638b3f7bcb470c1f912f7e4fabd33ab23982b5c5fb264163ec84ed3a",
+      "claims": "f7b98953c105a2a01dd933c0a7cca7ffd9f5d5b34e6c360b506d2d3dc99bd01e",
+      "evidence": "0a86dcae61f8b34c49070a2c12b9dfc26697275d87ef743c4735034b962f9270",
+      "diagnostics": "e687b84887a9de8a84a17f65f8002efcf71764ea010cbfddad5b7a90f57ff322",
+      "coverage": "f43e421bb746f7685b86a5e48bf2bcac92d7196947269f3799e11d38e8f74b0f"
+    },
+    "call_sites": [
+      {
+        "id": "urn:codenoesis:entity:blake3:54606fbad1a4311ae2438588b97966b80657a446a104bb7d727f75a5578c7bd8",
+        "name": "<unsupported-receiver>.send",
+        "target_spelling": "<unsupported-receiver>.send"
+      },
+      {
+        "id": "urn:codenoesis:entity:blake3:56c28729202001fb72778485bb640a3d273d0f59defc55462c22b3df2311c0e4",
+        "name": "simple_target",
+        "target_spelling": "simple_target"
+      },
+      {
+        "id": "urn:codenoesis:entity:blake3:7c67ba75bf6e0a6bcbe35d428dac0f300b4b6e876e833dadc2ae079b9130e456",
+        "name": "simple_target",
+        "target_spelling": "simple_target"
+      },
+      {
+        "id": "urn:codenoesis:entity:blake3:9898732401c3f82f53c0b6fecf5783dfcdcb688ef094120eab93aaa575c3e180",
+        "name": "<unsupported-receiver>.send",
+        "target_spelling": "<unsupported-receiver>.send"
+      },
+      {
+        "id": "urn:codenoesis:entity:blake3:eb9e7f2d86844a5f1d4779d39d38e00da0eda626e96f7ebe30da3e7172e38111",
+        "name": "consume",
+        "target_spelling": "consume"
+      },
+      {
+        "id": "urn:codenoesis:entity:blake3:f656871021223d69172d0f47944a662dd7f3b96d4f3cf4325a1cd43339fbfa4f",
+        "name": "factory",
+        "target_spelling": "factory"
+      }
+    ],
+    "indexes": {
+      "callable_signature_ids": [
+        "urn:codenoesis:entity:blake3:a38dd00e3c39d24d26d2744a7429fba79f4b28dcfa4102a57f7e21d08956c159",
+        "urn:codenoesis:entity:blake3:a5bae2c10a51c4a586649a4cf314fbc7acb0d99fe6ff815c60b9f01ec85414c0"
+      ],
+      "argument_count": 5,
+      "binding_count": 9,
+      "call_site_correspondence_count": 6
+    },
+    "omissions": {
+      "all_arguments_for_call_expression_id": "urn:codenoesis:entity:blake3:7a2d75d56c0ca50cf8012424816f42db11237eb25e85b1c70190afd164ca1832",
+      "receiver_for_call_expression_id": "urn:codenoesis:entity:blake3:06e7f873004747429a258a0a588488c3b2a7f2a2a1b35dcd1845647b14ea17cf",
+      "binds_from_for_binding_id": "urn:codenoesis:entity:blake3:b78cb16760dd8001e690ebff03cb8806fc6d004b4eee0620cd2e7dfc6c1f5f71"
+    },
+    "pattern_input_gap": {
+      "id": "urn:codenoesis:coverage-gap:blake3:27b14e9b54a0684cad1535cbb75adc66fa6bca8746928a64d7432f8aae263942",
+      "capability": "rust.pattern_input_unexpanded",
+      "subject_id": "urn:codenoesis:entity:blake3:7deb37cb8b97b9cc38a901dc19c02f02d6bbd0f29de2800e2afafb2d0000182e",
+      "evidence_id": "urn:codenoesis:evidence:blake3:9dcd0a0ba75cd2758a4c2e6a734c7fd5119442e9be4b0c8de1b09a9afd64345a"
+    }
+  },
+  "r15": {
+    "canonical_stdout_bytes": 612497,
+    "semantic_hash": "d4b9f9f6bc5da214bd0dbc65a32bd0abe6fb440878e12b248da766e8c3afc045",
+    "configuration_semantic_hash": "d2938b358039ae7e175e0d535de7d2d06e2537fcc79369d1cb4957e8297574ef",
+    "counts": {
+      "entities": 88,
+      "relationships": 172,
+      "claims": 260,
+      "evidence": 82,
+      "diagnostics": 7,
+      "coverage": 33
+    },
+    "family_canonical_sha256": {
+      "entities": "986c22d53c4fcb2a6e29f74e16a424bfe11bb36f6af6ac0698161b5ea3f98317",
+      "relationships": "eacda97cca5affa9925a6ff62fa5c0082254f24f12d007b53f5f892bf42ef79c",
+      "claims": "2139532fd3fda475de8e6faec711796aff53f85437b48a0944b186235576a578",
+      "evidence": "b5a03ca9e313c8bd22129df99ac58f5cad905608f0e742c96e7621b32daa24cc",
+      "diagnostics": "7e5299478ddba23502487c3fe59e2d9f3caed4d30c299ce6131c9c255a333fab",
+      "coverage": "0a0bb6368c3da2358f70ea82854cecdb953493a733d89eb114387a1f8e98a170"
+    },
+    "family_id_sha256": {
+      "entities": "c2fda118cf3809776cc2a09adaf8da7d91343b316834fa91cd8a47685051f9bc",
+      "relationships": "aade2bc466a470e22ddaba562365279c51733753aa8575bec8b08668338f5bef",
+      "claims": "66d479157ea4b1044fee02a815c2e98b49ea4d70cef19eecbd32d31ebcae9625",
+      "evidence": "5c6d14b211f0d5efcad4b41ddec86fea6ac90a0595e26315783b817ff80fcca3",
+      "diagnostics": "e687b84887a9de8a84a17f65f8002efcf71764ea010cbfddad5b7a90f57ff322",
+      "coverage": "a98c2b9390b7dfb3230d74a2b2ce879c738d8e7b487cfd9b9f9ac4d5b549d9d6"
+    },
+    "completed_callable_ids": [
+      "urn:codenoesis:entity:blake3:86e46b7fbb64c4ca8f2cc0f40d233ac3c919e19f2c2e3dad3e7ef787d9ff8fa4"
+    ],
+    "blocks": [
+      {
+        "id": "urn:codenoesis:entity:blake3:27536680c8bc1cb66089fa0566e002b5bc4f60635b84baa422bbf1760bb12790",
+        "ordinal": 0,
+        "role": "entry",
+        "start_byte": 82,
+        "end_byte": 116
+      },
+      {
+        "id": "urn:codenoesis:entity:blake3:dc8eb842d9cd1121768358fbf318e01c4805b2f7c3514ce2943cd4d4f2d38d0b",
+        "ordinal": 1,
+        "role": "condition",
+        "start_byte": 124,
+        "end_byte": 131
+      },
+      {
+        "id": "urn:codenoesis:entity:blake3:40e355bfc01a4bcaeddaee4ebb32bf75d11183a8665ede921809634f9f6d7a4c",
+        "ordinal": 2,
+        "role": "then_branch",
+        "start_byte": 142,
+        "end_byte": 156
+      },
+      {
+        "id": "urn:codenoesis:entity:blake3:62aef25b5c9b07512a288171e61dd98a04fef4811b7e542c6e8d9e8aadc42303",
+        "ordinal": 3,
+        "role": "else_branch",
+        "start_byte": 179,
+        "end_byte": 196
+      },
+      {
+        "id": "urn:codenoesis:entity:blake3:87d749022e1f98b5746c539d93f4b54d96cf8435220f2bc8786d5f3f4e2cf313",
+        "ordinal": 4,
+        "role": "join",
+        "start_byte": 208,
+        "end_byte": 213
+      }
+    ],
+    "retained_derivation_count": 15,
+    "unsupported_callable_coverage": [
+      {
+        "id": "urn:codenoesis:coverage-gap:blake3:5c90157f5e4732213e729cfdd161548113e845e48e439a7edf3cc671b25b252f",
+        "capability": "rust.lexical_reaching_definitions_not_analyzed",
+        "subject_id": "urn:codenoesis:entity:blake3:3377e5065e985ca558839df00498db8b4b04954fba4e3031a6ebf757ab7cf6ac"
+      },
+      {
+        "id": "urn:codenoesis:coverage-gap:blake3:84ed5222a37f597eb988dd3ee2aee6b4da00ced1df3ed67ad48a89d661269db7",
+        "capability": "rust.syntax_normal_flow_not_analyzed",
+        "subject_id": "urn:codenoesis:entity:blake3:3377e5065e985ca558839df00498db8b4b04954fba4e3031a6ebf757ab7cf6ac"
+      }
+    ]
+  },
+  "determinism": {
+    "input_order_permutations": 50,
+    "schedules": 10,
+    "expected_relation": "byte_identical"
+  },
+  "privacy": {
+    "forbidden_public_token": "://",
+    "checked_fields": [
+      "entity.name",
+      "rust.call_site.properties.target_spelling"
+    ],
+    "source_evidence_retained": true
+  }
+}

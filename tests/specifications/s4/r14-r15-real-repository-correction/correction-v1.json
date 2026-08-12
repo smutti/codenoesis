@@ -1,0 +1,161 @@
+{
+  "schema_version": "codenoesis.r14-r15-real-repository-correction/v1",
+  "status": "Proposed branch-scoped candidate",
+  "issue": "https://github.com/smutti/codenoesis/issues/170",
+  "authorization": "https://github.com/smutti/codenoesis/issues/170#issuecomment-5266803744",
+  "exact_base": "559fec3863830beef9fb4962d936c681a79c258e",
+  "slice": "S4",
+  "risk": "high",
+  "requirements": [
+    "FR-EXT-012",
+    "FR-EXT-016",
+    "FR-EXT-017",
+    "FR-EXP-006",
+    "FR-EXP-007",
+    "FR-CLI-001",
+    "FR-KNW-003",
+    "NFR-DET-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-PRV-002",
+    "NFR-PER-001",
+    "NFR-TST-001",
+    "NFR-TST-002",
+    "INV-BND-001"
+  ],
+  "profiles": {
+    "r14": "rust-expression-bindings-v1",
+    "r15": "rust-local-flow-v1",
+    "output_capacity": {
+      "selector": "local-snapshot-256m-v1",
+      "maximum_bytes_including_lf": 268435456,
+      "semantic_configuration_value": null,
+      "scan_only": true,
+      "allowed_only_for": [
+        "complete-r14-source-only",
+        "complete-r15-source-only"
+      ],
+      "rejected_for": [
+        "k1-alone",
+        "r10-r13",
+        "repository-boundary",
+        "cfg-alternatives",
+        "compiler-scip",
+        "nested-source",
+        "generated-source",
+        "non-scan"
+      ]
+    }
+  },
+  "call_target_spelling": {
+    "simple_grammar": [
+      "identifier",
+      "scoped_identifier",
+      "safe_generic_function",
+      "safe_field_receiver_chain"
+    ],
+    "complex_field_placeholder": "<unsupported-receiver>.<field>",
+    "other_complex_placeholder": "<unsupported-call-target>",
+    "resolution_state": "candidate_unresolved",
+    "forbidden_public_source": [
+      "receiver_expression",
+      "literal",
+      "raw_url",
+      "macro_result",
+      "call_chain",
+      "index",
+      "closure",
+      "body_snippet"
+    ]
+  },
+  "r14_fail_closed": {
+    "callable_authority": "exact inherited K1 signature",
+    "missing_signature": "skip_without_r14_facts",
+    "partially_selected_arguments": "omit_entire_argument_family_for_call",
+    "unselected_receiver": "omit_has_receiver",
+    "unselected_let_initializer": {
+      "coverage": "rust.pattern_input_unexpanded",
+      "binding": "preserved",
+      "binds_from": "omitted"
+    }
+  },
+  "r15_fail_closed": {
+    "callable_authority": "exact inherited R14/K1 signature",
+    "missing_signature": "skip_without_r15_facts",
+    "unsupported_inherited_callable": "whole_callable_zero_facts_with_existing_two_gaps"
+  },
+  "repository_boundary": {
+    "composition": "unsupported",
+    "shape": "SubmoduleOrGitlink",
+    "r14_code": "input.unsupported_rust_expression_composition",
+    "r15_code": "input.unsupported_rust_flow_composition",
+    "reason": "repository_boundary_not_supported",
+    "exit": 2,
+    "stdout_bytes": 0,
+    "store_created": false,
+    "nested_source_read": false
+  },
+  "resource_budget": {
+    "maximum_peak_rss_bytes": 4294967296,
+    "extraction_deadline_ms": 60000,
+    "streaming_serialization_introduced": false,
+    "server_slo_introduced": false
+  },
+  "immutability": {
+    "schemas": true,
+    "ontology_families": true,
+    "identity_domains": true,
+    "historical_fixtures": true,
+    "historical_goldens": true,
+    "query_contracts": true,
+    "portable_contracts": true,
+    "explorer_contracts": true,
+    "viewer_bytes": true,
+    "standard_32m_behavior": true,
+    "historical_64m_behavior": true
+  },
+  "fixture": {
+    "manifest": "tests/fixtures/s4/rust-real-repository-shapes-v1/manifest.json",
+    "oracle": "tests/fixtures/s4/rust-real-repository-shapes-v1/expected-r14-r15-correction.json",
+    "oracle_sha256": "76286fc962b7ff0e2675d788761b3898f2a640ee6fc6d294553cb26ce16e7981",
+    "permutations": 50,
+    "schedules": 10
+  },
+  "expected_red": {
+    "commands": [
+      "python3 -m unittest scripts.tests.test_s4_r14_r15_real_repository_correction -v",
+      "cargo test -p noesis --test e2e_fr_ext_016_017_real_repository_fail_closed --locked -- --nocapture"
+    ],
+    "r14": {
+      "exit": 11,
+      "stdout_bytes": 0,
+      "stderr_bytes": 196,
+      "stderr_sha256": "9b284f4bb7368bb0d11c5b33725c109ee469845aac00081e51175413adec4e3c",
+      "code": "internal.unexpected",
+      "stage": "expression_extraction"
+    },
+    "r15": {
+      "exit": 11,
+      "stdout_bytes": 0,
+      "stderr_bytes": 196,
+      "stderr_sha256": "01f7b883892dc357c177c072ce2cca62b3abbf3cbb22f40d173120a283181564",
+      "code": "internal.unexpected",
+      "stage": "local_flow_extraction"
+    },
+    "output_profile": {
+      "exit": 2,
+      "stdout_bytes": 0,
+      "stderr_bytes": 357,
+      "stderr_sha256": "e84e29861457502d4d5643259fbd0669ad8ad2dece27a7d8bdd6734a812e819c",
+      "code": "input.unsupported_rust_expression_composition"
+    }
+  },
+  "tests": {
+    "maximum_and_plus_one": true,
+    "boundary_allocations_retained_concurrently": false,
+    "unknown_duplicate_incomplete_non_r14_r15_non_scan_rejected_before_acquisition": true,
+    "source_execution": false,
+    "network": false
+  },
+  "correction_budget": 5
+}

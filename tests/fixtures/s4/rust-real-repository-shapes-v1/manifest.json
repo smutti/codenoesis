@@ -1,0 +1,43 @@
+{
+  "schema_version": "codenoesis.r14-r15-correction-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-real-repository-shapes-v1",
+  "external_source_vendored": false,
+  "materialization": {
+    "object_format": "sha1",
+    "tree_oid": "389e22d33ed887e32da70c2d60ddd72893bf9c27",
+    "commit_oid": "accc966f2c2729dddc95fe7caf7036312a2a01e0",
+    "author_name": "CodeNoesis",
+    "author_email": "fixture@codenoesis.invalid",
+    "author_date": "1786492800 +0000",
+    "commit_message": "R14/R15 real-repository shape fixture\n"
+  },
+  "files": [
+    {
+      "path": "repository/Cargo.toml",
+      "mode": "100644",
+      "byte_length": 117,
+      "blob_oid": "ef751f0f2a13161a2ae863f1ddd3427623e1451e",
+      "sha256": "97132c1228eefbd1fa76da12d88d651404a233794943a155e77d28ab225c7a2d"
+    },
+    {
+      "path": "repository/src/lib.rs",
+      "mode": "100644",
+      "byte_length": 664,
+      "blob_oid": "0d76928d136d1127ecd818c2b4719b4d3f52df30",
+      "sha256": "c332379543c71ed14bb982285d8486d765930b2e32c822aab88da72c2979da4e"
+    }
+  ],
+  "expected_oracle": {
+    "path": "tests/fixtures/s4/rust-real-repository-shapes-v1/expected-r14-r15-correction.json",
+    "byte_length": 9212,
+    "sha256": "76286fc962b7ff0e2675d788761b3898f2a640ee6fc6d294553cb26ce16e7981"
+  },
+  "sentinels": {
+    "process_execution_permitted": false,
+    "network_access_permitted": false,
+    "compiler_execution_permitted": false,
+    "macro_expansion_permitted": false,
+    "model_provider_permitted": false,
+    "browser_launch_permitted": false
+  }
+}

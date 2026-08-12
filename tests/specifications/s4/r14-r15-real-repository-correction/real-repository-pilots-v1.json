@@ -1,0 +1,71 @@
+{
+  "schema_version": "codenoesis.r14-r15-real-repository-pilots/v1",
+  "status": "required non-vendored acceptance evidence",
+  "network_during_analysis": false,
+  "target_execution": false,
+  "pilots": [
+    {
+      "repository": "dghilardi/lekton",
+      "role": "positive",
+      "commit_oid": "247b8f42fb045db41166d70a276a41c2e079b6eb",
+      "tree_oid": "55ba428493a4ffae86ba492422a049f46d567a30",
+      "checkout": "full_non_shallow_clean",
+      "object_format": "sha1",
+      "output_capacity_profile": "local-snapshot-256m-v1",
+      "r14_counts": {
+        "entities": 25993,
+        "relationships": 43164,
+        "claims": 69157,
+        "evidence": 24365,
+        "diagnostics": 4211,
+        "coverage": 12226
+      },
+      "r15_counts": {
+        "entities": 26150,
+        "relationships": 43675,
+        "claims": 69825,
+        "evidence": 24522,
+        "diagnostics": 4211,
+        "coverage": 13172,
+        "completed_callable_ids": 147,
+        "retained_derivations": 160
+      },
+      "required_journey": [
+        "scan",
+        "docs",
+        "exact-id-query",
+        "export",
+        "strict-reimport",
+        "explore"
+      ],
+      "deterministic_fresh_store_runs": 2,
+      "diagnostic_observations_not_equality_oracles": {
+        "r14_stdout_bytes": 161884928,
+        "r15_stdout_bytes": 164527664,
+        "documentation_manifest_bytes": 22426095,
+        "portable_graph_v8_bytes": 109119705,
+        "r15_scan_elapsed_seconds": 53.15,
+        "r15_scan_peak_rss_bytes": 3211427840,
+        "export_elapsed_seconds": 14.64,
+        "export_peak_rss_bytes": 2477621248,
+        "explore_elapsed_seconds": 1.47,
+        "explore_peak_rss_bytes": 866189312
+      }
+    },
+    {
+      "repository": "rustdesk/rustdesk",
+      "role": "typed_negative_repository_boundary",
+      "commit_oid": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "tree_oid": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+      "checkout": "full_non_shallow_clean",
+      "gitlinks": 1,
+      "r14_code": "input.unsupported_rust_expression_composition",
+      "r15_code": "input.unsupported_rust_flow_composition",
+      "reason": "repository_boundary_not_supported",
+      "exit": 2,
+      "stdout_bytes": 0,
+      "store_created": false,
+      "nested_source_read": false
+    }
+  ]
+}

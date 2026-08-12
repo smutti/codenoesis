@@ -6,14 +6,16 @@ CodeNoesis is an early-stage project exploring how to turn software repositories
 
 ## Status
 
-**Implemented local Rust analysis through R14, not yet production-ready or
-Verified.** The pinned Rust workspace now provides deterministic repository
+**Implemented local Rust analysis through R15 and the first bounded S7 runtime,
+not yet production-ready or Verified.** The pinned Rust workspace now provides deterministic repository
 acquisition, evidence-backed Rust ontology extraction, local persistence,
 documentation, exact-ID query, portable export, and an offline explorer. The
 latest protected merges add committed-source expression and lexical-binding
-facts and accept a valid empty additive R5 layer without changing R14 bytes.
-Issue #166 and Decision 0027 define a Proposed R15 source-only local-flow
-candidate; it is not Approved or Implemented on `main` until manual merge.
+facts, closed source-normal local flow, and the bounded implementation-aware
+HTTP/JSON impact pilot. Issue #170 and Decision 0029 define a Proposed
+high-risk correction that makes the accepted R14/R15 source-only journeys
+fail-closed on ordinary real Rust syntax and adds the explicit scan-only
+`local-snapshot-256m-v1` output envelope without changing ontology semantics.
 Complete independent evidence acceptance, broader language coverage,
 operations, and the remaining production-readiness slices are still pending.
 
