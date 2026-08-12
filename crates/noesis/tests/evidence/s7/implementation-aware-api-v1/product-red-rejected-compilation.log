@@ -1,0 +1,24 @@
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling codenoesis-domain v0.1.0 (<workspace>/crates/codenoesis-domain)
+   Compiling codenoesis-ports v0.1.0 (<workspace>/crates/codenoesis-ports)
+   Compiling codenoesis-contracts v0.1.0 (<workspace>/crates/codenoesis-contracts)
+   Compiling codenoesis-repository v0.1.0 (<workspace>/crates/codenoesis-repository)
+   Compiling codenoesis-scip v0.1.0 (<workspace>/crates/codenoesis-scip)
+   Compiling codenoesis-lang-rust v0.1.0 (<workspace>/crates/codenoesis-lang-rust)
+   Compiling codenoesis-contract-extractors v0.1.0 (<workspace>/crates/codenoesis-contract-extractors)
+   Compiling codenoesis-store-local v0.1.0 (<workspace>/crates/codenoesis-store-local)
+   Compiling codenoesis-application v0.1.0 (<workspace>/crates/codenoesis-application)
+   Compiling noesis v0.1.0 (<workspace>/crates/noesis)
+error[E0277]: the trait bound `Array<u8, UInt<UInt<UInt<UInt<..., ...>, ...>, ...>, ...>>: LowerHex` is not satisfied
+   --> crates/noesis/src/impact.rs:397:21
+    |
+397 |     format!("{:x}", Sha256::digest(bytes))
+    |              ----   ^^^^^^^^^^^^^^^^^^^^^ the trait `LowerHex` is not implemented for `Array<u8, UInt<UInt<UInt<UInt<UInt<..., ...>, ...>, ...>, ...>, ...>>`
+    |              |
+    |              required by this formatting parameter
+    |
+    = note: the full type name was written below the workspace target directory
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `noesis` (bin "noesis") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...

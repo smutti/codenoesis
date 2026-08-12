@@ -5,7 +5,7 @@ use std::io::Read as _;
 use std::path::{Component, Path, PathBuf};
 
 use codenoesis_contracts::{
-    CodeNoesisErrorV23, ImpactBoundFile, ImpactWorkspaceError, ImpactWorkspaceV1,
+    CodeNoesisErrorV23, IMPACT_PIPELINE, ImpactBoundFile, ImpactWorkspaceError, ImpactWorkspaceV1,
     parse_impact_workspace,
 };
 use serde_json::Value;
@@ -29,6 +29,9 @@ pub(crate) fn requested(arguments: &[OsString]) -> bool {
 }
 
 pub(crate) fn run(arguments: Vec<OsString>) -> Result<Vec<u8>, ImpactFailure> {
+    if PIPELINE_VERSION != IMPACT_PIPELINE {
+        return Err(internal_failure());
+    }
     let invocation = ImpactInvocation::parse(arguments)?;
     let manifest_path = canonical_manifest(&invocation.workspace)?;
     let manifest_bytes = read_bounded(&manifest_path, WORKSPACE_BYTES_MAXIMUM)
@@ -394,7 +397,14 @@ fn enforce_component_limit(
 }
 
 fn sha256(bytes: &[u8]) -> String {
-    format!("{:x}", Sha256::digest(bytes))
+    const HEX: &[u8; 16] = b"0123456789abcdef";
+    let digest = Sha256::digest(bytes);
+    let mut encoded = String::with_capacity(64);
+    for byte in digest {
+        encoded.push(char::from(HEX[usize::from(byte >> 4)]));
+        encoded.push(char::from(HEX[usize::from(byte & 0x0f)]));
+    }
+    encoded
 }
 
 fn workspace_failure(error: ImpactWorkspaceError) -> ImpactFailure {
