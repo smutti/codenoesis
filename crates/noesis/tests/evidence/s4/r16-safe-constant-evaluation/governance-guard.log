@@ -1,0 +1,10 @@
+test_contract_bundle (scripts.tests.test_s4_r16_safe_constant_evaluation_contract.R16ContractTest) ... ok
+test_exact_safe_constant_oracle (scripts.tests.test_s4_r16_safe_constant_evaluation_contract.R16ContractTest) ... ok
+test_failure_lifecycle_and_pilots_are_explicit (scripts.tests.test_s4_r16_safe_constant_evaluation_contract.R16ContractTest) ... ok
+test_frozen_contract_family (scripts.tests.test_s4_r16_safe_constant_evaluation_contract.R16ContractTest) ... ok
+test_immutable_fixture_material (scripts.tests.test_s4_r16_safe_constant_evaluation_contract.R16ContractTest) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.004s
+
+OK

@@ -1,0 +1,99 @@
+{
+  "schema_version": "codenoesis.product-red-observation/s4-r16-safe-constant-evaluation-v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/172",
+  "requirement_status": "Proposed branch-scoped candidate",
+  "requirements": [
+    "FR-EXT-020",
+    "FR-EXP-008",
+    "FR-EXT-012",
+    "FR-EXT-016",
+    "FR-EXT-017",
+    "FR-KNW-003",
+    "FR-QRY-001",
+    "FR-CLI-001",
+    "FR-DOC-001",
+    "FR-DOC-002",
+    "FR-DOC-003",
+    "NFR-DET-001",
+    "NFR-PER-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-PRV-002",
+    "NFR-TST-001",
+    "NFR-TST-002",
+    "INV-BND-001"
+  ],
+  "slice": "S4",
+  "roadmap_capability": "R16",
+  "risk": "high",
+  "correction_round": 0,
+  "correction_budget": 5,
+  "exact_base_sha": "6043313789f6855770520ad5312672fdb081ef38",
+  "governance_checkpoint_sha": "0f2dde1ac3b3d2dce662000dd906797028cfac97",
+  "governance_checkpoint_tree": "e06141bf8bf75739b1fceecd27b36f8bef5159ac",
+  "contract_bundle_sha256": "a11797eac9f428760ba67e875ef8dd7702429c365204f057a8a073d084d9e1df",
+  "production_source_changed_before_red": false,
+  "governance_guard": {
+    "command": "python3 -m unittest scripts.tests.test_s4_r16_safe_constant_evaluation_contract -v",
+    "exit_code": 0,
+    "tests_passed": 5,
+    "raw_log_path": "crates/noesis/tests/evidence/s4/r16-safe-constant-evaluation/governance-guard.log",
+    "raw_log_bytes": 683,
+    "raw_log_sha256": "201a8f488a6c2a352af89a40ad00a497926ed9f920992122a56c968ca098b310"
+  },
+  "red": {
+    "command": "cargo test -p noesis --test e2e_fr_ext_020_rust_safe_constant_evaluation e2e_fr_ext_020_rust_safe_constant_evaluation_complete_local_journey --locked -- --exact --nocapture",
+    "runner_exit_code": 101,
+    "expected_failure": "The complete R16 journey is unavailable because --rust-constant-profile has not been registered or implemented.",
+    "actual_failure": "expected RepositorySnapshotV18 success; observed frozen selector Red",
+    "failed_for_expected_reason": true,
+    "underlying_scan": {
+      "exit_code": 2,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_bytes": 149,
+      "stderr_sha256": "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe",
+      "schema_version": "codenoesis.error/v4",
+      "code": "input.invalid_revision",
+      "stage": "input",
+      "store": "absent",
+      "observation_method": "black-box E2E assertions completed before the intentional test panic"
+    },
+    "raw_log_path": "crates/noesis/tests/evidence/s4/r16-safe-constant-evaluation/red.log",
+    "raw_log_bytes": 1281,
+    "raw_log_sha256": "f9c62f510b5fb36b070210d8ecff613239f1586889d375925bc3515052809524",
+    "outer_wall_seconds": 4.229,
+    "test_reported_seconds": 1.27
+  },
+  "fixture": {
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-safe-constant-evaluation-v1",
+    "commit_oid": "d77f3b77aae0aeabb89c8833e4ab4d655075b837",
+    "tree_oid": "f46c4f56d5fd506ab5ce3f5fb338ee240065ad0b"
+  },
+  "policy": {
+    "binding": "maintainer_supervised_interactive_lane",
+    "source": "AGENTS.md",
+    "sha256": "07c4385775f37be9e5d2ba09f7e9edfe3936f800a2188e4155f166eef3299c71",
+    "unattended_authorization": false
+  },
+  "environment": {
+    "observed_at_utc": "2026-08-12T18:44:41Z",
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "host": "aarch64-apple-darwin",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "python": "Python 3.9.6",
+    "git": "git version 2.50.1 (Apple Git-155)",
+    "actionlint": "1.7.12",
+    "features": []
+  },
+  "ai": {
+    "agent": "OpenAI Codex",
+    "model": "not exposed by the runtime",
+    "run_id": "issue-172-r16-checkpoint-red-1",
+    "duration_seconds": 4.229,
+    "cost": "not exposed by the runtime"
+  },
+  "limitation": "This retained checkpoint Red proves only the missing R16 selector registration and behavior on the project-owned fixture. It is not Green, pilot, CI, independent-review, merge, or Verified evidence."
+}
