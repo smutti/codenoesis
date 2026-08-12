@@ -1,0 +1,77 @@
+{
+  "schema_version": "codenoesis.s7-runtime-correction-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/168",
+  "pull_request": "https://github.com/smutti/codenoesis/pull/169",
+  "authorization": "https://github.com/smutti/codenoesis/issues/168#issuecomment-5262477228",
+  "slice": "S7",
+  "planning_outcome": "C0-C4",
+  "risk": "high",
+  "observed_at_utc": "2026-08-12T08:43:19Z",
+  "correction": {
+    "round": 3,
+    "budget": 5,
+    "remaining_after_correction": 2,
+    "commit": "d3b5f620a935387fdd2aaeeb1e6bb76aaf42aa95",
+    "changed_path": "crates/noesis/src/impact.rs"
+  },
+  "failed_ci_observation": {
+    "branch_head": "8bccbda96046310b5182033bb3ccaea97384ab1c",
+    "pull_request_merge_commit": "68fe396ad764c26671810fddab196d7548f02b1e",
+    "workflow_run": "https://github.com/smutti/codenoesis/actions/runs/31577923163",
+    "job": "https://github.com/smutti/codenoesis/actions/runs/31577923163/job/94054156031",
+    "runner": "ubuntu-24.04",
+    "runner_image_version": "20260720.247.2",
+    "architecture": "x86_64-unknown-linux-gnu",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "command": "cargo test --workspace --all-targets --all-features --locked",
+    "exit": 101,
+    "failed_tests": [
+      "e2e_fr_imp_004_implementation_aware_api_diff",
+      "pt_nfr_det_001_s7_replays_and_schedules_are_byte_identical",
+      "sec_fr_cli_006_traversal_oversize_and_malformed_source_fail_closed"
+    ],
+    "observed_product_exit": 1,
+    "symlink_pre_boundary_test_passed": true
+  },
+  "root_cause": {
+    "component": "linux_landlock_read_authority",
+    "reason": "The exact federation report regular file was incorrectly included in the repository-root list. The inherited hard-requirement Landlock adapter grants ReadFile plus ReadDir to each root and rejects ReadDir for a regular file before confinement, so every S7 path that reached boundary installation returned impact.internal with exit 1.",
+    "platform_scope": "Linux normative filesystem boundary; non-Linux implementations intentionally install no Landlock rule."
+  },
+  "fix": {
+    "semantics": "Pass the exact federation report through the inherited single-file ReadFile slot and retain only provider and client directories in the ReadFile plus ReadDir root list.",
+    "authority_broadened": false,
+    "requirements_changed": false,
+    "oracle_changed": false,
+    "schema_changed": false,
+    "dependency_changed": false,
+    "risk_changed": false,
+    "frozen_s7_artifacts_changed": false
+  },
+  "focused_green": {
+    "commands": [
+      "cargo clippy --locked -p noesis --all-targets --all-features -- -D warnings",
+      "cargo test --locked -p noesis --test e2e_fr_imp_004_implementation_aware_api_diff"
+    ],
+    "exits": [
+      0,
+      0
+    ],
+    "tests_passed": 4,
+    "tests_failed": 0
+  },
+  "complete_local_gate": {
+    "tested_product_head": "d3b5f620a935387fdd2aaeeb1e6bb76aaf42aa95",
+    "summary": "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/linux-read-authority-correction-gate.log",
+    "status": "passed",
+    "rust_tests_passed": 549,
+    "python_tests_passed": 313,
+    "raw_local_log_bytes": 66496,
+    "raw_local_log_sha256": "15a5fdb029cdd1a49b73fb20acbac83d97691efa4a27975b274ad2b5101b2776"
+  },
+  "required_follow_up": [
+    "Run the native Ubuntu job on the corrected pull request head to retain normative Landlock evidence.",
+    "Run the complete repository gate on the immutable final evidence head.",
+    "Independent review and protected manual merge remain required."
+  ]
+}
