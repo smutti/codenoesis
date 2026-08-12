@@ -1,0 +1,25 @@
+issue=https://github.com/smutti/codenoesis/issues/170
+correction_round=3
+failed_head=3ccdba1e9e02d72744ffbd27816478cc7eb7694c
+failed_command=cargo test --workspace --all-targets --all-features --locked
+failed_exit=101
+failed_elapsed_seconds=433
+failed_test=conf_fr_ext_010_empty_semantic_extension_checkpoint_is_bound
+failed_reason=issue #170 status wording replaced the exact README and roadmap compatibility markers protected by issue #164
+failed_raw_log_bytes=53320
+failed_raw_log_sha256=4b550d1803e9e4ad825528700d4c830a8b311c169a9ac0177c3b88270e84447c
+correction_head=3f39f399049fc628e9f7364bf7dcfd83a9b55cdd
+correction=retain the exact R14 and R0-R14/K1 historical milestone phrases while keeping the current R15 status explicit
+product_contract_change=false
+
+command=cargo test -p noesis --test e2e_fr_ext_010_rust_semantic_depth conf_fr_ext_010_empty_semantic_extension_checkpoint_is_bound --locked -- --exact
+exit=0
+tests_passed=1
+
+command=python3 -m unittest scripts.tests.test_s4_r14_r15_real_repository_correction -v
+exit=0
+tests_passed=7
+
+command=git diff --check
+exit=0
+result=green

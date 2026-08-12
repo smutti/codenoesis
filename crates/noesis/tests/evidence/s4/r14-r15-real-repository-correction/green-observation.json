@@ -25,7 +25,7 @@
   "base_commit_sha": "559fec3863830beef9fb4962d936c681a79c258e",
   "tested_product_head_sha": "f28f049ecae1317f5a9ee9af4192c841523b19af",
   "tested_product_tree_sha": "0326fb33484077512487d63f9b2f1a16135b0de1",
-  "final_corrected_source_head_sha": "e7d204f777a5a536a58a7d96e20f9be02d9aabb0",
+  "final_corrected_source_head_sha": "3f39f399049fc628e9f7364bf7dcfd83a9b55cdd",
   "observed_at_utc": "2026-08-12T13:33:42Z",
   "red_before_code": {
     "governance_checkpoint_sha": "a43f7c80b836fa24e22db0bb7b53eac9e84f8bd7",
@@ -160,6 +160,21 @@
       "sha256": "2db377eae1c694d48764592b697931e1a6f7dc0a62b5af4f02fb97b6ef21f505"
     }
   },
+  "gate_correction_round_3": {
+    "round": 3,
+    "failed_head_sha": "3ccdba1e9e02d72744ffbd27816478cc7eb7694c",
+    "failed_command": "cargo test --workspace --all-targets --all-features --locked",
+    "failed_exit_code": 101,
+    "reason": "the issue #170 status wording replaced two exact governance compatibility markers protected by issue #164",
+    "corrected_head_sha": "3f39f399049fc628e9f7364bf7dcfd83a9b55cdd",
+    "product_contract_change": false,
+    "focused_revalidation": "the exact issue #164 conformance test plus all seven issue #170 governance tests passed",
+    "summary": {
+      "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/gate-regression-correction-round-3.log",
+      "byte_length": 1096,
+      "sha256": "17f3aec8b51c91ad71c11e73bea58c01e3e3df70420df66008b7af8a0cc73bbe"
+    }
+  },
   "complete_repository_gate": {
     "status": "not embedded to avoid invalidating the tested head; publish exact results externally against the final evidence commit",
     "commands": [
@@ -230,7 +245,7 @@
   },
   "human_approval": "Autorizzo issue #170 e il pacchetto completo high-risk R14/R15 descritto sulla baseline 559fec3863830beef9fb4962d936c681a79c258e.",
   "correction_budget": 5,
-  "correction_rounds_used": 2,
+  "correction_rounds_used": 3,
   "known_limitations": [
     "The branch-scoped correction remains Proposed and is not Verified before protected manual merge and independent evidence review.",
     "The first R15 pilot took 62.50 seconds end to end because total time includes serialization; the internal 60-second extraction guard passed and the second end-to-end run took 56.88 seconds.",
