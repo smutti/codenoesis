@@ -1,0 +1,12 @@
+test_executable_acceptance_is_present (scripts.tests.test_s4_r14_r15_real_repository_correction.R14R15RealRepositoryCorrectionTest) ... ok
+test_fixture_materialization_is_exact (scripts.tests.test_s4_r14_r15_real_repository_correction.R14R15RealRepositoryCorrectionTest) ... ok
+test_governance_authority_and_lifecycle (scripts.tests.test_s4_r14_r15_real_repository_correction.R14R15RealRepositoryCorrectionTest) ... ok
+test_historical_contracts_and_viewer_are_immutable (scripts.tests.test_s4_r14_r15_real_repository_correction.R14R15RealRepositoryCorrectionTest) ... ok
+test_machine_oracle_freezes_corrected_families (scripts.tests.test_s4_r14_r15_real_repository_correction.R14R15RealRepositoryCorrectionTest) ... ok
+test_pinned_pilots_are_non_vendored_and_exact (scripts.tests.test_s4_r14_r15_real_repository_correction.R14R15RealRepositoryCorrectionTest) ... ok
+test_selector_failure_and_red_are_exact (scripts.tests.test_s4_r14_r15_real_repository_correction.R14R15RealRepositoryCorrectionTest) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.010s
+
+OK

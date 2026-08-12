@@ -1,0 +1,67 @@
+{
+  "schema_version": "codenoesis.evidence-pack/red-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/170",
+  "requirements": [
+    "FR-EXT-012",
+    "FR-EXT-016",
+    "FR-EXT-017",
+    "FR-EXP-006",
+    "FR-EXP-007",
+    "FR-CLI-001"
+  ],
+  "requirement_status": "Approved and Implemented on main; branch-scoped correction Proposed",
+  "slice": "S4",
+  "risk": "high",
+  "base_sha": "559fec3863830beef9fb4962d936c681a79c258e",
+  "checkpoint_sha": "a43f7c80b836fa24e22db0bb7b53eac9e84f8bd7",
+  "checkpoint_contains_production_source_edit": false,
+  "commands": [
+    {
+      "command": "python3 -m unittest scripts.tests.test_s4_r14_r15_real_repository_correction -v",
+      "exit_status": 0,
+      "expected": "governance, fixture, oracle, immutable-baseline, and acceptance-presence conformance Green",
+      "actual": "7 tests passed",
+      "log": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/checkpoint-red-python.log",
+      "log_sha256": "c7c56cc8168a2f22e1fa361685b3b8aec525185a655c195222fe386c17e21795"
+    },
+    {
+      "command": "cargo test -p noesis --test e2e_fr_ext_016_017_real_repository_fail_closed --locked -- --nocapture",
+      "exit_status": 101,
+      "expected": "compiled acceptance Red only because the 256 MiB profile is unregistered and the current R14/R15 fixture scans reproduce the reviewed internal extraction mismatches",
+      "actual": "3 expected behavioral failures; 0 passed; compilation succeeded",
+      "log": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/checkpoint-red-cargo.log",
+      "log_sha256": "fea1c9835400bd6d1002c84ec19c16ab4d656778eb482dbef2d9fb53acf5034b"
+    }
+  ],
+  "underlying_red": {
+    "r14_stderr_sha256": "9b284f4bb7368bb0d11c5b33725c109ee469845aac00081e51175413adec4e3c",
+    "r15_stderr_sha256": "01f7b883892dc357c177c072ce2cca62b3abbf3cbb22f40d173120a283181564",
+    "profile_stderr_sha256": "e84e29861457502d4d5643259fbd0669ad8ad2dece27a7d8bdd6734a812e819c",
+    "stdout_bytes": 0,
+    "store_created": false
+  },
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "rustc_host": "aarch64-apple-darwin",
+    "llvm": "22.1.6",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "python": "3.9.6",
+    "network_during_test": false,
+    "target_execution": false
+  },
+  "ai_participation": {
+    "agent": "OpenAI Codex coding agent",
+    "model": "not exposed by runtime",
+    "policy": "repository AGENTS.md plus issue #170 exact branch-scoped authority",
+    "run_identifier": "issue-170-checkpoint-red",
+    "duration": "not measured",
+    "cost": "not exposed by runtime"
+  },
+  "known_limitations": [
+    "This observation proves only the reviewed Red on the local checkpoint environment.",
+    "No external repository pilot or complete repository gate has run at this checkpoint.",
+    "The correction remains Proposed and is not Verified."
+  ]
+}
