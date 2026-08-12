@@ -1,0 +1,82 @@
+{
+  "schema_version": "codenoesis.s7-runtime-red-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/168",
+  "authorization": "https://github.com/smutti/codenoesis/issues/168#issuecomment-5262477228",
+  "requirement_ids": [
+    "DR-SEM-001",
+    "FR-CLI-006",
+    "FR-EXT-018",
+    "FR-EXT-019",
+    "FR-IMP-004",
+    "FR-IMP-005"
+  ],
+  "requirement_status": {
+    "approved": [
+      "DR-SEM-001",
+      "FR-IMP-004",
+      "FR-IMP-005"
+    ],
+    "proposed_branch_scoped": [
+      "FR-CLI-006",
+      "FR-EXT-018",
+      "FR-EXT-019"
+    ]
+  },
+  "slice": "S7",
+  "risk": "high",
+  "base_commit_sha": "c212db5062ce28731f4aadc528a750d4ba33524f",
+  "governance_checkpoint_sha": "38100a6dda1667fc856905601c48bae5046dc7f4",
+  "observed_at_utc": "2026-08-12T06:07:16Z",
+  "production_source_modified_before_red": false,
+  "command": "python3 -m unittest scripts.tests.test_s7_runtime_contract.S7RuntimeContractTests.test_exact_runtime_capabilities_are_absent -v",
+  "expected_failure": "The governance guard must fail only because the exact S7 workspace member, pinned dependency, Rust provider capability, Kotlin client capability, and impact pipeline registrations are absent before production implementation.",
+  "actual_failure": "The guard reported exactly workspace, dependency, provider, client, and pipeline as absent; every frozen-artifact, contract, schema, capability, threat-model, and documentation guard passed separately.",
+  "exit_code": 1,
+  "missing_registrations": [
+    "workspace",
+    "dependency",
+    "provider",
+    "client",
+    "pipeline"
+  ],
+  "log": {
+    "path": "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/governance-red.log",
+    "byte_length": 1027,
+    "sha256": "7ad55d6ed8299d2ec0ea05af54ec17e34ce14b6ddfaad6288213257e23bf4161",
+    "normalization": "The absolute workspace prefix was replaced with <workspace>; all semantic failure bytes were retained."
+  },
+  "raw_capture": {
+    "byte_length": 1059,
+    "sha256": "9db2687f85d4c4ab7b5e747700fbb1a2cb71de7e0fd06b964e1ab12c1734761c"
+  },
+  "capture_correction": {
+    "accepted_as_product_correction": false,
+    "reason": "The first collection wrapper assigned the reserved zsh variable status after the unchanged test command had run, so it did not retain exit metadata. The exact test command was rerun unchanged with a non-reserved wrapper variable."
+  },
+  "immutable_oracle": {
+    "path": "tests/fixtures/s7/implementation-aware-api-v1/expected-semantic-compatibility-report.json",
+    "byte_length": 14991,
+    "sha256": "cfd9a8d4dcb2d04bcd9eaffd15f1ae947ffdaba80e07daee43375c9a67c15750"
+  },
+  "environment": {
+    "kernel": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "host": "aarch64-apple-darwin",
+    "macos": "26.5.2",
+    "python": "3.9.6",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "features": "governance-only Python conformance guard; no production source, network, target, build, plugin, model, or repository execution"
+  },
+  "agent": {
+    "product": "OpenAI Codex",
+    "model_identity": "not exposed by the runtime",
+    "run_identifier": "not exposed by the runtime",
+    "duration": "focused command completed in under one second",
+    "cost": "not exposed by the runtime",
+    "policy": "AGENTS.md sha256:07c4385775f37be9e5d2ba09f7e9edfe3936f800a2188e4155f166eef3299c71"
+  },
+  "human_approval": "Autorizzo issue #168 e il pacchetto completo high-risk S7/C0-C4 descritto sulla baseline c212db5062ce28731f4aadc528a750d4ba33524f, inclusi governance e codice in una sola PR, i due Red prima dell’implementazione, tree-sitter-kotlin-ng = 1.1.0, i percorsi consentiti, gli artifact S7 esistenti immutabili, il budget di cinque correzioni e le stop conditions descritte.",
+  "correction_rounds_used": 0,
+  "stop_conditions_triggered": []
+}

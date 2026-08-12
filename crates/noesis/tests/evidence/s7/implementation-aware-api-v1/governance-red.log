@@ -1,0 +1,21 @@
+test_exact_runtime_capabilities_are_absent (scripts.tests.test_s7_runtime_contract.S7RuntimeContractTests) ... FAIL
+
+======================================================================
+FAIL: test_exact_runtime_capabilities_are_absent (scripts.tests.test_s7_runtime_contract.S7RuntimeContractTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<workspace>/scripts/tests/test_s7_runtime_contract.py", line 132, in test_exact_runtime_capabilities_are_absent
+    self.assertEqual(
+AssertionError: Lists differ: ['workspace', 'dependency', 'provider', 'client', 'pipeline'] != []
+
+First list contains 5 additional elements.
+First extra element 0:
+'workspace'
+
+- ['workspace', 'dependency', 'provider', 'client', 'pipeline']
++ [] : S7 runtime capabilities are absent from production registration: workspace, dependency, provider, client, pipeline
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (failures=1)
