@@ -13,6 +13,7 @@ use support::s4_r14_r15_correction::{MaterializedR14R15CorrectionRepository, exp
 const R14_RED_SHA256: &str = "9b284f4bb7368bb0d11c5b33725c109ee469845aac00081e51175413adec4e3c";
 const R15_RED_SHA256: &str = "01f7b883892dc357c177c072ce2cca62b3abbf3cbb22f40d173120a283181564";
 const PROFILE_RED_SHA256: &str = "e84e29861457502d4d5643259fbd0669ad8ad2dece27a7d8bdd6734a812e819c";
+const MAX_CANONICAL_OUTPUT_BYTES: usize = 268_435_456;
 
 #[test]
 fn e2e_fr_ext_016_real_repository_shapes_are_fail_closed() {
@@ -163,16 +164,17 @@ fn assert_typed_boundary_failure(
 }
 
 fn verify_snapshot(bytes: &[u8], expected: &Value, include_flow: bool) {
-    assert_eq!(
-        bytes.len(),
-        usize::try_from(
-            expected["canonical_stdout_bytes"]
-                .as_u64()
-                .expect("stdout bytes")
-        )
-        .expect("stdout bytes fit usize")
-    );
+    let observed_local_bytes = usize::try_from(
+        expected["canonical_stdout_bytes"]
+            .as_u64()
+            .expect("observed local stdout bytes"),
+    )
+    .expect("observed local stdout bytes fit usize");
+    assert!(observed_local_bytes <= MAX_CANONICAL_OUTPUT_BYTES);
+    assert!(bytes.len() <= MAX_CANONICAL_OUTPUT_BYTES);
+    assert_eq!(bytes.last(), Some(&b'\n'));
     let snapshot = parse_single_document(bytes);
+    verify_dynamic_envelope(&snapshot);
     assert_eq!(
         snapshot["semantic_hash"]["value"],
         expected["semantic_hash"]
@@ -192,6 +194,32 @@ fn verify_snapshot(bytes: &[u8], expected: &Value, include_flow: bool) {
     if include_flow {
         verify_flow(graph, expected);
     }
+}
+
+fn verify_dynamic_envelope(snapshot: &Value) {
+    let envelope = &snapshot["envelope"];
+    let created_at = envelope["created_at"].as_str().expect("created at");
+    assert_eq!(created_at.len(), 20);
+    assert_eq!(created_at.as_bytes().get(10), Some(&b'T'));
+    assert!(created_at.ends_with('Z'));
+    assert!(envelope["job_id"].is_null());
+
+    let correlation_id = envelope["correlation_id"].as_str().expect("correlation ID");
+    let components = correlation_id.split('-').collect::<Vec<_>>();
+    assert_eq!(components.len(), 5);
+    assert_eq!(components[0], "scan");
+    components[1].parse::<u64>().expect("correlation seconds");
+    assert_eq!(components[2].len(), 9);
+    let nanoseconds = components[2]
+        .parse::<u32>()
+        .expect("correlation nanoseconds");
+    assert!(nanoseconds < 1_000_000_000);
+    components[3]
+        .parse::<u32>()
+        .expect("correlation process ID");
+    components[4]
+        .parse::<usize>()
+        .expect("correlation sequence");
 }
 
 fn verify_graph_families(graph: &Value, expected: &Value) {
