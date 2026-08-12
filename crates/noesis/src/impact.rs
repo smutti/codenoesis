@@ -1,23 +1,40 @@
 use std::collections::BTreeSet;
 use std::ffi::{OsStr, OsString};
-use std::fs;
-use std::io::Read as _;
+use std::fs::{self, Metadata};
+use std::io::{Read as _, Seek as _};
 use std::path::{Component, Path, PathBuf};
 
+use codenoesis_application::ImpactService;
+use codenoesis_contract_extractors::OpenApi31HttpJsonExtractor;
 use codenoesis_contracts::{
     CodeNoesisErrorV23, IMPACT_PIPELINE, ImpactBoundFile, ImpactWorkspaceError, ImpactWorkspaceV1,
-    parse_impact_workspace,
+    S7FederationContractError, S7FederationState, SemanticCompatibilityReportV1,
+    SemanticReportError, parse_impact_workspace, parse_s7_federation_authority,
 };
-use serde_json::Value;
+use codenoesis_domain::s6::{
+    OpenApiContractInput, ProviderBinding, SourceFormat, call_site_id, client_id,
+};
+use codenoesis_domain::s7::{
+    CLIENT_CAPABILITY, CONTRACT_CAPABILITY, ClientFact, ContractProjection, EvidenceSourceKind,
+    FederationState, ImpactAnalysisError, ImpactAnalysisInput, ProviderFieldFact,
+    ProviderRevisionFacts, S7Limit, S7LimitExceeded, SourceEvidence, SourceEvidenceLocator,
+    SourceExtractionError, SourceSpan,
+};
+use codenoesis_lang_kotlin::TreeSitterKotlinClientExtractor;
+use codenoesis_lang_rust::TreeSitterRustProviderExtractor;
+use codenoesis_ports::{
+    KotlinClientSourceExtractor, RustProviderSourceExtractor, S7OpenApiContractProjector,
+};
+use same_file::Handle as FileIdentity;
 use sha2::{Digest, Sha256};
 
 pub const PIPELINE_VERSION: &str = "codenoesis.pipeline/s7-v1";
 
-const WORKSPACE_BYTES_MAXIMUM: u64 = 1_048_576;
-const FEDERATION_REPORT_BYTES_MAXIMUM: u64 = 67_108_864;
-const SOURCE_FILES_MAXIMUM: u64 = 10_002;
-const SOURCE_BYTES_PER_FILE_MAXIMUM: u64 = 2_097_152;
-const TOTAL_SOURCE_BYTES_MAXIMUM: u64 = 268_435_456;
+const WORKSPACE_BYTES_MAXIMUM: u64 = S7Limit::WorkspaceBytes.maximum();
+const FEDERATION_REPORT_BYTES_MAXIMUM: u64 = S7Limit::FederationReportBytes.maximum();
+const SOURCE_FILES_MAXIMUM: u64 = S7Limit::SourceFiles.maximum();
+const SOURCE_BYTES_PER_FILE_MAXIMUM: u64 = S7Limit::SourceBytesPerFile.maximum();
+const TOTAL_SOURCE_BYTES_MAXIMUM: u64 = S7Limit::TotalSourceBytes.maximum();
 
 pub(crate) struct ImpactFailure {
     pub(crate) error: CodeNoesisErrorV23,
@@ -28,30 +45,217 @@ pub(crate) fn requested(arguments: &[OsString]) -> bool {
     arguments.get(1).is_some_and(|value| value == "impact")
 }
 
+#[allow(clippy::too_many_lines)]
 pub(crate) fn run(arguments: Vec<OsString>) -> Result<Vec<u8>, ImpactFailure> {
     if PIPELINE_VERSION != IMPACT_PIPELINE {
         return Err(internal_failure());
     }
     let invocation = ImpactInvocation::parse(arguments)?;
     let manifest_path = canonical_manifest(&invocation.workspace)?;
-    let manifest_bytes = read_bounded(&manifest_path, WORKSPACE_BYTES_MAXIMUM)
-        .map_err(|_| input_failure(CodeNoesisErrorV23::invalid_workspace("manifest_read")))?;
+    let manifest_bytes = read_stable(&manifest_path, WORKSPACE_BYTES_MAXIMUM, "workspace")?;
     enforce_limit(
         "workspace_bytes",
         WORKSPACE_BYTES_MAXIMUM,
         manifest_bytes.len(),
     )?;
     let workspace = parse_impact_workspace(&manifest_bytes).map_err(workspace_failure)?;
-    let sources = ImpactSources::resolve(manifest_path, workspace)?;
+    let sources = ImpactSources::resolve(manifest_path, workspace.clone())?;
     noesis::install_s6_filesystem_boundary(
         sources.workspace_manifest.as_os_str(),
         &sources.allowed_read_roots,
     )
     .map_err(|_| internal_failure())?;
-    sources.validate_bound_inputs()?;
-    Err(operation_failure(
-        CodeNoesisErrorV23::unsupported_implementation_semantics(),
-    ))
+    let inputs = sources.read_verified_inputs()?;
+    let authority = parse_s7_federation_authority(&inputs.federation_report)
+        .map_err(|error| federation_failure(&sources.federation_report, error))?;
+    if authority.provider_repository_identity != workspace.provider.repository_identity
+        || authority.provider_revision != workspace.provider.baseline.revision
+    {
+        return Err(operation_failure(
+            CodeNoesisErrorV23::invalid_federation_report(
+                &sources.federation_report.logical_path,
+                "authority_mismatch",
+            ),
+        ));
+    }
+    let operation = authority
+        .operations
+        .first()
+        .filter(|_| authority.operations.len() == 1)
+        .ok_or_else(|| {
+            operation_failure(CodeNoesisErrorV23::invalid_federation_report(
+                &sources.federation_report.logical_path,
+                "unsupported_operation_set",
+            ))
+        })?;
+    let contract_extractor = OpenApi31HttpJsonExtractor::new();
+    let baseline_contract = project_contract(
+        contract_extractor,
+        &workspace.provider.repository_identity,
+        &workspace.provider.baseline.revision,
+        &workspace.provider.baseline.contract,
+        &authority.service_authority,
+        &operation.operation_id,
+        &inputs.provider_contracts[0],
+    )?;
+    let target_contract = project_contract(
+        contract_extractor,
+        &workspace.provider.repository_identity,
+        &workspace.provider.target.revision,
+        &workspace.provider.target.contract,
+        &authority.service_authority,
+        &operation.operation_id,
+        &inputs.provider_contracts[1],
+    )?;
+    validate_contract_authority(
+        operation,
+        &baseline_contract,
+        &sources.federation_report.logical_path,
+    )?;
+    validate_contract_authority(
+        operation,
+        &target_contract,
+        &sources.federation_report.logical_path,
+    )?;
+
+    let provider_extractor = TreeSitterRustProviderExtractor::new();
+    let baseline_provider = provider_extractor
+        .extract_s7_provider(
+            &inputs.provider_sources[0],
+            &workspace.provider.baseline.callable_symbol,
+        )
+        .map_err(|error| source_failure(&error))?;
+    let target_provider = provider_extractor
+        .extract_s7_provider(
+            &inputs.provider_sources[1],
+            &workspace.provider.target.callable_symbol,
+        )
+        .map_err(|error| source_failure(&error))?;
+    let mut evidence = Vec::new();
+    let baseline = provider_facts(
+        &workspace.provider.repository_identity,
+        &workspace.provider.baseline,
+        baseline_contract,
+        &inputs.provider_contracts[0],
+        &inputs.provider_sources[0],
+        baseline_provider,
+        &mut evidence,
+    )?;
+    let target = provider_facts(
+        &workspace.provider.repository_identity,
+        &workspace.provider.target,
+        target_contract,
+        &inputs.provider_contracts[1],
+        &inputs.provider_sources[1],
+        target_provider,
+        &mut evidence,
+    )?;
+
+    let client_extractor = TreeSitterKotlinClientExtractor::new();
+    let authority_by_repository = authority
+        .clients
+        .iter()
+        .map(|client| (client.repository_identity.as_str(), client))
+        .collect::<std::collections::BTreeMap<_, _>>();
+    let mut clients = Vec::with_capacity(workspace.clients.len());
+    for (index, client) in workspace.clients.iter().enumerate() {
+        let federated = authority_by_repository
+            .get(client.repository_identity.as_str())
+            .ok_or_else(|| {
+                operation_failure(CodeNoesisErrorV23::invalid_federation_report(
+                    &sources.federation_report.logical_path,
+                    "client_authority_missing",
+                ))
+            })?;
+        if federated.role != client.role || federated.revision != client.revision {
+            return Err(operation_failure(
+                CodeNoesisErrorV23::invalid_federation_report(
+                    &sources.federation_report.logical_path,
+                    "client_authority_mismatch",
+                ),
+            ));
+        }
+        let extraction = client_extractor
+            .extract_s7_client(
+                &inputs.client_sources[index],
+                &client.decoder_symbol,
+                &client.call_symbol,
+            )
+            .map_err(|error| source_failure(&error))?;
+        let source_evidence = evidence_for_span(
+            &client.repository_identity,
+            &client.revision,
+            &client.source.path,
+            &inputs.client_sources[index],
+            extraction.evidence_span,
+            EvidenceSourceKind::ClientAssumption,
+            CLIENT_CAPABILITY,
+        )?;
+        let calculated_client_id = client_id(&client.repository_identity);
+        let calculated_call_site_id = call_site_id(
+            &calculated_client_id,
+            &client.revision,
+            &client.source.path,
+            &client.call_symbol,
+        );
+        if calculated_client_id != federated.client_id
+            || calculated_call_site_id != federated.call_site_id
+        {
+            return Err(operation_failure(
+                CodeNoesisErrorV23::invalid_federation_report(
+                    &sources.federation_report.logical_path,
+                    "client_identity_mismatch",
+                ),
+            ));
+        }
+        let federation = match &federated.state {
+            S7FederationState::Confirmed { operation_id } => FederationState::Confirmed {
+                operation_id: operation_id.clone(),
+            },
+            S7FederationState::Rejected {
+                operation_candidate_id,
+            } => FederationState::Rejected {
+                operation_candidate_id: operation_candidate_id.clone(),
+            },
+            S7FederationState::Unresolved => {
+                return Err(operation_failure(
+                    CodeNoesisErrorV23::invalid_federation_report(
+                        &sources.federation_report.logical_path,
+                        "unresolved_client_authority",
+                    ),
+                ));
+            }
+        };
+        clients.push(ClientFact {
+            repository_identity: client.repository_identity.clone(),
+            revision: client.revision.clone(),
+            client_id: calculated_client_id,
+            call_site_id: calculated_call_site_id,
+            call_symbol: client.call_symbol.clone(),
+            path_template: extraction.path_template,
+            assumptions: extraction
+                .assumptions
+                .into_iter()
+                .map(|fact| (format!("/{}", fact.field_name), fact.assumption))
+                .collect(),
+            evidence_id: source_evidence.id.clone(),
+            federation,
+        });
+        evidence.push(source_evidence);
+    }
+
+    evidence.sort_by(|left, right| left.id.cmp(&right.id));
+    let report = ImpactService::analyze(ImpactAnalysisInput {
+        provider_repository_identity: workspace.provider.repository_identity,
+        baseline,
+        target,
+        clients,
+        evidence,
+    })
+    .map_err(|error| analysis_failure(&error))?;
+    SemanticCompatibilityReportV1::from_domain(&report)
+        .and_then(|report| report.canonical_stdout())
+        .map_err(report_failure)
 }
 
 struct ImpactInvocation {
@@ -169,10 +373,7 @@ impl ImpactSources {
             )?);
             allowed_read_roots.insert(root);
         }
-        let source_count = provider_sources
-            .len()
-            .checked_add(client_sources.len())
-            .unwrap_or(usize::MAX);
+        let source_count = provider_sources.len().saturating_add(client_sources.len());
         enforce_limit("source_files", SOURCE_FILES_MAXIMUM, source_count)?;
         let source_bytes = provider_sources
             .iter()
@@ -203,35 +404,33 @@ impl ImpactSources {
         })
     }
 
-    fn validate_bound_inputs(&self) -> Result<(), ImpactFailure> {
-        for input in &self.provider_contracts {
-            input.read_and_verify()?;
-        }
-        for input in self.provider_sources.iter().chain(&self.client_sources) {
-            input.read_and_verify()?;
-        }
-        let report = self.federation_report.read_and_verify()?;
-        let report: Value = serde_json::from_slice(&report).map_err(|_| {
-            operation_failure(CodeNoesisErrorV23::invalid_federation_report(
-                &self.federation_report.logical_path,
-                "invalid_json",
-            ))
-        })?;
-        let valid_schema = report
-            .as_object()
-            .and_then(|object| object.get("schema_version"))
-            .and_then(Value::as_str)
-            == Some("codenoesis.federation-report/v1");
-        if !valid_schema {
-            return Err(operation_failure(
-                CodeNoesisErrorV23::invalid_federation_report(
-                    &self.federation_report.logical_path,
-                    "invalid_schema",
-                ),
-            ));
-        }
-        Ok(())
+    fn read_verified_inputs(&self) -> Result<VerifiedImpactInputs, ImpactFailure> {
+        Ok(VerifiedImpactInputs {
+            provider_contracts: self
+                .provider_contracts
+                .iter()
+                .map(BoundInput::read_and_verify)
+                .collect::<Result<_, _>>()?,
+            provider_sources: self
+                .provider_sources
+                .iter()
+                .map(BoundInput::read_and_verify)
+                .collect::<Result<_, _>>()?,
+            client_sources: self
+                .client_sources
+                .iter()
+                .map(BoundInput::read_and_verify)
+                .collect::<Result<_, _>>()?,
+            federation_report: self.federation_report.read_and_verify()?,
+        })
     }
+}
+
+struct VerifiedImpactInputs {
+    provider_contracts: Vec<Vec<u8>>,
+    provider_sources: Vec<Vec<u8>>,
+    client_sources: Vec<Vec<u8>>,
+    federation_report: Vec<u8>,
 }
 
 struct BoundInput {
@@ -266,8 +465,7 @@ impl BoundInput {
     }
 
     fn read_and_verify(&self) -> Result<Vec<u8>, ImpactFailure> {
-        let bytes = read_bounded(&self.path, self.maximum)
-            .map_err(|_| path_failure(&self.logical_path, self.component, "read_failed"))?;
+        let bytes = read_stable(&self.path, self.maximum, self.component)?;
         enforce_component_limit(
             self.component,
             self.maximum,
@@ -356,13 +554,115 @@ fn resolve_components(
     Ok(resolved)
 }
 
-fn read_bounded(path: &Path, maximum: u64) -> std::io::Result<Vec<u8>> {
-    let mut file = fs::File::open(path)?;
+fn read_stable(
+    path: &Path,
+    maximum: u64,
+    component: &'static str,
+) -> Result<Vec<u8>, ImpactFailure> {
+    read_stable_with(path, maximum, component, || {})
+}
+
+fn read_stable_with(
+    path: &Path,
+    maximum: u64,
+    component: &'static str,
+    after_first_read: impl FnOnce(),
+) -> Result<Vec<u8>, ImpactFailure> {
+    let path_identity_before = FileIdentity::from_path(path)
+        .map_err(|_| path_failure(&bounded_path(path), component, "metadata_unavailable"))?;
+    let path_before = fs::symlink_metadata(path)
+        .map_err(|_| path_failure(&bounded_path(path), component, "metadata_unavailable"))?;
+    if !path_before.is_file() || path_before.file_type().is_symlink() {
+        return Err(path_failure(&bounded_path(path), component, "file_type"));
+    }
+    let mut file = fs::File::open(path)
+        .map_err(|_| path_failure(&bounded_path(path), component, "read_failed"))?;
+    let before = file
+        .metadata()
+        .map_err(|_| path_failure(&bounded_path(path), component, "metadata_unavailable"))?;
+    let identity = FileIdentity::from_file(
+        file.try_clone()
+            .map_err(|_| path_failure(&bounded_path(path), component, "metadata_unavailable"))?,
+    )
+    .map_err(|_| path_failure(&bounded_path(path), component, "metadata_unavailable"))?;
     let mut bytes = Vec::new();
     file.by_ref()
         .take(maximum.saturating_add(1))
-        .read_to_end(&mut bytes)?;
+        .read_to_end(&mut bytes)
+        .map_err(|_| path_failure(&bounded_path(path), component, "read_failed"))?;
+    let observed = u64::try_from(bytes.len()).unwrap_or(u64::MAX);
+    let limit = if component == "workspace" {
+        "workspace_bytes"
+    } else if component == "federation_report" {
+        "federation_report_bytes"
+    } else {
+        "source_bytes_per_file"
+    };
+    enforce_limit_u64(limit, maximum, observed)?;
+    after_first_read();
+    file.rewind()
+        .map_err(|_| operation_failure(CodeNoesisErrorV23::mutable_input(component)))?;
+    let mut verification = Vec::new();
+    file.by_ref()
+        .take(maximum.saturating_add(1))
+        .read_to_end(&mut verification)
+        .map_err(|_| operation_failure(CodeNoesisErrorV23::mutable_input(component)))?;
+    let after = file
+        .metadata()
+        .map_err(|_| operation_failure(CodeNoesisErrorV23::mutable_input(component)))?;
+    let path_after = fs::symlink_metadata(path)
+        .map_err(|_| operation_failure(CodeNoesisErrorV23::mutable_input(component)))?;
+    let path_identity_matches =
+        FileIdentity::from_path(path).is_ok_and(|path_identity| path_identity == identity);
+    if bytes != verification
+        || path_identity_before != identity
+        || before.len() != observed
+        || !same_file_metadata(&path_before, &before)
+        || !same_file_metadata(&before, &after)
+        || !same_file_metadata(&after, &path_after)
+        || !path_identity_matches
+        || path_after.file_type().is_symlink()
+    {
+        return Err(operation_failure(CodeNoesisErrorV23::mutable_input(
+            component,
+        )));
+    }
     Ok(bytes)
+}
+
+#[cfg(unix)]
+fn same_file_metadata(left: &Metadata, right: &Metadata) -> bool {
+    use std::os::unix::fs::MetadataExt as _;
+    left.dev() == right.dev()
+        && left.ino() == right.ino()
+        && left.len() == right.len()
+        && left.mtime() == right.mtime()
+        && left.mtime_nsec() == right.mtime_nsec()
+}
+
+#[cfg(windows)]
+fn same_file_metadata(left: &Metadata, right: &Metadata) -> bool {
+    use std::os::windows::fs::MetadataExt as _;
+    left.file_size() == right.file_size()
+        && left.last_write_time() == right.last_write_time()
+        && left.creation_time() == right.creation_time()
+        && left.file_attributes() == right.file_attributes()
+}
+
+#[cfg(not(any(unix, windows)))]
+fn same_file_metadata(left: &Metadata, right: &Metadata) -> bool {
+    left.len() == right.len()
+        && left.modified().ok() == right.modified().ok()
+        && left.file_type() == right.file_type()
+}
+
+fn bounded_path(path: &Path) -> String {
+    path.file_name()
+        .and_then(OsStr::to_str)
+        .unwrap_or("input")
+        .chars()
+        .take(128)
+        .collect()
 }
 
 fn enforce_limit(limit: &'static str, maximum: u64, observed: usize) -> Result<(), ImpactFailure> {
@@ -407,6 +707,276 @@ fn sha256(bytes: &[u8]) -> String {
     encoded
 }
 
+fn project_contract(
+    extractor: OpenApi31HttpJsonExtractor,
+    repository_identity: &str,
+    revision: &str,
+    binding: &ImpactBoundFile,
+    service_authority: &str,
+    operation_id: &str,
+    bytes: &[u8],
+) -> Result<ContractProjection, ImpactFailure> {
+    extractor
+        .project_s7(
+            OpenApiContractInput {
+                binding: ProviderBinding {
+                    repository_identity: repository_identity.to_owned(),
+                    revision: revision.to_owned(),
+                    contract_path: binding.path.clone(),
+                    contract_sha256: binding.sha256.clone(),
+                    service_authority: service_authority.to_owned(),
+                    source_format: SourceFormat::Yaml,
+                },
+                bytes,
+            },
+            operation_id,
+        )
+        .map_err(|_| operation_failure(CodeNoesisErrorV23::unsupported_implementation_semantics()))
+}
+
+fn validate_contract_authority(
+    authority: &codenoesis_contracts::S7FederatedOperation,
+    contract: &ContractProjection,
+    federation_path: &str,
+) -> Result<(), ImpactFailure> {
+    if authority.operation_id != contract.operation_id
+        || authority.method != contract.method
+        || authority.path_template != contract.path_template
+        || authority.explicit_operation_id != contract.explicit_operation_id
+        || authority.response_status != contract.response_status
+        || authority.fields
+            != contract
+                .fields
+                .iter()
+                .map(|field| {
+                    (
+                        field.field_id.clone(),
+                        field.json_pointer.clone(),
+                        field.required,
+                    )
+                })
+                .collect::<Vec<_>>()
+    {
+        return Err(operation_failure(
+            CodeNoesisErrorV23::invalid_federation_report(
+                federation_path,
+                "contract_authority_mismatch",
+            ),
+        ));
+    }
+    Ok(())
+}
+
+fn provider_facts(
+    repository_identity: &str,
+    revision: &codenoesis_contracts::ImpactRevisionInput,
+    contract: ContractProjection,
+    contract_bytes: &[u8],
+    source_bytes: &[u8],
+    extraction: codenoesis_domain::s7::ProviderSourceExtraction,
+    evidence: &mut Vec<SourceEvidence>,
+) -> Result<ProviderRevisionFacts, ImpactFailure> {
+    let contract_evidence = evidence_for_lines(
+        EvidenceLines {
+            repository_identity,
+            revision: &revision.revision,
+            path: &revision.contract.path,
+            source: contract_bytes,
+            start_line: contract.evidence_span.start_line,
+            end_line: contract.evidence_span.end_line,
+        },
+        EvidenceSourceKind::DeclaredContract,
+        CONTRACT_CAPABILITY,
+    )?;
+    let mut fields = Vec::with_capacity(extraction.fields.len());
+    for field in extraction.fields {
+        let source_evidence = evidence_for_span(
+            repository_identity,
+            &revision.revision,
+            &revision.source.path,
+            source_bytes,
+            field.span,
+            EvidenceSourceKind::ProviderImplementation,
+            codenoesis_domain::s7::PROVIDER_CAPABILITY,
+        )?;
+        fields.push(ProviderFieldFact {
+            field_pointer: format!("/{}", field.field_name),
+            presence: field.presence,
+            evidence_id: source_evidence.id.clone(),
+        });
+        evidence.push(source_evidence);
+    }
+    fields.sort_by(|left, right| left.field_pointer.cmp(&right.field_pointer));
+    let mut custom_mapping_evidence_ids = Vec::new();
+    for span in extraction.custom_mapping_spans {
+        let source_evidence = evidence_for_span(
+            repository_identity,
+            &revision.revision,
+            &revision.source.path,
+            source_bytes,
+            span,
+            EvidenceSourceKind::ProviderImplementation,
+            codenoesis_domain::s7::PROVIDER_CAPABILITY,
+        )?;
+        custom_mapping_evidence_ids.push(source_evidence.id.clone());
+        evidence.push(source_evidence);
+    }
+    custom_mapping_evidence_ids.sort();
+    evidence.push(contract_evidence.clone());
+    Ok(ProviderRevisionFacts {
+        revision: revision.revision.clone(),
+        contract_sha256: revision.contract.sha256.clone(),
+        contract,
+        contract_evidence_id: contract_evidence.id,
+        fields,
+        custom_mapping_evidence_ids,
+    })
+}
+
+fn evidence_for_span(
+    repository_identity: &str,
+    revision: &str,
+    path: &str,
+    source: &[u8],
+    span: SourceSpan,
+    source_kind: EvidenceSourceKind,
+    capability_version: &'static str,
+) -> Result<SourceEvidence, ImpactFailure> {
+    if !span.is_valid_for(source.len()) {
+        return Err(operation_failure(
+            CodeNoesisErrorV23::unsupported_implementation_semantics(),
+        ));
+    }
+    evidence_for_lines(
+        EvidenceLines {
+            repository_identity,
+            revision,
+            path,
+            source,
+            start_line: span.start_line,
+            end_line: span.end_line,
+        },
+        source_kind,
+        capability_version,
+    )
+}
+
+#[derive(Clone, Copy)]
+struct EvidenceLines<'a> {
+    repository_identity: &'a str,
+    revision: &'a str,
+    path: &'a str,
+    source: &'a [u8],
+    start_line: u64,
+    end_line: u64,
+}
+
+fn evidence_for_lines(
+    lines: EvidenceLines<'_>,
+    source_kind: EvidenceSourceKind,
+    capability_version: &'static str,
+) -> Result<SourceEvidence, ImpactFailure> {
+    let excerpt =
+        line_excerpt(lines.source, lines.start_line, lines.end_line).ok_or_else(|| {
+            operation_failure(CodeNoesisErrorV23::unsupported_implementation_semantics())
+        })?;
+    Ok(SourceEvidence::new(
+        SourceEvidenceLocator {
+            repository_identity: lines.repository_identity.to_owned(),
+            revision: lines.revision.to_owned(),
+            path: lines.path.to_owned(),
+            start_line: lines.start_line,
+            end_line: lines.end_line,
+        },
+        sha256(excerpt),
+        source_kind,
+        capability_version,
+    ))
+}
+
+fn line_excerpt(source: &[u8], start_line: u64, end_line: u64) -> Option<&[u8]> {
+    if start_line == 0 || end_line < start_line {
+        return None;
+    }
+    let mut line = 1_u64;
+    let mut start = None;
+    let mut end = None;
+    for (index, byte) in source.iter().enumerate() {
+        if line == start_line && start.is_none() {
+            start = Some(index);
+        }
+        if *byte == b'\n' {
+            if line == end_line {
+                end = Some(index + 1);
+                break;
+            }
+            line = line.saturating_add(1);
+        }
+    }
+    if start.is_none() && line == start_line {
+        start = Some(source.len());
+    }
+    if end.is_none() && line == end_line {
+        end = Some(source.len());
+    }
+    let start = start?;
+    let end = end?;
+    (start < end).then_some(&source[start..end])
+}
+
+fn source_failure(error: &SourceExtractionError) -> ImpactFailure {
+    match error {
+        SourceExtractionError::LimitExceeded(exceeded) => s7_limit_failure(*exceeded),
+        SourceExtractionError::InvalidUtf8
+        | SourceExtractionError::InvalidSyntax
+        | SourceExtractionError::CallableMissing
+        | SourceExtractionError::CallableAmbiguous
+        | SourceExtractionError::UnsupportedSemantics => {
+            operation_failure(CodeNoesisErrorV23::unsupported_implementation_semantics())
+        }
+    }
+}
+
+fn analysis_failure(error: &ImpactAnalysisError) -> ImpactFailure {
+    match error {
+        ImpactAnalysisError::LimitExceeded(exceeded) => s7_limit_failure(*exceeded),
+        ImpactAnalysisError::InvalidAuthority | ImpactAnalysisError::UnsupportedSemantics => {
+            operation_failure(CodeNoesisErrorV23::unsupported_implementation_semantics())
+        }
+    }
+}
+
+fn report_failure(error: SemanticReportError) -> ImpactFailure {
+    match error {
+        SemanticReportError::LimitExceeded(exceeded) => s7_limit_failure(exceeded),
+        SemanticReportError::Invalid | SemanticReportError::Serialization => internal_failure(),
+    }
+}
+
+fn s7_limit_failure(exceeded: S7LimitExceeded) -> ImpactFailure {
+    operation_failure(CodeNoesisErrorV23::limit(
+        exceeded.limit.as_str(),
+        exceeded.maximum,
+        exceeded.observed,
+    ))
+}
+
+fn federation_failure(input: &BoundInput, error: S7FederationContractError) -> ImpactFailure {
+    match error {
+        S7FederationContractError::Invalid => operation_failure(
+            CodeNoesisErrorV23::invalid_federation_report(&input.logical_path, "report_validation"),
+        ),
+        S7FederationContractError::LimitExceeded { limit, observed } => {
+            let maximum = match limit {
+                "fields_per_operation" => 5_000,
+                "operations" | "linked_clients" => 10_000,
+                _ => return internal_failure(),
+            };
+            operation_failure(CodeNoesisErrorV23::limit(limit, maximum, observed))
+        }
+    }
+}
+
 fn workspace_failure(error: ImpactWorkspaceError) -> ImpactFailure {
     match error {
         ImpactWorkspaceError::Invalid => {
@@ -415,6 +985,11 @@ fn workspace_failure(error: ImpactWorkspaceError) -> ImpactFailure {
         ImpactWorkspaceError::TooManyClients { observed } => operation_failure(
             CodeNoesisErrorV23::limit("linked_clients", 10_000, observed),
         ),
+        ImpactWorkspaceError::LimitExceeded {
+            limit,
+            maximum,
+            observed,
+        } => operation_failure(CodeNoesisErrorV23::limit(limit, maximum, observed)),
     }
 }
 
@@ -442,5 +1017,39 @@ fn internal_failure() -> ImpactFailure {
     ImpactFailure {
         error: CodeNoesisErrorV23::internal(),
         exit_code: 1,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::fs;
+    use std::sync::atomic::{AtomicU64, Ordering};
+    use std::time::{SystemTime, UNIX_EPOCH};
+
+    use super::read_stable_with;
+
+    static NEXT_TEST_ROOT: AtomicU64 = AtomicU64::new(0);
+
+    #[test]
+    fn race_fr_cli_006_mutable_input_is_rejected() {
+        let nonce = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .expect("clock after epoch")
+            .as_nanos();
+        let sequence = NEXT_TEST_ROOT.fetch_add(1, Ordering::Relaxed);
+        let root = std::env::temp_dir().join(format!("codenoesis-s7-mutable-{nonce}-{sequence}"));
+        fs::create_dir_all(&root).expect("create mutable-input test root");
+        let path = root.join("source.rs");
+        fs::write(&path, b"baseline").expect("write baseline");
+
+        let result = read_stable_with(&path, 64, "provider_source", || {
+            fs::write(&path, b"modified").expect("replace input during stable read");
+        });
+        let failure = result.expect_err("mutable input must fail closed");
+        assert_eq!(failure.exit_code, 2);
+        assert_eq!(failure.error.value()["code"], "impact.mutable_input");
+        assert_eq!(failure.error.value()["stage"], "impact");
+
+        fs::remove_dir_all(root).expect("remove mutable-input test root");
     }
 }

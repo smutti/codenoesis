@@ -1,0 +1,17 @@
+[package]
+name = "codenoesis-lang-kotlin"
+version = "0.1.0"
+description = "Bounded Tree-sitter Kotlin adapter for CodeNoesis"
+edition.workspace = true
+license.workspace = true
+publish = false
+rust-version.workspace = true
+
+[dependencies]
+codenoesis-domain.workspace = true
+codenoesis-ports.workspace = true
+tree-sitter.workspace = true
+tree-sitter-kotlin-ng.workspace = true
+
+[lints]
+workspace = true

@@ -136,6 +136,39 @@ class S7RuntimeContractTests(unittest.TestCase):
             + ", ".join(missing),
         )
 
+    def test_dependency_and_lock_projection_are_exact(self):
+        workspace = (ROOT / "Cargo.toml").read_text(encoding="utf-8")
+        lock = (ROOT / "Cargo.lock").read_text(encoding="utf-8")
+        self.assertIn('tree-sitter-kotlin-ng = "=1.1.0"', workspace)
+        self.assertEqual(lock.count('name = "tree-sitter-kotlin-ng"'), 1)
+        package = lock.split('name = "tree-sitter-kotlin-ng"', 1)[1].split("[[package]]", 1)[0]
+        self.assertIn('version = "1.1.0"', package)
+        self.assertIn('checksum = "e800ebbda938acfbf224f4d2c34947a31994b1295ee6e819b65226c7b51b4450"', package)
+        self.assertIn(' "cc",', package)
+        self.assertIn(' "tree-sitter-language",', package)
+        self.assertEqual(package.count('\n "'), 2)
+
+    def test_runtime_has_no_executable_or_network_authority(self):
+        sources = [
+            ROOT / "crates" / "noesis" / "src" / "impact.rs",
+            ROOT / "crates" / "codenoesis-lang-rust" / "src" / "s7_provider.rs",
+            ROOT / "crates" / "codenoesis-lang-kotlin" / "src" / "lib.rs",
+        ]
+        forbidden = [
+            "Command::new",
+            "TcpListener",
+            "TcpStream",
+            "UdpSocket",
+            "reqwest",
+            "model_provider",
+            "std::process",
+            "unsafe {",
+        ]
+        for path in sources:
+            source = path.read_text(encoding="utf-8")
+            for marker in forbidden:
+                self.assertNotIn(marker, source, f"{path}: {marker}")
+
 
 if __name__ == "__main__":
     unittest.main()

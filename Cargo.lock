@@ -128,6 +128,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "codenoesis-lang-kotlin"
+version = "0.1.0"
+dependencies = [
+ "codenoesis-domain",
+ "codenoesis-ports",
+ "tree-sitter",
+ "tree-sitter-kotlin-ng",
+]
+
+[[package]]
 name = "codenoesis-lang-rust"
 version = "0.1.0"
 dependencies = [
@@ -446,6 +456,7 @@ dependencies = [
  "codenoesis-contract-extractors",
  "codenoesis-contracts",
  "codenoesis-domain",
+ "codenoesis-lang-kotlin",
  "codenoesis-lang-rust",
  "codenoesis-ports",
  "codenoesis-repository",
@@ -858,6 +869,16 @@ dependencies = [
  "regex-syntax",
  "serde_json",
  "streaming-iterator",
+ "tree-sitter-language",
+]
+
+[[package]]
+name = "tree-sitter-kotlin-ng"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e800ebbda938acfbf224f4d2c34947a31994b1295ee6e819b65226c7b51b4450"
+dependencies = [
+ "cc",
  "tree-sitter-language",
 ]
 

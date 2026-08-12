@@ -113,6 +113,23 @@ impl MaterializedImpactWorkspace {
 
         Self { root, manifest }
     }
+
+    pub fn root(&self) -> &Path {
+        &self.root
+    }
+
+    pub fn manifest_value(&self) -> serde_json::Value {
+        serde_json::from_slice(&fs::read(&self.manifest).expect("read S7 workspace"))
+            .expect("parse S7 workspace")
+    }
+
+    pub fn write_manifest(&self, value: &serde_json::Value) {
+        fs::write(
+            &self.manifest,
+            serde_json::to_vec(value).expect("serialize S7 workspace"),
+        )
+        .expect("write S7 workspace");
+    }
 }
 
 impl Drop for MaterializedImpactWorkspace {

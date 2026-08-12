@@ -16,6 +16,7 @@ mod s4_r6;
 mod s4_r7;
 mod s5;
 mod s6;
+mod s7;
 
 pub use s1_boundaries::{
     BoundaryScanError, PreparedNestedRepositoryRoot, RepositoryBoundaryScanInput,
@@ -36,6 +37,7 @@ pub use s4_r14::{ExpressionBindingsScanError, S4R14ScanOutput};
 pub use s4_r15::{LocalFlowScanError, S4R15ScanOutput};
 pub use s5::{RefreshError, RefreshPlan, RefreshService};
 pub use s6::{FederationRequest, FederationService, FederationServiceError};
+pub use s7::ImpactService;
 
 use std::ffi::OsString;
 
