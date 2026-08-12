@@ -1,0 +1,162 @@
+{
+  "schema_version": "codenoesis.rust-safe-constant-evaluation-profile/v1",
+  "profile": "rust-safe-constant-evaluation-v1",
+  "requires_profiles": [
+    "standard-local-s4",
+    "cargo-root-package-v1",
+    "cargo-manifest-facts-v1",
+    "rust-semantic-depth-v1",
+    "rust-framework-declarations-v1",
+    "rust-callable-semantics-v1",
+    "rust-expression-bindings-v1",
+    "rust-local-flow-v1"
+  ],
+  "contracts": {
+    "configuration": "codenoesis.configuration/v15",
+    "snapshot": "codenoesis.repository-snapshot/v18",
+    "extraction": "codenoesis.extraction/v15",
+    "chunk": "codenoesis.extraction-chunk/v15",
+    "graph": "codenoesis.knowledge-graph/v15",
+    "ontology": "codenoesis.ontology/rust/v15",
+    "semantic_hash": "codenoesis.semantic-hash-contract/v14",
+    "error": "codenoesis.error/v24",
+    "query": "codenoesis.local-query-result/v13",
+    "portable": "codenoesis.portable-graph/v9",
+    "explorer": "codenoesis.local-explorer/v9",
+    "pipeline": "codenoesis.pipeline/s4-r16-v1",
+    "extractor": "codenoesis.rust-constant-evaluation/s4-r16-v1",
+    "index": "codenoesis.constant-evaluation-index/v1",
+    "rule": "codenoesis.rule/rust-safe-constant-evaluation/v1"
+  },
+  "entity_kinds": [
+    "rust.evaluated_value"
+  ],
+  "relationship_kinds": [
+    "EVALUATES_TO"
+  ],
+  "claim_state": "derived_fact",
+  "subjects": [
+    "exact_typed_const",
+    "exact_typed_immutable_static",
+    "closed_fixed_repr_unit_enum"
+  ],
+  "result_types": [
+    "bool",
+    "i8",
+    "i16",
+    "i32",
+    "i64",
+    "i128",
+    "u8",
+    "u16",
+    "u32",
+    "u64",
+    "u128"
+  ],
+  "grammar": {
+    "literals": [
+      "boolean",
+      "binary_integer",
+      "octal_integer",
+      "decimal_integer",
+      "hex_integer"
+    ],
+    "unary": [
+      "signed_negate",
+      "boolean_or_fixed_integer_not"
+    ],
+    "integer_binary": [
+      "add",
+      "subtract",
+      "multiply",
+      "divide",
+      "remainder",
+      "bit_and",
+      "bit_or",
+      "bit_xor"
+    ],
+    "boolean_binary": [
+      "and",
+      "or"
+    ],
+    "comparisons": [
+      "equal",
+      "not_equal",
+      "less",
+      "less_equal",
+      "greater",
+      "greater_equal"
+    ],
+    "grouping": true,
+    "dependency": "one_direct_unqualified_same_owner_const",
+    "checked_fixed_width": true
+  },
+  "forbidden": [
+    "usize",
+    "isize",
+    "float",
+    "char",
+    "string",
+    "byte",
+    "reference",
+    "alias",
+    "generic",
+    "aggregate",
+    "pointer",
+    "inferred_type",
+    "implicit_conversion",
+    "cast",
+    "shift",
+    "path",
+    "import",
+    "associated_const",
+    "call",
+    "field",
+    "index",
+    "closure",
+    "macro",
+    "cfg",
+    "target_property",
+    "environment",
+    "intrinsic",
+    "runtime_value",
+    "compiler_validation",
+    "layout",
+    "abi",
+    "niche"
+  ],
+  "gaps": [
+    "rust.constant_target_dependent",
+    "rust.constant_expression_not_evaluated",
+    "rust.constant_dependency_not_evaluated",
+    "rust.constant_arithmetic_not_defined",
+    "rust.enum_discriminant_not_evaluated"
+  ],
+  "limits": {
+    "candidate_declared_values_per_source": 4096,
+    "syntax_nodes_per_expression": 256,
+    "direct_dependencies_per_subject": 256,
+    "dependency_levels": 64,
+    "variants_per_enum": 4096,
+    "total_evaluated_entities": 200000,
+    "total_evaluation_relationships": 200000,
+    "evaluation_dependency_references": 400000,
+    "derivation_input_references": 1000000,
+    "standard_snapshot_bytes": 33554432,
+    "optional_snapshot_bytes": 67108864,
+    "operational_snapshot_bytes": 268435456,
+    "extraction_deadline_ms": 60000,
+    "reference_peak_rss_bytes": 4294967296
+  },
+  "authority": {
+    "cargo": false,
+    "compiler": false,
+    "build": false,
+    "process": false,
+    "network": false,
+    "plugin": false,
+    "model": false,
+    "browser": false,
+    "mutation": false
+  }
+}

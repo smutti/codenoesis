@@ -1,0 +1,43 @@
+{
+  "schema_version": "codenoesis.r16-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-safe-constant-evaluation-v1",
+  "external_source_vendored": false,
+  "materialization": {
+    "object_format": "sha1",
+    "tree_oid": "f46c4f56d5fd506ab5ce3f5fb338ee240065ad0b",
+    "commit_oid": "d77f3b77aae0aeabb89c8833e4ab4d655075b837",
+    "author_name": "CodeNoesis",
+    "author_email": "fixture@codenoesis.invalid",
+    "author_date": "1786492800 +0000",
+    "commit_message": "R16 safe constant evaluation fixture\n"
+  },
+  "files": [
+    {
+      "path": "repository/Cargo.toml",
+      "mode": "100644",
+      "byte_length": 108,
+      "blob_oid": "d905035796a7bbd65ede11177a1dbc6bd554c68c",
+      "sha256": "baf1717a1d89176f648af94dd385500e3a8bfe081eb24d776fff5a00f0b98e2f"
+    },
+    {
+      "path": "repository/src/lib.rs",
+      "mode": "100644",
+      "byte_length": 390,
+      "blob_oid": "10dba4456b9f67ba3cfc0612bc0533f2746ef273",
+      "sha256": "8d3532c25027fd5444beff5ee1a62c3603cbe62aa8d44ffdb16af9038179571f"
+    }
+  ],
+  "expected_oracle": {
+    "path": "tests/fixtures/s4/rust-safe-constant-evaluation-v1/expected-safe-constant-evaluation.json",
+    "byte_length": 14059,
+    "sha256": "e4638bd35eff68dcb9a3dba73ecfb779134e3bce7207b500bfd0128ee229f368"
+  },
+  "sentinels": {
+    "process_execution_permitted": false,
+    "network_access_permitted": false,
+    "compiler_execution_permitted": false,
+    "macro_expansion_permitted": false,
+    "model_provider_permitted": false,
+    "browser_launch_permitted": false
+  }
+}

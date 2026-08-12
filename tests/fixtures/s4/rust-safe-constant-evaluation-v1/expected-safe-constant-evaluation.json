@@ -1,0 +1,234 @@
+{
+  "schema_version": "codenoesis.r16-safe-constant-evaluation-oracle/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-safe-constant-evaluation-v1",
+  "baseline": {
+    "snapshot_version": "codenoesis.repository-snapshot/v17",
+    "semantic_hash": "ab76dc72a7cc57cf25f4112a551c047ad091693b32d0f732b1a5005f6e504908",
+    "canonical_stdout_bytes": 185345,
+    "counts": {
+      "entities": 35,
+      "relationships": 35,
+      "claims": 70,
+      "evidence": 33,
+      "diagnostics": 1,
+      "coverage": 35,
+      "deterministic_claims": 65,
+      "derived_claims": 5
+    }
+  },
+  "additive_counts": {
+    "entities": 7,
+    "relationships": 7,
+    "claims": 14,
+    "evidence": 0,
+    "diagnostics": -1,
+    "coverage": -3,
+    "deterministic_claims": 0,
+    "derived_claims": 14
+  },
+  "complete_counts": {
+    "entities": 42,
+    "relationships": 42,
+    "claims": 84,
+    "evidence": 33,
+    "diagnostics": 0,
+    "coverage": 32,
+    "deterministic_claims": 65,
+    "derived_claims": 19
+  },
+  "contracts": {
+    "configuration": "codenoesis.configuration/v15",
+    "snapshot": "codenoesis.repository-snapshot/v18",
+    "extraction": "codenoesis.extraction/v15",
+    "chunk": "codenoesis.extraction-chunk/v15",
+    "graph": "codenoesis.knowledge-graph/v15",
+    "ontology": "codenoesis.ontology/rust/v15",
+    "semantic_hash": "codenoesis.semantic-hash-contract/v14",
+    "error": "codenoesis.error/v24",
+    "query": "codenoesis.local-query-result/v13",
+    "portable": "codenoesis.portable-graph/v9",
+    "explorer": "codenoesis.local-explorer/v9",
+    "pipeline": "codenoesis.pipeline/s4-r16-v1",
+    "extractor": "codenoesis.rust-constant-evaluation/s4-r16-v1",
+    "index": "codenoesis.constant-evaluation-index/v1",
+    "rule": "codenoesis.rule/rust-safe-constant-evaluation/v1"
+  },
+  "evaluated_values": [
+    {
+      "name": "OFFSET",
+      "declared_value_id": "urn:codenoesis:entity:blake3:0bbe397a68dca3c4574e7e43b786c1278c3c0b1125177af24b01e4c7e035c392",
+      "declared_value_claim_id": "urn:codenoesis:claim:blake3:9ac977a384facb3a798a3fc2ca3191117a861203a8410b6bc09f041cbf2be7a0",
+      "id": "urn:codenoesis:entity:blake3:182d696d6f256ef5cc5ecbdb6d2a47b3bf06a5188e6fad707ea14fb3b9a42dd3",
+      "claim_id": "urn:codenoesis:claim:blake3:44caf6a3b3cc0fed7e16c7225c60b94cd87ea6e642c6c8e23ec76b90b45185b8",
+      "relationship_id": "urn:codenoesis:relationship:blake3:d7a032110706aa0c4f629c5a8c04b4508cdd6449d37b17611415ea2a598d2af9",
+      "relationship_claim_id": "urn:codenoesis:claim:blake3:888d000ad7336beb51609e14e4782c910d77ef156276f753433a0435efaf215d",
+      "value_kind": "integer",
+      "value": "9",
+      "rust_type": "i32",
+      "type_authority": "explicit_primitive_annotation",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:e39d31a25bef345f5bd5a66badad3a493eac5877e215dcb694d492d535735463"],
+      "input_claim_ids": [
+        "urn:codenoesis:claim:blake3:7dfb21e6baa4e76028814e55667c855202a72c97eadca5291c31c9a99bc915b1",
+        "urn:codenoesis:claim:blake3:9ac977a384facb3a798a3fc2ca3191117a861203a8410b6bc09f041cbf2be7a0"
+      ],
+      "dependency_entity_ids": ["urn:codenoesis:entity:blake3:84e293ed3d9aa98201e827f45484cb1bdb8e3f52df6ff189689edfc8959d3e8e"]
+    },
+    {
+      "name": "Mode::Hot",
+      "declared_value_id": "urn:codenoesis:entity:blake3:b581914bb180b3443c1e869643f18d32d47310b49f7131ac30c3f1d3d804c80d",
+      "declared_value_claim_id": "urn:codenoesis:claim:blake3:2c9f13971057f22a6443e199d04bcb44d07b1cf00b8d5e7b466b0e1a90cc0316",
+      "id": "urn:codenoesis:entity:blake3:3984369d7c88a8212e830b801f372bc9dc115367ed0d446eecc2047de75a406f",
+      "claim_id": "urn:codenoesis:claim:blake3:037fad9650ee8278afd76da178c132188df03e1d244a7da937f2084855abb0c5",
+      "relationship_id": "urn:codenoesis:relationship:blake3:46af8dd00a2c388bb2cbd4b24702cc0699d302fbde2222f5a688d60014eded66",
+      "relationship_claim_id": "urn:codenoesis:claim:blake3:00167717e8992229b7755dd1af181487b57d8e049eed6fbf82d8c44f00ff333e",
+      "value_kind": "integer",
+      "value": "4",
+      "rust_type": "u8",
+      "type_authority": "fixed_repr_attribute",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:d302899c639df0cbfad12e15a6ffe616be7e734e7ae011bb36a82aa1699dbc74",
+        "urn:codenoesis:evidence:blake3:e677867a216c13aadbbe326f0f57d7f73b672c6d0b1f55fd314adb24e117d5c9"
+      ],
+      "input_claim_ids": [
+        "urn:codenoesis:claim:blake3:2c9f13971057f22a6443e199d04bcb44d07b1cf00b8d5e7b466b0e1a90cc0316",
+        "urn:codenoesis:claim:blake3:69c14b657adba512e92a08960e4f4770d52bac2d06c087bfb46386cf07df47bf"
+      ],
+      "dependency_entity_ids": ["urn:codenoesis:entity:blake3:c1a6313c5e9459f9c7620a06b3d93298e67d73b72b1c0783563a88ecb98ba374"]
+    },
+    {
+      "name": "ENABLED",
+      "declared_value_id": "urn:codenoesis:entity:blake3:d62da72445c568e3e49124c3f7a8ebd3f2e02857a4be11709b841c117181bc55",
+      "declared_value_claim_id": "urn:codenoesis:claim:blake3:da5a18ab7b7a36490e3e890204ddc217312834e4ceb9c7fb55c4f127bb876952",
+      "id": "urn:codenoesis:entity:blake3:ee920620b70ef49fcca81d08993d04b1b0154618530b2eb278de75b8a143f898",
+      "claim_id": "urn:codenoesis:claim:blake3:3e7e6bfdcf5008859feb52e219b3f951999bacdef0935d1235ca9540d6698a08",
+      "relationship_id": "urn:codenoesis:relationship:blake3:675390f483cb171c18ad6b1b11ff6bde1a2e37c34b8f634a45a6b2d37aa3d5b4",
+      "relationship_claim_id": "urn:codenoesis:claim:blake3:b7455b1acfbf124fc1ef413f4c858698dc1de19af90d00451c38c60e2333c4bf",
+      "value_kind": "boolean",
+      "value": "true",
+      "rust_type": "bool",
+      "type_authority": "explicit_primitive_annotation",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:9da8d63eae41349a9981e363546fa052bc0e32e5a0b9a3d61d492fa22395e014"],
+      "input_claim_ids": ["urn:codenoesis:claim:blake3:da5a18ab7b7a36490e3e890204ddc217312834e4ceb9c7fb55c4f127bb876952"],
+      "dependency_entity_ids": []
+    },
+    {
+      "name": "Mode::Off",
+      "declared_value_id": "urn:codenoesis:entity:blake3:7e3592deb3181e3d23c1d303eb98c03f664fb5afad9907899c60860e8dbdb997",
+      "declared_value_claim_id": "urn:codenoesis:claim:blake3:982708074e123f8d4cf9599add30e0e02c4c512d9311b1bdfc36aa8aa5241576",
+      "id": "urn:codenoesis:entity:blake3:8154ff98fcfa5b449a5d54939ed4024508baf67117b7268a8ffdd2fd590324b1",
+      "claim_id": "urn:codenoesis:claim:blake3:49055985cb7c0617b1e14c6f01f7a1461756dc20078c28754eec517959226373",
+      "relationship_id": "urn:codenoesis:relationship:blake3:b839fdf126dd796495cdef34472b0008b4568ab91cc26e43e55978513814ddaf",
+      "relationship_claim_id": "urn:codenoesis:claim:blake3:ed6e09a2121a82c328f0d31231bb64e8d4bc4d80fa83a67b3a9fcd155ff88de2",
+      "value_kind": "integer",
+      "value": "0",
+      "rust_type": "u8",
+      "type_authority": "fixed_repr_attribute",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:d1db2cfdc52a30130656970bd25970374e4b432795d6c82bcf1d20a9b75ed752",
+        "urn:codenoesis:evidence:blake3:e677867a216c13aadbbe326f0f57d7f73b672c6d0b1f55fd314adb24e117d5c9"
+      ],
+      "input_claim_ids": ["urn:codenoesis:claim:blake3:982708074e123f8d4cf9599add30e0e02c4c512d9311b1bdfc36aa8aa5241576"],
+      "dependency_entity_ids": []
+    },
+    {
+      "name": "BASE",
+      "declared_value_id": "urn:codenoesis:entity:blake3:ea203e69efa16a506f80011872387b88acd1e8e417e54f8fed6af71664689f3f",
+      "declared_value_claim_id": "urn:codenoesis:claim:blake3:5c4873d71defab475b897e2f5dd52c46a641e80602e009292ec7ccf160940c3c",
+      "id": "urn:codenoesis:entity:blake3:84e293ed3d9aa98201e827f45484cb1bdb8e3f52df6ff189689edfc8959d3e8e",
+      "claim_id": "urn:codenoesis:claim:blake3:7dfb21e6baa4e76028814e55667c855202a72c97eadca5291c31c9a99bc915b1",
+      "relationship_id": "urn:codenoesis:relationship:blake3:91cb4854fab2fce746103ac84fca6601b4f595c39bc1ada6a804f66ab451f0af",
+      "relationship_claim_id": "urn:codenoesis:claim:blake3:74cc249de4ff068afa0431ec28ff5fb198c378da63038898e749d9dc788fdbe8",
+      "value_kind": "integer",
+      "value": "14",
+      "rust_type": "i32",
+      "type_authority": "explicit_primitive_annotation",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:eb366a47878a77c9043eae954ebaf062cfd7e86445b46af69524241e92eb76e8"],
+      "input_claim_ids": ["urn:codenoesis:claim:blake3:5c4873d71defab475b897e2f5dd52c46a641e80602e009292ec7ccf160940c3c"],
+      "dependency_entity_ids": []
+    },
+    {
+      "name": "LIMIT",
+      "declared_value_id": "urn:codenoesis:entity:blake3:8d270dd86e8c787c38990e72da68522e74eb3346e44e8ff243d439397aff6f17",
+      "declared_value_claim_id": "urn:codenoesis:claim:blake3:7fc13485045bdd00b2f199f75b9a85c3570a2d57739cafdd9c394c4a1b67a490",
+      "id": "urn:codenoesis:entity:blake3:8efa3841070f77f50f82c1edba2736c9e88535ac10d5b774546c44e0c2b8647b",
+      "claim_id": "urn:codenoesis:claim:blake3:760e3f0b60af5f60c4fb98ae34d70e6a606e8526fd3ad73119be47e509f5a3a4",
+      "relationship_id": "urn:codenoesis:relationship:blake3:5c58eb745399cdf884531937ac00dbd7bf789df31cba2b92377d10a1d7fee2ba",
+      "relationship_claim_id": "urn:codenoesis:claim:blake3:f2659fd2f6eadb614c591964d4fb780681c41cb39cbfa2bfaa5d5ea6d55968f8",
+      "value_kind": "integer",
+      "value": "256",
+      "rust_type": "u16",
+      "type_authority": "explicit_primitive_annotation",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:8be72653c0c5eedf7a2629f0e36745bca9efed30d7616f55e9c20ab0421a9fed"],
+      "input_claim_ids": ["urn:codenoesis:claim:blake3:7fc13485045bdd00b2f199f75b9a85c3570a2d57739cafdd9c394c4a1b67a490"],
+      "dependency_entity_ids": []
+    },
+    {
+      "name": "Mode::Warm",
+      "declared_value_id": "urn:codenoesis:entity:blake3:1cc05b7eb0ab216385d6e0b3da539db80a7f9f2b60c98d2f739e91ef908d881f",
+      "declared_value_claim_id": "urn:codenoesis:claim:blake3:6aef0d505824337002750e96fed66febfbb45abf4d533bc7adbea9eee925285f",
+      "id": "urn:codenoesis:entity:blake3:c1a6313c5e9459f9c7620a06b3d93298e67d73b72b1c0783563a88ecb98ba374",
+      "claim_id": "urn:codenoesis:claim:blake3:69c14b657adba512e92a08960e4f4770d52bac2d06c087bfb46386cf07df47bf",
+      "relationship_id": "urn:codenoesis:relationship:blake3:7839b28fbe7a3b27fa0bb64382b46c69bc14fc9c81416a4cf72897dc02de17ed",
+      "relationship_claim_id": "urn:codenoesis:claim:blake3:ff68a4c4c191fc247278ab9219e83e2fe34fb3f9e451870efd341eace738b9e3",
+      "value_kind": "integer",
+      "value": "3",
+      "rust_type": "u8",
+      "type_authority": "fixed_repr_attribute",
+      "evidence_ids": [
+        "urn:codenoesis:evidence:blake3:0343f12abd36bee97feea26eee72870a98990fde10f6f82f980fe20afd14347f",
+        "urn:codenoesis:evidence:blake3:e677867a216c13aadbbe326f0f57d7f73b672c6d0b1f55fd314adb24e117d5c9"
+      ],
+      "input_claim_ids": ["urn:codenoesis:claim:blake3:6aef0d505824337002750e96fed66febfbb45abf4d533bc7adbea9eee925285f"],
+      "dependency_entity_ids": []
+    }
+  ],
+  "new_coverage": [
+    {
+      "id": "urn:codenoesis:coverage-gap:blake3:e9b9504f21323d4fd877ebf558f55b70c565caac28f2e6049837ffad1fd9e8ec",
+      "capability": "rust.constant_target_dependent",
+      "state": "not_evaluated",
+      "subject_id": "urn:codenoesis:entity:blake3:fe88e7f51420844395ab4a1374fbce9a88bcee571dd0f16859002f2f13b2fac2",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:2e6573353c9aef79fda35a17eebc5f153d9ebb980eb77412d8d56d3821f64fef"]
+    },
+    {
+      "id": "urn:codenoesis:coverage-gap:blake3:6ec7ea53fb1281a0f5dedf563e0158fde05211fbd8e2ccb2025c8213a32e32e3",
+      "capability": "rust.constant_expression_not_evaluated",
+      "state": "not_evaluated",
+      "subject_id": "urn:codenoesis:entity:blake3:5267410b3d0cc5fb425e4895595c9de5d9e1d0eee5f61ab74bd7e60f76dd4e69",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:320b131795bd47d0037f4c662642ef970ecb8f3492728d80bf0e92e83e189661"]
+    },
+    {
+      "id": "urn:codenoesis:coverage-gap:blake3:abdea417627735bbb91caf6e910e7c1a04edb3695a1d8905fb286c461152284a",
+      "capability": "rust.enum_discriminant_not_evaluated",
+      "state": "not_evaluated",
+      "subject_id": "urn:codenoesis:entity:blake3:c88401e51cd56f4351f3cd0b994fcb35c3f5e95ca7aa1aa9ac9dce7524292ca8",
+      "evidence_ids": ["urn:codenoesis:evidence:blake3:e192de927fd2b69a5ffbe2e7a12e2bfdd51711a40cded197925c193b0c51f106"]
+    }
+  ],
+  "removed_coverage_ids": [
+    "urn:codenoesis:coverage-gap:blake3:00d69403de74f89e7a6bf0d3e3262b78e18bd863087e54cd40a8babc06895b07",
+    "urn:codenoesis:coverage-gap:blake3:3ab082b69a029817a3f5850dc0c3b0601721fc0ddf15dcfc3f9356ffd87adf2b",
+    "urn:codenoesis:coverage-gap:blake3:591815d4658b5dcfca2d6d09cdcc67b61fa48284f11c41a575bb51add4af8737",
+    "urn:codenoesis:coverage-gap:blake3:8d6061cd4dd4c7526eb048fb4ef2f9d20dd3a9d44ed0cbf36e91ff28c8a57dcf",
+    "urn:codenoesis:coverage-gap:blake3:e356ef6b370c81200b0a9c691e1949363d5d61894e5d50eeda31e6e0f4b9b155",
+    "urn:codenoesis:coverage-gap:blake3:c92e43a8b17e475a3abe4d629c7d677d3e4d4afb064f4833d76e07cd3c505398"
+  ],
+  "removed_diagnostic_ids": [
+    "urn:codenoesis:diagnostic:blake3:0f700d44ac30ed87469124721456386c9a727537743550e55e7541bd944ea495"
+  ],
+  "expected_hashes": {
+    "configuration": "969e2180203946f71aaa3bc9ec71878678595f56b076d67672e4a5a2c53961dd",
+    "manifest_chunk": "7e8173ff6b6f63f1f2490d6ec9f6da28af5df61b065a84dc092ce56aa19221bb",
+    "source_chunk": "c6ee48b6c3e46b1b9bdb345f7c002b0807f33e6c54b25267f9fba3030330899a",
+    "knowledge_graph": "7e3c3dad5a4fda6f8317068c2e5567d861bff26c35dea94310cada98ceb1de13",
+    "snapshot": "ad760d2ef7e5807140b1feabd071047494ed17545ffaccf02ebe7302e65a54df"
+  },
+  "canonical_stdout_bytes": 214974,
+  "family_id_sha256": {
+    "entities": "cdc78abd0cdaa32e7453ce527c630fc908ffdf76f7f8dea98bb4e99638635f64",
+    "relationships": "fbf5f6a762cb59dd2d364d255e4c7b8ee9f8d6e9a3a6134ee93f04bf9a26643b",
+    "claims": "b45e91df9d794441a287c68e35ea7ce58b639d8cbc0c8dc33caa462de7456276",
+    "derivations": "ae4929a974b3457722e548ee86dd40887484d74bea24da79f95836edea3ac07b",
+    "index": "b7d9fba5b1497b5db1528ebba544044f63a40c0b2d409bd8787336d4ee65b7d6"
+  }
+}
