@@ -1,0 +1,28 @@
+{
+  "schema_version": "codenoesis.evidence-pack/red-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/170",
+  "slice": "S4",
+  "risk": "high",
+  "base_sha": "559fec3863830beef9fb4962d936c681a79c258e",
+  "checkpoint_sha": "9a946de790458b4a10c3a15243b5e0ced82970f0",
+  "checkpoint_contains_production_source_edit": false,
+  "command": "cargo test -p noesis --test e2e_fr_ext_016_017_real_repository_fail_closed --locked -- --nocapture",
+  "exit_status": 101,
+  "expected": "the original three correction failures plus R14/R15 acquisition-internal Red for an unselected gitlink",
+  "actual": "5 expected behavioral failures; both gitlink cases returned internal.unexpected at acquisition; compilation succeeded",
+  "log": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/typed-boundary-red.log",
+  "log_sha256": "f288c809ac5357159fea4606a046bb47abb265d1db4851bad89319e400166e6e",
+  "streams": {
+    "stdout_bytes_per_failure": 0,
+    "store_created": false
+  },
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "network_during_test": false,
+    "target_execution": false
+  },
+  "requirement_status": "branch-scoped correction Proposed; not Verified"
+}

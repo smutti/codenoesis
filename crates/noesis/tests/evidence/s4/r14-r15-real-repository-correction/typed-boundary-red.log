@@ -1,0 +1,40 @@
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling noesis v0.1.0 (/Users/smutti/Documents/personal/codenoesis/crates/noesis)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.28s
+     Running tests/e2e_fr_ext_016_017_real_repository_fail_closed.rs (target/debug/deps/e2e_fr_ext_016_017_real_repository_fail_closed-c644eb3d7bddf8da)
+
+running 5 tests
+
+thread 'conf_fr_cli_001_r14_r15_256m_profile_is_explicit' (3414427) panicked at crates/noesis/tests/e2e_fr_ext_016_017_real_repository_fail_closed.rs:68:9:
+expected registered local-snapshot-256m-v1; observed frozen profile Red
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'sec_inv_bnd_001_r15_gitlink_is_typed_before_publication' (3414431) panicked at crates/noesis/tests/e2e_fr_ext_016_017_real_repository_fail_closed.rs:143:5:
+expected typed R15 gitlink rejection; observed frozen acquisition Red
+
+thread 'sec_inv_bnd_001_r14_gitlink_is_typed_before_publication' (3414430) panicked at crates/noesis/tests/e2e_fr_ext_016_017_real_repository_fail_closed.rs:143:5:
+expected typed R14 gitlink rejection; observed frozen acquisition Red
+test conf_fr_cli_001_r14_r15_256m_profile_is_explicit ... FAILED
+test sec_inv_bnd_001_r14_gitlink_is_typed_before_publication ... FAILED
+test sec_inv_bnd_001_r15_gitlink_is_typed_before_publication ... FAILED
+
+thread 'e2e_fr_ext_016_real_repository_shapes_are_fail_closed' (3414428) panicked at crates/noesis/tests/e2e_fr_ext_016_017_real_repository_fail_closed.rs:128:5:
+expected corrected R14 success; observed frozen internal extraction Red
+
+thread 'e2e_fr_ext_017_real_repository_shapes_are_fail_closed' (3414429) panicked at crates/noesis/tests/e2e_fr_ext_016_017_real_repository_fail_closed.rs:128:5:
+expected corrected R15 success; observed frozen internal extraction Red
+test e2e_fr_ext_017_real_repository_shapes_are_fail_closed ... FAILED
+test e2e_fr_ext_016_real_repository_shapes_are_fail_closed ... FAILED
+
+failures:
+
+failures:
+    conf_fr_cli_001_r14_r15_256m_profile_is_explicit
+    e2e_fr_ext_016_real_repository_shapes_are_fail_closed
+    e2e_fr_ext_017_real_repository_shapes_are_fail_closed
+    sec_inv_bnd_001_r14_gitlink_is_typed_before_publication
+    sec_inv_bnd_001_r15_gitlink_is_typed_before_publication
+
+test result: FAILED. 0 passed; 5 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.26s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_ext_016_017_real_repository_fail_closed`
