@@ -23,6 +23,7 @@ pub mod s4_r6;
 pub mod s4_r7;
 pub mod s4_r8;
 pub mod s5;
+pub mod s7;
 
 use std::fs;
 use std::io::Write;
