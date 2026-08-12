@@ -25,7 +25,7 @@
   "base_commit_sha": "559fec3863830beef9fb4962d936c681a79c258e",
   "tested_product_head_sha": "f28f049ecae1317f5a9ee9af4192c841523b19af",
   "tested_product_tree_sha": "0326fb33484077512487d63f9b2f1a16135b0de1",
-  "final_corrected_source_head_sha": "3f39f399049fc628e9f7364bf7dcfd83a9b55cdd",
+  "final_corrected_source_head_sha": "8af8b407a5206365d86eb7857a026aed2ef1970b",
   "observed_at_utc": "2026-08-12T13:33:42Z",
   "red_before_code": {
     "governance_checkpoint_sha": "a43f7c80b836fa24e22db0bb7b53eac9e84f8bd7",
@@ -175,6 +175,23 @@
       "sha256": "17f3aec8b51c91ad71c11e73bea58c01e3e3df70420df66008b7af8a0cc73bbe"
     }
   },
+  "windows_envelope_correction_round_4": {
+    "round": 4,
+    "failed_head_sha": "afa7299eb3128209777b561cc7d297d0993dfdd7",
+    "failed_workflow": "https://github.com/smutti/codenoesis/actions/runs/31604674590",
+    "failed_check": "Test (windows-latest)",
+    "failed_exit_code": 101,
+    "reason": "the test treated a Unix complete-stdout observation as invariant even though the process-ID-bearing envelope is explicitly dynamic",
+    "corrected_head_sha": "8af8b407a5206365d86eb7857a026aed2ef1970b",
+    "oracle_change": false,
+    "semantic_contract_change": false,
+    "focused_revalidation": "Clippy, all five executable correction journeys and all seven governance tests passed locally",
+    "summary": {
+      "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/windows-envelope-correction-round-4.log",
+      "byte_length": 1607,
+      "sha256": "05ae1af0c0ed5f00bcbd3a9e2b3965c0b1472f81ed8174287af23ef3bf250266"
+    }
+  },
   "complete_repository_gate": {
     "status": "not embedded to avoid invalidating the tested head; publish exact results externally against the final evidence commit",
     "commands": [
@@ -245,7 +262,7 @@
   },
   "human_approval": "Autorizzo issue #170 e il pacchetto completo high-risk R14/R15 descritto sulla baseline 559fec3863830beef9fb4962d936c681a79c258e.",
   "correction_budget": 5,
-  "correction_rounds_used": 3,
+  "correction_rounds_used": 4,
   "known_limitations": [
     "The branch-scoped correction remains Proposed and is not Verified before protected manual merge and independent evidence review.",
     "The first R15 pilot took 62.50 seconds end to end because total time includes serialization; the internal 60-second extraction guard passed and the second end-to-end run took 56.88 seconds.",
