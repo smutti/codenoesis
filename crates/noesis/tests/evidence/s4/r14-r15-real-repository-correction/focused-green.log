@@ -1,0 +1,76 @@
+issue=https://github.com/smutti/codenoesis/issues/170
+requirements=FR-EXT-012,FR-EXT-016,FR-EXT-017,FR-EXP-006,FR-EXP-007,FR-CLI-001,FR-KNW-003,NFR-DET-001,NFR-SEC-001,NFR-SEC-005,NFR-PRV-002,NFR-PER-001,NFR-TST-001,NFR-TST-002,INV-BND-001
+requirement_status=Approved and Implemented on main; branch-scoped correction Proposed and not Verified
+slice=S4
+risk=high
+base_sha=559fec3863830beef9fb4962d936c681a79c258e
+checkpoint_sha=a43f7c80b836fa24e22db0bb7b53eac9e84f8bd7
+typed_boundary_red_sha=9a946de790458b4a10c3a15243b5e0ced82970f0
+tested_product_head=f28f049ecae1317f5a9ee9af4192c841523b19af
+
+command=cargo fmt --all --check
+exit=0
+
+command=python3 -m unittest scripts.tests.test_s4_r14_r15_real_repository_correction -v
+exit=0
+tests_passed=7
+coverage=authority, lifecycle, exact fixture materialization, corrected machine oracle, selector and typed boundary, pilot pins, immutable historical contracts and viewer, executable acceptance presence
+
+command=cargo test -p codenoesis-domain --test s4_r14_r15_output_capacity --locked
+exit=0
+tests_passed=1
+coverage=exact local-snapshot-256m-v1 boundary and selector
+
+command=cargo test -p codenoesis-lang-rust --test s4_k1_rust_callable_semantics --locked
+exit=0
+tests_passed=8
+coverage=bounded complex targets, unchanged simple targets, inherited uncertainty, 50 permutations, 10 schedules
+
+command=cargo test -p codenoesis-lang-rust --test s4_r14_rust_expression_bindings --locked
+exit=0
+tests_passed=6
+coverage=all-or-nothing expression families, unsupported syntax gaps, exact fixture oracle, corruption, ordering and schedule determinism
+
+command=cargo test -p codenoesis-lang-rust --test s4_r15_rust_local_flow --locked
+exit=0
+tests_passed=7
+coverage=K1 inheritance, local-flow fail-closed behavior, exact fixture oracle, corruption, depth boundary and determinism
+
+command=cargo test -p codenoesis-contracts --test s4_r14_r15_real_repository_correction --locked
+exit=0
+tests_passed=1
+coverage=R14/R15 bounded 256 MiB envelope with null semantic configuration
+
+command=cargo test -p codenoesis-contracts --lib pt_nfr_per_001_r14_256m_output_capacity_maximum_plus_one --locked
+exit=0
+tests_passed=1
+coverage=268435456-byte maximum and maximum-plus-one rejection without simultaneous boundary allocations
+
+command=cargo test -p noesis --bin noesis conf_fr_cli_001_r14_r15_256m_profile_has_an_exact_selector_matrix --locked
+exit=0
+tests_passed=1
+coverage=256 MiB selector accepted only for complete source-only R14 and R15 scans
+
+command=cargo test -p noesis --test e2e_fr_ext_016_017_real_repository_fail_closed --locked
+exit=0
+tests_passed=5
+coverage=corrected fixture oracle, explicit profile, typed R14/R15 gitlink rejection before publication
+
+command=cargo test -p noesis --test e2e_fr_ext_016_rust_expression_bindings --locked
+exit=0
+tests_passed=4
+coverage=historical R14 complete journey, selector closure, viewer portability and deterministic schedules
+
+command=cargo test -p noesis --test e2e_fr_ext_017_rust_local_flow --locked
+exit=0
+tests_passed=4
+coverage=historical R15 complete journey, R14 selector compatibility, forbidden composition and deterministic schedules
+
+rust_tests_passed=38
+python_tests_passed=7
+raw_normalized_log_bytes=10796
+raw_normalized_log_sha256=1ccca7d69b571b367e8b298dc7663a1a9e90bd0d3e7310cc09b1398776af3c03
+raw_log_retention=ephemeral local output summarized by this committed record
+environment=Darwin 25.5.0 arm64; rustc 1.97.1 (8bab26f4f 2026-07-14); cargo 1.97.1 (c980f4866 2026-06-30); Python 3.9.6
+known_warning=pre-existing exact toml dependency requirement contains ignored semver metadata; no manifest or dependency changed
+result=green
