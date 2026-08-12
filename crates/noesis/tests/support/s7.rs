@@ -139,10 +139,9 @@ impl Drop for MaterializedImpactWorkspace {
 }
 
 pub fn reviewed_golden() -> Vec<u8> {
-    fs::read(repository_root().join(
+    read_reviewed_fixture(&repository_root().join(
         "tests/fixtures/s7/implementation-aware-api-v1/expected-semantic-compatibility-report.json",
     ))
-    .expect("read reviewed S7 golden")
 }
 
 fn client(
@@ -171,11 +170,31 @@ fn client(
 fn copy_file(source: &Path, target: &Path) {
     fs::create_dir_all(target.parent().expect("S7 target parent"))
         .expect("create S7 target directory");
-    fs::copy(source, target).unwrap_or_else(|error| {
-        panic!(
-            "copy reviewed S7 input {} to {}: {error}",
-            source.display(),
-            target.display()
-        )
-    });
+    fs::write(target, read_reviewed_fixture(source))
+        .unwrap_or_else(|error| panic!("write reviewed S7 input {}: {error}", target.display()));
+}
+
+fn read_reviewed_fixture(path: &Path) -> Vec<u8> {
+    let bytes = fs::read(path)
+        .unwrap_or_else(|error| panic!("read reviewed S7 fixture {}: {error}", path.display()));
+    normalize_reviewed_fixture_bytes(&bytes)
+        .unwrap_or_else(|reason| panic!("invalid reviewed S7 fixture {}: {reason}", path.display()))
+}
+
+pub fn normalize_reviewed_fixture_bytes(bytes: &[u8]) -> Result<Vec<u8>, &'static str> {
+    let mut normalized = Vec::with_capacity(bytes.len());
+    let mut index = 0;
+    while index < bytes.len() {
+        if bytes[index] != b'\r' {
+            normalized.push(bytes[index]);
+            index += 1;
+            continue;
+        }
+        if bytes.get(index + 1) != Some(&b'\n') {
+            return Err("reviewed S7 fixture contains a bare carriage return");
+        }
+        normalized.push(b'\n');
+        index += 2;
+    }
+    Ok(normalized)
 }

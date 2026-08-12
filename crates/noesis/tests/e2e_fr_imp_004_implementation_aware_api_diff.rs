@@ -6,7 +6,26 @@ use std::process::{Command, Output};
 use std::thread;
 
 use support::parse_single_document;
-use support::s7::{MaterializedImpactWorkspace, reviewed_golden};
+use support::s7::{MaterializedImpactWorkspace, normalize_reviewed_fixture_bytes, reviewed_golden};
+
+#[test]
+fn conf_fr_cli_006_s7_reviewed_fixture_materialization_is_platform_neutral() {
+    let canonical = b"reviewed\nfixture\n";
+    let windows = b"reviewed\r\nfixture\r\n";
+
+    assert_eq!(
+        normalize_reviewed_fixture_bytes(canonical),
+        Ok(canonical.to_vec())
+    );
+    assert_eq!(
+        normalize_reviewed_fixture_bytes(windows),
+        Ok(canonical.to_vec())
+    );
+    assert_eq!(
+        normalize_reviewed_fixture_bytes(b"invalid\rcarriage-return"),
+        Err("reviewed S7 fixture contains a bare carriage return")
+    );
+}
 
 #[test]
 fn e2e_fr_imp_004_implementation_aware_api_diff() {
