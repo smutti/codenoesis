@@ -47,96 +47,14 @@ impl MaterializedR14R15CorrectionRepository {
             .arg(&worktree);
         successful_output(init, None);
 
-        for file in manifest["files"]
-            .as_array()
-            .expect("reviewed correction files")
-        {
-            let fixture_path = file["path"]
-                .as_str()
-                .expect("reviewed correction fixture path");
-            let relative = fixture_path
-                .strip_prefix("repository/")
-                .expect("correction repository-relative path");
-            let bytes = read_repository_text(fixture.join(fixture_path));
-            assert_eq!(
-                u64::try_from(bytes.len()).expect("correction fixture byte length"),
-                file["byte_length"].as_u64().expect("reviewed byte length")
-            );
-            assert_eq!(
-                lower_hex(&Sha256::digest(&bytes)),
-                file["sha256"].as_str().expect("reviewed SHA-256")
-            );
-            let destination = worktree.join(relative);
-            fs::create_dir_all(destination.parent().expect("correction fixture parent"))
-                .expect("create correction fixture parent");
-            fs::write(&destination, &bytes).expect("materialize correction fixture");
-
-            let mut hash = git_command(&global_config);
-            hash.arg("-C")
-                .arg(&worktree)
-                .args(["hash-object", "-w", "--stdin"]);
-            let blob_oid = stdout_line(successful_output(hash, Some(&bytes)));
-            assert_eq!(blob_oid, file["blob_oid"].as_str().expect("reviewed blob"));
-            update_index(
-                &worktree,
-                &global_config,
-                file["mode"].as_str().expect("reviewed mode"),
-                &blob_oid,
-                relative,
-            );
-        }
+        materialize_reviewed_files(&manifest, &fixture, &worktree, &global_config);
 
         let mut write_tree = git_command(&global_config);
         write_tree.arg("-C").arg(&worktree).arg("write-tree");
         let tree_oid = stdout_line(successful_output(write_tree, None));
         assert_eq!(tree_oid, FIXTURE_TREE_OID);
 
-        let materialization = &manifest["materialization"];
-        let mut make_commit = git_command(&global_config);
-        make_commit
-            .arg("-C")
-            .arg(&worktree)
-            .args(["commit-tree", &tree_oid, "-F", "-"])
-            .env(
-                "GIT_AUTHOR_NAME",
-                materialization["author_name"]
-                    .as_str()
-                    .expect("correction author"),
-            )
-            .env(
-                "GIT_AUTHOR_EMAIL",
-                materialization["author_email"]
-                    .as_str()
-                    .expect("correction email"),
-            )
-            .env(
-                "GIT_AUTHOR_DATE",
-                materialization["author_date"]
-                    .as_str()
-                    .expect("correction date"),
-            )
-            .env(
-                "GIT_COMMITTER_NAME",
-                materialization["author_name"]
-                    .as_str()
-                    .expect("correction committer"),
-            )
-            .env(
-                "GIT_COMMITTER_EMAIL",
-                materialization["author_email"]
-                    .as_str()
-                    .expect("correction committer email"),
-            )
-            .env(
-                "GIT_COMMITTER_DATE",
-                materialization["author_date"]
-                    .as_str()
-                    .expect("correction committer date"),
-            );
-        let message = materialization["commit_message"]
-            .as_str()
-            .expect("correction commit message");
-        let commit_oid = stdout_line(successful_output(make_commit, Some(message.as_bytes())));
+        let commit_oid = commit_reviewed_tree(&manifest, &worktree, &global_config, &tree_oid);
         assert_eq!(commit_oid, FIXTURE_COMMIT_OID);
 
         let mut update_ref = git_command(&global_config);
@@ -276,6 +194,85 @@ pub fn expected_correction() -> Value {
 fn fixture_root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("../../tests/fixtures/s4/rust-real-repository-shapes-v1")
+}
+
+fn materialize_reviewed_files(
+    manifest: &Value,
+    fixture: &Path,
+    worktree: &Path,
+    global_config: &Path,
+) {
+    for file in manifest["files"]
+        .as_array()
+        .expect("reviewed correction files")
+    {
+        let fixture_path = file["path"]
+            .as_str()
+            .expect("reviewed correction fixture path");
+        let relative = fixture_path
+            .strip_prefix("repository/")
+            .expect("correction repository-relative path");
+        let bytes = read_repository_text(fixture.join(fixture_path));
+        assert_eq!(
+            u64::try_from(bytes.len()).expect("correction fixture byte length"),
+            file["byte_length"].as_u64().expect("reviewed byte length")
+        );
+        assert_eq!(
+            lower_hex(&Sha256::digest(&bytes)),
+            file["sha256"].as_str().expect("reviewed SHA-256")
+        );
+        let destination = worktree.join(relative);
+        fs::create_dir_all(destination.parent().expect("correction fixture parent"))
+            .expect("create correction fixture parent");
+        fs::write(&destination, &bytes).expect("materialize correction fixture");
+
+        let mut hash = git_command(global_config);
+        hash.arg("-C")
+            .arg(worktree)
+            .args(["hash-object", "-w", "--stdin"]);
+        let blob_oid = stdout_line(successful_output(hash, Some(&bytes)));
+        assert_eq!(blob_oid, file["blob_oid"].as_str().expect("reviewed blob"));
+        update_index(
+            worktree,
+            global_config,
+            file["mode"].as_str().expect("reviewed mode"),
+            &blob_oid,
+            relative,
+        );
+    }
+}
+
+fn commit_reviewed_tree(
+    manifest: &Value,
+    worktree: &Path,
+    global_config: &Path,
+    tree_oid: &str,
+) -> String {
+    let materialization = &manifest["materialization"];
+    let author_name = materialization["author_name"]
+        .as_str()
+        .expect("correction author");
+    let author_email = materialization["author_email"]
+        .as_str()
+        .expect("correction email");
+    let author_date = materialization["author_date"]
+        .as_str()
+        .expect("correction date");
+    let mut make_commit = git_command(global_config);
+    make_commit
+        .arg("-C")
+        .arg(worktree)
+        .args(["commit-tree", tree_oid, "-F", "-"])
+        .env("GIT_AUTHOR_NAME", author_name)
+        .env("GIT_AUTHOR_EMAIL", author_email)
+        .env("GIT_AUTHOR_DATE", author_date)
+        .env("GIT_COMMITTER_NAME", author_name)
+        .env("GIT_COMMITTER_EMAIL", author_email)
+        .env("GIT_COMMITTER_DATE", author_date);
+    let message = materialization["commit_message"]
+        .as_str()
+        .expect("correction commit message");
+    stdout_line(successful_output(make_commit, Some(message.as_bytes())))
 }
 
 fn update_index(worktree: &Path, global_config: &Path, mode: &str, oid: &str, path: &str) {

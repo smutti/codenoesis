@@ -321,7 +321,7 @@ fn pt_nfr_det_001_r14_parallel_schedules_are_deterministic() {
 
 #[test]
 fn gt_fr_ext_016_partial_real_syntax_is_omitted_as_complete_families() {
-    let source = r#"
+    let source = r"
 pub fn partial(value: i32) -> i32 {
     let direct = simple_target(value);
     let mixed = consume(value, || value);
@@ -332,7 +332,7 @@ pub fn partial(value: i32) -> i32 {
 
 #[cfg(test)]
 pub fn test_only(value: i32) -> i32 { simple_target(value) }
-"#;
+";
     let extraction = TreeSitterRustWorkspaceExtractor::new()
         .extract_rust_expression_bindings(&correction_inventory(source))
         .expect("extract fail-closed R14 syntax");

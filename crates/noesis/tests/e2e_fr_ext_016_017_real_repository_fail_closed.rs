@@ -1,6 +1,7 @@
 mod support;
 
 use std::collections::BTreeMap;
+use std::fmt::Write as _;
 use std::process::Output;
 
 use serde_json::{Value, json};
@@ -185,6 +186,15 @@ fn verify_snapshot(bytes: &[u8], expected: &Value, include_flow: bool) {
         Value::Null
     );
     let graph = &snapshot["semantic"]["knowledge_graph"];
+    verify_graph_families(graph, expected);
+    verify_call_sites_and_privacy(graph);
+    verify_omissions(graph);
+    if include_flow {
+        verify_flow(graph, expected);
+    }
+}
+
+fn verify_graph_families(graph: &Value, expected: &Value) {
     for graph_family in [
         "entities",
         "relationships",
@@ -227,7 +237,9 @@ fn verify_snapshot(bytes: &[u8], expected: &Value, include_flow: bool) {
             "{graph_family} ID digest"
         );
     }
+}
 
+fn verify_call_sites_and_privacy(graph: &Value) {
     let call_sites = graph["entities"]
         .as_array()
         .expect("entities")
@@ -259,7 +271,9 @@ fn verify_snapshot(bytes: &[u8], expected: &Value, include_flow: bool) {
             );
         }
     }
+}
 
+fn verify_omissions(graph: &Value) {
     let omissions = &expected_correction()["r14"]["omissions"];
     let relationships = graph["relationships"].as_array().expect("relationships");
     assert!(!relationships.iter().any(|relationship| {
@@ -274,53 +288,53 @@ fn verify_snapshot(bytes: &[u8], expected: &Value, include_flow: bool) {
         relationship["kind"] == "BINDS_FROM"
             && relationship["source"] == omissions["binds_from_for_binding_id"]
     }));
+}
 
-    if include_flow {
-        assert_eq!(
-            graph["local_flow_index"]["completed_callable_ids"],
-            expected["completed_callable_ids"]
-        );
-        assert_eq!(
-            graph["local_flow_index"]["derivations"]
-                .as_array()
+fn verify_flow(graph: &Value, expected: &Value) {
+    assert_eq!(
+        graph["local_flow_index"]["completed_callable_ids"],
+        expected["completed_callable_ids"]
+    );
+    assert_eq!(
+        graph["local_flow_index"]["derivations"]
+            .as_array()
+            .expect("derivations")
+            .len(),
+        usize::try_from(
+            expected["retained_derivation_count"]
+                .as_u64()
                 .expect("derivations")
-                .len(),
-            usize::try_from(
-                expected["retained_derivation_count"]
+        )
+        .expect("derivations fit usize")
+    );
+    let actual_blocks = graph["entities"]
+        .as_array()
+        .expect("entities")
+        .iter()
+        .filter(|entity| entity["kind"] == "rust.syntax_basic_block")
+        .map(|entity| {
+            (
+                entity["properties"]["ordinal"]
                     .as_u64()
-                    .expect("derivations")
+                    .expect("actual block ordinal"),
+                json!({
+                    "id": entity["id"],
+                    "ordinal": entity["properties"]["ordinal"],
+                    "role": entity["properties"]["role"],
+                    "start_byte": entity["locator"]["start_byte"],
+                    "end_byte": entity["locator"]["end_byte"]
+                }),
             )
-            .expect("derivations fit usize")
-        );
-        let actual_blocks = graph["entities"]
-            .as_array()
-            .expect("entities")
-            .iter()
-            .filter(|entity| entity["kind"] == "rust.syntax_basic_block")
-            .map(|entity| {
-                (
-                    entity["properties"]["ordinal"]
-                        .as_u64()
-                        .expect("actual block ordinal"),
-                    json!({
-                        "id": entity["id"],
-                        "ordinal": entity["properties"]["ordinal"],
-                        "role": entity["properties"]["role"],
-                        "start_byte": entity["locator"]["start_byte"],
-                        "end_byte": entity["locator"]["end_byte"]
-                    }),
-                )
-            })
-            .collect::<BTreeMap<_, _>>();
-        let expected_blocks = expected["blocks"]
-            .as_array()
-            .expect("expected blocks")
-            .iter()
-            .cloned()
-            .map(|value| (value["ordinal"].as_u64().expect("block ordinal"), value))
-            .collect::<BTreeMap<_, _>>();
-        assert_eq!(actual_blocks, expected_blocks);
-    }
+        })
+        .collect::<BTreeMap<_, _>>();
+    let expected_blocks = expected["blocks"]
+        .as_array()
+        .expect("expected blocks")
+        .iter()
+        .cloned()
+        .map(|value| (value["ordinal"].as_u64().expect("block ordinal"), value))
+        .collect::<BTreeMap<_, _>>();
+    assert_eq!(actual_blocks, expected_blocks);
 }
 
 fn assert_success(output: &Output, label: &str) {
@@ -357,8 +371,10 @@ fn canonical_json_value(value: &Value) -> Value {
 }
 
 fn hex_sha256(value: &[u8]) -> String {
-    Sha256::digest(value)
-        .iter()
-        .map(|byte| format!("{byte:02x}"))
-        .collect()
+    let digest = Sha256::digest(value);
+    let mut encoded = String::with_capacity(digest.len() * 2);
+    for byte in digest {
+        write!(&mut encoded, "{byte:02x}").expect("write SHA-256 digest");
+    }
+    encoded
 }
