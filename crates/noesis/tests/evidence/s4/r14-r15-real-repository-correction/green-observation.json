@@ -25,6 +25,7 @@
   "base_commit_sha": "559fec3863830beef9fb4962d936c681a79c258e",
   "tested_product_head_sha": "f28f049ecae1317f5a9ee9af4192c841523b19af",
   "tested_product_tree_sha": "0326fb33484077512487d63f9b2f1a16135b0de1",
+  "final_corrected_source_head_sha": "2501c6b42b916b7f41486991f91e891e413bd9d2",
   "observed_at_utc": "2026-08-12T13:33:42Z",
   "red_before_code": {
     "governance_checkpoint_sha": "a43f7c80b836fa24e22db0bb7b53eac9e84f8bd7",
@@ -129,8 +130,23 @@
     "r14_counts": [83, 139, 222, 77, 7, 31],
     "r15_counts": [88, 172, 260, 82, 7, 33]
   },
+  "gate_correction": {
+    "round": 1,
+    "failed_head_sha": "3623d4ca73deed8c36725b840079cc6c7dd3b8c8",
+    "failed_command": "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+    "failed_exit_code": 101,
+    "reason": "clippy::match_same_arms rejected two equivalent null-capacity match arms",
+    "corrected_head_sha": "2501c6b42b916b7f41486991f91e891e413bd9d2",
+    "semantic_contract_change": false,
+    "focused_revalidation": "passed",
+    "summary": {
+      "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/gate-clippy-correction.log",
+      "byte_length": 1085,
+      "sha256": "5764735505817c1199b9e79af3d1eb50cc720f49ef5a78d93ada06b3ec0ea278"
+    }
+  },
   "complete_repository_gate": {
-    "status": "pending on the final evidence head; publish exact command results without modifying that head",
+    "status": "not embedded to avoid invalidating the tested head; publish exact results externally against the final evidence commit",
     "commands": [
       "actionlint -no-color",
       "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
@@ -199,11 +215,12 @@
   },
   "human_approval": "Autorizzo issue #170 e il pacchetto completo high-risk R14/R15 descritto sulla baseline 559fec3863830beef9fb4962d936c681a79c258e.",
   "correction_budget": 5,
+  "correction_rounds_used": 1,
   "known_limitations": [
     "The branch-scoped correction remains Proposed and is not Verified before protected manual merge and independent evidence review.",
     "The first R15 pilot took 62.50 seconds end to end because total time includes serialization; the internal 60-second extraction guard passed and the second end-to-end run took 56.88 seconds.",
     "Lekton contains no LEXICAL_MAY_REACHES_READ relationship, so the exact-ID pilot query uses a representative LEXICAL_MUST_REACHES_READ relationship.",
     "The external repositories and large generated outputs remain local and non-vendored; only identities, metrics and digests are retained.",
-    "The complete repository gate must run on the final evidence commit before publication."
+    "The exact complete-gate result and raw-log digest are published externally against the final evidence commit so recording them does not create a new untested head."
   ]
 }
