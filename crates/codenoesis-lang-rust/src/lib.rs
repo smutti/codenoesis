@@ -20,9 +20,11 @@ mod framework_declarations;
 mod local_flow;
 mod manifest_facts;
 mod root_package;
+mod s7_provider;
 mod semantic_depth;
 mod workspace;
 
+pub use s7_provider::{PROVIDER_CAPABILITY, TreeSitterRustProviderExtractor};
 pub use workspace::TreeSitterRustWorkspaceExtractor;
 
 #[derive(Clone, Copy, Debug, Default)]

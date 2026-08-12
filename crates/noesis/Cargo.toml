@@ -12,6 +12,7 @@ codenoesis-application.workspace = true
 codenoesis-contract-extractors.workspace = true
 codenoesis-contracts.workspace = true
 codenoesis-domain.workspace = true
+codenoesis-lang-kotlin.workspace = true
 codenoesis-lang-rust.workspace = true
 codenoesis-ports.workspace = true
 codenoesis-repository.workspace = true

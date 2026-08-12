@@ -1,0 +1,71 @@
+{
+  "schema_version": "codenoesis.s7-runtime-threat-model/v1",
+  "risk": "high",
+  "assets": [
+    "classifier_integrity",
+    "evidence_lineage",
+    "immutable_input_authority",
+    "public_report_confidentiality",
+    "stable_identity_integrity"
+  ],
+  "untrusted_inputs": [
+    "client_source",
+    "federation_report",
+    "impact_workspace",
+    "kotlin_comments_and_literals",
+    "openapi_contract",
+    "paths_and_roots",
+    "provider_source",
+    "rust_comments_and_literals"
+  ],
+  "threats": [
+    {
+      "id": "S7-T01",
+      "threat": "path_escape_or_alias",
+      "control": "explicit_non_symlink_roots_and_normalized_relative_paths",
+      "failure": "impact.invalid_workspace"
+    },
+    {
+      "id": "S7-T02",
+      "threat": "mutable_input_replacement",
+      "control": "stable_handle_and_sha256_revalidation",
+      "failure": "impact.mutable_input"
+    },
+    {
+      "id": "S7-T03",
+      "threat": "parser_resource_exhaustion",
+      "control": "precharged_byte_node_depth_string_and_count_limits",
+      "failure": "impact.limit_exceeded"
+    },
+    {
+      "id": "S7-T04",
+      "threat": "unsupported_semantics_promoted_to_fact",
+      "control": "closed_capability_matrix_and_unresolved_coverage_gap",
+      "failure": "impact.unsupported_implementation_semantics"
+    },
+    {
+      "id": "S7-T05",
+      "threat": "operation_decoy_false_link",
+      "control": "validated_s6_operation_and_call_site_identity",
+      "failure": "rejected_candidate"
+    },
+    {
+      "id": "S7-T06",
+      "threat": "source_or_secret_disclosure",
+      "control": "metadata_and_excerpt_digest_only_public_report",
+      "failure": "impact.internal"
+    },
+    {
+      "id": "S7-T07",
+      "threat": "ambient_or_executable_authority",
+      "control": "no_network_child_build_target_plugin_model_or_environment_authority",
+      "failure": "impact.invalid_workspace"
+    },
+    {
+      "id": "S7-T08",
+      "threat": "partial_or_noncanonical_output",
+      "control": "buffer_validate_limit_and_single_write",
+      "failure": "impact.internal"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": "codenoesis.s7-source-capability-matrix/v1",
+  "provider": {
+    "profile": "rust-direct-json-map/v1",
+    "language": "Rust",
+    "parser": "tree-sitter-rust/0.24.2",
+    "requires_r15_local_flow": true,
+    "supported": [
+      "direct_local_serde_json_map",
+      "literal_key_insert",
+      "supported_direct_if",
+      "direct_value_object_publication",
+      "guaranteed_present_on_all_supported_paths",
+      "may_be_absent_on_one_supported_path"
+    ],
+    "unsupported": [
+      "active_cfg_selection",
+      "alias_resolution",
+      "arbitrary_early_return",
+      "compiler_cfg",
+      "custom_mapping_helper",
+      "dynamic_key",
+      "generated_code",
+      "loop",
+      "macro_expansion",
+      "panic_or_unwind",
+      "reflection",
+      "runtime_configuration",
+      "target_execution",
+      "trait_or_type_inference"
+    ]
+  },
+  "client": {
+    "profile": "kotlin-direct-json-access/v1",
+    "language": "Kotlin/KMP",
+    "parser": "tree-sitter-kotlin-ng/1.1.0",
+    "supported": [
+      "direct_get_value_requires_present",
+      "direct_guarded_index_handles_absent",
+      "direct_decoder_call_path",
+      "direct_http_get_literal_interpolation",
+      "confirmed_s6_operation_identity"
+    ],
+    "unsupported": [
+      "alias_or_extension_indirection",
+      "annotation_configuration",
+      "arbitrary_control_flow",
+      "custom_codec",
+      "dynamic_path",
+      "framework_runtime_configuration",
+      "generated_serializer",
+      "gradle_or_compiler_execution",
+      "reflection",
+      "type_only_behavior",
+      "unresolved_call"
+    ]
+  }
+}

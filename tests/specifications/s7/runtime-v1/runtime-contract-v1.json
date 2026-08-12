@@ -1,0 +1,97 @@
+{
+  "schema_version": "codenoesis.s7-runtime-contract/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/168",
+  "base_commit_sha": "c212db5062ce28731f4aadc528a750d4ba33524f",
+  "slice": "S7",
+  "risk": "high",
+  "requirement_status": {
+    "approved": [
+      "DR-SEM-001",
+      "FR-IMP-004",
+      "FR-IMP-005"
+    ],
+    "proposed_branch_scoped": [
+      "FR-CLI-006",
+      "FR-EXT-018",
+      "FR-EXT-019"
+    ]
+  },
+  "profiles": {
+    "analysis": "implementation-aware-http-json/v1",
+    "runtime_pipeline": "codenoesis.pipeline/s7-v1",
+    "report_pipeline": "codenoesis.pipeline/semantic-impact/v1",
+    "provider": "rust-direct-json-map/v1",
+    "client": "kotlin-direct-json-access/v1",
+    "contract": "codenoesis.contract-capability/openapi-3.1-http-json/v1"
+  },
+  "contracts": {
+    "workspace": "codenoesis.impact-workspace/v1",
+    "error": "codenoesis.error/v23",
+    "report": "codenoesis.semantic-compatibility-report/v1",
+    "rule_catalog": "codenoesis.compatibility-rules/http-json/v1"
+  },
+  "command": {
+    "name": "impact",
+    "arguments": [
+      "--workspace",
+      "--profile",
+      "--format"
+    ],
+    "profile_argument": "implementation-aware-http-json-v1",
+    "format_argument": "json",
+    "success_exit": 0,
+    "input_or_capability_exit": 2,
+    "internal_exit": 1,
+    "output_only": true,
+    "single_buffered_stdout_write": true
+  },
+  "immutable_oracle": {
+    "path": "tests/fixtures/s7/implementation-aware-api-v1/expected-semantic-compatibility-report.json",
+    "bytes": 14991,
+    "sha256": "cfd9a8d4dcb2d04bcd9eaffd15f1ae947ffdaba80e07daee43375c9a67c15750",
+    "semantic_diffs": 2,
+    "client_assessments": 2,
+    "rejected_candidates": 1,
+    "evidence": 9,
+    "coverage_gaps": 1
+  },
+  "limits": {
+    "operations": 10000,
+    "fields_per_operation": 5000,
+    "linked_clients": 10000,
+    "call_sites": 1000000,
+    "semantic_diffs": 200000,
+    "evidence_items": 1000000,
+    "coverage_gaps": 200000,
+    "report_bytes": 67108864,
+    "workspace_bytes": 1048576,
+    "federation_report_bytes": 67108864,
+    "source_files": 10002,
+    "source_bytes_per_file": 2097152,
+    "total_source_bytes": 268435456,
+    "syntax_nodes_per_source": 1000000,
+    "source_nesting_depth": 256,
+    "string_literal_bytes": 16384,
+    "logical_path_bytes": 4096,
+    "callable_symbol_bytes": 1024
+  },
+  "dependency": {
+    "name": "tree-sitter-kotlin-ng",
+    "version": "1.1.0",
+    "requirement": "=1.1.0",
+    "license": "MIT",
+    "repository": "https://github.com/tree-sitter-grammars/tree-sitter-kotlin",
+    "other_new_dependencies_allowed": false
+  },
+  "determinism": {
+    "input_order_permutations": 50,
+    "parallel_schedules": 10,
+    "oracle": "byte_identical"
+  },
+  "red_sequence": [
+    "governance_capability_registration_absent",
+    "product_unsupported_implementation_semantics"
+  ],
+  "correction_budget": 5,
+  "manual_independent_review_and_merge_required": true
+}

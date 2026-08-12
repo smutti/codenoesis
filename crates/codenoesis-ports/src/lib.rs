@@ -25,6 +25,9 @@ use codenoesis_domain::s4_r14::{ExpressionBindingError, ExpressionBindingExtract
 use codenoesis_domain::s4_r15::{LocalFlowError, LocalFlowExtraction};
 use codenoesis_domain::s5::{AnalysisCacheEntry, IncrementalWorkspaceExtraction};
 use codenoesis_domain::s6::{ContractError, OpenApiContractInput, ProviderContract};
+use codenoesis_domain::s7::{
+    ClientSourceExtraction, ContractProjection, ProviderSourceExtraction, SourceExtractionError,
+};
 use codenoesis_domain::storage::{
     ArtifactId, LocalSnapshotHead, PublicationCandidate, PublicationEvent, PublicationResult,
     SnapshotId, StorageError, StoredArtifact, SweepResult,
@@ -278,6 +281,46 @@ pub trait OpenApiContractExtractor {
     /// Returns a typed encoding, YAML, `OpenAPI`, reference, or contract-limit
     /// failure without network access or partial output.
     fn extract(&self, input: OpenApiContractInput<'_>) -> Result<ProviderContract, ContractError>;
+}
+
+pub trait S7OpenApiContractProjector {
+    /// Projects one validated `OpenAPI` document onto the exact S7 operation authority.
+    ///
+    /// # Errors
+    ///
+    /// Returns a closed contract failure rather than selecting another operation.
+    fn project_s7(
+        &self,
+        input: OpenApiContractInput<'_>,
+        expected_operation_id: &str,
+    ) -> Result<ContractProjection, ContractError>;
+}
+
+pub trait RustProviderSourceExtractor {
+    /// Extracts the closed direct JSON-map facts for one selected Rust callable.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed syntax, capability, identity, or resource-limit failure.
+    fn extract_s7_provider(
+        &self,
+        source: &[u8],
+        callable_symbol: &str,
+    ) -> Result<ProviderSourceExtraction, SourceExtractionError>;
+}
+
+pub trait KotlinClientSourceExtractor {
+    /// Extracts the closed direct JSON-access facts for one selected Kotlin call path.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed syntax, capability, identity, or resource-limit failure.
+    fn extract_s7_client(
+        &self,
+        source: &[u8],
+        decoder_symbol: &str,
+        call_symbol: &str,
+    ) -> Result<ClientSourceExtraction, SourceExtractionError>;
 }
 
 pub trait PublicationObserver {

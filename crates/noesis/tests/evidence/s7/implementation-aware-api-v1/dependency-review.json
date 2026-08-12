@@ -1,0 +1,74 @@
+{
+  "schema_version": "codenoesis.s7-runtime-dependency-review/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/168",
+  "requirement_ids": [
+    "FR-EXT-019",
+    "FR-CLI-006"
+  ],
+  "reviewed_at_utc": "2026-08-12T08:00:32Z",
+  "direct_dependency": {
+    "name": "tree-sitter-kotlin-ng",
+    "version": "1.1.0",
+    "requirement": "=1.1.0",
+    "checksum": "e800ebbda938acfbf224f4d2c34947a31994b1295ee6e819b65226c7b51b4450",
+    "license": "MIT",
+    "rust_version": null,
+    "rust_version_observation": "not declared by the published manifest",
+    "build_script": true,
+    "default_features": true,
+    "active_features": [],
+    "rust_binding_unsafe_constructs": 1,
+    "rust_binding_unsafe_observation": "LanguageFn::from_raw wraps the grammar's generated C language symbol; no first-party unsafe was introduced"
+  },
+  "lockfile_projection": {
+    "new_external_packages": [
+      "tree-sitter-kotlin-ng 1.1.0"
+    ],
+    "new_external_package_count": 1,
+    "new_transitive_external_packages": [],
+    "reused_packages": [
+      {
+        "name": "cc",
+        "version": "1.3.0",
+        "checksum": "c89588d05638b5b4594a3348a2d6c20277e43a7f5c5202b05cc56888475a47b8"
+      },
+      {
+        "name": "tree-sitter-language",
+        "version": "0.1.7",
+        "checksum": "009994f150cc0cd50ff54917d5bc8bffe8cad10ca10d81c34da2ec421ae61782"
+      },
+      {
+        "name": "tree-sitter",
+        "version": "0.26.11",
+        "checksum": "af1c71c1c4cc0920b20d6b0f6572e7682cd07a6a2faec71067a31fa394c586df"
+      }
+    ],
+    "unexpected_package_additions": 0
+  },
+  "compatibility_observation": {
+    "repository_toolchain": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "host": "aarch64-apple-darwin",
+    "locked_build": "passed",
+    "locked_clippy_all_targets_all_features": "passed",
+    "locked_workspace_tests": "passed",
+    "locked_benchmark_compile": "passed"
+  },
+  "security_observation": {
+    "first_party_unsafe_constructs": 0,
+    "runtime_network_or_child_process_authority": false,
+    "analyzed_kotlin_compiled_or_executed": false,
+    "cargo_deny": "not run: cargo-deny is not installed and the repository has no deny.toml; exact-head platform and dependency review remain required in CI",
+    "advisory_database_query": "not run locally"
+  },
+  "commands": [
+    "git diff c212db5062ce28731f4aadc528a750d4ba33524f -- Cargo.toml Cargo.lock crates/noesis/Cargo.toml crates/codenoesis-lang-kotlin/Cargo.toml",
+    "cargo tree --locked -p codenoesis-lang-kotlin -e normal",
+    "cargo metadata --locked --format-version 1",
+    "rg -n 'unsafe\\s*\\{|unsafe\\s+fn|unsafe\\s+impl|unsafe\\s+trait|unsafe\\s+extern' <first-party S7 source paths>",
+    "rg -n '\\bunsafe\\b' <tree-sitter-kotlin-ng-1.1.0 Rust/C source>"
+  ],
+  "limitations": [
+    "The local review establishes the exact lock graph, package checksum, declared MIT license, build-script boundary, and pinned-toolchain compatibility; it is not a future-vulnerability guarantee.",
+    "Independent exact-head dependency review and protected manual merge remain required."
+  ]
+}
