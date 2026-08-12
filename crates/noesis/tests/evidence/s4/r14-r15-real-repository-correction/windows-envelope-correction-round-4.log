@@ -1,0 +1,34 @@
+issue=https://github.com/smutti/codenoesis/issues/170
+pull_request=https://github.com/smutti/codenoesis/pull/171
+correction_round=4
+failed_head=afa7299eb3128209777b561cc7d297d0993dfdd7
+failed_workflow=https://github.com/smutti/codenoesis/actions/runs/31604674590
+failed_job=https://github.com/smutti/codenoesis/actions/runs/31604674590/job/94140473870
+failed_check=Test (windows-latest)
+failed_exit=101
+failed_elapsed=16m14s
+failed_tests=e2e_fr_ext_016_real_repository_shapes_are_fail_closed,conf_fr_cli_001_r14_r15_256m_profile_is_explicit,e2e_fr_ext_017_real_repository_shapes_are_fail_closed
+failed_reason=the test compared complete stdout length to a Unix observation even though the process-ID-bearing correlation envelope is intentionally dynamic
+observed_lengths=R14 506864/506866; R14 256m 506865/506866; R15 612496/612497
+correction_head=8af8b407a5206365d86eb7857a026aed2ef1970b
+correction=retain the reviewed observed local size, require actual and observed output below the exact 268435456-byte cap with final LF, validate the dynamic envelope shape, and keep exact semantic/configuration/family/identity assertions
+oracle_change=false
+semantic_contract_change=false
+
+command=cargo fmt --all --check
+exit=0
+
+command=cargo clippy -p noesis --test e2e_fr_ext_016_017_real_repository_fail_closed --locked -- -D warnings
+exit=0
+
+command=cargo test -p noesis --test e2e_fr_ext_016_017_real_repository_fail_closed --locked
+exit=0
+tests_passed=5
+
+command=python3 -m unittest scripts.tests.test_s4_r14_r15_real_repository_correction -v
+exit=0
+tests_passed=7
+
+command=git diff --check
+exit=0
+result=green

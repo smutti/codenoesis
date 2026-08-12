@@ -1,0 +1,33 @@
+issue=https://github.com/smutti/codenoesis/issues/170
+correction_round=2
+failed_head=8cb994ebad16d55836c9d553f4d743f4a856b387
+failed_command=cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+failed_exit=101
+failed_reasons=needless raw-string hashes in two focused tests; oversized fixture and snapshot verification helpers; format-collect digest encoding
+failed_raw_log_bytes=3575
+failed_raw_log_sha256=c994c737eecd6aa9fe05098aaca7430cb5fbb4f8c5bd029932d77e1536e08f91
+correction_head=e7d204f777a5a536a58a7d96e20f9be02d9aabb0
+correction=remove unnecessary raw-string delimiters, extract focused helper functions, and encode SHA-256 with bounded fmt::Write
+semantic_contract_change=false
+
+command=cargo fmt --all --check
+exit=0
+
+command=cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+exit=0
+
+command=cargo test -p codenoesis-lang-rust --test s4_r14_rust_expression_bindings --locked
+exit=0
+tests_passed=6
+
+command=cargo test -p codenoesis-lang-rust --test s4_r15_rust_local_flow --locked
+exit=0
+tests_passed=7
+
+command=cargo test -p noesis --test e2e_fr_ext_016_017_real_repository_fail_closed --locked
+exit=0
+tests_passed=5
+
+command=git diff --check
+exit=0
+result=green

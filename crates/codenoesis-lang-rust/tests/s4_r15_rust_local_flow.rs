@@ -327,6 +327,44 @@ fn pt_fr_ext_017_nested_branches_are_deterministic_and_enforce_depth_boundary() 
     );
 }
 
+#[test]
+fn gt_fr_ext_017_callables_absent_from_k1_are_skipped() {
+    let source = r"
+pub fn complete(mut value: i32, enabled: bool) -> i32 {
+    if enabled { value = value + 1; } else { value = value + 2; }
+    value
+}
+
+#[cfg(test)]
+pub fn test_only(value: i32) -> i32 { value }
+";
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_local_flow(&inventory_with_source(source))
+        .expect("extract R15 with an absent inherited callable");
+    extraction
+        .knowledge
+        .validate()
+        .expect("validate R15 absent-callable skip");
+    let signatures = extraction
+        .knowledge
+        .expression
+        .callable
+        .graph
+        .entities
+        .iter()
+        .filter(|entity| {
+            entity.kind == codenoesis_domain::s4_k1::CallableSemanticEntityKind::Signature
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(signatures.len(), 1);
+    assert_eq!(signatures[0].name, "complete");
+    assert_eq!(
+        extraction.knowledge.graph.index.completed_callable_ids,
+        vec![signatures[0].subject_id.clone()]
+    );
+    assert!(extraction.knowledge.graph.coverage.is_empty());
+}
+
 fn fixture_inventory() -> RepositoryInventory {
     let root = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("../../tests/fixtures/s4/rust-local-flow-v1/repository");

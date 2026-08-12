@@ -1,0 +1,273 @@
+{
+  "schema_version": "codenoesis.r14-r15-real-repository-correction-green-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/170",
+  "authorization": "https://github.com/smutti/codenoesis/issues/170#issuecomment-5266803744",
+  "requirement_ids": [
+    "FR-EXT-012",
+    "FR-EXT-016",
+    "FR-EXT-017",
+    "FR-EXP-006",
+    "FR-EXP-007",
+    "FR-CLI-001",
+    "FR-KNW-003",
+    "NFR-DET-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-PRV-002",
+    "NFR-PER-001",
+    "NFR-TST-001",
+    "NFR-TST-002",
+    "INV-BND-001"
+  ],
+  "requirement_status": "Approved and Implemented on main; branch-scoped correction Proposed and not Verified",
+  "slice": "S4",
+  "risk": "high",
+  "base_commit_sha": "559fec3863830beef9fb4962d936c681a79c258e",
+  "tested_product_head_sha": "f28f049ecae1317f5a9ee9af4192c841523b19af",
+  "tested_product_tree_sha": "0326fb33484077512487d63f9b2f1a16135b0de1",
+  "final_corrected_source_head_sha": "8af8b407a5206365d86eb7857a026aed2ef1970b",
+  "observed_at_utc": "2026-08-12T13:33:42Z",
+  "red_before_code": {
+    "governance_checkpoint_sha": "a43f7c80b836fa24e22db0bb7b53eac9e84f8bd7",
+    "retained_checkpoint_red_sha": "0668db683586fd9f15d55392fd1f397574756b57",
+    "typed_boundary_checkpoint_sha": "9a946de790458b4a10c3a15243b5e0ced82970f0",
+    "retained_typed_boundary_red_sha": "c16aae8b067e206d97f4d3087f82bb16e70f896e",
+    "production_source_present_in_checkpoints": false,
+    "artifacts": [
+      {
+        "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/checkpoint-red-python.log",
+        "byte_length": 1105,
+        "sha256": "c7c56cc8168a2f22e1fa361685b3b8aec525185a655c195222fe386c17e21795"
+      },
+      {
+        "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/checkpoint-red-cargo.log",
+        "byte_length": 1962,
+        "sha256": "fea1c9835400bd6d1002c84ec19c16ab4d656778eb482dbef2d9fb53acf5034b"
+      },
+      {
+        "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/typed-boundary-red.log",
+        "byte_length": 2696,
+        "sha256": "f288c809ac5357159fea4606a046bb47abb265d1db4851bad89319e400166e6e"
+      }
+    ]
+  },
+  "focused_green": {
+    "status": "passed",
+    "rust_tests_passed": 38,
+    "python_tests_passed": 7,
+    "summary": {
+      "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/focused-green.log",
+      "byte_length": 3638,
+      "sha256": "7199174aeaa886932953a8e6a286bfeee79053d11f43b47a9ecc76b511576f0d"
+    },
+    "raw_normalized_log": {
+      "byte_length": 10796,
+      "sha256": "1ccca7d69b571b367e8b298dc7663a1a9e90bd0d3e7310cc09b1398776af3c03",
+      "retention": "ephemeral local output; command results retained by the committed summary"
+    }
+  },
+  "real_repository_pilots": {
+    "status": "passed",
+    "release_binary_sha256": "e4afde2b734472091be3700a922a552e17a066d40dfd824c8720d0907f570cc1",
+    "summary": {
+      "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/real-repository-pilots.log",
+      "byte_length": 6680,
+      "sha256": "0ff2378ded35da50f628da0b62d17b24f94861dd6a8d7dd0b910e54007231ffb"
+    },
+    "lekton": {
+      "repository": "dghilardi/lekton",
+      "commit_sha": "247b8f42fb045db41166d70a276a41c2e079b6eb",
+      "tree_sha": "55ba428493a4ffae86ba492422a049f46d567a30",
+      "checkout": "full, non-shallow, packed, SHA-1 and clean before and after",
+      "source_vendored": false,
+      "fresh_store_runs": 2,
+      "r14": {
+        "entities": 25993,
+        "relationships": 43164,
+        "claims": 69157,
+        "evidence": 24365,
+        "diagnostics": 4211,
+        "coverage": 12226,
+        "semantic_projection_sha256": "e5b90c6ca1e5ef75edf859b04086269562d8d3c7e4c99ebb4fadae2bda5ff877",
+        "journey_outputs_byte_identical": true
+      },
+      "r15": {
+        "entities": 26150,
+        "relationships": 43675,
+        "claims": 69825,
+        "evidence": 24522,
+        "diagnostics": 4211,
+        "coverage": 13172,
+        "completed_callable_ids": 147,
+        "retained_derivations": 160,
+        "semantic_projection_sha256": "3a3c0416e7f2878bdc434b55a09778e93b64027550a1583765aa2375fdf0462a",
+        "journey_outputs_byte_identical": true,
+        "maximum_observed_peak_rss_bytes": 3426222080
+      }
+    },
+    "rustdesk": {
+      "repository": "rustdesk/rustdesk",
+      "commit_sha": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "tree_sha": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+      "checkout": "full, non-shallow, packed, SHA-1 and clean before and after",
+      "source_vendored": false,
+      "gitlinks": 1,
+      "r14_exit": 2,
+      "r14_code": "input.unsupported_rust_expression_composition",
+      "r15_exit": 2,
+      "r15_code": "input.unsupported_rust_flow_composition",
+      "reason": "repository_boundary_not_supported",
+      "stdout_bytes": 0,
+      "store_created": false,
+      "nested_source_read": false
+    }
+  },
+  "fixture_oracle": {
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-real-repository-shapes-v1",
+    "commit_sha": "accc966f2c2729dddc95fe7caf7036312a2a01e0",
+    "tree_sha": "389e22d33ed887e32da70c2d60ddd72893bf9c27",
+    "oracle_sha256": "76286fc962b7ff0e2675d788761b3898f2a640ee6fc6d294553cb26ce16e7981",
+    "r14_counts": [83, 139, 222, 77, 7, 31],
+    "r15_counts": [88, 172, 260, 82, 7, 33]
+  },
+  "gate_correction": {
+    "round": 1,
+    "failed_head_sha": "3623d4ca73deed8c36725b840079cc6c7dd3b8c8",
+    "failed_command": "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+    "failed_exit_code": 101,
+    "reason": "clippy::match_same_arms rejected two equivalent null-capacity match arms",
+    "corrected_head_sha": "2501c6b42b916b7f41486991f91e891e413bd9d2",
+    "semantic_contract_change": false,
+    "focused_revalidation": "passed",
+    "summary": {
+      "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/gate-clippy-correction.log",
+      "byte_length": 1085,
+      "sha256": "5764735505817c1199b9e79af3d1eb50cc720f49ef5a78d93ada06b3ec0ea278"
+    }
+  },
+  "gate_correction_round_2": {
+    "round": 2,
+    "failed_head_sha": "8cb994ebad16d55836c9d553f4d743f4a856b387",
+    "failed_command": "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+    "failed_exit_code": 101,
+    "reason": "new test helpers violated needless-raw-string-hashes, too-many-lines and format-collect",
+    "corrected_head_sha": "e7d204f777a5a536a58a7d96e20f9be02d9aabb0",
+    "semantic_contract_change": false,
+    "focused_revalidation": "workspace Clippy plus 18 focused tests passed",
+    "summary": {
+      "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/gate-clippy-correction-round-2.log",
+      "byte_length": 1228,
+      "sha256": "2db377eae1c694d48764592b697931e1a6f7dc0a62b5af4f02fb97b6ef21f505"
+    }
+  },
+  "gate_correction_round_3": {
+    "round": 3,
+    "failed_head_sha": "3ccdba1e9e02d72744ffbd27816478cc7eb7694c",
+    "failed_command": "cargo test --workspace --all-targets --all-features --locked",
+    "failed_exit_code": 101,
+    "reason": "the issue #170 status wording replaced two exact governance compatibility markers protected by issue #164",
+    "corrected_head_sha": "3f39f399049fc628e9f7364bf7dcfd83a9b55cdd",
+    "product_contract_change": false,
+    "focused_revalidation": "the exact issue #164 conformance test plus all seven issue #170 governance tests passed",
+    "summary": {
+      "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/gate-regression-correction-round-3.log",
+      "byte_length": 1096,
+      "sha256": "17f3aec8b51c91ad71c11e73bea58c01e3e3df70420df66008b7af8a0cc73bbe"
+    }
+  },
+  "windows_envelope_correction_round_4": {
+    "round": 4,
+    "failed_head_sha": "afa7299eb3128209777b561cc7d297d0993dfdd7",
+    "failed_workflow": "https://github.com/smutti/codenoesis/actions/runs/31604674590",
+    "failed_check": "Test (windows-latest)",
+    "failed_exit_code": 101,
+    "reason": "the test treated a Unix complete-stdout observation as invariant even though the process-ID-bearing envelope is explicitly dynamic",
+    "corrected_head_sha": "8af8b407a5206365d86eb7857a026aed2ef1970b",
+    "oracle_change": false,
+    "semantic_contract_change": false,
+    "focused_revalidation": "Clippy, all five executable correction journeys and all seven governance tests passed locally",
+    "summary": {
+      "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/windows-envelope-correction-round-4.log",
+      "byte_length": 1607,
+      "sha256": "05ae1af0c0ed5f00bcbd3a9e2b3965c0b1472f81ed8174287af23ef3bf250266"
+    }
+  },
+  "complete_repository_gate": {
+    "status": "not embedded to avoid invalidating the tested head; publish exact results externally against the final evidence commit",
+    "commands": [
+      "actionlint -no-color",
+      "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+      "cargo fmt --all --check",
+      "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "cargo test --workspace --all-targets --all-features --locked",
+      "cargo test --workspace --doc --all-features --locked",
+      "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "python3 scripts/validate_benchmark_assets.py",
+      "cargo bench --workspace --all-features --no-run --locked"
+    ]
+  },
+  "actual_changed_paths": [
+    "README.md",
+    "crates/codenoesis-contracts/src/s4_r14.rs",
+    "crates/codenoesis-contracts/src/s4_r15.rs",
+    "crates/codenoesis-contracts/tests/s4_r14_r15_real_repository_correction.rs",
+    "crates/codenoesis-domain/src/lib.rs",
+    "crates/codenoesis-domain/tests/s4_r14_r15_output_capacity.rs",
+    "crates/codenoesis-lang-rust/src/callable_semantics.rs",
+    "crates/codenoesis-lang-rust/src/expression_bindings.rs",
+    "crates/codenoesis-lang-rust/src/local_flow.rs",
+    "crates/codenoesis-lang-rust/tests/s4_k1_rust_callable_semantics.rs",
+    "crates/codenoesis-lang-rust/tests/s4_r14_rust_expression_bindings.rs",
+    "crates/codenoesis-lang-rust/tests/s4_r15_rust_local_flow.rs",
+    "crates/noesis/src/main.rs",
+    "crates/noesis/tests/e2e_fr_ext_016_017_real_repository_fail_closed.rs",
+    "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/**",
+    "crates/noesis/tests/support/mod.rs",
+    "crates/noesis/tests/support/s4_r14_r15_correction.rs",
+    "docs/software/architecture.md",
+    "docs/software/decisions/0029-s4-r14-r15-real-repository-fail-closed-correction.md",
+    "docs/software/roadmap.md",
+    "docs/software/software-requirements-specification.md",
+    "scripts/tests/test_s4_r14_r15_real_repository_correction.py",
+    "tests/fixtures/s4/rust-real-repository-shapes-v1/**",
+    "tests/specifications/s4/r14-r15-real-repository-correction/**"
+  ],
+  "dependencies": "none added or changed",
+  "schemas": "unchanged",
+  "historical_goldens": "unchanged",
+  "viewer": {
+    "status": "unchanged",
+    "sha256": "d0b633b29e6494d6494a35b5553d72c3dd04a747eeef219ca33a9f5fe2a1f4fa"
+  },
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "host_memory": "24 GiB",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "python": "3.9.6",
+    "analysis_networking": false,
+    "repository_build": false,
+    "target_execution": false,
+    "model_provider": false,
+    "browser": false
+  },
+  "ai_participation": {
+    "agent": "OpenAI Codex coding agent",
+    "model": "not exposed by runtime",
+    "policy": "repository AGENTS.md plus issue #170 exact branch-scoped authority",
+    "run_identifier": "issue-170-r14-r15-correction",
+    "duration": "not continuously measured",
+    "cost": "not exposed by runtime"
+  },
+  "human_approval": "Autorizzo issue #170 e il pacchetto completo high-risk R14/R15 descritto sulla baseline 559fec3863830beef9fb4962d936c681a79c258e.",
+  "correction_budget": 5,
+  "correction_rounds_used": 4,
+  "known_limitations": [
+    "The branch-scoped correction remains Proposed and is not Verified before protected manual merge and independent evidence review.",
+    "The first R15 pilot took 62.50 seconds end to end because total time includes serialization; the internal 60-second extraction guard passed and the second end-to-end run took 56.88 seconds.",
+    "Lekton contains no LEXICAL_MAY_REACHES_READ relationship, so the exact-ID pilot query uses a representative LEXICAL_MUST_REACHES_READ relationship.",
+    "The external repositories and large generated outputs remain local and non-vendored; only identities, metrics and digests are retained.",
+    "The exact complete-gate result and raw-log digest are published externally against the final evidence commit so recording them does not create a new untested head."
+  ]
+}

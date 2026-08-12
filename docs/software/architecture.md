@@ -1,7 +1,8 @@
 # CodeNoesis Software Architecture
 
-> Status: **implementation architecture through the local R15 baseline, with
-> the S7 C0-C4 runtime a Proposed branch-scoped candidate**. The repository
+> Status: **implementation architecture through the local R15 baseline and
+> bounded S7 C0-C4 runtime, with the R14/R15 real-repository correction a
+> Proposed branch-scoped candidate**. The repository
 > contains working Rust crates and the `noesis` local CLI, but no production
 > server deployment or production-ready release.
 
@@ -346,12 +347,32 @@ gaps remain present because syntax-normal progression and lexical reaching
 definitions do not establish compiler CFG, executable validity, runtime
 execution, values, types, ownership, aliasing, or side effects.
 
+### R14/R15 real-repository correction boundary
+
+Issue #170 and Decision 0029 define one high-risk S4 correction over the exact
+accepted R14/R15 source-only lineage. The Rust adapter preserves simple K1 call
+target spelling and replaces every complex receiver or call target with a
+bounded placeholder; arbitrary receiver source and URL-looking literals never
+enter public target spelling. R14 processes only callables authorized by an
+inherited K1 signature and omits complete argument/receiver/initializer edge
+families when their source node is outside the selected grammar. R15 likewise
+processes only inherited R14/K1 signatures. Unsupported inherited callables
+retain the existing whole-callable typed gaps.
+
+The explicit `local-snapshot-256m-v1` selector is accepted only by complete
+R14/R15 source-only scans. It changes only the canonical output writer bound to
+268,435,456 bytes including LF; ConfigurationV13/V14 keep
+`output_capacity_profile = null`, so the semantic payload, identities, hashes,
+graph counts, and downstream projections remain unchanged. R14/R15 still do
+not compose with repository boundaries: a gitlink is mapped to the existing
+typed `repository_boundary_not_supported` input failure before store creation.
+No schema, identity domain, ontology family, dependency, nested traversal, or
+compiler/runtime authority is added.
+
 ### S7 implementation-aware runtime boundary
 
-Issue #168 and Decision 0028 define a Proposed high-risk S7 C0-C4 candidate on
-the exact R15 baseline. Before protected manual merge it is branch-scoped
-implementation authority, not an Approved, Implemented, or Verified runtime
-fact on `main`.
+Protected merge #169 made the issue #168 and Decision 0028 high-risk S7 C0-C4
+runtime Approved and Implemented, but not Verified, on the exact R15 baseline.
 
 The output-only `noesis impact` interface accepts one explicit
 `ImpactWorkspaceV1`. That manifest is the complete filesystem and revision

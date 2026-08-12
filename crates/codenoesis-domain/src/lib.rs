@@ -40,12 +40,15 @@ pub const STANDARD_LOCAL_S1_LIMITS: StandardLocalS1Limits = StandardLocalS1Limit
 
 pub const LOCAL_SNAPSHOT_64M_V1: &str = "local-snapshot-64m-v1";
 pub const LOCAL_SNAPSHOT_64M_CANONICAL_OUTPUT_BYTES: u64 = 67_108_864;
+pub const LOCAL_SNAPSHOT_256M_V1: &str = "local-snapshot-256m-v1";
+pub const LOCAL_SNAPSHOT_256M_CANONICAL_OUTPUT_BYTES: u64 = 268_435_456;
 
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 pub enum K1OutputCapacityProfile {
     #[default]
     Standard,
     LocalSnapshot64MV1,
+    LocalSnapshot256MV1,
 }
 
 impl K1OutputCapacityProfile {
@@ -54,6 +57,7 @@ impl K1OutputCapacityProfile {
         match self {
             Self::Standard => STANDARD_LOCAL_S1_LIMITS.canonical_output_bytes,
             Self::LocalSnapshot64MV1 => LOCAL_SNAPSHOT_64M_CANONICAL_OUTPUT_BYTES,
+            Self::LocalSnapshot256MV1 => LOCAL_SNAPSHOT_256M_CANONICAL_OUTPUT_BYTES,
         }
     }
 }

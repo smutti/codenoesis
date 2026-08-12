@@ -1,10 +1,10 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9+s7-runtime — S0 through S6 and R0-R15 plus K1 are implemented
-> but not Verified; the S7 C0-C4 runtime is a branch-authorized Proposed
-> candidate**. Protected merge #167 made the R15 V14/V17 local-flow family
-> effective. Issue #168 and Decision 0028 define only the candidate bounded
-> implementation-aware HTTP/JSON runtime pilot.
+> Status: **0.9+r14-r15-correction — S0 through S7 and R0-R15 plus K1 are
+> implemented but not Verified; the R14/R15 real-repository correction is a
+> branch-authorized Proposed candidate**. Protected merges #167 and #169 made
+> R15 and the bounded S7 C0-C4 runtime effective. Issue #170 and Decision 0029
+> define only the fail-closed source-only correction package.
 
 ## 1. Document control
 
@@ -12,7 +12,7 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S6 and roadmap R0-R15 plus K1 are Approved and Implemented but not Verified. Protected merge #167 made R15 effective. Issue #168 is an authorized high-risk S7 C0-C4 runtime candidate and remains Proposed until protected manual merge. |
+| Status | S0 through S7 and roadmap R0-R15 plus K1 are Approved and Implemented but not Verified. Protected merges #167 and #169 made R15 and the bounded S7 C0-C4 runtime effective. Issue #170 is an authorized high-risk R14/R15 correction candidate and remains Proposed until protected manual merge. |
 | Date | 2026-08-12 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
@@ -55,6 +55,7 @@
 | `0.9+r14.1` | 2026-08-11 | Recorded protected R14 merge #163 and authorized issue #164 plus Decision 0026 to accept a valid empty additive R5 member layer over complete inherited R4 knowledge. Decision 0025 and its R14 bundle remain byte-identical; no schema, selector, identity, golden, viewer, or previously accepted serialization changes. |
 | `0.9+r15` | 2026-08-11 | Recorded protected empty-R5 correction merge #165 and authorized issue #166 plus Decision 0027 for the closed R15 source-only local-flow layer. The Proposed candidate adds syntax blocks, possible normal branch edges, strict source reachability, lexical must/may reaching definitions, V14/V17 contracts, exact derivations, and a lossless QueryV12/PortableGraphV8/LocalExplorerV8 journey while preserving R0-R14/K1 bytes and broad compiler/runtime gaps. |
 | `0.9+s7-runtime` | 2026-08-12 | Recorded protected R15 merge #167 and authorized issue #168 plus Decision 0028 for one bounded S7 C0-C4 runtime pilot. The Proposed candidate adds explicit Rust direct-JSON-map provider facts, Kotlin/KMP direct-JSON-access client assumptions, three-view reconciliation, and output-only `noesis impact` while preserving the accepted S7 report schema, rule catalog, fixture, identities, and exact golden bytes. |
+| `0.9+r14-r15-correction` | 2026-08-12 | Recorded protected S7 runtime merge #169 and authorized issue #170 plus Decision 0029 for one fail-closed R14/R15 real-repository correction. The Proposed candidate bounds complex K1 target spelling, skips source callables outside inherited authority, omits incomplete R14 edge families, maps gitlinks to typed unsupported composition, and adds the operational scan-only `local-snapshot-256m-v1` envelope without changing schemas, identities, ontology families, or historical bytes. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -2128,16 +2129,15 @@ SHA-256 `9b284f4bb7368bb0d11c5b33725c109ee469845aac00081e51175413adec4e3c`.
 The correction is effective after protected manual merge #165 and remains not
 Verified until its complete evidence is independently accepted.
 
-### 2.27 S4 R15 closed Rust local-flow candidate register
+### 2.27 S4 R15 closed Rust local-flow implementation register
 
 Issue [#166](https://github.com/smutti/codenoesis/issues/166), the accountable
 maintainer's [exact package authorization](https://github.com/smutti/codenoesis/issues/166#issuecomment-5252891670),
-and [Decision 0027](decisions/0027-s4-r15-rust-local-flow-contract.md) govern
-one high-risk S4 candidate on exact base
-`011057c84258a26b08b12ced7ae1df478dbb5048`. The branch may combine
-governance, strict contracts/oracle, retained Red, production code, focused
-tests, traceability, and Green evidence. It remains Proposed and candidate-only
-until the accountable maintainer manually merges the exact protected PR.
+and [Decision 0027](decisions/0027-s4-r15-rust-local-flow-contract.md) governed
+the high-risk S4 package from exact base
+`011057c84258a26b08b12ced7ae1df478dbb5048`. Protected merge
+[#167](https://github.com/smutti/codenoesis/pull/167) made the exact package
+Approved and Implemented, but not Verified.
 
 The complete R14 source-only selector lineage plus
 `--rust-flow-profile rust-local-flow-v1` adds only evidence-backed
@@ -2150,10 +2150,10 @@ effects, execution, and active-branch claims remain forbidden.
 
 | Requirement | Current state | Target after protected merge | Slice | Ratification material |
 |---|---|---|---|---|
-| `FR-EXT-017` | Proposed branch-scoped candidate | Approved and Implemented, not Verified | `S4` | Decision 0027, [closed profile](../../tests/specifications/s4/r15/local-flow-v1.json), [machine oracle](../../tests/fixtures/s4/rust-local-flow-v1/expected-local-flow.json), and [E2E contract](../../tests/specifications/s4/r15/e2e_fr_ext_017_rust_local_flow.json) |
-| `FR-EXP-007` | Proposed branch-scoped candidate | Approved and Implemented, not Verified | `S4` | V8 schemas, Decision 0027, strict reimport, derivation, privacy, path, and immutable-viewer oracles |
+| `FR-EXT-017` | Approved and Implemented, not Verified | `Verified` only after independent acceptance of complete immutable evidence | `S4` | Decision 0027, protected merge #167, [closed profile](../../tests/specifications/s4/r15/local-flow-v1.json), [machine oracle](../../tests/fixtures/s4/rust-local-flow-v1/expected-local-flow.json), and [E2E contract](../../tests/specifications/s4/r15/e2e_fr_ext_017_rust_local_flow.json) |
+| `FR-EXP-007` | Approved and Implemented, not Verified | `Verified` only after independent acceptance of complete immutable evidence | `S4` | V8 schemas, Decision 0027, protected merge #167, strict reimport, derivation, privacy, path, and immutable-viewer oracles |
 | Bounded R15 amendment to `FR-QRY-001` | LocalQueryResultV1-V11 Approved | Approved and Implemented through additive LocalQueryResultV12, not Verified | `S4` | [LocalQueryResultV12 schema](../../tests/specifications/s4/r15/local-query-result-v12.schema.json) and exact flow/derivation queries |
-| Bounded R15 amendments to `FR-EXT-012`, `FR-EXT-016`, `FR-KNW-003`, `FR-CLI-001`, `FR-DOC-001/002/003`, `NFR-DET-001`, `NFR-SEC-001/005`, `NFR-PRV-002`, and `NFR-TST-001/002` | Approved through R14/K1 | Proposed additive V14/V17 behavior only; prior contracts remain immutable | `S4` | Issue #166, Decision 0027, fixture manifest, invalid-case matrix, retained Red, and complete Green evidence |
+| Bounded R15 amendments to `FR-EXT-012`, `FR-EXT-016`, `FR-KNW-003`, `FR-CLI-001`, `FR-DOC-001/002/003`, `NFR-DET-001`, `NFR-SEC-001/005`, `NFR-PRV-002`, and `NFR-TST-001/002` | Approved and Implemented, not Verified | `Verified` with independently accepted complete R15 evidence | `S4` | Issue #166, Decision 0027, protected merge #167, fixture manifest, invalid-case matrix, retained Red, and complete Green evidence |
 
 The project-owned fixture
 `urn:codenoesis:fixture:s4-rust-local-flow-v1` is commit
@@ -2173,6 +2173,83 @@ Only checkpoint-bound Red permits production edits. The complete Green journey
 must match every frozen ID, span, endpoint, evidence locator, derivation input,
 family digest, limit, invalid case, 50 permutations, ten schedules, lossless
 export/reimport, immutable viewer byte, and R0-R14/K1 compatibility oracle.
+
+### 2.28 S4 R14/R15 real-repository correction candidate register
+
+Issue [#170](https://github.com/smutti/codenoesis/issues/170), the accountable
+maintainer's [exact package authorization](https://github.com/smutti/codenoesis/issues/170#issuecomment-5266803744),
+and [Decision 0029](decisions/0029-s4-r14-r15-real-repository-fail-closed-correction.md)
+govern one high-risk S4 correction candidate on exact base
+`559fec3863830beef9fb4962d936c681a79c258e`. The package combines governance,
+fixture/oracle, retained Red, minimum production correction, tests, real-
+repository pilots, and evidence in one pull request. It remains Proposed and
+branch-scoped until protected manual merge.
+
+| Requirement | Current state | Target after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| `FR-EXT-012`, `FR-EXT-016`, `FR-EXT-017` | Approved and Implemented, not Verified | Approved and Implemented with the bounded fail-closed correction, still not Verified | `S4` | Decision 0029, exact fixture/oracle, focused adapter and CLI journeys, pinned Lekton/RustDesk pilots |
+| `FR-EXP-006`, `FR-EXP-007` | Approved and Implemented, not Verified | Unchanged contracts with corrected source-only journey, still not Verified | `S4` | Immutable QueryV11/V12, PortableGraphV7/V8, LocalExplorerV7/V8, strict reimport, privacy evidence |
+| Bounded correction to `FR-CLI-001` | Approved and Implemented, not Verified | Add operational scan-only `local-snapshot-256m-v1` for exact complete R14/R15 source-only matrices | `S4` | 256 MiB maximum/plus-one and invalid-composition matrix |
+| Bounded corrections to `FR-KNW-003`, `NFR-DET-001`, `NFR-SEC-001/005`, `NFR-PRV-002`, `NFR-PER-001`, `NFR-TST-001/002`, `INV-BND-001` | Approved baselines | Corrected fail-closed spelling, authority, resource, determinism, privacy, test, and typed-boundary behavior only | `S4` | Decision 0029, contract guard, retained Red/Green, complete gate, immutable-base checks |
+
+K1 MUST preserve exact current target spelling for direct identifier/scoped-
+identifier targets, safe generic functions over those targets, and method
+targets with a recursively safe identifier/`self`/scoped-identifier/field-chain
+receiver. A complex field call MUST instead publish exactly
+`<unsupported-receiver>.<field>`; every other complex target MUST publish
+exactly `<unsupported-call-target>`. These call sites remain
+`candidate_unresolved` with the existing diagnostic and coverage. Arbitrary
+receiver expressions, literals, URL-looking fragments, macros, call chains,
+indexes, closures, bodies, and snippets MUST NOT enter public `name` or
+`target_spelling`.
+
+R14 MUST process only declarations carrying one exact inherited K1 signature.
+If any direct argument lacks a selected expression, it MUST emit zero argument
+entities and argument edges for that call. If a receiver lacks a selected
+expression, it MUST omit `HAS_RECEIVER`. An unselected let initializer MUST
+preserve the binding, emit `rust.pattern_input_unexpanded`, and omit
+`BINDS_FROM`. A callable absent from K1 MUST be skipped. R15 MUST likewise skip
+callables absent from its inherited R14/K1 authority while preserving the
+existing whole-callable zero-fact rule and two typed flow gaps for unsupported
+inherited callables.
+
+The explicit `--output-capacity-profile local-snapshot-256m-v1` selector MUST
+be accepted only by complete source-only R14/R15 scans and MUST cap canonical
+stdout at 268,435,456 bytes including LF. It is operational: V13/V14
+`output_capacity_profile` remains `null`, and output with or without this
+selector MUST have byte-identical semantic payload, hash, identities, counts,
+documentation, queries, portable graph, and explorer for the same corrected
+facts. All K1-only, R10-R13, repository-boundary, cfg, compiler/SCIP,
+nested/generated-source, unknown, duplicate, incomplete, and non-scan uses MUST
+fail before acquisition with empty stdout and no mutation. The profile has a
+4,294,967,296-byte peak-RSS acceptance ceiling; the 60,000 ms extraction
+deadline remains unchanged.
+
+R14/R15 still MUST NOT compose with repository boundaries. A typed
+`SubmoduleOrGitlink` acquisition failure without the forbidden selector MUST
+map to the existing expression/flow unsupported-composition error with reason
+`repository_boundary_not_supported`, exit `2`, empty stdout, absent store, and
+no nested source read. It MUST NOT become `internal.unexpected`.
+
+The project-owned fixture
+`urn:codenoesis:fixture:s4-rust-real-repository-shapes-v1`, commit
+`accc966f2c2729dddc95fe7caf7036312a2a01e0`, tree
+`389e22d33ed887e32da70c2d60ddd72893bf9c27`, freezes exact IDs, spans,
+families, placeholders, omissions, coverage, and R15 completion through
+canonical and sorted-ID digests. Its corrected R14 graph has 83 entities, 139
+relationships, 222 claims, 77 evidence, 7 diagnostics, and 31 coverage records;
+R15 has 88 entities, 172 relationships, 260 claims, 82 evidence, 7 diagnostics,
+and 33 coverage records, including one completed callable and five blocks.
+Fifty permutations and ten schedules MUST be byte-identical, and no public
+`name` or `target_spelling` may contain the fixture `://` token.
+
+Pinned Lekton commit `247b8f42fb045db41166d70a276a41c2e079b6eb` is the positive
+full-journey oracle with the exact counts in Decision 0029. Pinned RustDesk
+commit `d412d198720aa56f6cfed2dfad262e8fb1322fb7` is the typed-negative one-
+gitlink oracle. Neither external repository is vendored or becomes product
+semantics. Decisions 0019, 0020, 0025, and 0027 and every historical schema,
+fixture, golden, identity, hash domain, query/export/explorer contract, and
+viewer byte remain immutable.
 
 ## 3. Product intent and success definition
 

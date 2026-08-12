@@ -91,7 +91,9 @@ and declared "R8 governance is Approved". Those markers likewise remain only
 as immutable guard history. The K1 pre-merge roadmap said
 "R0-R8 are implemented"; that marker is retained only as history.
 
-R0-R14 and K1 are implemented but remain not Verified until their complete
+The protected issue #164 milestone, **R0-R14 and K1 are implemented**, remains
+an immutable compatibility checkpoint. R0-R15, K1, and the bounded S7 C0-C4
+runtime are implemented but remain not Verified until their complete
 retained evidence is independently accepted. R7 static import still grants no
 index generation authority. Protected merge #163 made the explicit V13/V16
 committed-source expression and lexical-binding layer effective without adding
@@ -100,7 +102,10 @@ the valid empty additive R5 neutral element without changing any public
 R0-R14 contract or byte. R15 is likewise implemented but not Verified:
 protected merge #167 made its closed source-only local-flow layer effective
 through the explicit `rust-local-flow-v1` selector without adding compiler or
-runtime authority.
+runtime authority. Protected merge #169 made the bounded implementation-aware
+HTTP/JSON runtime effective. Issue #170 and Decision 0029 now define a Proposed
+R14/R15 fail-closed correction and explicit scan-only 256 MiB envelope; they do
+not change accepted ontology families or mark R14/R15 Verified.
 
 | Order | Planning item | Outcome | Governance dependency | Candidate acceptance gate |
 |---|---|---|---|---|
@@ -121,6 +126,7 @@ runtime authority.
 | `R13` | K1 and revision-bound SCIP composition | Implemented but not Verified: preserve complete K1 and R7 facts while adding only evidence-backed `HAS_COMPILER_SYMBOL` correspondence from exact K1 functions/methods to exact in-repository compiler symbols in additive V12/V15, QueryV10, PortableGraphV6, and LocalExplorerV6. | Issue #160, Decision 0024, and protected merge #161; complete immutable verification remains open. | The immutable compiler-index fixture completes scan → docs → callable/signature/compiler/join query → export → strict reimport → explore with five exact joins, two unchanged unresolved calls, zero new `CALLS`, 52 coverage records, and deterministic security/limit regressions. |
 | `R14` | Rust expression and lexical bindings | Implemented but not Verified after protected merge #163: preserves complete K1 while adding only closed committed-source expressions, ordered arguments, receivers, supported pattern bindings, explicit modifiers, and syntax-only lexical `READS`/`WRITES` in V13/V16, QueryV11, PortableGraphV7, and LocalExplorerV7. | Issue #162, Decision 0025, and protected merge #163; Decision 0026 and issue #164 correct only empty additive R5 neutrality while keeping the R14 bundle immutable. | The immutable K1 fixture completes scan → docs → expression/argument/binding/access query → export → strict reimport → explore with 73 expressions, 23 bindings, 29 reads, 7 writes, exact spans/scopes, and deterministic invalid/limit/security regressions without type, data-flow, ownership, or runtime claims. |
 | `R15` | Closed Rust local flow | Implemented but not Verified after protected merge #167: preserves complete R14 while adding evidence-backed syntax basic blocks, explicit possible normal branch edges, strict source reachability, and lexical must/may reaching definitions in V14/V17, QueryV12, PortableGraphV8, and LocalExplorerV8. | Issue #166, Decision 0027, and protected merge #167; no new dependency and no compiler/runtime authority. | The project-owned fixture completes scan → docs → block/condition/reachability/def-use query → export → strict reimport → explore with 5 blocks, 36 relations, exact derivations, 50 permutations, ten schedules, whole-callable rejection, inherited broad gaps, and immutable R0-R14/K1 bytes. |
+| `R14/R15 correction` | Real-repository fail-closed source-only journey | Proposed branch-scoped issue #170 candidate: bound complex K1 target spelling, skip callables outside inherited authority, omit incomplete R14 edge families, type gitlink rejection, and add the operational `local-snapshot-256m-v1` scan envelope. | Decision 0029 on exact base `559fec3863830beef9fb4962d936c681a79c258e`; no dependency, schema, identity, ontology-family, boundary-composition, or control-plane change. | The exact project-owned fixture and pinned Lekton/RustDesk pilots satisfy immutable counts/digests, privacy, 50 permutations, ten schedules, 256 MiB max/plus-one, 4 GiB RSS, 60 s extraction, full positive journeys, and typed negative boundary failures. |
 
 ### Earliest useful real-world checkpoint
 
@@ -404,14 +410,13 @@ and an LLM never upgrades a candidate to a deterministic fact.
 
 ### First S7 runtime package
 
-Issue #168 and Decision 0028 package C0-C4 in one high-risk branch-scoped
-candidate on the R15 baseline. It adds only `rust-direct-json-map/v1`,
+Issue #168 and Decision 0028 package C0-C4 in one high-risk outcome on the R15
+baseline, accepted by protected merge #169 but not yet Verified. It adds only `rust-direct-json-map/v1`,
 `kotlin-direct-json-access/v1`, explicit `ImpactWorkspaceV1` authority, and
 output-only `noesis impact`; it introduces exactly
 `tree-sitter-kotlin-ng = 1.1.0`. The existing S7 report schema, rule catalog,
 fixture, identities, and exact 14,991-byte golden remain immutable. The package
-is not Implemented or Verified on `main` until independent review and protected
-manual merge.
+is not production-ready or Verified until independent evidence acceptance.
 
 ## Sequencing and evidence
 

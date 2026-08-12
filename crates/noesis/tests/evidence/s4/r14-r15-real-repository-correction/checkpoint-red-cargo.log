@@ -1,0 +1,30 @@
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling noesis v0.1.0 (/Users/smutti/Documents/personal/codenoesis/crates/noesis)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.53s
+     Running tests/e2e_fr_ext_016_017_real_repository_fail_closed.rs (target/debug/deps/e2e_fr_ext_016_017_real_repository_fail_closed-c644eb3d7bddf8da)
+
+running 3 tests
+
+thread 'conf_fr_cli_001_r14_r15_256m_profile_is_explicit' (3403572) panicked at crates/noesis/tests/e2e_fr_ext_016_017_real_repository_fail_closed.rs:68:9:
+expected registered local-snapshot-256m-v1; observed frozen profile Red
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test conf_fr_cli_001_r14_r15_256m_profile_is_explicit ... FAILED
+
+thread 'e2e_fr_ext_016_real_repository_shapes_are_fail_closed' (3403573) panicked at crates/noesis/tests/e2e_fr_ext_016_017_real_repository_fail_closed.rs:102:5:
+expected corrected R14 success; observed frozen internal extraction Red
+
+thread 'e2e_fr_ext_017_real_repository_shapes_are_fail_closed' (3403574) panicked at crates/noesis/tests/e2e_fr_ext_016_017_real_repository_fail_closed.rs:102:5:
+expected corrected R15 success; observed frozen internal extraction Red
+test e2e_fr_ext_016_real_repository_shapes_are_fail_closed ... FAILED
+test e2e_fr_ext_017_real_repository_shapes_are_fail_closed ... FAILED
+
+failures:
+
+failures:
+    conf_fr_cli_001_r14_r15_256m_profile_is_explicit
+    e2e_fr_ext_016_real_repository_shapes_are_fail_closed
+    e2e_fr_ext_017_real_repository_shapes_are_fail_closed
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.09s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_ext_016_017_real_repository_fail_closed`

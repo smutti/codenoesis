@@ -394,7 +394,9 @@ impl RepositorySnapshotV16 {
             .and_then(Value::as_object_mut)
             .ok_or(RepositorySnapshotV16Error::ContractInvalid)?;
         let capacity = match output_capacity_profile {
-            K1OutputCapacityProfile::Standard => Value::Null,
+            K1OutputCapacityProfile::Standard | K1OutputCapacityProfile::LocalSnapshot256MV1 => {
+                Value::Null
+            }
             K1OutputCapacityProfile::LocalSnapshot64MV1 => {
                 Value::String("local-snapshot-64m-v1".to_owned())
             }
@@ -465,7 +467,7 @@ impl RepositorySnapshotV16 {
         })
     }
 
-    /// Serializes V16 under its selected 32 MiB or 64 MiB output envelope.
+    /// Serializes V16 under its selected bounded output envelope.
     ///
     /// # Errors
     ///
@@ -1903,5 +1905,44 @@ fn bounded_nonempty(value: &str, maximum: usize, fallback: &str) -> String {
         fallback.to_owned()
     } else {
         value
+    }
+}
+
+#[cfg(test)]
+mod output_capacity_tests {
+    use super::*;
+    use codenoesis_domain::LOCAL_SNAPSHOT_256M_CANONICAL_OUTPUT_BYTES;
+
+    #[test]
+    fn pt_nfr_per_001_r14_256m_output_capacity_maximum_plus_one() {
+        let profile = K1OutputCapacityProfile::LocalSnapshot256MV1;
+        let maximum = usize::try_from(LOCAL_SNAPSHOT_256M_CANONICAL_OUTPUT_BYTES)
+            .expect("256 MiB maximum fits usize");
+
+        let exact = RepositorySnapshotV16 {
+            value: Value::String("x".repeat(maximum - 3)),
+            output_capacity_profile: profile,
+        };
+        let bytes = exact
+            .canonical_stdout()
+            .expect("exact 256 MiB output must serialize");
+        assert_eq!(bytes.len(), maximum);
+        drop(bytes);
+        drop(exact);
+
+        let plus_one = RepositorySnapshotV16 {
+            value: Value::String("x".repeat(maximum - 2)),
+            output_capacity_profile: profile,
+        };
+        assert!(matches!(
+            plus_one.canonical_stdout(),
+            Err(RepositorySnapshotV16Error::LimitExceeded(
+                AcquisitionError::LimitExceeded {
+                    limit: LimitKind::CanonicalOutputBytes,
+                    maximum: LOCAL_SNAPSHOT_256M_CANONICAL_OUTPUT_BYTES,
+                    observed: 268_435_457,
+                }
+            ))
+        ));
     }
 }

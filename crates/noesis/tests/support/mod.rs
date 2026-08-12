@@ -15,6 +15,7 @@ pub mod s4_r11;
 pub mod s4_r12;
 pub mod s4_r13;
 pub mod s4_r14;
+pub mod s4_r14_r15_correction;
 pub mod s4_r15;
 pub mod s4_r3;
 pub mod s4_r4;

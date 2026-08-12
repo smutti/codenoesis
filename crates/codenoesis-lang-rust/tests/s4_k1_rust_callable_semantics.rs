@@ -285,6 +285,62 @@ fn reg_fr_ext_012_k1_matches_inherited_imported_owner_resolution() {
     );
 }
 
+#[test]
+fn sec_fr_knw_003_complex_call_targets_are_bounded_without_changing_simple_targets() {
+    let source = r#"
+pub fn calls(value: Client) {
+    simple_target();
+    module::target();
+    simple_target::<i32>();
+    value.field.send();
+    factory("https://fixture.invalid").send();
+    (factory)("https://fixture.invalid");
+}
+"#;
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_callable_semantics(&synthetic_inventory(source))
+        .expect("extract bounded K1 call targets");
+    extraction
+        .knowledge
+        .validate()
+        .expect("validate bounded K1 call targets");
+    let spellings = extraction
+        .knowledge
+        .graph
+        .entities
+        .iter()
+        .filter_map(|entity| match &entity.properties {
+            CallableSemanticProperties::CallSite(properties) => {
+                Some(properties.target_spelling.as_str())
+            }
+            _ => None,
+        })
+        .fold(BTreeMap::new(), |mut counts, spelling| {
+            *counts.entry(spelling).or_insert(0_usize) += 1;
+            counts
+        });
+    assert_eq!(
+        spellings,
+        BTreeMap::from([
+            ("<unsupported-call-target>", 1),
+            ("<unsupported-receiver>.send", 1),
+            ("factory", 1),
+            ("module::target", 1),
+            ("simple_target", 1),
+            ("simple_target::<i32>", 1),
+            ("value.field.send", 1),
+        ])
+    );
+    assert!(
+        extraction
+            .knowledge
+            .graph
+            .entities
+            .iter()
+            .all(|entity| !entity.name.contains("://"))
+    );
+}
+
 fn entity_counts(
     graph: &codenoesis_domain::s4_k1::CallableSemanticsGraph,
 ) -> BTreeMap<CallableSemanticEntityKind, usize> {
@@ -387,6 +443,38 @@ fn imported_owner_fixture_inventory() -> RepositoryInventory {
         u64::try_from(files.len()).expect("reviewed imported-owner file count"),
         files,
     ))
+}
+
+fn synthetic_inventory(source: &str) -> RepositoryInventory {
+    let files = vec![
+        AcquiredFile::new(
+            "Cargo.toml".to_owned(),
+            RegularFileMode::Regular,
+            synthetic_oid('c'),
+            b"[package]\nname=\"k1-correction\"\nversion=\"0.1.0\"\nedition=\"2024\"\n[lib]\npath=\"src/lib.rs\"\n"
+                .to_vec(),
+        ),
+        AcquiredFile::new(
+            "src/lib.rs".to_owned(),
+            RegularFileMode::Regular,
+            synthetic_oid('d'),
+            source.as_bytes().to_vec(),
+        ),
+    ];
+    RepositoryInventory::classify(AcquiredRepository::new(
+        BoundRevision::new(
+            RepositoryIdentity::parse("urn:codenoesis:test:k1-call-target-correction")
+                .expect("synthetic K1 repository identity"),
+            synthetic_oid('a'),
+            synthetic_oid('b'),
+        ),
+        u64::try_from(files.len()).expect("synthetic K1 file count"),
+        files,
+    ))
+}
+
+fn synthetic_oid(value: char) -> ObjectId {
+    ObjectId::parse_sha1(&value.to_string().repeat(40)).expect("synthetic SHA-1 object ID")
 }
 
 fn read_reviewed_fixture(path: &Path) -> Vec<u8> {

@@ -1,0 +1,29 @@
+issue=https://github.com/smutti/codenoesis/issues/170
+correction_round=1
+failed_head=3623d4ca73deed8c36725b840079cc6c7dd3b8c8
+failed_command=cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+failed_exit=101
+failed_reason=clippy::match_same_arms for Standard and LocalSnapshot256MV1 returning the same null semantic capacity value
+failed_raw_log_bytes=3098
+failed_raw_log_sha256=96f0ac95f825198a0dd14b4d4bbc4599ccf4fb41369ffdfeabbb8fc12c06337a
+correction_head=2501c6b42b916b7f41486991f91e891e413bd9d2
+correction=merge the equivalent enum patterns into one exhaustive match arm
+semantic_contract_change=false
+
+command=cargo fmt --all --check
+exit=0
+
+command=cargo clippy -p codenoesis-contracts --all-targets --all-features --locked -- -D warnings
+exit=0
+
+command=cargo test -p codenoesis-contracts --test s4_r14_r15_real_repository_correction --locked
+exit=0
+tests_passed=1
+
+command=cargo test -p codenoesis-contracts --lib pt_nfr_per_001_r14_256m_output_capacity_maximum_plus_one --locked
+exit=0
+tests_passed=1
+
+command=git diff --check
+exit=0
+result=green

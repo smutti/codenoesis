@@ -1222,7 +1222,7 @@ fn walk_body(
                 .child_by_field_name("function")
                 .or_else(|| node.named_child(0))
                 .ok_or_else(|| invalid_syntax(builder.path, node.start_byte(), node.kind()))?;
-            let spelling = normalize_syntax(node_text(function, builder.source).trim());
+            let spelling = call_target_spelling(function, builder.source);
             enforce_limit(
                 CallableSemanticsLimit::SignatureComponentBytes,
                 spelling.len(),
@@ -1623,6 +1623,35 @@ fn normalize_identifier(value: &str) -> String {
 
 fn normalize_syntax(value: &str) -> String {
     value.nfc().collect()
+}
+
+fn call_target_spelling(function: Node<'_>, source: &str) -> String {
+    if simple_call_target(function) {
+        return normalize_syntax(node_text(function, source).trim());
+    }
+    if function.kind() == "field_expression"
+        && let Some(field) = function.child_by_field_name("field")
+    {
+        return format!(
+            "<unsupported-receiver>.{}",
+            normalize_syntax(node_text(field, source).trim())
+        );
+    }
+    "<unsupported-call-target>".to_owned()
+}
+
+fn simple_call_target(node: Node<'_>) -> bool {
+    match node.kind() {
+        "identifier" | "self" | "scoped_identifier" => true,
+        "field_expression" => node
+            .child_by_field_name("value")
+            .is_some_and(simple_call_target),
+        "generic_function" => node
+            .child_by_field_name("function")
+            .or_else(|| node.named_child(0))
+            .is_some_and(simple_call_target),
+        _ => false,
+    }
 }
 
 fn node_text<'a>(node: Node<'_>, source: &'a str) -> &'a str {

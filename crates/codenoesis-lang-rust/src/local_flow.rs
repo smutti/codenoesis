@@ -679,7 +679,7 @@ impl TreeSitterRustWorkspaceExtractor {
                     callable_node.start_byte(),
                     header_end,
                 ) else {
-                    return Err(LocalFlowError::AccessMismatch);
+                    continue;
                 };
                 let callable_id = signature.subject_id.as_str();
                 let signature_evidence = signature.evidence_ids.clone();

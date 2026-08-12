@@ -319,6 +319,68 @@ fn pt_nfr_det_001_r14_parallel_schedules_are_deterministic() {
     });
 }
 
+#[test]
+fn gt_fr_ext_016_partial_real_syntax_is_omitted_as_complete_families() {
+    let source = r"
+pub fn partial(value: i32) -> i32 {
+    let direct = simple_target(value);
+    let mixed = consume(value, || value);
+    let opaque = client_factory!().send(value);
+    let chosen = match value { 0 => direct, _ => opaque };
+    direct + mixed + opaque + chosen
+}
+
+#[cfg(test)]
+pub fn test_only(value: i32) -> i32 { simple_target(value) }
+";
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_expression_bindings(&correction_inventory(source))
+        .expect("extract fail-closed R14 syntax");
+    extraction
+        .knowledge
+        .validate()
+        .expect("validate fail-closed R14 syntax");
+    let graph = &extraction.knowledge.graph;
+
+    let mixed = expression_id_for(source, "consume(value, || value)", graph);
+    assert!(graph.relationships.iter().all(|relationship| {
+        relationship.kind != ExpressionRelationshipKind::HasArgument || relationship.source != mixed
+    }));
+
+    let opaque = expression_id_for(source, "client_factory!().send(value)", graph);
+    assert!(graph.relationships.iter().all(|relationship| {
+        relationship.kind != ExpressionRelationshipKind::HasReceiver
+            || relationship.source != opaque
+    }));
+
+    let chosen = graph
+        .entities
+        .iter()
+        .find(|entity| {
+            entity.kind == ExpressionEntityKind::PatternBinding && entity.name == "chosen"
+        })
+        .expect("preserved match binding");
+    assert!(graph.relationships.iter().all(|relationship| {
+        relationship.kind != ExpressionRelationshipKind::BindsFrom
+            || relationship.source != chosen.id
+    }));
+    assert!(
+        graph
+            .coverage
+            .iter()
+            .any(|gap| gap.capability == "rust.pattern_input_unexpanded")
+    );
+
+    let test_only_start = u64::try_from(source.find("pub fn test_only").expect("test-only source"))
+        .expect("test-only offset");
+    assert!(
+        graph
+            .entities
+            .iter()
+            .all(|entity| entity.locator.start_byte < test_only_start)
+    );
+}
+
 fn extract_fixture(
     rotation: usize,
     reverse: bool,
@@ -389,6 +451,49 @@ pub fn unsupported_r14(input: Option<i32>) {
         })
         .collect();
     inventory(REPOSITORY_ID, COMMIT_OID, TREE_OID, files)
+}
+
+fn correction_inventory(source: &str) -> RepositoryInventory {
+    inventory(
+        "urn:codenoesis:test:r14-real-syntax-correction",
+        &"a".repeat(40),
+        &"b".repeat(40),
+        vec![
+            AcquiredFile::new(
+                "Cargo.toml".to_owned(),
+                RegularFileMode::Regular,
+                ObjectId::parse_sha1(&"c".repeat(40)).expect("synthetic R14 manifest blob"),
+                b"[package]\nname=\"r14-correction\"\nversion=\"0.1.0\"\nedition=\"2024\"\n[lib]\npath=\"src/lib.rs\"\n"
+                    .to_vec(),
+            ),
+            AcquiredFile::new(
+                "src/lib.rs".to_owned(),
+                RegularFileMode::Regular,
+                ObjectId::parse_sha1(&"d".repeat(40)).expect("synthetic R14 source blob"),
+                source.as_bytes().to_vec(),
+            ),
+        ],
+    )
+}
+
+fn expression_id_for(
+    source: &str,
+    snippet: &str,
+    graph: &codenoesis_domain::s4_r14::ExpressionBindingGraph,
+) -> String {
+    let start = source.find(snippet).expect("reviewed expression snippet");
+    let end = start + snippet.len();
+    graph
+        .entities
+        .iter()
+        .find(|entity| {
+            entity.kind == ExpressionEntityKind::Expression
+                && usize::try_from(entity.locator.start_byte).ok() == Some(start)
+                && usize::try_from(entity.locator.end_byte).ok() == Some(end)
+        })
+        .expect("reviewed expression entity")
+        .id
+        .clone()
 }
 
 fn inventory(
