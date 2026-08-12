@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:error:v23",
+  "title": "CodeNoesisErrorV23 impact subset",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v23"
+    },
+    "code": {
+      "enum": [
+        "impact.internal",
+        "impact.invalid_federation_report",
+        "impact.invalid_workspace",
+        "impact.limit_exceeded",
+        "impact.mutable_input",
+        "impact.unsupported_implementation_semantics"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "impact",
+        "input",
+        "internal"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[^\\r\\n]+$"
+    },
+    "retryable": {
+      "const": false
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 4,
+      "properties": {
+        "component": {
+          "enum": [
+            "client_source",
+            "federation_report",
+            "provider_contract",
+            "provider_source",
+            "semantic_report",
+            "workspace"
+          ]
+        },
+        "path": {
+          "$ref": "#/$defs/safe_path"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "limit": {
+          "enum": [
+            "call_sites",
+            "callable_symbol_bytes",
+            "coverage_gaps",
+            "evidence_items",
+            "federation_report_bytes",
+            "fields_per_operation",
+            "linked_clients",
+            "logical_path_bytes",
+            "operations",
+            "report_bytes",
+            "semantic_diffs",
+            "source_bytes_per_file",
+            "source_files",
+            "source_nesting_depth",
+            "string_literal_bytes",
+            "syntax_nodes_per_source",
+            "total_source_bytes",
+            "workspace_bytes"
+          ]
+        },
+        "maximum": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1073741824
+        },
+        "observed": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1073741825
+        },
+        "expected_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "observed_sha256": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "impact.invalid_workspace"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "input"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "code": {
+            "const": "impact.internal"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "stage": {
+            "const": "internal"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "safe_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)[^\\u0000\\r\\n]+$"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

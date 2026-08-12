@@ -1,9 +1,9 @@
 # CodeNoesis Software Architecture
 
-> Status: **implementation architecture through the local R14 baseline, with
-> R15 a Proposed branch-scoped candidate**. The repository contains working
-> Rust crates and the `noesis` local CLI, but no production server deployment
-> or production-ready release.
+> Status: **implementation architecture through the local R15 baseline, with
+> the S7 C0-C4 runtime a Proposed branch-scoped candidate**. The repository
+> contains working Rust crates and the `noesis` local CLI, but no production
+> server deployment or production-ready release.
 
 This document is the implementation baseline for the [CodeNoesis software track](README.md). Research-only ideas must first define an experiment and acceptance evidence in the [research track](../research/README.md); they enter this architecture only through an explicit engineering decision.
 
@@ -49,6 +49,7 @@ codenoesis/
 │   │   ├── codenoesis-tree-sitter
 │   │   ├── codenoesis-lang-c-family
 │   │   ├── codenoesis-lang-java
+│   │   ├── codenoesis-lang-kotlin
 │   │   ├── codenoesis-lang-rust
 │   │   ├── codenoesis-lang-js
 │   │   ├── codenoesis-contract-extractors
@@ -344,6 +345,40 @@ byte-identical R14. The inherited compiler/runtime reachability and data-flow
 gaps remain present because syntax-normal progression and lexical reaching
 definitions do not establish compiler CFG, executable validity, runtime
 execution, values, types, ownership, aliasing, or side effects.
+
+### S7 implementation-aware runtime boundary
+
+Issue #168 and Decision 0028 define a Proposed high-risk S7 C0-C4 candidate on
+the exact R15 baseline. Before protected manual merge it is branch-scoped
+implementation authority, not an Approved, Implemented, or Verified runtime
+fact on `main`.
+
+The output-only `noesis impact` interface accepts one explicit
+`ImpactWorkspaceV1`. That manifest is the complete filesystem and revision
+authority for provider baseline and target sources, Kotlin/KMP client sources,
+and one already materialized S6 federation report. The command performs no
+repository discovery, store publication, network access, build, target,
+compiler, Gradle, plugin, model, test, or runtime execution. Success buffers and
+validates one immutable `SemanticCompatibilityReportV1`; failures emit only a
+typed `CodeNoesisErrorV23` and never a partial report.
+
+Source adapters are inward-facing evidence producers. The Rust adapter exposes
+only `rust-direct-json-map/v1`; the Kotlin adapter uses the pinned
+`tree-sitter-kotlin-ng = 1.1.0` grammar and exposes only
+`kotlin-direct-json-access/v1`. They return closed capability facts and gaps to
+the impact domain; they do not classify compatibility, write public streams, or
+gain ambient filesystem authority. The impact domain validates the exact S6
+operation binding, preserves `declared_contract`, `provider_implementation`,
+and `client_assumption` as separate views, and applies only the immutable
+Decision 0007 rule catalog. Unsupported semantics remain `unresolved` with
+coverage and never become compatible or breaking by default.
+
+The pipeline registration is `codenoesis.pipeline/s7-v1`. The accepted golden
+retains its historical `codenoesis.pipeline/semantic-impact/v1` report field;
+the runtime must reproduce those exact bytes rather than migrate or regenerate
+the oracle. Stable-handle reads, SHA-256 revalidation, fixed limits, canonical
+ordering, digest-only excerpts, and no raw source projection enforce the
+authority, race, privacy, and determinism boundary.
 
 ## Versioned artifacts and identity
 
