@@ -91,7 +91,9 @@ and declared "R8 governance is Approved". Those markers likewise remain only
 as immutable guard history. The K1 pre-merge roadmap said
 "R0-R8 are implemented"; that marker is retained only as history.
 
-R0-R15, K1, and the bounded S7 C0-C4 runtime are implemented but remain not Verified until their complete
+The protected issue #164 milestone, **R0-R14 and K1 are implemented**, remains
+an immutable compatibility checkpoint. R0-R15, K1, and the bounded S7 C0-C4
+runtime are implemented but remain not Verified until their complete
 retained evidence is independently accepted. R7 static import still grants no
 index generation authority. Protected merge #163 made the explicit V13/V16
 committed-source expression and lexical-binding layer effective without adding

@@ -10,7 +10,10 @@ CodeNoesis is an early-stage project exploring how to turn software repositories
 not yet production-ready or Verified.** The pinned Rust workspace now provides deterministic repository
 acquisition, evidence-backed Rust ontology extraction, local persistence,
 documentation, exact-ID query, portable export, and an offline explorer. The
-latest protected merges add committed-source expression and lexical-binding
+protected milestone **Implemented local Rust analysis through R14** remains an
+immutable compatibility checkpoint; later protected merges extend it rather
+than replacing it.
+The latest protected merges add committed-source expression and lexical-binding
 facts, closed source-normal local flow, and the bounded implementation-aware
 HTTP/JSON impact pilot. Issue #170 and Decision 0029 define a Proposed
 high-risk correction that makes the accepted R14/R15 source-only journeys
