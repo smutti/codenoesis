@@ -1,0 +1,59 @@
+issue=https://github.com/smutti/codenoesis/issues/172
+authorization=explicit accountable-maintainer authorization in the supervised Codex task
+requirements=FR-EXT-020,FR-EXP-008,FR-EXT-012,FR-EXT-016,FR-EXT-017,FR-KNW-003,FR-QRY-001,FR-CLI-001,FR-DOC-001,FR-DOC-002,FR-DOC-003,NFR-DET-001,NFR-PER-001,NFR-SEC-001,NFR-SEC-005,NFR-PRV-002,NFR-TST-001,NFR-TST-002,INV-BND-001
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+exact_base_sha=6043313789f6855770520ad5312672fdb081ef38
+governance_checkpoint_sha=0f2dde1ac3b3d2dce662000dd906797028cfac97
+red_evidence_sha=964a095cac008a7cf06887097870422cee9c8064
+product_implementation_sha=40150fa310cb2c0bd3f61182bf674efc1d1c92dd
+tested_corrected_head=1f9172f38991c6f3d8ac2a81d3a73924c6f66073
+tested_tree=f5da0c32f61d12f60fd6e6978893a09601488ce3
+started_at_utc=2026-08-13T07:38:14Z
+completed_at_utc=2026-08-13T07:38:21Z
+
+command=cargo fmt --all --check
+exit=0
+
+command=cargo test -p codenoesis-domain --test s4_r16_safe_constant_evaluation --locked
+exit=0
+tests_passed=2
+coverage=contract constants, reviewed identities, and every R16 maximum plus maximum-plus-one domain limit
+
+command=cargo test -p codenoesis-application --test s4_r16_safe_constant_evaluation --locked
+exit=0
+tests_passed=1
+coverage=single acquisition, canonical boundary handoff, typed failure propagation, and no partial publication
+
+command=cargo test -p codenoesis-contracts --test s4_r16_safe_constant_evaluation --locked
+exit=0
+tests_passed=5
+coverage=ErrorV24, SnapshotV18, QueryV13, PortableGraphV9, ExplorerV9, canonical derivation, privacy, path, cycle, and integrity failures
+
+command=cargo test -p codenoesis-lang-rust --test s4_r16_safe_constant_evaluation --locked
+exit=0
+tests_passed=5
+coverage=closed grammar, conditional-source authority, typed unsupported gaps, 256/257 syntax boundary, 64/65 dependency depth, and order-independent DAG evaluation
+
+command=cargo test -p noesis --test e2e_fr_ext_020_rust_safe_constant_evaluation --locked
+exit=0
+tests_passed=4
+journey=scan -> docs -> exact evaluated-value query -> export V9 -> strict reimport -> explore V9
+fixture_oracle=42 entities, 42 relationships, 84 claims, 33 evidence, 0 diagnostics, 32 coverage records, and 7 evaluated values
+determinism=50 input and argument permutations plus 10 schedules have byte-identical semantic output
+selector_compatibility=selector absence is exact R15 and repository-boundary composition fails before acquisition
+
+command=python3 -m unittest scripts.tests.test_s4_r16_safe_constant_evaluation_contract scripts.tests.test_s4_r14_r15_real_repository_correction -v
+exit=0
+r16_governance_tests_passed=5
+r14_r15_regression_tests_passed=7
+
+r16_rust_tests_passed=17
+python_tests_passed=12
+raw_local_log_bytes=6053
+raw_local_log_sha256=3ff81b1bf925d81dd9c663d25758aee43aa747dda95e942db8b2ba5902e58ebf
+environment=macOS 26.5.2 Darwin 25.5.0 arm64; rustc 1.97.1; cargo 1.97.1; Python 3.9.6
+known_warning=the pre-existing exact toml dependency requirement includes ignored semver metadata; no Cargo manifest, lockfile, or dependency changed
+correction_rounds_used=1
+result=candidate_green_not_verified
