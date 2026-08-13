@@ -48,11 +48,11 @@ The implemented compatibility profile is bounded rather than general:
 - Cargo feature worlds, macro expansion, compiler-grade generation or general
   resolution, active `cfg`, type/ownership/runtime semantics, and general graph
   traversal remain unsupported or explicit gaps;
-- LocalExplorerV1/V2 support their matching PortableGraph versions. Later
-  versioned explorer artifacts are generated deterministically, but the
-  canonical browser frontend used by LocalExplorerV3-V9 still validates only
-  `codenoesis.portable-graph/v2`; V9 is observed to fail with
-  `Unsupported portable graph schema.` and is not advertised as usable.
+- LocalExplorerV1/V2 support their matching PortableGraph versions. Issue #176
+  and Decision 0031 now define the Proposed exact-schema V3-V9 browser
+  correction with bounded visual graph inspection; until protected manual
+  merge, current `main` still rejects those later graphs and does not advertise
+  the journey as usable.
 
 ## Real-world Rust compatibility target
 
@@ -127,8 +127,9 @@ Verified. Protected PR #173, merged as
 `c3d05994a56e747fbe3157173998f8ac76ef7333`, made the exact Issue #172 /
 Decision 0030 `rust-safe-constant-evaluation-v1` package Approved and
 Implemented, but not Verified. Its generated LocalExplorerV9 manifest and
-PortableGraphV9 are deterministic, while the immutable browser frontend still
-rejects V9 because it validates only `codenoesis.portable-graph/v2`.
+PortableGraphV9 are deterministic. Issue #176 and Decision 0031 define the
+Proposed correction for the immutable V2 browser mismatch without changing
+R16 graph semantics or claiming current `main` is usable.
 
 | Order | Planning item | Outcome | Governance dependency | Candidate acceptance gate |
 |---|---|---|---|---|
@@ -151,7 +152,7 @@ rejects V9 because it validates only `codenoesis.portable-graph/v2`.
 | `R15` | Closed Rust local flow | Implemented but not Verified after protected merge #167: preserves complete R14 while adding evidence-backed syntax basic blocks, explicit possible normal branch edges, strict source reachability, and lexical must/may reaching definitions in V14/V17, QueryV12, PortableGraphV8, and LocalExplorerV8. | Issue #166, Decision 0027, and protected merge #167; no new dependency and no compiler/runtime authority. | The project-owned fixture completes scan → docs → block/condition/reachability/def-use query → export → strict reimport → explore with 5 blocks, 36 relations, exact derivations, 50 permutations, ten schedules, whole-callable rejection, inherited broad gaps, and immutable R0-R14/K1 bytes. |
 | `R14/R15 correction` | Real-repository fail-closed source-only journey | Implemented but not Verified after protected merge #171: bound complex K1 target spelling, skip callables outside inherited authority, omit incomplete R14 edge families, type gitlink rejection, and add the operational `local-snapshot-256m-v1` scan envelope. | Issue #170, Decision 0029, and protected merge #171; no dependency, schema, identity, ontology-family, boundary-composition, or control-plane change. | The exact project-owned fixture and pinned Lekton/RustDesk pilots satisfy immutable counts/digests, privacy, 50 permutations, ten schedules, 256 MiB max/plus-one, 4 GiB RSS, 60 s extraction, full positive journeys, and typed negative boundary failures. |
 | `R16` | Bounded safe Rust constant evaluation | Implemented but not Verified after protected PR #173: preserve corrected R15 and add checked target-independent primitive constants plus fixed-repr unit-enum discriminants as `rust.evaluated_value` and `EVALUATES_TO`, with exact derivations and typed gaps. | Issue #172, Decision 0030, and merge `c3d05994a56e747fbe3157173998f8ac76ef7333`; no new dependency, execution, compiler, target, cfg, boundary, or control-plane authority. | The project-owned fixture emits seven exact values, two dependencies, 42 entities, 42 relationships, 84 claims, 33 evidence, zero diagnostics, 32 coverage records, exact V15/V18 hashes, 50 permutations, ten schedules, all boundaries, two deterministic Lekton journeys, and the typed RustDesk boundary negative. Artifact generation succeeds, but the V9 browser journey remains blocked by the exact-schema frontend defect. |
-| `R10-R16 explorer correction` | Matching portable-graph browser loading | Planning-only next package: make LocalExplorerV3-V9 accept only their exact matching PortableGraphV3-V9 contracts and expose real search, neighborhood, relationship, evidence, derivation, and uncertainty inspection without weakening privacy, CSP, path, size, or schema validation. | A separate high-risk S4 Ready issue, exact additive or corrected interface contracts, retained browser Red, and independent review; historical viewer bytes and R0-R16 ontology semantics remain protected unless explicitly governed. | Each generated explorer loads its matching graph in a real browser; mismatched versions, malformed or oversized graphs, unsafe content, path races, and privacy leaks fail closed; deterministic search and bounded graph inspection are exercised end to end. |
+| `R10-R16 explorer correction` | Matching portable-graph browser loading | Proposed branch-scoped candidate: make LocalExplorerV3-V9 accept only their exact matching PortableGraphV3-V9 contracts and expose real search, bounded SVG neighborhoods, relationship, evidence, derivation, and uncertainty inspection without weakening privacy, CSP, path, size, or schema validation. | Issue #176, Decision 0031, exact base `16252f59b2dd2302b3f660268843869a45f8ca87`, retained browser Red, no new dependency, and independent review; historical V1/V2 viewer bytes and R0-R16 ontology semantics remain protected. | Each generated explorer loads its matching graph in a real browser; mismatched versions, malformed or oversized graphs, unsafe content, path races, and privacy leaks fail closed; deterministic search and bounded graph inspection are exercised end to end. |
 
 ### Earliest useful real-world checkpoint
 
@@ -169,9 +170,9 @@ future slice without changing that slice's approved meaning.
 
 ### Post-R16 delivery sequence
 
-1. Correct exact matching PortableGraphV3-V9 loading and real graph inspection
-   in LocalExplorerV3-V9; until then the V9 browser journey is not advertised as
-   usable.
+1. Complete issue #176 / Decision 0031 for exact matching PortableGraphV3-V9
+   loading and real graph inspection in LocalExplorerV3-V9; until protected
+   merge the V9 browser journey is not advertised as usable.
 2. Begin `G0` before defining or implementing any new public compatibility or
    interface contract.
 3. Add opt-in trusted local evidence-to-source retrieval under repository,

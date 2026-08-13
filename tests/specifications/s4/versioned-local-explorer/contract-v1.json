@@ -1,0 +1,105 @@
+{
+  "schema_version": "codenoesis.versioned-local-explorer-correction/v1",
+  "issue": 176,
+  "exact_base_sha": "16252f59b2dd2302b3f660268843869a45f8ca87",
+  "status": "proposed_branch_scoped_candidate",
+  "slice": "S4",
+  "risk": "high",
+  "dependency_change": false,
+  "maximum_portable_graph_bytes": 268435456,
+  "common_array_families": [
+    "claims",
+    "coverage_gaps",
+    "diagnostics",
+    "document_statements",
+    "documents",
+    "entities",
+    "evidence",
+    "relationships"
+  ],
+  "viewers": [
+    {
+      "explorer_schema": "codenoesis.local-explorer/v3",
+      "portable_schema": "codenoesis.portable-graph/v3",
+      "required_sections": []
+    },
+    {
+      "explorer_schema": "codenoesis.local-explorer/v4",
+      "portable_schema": "codenoesis.portable-graph/v4",
+      "required_sections": [
+        "repository_boundaries"
+      ]
+    },
+    {
+      "explorer_schema": "codenoesis.local-explorer/v5",
+      "portable_schema": "codenoesis.portable-graph/v5",
+      "required_sections": [
+        "repository_boundaries"
+      ]
+    },
+    {
+      "explorer_schema": "codenoesis.local-explorer/v6",
+      "portable_schema": "codenoesis.portable-graph/v6",
+      "required_sections": []
+    },
+    {
+      "explorer_schema": "codenoesis.local-explorer/v7",
+      "portable_schema": "codenoesis.portable-graph/v7",
+      "required_sections": []
+    },
+    {
+      "explorer_schema": "codenoesis.local-explorer/v8",
+      "portable_schema": "codenoesis.portable-graph/v8",
+      "required_sections": [
+        "local_flow_index"
+      ]
+    },
+    {
+      "explorer_schema": "codenoesis.local-explorer/v9",
+      "portable_schema": "codenoesis.portable-graph/v9",
+      "required_sections": [
+        "constant_evaluation_index",
+        "local_flow_index"
+      ]
+    }
+  ],
+  "immutable_assets": [
+    {
+      "path": "crates/noesis/assets/s4/k1/index.html",
+      "sha256": "d0b633b29e6494d6494a35b5553d72c3dd04a747eeef219ca33a9f5fe2a1f4fa"
+    },
+    {
+      "path": "crates/noesis/assets/s4/r8/index.html",
+      "sha256": "1caa2c0ca5675937eab674f61681883ba3c6a428feb6b1baa744a0cb7eecd044"
+    }
+  ],
+  "privacy_denied_fields": [
+    "body_text",
+    "environment",
+    "expression_text",
+    "source_contents",
+    "source_snippet"
+  ],
+  "capabilities": [
+    "bounded_svg_neighborhood",
+    "derivation_inspection",
+    "evidence_inspection",
+    "exact_id_search",
+    "exact_schema_binding",
+    "relationship_inspection",
+    "text_search",
+    "typed_filters",
+    "uncertainty_inspection"
+  ],
+  "forbidden_authority": [
+    "browser_auto_launch",
+    "dynamic_code",
+    "graph_mutation",
+    "network",
+    "process_execution",
+    "repair_or_inference",
+    "source_repository_access",
+    "storage",
+    "telemetry"
+  ]
+}

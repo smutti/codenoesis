@@ -11,9 +11,22 @@ use support::parse_single_document;
 use support::s4_r16::{
     MaterializedConstantEvaluationRepository, expected_safe_constant_evaluation,
 };
+use support::versioned_explorer::assert_matching_viewer_contract;
 
 const EXPECTED_RED_STDERR_SHA256: &str =
     "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe";
+
+#[test]
+fn e2e_fr_exp_008_local_explorer_v9_is_bound_to_portable_v9() {
+    let repository = MaterializedConstantEvaluationRepository::fixture();
+    assert_success(&repository.scan(), "R16 viewer-contract scan");
+    assert_success(&repository.docs(), "R16 viewer-contract docs");
+    assert_success(&repository.export(), "R16 viewer-contract export");
+    let explore = repository.explore();
+    assert_success(&explore, "R16 viewer-contract explore");
+    let manifest = parse_single_document(&explore.stdout);
+    assert_matching_viewer_contract(&repository.explorer.join("index.html"), &manifest, 9);
+}
 
 #[test]
 #[allow(clippy::too_many_lines)]
