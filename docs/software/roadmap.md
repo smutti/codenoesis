@@ -1,7 +1,7 @@
 # CodeNoesis Delivery Roadmap
 
 > Status: **Proposed planning companion — not implementation authority**.
-> Last updated: **2026-08-12**.
+> Last updated: **2026-08-13**.
 
 This roadmap sequences product and validation work without changing the
 normative meaning or approval status of the
@@ -19,29 +19,40 @@ SRS slice or requirement IDs. They must not be used to bypass the approved
 
 ## Current product baseline
 
-The repository contains the local `S0`–`S4` implementation journey:
+The repository contains the local `S0`–`S4` implementation journey through
+R16, plus the first bounded S7 C0-C4 runtime:
 
 ```text
 immutable local Git revision
-  -> bounded inventory
-  -> Rust ontology
+  -> bounded loose/packed acquisition and gitlink boundaries
+  -> Cargo inventory and manifest facts
+  -> evidence-backed Rust ontology through R16
   -> atomic local snapshot
-  -> evidence-backed Markdown and exact-ID query
+  -> evidence-backed Markdown, exact-ID query, and portable export
+  -> versioned offline-explorer artifact
 ```
 
-The current compatibility profile deliberately remains narrow:
+The implemented compatibility profile is bounded rather than general:
 
-- acquisition accepts verified loose SHA-1 Git objects and rejects packed
-  object databases;
-- the S4 Cargo profile accepts a literal virtual workspace whose root manifest
-  contains only `[workspace]`;
-- the explicit R5 profile extends the accepted Rust ontology lineage through
-  fields, variants, constants/statics, associated types, method contexts, and
-  attribute-preserving uncertainty while remaining not Verified;
-- Cargo feature worlds, macro expansion, compiler-grade resolution, framework
-  semantics and general canonical graph traversal remain unsupported or
-  explicit coverage gaps; R8/K1 export and explorer are implemented but not
-  Verified, and they never make an active-configuration claim.
+- acquisition accepts verified loose and packed SHA-1 Git objects and models
+  gitlinks as explicit repository boundaries without implicit fetch or nested
+  traversal;
+- Cargo inventory accepts the approved virtual and non-virtual workspace/root
+  package shapes and records the bounded manifest, target, dependency, feature,
+  patch, and build-script facts without performing dependency resolution;
+- the Rust lineage through R16 adds declarations, framework-neutral source
+  candidates, optional supplied SCIP facts, callable/value syntax, cfg
+  alternatives, repository-boundary and compiler joins, expressions, lexical
+  local flow, and checked target-independent constants, while remaining not
+  Verified;
+- Cargo feature worlds, macro expansion, compiler-grade generation or general
+  resolution, active `cfg`, type/ownership/runtime semantics, and general graph
+  traversal remain unsupported or explicit gaps;
+- LocalExplorerV1/V2 support their matching PortableGraph versions. Later
+  versioned explorer artifacts are generated deterministically, but the
+  canonical browser frontend used by LocalExplorerV3-V9 still validates only
+  `codenoesis.portable-graph/v2`; V9 is observed to fail with
+  `Unsupported portable graph schema.` and is not advertised as usable.
 
 ## Real-world Rust compatibility target
 
@@ -63,6 +74,12 @@ to reusable classes of real-world Rust repositories:
 |---|---|---|---|
 | [Lekton](https://github.com/dghilardi/lekton) | [`7a4d1a4a30468f4c18ce158a9b825680b00f4820`](https://github.com/dghilardi/lekton/commit/7a4d1a4a30468f4c18ce158a9b825680b00f4820) | `AGPL-3.0-or-later` | Root package explicitly listed as `"."`, a separate CLI member, library and multiple binaries, features, build dependencies, and a build script in a modular web/server application. |
 | [RustDesk](https://github.com/rustdesk/rustdesk) | [`d412d198720aa56f6cfed2dfad262e8fb1322fb7`](https://github.com/rustdesk/rustdesk/commit/d412d198720aa56f6cfed2dfad262e8fb1322fb7) | `AGPL-3.0` | Implicit root package plus workspace members and exclusions, library and multiple binaries, a build script, target-specific and Git/path dependencies, patches, one gitlink member, and substantial Rust/Dart/native/mobile source. |
+
+The corpus-v1 Lekton baseline remains pinned to
+`7a4d1a4a30468f4c18ce158a9b825680b00f4820`. Later R14-R16 real-repository
+pilots use the separately recorded revision
+`247b8f42fb045db41166d70a276a41c2e079b6eb`; those pilot observations do not
+replace or silently mutate the corpus-v1 descriptor.
 
 Both repositories are validation cases, not sources of product semantics. No
 ontology kind, extractor rule, error, or interface may contain
@@ -92,10 +109,10 @@ as immutable guard history. The K1 pre-merge roadmap said
 "R0-R8 are implemented"; that marker is retained only as history.
 
 The protected issue #164 milestone, **R0-R14 and K1 are implemented**, remains
-an immutable compatibility checkpoint. R0-R15, K1, and the bounded S7 C0-C4
-runtime are implemented but remain not Verified until their complete
-retained evidence is independently accepted. R7 static import still grants no
-index generation authority. Protected merge #163 made the explicit V13/V16
+an immutable compatibility checkpoint. R0-R16, K1, and the bounded S7 C0-C4
+runtime are implemented but remain not Verified until their complete retained
+evidence is independently accepted. R7 static import still grants no index
+generation authority. Protected merge #163 made the explicit V13/V16
 committed-source expression and lexical-binding layer effective without adding
 compiler, data-flow, ownership, or runtime meaning. Protected merge #165 accepts
 the valid empty additive R5 neutral element without changing any public
@@ -106,8 +123,12 @@ runtime authority. Protected merge #169 made the bounded implementation-aware
 HTTP/JSON runtime effective. Protected merge #171 made the Decision 0029
 R14/R15 fail-closed correction and explicit scan-only 256 MiB envelope
 effective without changing accepted ontology families or marking R14/R15
-Verified. Issue #172 and Decision 0030 now define the Proposed R16
-`rust-safe-constant-evaluation-v1` layer over that corrected baseline.
+Verified. Protected PR #173, merged as
+`c3d05994a56e747fbe3157173998f8ac76ef7333`, made the exact Issue #172 /
+Decision 0030 `rust-safe-constant-evaluation-v1` package Approved and
+Implemented, but not Verified. Its generated LocalExplorerV9 manifest and
+PortableGraphV9 are deterministic, while the immutable browser frontend still
+rejects V9 because it validates only `codenoesis.portable-graph/v2`.
 
 | Order | Planning item | Outcome | Governance dependency | Candidate acceptance gate |
 |---|---|---|---|---|
@@ -129,21 +150,40 @@ Verified. Issue #172 and Decision 0030 now define the Proposed R16
 | `R14` | Rust expression and lexical bindings | Implemented but not Verified after protected merge #163: preserves complete K1 while adding only closed committed-source expressions, ordered arguments, receivers, supported pattern bindings, explicit modifiers, and syntax-only lexical `READS`/`WRITES` in V13/V16, QueryV11, PortableGraphV7, and LocalExplorerV7. | Issue #162, Decision 0025, and protected merge #163; Decision 0026 and issue #164 correct only empty additive R5 neutrality while keeping the R14 bundle immutable. | The immutable K1 fixture completes scan → docs → expression/argument/binding/access query → export → strict reimport → explore with 73 expressions, 23 bindings, 29 reads, 7 writes, exact spans/scopes, and deterministic invalid/limit/security regressions without type, data-flow, ownership, or runtime claims. |
 | `R15` | Closed Rust local flow | Implemented but not Verified after protected merge #167: preserves complete R14 while adding evidence-backed syntax basic blocks, explicit possible normal branch edges, strict source reachability, and lexical must/may reaching definitions in V14/V17, QueryV12, PortableGraphV8, and LocalExplorerV8. | Issue #166, Decision 0027, and protected merge #167; no new dependency and no compiler/runtime authority. | The project-owned fixture completes scan → docs → block/condition/reachability/def-use query → export → strict reimport → explore with 5 blocks, 36 relations, exact derivations, 50 permutations, ten schedules, whole-callable rejection, inherited broad gaps, and immutable R0-R14/K1 bytes. |
 | `R14/R15 correction` | Real-repository fail-closed source-only journey | Implemented but not Verified after protected merge #171: bound complex K1 target spelling, skip callables outside inherited authority, omit incomplete R14 edge families, type gitlink rejection, and add the operational `local-snapshot-256m-v1` scan envelope. | Issue #170, Decision 0029, and protected merge #171; no dependency, schema, identity, ontology-family, boundary-composition, or control-plane change. | The exact project-owned fixture and pinned Lekton/RustDesk pilots satisfy immutable counts/digests, privacy, 50 permutations, ten schedules, 256 MiB max/plus-one, 4 GiB RSS, 60 s extraction, full positive journeys, and typed negative boundary failures. |
-| `R16` | Bounded safe Rust constant evaluation | Proposed branch-scoped issue #172 candidate: preserve corrected R15 and add checked target-independent primitive constants plus fixed-repr unit-enum discriminants as `rust.evaluated_value` and `EVALUATES_TO`, with exact derivations and typed gaps. | Issue #172 and Decision 0030 on exact base `6043313789f6855770520ad5312672fdb081ef38`; no new dependency, execution, compiler, target, cfg, boundary, or control-plane authority. | The project-owned fixture emits seven exact values, two dependencies, 42 entities, 42 relationships, 84 claims, 33 evidence, zero diagnostics, 32 coverage records, exact V15/V18 hashes, 50 permutations, ten schedules, all boundaries, two deterministic Lekton journeys, and the typed RustDesk boundary negative. |
+| `R16` | Bounded safe Rust constant evaluation | Implemented but not Verified after protected PR #173: preserve corrected R15 and add checked target-independent primitive constants plus fixed-repr unit-enum discriminants as `rust.evaluated_value` and `EVALUATES_TO`, with exact derivations and typed gaps. | Issue #172, Decision 0030, and merge `c3d05994a56e747fbe3157173998f8ac76ef7333`; no new dependency, execution, compiler, target, cfg, boundary, or control-plane authority. | The project-owned fixture emits seven exact values, two dependencies, 42 entities, 42 relationships, 84 claims, 33 evidence, zero diagnostics, 32 coverage records, exact V15/V18 hashes, 50 permutations, ten schedules, all boundaries, two deterministic Lekton journeys, and the typed RustDesk boundary negative. Artifact generation succeeds, but the V9 browser journey remains blocked by the exact-schema frontend defect. |
+| `R10-R16 explorer correction` | Matching portable-graph browser loading | Planning-only next package: make LocalExplorerV3-V9 accept only their exact matching PortableGraphV3-V9 contracts and expose real search, neighborhood, relationship, evidence, derivation, and uncertainty inspection without weakening privacy, CSP, path, size, or schema validation. | A separate high-risk S4 Ready issue, exact additive or corrected interface contracts, retained browser Red, and independent review; historical viewer bytes and R0-R16 ontology semantics remain protected unless explicitly governed. | Each generated explorer loads its matching graph in a real browser; mismatched versions, malformed or oversized graphs, unsafe content, path races, and privacy leaks fail closed; deterministic search and bounded graph inspection are exercised end to end. |
 
 ### Earliest useful real-world checkpoint
 
-`R1`–`R3` are the minimum path to analyzing ordinary packed clones with safe
-gitlink boundaries and common virtual or non-virtual Cargo workspace layouts.
-At that checkpoint CodeNoesis should create and query a partial but honest
-ontology and generate evidence-backed documentation. `R4`–`R16` increase
-semantic coverage and make the graph easier to inspect; they are not permitted
-to hide unsupported meaning.
+The `R1`–`R3` minimum checkpoint for analyzing ordinary packed clones with safe
+gitlink boundaries and common virtual or non-virtual Cargo workspace layouts
+has been reached. CodeNoesis can create and query a partial but honest ontology
+and generate evidence-backed documentation at that checkpoint. `R4`–`R16`
+increase semantic coverage and the amount of inspectable evidence; they are not
+permitted to hide unsupported meaning.
 
 The existing `S5` slice is incremental refresh, so none of `R1`–`R8` may be
 silently folded into `S5`. Governance must either amend the delivery plan with
 bounded post-S4 compatibility slices or assign each behavior to an existing
 future slice without changing that slice's approved meaning.
+
+### Post-R16 delivery sequence
+
+1. Correct exact matching PortableGraphV3-V9 loading and real graph inspection
+   in LocalExplorerV3-V9; until then the V9 browser journey is not advertised as
+   usable.
+2. Begin `G0` before defining or implementing any new public compatibility or
+   interface contract.
+3. Add opt-in trusted local evidence-to-source retrieval under repository,
+   privacy, path, race, and output authority.
+4. Add a bounded LLM-ready context projection over typed facts, evidence, and
+   uncertainty rather than exposing raw graph identifiers alone.
+5. Extend implementation-aware API and semantic diff to compare contracts with
+   provider/client behavior and versioned implementation evidence.
+6. Execute the reproducible conference evaluation over pinned, structurally
+   independent repositories.
+7. Keep verification separate: R0-R16, K1, and applicable S7 behavior become
+   Verified only through independent acceptance of complete immutable evidence.
 
 ### Real-world compatibility completion definition
 
@@ -187,7 +227,7 @@ CodeNoesis has two distinct candidate general-availability gates:
 
 | Gate | User-visible outcome | Required scope | Candidate exit condition |
 |---|---|---|---|
-| Local GA | A supported, signed `noesis` distribution analyzes declared local repository profiles with deterministic evidence, bounded resource use, documented platform guarantees, recoverable local state, and no target execution or analysis network access. | Verified applicable `S0`–`S4` behavior, the advertised subset of `R0`–`R9` and `P1`–`P5`, plus applicable `G0`–`G9` controls. | Installation, upgrade, rollback, compatibility, backup/export, security, performance, support, and pilot evidence are Green for every advertised local capability and platform. |
+| Local GA | A supported, signed `noesis` distribution analyzes declared local repository profiles with deterministic evidence, bounded resource use, documented platform guarantees, recoverable local state, and no target execution or analysis network access. | Verified applicable `S0`–`S4` behavior and every advertised local compatibility, ontology, query, export, explorer, or pilot profile, including any selected R0-R16/K1 capability, plus applicable `G0`–`G9` controls. | Installation, upgrade, rollback, compatibility, backup/export, security, performance, support, and pilot evidence are Green for every advertised local capability and platform. |
 | Server GA | A supported multi-user deployment provides durable jobs, REST/MCP parity, tenant isolation, governed intelligence, recovery, observability, and signed release operations. | Local GA plus Verified applicable `S5`–`S14` behavior and all server-applicable `G0`–`G9` controls. | SLO, tenant, privacy, migration, restore, chaos, supply-chain, incident, and multi-repository pilot gates pass on the exact release artifacts. |
 
 An optional adapter, compiler index, framework capability, interface, or
@@ -218,6 +258,8 @@ single-PR vertical package as its implementation.
 
 ### Production-readiness sequencing
 
+- The matching LocalExplorerV3-V9 correction blocks advertising those browser
+  journeys as usable and precedes the next new product capability.
 - `G0` starts before the next public compatibility or interface contract.
 - `G1`, `G2`, `G5`, and `G8` apply to Local GA rather than waiting for the
   server path.
