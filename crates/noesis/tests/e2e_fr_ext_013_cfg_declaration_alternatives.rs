@@ -16,6 +16,7 @@ use codenoesis_lang_rust::TreeSitterRustWorkspaceExtractor;
 use codenoesis_repository::LocalGitRepository;
 use support::parse_single_document;
 use support::s4_r10::{MaterializedCfgAlternativesRepository, R10_PROFILE, REPOSITORY_ID};
+use support::versioned_explorer::assert_matching_viewer_contract;
 
 const LOGICAL_METHOD_ID: &str =
     "urn:codenoesis:entity:blake3:437b0bfcd3821ae91eabe8c395d99c80ec54cc53e6f1e6ca6e24098b20bf4b45";
@@ -510,28 +511,11 @@ fn e2e_fr_exp_003_r10_lossless_local_journey() {
             "R10 explorer enabled {disabled}"
         );
     }
-    let viewer = fs::read(repository.explorer.join("index.html")).expect("read R10 viewer");
-    let k1_viewer = normalize_lf(
-        &fs::read(Path::new(env!("CARGO_MANIFEST_DIR")).join("assets/s4/k1/index.html"))
-            .expect("read immutable K1 viewer"),
+    assert_matching_viewer_contract(
+        &repository.explorer.join("index.html"),
+        &explorer_manifest,
+        3,
     );
-    assert_eq!(viewer, k1_viewer, "R10 changed immutable K1 viewer bytes");
-    let viewer = String::from_utf8(viewer).expect("R10 viewer UTF-8");
-    for forbidden in [
-        "http://",
-        "https://",
-        "fetch(",
-        "XMLHttpRequest",
-        "WebSocket",
-        "eval(",
-        "new Function(",
-        ".innerHTML",
-    ] {
-        assert!(
-            !viewer.contains(forbidden),
-            "R10 viewer contains {forbidden}"
-        );
-    }
     assert!(!repository.build_sentinel().exists());
 }
 
@@ -884,21 +868,6 @@ fn r10_relationship_mut(value: &mut Value) -> &mut Value {
         .iter_mut()
         .find(|relationship| relationship["kind"] == "HAS_DECLARATION_ALTERNATIVE")
         .expect("R10 alternative relationship")
-}
-
-fn normalize_lf(bytes: &[u8]) -> Vec<u8> {
-    let mut normalized = Vec::with_capacity(bytes.len());
-    let mut index = 0;
-    while index < bytes.len() {
-        if bytes[index] == b'\r' && bytes.get(index + 1) == Some(&b'\n') {
-            normalized.push(b'\n');
-            index += 2;
-        } else {
-            normalized.push(bytes[index]);
-            index += 1;
-        }
-    }
-    normalized
 }
 
 fn assert_graph_evidence_references(graph: &Value) {

@@ -9,6 +9,7 @@ use sha2::{Digest as _, Sha256};
 
 use support::parse_single_document;
 use support::s4_r14::{MaterializedExpressionBindingRepository, expected_expression_bindings};
+use support::versioned_explorer::assert_matching_viewer_contract;
 
 const EXPECTED_RED_STDERR_SHA256: &str =
     "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe";
@@ -229,13 +230,7 @@ fn e2e_fr_ext_016_rust_expression_bindings_complete_local_journey() {
     assert_eq!(manifest["schema_version"], "codenoesis.local-explorer/v7");
     assert_eq!(manifest["security"]["network"], false);
     assert_eq!(manifest["security"]["dynamic_code"], false);
-    let viewer = fs::read(repository.inner.explorer.join("index.html")).expect("read R14 viewer");
-    let immutable = normalize_lf(
-        fs::read(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("assets/s4/k1/index.html"))
-            .expect("read immutable K1 viewer")
-            .as_slice(),
-    );
-    assert_eq!(viewer, immutable, "R14 viewer bytes changed");
+    assert_matching_viewer_contract(&repository.inner.explorer.join("index.html"), &manifest, 7);
     assert!(!repository.build_sentinel().exists());
 }
 

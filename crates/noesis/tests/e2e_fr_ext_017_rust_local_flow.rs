@@ -9,6 +9,7 @@ use sha2::{Digest as _, Sha256};
 
 use support::parse_single_document;
 use support::s4_r15::{MaterializedLocalFlowRepository, expected_local_flow};
+use support::versioned_explorer::assert_matching_viewer_contract;
 
 const EXPECTED_RED_STDERR_SHA256: &str =
     "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe";
@@ -402,13 +403,7 @@ fn e2e_fr_ext_017_rust_local_flow_complete_local_journey() {
     assert_eq!(manifest["schema_version"], "codenoesis.local-explorer/v8");
     assert_eq!(manifest["security"]["network"], false);
     assert_eq!(manifest["security"]["dynamic_code"], false);
-    let viewer = fs::read(repository.explorer.join("index.html")).expect("read R15 viewer");
-    let immutable = normalize_lf(
-        fs::read(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("assets/s4/k1/index.html"))
-            .expect("read immutable K1 viewer")
-            .as_slice(),
-    );
-    assert_eq!(viewer, immutable, "R15 viewer bytes changed");
+    assert_matching_viewer_contract(&repository.explorer.join("index.html"), &manifest, 8);
     assert!(!repository.build_sentinel().exists());
 }
 
@@ -616,21 +611,6 @@ fn assert_success(output: &Output, label: &str) {
         "{label} failed: {}",
         String::from_utf8_lossy(&output.stderr)
     );
-}
-
-fn normalize_lf(bytes: &[u8]) -> Vec<u8> {
-    let mut normalized = Vec::with_capacity(bytes.len());
-    let mut index = 0;
-    while index < bytes.len() {
-        if bytes[index] == b'\r' && bytes.get(index + 1) == Some(&b'\n') {
-            normalized.push(b'\n');
-            index += 2;
-        } else {
-            normalized.push(bytes[index]);
-            index += 1;
-        }
-    }
-    normalized
 }
 
 fn hex_sha256(bytes: &[u8]) -> String {

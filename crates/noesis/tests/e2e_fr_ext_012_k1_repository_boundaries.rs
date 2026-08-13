@@ -11,6 +11,7 @@ use support::s4_r11::{
     BOUNDARY_EVIDENCE_ID, BOUNDARY_ID, MaterializedCallableBoundaryRepository,
     expected_bound_boundaries, expected_unbound_boundaries,
 };
+use support::versioned_explorer::assert_matching_viewer_contract;
 
 const HETEROGENEOUS_CFG_METHOD_ALTERNATIVES_SOURCE: &[u8] = br"pub struct Client;
 pub struct Context;
@@ -156,12 +157,7 @@ fn e2e_fr_ext_012_k1_gitlink_boundaries_complete_local_journey() {
     assert_eq!(manifest["schema_version"], "codenoesis.local-explorer/v4");
     assert_eq!(manifest["security"]["network"], false);
     assert_eq!(manifest["security"]["dynamic_code"], false);
-    let viewer = fs::read(repository.explorer.join("index.html")).expect("read R11 viewer");
-    let immutable_viewer = normalize_lf(
-        &fs::read(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("assets/s4/k1/index.html"))
-            .expect("read immutable K1 viewer"),
-    );
-    assert_eq!(viewer, immutable_viewer);
+    assert_matching_viewer_contract(&repository.explorer.join("index.html"), &manifest, 4);
     assert!(!repository.build_sentinel().exists());
 
     let bound = MaterializedCallableBoundaryRepository::fixture();

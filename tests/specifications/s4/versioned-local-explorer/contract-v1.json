@@ -7,6 +7,8 @@
   "risk": "high",
   "dependency_change": false,
   "maximum_portable_graph_bytes": 268435456,
+  "viewer_byte_length": 27679,
+  "content_security_policy": "default-src 'none'; script-src 'sha256-cFyehXImq07b3INT0Fff+uEiQWykXxu4jkzRLNqF9EM='; style-src 'sha256-Y4n+kUJ7cKEiQDrj1EhdHicIssJjePi9deKe0UgCjvk='; img-src 'none'; font-src 'none'; connect-src 'none'; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'; manifest-src 'none'; media-src 'none'; worker-src 'none'",
   "common_array_families": [
     "claims",
     "coverage_gaps",
@@ -21,11 +23,13 @@
     {
       "explorer_schema": "codenoesis.local-explorer/v3",
       "portable_schema": "codenoesis.portable-graph/v3",
+      "viewer_sha256": "2b165eb4d4e0f9c0ccff1709142c5346825370921476cf3f37522a33c49d5ae9",
       "required_sections": []
     },
     {
       "explorer_schema": "codenoesis.local-explorer/v4",
       "portable_schema": "codenoesis.portable-graph/v4",
+      "viewer_sha256": "e8e38f88c8890b574f75874ca64b65dcf27659e96eb88d8fb3e992365832f70d",
       "required_sections": [
         "repository_boundaries"
       ]
@@ -33,6 +37,7 @@
     {
       "explorer_schema": "codenoesis.local-explorer/v5",
       "portable_schema": "codenoesis.portable-graph/v5",
+      "viewer_sha256": "5dce1d0c0c1242bd4b8555c2aa72a6e0a4abbd39e6541f7c779f3421c1d73573",
       "required_sections": [
         "repository_boundaries"
       ]
@@ -40,16 +45,19 @@
     {
       "explorer_schema": "codenoesis.local-explorer/v6",
       "portable_schema": "codenoesis.portable-graph/v6",
+      "viewer_sha256": "c8b7d78da8750db7055b07ec65249570f816bdd046691b4b6f7f0dd49a864dd7",
       "required_sections": []
     },
     {
       "explorer_schema": "codenoesis.local-explorer/v7",
       "portable_schema": "codenoesis.portable-graph/v7",
+      "viewer_sha256": "fe4da97cfe466106b43608067a5ef70660056a3467b6ca3af5362868435b70c9",
       "required_sections": []
     },
     {
       "explorer_schema": "codenoesis.local-explorer/v8",
       "portable_schema": "codenoesis.portable-graph/v8",
+      "viewer_sha256": "6b15bf9b66487a6d76c5ac7b738d2bbcf76ccb946fd9b2f9e0c611da85c99ae5",
       "required_sections": [
         "local_flow_index"
       ]
@@ -57,6 +65,7 @@
     {
       "explorer_schema": "codenoesis.local-explorer/v9",
       "portable_schema": "codenoesis.portable-graph/v9",
+      "viewer_sha256": "1c933411b01e5684ceeca0d92423908976b9605e12c4e8a95533200eb494c85a",
       "required_sections": [
         "constant_evaluation_index",
         "local_flow_index"

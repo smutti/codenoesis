@@ -295,6 +295,7 @@ fn e2e_fr_ext_020_rust_safe_constant_evaluation_complete_local_journey() {
     assert_eq!(manifest["schema_version"], "codenoesis.local-explorer/v9");
     assert_eq!(manifest["security"]["network"], false);
     assert_eq!(manifest["security"]["dynamic_code"], false);
+    assert_matching_viewer_contract(&repository.explorer.join("index.html"), &manifest, 9);
     assert!(!repository.build_sentinel().exists());
 }
 

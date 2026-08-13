@@ -1,5 +1,7 @@
+import base64
 import hashlib
 import json
+import re
 import unittest
 from pathlib import Path
 
@@ -9,6 +11,8 @@ CONTRACT = (
     ROOT / "tests/specifications/s4/versioned-local-explorer/contract-v1.json"
 )
 DECISION = ROOT / "docs/software/decisions/0031-s4-versioned-local-explorer-browser.md"
+TEMPLATE = ROOT / "crates/noesis/assets/s4/versioned/index.html"
+PUBLISHER = ROOT / "crates/noesis/src/portable_explorer.rs"
 
 
 def load_json(path: Path):
@@ -88,6 +92,69 @@ class VersionedLocalExplorerContractTest(unittest.TestCase):
             contract["viewers"][-1]["required_sections"],
             ["constant_evaluation_index", "local_flow_index"],
         )
+
+    def test_materialized_viewers_match_integrity_pins(self):
+        contract = load_json(CONTRACT)
+        template = TEMPLATE.read_bytes().replace(b"\r\n", b"\n")
+        self.assertEqual(template.count(b"@@PORTABLE_SCHEMA@@"), 2)
+        self.assertEqual(template.count(b"@@PORTABLE_LABEL@@"), 1)
+        self.assertEqual(template.count(b"@@EXPLORER_LABEL@@"), 2)
+        publisher = PUBLISHER.read_text(encoding="utf-8")
+        for record in contract["viewers"]:
+            portable_version = record["portable_schema"].rsplit("v", 1)[1]
+            explorer_label = f"LocalExplorerV{portable_version}"
+            portable_label = f"PortableGraphV{portable_version}"
+            materialized = (
+                template.replace(b"@@PORTABLE_SCHEMA@@", record["portable_schema"].encode())
+                .replace(b"@@PORTABLE_LABEL@@", portable_label.encode())
+                .replace(b"@@EXPLORER_LABEL@@", explorer_label.encode())
+            )
+            self.assertNotIn(b"@@", materialized)
+            self.assertEqual(len(materialized), contract["viewer_byte_length"])
+            self.assertEqual(
+                hashlib.sha256(materialized).hexdigest(), record["viewer_sha256"]
+            )
+            self.assertIn(record["viewer_sha256"], publisher)
+            self.assertIn(record["portable_schema"], publisher)
+
+    def test_csp_hashes_and_dom_rendering_are_closed(self):
+        contract = load_json(CONTRACT)
+        template = TEMPLATE.read_bytes().replace(b"\r\n", b"\n")
+        style = re.search(rb"<style>(.*?)</style>", template, re.DOTALL)
+        script = re.search(rb"<script>(.*?)</script>", template, re.DOTALL)
+        self.assertIsNotNone(style)
+        self.assertIsNotNone(script)
+        style_digest = base64.b64encode(hashlib.sha256(style.group(1)).digest()).decode()
+        script_digest = base64.b64encode(hashlib.sha256(script.group(1)).digest()).decode()
+        csp = contract["content_security_policy"]
+        self.assertIn(f"style-src 'sha256-{style_digest}'", csp)
+        self.assertIn(f"script-src 'sha256-{script_digest}'", csp)
+        text = template.decode("utf-8")
+        self.assertIn(f'content="{csp}"', text)
+        for required in [
+            'id="graph-view"',
+            'id="uncertainty-button"',
+            'id="derivation-view"',
+            "MAX_FILE_BYTES = 268435456",
+            "Duplicate portable record identity rejected.",
+            "item.evidence_id || item.statement_id || item.document_id",
+            "resetState(error instanceof Error",
+            "textContent",
+        ]:
+            self.assertIn(required, text)
+        for forbidden in [
+            "http://",
+            "https://",
+            "fetch(",
+            "XMLHttpRequest",
+            "WebSocket",
+            "eval(",
+            "new Function(",
+            ".innerHTML",
+            "unsafe-inline",
+            "unsafe-eval",
+        ]:
+            self.assertNotIn(forbidden, text)
 
 
 if __name__ == "__main__":

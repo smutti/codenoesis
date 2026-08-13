@@ -1,0 +1,123 @@
+{
+  "schema_version": "codenoesis.test-evidence/versioned-local-explorer-browser-v1",
+  "issue": 176,
+  "status": "candidate_green_observation",
+  "observed_at": "2026-08-13 Europe/Rome",
+  "browser": {
+    "surface": "Codex in-app browser",
+    "engine_version": "not exposed",
+    "url": "http://127.0.0.1:8767/",
+    "transport": "loopback static HTTP server",
+    "console_warnings_or_errors": []
+  },
+  "fixture": {
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-safe-constant-evaluation-v1",
+    "commit_oid": "d77f3b77aae0aeabb89c8833e4ab4d655075b837",
+    "portable_graph": {
+      "schema_version": "codenoesis.portable-graph/v9",
+      "byte_length": 148169,
+      "sha256": "ead5352688cb723ff7db6cd640673e0a86349e6b66c03bfdbbe623a08b708f22"
+    },
+    "viewer": {
+      "schema_version": "codenoesis.local-explorer/v9",
+      "byte_length": 27679,
+      "sha256": "1c933411b01e5684ceeca0d92423908976b9605e12c4e8a95533200eb494c85a"
+    },
+    "manifest": {
+      "byte_length": 1142,
+      "sha256": "f463389cd67b836379250d17444e1a960edd9a6af0046a9d58aadce0a94cf996"
+    }
+  },
+  "valid_load": {
+    "status": "PortableGraphV9 loaded locally; no network, source repository, or target process used.",
+    "family_counts": {
+      "entities": 42,
+      "relationships": 42,
+      "claims": 84,
+      "evidence": 33,
+      "diagnostics": 0,
+      "coverage_gaps": 32,
+      "documents": 2,
+      "document_statements": 77
+    },
+    "search_enabled": true,
+    "uncertainty_enabled": true
+  },
+  "exact_id_inspection": {
+    "entity_id": "urn:codenoesis:entity:blake3:182d696d6f256ef5cc5ecbdb6d2a47b3bf06a5188e6fad707ea14fb3b9a42dd3",
+    "kind": "rust.evaluated_value",
+    "canonical_value": "9",
+    "linked_claims_exposed": true,
+    "linked_evidence_exposed": true,
+    "derivation_rule": "codenoesis.rule/rust-safe-constant-evaluation/v1",
+    "visual_nodes": 2,
+    "visual_relationships": 1,
+    "status": "Neighborhood rendered: 2 node(s), 1 edge(s)."
+  },
+  "direct_relationship_inspection": {
+    "relationship_id": "urn:codenoesis:relationship:blake3:46af8dd00a2c388bb2cbd4b24702cc0699d302fbde2222f5a688d60014eded66",
+    "kind": "EVALUATES_TO",
+    "source_exposed": true,
+    "target_exposed": true,
+    "derivation_rule": "codenoesis.rule/rust-safe-constant-evaluation/v1",
+    "visual_nodes": 3,
+    "visual_relationships": 2
+  },
+  "uncertainty_inspection": {
+    "result_count": 32,
+    "first_id": "urn:codenoesis:coverage-gap:blake3:0d7633d7cb1356f8da3e711d6f21d05fd63580c5f9ee89a19477804172771cc0",
+    "first_capability": "rust.scalar_value_not_normalized",
+    "status": "Explicit uncertainty: 32 result(s)."
+  },
+  "fail_closed_cases": [
+    {
+      "case": "mismatched_v8",
+      "input_schema_version": "codenoesis.portable-graph/v8",
+      "input_byte_length": 127822,
+      "input_sha256": "74de05290cebaf8f4ea92974374688965a27139a004a7ec8150ac43a868aa2ac",
+      "status": "Unsupported portable graph schema; expected codenoesis.portable-graph/v9."
+    },
+    {
+      "case": "malformed_json",
+      "status": "JSON parser rejected the malformed document."
+    },
+    {
+      "case": "incomplete_v9",
+      "status": "Required portable family absent: entities."
+    },
+    {
+      "case": "privacy_violation",
+      "status": "Portable privacy contract rejected."
+    },
+    {
+      "case": "maximum_plus_one",
+      "status": "Portable graph exceeds 268,435,456 bytes."
+    }
+  ],
+  "rejection_postconditions": {
+    "search_enabled": false,
+    "uncertainty_enabled": false,
+    "family_count_cards": 0,
+    "result_records": 0,
+    "visual_nodes": 0
+  },
+  "corrections": [
+    {
+      "round": 1,
+      "observation": "The first real-browser load selected document_id before statement_id for document statements and therefore reported false duplicate identities.",
+      "correction": "Stable browser identity now prefers statement_id before document_id; the canonical graph then loads with 77 unique document statements and all viewer/CSP integrity pins were recalculated."
+    }
+  ],
+  "screenshot": {
+    "path": "crates/noesis/tests/evidence/s4/versioned-local-explorer/browser-v9-valid.png",
+    "mime_type": "image/png",
+    "width": 1280,
+    "height": 1282,
+    "sha256": "99bd8ce1f83202a1d9f805525a24ff41d5c3c0dcfe40c7a69f5dbf20ab0ed0da"
+  },
+  "limitations": [
+    "This is one local browser observation on the project-owned R16 fixture, not independent verification.",
+    "The browser performs a bounded untrusted-file check; strict Rust reimport remains the full PortableGraph contract authority.",
+    "Independent review, base-controlled GitHub checks, and protected manual merge remain pending."
+  ]
+}

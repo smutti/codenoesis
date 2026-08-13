@@ -67,7 +67,75 @@ const VIEWER_SOURCE_BYTES: &[u8] = include_bytes!("../assets/s4/r8/index.html");
 const K1_VIEWER_SHA256: &str = "d0b633b29e6494d6494a35b5553d72c3dd04a747eeef219ca33a9f5fe2a1f4fa";
 const K1_VIEWER_SOURCE_BYTES: &[u8] = include_bytes!("../assets/s4/k1/index.html");
 const K1_CONTENT_SECURITY_POLICY: &str = "default-src 'none'; script-src 'sha256-R41XZjWjTeEyibhsIBP7psaPv+NxqnUdBpe0aobqE60='; style-src 'sha256-DlrPz5j7NCFDGArFkpQGNY37x++FaVe5CWumM3tlRuw='; img-src 'none'; font-src 'none'; connect-src 'none'; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'; manifest-src 'none'; media-src 'none'; worker-src 'none'";
+const VERSIONED_VIEWER_TEMPLATE_BYTES: &[u8] = include_bytes!("../assets/s4/versioned/index.html");
+const VERSIONED_CONTENT_SECURITY_POLICY: &str = "default-src 'none'; script-src 'sha256-cFyehXImq07b3INT0Fff+uEiQWykXxu4jkzRLNqF9EM='; style-src 'sha256-Y4n+kUJ7cKEiQDrj1EhdHicIssJjePi9deKe0UgCjvk='; img-src 'none'; font-src 'none'; connect-src 'none'; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'; manifest-src 'none'; media-src 'none'; worker-src 'none'";
+const R10_VERSIONED_VIEWER: VersionedViewer = VersionedViewer::new(
+    "codenoesis.portable-graph/v3",
+    "PortableGraphV3",
+    "LocalExplorerV3",
+    "2b165eb4d4e0f9c0ccff1709142c5346825370921476cf3f37522a33c49d5ae9",
+);
+const R11_VERSIONED_VIEWER: VersionedViewer = VersionedViewer::new(
+    "codenoesis.portable-graph/v4",
+    "PortableGraphV4",
+    "LocalExplorerV4",
+    "e8e38f88c8890b574f75874ca64b65dcf27659e96eb88d8fb3e992365832f70d",
+);
+const R12_VERSIONED_VIEWER: VersionedViewer = VersionedViewer::new(
+    "codenoesis.portable-graph/v5",
+    "PortableGraphV5",
+    "LocalExplorerV5",
+    "5dce1d0c0c1242bd4b8555c2aa72a6e0a4abbd39e6541f7c779f3421c1d73573",
+);
+const R13_VERSIONED_VIEWER: VersionedViewer = VersionedViewer::new(
+    "codenoesis.portable-graph/v6",
+    "PortableGraphV6",
+    "LocalExplorerV6",
+    "c8b7d78da8750db7055b07ec65249570f816bdd046691b4b6f7f0dd49a864dd7",
+);
+const R14_VERSIONED_VIEWER: VersionedViewer = VersionedViewer::new(
+    "codenoesis.portable-graph/v7",
+    "PortableGraphV7",
+    "LocalExplorerV7",
+    "fe4da97cfe466106b43608067a5ef70660056a3467b6ca3af5362868435b70c9",
+);
+const R15_VERSIONED_VIEWER: VersionedViewer = VersionedViewer::new(
+    "codenoesis.portable-graph/v8",
+    "PortableGraphV8",
+    "LocalExplorerV8",
+    "6b15bf9b66487a6d76c5ac7b738d2bbcf76ccb946fd9b2f9e0c611da85c99ae5",
+);
+const R16_VERSIONED_VIEWER: VersionedViewer = VersionedViewer::new(
+    "codenoesis.portable-graph/v9",
+    "PortableGraphV9",
+    "LocalExplorerV9",
+    "1c933411b01e5684ceeca0d92423908976b9605e12c4e8a95533200eb494c85a",
+);
 static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
+
+#[derive(Clone, Copy)]
+struct VersionedViewer {
+    portable_schema: &'static str,
+    portable_label: &'static str,
+    explorer_label: &'static str,
+    sha256: &'static str,
+}
+
+impl VersionedViewer {
+    const fn new(
+        portable_schema: &'static str,
+        portable_label: &'static str,
+        explorer_label: &'static str,
+        sha256: &'static str,
+    ) -> Self {
+        Self {
+            portable_schema,
+            portable_label,
+            explorer_label,
+            sha256,
+        }
+    }
+}
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum PortableExplorerError {
@@ -1669,7 +1737,7 @@ pub fn ensure_r10_explorer_output_root_for_boundary(
     ensure_output_root(input, output, OutputKind::R10Explorer)
 }
 
-/// Publishes the immutable K1 viewer bound to one validated R10 graph.
+/// Publishes the exact-schema versioned viewer bound to one validated R10 graph.
 ///
 /// # Errors
 ///
@@ -1682,13 +1750,12 @@ pub fn publish_local_explorer_v3(
     if portable.canonical_file() != portable_bytes {
         return Err(R10ContractError::InvalidProjection.into());
     }
-    let viewer_bytes =
-        normalize_checkout_text(K1_VIEWER_SOURCE_BYTES).ok_or(PortableExplorerError::Internal)?;
+    let viewer_bytes = render_versioned_viewer(R10_VERSIONED_VIEWER)?;
     let manifest = LocalExplorerManifestV3::new(
         portable,
         &viewer_bytes,
-        K1_VIEWER_SHA256,
-        K1_CONTENT_SECURITY_POLICY,
+        R10_VERSIONED_VIEWER.sha256,
+        VERSIONED_CONTENT_SECURITY_POLICY,
         sha256,
     )?;
     let manifest_bytes = manifest
@@ -1730,7 +1797,7 @@ pub fn ensure_r11_explorer_output_root_for_boundary(
     ensure_output_root(input, output, OutputKind::R11Explorer)
 }
 
-/// Publishes the immutable K1 viewer bound to one validated R11 graph.
+/// Publishes the exact-schema versioned viewer bound to one validated R11 graph.
 ///
 /// # Errors
 ///
@@ -1743,13 +1810,12 @@ pub fn publish_local_explorer_v4(
     if portable.canonical_file() != portable_bytes {
         return Err(R11ContractError::InvalidProjection.into());
     }
-    let viewer_bytes =
-        normalize_checkout_text(K1_VIEWER_SOURCE_BYTES).ok_or(PortableExplorerError::Internal)?;
+    let viewer_bytes = render_versioned_viewer(R11_VERSIONED_VIEWER)?;
     let manifest = LocalExplorerManifestV4::new(
         portable,
         &viewer_bytes,
-        K1_VIEWER_SHA256,
-        K1_CONTENT_SECURITY_POLICY,
+        R11_VERSIONED_VIEWER.sha256,
+        VERSIONED_CONTENT_SECURITY_POLICY,
         sha256,
     )?;
     let manifest_bytes = manifest
@@ -1791,7 +1857,7 @@ pub fn ensure_r12_explorer_output_root_for_boundary(
     ensure_output_root(input, output, OutputKind::R12Explorer)
 }
 
-/// Publishes the immutable K1 viewer bound to one validated R12 graph.
+/// Publishes the exact-schema versioned viewer bound to one validated R12 graph.
 ///
 /// # Errors
 ///
@@ -1804,13 +1870,12 @@ pub fn publish_local_explorer_v5(
     if portable.canonical_file() != portable_bytes {
         return Err(R12ContractError::InvalidProjection.into());
     }
-    let viewer_bytes =
-        normalize_checkout_text(K1_VIEWER_SOURCE_BYTES).ok_or(PortableExplorerError::Internal)?;
+    let viewer_bytes = render_versioned_viewer(R12_VERSIONED_VIEWER)?;
     let manifest = LocalExplorerManifestV5::new(
         portable,
         &viewer_bytes,
-        K1_VIEWER_SHA256,
-        K1_CONTENT_SECURITY_POLICY,
+        R12_VERSIONED_VIEWER.sha256,
+        VERSIONED_CONTENT_SECURITY_POLICY,
         sha256,
     )?;
     let manifest_bytes = manifest
@@ -1852,7 +1917,7 @@ pub fn ensure_r13_explorer_output_root_for_boundary(
     ensure_output_root(input, output, OutputKind::R13Explorer)
 }
 
-/// Publishes the immutable K1 viewer bound to one validated R13 graph.
+/// Publishes the exact-schema versioned viewer bound to one validated R13 graph.
 ///
 /// # Errors
 ///
@@ -1865,13 +1930,12 @@ pub fn publish_local_explorer_v6(
     if portable.canonical_file() != portable_bytes {
         return Err(R13ContractError::InvalidProjection.into());
     }
-    let viewer_bytes =
-        normalize_checkout_text(K1_VIEWER_SOURCE_BYTES).ok_or(PortableExplorerError::Internal)?;
+    let viewer_bytes = render_versioned_viewer(R13_VERSIONED_VIEWER)?;
     let manifest = LocalExplorerManifestV6::new(
         portable,
         &viewer_bytes,
-        K1_VIEWER_SHA256,
-        K1_CONTENT_SECURITY_POLICY,
+        R13_VERSIONED_VIEWER.sha256,
+        VERSIONED_CONTENT_SECURITY_POLICY,
         sha256,
     )?;
     let manifest_bytes = manifest
@@ -1913,7 +1977,7 @@ pub fn ensure_r14_explorer_output_root_for_boundary(
     ensure_output_root(input, output, OutputKind::R14Explorer)
 }
 
-/// Publishes the immutable K1 viewer bound to one validated R14 graph.
+/// Publishes the exact-schema versioned viewer bound to one validated R14 graph.
 ///
 /// # Errors
 ///
@@ -1926,13 +1990,12 @@ pub fn publish_local_explorer_v7(
     if portable.canonical_file() != portable_bytes {
         return Err(R14ContractError::InvalidProjection.into());
     }
-    let viewer_bytes =
-        normalize_checkout_text(K1_VIEWER_SOURCE_BYTES).ok_or(PortableExplorerError::Internal)?;
+    let viewer_bytes = render_versioned_viewer(R14_VERSIONED_VIEWER)?;
     let manifest = LocalExplorerManifestV7::new(
         portable,
         &viewer_bytes,
-        K1_VIEWER_SHA256,
-        K1_CONTENT_SECURITY_POLICY,
+        R14_VERSIONED_VIEWER.sha256,
+        VERSIONED_CONTENT_SECURITY_POLICY,
         sha256,
     )?;
     let manifest_bytes = manifest
@@ -1974,7 +2037,7 @@ pub fn ensure_r15_explorer_output_root_for_boundary(
     ensure_output_root(input, output, OutputKind::R15Explorer)
 }
 
-/// Publishes the immutable K1 viewer bound to one validated R15 graph.
+/// Publishes the exact-schema versioned viewer bound to one validated R15 graph.
 ///
 /// # Errors
 ///
@@ -1987,13 +2050,12 @@ pub fn publish_local_explorer_v8(
     if portable.canonical_file() != portable_bytes {
         return Err(R15ContractError::InvalidProjection.into());
     }
-    let viewer_bytes =
-        normalize_checkout_text(K1_VIEWER_SOURCE_BYTES).ok_or(PortableExplorerError::Internal)?;
+    let viewer_bytes = render_versioned_viewer(R15_VERSIONED_VIEWER)?;
     let manifest = LocalExplorerManifestV8::new(
         portable,
         &viewer_bytes,
-        K1_VIEWER_SHA256,
-        K1_CONTENT_SECURITY_POLICY,
+        R15_VERSIONED_VIEWER.sha256,
+        VERSIONED_CONTENT_SECURITY_POLICY,
         sha256,
     )?;
     let manifest_bytes = manifest
@@ -2035,7 +2097,7 @@ pub fn ensure_r16_explorer_output_root_for_boundary(
     ensure_output_root(input, output, OutputKind::R16Explorer)
 }
 
-/// Publishes the immutable K1 viewer bound to one validated R16 graph.
+/// Publishes the exact-schema versioned viewer bound to one validated R16 graph.
 ///
 /// # Errors
 ///
@@ -2048,13 +2110,12 @@ pub fn publish_local_explorer_v9(
     if portable.canonical_file() != portable_bytes {
         return Err(R16ContractError::InvalidProjection.into());
     }
-    let viewer_bytes =
-        normalize_checkout_text(K1_VIEWER_SOURCE_BYTES).ok_or(PortableExplorerError::Internal)?;
+    let viewer_bytes = render_versioned_viewer(R16_VERSIONED_VIEWER)?;
     let manifest = LocalExplorerManifestV9::new(
         portable,
         &viewer_bytes,
-        K1_VIEWER_SHA256,
-        K1_CONTENT_SECURITY_POLICY,
+        R16_VERSIONED_VIEWER.sha256,
+        VERSIONED_CONTENT_SECURITY_POLICY,
         sha256,
     )?;
     let manifest_bytes = manifest
@@ -2081,6 +2142,29 @@ pub fn sha256(bytes: &[u8]) -> String {
         write!(&mut output, "{byte:02x}").expect("writing SHA-256 hex cannot fail");
     }
     output
+}
+
+fn render_versioned_viewer(contract: VersionedViewer) -> Result<Vec<u8>, PortableExplorerError> {
+    let template = normalize_checkout_text(VERSIONED_VIEWER_TEMPLATE_BYTES)
+        .ok_or(PortableExplorerError::Internal)?;
+    let template = std::str::from_utf8(&template).map_err(|_| PortableExplorerError::Internal)?;
+    if !template.contains("@@PORTABLE_SCHEMA@@")
+        || !template.contains("@@PORTABLE_LABEL@@")
+        || !template.contains("@@EXPLORER_LABEL@@")
+    {
+        return Err(PortableExplorerError::Internal);
+    }
+    let viewer = template
+        .replace("@@PORTABLE_SCHEMA@@", contract.portable_schema)
+        .replace("@@PORTABLE_LABEL@@", contract.portable_label)
+        .replace("@@EXPLORER_LABEL@@", contract.explorer_label);
+    if viewer.contains("@@")
+        || viewer.len() > 1_048_576
+        || sha256(viewer.as_bytes()) != contract.sha256
+    {
+        return Err(PortableExplorerError::Internal);
+    }
+    Ok(viewer.into_bytes())
 }
 
 fn validate_output_root(
@@ -2694,6 +2778,36 @@ mod tests {
 
     const PORTABLE_FIXTURE_SOURCE: &[u8] =
         include_bytes!("../../../tests/fixtures/s4/portable-explorer-v1/portable-graph.json");
+
+    #[test]
+    fn pt_nfr_det_001_versioned_viewers_are_exact_and_deterministic() {
+        let contracts = [
+            super::R10_VERSIONED_VIEWER,
+            super::R11_VERSIONED_VIEWER,
+            super::R12_VERSIONED_VIEWER,
+            super::R13_VERSIONED_VIEWER,
+            super::R14_VERSIONED_VIEWER,
+            super::R15_VERSIONED_VIEWER,
+            super::R16_VERSIONED_VIEWER,
+        ];
+        for contract in contracts {
+            let expected = super::render_versioned_viewer(contract).expect("render viewer");
+            assert_eq!(super::sha256(&expected), contract.sha256);
+            let expected_meta = format!(
+                "<meta name=\"codenoesis-portable-schema\" content=\"{}\">",
+                contract.portable_schema
+            );
+            let text = std::str::from_utf8(&expected).expect("viewer UTF-8");
+            assert!(text.contains(&expected_meta));
+            assert!(!text.contains("@@"));
+            for _ in 0..50 {
+                assert_eq!(
+                    super::render_versioned_viewer(contract).expect("repeat viewer"),
+                    expected
+                );
+            }
+        }
+    }
 
     #[test]
     fn sec_nfr_sec_001_checkout_text_normalization_is_closed() {

@@ -9,6 +9,7 @@ use sha2::{Digest as _, Sha256};
 
 use support::parse_single_document;
 use support::s4_r13::{MaterializedCallableScipRepository, expected_composition};
+use support::versioned_explorer::assert_matching_viewer_contract;
 
 const EXPECTED_RED_STDERR_SHA256: &str =
     "2573e0f364350b300218c6d1940e6eb33f4f0bc70b7ba92dd9b2821f5bf97013";
@@ -236,12 +237,7 @@ fn e2e_fr_ext_015_k1_scip_composition_complete_local_journey() {
     assert_eq!(manifest["schema_version"], "codenoesis.local-explorer/v6");
     assert_eq!(manifest["security"]["network"], false);
     assert_eq!(manifest["security"]["dynamic_code"], false);
-    let viewer = fs::read(repository.explorer().join("index.html")).expect("read R13 viewer");
-    let immutable_viewer = normalize_lf(
-        &fs::read(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("assets/s4/k1/index.html"))
-            .expect("read immutable K1 viewer"),
-    );
-    assert_eq!(viewer, immutable_viewer);
+    assert_matching_viewer_contract(&repository.explorer().join("index.html"), &manifest, 6);
     assert!(!repository.build_sentinel().exists());
     assert!(!repository.indexer_sentinel().exists());
 }
@@ -372,12 +368,6 @@ fn assert_private(value: &Value) {
         Value::Array(values) => values.iter().for_each(assert_private),
         Value::Null | Value::Bool(_) | Value::Number(_) | Value::String(_) => {}
     }
-}
-
-fn normalize_lf(bytes: &[u8]) -> Vec<u8> {
-    String::from_utf8_lossy(bytes)
-        .replace("\r\n", "\n")
-        .into_bytes()
 }
 
 fn hex_sha256(bytes: &[u8]) -> String {
