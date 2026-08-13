@@ -103,9 +103,11 @@ R0-R14 contract or byte. R15 is likewise implemented but not Verified:
 protected merge #167 made its closed source-only local-flow layer effective
 through the explicit `rust-local-flow-v1` selector without adding compiler or
 runtime authority. Protected merge #169 made the bounded implementation-aware
-HTTP/JSON runtime effective. Issue #170 and Decision 0029 now define a Proposed
-R14/R15 fail-closed correction and explicit scan-only 256 MiB envelope; they do
-not change accepted ontology families or mark R14/R15 Verified.
+HTTP/JSON runtime effective. Protected merge #171 made the Decision 0029
+R14/R15 fail-closed correction and explicit scan-only 256 MiB envelope
+effective without changing accepted ontology families or marking R14/R15
+Verified. Issue #172 and Decision 0030 now define the Proposed R16
+`rust-safe-constant-evaluation-v1` layer over that corrected baseline.
 
 | Order | Planning item | Outcome | Governance dependency | Candidate acceptance gate |
 |---|---|---|---|---|
@@ -126,14 +128,15 @@ not change accepted ontology families or mark R14/R15 Verified.
 | `R13` | K1 and revision-bound SCIP composition | Implemented but not Verified: preserve complete K1 and R7 facts while adding only evidence-backed `HAS_COMPILER_SYMBOL` correspondence from exact K1 functions/methods to exact in-repository compiler symbols in additive V12/V15, QueryV10, PortableGraphV6, and LocalExplorerV6. | Issue #160, Decision 0024, and protected merge #161; complete immutable verification remains open. | The immutable compiler-index fixture completes scan → docs → callable/signature/compiler/join query → export → strict reimport → explore with five exact joins, two unchanged unresolved calls, zero new `CALLS`, 52 coverage records, and deterministic security/limit regressions. |
 | `R14` | Rust expression and lexical bindings | Implemented but not Verified after protected merge #163: preserves complete K1 while adding only closed committed-source expressions, ordered arguments, receivers, supported pattern bindings, explicit modifiers, and syntax-only lexical `READS`/`WRITES` in V13/V16, QueryV11, PortableGraphV7, and LocalExplorerV7. | Issue #162, Decision 0025, and protected merge #163; Decision 0026 and issue #164 correct only empty additive R5 neutrality while keeping the R14 bundle immutable. | The immutable K1 fixture completes scan → docs → expression/argument/binding/access query → export → strict reimport → explore with 73 expressions, 23 bindings, 29 reads, 7 writes, exact spans/scopes, and deterministic invalid/limit/security regressions without type, data-flow, ownership, or runtime claims. |
 | `R15` | Closed Rust local flow | Implemented but not Verified after protected merge #167: preserves complete R14 while adding evidence-backed syntax basic blocks, explicit possible normal branch edges, strict source reachability, and lexical must/may reaching definitions in V14/V17, QueryV12, PortableGraphV8, and LocalExplorerV8. | Issue #166, Decision 0027, and protected merge #167; no new dependency and no compiler/runtime authority. | The project-owned fixture completes scan → docs → block/condition/reachability/def-use query → export → strict reimport → explore with 5 blocks, 36 relations, exact derivations, 50 permutations, ten schedules, whole-callable rejection, inherited broad gaps, and immutable R0-R14/K1 bytes. |
-| `R14/R15 correction` | Real-repository fail-closed source-only journey | Proposed branch-scoped issue #170 candidate: bound complex K1 target spelling, skip callables outside inherited authority, omit incomplete R14 edge families, type gitlink rejection, and add the operational `local-snapshot-256m-v1` scan envelope. | Decision 0029 on exact base `559fec3863830beef9fb4962d936c681a79c258e`; no dependency, schema, identity, ontology-family, boundary-composition, or control-plane change. | The exact project-owned fixture and pinned Lekton/RustDesk pilots satisfy immutable counts/digests, privacy, 50 permutations, ten schedules, 256 MiB max/plus-one, 4 GiB RSS, 60 s extraction, full positive journeys, and typed negative boundary failures. |
+| `R14/R15 correction` | Real-repository fail-closed source-only journey | Implemented but not Verified after protected merge #171: bound complex K1 target spelling, skip callables outside inherited authority, omit incomplete R14 edge families, type gitlink rejection, and add the operational `local-snapshot-256m-v1` scan envelope. | Issue #170, Decision 0029, and protected merge #171; no dependency, schema, identity, ontology-family, boundary-composition, or control-plane change. | The exact project-owned fixture and pinned Lekton/RustDesk pilots satisfy immutable counts/digests, privacy, 50 permutations, ten schedules, 256 MiB max/plus-one, 4 GiB RSS, 60 s extraction, full positive journeys, and typed negative boundary failures. |
+| `R16` | Bounded safe Rust constant evaluation | Proposed branch-scoped issue #172 candidate: preserve corrected R15 and add checked target-independent primitive constants plus fixed-repr unit-enum discriminants as `rust.evaluated_value` and `EVALUATES_TO`, with exact derivations and typed gaps. | Issue #172 and Decision 0030 on exact base `6043313789f6855770520ad5312672fdb081ef38`; no new dependency, execution, compiler, target, cfg, boundary, or control-plane authority. | The project-owned fixture emits seven exact values, two dependencies, 42 entities, 42 relationships, 84 claims, 33 evidence, zero diagnostics, 32 coverage records, exact V15/V18 hashes, 50 permutations, ten schedules, all boundaries, two deterministic Lekton journeys, and the typed RustDesk boundary negative. |
 
 ### Earliest useful real-world checkpoint
 
 `R1`–`R3` are the minimum path to analyzing ordinary packed clones with safe
 gitlink boundaries and common virtual or non-virtual Cargo workspace layouts.
 At that checkpoint CodeNoesis should create and query a partial but honest
-ontology and generate evidence-backed documentation. `R4`–`R15` increase
+ontology and generate evidence-backed documentation. `R4`–`R16` increase
 semantic coverage and make the graph easier to inspect; they are not permitted
 to hide unsupported meaning.
 

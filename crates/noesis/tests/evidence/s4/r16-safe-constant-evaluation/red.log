@@ -1,0 +1,20 @@
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling noesis v0.1.0 (/Users/smutti/Documents/personal/codenoesis/crates/noesis)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.07s
+     Running tests/e2e_fr_ext_020_rust_safe_constant_evaluation.rs (target/debug/deps/e2e_fr_ext_020_rust_safe_constant_evaluation-a11d93f5182d311e)
+
+running 1 test
+
+thread 'e2e_fr_ext_020_rust_safe_constant_evaluation_complete_local_journey' (3899517) panicked at crates/noesis/tests/e2e_fr_ext_020_rust_safe_constant_evaluation.rs:39:9:
+expected RepositorySnapshotV18 success; observed frozen selector Red
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test e2e_fr_ext_020_rust_safe_constant_evaluation_complete_local_journey ... FAILED
+
+failures:
+
+failures:
+    e2e_fr_ext_020_rust_safe_constant_evaluation_complete_local_journey
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 1.27s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_ext_020_rust_safe_constant_evaluation`

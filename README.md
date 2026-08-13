@@ -7,6 +7,7 @@ CodeNoesis is an early-stage project exploring how to turn software repositories
 ## Status
 
 **Implemented local Rust analysis through R15 and the first bounded S7 runtime,
+with R16 safe constant evaluation now a branch-scoped candidate; the product is
 not yet production-ready or Verified.** The pinned Rust workspace now provides deterministic repository
 acquisition, evidence-backed Rust ontology extraction, local persistence,
 documentation, exact-ID query, portable export, and an offline explorer. The
@@ -14,11 +15,14 @@ protected milestone **Implemented local Rust analysis through R14** remains an
 immutable compatibility checkpoint; later protected merges extend it rather
 than replacing it.
 The latest protected merges add committed-source expression and lexical-binding
-facts, closed source-normal local flow, and the bounded implementation-aware
-HTTP/JSON impact pilot. Issue #170 and Decision 0029 define a Proposed
-high-risk correction that makes the accepted R14/R15 source-only journeys
-fail-closed on ordinary real Rust syntax and adds the explicit scan-only
-`local-snapshot-256m-v1` output envelope without changing ontology semantics.
+facts, closed source-normal local flow, the bounded implementation-aware
+HTTP/JSON impact pilot, and the Issue #170 / Decision 0029 accepted R14/R15
+fail-closed correction with its explicit scan-only `local-snapshot-256m-v1`
+output envelope. Issue #172 and
+Decision 0030 define the Proposed `rust-safe-constant-evaluation-v1` candidate,
+which derives only checked target-independent primitive constants and fixed-
+repr enum discriminants while retaining explicit gaps for every unsupported
+case.
 Complete independent evidence acceptance, broader language coverage,
 operations, and the remaining production-readiness slices are still pending.
 

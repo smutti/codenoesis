@@ -2174,23 +2174,24 @@ must match every frozen ID, span, endpoint, evidence locator, derivation input,
 family digest, limit, invalid case, 50 permutations, ten schedules, lossless
 export/reimport, immutable viewer byte, and R0-R14/K1 compatibility oracle.
 
-### 2.28 S4 R14/R15 real-repository correction candidate register
+### 2.28 S4 R14/R15 real-repository correction implementation register
 
 Issue [#170](https://github.com/smutti/codenoesis/issues/170), the accountable
 maintainer's [exact package authorization](https://github.com/smutti/codenoesis/issues/170#issuecomment-5266803744),
 and [Decision 0029](decisions/0029-s4-r14-r15-real-repository-fail-closed-correction.md)
-govern one high-risk S4 correction candidate on exact base
-`559fec3863830beef9fb4962d936c681a79c258e`. The package combines governance,
+governed one high-risk S4 correction on exact base
+`559fec3863830beef9fb4962d936c681a79c258e`. Protected merge
+[#171](https://github.com/smutti/codenoesis/pull/171) made the exact package
+Approved and Implemented, but not Verified. It combined governance,
 fixture/oracle, retained Red, minimum production correction, tests, real-
-repository pilots, and evidence in one pull request. It remains Proposed and
-branch-scoped until protected manual merge.
+repository pilots, and evidence in one pull request.
 
 | Requirement | Current state | Target after protected merge | Slice | Ratification material |
 |---|---|---|---|---|
-| `FR-EXT-012`, `FR-EXT-016`, `FR-EXT-017` | Approved and Implemented, not Verified | Approved and Implemented with the bounded fail-closed correction, still not Verified | `S4` | Decision 0029, exact fixture/oracle, focused adapter and CLI journeys, pinned Lekton/RustDesk pilots |
-| `FR-EXP-006`, `FR-EXP-007` | Approved and Implemented, not Verified | Unchanged contracts with corrected source-only journey, still not Verified | `S4` | Immutable QueryV11/V12, PortableGraphV7/V8, LocalExplorerV7/V8, strict reimport, privacy evidence |
-| Bounded correction to `FR-CLI-001` | Approved and Implemented, not Verified | Add operational scan-only `local-snapshot-256m-v1` for exact complete R14/R15 source-only matrices | `S4` | 256 MiB maximum/plus-one and invalid-composition matrix |
-| Bounded corrections to `FR-KNW-003`, `NFR-DET-001`, `NFR-SEC-001/005`, `NFR-PRV-002`, `NFR-PER-001`, `NFR-TST-001/002`, `INV-BND-001` | Approved baselines | Corrected fail-closed spelling, authority, resource, determinism, privacy, test, and typed-boundary behavior only | `S4` | Decision 0029, contract guard, retained Red/Green, complete gate, immutable-base checks |
+| `FR-EXT-012`, `FR-EXT-016`, `FR-EXT-017` | Approved and Implemented with the bounded correction, not Verified | `Verified` only after independent acceptance of complete immutable evidence | `S4` | Decision 0029, protected merge #171, exact fixture/oracle, focused adapter and CLI journeys, pinned Lekton/RustDesk pilots |
+| `FR-EXP-006`, `FR-EXP-007` | Approved and Implemented with unchanged contracts and corrected source-only journey, not Verified | `Verified` only after independent acceptance of complete immutable evidence | `S4` | Immutable QueryV11/V12, PortableGraphV7/V8, LocalExplorerV7/V8, strict reimport, privacy evidence, protected merge #171 |
+| Bounded correction to `FR-CLI-001` | Approved and Implemented with operational scan-only `local-snapshot-256m-v1`, not Verified | `Verified` with independently accepted capacity and composition evidence | `S4` | 256 MiB maximum/plus-one, invalid-composition matrix, and protected merge #171 |
+| Bounded corrections to `FR-KNW-003`, `NFR-DET-001`, `NFR-SEC-001/005`, `NFR-PRV-002`, `NFR-PER-001`, `NFR-TST-001/002`, `INV-BND-001` | Approved and Implemented, not Verified | `Verified` with independently accepted complete correction evidence | `S4` | Decision 0029, contract guard, retained Red/Green, complete gate, immutable-base checks, and protected merge #171 |
 
 K1 MUST preserve exact current target spelling for direct identifier/scoped-
 identifier targets, safe generic functions over those targets, and method
@@ -2250,6 +2251,78 @@ gitlink oracle. Neither external repository is vendored or becomes product
 semantics. Decisions 0019, 0020, 0025, and 0027 and every historical schema,
 fixture, golden, identity, hash domain, query/export/explorer contract, and
 viewer byte remain immutable.
+
+### 2.29 S4 R16 bounded safe Rust constant-evaluation candidate register
+
+Issue [#172](https://github.com/smutti/codenoesis/issues/172), the accountable
+maintainer's exact package authorization, and
+[Decision 0030](decisions/0030-s4-r16-safe-constant-evaluation.md) govern one
+high-risk S4 candidate on exact corrected R15 base
+`6043313789f6855770520ad5312672fdb081ef38`. Governance, frozen schemas and
+oracle, retained Red, minimum product implementation, tests, documentation,
+traceability, and evidence share one maintainer-supervised pull request. Until
+protected manual merge, the requirements and implementation remain Proposed
+and branch-scoped rather than Approved, Implemented, or Verified facts on
+`main`.
+
+| Requirement | Current state | Target after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| `FR-EXT-020` | Proposed branch-scoped candidate | Approved and Implemented for the exact closed constant-evaluation grammar, not Verified | `S4` | Issue #172, Decision 0030, [closed profile](../../tests/specifications/s4/r16/safe-constant-evaluation-v1.json), [machine oracle](../../tests/fixtures/s4/rust-safe-constant-evaluation-v1/expected-safe-constant-evaluation.json), and [E2E contract](../../tests/specifications/s4/r16/e2e_fr_ext_020_rust_safe_constant_evaluation.json) |
+| `FR-EXP-008` | Proposed branch-scoped candidate | Approved and Implemented for lossless QueryV13, PortableGraphV9, and LocalExplorerV9, not Verified | `S4` | V9/V13 schemas, Decision 0030, strict reimport, derivation, privacy, path, race, and immutable-viewer oracles |
+| Bounded R16 amendments to `FR-EXT-012`, `FR-EXT-016`, `FR-EXT-017`, `FR-KNW-003`, `FR-QRY-001`, `FR-CLI-001`, and `FR-DOC-001/002/003` | Proposed only for the exact issue #172 package | Approved and Implemented only with complete protected merge of that package, not Verified | `S4` | Complete R15 compatibility, exact identities, typed uncertainty, full local journey, and traceability evidence |
+| Bounded R16 amendments to `NFR-DET-001`, `NFR-PER-001`, `NFR-SEC-001/005`, `NFR-PRV-002`, `NFR-TST-001/002`, and `INV-BND-001` | Proposed only for the exact issue #172 package | Approved and Implemented only with complete protected merge of that package, not Verified | `S4` | Retained checkpoint Red, exact limits, 50 permutations, ten schedules, offline/no-execution controls, private projections, pilots, and complete gate |
+
+The explicit complete R15 selector matrix plus
+`--rust-constant-profile rust-safe-constant-evaluation-v1` MUST add exactly
+`rust.evaluated_value` and `EVALUATES_TO` for existing K1 declared values that
+fall within the closed grammar. Supported result types are `bool`, signed
+`i8`–`i128`, and unsigned `u8`–`u128`, excluding `isize` and `usize`. Supported
+expressions are literals, parentheses, the enumerated unary, arithmetic,
+bitwise, boolean, and same-type comparison operators, and one unique direct
+same-owner constant dependency. Every operation MUST be checked at the exact
+explicit width. Calls, casts, shifts, paths, imports, associated constants,
+macros, `cfg`, target properties, environment, compiler/runtime state, inferred
+types, and every unlisted form MUST emit no value.
+
+A fixed-repr enum MUST contain only unit variants, one direct supported literal
+repr, no enum/variant uncertainty, and a fully successful explicit/implicit
+discriminant sequence; otherwise the entire enum emits zero evaluated values.
+For every result, entity and relationship claims MUST be `derived_fact`, and
+the constant-evaluation index MUST retain sorted rule, input claim, input
+evidence, and dependency IDs. Raw initializer/expression/literal/body/snippet
+text, absolute paths, URLs, environment, arguments, and telemetry MUST NOT be
+stored or exported.
+
+Unsupported subjects MUST retain one exact typed gap from
+`rust.constant_target_dependent`, `rust.constant_expression_not_evaluated`,
+`rust.constant_dependency_not_evaluated`,
+`rust.constant_arithmetic_not_defined`, or
+`rust.enum_discriminant_not_evaluated`. A successful result may discharge only
+the same-evidence inherited value gap; a fully closed fixed-repr enum may also
+discharge only its exact repr diagnostic/gap. All unrelated compiler, type,
+target, runtime, cfg, data-flow, ownership, alias, side-effect, and execution
+uncertainty remains.
+
+The project-owned fixture
+`urn:codenoesis:fixture:s4-rust-safe-constant-evaluation-v1`, commit
+`d77f3b77aae0aeabb89c8833e4ab4d655075b837`, tree
+`f46c4f56d5fd506ab5ce3f5fb338ee240065ad0b`, freezes seven values and two
+dependencies. The complete candidate graph has exactly **42 entities, 42
+relationships, 84 claims, 33 evidence, zero diagnostics, 32 coverage records,
+65 deterministic claims, and 19 derived claims**. Canonical stdout is 214,974
+bytes and the candidate semantic hash is
+`ad760d2ef7e5807140b1feabd071047494ed17545ffaccf02ebe7302e65a54df`.
+The checkpoint Red remains the exact 149-byte unknown-selector ErrorV4 with
+SHA-256 `7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe`.
+
+R16 inherits every R15/output limit and adds 4,096 candidates per source, 256
+syntax nodes per expression, 256 direct dependencies, 64 dependency levels,
+4,096 variants per enum, 200,000 evaluated entities and relationships,
+400,000 dependency references, and 1,000,000 derivation-input references.
+Every maximum and maximum-plus-one, 50 permutations, ten schedules, two pinned
+Lekton full journeys, the typed RustDesk boundary negative, 60-second
+extraction deadline, 4 GiB RSS ceiling, no execution/network/model authority,
+and byte-identical selector-absent R0-R15/K1/S7 compatibility are mandatory.
 
 ## 3. Product intent and success definition
 
@@ -2398,6 +2471,7 @@ cannot replace their verification.
 | `FR-EXT-017` | P0 | `0.1` | The explicit R15 `rust-local-flow-v1` profile MUST preserve complete R14 and, only for a whole callable accepted by the closed acyclic grammar, emit evidence-backed syntax basic blocks, exact direct possible normal-completion successors, their strict source transitive closure, and lexical must/may reaching definitions over exact R14 `READS`/`WRITES`. Unsupported or ambiguous constructs MUST emit zero R15 facts for that callable and typed coverage. The profile MUST retain every derivation input and rule version and MUST NOT claim compiler CFG/data flow, executable validity, actual reachability, active branches, values, types, ownership, aliasing, side effects, or runtime behavior. | The project-owned fixture matches RepositorySnapshotV17/KnowledgeGraphV14 with five exact blocks, 36 relationships, five disjoint evidence records, 25 deterministic and 16 derived claims, exact IDs/spans/endpoints/derivations, inherited broad gaps, whole-callable negatives, every boundary, 50 permutations, ten schedules, and immutable R0-R14/K1 bytes in Decision 0027. `GT`, `E2E`, `CONF`, `PT`, `SEC` |
 | `FR-EXT-018` | P0 | `0.2` | The explicit S7 `rust-direct-json-map/v1` provider capability MUST inspect only one workspace-selected committed Rust callable and prove field presence only for the closed direct `serde_json::Map` insertion, supported `if`, and direct `serde_json::Value::Object` publication subset. It MUST distinguish `guaranteed_present`, `may_be_absent`, and `unknown`, retain exact source evidence, and MUST NOT traverse helpers or infer aliases, loops, early returns, macros, generated code, custom codecs, reflection, dynamic keys, compiler meaning, runtime configuration, or execution. | The reviewed baseline and target provider sources prove `/nickname` changing from guaranteed to maybe absent, retain the custom `/displayName` helper as an explicit gap, reject malformed/unsupported/resource/race cases, and remain deterministic without process, network, build, target, plugin, model, or ambient authority. `GT`, `E2E`, `CONF`, `PT`, `SEC` |
 | `FR-EXT-019` | P0 | `0.2` | The explicit S7 `kotlin-direct-json-access/v1` client capability MUST inspect only workspace-selected committed Kotlin/KMP decoder and call paths, prove `requires_present` from direct `JsonObject.getValue` and `handles_absent` from guarded indexed access, and bind a direct literal or interpolated `httpGet` path only to an already confirmed S6 operation identity. DTO spelling, annotations, generated serializers, custom codecs, reflection, aliases, extension indirection, dynamic paths, unresolved calls, Gradle, compiler, framework, configuration, and runtime meaning MUST remain `unknown`. | Strict and safe reviewed clients receive distinct assumptions from their actual access paths, the operation decoy is rejected despite similar names, every fact resolves to exact source evidence, and unsupported/resource/race cases fail or produce exact gaps without executing the project. `GT`, `E2E`, `CONF`, `PT`, `SEC` |
+| `FR-EXT-020` | P0 | `0.1` | The explicit R16 `rust-safe-constant-evaluation-v1` profile MUST preserve the complete corrected R15 graph and add only checked target-independent `bool`, fixed-width signed/unsigned integer constants, immutable statics, and closed fixed-repr unit-enum discriminants from the approved grammar as evidence-backed `rust.evaluated_value` and `EVALUATES_TO` derived facts. It MUST retain exact rule, input claim, evidence, and dependency IDs, publish typed gaps for every unsupported or undefined case, evaluate enums all-or-nothing, and MUST NOT infer types, targets, active `cfg`, compiler validity/layout, runtime state, ownership, side effects, or execute any project/toolchain code. | The project-owned R16 fixture matches ConfigurationV15/RepositorySnapshotV18/KnowledgeGraphV15 with seven exact values, two dependencies, exact identities/hashes/counts/gap discharge, arithmetic/dependency/enum negatives, every maximum and maximum-plus-one, 50 permutations, ten schedules, no execution/network/model authority, byte-identical legacy paths, two pinned Lekton journeys, and the typed RustDesk boundary negative in Decision 0030. `GT`, `E2E`, `CONF`, `PT`, `SEC` |
 
 ### 9.3 Knowledge graph, claims, and snapshots
 
@@ -2445,6 +2519,7 @@ cannot replace their verification.
 | `FR-EXP-005` | P0 | `0.2` | The explicit R13 export profile MUST project one validated visible RepositorySnapshotV15 and deterministic documents as canonical `PortableGraphV6`, then generate read-only offline `LocalExplorerV6`, losslessly preserving K1, R7, and `HAS_COMPILER_SYMBOL` families without source contents, body text, initializer text, snippets, compiler arguments, absolute roots, or inferred calls/runtime meaning. Reimport MUST reject rather than repair, infer, reorder, deduplicate, or truncate. | The R13 black-box journey, exact union and join-index digests, strict reimport, duplicate/reference/evidence/hash/order/privacy/path/race/limit cases, 50 permutations, immutable K1 viewer bytes, and PortableGraphV1-V5 regressions match Decision 0024. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
 | `FR-EXP-006` | P0 | `0.2` | The explicit R14 export profile MUST project one validated visible RepositorySnapshotV16 and deterministic documents as canonical `PortableGraphV7`, then generate read-only offline `LocalExplorerV7`, losslessly preserving K1 plus expression, argument, binding, and lexical-access families without raw body, initializer, expression, literal, or snippet text, absolute roots, URLs, credentials, environment, arguments, telemetry, or inferred compiler/runtime meaning. Reimport MUST reject rather than repair, infer, reorder, deduplicate, or truncate. | The R14 black-box journey, exact family/index digests, strict reimport, duplicate/reference/evidence/hash/order/privacy/path/race/limit cases, 50 permutations, immutable K1 viewer bytes, and PortableGraphV1-V6 regressions match Decision 0025. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
 | `FR-EXP-007` | P0 | `0.2` | The explicit R15 export profile MUST project one validated visible RepositorySnapshotV17 and deterministic documents as canonical `PortableGraphV8`, then generate read-only offline `LocalExplorerV8`, losslessly preserving complete R14 plus syntax blocks, source-normal edges, reaching-definition relationships, claims, evidence, and every local-flow derivation input. It MUST exclude source/body/initializer/expression/condition/literal/snippet text, absolute roots, URLs, credentials, environment, arguments, telemetry, and inferred compiler/runtime meaning. Reimport MUST reject rather than repair, infer, reorder, deduplicate, truncate, or synthesize derivations. | The R15 black-box journey, exact family/index/derivation digests, strict reimport, duplicate/reference/evidence/hash/order/privacy/path/race/limit cases, 50 permutations, immutable K1 viewer bytes, and PortableGraphV1-V7 regressions match Decision 0027. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
+| `FR-EXP-008` | P0 | `0.2` | The explicit R16 export profile MUST project one validated visible RepositorySnapshotV18 and deterministic documents as canonical `PortableGraphV9`, then generate read-only offline `LocalExplorerV9`, losslessly preserving the complete corrected R15 graph plus evaluated values, evaluation relationships, claims, evidence, typed gaps, and every constant-evaluation derivation input. It MUST exclude raw initializer/expression/literal/body/snippet text, absolute roots, URLs, credentials, environment, arguments, telemetry, and inferred compiler/target/runtime meaning. Reimport MUST reject rather than repair, infer, reorder, deduplicate, truncate, evaluate, or synthesize derivations. | The R16 black-box journey, exact family/index/derivation/hash digests, strict reimport, duplicate/reference/evidence/hash/order/privacy/path/race/limit cases, 50 permutations, immutable viewer bytes, and PortableGraphV1-V8 regressions match Decision 0030. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
 | `FR-QRY-001` | P0 | `0.1` | Local queries MUST retrieve every approved entity, relationship, claim, evidence, diagnostic, coverage gap, and document by stable identity, expose unknown or contradictory states, and select a versioned result contract from the validated snapshot without changing prior result versions. R8 MAY expose the same exact subjects in a validated read-only portable projection. K1 adds LocalQueryResultV6 for V11; R10 adds V7 for V12; R11 adds V8 for V13; R12 adds V9 for V14; R13 adds V10 for V15; R14 adds V11 for V16; and R15 adds LocalQueryResultV12 for V17 block, flow, reaching-definition, and derivation subjects, while V1-V11 bytes and authority remain unchanged. | CLI black-box scenarios return the reviewed typed result and stable exit status; V17 exercises every R15 subject and derivation after restart, V16 exercises R14, V15 R13, V14 R12, V13 R11, V12 R10, V11 K1, earlier heads retain approved dispatch/bytes, and portable family digests prove exact preservation. `E2E`, `CONF` |
 | `FR-QRY-002` | P1 | `0.2` | Graph traversal MUST enforce configurable depth, result, time, and resource limits with cycle handling. The bounded R8 subset is deterministic breadth-first read-only traversal over one validated PortableGraphV1 with default depth 1, maximum depth 2, at most 256 subjects and 512 relationships, and explicit display truncation. Broader canonical/server traversal remains Proposed. | Cyclic and adversarial queries terminate within the configured bound without starving unrelated work; R8 permutation and maximum-plus-one cases return identical bounded neighborhoods or typed failures without mutating the graph. `PT`, `PERF`, `SEC` |
 | `FR-CLI-001` | P0 | `0.1` | The CLI MUST provide local `scan`, `docs`, `query`, `export`, and `explore` journeys with human-readable and versioned JSON output. R8, K1, and R10-R15 behavior MUST be explicitly selected, preserve accepted command bytes, use marker-owned atomic output roots, and reject unsupported profile composition before acquisition. | The R8 through R15 fixtures each complete scan -> docs -> query -> export -> explore without network, child process, browser auto-launch, target/toolchain/index execution, repository mutation, or unintended store mutation; complete invalid R15 composition returns ErrorV22, incomplete selector intent retains its historical error family, and every prior command remains unchanged. `E2E`, `CONF`, `SEC`, `FT` |

@@ -1,0 +1,33 @@
+issue=https://github.com/smutti/codenoesis/issues/172
+round=1
+budget=5
+risk=high
+semantic_requirement_change=false
+oracle_change=false
+dependency_change=false
+allowed_path_expansion=false
+
+failed_tested_head=40150fa310cb2c0bd3f61182bf674efc1d1c92dd
+failed_command=python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+failed_test=test_s4_r14_r15_real_repository_correction.R14R15RealRepositoryCorrectionTest.test_governance_authority_and_lifecycle
+failure=README.md retained the R14/R15 output-capacity semantics but no longer contained the exact protected issue marker #170
+product_behavior_failure=false
+historical_golden_failure=false
+
+orchestration_observation=the first aggregate shell command used tee without pipefail, so later successful commands produced aggregate exit 0 even though unittest failed; the result was rejected and the corrected rerun used set -euo pipefail
+first_aggregate_log_bytes=77976
+first_aggregate_log_sha256=a784d4d9e1aa8490e76fcbb69196c26fccac00357c5429cdefdbfce2f87f8b68
+
+correction_commit=792d741f95fd001d1ea5922de4579801f94de810
+correction=restore the exact Issue #170 and Decision 0029 lifecycle reference in README.md without changing R16 or R14/R15 semantics
+contract_rebind_commit=1f9172f38991c6f3d8ac2a81d3a73924c6f66073
+contract_rebind=update only the R16 bundle README digest and aggregate bundle digest after the authorized README correction
+current_contract_bundle_sha256=bdd8c15558bdb7f3904b37c1dc1a33d636b78bd4927327439204f163b6b73ac2
+current_contract_bundle_file_sha256=30f93bb08602f3b301833ee60919540ecd85cd8753734a2963f3f18012b47224
+
+focused_revalidation=5 R16 governance tests plus 7 protected R14/R15 tests passed
+corrected_complete_gate=green
+corrected_complete_gate_head=1f9172f38991c6f3d8ac2a81d3a73924c6f66073
+corrected_complete_gate_log_sha256=323bbe4471a56c3d65c4fd0e5165d25d538fc71bb6fa0f9afbe4c176304fb596
+remaining_correction_rounds=4
+result=bounded_non_semantic_correction_green

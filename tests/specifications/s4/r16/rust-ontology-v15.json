@@ -1,0 +1,55 @@
+{
+  "schema_version": "codenoesis.ontology-definition/v1",
+  "ontology_version": "codenoesis.ontology/rust/v15",
+  "extends": [
+    "codenoesis.ontology/rust/v14"
+  ],
+  "profile": "rust-safe-constant-evaluation-v1",
+  "extractor": "codenoesis.rust-constant-evaluation/s4-r16-v1",
+  "entity_kinds": {
+    "rust.evaluated_value": {
+      "identity": "codenoesis.entity-id/rust-safe-constant-evaluation/v1",
+      "claim_state": "derived_fact",
+      "declared_value_reference": true,
+      "properties": [
+        "value_kind",
+        "canonical_value",
+        "rust_type",
+        "type_authority",
+        "rule_version"
+      ],
+      "raw_text": false
+    }
+  },
+  "relationship_kinds": {
+    "EVALUATES_TO": {
+      "identity": "codenoesis.relationship-id/rust-safe-constant-evaluation/v1",
+      "claim_state": "derived_fact",
+      "source": "rust.declared_value",
+      "target": "rust.evaluated_value",
+      "meaning": "bounded_source_derivation"
+    }
+  },
+  "identity_domains": {
+    "entity": "codenoesis.entity-id/rust-safe-constant-evaluation/v1",
+    "relationship": "codenoesis.relationship-id/rust-safe-constant-evaluation/v1",
+    "evidence": "existing_committed_source_evidence",
+    "existing_r15": "unchanged"
+  },
+  "epistemology": {
+    "bounded_constant_evaluation": true,
+    "fixed_repr_discriminants": true,
+    "exact_explicit_primitive_type": true,
+    "inferred_types": false,
+    "target_properties": false,
+    "compiler_validation": false,
+    "compiler_layout": false,
+    "active_cfg": false,
+    "runtime": false,
+    "ownership": false,
+    "side_effects": false
+  },
+  "normalization": "NFC",
+  "ordering": "raw_utf8_identity",
+  "existing_identity_domains_immutable": true
+}

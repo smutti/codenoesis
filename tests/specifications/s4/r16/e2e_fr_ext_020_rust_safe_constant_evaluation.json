@@ -1,0 +1,106 @@
+{
+  "schema_version": "codenoesis.e2e-spec/v1",
+  "id": "e2e_fr_ext_020_rust_safe_constant_evaluation_complete_local_journey",
+  "requirements": [
+    "FR-EXT-020",
+    "FR-EXP-008",
+    "FR-EXT-012",
+    "FR-EXT-016",
+    "FR-EXT-017",
+    "FR-KNW-003",
+    "FR-QRY-001",
+    "FR-CLI-001",
+    "FR-DOC-001",
+    "FR-DOC-002",
+    "FR-DOC-003",
+    "NFR-DET-001",
+    "NFR-PER-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-PRV-002",
+    "NFR-TST-001",
+    "NFR-TST-002",
+    "INV-BND-001"
+  ],
+  "status": "Proposed branch-scoped candidate",
+  "slice": "S4",
+  "risk": "high",
+  "exact_base": "6043313789f6855770520ad5312672fdb081ef38",
+  "fixture": "urn:codenoesis:fixture:s4-rust-safe-constant-evaluation-v1",
+  "selector": "--rust-constant-profile rust-safe-constant-evaluation-v1",
+  "journey": [
+    "scan",
+    "docs",
+    "query",
+    "export",
+    "strict_reimport",
+    "explore"
+  ],
+  "expected_red": {
+    "command": "cargo test -p noesis --test e2e_fr_ext_020_rust_safe_constant_evaluation e2e_fr_ext_020_rust_safe_constant_evaluation_complete_local_journey --locked -- --exact --nocapture",
+    "underlying_scan_exit": 2,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_bytes": 149,
+    "stderr_sha256": "7f75f7a91f6af0328795f3fbd2729e69756beba2ebd642cc1f6401265662a2fe",
+    "schema_version": "codenoesis.error/v4",
+    "code": "input.invalid_revision",
+    "stage": "input",
+    "store": "absent"
+  },
+  "expected_green": {
+    "configuration": "codenoesis.configuration/v15",
+    "snapshot": "codenoesis.repository-snapshot/v18",
+    "graph": "codenoesis.knowledge-graph/v15",
+    "ontology": "codenoesis.ontology/rust/v15",
+    "query": "codenoesis.local-query-result/v13",
+    "portable": "codenoesis.portable-graph/v9",
+    "explorer": "codenoesis.local-explorer/v9",
+    "semantic_hash": "ad760d2ef7e5807140b1feabd071047494ed17545ffaccf02ebe7302e65a54df",
+    "canonical_stdout_bytes": 214974,
+    "counts": {
+      "entities": 42,
+      "relationships": 42,
+      "claims": 84,
+      "evidence": 33,
+      "diagnostics": 0,
+      "coverage": 32,
+      "deterministic_claims": 65,
+      "derived_claims": 19
+    },
+    "additive": {
+      "evaluated_values": 7,
+      "evaluation_relationships": 7,
+      "claims": 14,
+      "evidence": 0,
+      "dependencies": 2
+    },
+    "connected_components": 1,
+    "duplicate_ids": 0,
+    "dangling_references": 0,
+    "portable_reimport_lossless": true,
+    "viewer_bytes_immutable": true,
+    "permutations": 50,
+    "parallel_schedules": 10
+  },
+  "oracle": "tests/fixtures/s4/rust-safe-constant-evaluation-v1/expected-safe-constant-evaluation.json",
+  "pilots": {
+    "lekton": {
+      "commit": "247b8f42fb045db41166d70a276a41c2e079b6eb",
+      "runs": 2,
+      "complete": true
+    },
+    "rustdesk": {
+      "commit": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "expected": "input.unsupported_rust_constant_evaluation_composition"
+    }
+  },
+  "failure": {
+    "schema": "codenoesis.error/v24",
+    "stdout": "empty",
+    "publication": "none",
+    "repair": false,
+    "truncation": false,
+    "partial_enum": false
+  }
+}

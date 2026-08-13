@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/codenoesis-error-v24.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v24"
+    },
+    "code": {
+      "enum": [
+        "input.invalid_rust_constant_profile",
+        "input.unsupported_rust_constant_evaluation_composition",
+        "input.unsafe_output_path",
+        "acquisition.limit_exceeded",
+        "extraction.invalid_rust_source",
+        "extraction.constant_identity_conflict",
+        "extraction.constant_value_invalid",
+        "extraction.constant_dependency_invalid",
+        "extraction.constant_dependency_cycle",
+        "extraction.constant_derivation_mismatch",
+        "extraction.constant_index_mismatch",
+        "extraction.constant_limit_exceeded",
+        "snapshot.invalid_v18",
+        "query.invalid_v18",
+        "export.invalid_snapshot",
+        "export.invalid_portable_graph_v9",
+        "export.limit_exceeded",
+        "explorer.asset_integrity_mismatch",
+        "explorer.limit_exceeded",
+        "internal.unexpected"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "input",
+        "acquisition",
+        "extraction",
+        "snapshot",
+        "query",
+        "export",
+        "explorer",
+        "internal"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "retryable": {
+      "const": false
+    },
+    "context": {
+      "type": "object"
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/local-query-result-v13.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "repository_identity",
+    "snapshot_id",
+    "requested_id",
+    "result_kind",
+    "entity",
+    "relationship",
+    "claims",
+    "evidence",
+    "diagnostic",
+    "coverage_gap",
+    "document",
+    "document_statements",
+    "linked_k1_entities",
+    "linked_k1_relationships",
+    "linked_expression_entities",
+    "linked_expression_relationships",
+    "linked_flow_entities",
+    "linked_flow_relationships",
+    "linked_derivations",
+    "linked_constant_entities",
+    "linked_constant_relationships",
+    "linked_constant_derivations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.local-query-result/v13"
+    },
+    "repository_identity": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:"
+    },
+    "snapshot_id": {
+      "type": "string",
+      "pattern": "^urn:codenoesis:snapshot:blake3:[0-9a-f]{64}$"
+    },
+    "requested_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "result_kind": {
+      "enum": [
+        "entity",
+        "relationship",
+        "claim",
+        "evidence",
+        "diagnostic",
+        "coverage_gap",
+        "document"
+      ]
+    },
+    "entity": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "relationship": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "claims": {
+      "type": "array"
+    },
+    "evidence": {
+      "type": "array"
+    },
+    "diagnostic": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "coverage_gap": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "document": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "document_statements": {
+      "type": "array"
+    },
+    "linked_k1_entities": {
+      "type": "array"
+    },
+    "linked_k1_relationships": {
+      "type": "array"
+    },
+    "linked_expression_entities": {
+      "type": "array"
+    },
+    "linked_expression_relationships": {
+      "type": "array"
+    },
+    "linked_flow_entities": {
+      "type": "array"
+    },
+    "linked_flow_relationships": {
+      "type": "array"
+    },
+    "linked_derivations": {
+      "type": "array"
+    },
+    "linked_constant_entities": {
+      "type": "array"
+    },
+    "linked_constant_relationships": {
+      "type": "array"
+    },
+    "linked_constant_derivations": {
+      "type": "array"
+    }
+  }
+}

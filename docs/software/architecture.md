@@ -1,7 +1,7 @@
 # CodeNoesis Software Architecture
 
-> Status: **implementation architecture through the local R15 baseline and
-> bounded S7 C0-C4 runtime, with the R14/R15 real-repository correction a
+> Status: **implementation architecture through the corrected local R15
+> baseline and bounded S7 C0-C4 runtime, with R16 safe constant evaluation a
 > Proposed branch-scoped candidate**. The repository
 > contains working Rust crates and the `noesis` local CLI, but no production
 > server deployment or production-ready release.
@@ -350,7 +350,8 @@ execution, values, types, ownership, aliasing, or side effects.
 ### R14/R15 real-repository correction boundary
 
 Issue #170 and Decision 0029 define one high-risk S4 correction over the exact
-accepted R14/R15 source-only lineage. The Rust adapter preserves simple K1 call
+accepted R14/R15 source-only lineage. Protected merge #171 made the correction
+Approved and Implemented, but not Verified. The Rust adapter preserves simple K1 call
 target spelling and replaces every complex receiver or call target with a
 bounded placeholder; arbitrary receiver source and URL-looking literals never
 enter public target spelling. R14 processes only callables authorized by an
@@ -368,6 +369,41 @@ not compose with repository boundaries: a gitlink is mapped to the existing
 typed `repository_boundary_not_supported` input failure before store creation.
 No schema, identity domain, ontology family, dependency, nested traversal, or
 compiler/runtime authority is added.
+
+### R16 bounded safe Rust constant evaluation
+
+Issue #172 and Decision 0030 define a Proposed high-risk S4 candidate over the
+exact corrected R15 source-only lineage. Its explicit selector is
+`rust-safe-constant-evaluation-v1`. The complete R15 application path
+first produces and validates its ordinary source graph. The Rust adapter then
+provides a bounded `ConstantEvaluationKnowledge` overlay for existing K1
+declared values only; it does not replace, reinterpret, or mutate R15 domain
+facts.
+
+The inward domain owns the closed primitive type catalog, checked value model,
+evaluation dependencies, `rust.evaluated_value`, `EVALUATES_TO`, typed gaps,
+stable identities, and `codenoesis.constant-evaluation-index/v1`. It validates
+one result per declared value, canonical decimal/boolean values, exact type
+authority, claim/evidence/dependency provenance, acyclicity, ordering, limits,
+and the all-or-nothing fixed-repr enum rule before publication. Unsupported
+syntax remains a successful extraction with an explicit gap and zero guessed
+facts.
+
+The language adapter may inspect only the already acquired committed UTF-8
+Rust source with tree-sitter. It evaluates the closed boolean/integer grammar
+in a fixed-width checked interpreter and resolves only one unqualified unique
+same-owner constant dependency. It cannot invoke Cargo, rustc, build scripts,
+proc macros, target code, processes, networking, plugins, models, or browsers;
+it cannot infer types, targets, active `cfg`, layout, ownership, side effects,
+or runtime behavior.
+
+ConfigurationV15, ExtractionChunkV15, KnowledgeGraphV15, and
+RepositorySnapshotV18 use new semantic hash domains and preserve the complete
+corrected R15 graph. LocalQueryResultV13 exposes evaluated values and exact
+derivations. PortableGraphV9 retains the evaluation index losslessly, and
+LocalExplorerV9 reuses immutable viewer assets. Omitting the selector remains
+byte-identical R15; repository-boundary, cfg-alternative, and SCIP/compiler
+composition fails before acquisition.
 
 ### S7 implementation-aware runtime boundary
 

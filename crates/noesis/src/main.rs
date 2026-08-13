@@ -19,9 +19,10 @@ use std::time::{Instant, SystemTime, UNIX_EPOCH};
 use codenoesis_application::{
     BoundaryScanError, CallableBoundaryCompositionScanError, CallableCfgAlternativesScanError,
     CallableScipScanError, CallableSemanticsScanError, CargoManifestScanError,
-    CompilerIndexScanError, ExpressionBindingsScanError, FrameworkScanError, LocalFlowScanError,
-    PublicationService, RefreshError, RefreshService, RootPackageScanError,
-    RustCfgAlternativesScanError, RustSemanticScanError, ScanError, ScanRequest, ScanService,
+    CompilerIndexScanError, ConstantEvaluationScanError, ExpressionBindingsScanError,
+    FrameworkScanError, LocalFlowScanError, PublicationService, RefreshError, RefreshService,
+    RootPackageScanError, RustCfgAlternativesScanError, RustSemanticScanError, ScanError,
+    ScanRequest, ScanService,
 };
 use codenoesis_contracts::{
     AnalysisCacheEntryV1, BoundaryManifestReason, CodeNoesisErrorV1, CodeNoesisErrorV2,
@@ -30,33 +31,35 @@ use codenoesis_contracts::{
     CodeNoesisErrorV12, CodeNoesisErrorV13, CodeNoesisErrorV14, CodeNoesisErrorV15,
     CodeNoesisErrorV16, CodeNoesisErrorV17, CodeNoesisErrorV18, CodeNoesisErrorV19,
     CodeNoesisErrorV20, CodeNoesisErrorV21, CodeNoesisErrorV22, CodeNoesisErrorV23,
-    DocumentationContractError, IncrementalRefreshReportError, IncrementalRefreshReportInput,
-    IncrementalRefreshReportV1, K1ContractError, NestedRepositoryUnavailableReason,
-    PortableGraphV1, PortableGraphV2, PortableGraphV3, PortableGraphV4, PortableGraphV5,
-    PortableGraphV6, PortableGraphV7, PortableGraphV8, QueryContractError, R8ContractError,
-    R10ContractError, R11ContractError, R12_PORTABLE_GRAPH_VERSION, R12ContractError,
-    R13_PORTABLE_GRAPH_VERSION, R13ContractError, R14ContractError, R15ContractError,
-    RepositorySnapshotV2Error, RepositorySnapshotV3, RepositorySnapshotV3Error,
-    RepositorySnapshotV4, RepositorySnapshotV4Error, RepositorySnapshotV5,
-    RepositorySnapshotV5Error, RepositorySnapshotV6, RepositorySnapshotV6Error,
-    RepositorySnapshotV7, RepositorySnapshotV7Error, RepositorySnapshotV8,
-    RepositorySnapshotV8Error, RepositorySnapshotV9, RepositorySnapshotV9Error,
-    RepositorySnapshotV10, RepositorySnapshotV10Error, RepositorySnapshotV11,
-    RepositorySnapshotV11Error, RepositorySnapshotV12, RepositorySnapshotV12Error,
-    RepositorySnapshotV13, RepositorySnapshotV13Error, RepositorySnapshotV14,
-    RepositorySnapshotV14Error, RepositorySnapshotV15, RepositorySnapshotV15Error,
-    RepositorySnapshotV16, RepositorySnapshotV16Error, RepositorySnapshotV17,
-    RepositorySnapshotV17Error, SnapshotEnvelopeV1, ValidatedS4Head, generate_documentation_v1,
-    local_query_result_v1, local_query_result_v2, local_query_result_v3, local_query_result_v4,
-    local_query_result_v5, local_query_result_v6, local_query_result_v7, local_query_result_v8,
-    local_query_result_v9, local_query_result_v10, local_query_result_v11, local_query_result_v12,
-    validate_stored_snapshot_semantic_v4, validate_stored_snapshot_semantic_v5,
-    validate_stored_snapshot_semantic_v6, validate_stored_snapshot_semantic_v7,
-    validate_stored_snapshot_semantic_v8, validate_stored_snapshot_semantic_v9,
-    validate_stored_snapshot_semantic_v10, validate_stored_snapshot_semantic_v11,
-    validate_stored_snapshot_semantic_v12, validate_stored_snapshot_semantic_v13,
-    validate_stored_snapshot_semantic_v14, validate_stored_snapshot_semantic_v15,
-    validate_stored_snapshot_semantic_v16, validate_stored_snapshot_semantic_v17,
+    CodeNoesisErrorV24, DocumentationContractError, IncrementalRefreshReportError,
+    IncrementalRefreshReportInput, IncrementalRefreshReportV1, K1ContractError,
+    NestedRepositoryUnavailableReason, PortableGraphV1, PortableGraphV2, PortableGraphV3,
+    PortableGraphV4, PortableGraphV5, PortableGraphV6, PortableGraphV7, PortableGraphV8,
+    PortableGraphV9, QueryContractError, R8ContractError, R10ContractError, R11ContractError,
+    R12_PORTABLE_GRAPH_VERSION, R12ContractError, R13_PORTABLE_GRAPH_VERSION, R13ContractError,
+    R14ContractError, R15ContractError, R16ContractError, RepositorySnapshotV2Error,
+    RepositorySnapshotV3, RepositorySnapshotV3Error, RepositorySnapshotV4,
+    RepositorySnapshotV4Error, RepositorySnapshotV5, RepositorySnapshotV5Error,
+    RepositorySnapshotV6, RepositorySnapshotV6Error, RepositorySnapshotV7,
+    RepositorySnapshotV7Error, RepositorySnapshotV8, RepositorySnapshotV8Error,
+    RepositorySnapshotV9, RepositorySnapshotV9Error, RepositorySnapshotV10,
+    RepositorySnapshotV10Error, RepositorySnapshotV11, RepositorySnapshotV11Error,
+    RepositorySnapshotV12, RepositorySnapshotV12Error, RepositorySnapshotV13,
+    RepositorySnapshotV13Error, RepositorySnapshotV14, RepositorySnapshotV14Error,
+    RepositorySnapshotV15, RepositorySnapshotV15Error, RepositorySnapshotV16,
+    RepositorySnapshotV16Error, RepositorySnapshotV17, RepositorySnapshotV17Error,
+    RepositorySnapshotV18, RepositorySnapshotV18Error, SnapshotEnvelopeV1, ValidatedS4Head,
+    generate_documentation_v1, local_query_result_v1, local_query_result_v2, local_query_result_v3,
+    local_query_result_v4, local_query_result_v5, local_query_result_v6, local_query_result_v7,
+    local_query_result_v8, local_query_result_v9, local_query_result_v10, local_query_result_v11,
+    local_query_result_v12, local_query_result_v13, validate_stored_snapshot_semantic_v4,
+    validate_stored_snapshot_semantic_v5, validate_stored_snapshot_semantic_v6,
+    validate_stored_snapshot_semantic_v7, validate_stored_snapshot_semantic_v8,
+    validate_stored_snapshot_semantic_v9, validate_stored_snapshot_semantic_v10,
+    validate_stored_snapshot_semantic_v11, validate_stored_snapshot_semantic_v12,
+    validate_stored_snapshot_semantic_v13, validate_stored_snapshot_semantic_v14,
+    validate_stored_snapshot_semantic_v15, validate_stored_snapshot_semantic_v16,
+    validate_stored_snapshot_semantic_v17, validate_stored_snapshot_semantic_v18,
 };
 use codenoesis_domain::knowledge::KnowledgeError;
 use codenoesis_domain::s1_boundaries::LOCAL_GITLINKS_V1;
@@ -74,6 +77,7 @@ use codenoesis_domain::s4_r7::{CompilerIndexError, R7_COMPILER_INDEX_PROFILE};
 use codenoesis_domain::s4_r10::R10_PROFILE;
 use codenoesis_domain::s4_r14::R14_PROFILE;
 use codenoesis_domain::s4_r15::R15_PROFILE;
+use codenoesis_domain::s4_r16::R16_PROFILE;
 use codenoesis_domain::s5::{
     ANALYSIS_CACHE_SCHEMA_VERSION, AnalysisCacheEntry, DEPENDENCY_RULE_VERSION,
     EXTRACTION_CONTRACT_VERSION, IncrementalRuleOutcome, MAX_ANALYSIS_ENTRIES,
@@ -85,7 +89,7 @@ use codenoesis_domain::storage::{
     SNAPSHOT_SCHEMA_VERSION_V9, SNAPSHOT_SCHEMA_VERSION_V10, SNAPSHOT_SCHEMA_VERSION_V11,
     SNAPSHOT_SCHEMA_VERSION_V12, SNAPSHOT_SCHEMA_VERSION_V13, SNAPSHOT_SCHEMA_VERSION_V14,
     SNAPSHOT_SCHEMA_VERSION_V15, SNAPSHOT_SCHEMA_VERSION_V16, SNAPSHOT_SCHEMA_VERSION_V17,
-    StorageComponent, StorageError,
+    SNAPSHOT_SCHEMA_VERSION_V18, StorageComponent, StorageError,
 };
 use codenoesis_domain::{AcquisitionError, EntryPolicy, UnsupportedFeature};
 use codenoesis_domain::{
@@ -164,6 +168,7 @@ fn main() -> ExitCode {
     let r10_scan_requested = rust_cfg_alternatives_requested(&arguments);
     let r12_scan_requested = rust_callable_cfg_alternatives_requested(&arguments);
     let r13_scan_requested = rust_callable_scip_requested(&arguments);
+    let r16_requested = r16_profile_requested(&arguments);
     let r15_requested = r15_profile_requested(&arguments);
     let r14_requested = r14_profile_requested(&arguments);
     let r10_requested = r10_profile_requested(&arguments);
@@ -174,7 +179,8 @@ fn main() -> ExitCode {
     let k1_scan_requested = option_requested(&arguments, "--rust-callable-profile")
         || output_capacity_requested
         || r14_requested
-        || r15_requested;
+        || r15_requested
+        || r16_requested;
     let k1_requested = (k1_scan_requested
         || option_requested(&arguments, "--portable-profile")
         || option_requested(&arguments, "--explorer-profile"))
@@ -182,7 +188,8 @@ fn main() -> ExitCode {
         && !r12_scan_requested
         && !r13_scan_requested
         && !r14_requested
-        && !r15_requested;
+        && !r15_requested
+        && !r16_requested;
     let r11_requested = k1_scan_requested
         && (option_requested(&arguments, "--repository-boundary-profile")
             || option_requested(&arguments, "--repository-boundary-manifest"))
@@ -205,12 +212,12 @@ fn main() -> ExitCode {
     let manifest_profile_scan_requested = option_requested(&arguments, "--manifest-profile");
     let rust_semantic_requested =
         option_requested(&arguments, "--rust-semantic-profile") && !r10_requested;
-    let r6_requested = option_requested(&arguments, "--rust-framework-profile");
+    let framework_requested = option_requested(&arguments, "--rust-framework-profile");
     let r7_requested = option_requested(&arguments, "--compiler-index-profile")
         || option_requested(&arguments, "--compiler-index-binding");
     let mut scan_worker = if k1_scan_requested
         || r7_requested
-        || r6_requested
+        || framework_requested
         || r10_scan_requested
         || rust_semantic_requested
         || manifest_profile_scan_requested
@@ -239,7 +246,7 @@ fn main() -> ExitCode {
         run_explore(arguments)
     } else if k1_scan_requested
         || r7_requested
-        || r6_requested
+        || framework_requested
         || r10_scan_requested
         || rust_semantic_requested
         || manifest_profile_scan_requested
@@ -270,6 +277,7 @@ fn main() -> ExitCode {
         Ok(stdout) => match io::stdout().lock().write_all(&stdout) {
             Ok(()) => ExitCode::SUCCESS,
             Err(_) if impact_requested => emit_internal_error_v23(),
+            Err(_) if r16_requested => emit_internal_error_v24(),
             Err(_) if r15_requested => emit_internal_error_v22(),
             Err(_) if r14_requested => emit_internal_error_v21(),
             Err(_) if r13_scan_requested => emit_internal_error_v20(),
@@ -281,7 +289,7 @@ fn main() -> ExitCode {
             Err(_) if federation_requested => emit_internal_error_v8(),
             Err(_) if refresh_requested => emit_internal_error_v7(),
             Err(_) if r7_requested => emit_internal_error_v14(),
-            Err(_) if r6_requested => emit_internal_error_v13(),
+            Err(_) if framework_requested => emit_internal_error_v13(),
             Err(_) if rust_semantic_requested => emit_internal_error_v12(),
             Err(_) if manifest_profile_scan_requested => emit_internal_error_v11(),
             Err(_) if r3_requested => emit_internal_error_v10(),
@@ -293,6 +301,7 @@ fn main() -> ExitCode {
             Err(_) => emit_internal_error_v1(),
         },
         Err(Failure::S7(failure)) => emit_error_v23(&failure.error, failure.exit_code),
+        Err(Failure::R16(failure)) => emit_error_v24(&failure.error, failure.exit_code),
         Err(Failure::R15(failure)) => emit_error_v22(&failure.error, failure.exit_code),
         Err(Failure::R14(failure)) => emit_error_v21(&failure.error, failure.exit_code),
         Err(Failure::R13(failure)) => emit_error_v20(&failure.error, failure.exit_code),
@@ -557,6 +566,7 @@ fn run_s4(
     scan_worker: Option<&mut ScanWorker>,
 ) -> Result<Vec<u8>, Failure> {
     let arguments = arguments.into_iter().collect::<Vec<_>>();
+    let r16_requested = option_requested(&arguments, "--rust-constant-profile");
     let r15_requested = option_requested(&arguments, "--rust-flow-profile");
     let r14_requested = option_requested(&arguments, "--rust-expression-profile");
     let r13_requested = rust_callable_scip_requested(&arguments);
@@ -567,7 +577,9 @@ fn run_s4(
             || option_requested(&arguments, "--repository-boundary-manifest"))
         && !r12_requested;
     let invocation = parse_s4_invocation(arguments).map_err(|error| {
-        if r15_requested {
+        if r16_requested {
+            r16_invocation_failure(error)
+        } else if r15_requested {
             r15_invocation_failure(error)
         } else if r14_requested {
             r14_invocation_failure(error)
@@ -581,6 +593,10 @@ fn run_s4(
             invocation_failure(error)
         }
     })?;
+    if invocation.rust_constant_profile {
+        let scan_worker = scan_worker.ok_or_else(r16_internal_failure)?;
+        return run_s4_r16(invocation, scan_worker);
+    }
     if invocation.rust_flow_profile {
         let scan_worker = scan_worker.ok_or_else(r15_internal_failure)?;
         return run_s4_r15(invocation, scan_worker);
@@ -843,6 +859,69 @@ fn run_s4_r15(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Ve
     )
     .map_err(|error| match error {
         ScanError::Internal => r15_internal_failure(),
+        other => Failure::Scan(other),
+    })?;
+    rollback.disarm();
+    stage_analysis_cache_best_effort(&mut local_store, &scan.analysis_cache_entries);
+    Ok(stdout)
+}
+
+fn run_s4_r16(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Vec<u8>, Failure> {
+    let store = invocation
+        .store
+        .clone()
+        .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
+    let repository = invocation.repository.clone();
+    let output_capacity_profile = invocation.output_capacity_profile;
+    let started_at = Instant::now();
+    let scan_repository = repository.clone();
+    let scan = run_confined_scan(
+        scan_worker,
+        repository.clone(),
+        None,
+        Vec::new(),
+        move || {
+            let envelope = current_envelope().ok_or_else(r16_internal_failure)?;
+            let request = ScanRequest::new(
+                invocation.repository,
+                invocation.identity,
+                invocation.revision,
+                envelope,
+            );
+            ScanService::new(repository_adapter(invocation.packed_sha1))
+                .scan_s4_r16(request, output_capacity_profile, |inventory| {
+                    TreeSitterRustWorkspaceExtractor::new()
+                        .extract_rust_constant_evaluation(inventory)
+                })
+                .map_err(r16_scan_failure)
+        },
+    )
+    .map_err(|()| r16_internal_failure())??;
+    enforce_scan_deadline(started_at).map_err(r16_upgrade_limit_failure)?;
+    let stdout = serialize_v18(&scan.snapshot)?;
+    let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
+        .is_err_and(|error| error.kind() == io::ErrorKind::NotFound);
+    let mut rollback = EmptyStoreRollback::new(store.clone(), store_was_absent);
+    ensure_store_root_for_boundary(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    noesis::install_s3_filesystem_boundary(&scan_repository, &store)
+        .map_err(|_| r16_internal_failure())?;
+    let mut local_store = LocalStore::open(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    PublicationService::publish_v18(
+        &scan.snapshot,
+        &mut local_store.artifacts,
+        &mut local_store.metadata,
+        &mut NoopPublicationObserver,
+    )
+    .map_err(|error| match error {
+        ScanError::Internal => r16_internal_failure(),
         other => Failure::Scan(other),
     })?;
     rollback.disarm();
@@ -2440,6 +2519,9 @@ fn run_s5(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fail
 
 fn run_export(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
     let invocation = ExportInvocation::parse(arguments)?;
+    if invocation.profile == PortableProfile::R16 {
+        return run_export_r16(&invocation);
+    }
     if invocation.profile == PortableProfile::R15 {
         return run_export_r15(&invocation);
     }
@@ -2485,6 +2567,67 @@ fn run_export(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, 
         .map_err(|_| r8_internal_failure())?;
     noesis::portable_explorer::publish_portable_graph(&prepared, &portable)
         .map_err(|error| r8_portable_failure(error, 16))
+}
+
+fn run_export_r16(invocation: &ExportInvocation) -> Result<Vec<u8>, Failure> {
+    let loaded = load_s4_snapshot(&invocation.store, &invocation.identity)
+        .map_err(|error| r16_snapshot_load_failure(&error))?;
+    if loaded.head.snapshot_schema_version != SNAPSHOT_SCHEMA_VERSION_V18 {
+        return Err(r16_contract_failure(
+            &R16ContractError::InvalidSnapshot,
+            16,
+            false,
+        ));
+    }
+    let documents = invocation.documents.as_deref().ok_or_else(|| {
+        r16_failure(
+            CodeNoesisErrorV24::unsupported_composition("documents_required"),
+            2,
+        )
+    })?;
+    validate_documents_root_for_boundary(
+        std::path::Path::new(&invocation.store),
+        std::path::Path::new(documents),
+    )
+    .map_err(|_| r16_contract_failure(&R16ContractError::InvalidSnapshot, 16, false))?;
+    let documentation = generate_documentation_v1(
+        &loaded.semantic,
+        loaded.head.snapshot_id.as_str(),
+        &loaded.head.semantic_hash.value,
+    )
+    .map_err(|_| r16_contract_failure(&R16ContractError::InvalidSnapshot, 16, false))?;
+    let manifest = load_validated_manifest(
+        std::path::Path::new(documents),
+        invocation.identity.as_str(),
+        loaded.head.snapshot_id.as_str(),
+        &loaded.head.semantic_hash.value,
+    )
+    .map_err(|_| r16_contract_failure(&R16ContractError::InvalidSnapshot, 16, false))?;
+    if &manifest != documentation.manifest() {
+        return Err(r16_contract_failure(
+            &R16ContractError::InvalidSnapshot,
+            16,
+            false,
+        ));
+    }
+    let portable = PortableGraphV9::from_validated_v18(
+        &loaded.semantic,
+        &loaded.head,
+        &manifest,
+        noesis::portable_explorer::sha256,
+    )
+    .map_err(|error| r16_contract_failure(&error, 16, false))?;
+    let store = std::path::Path::new(&invocation.store);
+    let output = std::path::Path::new(&invocation.output);
+    noesis::portable_explorer::validate_r16_export_output_root(store, output)
+        .map_err(|error| r16_portable_failure(error, 16, false))?;
+    let prepared =
+        noesis::portable_explorer::ensure_r16_export_output_root_for_boundary(store, output)
+            .map_err(|error| r16_portable_failure(error, 16, false))?;
+    noesis::install_r8_export_filesystem_boundary(&invocation.store, &invocation.output)
+        .map_err(|_| r16_internal_failure())?;
+    noesis::portable_explorer::publish_portable_graph_v9(&prepared, &portable)
+        .map_err(|error| r16_portable_failure(error, 16, false))
 }
 
 fn run_export_r15(invocation: &ExportInvocation) -> Result<Vec<u8>, Failure> {
@@ -2794,6 +2937,9 @@ fn run_export_r14(invocation: &ExportInvocation) -> Result<Vec<u8>, Failure> {
 
 fn run_explore(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
     let invocation = ExploreInvocation::parse(arguments)?;
+    if invocation.profile == PortableProfile::R16 {
+        return run_explore_r16(&invocation);
+    }
     if invocation.profile == PortableProfile::R15 {
         return run_explore_r15(&invocation);
     }
@@ -2819,6 +2965,22 @@ fn run_explore(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>,
         .map_err(|_| r8_internal_failure())?;
     noesis::portable_explorer::publish_local_explorer(&prepared, &portable, &portable_bytes)
         .map_err(|error| r8_portable_failure(error, 17))
+}
+
+fn run_explore_r16(invocation: &ExploreInvocation) -> Result<Vec<u8>, Failure> {
+    let input = std::path::Path::new(&invocation.input);
+    let output = std::path::Path::new(&invocation.output);
+    let (portable, portable_bytes) = noesis::portable_explorer::read_portable_graph_v9(input)
+        .map_err(|error| r16_portable_failure(error, 17, true))?;
+    noesis::portable_explorer::validate_r16_explorer_output_root(input, output)
+        .map_err(|error| r16_portable_failure(error, 17, true))?;
+    let prepared =
+        noesis::portable_explorer::ensure_r16_explorer_output_root_for_boundary(input, output)
+            .map_err(|error| r16_portable_failure(error, 17, true))?;
+    noesis::install_r8_explorer_filesystem_boundary(&invocation.input, &invocation.output)
+        .map_err(|_| r16_internal_failure())?;
+    noesis::portable_explorer::publish_local_explorer_v9(&prepared, &portable, &portable_bytes)
+        .map_err(|error| r16_portable_failure(error, 17, true))
 }
 
 fn run_explore_r15(invocation: &ExploreInvocation) -> Result<Vec<u8>, Failure> {
@@ -2970,6 +3132,7 @@ fn run_docs(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fa
     let docs_v15 = loaded.head.snapshot_schema_version == SNAPSHOT_SCHEMA_VERSION_V15;
     let docs_v16 = loaded.head.snapshot_schema_version == SNAPSHOT_SCHEMA_VERSION_V16;
     let docs_v17 = loaded.head.snapshot_schema_version == SNAPSHOT_SCHEMA_VERSION_V17;
+    let docs_v18 = loaded.head.snapshot_schema_version == SNAPSHOT_SCHEMA_VERSION_V18;
     validate_output_root_for_generation(
         std::path::Path::new(&invocation.store),
         std::path::Path::new(&invocation.output),
@@ -2986,6 +3149,9 @@ fn run_docs(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Fa
         &loaded.head.semantic_hash.value,
     )
     .map_err(|error| match error {
+        DocumentationContractError::InvalidSnapshot if docs_v18 => {
+            r16_failure(CodeNoesisErrorV24::invalid_snapshot(), 13)
+        }
         DocumentationContractError::InvalidSnapshot if docs_v17 => {
             r15_failure(CodeNoesisErrorV22::invalid_snapshot(), 13)
         }
@@ -3035,6 +3201,7 @@ fn run_query(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, F
                 Failure::Query(QueryFailure::SnapshotMismatch)
             }
         })?;
+    let constant_query = loaded.head.snapshot_schema_version == SNAPSHOT_SCHEMA_VERSION_V18;
     let latest_query_schema = loaded.head.snapshot_schema_version == SNAPSHOT_SCHEMA_VERSION_V17;
     let query_v11 = loaded.head.snapshot_schema_version == SNAPSHOT_SCHEMA_VERSION_V16;
     let query_v10 = loaded.head.snapshot_schema_version == SNAPSHOT_SCHEMA_VERSION_V15;
@@ -3046,7 +3213,8 @@ fn run_query(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, F
     let query_v4 = loaded.head.snapshot_schema_version == SNAPSHOT_SCHEMA_VERSION_V9;
     let query_v3 = loaded.head.snapshot_schema_version == SNAPSHOT_SCHEMA_VERSION_V8;
     let query_v2 = loaded.head.snapshot_schema_version == SNAPSHOT_SCHEMA_VERSION_V7;
-    if !latest_query_schema
+    if !constant_query
+        && !latest_query_schema
         && !query_v11
         && !query_v10
         && !query_v9
@@ -3059,7 +3227,8 @@ fn run_query(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, F
     {
         return Err(Failure::S4Input(CodeNoesisErrorV5::invalid_query_id()));
     }
-    if !latest_query_schema
+    if !constant_query
+        && !latest_query_schema
         && !query_v11
         && !query_v10
         && !query_v9
@@ -3088,6 +3257,18 @@ fn run_query(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, F
         &loaded.head.semantic_hash.value,
     )
     .map_err(|error| {
+        if constant_query {
+            return match error {
+                GeneratedDocsError::SnapshotMismatch
+                | GeneratedDocsError::InvalidRoot
+                | GeneratedDocsError::UnmarkedNonemptyRoot
+                | GeneratedDocsError::UnsafePath
+                | GeneratedDocsError::CorruptGeneration
+                | GeneratedDocsError::Failed => {
+                    r16_failure(CodeNoesisErrorV24::invalid_query(), 14)
+                }
+            };
+        }
         if latest_query_schema {
             return match error {
                 GeneratedDocsError::SnapshotMismatch
@@ -3177,7 +3358,17 @@ fn run_query(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, F
             | GeneratedDocsError::Failed => Failure::Query(QueryFailure::CorruptDocuments),
         }
     })?;
-    let stdout = if latest_query_schema {
+    let stdout = if constant_query {
+        local_query_result_v13(
+            &loaded.semantic,
+            &manifest,
+            loaded.head.snapshot_id.as_str(),
+            &invocation.requested_id,
+        )
+        .map_err(query_v13_contract_failure)?
+        .canonical_stdout()
+        .map_err(query_v13_stdout_failure)?
+    } else if latest_query_schema {
         local_query_result_v12(
             &loaded.semantic,
             &manifest,
@@ -3299,6 +3490,19 @@ fn run_query(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, F
         .map_err(query_stdout_failure)?
     };
     Ok(stdout)
+}
+
+fn query_v13_contract_failure(error: QueryContractError) -> Failure {
+    match error {
+        QueryContractError::NotFound => Failure::Query(QueryFailure::NotFound),
+        QueryContractError::InvalidSnapshot
+        | QueryContractError::InvalidDocuments
+        | QueryContractError::LimitExceeded => r16_failure(CodeNoesisErrorV24::invalid_query(), 14),
+    }
+}
+
+fn query_v13_stdout_failure(_error: QueryContractError) -> Failure {
+    r16_failure(CodeNoesisErrorV24::invalid_query(), 14)
 }
 
 fn query_v12_contract_failure(error: QueryContractError) -> Failure {
@@ -3448,6 +3652,7 @@ fn load_s4_snapshot_from_store(
             | SNAPSHOT_SCHEMA_VERSION_V15
             | SNAPSHOT_SCHEMA_VERSION_V16
             | SNAPSHOT_SCHEMA_VERSION_V17
+            | SNAPSHOT_SCHEMA_VERSION_V18
     ) {
         return Err(LoadS4Error::UnsupportedSnapshotSchema(
             head.snapshot_schema_version.clone(),
@@ -3490,6 +3695,7 @@ fn load_s4_snapshot_from_store(
         SNAPSHOT_SCHEMA_VERSION_V15 => validate_stored_snapshot_semantic_v15(&semantic, &head),
         SNAPSHOT_SCHEMA_VERSION_V16 => validate_stored_snapshot_semantic_v16(&semantic, &head),
         SNAPSHOT_SCHEMA_VERSION_V17 => validate_stored_snapshot_semantic_v17(&semantic, &head),
+        SNAPSHOT_SCHEMA_VERSION_V18 => validate_stored_snapshot_semantic_v18(&semantic, &head),
         _ => return Err(LoadS4Error::SnapshotMismatch),
     }
     .map_err(|error| LoadS4Error::Scan(ScanError::Storage(error)))?;
@@ -3892,6 +4098,17 @@ fn serialize_v17(snapshot: &RepositorySnapshotV17) -> Result<Vec<u8>, Failure> {
     })
 }
 
+fn serialize_v18(snapshot: &RepositorySnapshotV18) -> Result<Vec<u8>, Failure> {
+    snapshot.canonical_stdout().map_err(|error| match error {
+        RepositorySnapshotV18Error::LimitExceeded(error) => {
+            r16_failure(CodeNoesisErrorV24::acquisition_limit(&error), 10)
+        }
+        RepositorySnapshotV18Error::Serialization(_)
+        | RepositorySnapshotV18Error::ContractInvalid
+        | RepositorySnapshotV18Error::OutputLengthOverflow => r16_internal_failure(),
+    })
+}
+
 fn enforce_scan_deadline(started_at: Instant) -> Result<(), Failure> {
     let elapsed = u64::try_from(started_at.elapsed().as_millis()).map_err(|_| Failure::Internal)?;
     if elapsed > STANDARD_LOCAL_S1_LIMITS.scan_wall_milliseconds {
@@ -3976,6 +4193,12 @@ fn invocation_failure(error: InvocationError) -> Failure {
         InvocationError::InvalidR15Composition(reason) => {
             r15_failure(CodeNoesisErrorV22::unsupported_composition(reason), 2)
         }
+        InvocationError::InvalidR16Profile(profile) => {
+            r16_failure(CodeNoesisErrorV24::invalid_profile(&profile), 2)
+        }
+        InvocationError::InvalidR16Composition(reason) => {
+            r16_failure(CodeNoesisErrorV24::unsupported_composition(reason), 2)
+        }
         InvocationError::InvalidRustFrameworkProfile(profile) => r6_failure(
             CodeNoesisErrorV13::invalid_rust_framework_profile(&profile),
             2,
@@ -4008,6 +4231,22 @@ fn invocation_failure(error: InvocationError) -> Failure {
     }
 }
 
+fn r16_invocation_failure(error: InvocationError) -> Failure {
+    match error {
+        InvocationError::Input(error) => Failure::Input(error),
+        InvocationError::InvalidR16Profile(profile) => {
+            r16_failure(CodeNoesisErrorV24::invalid_profile(&profile), 2)
+        }
+        InvocationError::InvalidR16Composition(reason) => {
+            r16_failure(CodeNoesisErrorV24::unsupported_composition(reason), 2)
+        }
+        _ => r16_failure(
+            CodeNoesisErrorV24::unsupported_composition("exact_selector_matrix_required"),
+            2,
+        ),
+    }
+}
+
 fn r15_invocation_failure(error: InvocationError) -> Failure {
     match error {
         InvocationError::Input(error) => Failure::Input(error),
@@ -4016,6 +4255,12 @@ fn r15_invocation_failure(error: InvocationError) -> Failure {
         }
         InvocationError::InvalidR15Composition(reason) => {
             r15_failure(CodeNoesisErrorV22::unsupported_composition(reason), 2)
+        }
+        InvocationError::InvalidR16Profile(profile) => {
+            r16_failure(CodeNoesisErrorV24::invalid_profile(&profile), 2)
+        }
+        InvocationError::InvalidR16Composition(reason) => {
+            r16_failure(CodeNoesisErrorV24::unsupported_composition(reason), 2)
         }
         _ => r15_failure(
             CodeNoesisErrorV22::unsupported_composition("exact_selector_matrix_required"),
@@ -4161,6 +4406,12 @@ fn s5_invocation_failure(error: InvocationError) -> Failure {
         }
         InvocationError::InvalidR15Composition(reason) => {
             r15_failure(CodeNoesisErrorV22::unsupported_composition(reason), 2)
+        }
+        InvocationError::InvalidR16Profile(profile) => {
+            r16_failure(CodeNoesisErrorV24::invalid_profile(&profile), 2)
+        }
+        InvocationError::InvalidR16Composition(reason) => {
+            r16_failure(CodeNoesisErrorV24::unsupported_composition(reason), 2)
         }
         InvocationError::InvalidRustFrameworkProfile(profile) => r6_failure(
             CodeNoesisErrorV13::invalid_rust_framework_profile(&profile),
@@ -4502,6 +4753,45 @@ fn r15_scan_failure(error: LocalFlowScanError) -> Failure {
     }
 }
 
+fn r16_scan_failure(error: ConstantEvaluationScanError) -> Failure {
+    match error {
+        ConstantEvaluationScanError::Scan(ScanError::Internal) => r16_internal_failure(),
+        ConstantEvaluationScanError::Scan(ScanError::Acquisition(error))
+            if is_gitlink_acquisition(&error) =>
+        {
+            r16_failure(
+                CodeNoesisErrorV24::unsupported_composition("repository_boundary_not_supported"),
+                2,
+            )
+        }
+        ConstantEvaluationScanError::Scan(ScanError::Acquisition(error)) => {
+            r16_failure(CodeNoesisErrorV24::acquisition_limit(&error), 10)
+        }
+        ConstantEvaluationScanError::Scan(error) => Failure::Scan(error),
+        ConstantEvaluationScanError::ConstantEvaluation(error) => {
+            r16_failure(CodeNoesisErrorV24::from_constant_evaluation(&error), 11)
+        }
+        ConstantEvaluationScanError::InvalidSnapshot => {
+            r16_failure(CodeNoesisErrorV24::invalid_snapshot(), 12)
+        }
+    }
+}
+
+fn r16_upgrade_limit_failure(failure: Failure) -> Failure {
+    match failure {
+        Failure::Scan(ScanError::Acquisition(error)) if is_gitlink_acquisition(&error) => {
+            r16_failure(
+                CodeNoesisErrorV24::unsupported_composition("repository_boundary_not_supported"),
+                2,
+            )
+        }
+        Failure::Scan(ScanError::Acquisition(error)) => {
+            r16_failure(CodeNoesisErrorV24::acquisition_limit(&error), 10)
+        }
+        other => other,
+    }
+}
+
 fn r15_upgrade_limit_failure(failure: Failure) -> Failure {
     match failure {
         Failure::Scan(ScanError::Acquisition(error)) if is_gitlink_acquisition(&error) => {
@@ -4606,6 +4896,14 @@ fn r14_failure(error: CodeNoesisErrorV21, exit_code: u8) -> Failure {
 
 fn r15_failure(error: CodeNoesisErrorV22, exit_code: u8) -> Failure {
     Failure::R15(R15Failure { error, exit_code })
+}
+
+fn r16_failure(error: CodeNoesisErrorV24, exit_code: u8) -> Failure {
+    Failure::R16(R16Failure { error, exit_code })
+}
+
+fn r16_internal_failure() -> Failure {
+    r16_failure(CodeNoesisErrorV24::internal("runtime"), 70)
 }
 
 fn r15_internal_failure() -> Failure {
@@ -4713,6 +5011,16 @@ fn r15_snapshot_load_failure(error: LoadS4Error) -> Failure {
     }
 }
 
+fn r16_snapshot_load_failure(error: &LoadS4Error) -> Failure {
+    match error {
+        LoadS4Error::UnsupportedSnapshotSchema(_)
+        | LoadS4Error::Scan(_)
+        | LoadS4Error::SnapshotMismatch => {
+            r16_contract_failure(&R16ContractError::InvalidSnapshot, 16, false)
+        }
+    }
+}
+
 fn k1_portable_failure(
     error: noesis::portable_explorer::PortableExplorerError,
     code: u8,
@@ -4736,6 +5044,7 @@ fn k1_portable_failure(
         | noesis::portable_explorer::PortableExplorerError::R13Contract(_)
         | noesis::portable_explorer::PortableExplorerError::R14Contract(_)
         | noesis::portable_explorer::PortableExplorerError::R15Contract(_)
+        | noesis::portable_explorer::PortableExplorerError::R16Contract(_)
         | noesis::portable_explorer::PortableExplorerError::Internal => k1_internal_failure(),
     }
 }
@@ -4776,6 +5085,7 @@ fn r10_portable_failure(
         | noesis::portable_explorer::PortableExplorerError::R13Contract(_)
         | noesis::portable_explorer::PortableExplorerError::R14Contract(_)
         | noesis::portable_explorer::PortableExplorerError::R15Contract(_)
+        | noesis::portable_explorer::PortableExplorerError::R16Contract(_)
         | noesis::portable_explorer::PortableExplorerError::Internal => r10_internal_failure(),
     }
 }
@@ -4803,6 +5113,7 @@ fn r11_portable_failure(
         | noesis::portable_explorer::PortableExplorerError::R13Contract(_)
         | noesis::portable_explorer::PortableExplorerError::R14Contract(_)
         | noesis::portable_explorer::PortableExplorerError::R15Contract(_)
+        | noesis::portable_explorer::PortableExplorerError::R16Contract(_)
         | noesis::portable_explorer::PortableExplorerError::Internal => r11_internal_failure(),
     }
 }
@@ -4830,6 +5141,7 @@ fn r12_portable_failure(
         | noesis::portable_explorer::PortableExplorerError::R13Contract(_)
         | noesis::portable_explorer::PortableExplorerError::R14Contract(_)
         | noesis::portable_explorer::PortableExplorerError::R15Contract(_)
+        | noesis::portable_explorer::PortableExplorerError::R16Contract(_)
         | noesis::portable_explorer::PortableExplorerError::Internal => r12_internal_failure(),
     }
 }
@@ -4857,6 +5169,7 @@ fn r13_portable_failure(
         | noesis::portable_explorer::PortableExplorerError::R12Contract(_)
         | noesis::portable_explorer::PortableExplorerError::R14Contract(_)
         | noesis::portable_explorer::PortableExplorerError::R15Contract(_)
+        | noesis::portable_explorer::PortableExplorerError::R16Contract(_)
         | noesis::portable_explorer::PortableExplorerError::Internal => r13_internal_failure(),
     }
 }
@@ -4892,6 +5205,7 @@ fn r14_portable_failure(
         | noesis::portable_explorer::PortableExplorerError::R12Contract(_)
         | noesis::portable_explorer::PortableExplorerError::R13Contract(_)
         | noesis::portable_explorer::PortableExplorerError::R15Contract(_)
+        | noesis::portable_explorer::PortableExplorerError::R16Contract(_)
         | noesis::portable_explorer::PortableExplorerError::Internal => r14_internal_failure(),
     }
 }
@@ -4932,6 +5246,7 @@ fn r15_portable_failure(
         | noesis::portable_explorer::PortableExplorerError::R12Contract(_)
         | noesis::portable_explorer::PortableExplorerError::R13Contract(_)
         | noesis::portable_explorer::PortableExplorerError::R14Contract(_)
+        | noesis::portable_explorer::PortableExplorerError::R16Contract(_)
         | noesis::portable_explorer::PortableExplorerError::Internal => r15_internal_failure(),
     }
 }
@@ -4946,6 +5261,47 @@ fn r15_contract_failure(error: &R15ContractError, code: u8, explorer: bool) -> F
             CodeNoesisErrorV22::from_contract(error)
         };
         r15_failure(error, code)
+    }
+}
+
+fn r16_portable_failure(
+    error: noesis::portable_explorer::PortableExplorerError,
+    code: u8,
+    explorer: bool,
+) -> Failure {
+    match error {
+        noesis::portable_explorer::PortableExplorerError::UnsafeOutput {
+            path_sha256,
+            reason,
+        } => r16_failure(
+            CodeNoesisErrorV24::unsafe_output_path(&path_sha256, reason),
+            2,
+        ),
+        noesis::portable_explorer::PortableExplorerError::R16Contract(error) => {
+            r16_contract_failure(&error, code, explorer)
+        }
+        noesis::portable_explorer::PortableExplorerError::Contract(_)
+        | noesis::portable_explorer::PortableExplorerError::K1Contract(_)
+        | noesis::portable_explorer::PortableExplorerError::R10Contract(_)
+        | noesis::portable_explorer::PortableExplorerError::R11Contract(_)
+        | noesis::portable_explorer::PortableExplorerError::R12Contract(_)
+        | noesis::portable_explorer::PortableExplorerError::R13Contract(_)
+        | noesis::portable_explorer::PortableExplorerError::R14Contract(_)
+        | noesis::portable_explorer::PortableExplorerError::R15Contract(_)
+        | noesis::portable_explorer::PortableExplorerError::Internal => r16_internal_failure(),
+    }
+}
+
+fn r16_contract_failure(error: &R16ContractError, code: u8, explorer: bool) -> Failure {
+    if error == &R16ContractError::Internal {
+        r16_internal_failure()
+    } else {
+        let error = if explorer {
+            CodeNoesisErrorV24::from_explorer_contract(error)
+        } else {
+            CodeNoesisErrorV24::from_contract(error)
+        };
+        r16_failure(error, code)
     }
 }
 
@@ -4995,6 +5351,7 @@ fn r8_portable_failure(
         | noesis::portable_explorer::PortableExplorerError::R13Contract(_)
         | noesis::portable_explorer::PortableExplorerError::R14Contract(_)
         | noesis::portable_explorer::PortableExplorerError::R15Contract(_)
+        | noesis::portable_explorer::PortableExplorerError::R16Contract(_)
         | noesis::portable_explorer::PortableExplorerError::Internal => r8_internal_failure(),
     }
 }
@@ -5255,6 +5612,19 @@ fn r15_profile_requested(arguments: &[OsString]) -> bool {
                 pair.first().is_some_and(|flag| {
                     flag == "--portable-profile" || flag == "--explorer-profile"
                 }) && pair.get(1).is_some_and(|value| value == R15_PROFILE)
+            })
+}
+
+fn r16_profile_requested(arguments: &[OsString]) -> bool {
+    option_requested(arguments, "--rust-constant-profile")
+        || arguments
+            .get(2..)
+            .unwrap_or_default()
+            .chunks(2)
+            .any(|pair| {
+                pair.first().is_some_and(|flag| {
+                    flag == "--portable-profile" || flag == "--explorer-profile"
+                }) && pair.get(1).is_some_and(|value| value == R16_PROFILE)
             })
 }
 
@@ -5627,6 +5997,17 @@ fn emit_error_v22(error: &CodeNoesisErrorV22, code: u8) -> ExitCode {
     }
 }
 
+fn emit_error_v24(error: &CodeNoesisErrorV24, code: u8) -> ExitCode {
+    let Ok(bytes) = error.canonical_stderr() else {
+        return ExitCode::from(70);
+    };
+    if io::stderr().lock().write_all(&bytes).is_ok() {
+        ExitCode::from(code)
+    } else {
+        ExitCode::from(70)
+    }
+}
+
 fn emit_internal_error_v10() -> ExitCode {
     emit_error_v10(&CodeNoesisErrorV10::internal(), 70)
 }
@@ -5679,6 +6060,10 @@ fn emit_internal_error_v22() -> ExitCode {
     emit_error_v22(&CodeNoesisErrorV22::internal("runtime"), 70)
 }
 
+fn emit_internal_error_v24() -> ExitCode {
+    emit_error_v24(&CodeNoesisErrorV24::internal("runtime"), 70)
+}
+
 fn emit_docs_error(error: GeneratedDocsError) -> ExitCode {
     let error = match error {
         GeneratedDocsError::UnmarkedNonemptyRoot => {
@@ -5706,6 +6091,7 @@ fn emit_query_error(error: QueryFailure) -> ExitCode {
 
 enum Failure {
     S7(impact::ImpactFailure),
+    R16(R16Failure),
     R15(R15Failure),
     R14(R14Failure),
     R13(R13Failure),
@@ -5729,6 +6115,11 @@ enum Failure {
     Docs(GeneratedDocsError),
     Query(QueryFailure),
     Internal,
+}
+
+struct R16Failure {
+    error: CodeNoesisErrorV24,
+    exit_code: u8,
 }
 
 struct R15Failure {
@@ -5837,11 +6228,14 @@ enum PortableProfile {
     R10,
     R14,
     R15,
+    R16,
 }
 
 impl PortableProfile {
     fn requested(arguments: &[OsString], option: &str) -> Self {
-        if r15_profile_requested(arguments) {
+        if r16_profile_requested(arguments) {
+            Self::R16
+        } else if r15_profile_requested(arguments) {
             Self::R15
         } else if r14_profile_requested(arguments) {
             Self::R14
@@ -5855,7 +6249,7 @@ impl PortableProfile {
     }
 
     fn requires_documents(self) -> bool {
-        matches!(self, Self::R14 | Self::R15)
+        matches!(self, Self::R14 | Self::R15 | Self::R16)
     }
 }
 
@@ -5924,6 +6318,10 @@ impl ExportInvocation {
             Some(R10_PROFILE) => PortableProfile::R10,
             Some(R14_PROFILE) => PortableProfile::R14,
             Some(R15_PROFILE) => PortableProfile::R15,
+            Some(R16_PROFILE) => PortableProfile::R16,
+            Some(profile) if profile.starts_with("rust-safe-constant-evaluation") => {
+                return Err(r16_failure(CodeNoesisErrorV24::invalid_profile(profile), 2));
+            }
             Some(profile) if profile.starts_with("rust-local-flow") => {
                 return Err(r15_failure(CodeNoesisErrorV22::invalid_profile(profile), 2));
             }
@@ -6011,6 +6409,10 @@ impl ExploreInvocation {
             Some(R10_PROFILE) => PortableProfile::R10,
             Some(R14_PROFILE) => PortableProfile::R14,
             Some(R15_PROFILE) => PortableProfile::R15,
+            Some(R16_PROFILE) => PortableProfile::R16,
+            Some(profile) if profile.starts_with("rust-safe-constant-evaluation") => {
+                return Err(r16_failure(CodeNoesisErrorV24::invalid_profile(profile), 2));
+            }
             Some(profile) if profile.starts_with("rust-local-flow") => {
                 return Err(r15_failure(CodeNoesisErrorV22::invalid_profile(profile), 2));
             }
@@ -6038,6 +6440,10 @@ impl ExploreInvocation {
 
 fn invalid_export_profile(profile: PortableProfile) -> Failure {
     match profile {
+        PortableProfile::R16 => r16_failure(
+            CodeNoesisErrorV24::unsupported_composition("invalid_export"),
+            2,
+        ),
         PortableProfile::R15 => r15_failure(
             CodeNoesisErrorV22::unsupported_composition("invalid_export"),
             2,
@@ -6057,6 +6463,10 @@ fn invalid_export_profile(profile: PortableProfile) -> Failure {
 
 fn invalid_explorer_profile(profile: PortableProfile) -> Failure {
     match profile {
+        PortableProfile::R16 => r16_failure(
+            CodeNoesisErrorV24::unsupported_composition("invalid_explorer"),
+            2,
+        ),
         PortableProfile::R15 => r15_failure(
             CodeNoesisErrorV22::unsupported_composition("invalid_explorer"),
             2,
@@ -6089,6 +6499,10 @@ fn reject_parent_output(output: &OsStr, profile: PortableProfile) -> Result<(), 
     {
         let path_sha256 = noesis::portable_explorer::sha256(output.as_encoded_bytes());
         match profile {
+            PortableProfile::R16 => Err(r16_failure(
+                CodeNoesisErrorV24::unsafe_output_path(&path_sha256, "parent_escape"),
+                2,
+            )),
             PortableProfile::R15 => Err(r15_failure(
                 CodeNoesisErrorV22::unsafe_output_path(&path_sha256, "parent_escape"),
                 2,
@@ -6288,6 +6702,9 @@ fn valid_s4_root_argument(value: &OsStr) -> bool {
 
 #[allow(clippy::too_many_lines)]
 fn parse_s4_invocation(arguments: Vec<OsString>) -> Result<Invocation, InvocationError> {
+    if option_requested(&arguments, "--rust-constant-profile") {
+        return parse_r16_invocation(&arguments);
+    }
     if option_requested(&arguments, "--rust-flow-profile") {
         return parse_r15_invocation(&arguments);
     }
@@ -6394,6 +6811,84 @@ fn parse_s4_invocation(arguments: Vec<OsString>) -> Result<Invocation, Invocatio
     }
     invocation.compiler_index_profile = true;
     invocation.compiler_index_binding = Some(compiler_binding);
+    Ok(invocation)
+}
+
+fn parse_r16_invocation(arguments: &[OsString]) -> Result<Invocation, InvocationError> {
+    if arguments
+        .get(1)
+        .is_none_or(|value| value != OsStr::new("scan"))
+    {
+        return Err(InvocationError::InvalidR16Composition(
+            "r15_source_only_without_boundaries_cfg_or_compiler_index",
+        ));
+    }
+    if option_requested(arguments, "--repository-boundary-profile")
+        || option_requested(arguments, "--repository-boundary-manifest")
+    {
+        return Err(InvocationError::InvalidR16Composition(
+            "repository_boundary_not_supported",
+        ));
+    }
+    if option_requested(arguments, "--compiler-index-profile")
+        || option_requested(arguments, "--compiler-index-binding")
+        || rust_cfg_alternatives_requested(arguments)
+    {
+        return Err(InvocationError::InvalidR16Composition(
+            "r15_source_only_without_boundaries_cfg_or_compiler_index",
+        ));
+    }
+    let mut stripped = arguments.iter().take(2).cloned().collect::<Vec<_>>();
+    let mut constant_profile = None;
+    let mut index = 2;
+    while index < arguments.len() {
+        let flag = &arguments[index];
+        let Some(value) = arguments.get(index + 1) else {
+            return Err(InvocationError::InvalidR16Composition(
+                "complete_option_pair_required",
+            ));
+        };
+        if flag == OsStr::new("--rust-constant-profile") {
+            if constant_profile.is_some() {
+                return Err(InvocationError::InvalidR16Composition(
+                    "single_constant_profile_required",
+                ));
+            }
+            let Some(value) = value.to_str() else {
+                return Err(InvocationError::InvalidR16Profile(String::new()));
+            };
+            constant_profile = Some(value.to_owned());
+        } else {
+            stripped.push(flag.clone());
+            stripped.push(value.clone());
+        }
+        index += 2;
+    }
+    let Some(constant_profile) = constant_profile else {
+        return Err(InvocationError::InvalidR16Composition(
+            "constant_profile_required",
+        ));
+    };
+    if constant_profile != R16_PROFILE {
+        return Err(InvocationError::InvalidR16Profile(constant_profile));
+    }
+    let mut invocation = parse_r15_invocation(&stripped).map_err(|error| match error {
+        InvocationError::Input(error) => InvocationError::Input(error),
+        InvocationError::InvalidR15Profile(_) => {
+            InvocationError::InvalidR16Composition("exact_r15_flow_profile_required")
+        }
+        _ => InvocationError::InvalidR16Composition("exact_r15_selector_matrix_required"),
+    })?;
+    if !invocation.rust_flow_profile
+        || invocation.boundary_profile
+        || invocation.rust_cfg_alternatives_profile
+        || invocation.compiler_index_profile
+    {
+        return Err(InvocationError::InvalidR16Composition(
+            "complete_r15_source_only_profiles_required",
+        ));
+    }
+    invocation.rust_constant_profile = true;
     Ok(invocation)
 }
 
@@ -6992,6 +7487,7 @@ struct Invocation {
     rust_callable_profile: bool,
     rust_expression_profile: bool,
     rust_flow_profile: bool,
+    rust_constant_profile: bool,
     output_capacity_profile: K1OutputCapacityProfile,
     compiler_index_profile: bool,
     compiler_index_binding: Option<OsString>,
@@ -7017,6 +7513,8 @@ enum InvocationError {
     InvalidR14Composition(&'static str),
     InvalidR15Profile(String),
     InvalidR15Composition(&'static str),
+    InvalidR16Profile(String),
+    InvalidR16Composition(&'static str),
     InvalidRustFrameworkProfile(String),
     InvalidRustFrameworkComposition(Vec<String>),
     InvalidRustCallableProfile(String),
@@ -7501,6 +7999,7 @@ impl Invocation {
             rust_callable_profile: false,
             rust_expression_profile: false,
             rust_flow_profile: false,
+            rust_constant_profile: false,
             output_capacity_profile: K1OutputCapacityProfile::Standard,
             compiler_index_profile: false,
             compiler_index_binding: None,

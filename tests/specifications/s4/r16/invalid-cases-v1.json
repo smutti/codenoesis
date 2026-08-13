@@ -1,0 +1,221 @@
+{
+  "schema_version": "codenoesis.r16-invalid-cases/v1",
+  "cases": [
+    {
+      "id": "missing_r15_flow_profile",
+      "expected": "input.unsupported_rust_constant_evaluation_composition"
+    },
+    {
+      "id": "missing_constant_profile",
+      "dispatch": "legacy_r15"
+    },
+    {
+      "id": "boundary_profile",
+      "expected": "input.unsupported_rust_constant_evaluation_composition"
+    },
+    {
+      "id": "cfg_alternatives_profile",
+      "expected": "input.unsupported_rust_constant_evaluation_composition"
+    },
+    {
+      "id": "compiler_profile",
+      "expected": "input.unsupported_rust_constant_evaluation_composition"
+    },
+    {
+      "id": "unknown_profile",
+      "expected": "input.invalid_rust_constant_profile"
+    },
+    {
+      "id": "usize_subject",
+      "expected": "rust.constant_target_dependent"
+    },
+    {
+      "id": "isize_subject",
+      "expected": "rust.constant_target_dependent"
+    },
+    {
+      "id": "float_subject",
+      "expected": "rust.constant_expression_not_evaluated"
+    },
+    {
+      "id": "call_expression",
+      "expected": "rust.constant_expression_not_evaluated"
+    },
+    {
+      "id": "cast_expression",
+      "expected": "rust.constant_expression_not_evaluated"
+    },
+    {
+      "id": "shift_expression",
+      "expected": "rust.constant_expression_not_evaluated"
+    },
+    {
+      "id": "path_dependency",
+      "expected": "rust.constant_dependency_not_evaluated"
+    },
+    {
+      "id": "ambiguous_dependency",
+      "expected": "rust.constant_dependency_not_evaluated"
+    },
+    {
+      "id": "missing_dependency",
+      "expected": "rust.constant_dependency_not_evaluated"
+    },
+    {
+      "id": "dependency_cycle",
+      "expected": "rust.constant_dependency_not_evaluated"
+    },
+    {
+      "id": "overflow",
+      "expected": "rust.constant_arithmetic_not_defined"
+    },
+    {
+      "id": "underflow",
+      "expected": "rust.constant_arithmetic_not_defined"
+    },
+    {
+      "id": "divide_by_zero",
+      "expected": "rust.constant_arithmetic_not_defined"
+    },
+    {
+      "id": "remainder_by_zero",
+      "expected": "rust.constant_arithmetic_not_defined"
+    },
+    {
+      "id": "signed_min_divide_minus_one",
+      "expected": "rust.constant_arithmetic_not_defined"
+    },
+    {
+      "id": "suffix_mismatch",
+      "expected": "rust.constant_expression_not_evaluated"
+    },
+    {
+      "id": "enum_without_fixed_repr",
+      "expected": "rust.enum_discriminant_not_evaluated"
+    },
+    {
+      "id": "enum_payload_variant",
+      "expected": "rust.enum_discriminant_not_evaluated"
+    },
+    {
+      "id": "enum_partial_failure",
+      "expected": "zero_evaluated_enum_values"
+    },
+    {
+      "id": "duplicate_evaluated_identity",
+      "expected": "extraction.constant_identity_conflict"
+    },
+    {
+      "id": "dangling_declared_value",
+      "expected": "extraction.constant_value_invalid"
+    },
+    {
+      "id": "noncanonical_value",
+      "expected": "extraction.constant_value_invalid"
+    },
+    {
+      "id": "invalid_type_authority",
+      "expected": "extraction.constant_value_invalid"
+    },
+    {
+      "id": "dangling_dependency",
+      "expected": "extraction.constant_dependency_invalid"
+    },
+    {
+      "id": "represented_cycle",
+      "expected": "extraction.constant_dependency_cycle"
+    },
+    {
+      "id": "missing_input_claim",
+      "expected": "extraction.constant_derivation_mismatch"
+    },
+    {
+      "id": "missing_input_evidence",
+      "expected": "extraction.constant_derivation_mismatch"
+    },
+    {
+      "id": "index_graph_disagreement",
+      "expected": "extraction.constant_index_mismatch"
+    },
+    {
+      "id": "candidate_values_max_plus_one",
+      "expected": "extraction.constant_limit_exceeded"
+    },
+    {
+      "id": "syntax_nodes_max_plus_one",
+      "expected": "extraction.constant_limit_exceeded"
+    },
+    {
+      "id": "dependencies_max_plus_one",
+      "expected": "extraction.constant_limit_exceeded"
+    },
+    {
+      "id": "dependency_levels_max_plus_one",
+      "expected": "extraction.constant_limit_exceeded"
+    },
+    {
+      "id": "variants_max_plus_one",
+      "expected": "extraction.constant_limit_exceeded"
+    },
+    {
+      "id": "entities_max_plus_one",
+      "expected": "extraction.constant_limit_exceeded"
+    },
+    {
+      "id": "relationships_max_plus_one",
+      "expected": "extraction.constant_limit_exceeded"
+    },
+    {
+      "id": "dependency_references_max_plus_one",
+      "expected": "extraction.constant_limit_exceeded"
+    },
+    {
+      "id": "derivation_inputs_max_plus_one",
+      "expected": "extraction.constant_limit_exceeded"
+    },
+    {
+      "id": "portable_unknown_field",
+      "expected": "export.invalid_portable_graph_v9"
+    },
+    {
+      "id": "portable_noncanonical_order",
+      "expected": "export.invalid_portable_graph_v9"
+    },
+    {
+      "id": "portable_missing_derivation",
+      "expected": "export.invalid_portable_graph_v9"
+    },
+    {
+      "id": "portable_raw_expression",
+      "expected": "export.invalid_portable_graph_v9"
+    },
+    {
+      "id": "portable_absolute_root",
+      "expected": "export.invalid_portable_graph_v9"
+    },
+    {
+      "id": "output_parent_symlink",
+      "expected": "input.unsafe_output_path"
+    },
+    {
+      "id": "output_race_replacement",
+      "expected": "input.unsafe_output_path"
+    },
+    {
+      "id": "mutable_input",
+      "expected": "input.unsupported_rust_constant_evaluation_composition"
+    },
+    {
+      "id": "html_script_close",
+      "expected": "explorer.asset_integrity_mismatch"
+    },
+    {
+      "id": "remote_resource",
+      "expected": "explorer.asset_integrity_mismatch"
+    },
+    {
+      "id": "dynamic_code",
+      "expected": "explorer.asset_integrity_mismatch"
+    }
+  ]
+}

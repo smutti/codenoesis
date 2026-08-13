@@ -632,6 +632,7 @@ pub(super) struct GraphIndex {
     callable_cfg_alternatives: bool,
     expression_bindings: bool,
     local_flow: bool,
+    constant_evaluation: bool,
     repository_boundaries: Option<Value>,
     pub(super) entities: BTreeMap<String, Value>,
     relationships: Vec<Value>,
@@ -669,6 +670,7 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v12"
                     | "codenoesis.knowledge-graph/v13"
                     | "codenoesis.knowledge-graph/v14"
+                    | "codenoesis.knowledge-graph/v15"
             )
         );
         let rust_semantic_depth = matches!(
@@ -684,6 +686,7 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v12"
                     | "codenoesis.knowledge-graph/v13"
                     | "codenoesis.knowledge-graph/v14"
+                    | "codenoesis.knowledge-graph/v15"
             )
         );
         let declaration_alternatives = matches!(
@@ -701,6 +704,7 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v12"
                     | "codenoesis.knowledge-graph/v13"
                     | "codenoesis.knowledge-graph/v14"
+                    | "codenoesis.knowledge-graph/v15"
             )
         );
         let compiler_index = matches!(
@@ -716,6 +720,7 @@ impl GraphIndex {
                     | "codenoesis.knowledge-graph/v12"
                     | "codenoesis.knowledge-graph/v13"
                     | "codenoesis.knowledge-graph/v14"
+                    | "codenoesis.knowledge-graph/v15"
             )
         );
         let callable_scip_composition =
@@ -724,9 +729,17 @@ impl GraphIndex {
             graph_schema_version == Some("codenoesis.knowledge-graph/v11");
         let expression_bindings = matches!(
             graph_schema_version,
-            Some("codenoesis.knowledge-graph/v13" | "codenoesis.knowledge-graph/v14")
+            Some(
+                "codenoesis.knowledge-graph/v13"
+                    | "codenoesis.knowledge-graph/v14"
+                    | "codenoesis.knowledge-graph/v15"
+            )
         );
-        let local_flow = graph_schema_version == Some("codenoesis.knowledge-graph/v14");
+        let local_flow = matches!(
+            graph_schema_version,
+            Some("codenoesis.knowledge-graph/v14" | "codenoesis.knowledge-graph/v15")
+        );
+        let constant_evaluation = graph_schema_version == Some("codenoesis.knowledge-graph/v15");
         let repository_boundaries = if matches!(
             graph_schema_version,
             Some("codenoesis.knowledge-graph/v10" | "codenoesis.knowledge-graph/v11")
@@ -794,6 +807,7 @@ impl GraphIndex {
             callable_cfg_alternatives,
             expression_bindings,
             local_flow,
+            constant_evaluation,
             repository_boundaries,
             entities,
             relationships,
@@ -1804,6 +1818,16 @@ fn module_document(
             &mut statements,
         )?;
     }
+    if index.constant_evaluation {
+        append_constant_evaluation(
+            index,
+            &document_id,
+            string_field(module, "crate_id")?,
+            module_path,
+            &mut content,
+            &mut statements,
+        )?;
+    }
     Ok(DocumentDraft {
         document_id,
         kind: "module",
@@ -2109,6 +2133,72 @@ fn is_local_flow_relationship_kind(kind: &str) -> bool {
             | "LEXICAL_MUST_REACHES_READ"
             | "LEXICAL_MAY_REACHES_READ"
     )
+}
+
+fn append_constant_evaluation(
+    index: &GraphIndex,
+    document_id: &str,
+    crate_id: &str,
+    module_path: &str,
+    content: &mut String,
+    statements: &mut Vec<Value>,
+) -> Result<(), DocumentationContractError> {
+    let mut values = index
+        .entities
+        .values()
+        .filter_map(|entity| {
+            (string_field(entity, "kind") == Ok("rust.evaluated_value"))
+                .then(|| string_field(entity, "declared_value_id").ok())
+                .flatten()
+                .and_then(|declared_id| {
+                    let declared = index.entities.get(declared_id)?;
+                    (string_field(declared, "crate_id") == Ok(crate_id)
+                        && string_field(declared, "module_path") == Ok(module_path))
+                    .then_some((entity, declared))
+                })
+        })
+        .collect::<Vec<_>>();
+    values.sort_by(|(left, _), (right, _)| {
+        string_field(left, "id")
+            .unwrap_or_default()
+            .cmp(string_field(right, "id").unwrap_or_default())
+    });
+    if values.is_empty() {
+        return Ok(());
+    }
+    content.push_str(
+        "\n## Safe constant evaluation\n\nThese values are derived from the closed, target-independent R16 syntax profile; this is not compiler or runtime evaluation. Unsupported expressions retain explicit uncertainty and produce no guessed value.\n\n",
+    );
+    for (ordinal, (entity, declared)) in values.into_iter().enumerate() {
+        let identifier = string_field(entity, "id")?;
+        let declared_identifier = string_field(entity, "declared_value_id")?;
+        let properties = entity
+            .get("properties")
+            .ok_or(DocumentationContractError::InvalidSnapshot)?;
+        let claim = index.claim("entity", identifier)?;
+        let statement = statement_value(
+            document_id,
+            "safe_constant_evaluation",
+            identifier,
+            ordinal,
+            "derived_fact",
+            vec![identifier.to_owned(), declared_identifier.to_owned()],
+            string_array(claim, "evidence_ids")?,
+            Vec::new(),
+        );
+        writeln!(
+            content,
+            "- `{}` evaluates to `{}` as `{}` using `{}`. {}",
+            markdown_code(string_field(declared, "name")?),
+            markdown_code(string_field(properties, "canonical_value")?),
+            markdown_code(string_field(properties, "rust_type")?),
+            markdown_code(string_field(properties, "type_authority")?),
+            statement_marker(&statement)?
+        )
+        .expect("writing Markdown to a String cannot fail");
+        statements.push(statement);
+    }
+    Ok(())
 }
 
 fn describe_k1_entity(entity: &Value) -> Result<String, DocumentationContractError> {

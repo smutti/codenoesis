@@ -15,6 +15,7 @@ use tree_sitter::{Node, Parser};
 use unicode_normalization::UnicodeNormalization as _;
 
 mod callable_semantics;
+mod constant_evaluation;
 mod expression_bindings;
 mod framework_declarations;
 mod local_flow;

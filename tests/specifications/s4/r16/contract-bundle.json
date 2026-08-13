@@ -1,0 +1,122 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "README.md",
+      "sha256": "68d61aa53c59317ff88b5e4c434d860da4859a39287baf9542efdbdf66dd0bca"
+    },
+    {
+      "path": "docs/software/architecture.md",
+      "sha256": "88192f6877eaaba6f066ea5b5c04ff8ed6449f95e09d2d18a328e6bfd4dd1efe"
+    },
+    {
+      "path": "docs/software/decisions/0030-s4-r16-safe-constant-evaluation.md",
+      "sha256": "8a6b1de106f4615adf9833a454cd443c598b0997df6a697ac7220443805af3c6"
+    },
+    {
+      "path": "docs/software/roadmap.md",
+      "sha256": "55d93f5cd7219fcd2049213db37c8ce09d3f7e83341872293ed1a8a9c130f4b2"
+    },
+    {
+      "path": "docs/software/software-requirements-specification.md",
+      "sha256": "9b9dfe6f9c3611b626682f223655fc7a3cd501a4ca776da4b8f7eaca2236d75d"
+    },
+    {
+      "path": "scripts/tests/test_s4_r16_safe_constant_evaluation_contract.py",
+      "sha256": "e0d5d8294bcb4ace7a4d9aff7dcc1b67998bf5236dca63556acd8383c7b2721e"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-safe-constant-evaluation-v1/README.md",
+      "sha256": "cf76b2b3f7d8591b9e6f22e371f88c3af83eec0c5d23814d8c2df466b080c581"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-safe-constant-evaluation-v1/expected-safe-constant-evaluation.json",
+      "sha256": "e4638bd35eff68dcb9a3dba73ecfb779134e3bce7207b500bfd0128ee229f368"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-safe-constant-evaluation-v1/manifest.json",
+      "sha256": "acb16569d3cd94fddc0255698a848042806a47567be4a630212922a588859287"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-safe-constant-evaluation-v1/repository/Cargo.toml",
+      "sha256": "baf1717a1d89176f648af94dd385500e3a8bfe081eb24d776fff5a00f0b98e2f"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-safe-constant-evaluation-v1/repository/src/lib.rs",
+      "sha256": "8d3532c25027fd5444beff5ee1a62c3603cbe62aa8d44ffdb16af9038179571f"
+    },
+    {
+      "path": "tests/specifications/s4/r14-r15-real-repository-correction/README.md",
+      "sha256": "a94b0e076bfd57f60e60368fcc31193cc750a541d71e6ba48326208391e9f0b2"
+    },
+    {
+      "path": "tests/specifications/s4/r14-r15-real-repository-correction/correction-v1.json",
+      "sha256": "8b3678894c3e9259d065f64b4753c3f1f9ac02b58363414dc29fa1e85ca478a1"
+    },
+    {
+      "path": "tests/specifications/s4/r14-r15-real-repository-correction/real-repository-pilots-v1.json",
+      "sha256": "7bb2997a39b807c4182861823dbac4791d24f75aeb2c1bf4760363ec1f981c35"
+    },
+    {
+      "path": "tests/specifications/s4/r15/contract-bundle.json",
+      "sha256": "d8c909af643334aa69c72fc9e88d68b14d491aa4f822ebb6fe4e5687d1fb8222"
+    },
+    {
+      "path": "tests/specifications/s4/r16/codenoesis-error-v24.schema.json",
+      "sha256": "da663de52e2f387a06c4930a1341bf3c9ea6a5946d1cb856a9691500ad2e02b4"
+    },
+    {
+      "path": "tests/specifications/s4/r16/configuration-v15.schema.json",
+      "sha256": "449ac08bdd8af56790da106fcd7d75360228fde12cf41f7a088b9d20c86a6415"
+    },
+    {
+      "path": "tests/specifications/s4/r16/e2e_fr_ext_020_rust_safe_constant_evaluation.json",
+      "sha256": "08c2118e2568ea72b49df7b26bb2adee21436cf3de2e933ca6cfbc50b7e09b3b"
+    },
+    {
+      "path": "tests/specifications/s4/r16/extraction-chunk-v15.schema.json",
+      "sha256": "e1b041fcedd985675993dbdc03801dbe007c46263e5694e357906189deb5b363"
+    },
+    {
+      "path": "tests/specifications/s4/r16/invalid-cases-v1.json",
+      "sha256": "5649296074f4c100b23f13d89760ff87a880e3115541fdaf55de287da8a38d65"
+    },
+    {
+      "path": "tests/specifications/s4/r16/knowledge-graph-v15.schema.json",
+      "sha256": "6243e113579db7c7d148bdfa491d4a8b4d12242b965d4352f7afa768de60ebc4"
+    },
+    {
+      "path": "tests/specifications/s4/r16/local-explorer-manifest-v9.schema.json",
+      "sha256": "c66ab8da1da577a08b6b610714d590974d7893900f82536299fbeff6c1e738e5"
+    },
+    {
+      "path": "tests/specifications/s4/r16/local-query-result-v13.schema.json",
+      "sha256": "5aa935c60b376791e33ce84243156552b0d6c40fc7266a4857f04e90dfbd4050"
+    },
+    {
+      "path": "tests/specifications/s4/r16/portable-graph-v9.schema.json",
+      "sha256": "037009342aff6a6e665824b88f07c61fb407b3f12604d7c289cb565afbf85fda"
+    },
+    {
+      "path": "tests/specifications/s4/r16/repository-snapshot-v18.schema.json",
+      "sha256": "05408d42e2bd5bf3ecb1abf209e7a36fdc4655438d48d2f6c8bf58f9381d5d75"
+    },
+    {
+      "path": "tests/specifications/s4/r16/rust-ontology-v15.json",
+      "sha256": "7716f08f758a289f8ea8aa4d84497ae0639f4bf93b03bde0ba394fa98531f111"
+    },
+    {
+      "path": "tests/specifications/s4/r16/safe-constant-evaluation-v1.json",
+      "sha256": "b1f6b6aa80a67cac8ba13633f0cce97e9678e8913492ebd05b1e14d8cf6e8dd7"
+    },
+    {
+      "path": "tests/specifications/s4/r16/semantic-hash-contract-v14.json",
+      "sha256": "c0009ea448aa23cb284bea7783e1090ec6a23ef5eb460b70246d5c998d2c990a"
+    }
+  ],
+  "bundle_sha256": "bdd8c15558bdb7f3904b37c1dc1a33d636b78bd4927327439204f163b6b73ac2"
+}
