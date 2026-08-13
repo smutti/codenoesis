@@ -17,7 +17,7 @@
   "exact_base_sha": "16252f59b2dd2302b3f660268843869a45f8ca87",
   "checkpoint_sha": "f4891ccffb781c4b5584673c24ad7d01aee7ee3e",
   "red_evidence_sha": "fa8f5c0e88fc602a64056786cf5ee8843049589d",
-  "implementation_sha": "13762174f5f919f0dc0008d5f6e8a344634a1a28",
+  "implementation_sha": "f6ecffa1ad8b8cf86f3e18869aef120bf66ae771",
   "dependency_change": false,
   "control_plane_change": false,
   "actual_changed_paths": [
@@ -83,9 +83,43 @@
     "valid_v9": true,
     "fail_closed_cases": ["mismatched_v8", "malformed_json", "incomplete_v9", "privacy_violation", "maximum_plus_one"]
   },
-  "correction_rounds_used": 1,
+  "corrections": [
+    {
+      "round": 1,
+      "finding": "Real-browser validation exposed a false duplicate document-statement identity because document_id was selected before statement_id.",
+      "resolution": "Prefer statement_id before document_id and recalculate the seven viewer and CSP integrity pins."
+    },
+    {
+      "round": 2,
+      "finding": "The complete strict Clippy gate rejected format-collect in the new test-only hexadecimal helper.",
+      "resolution": "Write each digest byte directly into one capacity-bounded String; full strict Clippy then passed."
+    }
+  ],
+  "correction_rounds_used": 2,
   "repository_gate": {
-    "status": "not run yet on evidence head"
+    "status": "Green",
+    "tested_head_sha": "f6ecffa1ad8b8cf86f3e18869aef120bf66ae771",
+    "started_at": "2026-08-13T15:11:38Z",
+    "completed_at": "2026-08-13T15:22:48Z",
+    "commands": [
+      "actionlint -no-color",
+      "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+      "cargo fmt --all --check",
+      "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "cargo test --workspace --all-targets --all-features --locked",
+      "cargo test --workspace --doc --all-features --locked",
+      "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "python3 scripts/validate_benchmark_assets.py",
+      "cargo bench --workspace --all-features --no-run --locked",
+      "git diff --check"
+    ],
+    "python_governance_tests": 331,
+    "benchmark_assets": "valid: status=scaffold, suites=0",
+    "log": {
+      "path": "crates/noesis/tests/evidence/s4/versioned-local-explorer/repository-gate.log",
+      "byte_length": 72945,
+      "sha256": "878fbbded4df568be005e3e18fe2fdd4291169b602db830d626079e908371000"
+    }
   },
   "environment": {
     "os": "macOS 26.5.2 build 25F84",
@@ -113,6 +147,6 @@
   "known_limitations": [
     "This is candidate evidence, not independent verification or an Approved/Verified fact on main.",
     "Strict Rust reimport remains the full PortableGraph contract authority; the browser performs bounded inspection checks.",
-    "The complete repository gate, base-controlled GitHub checks, independent review, and protected manual merge remain pending at this observation."
+    "Base-controlled GitHub checks, independent review, and protected manual merge remain pending at this observation."
   ]
 }
