@@ -1,0 +1,95 @@
+$ python3 -m unittest scripts.tests.test_s4_versioned_explorer_contract -v
+test_candidate_governance_is_complete_and_not_verified (scripts.tests.test_s4_versioned_explorer_contract.VersionedLocalExplorerContractTest) ... ok
+test_csp_hashes_and_dom_rendering_are_closed (scripts.tests.test_s4_versioned_explorer_contract.VersionedLocalExplorerContractTest) ... ok
+test_exact_authority_and_version_mapping (scripts.tests.test_s4_versioned_explorer_contract.VersionedLocalExplorerContractTest) ... ok
+test_historical_viewer_assets_are_immutable (scripts.tests.test_s4_versioned_explorer_contract.VersionedLocalExplorerContractTest) ... ok
+test_materialized_viewers_match_integrity_pins (scripts.tests.test_s4_versioned_explorer_contract.VersionedLocalExplorerContractTest) ... ok
+test_security_and_inspection_contract_is_closed (scripts.tests.test_s4_versioned_explorer_contract.VersionedLocalExplorerContractTest) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.003s
+
+OK
+$ node --check /tmp/codenoesis-issue-176-viewer.js
+$ cargo fmt --all --check
+$ cargo test -p noesis --lib portable_explorer::tests::pt_nfr_det_001_versioned_viewers_are_exact_and_deterministic --locked -- --exact --nocapture
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running unittests src/lib.rs (target/debug/deps/noesis-700776f981933458)
+
+running 1 test
+test portable_explorer::tests::pt_nfr_det_001_versioned_viewers_are_exact_and_deterministic ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 25 filtered out; finished in 0.14s
+
+$ cargo test -p noesis --test e2e_fr_ext_013_cfg_declaration_alternatives e2e_fr_exp_003_r10_lossless_local_journey --locked -- --exact --nocapture
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running tests/e2e_fr_ext_013_cfg_declaration_alternatives.rs (target/debug/deps/e2e_fr_ext_013_cfg_declaration_alternatives-c611ff21cded9de6)
+
+running 1 test
+test e2e_fr_exp_003_r10_lossless_local_journey ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 1.62s
+
+$ cargo test -p noesis --test e2e_fr_ext_012_k1_repository_boundaries e2e_fr_ext_012_k1_gitlink_boundaries_complete_local_journey --locked -- --exact --nocapture
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running tests/e2e_fr_ext_012_k1_repository_boundaries.rs (target/debug/deps/e2e_fr_ext_012_k1_repository_boundaries-9689a36f4dc4733a)
+
+running 1 test
+test e2e_fr_ext_012_k1_gitlink_boundaries_complete_local_journey ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 4.29s
+
+$ cargo test -p noesis --test e2e_fr_ext_014_k1_cfg_alternatives e2e_fr_ext_014_k1_cfg_alternatives_complete_local_journey --locked -- --exact --nocapture
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running tests/e2e_fr_ext_014_k1_cfg_alternatives.rs (target/debug/deps/e2e_fr_ext_014_k1_cfg_alternatives-e70908a650dd102f)
+
+running 1 test
+test e2e_fr_ext_014_k1_cfg_alternatives_complete_local_journey ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 4.20s
+
+$ cargo test -p noesis --test e2e_fr_ext_015_k1_scip_composition e2e_fr_ext_015_k1_scip_composition_complete_local_journey --locked -- --exact --nocapture
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running tests/e2e_fr_ext_015_k1_scip_composition.rs (target/debug/deps/e2e_fr_ext_015_k1_scip_composition-727e14f15f42aa81)
+
+running 1 test
+test e2e_fr_ext_015_k1_scip_composition_complete_local_journey ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 2.78s
+
+$ cargo test -p noesis --test e2e_fr_ext_016_rust_expression_bindings e2e_fr_ext_016_rust_expression_bindings_complete_local_journey --locked -- --exact --nocapture
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running tests/e2e_fr_ext_016_rust_expression_bindings.rs (target/debug/deps/e2e_fr_ext_016_rust_expression_bindings-48ae3b243eea44ae)
+
+running 1 test
+test e2e_fr_ext_016_rust_expression_bindings_complete_local_journey ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 5.29s
+
+$ cargo test -p noesis --test e2e_fr_ext_017_rust_local_flow e2e_fr_ext_017_rust_local_flow_complete_local_journey --locked -- --exact --nocapture
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running tests/e2e_fr_ext_017_rust_local_flow.rs (target/debug/deps/e2e_fr_ext_017_rust_local_flow-8ab0885d8d7b4be9)
+
+running 1 test
+test e2e_fr_ext_017_rust_local_flow_complete_local_journey ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 2.41s
+
+$ cargo test -p noesis --test e2e_fr_ext_020_rust_safe_constant_evaluation e2e_fr_ext_020_rust_safe_constant_evaluation_complete_local_journey --locked -- --exact --nocapture
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running tests/e2e_fr_ext_020_rust_safe_constant_evaluation.rs (target/debug/deps/e2e_fr_ext_020_rust_safe_constant_evaluation-a11d93f5182d311e)
+
+running 1 test
+test e2e_fr_ext_020_rust_safe_constant_evaluation_complete_local_journey ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 2.26s
+
+$ git diff --check

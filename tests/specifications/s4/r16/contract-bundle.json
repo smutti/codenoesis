@@ -7,11 +7,11 @@
     },
     {
       "path": "README.md",
-      "sha256": "ed3fb45ca4a2f11b857c8dcf8cc4e0b7c0413d541afcc4094a03a4fd834586b0"
+      "sha256": "b6f52cc95054f40400e8449c0a83f23725ad2d6e5bc5656d0e021bee704474c2"
     },
     {
       "path": "docs/software/architecture.md",
-      "sha256": "8bc00817d9f22836d2a6ac04cc01ccccd5551dd7a4ab7aa1d7dfd8f4001028e5"
+      "sha256": "810699d5af1da4a32953253405704853eac9e955170d6bead22186a1f3710be0"
     },
     {
       "path": "docs/software/decisions/0030-s4-r16-safe-constant-evaluation.md",
@@ -19,11 +19,11 @@
     },
     {
       "path": "docs/software/roadmap.md",
-      "sha256": "f05305d9e7f67f761cd916d99b3ea4dd674d6f093688bc6a526ba34f436b4255"
+      "sha256": "8ef54a570c7a5bc733867901556a2e1366f8f736a4b26cd96cc9a1dc51b382c9"
     },
     {
       "path": "docs/software/software-requirements-specification.md",
-      "sha256": "33c4b254e870faa645f329b848b2791107df03bbc09bda9bf430df47c7ca33f7"
+      "sha256": "1361a1c0fc6b91bc75e04b595185886939c12df97b79d5ebbb809a866165bf44"
     },
     {
       "path": "scripts/tests/test_s4_r16_safe_constant_evaluation_contract.py",
@@ -118,5 +118,5 @@
       "sha256": "c0009ea448aa23cb284bea7783e1090ec6a23ef5eb460b70246d5c998d2c990a"
     }
   ],
-  "bundle_sha256": "b3947080ceb425f68fda79d93646eba13e97fe525748bb57d96dabcf9fe08339"
+  "bundle_sha256": "377c97bcbde32a4c992d2b115c8b9e9eab1a7ccbb2aa6a7fdebdc404e5d86f7b"
 }

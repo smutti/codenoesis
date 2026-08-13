@@ -243,8 +243,9 @@ equal the graph projection exactly. ConfigurationV12, ExtractionChunkV12, and
 the V15/V12 family use separate semantic hash domains.
 
 LocalQueryResultV10 exposes callable, signature, compiler-symbol, and join
-neighborhoods. PortableGraphV6 is a lossless private V15 projection and
-LocalExplorerV6 reuses the immutable K1 viewer bytes. R7 alone remains V10 and
+neighborhoods. PortableGraphV6 is a lossless private V15 projection and the
+historical LocalExplorerV6 implementation reused the immutable K1 viewer
+bytes. R7 alone remains V10 and
 K1 alone remains V11. R10/R12 declaration alternatives, R2/R11 repository
 boundaries, nested source, and the R9 output-capacity selector do not compose in
 R13. Complete R7 plus K1 intent selects typed ErrorV20 failures and cannot
@@ -402,15 +403,32 @@ or runtime behavior.
 ConfigurationV15, ExtractionChunkV15, KnowledgeGraphV15, and
 RepositorySnapshotV18 use new semantic hash domains and preserve the complete
 corrected R15 graph. LocalQueryResultV13 exposes evaluated values and exact
-derivations. PortableGraphV9 retains the evaluation index losslessly, and
-LocalExplorerV9 deterministically emits its manifest while reusing immutable
-viewer assets. Those browser assets still validate only
-`codenoesis.portable-graph/v2`; loading the matching generated PortableGraphV9
-therefore fails with `Unsupported portable graph schema.` This is a known
-interface defect, so the V9 browser journey is not currently an advertised
-usable capability and requires a separately authorized correction. Omitting
-the selector remains byte-identical R15; repository-boundary, cfg-alternative,
-and SCIP/compiler composition fails before acquisition.
+derivations. PortableGraphV9 retains the evaluation index losslessly. On the
+protected base, LocalExplorerV9 deterministically emits its manifest while its
+K1-derived browser still accepts only `codenoesis.portable-graph/v2`; loading
+the matching V9 graph therefore fails. Omitting the selector remains
+byte-identical R15; repository-boundary, cfg-alternative, and SCIP/compiler
+composition fails before acquisition.
+
+### LocalExplorerV3-V9 exact-schema correction candidate
+
+Issue [#176](https://github.com/smutti/codenoesis/issues/176) and
+[Decision 0031](decisions/0031-s4-versioned-local-explorer-browser.md) define
+one Proposed high-risk S4 correction over exact base
+`16252f59b2dd2302b3f660268843869a45f8ca87`. It leaves every ontology, query,
+portable graph, explorer manifest schema, marker, identity, and V1/V2 viewer
+byte unchanged. Only the V3-V9 publishers receive a reviewed template
+materialized with one exact expected PortableGraph schema and integrity-pinned
+by the existing manifest entrypoint.
+
+The candidate validates exact version, size, common families,
+version-specific indexes, unique identities, and privacy before enabling
+inspection. It exposes counts, exact-ID/NFC search, typed filters,
+relationships, claims, evidence, derivations, diagnostics, coverage gaps, and
+deterministic depth-one/two SVG neighborhoods. Rejection clears all prior
+state. CSP remains default-deny with no network, dynamic code, storage,
+telemetry, source access, browser auto-launch, mutation, repair, or inference.
+The behavior is not effective or Verified until protected manual merge.
 
 ### S7 implementation-aware runtime boundary
 

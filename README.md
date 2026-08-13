@@ -25,11 +25,14 @@ Implemented, but not Verified. It derives only checked target-independent
 primitive constants and fixed-repr enum discriminants while retaining explicit
 gaps for every unsupported case.
 
-One known interface defect remains: generation of the deterministic
-LocalExplorerV9 manifest and PortableGraphV9 succeeds, but the immutable browser
-frontend still validates only `codenoesis.portable-graph/v2` and rejects the V9
-graph with `Unsupported portable graph schema.` The V9 browser explorer is not
-advertised as usable until a separately reviewed correction is merged.
+Issue [#176](https://github.com/smutti/codenoesis/issues/176) and
+[Decision 0031](docs/software/decisions/0031-s4-versioned-local-explorer-browser.md)
+define the Proposed high-risk S4 correction for the known LocalExplorerV3-V9
+browser defect. The candidate binds each generated explorer to its exact
+PortableGraphV3-V9 schema and adds real bounded graph inspection while
+preserving the immutable V1/V2 viewer assets. Until the exact pull request is
+manually merged, current `main` still rejects those later graphs and the
+browser journey is not advertised as usable.
 Complete independent evidence acceptance, broader language coverage,
 operations, and the remaining production-readiness slices are still pending.
 

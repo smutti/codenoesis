@@ -11,6 +11,7 @@ use sha2::{Digest as _, Sha256};
 
 use support::parse_single_document;
 use support::s4_r12::{MaterializedCallableCfgAlternativesRepository, expected_composition};
+use support::versioned_explorer::assert_matching_viewer_contract;
 
 const EXPECTED_RED_STDERR_SHA256: &str =
     "dbe134dbc101765a8ebdc2ffe917f4776fddb42d10e3dfe1957e2aa819adb70c";
@@ -289,12 +290,7 @@ fn e2e_fr_ext_014_k1_cfg_alternatives_complete_local_journey() {
     assert_eq!(manifest["schema_version"], "codenoesis.local-explorer/v5");
     assert_eq!(manifest["security"]["network"], false);
     assert_eq!(manifest["security"]["dynamic_code"], false);
-    let viewer = fs::read(repository.explorer.join("index.html")).expect("read R12 viewer");
-    let immutable_viewer = normalize_lf(
-        &fs::read(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("assets/s4/k1/index.html"))
-            .expect("read immutable K1 viewer"),
-    );
-    assert_eq!(viewer, immutable_viewer);
+    assert_matching_viewer_contract(&repository.explorer.join("index.html"), &manifest, 5);
     assert!(!repository.build_sentinel().exists());
 
     let with_boundary = MaterializedCallableCfgAlternativesRepository::fixture();
