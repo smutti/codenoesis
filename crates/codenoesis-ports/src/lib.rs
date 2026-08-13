@@ -23,6 +23,7 @@ use codenoesis_domain::s4_r10::{
 use codenoesis_domain::s4_r12::{CallableCfgAlternativesError, CallableCfgAlternativesExtraction};
 use codenoesis_domain::s4_r14::{ExpressionBindingError, ExpressionBindingExtraction};
 use codenoesis_domain::s4_r15::{LocalFlowError, LocalFlowExtraction};
+use codenoesis_domain::s4_r16::{ConstantEvaluationError, ConstantEvaluationExtraction};
 use codenoesis_domain::s5::{AnalysisCacheEntry, IncrementalWorkspaceExtraction};
 use codenoesis_domain::s6::{ContractError, OpenApiContractInput, ProviderContract};
 use codenoesis_domain::s7::{
@@ -255,6 +256,19 @@ pub trait RustLocalFlowExtractor {
         &self,
         inventory: &RepositoryInventory,
     ) -> Result<LocalFlowExtraction, LocalFlowError>;
+}
+
+pub trait RustConstantEvaluationExtractor {
+    /// Extracts the closed R16 fixed-width constant-evaluation overlay over exact R15 facts.
+    ///
+    /// # Errors
+    ///
+    /// Returns an inherited R15 or typed identity, value, dependency, derivation, or limit
+    /// failure without executing repository content or consulting target-dependent authority.
+    fn extract_rust_constant_evaluation(
+        &self,
+        inventory: &RepositoryInventory,
+    ) -> Result<ConstantEvaluationExtraction, ConstantEvaluationError>;
 }
 
 pub trait RustFrameworkDeclarationExtractor {

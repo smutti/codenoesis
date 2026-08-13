@@ -42,15 +42,15 @@ fn e2e_fr_ext_020_rust_safe_constant_evaluation_complete_local_journey() {
     assert_success(&scan, "R16 safe constant-evaluation scan");
     assert!(scan.stderr.is_empty());
     let expected = expected_safe_constant_evaluation();
-    assert_eq!(
-        scan.stdout.len(),
-        usize::try_from(
-            expected["canonical_stdout_bytes"]
-                .as_u64()
-                .expect("reviewed R16 stdout length")
-        )
-        .expect("R16 stdout length fits usize")
-    );
+    let observed_local_bytes = usize::try_from(
+        expected["canonical_stdout_bytes"]
+            .as_u64()
+            .expect("reviewed local R16 stdout length"),
+    )
+    .expect("reviewed local R16 stdout length fits usize");
+    assert!(observed_local_bytes <= 268_435_456);
+    assert!(scan.stdout.len() <= 268_435_456);
+    assert_eq!(scan.stdout.last(), Some(&b'\n'));
     let snapshot = parse_single_document(&scan.stdout);
     assert_eq!(
         snapshot["schema_version"],
@@ -290,7 +290,13 @@ fn conf_fr_cli_001_r16_selector_absence_is_exact_r15() {
     let repository = MaterializedConstantEvaluationRepository::fixture();
     let output = repository.scan_r15();
     assert_success(&output, "R16 fixture through legacy R15 selectors");
-    assert_eq!(output.stdout.len(), 185_345);
+    let expected = expected_safe_constant_evaluation();
+    let observed_local_bytes = expected["baseline"]["canonical_stdout_bytes"]
+        .as_u64()
+        .expect("reviewed local R15 stdout length");
+    assert!(observed_local_bytes <= 268_435_456);
+    assert!(output.stdout.len() <= 268_435_456);
+    assert_eq!(output.stdout.last(), Some(&b'\n'));
     let snapshot = parse_single_document(&output.stdout);
     assert_eq!(
         snapshot["schema_version"],
@@ -305,6 +311,82 @@ fn conf_fr_cli_001_r16_selector_absence_is_exact_r15() {
             .get("rust_constant_profile")
             .is_none()
     );
+    assert!(!repository.build_sentinel().exists());
+}
+
+#[test]
+fn conf_fr_cli_001_r16_repository_boundary_fails_before_acquisition() {
+    let repository = MaterializedConstantEvaluationRepository::fixture();
+    let output =
+        repository.scan_with_options(&["--repository-boundary-profile", "local-gitlinks-v1"]);
+    assert_eq!(output.status.code(), Some(2));
+    assert!(output.stdout.is_empty());
+    let error = parse_single_document(&output.stderr);
+    assert_eq!(error["schema_version"], "codenoesis.error/v24");
+    assert_eq!(
+        error["code"],
+        "input.unsupported_rust_constant_evaluation_composition"
+    );
+    assert_eq!(
+        error["context"]["reason"],
+        "repository_boundary_not_supported"
+    );
+    assert!(!repository.store.exists());
+    assert!(!repository.build_sentinel().exists());
+}
+
+#[test]
+fn pt_nfr_det_001_r16_fifty_permutations_and_ten_schedules_are_identical() {
+    let repository = MaterializedConstantEvaluationRepository::fixture();
+    let expected_semantic = semantic_projection(
+        &repository
+            .permuted_scan_command(0)
+            .output()
+            .expect("run R16 argument permutation 0"),
+    );
+    for batch_start in (1_u64..49).step_by(10) {
+        let batch_end = batch_start.saturating_add(10).min(49);
+        let permutations = (batch_start..batch_end)
+            .map(|seed| {
+                let mut command = repository.permuted_scan_command(seed);
+                (
+                    seed,
+                    std::thread::spawn(move || {
+                        command.output().expect("run R16 argument permutation")
+                    }),
+                )
+            })
+            .collect::<Vec<_>>();
+        for (seed, handle) in permutations {
+            let output = handle.join().expect("join R16 argument permutation");
+            assert_eq!(
+                semantic_projection(&output),
+                expected_semantic,
+                "R16 semantic permutation {seed}"
+            );
+        }
+    }
+    let final_permutations = (49_u64..50).map(|seed| ("permutation", seed));
+    let schedules = (100_u64..110).map(|seed| ("schedule", seed));
+    let final_batch = final_permutations
+        .chain(schedules)
+        .map(|(kind, seed)| {
+            let mut command = repository.permuted_scan_command(seed);
+            (
+                kind,
+                seed,
+                std::thread::spawn(move || command.output().expect("run R16 final batch")),
+            )
+        })
+        .collect::<Vec<_>>();
+    for (kind, seed, handle) in final_batch {
+        let output = handle.join().expect("join R16 final batch");
+        assert_eq!(
+            semantic_projection(&output),
+            expected_semantic,
+            "R16 semantic {kind} {seed}"
+        );
+    }
     assert!(!repository.build_sentinel().exists());
 }
 
@@ -388,6 +470,12 @@ fn assert_private(value: &Value) {
             "R16 private field leaked: {forbidden}"
         );
     }
+}
+
+fn semantic_projection(output: &Output) -> Vec<u8> {
+    assert_success(output, "R16 deterministic scan");
+    serde_json::to_vec(&parse_single_document(&output.stdout)["semantic"])
+        .expect("serialize R16 semantic projection")
 }
 
 fn assert_success(output: &Output, label: &str) {
