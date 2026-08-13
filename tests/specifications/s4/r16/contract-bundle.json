@@ -7,7 +7,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "5c8ebb29110a92ecacdb84985b39e994ff4fbb6f7c0203add34d80268c1e338a"
+      "sha256": "68d61aa53c59317ff88b5e4c434d860da4859a39287baf9542efdbdf66dd0bca"
     },
     {
       "path": "docs/software/architecture.md",
@@ -118,5 +118,5 @@
       "sha256": "c0009ea448aa23cb284bea7783e1090ec6a23ef5eb460b70246d5c998d2c990a"
     }
   ],
-  "bundle_sha256": "a11797eac9f428760ba67e875ef8dd7702429c365204f057a8a073d084d9e1df"
+  "bundle_sha256": "bdd8c15558bdb7f3904b37c1dc1a33d636b78bd4927327439204f163b6b73ac2"
 }
