@@ -16,8 +16,9 @@ immutable compatibility checkpoint; later protected merges extend it rather
 than replacing it.
 The latest protected merges add committed-source expression and lexical-binding
 facts, closed source-normal local flow, the bounded implementation-aware
-HTTP/JSON impact pilot, and the accepted R14/R15 fail-closed correction with
-its explicit scan-only `local-snapshot-256m-v1` output envelope. Issue #172 and
+HTTP/JSON impact pilot, and the Issue #170 / Decision 0029 accepted R14/R15
+fail-closed correction with its explicit scan-only `local-snapshot-256m-v1`
+output envelope. Issue #172 and
 Decision 0030 define the Proposed `rust-safe-constant-evaluation-v1` candidate,
 which derives only checked target-independent primitive constants and fixed-
 repr enum discriminants while retaining explicit gaps for every unsupported
