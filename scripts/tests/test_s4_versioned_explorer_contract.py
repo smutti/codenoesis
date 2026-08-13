@@ -1,7 +1,6 @@
 import base64
 import hashlib
 import json
-import re
 import unittest
 from pathlib import Path
 
@@ -17,6 +16,14 @@ PUBLISHER = ROOT / "crates/noesis/src/portable_explorer.rs"
 
 def load_json(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def inline_element_contents(document: bytes, tag: bytes):
+    opening = b"<" + tag + b">"
+    closing = b"</" + tag + b">"
+    start = document.index(opening) + len(opening)
+    end = document.index(closing, start)
+    return document[start:end]
 
 
 def sha256(path: Path):
@@ -120,12 +127,10 @@ class VersionedLocalExplorerContractTest(unittest.TestCase):
     def test_csp_hashes_and_dom_rendering_are_closed(self):
         contract = load_json(CONTRACT)
         template = TEMPLATE.read_bytes().replace(b"\r\n", b"\n")
-        style = re.search(rb"<style>(.*?)</style>", template, re.DOTALL)
-        script = re.search(rb"<script>(.*?)</script>", template, re.DOTALL)
-        self.assertIsNotNone(style)
-        self.assertIsNotNone(script)
-        style_digest = base64.b64encode(hashlib.sha256(style.group(1)).digest()).decode()
-        script_digest = base64.b64encode(hashlib.sha256(script.group(1)).digest()).decode()
+        style = inline_element_contents(template, b"style")
+        script = inline_element_contents(template, b"script")
+        style_digest = base64.b64encode(hashlib.sha256(style).digest()).decode()
+        script_digest = base64.b64encode(hashlib.sha256(script).digest()).decode()
         csp = contract["content_security_policy"]
         self.assertIn(f"style-src 'sha256-{style_digest}'", csp)
         self.assertIn(f"script-src 'sha256-{script_digest}'", csp)
