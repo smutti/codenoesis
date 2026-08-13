@@ -1,10 +1,9 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9+r14-r15-correction — S0 through S7 and R0-R15 plus K1 are
-> implemented but not Verified; the R14/R15 real-repository correction is a
-> branch-authorized Proposed candidate**. Protected merges #167 and #169 made
-> R15 and the bounded S7 C0-C4 runtime effective. Issue #170 and Decision 0029
-> define only the fail-closed source-only correction package.
+> Status: **0.9+r16 — S0 through S7 and R0-R16 plus K1 are implemented but not
+> Verified**. Protected merges #167, #169, #171, and #173 made R15, the bounded
+> S7 C0-C4 runtime, the R14/R15 real-repository correction, and the exact R16
+> safe constant-evaluation package effective.
 
 ## 1. Document control
 
@@ -12,8 +11,8 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S7 and roadmap R0-R15 plus K1 are Approved and Implemented but not Verified. Protected merges #167 and #169 made R15 and the bounded S7 C0-C4 runtime effective. Issue #170 is an authorized high-risk R14/R15 correction candidate and remains Proposed until protected manual merge. |
-| Date | 2026-08-12 |
+| Status | S0 through S7 and roadmap R0-R16 plus K1 are Approved and Implemented but not Verified. Protected PR #173 merged the exact Issue #172 / Decision 0030 package as `c3d05994a56e747fbe3157173998f8ac76ef7333`; historical Proposed candidate artifacts remain immutable. |
+| Date | 2026-08-13 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -56,6 +55,7 @@
 | `0.9+r15` | 2026-08-11 | Recorded protected empty-R5 correction merge #165 and authorized issue #166 plus Decision 0027 for the closed R15 source-only local-flow layer. The Proposed candidate adds syntax blocks, possible normal branch edges, strict source reachability, lexical must/may reaching definitions, V14/V17 contracts, exact derivations, and a lossless QueryV12/PortableGraphV8/LocalExplorerV8 journey while preserving R0-R14/K1 bytes and broad compiler/runtime gaps. |
 | `0.9+s7-runtime` | 2026-08-12 | Recorded protected R15 merge #167 and authorized issue #168 plus Decision 0028 for one bounded S7 C0-C4 runtime pilot. The Proposed candidate adds explicit Rust direct-JSON-map provider facts, Kotlin/KMP direct-JSON-access client assumptions, three-view reconciliation, and output-only `noesis impact` while preserving the accepted S7 report schema, rule catalog, fixture, identities, and exact golden bytes. |
 | `0.9+r14-r15-correction` | 2026-08-12 | Recorded protected S7 runtime merge #169 and authorized issue #170 plus Decision 0029 for one fail-closed R14/R15 real-repository correction. The Proposed candidate bounds complex K1 target spelling, skips source callables outside inherited authority, omits incomplete R14 edge families, maps gitlinks to typed unsupported composition, and adds the operational scan-only `local-snapshot-256m-v1` envelope without changing schemas, identities, ontology families, or historical bytes. |
+| `0.9+r16` | 2026-08-13 | Recorded protected R14/R15 correction merge #171 and the Issue #172 / Decision 0030 R16 candidate, then reconciled protected PR #173 and merge `c3d05994a56e747fbe3157173998f8ac76ef7333` as Approved and Implemented but not Verified. The post-merge review also records the LocalExplorerV9 browser schema mismatch as a separate correction without changing R16 requirements, ontology semantics, Decision 0030, fixtures, or evidence. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -2252,25 +2252,35 @@ semantics. Decisions 0019, 0020, 0025, and 0027 and every historical schema,
 fixture, golden, identity, hash domain, query/export/explorer contract, and
 viewer byte remain immutable.
 
-### 2.29 S4 R16 bounded safe Rust constant-evaluation candidate register
+### 2.29 S4 R16 bounded safe Rust constant-evaluation lifecycle register
 
 Issue [#172](https://github.com/smutti/codenoesis/issues/172), the accountable
 maintainer's exact package authorization, and
-[Decision 0030](decisions/0030-s4-r16-safe-constant-evaluation.md) govern one
+[Decision 0030](decisions/0030-s4-r16-safe-constant-evaluation.md) governed one
 high-risk S4 candidate on exact corrected R15 base
 `6043313789f6855770520ad5312672fdb081ef38`. Governance, frozen schemas and
 oracle, retained Red, minimum product implementation, tests, documentation,
-traceability, and evidence share one maintainer-supervised pull request. Until
-protected manual merge, the requirements and implementation remain Proposed
-and branch-scoped rather than Approved, Implemented, or Verified facts on
-`main`.
+traceability, and evidence shared one maintainer-supervised pull request.
+Protected PR #173 merged that exact package as
+`c3d05994a56e747fbe3157173998f8ac76ef7333`; the requirements and
+implementation are therefore Approved and Implemented on `main`, but not
+Verified. Decision 0030, the Proposed candidate contracts, and retained
+Red/Green evidence remain immutable historical branch-scoped material.
 
-| Requirement | Current state | Target after protected merge | Slice | Ratification material |
-|---|---|---|---|---|
-| `FR-EXT-020` | Proposed branch-scoped candidate | Approved and Implemented for the exact closed constant-evaluation grammar, not Verified | `S4` | Issue #172, Decision 0030, [closed profile](../../tests/specifications/s4/r16/safe-constant-evaluation-v1.json), [machine oracle](../../tests/fixtures/s4/rust-safe-constant-evaluation-v1/expected-safe-constant-evaluation.json), and [E2E contract](../../tests/specifications/s4/r16/e2e_fr_ext_020_rust_safe_constant_evaluation.json) |
-| `FR-EXP-008` | Proposed branch-scoped candidate | Approved and Implemented for lossless QueryV13, PortableGraphV9, and LocalExplorerV9, not Verified | `S4` | V9/V13 schemas, Decision 0030, strict reimport, derivation, privacy, path, race, and immutable-viewer oracles |
-| Bounded R16 amendments to `FR-EXT-012`, `FR-EXT-016`, `FR-EXT-017`, `FR-KNW-003`, `FR-QRY-001`, `FR-CLI-001`, and `FR-DOC-001/002/003` | Proposed only for the exact issue #172 package | Approved and Implemented only with complete protected merge of that package, not Verified | `S4` | Complete R15 compatibility, exact identities, typed uncertainty, full local journey, and traceability evidence |
-| Bounded R16 amendments to `NFR-DET-001`, `NFR-PER-001`, `NFR-SEC-001/005`, `NFR-PRV-002`, `NFR-TST-001/002`, and `INV-BND-001` | Proposed only for the exact issue #172 package | Approved and Implemented only with complete protected merge of that package, not Verified | `S4` | Retained checkpoint Red, exact limits, 50 permutations, ten schedules, offline/no-execution controls, private projections, pilots, and complete gate |
+| Requirement | Post-merge state | Slice | Ratification material |
+|---|---|---|---|
+| `FR-EXT-020` | Approved and Implemented for the exact closed constant-evaluation grammar, not Verified | `S4` | Issue #172, Decision 0030, [closed profile](../../tests/specifications/s4/r16/safe-constant-evaluation-v1.json), [machine oracle](../../tests/fixtures/s4/rust-safe-constant-evaluation-v1/expected-safe-constant-evaluation.json), and [E2E contract](../../tests/specifications/s4/r16/e2e_fr_ext_020_rust_safe_constant_evaluation.json) |
+| `FR-EXP-008` | Approved and Implemented for lossless QueryV13, PortableGraphV9, and LocalExplorerV9 artifact generation, not Verified | `S4` | V9/V13 schemas, Decision 0030, strict reimport, derivation, privacy, path, race, and immutable-viewer oracles |
+| Bounded R16 amendments to `FR-EXT-012`, `FR-EXT-016`, `FR-EXT-017`, `FR-KNW-003`, `FR-QRY-001`, `FR-CLI-001`, and `FR-DOC-001/002/003` | Approved and Implemented only for the exact protected issue #172 package, not Verified | `S4` | Complete R15 compatibility, exact identities, typed uncertainty, full local journey, and traceability evidence |
+| Bounded R16 amendments to `NFR-DET-001`, `NFR-PER-001`, `NFR-SEC-001/005`, `NFR-PRV-002`, `NFR-TST-001/002`, and `INV-BND-001` | Approved and Implemented only for the exact protected issue #172 package, not Verified | `S4` | Retained checkpoint Red, exact limits, 50 permutations, ten schedules, offline/no-execution controls, private projections, pilots, and complete gate |
+
+The deterministic LocalExplorerV9 manifest and matching PortableGraphV9 are
+implemented artifacts. The immutable browser frontend nevertheless validates
+only `codenoesis.portable-graph/v2` and rejects V9 with
+`Unsupported portable graph schema.` This post-merge interface defect blocks a
+claim that the current V9 browser journey is usable or Verified; correcting it
+requires a separate authorized package and does not change the R16 ontology
+semantics recorded below.
 
 The explicit complete R15 selector matrix plus
 `--rust-constant-profile rust-safe-constant-evaluation-v1` MUST add exactly

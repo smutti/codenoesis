@@ -1,10 +1,9 @@
 # CodeNoesis Software Architecture
 
-> Status: **implementation architecture through the corrected local R15
-> baseline and bounded S7 C0-C4 runtime, with R16 safe constant evaluation a
-> Proposed branch-scoped candidate**. The repository
-> contains working Rust crates and the `noesis` local CLI, but no production
-> server deployment or production-ready release.
+> Status: **implementation architecture through the corrected local R16
+> baseline and bounded S7 C0-C4 runtime; both remain not Verified**. The
+> repository contains working Rust crates and the `noesis` local CLI, but no
+> production server deployment or production-ready release.
 
 This document is the implementation baseline for the [CodeNoesis software track](README.md). Research-only ideas must first define an experiment and acceptance evidence in the [research track](../research/README.md); they enter this architecture only through an explicit engineering decision.
 
@@ -372,13 +371,16 @@ compiler/runtime authority is added.
 
 ### R16 bounded safe Rust constant evaluation
 
-Issue #172 and Decision 0030 define a Proposed high-risk S4 candidate over the
-exact corrected R15 source-only lineage. Its explicit selector is
-`rust-safe-constant-evaluation-v1`. The complete R15 application path
-first produces and validates its ordinary source graph. The Rust adapter then
-provides a bounded `ConstantEvaluationKnowledge` overlay for existing K1
-declared values only; it does not replace, reinterpret, or mutate R15 domain
-facts.
+Issue #172 and Decision 0030 defined the Proposed high-risk S4 candidate over
+the exact corrected R15 source-only lineage. Protected PR #173, merged as
+`c3d05994a56e747fbe3157173998f8ac76ef7333`, made that exact package Approved
+and Implemented, but not Verified. Decision 0030 and its retained checkpoint
+artifacts remain immutable historical branch-scoped Proposed material. The
+explicit selector is `rust-safe-constant-evaluation-v1`. The complete R15
+application path first produces and validates its ordinary source graph. The
+Rust adapter then provides a bounded `ConstantEvaluationKnowledge` overlay for
+existing K1 declared values only; it does not replace, reinterpret, or mutate
+R15 domain facts.
 
 The inward domain owns the closed primitive type catalog, checked value model,
 evaluation dependencies, `rust.evaluated_value`, `EVALUATES_TO`, typed gaps,
@@ -401,9 +403,14 @@ ConfigurationV15, ExtractionChunkV15, KnowledgeGraphV15, and
 RepositorySnapshotV18 use new semantic hash domains and preserve the complete
 corrected R15 graph. LocalQueryResultV13 exposes evaluated values and exact
 derivations. PortableGraphV9 retains the evaluation index losslessly, and
-LocalExplorerV9 reuses immutable viewer assets. Omitting the selector remains
-byte-identical R15; repository-boundary, cfg-alternative, and SCIP/compiler
-composition fails before acquisition.
+LocalExplorerV9 deterministically emits its manifest while reusing immutable
+viewer assets. Those browser assets still validate only
+`codenoesis.portable-graph/v2`; loading the matching generated PortableGraphV9
+therefore fails with `Unsupported portable graph schema.` This is a known
+interface defect, so the V9 browser journey is not currently an advertised
+usable capability and requires a separately authorized correction. Omitting
+the selector remains byte-identical R15; repository-boundary, cfg-alternative,
+and SCIP/compiler composition fails before acquisition.
 
 ### S7 implementation-aware runtime boundary
 

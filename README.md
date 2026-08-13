@@ -6,23 +6,30 @@ CodeNoesis is an early-stage project exploring how to turn software repositories
 
 ## Status
 
-**Implemented local Rust analysis through R15 and the first bounded S7 runtime,
-with R16 safe constant evaluation now a branch-scoped candidate; the product is
-not yet production-ready or Verified.** The pinned Rust workspace now provides deterministic repository
-acquisition, evidence-backed Rust ontology extraction, local persistence,
-documentation, exact-ID query, portable export, and an offline explorer. The
-protected milestone **Implemented local Rust analysis through R14** remains an
-immutable compatibility checkpoint; later protected merges extend it rather
-than replacing it.
+**Implemented local Rust analysis through R16 and the first bounded S7 runtime;
+the product is not yet production-ready or Verified.** The pinned Rust
+workspace now provides deterministic repository acquisition, evidence-backed
+Rust ontology extraction, local persistence, documentation, exact-ID query,
+portable export, and versioned offline-explorer artifacts. The protected
+milestone **Implemented local Rust analysis through R14** remains an immutable
+compatibility checkpoint; later protected merges extend it rather than
+replacing it.
 The latest protected merges add committed-source expression and lexical-binding
 facts, closed source-normal local flow, the bounded implementation-aware
-HTTP/JSON impact pilot, and the Issue #170 / Decision 0029 accepted R14/R15
+HTTP/JSON impact pilot, the Issue #170 / Decision 0029 accepted R14/R15
 fail-closed correction with its explicit scan-only `local-snapshot-256m-v1`
-output envelope. Issue #172 and
-Decision 0030 define the Proposed `rust-safe-constant-evaluation-v1` candidate,
-which derives only checked target-independent primitive constants and fixed-
-repr enum discriminants while retaining explicit gaps for every unsupported
-case.
+output envelope, and bounded safe Rust constant evaluation. Protected PR #173,
+merged as `c3d05994a56e747fbe3157173998f8ac76ef7333`, made the exact Issue #172 /
+Decision 0030 `rust-safe-constant-evaluation-v1` package Approved and
+Implemented, but not Verified. It derives only checked target-independent
+primitive constants and fixed-repr enum discriminants while retaining explicit
+gaps for every unsupported case.
+
+One known interface defect remains: generation of the deterministic
+LocalExplorerV9 manifest and PortableGraphV9 succeeds, but the immutable browser
+frontend still validates only `codenoesis.portable-graph/v2` and rejects the V9
+graph with `Unsupported portable graph schema.` The V9 browser explorer is not
+advertised as usable until a separately reviewed correction is merged.
 Complete independent evidence acceptance, broader language coverage,
 operations, and the remaining production-readiness slices are still pending.
 
