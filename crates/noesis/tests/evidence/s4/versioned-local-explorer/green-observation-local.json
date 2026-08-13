@@ -1,0 +1,118 @@
+{
+  "schema_version": "codenoesis.test-evidence/versioned-local-explorer-green-v1",
+  "issue": 176,
+  "authorization_comment": "https://github.com/smutti/codenoesis/issues/176#issuecomment-5281735908",
+  "requirement_ids": [
+    "FR-EXP-002-R11-amendment",
+    "FR-EXP-003",
+    "FR-EXP-004",
+    "FR-EXP-005",
+    "FR-EXP-006",
+    "FR-EXP-007",
+    "FR-EXP-008"
+  ],
+  "requirement_status": "branch-scoped candidate; not Verified",
+  "slice": "S4",
+  "risk": "high",
+  "exact_base_sha": "16252f59b2dd2302b3f660268843869a45f8ca87",
+  "checkpoint_sha": "f4891ccffb781c4b5584673c24ad7d01aee7ee3e",
+  "red_evidence_sha": "fa8f5c0e88fc602a64056786cf5ee8843049589d",
+  "implementation_sha": "13762174f5f919f0dc0008d5f6e8a344634a1a28",
+  "dependency_change": false,
+  "control_plane_change": false,
+  "actual_changed_paths": [
+    "README.md",
+    "crates/noesis/assets/s4/versioned/index.html",
+    "crates/noesis/src/portable_explorer.rs",
+    "crates/noesis/tests/e2e_fr_ext_012_k1_repository_boundaries.rs",
+    "crates/noesis/tests/e2e_fr_ext_013_cfg_declaration_alternatives.rs",
+    "crates/noesis/tests/e2e_fr_ext_014_k1_cfg_alternatives.rs",
+    "crates/noesis/tests/e2e_fr_ext_015_k1_scip_composition.rs",
+    "crates/noesis/tests/e2e_fr_ext_016_rust_expression_bindings.rs",
+    "crates/noesis/tests/e2e_fr_ext_017_rust_local_flow.rs",
+    "crates/noesis/tests/e2e_fr_ext_020_rust_safe_constant_evaluation.rs",
+    "crates/noesis/tests/evidence/s4/versioned-local-explorer/**",
+    "crates/noesis/tests/support/mod.rs",
+    "crates/noesis/tests/support/versioned_explorer.rs",
+    "docs/software/architecture.md",
+    "docs/software/decisions/0031-s4-versioned-local-explorer-browser.md",
+    "docs/software/roadmap.md",
+    "docs/software/software-requirements-specification.md",
+    "scripts/tests/test_s4_versioned_explorer_contract.py",
+    "tests/specifications/s4/r16/contract-bundle.json",
+    "tests/specifications/s4/versioned-local-explorer/contract-v1.json"
+  ],
+  "red": {
+    "command_exit_status": 101,
+    "expected_reason_confirmed": true,
+    "log_sha256": "22a1f444657392aac72523b565fac867b64fd6c918a82b6ab87ada4ee364ccd4"
+  },
+  "focused_green": {
+    "exit_status": 0,
+    "python_contract_tests": 6,
+    "deterministic_materializations_per_version": 50,
+    "full_local_journeys": ["R10/V3", "R11/V4", "R12/V5", "R13/V6", "R14/V7", "R15/V8", "R16/V9"],
+    "script_syntax": "node --check Green",
+    "format": "cargo fmt --all --check Green",
+    "diff_check": "Green",
+    "log": {
+      "path": "crates/noesis/tests/evidence/s4/versioned-local-explorer/focused-green.log",
+      "byte_length": 7539,
+      "sha256": "5c324e33e443d2548bb4287989dc7a75fad726f9cca0f166c56c99b9e29836d7"
+    }
+  },
+  "viewers": [
+    {"explorer": "LocalExplorerV3", "portable_schema": "codenoesis.portable-graph/v3", "byte_length": 27679, "sha256": "2b165eb4d4e0f9c0ccff1709142c5346825370921476cf3f37522a33c49d5ae9"},
+    {"explorer": "LocalExplorerV4", "portable_schema": "codenoesis.portable-graph/v4", "byte_length": 27679, "sha256": "e8e38f88c8890b574f75874ca64b65dcf27659e96eb88d8fb3e992365832f70d"},
+    {"explorer": "LocalExplorerV5", "portable_schema": "codenoesis.portable-graph/v5", "byte_length": 27679, "sha256": "5dce1d0c0c1242bd4b8555c2aa72a6e0a4abbd39e6541f7c779f3421c1d73573"},
+    {"explorer": "LocalExplorerV6", "portable_schema": "codenoesis.portable-graph/v6", "byte_length": 27679, "sha256": "c8b7d78da8750db7055b07ec65249570f816bdd046691b4b6f7f0dd49a864dd7"},
+    {"explorer": "LocalExplorerV7", "portable_schema": "codenoesis.portable-graph/v7", "byte_length": 27679, "sha256": "fe4da97cfe466106b43608067a5ef70660056a3467b6ca3af5362868435b70c9"},
+    {"explorer": "LocalExplorerV8", "portable_schema": "codenoesis.portable-graph/v8", "byte_length": 27679, "sha256": "6b15bf9b66487a6d76c5ac7b738d2bbcf76ccb946fd9b2f9e0c611da85c99ae5"},
+    {"explorer": "LocalExplorerV9", "portable_schema": "codenoesis.portable-graph/v9", "byte_length": 27679, "sha256": "1c933411b01e5684ceeca0d92423908976b9605e12c4e8a95533200eb494c85a"}
+  ],
+  "content_security_policy": "default-src 'none'; script-src 'sha256-cFyehXImq07b3INT0Fff+uEiQWykXxu4jkzRLNqF9EM='; style-src 'sha256-Y4n+kUJ7cKEiQDrj1EhdHicIssJjePi9deKe0UgCjvk='; img-src 'none'; font-src 'none'; connect-src 'none'; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'; manifest-src 'none'; media-src 'none'; worker-src 'none'",
+  "historical_assets": {
+    "LocalExplorerV1_sha256": "1caa2c0ca5675937eab674f61681883ba3c6a428feb6b1baa744a0cb7eecd044",
+    "LocalExplorerV2_sha256": "d0b633b29e6494d6494a35b5553d72c3dd04a747eeef219ca33a9f5fe2a1f4fa",
+    "unchanged": true
+  },
+  "real_browser": {
+    "observation_path": "crates/noesis/tests/evidence/s4/versioned-local-explorer/browser-observation-local.json",
+    "observation_sha256": "85dbc790f7d3f3d299ecb47380684d339d239c11827e5749e7302fd46fa356ce",
+    "screenshot_sha256": "99bd8ce1f83202a1d9f805525a24ff41d5c3c0dcfe40c7a69f5dbf20ab0ed0da",
+    "valid_v9": true,
+    "fail_closed_cases": ["mismatched_v8", "malformed_json", "incomplete_v9", "privacy_violation", "maximum_plus_one"]
+  },
+  "correction_rounds_used": 1,
+  "repository_gate": {
+    "status": "not run yet on evidence head"
+  },
+  "environment": {
+    "os": "macOS 26.5.2 build 25F84",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "host": "aarch64-apple-darwin",
+    "python": "3.9.6",
+    "node": "24.15.0",
+    "features": "workspace locked/default focused targets",
+    "network_for_product_path": false,
+    "model_provider_for_product_path": false
+  },
+  "ai": {
+    "agent": "OpenAI Codex",
+    "model": "not exposed by the execution environment",
+    "policy": "repository AGENTS.md plus issue #176",
+    "policy_sha256": "07c4385775f37be9e5d2ba09f7e9edfe3936f800a2188e4155f166eef3299c71",
+    "machine_policy_version": 1,
+    "machine_policy_sha256": "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993",
+    "run_identifier": "issue-176-versioned-local-explorer",
+    "duration": "not measured",
+    "cost": "not exposed"
+  },
+  "known_limitations": [
+    "This is candidate evidence, not independent verification or an Approved/Verified fact on main.",
+    "Strict Rust reimport remains the full PortableGraph contract authority; the browser performs bounded inspection checks.",
+    "The complete repository gate, base-controlled GitHub checks, independent review, and protected manual merge remain pending at this observation."
+  ]
+}
