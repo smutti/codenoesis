@@ -17,7 +17,7 @@
   "exact_base_sha": "16252f59b2dd2302b3f660268843869a45f8ca87",
   "checkpoint_sha": "f4891ccffb781c4b5584673c24ad7d01aee7ee3e",
   "red_evidence_sha": "fa8f5c0e88fc602a64056786cf5ee8843049589d",
-  "implementation_sha": "f6ecffa1ad8b8cf86f3e18869aef120bf66ae771",
+  "implementation_sha": "ff475597fdf8b574d7bb03b3a3286cac67f9c3fe",
   "dependency_change": false,
   "control_plane_change": false,
   "actual_changed_paths": [
@@ -93,9 +93,14 @@
       "round": 2,
       "finding": "The complete strict Clippy gate rejected format-collect in the new test-only hexadecimal helper.",
       "resolution": "Write each digest byte directly into one capacity-bounded String; full strict Clippy then passed."
+    },
+    {
+      "round": 3,
+      "finding": "GitHub CodeQL classified the test-only case-sensitive regular expression used to extract reviewed inline assets as an incomplete HTML filtering expression.",
+      "resolution": "Replace the regular expression with exact byte-delimiter extraction from the repository-owned static template; all 331 Python governance tests remain Green."
     }
   ],
-  "correction_rounds_used": 2,
+  "correction_rounds_used": 3,
   "repository_gate": {
     "status": "Green",
     "tested_head_sha": "f6ecffa1ad8b8cf86f3e18869aef120bf66ae771",
