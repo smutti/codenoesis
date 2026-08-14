@@ -1,0 +1,78 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "docs/software/decisions/0035-local-upgrade-safety.md",
+      "sha256": "cf41761ab4f4bfe35313cfed7f3fd605a86fd255ae6eec141e1d73111bf5ca25"
+    },
+    {
+      "path": "scripts/tests/test_g2_local_upgrade_safety_contract.py",
+      "sha256": "ce6738cd93001292598cd9158c0055fac1d8319d37a18cb1381c9eaf4d81adf8"
+    },
+    {
+      "path": "tests/specifications/g2/local-upgrade-safety-v1/codenoesis-error-v27.schema.json",
+      "sha256": "8923f91f8e0d62174f08bcc766d84c71ab13e30e017d4bf12bbe475bd96437b1"
+    },
+    {
+      "path": "tests/specifications/g2/local-upgrade-safety-v1/contract-v1.json",
+      "sha256": "7557878682a3f8a2928cb99116f0934316c2178dea7bb4fdbab86b8c2a8f3112"
+    },
+    {
+      "path": "tests/specifications/g2/local-upgrade-safety-v1/e2e_fr_cmp_001_local_upgrade.json",
+      "sha256": "90203085e0e82f1f6ec3f1817837edd96a6c96e7fbbc17fb04b8a8f85f165df0"
+    },
+    {
+      "path": "tests/specifications/g2/local-upgrade-safety-v1/expected-error-incompatible.json",
+      "sha256": "1da314bfb3c1100804c3a2fc7309208943582ddb1653e3a22db2779183c413ca"
+    },
+    {
+      "path": "tests/specifications/g2/local-upgrade-safety-v1/expected-error-invalid-arguments.json",
+      "sha256": "44fbc20fe2d3da416305fb6362706773eeec6aeba92037aa33ede9eea069dfc3"
+    },
+    {
+      "path": "tests/specifications/g2/local-upgrade-safety-v1/expected-error-invalid-plan.json",
+      "sha256": "22962f84a1cdc0b29922f9498cbc8e25302894a0ef1727455a32c2f331c761e5"
+    },
+    {
+      "path": "tests/specifications/g2/local-upgrade-safety-v1/expected-rollback-report-aarch64-apple-darwin.json",
+      "sha256": "c860fc110a7bc5647ac17b7018e39917eb7d66f8cfa823e831847a675efcdbbe"
+    },
+    {
+      "path": "tests/specifications/g2/local-upgrade-safety-v1/expected-rollback-report-x86_64-pc-windows-msvc.json",
+      "sha256": "755b5b04ee6cff6443f99d4beaec0a9b387b874498aa2bc2a99ab8f1a225b4a7"
+    },
+    {
+      "path": "tests/specifications/g2/local-upgrade-safety-v1/expected-rollback-report-x86_64-unknown-linux-gnu.json",
+      "sha256": "d1ffd355343eb65abff79214e9410d707068140d814baf23a40372017981fe23"
+    },
+    {
+      "path": "tests/specifications/g2/local-upgrade-safety-v1/expected-upgrade-plan-aarch64-apple-darwin.json",
+      "sha256": "514d1eacf9dc61410e797c6fcf6424dd3fd5e5325d1f25db602335f9869fe23f"
+    },
+    {
+      "path": "tests/specifications/g2/local-upgrade-safety-v1/expected-upgrade-plan-x86_64-pc-windows-msvc.json",
+      "sha256": "94b95ba5627e77503459d65cb01b59cb1282a65de3b52eedcd0100256ce05bf4"
+    },
+    {
+      "path": "tests/specifications/g2/local-upgrade-safety-v1/expected-upgrade-plan-x86_64-unknown-linux-gnu.json",
+      "sha256": "49a200ec38108c668be6d7147708904e0aacc6d2e4924d5d537dac92ca2b705c"
+    },
+    {
+      "path": "tests/specifications/g2/local-upgrade-safety-v1/invalid-cases-v1.json",
+      "sha256": "328094b7af367689479a93705621809e741f1781cb0449106d91e376941aaddd"
+    },
+    {
+      "path": "tests/specifications/g2/local-upgrade-safety-v1/local-rollback-report-v1.schema.json",
+      "sha256": "c8cd559a7d19c3faca803c3db6b6efdcf334b6529c88c2b92817cdddfe0727e4"
+    },
+    {
+      "path": "tests/specifications/g2/local-upgrade-safety-v1/local-upgrade-plan-v1.schema.json",
+      "sha256": "b1d41bf8b9b8323c16d6d944f3e95803b1aa1ee0ae32569255b9a52633f2c828"
+    },
+    {
+      "path": "xtask/tests/e2e_fr_cmp_001_local_upgrade.rs",
+      "sha256": "7b5729709ae75565da71895a99002a9891a3437c22fc96ec1c205d1c1c349558"
+    }
+  ],
+  "bundle_sha256": "7d73416e720024bf825f4fc1cc83cb5afb9cadd874fb925ed2fde2a0de60fe2a"
+}

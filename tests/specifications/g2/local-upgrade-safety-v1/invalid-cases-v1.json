@@ -1,0 +1,26 @@
+{
+  "schema_version": "codenoesis.local-upgrade-invalid-cases/v1",
+  "cases": [
+    "duplicate-argument",
+    "missing-argument",
+    "same-bundle",
+    "third-bundle-rollback",
+    "rollback-without-plan",
+    "plan-substitution",
+    "unsupported-target",
+    "unsupported-profile",
+    "unsupported-manifest-schema",
+    "changed-bundle-name",
+    "changed-manifest",
+    "changed-binary",
+    "changed-fixed-payload",
+    "missing-file",
+    "extra-file",
+    "symlink-root",
+    "symlink-file",
+    "symlink-plan",
+    "unstable-input",
+    "private-canary",
+    "plan-maximum-plus-one"
+  ]
+}

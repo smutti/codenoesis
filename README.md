@@ -52,11 +52,23 @@ or GA authority.
 
 Issue [#182](https://github.com/smutti/codenoesis/issues/182) and
 [Decision 0034](docs/software/decisions/0034-g1a-local-cli-distribution-configuration.md)
-define the Proposed high-risk G1a/S14 local-first candidate. It adds a closed
+were protected by PR #183, merged as
+`e7643d83965dca2f9342080264e7c6c58f3dd761`. The high-risk G1a/S14 package is
+Approved and Implemented but not Verified. It adds a closed
 `FR-CFG-001` configuration contract, `FR-CLI-008` fail-closed startup
 validation, and an unsigned `FR-REL-002` digest-named staged CLI bundle with
-explicit install, upgrade, rollback, and uninstall procedures. Before protected
-merge it remains a candidate and is not a supported or published release.
+explicit install, upgrade, rollback, and uninstall procedures. It remains
+unsigned experimental engineering material, not a supported or published
+release.
+
+Issue [#184](https://github.com/smutti/codenoesis/issues/184) and
+[Decision 0035](docs/software/decisions/0035-local-upgrade-safety.md) define the
+Proposed Local Upgrade Safety G2a/G5-local/G7a/S14 candidate. It adds
+output-only `FR-CMP-001` exact-bundle upgrade and `FR-CLI-009` exact-plan
+rollback preflights, local
+tamper/race/privacy rejection, and observational performance evidence without
+activating a bundle or creating a compatibility, support, signing, publication,
+SLO, or GA promise.
 Complete independent evidence acceptance, broader language coverage,
 operations, and the remaining production-readiness slices are still pending.
 
