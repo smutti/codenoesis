@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/local-distribution-manifest-v1.schema.json",
+  "title": "LocalDistributionManifestV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "target",
+    "distribution",
+    "support",
+    "verification",
+    "release_status",
+    "signing",
+    "artifact_attestation",
+    "release_provenance",
+    "publication",
+    "binary_sha256",
+    "files"
+  ],
+  "properties": {
+    "schema_version": { "const": "codenoesis.local-distribution/v1" },
+    "profile_id": { "const": "local-experimental-r17" },
+    "target": {
+      "enum": [
+        "x86_64-unknown-linux-gnu",
+        "aarch64-apple-darwin",
+        "x86_64-pc-windows-msvc"
+      ]
+    },
+    "distribution": { "const": "unsigned-staged-directory" },
+    "support": { "const": "none" },
+    "verification": { "const": "not-verified" },
+    "release_status": { "const": "not-ga" },
+    "signing": { "const": "not-available" },
+    "artifact_attestation": { "const": "not-available" },
+    "release_provenance": { "const": false },
+    "publication": { "const": false },
+    "binary_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "files": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": { "$ref": "#/$defs/file" }
+    }
+  },
+  "$defs": {
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "length", "sha256", "mode"],
+      "properties": {
+        "path": {
+          "enum": [
+            "bin/noesis",
+            "bin/noesis.exe",
+            "etc/codenoesis/config.json",
+            "share/codenoesis/schemas/local-cli-config-v1.schema.json",
+            "share/doc/codenoesis/INSTALL.md",
+            "share/doc/codenoesis/LICENSE"
+          ]
+        },
+        "length": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 268435456
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "mode": { "enum": ["executable", "data"] }
+      }
+    }
+  }
+}

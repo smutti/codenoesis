@@ -468,11 +468,12 @@ profile starts G0 classification but grants no GA, signing, support, release,
 deployment, publication, or compatibility promise. Protected PR #179 made the
 behavior effective; it remains not Verified.
 
-### G0 bounded release-profile registry candidate
+### G0 bounded release-profile registry
 
-Issue [#180](https://github.com/smutti/codenoesis/issues/180) and
-[Decision 0033](decisions/0033-g0-release-profile-registry.md) define Proposed
-`FR-REL-001` and `FR-CLI-007` for one critical S14 package. The inward-owned
+Issue [#180](https://github.com/smutti/codenoesis/issues/180),
+[Decision 0033](decisions/0033-g0-release-profile-registry.md), and protected
+PR #181 made `FR-REL-001` and `FR-CLI-007` Approved and Implemented but not
+Verified for one critical S14 package. The inward-owned
 contract embeds one closed `local-experimental-r17` definition and selects a
 platform only from compile-time `cfg`. The output boundary emits canonical
 `ReleaseProfileV1`; invalid command/profile/target state emits only
@@ -490,6 +491,38 @@ provenance/publication/deployment/secrets as false, support as none, and
 distribution as source-build-only. It is not a release subsystem. G1, G2, G5,
 G8, and G9 retain authority over distribution, compatibility, security,
 supply-chain release evidence, support, and GA.
+
+### G1a local configuration and staged distribution candidate
+
+Issue [#182](https://github.com/smutti/codenoesis/issues/182) and
+[Decision 0034](decisions/0034-g1a-local-cli-distribution-configuration.md)
+define Proposed `FR-CFG-001`, `FR-REL-002`, and `FR-CLI-008` for one high-risk
+S14 candidate. The inward contract owns a closed fixed-policy
+`LocalCliConfigurationV1`, canonical `LocalConfigurationReportV1`, canonical
+`LocalDistributionManifestV1`, and strict `CodeNoesisErrorV26`.
+
+The composition root resolves an optional leading explicit configuration or
+the embedded default before dispatch. Explicit input is a stable bounded
+regular non-symlink file. No environment, home/system/current-directory,
+registry/plist, network, merge, include, interpolation, inheritance, repair,
+or secret reference participates. Selector absence preserves the established
+command path and bytes.
+
+The repository-maintenance `xtask` adapter accepts one already-built local
+binary and one explicit empty output root. It derives the current target from
+compile-time `cfg`, validates the G0 target set, stages a six-file directory in
+the output filesystem, and renames it into a digest-named final path only after
+all payload and manifest checks pass. It does not build source, resolve
+dependencies, install globally, mutate PATH or operating-system state, sign,
+publish, deploy, or create release authority.
+
+The bundle is installed and upgraded side by side as a complete immutable
+directory. Activation remains an explicit caller-owned path; rollback selects
+the retained previous digest path and uninstall removes only an explicitly
+selected directory. There is no launcher, service, hidden `current` pointer,
+package database, automatic updater, or server artifact. G1 remains incomplete
+until its remaining local and server distribution, secret, release-channel,
+and supported-installation semantics are separately approved.
 
 ### S7 implementation-aware runtime boundary
 

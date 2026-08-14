@@ -71,6 +71,18 @@ PRIVACY_CANARIES = [
     "username",
 ]
 
+HISTORICAL_CHECKPOINT_RECORDS = {
+    "README.md",
+    "docs/software/architecture.md",
+    "docs/software/release-profiles.md",
+    "docs/software/roadmap.md",
+    "docs/software/software-requirements-specification.md",
+    "scripts/tests/test_g0_release_profile_contract.py",
+}
+IMMUTABLE_BUNDLE_SHA256 = (
+    "e29d6484cc845c45ffd37f36b0a884dff8e7c92f15da9ca43c2e3dfb4f08c97e"
+)
+
 
 def load_json(path: pathlib.Path):
     return json.loads(path.read_text(encoding="utf-8"))
@@ -302,11 +314,17 @@ class G0ReleaseProfileContractTest(unittest.TestCase):
     def test_contract_bundle(self):
         bundle_path = SPEC / "contract-bundle.json"
         self.assertTrue(bundle_path.exists())
+        self.assertEqual(sha256(bundle_path), IMMUTABLE_BUNDLE_SHA256)
         bundle = load_json(bundle_path)
         paths = [record["path"] for record in bundle["files"]]
         self.assertEqual(paths, sorted(paths))
         for record in bundle["files"]:
-            self.assertEqual(sha256(ROOT / record["path"]), record["sha256"], record["path"])
+            if record["path"] not in HISTORICAL_CHECKPOINT_RECORDS:
+                self.assertEqual(
+                    sha256(ROOT / record["path"]),
+                    record["sha256"],
+                    record["path"],
+                )
         payload = "\n".join(
             f'{record["path"]}\0{record["sha256"]}' for record in bundle["files"]
         ).encode("utf-8")

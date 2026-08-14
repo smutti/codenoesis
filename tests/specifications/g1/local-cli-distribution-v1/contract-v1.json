@@ -1,0 +1,61 @@
+{
+  "schema_version": "codenoesis.g1a-local-distribution-contract/v1",
+  "issue": 182,
+  "exact_base_sha": "a525126228205901885038586e21d30db745b1ec",
+  "status": "proposed_branch_scoped_candidate",
+  "planning_item": "G1a",
+  "slice": "S14",
+  "risk": "high",
+  "requirements": [
+    "FR-CFG-001",
+    "FR-REL-002",
+    "FR-CLI-008"
+  ],
+  "contracts": {
+    "configuration": "codenoesis.configuration/local-cli/v1",
+    "configuration_report": "codenoesis.configuration-report/v1",
+    "distribution_manifest": "codenoesis.local-distribution/v1",
+    "error": "codenoesis.error/v26"
+  },
+  "limits": {
+    "configuration_bytes": 65536,
+    "configuration_report_bytes_including_lf": 65536,
+    "binary_bytes": 268435456,
+    "manifest_bytes_including_lf": 65536,
+    "payload_files": 5,
+    "logical_files": 6
+  },
+  "determinism": {
+    "argument_constructions": 50,
+    "schedules": 10,
+    "canonical_lf_json": true,
+    "full_binary_sha256_identity": true,
+    "environment_independent": true,
+    "working_directory_independent": true
+  },
+  "dependencies": {
+    "new_packages": false,
+    "xtask_runtime": [
+      "codenoesis-contracts",
+      "same-file",
+      "serde_json",
+      "sha2"
+    ],
+    "xtask_dev": ["tempfile"]
+  },
+  "protected_digests": {
+    "g0_contract_bundle_file_sha256": "e29d6484cc845c45ffd37f36b0a884dff8e7c92f15da9ca43c2e3dfb4f08c97e",
+    "decision_0033_sha256": "574a6b721f09ff3d746ee7d3cc79e60641e95a002aa68ca82cbe0fe4f937184b",
+    "g0_registry_sha256": "30ab53244923170cd85414f371a1020c75438416a587e6c51c9f5b0e54cb6074"
+  },
+  "migration": false,
+  "control_plane_effect": false,
+  "workflow_effect": false,
+  "permission_effect": false,
+  "secret_effect": false,
+  "signing_effect": false,
+  "publication_effect": false,
+  "release_effect": false,
+  "support_commitment": false,
+  "server_artifact": false
+}

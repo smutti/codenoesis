@@ -1,0 +1,58 @@
+{
+  "schema_version": "codenoesis.e2e-spec/v1",
+  "id": "e2e_fr_rel_002_packages_local_cli",
+  "requirements": [
+    "FR-REL-002",
+    "FR-CLI-008",
+    "FR-REL-001",
+    "NFR-CMP-001",
+    "NFR-SEC-003",
+    "NFR-PORT-001",
+    "NFR-TST-001",
+    "NFR-TST-002",
+    "INV-BND-001"
+  ],
+  "status": "Proposed branch-scoped candidate",
+  "planning_item": "G1a",
+  "slice": "S14",
+  "risk": "high",
+  "exact_base": "a525126228205901885038586e21d30db745b1ec",
+  "command": [
+    "package-local-cli",
+    "--binary",
+    "<fixture-binary>",
+    "--output",
+    "<existing-empty-output-root>"
+  ],
+  "expected_red": {
+    "exit": 0,
+    "stdout_bytes": 123,
+    "stderr_bytes": 0,
+    "stdout": "CodeNoesis workspace bootstrap: no product slice is implemented. See docs/software/software-requirements-specification.md.\n",
+    "bundle_created": false
+  },
+  "expected_green": {
+    "exit": 0,
+    "stderr_bytes": 0,
+    "schema_version": "codenoesis.local-distribution/v1",
+    "accepted_targets": [
+      "x86_64-unknown-linux-gnu",
+      "aarch64-apple-darwin",
+      "x86_64-pc-windows-msvc"
+    ],
+    "payload_files": 5,
+    "logical_files": 6,
+    "argument_constructions": 50,
+    "schedules": 10,
+    "output_bytes_maximum_including_lf": 65536
+  },
+  "failure": {
+    "schema_version": "codenoesis.error/v26",
+    "stdout": "empty",
+    "partial_bundle": false,
+    "writes_outside_output_root": false,
+    "repair": false,
+    "fallback": false,
+    "target_override": false
+  }
+}

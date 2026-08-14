@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/codenoesis-error-v26.schema.json",
+  "title": "CodeNoesisErrorV26",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": { "const": "codenoesis.error/v26" },
+    "code": {
+      "enum": [
+        "configuration.invalid_arguments",
+        "configuration.invalid_file",
+        "configuration.unstable_input",
+        "configuration.unsupported_schema",
+        "configuration.unsupported_value",
+        "distribution.invalid_arguments",
+        "distribution.invalid_binary",
+        "distribution.output_exists",
+        "distribution.limit_exceeded",
+        "distribution.internal"
+      ]
+    },
+    "stage": { "enum": ["input", "configuration", "distribution", "internal"] },
+    "message": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "retryable": { "const": false },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 2,
+      "properties": {
+        "limit": { "type": "string", "maxLength": 64 },
+        "maximum": { "type": "integer", "minimum": 0, "maximum": 268435456 }
+      }
+    }
+  }
+}

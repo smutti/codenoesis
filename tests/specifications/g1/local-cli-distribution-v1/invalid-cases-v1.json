@@ -1,0 +1,27 @@
+{
+  "schema_version": "codenoesis.g1a-invalid-cases/v1",
+  "configuration": [
+    { "case": "missing_argument", "code": "configuration.invalid_arguments" },
+    { "case": "duplicate_argument", "code": "configuration.invalid_arguments" },
+    { "case": "unknown_argument", "code": "configuration.invalid_arguments" },
+    { "case": "non_json_format", "code": "configuration.invalid_arguments" },
+    { "case": "non_regular_or_symlink", "code": "configuration.invalid_file" },
+    { "case": "duplicate_json_key", "code": "configuration.invalid_file" },
+    { "case": "unknown_json_key", "code": "configuration.unsupported_value" },
+    { "case": "unsupported_schema", "code": "configuration.unsupported_schema" },
+    { "case": "raw_secret", "code": "configuration.unsupported_value" },
+    { "case": "non_empty_secret_reference", "code": "configuration.unsupported_value" },
+    { "case": "maximum_plus_one", "code": "configuration.invalid_file" },
+    { "case": "replacement_or_length_change", "code": "configuration.unstable_input" }
+  ],
+  "distribution": [
+    { "case": "missing_or_duplicate_argument", "code": "distribution.invalid_arguments" },
+    { "case": "non_regular_or_symlink_binary", "code": "distribution.invalid_binary" },
+    { "case": "binary_maximum_plus_one", "code": "distribution.limit_exceeded" },
+    { "case": "non_directory_or_symlink_output", "code": "distribution.invalid_arguments" },
+    { "case": "non_empty_output", "code": "distribution.output_exists" },
+    { "case": "final_collision", "code": "distribution.output_exists" },
+    { "case": "input_replacement_or_length_change", "code": "distribution.invalid_binary" },
+    { "case": "write_or_rename_failure", "code": "distribution.internal" }
+  ]
+}
