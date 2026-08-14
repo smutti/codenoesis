@@ -1,0 +1,7 @@
+command: python3 -m unittest scripts.tests.test_g0_release_profile_contract scripts.tests.test_g1_local_distribution_contract -v
+checkpoint: 0b9df6d2dffd08ab2e1ab848b16f8fa7fc3c56e5
+result: OK
+tests_run: 15
+exit_status: 0
+g0_bundle_sha256: e29d6484cc845c45ffd37f36b0a884dff8e7c92f15da9ca43c2e3dfb4f08c97e
+g1a_contract_bundle_sha256: f3e1684dcef93b5edbfa9b7af531ec60662137e7204a684a99e7ee5ecd9c003f
