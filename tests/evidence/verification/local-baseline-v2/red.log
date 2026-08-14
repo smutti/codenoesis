@@ -1,0 +1,23 @@
+CodeNoesis LocalBaselineVerificationV2 expected Red
+issue: https://github.com/smutti/codenoesis/issues/188
+governance_checkpoint_sha: 1daa23ffbaa0ea13f5fc5910aa5798c7523f254c
+governance_checkpoint_tree: c9c8df4aad66e5410379772c12ba7dbc55b70700
+command: python3 -m unittest scripts/tests/test_local_baseline_verification_v2.py
+exit_code: 1
+tests_run: 7
+failures: 3
+
+failure: test_candidate_manifest_exists
+message: verification manifest is absent
+
+failure: test_status_documents_are_aligned
+message: LocalBaselineVerificationV2 candidate Verified pending independent review and protected manual merge is absent from the SRS, roadmap, and README lifecycle documents
+
+failure: test_validator_exists
+message: verification validator is absent
+
+unexpected_errors: 0
+unexpected_failures: 0
+result: expected_red
+raw_log_sha256: 8cb6d5226fd66a43551a1fc8683890fc4c2f4c9259014fee3d5c1c6d05e24cfc
+normalization: codenoesis.local-baseline-red-normalization/v1 replaces the absolute repository root with <repository>, retains the unittest failure identities and messages, and replaces the status-document assertion payload with its fixed missing-marker statement

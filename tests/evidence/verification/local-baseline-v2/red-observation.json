@@ -1,0 +1,80 @@
+{
+  "schema_version": "codenoesis.local-baseline-verification-red/v2",
+  "issue": "https://github.com/smutti/codenoesis/issues/188",
+  "base_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+  "governance_checkpoint_sha": "1daa23ffbaa0ea13f5fc5910aa5798c7523f254c",
+  "governance_checkpoint_tree": "c9c8df4aad66e5410379772c12ba7dbc55b70700",
+  "observed_at": "2026-08-14T22:48:06Z",
+  "command": "python3 -m unittest scripts/tests/test_local_baseline_verification_v2.py",
+  "exit_code": 1,
+  "tests_run": 7,
+  "expected_failure": [
+    "verification manifest is absent",
+    "verification status marker is absent from the SRS, roadmap, and README",
+    "verification validator is absent"
+  ],
+  "observed_failure": [
+    "verification manifest is absent",
+    "verification status marker is absent from the SRS, roadmap, and README",
+    "verification validator is absent"
+  ],
+  "unexpected_failures": [],
+  "raw_log": {
+    "sha256": "8cb6d5226fd66a43551a1fc8683890fc4c2f4c9259014fee3d5c1c6d05e24cfc",
+    "bytes": 318565,
+    "retention": "normalized derivative retained in Git; raw source retained for the active supervised run"
+  },
+  "normalized_log": {
+    "path": "tests/evidence/verification/local-baseline-v2/red.log",
+    "sha256": "ba91fcc0d23684a57f1356db70ce41f41db36c9c718851bbfbb6cd0603124ca4",
+    "normalization": "codenoesis.local-baseline-red-normalization/v1"
+  },
+  "checkpoint_files": [
+    {
+      "path": "docs/software/decisions/0037-local-baseline-verification-v2.md",
+      "sha256": "c149645a7a5914e956ec41ce79578cb14f563daf7bb39b393194289cfe7d9072"
+    },
+    {
+      "path": "docs/software/verification.md",
+      "sha256": "86569b0274aa5a7f088a3007b1d9237418c505fd34ec8a1724e99ebb8ccfb754"
+    },
+    {
+      "path": "scripts/tests/test_local_baseline_verification_v2.py",
+      "sha256": "9b9c2bc405d470a26c61bb1e30b5ee0b89f51bac88840359b4da885162f40a51"
+    },
+    {
+      "path": "tests/specifications/s0/evidence-manifest-v1.schema.json",
+      "sha256": "d1a09942c260115282364bad8be5eada0103a48d13245af384d852b84cb72216"
+    },
+    {
+      "path": "tests/specifications/verification/local-baseline-v2/manifest.schema.json",
+      "sha256": "72bb571a0d00b12543ccb4a3e4a42e13211942e1cdf78787f4b379252cb9a2bb"
+    },
+    {
+      "path": "tests/specifications/verification/local-baseline-v2/plan.json",
+      "sha256": "2b3a6a5e71f35823faeb9a676a0bdd281ebac4095004bc0cd2f84f2f4264cc0f"
+    },
+    {
+      "path": "tests/specifications/verification/local-baseline-v2/profile-catalog.json",
+      "sha256": "23d175dd5e73f0c67e2d8c9d8fdf36c921220f41fcfaaf6586514ed6d632172b"
+    }
+  ],
+  "historical_blocker": {
+    "issue": "https://github.com/smutti/codenoesis/issues/141",
+    "checkpoint_sha": "5f27f0c50899e513930ef7793a863477dc680dcd",
+    "red_sha": "27632f842b6b5fc5b798656183f45db0fb4931a4",
+    "reused_as_v2_red": false
+  },
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "python": "Python 3.9.6",
+    "toolchain_file_sha256": "279d77167cec5426fa80f457cd066dc74a360fbe4e2816f4f3fa01487a918fdc",
+    "policy_sha256": "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993",
+    "agent": "OpenAI Codex",
+    "model": "not exposed by runtime",
+    "run_identifier": "issue-188-local-baseline-verification-v2"
+  }
+}
