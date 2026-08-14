@@ -1,0 +1,90 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "README.md",
+      "sha256": "12c7f8d937801d0841af6d10f3094a4f39448bbeb1891c6c06a2453d1060b5b5"
+    },
+    {
+      "path": "crates/noesis/tests/e2e_fr_ctx_001_function_context.rs",
+      "sha256": "f2e0c62bf4ce79307a4f99b0f11c396c905a3666218e124264d2139016f1e4ed"
+    },
+    {
+      "path": "crates/noesis/tests/support/mod.rs",
+      "sha256": "0a5de96b80c5de08a05d7e27214aed62602174858d8eaa1b820fb8e7cf0416d7"
+    },
+    {
+      "path": "crates/noesis/tests/support/s4_r17.rs",
+      "sha256": "64e9d223693f7467d90da8ff272b5a5d661cd50cd5893bf0ad2c3a2c6d10a826"
+    },
+    {
+      "path": "docs/software/architecture.md",
+      "sha256": "05317576aa2878d2caa322f54cbc4cb9c1d717485e825e5e0adc45855fd50665"
+    },
+    {
+      "path": "docs/software/decisions/0032-s4-r17-function-context-navigation.md",
+      "sha256": "5540a2cff491b7b1e23649cc5fe77b49dcf2145db70a144364e705a169ac4345"
+    },
+    {
+      "path": "docs/software/release-profiles.md",
+      "sha256": "04335ad0d4b4b91e6fda680c3ae77c4a26a78ea7105ffe8157bb9c976f8a583f"
+    },
+    {
+      "path": "docs/software/roadmap.md",
+      "sha256": "8b99647b50f5bc0c5026f04e98d8befc427edac9c29a16afc8dee6d902fbd5a7"
+    },
+    {
+      "path": "docs/software/software-requirements-specification.md",
+      "sha256": "bc31e560a6413319d94ded565e4b3ccd50683ddc1fcc56680e3a0e00cde243ec"
+    },
+    {
+      "path": "scripts/tests/test_s4_r17_function_context_contract.py",
+      "sha256": "bc789b5f4c03acc382f65247d1aaa37fb00605a3af1d1d14096dcd10de98cb38"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-function-context-v1/README.md",
+      "sha256": "3f7b86bda5e554a2f33378908a6dd427aa7e13f2983d8e5b918d001ab912b507"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-function-context-v1/expected-function-context.json",
+      "sha256": "437dc3cfc694747045beb1c40c18500409796acf7025e5968cc36dea5e095c77"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-function-context-v1/manifest.json",
+      "sha256": "9bb0fe1c9c84213db6e8ebd42d166a6187c1d32657bdb2592ad2ab9cbe6093a4"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-function-context-v1/repository/Cargo.toml",
+      "sha256": "b0174b2d1a50ef32e57b92f111984f068b85a0c4f42b1c41e6f6e5c445f5db07"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-function-context-v1/repository/src/lib.rs",
+      "sha256": "66c45fce26cae70bf7d07e1c2d5bd7a37dac51cb884d80babfe54b96c8176981"
+    },
+    {
+      "path": "tests/specifications/s4/r16/contract-bundle.json",
+      "sha256": "3a29e6eb598ee4616a252263d628d53ba1c074806c1973ffa5a73da263b097ed"
+    },
+    {
+      "path": "tests/specifications/s4/r17/contract-v1.json",
+      "sha256": "fe5adb8bba0873c3372eb35af84277a26560a45053e75e674e01949f4a3e44e4"
+    },
+    {
+      "path": "tests/specifications/s4/r17/e2e_fr_ctx_001_function_context.json",
+      "sha256": "a89229f56075263b97badf9d944374d70f492fc193ed71acb81aa52f145615f3"
+    },
+    {
+      "path": "tests/specifications/s4/r17/function-context-v1.schema.json",
+      "sha256": "a0fec413b448fe5f81d756694dea534feb0a00d2da86834f9909f96096ffc498"
+    },
+    {
+      "path": "tests/specifications/s4/r17/local-explorer-manifest-v10.schema.json",
+      "sha256": "99052438ac575e27213a6ba90d5050eae857fd74fb0d737673a0c094cb9da839"
+    }
+  ],
+  "bundle_sha256": "6311874d88127ddc0bdfbadd2e91dc94ef6de65b68ac9114ec6b2825310dd8dc"
+}

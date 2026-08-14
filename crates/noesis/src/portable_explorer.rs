@@ -9,18 +9,19 @@ use codenoesis_contracts::{
     K1_EXPLORER_MARKER, K1_PORTABLE_MARKER, K1ContractError, LocalExplorerManifestV1,
     LocalExplorerManifestV2, LocalExplorerManifestV3, LocalExplorerManifestV4,
     LocalExplorerManifestV5, LocalExplorerManifestV6, LocalExplorerManifestV7,
-    LocalExplorerManifestV8, LocalExplorerManifestV9, MAX_K1_PORTABLE_GRAPH_BYTES,
-    MAX_R8_PORTABLE_GRAPH_BYTES, MAX_R10_PORTABLE_GRAPH_BYTES, MAX_R11_PORTABLE_GRAPH_BYTES,
-    MAX_R12_PORTABLE_GRAPH_BYTES, MAX_R13_PORTABLE_GRAPH_BYTES, MAX_R14_PORTABLE_GRAPH_BYTES,
-    MAX_R15_PORTABLE_GRAPH_BYTES, MAX_R16_PORTABLE_GRAPH_BYTES, PortableGraphV1, PortableGraphV2,
-    PortableGraphV3, PortableGraphV4, PortableGraphV5, PortableGraphV6, PortableGraphV7,
-    PortableGraphV8, PortableGraphV9, R8_EXPLORER_MARKER, R8_PORTABLE_MARKER, R8ContractError,
-    R10_EXPLORER_MARKER, R10_PORTABLE_MARKER, R10ContractError, R11_EXPLORER_MARKER,
-    R11_PORTABLE_GRAPH_VERSION, R11_PORTABLE_MARKER, R11ContractError, R12_EXPLORER_MARKER,
-    R12_PORTABLE_GRAPH_VERSION, R12_PORTABLE_MARKER, R12ContractError, R13_EXPLORER_MARKER,
-    R13_PORTABLE_GRAPH_VERSION, R13_PORTABLE_MARKER, R13ContractError, R14_EXPLORER_MARKER,
-    R14_PORTABLE_MARKER, R14ContractError, R15_EXPLORER_MARKER, R15_PORTABLE_MARKER,
-    R15ContractError, R16_EXPLORER_MARKER, R16_PORTABLE_MARKER, R16ContractError,
+    LocalExplorerManifestV8, LocalExplorerManifestV9, LocalExplorerManifestV10,
+    MAX_K1_PORTABLE_GRAPH_BYTES, MAX_R8_PORTABLE_GRAPH_BYTES, MAX_R10_PORTABLE_GRAPH_BYTES,
+    MAX_R11_PORTABLE_GRAPH_BYTES, MAX_R12_PORTABLE_GRAPH_BYTES, MAX_R13_PORTABLE_GRAPH_BYTES,
+    MAX_R14_PORTABLE_GRAPH_BYTES, MAX_R15_PORTABLE_GRAPH_BYTES, MAX_R16_PORTABLE_GRAPH_BYTES,
+    PortableGraphV1, PortableGraphV2, PortableGraphV3, PortableGraphV4, PortableGraphV5,
+    PortableGraphV6, PortableGraphV7, PortableGraphV8, PortableGraphV9, R8_EXPLORER_MARKER,
+    R8_PORTABLE_MARKER, R8ContractError, R10_EXPLORER_MARKER, R10_PORTABLE_MARKER,
+    R10ContractError, R11_EXPLORER_MARKER, R11_PORTABLE_GRAPH_VERSION, R11_PORTABLE_MARKER,
+    R11ContractError, R12_EXPLORER_MARKER, R12_PORTABLE_GRAPH_VERSION, R12_PORTABLE_MARKER,
+    R12ContractError, R13_EXPLORER_MARKER, R13_PORTABLE_GRAPH_VERSION, R13_PORTABLE_MARKER,
+    R13ContractError, R14_EXPLORER_MARKER, R14_PORTABLE_MARKER, R14ContractError,
+    R15_EXPLORER_MARKER, R15_PORTABLE_MARKER, R15ContractError, R16_EXPLORER_MARKER,
+    R16_PORTABLE_MARKER, R16ContractError, R17_EXPLORER_MARKER,
 };
 #[cfg(any(unix, windows))]
 use same_file::Handle as FileIdentity;
@@ -62,6 +63,8 @@ const R16_PORTABLE_MARKER_BYTES: &[u8] =
     b"{\"schema_version\":\"codenoesis.portable-graph-marker/v9\"}\n";
 const R16_EXPLORER_MARKER_BYTES: &[u8] =
     b"{\"schema_version\":\"codenoesis.local-explorer-marker/v9\"}\n";
+const R17_EXPLORER_MARKER_BYTES: &[u8] =
+    b"{\"schema_version\":\"codenoesis.local-explorer-marker/v10\"}\n";
 const VIEWER_SHA256: &str = "1caa2c0ca5675937eab674f61681883ba3c6a428feb6b1baa744a0cb7eecd044";
 const VIEWER_SOURCE_BYTES: &[u8] = include_bytes!("../assets/s4/r8/index.html");
 const K1_VIEWER_SHA256: &str = "d0b633b29e6494d6494a35b5553d72c3dd04a747eeef219ca33a9f5fe2a1f4fa";
@@ -111,6 +114,11 @@ const R16_VERSIONED_VIEWER: VersionedViewer = VersionedViewer::new(
     "LocalExplorerV9",
     "1c933411b01e5684ceeca0d92423908976b9605e12c4e8a95533200eb494c85a",
 );
+const R17_FUNCTION_CONTEXT_VIEWER_SHA256: &str =
+    "1494f3868a4dae29d20c46d423e4f368e4a33db9eeb0b9490884bfff621c8b54";
+const R17_FUNCTION_CONTEXT_VIEWER_BYTES: &[u8] =
+    include_bytes!("../assets/s4/function-context/index.html");
+const R17_FUNCTION_CONTEXT_CONTENT_SECURITY_POLICY: &str = "default-src 'none'; script-src 'sha256-QLT6Bh/CWnZJlwd1fpkQRnyO3aIzrkXh0QprqW71ZPU='; style-src 'sha256-05TnzuCUvQRD9X6omoYicxv6U0biuIEsVNx0tcxpeHE='; img-src 'none'; font-src 'none'; connect-src 'none'; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; form-action 'none'; base-uri 'none'; manifest-src 'none'; media-src 'none'; worker-src 'none'";
 static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Clone, Copy)]
@@ -2133,6 +2141,67 @@ pub fn publish_local_explorer_v9(
     Ok(manifest_bytes)
 }
 
+/// Validates an R17 explorer destination without creating or changing it.
+///
+/// # Errors
+///
+/// Returns a typed error for aliasing, symlinks, escapes, or invalid ownership.
+pub fn validate_r17_explorer_output_root(
+    input: &Path,
+    output: &Path,
+) -> Result<(), PortableExplorerError> {
+    validate_output_root(input, output, OutputKind::R17Explorer)
+}
+
+/// Creates an absent R17 explorer destination after complete validation.
+///
+/// # Errors
+///
+/// Returns a typed error when validation or directory creation fails.
+pub fn ensure_r17_explorer_output_root_for_boundary(
+    input: &Path,
+    output: &Path,
+) -> Result<PreparedOutputRoot, PortableExplorerError> {
+    ensure_output_root(input, output, OutputKind::R17Explorer)
+}
+
+/// Publishes the function-centered viewer bound to one validated R16 graph.
+///
+/// # Errors
+///
+/// Returns a typed error for asset, integrity, ownership, race, or I/O failures.
+pub fn publish_local_explorer_v10(
+    prepared: &PreparedOutputRoot,
+    portable: &PortableGraphV9,
+    portable_bytes: &[u8],
+) -> Result<Vec<u8>, PortableExplorerError> {
+    if portable.canonical_file() != portable_bytes {
+        return Err(R16ContractError::InvalidProjection.into());
+    }
+    let viewer_bytes = normalize_checkout_text(R17_FUNCTION_CONTEXT_VIEWER_BYTES)
+        .ok_or(PortableExplorerError::Internal)?;
+    let manifest = LocalExplorerManifestV10::new(
+        portable,
+        &viewer_bytes,
+        R17_FUNCTION_CONTEXT_VIEWER_SHA256,
+        R17_FUNCTION_CONTEXT_CONTENT_SECURITY_POLICY,
+        sha256,
+    )?;
+    let manifest_bytes = manifest
+        .canonical_file()
+        .map_err(|_| PortableExplorerError::Internal)?;
+    publish_files(
+        prepared,
+        OutputKind::R17Explorer,
+        &[
+            OwnedFile::new("portable-graph.json", portable_bytes.to_vec()),
+            OwnedFile::new("index.html", viewer_bytes),
+            OwnedFile::new("explorer-manifest.json", manifest_bytes.clone()),
+        ],
+    )?;
+    Ok(manifest_bytes)
+}
+
 #[must_use]
 pub fn sha256(bytes: &[u8]) -> String {
     let digest = Sha256::digest(bytes);
@@ -2645,6 +2714,7 @@ enum OutputKind {
     R15Explorer,
     R16Portable,
     R16Explorer,
+    R17Explorer,
 }
 
 impl OutputKind {
@@ -2668,6 +2738,7 @@ impl OutputKind {
             Self::R15Explorer => R15_EXPLORER_MARKER,
             Self::R16Portable => R16_PORTABLE_MARKER,
             Self::R16Explorer => R16_EXPLORER_MARKER,
+            Self::R17Explorer => R17_EXPLORER_MARKER,
         }
     }
 
@@ -2691,6 +2762,7 @@ impl OutputKind {
             Self::R15Explorer => R15_EXPLORER_MARKER_BYTES,
             Self::R16Portable => R16_PORTABLE_MARKER_BYTES,
             Self::R16Explorer => R16_EXPLORER_MARKER_BYTES,
+            Self::R17Explorer => R17_EXPLORER_MARKER_BYTES,
         }
     }
 
@@ -2759,6 +2831,12 @@ impl OutputKind {
                 "index.html",
                 "explorer-manifest.json",
             ]),
+            Self::R17Explorer => BTreeSet::from([
+                R17_EXPLORER_MARKER,
+                "portable-graph.json",
+                "index.html",
+                "explorer-manifest.json",
+            ]),
         }
     }
 }
@@ -2773,7 +2851,7 @@ mod tests {
         OutputKind, OwnedFile, PortableExplorerError, publish_files_with,
         read_portable_graph_v3_with, read_portable_graph_v4_with, read_portable_graph_v5_with,
         read_portable_graph_v6_with, read_portable_graph_v7_with, read_portable_graph_v8_with,
-        read_portable_graph_with,
+        read_portable_graph_v9_with, read_portable_graph_with,
     };
 
     const PORTABLE_FIXTURE_SOURCE: &[u8] =
@@ -2806,6 +2884,72 @@ mod tests {
                     expected
                 );
             }
+        }
+    }
+
+    #[test]
+    fn sec_fr_exp_009_function_context_viewer_is_exact_and_offline() {
+        let bytes = super::normalize_checkout_text(super::R17_FUNCTION_CONTEXT_VIEWER_BYTES)
+            .expect("reviewed LF-only R17 viewer");
+        assert_eq!(
+            super::sha256(&bytes),
+            super::R17_FUNCTION_CONTEXT_VIEWER_SHA256
+        );
+        let text = std::str::from_utf8(&bytes).expect("R17 viewer UTF-8");
+        for required in [
+            "codenoesis.portable-graph/v9",
+            "codenoesis.function-context/v1",
+            "rust.function",
+            "rust.method",
+            "declared_signature",
+            "createElementNS",
+            "textContent",
+            "MAX_FILE_BYTES=268435456",
+            "MAX_HISTORY=128",
+            "MAX_SUBJECTS=256",
+            "MAX_RELATIONSHIPS=512",
+            "window.codenoesisR17",
+            "#id=",
+        ] {
+            assert!(
+                text.contains(required),
+                "missing R17 viewer control: {required}"
+            );
+        }
+        for forbidden in [
+            "http://",
+            "https://",
+            "fetch(",
+            "XMLHttpRequest",
+            "WebSocket",
+            "eval(",
+            "new Function(",
+            ".innerHTML",
+            "document.write",
+            "localStorage",
+            "sessionStorage",
+            "indexedDB",
+            "document.cookie",
+            "navigator.clipboard",
+        ] {
+            assert!(
+                !text.contains(forbidden),
+                "active R17 viewer token: {forbidden}"
+            );
+        }
+        assert_eq!(
+            OutputKind::R17Explorer.marker(),
+            codenoesis_contracts::R17_EXPLORER_MARKER
+        );
+        assert_eq!(
+            OutputKind::R17Explorer.marker_bytes(),
+            b"{\"schema_version\":\"codenoesis.local-explorer-marker/v10\"}\n"
+        );
+        for _ in 0..50 {
+            assert_eq!(
+                super::sha256(&bytes),
+                super::R17_FUNCTION_CONTEXT_VIEWER_SHA256
+            );
         }
     }
 
@@ -3227,6 +3371,113 @@ mod tests {
             assert!(output.join("portable-graph.json").is_file());
         }
         fs::remove_dir_all(parent).expect("remove R15 output race fixture");
+    }
+
+    #[test]
+    fn race_nfr_sec_005_r17_mutable_input_is_rejected() {
+        let root = temporary_root("r17-mutable-input");
+        let input = root.join("portable-graph.json");
+        let initial = b"{}\n".to_vec();
+        fs::write(&input, &initial).expect("write R17 race input");
+        let mutation_ran = Cell::new(false);
+        let result = read_portable_graph_v9_with(&input, || {
+            fs::write(&input, b"[]\n").expect("rewrite R17 race input");
+            mutation_ran.set(true);
+        });
+        assert!(mutation_ran.get(), "R17 mutable-input schedule did not run");
+        assert!(matches!(result, Err(PortableExplorerError::R16Contract(_))));
+        fs::remove_dir_all(root).expect("remove R17 race fixture");
+    }
+
+    #[test]
+    fn race_nfr_sec_005_r17_output_replacement_is_rejected_or_blocked() {
+        let parent = temporary_root("r17-output-replacement");
+        let output = parent.join("output");
+        let attacker = parent.join("attacker");
+        let displaced = parent.join("displaced");
+        fs::create_dir(&output).expect("create R17 selected output");
+        fs::create_dir(&attacker).expect("create R17 attacker output");
+        let replaced = Cell::new(false);
+        let result = publish_files_with(
+            &output,
+            OutputKind::R17Explorer,
+            &[
+                OwnedFile::new("portable-graph.json", b"reviewed\n".to_vec()),
+                OwnedFile::new("index.html", b"<script></script>\n".to_vec()),
+                OwnedFile::new("explorer-manifest.json", b"{}\n".to_vec()),
+            ],
+            || {
+                if fs::rename(&output, &displaced).is_ok() {
+                    if fs::rename(&attacker, &output).is_ok() {
+                        replaced.set(true);
+                    } else {
+                        fs::rename(&displaced, &output)
+                            .expect("restore blocked R17 output replacement");
+                    }
+                }
+            },
+        );
+        if replaced.get() {
+            assert!(matches!(
+                result,
+                Err(PortableExplorerError::UnsafeOutput { .. })
+            ));
+            assert!(directory_is_empty(&output));
+            assert!(directory_is_empty(&displaced));
+        } else {
+            assert!(result.is_ok());
+            assert!(output.join("portable-graph.json").is_file());
+        }
+        fs::remove_dir_all(parent).expect("remove R17 output race fixture");
+    }
+
+    #[test]
+    fn sec_nfr_sec_005_r17_path_capacity_and_symlink_inputs_fail_closed() {
+        let root = temporary_root("r17-path-capacity");
+        let input = root.join("portable-graph.json");
+        fs::write(&input, b"{}\n").expect("write R17 path input");
+
+        for output in [
+            input.clone(),
+            root.join("selected").join("..").join("escaped"),
+        ] {
+            assert!(matches!(
+                super::validate_r17_explorer_output_root(&input, &output),
+                Err(PortableExplorerError::UnsafeOutput { .. })
+            ));
+        }
+
+        let oversized = root.join("oversized-portable-graph.json");
+        let oversized_file = fs::File::create(&oversized).expect("create oversized R17 input");
+        oversized_file
+            .set_len(super::MAX_R16_PORTABLE_GRAPH_BYTES + 1)
+            .expect("set oversized R17 input length");
+        assert!(matches!(
+            super::read_portable_graph_v9(&oversized),
+            Err(PortableExplorerError::R16Contract(
+                codenoesis_contracts::R16ContractError::LimitExceeded {
+                    limit: "portable_graph_bytes",
+                    maximum: super::MAX_R16_PORTABLE_GRAPH_BYTES,
+                    observed
+                }
+            )) if observed == super::MAX_R16_PORTABLE_GRAPH_BYTES + 1
+        ));
+
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::symlink;
+
+            let outside = root.join("outside");
+            fs::create_dir(&outside).expect("create R17 outside directory");
+            let linked_parent = root.join("linked-parent");
+            symlink(&outside, &linked_parent).expect("create R17 parent symlink");
+            assert!(matches!(
+                super::validate_r17_explorer_output_root(&input, &linked_parent.join("explorer")),
+                Err(PortableExplorerError::UnsafeOutput { .. })
+            ));
+        }
+
+        fs::remove_dir_all(root).expect("remove R17 path fixture");
     }
 
     fn temporary_root(label: &str) -> PathBuf {

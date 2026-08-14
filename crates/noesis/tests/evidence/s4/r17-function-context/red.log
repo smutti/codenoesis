@@ -1,0 +1,20 @@
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running tests/e2e_fr_ctx_001_function_context.rs (target/debug/deps/e2e_fr_ctx_001_function_context-8d3cfe9eacadd109)
+
+running 1 test
+
+thread 'e2e_fr_ctx_001_function_context_and_navigation' (1449350) panicked at crates/noesis/tests/e2e_fr_ctx_001_function_context.rs:14:5:
+R17 function-context query failed: status=Some(2); stdout=; stderr={"code":"input.invalid_query_id","context":{},"message":"invalid query id","retryable":false,"schema_version":"codenoesis.error/v5","stage":"input"}
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test e2e_fr_ctx_001_function_context_and_navigation ... FAILED
+
+failures:
+
+failures:
+    e2e_fr_ctx_001_function_context_and_navigation
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.09s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_ctx_001_function_context`

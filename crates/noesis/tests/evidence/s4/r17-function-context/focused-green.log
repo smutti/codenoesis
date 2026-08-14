@@ -1,0 +1,64 @@
+issue=https://github.com/smutti/codenoesis/issues/178
+authorization=explicit accountable-maintainer authorization in the supervised Codex task
+requirements=FR-CTX-001,FR-EXP-009,FR-QRY-001,FR-QRY-002-bounded-local-subset,FR-CLI-001,NFR-DET-001,NFR-PER-001,NFR-SEC-001,NFR-SEC-005,NFR-PRV-002,NFR-TST-001,NFR-TST-002,INV-BND-001
+requirement_status=Proposed branch-scoped candidate
+slice=S4
+risk=high
+exact_base_sha=f0d0fc998a9158e7c8e96a5b70c8830a3150dd22
+initial_governance_checkpoint_sha=660b83c07b9b243e457d09f956593f2f5407502b
+corrected_governance_checkpoint_sha=96443e6bdae0e9909facef62d906f5a4b3675253
+red_evidence_sha=c37fad90e892b0a01f7f0dc8f106465e1e8baea0
+product_implementation_sha=be506140fe111f18c57a58cac045fb54445b5abe
+tested_head=81811308ea93f678a2165aa54673bab8c5262644
+tested_tree=22b8a18fe755a872850c05c43bce56c842a5466c
+started_at_utc=2026-08-14T08:44:17Z
+completed_at_utc=2026-08-14T08:44:32Z
+duration_seconds=15
+
+command=cargo fmt --all --check
+exit=0
+
+command=python3 -m unittest scripts.tests.test_s4_r17_function_context_contract -v
+exit=0
+tests_passed=6
+coverage=checkpoint order, retained Red, candidate governance, G0 profile, exact contracts, fixture, oracle, and bundle digests
+
+command=cargo test -p codenoesis-contracts --lib s4_r17::tests --all-features --locked
+exit=0
+tests_passed=5
+coverage=typed structural failures, privacy deny list, URL rejection, viewer active-content rejection, declared signature reconstruction, and ten byte-identical context schedules
+
+command=cargo test -p codenoesis-contracts --test s4_r17_function_context --all-features --locked
+exit=0
+tests_passed=3
+coverage=every exact R17 maximum, every maximum-plus-one, schema/profile constants, 4 MiB context and inherited 256 MiB portable bound
+
+command=cargo test -p noesis --lib portable_explorer::tests:: --all-features --locked
+exit=0
+tests_passed=20
+coverage=R17 mutable input, output replacement race, alias, parent escape, symlink, 256 MiB plus one, exact offline asset, CSP/XSS controls, and inherited explorer regressions
+
+command=cargo test -p noesis --bin noesis r17_ --all-features --locked
+exit=0
+tests_passed=2
+coverage=fifty argument permutations and fail-closed query/export/explorer selector matrix
+
+command=cargo test -p noesis --test e2e_fr_ctx_001_function_context e2e_fr_ctx_001_function_context_and_navigation --locked -- --exact --nocapture
+exit=0
+tests_passed=1
+journey=scan -> docs -> selector-absent QueryV13 -> FunctionContextV1 -> PortableGraphV9 -> LocalExplorerV10
+determinism=ten context schedules and ten explorer publications are byte-identical
+compatibility=selector absence remains exact QueryV13 and explicit export remains exact PortableGraphV9
+
+command=cargo clippy -p codenoesis-contracts -p noesis --all-targets --all-features --locked -- -D warnings
+exit=0
+
+rust_tests_passed=31
+python_tests_passed=6
+raw_local_log_bytes=7602
+raw_local_log_sha256=7fab8f0a6167ef8e43dfb66a07ed61716a1278a4b805f36545a35af50051dc7e
+environment=macOS 26.5.2 build 25F84; Darwin 25.5.0 arm64; rustc 1.97.1; cargo 1.97.1; Python 3.9.6
+known_warning=the pre-existing exact toml dependency requirement includes ignored semver metadata; no Cargo manifest, lockfile, or dependency changed
+correction_rounds_used=3
+correction_budget=5
+result=candidate_green_not_verified

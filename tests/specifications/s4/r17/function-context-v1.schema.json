@@ -1,0 +1,347 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/function-context-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "authority",
+    "source",
+    "display_signature",
+    "callable",
+    "owner",
+    "signature",
+    "parameters",
+    "body_facts",
+    "calls",
+    "relationships",
+    "claims",
+    "evidence",
+    "diagnostics",
+    "coverage_gaps",
+    "derivations",
+    "navigation",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.function-context/v1"
+    },
+    "authority": {
+      "const": "declared_source_only"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository_identity",
+        "commit_oid",
+        "tree_oid",
+        "snapshot_id",
+        "snapshot_schema_version",
+        "graph_schema_version",
+        "ontology_version",
+        "snapshot_semantic_hash",
+        "graph_semantic_hash"
+      ],
+      "properties": {
+        "repository_identity": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:"
+        },
+        "commit_oid": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "tree_oid": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:snapshot:blake3:[0-9a-f]{64}$"
+        },
+        "snapshot_schema_version": {
+          "const": "codenoesis.repository-snapshot/v18"
+        },
+        "graph_schema_version": {
+          "const": "codenoesis.knowledge-graph/v15"
+        },
+        "ontology_version": {
+          "const": "codenoesis.ontology/rust/v15"
+        },
+        "snapshot_semantic_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "graph_semantic_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "display_signature": {
+      "type": "string",
+      "minLength": 1
+    },
+    "callable": {
+      "$ref": "#/$defs/entity"
+    },
+    "owner": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/entity"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "signature": {
+      "$ref": "#/$defs/entity"
+    },
+    "parameters": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "$ref": "#/$defs/entity"
+      }
+    },
+    "body_facts": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "$ref": "#/$defs/entity"
+      }
+    },
+    "calls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "outgoing",
+        "incoming"
+      ],
+      "properties": {
+        "outgoing": {
+          "type": "array",
+          "maxItems": 512,
+          "items": {
+            "$ref": "#/$defs/call"
+          }
+        },
+        "incoming": {
+          "type": "array",
+          "maxItems": 512,
+          "items": {
+            "$ref": "#/$defs/call"
+          }
+        }
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {
+        "$ref": "#/$defs/relationship"
+      }
+    },
+    "claims": {
+      "type": "array",
+      "maxItems": 2048,
+      "items": {
+        "$ref": "#/$defs/identified"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 2048,
+      "items": {
+        "$ref": "#/$defs/identified"
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": {
+        "$ref": "#/$defs/identified"
+      }
+    },
+    "coverage_gaps": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": {
+        "$ref": "#/$defs/identified"
+      }
+    },
+    "derivations": {
+      "type": "array",
+      "maxItems": 1024,
+      "items": {
+        "type": "object"
+      }
+    },
+    "navigation": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "$ref": "#/$defs/navigation"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "identified": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:"
+        }
+      }
+    },
+    "entity": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/identified"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "name"
+          ],
+          "properties": {
+            "kind": {
+              "type": "string",
+              "minLength": 1
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "relationship": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/identified"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "source",
+            "target"
+          ],
+          "properties": {
+            "kind": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "call": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relationship_id",
+        "source_id",
+        "source_kind",
+        "source_name",
+        "target_id",
+        "target_kind",
+        "target_name",
+        "state"
+      ],
+      "properties": {
+        "relationship_id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:relationship:blake3:[0-9a-f]{64}$"
+        },
+        "source_id": {
+          "type": "string"
+        },
+        "source_kind": {
+          "type": "string"
+        },
+        "source_name": {
+          "type": "string"
+        },
+        "target_id": {
+          "type": "string"
+        },
+        "target_kind": {
+          "type": "string"
+        },
+        "target_name": {
+          "type": "string"
+        },
+        "state": {
+          "const": "proven_unique_local"
+        }
+      }
+    },
+    "navigation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "family",
+        "kind",
+        "name",
+        "roles",
+        "relationship_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:entity:blake3:[0-9a-f]{64}$"
+        },
+        "family": {
+          "const": "entities"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "relationship_ids": {
+          "type": "array",
+          "maxItems": 512,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

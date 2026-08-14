@@ -1,0 +1,63 @@
+{
+  "schema_version": "codenoesis.r17-red-observation/v1",
+  "issue": 178,
+  "requirements": [
+    "FR-CTX-001",
+    "FR-EXP-009"
+  ],
+  "requirement_status": "Proposed branch-scoped candidate",
+  "slice": "S4",
+  "risk": "high",
+  "exact_base_sha": "f0d0fc998a9158e7c8e96a5b70c8830a3150dd22",
+  "checkpoint": {
+    "commit_sha": "96443e6bdae0e9909facef62d906f5a4b3675253",
+    "tree_sha": "5ce8fd4b3d097e014fdd8b74529045df24224b8e",
+    "contains_production_source_or_viewer_asset_edit": false
+  },
+  "observed_at_utc": "2026-08-14T07:42:59Z",
+  "command": "cargo test -p noesis --test e2e_fr_ctx_001_function_context e2e_fr_ctx_001_function_context_and_navigation --locked -- --exact --nocapture",
+  "command_exit_status": 101,
+  "expected_failure": {
+    "stage": "query argument validation before function-context projection",
+    "underlying_query_exit_status": 2,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_schema_version": "codenoesis.error/v5",
+    "stderr_code": "input.invalid_query_id",
+    "stderr_stage": "input",
+    "stderr_message": "invalid query id",
+    "stderr_bytes_including_lf": 149,
+    "stderr_sha256_including_lf": "0129bc1d1e98589257fe1d5417f29be92eae5a23adc37c450157dba6b4c8133e"
+  },
+  "observed_failure": {
+    "matched_expected_reason": true,
+    "underlying_query_exit_status": 2,
+    "stdout_bytes": 0,
+    "stderr_schema_version": "codenoesis.error/v5",
+    "stderr_code": "input.invalid_query_id",
+    "stderr_stage": "input",
+    "stderr_message": "invalid query id",
+    "store_remained_valid": true,
+    "context_emitted": false,
+    "explorer_published": false
+  },
+  "log": {
+    "path": "crates/noesis/tests/evidence/s4/r17-function-context/red.log",
+    "byte_length": 1227,
+    "sha256": "7629941e7da6b7ec896cd12741dff6e1e191afb9765551ca6b2c42ec13e785b1"
+  },
+  "environment": {
+    "operating_system": "macOS 26.5.2 (25F84)",
+    "kernel": "Darwin 25.5.0 arm64",
+    "architecture": "aarch64-apple-darwin",
+    "memory_bytes": 25769803776,
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "features": "noesis integration-test defaults; Cargo --locked"
+  },
+  "limitations": [
+    "local checkpoint observation only",
+    "independent review pending",
+    "base-controlled GitHub checks not run on an unpublished branch"
+  ]
+}

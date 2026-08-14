@@ -1,9 +1,10 @@
 # CodeNoesis Software Architecture
 
-> Status: **implementation architecture through the corrected local R16
-> baseline and bounded S7 C0-C4 runtime; both remain not Verified**. The
-> repository contains working Rust crates and the `noesis` local CLI, but no
-> production server deployment or production-ready release.
+> Status: **implementation architecture through corrected local R16 and the
+> bounded S7 C0-C4 runtime; R17 function context is a Proposed branch
+> candidate**. Implemented behavior remains not Verified. The repository
+> contains working Rust crates and the `noesis` local CLI, but no production
+> server deployment or production-ready release.
 
 This document is the implementation baseline for the [CodeNoesis software track](README.md). Research-only ideas must first define an experiment and acceptance evidence in the [research track](../research/README.md); they enter this architecture only through an explicit engineering decision.
 
@@ -421,14 +422,50 @@ byte unchanged. Only the V3-V9 publishers receive a reviewed template
 materialized with one exact expected PortableGraph schema and integrity-pinned
 by the existing manifest entrypoint.
 
-The candidate validates exact version, size, common families,
+The merged correction validates exact version, size, common families,
 version-specific indexes, unique identities, and privacy before enabling
 inspection. It exposes counts, exact-ID/NFC search, typed filters,
 relationships, claims, evidence, derivations, diagnostics, coverage gaps, and
 deterministic depth-one/two SVG neighborhoods. Rejection clears all prior
 state. CSP remains default-deny with no network, dynamic code, storage,
 telemetry, source access, browser auto-launch, mutation, repair, or inference.
-The behavior is not effective or Verified until protected manual merge.
+Protected PR #177 made the behavior effective; it remains not Verified.
+
+### R17 function-centered context and navigation candidate
+
+Issue [#178](https://github.com/smutti/codenoesis/issues/178) and
+[Decision 0032](decisions/0032-s4-r17-function-context-navigation.md) define
+one Proposed high-risk S4 package over exact protected merge
+`f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`. It adds no ontology family,
+identity, snapshot, query version, or PortableGraph version. The explicit
+`rust-function-context-v1` selector projects one validated R16 callable into
+canonical `FunctionContextV1`; selector absence preserves LocalQueryResultV13
+bytes.
+
+The projection service is a pure inward-owned contract operation over one
+validated semantic head. It builds indexes by stable identity, verifies one
+callable root and one `HAS_SIGNATURE`, orders contiguous `HAS_PARAMETER`
+subjects, follows only direct `HAS_BODY_FACT` and proven `CALLS`, retains
+applicable claims/evidence/diagnostics/gaps/derivations, and emits deterministic
+navigation roles. It rejects dangling, duplicate, inconsistent, non-canonical,
+private, or over-limit input rather than repairing or inferring it. No source
+retrieval, compiler, type/dispatch resolution, cfg selection, ownership,
+side-effect, returned-value, or runtime authority enters the domain.
+
+The additive LocalExplorerV10 publisher accepts exactly canonical
+PortableGraphV9 and materializes a separate integrity-pinned static asset. The
+browser independently validates schema, families, references, privacy, and
+size before enabling search. It renders declared signatures, ordered
+parameters, outputs, calls, body facts, evidence, claims, uncertainty, and a
+bounded SVG neighborhood with text-only DOM operations, deterministic URL
+fragments, and 128-entry in-memory history. It has no network, storage,
+clipboard, dynamic-code, source, process, mutation, repair, inference, model,
+or browser-launch authority.
+
+R17 is exposed only by the source-build `local-experimental-r17` profile. That
+profile starts G0 classification but grants no GA, signing, support, release,
+deployment, publication, or compatibility promise. The branch remains
+ineffective until protected manual merge and remains not Verified afterward.
 
 ### S7 implementation-aware runtime boundary
 

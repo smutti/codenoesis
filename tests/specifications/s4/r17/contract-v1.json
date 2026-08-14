@@ -1,0 +1,88 @@
+{
+  "schema_version": "codenoesis.r17-function-context-contract/v1",
+  "issue": 178,
+  "exact_base_sha": "f0d0fc998a9158e7c8e96a5b70c8830a3150dd22",
+  "status": "proposed_branch_scoped_candidate",
+  "slice": "S4",
+  "risk": "high",
+  "requirements": [
+    "FR-CTX-001",
+    "FR-EXP-009"
+  ],
+  "profile": "rust-function-context-v1",
+  "release_profile": "local-experimental-r17",
+  "contracts": {
+    "snapshot": "codenoesis.repository-snapshot/v18",
+    "graph": "codenoesis.knowledge-graph/v15",
+    "ontology": "codenoesis.ontology/rust/v15",
+    "query_default": "codenoesis.local-query-result/v13",
+    "context": "codenoesis.function-context/v1",
+    "portable": "codenoesis.portable-graph/v9",
+    "explorer": "codenoesis.local-explorer/v10"
+  },
+  "limits": {
+    "context_output_bytes_including_lf": 4194304,
+    "function_parameters": 256,
+    "linked_subjects": 256,
+    "linked_relationships": 512,
+    "linked_claims": 2048,
+    "linked_evidence": 2048,
+    "uncertainty_records": 1024,
+    "portable_graph_bytes": 268435456,
+    "viewer_function_search_results": 100,
+    "viewer_navigation_history": 128
+  },
+  "determinism": {
+    "argument_permutations": 50,
+    "parallel_schedules": 10,
+    "lekton_fresh_store_runs": 2,
+    "canonical_lf_json": true,
+    "selector_absence_byte_identical": true
+  },
+  "privacy_denied_fields": [
+    "absolute_root",
+    "argument",
+    "body_text",
+    "condition_text",
+    "credential",
+    "environment",
+    "expression_text",
+    "initializer_text",
+    "literal_text",
+    "model_data",
+    "source_contents",
+    "source_snippet",
+    "telemetry",
+    "url"
+  ],
+  "limitations": [
+    "active_cfg_not_selected",
+    "compiler_validity_not_proven",
+    "declared_types_not_resolved",
+    "dispatch_not_resolved",
+    "ownership_and_aliasing_not_computed",
+    "returned_values_not_proven",
+    "runtime_behavior_not_observed",
+    "side_effects_not_computed"
+  ],
+  "forbidden_authority": [
+    "active_world_selection",
+    "browser_auto_launch",
+    "compiler_execution",
+    "dynamic_code",
+    "graph_mutation",
+    "model_invocation",
+    "network",
+    "process_execution",
+    "repair_or_inference",
+    "source_export",
+    "source_repository_access",
+    "storage",
+    "target_execution",
+    "telemetry"
+  ],
+  "new_dependency": false,
+  "migration": false,
+  "control_plane_effect": false,
+  "release_effect": false
+}

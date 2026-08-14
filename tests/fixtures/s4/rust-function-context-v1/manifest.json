@@ -1,0 +1,44 @@
+{
+  "schema_version": "codenoesis.r17-fixture-manifest/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-function-context-v1",
+  "external_source_vendored": false,
+  "materialization": {
+    "object_format": "sha1",
+    "tree_oid": "aed06ed2ea7447c85a25b03fa48dd9d591b7d825",
+    "commit_oid": "09093916dfc9b925fa22c7de660b67103a4def01",
+    "author_name": "CodeNoesis",
+    "author_email": "fixture@codenoesis.invalid",
+    "author_date": "1786665600 +0000",
+    "commit_message": "R17 function context fixture\n"
+  },
+  "files": [
+    {
+      "path": "repository/Cargo.toml",
+      "mode": "100644",
+      "byte_length": 106,
+      "blob_oid": "9f7506aa44f6e6b95364a04141474cfecd9db560",
+      "sha256": "b0174b2d1a50ef32e57b92f111984f068b85a0c4f42b1c41e6f6e5c445f5db07"
+    },
+    {
+      "path": "repository/src/lib.rs",
+      "mode": "100644",
+      "byte_length": 510,
+      "blob_oid": "3beb259d89c879b3b16f8d7de20b5f7d23ffcf88",
+      "sha256": "66c45fce26cae70bf7d07e1c2d5bd7a37dac51cb884d80babfe54b96c8176981"
+    }
+  ],
+  "expected_oracle": {
+    "path": "tests/fixtures/s4/rust-function-context-v1/expected-function-context.json",
+    "byte_length": 12555,
+    "sha256": "437dc3cfc694747045beb1c40c18500409796acf7025e5968cc36dea5e095c77"
+  },
+  "sentinels": {
+    "process_execution_permitted": false,
+    "network_access_permitted": false,
+    "compiler_execution_permitted": false,
+    "macro_expansion_permitted": false,
+    "source_export_permitted": false,
+    "model_provider_permitted": false,
+    "browser_launch_permitted": false
+  }
+}
