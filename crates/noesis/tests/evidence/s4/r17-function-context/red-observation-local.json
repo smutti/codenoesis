@@ -10,11 +10,11 @@
   "risk": "high",
   "exact_base_sha": "f0d0fc998a9158e7c8e96a5b70c8830a3150dd22",
   "checkpoint": {
-    "commit_sha": "660b83c07b9b243e457d09f956593f2f5407502b",
-    "tree_sha": "2240e2d4d16839c523f0c264d24b945ffef7a383",
+    "commit_sha": "96443e6bdae0e9909facef62d906f5a4b3675253",
+    "tree_sha": "5ce8fd4b3d097e014fdd8b74529045df24224b8e",
     "contains_production_source_or_viewer_asset_edit": false
   },
-  "observed_at_utc": "2026-08-14T07:33:09Z",
+  "observed_at_utc": "2026-08-14T07:42:59Z",
   "command": "cargo test -p noesis --test e2e_fr_ctx_001_function_context e2e_fr_ctx_001_function_context_and_navigation --locked -- --exact --nocapture",
   "command_exit_status": 101,
   "expected_failure": {
@@ -43,8 +43,8 @@
   },
   "log": {
     "path": "crates/noesis/tests/evidence/s4/r17-function-context/red.log",
-    "byte_length": 1314,
-    "sha256": "077901b2d2f362efb839f3f94326ca869195196f0da697f5f2da4100472a7397"
+    "byte_length": 1227,
+    "sha256": "7629941e7da6b7ec896cd12741dff6e1e191afb9765551ca6b2c42ec13e785b1"
   },
   "environment": {
     "operating_system": "macOS 26.5.2 (25F84)",
