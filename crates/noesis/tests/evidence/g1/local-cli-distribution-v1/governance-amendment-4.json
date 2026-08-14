@@ -1,0 +1,33 @@
+{
+  "schema_version": "codenoesis.governance-amendment/v1",
+  "issue": 182,
+  "correction_round": 4,
+  "risk": "high",
+  "status": "superseded_before_commit",
+  "authorization": "accountable-maintainer authorization of the bounded R16/R17 governance-hash correction",
+  "authorization_record": "https://github.com/smutti/codenoesis/issues/182#issuecomment-5294342850",
+  "proposal_record": "https://github.com/smutti/codenoesis/issues/182#issuecomment-5294297818",
+  "parent_head_sha": "daeaf55255cb90e181266775c6d7708f582a2088",
+  "initial_failure": {
+    "failed_tests": 2,
+    "log_bytes": 2127,
+    "log_sha256": "ef7e46bdd8851fec2d725786eb1e1ba91f0989a013db17adc736f3a51b598bd6"
+  },
+  "attempted_correction": {
+    "committed": false,
+    "r16_candidate_bundle_sha256": "aebd9c98b8673ec42be67a573cadbb5e9cf81c8a2a6ee856bd23e332a43352b4",
+    "r17_candidate_bundle_sha256": "28a65c1dafd3d7ae7af58fc38ea76cb45dfeae43153085327a788e62b964e57f"
+  },
+  "transitive_failure": {
+    "reason": "Changing the R16 bundle file invalidated the protected R16 file digest nested in the R17 bundle and would cascade through G0 and G1 identities.",
+    "log_bytes": 1445,
+    "log_sha256": "aaaad33a1447986ed8cb742480edc7f4ad75f5fa008105afc11d15086c4c093e"
+  },
+  "final_bundle_changes_retained": false,
+  "resolution_record": "https://github.com/smutti/codenoesis/issues/182#issuecomment-5294384988",
+  "preserved": [
+    "R16 bundle file SHA-256 3656d6c009b129f5504320e10c3886c48ac9a4adbe40e78129a48b49c655805b",
+    "R17 bundle file SHA-256 7ddb828f2c637ffba3652dfc2c36d76a63e5351ac954b6c390b3e47663499bc0",
+    "all fixtures, schemas, goldens, ontology identities, runtime outputs, and product semantics"
+  ]
+}
