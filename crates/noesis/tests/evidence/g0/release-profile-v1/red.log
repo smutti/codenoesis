@@ -1,0 +1,19 @@
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s
+     Running tests/e2e_fr_rel_001_release_profile.rs (target/debug/deps/e2e_fr_rel_001_release_profile-5951f0bc1a42cfa7)
+
+running 1 test
+
+thread 'e2e_fr_rel_001_reports_bound_profile' (1812652) panicked at crates/noesis/tests/e2e_fr_rel_001_release_profile.rs:100:9:
+expected Red: the exact base rejects the unimplemented profile command as input.invalid_revision
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test e2e_fr_rel_001_reports_bound_profile ... FAILED
+
+failures:
+
+failures:
+    e2e_fr_rel_001_reports_bound_profile
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.80s
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_rel_001_release_profile`

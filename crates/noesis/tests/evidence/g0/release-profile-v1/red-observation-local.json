@@ -1,0 +1,47 @@
+{
+  "schema_version": "codenoesis.g0-red-observation/v1",
+  "issue": 180,
+  "requirements": [
+    "FR-REL-001",
+    "FR-CLI-007"
+  ],
+  "requirement_status": "Proposed branch-scoped candidate",
+  "planning_item": "G0",
+  "slice": "S14",
+  "risk": "critical",
+  "base_sha": "f0bdb5290566bb85bb103e24291e952d4c557156",
+  "checkpoint_sha": "b4631d86f9f22c6b4760efe96577e1ffac1ccfb8",
+  "governance_command": "python3 -m unittest scripts.tests.test_g0_release_profile_contract scripts.tests.test_s4_r16_safe_constant_evaluation_contract scripts.tests.test_s4_r17_function_context_contract -v",
+  "governance_exit": 0,
+  "red_test_command": "cargo test -p noesis --test e2e_fr_rel_001_release_profile e2e_fr_rel_001_reports_bound_profile --locked -- --exact --nocapture",
+  "red_test_exit": 101,
+  "expected_failure_reason": "the exact base has no profile command and dispatches the invocation through the inherited S0 revision parser",
+  "actual_failure_reason": "the acceptance test observed the exact 149-byte codenoesis.error/v1 input.invalid_revision record and stopped as the authorized Red",
+  "public_command": "noesis profile --id local-experimental-r17 --format json",
+  "public_observation": {
+    "exit": 2,
+    "stdout_bytes": 0,
+    "stderr_bytes": 149,
+    "stderr_schema_version": "codenoesis.error/v1",
+    "stderr_code": "input.invalid_revision",
+    "stderr_sha256": "ce9225d963d52e228c7d53ae2b481d969eb0e73992d48db919cc80801a9ee2e6"
+  },
+  "retained_log": {
+    "path": "crates/noesis/tests/evidence/g0/release-profile-v1/red.log",
+    "bytes": 1074,
+    "sha256": "13efb53c8b2eda58cd77b0cf894228912ae934991fc949ad24fd75c9994819f1"
+  },
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "rust_host": "aarch64-apple-darwin",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "features": "workspace defaults under --locked",
+    "network_or_model_provider": "not used"
+  },
+  "discarded_capture": {
+    "evidence": false,
+    "reason": "the first shell wrapper used the zsh read-only variable name status after the same expected test failure; the corrected wrapper retained the exact subsequent deterministic Red"
+  }
+}
