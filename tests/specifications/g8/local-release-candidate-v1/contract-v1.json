@@ -1,0 +1,103 @@
+{
+  "schema_version": "codenoesis.g1b-g8-local-release-contract/v1",
+  "issue": 186,
+  "requirements": [
+    "FR-REL-003",
+    "FR-CLI-010"
+  ],
+  "slice": "S14",
+  "risk": "critical",
+  "base_sha": "c5d259d7689b8a49527f8322b606e58cc0e1e61d",
+  "contracts": [
+    "codenoesis.local-release-candidate-manifest/v1",
+    "codenoesis.local-release-candidate-verification/v1",
+    "codenoesis.local-dependency-lock/v1",
+    "codenoesis.local-license-report/v1",
+    "codenoesis.local-advisory-report/v1",
+    "codenoesis.local-unsafe-inventory/v1",
+    "CycloneDX-1.6",
+    "codenoesis.error/v28"
+  ],
+  "limits": {
+    "bundles": 1,
+    "files_per_bundle": 6,
+    "archive_bytes": 285212672,
+    "evidence_document_bytes": 4194304,
+    "evidence_total_bytes": 33554432,
+    "candidate_subject_files": 8,
+    "packages": 512,
+    "dependency_edges": 4096,
+    "unsafe_exceptions": 512,
+    "zip_entries": 1024,
+    "relative_path_bytes": 256,
+    "public_json_bytes": 131072,
+    "constructions": 50,
+    "schedules": 10,
+    "artifact_retention_days": 30
+  },
+  "cargo_lock_sha256": "434cc5e8e38a4c57f35990431d4682974b6cae94893860e1948c8f7cc21ffbca",
+  "dependencies": {
+    "workspace_existing": "crc32fast = 1.5.0",
+    "cargo_audit": "0.22.2",
+    "checkout": "3d3c42e5aac5ba805825da76410c181273ba90b1",
+    "upload_artifact": "043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+    "download_artifact": "3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c",
+    "attest_build_provenance": "4d101475d8b20a2381f78447822ac1eab6504dd8"
+  },
+  "expected_red": {
+    "command_exit": 2,
+    "stdout_bytes": 0,
+    "stderr_bytes": 170,
+    "stderr_sha256": "cd5f646ce966c60887ae0ed110142ba22c4a5f6a05a792c72bfbab5ba3a94311",
+    "schema_version": "codenoesis.error/v26",
+    "code": "distribution.invalid_arguments",
+    "workflow": "absent"
+  },
+  "authority": {
+    "system_install": false,
+    "automatic_update": false,
+    "tag": false,
+    "github_release": false,
+    "package_publication": false,
+    "deployment": false,
+    "secrets": false,
+    "support": "none",
+    "ga": false,
+    "post_merge_attestation_dispatch": "maintainer-only"
+  },
+  "target_oracles": {
+    "aarch64-apple-darwin": {
+      "archive_bytes": 17514,
+      "archive_sha256": "fc5e3fb15dd1e4344933abdfbe562b277949ba2bea7eb384b0875563267a3639",
+      "manifest_bytes": 2138,
+      "manifest_sha256": "9f6b34af5ffc2b75120c68b5c9758798bd4be5c7a72243040e070a5755ae70d3",
+      "checksums_bytes": 743,
+      "checksums_sha256": "d4d51f5f7e51f92b0570109c9eb52ce8820455c1128f7452fb30fada7a5a17da",
+      "verification_bytes": 1596,
+      "verification_sha256": "98bb18198d4620a99d5de20065398b3e255d121318deee646ff7a19c0409469c",
+      "candidate_name": "codenoesis-local-release-candidate-r17-aarch64-apple-darwin-fc5e3fb15dd1e4344933abdfbe562b277949ba2bea7eb384b0875563267a3639"
+    },
+    "x86_64-pc-windows-msvc": {
+      "archive_bytes": 17552,
+      "archive_sha256": "e8bd888392ef1f3880db0dad1baada35ecabb8add951385e0917c2e3e3b53194",
+      "manifest_bytes": 2144,
+      "manifest_sha256": "bbf2200171aadd0eae2b830507fe4cad474adf1184521df1d2c06ad821fb5734",
+      "checksums_bytes": 745,
+      "checksums_sha256": "0622637f1621c0b2ec8bce28823161dd4febbc8a23e1321a21d6ff44619a91ae",
+      "verification_bytes": 1600,
+      "verification_sha256": "3b881e2af6fc3e449bbf0e2d28cb5807dbe779cdfeac32efeca7eba4a70ccc6a",
+      "candidate_name": "codenoesis-local-release-candidate-r17-x86_64-pc-windows-msvc-e8bd888392ef1f3880db0dad1baada35ecabb8add951385e0917c2e3e3b53194"
+    },
+    "x86_64-unknown-linux-gnu": {
+      "archive_bytes": 17566,
+      "archive_sha256": "74d93b4b22f6591943ca0612560452facd480395fca3d8c341d12a9f686c7ed7",
+      "manifest_bytes": 2150,
+      "manifest_sha256": "fbc16c63b8523e55158278dc76b6f85ae0094b2779e2594c30a80152cdb086ae",
+      "checksums_bytes": 747,
+      "checksums_sha256": "c23721e2074514191ef2a643a2f3c1767aad78c26fc0d38a0486ec1e09b3d3b3",
+      "verification_bytes": 1604,
+      "verification_sha256": "484f72e1118482331ca359fbe67075795db5417cf979ee8c9ca3c07663d416c7",
+      "candidate_name": "codenoesis-local-release-candidate-r17-x86_64-unknown-linux-gnu-74d93b4b22f6591943ca0612560452facd480395fca3d8c341d12a9f686c7ed7"
+    }
+  }
+}

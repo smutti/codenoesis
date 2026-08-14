@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/cyclonedx-1.6-profile.schema.json",
+  "title": "CodeNoesis CycloneDX 1.6 profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "bomFormat",
+    "specVersion",
+    "serialNumber",
+    "version",
+    "metadata",
+    "components",
+    "dependencies"
+  ],
+  "properties": {
+    "bomFormat": {
+      "const": "CycloneDX"
+    },
+    "specVersion": {
+      "const": "1.6"
+    },
+    "serialNumber": {
+      "type": "string",
+      "pattern": "^urn:uuid:[0-9a-f-]{36}$"
+    },
+    "version": {
+      "const": 1
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "components": {
+      "type": "array",
+      "maxItems": 512
+    },
+    "dependencies": {
+      "type": "array",
+      "maxItems": 512
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "schema_version": "codenoesis.acceptance/local-release-candidate/v1",
+  "requirement_ids": [
+    "FR-REL-003",
+    "FR-CLI-010"
+  ],
+  "package_command": [
+    "xtask",
+    "package-local-release-candidate",
+    "--bundle",
+    "<g1a>",
+    "--source-commit",
+    "<main-sha>",
+    "--supply-chain",
+    "<evidence>",
+    "--output",
+    "<empty-root>"
+  ],
+  "verify_command": [
+    "xtask",
+    "verify-local-release-candidate",
+    "--candidate",
+    "<candidate>"
+  ],
+  "signature_command": [
+    "gh",
+    "attestation",
+    "verify",
+    "<archive>",
+    "--bundle",
+    "<bundle>",
+    "--repo",
+    "smutti/codenoesis",
+    "--signer-workflow",
+    "smutti/codenoesis/.github/workflows/local-release-candidate.yml",
+    "--source-ref",
+    "refs/heads/main",
+    "--deny-self-hosted-runners"
+  ],
+  "success": {
+    "exit": 0,
+    "stderr_bytes": 0,
+    "single_stdout_write": true,
+    "packaging_mutation": "new-candidate-only",
+    "verification_mutation": false
+  },
+  "failure": {
+    "exit": 2,
+    "stdout_bytes": 0,
+    "schema_version": "codenoesis.error/v28",
+    "partial_candidate": false
+  },
+  "determinism": {
+    "constructions": 50,
+    "schedules": 10
+  },
+  "security": {
+    "network_in_xtask": false,
+    "binary_execution_in_xtask": false,
+    "secret_sources": false,
+    "ambient_discovery": false,
+    "system_install": false,
+    "publication": false,
+    "privileged_job_repository_execution": false
+  }
+}

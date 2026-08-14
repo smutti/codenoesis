@@ -1,0 +1,203 @@
+{
+  "schema_version": "codenoesis.evidence/g8-local-release-implementation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/186",
+  "authorization": "https://github.com/smutti/codenoesis/issues/186#issuecomment-5296619186",
+  "observed_at_utc": "2026-08-14T19:48:59Z",
+  "planning_package": "G1b/G8-local",
+  "slice": "S14",
+  "risk": "critical",
+  "risk_owner": "@smutti",
+  "requirement_status": {
+    "proposed_branch_scoped_until_protected_manual_merge": [
+      "FR-REL-003",
+      "FR-CLI-010"
+    ],
+    "bounded_proposed_amendments": [
+      "FR-REL-001",
+      "FR-REL-002",
+      "NFR-SUP-001",
+      "NFR-MNT-002",
+      "NFR-SEC-004",
+      "NFR-CMP-001",
+      "NFR-PORT-001",
+      "NFR-TST-001",
+      "NFR-TST-002"
+    ],
+    "verified": false
+  },
+  "commits": {
+    "base": "c5d259d7689b8a49527f8322b606e58cc0e1e61d",
+    "governance_checkpoint": "7e6b41e7d66bff7eb008f9a01b67afd1f6987ccd",
+    "retained_expected_reds": "73bceedf1ac7f1471352abbfd76ae79ac8a31841",
+    "implementation": "a048b0abf5ba75bebff255eb50c10046a116ffd0",
+    "prior_governance_traceability_correction": "764bb9f00063134d75fdf825d542b17fca7e6d99",
+    "tested_product_head": "764bb9f00063134d75fdf825d542b17fca7e6d99",
+    "evidence_commit": "recorded by the pull request"
+  },
+  "public_outcome": {
+    "package_command": "cargo run --locked -p xtask -- package-local-release-candidate --bundle <g1a> --source-commit <sha> --supply-chain <evidence> --output <empty-root>",
+    "verify_command": "cargo run --locked -p xtask -- verify-local-release-candidate --candidate <candidate>",
+    "real_local_target": "aarch64-apple-darwin",
+    "source_commit": "764bb9f00063134d75fdf825d542b17fca7e6d99",
+    "binary_sha256": "c620c914f8f34a7618eb0848313764cb850029884384bbc5a82351e5e25bc95f",
+    "archive_bytes": 19904981,
+    "archive_sha256": "c51d9b7815854adf828a82ec5f208771246a1bd271e2684d614b24d3f5799a38",
+    "candidate_name": "codenoesis-local-release-candidate-r17-aarch64-apple-darwin-c51d9b7815854adf828a82ec5f208771246a1bd271e2684d614b24d3f5799a38",
+    "subject_files": 8,
+    "manifest_stdout": {
+      "bytes": 2148,
+      "sha256": "3a25340fb07d290a4b4f6c0b49c3d36503f8775a063095a58f54eddaf497658b"
+    },
+    "verification_stdout": {
+      "bytes": 1603,
+      "sha256": "043fa22822d35002353f8de6fc0f069c78cf35466a6c2351be42c68fc5cbac6a"
+    },
+    "config_smoke_sha256": "9540f018a3cc5629019c3389195c246b1c1614a7168265054cfbd0d3aa005dc9",
+    "profile_smoke_sha256": "d2e2ae26a1d0779245c0dc8da05f6101445af304b291d757be3e0edd61bb6d4e",
+    "offline_verification": true,
+    "system_mutation": false
+  },
+  "contracts": {
+    "decision_0036_sha256": "77f42eac06672a703036842d2cce9e2dee01bd561cafe47653805aeede597b40",
+    "contract_bundle_sha256": "5a2aab9a1877579a56efdfd9b1b3991e0a1f1e24d518e22ad7a05da54202f57c",
+    "supply_policy_sha256": "1dc9a2a18743a696ad26bdec542c797033fa2df27fc1869fb8f0b84f77d1c1a2",
+    "workflow_sha256": "269082c6b679e630a13faca740c27edaa942c224f8933598c4b28489d8e0b8e5",
+    "g0_g1a_g2a_public_bytes_changed": false,
+    "r0_r17_k1_s7_ontology_or_viewer_bytes_changed": false
+  },
+  "workflow_authority": {
+    "trigger": "workflow_dispatch on refs/heads/main with exact expected_sha",
+    "unprivileged_jobs": "contents: read only",
+    "attest_job": [
+      "contents: read",
+      "id-token: write",
+      "attestations: write"
+    ],
+    "repository_or_candidate_executable_in_privileged_job": false,
+    "contents_write": false,
+    "package_publication": false,
+    "release_or_tag_authority": false,
+    "head_authored_workflow_authoritative_for_own_pull_request": false
+  },
+  "evidence": {
+    "original_red_observation": "red-observation.json",
+    "first_party_unsafe_red": {
+      "path": "first-party-unsafe-red.log",
+      "bytes": 815,
+      "sha256": "81501e930bf1c1c836bd7fe1016880507d998db78d77b5561e2ff849cf635424"
+    },
+    "focused_green": {
+      "path": "focused-green.log",
+      "bytes": 2137,
+      "sha256": "5b8ce0a4dc0e2cb0d812a7b30e1f5bfa0667899850124162fb638c75a7ed6db5"
+    },
+    "complete_gate": {
+      "path": "complete-gate-summary.log",
+      "bytes": 1244,
+      "sha256": "dabaedaf6fb7e091a23144fbc9c9c4f0c4a3154f3f10f2f9ef1a50964da88351",
+      "raw_local_log_bytes": 78611,
+      "raw_local_log_sha256": "af4507eeaa34d658194f9cb93af91a51fb66fbf013283ad532b7051fca7e2fad"
+    },
+    "supply_chain": {
+      "path": "supply-chain-observation-local.json",
+      "sha256": "34ba1b1eb8d43fc3942b8dd0a097e7cb56356d01ba3b4c67054e7bc838a93bcc"
+    },
+    "traceability": {
+      "path": "traceability.json",
+      "sha256": "088b21d5a8f64ee1b903d9f3eab26b952cdf00ff39719f16b968ad229b733468"
+    }
+  },
+  "validation": {
+    "focused_rust_tests_passed": 8,
+    "focused_python_tests_passed": 9,
+    "complete_gate_passed": true,
+    "complete_gate_rust_tests_passed": 646,
+    "complete_gate_doctests_passed": 0,
+    "complete_gate_python_tests_passed": 367,
+    "benchmark_assets_valid": true,
+    "benchmark_compile_passed": true,
+    "cargo_audit_vulnerabilities": 0,
+    "three_target_supply_replay_byte_identical": true
+  },
+  "corrections": {
+    "budget": 5,
+    "rounds_used": 4,
+    "rounds_remaining": 1,
+    "rounds": [
+      {
+        "round": 1,
+        "kind": "local contract and security review",
+        "changes": [
+          "Route malformed bundle, evidence and archive trees to their exact ErrorV28 families.",
+          "Use cargo-audit --version for the exact executable identity check.",
+          "Reject actual first-party Rust unsafe constructs while excluding comments and literals from that decision."
+        ],
+        "requirement_or_oracle_changed": false
+      },
+      {
+        "round": 2,
+        "kind": "complete-gate governance compatibility",
+        "changes": [
+          "Restore inherited issue #182 and issue #184 / Decision 0035 traceability markers in mutable lifecycle documentation."
+        ],
+        "requirement_or_oracle_changed": false
+      },
+      {
+        "round": 3,
+        "kind": "CodeQL trusted-source correction",
+        "changes": [
+          "Keep the exact expected_sha equality guard while checking out only the trusted workflow context github.sha.",
+          "Strengthen the workflow contract against checkout refs derived from workflow_dispatch input."
+        ],
+        "requirement_or_oracle_changed": false
+      },
+      {
+        "round": 4,
+        "kind": "Windows atomic publication correction",
+        "changes": [
+          "Release the stable archive identity handle after final revalidation and before atomically renaming its staging directory.",
+          "Retain the Windows Red as Actions run 31836645169 job 94884386131, where sec_fr_rel_003_candidate_tree_and_archive_tamper_fail_closed returned release.internal during candidate publication."
+        ],
+        "requirement_or_oracle_changed": false
+      }
+    ]
+  },
+  "actual_change_scope": {
+    "paths_before_evidence": 47,
+    "evidence_paths_added": 6,
+    "exact_path_source": "git diff --name-only c5d259d7689b8a49527f8322b606e58cc0e1e61d..<review-head>",
+    "outside_authorized_paths": [],
+    "unrelated_graphify_directories_staged": false
+  },
+  "environment": {
+    "kernel": "Darwin 25.5.0",
+    "macos": "26.5.2",
+    "architecture": "arm64",
+    "host": "aarch64-apple-darwin",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "python": "Python 3.9.6",
+    "actionlint": "1.7.12",
+    "toolchain_file_sha256": "279d77167cec5426fa80f457cd066dc74a360fbe4e2816f4f3fa01487a918fdc",
+    "base_policy_sha256": "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993",
+    "agent_policy_sha256": "07c4385775f37be9e5d2ba09f7e9edfe3936f800a2188e4155f166eef3299c71"
+  },
+  "agent": {
+    "product": "OpenAI Codex",
+    "model_identity": "not exposed by the runtime",
+    "run_identifier": "not exposed by the runtime",
+    "duration": "retained per-command results are recorded; aggregate duration is not exposed",
+    "cost": "not exposed by the runtime"
+  },
+  "known_limitations": [
+    "The local real-candidate smoke is macOS arm64 only; native Linux x86_64 and Windows x86_64 candidates require the protected-main post-merge workflow.",
+    "Keyless provenance and offline gh attestation verification are not run on the unmerged branch and remain required post-merge evidence.",
+    "Requirements remain Proposed on this branch and the package is not Verified, published, supported or GA.",
+    "The complete local gate raw log is represented by its digest and summary; immutable GitHub check logs remain required on the final review head."
+  ],
+  "human_approvals": [
+    "Autorizzo issue #186 e il pacchetto completo critical G1b/G8-local descritto.",
+    "Independent review, protected manual merge and post-merge dispatch remain maintainer-only."
+  ],
+  "stop_conditions_triggered": []
+}

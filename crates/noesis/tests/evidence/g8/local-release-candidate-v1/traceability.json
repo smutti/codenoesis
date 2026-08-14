@@ -1,0 +1,92 @@
+{
+  "schema_version": "codenoesis.traceability/g8-local-release-candidate-v1",
+  "issue": 186,
+  "slice": "S14",
+  "requirements": [
+    {
+      "id": "FR-REL-003",
+      "status": "Proposed branch-scoped candidate",
+      "tests": [
+        "ct_fr_rel_003_all_target_manifests_and_verifications_are_exact",
+        "e2e_fr_rel_003_packages_and_verifies_exact_candidate",
+        "sec_fr_rel_003_candidate_tree_and_archive_tamper_fail_closed"
+      ],
+      "evidence": [
+        "focused-green.log",
+        "implementation-observation-local.json"
+      ]
+    },
+    {
+      "id": "FR-CLI-010",
+      "status": "Proposed branch-scoped candidate",
+      "tests": [
+        "ct_fr_cli_010_error_v28_matches_frozen_public_bytes",
+        "sec_fr_cli_010_invalid_arguments_and_nonempty_output_fail_closed",
+        "e2e_fr_rel_003_packages_and_verifies_exact_candidate"
+      ],
+      "evidence": [
+        "red-command.log",
+        "focused-green.log"
+      ]
+    },
+    {
+      "id": "NFR-SUP-001",
+      "status": "Bounded Proposed amendment",
+      "tests": [
+        "ct_nfr_sup_001_supply_documents_are_closed_and_cross_bound",
+        "sec_nfr_sup_001_vulnerability_rejects_without_partial_candidate",
+        "test_supply_generator_rejects_first_party_unsafe"
+      ],
+      "evidence": [
+        "supply-chain-observation-local.json",
+        "first-party-unsafe-red.log",
+        "focused-green.log"
+      ]
+    },
+    {
+      "id": "NFR-MNT-002",
+      "status": "Bounded Proposed amendment",
+      "tests": [
+        "test_reviewed_supply_policy_is_closed_and_time_bounded",
+        "test_supply_generator_rejects_first_party_unsafe"
+      ],
+      "evidence": [
+        "supply-chain-observation-local.json"
+      ]
+    },
+    {
+      "id": "NFR-SEC-004",
+      "status": "Bounded Proposed amendment",
+      "tests": [
+        "sec_nfr_sec_004_noncanonical_and_private_evidence_fails_closed",
+        "test_trusted_workflow_and_ci_gate_are_exact"
+      ],
+      "evidence": [
+        "focused-green.log",
+        "complete-gate-summary.log"
+      ]
+    },
+    {
+      "id": "NFR-PORT-001",
+      "status": "Bounded Proposed amendment",
+      "tests": [
+        "test_trusted_workflow_and_ci_gate_are_exact"
+      ],
+      "evidence": [
+        "implementation-observation-local.json"
+      ],
+      "remaining": "Post-merge protected-main native Linux, macOS arm64 and Windows candidate/attestation run"
+    },
+    {
+      "id": "NFR-TST-001/NFR-TST-002",
+      "status": "Bounded Proposed amendment",
+      "tests": [
+        "e2e_fr_rel_003_packages_and_verifies_exact_candidate"
+      ],
+      "evidence": [
+        "focused-green.log",
+        "complete-gate-summary.log"
+      ]
+    }
+  ]
+}

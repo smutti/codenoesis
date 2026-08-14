@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/local-release-candidate-manifest-v1.schema.json",
+  "title": "LocalReleaseCandidateManifestV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "carrier",
+    "target",
+    "source",
+    "release_status",
+    "support",
+    "publication",
+    "runtime_profile_release_authority_unchanged",
+    "archive",
+    "embedded_bundle",
+    "evidence",
+    "attestation",
+    "reproducibility"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.local-release-candidate-manifest/v1"
+    },
+    "profile_id": {
+      "const": "local-experimental-r17"
+    },
+    "carrier": {
+      "const": "deterministic-zip-stored-v1"
+    },
+    "target": {
+      "enum": [
+        "aarch64-apple-darwin",
+        "x86_64-pc-windows-msvc",
+        "x86_64-unknown-linux-gnu"
+      ]
+    },
+    "source": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "#source",
+      "title": "SourceIdentityV1",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "commit",
+        "ref"
+      ],
+      "properties": {
+        "repository": {
+          "const": "https://github.com/smutti/codenoesis"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "ref": {
+          "const": "refs/heads/main"
+        }
+      }
+    },
+    "release_status": {
+      "const": "not-ga"
+    },
+    "support": {
+      "const": "none"
+    },
+    "publication": {
+      "const": false
+    },
+    "runtime_profile_release_authority_unchanged": {
+      "const": true
+    },
+    "archive": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "#archive",
+      "title": "ArchiveRecordV1",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "length",
+        "sha256",
+        "entries"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "length": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 285212672
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "entries": {
+          "const": 6
+        }
+      }
+    },
+    "embedded_bundle": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "#bundle",
+      "title": "EmbeddedBundleV1",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "manifest_sha256",
+        "binary_sha256"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "manifest_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "binary_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#evidence",
+        "title": "EvidenceRecordV1",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "schema",
+          "length",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "enum": [
+              "evidence/advisory-report.json",
+              "evidence/dependency-lock.json",
+              "evidence/license-report.json",
+              "evidence/sbom.cdx.json",
+              "evidence/unsafe-inventory.json"
+            ]
+          },
+          "schema": {
+            "enum": [
+              "codenoesis.local-advisory-report/v1",
+              "codenoesis.local-dependency-lock/v1",
+              "codenoesis.local-license-report/v1",
+              "CycloneDX-1.6",
+              "codenoesis.local-unsafe-inventory/v1"
+            ]
+          },
+          "length": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4194304
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "attestation": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "#attestation",
+      "title": "AttestationRequirementV1",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "predicate_type",
+        "required_for_distribution",
+        "included_in_candidate"
+      ],
+      "properties": {
+        "provider": {
+          "const": "github-artifact-attestations"
+        },
+        "predicate_type": {
+          "const": "https://slsa.dev/provenance/v1"
+        },
+        "required_for_distribution": {
+          "const": true
+        },
+        "included_in_candidate": {
+          "const": false
+        }
+      }
+    },
+    "reproducibility": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "#reproducibility",
+      "title": "ReproducibilityV1",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fixed_inputs",
+        "advisory_observation"
+      ],
+      "properties": {
+        "fixed_inputs": {
+          "const": "byte-identical"
+        },
+        "advisory_observation": {
+          "const": "time-varying-not-claimed"
+        }
+      }
+    }
+  }
+}

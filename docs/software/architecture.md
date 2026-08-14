@@ -1,8 +1,8 @@
 # CodeNoesis Software Architecture
 
-> Status: **implementation architecture through corrected local R16 and the
-> bounded S7 C0-C4 runtime; R17 function context is a Proposed branch
-> candidate**. Implemented behavior remains not Verified. The repository
+> Status: **implementation architecture through R17, bounded S7 C0-C4, G1a,
+> and local upgrade safety; G1b/G8-local is a Proposed branch candidate**.
+> Implemented behavior remains not Verified. The repository
 > contains working Rust crates and the `noesis` local CLI, but no production
 > server deployment or production-ready release.
 
@@ -525,11 +525,12 @@ package database, automatic updater, or server artifact. G1 remains incomplete
 until its remaining local and server distribution, secret, release-channel,
 and supported-installation semantics are separately approved.
 
-### Local Upgrade Safety candidate
+### Local Upgrade Safety
 
-Issue [#184](https://github.com/smutti/codenoesis/issues/184) and
-[Decision 0035](decisions/0035-local-upgrade-safety.md) define Proposed
-`FR-CMP-001` and `FR-CLI-009` for one high-risk G2a/G5-local/G7a S14 package.
+Issue [#184](https://github.com/smutti/codenoesis/issues/184),
+[Decision 0035](decisions/0035-local-upgrade-safety.md), and protected PR #185
+made `FR-CMP-001` and `FR-CLI-009` Approved and Implemented but not Verified
+for one high-risk G2a/G5-local/G7a S14 package.
 The inward contract owns canonical `LocalUpgradePlanV1`,
 `LocalRollbackReportV1`, and strict `CodeNoesisErrorV27`. The repository
 maintenance adapter owns stable filesystem reads of two complete G1a bundles
@@ -549,6 +550,43 @@ binary, mutate a path, create a hidden pointer, migrate product data, read a
 secret source, open network, sign, publish, or establish support or GA. The
 G7a runner is observational only and does not resolve `NFR-PER-002` or
 `OD-SLO-001`.
+
+### G1b/G8-local verifiable distribution candidate
+
+Issue [#186](https://github.com/smutti/codenoesis/issues/186) and
+[Decision 0036](decisions/0036-local-verifiable-distribution.md) define
+Proposed `FR-REL-003` and `FR-CLI-010` for one critical S14 package. Existing
+G0, G1a, and G2a contracts remain immutable. The new boundary wraps one exact
+G1a directory in an outer deterministic release-candidate carrier without
+changing the embedded runtime profile or configuration.
+
+The inward contract owns canonical candidate manifest, verification, supply
+evidence, and `CodeNoesisErrorV28` values. The repository-maintenance adapter
+owns stable filesystem reads, deterministic stored-entry ZIP writing, complete
+ZIP revalidation, digest-named atomic publication, and read-only verification.
+It accepts only one known six-file G1a tree and exact target/source/lock/policy
+evidence. It rejects traversal, symlinks, devices, duplicates, malformed ZIP,
+CRC/SHA/mode/length mismatch, evidence substitution, races, private values, and
+resource excess rather than repairing or inferring.
+
+The supply generator is a release adapter, not domain authority. It normalizes
+target-filtered locked Cargo metadata, exact Cargo.lock identity, reviewed
+license expressions, current cargo-audit output, transitive lexical unsafe
+surface, and CycloneDX 1.6 structure into privacy-safe canonical evidence.
+Advisory database time is observational; fixed normalized inputs alone carry a
+byte-reproducibility claim.
+
+The trusted workflow separates unprivileged supply/build jobs from a
+GitHub-hosted attest job with only contents-read, OIDC, and attestation-write.
+The privileged job executes no repository, dependency, or candidate program.
+It activates only after protected merge and explicit main dispatch. The local
+verifier never claims Sigstore trust; consumer identity and provenance checks
+remain the exact external `gh attestation verify` boundary.
+
+No tag, release, package, image, deployment, environment, secret, signing key,
+support window, EOL, release channel, vulnerability-response SLA, or GA
+authority enters this package. Post-merge three-platform attestation evidence
+and independent acceptance remain required before Verified.
 
 ### S7 implementation-aware runtime boundary
 

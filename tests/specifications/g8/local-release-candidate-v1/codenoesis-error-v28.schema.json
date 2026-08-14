@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/codenoesis-error-v28.schema.json",
+  "title": "CodeNoesisErrorV28",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v28"
+    },
+    "code": {
+      "enum": [
+        "release.internal",
+        "release.invalid_archive",
+        "release.invalid_arguments",
+        "release.invalid_bundle",
+        "release.invalid_evidence",
+        "release.limit_exceeded",
+        "release.policy_rejected",
+        "release.unstable_input"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "input",
+        "release",
+        "internal"
+      ]
+    },
+    "message": {
+      "enum": [
+        "invalid release command",
+        "invalid local distribution bundle",
+        "invalid release evidence",
+        "invalid release archive",
+        "unstable release input",
+        "release policy rejected",
+        "release limit exceeded",
+        "release operation failed"
+      ]
+    },
+    "retryable": {
+      "const": false
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 0
+    }
+  }
+}
