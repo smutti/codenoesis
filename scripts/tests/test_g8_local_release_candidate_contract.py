@@ -1,6 +1,8 @@
 import hashlib
 import json
 import pathlib
+import runpy
+import tempfile
 import unittest
 
 
@@ -88,6 +90,57 @@ def sha256_bytes(value: bytes):
 
 
 class G8LocalReleaseCandidateContractTest(unittest.TestCase):
+    def test_supply_generator_rejects_first_party_unsafe(self):
+        generator = runpy.run_path(
+            str(ROOT / "scripts/generate_local_supply_chain_evidence.py")
+        )
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            package_root = pathlib.Path(temporary_directory) / "workspace-package"
+            (package_root / "src").mkdir(parents=True)
+            (package_root / "Cargo.toml").write_text(
+                '[package]\nname = "workspace-package"\nversion = "0.1.0"\n',
+                encoding="utf-8",
+            )
+            source = package_root / "src/lib.rs"
+            source.write_text(
+                '// unsafe is rejected only as a Rust construct\n'
+                'pub const POLICY_WORD: &str = "unsafe";\n',
+                encoding="utf-8",
+            )
+            dependency = {
+                "packages": [
+                    {
+                        "id": "workspace-package@0.1.0",
+                        "name": "workspace-package",
+                        "version": "0.1.0",
+                        "source": "workspace",
+                    }
+                ]
+            }
+            package_details = {
+                "workspace-package@0.1.0": {
+                    "manifest_path": str(package_root / "Cargo.toml")
+                }
+            }
+            accepted = generator["build_unsafe_inventory"](
+                dependency,
+                package_details,
+                {},
+                "x86_64-unknown-linux-gnu",
+                "0" * 64,
+            )
+            self.assertEqual(accepted["packages"][0]["unsafe_tokens"], 0)
+
+            source.write_text("unsafe fn rejected() {}\n", encoding="utf-8")
+            with self.assertRaises(generator["EvidenceError"]):
+                generator["build_unsafe_inventory"](
+                    dependency,
+                    package_details,
+                    {},
+                    "x86_64-unknown-linux-gnu",
+                    "0" * 64,
+                )
+
     def test_exact_branch_authority_dependencies_and_limits(self):
         contract = load_json(SPEC / "contract-v1.json")
         self.assertEqual(

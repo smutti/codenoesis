@@ -11,7 +11,7 @@
     },
     {
       "path": "scripts/tests/test_g8_local_release_candidate_contract.py",
-      "sha256": "b288ebc8fa22c0a922b2d4779606bf797418c7e153b7e8e07c17b5fd31ba44c5"
+      "sha256": "da2cea9725fc6ba458f47e30f0aa1e26d4521234ad90ec9871a2e369d05c8d15"
     },
     {
       "path": "supply-chain/local-release-policy-v1.json",
@@ -99,8 +99,8 @@
     },
     {
       "path": "xtask/tests/e2e_fr_rel_003_local_release_candidate.rs",
-      "sha256": "b29c5243659de6f8066933adfce67aa05b90f8b8210b7010cc5e4b36aac0eb0b"
+      "sha256": "9adc846b1846a2b90e2389389aa3c203d388db5305fe6b663d3d37a794318ed2"
     }
   ],
-  "bundle_sha256": "923b09f206738d642636bd80ef6feef1f7047c348c87ea3a78f5a7bc383a9536"
+  "bundle_sha256": "7a933ffbcf6fcc95b0aa2da1a1dffc355481efadfa4542819b3c41b55e4799fb"
 }

@@ -137,21 +137,7 @@ fn package_g1a_fixture(root: &Path) -> PathBuf {
 }
 
 fn write_supply_chain_fixture(root: &Path, target: &str) {
-    write_json(
-        &root.join("advisory-report.json"),
-        &json!({
-            "schema_version": "codenoesis.local-advisory-report/v1",
-            "cargo_lock_sha256": CARGO_LOCK_SHA256,
-            "tool": {"name": "cargo-audit", "version": "0.22.2"},
-            "database": {
-                "commit": AUDIT_DATABASE_COMMIT,
-                "updated": "2026-08-12T12:42:29+02:00"
-            },
-            "status": "accepted",
-            "vulnerabilities": [],
-            "warnings": []
-        }),
-    );
+    write_advisory_fixture(root);
     write_json(
         &root.join("dependency-lock.json"),
         &json!({
@@ -246,6 +232,24 @@ fn write_supply_chain_fixture(root: &Path, target: &str) {
                 {"ref": "pkg:cargo/noesis@0.1.0", "dependsOn": ["pkg:cargo/serde_json@1.0.151"]},
                 {"ref": "pkg:cargo/serde_json@1.0.151", "dependsOn": []}
             ]
+        }),
+    );
+}
+
+fn write_advisory_fixture(root: &Path) {
+    write_json(
+        &root.join("advisory-report.json"),
+        &json!({
+            "schema_version": "codenoesis.local-advisory-report/v1",
+            "cargo_lock_sha256": CARGO_LOCK_SHA256,
+            "tool": {"name": "cargo-audit", "version": "0.22.2"},
+            "database": {
+                "commit": AUDIT_DATABASE_COMMIT,
+                "updated": "2026-08-12T12:42:29+02:00"
+            },
+            "status": "accepted",
+            "vulnerabilities": [],
+            "warnings": []
         }),
     );
 }

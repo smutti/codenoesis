@@ -109,9 +109,41 @@ jobs:
       - name: Test all targets and features
         run: cargo test --workspace --all-targets --all-features --locked
 
+  supply-chain:
+    name: Local release supply-chain gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install exact advisory scanner
+        run: cargo install cargo-audit --version 0.22.2 --locked
+
+      - name: Generate and validate current Linux evidence
+        run: |
+          set -euo pipefail
+          test "$(cargo-audit --version)" = "cargo-audit 0.22.2"
+          cargo fetch --locked --target x86_64-unknown-linux-gnu
+          cargo metadata --locked --filter-platform x86_64-unknown-linux-gnu \
+            --format-version 1 > "$RUNNER_TEMP/metadata.json"
+          cargo audit --json > "$RUNNER_TEMP/audit.json"
+          mkdir "$RUNNER_TEMP/supply-chain"
+          python3 scripts/generate_local_supply_chain_evidence.py \
+            --metadata "$RUNNER_TEMP/metadata.json" \
+            --cargo-lock Cargo.lock \
+            --audit "$RUNNER_TEMP/audit.json" \
+            --audit-version 0.22.2 \
+            --policy supply-chain/local-release-policy-v1.json \
+            --target x86_64-unknown-linux-gnu \
+            --output "$RUNNER_TEMP/supply-chain"
+          test "$(find "$RUNNER_TEMP/supply-chain" -maxdepth 1 -type f | wc -l)" -eq 5
+
   ci-policy-gate:
     name: CI policy gate
-    needs: [quality, portability]
+    needs: [quality, portability, supply-chain]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 2
@@ -121,7 +153,9 @@ jobs:
         env:
           PORTABILITY_RESULT: ${{ needs.portability.result }}
           QUALITY_RESULT: ${{ needs.quality.result }}
+          SUPPLY_CHAIN_RESULT: ${{ needs.supply-chain.result }}
         run: |
           set -euo pipefail
           test "$QUALITY_RESULT" = "success"
           test "$PORTABILITY_RESULT" = "success"
+          test "$SUPPLY_CHAIN_RESULT" = "success"
