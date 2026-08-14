@@ -1,3 +1,4 @@
-//! Repository-maintenance and bounded local-distribution support.
+//! Repository-maintenance, local-distribution, and upgrade-preflight support.
 
 pub mod distribution;
+pub mod upgrade;

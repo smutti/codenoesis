@@ -1,0 +1,24 @@
+{
+  "schema_version": "codenoesis.evidence/g2-local-upgrade-correction/v1",
+  "issue": 184,
+  "round": 1,
+  "risk": "high",
+  "reason": "the pinned Clippy gate identified an equivalent manual-assert form in the pre-code acceptance test and map_unwrap_or in the observational runner",
+  "semantic_change": false,
+  "oracle_change": false,
+  "checkpoint_history_rewritten": false,
+  "red_evidence_rewritten": false,
+  "changes": {
+    "acceptance_test": {
+      "path": "xtask/tests/e2e_fr_cmp_001_local_upgrade.rs",
+      "before_sha256": "7b5729709ae75565da71895a99002a9891a3437c22fc96ec1c205d1c1c349558",
+      "after_sha256": "2dc7aaa0b20d46ceb0c099647de0ba6bd59abdd2cc61d171d9f299714e6207c6",
+      "behavior": "the identical byte-exact base ErrorV26 condition still fails with the identical expected-Red message"
+    },
+    "contract_bundle": {
+      "before_bundle_sha256": "7d73416e720024bf825f4fc1cc83cb5afb9cadd874fb925ed2fde2a0de60fe2a",
+      "after_bundle_sha256": "36afdd0027eec78f1c04cdc9f6987ee16d3f6c994136181cd08c299c170c64bc"
+    },
+    "benchmark": "map(...).unwrap_or(...) became the equivalent map_or(...) expression"
+  }
+}

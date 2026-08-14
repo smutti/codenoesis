@@ -63,6 +63,20 @@ and stable non-symlink file identities. A compatible pair emits
 `LocalUpgradePlanV1` and classifies the fixed V1 configuration transition as
 `identical-v1-no-migration`.
 
+The branch-scoped candidate is exercised with:
+
+```text
+cargo run --locked -p xtask -- preflight-local-upgrade \
+  --current <g1a-bundle-a> --candidate <g1a-bundle-b>
+
+cargo run --locked -p xtask -- preflight-local-rollback \
+  --plan <local-upgrade-plan-v1.json> \
+  --current <g1a-bundle-b> --target <g1a-bundle-a>
+```
+
+The caller retains the first command's exact stdout as the rollback plan. A
+failure emits only canonical `codenoesis.error/v27` on stderr and exits 2.
+
 Rollback requires that exact plan, the exact candidate as current, and the
 exact retained prior bundle as target. It emits `LocalRollbackReportV1` only
 after all three inputs revalidate. A reversed pair without the plan, a third

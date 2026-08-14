@@ -2,6 +2,7 @@
 
 mod g0;
 mod g1;
+mod g2;
 mod s1_boundaries;
 mod s1_packed;
 mod s4;
@@ -26,6 +27,7 @@ mod s7;
 
 pub use g0::*;
 pub use g1::*;
+pub use g2::*;
 pub use s1_boundaries::*;
 pub use s1_packed::*;
 pub use s4::*;

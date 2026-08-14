@@ -136,11 +136,10 @@ fn run_rollback(plan: &Path, current: &Path, target: &Path) -> Output {
 
 fn fail_if_expected_checkpoint_red(output: &Output) {
     const EXPECTED: &[u8] = b"{\"code\":\"distribution.invalid_arguments\",\"context\":{},\"message\":\"invalid distribution command\",\"retryable\":false,\"schema_version\":\"codenoesis.error/v26\",\"stage\":\"input\"}\n";
-    if output.status.code() == Some(2) && output.stdout.is_empty() && output.stderr == EXPECTED {
-        panic!(
-            "expected Red: exact base rejects preflight-local-upgrade as distribution.invalid_arguments"
-        );
-    }
+    assert!(
+        !(output.status.code() == Some(2) && output.stdout.is_empty() && output.stderr == EXPECTED),
+        "expected Red: exact base rejects preflight-local-upgrade as distribution.invalid_arguments"
+    );
 }
 
 fn assert_success(output: &Output, expected: &[u8]) {
