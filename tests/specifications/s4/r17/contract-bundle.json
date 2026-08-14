@@ -43,7 +43,7 @@
     },
     {
       "path": "scripts/tests/test_s4_r17_function_context_contract.py",
-      "sha256": "503db16b4d6f6f5cde6bdcd0dc35569b0c7f0f80853148ae662753579e3a884d"
+      "sha256": "bc789b5f4c03acc382f65247d1aaa37fb00605a3af1d1d14096dcd10de98cb38"
     },
     {
       "path": "tests/fixtures/s4/rust-function-context-v1/README.md",
@@ -83,8 +83,8 @@
     },
     {
       "path": "tests/specifications/s4/r17/local-explorer-manifest-v10.schema.json",
-      "sha256": "44f6bf0f5f9eff6f6c59cd278e2e5ca7a3b410e1b028d05db22cd1554bf40865"
+      "sha256": "99052438ac575e27213a6ba90d5050eae857fd74fb0d737673a0c094cb9da839"
     }
   ],
-  "bundle_sha256": "9c9fcb5d840a4d651528dae141795102ab881e761353cc8cd5377971fb7ac535"
+  "bundle_sha256": "b30cd206baf01d94e3a455243d97bfb4aabb35e3f0c0e54b60a5b5031db86603"
 }

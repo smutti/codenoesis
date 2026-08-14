@@ -112,6 +112,11 @@ class R17FunctionContextContractTest(unittest.TestCase):
             "codenoesis.portable-graph/v9",
         )
         self.assertEqual(
+            explorer_schema["properties"]["portable_graph"]["properties"]
+            ["path"]["const"],
+            "portable-graph.json",
+        )
+        self.assertEqual(
             explorer_schema["properties"]["limits"]["properties"]
             ["navigation_history"]["const"],
             128,

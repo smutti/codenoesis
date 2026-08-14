@@ -30,7 +30,7 @@
       ],
       "properties": {
         "path": {
-          "const": "../portable-graph.json"
+          "const": "portable-graph.json"
         },
         "schema_version": {
           "const": "codenoesis.portable-graph/v9"
