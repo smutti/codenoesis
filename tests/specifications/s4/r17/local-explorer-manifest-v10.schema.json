@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/local-explorer-manifest-v10.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile",
+    "portable_graph",
+    "entrypoint",
+    "security",
+    "capabilities",
+    "limits"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.local-explorer/v10"
+    },
+    "profile": {
+      "const": "rust-function-context-v1"
+    },
+    "portable_graph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "schema_version",
+        "sha256",
+        "byte_length"
+      ],
+      "properties": {
+        "path": {
+          "const": "../portable-graph.json"
+        },
+        "schema_version": {
+          "const": "codenoesis.portable-graph/v9"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 268435456
+        }
+      }
+    },
+    "entrypoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "byte_length"
+      ],
+      "properties": {
+        "path": {
+          "const": "index.html"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "content_security_policy",
+        "network",
+        "dynamic_code",
+        "storage",
+        "telemetry",
+        "clipboard",
+        "source_access",
+        "process_execution",
+        "mutation",
+        "repair",
+        "inference"
+      ],
+      "properties": {
+        "profile": {
+          "const": "codenoesis.local-explorer-security/v10"
+        },
+        "content_security_policy": {
+          "type": "string"
+        },
+        "network": {
+          "const": false
+        },
+        "dynamic_code": {
+          "const": false
+        },
+        "storage": {
+          "const": false
+        },
+        "telemetry": {
+          "const": false
+        },
+        "clipboard": {
+          "const": false
+        },
+        "source_access": {
+          "const": false
+        },
+        "process_execution": {
+          "const": false
+        },
+        "mutation": {
+          "const": false
+        },
+        "repair": {
+          "const": false
+        },
+        "inference": {
+          "const": false
+        }
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "portable_graph_bytes",
+        "function_search_results",
+        "navigation_history",
+        "neighborhood_subjects",
+        "neighborhood_relationships"
+      ],
+      "properties": {
+        "portable_graph_bytes": {
+          "const": 268435456
+        },
+        "function_search_results": {
+          "const": 100
+        },
+        "navigation_history": {
+          "const": 128
+        },
+        "neighborhood_subjects": {
+          "const": 256
+        },
+        "neighborhood_relationships": {
+          "const": 512
+        }
+      }
+    }
+  }
+}

@@ -1,9 +1,9 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9+r16 — S0 through S7 and R0-R16 plus K1 are implemented but not
-> Verified**. Protected merges #167, #169, #171, and #173 made R15, the bounded
-> S7 C0-C4 runtime, the R14/R15 real-repository correction, and the exact R16
-> safe constant-evaluation package effective.
+> Status: **0.9+r17-candidate — S0 through S7 and R0-R16 plus K1 are
+> implemented but not Verified; R17 is Proposed**. Protected PR #177 corrected
+> LocalExplorerV3-V9 browser loading. Issue #178 defines the branch-scoped R17
+> function-context candidate over that exact protected baseline.
 
 ## 1. Document control
 
@@ -11,8 +11,8 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S7 and roadmap R0-R16 plus K1 are Approved and Implemented but not Verified. Protected PR #173 merged the exact Issue #172 / Decision 0030 package as `c3d05994a56e747fbe3157173998f8ac76ef7333`; historical Proposed candidate artifacts remain immutable. |
-| Date | 2026-08-13 |
+| Status | S0 through S7 and roadmap R0-R16 plus K1 are Approved and Implemented but not Verified. Protected PR #177 merged the exact Issue #176 / Decision 0031 browser correction as `f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`. Issue #178 / Decision 0032 is a Proposed branch-scoped R17 candidate and is ineffective before protected manual merge. |
+| Date | 2026-08-14 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -57,6 +57,8 @@
 | `0.9+r14-r15-correction` | 2026-08-12 | Recorded protected S7 runtime merge #169 and authorized issue #170 plus Decision 0029 for one fail-closed R14/R15 real-repository correction. The Proposed candidate bounds complex K1 target spelling, skips source callables outside inherited authority, omits incomplete R14 edge families, maps gitlinks to typed unsupported composition, and adds the operational scan-only `local-snapshot-256m-v1` envelope without changing schemas, identities, ontology families, or historical bytes. |
 | `0.9+r16` | 2026-08-13 | Recorded protected R14/R15 correction merge #171 and the Issue #172 / Decision 0030 R16 candidate, then reconciled protected PR #173 and merge `c3d05994a56e747fbe3157173998f8ac76ef7333` as Approved and Implemented but not Verified. The post-merge review also records the LocalExplorerV9 browser schema mismatch as a separate correction without changing R16 requirements, ontology semantics, Decision 0030, fixtures, or evidence. |
 | `0.9+explorer-candidate` | 2026-08-13 | Proposed issue #176 and Decision 0031 on exact base `16252f59b2dd2302b3f660268843869a45f8ca87` to correct LocalExplorerV3-V9 exact-schema loading and add bounded visual graph inspection. The branch-scoped candidate preserves V1/V2 viewer bytes and every R0-R16 ontology/query/portable contract and remains ineffective until protected manual merge. |
+| `0.9+explorer-correction` | 2026-08-14 | Reconciled protected PR #177 and merge `f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`: the exact Issue #176 / Decision 0031 LocalExplorerV3-V9 browser correction is Approved and Implemented but not Verified. Historical viewer, ontology, query, and portable contracts remain immutable. |
+| `0.9+r17-candidate` | 2026-08-14 | Proposed issue #178 and Decision 0032 on exact protected base `f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`: add opt-in deterministic `FunctionContextV1`, additive LocalExplorerV10 function navigation over unchanged PortableGraphV9, and the source-build-only `local-experimental-r17` G0 profile. The package remains ineffective until protected manual merge. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -2335,7 +2337,7 @@ Lekton full journeys, the typed RustDesk boundary negative, 60-second
 extraction deadline, 4 GiB RSS ceiling, no execution/network/model authority,
 and byte-identical selector-absent R0-R15/K1/S7 compatibility are mandatory.
 
-### 2.30 S4 LocalExplorerV3-V9 exact-schema correction candidate register
+### 2.30 S4 LocalExplorerV3-V9 exact-schema correction lifecycle register
 
 Issue [#176](https://github.com/smutti/codenoesis/issues/176), the accountable
 maintainer's high-risk S4 authorization, and
@@ -2343,16 +2345,17 @@ maintainer's high-risk S4 authorization, and
 one branch-scoped correction on exact base
 `16252f59b2dd2302b3f660268843869a45f8ca87`. Governance, the corrected
 acceptance oracle, retained Red, product asset and publisher changes, tests,
-browser evidence, and traceability share one maintainer-supervised pull
-request. The candidate is Proposed and ineffective until protected manual
-merge; no requirement becomes Verified through this package.
+browser evidence, and traceability shared one maintainer-supervised pull
+request. Protected PR #177 merged the exact package as
+`f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`; it is Approved and Implemented
+but not Verified.
 
-| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
+| Requirement | Pre-correction state | Post-merge state | Slice | Ratification material |
 |---|---|---|---|---|
-| `FR-EXP-003` | Approved and Implemented for V3 artifact generation, not Verified; browser rejects its matching graph | LocalExplorerV3 accepts only PortableGraphV3 and exposes the bounded offline inspection contract | `S4` | Issue #176, Decision 0031, machine contract, retained browser Red, and real-browser Green |
-| Bounded R11 amendment to `FR-EXP-002` | Approved and Implemented for V4 artifact generation, not Verified; browser rejects its matching graph | LocalExplorerV4 accepts only PortableGraphV4 while V2 remains byte-identical | `S4` | Same correction oracle and immutable V2 regression |
-| `FR-EXP-004` through `FR-EXP-008` | Approved and Implemented for V5-V9 artifact generation, not Verified; browsers reject matching graphs | LocalExplorerV5-V9 each accept only their matching PortableGraphV5-V9 and expose the same bounded inspection surface | `S4` | Same correction oracle, version matrix, and focused R12-R16 journeys |
-| Bounded amendments to `FR-CLI-001`, `NFR-DET-001`, `NFR-SEC-001/005`, `NFR-PRV-002`, `NFR-TST-001/002`, and `INV-BND-001` | Existing offline, deterministic, private, Red-first boundaries Approved | Correct exact-schema browser loading, integrity pins, fail-closed input checks, visual bounds, and retained evidence without new authority | `S4` | Decision 0031 and `tests/specifications/s4/versioned-local-explorer/contract-v1.json` |
+| `FR-EXP-003` | Approved and Implemented for V3 artifact generation, not Verified; browser rejected its matching graph | Approved and Implemented: LocalExplorerV3 accepts only PortableGraphV3 and exposes the bounded offline inspection contract; not Verified | `S4` | Issue #176, Decision 0031, machine contract, retained browser Red, real-browser Green, and protected PR #177 |
+| Bounded R11 amendment to `FR-EXP-002` | Approved and Implemented for V4 artifact generation, not Verified; browser rejected its matching graph | Approved and Implemented: LocalExplorerV4 accepts only PortableGraphV4 while V2 remains byte-identical; not Verified | `S4` | Same correction oracle, immutable V2 regression, and protected PR #177 |
+| `FR-EXP-004` through `FR-EXP-008` | Approved and Implemented for V5-V9 artifact generation, not Verified; browsers rejected matching graphs | Approved and Implemented: LocalExplorerV5-V9 each accept only their matching PortableGraphV5-V9 and expose the same bounded inspection surface; not Verified | `S4` | Same correction oracle, version matrix, focused R12-R16 journeys, and protected PR #177 |
+| Bounded amendments to `FR-CLI-001`, `NFR-DET-001`, `NFR-SEC-001/005`, `NFR-PRV-002`, `NFR-TST-001/002`, and `INV-BND-001` | Existing offline, deterministic, private, Red-first boundaries Approved | Approved and Implemented for exact-schema loading, integrity pins, fail-closed input checks, visual bounds, and retained evidence without new authority; not Verified | `S4` | Decision 0031, `tests/specifications/s4/versioned-local-explorer/contract-v1.json`, and protected PR #177 |
 
 Every materialized V3-V9 viewer MUST accept exactly its matching portable
 schema and reject every other version. Before enabling inspection it MUST
@@ -2370,6 +2373,53 @@ remain read-only and offline, and grant no network, dynamic-code, source,
 process, storage, telemetry, mutation, browser-launch, model, or plugin
 authority. V1/V2 assets and all ontology/query/portable/schema/identity bytes
 remain immutable.
+
+### 2.31 S4 R17 function-context navigation candidate register
+
+Issue [#178](https://github.com/smutti/codenoesis/issues/178), the accountable
+maintainer's high-risk authorization, and
+[Decision 0032](decisions/0032-s4-r17-function-context-navigation.md) govern
+one branch-scoped candidate on exact protected base
+`f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`. Governance, G0 profile,
+schemas, project-owned fixture and oracle, retained Red, minimum production
+implementation, browser asset, tests, traceability, pilots, and evidence share
+one maintainer-supervised pull request. Before protected manual merge every
+R17 requirement and implementation statement remains Proposed/candidate.
+
+| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| `FR-CTX-001` | Proposed | Approved and Implemented only for deterministic `FunctionContextV1` over one exact R16 `rust.function` or `rust.method`; not Verified | `S4` | Issue #178, Decision 0032, strict schema, machine oracle, retained Red/Green, and CLI/browser parity evidence |
+| `FR-EXP-009` | Proposed | Approved and Implemented only for additive LocalExplorerV10 over exact PortableGraphV9 with bounded function navigation; not Verified | `S4` | Issue #178, Decision 0032, V10 manifest schema, static viewer, real-browser evidence, and immutable V1-V9 regressions |
+| Bounded R17 amendments to `FR-QRY-001`, the local subset of `FR-QRY-002`, and `FR-CLI-001` | Existing exact-ID query and bounded portable traversal Approved | Add only explicit `--context-profile rust-function-context-v1` and `--explorer-profile rust-function-context-v1`; selector absence preserves QueryV13, PortableGraphV9, and ExplorerV9 bytes | `S4` | Public E2E journey and selector-absence oracle |
+| Bounded R17 amendments to `NFR-DET-001`, `NFR-PER-001`, `NFR-SEC-001/005`, `NFR-PRV-002`, `NFR-TST-001/002`, and `INV-BND-001` | Existing deterministic, bounded, offline, private, Red-first controls Approved | Add exact context/navigation maxima, canonical ordering, privacy deny-list, real-browser security, 50 permutations, ten schedules, and two pinned Lekton replays without new authority | `S4` | R17 contract bundle, fixture, invalid corpus, retained evidence, and complete gate |
+
+The explicit context selector accepts exactly one existing R16
+`rust.function` or `rust.method`. It MUST return canonical
+`codenoesis.function-context/v1` containing the callable, lexical owner when
+present, exactly one signature, contiguous zero-based parameters, direct body
+facts, proven incoming/outgoing `CALLS`, applicable claims, evidence,
+diagnostics, coverage gaps, derivations, deterministic navigation roles, one
+display signature, and the fixed limitations in Decision 0032. It MUST expose
+declared source facts only and MUST NOT infer types, aliases, generics,
+dispatch, active `cfg`, ownership, side effects, returned values, compiler
+validity, or runtime behavior.
+
+The context is bounded to 4,194,304 bytes including LF, 256 parameters, 256
+linked subjects, 512 linked relationships, 2,048 claims, 2,048 evidence, and
+1,024 uncertainty records. LocalExplorerV10 accepts exactly canonical
+PortableGraphV9, returns at most 100 function search results, and retains at
+most 128 history entries. Every maximum and maximum-plus-one fails closed with
+empty stdout/no publication and no repair, truncation, sampling, inference, or
+partial context. Raw source/body/expression/initializer/condition/literal or
+snippet text, absolute roots, URLs, credentials, environment, arguments,
+telemetry, and model data MUST NOT cross either boundary.
+
+The source-build-only `local-experimental-r17` profile begins G0 planning. It
+is not Local GA, signed distribution, supported platform matrix, release
+channel, support window, deployment, publication, or compatibility authority.
+Protected merge makes the exact package Approved and Implemented but not
+Verified; independent acceptance of the complete immutable evidence pack is a
+separate lifecycle action.
 
 ## 3. Product intent and success definition
 
@@ -2567,9 +2617,11 @@ cannot replace their verification.
 | `FR-EXP-006` | P0 | `0.2` | The explicit R14 export profile MUST project one validated visible RepositorySnapshotV16 and deterministic documents as canonical `PortableGraphV7`, then generate read-only offline `LocalExplorerV7`, losslessly preserving K1 plus expression, argument, binding, and lexical-access families without raw body, initializer, expression, literal, or snippet text, absolute roots, URLs, credentials, environment, arguments, telemetry, or inferred compiler/runtime meaning. Reimport MUST reject rather than repair, infer, reorder, deduplicate, or truncate. | The R14 black-box journey, exact family/index digests, strict reimport, duplicate/reference/evidence/hash/order/privacy/path/race/limit cases, 50 permutations, immutable V1/V2 viewer bytes, exact V7 schema binding under Decision 0031, and PortableGraphV1-V6 regressions match Decisions 0025 and 0031. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
 | `FR-EXP-007` | P0 | `0.2` | The explicit R15 export profile MUST project one validated visible RepositorySnapshotV17 and deterministic documents as canonical `PortableGraphV8`, then generate read-only offline `LocalExplorerV8`, losslessly preserving complete R14 plus syntax blocks, source-normal edges, reaching-definition relationships, claims, evidence, and every local-flow derivation input. It MUST exclude source/body/initializer/expression/condition/literal/snippet text, absolute roots, URLs, credentials, environment, arguments, telemetry, and inferred compiler/runtime meaning. Reimport MUST reject rather than repair, infer, reorder, deduplicate, truncate, or synthesize derivations. | The R15 black-box journey, exact family/index/derivation digests, strict reimport, duplicate/reference/evidence/hash/order/privacy/path/race/limit cases, 50 permutations, immutable V1/V2 viewer bytes, exact V8 schema binding under Decision 0031, and PortableGraphV1-V7 regressions match Decisions 0027 and 0031. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
 | `FR-EXP-008` | P0 | `0.2` | The explicit R16 export profile MUST project one validated visible RepositorySnapshotV18 and deterministic documents as canonical `PortableGraphV9`, then generate read-only offline `LocalExplorerV9`, losslessly preserving the complete corrected R15 graph plus evaluated values, evaluation relationships, claims, evidence, typed gaps, and every constant-evaluation derivation input. It MUST exclude raw initializer/expression/literal/body/snippet text, absolute roots, URLs, credentials, environment, arguments, telemetry, and inferred compiler/target/runtime meaning. Reimport MUST reject rather than repair, infer, reorder, deduplicate, truncate, evaluate, or synthesize derivations. | The R16 black-box journey, exact family/index/derivation/hash digests, strict reimport, duplicate/reference/evidence/hash/order/privacy/path/race/limit cases, 50 permutations, immutable V1/V2 viewer bytes, exact V9 schema binding under Decision 0031, and PortableGraphV1-V8 regressions match Decisions 0030 and 0031. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
-| `FR-QRY-001` | P0 | `0.1` | Local queries MUST retrieve every approved entity, relationship, claim, evidence, diagnostic, coverage gap, and document by stable identity, expose unknown or contradictory states, and select a versioned result contract from the validated snapshot without changing prior result versions. R8 MAY expose the same exact subjects in a validated read-only portable projection. K1 adds LocalQueryResultV6 for V11; R10 adds V7 for V12; R11 adds V8 for V13; R12 adds V9 for V14; R13 adds V10 for V15; R14 adds V11 for V16; and R15 adds LocalQueryResultV12 for V17 block, flow, reaching-definition, and derivation subjects, while V1-V11 bytes and authority remain unchanged. | CLI black-box scenarios return the reviewed typed result and stable exit status; V17 exercises every R15 subject and derivation after restart, V16 exercises R14, V15 R13, V14 R12, V13 R11, V12 R10, V11 K1, earlier heads retain approved dispatch/bytes, and portable family digests prove exact preservation. `E2E`, `CONF` |
-| `FR-QRY-002` | P1 | `0.2` | Graph traversal MUST enforce configurable depth, result, time, and resource limits with cycle handling. The bounded R8 subset is deterministic breadth-first read-only traversal over one validated PortableGraphV1 with default depth 1, maximum depth 2, at most 256 subjects and 512 relationships, and explicit display truncation. Broader canonical/server traversal remains Proposed. | Cyclic and adversarial queries terminate within the configured bound without starving unrelated work; R8 permutation and maximum-plus-one cases return identical bounded neighborhoods or typed failures without mutating the graph. `PT`, `PERF`, `SEC` |
-| `FR-CLI-001` | P0 | `0.1` | The CLI MUST provide local `scan`, `docs`, `query`, `export`, and `explore` journeys with human-readable and versioned JSON output. R8, K1, and R10-R15 behavior MUST be explicitly selected, preserve accepted command bytes, use marker-owned atomic output roots, and reject unsupported profile composition before acquisition. | The R8 through R15 fixtures each complete scan -> docs -> query -> export -> explore without network, child process, browser auto-launch, target/toolchain/index execution, repository mutation, or unintended store mutation; complete invalid R15 composition returns ErrorV22, incomplete selector intent retains its historical error family, and every prior command remains unchanged. `E2E`, `CONF`, `SEC`, `FT` |
+| `FR-CTX-001` | P0 | `0.2` | The explicit `rust-function-context-v1` query profile MUST project one exact validated R16 `rust.function` or `rust.method` into canonical `FunctionContextV1`, grouping only its existing callable, owner, signature, contiguous ordered parameters, direct body facts, proven incoming/outgoing `CALLS`, claims, evidence, diagnostics, gaps, derivations, deterministic navigation roles, and fixed limitations. It MUST expose declared-source authority and MUST NOT retrieve raw source or infer type, dispatch, cfg, ownership, side-effect, returned-value, compiler, or runtime meaning. | The project-owned oracle and pinned Lekton replay prove exact signature/input/output/call/uncertainty fields, canonical order, CLI/browser parity, privacy, all maximum/plus-one failures, 50 permutations, ten schedules, selector-absence QueryV13 identity, and empty stdout on typed failure. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
+| `FR-EXP-009` | P0 | `0.2` | The explicit `rust-function-context-v1` explorer profile MUST accept exactly canonical PortableGraphV9 and generate additive read-only offline LocalExplorerV10 with bounded function/method search, declared-signature cards, clickable related facts/evidence/uncertainty, deterministic URL fragments, bounded back/forward history, and existing bounded graph inspection. It MUST preserve PortableGraphV9 and LocalExplorerV1-V9 bytes and grant no network, storage, clipboard, dynamic-code, source, process, mutation, repair, inference, model, or browser-launch authority. | A real browser loads the exact fixture and pinned Lekton artifacts, displays ordered inputs and declared output, navigates parameter -> callable -> callee/evidence with deterministic history, matches FunctionContextV1 ordering, rejects invalid/private/mismatched/oversized input, and preserves every historical artifact digest. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
+| `FR-QRY-001` | P0 | `0.1` | Local queries MUST retrieve every approved entity, relationship, claim, evidence, diagnostic, coverage gap, and document by stable identity, expose unknown or contradictory states, and select a versioned result contract from the validated snapshot without changing prior result versions. R8 MAY expose the same exact subjects in a validated read-only portable projection. K1 adds LocalQueryResultV6 for V11; R10 adds V7 for V12; R11 adds V8 for V13; R12 adds V9 for V14; R13 adds V10 for V15; R14 adds V11 for V16; R15 adds V12 for V17; and R16 adds LocalQueryResultV13 for V18. R17 MAY add FunctionContextV1 only under its explicit selector, while every LocalQueryResultV1-V13 byte and authority remains unchanged. | CLI black-box scenarios return the reviewed typed result and stable exit status; V18 exercises R16, V17 R15, V16 R14, V15 R13, V14 R12, V13 R11, V12 R10, V11 K1, earlier heads retain approved dispatch/bytes, and the R17 selector-absence oracle proves QueryV13 identity. `E2E`, `CONF` |
+| `FR-QRY-002` | P1 | `0.2` | Graph traversal MUST enforce configurable depth, result, time, and resource limits with cycle handling. The bounded R8 subset is deterministic breadth-first read-only traversal over one validated PortableGraphV1 with default depth 1, maximum depth 2, at most 256 subjects and 512 relationships, and explicit display truncation. The bounded local R17 subset is one fail-closed function-centered projection over at most 256 subjects and 512 relationships with no truncation. Broader canonical/server traversal remains Proposed. | Cyclic and adversarial queries terminate within the configured bound without starving unrelated work; R8 and R17 permutation and maximum-plus-one cases return identical bounded results or typed failures without mutating the graph. `PT`, `PERF`, `SEC` |
+| `FR-CLI-001` | P0 | `0.1` | The CLI MUST provide local `scan`, `docs`, `query`, `export`, and `explore` journeys with human-readable and versioned JSON output. R8, K1, R10-R16, and R17 behavior MUST be explicitly selected, preserve accepted command bytes, use marker-owned atomic output roots, and reject unsupported profile composition before acquisition or projection. | The R8 through R17 fixtures complete their approved scan -> docs -> query -> export -> explore journeys without network, child process, browser auto-launch, target/toolchain/index execution, repository mutation, or unintended store mutation; complete invalid composition returns the versioned typed failure, incomplete selector intent retains its historical error family, and every prior command remains unchanged. `E2E`, `CONF`, `SEC`, `FT` |
 | `FR-CLI-002` | P1 | `1.0` | Approved CLI commands MUST have stable exit codes, error codes, configuration precedence, and local/remote capability behaviour. | Golden compatibility tests cover output schema, error catalog, precedence, and server parity. `CONF`, `E2E` |
 | `FR-CLI-003` | P0 | `0.1` | The S0 CLI MUST provide a local `noesis scan` JSON journey that accepts an explicit repository identity and revision and emits either `RepositorySnapshotV1` or `CodeNoesisErrorV1` with the ratified S0 stream and exit semantics. | S0 black-box tests validate success, non-Git input, missing and inconsistent objects, schema, stdout/stderr separation, and exit status. `E2E`, `CONF` |
 | `FR-CLI-004` | P1 | `0.2` | The local CLI MUST provide `noesis refresh` with explicit repository, repository identity, revision, store, and `standard-local-s5` profile inputs; success emits strict canonical `IncrementalRefreshReportV1` on stdout and failure emits strict `CodeNoesisErrorV7` on stderr without a partial head. | Black-box and conformance tests validate exact command parsing, streams, exits, report/error schemas, no-change retry, concurrent-head failure, limits, and S4 cold equivalence. `E2E`, `CONF`, `FT` |
@@ -2705,7 +2757,7 @@ crate tree is not scaffolded upfront.
 | `S1` Safe inventory | Snapshot contains supported files, language and manifest inventory, evidence, diagnostics, and coverage gaps. | `FR-ACQ-002`, `FR-INV-001`, `DR-EVD-001`, `NFR-SEC-001` | Scan a reviewed repository plus traversal, symlink, oversized, and sentinel-script fixtures. | All evidence resolves; every limit has a typed boundary case; nothing escapes the root. |
 | `S2` Rust knowledge | A Rust fixture produces reviewed entities and relations in a validated graph. | `FR-EXT-001/002`, `FR-KNW-001/002/003`, `DR-IDN-001` | Compare a Rust repository to a hand-authored graph oracle. | Stable IDs; malformed/Unicode coverage; invariants property-tested and fuzz target seeded. |
 | `S3` Atomic local storage | SQLite/CAS persists and publishes one immutable snapshot across restart and faults. | `FR-STO-001`, `FR-SNP-001`, `INV-SNP-001` | Scan, kill at each failpoint, restart, and query the visible head. | Fake/SQLite and fake/filesystem contracts green; no partial head; retry idempotent. |
-| `S4` Evidence-backed docs | `noesis docs` creates deterministic overview/module views without touching manual files. | `FR-DOC-001/002/003`, `FR-QRY-001`, `FR-CLI-001` | Complete scan -> docs -> query through the CLI. | Every statement resolves or exposes uncertainty; output deterministic; manual checksums unchanged. |
+| `S4` Evidence-backed docs | `noesis docs` creates deterministic overview/module views without touching manual files; explicit later profiles may add bounded portable and function-centered read-only projections. | `FR-DOC-001/002/003`, `FR-QRY-001`, `FR-CTX-001`, `FR-EXP-*`, `FR-CLI-001` | Complete scan -> docs -> query/context -> export -> explore through the CLI. | Every statement resolves or exposes uncertainty; output deterministic; manual checksums and selector-absent bytes unchanged. |
 | `S5` Incremental refresh | One mapped non-root Rust source edit reparses only that source, reuses exact revision-neutral analysis, rematerializes every commit-bound public target artifact, and equals a cold S4 target. | `FR-INC-*`, `FR-CLI-004`, `INV-INC-001` | Refresh the reviewed A→B fixture, observe parser/cache activity, and compare target snapshot plus documents with a clean target store. | Canonical target bytes equal; exact invalidation and cache sets emitted; all target evidence is commit-bound; atomic head and fixed failures proven; no target execution. |
 | `S6` Contract federation | Output-only federation of one bounded OpenAPI 3.1.0 provider, two explicit clients, one operation decoy, and one heuristic candidate emits a deterministic source-neutral report. | `FR-EXT-004`, `FR-FED-*`, `FR-CLI-005` | Run `noesis federate` over the reviewed JSON/YAML provider and client catalog. | Two exact links confirmed; decoy rejected; heuristic remains candidate with a gap; JSON/YAML semantics agree; strict streams, limits, hostile-input failures, and no ambient authority proven. |
 | `S7` Change impact | A semantic API diff compares declared contract and approved provider implementation facts, then returns bounded affected client paths, evidence, and gaps. | `DR-SEM-001`, `FR-IMP-*`, `FR-QRY-002` | Compare two provider revisions with unchanged contract bytes, one strict client, one safe client, and one operation decoy. | Ratified direction-aware classifier matches the three-view oracle; implementation-only change remains visible; safe client and decoy are not mislabeled; unknown behavior remains a gap. |

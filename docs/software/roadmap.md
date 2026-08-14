@@ -1,7 +1,7 @@
 # CodeNoesis Delivery Roadmap
 
 > Status: **Proposed planning companion — not implementation authority**.
-> Last updated: **2026-08-13**.
+> Last updated: **2026-08-14**.
 
 This roadmap sequences product and validation work without changing the
 normative meaning or approval status of the
@@ -29,7 +29,7 @@ immutable local Git revision
   -> evidence-backed Rust ontology through R16
   -> atomic local snapshot
   -> evidence-backed Markdown, exact-ID query, and portable export
-  -> versioned offline-explorer artifact
+  -> versioned offline-explorer artifact and proposed function context
 ```
 
 The implemented compatibility profile is bounded rather than general:
@@ -48,11 +48,10 @@ The implemented compatibility profile is bounded rather than general:
 - Cargo feature worlds, macro expansion, compiler-grade generation or general
   resolution, active `cfg`, type/ownership/runtime semantics, and general graph
   traversal remain unsupported or explicit gaps;
-- LocalExplorerV1/V2 support their matching PortableGraph versions. Issue #176
-  and Decision 0031 now define the Proposed exact-schema V3-V9 browser
-  correction with bounded visual graph inspection; until protected manual
-  merge, current `main` still rejects those later graphs and does not advertise
-  the journey as usable.
+- LocalExplorerV1-V9 support their matching PortableGraph versions after
+  protected PR #177. Issue #178 and Decision 0032 propose opt-in
+  FunctionContextV1 and additive LocalExplorerV10 navigation over unchanged
+  R16/PortableGraphV9 facts; R17 remains ineffective before protected merge.
 
 ## Real-world Rust compatibility target
 
@@ -127,9 +126,10 @@ Verified. Protected PR #173, merged as
 `c3d05994a56e747fbe3157173998f8ac76ef7333`, made the exact Issue #172 /
 Decision 0030 `rust-safe-constant-evaluation-v1` package Approved and
 Implemented, but not Verified. Its generated LocalExplorerV9 manifest and
-PortableGraphV9 are deterministic. Issue #176 and Decision 0031 define the
-Proposed correction for the immutable V2 browser mismatch without changing
-R16 graph semantics or claiming current `main` is usable.
+PortableGraphV9 are deterministic. Protected PR #177 made the Decision 0031
+exact-schema LocalExplorerV3-V9 correction Approved and Implemented but not
+Verified. Issue #178 and Decision 0032 now define the Proposed R17 function
+context/navigation package without changing any R16 graph semantics.
 
 | Order | Planning item | Outcome | Governance dependency | Candidate acceptance gate |
 |---|---|---|---|---|
@@ -152,7 +152,8 @@ R16 graph semantics or claiming current `main` is usable.
 | `R15` | Closed Rust local flow | Implemented but not Verified after protected merge #167: preserves complete R14 while adding evidence-backed syntax basic blocks, explicit possible normal branch edges, strict source reachability, and lexical must/may reaching definitions in V14/V17, QueryV12, PortableGraphV8, and LocalExplorerV8. | Issue #166, Decision 0027, and protected merge #167; no new dependency and no compiler/runtime authority. | The project-owned fixture completes scan → docs → block/condition/reachability/def-use query → export → strict reimport → explore with 5 blocks, 36 relations, exact derivations, 50 permutations, ten schedules, whole-callable rejection, inherited broad gaps, and immutable R0-R14/K1 bytes. |
 | `R14/R15 correction` | Real-repository fail-closed source-only journey | Implemented but not Verified after protected merge #171: bound complex K1 target spelling, skip callables outside inherited authority, omit incomplete R14 edge families, type gitlink rejection, and add the operational `local-snapshot-256m-v1` scan envelope. | Issue #170, Decision 0029, and protected merge #171; no dependency, schema, identity, ontology-family, boundary-composition, or control-plane change. | The exact project-owned fixture and pinned Lekton/RustDesk pilots satisfy immutable counts/digests, privacy, 50 permutations, ten schedules, 256 MiB max/plus-one, 4 GiB RSS, 60 s extraction, full positive journeys, and typed negative boundary failures. |
 | `R16` | Bounded safe Rust constant evaluation | Implemented but not Verified after protected PR #173: preserve corrected R15 and add checked target-independent primitive constants plus fixed-repr unit-enum discriminants as `rust.evaluated_value` and `EVALUATES_TO`, with exact derivations and typed gaps. | Issue #172, Decision 0030, and merge `c3d05994a56e747fbe3157173998f8ac76ef7333`; no new dependency, execution, compiler, target, cfg, boundary, or control-plane authority. | The project-owned fixture emits seven exact values, two dependencies, 42 entities, 42 relationships, 84 claims, 33 evidence, zero diagnostics, 32 coverage records, exact V15/V18 hashes, 50 permutations, ten schedules, all boundaries, two deterministic Lekton journeys, and the typed RustDesk boundary negative. Artifact generation succeeds, but the V9 browser journey remains blocked by the exact-schema frontend defect. |
-| `R10-R16 explorer correction` | Matching portable-graph browser loading | Proposed branch-scoped candidate: make LocalExplorerV3-V9 accept only their exact matching PortableGraphV3-V9 contracts and expose real search, bounded SVG neighborhoods, relationship, evidence, derivation, and uncertainty inspection without weakening privacy, CSP, path, size, or schema validation. | Issue #176, Decision 0031, exact base `16252f59b2dd2302b3f660268843869a45f8ca87`, retained browser Red, no new dependency, and independent review; historical V1/V2 viewer bytes and R0-R16 ontology semantics remain protected. | Each generated explorer loads its matching graph in a real browser; mismatched versions, malformed or oversized graphs, unsafe content, path races, and privacy leaks fail closed; deterministic search and bounded graph inspection are exercised end to end. |
+| `R10-R16 explorer correction` | Matching portable-graph browser loading | Implemented but not Verified after protected PR #177: LocalExplorerV3-V9 accept only exact matching PortableGraphV3-V9 and expose real search, bounded SVG neighborhoods, relationship, evidence, derivation, and uncertainty inspection. | Issue #176, Decision 0031, merge `f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`, retained browser evidence, and immutable V1/V2 assets. | Each generated explorer loads its matching graph in a real browser; mismatches and malformed, oversized, unsafe, racing, or private inputs fail closed; independent verification remains open. |
+| `R17` | Function-centered context and navigation | Proposed branch-scoped candidate: group one existing R16 function/method, declared signature, ordered parameters, return spelling, body facts, proven calls, evidence, claims, derivations, uncertainty, and navigation roles into canonical FunctionContextV1; add LocalExplorerV10 over unchanged PortableGraphV9. | Issue #178, Decision 0032, exact base `f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`, `local-experimental-r17`, no new dependency, and protected manual merge. | The project-owned method card and two pinned Lekton journeys are deterministic; CLI/browser fields match; all limits/security/privacy failures close safely; QueryV13, PortableGraphV9, and ExplorerV1-V9 bytes remain immutable. |
 
 ### Earliest useful real-world checkpoint
 
@@ -170,20 +171,19 @@ future slice without changing that slice's approved meaning.
 
 ### Post-R16 delivery sequence
 
-1. Complete issue #176 / Decision 0031 for exact matching PortableGraphV3-V9
-   loading and real graph inspection in LocalExplorerV3-V9; until protected
-   merge the V9 browser journey is not advertised as usable.
-2. Begin `G0` before defining or implementing any new public compatibility or
-   interface contract.
+1. Complete issue #178 / Decision 0032: deliver the bounded LLM-ready
+   FunctionContextV1 and LocalExplorerV10 function navigation over unchanged
+   R16 facts.
+2. Continue `G0` beyond the source-build-only experimental profile by fixing
+   supported platforms, capability matrix, owners, artifacts, support terms,
+   signing, provenance, and release boundaries.
 3. Add opt-in trusted local evidence-to-source retrieval under repository,
-   privacy, path, race, and output authority.
-4. Add a bounded LLM-ready context projection over typed facts, evidence, and
-   uncertainty rather than exposing raw graph identifiers alone.
-5. Extend implementation-aware API and semantic diff to compare contracts with
+   privacy, path, race, and output authority; R17 intentionally excludes it.
+4. Extend implementation-aware API and semantic diff to compare contracts with
    provider/client behavior and versioned implementation evidence.
-6. Execute the reproducible conference evaluation over pinned, structurally
+5. Execute the reproducible conference evaluation over pinned, structurally
    independent repositories.
-7. Keep verification separate: R0-R16, K1, and applicable S7 behavior become
+6. Keep verification separate: R0-R17, K1, and applicable S7 behavior become
    Verified only through independent acceptance of complete immutable evidence.
 
 ### Real-world compatibility completion definition

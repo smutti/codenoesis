@@ -25,14 +25,22 @@ Implemented, but not Verified. It derives only checked target-independent
 primitive constants and fixed-repr enum discriminants while retaining explicit
 gaps for every unsupported case.
 
-Issue [#176](https://github.com/smutti/codenoesis/issues/176) and
-[Decision 0031](docs/software/decisions/0031-s4-versioned-local-explorer-browser.md)
-define the Proposed high-risk S4 correction for the known LocalExplorerV3-V9
-browser defect. The candidate binds each generated explorer to its exact
-PortableGraphV3-V9 schema and adds real bounded graph inspection while
-preserving the immutable V1/V2 viewer assets. Until the exact pull request is
-manually merged, current `main` still rejects those later graphs and the
-browser journey is not advertised as usable.
+Issue [#176](https://github.com/smutti/codenoesis/issues/176),
+[Decision 0031](docs/software/decisions/0031-s4-versioned-local-explorer-browser.md),
+and protected PR #177 corrected the LocalExplorerV3-V9 browser defect on
+`main`. Each generated explorer now binds to its exact PortableGraphV3-V9
+schema and exposes bounded graph inspection while preserving the immutable
+V1/V2 viewer assets. The correction is Approved and Implemented but not
+Verified.
+
+Issue [#178](https://github.com/smutti/codenoesis/issues/178) and
+[Decision 0032](docs/software/decisions/0032-s4-r17-function-context-navigation.md)
+define the Proposed high-risk R17/S4 function-context package. It adds an
+opt-in deterministic `FunctionContextV1` projection and an additive
+LocalExplorerV10 function view over unchanged R16 facts, so humans and LLM
+consumers can inspect declared inputs, output spelling, calls, evidence, and
+uncertainty without reconstructing raw graph identifiers. The branch remains
+a candidate until protected manual merge.
 Complete independent evidence acceptance, broader language coverage,
 operations, and the remaining production-readiness slices are still pending.
 

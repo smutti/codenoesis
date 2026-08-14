@@ -1,0 +1,69 @@
+{
+  "schema_version": "codenoesis.e2e-spec/v1",
+  "id": "e2e_fr_ctx_001_function_context_and_navigation",
+  "requirements": [
+    "FR-CTX-001",
+    "FR-EXP-009",
+    "FR-QRY-001",
+    "FR-QRY-002",
+    "FR-CLI-001",
+    "NFR-DET-001",
+    "NFR-PER-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-PRV-002",
+    "NFR-TST-001",
+    "NFR-TST-002",
+    "INV-BND-001"
+  ],
+  "status": "Proposed branch-scoped candidate",
+  "slice": "S4",
+  "risk": "high",
+  "exact_base": "f0d0fc998a9158e7c8e96a5b70c8830a3150dd22",
+  "fixture": "urn:codenoesis:fixture:s4-rust-function-context-v1",
+  "selector": "rust-function-context-v1",
+  "journey": [
+    "scan",
+    "docs",
+    "query_context",
+    "export_v9",
+    "explore_v10",
+    "browser_navigation"
+  ],
+  "expected_red": {
+    "command": "cargo test -p noesis --test e2e_fr_ctx_001_function_context e2e_fr_ctx_001_function_context_and_navigation --locked -- --exact --nocapture",
+    "underlying_query_exit": 2,
+    "stdout_bytes": 0,
+    "reason": "the exact base rejects --context-profile rust-function-context-v1 before projection"
+  },
+  "expected_green": {
+    "context": "codenoesis.function-context/v1",
+    "portable": "codenoesis.portable-graph/v9",
+    "explorer": "codenoesis.local-explorer/v10",
+    "root_kind": "rust.method",
+    "parameters": 3,
+    "outgoing_calls": 1,
+    "incoming_calls": 0,
+    "entities": 11,
+    "relationships": 9,
+    "claims": 20,
+    "evidence": 11,
+    "diagnostics": 1,
+    "coverage_gaps": 7,
+    "derivations": 0,
+    "navigation": 11,
+    "permutations": 50,
+    "parallel_schedules": 10,
+    "lekton_runs": 2,
+    "selector_absence_byte_identical": true,
+    "portable_v9_byte_identical": true
+  },
+  "oracle": "tests/fixtures/s4/rust-function-context-v1/expected-function-context.json",
+  "failure": {
+    "stdout": "empty",
+    "publication": "none",
+    "repair": false,
+    "truncation": false,
+    "inference": false
+  }
+}
