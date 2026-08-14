@@ -1,0 +1,55 @@
+{
+  "schema_version": "codenoesis.g0-release-profile-contract/v1",
+  "issue": 180,
+  "exact_base_sha": "f0bdb5290566bb85bb103e24291e952d4c557156",
+  "status": "proposed_branch_scoped_candidate",
+  "planning_item": "G0",
+  "slice": "S14",
+  "risk": "critical",
+  "requirements": [
+    "FR-REL-001",
+    "FR-CLI-007"
+  ],
+  "profile_id": "local-experimental-r17",
+  "contracts": {
+    "report": "codenoesis.release-profile/v1",
+    "error": "codenoesis.error/v25",
+    "registry": "codenoesis.release-profile-registry/v1"
+  },
+  "limits": {
+    "output_bytes_including_lf": 65536,
+    "platform_entries": 16,
+    "advertised_capabilities": 64,
+    "excluded_capabilities": 64,
+    "limitations": 64,
+    "identifier_or_text_utf8_bytes": 128
+  },
+  "determinism": {
+    "argument_or_registry_permutations": 50,
+    "parallel_schedules_per_target": 10,
+    "canonical_lf_json": true,
+    "environment_independent": true,
+    "working_directory_independent": true
+  },
+  "expected_red": {
+    "exit": 2,
+    "stdout_bytes": 0,
+    "stderr_bytes": 149,
+    "schema_version": "codenoesis.error/v1",
+    "code": "input.invalid_revision"
+  },
+  "protected_digests": {
+    "decision_0032_sha256": "5540a2cff491b7b1e23649cc5fe77b49dcf2145db70a144364e705a169ac4345",
+    "r17_contract_bundle_sha256": "7ddb828f2c637ffba3652dfc2c36d76a63e5351ac954b6c390b3e47663499bc0"
+  },
+  "new_dependency": false,
+  "migration": false,
+  "control_plane_effect": false,
+  "workflow_effect": false,
+  "permission_effect": false,
+  "secret_effect": false,
+  "signing_effect": false,
+  "publication_effect": false,
+  "release_effect": false,
+  "support_commitment": false
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": "codenoesis.release-profile-registry/v1",
+  "profiles": [
+    {
+      "profile_id": "local-experimental-r17",
+      "classification": "experimental",
+      "distribution": "source-build-only",
+      "support": "none",
+      "owner": "@smutti",
+      "verification": "not-verified",
+      "release_status": "not-ga",
+      "platform_matrix": [
+        {
+          "target": "x86_64-unknown-linux-gnu",
+          "classification": "ci-observed-experimental",
+          "sandbox_tier": "normative-linux-seccomp-landlock-v1",
+          "normative_os_confinement": true
+        },
+        {
+          "target": "aarch64-apple-darwin",
+          "classification": "ci-observed-experimental",
+          "sandbox_tier": "functional-portability-only-v1",
+          "normative_os_confinement": false
+        },
+        {
+          "target": "x86_64-pc-windows-msvc",
+          "classification": "ci-observed-experimental",
+          "sandbox_tier": "functional-portability-only-v1",
+          "normative_os_confinement": false
+        }
+      ],
+      "capabilities": [
+        "local-acquisition-r2",
+        "local-analysis-r16",
+        "local-docs-query-r16",
+        "local-portable-graph-v9",
+        "local-function-context-v1",
+        "local-explorer-v10"
+      ],
+      "excluded_capabilities": [
+        "incremental-refresh-s5",
+        "federation-s6",
+        "implementation-aware-impact-s7",
+        "trusted-source-retrieval",
+        "remote-acquisition",
+        "compiler-index-generation",
+        "model-provider",
+        "server-runtime",
+        "signed-distribution",
+        "release-publication"
+      ],
+      "release_authority": {
+        "signing": "not-available",
+        "artifact_attestation": "not-available",
+        "build_provenance": "protected-git-and-ci-evidence-only",
+        "release_provenance": false,
+        "release_publication": false,
+        "deployment": false,
+        "secrets": false
+      },
+      "limitations": [
+        "experimental_source_build_only",
+        "not_verified",
+        "no_support_window",
+        "no_binary_distribution",
+        "no_signature_or_attestation",
+        "linux_only_normative_os_confinement",
+        "no_ga_compatibility_promise"
+      ]
+    }
+  ]
+}

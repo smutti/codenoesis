@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/release-profile-v1.schema.json",
+  "title": "CodeNoesis ReleaseProfileV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "classification",
+    "distribution",
+    "support",
+    "owner",
+    "verification",
+    "release_status",
+    "selected_platform",
+    "platform_matrix",
+    "capabilities",
+    "excluded_capabilities",
+    "release_authority",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": { "const": "codenoesis.release-profile/v1" },
+    "profile_id": { "const": "local-experimental-r17" },
+    "classification": { "const": "experimental" },
+    "distribution": { "const": "source-build-only" },
+    "support": { "const": "none" },
+    "owner": { "const": "@smutti" },
+    "verification": { "const": "not-verified" },
+    "release_status": { "const": "not-ga" },
+    "selected_platform": { "$ref": "#/$defs/selected_platform" },
+    "platform_matrix": {
+      "type": "array",
+      "maxItems": 16,
+      "const": [
+        {
+          "target": "x86_64-unknown-linux-gnu",
+          "classification": "ci-observed-experimental",
+          "sandbox_tier": "normative-linux-seccomp-landlock-v1",
+          "normative_os_confinement": true
+        },
+        {
+          "target": "aarch64-apple-darwin",
+          "classification": "ci-observed-experimental",
+          "sandbox_tier": "functional-portability-only-v1",
+          "normative_os_confinement": false
+        },
+        {
+          "target": "x86_64-pc-windows-msvc",
+          "classification": "ci-observed-experimental",
+          "sandbox_tier": "functional-portability-only-v1",
+          "normative_os_confinement": false
+        }
+      ]
+    },
+    "capabilities": {
+      "type": "array",
+      "maxItems": 64,
+      "const": [
+        "local-acquisition-r2",
+        "local-analysis-r16",
+        "local-docs-query-r16",
+        "local-portable-graph-v9",
+        "local-function-context-v1",
+        "local-explorer-v10"
+      ]
+    },
+    "excluded_capabilities": {
+      "type": "array",
+      "maxItems": 64,
+      "const": [
+        "incremental-refresh-s5",
+        "federation-s6",
+        "implementation-aware-impact-s7",
+        "trusted-source-retrieval",
+        "remote-acquisition",
+        "compiler-index-generation",
+        "model-provider",
+        "server-runtime",
+        "signed-distribution",
+        "release-publication"
+      ]
+    },
+    "release_authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "signing",
+        "artifact_attestation",
+        "build_provenance",
+        "release_provenance",
+        "release_publication",
+        "deployment",
+        "secrets"
+      ],
+      "properties": {
+        "signing": { "const": "not-available" },
+        "artifact_attestation": { "const": "not-available" },
+        "build_provenance": { "const": "protected-git-and-ci-evidence-only" },
+        "release_provenance": { "const": false },
+        "release_publication": { "const": false },
+        "deployment": { "const": false },
+        "secrets": { "const": false }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "maxItems": 64,
+      "const": [
+        "experimental_source_build_only",
+        "not_verified",
+        "no_support_window",
+        "no_binary_distribution",
+        "no_signature_or_attestation",
+        "linux_only_normative_os_confinement",
+        "no_ga_compatibility_promise"
+      ]
+    }
+  },
+  "$defs": {
+    "platform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target",
+        "classification",
+        "sandbox_tier",
+        "normative_os_confinement"
+      ],
+      "properties": {
+        "target": { "type": "string", "maxLength": 128 },
+        "classification": { "type": "string", "maxLength": 128 },
+        "sandbox_tier": { "type": "string", "maxLength": 128 },
+        "normative_os_confinement": { "type": "boolean" }
+      }
+    },
+    "selected_platform": {
+      "oneOf": [
+        {
+          "allOf": [
+            { "$ref": "#/$defs/platform" },
+            {
+              "properties": {
+                "target": { "const": "x86_64-unknown-linux-gnu" },
+                "classification": { "const": "ci-observed-experimental" },
+                "sandbox_tier": { "const": "normative-linux-seccomp-landlock-v1" },
+                "normative_os_confinement": { "const": true }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "#/$defs/platform" },
+            {
+              "properties": {
+                "target": { "const": "aarch64-apple-darwin" },
+                "classification": { "const": "ci-observed-experimental" },
+                "sandbox_tier": { "const": "functional-portability-only-v1" },
+                "normative_os_confinement": { "const": false }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "#/$defs/platform" },
+            {
+              "properties": {
+                "target": { "const": "x86_64-pc-windows-msvc" },
+                "classification": { "const": "ci-observed-experimental" },
+                "sandbox_tier": { "const": "functional-portability-only-v1" },
+                "normative_os_confinement": { "const": false }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

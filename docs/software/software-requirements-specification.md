@@ -1,9 +1,10 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9+r17-candidate — S0 through S7 and R0-R16 plus K1 are
-> implemented but not Verified; R17 is Proposed**. Protected PR #177 corrected
-> LocalExplorerV3-V9 browser loading. Issue #178 defines the branch-scoped R17
-> function-context candidate over that exact protected baseline.
+> Status: **0.9+g0-candidate — S0 through S7 and R0-R17 plus K1 are
+> Approved and Implemented but not Verified; G0 is Proposed**. Protected PR
+> #179 merged the exact R17 function-context package. Issue #180 and Decision
+> 0033 define the branch-scoped G0 release-profile candidate over that exact
+> protected baseline.
 
 ## 1. Document control
 
@@ -11,7 +12,7 @@
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | S0 through S7 and roadmap R0-R16 plus K1 are Approved and Implemented but not Verified. Protected PR #177 merged the exact Issue #176 / Decision 0031 browser correction as `f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`. Issue #178 / Decision 0032 is a Proposed branch-scoped R17 candidate and is ineffective before protected manual merge. |
+| Status | S0 through S7 and roadmap R0-R17 plus K1 are Approved and Implemented but not Verified. Protected PR #179 merged the exact Issue #178 / Decision 0032 R17 package as `f0bdb5290566bb85bb103e24291e952d4c557156`. Issue #180 / Decision 0033 is a Proposed branch-scoped G0 candidate and is ineffective before protected manual merge. |
 | Date | 2026-08-14 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
@@ -59,6 +60,7 @@
 | `0.9+explorer-candidate` | 2026-08-13 | Proposed issue #176 and Decision 0031 on exact base `16252f59b2dd2302b3f660268843869a45f8ca87` to correct LocalExplorerV3-V9 exact-schema loading and add bounded visual graph inspection. The branch-scoped candidate preserves V1/V2 viewer bytes and every R0-R16 ontology/query/portable contract and remains ineffective until protected manual merge. |
 | `0.9+explorer-correction` | 2026-08-14 | Reconciled protected PR #177 and merge `f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`: the exact Issue #176 / Decision 0031 LocalExplorerV3-V9 browser correction is Approved and Implemented but not Verified. Historical viewer, ontology, query, and portable contracts remain immutable. |
 | `0.9+r17-candidate` | 2026-08-14 | Proposed issue #178 and Decision 0032 on exact protected base `f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`: add opt-in deterministic `FunctionContextV1`, additive LocalExplorerV10 function navigation over unchanged PortableGraphV9, and the source-build-only `local-experimental-r17` G0 profile. The package remains ineffective until protected manual merge. |
+| `0.9+g0-candidate` | 2026-08-14 | Reconciled protected PR #179 and merge `f0bdb5290566bb85bb103e24291e952d4c557156` as R17 Approved and Implemented but not Verified, then proposed issue #180 and Decision 0033 for `FR-REL-001`, `FR-CLI-007`, canonical `ReleaseProfileV1`, strict `CodeNoesisErrorV25`, the exact three-target source-build-only matrix, and an output-only preflight with no release, signing, publication, support, secret, or deployment authority. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -2374,24 +2376,23 @@ process, storage, telemetry, mutation, browser-launch, model, or plugin
 authority. V1/V2 assets and all ontology/query/portable/schema/identity bytes
 remain immutable.
 
-### 2.31 S4 R17 function-context navigation candidate register
+### 2.31 S4 R17 function-context navigation register
 
 Issue [#178](https://github.com/smutti/codenoesis/issues/178), the accountable
 maintainer's high-risk authorization, and
-[Decision 0032](decisions/0032-s4-r17-function-context-navigation.md) govern
+[Decision 0032](decisions/0032-s4-r17-function-context-navigation.md) governed
 one branch-scoped candidate on exact protected base
-`f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`. Governance, G0 profile,
-schemas, project-owned fixture and oracle, retained Red, minimum production
-implementation, browser asset, tests, traceability, pilots, and evidence share
-one maintainer-supervised pull request. Before protected manual merge every
-R17 requirement and implementation statement remains Proposed/candidate.
+`f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`. Protected PR #179 merged that
+exact package as `f0bdb5290566bb85bb103e24291e952d4c557156`; R17 is therefore
+Approved and Implemented but not Verified. Decision 0032 and its immutable
+contract bundle remain unchanged.
 
-| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
-|---|---|---|---|---|
-| `FR-CTX-001` | Proposed | Approved and Implemented only for deterministic `FunctionContextV1` over one exact R16 `rust.function` or `rust.method`; not Verified | `S4` | Issue #178, Decision 0032, strict schema, machine oracle, retained Red/Green, and CLI/browser parity evidence |
-| `FR-EXP-009` | Proposed | Approved and Implemented only for additive LocalExplorerV10 over exact PortableGraphV9 with bounded function navigation; not Verified | `S4` | Issue #178, Decision 0032, V10 manifest schema, static viewer, real-browser evidence, and immutable V1-V9 regressions |
-| Bounded R17 amendments to `FR-QRY-001`, the local subset of `FR-QRY-002`, and `FR-CLI-001` | Existing exact-ID query and bounded portable traversal Approved | Add only explicit `--context-profile rust-function-context-v1` and `--explorer-profile rust-function-context-v1`; selector absence preserves QueryV13, PortableGraphV9, and ExplorerV9 bytes | `S4` | Public E2E journey and selector-absence oracle |
-| Bounded R17 amendments to `NFR-DET-001`, `NFR-PER-001`, `NFR-SEC-001/005`, `NFR-PRV-002`, `NFR-TST-001/002`, and `INV-BND-001` | Existing deterministic, bounded, offline, private, Red-first controls Approved | Add exact context/navigation maxima, canonical ordering, privacy deny-list, real-browser security, 50 permutations, ten schedules, and two pinned Lekton replays without new authority | `S4` | R17 contract bundle, fixture, invalid corpus, retained evidence, and complete gate |
+| Requirement | State after protected merge | Slice | Ratification material |
+|---|---|---|---|
+| `FR-CTX-001` | Approved and Implemented for deterministic `FunctionContextV1` over one exact R16 `rust.function` or `rust.method`; not Verified | `S4` | Issue #178, Decision 0032, strict schema, machine oracle, retained Red/Green, CLI/browser parity evidence, and protected PR #179 |
+| `FR-EXP-009` | Approved and Implemented for additive LocalExplorerV10 over exact PortableGraphV9 with bounded function navigation; not Verified | `S4` | Issue #178, Decision 0032, V10 manifest schema, static viewer, real-browser evidence, immutable V1-V9 regressions, and protected PR #179 |
+| Bounded R17 amendments to `FR-QRY-001`, the local subset of `FR-QRY-002`, and `FR-CLI-001` | Approved and Implemented only for explicit `--context-profile rust-function-context-v1` and `--explorer-profile rust-function-context-v1`; selector absence preserves QueryV13, PortableGraphV9, and ExplorerV9 bytes; not Verified | `S4` | Public E2E journey, selector-absence oracle, and protected PR #179 |
+| Bounded R17 amendments to `NFR-DET-001`, `NFR-PER-001`, `NFR-SEC-001/005`, `NFR-PRV-002`, `NFR-TST-001/002`, and `INV-BND-001` | Approved and Implemented for exact context/navigation maxima, canonical ordering, privacy deny-list, real-browser security, 50 permutations, ten schedules, and two pinned Lekton replays without new authority; not Verified | `S4` | R17 contract bundle, fixture, invalid corpus, retained evidence, complete gate, and protected PR #179 |
 
 The explicit context selector accepts exactly one existing R16
 `rust.function` or `rust.method`. It MUST return canonical
@@ -2414,12 +2415,56 @@ partial context. Raw source/body/expression/initializer/condition/literal or
 snippet text, absolute roots, URLs, credentials, environment, arguments,
 telemetry, and model data MUST NOT cross either boundary.
 
-The source-build-only `local-experimental-r17` profile begins G0 planning. It
-is not Local GA, signed distribution, supported platform matrix, release
-channel, support window, deployment, publication, or compatibility authority.
-Protected merge makes the exact package Approved and Implemented but not
-Verified; independent acceptance of the complete immutable evidence pack is a
+The source-build-only `local-experimental-r17` label begins G0 planning. It is
+not Local GA, signed distribution, supported platform matrix, release channel,
+support window, deployment, publication, or compatibility authority.
+Independent acceptance of R17's complete immutable evidence pack remains a
 separate lifecycle action.
+
+### 2.32 G0/S14 release-profile registry candidate register
+
+Issue [#180](https://github.com/smutti/codenoesis/issues/180), the accountable
+maintainer's critical authorization, and
+[Decision 0033](decisions/0033-g0-release-profile-registry.md) govern one
+branch-scoped candidate on exact protected base
+`f0bdb5290566bb85bb103e24291e952d4c557156`. Governance, strict schemas,
+closed registry, three target-specific goldens, retained Red, minimum product
+implementation, tests, traceability, and evidence share one supervised pull
+request. Before protected manual merge, G0 and every implementation statement
+remain Proposed/candidate.
+
+| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| `FR-REL-001` | Proposed | Approved and Implemented only for the embedded `local-experimental-r17` registry, exact target matrix, capability/exclusion/limitation sets, and explicit absence of GA, support, distribution, signing, publication, deployment, secret, and release authority; not Verified | `S14` | Issue #180, Decision 0033, registry/schema/golden bundle, retained Red/Green, and complete gate |
+| `FR-CLI-007` | Proposed | Approved and Implemented only for output-only `noesis profile --id local-experimental-r17 --format json`, canonical `ReleaseProfileV1`, and strict `CodeNoesisErrorV25`; not Verified | `S14` | Issue #180, Decision 0033, public E2E oracle, target matrix, privacy/boundary tests, and complete gate |
+| Bounded G0 amendments to `DR-ART-001`, `NFR-PORT-001`, `NFR-CMP-001`, `NFR-SEC-001/005`, `NFR-TST-001/002`, and `INV-BND-001`; closure of `OD-SBX-001` for this profile only | Existing deterministic, bounded, offline, private, Red-first controls Approved | Add only the versioned profile artifact, exact compile-target selection, Linux normative confinement distinction, 65,536-byte bound, fail-closed preflight, and retained Red-before-code evidence; no broader release or sandbox claim | `S14` | Issue #180, Decision 0033, `codenoesis.g0-release-profile-contract/v1`, and protected-base authority |
+
+The command accepts exactly `profile`, one `--id local-experimental-r17`, one
+`--format json`, and either pair order. It installs the inherited process
+boundary before dispatch, reads no repository or ambient selector, derives the
+target only from compile-time Rust `cfg`, validates the closed embedded
+registry, and emits one canonical LF-terminated
+`codenoesis.release-profile/v1` report. Unknown profiles, unsupported targets,
+invalid or duplicate arguments, invalid format, malformed embedded state,
+privacy violations, and resource excess fail closed before repository work as
+one `codenoesis.error/v25`, with empty stdout and no repair, fallback,
+inference, truncation, retry, or target override.
+
+The exact accepted targets are `x86_64-unknown-linux-gnu` with
+`normative-linux-seccomp-landlock-v1`, `aarch64-apple-darwin` with
+`functional-portability-only-v1`, and `x86_64-pc-windows-msvc` with
+`functional-portability-only-v1`. Only Linux carries normative operating-system
+confinement evidence; macOS and Windows are functional portability observations
+without an equivalent sandbox claim. The report is bounded to 65,536 bytes
+including LF, 16 platform entries, 64 capabilities, 64 exclusions, 64
+limitations, and 128 UTF-8 bytes per identifier or text value.
+
+Protected merge activates no binary distribution, release channel, support
+window, compatibility promise, SBOM, vulnerability policy, signature,
+attestation, release provenance, publication, deployment, tag, credential,
+secret, workflow, permission, or control-plane authority. The source-build-only
+profile remains experimental, not GA, and not Verified; G1, G2, G5, G8, and G9
+remain separate planning items.
 
 ## 3. Product intent and success definition
 
@@ -2512,7 +2557,7 @@ migration, restore, performance, and security gates.
 | `INV-MDL-001` | P0 | An LLM or Council verdict MUST NOT create `deterministic_fact` or `confirmed` state directly. | `UT`, `PT`, `E2E` |
 | `INV-INC-001` | P1 | Incremental refresh and a clean scan of the same immutable target under the same accepted versions MUST produce byte-identical canonical snapshot, graph, chunk, and generated-document semantic content. A revision-neutral cache entry MUST NOT become authoritative without complete target rematerialization and validation. | `PT`, `GT`, `E2E` |
 | `INV-STO-001` | P1 | Storage adapters MUST expose the same domain-observable behaviour for the shared contract. | `CT`, `IT` |
-| `INV-BND-001` | P1 | Repository processing, graph traversal, jobs, plugins, and model calls MUST terminate at configured bounds with typed outcomes. | `PT`, `SEC`, `FT` |
+| `INV-BND-001` | P1 | Repository processing, graph traversal, jobs, plugins, model calls, and the G0 release-profile preflight MUST terminate at configured bounds with typed outcomes. G0 MUST reject rather than truncate a report above 65,536 bytes including LF or a registry above its reviewed item/text maxima. | `PT`, `SEC`, `FT` |
 | `INV-TEN-001` | P1 | A workspace actor MUST NOT observe another workspace through data, search, cache, events, errors, logs, metrics, or timing-sensitive bulk operations. | `SEC`, `IT`, `PERF` |
 
 These invariants are release blockers. Coverage exclusions or a manual waiver
@@ -2522,7 +2567,7 @@ cannot replace their verification.
 
 | ID | Pri. | Target | Normative requirement | Acceptance evidence |
 |---|---:|---:|---|---|
-| `DR-ART-001` | P0 | `0.1` | Public artifacts MUST contain schema, repository, configuration, pipeline, ontology, extractor, and evidence-lineage versions. | Schema tests reject missing or unknown mandatory fields. `CONF` |
+| `DR-ART-001` | P0 | `0.1` | Public repository-derived artifacts MUST contain schema, repository, configuration, pipeline, ontology, extractor, and evidence-lineage versions. The G0 preflight is explicitly not repository-derived: `ReleaseProfileV1` MUST instead contain its schema, profile, selected platform, complete platform matrix, capability, exclusion, limitation, verification, support, distribution, and release-authority fields and MUST contain no repository identity. | Schema tests reject missing or unknown mandatory fields; the G0 contract rejects repository or ambient private fields. `CONF`, `SEC` |
 | `DR-ART-002` | P0 | `0.1` | Canonical semantic content MUST be separated from volatile envelope metadata. Creation time, job ID, and correlation ID MUST NOT change the semantic hash. | Replays with different clocks and job IDs produce the same semantic hash and distinct envelopes. `PT` |
 | `DR-IDN-001` | P0 | `0.1` | Stable IDs MUST derive from canonical project identity, language, symbol identity, and versioned normalization rules rather than storage sequence numbers. | Randomized insertion and file ordering do not change IDs. `PT` |
 | `DR-IDN-002` | P0 | `0.1` | Rust workspace crate, source-file, module, symbol, relationship, document, and statement IDs MUST derive from canonical repository identity, manifest/target identity, module path, subject identity, and immutable versioned normalization rather than member order, output location, commit, or storage sequence. | Reordered members/files and changed envelopes/output roots retain reviewed IDs while canonical collisions fail closed. `PT`, `GT` |
@@ -2619,6 +2664,7 @@ cannot replace their verification.
 | `FR-EXP-008` | P0 | `0.2` | The explicit R16 export profile MUST project one validated visible RepositorySnapshotV18 and deterministic documents as canonical `PortableGraphV9`, then generate read-only offline `LocalExplorerV9`, losslessly preserving the complete corrected R15 graph plus evaluated values, evaluation relationships, claims, evidence, typed gaps, and every constant-evaluation derivation input. It MUST exclude raw initializer/expression/literal/body/snippet text, absolute roots, URLs, credentials, environment, arguments, telemetry, and inferred compiler/target/runtime meaning. Reimport MUST reject rather than repair, infer, reorder, deduplicate, truncate, evaluate, or synthesize derivations. | The R16 black-box journey, exact family/index/derivation/hash digests, strict reimport, duplicate/reference/evidence/hash/order/privacy/path/race/limit cases, 50 permutations, immutable V1/V2 viewer bytes, exact V9 schema binding under Decision 0031, and PortableGraphV1-V8 regressions match Decisions 0030 and 0031. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
 | `FR-CTX-001` | P0 | `0.2` | The explicit `rust-function-context-v1` query profile MUST project one exact validated R16 `rust.function` or `rust.method` into canonical `FunctionContextV1`, grouping only its existing callable, owner, signature, contiguous ordered parameters, direct body facts, proven incoming/outgoing `CALLS`, claims, evidence, diagnostics, gaps, derivations, deterministic navigation roles, and fixed limitations. It MUST expose declared-source authority and MUST NOT retrieve raw source or infer type, dispatch, cfg, ownership, side-effect, returned-value, compiler, or runtime meaning. | The project-owned oracle and pinned Lekton replay prove exact signature/input/output/call/uncertainty fields, canonical order, CLI/browser parity, privacy, all maximum/plus-one failures, 50 permutations, ten schedules, selector-absence QueryV13 identity, and empty stdout on typed failure. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
 | `FR-EXP-009` | P0 | `0.2` | The explicit `rust-function-context-v1` explorer profile MUST accept exactly canonical PortableGraphV9 and generate additive read-only offline LocalExplorerV10 with bounded function/method search, declared-signature cards, clickable related facts/evidence/uncertainty, deterministic URL fragments, bounded back/forward history, and existing bounded graph inspection. It MUST preserve PortableGraphV9 and LocalExplorerV1-V9 bytes and grant no network, storage, clipboard, dynamic-code, source, process, mutation, repair, inference, model, or browser-launch authority. | A real browser loads the exact fixture and pinned Lekton artifacts, displays ordered inputs and declared output, navigates parameter -> callable -> callee/evidence with deterministic history, matches FunctionContextV1 ordering, rejects invalid/private/mismatched/oversized input, and preserves every historical artifact digest. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
+| `FR-REL-001` | P0 | `0.2` | The embedded `local-experimental-r17` registry MUST emit canonical `ReleaseProfileV1` only for an exact accepted compile target and MUST state the complete capability, exclusion, limitation, platform sandbox, support, distribution, verification, and release-authority semantics fixed by Decision 0033. It MUST fail closed before repository work for an unknown profile, unsupported target, invalid embedded contract, privacy violation, or resource excess and MUST NOT imply GA, support, binary distribution, signing, attestation, release provenance, publication, deployment, secret, workflow, permission, or compatibility authority. | Three exact target goldens, strict schemas, registry validation, maximum/plus-one cases, 50 construction schedules, ten process schedules, privacy canaries, unsupported-target behavior, and immutable R0-R17/K1 bytes demonstrate the bounded source-build-only profile. `E2E`, `CONF`, `PT`, `SEC`, `FT` |
 | `FR-QRY-001` | P0 | `0.1` | Local queries MUST retrieve every approved entity, relationship, claim, evidence, diagnostic, coverage gap, and document by stable identity, expose unknown or contradictory states, and select a versioned result contract from the validated snapshot without changing prior result versions. R8 MAY expose the same exact subjects in a validated read-only portable projection. K1 adds LocalQueryResultV6 for V11; R10 adds V7 for V12; R11 adds V8 for V13; R12 adds V9 for V14; R13 adds V10 for V15; R14 adds V11 for V16; R15 adds V12 for V17; and R16 adds LocalQueryResultV13 for V18. R17 MAY add FunctionContextV1 only under its explicit selector, while every LocalQueryResultV1-V13 byte and authority remains unchanged. | CLI black-box scenarios return the reviewed typed result and stable exit status; V18 exercises R16, V17 R15, V16 R14, V15 R13, V14 R12, V13 R11, V12 R10, V11 K1, earlier heads retain approved dispatch/bytes, and the R17 selector-absence oracle proves QueryV13 identity. `E2E`, `CONF` |
 | `FR-QRY-002` | P1 | `0.2` | Graph traversal MUST enforce configurable depth, result, time, and resource limits with cycle handling. The bounded R8 subset is deterministic breadth-first read-only traversal over one validated PortableGraphV1 with default depth 1, maximum depth 2, at most 256 subjects and 512 relationships, and explicit display truncation. The bounded local R17 subset is one fail-closed function-centered projection over at most 256 subjects and 512 relationships with no truncation. Broader canonical/server traversal remains Proposed. | Cyclic and adversarial queries terminate within the configured bound without starving unrelated work; R8 and R17 permutation and maximum-plus-one cases return identical bounded results or typed failures without mutating the graph. `PT`, `PERF`, `SEC` |
 | `FR-CLI-001` | P0 | `0.1` | The CLI MUST provide local `scan`, `docs`, `query`, `export`, and `explore` journeys with human-readable and versioned JSON output. R8, K1, R10-R16, and R17 behavior MUST be explicitly selected, preserve accepted command bytes, use marker-owned atomic output roots, and reject unsupported profile composition before acquisition or projection. | The R8 through R17 fixtures complete their approved scan -> docs -> query -> export -> explore journeys without network, child process, browser auto-launch, target/toolchain/index execution, repository mutation, or unintended store mutation; complete invalid composition returns the versioned typed failure, incomplete selector intent retains its historical error family, and every prior command remains unchanged. `E2E`, `CONF`, `SEC`, `FT` |
@@ -2627,6 +2673,7 @@ cannot replace their verification.
 | `FR-CLI-004` | P1 | `0.2` | The local CLI MUST provide `noesis refresh` with explicit repository, repository identity, revision, store, and `standard-local-s5` profile inputs; success emits strict canonical `IncrementalRefreshReportV1` on stdout and failure emits strict `CodeNoesisErrorV7` on stderr without a partial head. | Black-box and conformance tests validate exact command parsing, streams, exits, report/error schemas, no-change retry, concurrent-head failure, limits, and S4 cold equivalence. `E2E`, `CONF`, `FT` |
 | `FR-CLI-005` | P1 | `0.2` | The local CLI MUST provide output-only `noesis federate` with one explicit workspace manifest, `standard-local-s6`, and JSON output; success MUST buffer and validate one canonical `FederationReportV1` before a single stdout write, while failure MUST emit one strict `CodeNoesisErrorV8` on stderr with no stdout, store, or partial artifact. | Black-box and conformance tests validate exact parsing, configuration authority, streams, exits, schemas, report size, no partial output, no persistent mutation, and unchanged S0–S5 commands. `E2E`, `CONF`, `SEC`, `FT` |
 | `FR-CLI-006` | P0 | `0.2` | The local CLI MUST provide output-only `noesis impact --workspace <impact-workspace-v1.json> --profile implementation-aware-http-json-v1 --format json`. Success MUST validate and write exactly one canonical LF-terminated `SemanticCompatibilityReportV1` to stdout with exit `0`; invalid input or unsupported capability MUST write exactly one strict `CodeNoesisErrorV23` to stderr with exit `2`; internal failure MUST use exit `1`; every failure MUST leave stdout empty and emit no partial report, store, or artifact. | The exact S7 fixture emits the immutable 14,991-byte golden, strict/safe/decoy/custom-helper outcomes, stable streams and exits, maximum and maximum-plus-one behavior, mutable-input rejection, 50 input permutations, ten schedules, no side effects, and unchanged S0-S6/R0-R15/K1 behavior. `E2E`, `CONF`, `SEC`, `FT`, `PT` |
+| `FR-CLI-007` | P0 | `0.2` | The local CLI MUST provide output-only `noesis profile --id local-experimental-r17 --format json`, accepting the two flag pairs in either order exactly once and no target override or additional authority-bearing input. Success MUST write exactly one canonical LF-terminated `ReleaseProfileV1` to stdout with exit `0`; invalid input or unsupported capability MUST write one strict `CodeNoesisErrorV25` to stderr with exit `2`; embedded-contract failure MUST use exit `1`; every failure MUST leave stdout empty and perform no repository, filesystem, network, process, store, artifact, publication, signing, or release work. | The public black-box oracle validates exact per-target bytes, streams and exits, invalid/duplicate arguments, non-JSON format, unknown profile, unsupported platform, privacy canaries, environment and working-directory independence, 50 permutations, ten schedules, and no side effects. `E2E`, `CONF`, `SEC`, `FT`, `PT` |
 | `FR-API-001` | P1 | `0.4` | The REST API MUST expose approved `/api/v1` resources using versioned schemas, RFC 9457 Problem Details, correlation IDs, and idempotency keys. | Contract tests validate success, error, retry, and duplicate-submission cases. `CONF`, `E2E` |
 | `FR-API-002` | P1 | `0.4` | Long-running REST operations MUST return a durable job identity and MUST expose bounded status and event retrieval. | Submit, disconnect, reconnect, retry, and event-resume scenarios retain one logical job. `E2E`, `FT` |
 | `FR-MCP-001` | P1 | `0.4` | MCP tools and resources MUST invoke the same application use cases and authorization policies as CLI/REST. | Transport conformance proves semantic parity and absence of transport business logic. `CT`, `E2E` |
@@ -2663,11 +2710,11 @@ cannot replace their verification.
 
 | ID | Pri. | Normative requirement | Acceptance evidence |
 |---|---:|---|---|
-| `NFR-SEC-001` | P0 | Standard local analysis MUST have zero target process execution, zero analysis-stage network access, and zero filesystem access outside allowed roots. R8 export/explore additionally MUST NOT start a server, auto-launch a browser, load a remote resource, interpret graph data as active content, mutate repository/store state, or write outside an exact marker-owned destination. | A malicious-repository and portable-projection corpus includes traversal, symlink loops, archive/repository bombs, oversized input, parser attacks, XSS/CSP payloads, remote origins, path races, and sentinel scripts. `SEC`, `FZ` |
+| `NFR-SEC-001` | P0 | Standard local analysis MUST have zero target process execution, zero analysis-stage network access, and zero filesystem access outside allowed roots. R8 export/explore additionally MUST NOT start a server, auto-launch a browser, load a remote resource, interpret graph data as active content, mutate repository/store state, or write outside an exact marker-owned destination. The G0 profile preflight MUST perform no repository, filesystem, network, child-process, store, artifact, signing, publication, deployment, or release work and MUST derive its platform only from reviewed compile-time `cfg`. | A malicious-repository and portable-projection corpus includes traversal, symlink loops, archive/repository bombs, oversized input, parser attacks, XSS/CSP payloads, remote origins, path races, and sentinel scripts; G0 adds environment/path/network canaries and no-side-effect observation. `SEC`, `FZ` |
 | `NFR-SEC-002` | P1 | Server authorization and storage MUST satisfy `INV-TEN-001` across database, objects, FTS, caches, jobs, events, logs, metrics, and model requests. | Randomized multi-tenant operations and explicit attack cases find no cross-tenant data. `SEC`, `PERF` |
 | `NFR-SEC-003` | P1 | Secrets MUST use an external secret manager, MUST be redacted from observable output, and MUST be scoped to the stage that requires them. | Canary secrets never appear in persisted artifacts, logs, traces, metrics, errors, or model payloads. `SEC` |
 | `NFR-SEC-004` | P1 | A release MUST have no known exploitable Critical vulnerability. High-risk exceptions require owner, expiry, rationale, and compensating control. | Dependency, container, binary, and configuration reports plus the exception register are release artifacts. `SEC`, `CONF` |
-| `NFR-SEC-005` | P0 | From S0 `noesis` process start until exit, a standard local scan MUST launch no child process and MUST have no direct or brokered network channel. The same zero-child/zero-network boundary applies to R8 `export` and `explore`, including no browser auto-launch or local server. Fixture setup, manual opening of the generated static page after command exit, and the test harness are outside this monitored boundary. | A Linux black-box run combines an empty network namespace, non-socket-only inherited standard descriptors, and the ratified deny-and-audit seccomp policy for process, socket/network, and `io_uring` paths. Generated probes cover every policy syscall and conditional branch on the selected architecture; missing, unexpectedly allowed, or unproved `not_exposed` results fail. R8 repeats the command boundary for both additive journeys. `SEC`, `E2E` |
+| `NFR-SEC-005` | P0 | From S0 `noesis` process start until exit, a standard local scan MUST launch no child process and MUST have no direct or brokered network channel. The same zero-child/zero-network boundary applies to R8 `export` and `explore` and G0 `profile`, including no browser auto-launch or local server. Fixture setup, manual opening of a generated static page after command exit, and the test harness are outside this monitored boundary. | A Linux black-box run combines an empty network namespace, non-socket-only inherited standard descriptors, and the ratified deny-and-audit seccomp policy for process, socket/network, and `io_uring` paths. Generated probes cover every policy syscall and conditional branch on the selected architecture; missing, unexpectedly allowed, or unproved `not_exposed` results fail. R8 and G0 repeat the command boundary for their additive journeys. `SEC`, `E2E` |
 | `NFR-PRV-001` | P0 | Source, evidence, and derived knowledge MUST NOT leave the local system or configured workspace unless an authorized user explicitly enables an allowlisted destination. | Network capture in default/off mode records zero external content-bearing calls. `SEC`, `E2E` |
 | `NFR-PRV-002` | P1 | Data classification, retention, export, deletion, legal hold, residency, and backup expiry MUST be explicit per deployment policy. The approved portable-v1 profile classifies already-redacted evidence metadata as exportable and excludes source contents, snippets, absolute paths, raw tool roots/arguments, environment values, telemetry, and ambient private data. Broader lifecycle policy remains Proposed. | Lifecycle conformance tests exercise creation through purge and backup expiration; R8 privacy goldens and canaries prove only the approved metadata crosses the explicit output boundary. `SEC`, `DR` |
 
@@ -2677,8 +2724,8 @@ cannot replace their verification.
 |---|---:|---|---|
 | `NFR-OBS-001` | P1 | Every request and job MUST propagate a correlation ID and emit stage, duration, outcome, coverage, limit, queue, sandbox, Council, token, and cost signals without source leakage. | Trace and metric contract tests cover success, failure, retry, and cancellation. `CT`, `IT` |
 | `NFR-OPS-001` | P1 | Server processes MUST expose liveness, readiness, startup, and graceful-drain behaviour with documented alerts and runbooks. | Dependency loss, shutdown, queue drain, and stuck-worker scenarios produce approved health transitions and alerts. `FT`, `E2E` |
-| `NFR-CMP-001` | P1 | Public JSON, REST, MCP, WIT, configuration, ontology, and artifact changes MUST be classified for compatibility and versioned before merge. | Compatibility tests block an unapproved breaking fixture. `CONF` |
-| `NFR-PORT-001` | P1 | The supported CLI and server platform matrix MUST state the guarantee available on each OS/architecture rather than implying identical sandbox capabilities. | Release tests run on every supported tier and verify its declared capability set. `CONF`, `SEC` |
+| `NFR-CMP-001` | P1 | Public JSON, REST, MCP, WIT, configuration, ontology, and artifact changes MUST be classified for compatibility and versioned before merge. G0 `ReleaseProfileV1` and `CodeNoesisErrorV25` are additive experimental source-build contracts with no GA compatibility promise; any field or semantic change still requires a new reviewed contract version. | Compatibility tests block an unapproved breaking fixture and preserve the exact G0 goldens. `CONF` |
+| `NFR-PORT-001` | P1 | The supported CLI and server platform matrix MUST state the guarantee available on each OS/architecture rather than implying identical sandbox capabilities. The bounded G0 source-build matrix accepts exactly `x86_64-unknown-linux-gnu`, `aarch64-apple-darwin`, and `x86_64-pc-windows-msvc`; only Linux claims normative seccomp/Landlock confinement, while macOS and Windows claim functional portability evidence only. Every other target fails closed. | Per-target release-profile goldens and CI observations verify the declared tier without converting an observation into a support commitment. `CONF`, `SEC` |
 | `NFR-MNT-001` | P0 | First-party crate dependencies MUST follow the approved inward dependency rules and first-party `unsafe` MUST remain forbidden. | An architecture fitness test rejects forbidden dependency edges, missing lint inheritance, and any first-party allowance of `unsafe`. `CONF` |
 | `NFR-MNT-002` | P1 | Transitive dependency `unsafe` use MUST be inventoried; every accepted exception MUST record package identity, scope, rationale, owner, review evidence, and expiry. | The supply-chain gate rejects an unregistered or expired exception and publishes the reviewed inventory. `CONF`, `SEC` |
 | `NFR-SUP-001` | P1 | Releases MUST produce a locked dependency graph, license/advisory evidence, SBOM, signed artifacts, and verifiable build provenance. | Consumers can verify artifact identity, signature, SBOM association, and provenance against source. `CONF`, `SEC` |

@@ -1,0 +1,59 @@
+{
+  "schema_version": "codenoesis.e2e-spec/v1",
+  "id": "e2e_fr_rel_001_reports_bound_profile",
+  "requirements": [
+    "FR-REL-001",
+    "FR-CLI-007",
+    "DR-ART-001",
+    "NFR-PORT-001",
+    "NFR-CMP-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-TST-001",
+    "NFR-TST-002",
+    "INV-BND-001",
+    "OD-SBX-001"
+  ],
+  "status": "Proposed branch-scoped candidate",
+  "planning_item": "G0",
+  "slice": "S14",
+  "risk": "critical",
+  "exact_base": "f0bdb5290566bb85bb103e24291e952d4c557156",
+  "command": [
+    "profile",
+    "--id",
+    "local-experimental-r17",
+    "--format",
+    "json"
+  ],
+  "expected_red": {
+    "exit": 2,
+    "stdout_bytes": 0,
+    "stderr_bytes": 149,
+    "schema_version": "codenoesis.error/v1",
+    "code": "input.invalid_revision"
+  },
+  "expected_green": {
+    "exit": 0,
+    "stderr_bytes": 0,
+    "schema_version": "codenoesis.release-profile/v1",
+    "profile_id": "local-experimental-r17",
+    "accepted_targets": [
+      "x86_64-unknown-linux-gnu",
+      "aarch64-apple-darwin",
+      "x86_64-pc-windows-msvc"
+    ],
+    "permutations": 50,
+    "schedules_per_target": 10,
+    "output_bytes_maximum_including_lf": 65536
+  },
+  "failure": {
+    "schema_version": "codenoesis.error/v25",
+    "stdout": "empty",
+    "filesystem_work": "none",
+    "publication": "none",
+    "repair": false,
+    "fallback": false,
+    "target_override": false
+  }
+}

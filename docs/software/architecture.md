@@ -431,11 +431,12 @@ state. CSP remains default-deny with no network, dynamic code, storage,
 telemetry, source access, browser auto-launch, mutation, repair, or inference.
 Protected PR #177 made the behavior effective; it remains not Verified.
 
-### R17 function-centered context and navigation candidate
+### R17 function-centered context and navigation
 
-Issue [#178](https://github.com/smutti/codenoesis/issues/178) and
-[Decision 0032](decisions/0032-s4-r17-function-context-navigation.md) define
-one Proposed high-risk S4 package over exact protected merge
+Issue [#178](https://github.com/smutti/codenoesis/issues/178),
+[Decision 0032](decisions/0032-s4-r17-function-context-navigation.md), and
+protected PR #179 define one Approved and Implemented but not Verified
+high-risk S4 package over exact protected merge
 `f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`. It adds no ontology family,
 identity, snapshot, query version, or PortableGraph version. The explicit
 `rust-function-context-v1` selector projects one validated R16 callable into
@@ -464,8 +465,31 @@ or browser-launch authority.
 
 R17 is exposed only by the source-build `local-experimental-r17` profile. That
 profile starts G0 classification but grants no GA, signing, support, release,
-deployment, publication, or compatibility promise. The branch remains
-ineffective until protected manual merge and remains not Verified afterward.
+deployment, publication, or compatibility promise. Protected PR #179 made the
+behavior effective; it remains not Verified.
+
+### G0 bounded release-profile registry candidate
+
+Issue [#180](https://github.com/smutti/codenoesis/issues/180) and
+[Decision 0033](decisions/0033-g0-release-profile-registry.md) define Proposed
+`FR-REL-001` and `FR-CLI-007` for one critical S14 package. The inward-owned
+contract embeds one closed `local-experimental-r17` definition and selects a
+platform only from compile-time `cfg`. The output boundary emits canonical
+`ReleaseProfileV1`; invalid command/profile/target state emits only
+`CodeNoesisErrorV25`.
+
+The composition root installs the inherited S0 boundary before dispatching the
+output-only `profile` command. The command reads no repository, path,
+environment selector, credential, release key, or network resource and writes
+no store or artifact. Linux x86_64 carries the normative seccomp/Landlock tier;
+macOS arm64 and Windows x86_64 remain functional-portability-only tiers. Every
+other target fails closed before profile publication.
+
+The registry records signing and attestation as unavailable, release
+provenance/publication/deployment/secrets as false, support as none, and
+distribution as source-build-only. It is not a release subsystem. G1, G2, G5,
+G8, and G9 retain authority over distribution, compatibility, security,
+supply-chain release evidence, support, and GA.
 
 ### S7 implementation-aware runtime boundary
 
