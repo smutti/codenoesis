@@ -1,0 +1,19 @@
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running tests/e2e_fr_cmp_001_local_upgrade.rs (target/debug/deps/e2e_fr_cmp_001_local_upgrade-ff9048aa8927147a)
+
+running 1 test
+
+thread 'e2e_fr_cmp_001_preflights_local_upgrade_and_rollback' (3203314) panicked at xtask/tests/e2e_fr_cmp_001_local_upgrade.rs:140:9:
+expected Red: exact base rejects preflight-local-upgrade as distribution.invalid_arguments
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test e2e_fr_cmp_001_preflights_local_upgrade_and_rollback ... FAILED
+
+failures:
+
+failures:
+    e2e_fr_cmp_001_preflights_local_upgrade_and_rollback
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+error: test failed, to rerun pass `-p xtask --test e2e_fr_cmp_001_local_upgrade`

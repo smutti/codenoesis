@@ -1,0 +1,46 @@
+{
+  "schema_version": "codenoesis.evidence/g2-local-upgrade-red/v1",
+  "issue": 184,
+  "requirement_ids": ["FR-CMP-001", "FR-CLI-009"],
+  "slice": "S14",
+  "risk": "high",
+  "exact_base_sha": "e7643d83965dca2f9342080264e7c6c58f3dd761",
+  "checkpoint_sha": "09ed3149676cfa416164e1da904d06a1852d659e",
+  "command": "cargo test --locked -p xtask --test e2e_fr_cmp_001_local_upgrade -- --exact e2e_fr_cmp_001_preflights_local_upgrade_and_rollback --nocapture",
+  "expected_failure": {
+    "public_exit": 2,
+    "public_stdout_bytes": 0,
+    "public_stderr_bytes": 170,
+    "public_stderr_sha256": "cd5f646ce966c60887ae0ed110142ba22c4a5f6a05a792c72bfbab5ba3a94311",
+    "schema_version": "codenoesis.error/v26",
+    "code": "distribution.invalid_arguments"
+  },
+  "observed": {
+    "test_exit": 101,
+    "test_result": "failed-for-expected-red-reason",
+    "failure_reason": "the exact checkpoint rejected preflight-local-upgrade with the byte-exact G1a distribution.invalid_arguments error",
+    "retained_log": "crates/noesis/tests/evidence/g2/local-upgrade-safety-v1/red.log",
+    "retained_log_bytes": 1099,
+    "retained_log_sha256": "c227c34933565c1239d2d2ecbef6e1b645d23bc6800f73d30520c2054ca8c3c2"
+  },
+  "retry_disclosure": {
+    "retained_run": 2,
+    "reason": "the first wrapper used the reserved zsh variable status after the identical test had completed; no first-run exit metadata was accepted"
+  },
+  "environment": {
+    "os": "macOS 26.5.2 (25F84)",
+    "kernel": "Darwin 25.5.0 arm64",
+    "architecture": "aarch64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "target": "aarch64-apple-darwin",
+    "features": "xtask default",
+    "network_required": false,
+    "model_provider_required": false
+  },
+  "agent": {
+    "interface": "Codex",
+    "model_identity": "not exposed to repository process",
+    "cost": "not available"
+  }
+}
