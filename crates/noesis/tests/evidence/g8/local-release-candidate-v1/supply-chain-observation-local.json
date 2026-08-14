@@ -1,0 +1,81 @@
+{
+  "schema_version": "codenoesis.evidence/g8-local-supply-chain/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/186",
+  "observed_at_utc": "2026-08-14T19:48:59Z",
+  "source_head": "764bb9f00063134d75fdf825d542b17fca7e6d99",
+  "generator_sha256": "3aff43eba97780d7fcd553ed448df54bea2a716e096a060dbfa20a1e48960cd6",
+  "policy_sha256": "1dc9a2a18743a696ad26bdec542c797033fa2df27fc1869fb8f0b84f77d1c1a2",
+  "lockfile_binding": {
+    "raw_cargo_lock_sha256": "d2d336a8316a8dd19bf1aa21ce60040dc142b1eb2d379407a078bbfb1a1ca18a",
+    "reviewed_noesis_lock_projection_sha256": "434cc5e8e38a4c57f35990431d4682974b6cae94893860e1948c8f7cc21ffbca",
+    "authorized_maintenance_edge": "xtask@0.0.0 -> crc32fast@1.5.0",
+    "closed_projection": "The generator rejects every raw lock change except the single authorized existing-package xtask edge before binding the target noesis normal/build graph to the reviewed projection."
+  },
+  "advisory": {
+    "tool": "cargo-audit 0.22.2",
+    "raw_report_sha256": "54b5ad362ac5a35a6010f1ed6b03dcbc29232fafb973153ca0879368d80d6e90",
+    "database_commit": "69f93e1d081d8b6fbee010e48f0b5e0d13661415",
+    "database_updated": "2026-08-12T12:42:29+02:00",
+    "advisories": 1216,
+    "vulnerabilities": 0,
+    "warnings": 0,
+    "status": "accepted"
+  },
+  "targets": [
+    {
+      "target": "aarch64-apple-darwin",
+      "packages": 92,
+      "dependency_edges": 155,
+      "unsafe_exceptions": 61,
+      "first_party_unsafe_constructs": 0,
+      "total_document_bytes": 83329,
+      "documents": {
+        "advisory-report.json": "d48ed3c56c9bfcbb66a7c96bcb041127dd0aa6141c5140fd88e36f3e6fe4c650",
+        "dependency-lock.json": "c55e19a78f18e9dbac77fc3a4ac63f4257afd3895b45a3b8ece700e09ea94f84",
+        "license-report.json": "7a445ce8b001e56ef64f22c886591ba96803b92a6fc1830046bf509d4a6a9779",
+        "sbom.cdx.json": "9bcfdfe5fa585e99ce205282064cb5a2d2191798b0c1e2cafc8a9e86503f1b6f",
+        "unsafe-inventory.json": "33c89db959e19b764e1540f299b9ff0cea78473c6e625aed5b00c018f4c4644a"
+      }
+    },
+    {
+      "target": "x86_64-pc-windows-msvc",
+      "packages": 96,
+      "dependency_edges": 160,
+      "unsafe_exceptions": 62,
+      "first_party_unsafe_constructs": 0,
+      "total_document_bytes": 86968,
+      "documents": {
+        "advisory-report.json": "d48ed3c56c9bfcbb66a7c96bcb041127dd0aa6141c5140fd88e36f3e6fe4c650",
+        "dependency-lock.json": "fc5afc07eacd605b5787e257eb38a93be9b4ec3a8b9a5bab725e81518f827ec0",
+        "license-report.json": "f5eb579d23b8ff5f3c9eed2271fcb8552a18e4719349ab6341d029077354804f",
+        "sbom.cdx.json": "f4dc8174e3cae16aefea5903453ddde92d75e9028f3050244aa03e401ab3bac2",
+        "unsafe-inventory.json": "6539b445e4b448a493e8d75f61a5b8798b4c8f12012183efd8ec6c97f2a2270c"
+      }
+    },
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "packages": 100,
+      "dependency_edges": 174,
+      "unsafe_exceptions": 68,
+      "first_party_unsafe_constructs": 0,
+      "total_document_bytes": 91203,
+      "documents": {
+        "advisory-report.json": "d48ed3c56c9bfcbb66a7c96bcb041127dd0aa6141c5140fd88e36f3e6fe4c650",
+        "dependency-lock.json": "fc3d6d122b1e7fb861e4cbab6cc5699c52a5196fcc2c26c002839c1964007879",
+        "license-report.json": "ea2faefa9cdbc06bb2bfd40e12a34cd11a15b8f6874a7998b6458690e463a3e4",
+        "sbom.cdx.json": "73dcab0692f07e85debbb0c4269996f63e8db6998f5effada2aef03d930321d6",
+        "unsafe-inventory.json": "8057bc3854b8a473ec1a2ff159ff9d0770120599af6bff1b8d794b6b46652df6"
+      }
+    }
+  ],
+  "replay": {
+    "all_targets_regenerated_after_first_party_unsafe_fix": true,
+    "byte_identical": true
+  },
+  "privacy": {
+    "absolute_source_paths_in_documents": false,
+    "registry_roots_in_documents": false,
+    "credentials_in_documents": false,
+    "source_contents_in_documents": false
+  }
+}

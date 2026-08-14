@@ -1,0 +1,14 @@
+test_supply_generator_rejects_first_party_unsafe (scripts.tests.test_g8_local_release_candidate_contract.G8LocalReleaseCandidateContractTest) ... FAIL
+
+======================================================================
+FAIL: test_supply_generator_rejects_first_party_unsafe (scripts.tests.test_g8_local_release_candidate_contract.G8LocalReleaseCandidateContractTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<workspace>/scripts/tests/test_g8_local_release_candidate_contract.py", line 124, in test_supply_generator_rejects_first_party_unsafe
+    generator["build_unsafe_inventory"](
+AssertionError: EvidenceError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.005s
+
+FAILED (failures=1)

@@ -1,0 +1,36 @@
+issue=https://github.com/smutti/codenoesis/issues/186
+tested_product_head=764bb9f00063134d75fdf825d542b17fca7e6d99
+environment=Darwin 25.5.0 arm64; macOS 26.5.2
+rustc=1.97.1 (8bab26f4f 2026-07-14)
+cargo=1.97.1 (c980f4866 2026-06-30)
+python=3.9.6
+actionlint=1.7.12
+
+command=actionlint -no-color
+exit=0
+command=python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json
+exit=0
+command=cargo fmt --all --check
+exit=0
+command=cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+exit=0
+command=cargo test --workspace --all-targets --all-features --locked
+exit=0
+rust_workspace_tests_passed=646
+command=cargo test --workspace --doc --all-features --locked
+exit=0
+rust_doctests_passed=0
+command=python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+exit=0
+python_tests_passed=367
+command=python3 scripts/validate_benchmark_assets.py
+exit=0
+command=cargo bench --workspace --all-features --no-run --locked
+exit=0
+
+complete_gate=passed
+raw_local_log_bytes=78611
+raw_local_log_sha256=af4507eeaa34d658194f9cb93af91a51fb66fbf013283ad532b7051fca7e2fad
+known_unrelated_warning=toml 1.1.4+spec-1.1.0 semver metadata is ignored
+post_merge_three_platform_attestation=not_run
+verified=false
