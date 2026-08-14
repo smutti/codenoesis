@@ -1,0 +1,79 @@
+{
+  "schema_version": "codenoesis.implementation-observation/v1",
+  "issue": 182,
+  "requirements": [
+    "FR-CFG-001",
+    "FR-REL-002",
+    "FR-CLI-008"
+  ],
+  "requirement_status": "Proposed branch-scoped candidate",
+  "planning_item": "G1a",
+  "slice": "S14",
+  "risk": "high",
+  "exact_base_sha": "a525126228205901885038586e21d30db745b1ec",
+  "observed_head_sha": "03a72ca52886dcd9baf0246cee3c231e2bdeb5b4",
+  "branch": "codex/182-g1a-local-distribution",
+  "checkpoint_sha": "0b9df6d2dffd08ab2e1ab848b16f8fa7fc3c56e5",
+  "red_evidence_sha": "ed62013a05d69a2ff0b845a107ba2b8be7d24775",
+  "product_sha": "277e101268e662acb2feb57901dad703f2d3bde6",
+  "correction_shas": [
+    "23ae612f2ca63f9d62c960d6264d3ece27f2fdb6",
+    "daeaf55255cb90e181266775c6d7708f582a2088",
+    "03a72ca52886dcd9baf0246cee3c231e2bdeb5b4"
+  ],
+  "actual_changed_paths": {
+    "command": "git diff --name-only a525126228205901885038586e21d30db745b1ec..03a72ca52886dcd9baf0246cee3c231e2bdeb5b4 | sort",
+    "count": 53,
+    "sha256": "3fbe95b306b27690c543499b864a23893d631f6ee689ff3814ff9f452df89c97",
+    "outside_authorized_or_recorded_corrections": []
+  },
+  "red": {
+    "governance_tests": 15,
+    "configuration_log_sha256": "01ced2da80bbfc4839aa98dab37d52dbb5cb55251dde7d4b6438adcb7ccabfd8",
+    "distribution_log_sha256": "1da3f52474dda7cef6e23da4f46e119d2a06dc7973520947312704be806e9876"
+  },
+  "green": {
+    "complete_gate": "complete-gate-local.json",
+    "actual_binary_smoke": "actual-binary-smoke-local.json",
+    "configuration_contract_and_e2e": "Green",
+    "distribution_contract_and_e2e": "Green",
+    "fifty_constructions": "Green",
+    "ten_schedules": "Green",
+    "boundary_and_failure_atomicity": "Green",
+    "clean_install_preflight_uninstall": "Green"
+  },
+  "corrections": [
+    "round 1: preserve immutable G0 checkpoint records while allowing later lifecycle governance",
+    "round 2: apply pinned rustfmt output to the two G1a acceptance tests and update their G1 bundle records",
+    "round 3: accept the authorized xtask to codenoesis-contracts first-party architecture edge",
+    "round 4: retain the rejected transitive bundle-digest attempt without committing bundle changes",
+    "round 5: preserve immutable R16/R17 bundles and classify mutable governance records historically"
+  ],
+  "immutable_protected_artifacts": {
+    "r16_bundle_file_sha256": "3656d6c009b129f5504320e10c3886c48ac9a4adbe40e78129a48b49c655805b",
+    "r17_bundle_file_sha256": "7ddb828f2c637ffba3652dfc2c36d76a63e5351ac954b6c390b3e47663499bc0",
+    "g0_bundle_file_sha256": "e29d6484cc845c45ffd37f36b0a884dff8e7c92f15da9ca43c2e3dfb4f08c97e"
+  },
+  "ai_participation": {
+    "agent": "OpenAI Codex coding agent",
+    "model": "not exposed by runtime",
+    "policy_sha256": "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993",
+    "run_identifier": "issue-182-maintainer-supervised-interactive",
+    "duration": "not retained by runtime",
+    "cost": "not exposed by runtime"
+  },
+  "pending_external_evidence": [
+    "base-controlled Linux x86_64 CI",
+    "base-controlled macOS arm64 CI",
+    "base-controlled Windows x86_64 CI",
+    "independent review",
+    "protected manual merge"
+  ],
+  "known_limitations": [
+    "unsigned staged directory only",
+    "no archive, installer, package repository, update channel, server artifact, signing, attestation, SBOM, publication, deployment, or support window",
+    "local smoke observes only aarch64-apple-darwin",
+    "requirements remain Proposed until protected manual merge",
+    "the package is not Verified, supported, signed, published, reproducible, release-provenanced, or GA"
+  ]
+}

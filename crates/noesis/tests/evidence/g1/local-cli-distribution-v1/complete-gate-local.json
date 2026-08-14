@@ -1,0 +1,74 @@
+{
+  "schema_version": "codenoesis.complete-gate-observation/v1",
+  "issue": 182,
+  "requirements": [
+    "FR-CFG-001",
+    "FR-REL-002",
+    "FR-CLI-008"
+  ],
+  "requirement_status": "Proposed branch-scoped candidate",
+  "observed_head_sha": "03a72ca52886dcd9baf0246cee3c231e2bdeb5b4",
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "python": "3.9.6",
+    "actionlint": "1.7.12",
+    "features": "workspace all targets and all features",
+    "network_or_model_provider": "not used"
+  },
+  "commands": [
+    {
+      "command": "actionlint -no-color",
+      "exit_status": 0,
+      "duration_seconds": 1
+    },
+    {
+      "command": "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+      "exit_status": 0,
+      "duration_seconds": 0
+    },
+    {
+      "command": "cargo fmt --all --check",
+      "exit_status": 0,
+      "duration_seconds": 1
+    },
+    {
+      "command": "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "exit_status": 0,
+      "duration_seconds": 1
+    },
+    {
+      "command": "cargo test --workspace --all-targets --all-features --locked",
+      "exit_status": 0,
+      "duration_seconds": 519
+    },
+    {
+      "command": "cargo test --workspace --doc --all-features --locked",
+      "exit_status": 0,
+      "duration_seconds": 16
+    },
+    {
+      "command": "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "exit_status": 0,
+      "duration_seconds": 3,
+      "tests": 352
+    },
+    {
+      "command": "python3 scripts/validate_benchmark_assets.py",
+      "exit_status": 0,
+      "duration_seconds": 0
+    },
+    {
+      "command": "cargo bench --workspace --all-features --no-run --locked",
+      "exit_status": 0,
+      "duration_seconds": 3
+    }
+  ],
+  "raw_log": {
+    "bytes": 76406,
+    "sha256": "44236f361988bafdae0de495265f5f0a913225f5cd605193e702bffa1df9e5ff"
+  },
+  "result": "Green local complete gate; base-controlled CI and independent review remain required"
+}
