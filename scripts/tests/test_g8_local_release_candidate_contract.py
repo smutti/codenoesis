@@ -421,6 +421,7 @@ class G8LocalReleaseCandidateContractTest(unittest.TestCase):
         for forbidden in [
             "pull_request:",
             "push:",
+            "ref: ${{ inputs.expected_sha }}",
             "contents: write",
             "packages: write",
             "security-events: write",
@@ -429,6 +430,8 @@ class G8LocalReleaseCandidateContractTest(unittest.TestCase):
             "self-hosted",
         ]:
             self.assertNotIn(forbidden, workflow)
+        self.assertEqual(workflow.count("ref: ${{ github.sha }}"), len(TARGETS) + 1)
+        self.assertEqual(workflow.count("${{ inputs.expected_sha }}"), 1)
 
         ci = CI.read_text(encoding="utf-8")
         self.assertIn("supply-chain:", ci)

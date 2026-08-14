@@ -59,9 +59,9 @@
   },
   "contracts": {
     "decision_0036_sha256": "77f42eac06672a703036842d2cce9e2dee01bd561cafe47653805aeede597b40",
-    "contract_bundle_sha256": "36a6aad5bb10f09341004bad53b9b4079f4e744b8847f669a9eccf32d58ed852",
+    "contract_bundle_sha256": "5a2aab9a1877579a56efdfd9b1b3991e0a1f1e24d518e22ad7a05da54202f57c",
     "supply_policy_sha256": "1dc9a2a18743a696ad26bdec542c797033fa2df27fc1869fb8f0b84f77d1c1a2",
-    "workflow_sha256": "9c0799aa1feb56b056295fceccfd97d8bd78c1775eda82d4fa7e7ee5d3519ec6",
+    "workflow_sha256": "269082c6b679e630a13faca740c27edaa942c224f8933598c4b28489d8e0b8e5",
     "g0_g1a_g2a_public_bytes_changed": false,
     "r0_r17_k1_s7_ontology_or_viewer_bytes_changed": false
   },
@@ -121,8 +121,8 @@
   },
   "corrections": {
     "budget": 5,
-    "rounds_used": 2,
-    "rounds_remaining": 3,
+    "rounds_used": 3,
+    "rounds_remaining": 2,
     "rounds": [
       {
         "round": 1,
@@ -139,6 +139,15 @@
         "kind": "complete-gate governance compatibility",
         "changes": [
           "Restore inherited issue #182 and issue #184 / Decision 0035 traceability markers in mutable lifecycle documentation."
+        ],
+        "requirement_or_oracle_changed": false
+      },
+      {
+        "round": 3,
+        "kind": "CodeQL trusted-source correction",
+        "changes": [
+          "Keep the exact expected_sha equality guard while checking out only the trusted workflow context github.sha.",
+          "Strengthen the workflow contract against checkout refs derived from workflow_dispatch input."
         ],
         "requirement_or_oracle_changed": false
       }
