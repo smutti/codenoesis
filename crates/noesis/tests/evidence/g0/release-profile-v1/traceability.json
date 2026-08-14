@@ -1,0 +1,138 @@
+{
+  "schema_version": "codenoesis.g0-release-profile-traceability/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/180",
+  "requirement_status": "Proposed branch-scoped candidate",
+  "planning_item": "G0",
+  "slice": "S14",
+  "risk": "critical",
+  "tested_head": "75db38aa2583ccf269a94651dcfaf7a7ec917575",
+  "requirements": {
+    "FR-REL-001": {
+      "tests": [
+        "g0::tests::fr_rel_001_exact_limits_accept_maximum_and_reject_plus_one",
+        "g0::tests::fr_rel_001_malformed_and_private_registries_fail_closed",
+        "conf_fr_rel_001_embedded_registry_matches_reviewed_fixture",
+        "conf_fr_rel_001_each_target_matches_exact_golden",
+        "pt_fr_rel_001_fifty_constructions_and_ten_schedules_are_identical",
+        "sec_fr_rel_001_invalid_private_and_oversized_registry_fails_closed",
+        "e2e_fr_rel_001_reports_bound_profile"
+      ],
+      "evidence": [
+        "red-observation-local.json",
+        "focused-green.log",
+        "local-observation.log",
+        "complete-gate-summary.log"
+      ]
+    },
+    "FR-CLI-007": {
+      "tests": [
+        "conf_fr_cli_007_unknown_and_unsupported_are_strict_error_v25",
+        "s4_root_argument_tests::pt_fr_cli_007_g0_profile_accepts_fifty_pair_orderings",
+        "s4_root_argument_tests::sec_fr_cli_007_g0_profile_argument_matrix_fails_closed",
+        "e2e_fr_rel_001_reports_bound_profile"
+      ],
+      "evidence": [
+        "red.log",
+        "focused-green.log",
+        "local-observation.log"
+      ]
+    },
+    "DR-ART-001": {
+      "tests": [
+        "scripts.tests.test_g0_release_profile_contract.G0ReleaseProfileContractTest.test_exact_target_goldens_are_canonical_and_private",
+        "conf_fr_rel_001_each_target_matches_exact_golden"
+      ],
+      "evidence": [
+        "implementation-observation-local.json",
+        "focused-green.log"
+      ]
+    },
+    "NFR-PORT-001": {
+      "tests": [
+        "scripts.tests.test_g0_release_profile_contract.G0ReleaseProfileContractTest.test_closed_registry_and_platform_matrix",
+        "conf_fr_rel_001_each_target_matches_exact_golden"
+      ],
+      "evidence": [
+        "implementation-observation-local.json",
+        "complete-gate-summary.log"
+      ],
+      "remaining_evidence": "base-controlled Linux x86_64, macOS arm64, and Windows x86_64 PR checks"
+    },
+    "NFR-CMP-001": {
+      "tests": [
+        "scripts.tests.test_g0_release_profile_contract.G0ReleaseProfileContractTest.test_governance_reconciles_r17_without_claiming_release",
+        "scripts.tests.test_g0_release_profile_contract.G0ReleaseProfileContractTest.test_contract_bundle"
+      ],
+      "evidence": [
+        "complete-gate-summary.log"
+      ]
+    },
+    "NFR-SEC-001": {
+      "tests": [
+        "g0::tests::fr_rel_001_malformed_and_private_registries_fail_closed",
+        "sec_fr_rel_001_invalid_private_and_oversized_registry_fails_closed",
+        "s4_root_argument_tests::sec_fr_cli_007_g0_profile_argument_matrix_fails_closed"
+      ],
+      "evidence": [
+        "focused-green.log",
+        "local-observation.log"
+      ]
+    },
+    "NFR-SEC-005": {
+      "tests": [
+        "e2e_fr_rel_001_reports_bound_profile",
+        "s4_root_argument_tests::sec_fr_cli_007_g0_profile_argument_matrix_fails_closed"
+      ],
+      "evidence": [
+        "local-observation.log",
+        "complete-gate-summary.log"
+      ]
+    },
+    "NFR-TST-001": {
+      "tests": [
+        "scripts.tests.test_g0_release_profile_contract.G0ReleaseProfileContractTest.test_acceptance_contract_records_exact_red",
+        "scripts.tests.test_g0_release_profile_contract.G0ReleaseProfileContractTest.test_contract_bundle"
+      ],
+      "evidence": [
+        "red-observation-local.json",
+        "focused-green.log",
+        "complete-gate-summary.log"
+      ]
+    },
+    "NFR-TST-002": {
+      "tests": [
+        "e2e_fr_rel_001_reports_bound_profile",
+        "conf_fr_rel_001_each_target_matches_exact_golden"
+      ],
+      "evidence": [
+        "focused-green.log",
+        "local-observation.log"
+      ]
+    },
+    "INV-BND-001": {
+      "tests": [
+        "g0::tests::fr_rel_001_exact_limits_accept_maximum_and_reject_plus_one",
+        "sec_fr_rel_001_invalid_private_and_oversized_registry_fails_closed",
+        "conf_fr_cli_007_unknown_and_unsupported_are_strict_error_v25"
+      ],
+      "evidence": [
+        "focused-green.log",
+        "complete-gate-summary.log"
+      ]
+    },
+    "OD-SBX-001-bounded-subset": {
+      "tests": [
+        "scripts.tests.test_g0_release_profile_contract.G0ReleaseProfileContractTest.test_closed_registry_and_platform_matrix",
+        "conf_fr_rel_001_each_target_matches_exact_golden",
+        "conf_fr_cli_007_unknown_and_unsupported_are_strict_error_v25"
+      ],
+      "evidence": [
+        "implementation-observation-local.json",
+        "local-observation.log"
+      ]
+    }
+  },
+  "release_signing_publication_authority": "none",
+  "independent_review": "pending",
+  "verification": "not Verified"
+}

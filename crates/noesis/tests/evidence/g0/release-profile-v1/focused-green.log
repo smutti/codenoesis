@@ -1,0 +1,65 @@
+checkpoint=b4631d86f9f22c6b4760efe96577e1ffac1ccfb8
+implementation=75db38a
+$ python3 -m unittest scripts.tests.test_g0_release_profile_contract -v
+test_acceptance_contract_records_exact_red (scripts.tests.test_g0_release_profile_contract.G0ReleaseProfileContractTest) ... ok
+test_closed_registry_and_platform_matrix (scripts.tests.test_g0_release_profile_contract.G0ReleaseProfileContractTest) ... ok
+test_contract_bundle (scripts.tests.test_g0_release_profile_contract.G0ReleaseProfileContractTest) ... ok
+test_exact_authority_and_bounded_effects (scripts.tests.test_g0_release_profile_contract.G0ReleaseProfileContractTest) ... ok
+test_exact_target_goldens_are_canonical_and_private (scripts.tests.test_g0_release_profile_contract.G0ReleaseProfileContractTest) ... ok
+test_governance_reconciles_r17_without_claiming_release (scripts.tests.test_g0_release_profile_contract.G0ReleaseProfileContractTest) ... ok
+test_schemas_freeze_limits_and_failures (scripts.tests.test_g0_release_profile_contract.G0ReleaseProfileContractTest) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.004s
+
+OK
+$ cargo test -p codenoesis-contracts --lib g0::tests --locked
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running unittests src/lib.rs (target/debug/deps/codenoesis_contracts-0ac9ecfa156775ac)
+
+running 2 tests
+test g0::tests::fr_rel_001_exact_limits_accept_maximum_and_reject_plus_one ... ok
+test g0::tests::fr_rel_001_malformed_and_private_registries_fail_closed ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 22 filtered out; finished in 0.00s
+
+$ cargo test -p codenoesis-contracts --test g0_release_profile --locked
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running tests/g0_release_profile.rs (target/debug/deps/g0_release_profile-f0d3419c19febf48)
+
+running 5 tests
+test conf_fr_rel_001_embedded_registry_matches_reviewed_fixture ... ok
+test sec_fr_rel_001_invalid_private_and_oversized_registry_fails_closed ... ok
+test conf_fr_cli_007_unknown_and_unsupported_are_strict_error_v25 ... ok
+test conf_fr_rel_001_each_target_matches_exact_golden ... ok
+test pt_fr_rel_001_fifty_constructions_and_ten_schedules_are_identical ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+$ cargo test -p noesis --bin noesis fr_cli_007_g0_profile --locked
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
+     Running unittests src/main.rs (target/debug/deps/noesis-25874fc77ce7e858)
+
+running 2 tests
+test s4_root_argument_tests::sec_fr_cli_007_g0_profile_argument_matrix_fails_closed ... ok
+test s4_root_argument_tests::pt_fr_cli_007_g0_profile_accepts_fifty_pair_orderings ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+
+$ cargo test -p noesis --test e2e_fr_rel_001_release_profile e2e_fr_rel_001_reports_bound_profile --locked -- --exact --nocapture
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running tests/e2e_fr_rel_001_release_profile.rs (target/debug/deps/e2e_fr_rel_001_release_profile-5951f0bc1a42cfa7)
+
+running 1 test
+test e2e_fr_rel_001_reports_bound_profile ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.08s
+
+$ cargo fmt --all --check
+$ cargo clippy -p codenoesis-contracts -p noesis --all-targets --all-features --locked -- -D warnings
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.08s
