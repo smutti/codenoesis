@@ -61,6 +61,14 @@ fn e2e_fr_ctx_001_function_context_and_navigation() {
 
     let context_output = repository.query_context(ROOT_CALLABLE_ID);
     assert_success(&context_output, "R17 function-context query");
+    for schedule in 1..10 {
+        let replay = repository.query_context(ROOT_CALLABLE_ID);
+        assert_success(&replay, "R17 function-context replay");
+        assert_eq!(
+            replay.stdout, context_output.stdout,
+            "context schedule {schedule}"
+        );
+    }
     let context = parse_single_document(&context_output.stdout);
     let oracle = expected_function_context();
     assert_eq!(context["schema_version"], oracle["context_schema_version"]);
@@ -184,5 +192,31 @@ fn e2e_fr_ctx_001_function_context_and_navigation() {
         "codenoesis.portable-graph/v9"
     );
     assert!(repository.explorer.join("index.html").is_file());
+    let explorer_files = [
+        "portable-graph.json",
+        "index.html",
+        "explorer-manifest.json",
+    ];
+    let expected_explorer = explorer_files.map(|path| {
+        fs::read(repository.explorer.join(path)).expect("read reviewed R17 explorer artifact")
+    });
+    for schedule in 1..10 {
+        let output = repository
+            .root
+            .join(format!("explorer-replay-{schedule:02}"));
+        let replay = repository.explore_context_at(&output);
+        assert_success(&replay, "R17 LocalExplorerV10 replay");
+        assert_eq!(
+            replay.stdout, explore.stdout,
+            "explorer manifest schedule {schedule}"
+        );
+        for (index, path) in explorer_files.iter().enumerate() {
+            assert_eq!(
+                fs::read(output.join(path)).expect("read replayed R17 explorer artifact"),
+                expected_explorer[index],
+                "explorer artifact {path} schedule {schedule}"
+            );
+        }
+    }
     assert!(!repository.build_sentinel().exists());
 }

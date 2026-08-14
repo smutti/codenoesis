@@ -144,6 +144,15 @@ impl FunctionContextV1 {
     ) -> Result<Self, FunctionContextError> {
         validate_stored_snapshot_semantic_v18(semantic, head)
             .map_err(|_| FunctionContextError::InvalidSnapshot)?;
+        Self::from_validated_semantic(semantic, head, requested_id)
+    }
+
+    #[allow(clippy::too_many_lines)]
+    fn from_validated_semantic(
+        semantic: &Value,
+        head: &LocalSnapshotHead,
+        requested_id: &str,
+    ) -> Result<Self, FunctionContextError> {
         let graph = semantic
             .get("knowledge_graph")
             .and_then(Value::as_object)
@@ -1176,9 +1185,176 @@ fn safe_content_security_policy(value: &str) -> bool {
 
 #[cfg(test)]
 mod tests {
+    use codenoesis_domain::storage::{
+        GRAPH_HASH_DOMAIN_V15, LocalSnapshotHead, SNAPSHOT_HASH_DOMAIN_V18, SemanticHash,
+        SnapshotId,
+    };
+    use codenoesis_domain::{ObjectId, RepositoryIdentity};
     use serde_json::json;
 
-    use super::display_signature;
+    use super::{
+        FunctionContextError, FunctionContextV1, display_signature, safe_content_security_policy,
+        safe_viewer,
+    };
+
+    const ROOT_ID: &str = "entity:callable";
+
+    #[test]
+    fn ft_fr_ctx_001_structural_failures_are_typed_and_closed() {
+        assert_eq!(
+            project(&reviewed_semantic(), "entity:missing").unwrap_err(),
+            FunctionContextError::NotFound
+        );
+
+        let mut invalid_root = reviewed_semantic();
+        entity_mut(&mut invalid_root, ROOT_ID)["kind"] = json!("rust.module");
+        assert_eq!(
+            project(&invalid_root, ROOT_ID).unwrap_err(),
+            FunctionContextError::InvalidRootKind
+        );
+
+        let mut missing_signature = reviewed_semantic();
+        relationships_mut(&mut missing_signature)
+            .retain(|relationship| relationship["kind"] != "HAS_SIGNATURE");
+        assert_eq!(
+            project(&missing_signature, ROOT_ID).unwrap_err(),
+            FunctionContextError::MissingSignature
+        );
+
+        let mut duplicate_signature = reviewed_semantic();
+        relationships_mut(&mut duplicate_signature).push(json!({
+            "id": "relationship:signature-duplicate",
+            "kind": "HAS_SIGNATURE",
+            "source": ROOT_ID,
+            "target": "entity:signature"
+        }));
+        assert_eq!(
+            project(&duplicate_signature, ROOT_ID).unwrap_err(),
+            FunctionContextError::DuplicateSignature
+        );
+
+        let mut dangling_signature = reviewed_semantic();
+        relationship_mut(&mut dangling_signature, "relationship:signature")["target"] =
+            json!("entity:missing");
+        assert_eq!(
+            project(&dangling_signature, ROOT_ID).unwrap_err(),
+            FunctionContextError::DanglingReference("entity:missing".to_owned())
+        );
+
+        let mut wrong_signature_subject = reviewed_semantic();
+        entity_mut(&mut wrong_signature_subject, "entity:signature")["subject_id"] =
+            json!("entity:other");
+        assert_eq!(
+            project(&wrong_signature_subject, ROOT_ID).unwrap_err(),
+            FunctionContextError::InvalidRelationship
+        );
+
+        let mut ordinal_gap = reviewed_semantic();
+        entity_mut(&mut ordinal_gap, "entity:parameter")["ordinal"] = json!(1);
+        assert_eq!(
+            project(&ordinal_gap, ROOT_ID).unwrap_err(),
+            FunctionContextError::InvalidParameterOrdinal
+        );
+
+        let mut dangling_evidence = reviewed_semantic();
+        entity_mut(&mut dangling_evidence, ROOT_ID)["evidence_ids"] = json!(["evidence:missing"]);
+        assert_eq!(
+            project(&dangling_evidence, ROOT_ID).unwrap_err(),
+            FunctionContextError::DanglingReference("evidence:missing".to_owned())
+        );
+
+        let mut inconsistent_claim = reviewed_semantic();
+        inconsistent_claim["knowledge_graph"]["claims"] = json!([{
+            "id": "claim:wrong-kind",
+            "subject_kind": "relationship",
+            "subject_id": ROOT_ID,
+            "state": "deterministic_fact",
+            "evidence_ids": []
+        }]);
+        assert_eq!(
+            project(&inconsistent_claim, ROOT_ID).unwrap_err(),
+            FunctionContextError::InvalidRelationship
+        );
+
+        let mut dangling_derivation = reviewed_semantic();
+        dangling_derivation["knowledge_graph"]["local_flow_index"]["derivations"] = json!([{
+            "entity_id": ROOT_ID,
+            "input_claim_ids": ["claim:missing"]
+        }]);
+        assert_eq!(
+            project(&dangling_derivation, ROOT_ID).unwrap_err(),
+            FunctionContextError::DanglingReference("claim:missing".to_owned())
+        );
+
+        let mut malformed = reviewed_semantic();
+        malformed["knowledge_graph"]
+            .as_object_mut()
+            .expect("reviewed graph")
+            .remove("claims");
+        assert_eq!(
+            project(&malformed, ROOT_ID).unwrap_err(),
+            FunctionContextError::InvalidSnapshot
+        );
+    }
+
+    #[test]
+    fn sec_nfr_prv_002_private_fields_and_urls_are_rejected() {
+        let mut private_field = reviewed_semantic();
+        entity_mut(&mut private_field, ROOT_ID)["source_snippet"] = json!("secret()");
+        assert_eq!(
+            project(&private_field, ROOT_ID).unwrap_err(),
+            FunctionContextError::UnsafePayload("source_snippet".to_owned())
+        );
+
+        let mut remote_value = reviewed_semantic();
+        entity_mut(&mut remote_value, ROOT_ID)["documentation"] =
+            json!("https://example.invalid/private");
+        assert_eq!(
+            project(&remote_value, ROOT_ID).unwrap_err(),
+            FunctionContextError::UnsafePayload("url".to_owned())
+        );
+    }
+
+    #[test]
+    fn pt_nfr_det_001_ten_context_schedules_are_byte_identical() {
+        let semantic = reviewed_semantic();
+        let expected = project(&semantic, ROOT_ID)
+            .expect("project reviewed context")
+            .canonical_stdout()
+            .expect("serialize reviewed context");
+        for _schedule in 0..10 {
+            assert_eq!(
+                project(&semantic, ROOT_ID)
+                    .expect("replay reviewed context")
+                    .canonical_stdout()
+                    .expect("serialize replayed context"),
+                expected
+            );
+        }
+    }
+
+    #[test]
+    fn sec_fr_exp_009_viewer_security_checks_reject_active_content() {
+        assert!(safe_viewer(b"<script>const value = 1;</script>\n"));
+        for candidate in [
+            b"<script>fetch('https://example.invalid');</script>".as_slice(),
+            b"<script>element.innerHTML = value;</script>".as_slice(),
+            b"<script>eval('1');</script>".as_slice(),
+            b"<script>const value = '</script>';</script>".as_slice(),
+        ] {
+            assert!(!safe_viewer(candidate));
+        }
+        assert!(safe_content_security_policy(
+            "default-src 'none'; connect-src 'none'; worker-src 'none'; object-src 'none'; frame-src 'none'; form-action 'none'"
+        ));
+        for candidate in [
+            "default-src 'self'; connect-src 'none'; worker-src 'none'; object-src 'none'; frame-src 'none'; form-action 'none'",
+            "default-src 'none'; connect-src https:; worker-src 'none'; object-src 'none'; frame-src 'none'; form-action 'none'",
+            "default-src 'none'; connect-src 'none'; worker-src 'none'; object-src 'none'; frame-src 'none'; form-action 'none'; script-src 'unsafe-inline'",
+        ] {
+            assert!(!safe_content_security_policy(candidate));
+        }
+    }
 
     #[test]
     fn ct_fr_ctx_001_display_signature_uses_only_declared_facts_when_root_has_no_card() {
@@ -1209,5 +1385,124 @@ mod tests {
             display_signature(&root, &signature, &parameters).expect("declared display signature"),
             "pub fn clamp(input: i32, limit: i32) -> i32"
         );
+    }
+
+    fn project(
+        semantic: &serde_json::Value,
+        requested_id: &str,
+    ) -> Result<FunctionContextV1, FunctionContextError> {
+        FunctionContextV1::from_validated_semantic(semantic, &reviewed_head(), requested_id)
+    }
+
+    fn reviewed_semantic() -> serde_json::Value {
+        json!({
+            "repository": {
+                "identity": "urn:codenoesis:fixture:s4-r17-unit",
+                "commit_oid": "0000000000000000000000000000000000000000",
+                "tree_oid": "1111111111111111111111111111111111111111"
+            },
+            "knowledge_graph": {
+                "entities": [
+                    {
+                        "id": ROOT_ID,
+                        "kind": "rust.function",
+                        "name": "clamp",
+                        "properties": {
+                            "declared_signature": "pub fn clamp(input: i32) -> i32"
+                        }
+                    },
+                    {
+                        "id": "entity:parameter",
+                        "kind": "rust.parameter",
+                        "name": "input",
+                        "ordinal": 0,
+                        "subject_id": ROOT_ID,
+                        "properties": {
+                            "declared_type": "i32",
+                            "pattern": "input",
+                            "receiver_state": "not_receiver"
+                        }
+                    },
+                    {
+                        "id": "entity:signature",
+                        "kind": "rust.callable_signature",
+                        "name": "clamp signature",
+                        "subject_id": ROOT_ID,
+                        "properties": {
+                            "return_state": "declared",
+                            "return_type": "i32"
+                        }
+                    }
+                ],
+                "relationships": [
+                    {
+                        "id": "relationship:parameter",
+                        "kind": "HAS_PARAMETER",
+                        "source": "entity:signature",
+                        "target": "entity:parameter"
+                    },
+                    {
+                        "id": "relationship:signature",
+                        "kind": "HAS_SIGNATURE",
+                        "source": ROOT_ID,
+                        "target": "entity:signature"
+                    }
+                ],
+                "claims": [],
+                "evidence": [],
+                "diagnostics": [],
+                "coverage": [],
+                "local_flow_index": {"derivations": []},
+                "constant_evaluation_index": {"derivations": []}
+            }
+        })
+    }
+
+    fn reviewed_head() -> LocalSnapshotHead {
+        let snapshot_hash = "2222222222222222222222222222222222222222222222222222222222222222";
+        LocalSnapshotHead {
+            repository_identity: RepositoryIdentity::parse("urn:codenoesis:fixture:s4-r17-unit")
+                .expect("reviewed repository identity"),
+            snapshot_id: SnapshotId::from_semantic_hash(snapshot_hash)
+                .expect("reviewed snapshot ID"),
+            commit_oid: ObjectId::parse_sha1("0000000000000000000000000000000000000000")
+                .expect("reviewed commit"),
+            snapshot_schema_version: super::R16_SNAPSHOT_VERSION.to_owned(),
+            semantic_hash: SemanticHash::blake3(SNAPSHOT_HASH_DOMAIN_V18, snapshot_hash),
+            graph_semantic_hash: SemanticHash::blake3(
+                GRAPH_HASH_DOMAIN_V15,
+                "3333333333333333333333333333333333333333333333333333333333333333",
+            ),
+            generation: 1,
+            artifacts: Vec::new(),
+        }
+    }
+
+    fn entity_mut<'a>(
+        semantic: &'a mut serde_json::Value,
+        identifier: &str,
+    ) -> &'a mut serde_json::Value {
+        semantic["knowledge_graph"]["entities"]
+            .as_array_mut()
+            .expect("reviewed entities")
+            .iter_mut()
+            .find(|entity| entity["id"] == identifier)
+            .expect("reviewed entity")
+    }
+
+    fn relationships_mut(semantic: &mut serde_json::Value) -> &mut Vec<serde_json::Value> {
+        semantic["knowledge_graph"]["relationships"]
+            .as_array_mut()
+            .expect("reviewed relationships")
+    }
+
+    fn relationship_mut<'a>(
+        semantic: &'a mut serde_json::Value,
+        identifier: &str,
+    ) -> &'a mut serde_json::Value {
+        relationships_mut(semantic)
+            .iter_mut()
+            .find(|relationship| relationship["id"] == identifier)
+            .expect("reviewed relationship")
     }
 }

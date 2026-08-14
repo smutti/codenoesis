@@ -229,11 +229,15 @@ impl MaterializedFunctionContextRepository {
     }
 
     pub fn explore_context(&self) -> Output {
+        self.explore_context_at(&self.explorer)
+    }
+
+    pub fn explore_context_at(&self, output: &Path) -> Output {
         Command::new(env!("CARGO_BIN_EXE_noesis"))
             .args(["explore", "--input"])
             .arg(self.portable.join("portable-graph.json"))
             .arg("--output")
-            .arg(&self.explorer)
+            .arg(output)
             .args(["--explorer-profile", CONTEXT_PROFILE, "--format", "json"])
             .output()
             .expect("launch R17 LocalExplorerV10")

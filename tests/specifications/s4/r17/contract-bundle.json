@@ -11,7 +11,7 @@
     },
     {
       "path": "crates/noesis/tests/e2e_fr_ctx_001_function_context.rs",
-      "sha256": "5568d5ebb8544e240cd7412cf9b7ec307ddcbbd66358512e92aaa0159b3d6f10"
+      "sha256": "f2e0c62bf4ce79307a4f99b0f11c396c905a3666218e124264d2139016f1e4ed"
     },
     {
       "path": "crates/noesis/tests/support/mod.rs",
@@ -19,7 +19,7 @@
     },
     {
       "path": "crates/noesis/tests/support/s4_r17.rs",
-      "sha256": "2d9c047b8bb5212f03367d5c904a7fa32fb14429fd1b354cb4ee10ba36d8c3a3"
+      "sha256": "64e9d223693f7467d90da8ff272b5a5d661cd50cd5893bf0ad2c3a2c6d10a826"
     },
     {
       "path": "docs/software/architecture.md",
@@ -86,5 +86,5 @@
       "sha256": "99052438ac575e27213a6ba90d5050eae857fd74fb0d737673a0c094cb9da839"
     }
   ],
-  "bundle_sha256": "9bcf9cf64bc1d26691a075864a80654a46ba8a24eb95425abde98101d524d0ff"
+  "bundle_sha256": "6311874d88127ddc0bdfbadd2e91dc94ef6de65b68ac9114ec6b2825310dd8dc"
 }

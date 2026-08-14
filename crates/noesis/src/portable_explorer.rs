@@ -2851,7 +2851,7 @@ mod tests {
         OutputKind, OwnedFile, PortableExplorerError, publish_files_with,
         read_portable_graph_v3_with, read_portable_graph_v4_with, read_portable_graph_v5_with,
         read_portable_graph_v6_with, read_portable_graph_v7_with, read_portable_graph_v8_with,
-        read_portable_graph_with,
+        read_portable_graph_v9_with, read_portable_graph_with,
     };
 
     const PORTABLE_FIXTURE_SOURCE: &[u8] =
@@ -3371,6 +3371,113 @@ mod tests {
             assert!(output.join("portable-graph.json").is_file());
         }
         fs::remove_dir_all(parent).expect("remove R15 output race fixture");
+    }
+
+    #[test]
+    fn race_nfr_sec_005_r17_mutable_input_is_rejected() {
+        let root = temporary_root("r17-mutable-input");
+        let input = root.join("portable-graph.json");
+        let initial = b"{}\n".to_vec();
+        fs::write(&input, &initial).expect("write R17 race input");
+        let mutation_ran = Cell::new(false);
+        let result = read_portable_graph_v9_with(&input, || {
+            fs::write(&input, b"[]\n").expect("rewrite R17 race input");
+            mutation_ran.set(true);
+        });
+        assert!(mutation_ran.get(), "R17 mutable-input schedule did not run");
+        assert!(matches!(result, Err(PortableExplorerError::R16Contract(_))));
+        fs::remove_dir_all(root).expect("remove R17 race fixture");
+    }
+
+    #[test]
+    fn race_nfr_sec_005_r17_output_replacement_is_rejected_or_blocked() {
+        let parent = temporary_root("r17-output-replacement");
+        let output = parent.join("output");
+        let attacker = parent.join("attacker");
+        let displaced = parent.join("displaced");
+        fs::create_dir(&output).expect("create R17 selected output");
+        fs::create_dir(&attacker).expect("create R17 attacker output");
+        let replaced = Cell::new(false);
+        let result = publish_files_with(
+            &output,
+            OutputKind::R17Explorer,
+            &[
+                OwnedFile::new("portable-graph.json", b"reviewed\n".to_vec()),
+                OwnedFile::new("index.html", b"<script></script>\n".to_vec()),
+                OwnedFile::new("explorer-manifest.json", b"{}\n".to_vec()),
+            ],
+            || {
+                if fs::rename(&output, &displaced).is_ok() {
+                    if fs::rename(&attacker, &output).is_ok() {
+                        replaced.set(true);
+                    } else {
+                        fs::rename(&displaced, &output)
+                            .expect("restore blocked R17 output replacement");
+                    }
+                }
+            },
+        );
+        if replaced.get() {
+            assert!(matches!(
+                result,
+                Err(PortableExplorerError::UnsafeOutput { .. })
+            ));
+            assert!(directory_is_empty(&output));
+            assert!(directory_is_empty(&displaced));
+        } else {
+            assert!(result.is_ok());
+            assert!(output.join("portable-graph.json").is_file());
+        }
+        fs::remove_dir_all(parent).expect("remove R17 output race fixture");
+    }
+
+    #[test]
+    fn sec_nfr_sec_005_r17_path_capacity_and_symlink_inputs_fail_closed() {
+        let root = temporary_root("r17-path-capacity");
+        let input = root.join("portable-graph.json");
+        fs::write(&input, b"{}\n").expect("write R17 path input");
+
+        for output in [
+            input.clone(),
+            root.join("selected").join("..").join("escaped"),
+        ] {
+            assert!(matches!(
+                super::validate_r17_explorer_output_root(&input, &output),
+                Err(PortableExplorerError::UnsafeOutput { .. })
+            ));
+        }
+
+        let oversized = root.join("oversized-portable-graph.json");
+        let oversized_file = fs::File::create(&oversized).expect("create oversized R17 input");
+        oversized_file
+            .set_len(super::MAX_R16_PORTABLE_GRAPH_BYTES + 1)
+            .expect("set oversized R17 input length");
+        assert!(matches!(
+            super::read_portable_graph_v9(&oversized),
+            Err(PortableExplorerError::R16Contract(
+                codenoesis_contracts::R16ContractError::LimitExceeded {
+                    limit: "portable_graph_bytes",
+                    maximum: super::MAX_R16_PORTABLE_GRAPH_BYTES,
+                    observed
+                }
+            )) if observed == super::MAX_R16_PORTABLE_GRAPH_BYTES + 1
+        ));
+
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::symlink;
+
+            let outside = root.join("outside");
+            fs::create_dir(&outside).expect("create R17 outside directory");
+            let linked_parent = root.join("linked-parent");
+            symlink(&outside, &linked_parent).expect("create R17 parent symlink");
+            assert!(matches!(
+                super::validate_r17_explorer_output_root(&input, &linked_parent.join("explorer")),
+                Err(PortableExplorerError::UnsafeOutput { .. })
+            ));
+        }
+
+        fs::remove_dir_all(root).expect("remove R17 path fixture");
     }
 
     fn temporary_root(label: &str) -> PathBuf {
