@@ -31,6 +31,10 @@ fn ids(records: &Value) -> Vec<&str> {
 }
 
 #[test]
+#[allow(
+    clippy::too_many_lines,
+    reason = "the public R17 journey keeps its reviewed scan-through-explorer oracle in one test"
+)]
 fn e2e_fr_ctx_001_function_context_and_navigation() {
     let repository = MaterializedFunctionContextRepository::fixture();
     let scan = repository.scan();

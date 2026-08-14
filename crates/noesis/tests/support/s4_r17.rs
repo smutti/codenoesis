@@ -25,6 +25,10 @@ pub struct MaterializedFunctionContextRepository {
 }
 
 impl MaterializedFunctionContextRepository {
+    #[allow(
+        clippy::too_many_lines,
+        reason = "deterministic fixture materialization keeps the reviewed Git identity steps together"
+    )]
     pub fn fixture() -> Self {
         let fixture = fixture_root();
         let manifest: Value = serde_json::from_slice(
