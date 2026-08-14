@@ -1,0 +1,105 @@
+{
+  "schema_version": "codenoesis.github-actions-run-evidence/v1",
+  "repository": "smutti/codenoesis",
+  "runs": [
+    {
+      "run_id": 29955409362,
+      "run_attempt": 1,
+      "workflow": "CI",
+      "workflow_path": ".github/workflows/ci.yml",
+      "event": "pull_request",
+      "head_branch": "codex/9-s0-walking-skeleton",
+      "head_sha": "b80c08935c32293f1315ae6dd1b4f1a7f52cd6c5",
+      "tree_sha": "afc89d7fac6b263397c4bdebce7a23ebbc0a8207",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/29955409362",
+      "jobs": [
+        {"job_id": 89043105431, "name": "Rust quality gate", "conclusion": "success"},
+        {"job_id": 89043105498, "name": "Test (macos-latest)", "conclusion": "success"},
+        {"job_id": 89043105541, "name": "Test (ubuntu-latest)", "conclusion": "success"},
+        {"job_id": 89043105554, "name": "Test (windows-latest)", "conclusion": "success"},
+        {"job_id": 89043310601, "name": "CI policy gate", "conclusion": "success"}
+      ]
+    },
+    {
+      "run_id": 31842394871,
+      "run_attempt": 1,
+      "workflow": "CI",
+      "workflow_path": ".github/workflows/ci.yml",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "tree_sha": "a7bc24209a1b372aac66891d648dd88f99d17bb3",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/31842394871",
+      "jobs": [
+        {"job_id": 94901860547, "name": "Rust quality gate", "conclusion": "success"},
+        {"job_id": 94901860582, "name": "Local release supply-chain gate", "conclusion": "success"},
+        {"job_id": 94901860583, "name": "Test (ubuntu-latest)", "conclusion": "success"},
+        {"job_id": 94901860606, "name": "Test (macos-latest)", "conclusion": "success"},
+        {"job_id": 94901860613, "name": "Test (windows-latest)", "conclusion": "success"},
+        {"job_id": 94906830505, "name": "CI policy gate", "conclusion": "success"}
+      ]
+    },
+    {
+      "run_id": 31842394863,
+      "run_attempt": 1,
+      "workflow": "Benchmark integrity",
+      "workflow_path": ".github/workflows/benchmark.yml",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "tree_sha": "a7bc24209a1b372aac66891d648dd88f99d17bb3",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/31842394863",
+      "jobs": [
+        {"job_id": 94901860463, "name": "Compile Rust benchmark targets", "conclusion": "success"},
+        {"job_id": 94901860465, "name": "Validate benchmark contract", "conclusion": "success"},
+        {"job_id": 94902437655, "name": "Benchmark policy gate", "conclusion": "success"}
+      ]
+    },
+    {
+      "run_id": 31842394592,
+      "run_attempt": 1,
+      "workflow": "CodeQL",
+      "workflow_path": "dynamic/github-code-scanning/codeql",
+      "event": "dynamic",
+      "head_branch": "main",
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "tree_sha": "a7bc24209a1b372aac66891d648dd88f99d17bb3",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/31842394592",
+      "downloaded_rust_job_log_sha256": "e6f3ae953eff416ebdf4dd7c3d517f17e5d755ed200dedab0164bd06dfa32067",
+      "downloaded_rust_job_log_bytes": 1867883,
+      "jobs": [
+        {"job_id": 94901863380, "name": "Analyze (actions)", "conclusion": "success"},
+        {"job_id": 94901863406, "name": "Analyze (python)", "conclusion": "success"},
+        {"job_id": 94901863459, "name": "Analyze (rust)", "conclusion": "success"}
+      ]
+    },
+    {
+      "run_id": 31843845301,
+      "run_attempt": 1,
+      "workflow": "Local release candidate",
+      "workflow_path": ".github/workflows/local-release-candidate.yml",
+      "event": "workflow_dispatch",
+      "head_branch": "main",
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "tree_sha": "a7bc24209a1b372aac66891d648dd88f99d17bb3",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/31843845301",
+      "artifact_id": 9235430119,
+      "artifact_digest": "sha256:3c15eabb8fb3125dfe01e48c51c0322231f6e64a733eb72380bad8d86f8ecea8",
+      "attestation_id": 40843198,
+      "attestation_bundle_sha256": "3048d8078a79a00dc75015b36b0ebb00718ebf13cd71258060821d837270f28f",
+      "jobs": [
+        {"job_id": 94906162427, "name": "Validate protected source identity", "conclusion": "success"},
+        {"job_id": 94906188056, "name": "Generate exact target supply evidence", "conclusion": "success"},
+        {"job_id": 94907096937, "name": "Build macOS candidate", "conclusion": "success"},
+        {"job_id": 94907096940, "name": "Build Windows candidate", "conclusion": "success"},
+        {"job_id": 94907097060, "name": "Build Linux candidate", "conclusion": "success"},
+        {"job_id": 94908208375, "name": "Attest immutable candidate subjects", "conclusion": "success"}
+      ]
+    }
+  ]
+}

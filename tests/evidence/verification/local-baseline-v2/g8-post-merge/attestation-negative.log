@@ -1,0 +1,18 @@
+EXPECTED FAIL name=artifact-substitution exit=1
+
+Error: verifying with issuer "sigstore.dev"
+EXPECTED FAIL name=bundle-substitution exit=1
+
+Error: no attestations found with predicate type: https://slsa.dev/provenance/v1
+EXPECTED FAIL name=repo-substitution exit=1
+
+Error: expected SourceRepositoryURI to be https://github.com/smutti/not-codenoesis, got https://github.com/smutti/codenoesis
+EXPECTED FAIL name=signer-substitution exit=1
+
+Error: verifying with issuer "sigstore.dev"
+EXPECTED FAIL name=ref-substitution exit=1
+
+Error: expected SourceRepositoryRef to be refs/heads/not-main, got refs/heads/main
+EXPECTED FAIL name=digest-substitution exit=1
+
+Error: expected SourceRepositoryDigest to be 0000000000000000000000000000000000000000, got 9ecdc3acefd43495daf76b9f2ab69a7bbacff172

@@ -1,0 +1,946 @@
+Generate exact target supply evidence	Set up job	﻿2026-08-14T21:46:18.1666422Z Current runner version: '2.336.0'
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1692497Z ##[group]Runner Image Provisioner
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1693489Z Hosted Compute Agent
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1694083Z Version: 20260729.566
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1694693Z Commit: cf7153fe6e25b664e8693c24944bf2b00355d109
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1695746Z Build Date: 2026-07-29T19:17:02Z
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1696443Z Worker ID: {d1dafe95-0681-49ff-a253-379ee0f7407c}
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1697173Z Azure Region: westus
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1697745Z ##[endgroup]
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1699264Z ##[group]Operating System
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1700033Z Ubuntu
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1700549Z 24.04.4
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1701044Z LTS
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1701625Z ##[endgroup]
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1702181Z ##[group]Runner Image
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1702845Z Image: ubuntu-24.04
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1703430Z Version: 20260810.271.1
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1704486Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260810.271/images/ubuntu/Ubuntu2404-Readme.md
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1706960Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260810.271
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1708044Z ##[endgroup]
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1709146Z ##[group]GITHUB_TOKEN Permissions
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1711398Z Contents: read
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1712053Z Metadata: read
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1712658Z ##[endgroup]
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1715168Z Secret source: Actions
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.1716809Z Prepare workflow directory
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.2059912Z Prepare all required actions
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.2111579Z Getting action download info
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.5839844Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.7366030Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+Generate exact target supply evidence	Set up job	2026-08-14T21:46:18.9581831Z Complete job name: Generate exact target supply evidence
+Generate exact target supply evidence	Check out exact source	﻿2026-08-14T21:46:19.0350664Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0351805Z with:
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0352343Z   ref: 9ecdc3acefd43495daf76b9f2ab69a7bbacff172
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0353041Z   persist-credentials: false
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0353570Z   repository: smutti/codenoesis
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0357364Z   token: ***
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0357811Z   ssh-strict: true
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0358246Z   ssh-user: git
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0358662Z   clean: true
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0359113Z   sparse-checkout-cone-mode: true
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0359636Z   fetch-depth: 1
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0360065Z   fetch-tags: false
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0360520Z   show-progress: true
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0360975Z   lfs: false
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0361384Z   submodules: false
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0361831Z   set-safe-directory: true
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0362339Z   allow-unsafe-pr-checkout: false
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.0363118Z ##[endgroup]
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1343720Z Syncing repository: smutti/codenoesis
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1346955Z ##[group]Getting Git version info
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1348181Z Working directory is '/home/runner/work/codenoesis/codenoesis'
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1349829Z [command]/usr/bin/git version
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1436589Z git version 2.54.0
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1470590Z ##[endgroup]
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1478829Z Temporarily overriding HOME='/home/runner/work/_temp/df435606-4764-467c-945b-9dd12bff45e9' before making global git config changes
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1481222Z Adding repository directory to the temporary git global config as a safe directory
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1486860Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/codenoesis/codenoesis
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1543514Z Deleting the contents of '/home/runner/work/codenoesis/codenoesis'
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1548338Z ##[group]Determining repository object format
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1549773Z ##[endgroup]
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1550695Z ##[group]Initializing the repository
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1554504Z [command]/usr/bin/git init /home/runner/work/codenoesis/codenoesis
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1674686Z hint: Using 'master' as the name for the initial branch. This default branch name
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1676671Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1678425Z hint: to use in all of your new repositories, which will suppress this warning,
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1679732Z hint: call:
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1680382Z hint:
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1681196Z hint: 	git config --global init.defaultBranch <name>
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1682043Z hint:
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1682983Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1684241Z hint: 'development'. The just-created branch can be renamed via this command:
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1685879Z hint:
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1686597Z hint: 	git branch -m <name>
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1687307Z hint:
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1687953Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1689047Z Initialized empty Git repository in /home/runner/work/codenoesis/codenoesis/.git/
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1693295Z [command]/usr/bin/git remote add origin https://github.com/smutti/codenoesis
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1743004Z ##[endgroup]
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1744173Z ##[group]Disabling automatic garbage collection
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1746412Z [command]/usr/bin/git config --local gc.auto 0
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1789265Z ##[endgroup]
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1790969Z ##[group]Setting up auth
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1791867Z Removing SSH command configuration
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1795580Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.1834488Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.2230937Z Removing HTTP extra header
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.2238906Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.2282635Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.2564278Z Removing includeIf entries pointing to credentials config files
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.2570812Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.2610452Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.2883335Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-7eb20403-9be2-43c6-a849-b3aba4e61b0d.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.2927474Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path /home/runner/work/_temp/git-credentials-7eb20403-9be2-43c6-a849-b3aba4e61b0d.config
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.2963595Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-7eb20403-9be2-43c6-a849-b3aba4e61b0d.config
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.3002878Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-7eb20403-9be2-43c6-a849-b3aba4e61b0d.config
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.3038905Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-7eb20403-9be2-43c6-a849-b3aba4e61b0d.config
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.3068544Z ##[endgroup]
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.3069346Z ##[group]Fetching the repository
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:19.3074615Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin 9ecdc3acefd43495daf76b9f2ab69a7bbacff172
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.5485154Z From https://github.com/smutti/codenoesis
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.5487962Z  * branch            9ecdc3acefd43495daf76b9f2ab69a7bbacff172 -> FETCH_HEAD
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.5535285Z [command]/usr/bin/git rev-parse --verify --quiet 9ecdc3acefd43495daf76b9f2ab69a7bbacff172^{object}
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.5565442Z 9ecdc3acefd43495daf76b9f2ab69a7bbacff172
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.5572510Z ##[endgroup]
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.5574126Z ##[group]Determining the checkout info
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.5576411Z ##[endgroup]
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.5578399Z [command]/usr/bin/git sparse-checkout disable
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.5632696Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.5667197Z ##[group]Checking out the ref
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.5669562Z [command]/usr/bin/git checkout --progress --force 9ecdc3acefd43495daf76b9f2ab69a7bbacff172
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6671607Z Note: switching to '9ecdc3acefd43495daf76b9f2ab69a7bbacff172'.
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6673366Z 
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6674717Z You are in 'detached HEAD' state. You can look around, make experimental
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6677033Z changes and commit them, and you can discard any commits you make in this
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6678704Z state without impacting any branches by switching back to a branch.
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6679758Z 
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6680394Z If you want to create a new branch to retain commits you create, you may
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6681822Z do so (now or later) by using -c with the switch command. Example:
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6682662Z 
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6683022Z   git switch -c <new-branch-name>
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6683662Z 
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6684032Z Or undo this operation with:
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6685061Z 
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6685575Z   git switch -
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6686152Z 
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6686892Z Turn off this advice by setting config variable advice.detachedHead to false
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6687987Z 
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6688702Z HEAD is now at 9ecdc3a [G1b/G8][S14] Add verifiable local release candidates (#187)
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6691854Z ##[endgroup]
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6733937Z [command]/usr/bin/git log -1 --format=%H
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6764621Z 9ecdc3acefd43495daf76b9f2ab69a7bbacff172
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6779782Z ##[group]Removing auth
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6780876Z Removing SSH command configuration
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6782230Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.6821407Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7053164Z Removing HTTP extra header
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7057523Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7099126Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7325784Z Removing includeIf entries pointing to credentials config files
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7328806Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7361262Z includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7363975Z includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7366463Z includeif.gitdir:/github/workspace/.git.path
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7368350Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7373017Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7400092Z /home/runner/work/_temp/git-credentials-7eb20403-9be2-43c6-a849-b3aba4e61b0d.config
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7413892Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-7eb20403\-9be2\-43c6\-a849\-b3aba4e61b0d\.config
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7452585Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7480584Z /home/runner/work/_temp/git-credentials-7eb20403-9be2-43c6-a849-b3aba4e61b0d.config
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7490987Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-7eb20403\-9be2\-43c6\-a849\-b3aba4e61b0d\.config
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7530209Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7563771Z /github/runner_temp/git-credentials-7eb20403-9be2-43c6-a849-b3aba4e61b0d.config
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7573183Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-7eb20403\-9be2\-43c6\-a849\-b3aba4e61b0d\.config
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7622054Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7698538Z /github/runner_temp/git-credentials-7eb20403-9be2-43c6-a849-b3aba4e61b0d.config
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7706643Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-7eb20403\-9be2\-43c6\-a849\-b3aba4e61b0d\.config
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7747883Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7971168Z Removing credentials config '/home/runner/work/_temp/git-credentials-7eb20403-9be2-43c6-a849-b3aba4e61b0d.config'
+Generate exact target supply evidence	Check out exact source	2026-08-14T21:46:20.7979759Z ##[endgroup]
+Generate exact target supply evidence	Install exact advisory scanner	﻿2026-08-14T21:46:20.8212258Z ##[group]Run cargo install cargo-audit --version 0.22.2 --locked
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:20.8214058Z ^[[36;1mcargo install cargo-audit --version 0.22.2 --locked^[[0m
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:20.8258188Z shell: /usr/bin/bash -e {0}
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:20.8259300Z ##[endgroup]
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:20.8842863Z info: syncing channel updates for 1.97.1-x86_64-unknown-linux-gnu
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:21.0052645Z info: latest update on 2026-07-16 for version 1.97.1 (8bab26f4f 2026-07-14)
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:21.0083122Z info: downloading 5 components
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:30.1635264Z     Updating crates.io index
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:30.1867178Z  Downloading crates ...
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:30.2264537Z   Downloaded cargo-audit v0.22.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:30.2518086Z   Installing cargo-audit v0.22.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:30.2519528Z warning: default toolchain implicitly overridden with `1.97.1-x86_64-unknown-linux-gnu` by rustup toolchain file
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:30.2520332Z   |
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:30.2520790Z   = help: use `cargo +stable install` if you meant to use the stable toolchain
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:30.2522025Z   = note: rustup selects the toolchain based on the parent environment and not the environment of the package being installed
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:30.2580595Z     Updating crates.io index
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:30.9422458Z     Updating crates.io index
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.0540884Z  Downloading crates ...
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.0746051Z   Downloaded abscissa_core v0.9.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.0787701Z   Downloaded abscissa_derive v0.9.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.0796775Z   Downloaded addr2line v0.25.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.0882175Z   Downloaded gix-negotiate v0.32.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.0907194Z   Downloaded gix-ignore v0.21.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.0923381Z   Downloaded arrayvec v0.7.6
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.0947521Z   Downloaded autocfg v1.5.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.0971147Z   Downloaded gix-lock v23.0.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.0986654Z   Downloaded home v0.5.12
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1002485Z   Downloaded cmake v0.1.58
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1013969Z   Downloaded gix-quote v0.7.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1026122Z   Downloaded gix-sec v0.14.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1045578Z   Downloaded gix-validate v0.11.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1058480Z   Downloaded indenter v0.3.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1074407Z   Downloaded auditable-extract v0.3.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1084470Z   Downloaded ident_case v1.0.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1093707Z   Downloaded itoa v1.0.18
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1110589Z   Downloaded matchers v0.2.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1122095Z   Downloaded percent-encoding v2.3.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1132105Z   Downloaded gix-hashtable v0.15.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1141934Z   Downloaded clap_lex v1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1155099Z   Downloaded gix-glob v0.26.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1170963Z   Downloaded gix-hash v0.25.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1187001Z   Downloaded gix-traverse v0.58.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1205068Z   Downloaded hyper-rustls v0.27.9
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1220712Z   Downloaded jobserver v0.1.34
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1242241Z   Downloaded cc v1.2.62
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1275900Z   Downloaded gix-features v0.48.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1304030Z   Downloaded http-body-util v0.1.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1322904Z   Downloaded nu-ansi-term v0.50.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1351359Z   Downloaded owo-colors v4.3.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1374206Z   Downloaded borsh v1.6.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1468936Z   Downloaded crc32fast v1.5.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1490249Z   Downloaded gix-index v0.52.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1536052Z   Downloaded gix-pathspec v0.18.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1554851Z   Downloaded gix-worktree-stream v0.33.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1572204Z   Downloaded lock_api v0.4.14
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1589898Z   Downloaded bytes v1.11.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1645876Z   Downloaded gix-object v0.61.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1683907Z   Downloaded gix-odb v0.81.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1728788Z   Downloaded icu_locale_core v2.1.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1820712Z   Downloaded icu_properties v2.1.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1844496Z   Downloaded miniz_oxide v0.8.9
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1872441Z   Downloaded platforms v3.10.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1892772Z   Downloaded crossbeam-epoch v0.9.18
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1917038Z   Downloaded gix-pack v0.71.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.1983483Z   Downloaded gix-packetline v0.21.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2002002Z   Downloaded gix-shallow v0.12.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2012653Z   Downloaded hashbrown v0.15.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2063003Z   Downloaded heapless v0.8.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2103581Z   Downloaded io-close v0.3.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2114227Z   Downloaded aws-lc-rs v1.16.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2223927Z   Downloaded gix-path v0.12.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2243633Z   Downloaded binfarce v0.2.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2260952Z   Downloaded cfg-if v1.0.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2274330Z   Downloaded aho-corasick v1.1.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2335745Z   Downloaded anstyle v1.0.14
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2358348Z   Downloaded heck v0.5.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2369196Z   Downloaded http-body v1.0.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2382256Z   Downloaded futures-io v0.3.32
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2392778Z   Downloaded flate2 v1.1.9
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2454566Z   Downloaded color-eyre v0.6.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2532018Z   Downloaded either v1.15.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2546955Z   Downloaded gix-actor v0.41.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2559544Z   Downloaded gix-commitgraph v0.37.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2575635Z   Downloaded idna_adapter v1.2.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2584776Z   Downloaded rustc-demangle v0.1.27
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2604247Z   Downloaded gix-config-value v0.18.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2617471Z   Downloaded gix-ref v0.64.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2665775Z   Downloaded errno v0.3.14
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2681033Z   Downloaded cvss v2.2.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2773866Z   Downloaded fastrand v2.4.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2774495Z   Downloaded futures-util v0.3.32
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2915820Z   Downloaded deranged v0.5.8
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2929688Z   Downloaded form_urlencoded v1.2.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2937727Z   Downloaded display-error-chain v0.2.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2950535Z   Downloaded getrandom v0.4.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.2989214Z   Downloaded foldhash v0.2.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3001556Z   Downloaded zerofrom-derive v0.1.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3014106Z   Downloaded gix-error v0.2.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3030521Z   Downloaded openssl-probe v0.2.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3041968Z   Downloaded gix v0.84.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3221957Z   Downloaded scopeguard v1.2.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3235778Z   Downloaded shell-words v1.1.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3244817Z   Downloaded gix-worktree v0.53.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3261805Z   Downloaded wasmparser v0.247.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3343043Z   Downloaded is_terminal_polyfill v1.70.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3352211Z   Downloaded proc-macro2 v1.0.106
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3381754Z   Downloaded gix-refspec v0.42.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3398480Z   Downloaded gix-revision v0.46.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3419158Z   Downloaded anstyle-query v1.1.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3433576Z   Downloaded potential_utf v0.1.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3444026Z   Downloaded powerfmt v0.2.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3457780Z   Downloaded utf8_iter v1.0.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3468157Z   Downloaded byteorder v1.5.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3484227Z   Downloaded compression-core v0.4.32
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3494817Z   Downloaded gix-utils v0.3.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3506717Z   Downloaded hash32 v0.3.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3520836Z   Downloaded yoke v0.8.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3538670Z   Downloaded gix-trace v0.1.20
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3548870Z   Downloaded lazy_static v1.5.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3566719Z   Downloaded num-conv v0.2.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3574879Z   Downloaded gix-prompt v0.15.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3586366Z   Downloaded mime v0.3.17
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3599206Z   Downloaded nonempty v0.12.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3611198Z   Downloaded version_check v0.9.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3624679Z   Downloaded gix-revwalk v0.32.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3637018Z   Downloaded zerofrom v0.1.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3646420Z   Downloaded atomic-waker v1.1.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3658218Z   Downloaded quitters v0.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3666202Z   Downloaded rustc-hash v2.1.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3679272Z   Downloaded tinyvec_macros v0.1.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3687803Z   Downloaded unicode-bom v2.0.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3700508Z   Downloaded utf8parse v0.2.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3710250Z   Downloaded auditable-serde v0.9.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3718782Z   Downloaded camino v1.2.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3738582Z   Downloaded gix-submodule v0.31.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3750705Z   Downloaded httparse v1.10.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3775430Z   Downloaded lru-slab v0.1.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3783807Z   Downloaded pin-project-lite v0.2.17
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3842905Z   Downloaded zerovec-derive v0.11.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3858139Z   Downloaded gix-worktree-state v0.31.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3871747Z   Downloaded ipnet v2.12.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3888598Z   Downloaded kstring v2.0.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3911856Z   Downloaded ppv-lite86 v0.2.21
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3926157Z   Downloaded rand_core v0.9.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3940994Z   Downloaded synstructure v0.13.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3953674Z   Downloaded termcolor v1.4.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3967301Z   Downloaded uluru v3.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3975644Z   Downloaded untrusted v0.9.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.3992220Z   Downloaded zeroize v1.8.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4004985Z   Downloaded memmap2 v0.9.10
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4022015Z   Downloaded same-file v1.0.6
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4040315Z   Downloaded shlex v1.3.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4056418Z   Downloaded thread_local v1.1.9
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4074807Z   Downloaded tinystr v0.8.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4098383Z   Downloaded filetime v0.2.28
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4115172Z   Downloaded icu_normalizer v2.1.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4165599Z   Downloaded rand_chacha v0.9.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4179380Z   Downloaded thiserror v2.0.18
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4254915Z   Downloaded anstyle-parse v1.0.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4271017Z   Downloaded async-compression v0.4.42
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4343268Z   Downloaded compression-codecs v0.4.38
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4383053Z   Downloaded crossbeam-channel v0.5.15
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4423030Z   Downloaded displaydoc v0.2.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4453339Z   Downloaded gix-url v0.36.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4466550Z   Downloaded maybe-async v0.2.10
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4494130Z   Downloaded once_cell v1.21.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4519453Z   Downloaded parking_lot_core v0.9.12
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4540314Z   Downloaded quinn-udp v0.5.14
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4557956Z   Downloaded icu_provider v2.1.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4582984Z   Downloaded litemap v0.8.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4605743Z   Downloaded parking_lot v0.12.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4630637Z   Downloaded tempfile v3.27.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4656270Z   Downloaded tokio-rustls v0.26.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4680143Z   Downloaded gix-protocol v0.62.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4711872Z   Downloaded thiserror-impl v2.0.18
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4726576Z   Downloaded tracing-attributes v0.1.31
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4753009Z   Downloaded tracing-log v0.2.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4766491Z   Downloaded clap v4.6.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4864869Z   Downloaded clap_builder v4.6.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4929868Z   Downloaded gix-filter v0.31.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4956022Z   Downloaded log v0.4.29
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.4980616Z   Downloaded rustls-pki-types v1.14.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5006398Z   Downloaded walkdir v2.5.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5024616Z   Downloaded foldhash v0.1.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5037100Z   Downloaded gix-transport v0.57.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5074230Z   Downloaded rustls-platform-verifier v0.7.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5113543Z   Downloaded sharded-slab v0.1.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5147211Z   Downloaded tinyvec v1.11.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5174638Z   Downloaded arc-swap v1.9.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5215583Z   Downloaded backtrace v0.3.76
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5267436Z   Downloaded bitflags v2.11.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5311755Z   Downloaded quote v1.0.45
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5339236Z   Downloaded strsim v0.11.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5352138Z   Downloaded topological-sort v0.2.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5363157Z   Downloaded cfg_aliases v0.2.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5372805Z   Downloaded allocator-api2 v0.2.21
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5398425Z   Downloaded clru v0.6.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5411017Z   Downloaded crossbeam-utils v0.8.21
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5437985Z   Downloaded faster-hex v0.10.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5452964Z   Downloaded gix-command v0.9.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5462866Z   Downloaded gix-discover v0.52.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5478200Z   Downloaded icu_collections v2.1.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5540583Z   Downloaded jiff-static v0.2.28
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5566660Z   Downloaded rustc-stable-hash v0.1.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5582457Z   Downloaded smol_str v0.3.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5598365Z   Downloaded adler2 v2.0.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5611341Z   Downloaded base64 v0.22.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5649768Z   Downloaded block-buffer v0.10.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5660280Z   Downloaded generic-array v0.14.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5674410Z   Downloaded icu_normalizer_data v2.1.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5695116Z   Downloaded memchr v2.8.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5750064Z   Downloaded secrecy v0.10.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5759451Z   Downloaded stable_deref_trait v1.2.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5768719Z   Downloaded tracing-core v0.1.36
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5795833Z   Downloaded zerotrie v0.2.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5835827Z   Downloaded zmij v1.0.21
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5853710Z   Downloaded tame-index v0.26.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5898138Z   Downloaded toml_datetime v0.7.5+spec-1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5910588Z   Downloaded toml v0.9.12+spec-1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5951866Z   Downloaded wait-timeout v0.2.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5967524Z   Downloaded want v0.3.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5976911Z   Downloaded anstream v1.0.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.5997034Z   Downloaded bstr v1.12.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6074900Z   Downloaded canonical-path v2.0.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6082472Z   Downloaded clap_derive v4.6.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6104554Z   Downloaded crossbeam-deque v0.8.6
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6118693Z   Downloaded fnv v1.0.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6127590Z   Downloaded http v1.4.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6163801Z   Downloaded hyper-util v0.1.20
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6234598Z   Downloaded indexmap v2.14.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6278485Z   Downloaded mio v1.2.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6338552Z   Downloaded quinn v0.11.9
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6370540Z   Downloaded rustls v0.23.40
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6489265Z   Downloaded slab v0.4.12
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6502145Z   Downloaded static_assertions v1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6516612Z   Downloaded toml_parser v1.1.2+spec-1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6539382Z   Downloaded auditable-info v0.10.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6548340Z   Downloaded rustls-webpki v0.103.13
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6579069Z   Downloaded rustsec v0.33.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6629701Z   Downloaded toml-span v0.7.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6645822Z   Downloaded dunce v1.0.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6654636Z   Downloaded toml v1.1.2+spec-1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6696597Z   Downloaded gix-diff v0.64.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6725010Z   Downloaded hashbrown v0.16.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6776196Z   Downloaded gimli v0.32.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6844544Z   Downloaded icu_properties_data v2.1.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6948720Z   Downloaded idna v1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.6983307Z   Downloaded prodash v31.0.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7023010Z   Downloaded socket2 v0.6.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7040921Z   Downloaded unicode-ident v1.0.24
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7069887Z   Downloaded url v2.5.8
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7095424Z   Downloaded gix-bitmap v0.3.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7104799Z   Downloaded hyper v1.9.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7171750Z   Downloaded object v0.39.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7284664Z   Downloaded typenum v1.20.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7319955Z   Downloaded h2 v0.4.14
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7385049Z   Downloaded hashbrown v0.17.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7437555Z   Downloaded crypto-common v0.1.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7447042Z   Downloaded tokio-util v0.7.18
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7525300Z   Downloaded tower-http v0.6.10
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7616517Z   Downloaded fs-err v3.3.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7636342Z   Downloaded fs_extra v1.3.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7652357Z   Downloaded cargo-lock v11.0.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7686659Z   Downloaded reqwest v0.13.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7740558Z   Downloaded digest v0.10.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7758934Z   Downloaded getrandom v0.3.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7793773Z   Downloaded quinn-proto v0.11.14
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7860484Z   Downloaded zerovec v0.11.6
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7920552Z   Downloaded zlib-rs v0.6.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.7973333Z   Downloaded tracing-subscriber v0.3.23
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.8058180Z   Downloaded futures-core v0.3.32
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.8072138Z   Downloaded colorchoice v1.0.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.8082382Z   Downloaded futures-task v0.3.32
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.8094443Z   Downloaded zerocopy v0.8.48
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.8318499Z   Downloaded object v0.37.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.8428048Z   Downloaded writeable v0.6.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.8448641Z   Downloaded gix-attributes v0.33.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.8465156Z   Downloaded gix-fs v0.21.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.8481104Z   Downloaded eyre v0.6.12
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.8515340Z   Downloaded equivalent v1.0.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.8525800Z   Downloaded gix-tempfile v23.0.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.8539363Z   Downloaded toml_datetime v1.1.1+spec-1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.8551959Z   Downloaded getrandom v0.2.17
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.8581651Z   Downloaded libc v0.2.186
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.8982434Z   Downloaded encoding_rs v0.8.35
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.9180738Z   Downloaded gix-credentials v0.38.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.9198352Z   Downloaded jiff v0.2.28
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.9365285Z   Downloaded petgraph v0.8.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.9571584Z   Downloaded sha1-checked v0.10.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:31.9631623Z   Downloaded tokio v1.52.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.0083086Z   Downloaded cpufeatures v0.2.17
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.0097553Z   Downloaded fixedbitset v0.5.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.0116943Z   Downloaded futures-sink v0.3.32
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.0125892Z   Downloaded futures-channel v0.3.32
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.0144699Z   Downloaded rustix v1.1.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.0423464Z   Downloaded linux-raw-sys v0.12.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.1049097Z   Downloaded gix-config v0.57.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.1094618Z   Downloaded find-msvc-tools v0.1.9
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.1111107Z   Downloaded winnow v0.7.15
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.1207849Z   Downloaded sync_wrapper v1.0.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.1216486Z   Downloaded rustls-native-certs v0.8.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.1240581Z   Downloaded gix-chunk v0.7.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.1252736Z   Downloaded gix-date v0.15.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.1269063Z   Downloaded tower v0.5.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.1372525Z   Downloaded ring v0.17.14
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.1802443Z   Downloaded unicode-normalization v0.1.25
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.1837491Z   Downloaded serde_json v1.0.149
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.1911035Z   Downloaded time-macros v0.2.27
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.1933798Z   Downloaded serde_derive v1.0.228
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.1965370Z   Downloaded rayon-core v1.13.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2002701Z   Downloaded rayon v1.12.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2100383Z   Downloaded sha1 v0.10.6
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2116995Z   Downloaded serde_spanned v1.1.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2128511Z   Downloaded twox-hash v2.1.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2151784Z   Downloaded winnow v1.0.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2249643Z   Downloaded regex v1.12.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2303618Z   Downloaded yoke-derive v0.8.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2315629Z   Downloaded toml_writer v1.1.1+spec-1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2329277Z   Downloaded regex-automata v0.4.14
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2468566Z   Downloaded subtle v2.6.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2479952Z   Downloaded time-core v0.1.8
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2490916Z   Downloaded semver v1.0.28
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2514895Z   Downloaded syn v2.0.117
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2620268Z   Downloaded time v0.3.47
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2753004Z   Downloaded simd-adler32 v0.3.9
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2773236Z   Downloaded rand v0.9.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2813205Z   Downloaded tower-layer v0.3.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2822759Z   Downloaded tracing v0.1.44
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.2979719Z   Downloaded regex-syntax v0.8.10
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.3047491Z   Downloaded smallvec v1.15.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.3068795Z   Downloaded serde_core v1.0.228
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.3096182Z   Downloaded tower-service v0.3.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.3104106Z   Downloaded try-lock v0.2.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.3113270Z   Downloaded wasmparser v0.207.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.3175379Z   Downloaded serde v1.0.228
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.3210160Z   Downloaded rustversion v1.0.22
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.3238802Z   Downloaded aws-lc-sys v0.40.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.6596060Z    Compiling proc-macro2 v1.0.106
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.6597187Z    Compiling unicode-ident v1.0.24
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.6597800Z    Compiling quote v1.0.45
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.6598171Z    Compiling libc v0.2.186
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.7141666Z    Compiling memchr v2.8.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.8155035Z    Compiling cfg-if v1.0.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:32.8515990Z    Compiling regex-syntax v0.8.10
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:33.6975931Z    Compiling syn v2.0.117
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:33.7921137Z    Compiling aho-corasick v1.1.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:34.0352845Z    Compiling smallvec v1.15.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:34.2706464Z    Compiling once_cell v1.21.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:34.4496255Z    Compiling bytes v1.11.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:35.3395933Z    Compiling regex-automata v0.4.14
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:39.3235747Z    Compiling bstr v1.12.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:40.8206057Z    Compiling stable_deref_trait v1.2.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:40.8566679Z    Compiling thiserror v2.0.18
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:40.9585980Z    Compiling thiserror-impl v2.0.18
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:41.0633476Z    Compiling crossbeam-utils v0.8.21
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:41.2042038Z    Compiling crc32fast v1.5.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:41.3515963Z    Compiling tinyvec_macros v0.1.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:41.3916256Z    Compiling gix-trace v0.1.20
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:41.4546037Z    Compiling tinyvec v1.11.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:42.0822800Z    Compiling gix-validate v0.11.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:42.1456489Z    Compiling parking_lot_core v0.9.12
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:42.2566409Z    Compiling fastrand v2.4.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:42.3385900Z    Compiling bitflags v2.11.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:42.4947830Z    Compiling gix-path v0.12.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:42.6216409Z    Compiling unicode-normalization v0.1.25
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:42.6926187Z    Compiling itoa v1.0.18
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:42.8926229Z    Compiling scopeguard v1.2.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:42.9366039Z    Compiling lock_api v0.4.14
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:43.1376181Z    Compiling gix-utils v0.3.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:43.2046164Z    Compiling crossbeam-channel v0.5.15
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:43.4096465Z    Compiling parking_lot v0.12.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:43.8696176Z    Compiling equivalent v1.0.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:43.9056153Z    Compiling same-file v1.0.6
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:43.9415970Z    Compiling foldhash v0.2.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:44.0167111Z    Compiling allocator-api2 v0.2.21
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:44.1135919Z    Compiling walkdir v2.5.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:44.3328413Z    Compiling prodash v31.0.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:44.3676015Z    Compiling zlib-rs v0.6.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:44.8216253Z    Compiling gix-error v0.2.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:45.2055671Z    Compiling version_check v0.9.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:45.4086341Z    Compiling generic-array v0.14.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:45.4921717Z    Compiling hashbrown v0.17.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:46.2066176Z    Compiling typenum v1.20.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:46.2976416Z    Compiling heapless v0.8.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:46.4373988Z    Compiling byteorder v1.5.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:46.5780288Z    Compiling serde_core v1.0.228
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:46.7495801Z    Compiling hash32 v0.3.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:47.3206188Z    Compiling gix-features v0.48.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:47.4294449Z    Compiling block-buffer v0.10.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:47.5215980Z    Compiling crypto-common v0.1.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:48.6216044Z    Compiling digest v0.10.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:48.7506170Z    Compiling faster-hex v0.10.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:49.1452121Z    Compiling synstructure v0.13.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:49.6478616Z    Compiling cpufeatures v0.2.17
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:49.6815736Z    Compiling sha1 v0.10.6
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:49.9326390Z    Compiling sha1-checked v0.10.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:50.0945540Z    Compiling jiff v0.2.28
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:50.1256047Z    Compiling zerofrom-derive v0.1.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:50.7115984Z    Compiling gix-hash v0.25.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:51.2156587Z    Compiling zerofrom v0.1.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:51.2838050Z    Compiling yoke-derive v0.8.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:51.3175911Z    Compiling pin-project-lite v0.2.17
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:51.3595866Z    Compiling rustix v1.1.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:52.2132546Z    Compiling yoke v0.8.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:52.3646063Z    Compiling gix-hashtable v0.15.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:52.4416143Z    Compiling linux-raw-sys v0.12.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:52.4906630Z    Compiling jobserver v0.1.34
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:52.7475988Z    Compiling zerovec-derive v0.11.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:53.6795837Z    Compiling find-msvc-tools v0.1.9
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:53.8396032Z    Compiling shlex v1.3.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:53.9576004Z    Compiling gix-date v0.15.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:54.2336265Z    Compiling gix-actor v0.41.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:54.6295839Z    Compiling gix-object v0.61.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:56.4315989Z    Compiling cc v1.2.62
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:56.5664628Z    Compiling zerovec v0.11.6
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:57.2064516Z    Compiling displaydoc v0.2.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:57.5826043Z    Compiling memmap2 v0.9.10
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:57.6836197Z    Compiling serde v1.0.228
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:57.8284231Z    Compiling getrandom v0.4.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:57.8535926Z    Compiling cmake v0.1.58
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:57.9402170Z    Compiling serde_derive v1.0.228
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:57.9565746Z    Compiling dunce v1.0.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:57.9916207Z    Compiling futures-core v0.3.32
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:58.0725935Z    Compiling fs_extra v1.3.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:58.2915848Z    Compiling aws-lc-sys v0.40.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:58.3046029Z    Compiling socket2 v0.6.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:59.0335811Z    Compiling mio v1.2.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:59.2756114Z    Compiling zeroize v1.8.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:46:59.3950834Z    Compiling tokio v1.52.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:01.3567114Z    Compiling tempfile v3.27.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:02.1080034Z    Compiling tinystr v0.8.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:02.2496809Z    Compiling gix-fs v0.21.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:02.7352004Z    Compiling gix-chunk v0.7.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:02.8994039Z    Compiling percent-encoding v2.3.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:02.9136121Z    Compiling futures-sink v0.3.32
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:02.9649321Z    Compiling litemap v0.8.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:03.0584474Z    Compiling adler2 v2.0.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:03.1156016Z    Compiling writeable v0.6.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:03.1487105Z    Compiling simd-adler32 v0.3.9
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:03.2760332Z    Compiling miniz_oxide v0.8.9
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:04.0302634Z    Compiling icu_locale_core v2.1.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:04.6983385Z    Compiling gix-tempfile v23.0.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:05.2146378Z    Compiling zerotrie v0.2.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:05.5325931Z    Compiling potential_utf v0.1.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:05.6005995Z    Compiling gix-quote v0.7.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:05.8506169Z    Compiling tracing-core v0.1.36
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:06.3020792Z    Compiling aws-lc-rs v1.16.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:06.4329224Z    Compiling nonempty v0.12.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:06.5462443Z    Compiling icu_properties_data v2.1.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:06.6189942Z    Compiling icu_normalizer_data v2.1.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:06.7075992Z    Compiling icu_collections v2.1.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:06.7953472Z    Compiling icu_provider v2.1.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:07.1069907Z    Compiling http v1.4.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:07.2805263Z    Compiling tracing-attributes v0.1.31
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:08.2227247Z    Compiling slab v0.4.12
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:08.3532222Z    Compiling fnv v1.0.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:08.3908805Z    Compiling tracing v0.1.44
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:08.8158288Z    Compiling gix-commitgraph v0.37.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:08.8595917Z    Compiling rustls-pki-types v1.14.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:08.9625854Z    Compiling gix-glob v0.26.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:09.6367830Z    Compiling indexmap v2.14.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:09.6520318Z    Compiling gix-revwalk v0.32.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:09.7413741Z    Compiling icu_normalizer v2.1.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:09.8949574Z    Compiling icu_properties v2.1.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:10.5043639Z    Compiling http-body v1.0.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:10.5595903Z    Compiling gix-lock v23.0.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:10.9446071Z    Compiling tokio-util v0.7.18
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:11.0026263Z    Compiling rustls v0.23.40
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:11.0826942Z    Compiling futures-io v0.3.32
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:11.2006612Z    Compiling untrusted v0.9.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:11.2656408Z    Compiling httparse v1.10.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:11.4355907Z    Compiling futures-task v0.3.32
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:11.5426671Z    Compiling futures-util v0.3.32
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:11.5735994Z    Compiling idna_adapter v1.2.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:11.6426144Z    Compiling log v0.4.29
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:11.8070625Z    Compiling tower-service v0.3.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:11.8496343Z    Compiling unicode-bom v2.0.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:11.9774746Z    Compiling subtle v2.6.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:12.0192229Z    Compiling utf8_iter v1.0.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:12.0545946Z    Compiling atomic-waker v1.1.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:12.1065701Z    Compiling try-lock v0.2.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:12.1145676Z    Compiling h2 v0.4.14
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:12.1565548Z    Compiling want v0.3.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:12.2623069Z    Compiling idna v1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:14.3811398Z    Compiling flate2 v1.1.9
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:14.6816648Z    Compiling form_urlencoded v1.2.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:14.8422067Z    Compiling futures-channel v0.3.32
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:14.8660934Z    Compiling gix-config-value v0.18.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:15.0416222Z    Compiling static_assertions v1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:15.0766169Z    Compiling shell-words v1.1.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:15.2469944Z    Compiling compression-core v0.4.32
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:15.3115915Z    Compiling compression-codecs v0.4.38
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:15.5406825Z    Compiling gix-command v0.9.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:15.6063969Z    Compiling kstring v2.0.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:15.7701973Z    Compiling hyper v1.9.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:16.0806029Z    Compiling url v2.5.8
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:18.5947094Z    Compiling sync_wrapper v1.0.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:18.6457246Z    Compiling gix-sec v0.14.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:18.7105641Z    Compiling encoding_rs v0.8.35
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:18.8886127Z    Compiling ipnet v2.12.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:19.4115237Z    Compiling base64 v0.22.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:19.7936426Z    Compiling openssl-probe v0.2.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:19.9656250Z    Compiling tower-layer v0.3.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:20.1237835Z    Compiling tower v0.5.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:20.1307639Z    Compiling rustls-native-certs v0.8.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:20.6146217Z    Compiling hyper-util v0.1.20
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:20.8285978Z    Compiling gix-attributes v0.33.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:23.3237038Z    Compiling async-compression v0.4.42
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:23.3315999Z    Compiling http-body-util v0.1.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:23.5407460Z    Compiling semver v1.0.28
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:23.6979781Z    Compiling rustversion v1.0.22
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:23.7453430Z    Compiling zmij v1.0.21
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:23.8448557Z    Compiling tower-http v0.6.10
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:23.8699240Z    Compiling gix-ref v0.64.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:24.1396277Z    Compiling gix-url v0.36.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:24.6306061Z    Compiling gix-packetline v0.21.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:24.9735993Z    Compiling mime v0.3.17
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:25.3676059Z    Compiling winnow v1.0.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:25.4251344Z    Compiling serde_json v1.0.149
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:25.7836107Z    Compiling toml_parser v1.1.2+spec-1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:26.2029164Z    Compiling gix-prompt v0.15.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:26.6146298Z    Compiling gix-revision v0.46.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:27.0575875Z    Compiling gix-traverse v0.58.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:28.0325960Z    Compiling serde_spanned v1.1.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:28.0961560Z    Compiling gix-bitmap v0.3.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:28.3385999Z    Compiling hashbrown v0.16.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:29.0044353Z    Compiling crossbeam-epoch v0.9.18
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:29.0424678Z    Compiling filetime v0.2.28
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:29.1852495Z    Compiling toml_writer v1.1.1+spec-1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:29.3078682Z    Compiling arrayvec v0.7.6
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:29.3121459Z    Compiling rayon-core v1.13.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:29.3766230Z    Compiling object v0.37.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:29.3842227Z    Compiling autocfg v1.5.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:29.4715893Z    Compiling utf8parse v0.2.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:29.5065930Z    Compiling uluru v3.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:29.5235873Z    Compiling anstyle-parse v1.0.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:29.5846016Z    Compiling crossbeam-deque v0.8.6
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:29.6736262Z    Compiling gix-index v0.52.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:29.6805623Z    Compiling fs-err v3.3.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:29.7546484Z    Compiling clru v0.6.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:29.7575652Z    Compiling gix-refspec v0.42.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:29.9736105Z    Compiling gix-credentials v0.38.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:31.2806060Z    Compiling arc-swap v1.9.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:31.7981382Z    Compiling gix-ignore v0.21.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:32.1766333Z    Compiling toml_datetime v0.7.5+spec-1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:32.7026200Z    Compiling owo-colors v4.3.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:32.8364705Z    Compiling gimli v0.32.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:34.0816222Z    Compiling camino v1.2.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:34.2436300Z    Compiling foldhash v0.1.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:34.3947122Z    Compiling eyre v0.6.12
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:34.4926078Z    Compiling anstyle-query v1.1.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:34.5416352Z    Compiling anstyle v1.0.14
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:34.7315961Z    Compiling winnow v0.7.15
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:35.3126047Z    Compiling colorchoice v1.0.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:35.3606161Z    Compiling is_terminal_polyfill v1.70.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:35.3997284Z    Compiling anstream v1.0.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:35.8755850Z    Compiling addr2line v0.25.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:36.0251146Z    Compiling hashbrown v0.15.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:36.3355761Z    Compiling gix-worktree v0.53.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:36.5585962Z    Compiling toml v0.9.12+spec-1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:36.6446554Z    Compiling gix-pack v0.71.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:41.2596227Z    Compiling gix-config v0.57.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:41.4885842Z    Compiling gix-filter v0.31.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:42.8866600Z    Compiling gix-pathspec v0.18.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:45.0105784Z    Compiling gix-shallow v0.12.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:45.7965799Z    Compiling gix-negotiate v0.32.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:45.8915965Z    Compiling wasmparser v0.207.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:46.7855791Z    Compiling maybe-async v0.2.10
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:47.2745945Z    Compiling regex v1.12.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:47.7115873Z    Compiling io-close v0.3.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:47.8169428Z    Compiling indenter v0.3.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:47.9345842Z    Compiling topological-sort v0.2.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:48.0261326Z    Compiling strsim v0.11.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:48.5950274Z    Compiling either v1.15.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:48.7475961Z    Compiling fixedbitset v0.5.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:48.8576535Z    Compiling powerfmt v0.2.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:49.0515850Z    Compiling heck v0.5.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:49.1936040Z    Compiling rustc-demangle v0.1.27
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:49.1968355Z    Compiling lazy_static v1.5.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:49.2416156Z    Compiling clap_lex v1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:49.5146008Z    Compiling binfarce v0.2.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:50.4296158Z    Compiling auditable-extract v0.3.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:50.5805996Z    Compiling backtrace v0.3.76
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:51.7289862Z    Compiling clap_builder v4.6.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:52.1265944Z    Compiling sharded-slab v0.1.7
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:52.6905865Z    Compiling clap_derive v4.6.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:54.3796914Z    Compiling deranged v0.5.8
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:55.7405980Z    Compiling petgraph v0.8.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:56.2635935Z    Compiling rayon v1.12.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:47:58.5845927Z    Compiling auditable-serde v0.9.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:00.3636020Z    Compiling gix-worktree-state v0.31.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:00.9595945Z    Compiling gix-submodule v0.31.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:01.0666069Z    Compiling gix-odb v0.81.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:04.2832628Z    Compiling gix-discover v0.52.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:04.7332818Z    Compiling tracing-log v0.2.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:04.9754238Z    Compiling smol_str v0.3.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:05.1672076Z    Compiling gix-diff v0.64.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:05.3686136Z    Compiling toml_datetime v1.1.1+spec-1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:05.4096667Z    Compiling matchers v0.2.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:05.4935832Z    Compiling toml-span v0.7.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:05.7535725Z    Compiling thread_local v1.1.9
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:05.9686332Z    Compiling num-conv v0.2.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:06.0675900Z    Compiling time-core v0.1.8
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:06.1746432Z    Compiling ident_case v1.0.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:06.2315972Z    Compiling rustc-stable-hash v0.1.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:06.3735780Z    Compiling object v0.39.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:06.4996167Z    Compiling nu-ansi-term v0.50.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:06.9456045Z    Compiling twox-hash v2.1.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:07.0149677Z    Compiling tracing-subscriber v0.3.23
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:07.3923523Z    Compiling abscissa_derive v0.9.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:07.6876427Z    Compiling time v0.3.47
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:08.9839577Z    Compiling toml v1.1.2+spec-1.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:11.1311498Z    Compiling color-eyre v0.6.5
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:13.0856284Z    Compiling auditable-info v0.10.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:13.0948477Z    Compiling cargo-lock v11.0.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:13.8838330Z    Compiling clap v4.6.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:13.9266184Z    Compiling quitters v0.1.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:14.0540179Z    Compiling secrecy v0.10.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:14.1406356Z    Compiling cvss v2.2.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:14.6326155Z    Compiling platforms v3.10.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:15.0776209Z    Compiling wasmparser v0.247.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:16.3451066Z    Compiling wait-timeout v0.2.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:16.6935884Z    Compiling canonical-path v2.0.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:16.8636033Z    Compiling home v0.5.12
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:16.9535843Z    Compiling termcolor v1.4.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:17.3302118Z    Compiling abscissa_core v0.9.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:21.6676036Z    Compiling display-error-chain v0.2.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:44.9797582Z    Compiling rustls-webpki v0.103.13
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:48.3452264Z    Compiling tokio-rustls v0.26.4
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:48.5888674Z    Compiling rustls-platform-verifier v0.7.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:48.5889306Z    Compiling hyper-rustls v0.27.9
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:48.8936643Z    Compiling reqwest v0.13.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:50.6694603Z    Compiling gix-transport v0.57.1
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:50.6695742Z    Compiling tame-index v0.26.3
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:48:56.9366349Z    Compiling gix-protocol v0.62.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:49:00.9149401Z    Compiling gix v0.84.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:49:05.7525910Z    Compiling rustsec v0.33.0
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:49:09.3135874Z    Compiling cargo-audit v0.22.2
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:49:29.8589640Z     Finished `release` profile [optimized] target(s) in 2m 59s
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:49:29.8848796Z   Installing /home/runner/.cargo/bin/cargo-audit
+Generate exact target supply evidence	Install exact advisory scanner	2026-08-14T21:49:29.8855809Z    Installed package `cargo-audit v0.22.2` (executable `cargo-audit`)
+Generate exact target supply evidence	Generate three target evidence sets	﻿2026-08-14T21:49:30.0487995Z ##[group]Run set -euo pipefail
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0488365Z ^[[36;1mset -euo pipefail^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0488703Z ^[[36;1mtest "$(cargo-audit --version)" = "cargo-audit 0.22.2"^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0489128Z ^[[36;1mcargo audit --json > "$RUNNER_TEMP/audit.json"^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0489457Z ^[[36;1mmkdir "$RUNNER_TEMP/supply"^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0489716Z ^[[36;1mfor target in \^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0489950Z ^[[36;1m  aarch64-apple-darwin \^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0490210Z ^[[36;1m  x86_64-pc-windows-msvc \^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0490469Z ^[[36;1m  x86_64-unknown-linux-gnu^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0490702Z ^[[36;1mdo^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0490938Z ^[[36;1m  cargo fetch --locked --target "$target"^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0491310Z ^[[36;1m  cargo metadata --locked --filter-platform "$target" \^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0491731Z ^[[36;1m    --format-version 1 > "$RUNNER_TEMP/metadata-$target.json"^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0492122Z ^[[36;1m  mkdir "$RUNNER_TEMP/supply/$target"^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0492507Z ^[[36;1m  python3 scripts/generate_local_supply_chain_evidence.py \^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0492957Z ^[[36;1m    --metadata "$RUNNER_TEMP/metadata-$target.json" \^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0493287Z ^[[36;1m    --cargo-lock Cargo.lock \^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0493588Z ^[[36;1m    --audit "$RUNNER_TEMP/audit.json" \^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0493893Z ^[[36;1m    --audit-version 0.22.2 \^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0494248Z ^[[36;1m    --policy supply-chain/local-release-policy-v1.json \^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0494619Z ^[[36;1m    --target "$target" \^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0495255Z ^[[36;1m    --output "$RUNNER_TEMP/supply/$target"^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0495555Z ^[[36;1mdone^[[0m
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0534224Z shell: /usr/bin/bash -e {0}
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:30.0534481Z ##[endgroup]
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:32.9489233Z warning: /home/runner/work/codenoesis/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:32.9919681Z  Downloading crates ...
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0397269Z   Downloaded sha2 v0.11.0
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0438527Z   Downloaded getrandom v0.4.3
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0478094Z   Downloaded bitflags v2.13.1
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0525365Z   Downloaded fastrand v2.5.0
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0540678Z   Downloaded thiserror v1.0.69
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0599659Z   Downloaded toml v1.1.4+spec-1.1.0
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0642959Z   Downloaded protobuf-support v3.7.2
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0661670Z   Downloaded streaming-iterator v0.1.9
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0675158Z   Downloaded proc-macro2 v1.0.107
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0707267Z   Downloaded tree-sitter-language v0.1.7
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0727166Z   Downloaded hashlink v0.11.1
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0746588Z   Downloaded const-oid v0.10.2
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0771563Z   Downloaded crypto-common v0.2.2
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0785667Z   Downloaded fallible-streaming-iterator v0.1.9
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0804083Z   Downloaded quote v1.0.47
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0823975Z   Downloaded arrayref v0.3.9
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0837325Z   Downloaded block-buffer v0.12.1
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0850806Z   Downloaded shlex v2.0.1
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0864685Z   Downloaded yaml-rust2 v0.11.0
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0900980Z   Downloaded pkg-config v0.3.33
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.0917262Z   Downloaded memchr v2.8.3
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1002746Z   Downloaded tree-sitter v0.26.11
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1095377Z   Downloaded scip v0.9.0
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1122910Z   Downloaded toml_parser v1.1.3+spec-1.1.0
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1172940Z   Downloaded sha1 v0.11.0
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1201043Z   Downloaded simd-adler32 v0.3.10
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1225299Z   Downloaded zmij v1.0.23
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1243935Z   Downloaded thiserror-impl v1.0.69
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1261766Z   Downloaded toml_writer v1.1.2+spec-1.1.0
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1277998Z   Downloaded digest v0.11.3
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1304488Z   Downloaded cpufeatures v0.3.0
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1320225Z   Downloaded constant_time_eq v0.4.2
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1341876Z   Downloaded fallible-iterator v0.3.0
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1354355Z   Downloaded arraydeque v0.5.1
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1367047Z   Downloaded hybrid-array v0.4.13
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1388826Z   Downloaded arrayvec v0.7.8
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1410057Z   Downloaded regex v1.13.1
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1463958Z   Downloaded serde_core v1.0.229
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1491330Z   Downloaded smallvec v1.15.2
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1506031Z   Downloaded tinyvec v1.12.0
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1532538Z   Downloaded rusqlite v0.40.1
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1601317Z   Downloaded cc v1.3.0
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1630906Z   Downloaded typenum v1.20.1
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.1665941Z   Downloaded libc v0.2.189
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.2111145Z   Downloaded protobuf v3.7.2
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.2223717Z   Downloaded winnow v1.0.4
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.2322484Z   Downloaded serde_json v1.0.151
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.2397402Z   Downloaded vcpkg v0.2.15
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.2951742Z   Downloaded blake3 v1.8.5
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.3032611Z   Downloaded regex-syntax v0.8.11
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.3100404Z   Downloaded tree-sitter-rust v0.24.2
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.3207871Z   Downloaded syn v2.0.119
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.3320688Z   Downloaded regex-automata v0.4.16
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.3463800Z   Downloaded sha1collisiondetection v0.3.4
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.3530598Z   Downloaded tree-sitter-kotlin-ng v1.1.0
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.3827720Z   Downloaded libsqlite3-sys v0.38.1
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.5508477Z  Downloading crates ...
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.5737249Z   Downloaded enumflags2_derive v0.7.12
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.5751633Z   Downloaded enumflags2 v0.7.12
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.5814776Z   Downloaded thiserror v2.0.19
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.5882704Z   Downloaded thiserror-impl v2.0.19
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.5898070Z   Downloaded landlock v0.4.7
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.5926874Z   Downloaded seccompiler v0.5.0
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:33.5963985Z   Downloaded syn v3.0.3
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:45.8550496Z warning: /home/runner/work/codenoesis/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:45.8967846Z  Downloading crates ...
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:45.9243792Z   Downloaded windows-link v0.2.1
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:45.9254515Z   Downloaded winapi-util v0.1.11
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:45.9271830Z   Downloaded windows-targets v0.52.6
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:45.9281885Z   Downloaded atomicwrites v0.4.4
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:45.9453969Z   Downloaded windows_x86_64_msvc v0.52.6
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:45.9585207Z   Downloaded windows-sys v0.61.2
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:46.0226628Z   Downloaded windows-sys v0.52.0
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:46.1854127Z  Downloading crates ...
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:46.2267339Z   Downloaded rustix v0.38.44
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:46.2620584Z   Downloaded windows_x86_64_gnu v0.52.6
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:46.2802118Z   Downloaded linux-raw-sys v0.4.15
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:49:46.3260094Z   Downloaded windows-sys v0.59.0
+Generate exact target supply evidence	Generate three target evidence sets	2026-08-14T21:50:12.0920105Z warning: /home/runner/work/codenoesis/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+Generate exact target supply evidence	Upload immutable supply evidence	﻿2026-08-14T21:50:32.7062764Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:32.7063212Z with:
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:32.7063529Z   name: local-release-supply-9ecdc3acefd43495daf76b9f2ab69a7bbacff172
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:32.7063945Z   path: /home/runner/work/_temp/supply
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:32.7064214Z   if-no-files-found: error
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:32.7064438Z   retention-days: 30
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:32.7064651Z   compression-level: 6
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:32.7065110Z   overwrite: false
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:32.7065360Z   include-hidden-files: false
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:32.7065605Z   archive: true
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:32.7065795Z ##[endgroup]
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:32.8536439Z With the provided path, there will be 15 files uploaded
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:32.8543360Z Artifact name is valid!
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:32.8544038Z Root directory input is valid!
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:33.1683426Z Uploading artifact: local-release-supply-9ecdc3acefd43495daf76b9f2ab69a7bbacff172.zip
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:33.1729442Z Beginning upload of artifact content to blob storage
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:33.6653744Z Uploaded bytes 55637
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:33.7448295Z Finished uploading artifact content to blob storage!
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:33.7449652Z SHA256 digest of uploaded artifact is 3cd0236bb159af42cd92e6212fe6d935e5973cccc95f8448b9b3c172f2536afa
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:33.7450745Z Finalizing artifact upload
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:34.0982723Z Artifact local-release-supply-9ecdc3acefd43495daf76b9f2ab69a7bbacff172 successfully finalized. Artifact ID 9235297414
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:34.0984589Z Artifact local-release-supply-9ecdc3acefd43495daf76b9f2ab69a7bbacff172 has been successfully uploaded! Final size is 55637 bytes. Artifact ID is 9235297414
+Generate exact target supply evidence	Upload immutable supply evidence	2026-08-14T21:50:34.0987595Z Artifact download URL: https://github.com/smutti/codenoesis/actions/runs/31843845301/artifacts/9235297414
+Generate exact target supply evidence	Post Check out exact source	﻿2026-08-14T21:50:34.1196428Z Post job cleanup.
+Generate exact target supply evidence	Post Check out exact source	2026-08-14T21:50:34.2061423Z [command]/usr/bin/git version
+Generate exact target supply evidence	Post Check out exact source	2026-08-14T21:50:34.2106184Z git version 2.54.0
+Generate exact target supply evidence	Post Check out exact source	2026-08-14T21:50:34.2148074Z Temporarily overriding HOME='/home/runner/work/_temp/3d0008af-f662-43a5-ab2a-b03cd3556f78' before making global git config changes
+Generate exact target supply evidence	Post Check out exact source	2026-08-14T21:50:34.2149459Z Adding repository directory to the temporary git global config as a safe directory
+Generate exact target supply evidence	Post Check out exact source	2026-08-14T21:50:34.2162755Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/codenoesis/codenoesis
+Generate exact target supply evidence	Post Check out exact source	2026-08-14T21:50:34.2209594Z Removing SSH command configuration
+Generate exact target supply evidence	Post Check out exact source	2026-08-14T21:50:34.2210420Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Generate exact target supply evidence	Post Check out exact source	2026-08-14T21:50:34.2243252Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Generate exact target supply evidence	Post Check out exact source	2026-08-14T21:50:34.2492677Z Removing HTTP extra header
+Generate exact target supply evidence	Post Check out exact source	2026-08-14T21:50:34.2500611Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Generate exact target supply evidence	Post Check out exact source	2026-08-14T21:50:34.2539904Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Generate exact target supply evidence	Post Check out exact source	2026-08-14T21:50:34.2792291Z Removing includeIf entries pointing to credentials config files
+Generate exact target supply evidence	Post Check out exact source	2026-08-14T21:50:34.2801254Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Generate exact target supply evidence	Post Check out exact source	2026-08-14T21:50:34.2842506Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Generate exact target supply evidence	Complete job	﻿2026-08-14T21:50:34.3251531Z Cleaning up orphan processes

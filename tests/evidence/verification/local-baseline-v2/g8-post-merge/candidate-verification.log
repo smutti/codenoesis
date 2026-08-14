@@ -1,0 +1,110 @@
+VERIFY codenoesis-local-release-candidate-r17-aarch64-apple-darwin-3f1953e7542e62d95bf91b1be653f5573734a2f57bd806c26244ffbbc1e2f10e
+{"archive_sha256":"3f1953e7542e62d95bf91b1be653f5573734a2f57bd806c26244ffbbc1e2f10e","candidate_name":"codenoesis-local-release-candidate-r17-aarch64-apple-darwin-3f1953e7542e62d95bf91b1be653f5573734a2f57bd806c26244ffbbc1e2f10e","checksums_sha256":"fc8093c483a443982078d0caea384478b70ea27fbd341fae0e9f9d19ceeee0b5","evidence":[{"length":351,"path":"evidence/advisory-report.json","schema":"codenoesis.local-advisory-report/v1","sha256":"d48ed3c56c9bfcbb66a7c96bcb041127dd0aa6141c5140fd88e36f3e6fe4c650"},{"length":23319,"path":"evidence/dependency-lock.json","schema":"codenoesis.local-dependency-lock/v1","sha256":"c55e19a78f18e9dbac77fc3a4ac63f4257afd3895b45a3b8ece700e09ea94f84"},{"length":7651,"path":"evidence/license-report.json","schema":"codenoesis.local-license-report/v1","sha256":"7a445ce8b001e56ef64f22c886591ba96803b92a6fc1830046bf509d4a6a9779"},{"length":35542,"path":"evidence/sbom.cdx.json","schema":"CycloneDX-1.6","sha256":"9bcfdfe5fa585e99ce205282064cb5a2d2191798b0c1e2cafc8a9e86503f1b6f"},{"length":16466,"path":"evidence/unsafe-inventory.json","schema":"codenoesis.local-unsafe-inventory/v1","sha256":"33c89db959e19b764e1540f299b9ff0cea78473c6e625aed5b00c018f4c4644a"}],"manifest_sha256":"238886dceb7e253056f2be0ab92a1c1fa085c281ba5c9cace820af1dd6fd536d","profile_id":"local-experimental-r17","publication":false,"release_status":"not-ga","schema_version":"codenoesis.local-release-candidate-verification/v1","signature_verification":"external-gh-required","source_commit":"9ecdc3acefd43495daf76b9f2ab69a7bbacff172","support":"none","target":"aarch64-apple-darwin","verified":true}
+VERIFY codenoesis-local-release-candidate-r17-x86_64-pc-windows-msvc-cb1b9b0f2d64c6e61d53d9296d96487c795f5bb95092ef8a761bf6f8da836a2c
+{"archive_sha256":"cb1b9b0f2d64c6e61d53d9296d96487c795f5bb95092ef8a761bf6f8da836a2c","candidate_name":"codenoesis-local-release-candidate-r17-x86_64-pc-windows-msvc-cb1b9b0f2d64c6e61d53d9296d96487c795f5bb95092ef8a761bf6f8da836a2c","checksums_sha256":"6e4e6e848f3a2059ab39c70873add01fbf002f4710dc3ccf0358e25e22545b14","evidence":[{"length":351,"path":"evidence/advisory-report.json","schema":"codenoesis.local-advisory-report/v1","sha256":"d48ed3c56c9bfcbb66a7c96bcb041127dd0aa6141c5140fd88e36f3e6fe4c650"},{"length":24440,"path":"evidence/dependency-lock.json","schema":"codenoesis.local-dependency-lock/v1","sha256":"fc5afc07eacd605b5787e257eb38a93be9b4ec3a8b9a5bab725e81518f827ec0"},{"length":7962,"path":"evidence/license-report.json","schema":"codenoesis.local-license-report/v1","sha256":"f5eb579d23b8ff5f3c9eed2271fcb8552a18e4719349ab6341d029077354804f"},{"length":37192,"path":"evidence/sbom.cdx.json","schema":"CycloneDX-1.6","sha256":"f4dc8174e3cae16aefea5903453ddde92d75e9028f3050244aa03e401ab3bac2"},{"length":17023,"path":"evidence/unsafe-inventory.json","schema":"codenoesis.local-unsafe-inventory/v1","sha256":"6539b445e4b448a493e8d75f61a5b8798b4c8f12012183efd8ec6c97f2a2270c"}],"manifest_sha256":"7917d1638143e49847dea0c7793c93253852d737d88905ce57015e596efbe536","profile_id":"local-experimental-r17","publication":false,"release_status":"not-ga","schema_version":"codenoesis.local-release-candidate-verification/v1","signature_verification":"external-gh-required","source_commit":"9ecdc3acefd43495daf76b9f2ab69a7bbacff172","support":"none","target":"x86_64-pc-windows-msvc","verified":true}
+VERIFY codenoesis-local-release-candidate-r17-x86_64-unknown-linux-gnu-84ccae6e941d3d60cf3b962bebef22a0792cdabbed2392e1af4d9dcc99d55fb0
+{"archive_sha256":"84ccae6e941d3d60cf3b962bebef22a0792cdabbed2392e1af4d9dcc99d55fb0","candidate_name":"codenoesis-local-release-candidate-r17-x86_64-unknown-linux-gnu-84ccae6e941d3d60cf3b962bebef22a0792cdabbed2392e1af4d9dcc99d55fb0","checksums_sha256":"bf54c368b8184aa0fe29e199b9ae44d60252ff9771476cf3d69a377221aad452","evidence":[{"length":351,"path":"evidence/advisory-report.json","schema":"codenoesis.local-advisory-report/v1","sha256":"d48ed3c56c9bfcbb66a7c96bcb041127dd0aa6141c5140fd88e36f3e6fe4c650"},{"length":25497,"path":"evidence/dependency-lock.json","schema":"codenoesis.local-dependency-lock/v1","sha256":"fc3d6d122b1e7fb861e4cbab6cc5699c52a5196fcc2c26c002839c1964007879"},{"length":8348,"path":"evidence/license-report.json","schema":"codenoesis.local-license-report/v1","sha256":"ea2faefa9cdbc06bb2bfd40e12a34cd11a15b8f6874a7998b6458690e463a3e4"},{"length":38877,"path":"evidence/sbom.cdx.json","schema":"CycloneDX-1.6","sha256":"73dcab0692f07e85debbb0c4269996f63e8db6998f5effada2aef03d930321d6"},{"length":18130,"path":"evidence/unsafe-inventory.json","schema":"codenoesis.local-unsafe-inventory/v1","sha256":"8057bc3854b8a473ec1a2ff159ff9d0770120599af6bff1b8d794b6b46652df6"}],"manifest_sha256":"6320beb04779fbf9d1e509d3eb12cd24073c939b57a66b998059c8d91c92bd30","profile_id":"local-experimental-r17","publication":false,"release_status":"not-ga","schema_version":"codenoesis.local-release-candidate-verification/v1","signature_verification":"external-gh-required","source_commit":"9ecdc3acefd43495daf76b9f2ab69a7bbacff172","support":"none","target":"x86_64-unknown-linux-gnu","verified":true}
+--- attestation bundle ---
+       1 /tmp/codenoesis-g8-run-31843845301.L8e5HA/attestation.jsonl
+3048d8078a79a00dc75015b36b0ebb00718ebf13cd71258060821d837270f28f  /tmp/codenoesis-g8-run-31843845301.L8e5HA/attestation.jsonl
+--- gh attestation CLI ---
+Verify the integrity and provenance of an artifact using its associated
+cryptographically signed attestations.
+
+## Understanding Verification
+
+An attestation is a claim (i.e. a provenance statement) made by an actor
+(i.e. a GitHub Actions workflow) regarding a subject (i.e. an artifact).
+
+In order to verify an attestation, you must provide an artifact and validate:
+* the identity of the actor that produced the attestation
+* the expected attestation predicate type (the nature of the claim)
+
+By default, this command enforces the `https://slsa.dev/provenance/v1`
+predicate type. To verify other attestation predicate types use the
+`--predicate-type` flag.
+
+The "actor identity" consists of:
+* the repository or the repository owner the artifact is linked with
+* the Actions workflow that produced the attestation (a.k.a the
+  signer workflow)
+
+This identity is then validated against the attestation's certificate's
+SourceRepository, SourceRepositoryOwner, and SubjectAlternativeName
+(SAN) fields, among others.
+
+It is up to you to decide how precisely you want to enforce this identity.
+
+At a minimum, this command requires either:
+* the `--owner` flag (e.g. --owner github), or
+* the `--repo` flag (e.g. --repo github/example)
+
+The more precisely you specify the identity, the more control you will
+have over the security guarantees offered by the verification process.
+
+Ideally, the path of the signer workflow is also validated using the
+`--signer-workflow` or `--cert-identity` flags.
+
+Please note: if your attestation was generated via a reusable workflow then
+that reusable workflow is the signer whose identity needs to be validated.
+In this situation, you must use either the `--signer-workflow` or
+the `--signer-repo` flag.
+
+For more options, see the other available flags.
+
+## Loading Artifacts And Attestations
+
+To specify the artifact, this command requires:
+* a file path to an artifact, or
+* a container image URI (e.g. `oci://<image-uri>`)
+  * (note that if you provide an OCI URL, you must already be authenticated with
+its container registry)
+
+By default, this command will attempt to fetch relevant attestations via the
+GitHub API using the values provided to `--owner` or  `--repo`.
+
+To instead fetch attestations from your artifact's OCI registry, use the
+`--bundle-from-oci` flag.
+
+For offline verification using attestations stored on disk (c.f. the download command)
+provide a path to the `--bundle` flag.
+
+## Additional Policy Enforcement
+
+Given the `--format=json` flag, upon successful verification this
+command will output a JSON array containing one entry per verified attestation.
+
+This output can then be used for additional policy enforcement, i.e. by being
+piped into a policy engine.
+
+Each object in the array contains two properties:
+* an `attestation` object, which contains the bundle that was verified
+* a `verificationResult` object, which is a parsed representation of the
+  contents of the bundle that was verified.
+
+Within the `verificationResult` object you will find:
+* `signature.certificate`, which is a parsed representation of the X.509
+  certificate embedded in the attestation,
+* `verifiedTimestamps`, an array of objects denoting when the attestation
+  was witnessed by a transparency log or a timestamp authority
+* `statement`, which contains the `subject` array referencing artifacts,
+  the `predicateType` field, and the `predicate` object which contains
+  additional, often user-controllable, metadata
+
+IMPORTANT: please note that only the `signature.certificate` and the
+`verifiedTimestamps` properties contain values that cannot be
+manipulated by the workflow that originated the attestation.
+
+When dealing with attestations created within GitHub Actions, the contents of
+`signature.certificate` are populated directly from the OpenID Connect
+token that GitHub has generated. The contents of the `verifiedTimestamps`
+array are populated from the signed timestamps originating from either a
+transparency log or a timestamp authority – and likewise cannot be forged by users.
+
+When designing policy enforcement using this output, special care must be taken
+when examining the contents of the `statement.predicate` property:
+should an attacker gain access to your workflow's execution context, they
+could then falsify the contents of the `statement.predicate`.
+
+To mitigate this attack vector, consider using a "trusted builder": when generating
+an artifact, have the build and attestation signing occur within a reusable workflow
