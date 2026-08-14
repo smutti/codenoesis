@@ -1,0 +1,19 @@
+warning: <workspace>/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running tests/e2e_fr_rel_003_local_release_candidate.rs (target/debug/deps/e2e_fr_rel_003_local_release_candidate-079b2ce1e4c7bb24)
+
+running 1 test
+
+thread 'e2e_fr_rel_003_packages_and_verifies_exact_candidate' (3623229) panicked at xtask/tests/e2e_fr_rel_003_local_release_candidate.rs:332:9:
+expected Red: exact base rejects package-local-release-candidate as distribution.invalid_arguments
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test e2e_fr_rel_003_packages_and_verifies_exact_candidate ... FAILED
+
+failures:
+
+failures:
+    e2e_fr_rel_003_packages_and_verifies_exact_candidate
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+error: test failed, to rerun pass `-p xtask --test e2e_fr_rel_003_local_release_candidate`

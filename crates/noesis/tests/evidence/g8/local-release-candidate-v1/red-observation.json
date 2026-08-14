@@ -1,0 +1,64 @@
+{
+  "schema_version": "codenoesis.evidence/g8-local-release-red/v1",
+  "issue": 186,
+  "requirement_ids": [
+    "FR-REL-003",
+    "FR-CLI-010"
+  ],
+  "requirement_status": "proposed_branch_scoped_candidate",
+  "planning_package": [
+    "G1b",
+    "G8-local"
+  ],
+  "slice": "S14",
+  "risk": "critical",
+  "authority": {
+    "base_sha": "c5d259d7689b8a49527f8322b606e58cc0e1e61d",
+    "checkpoint_sha": "7e6b41e7d66bff7eb008f9a01b67afd1f6987ccd"
+  },
+  "observed_at": "2026-08-14T18:27:31Z",
+  "reds": [
+    {
+      "kind": "trusted_workflow_contract",
+      "command": "python3 -m unittest scripts.tests.test_g8_local_release_candidate_contract -v",
+      "harness_exit": 1,
+      "expected_reason": "protected-main local release candidate workflow is absent",
+      "actual_reason": "exactly seven governance checks passed and the workflow-presence check failed",
+      "log_path": "crates/noesis/tests/evidence/g8/local-release-candidate-v1/red-workflow.log",
+      "log_sha256": "9c2cb2f45efe9338c23b805c764d7e2c643507a5ac02249a585a8fd17ba11391"
+    },
+    {
+      "kind": "public_candidate_command",
+      "command": "cargo test -p xtask --test e2e_fr_rel_003_local_release_candidate e2e_fr_rel_003_packages_and_verifies_exact_candidate --locked -- --exact --nocapture",
+      "harness_exit": 101,
+      "invoked_command_exit": 2,
+      "invoked_stdout_bytes": 0,
+      "invoked_stderr_schema": "codenoesis.error/v26",
+      "invoked_stderr_code": "distribution.invalid_arguments",
+      "invoked_stderr_sha256": "cd5f646ce966c60887ae0ed110142ba22c4a5f6a05a792c72bfbab5ba3a94311",
+      "expected_reason": "exact base routes the unknown candidate command to G1a and rejects it",
+      "actual_reason": "acceptance test observed the byte-exact expected G1a rejection and failed intentionally",
+      "log_path": "crates/noesis/tests/evidence/g8/local-release-candidate-v1/red-command.log",
+      "log_sha256": "a5d5a750354906194d8eed5809928b25b1fdf90700a46b28fe453c2c864fd2dc"
+    }
+  ],
+  "environment": {
+    "os": "Darwin",
+    "arch": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "python": "Python 3.9.6"
+  },
+  "privacy": {
+    "workspace_path_normalized": true,
+    "home_path_normalized": true,
+    "secrets_recorded": false,
+    "source_recorded": false
+  },
+  "agent": {
+    "interface": "Codex",
+    "model_identity": "not exposed to repository process",
+    "duration": "not available",
+    "cost": "not available"
+  }
+}
