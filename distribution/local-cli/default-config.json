@@ -1,0 +1,1 @@
+{"execution":{"browser_auto_open":"disabled","model_providers":"disabled","network":"disabled","target_execution":"disabled"},"output":{"format":"json"},"release_profile":"local-experimental-r17","schema_version":"codenoesis.configuration/local-cli/v1","secrets":{"mode":"forbidden","references":[]}}

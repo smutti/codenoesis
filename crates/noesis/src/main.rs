@@ -8,8 +8,8 @@ mod repository_boundaries;
 use std::collections::BTreeMap;
 use std::env;
 use std::ffi::{OsStr, OsString};
-use std::fs;
-use std::io::{self, Write};
+use std::fs::{self, File, Metadata};
+use std::io::{self, Read, Seek, Write};
 use std::process::ExitCode;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::mpsc;
@@ -31,26 +31,28 @@ use codenoesis_contracts::{
     CodeNoesisErrorV12, CodeNoesisErrorV13, CodeNoesisErrorV14, CodeNoesisErrorV15,
     CodeNoesisErrorV16, CodeNoesisErrorV17, CodeNoesisErrorV18, CodeNoesisErrorV19,
     CodeNoesisErrorV20, CodeNoesisErrorV21, CodeNoesisErrorV22, CodeNoesisErrorV23,
-    CodeNoesisErrorV24, CodeNoesisErrorV25, DocumentationContractError, FunctionContextError,
-    FunctionContextV1, IncrementalRefreshReportError, IncrementalRefreshReportInput,
-    IncrementalRefreshReportV1, K1ContractError, MAX_RELEASE_PROFILE_TEXT_BYTES,
-    NestedRepositoryUnavailableReason, PortableGraphV1, PortableGraphV2, PortableGraphV3,
-    PortableGraphV4, PortableGraphV5, PortableGraphV6, PortableGraphV7, PortableGraphV8,
-    PortableGraphV9, QueryContractError, R8ContractError, R10ContractError, R11ContractError,
-    R12_PORTABLE_GRAPH_VERSION, R12ContractError, R13_PORTABLE_GRAPH_VERSION, R13ContractError,
-    R14ContractError, R15ContractError, R16ContractError, R17_CONTEXT_PROFILE, ReleaseProfileError,
-    RepositorySnapshotV2Error, RepositorySnapshotV3, RepositorySnapshotV3Error,
-    RepositorySnapshotV4, RepositorySnapshotV4Error, RepositorySnapshotV5,
-    RepositorySnapshotV5Error, RepositorySnapshotV6, RepositorySnapshotV6Error,
-    RepositorySnapshotV7, RepositorySnapshotV7Error, RepositorySnapshotV8,
-    RepositorySnapshotV8Error, RepositorySnapshotV9, RepositorySnapshotV9Error,
-    RepositorySnapshotV10, RepositorySnapshotV10Error, RepositorySnapshotV11,
-    RepositorySnapshotV11Error, RepositorySnapshotV12, RepositorySnapshotV12Error,
-    RepositorySnapshotV13, RepositorySnapshotV13Error, RepositorySnapshotV14,
-    RepositorySnapshotV14Error, RepositorySnapshotV15, RepositorySnapshotV15Error,
-    RepositorySnapshotV16, RepositorySnapshotV16Error, RepositorySnapshotV17,
-    RepositorySnapshotV17Error, RepositorySnapshotV18, RepositorySnapshotV18Error,
-    SnapshotEnvelopeV1, ValidatedS4Head, current_release_profile_v1, generate_documentation_v1,
+    CodeNoesisErrorV24, CodeNoesisErrorV25, CodeNoesisErrorV26, DocumentationContractError,
+    FunctionContextError, FunctionContextV1, IncrementalRefreshReportError,
+    IncrementalRefreshReportInput, IncrementalRefreshReportV1, K1ContractError,
+    LocalConfigurationError, LocalConfigurationSource, MAX_LOCAL_CONFIGURATION_BYTES,
+    MAX_RELEASE_PROFILE_TEXT_BYTES, NestedRepositoryUnavailableReason, PortableGraphV1,
+    PortableGraphV2, PortableGraphV3, PortableGraphV4, PortableGraphV5, PortableGraphV6,
+    PortableGraphV7, PortableGraphV8, PortableGraphV9, QueryContractError, R8ContractError,
+    R10ContractError, R11ContractError, R12_PORTABLE_GRAPH_VERSION, R12ContractError,
+    R13_PORTABLE_GRAPH_VERSION, R13ContractError, R14ContractError, R15ContractError,
+    R16ContractError, R17_CONTEXT_PROFILE, ReleaseProfileError, RepositorySnapshotV2Error,
+    RepositorySnapshotV3, RepositorySnapshotV3Error, RepositorySnapshotV4,
+    RepositorySnapshotV4Error, RepositorySnapshotV5, RepositorySnapshotV5Error,
+    RepositorySnapshotV6, RepositorySnapshotV6Error, RepositorySnapshotV7,
+    RepositorySnapshotV7Error, RepositorySnapshotV8, RepositorySnapshotV8Error,
+    RepositorySnapshotV9, RepositorySnapshotV9Error, RepositorySnapshotV10,
+    RepositorySnapshotV10Error, RepositorySnapshotV11, RepositorySnapshotV11Error,
+    RepositorySnapshotV12, RepositorySnapshotV12Error, RepositorySnapshotV13,
+    RepositorySnapshotV13Error, RepositorySnapshotV14, RepositorySnapshotV14Error,
+    RepositorySnapshotV15, RepositorySnapshotV15Error, RepositorySnapshotV16,
+    RepositorySnapshotV16Error, RepositorySnapshotV17, RepositorySnapshotV17Error,
+    RepositorySnapshotV18, RepositorySnapshotV18Error, SnapshotEnvelopeV1, ValidatedS4Head,
+    current_release_profile_v1, generate_documentation_v1, local_configuration_report_v1,
     local_query_result_v1, local_query_result_v2, local_query_result_v3, local_query_result_v4,
     local_query_result_v5, local_query_result_v6, local_query_result_v7, local_query_result_v8,
     local_query_result_v9, local_query_result_v10, local_query_result_v11, local_query_result_v12,
@@ -107,6 +109,7 @@ use noesis::generated_docs::{
     GeneratedDocsError, load_validated_manifest, validate_documents_root_for_boundary,
     validate_output_root_for_generation,
 };
+use same_file::Handle as FileIdentity;
 use serde_json::Value;
 
 static CORRELATION_SEQUENCE: AtomicU64 = AtomicU64::new(0);
@@ -166,7 +169,32 @@ impl Drop for ScanWorker {
 
 #[allow(clippy::too_many_lines)]
 fn main() -> ExitCode {
-    let arguments = env::args_os().collect::<Vec<_>>();
+    let bootstrap = match ConfigurationBootstrap::parse(env::args_os().collect()) {
+        Ok(bootstrap) => bootstrap,
+        Err(error) => return emit_error_v26(&error, 2),
+    };
+    if noesis::install_s0_security_boundary().is_err() {
+        return if bootstrap.g1_requested {
+            emit_internal_error_v26()
+        } else {
+            emit_internal_error_v1()
+        };
+    }
+    let configuration = match resolve_startup_configuration(bootstrap.configuration.as_deref()) {
+        Ok(configuration) => configuration,
+        Err(failure) => return emit_error_v26(&failure.error, failure.exit_code),
+    };
+    if bootstrap.validate_requested {
+        let Ok(stdout) = configuration.canonical_stdout() else {
+            return emit_internal_error_v26();
+        };
+        return if io::stdout().lock().write_all(&stdout).is_ok() {
+            ExitCode::SUCCESS
+        } else {
+            emit_internal_error_v26()
+        };
+    }
+    let arguments = bootstrap.arguments;
     let profile_requested = arguments.get(1).is_some_and(|value| value == "profile");
     let r10_scan_requested = rust_cfg_alternatives_requested(&arguments);
     let r12_scan_requested = rust_callable_cfg_alternatives_requested(&arguments);
@@ -231,9 +259,6 @@ fn main() -> ExitCode {
     } else {
         None
     };
-    if noesis::install_s0_security_boundary().is_err() {
-        return emit_internal_error_v1();
-    }
     let s4_requested = requested_profile(&arguments, "standard-local-s4");
     let s3_requested = requested_profile(&arguments, "standard-local-s3");
     let s4_error_lineage = s4_requested || docs_requested || query_requested;
@@ -479,6 +504,183 @@ impl ProfileInvocation {
 enum ProfileInvocationError {
     InvalidCommand,
     InvalidFormat,
+}
+
+struct ConfigurationBootstrap {
+    arguments: Vec<OsString>,
+    configuration: Option<OsString>,
+    validate_requested: bool,
+    g1_requested: bool,
+}
+
+impl ConfigurationBootstrap {
+    fn parse(mut arguments: Vec<OsString>) -> Result<Self, CodeNoesisErrorV26> {
+        let leading_configuration = arguments
+            .get(1)
+            .is_some_and(|argument| argument == "--config");
+        let mut configuration = None;
+        if leading_configuration {
+            let value = arguments
+                .get(2)
+                .filter(|value| !value.is_empty())
+                .cloned()
+                .ok_or_else(CodeNoesisErrorV26::configuration_invalid_arguments)?;
+            configuration = Some(value);
+            arguments.drain(1..=2);
+        }
+        if arguments
+            .iter()
+            .skip(1)
+            .any(|argument| argument == "--config")
+        {
+            return Err(CodeNoesisErrorV26::configuration_invalid_arguments());
+        }
+
+        let validate_requested = arguments.get(1).is_some_and(|value| value == "config");
+        if validate_requested {
+            if arguments.get(2).is_none_or(|value| value != "validate")
+                || !matches!(arguments.len(), 5 | 7)
+            {
+                return Err(CodeNoesisErrorV26::configuration_invalid_arguments());
+            }
+            let mut file = None;
+            let mut format = None;
+            for pair in arguments[3..].chunks_exact(2) {
+                let flag = pair[0]
+                    .to_str()
+                    .ok_or_else(CodeNoesisErrorV26::configuration_invalid_arguments)?;
+                match flag {
+                    "--file" if file.is_none() => file = Some(pair[1].clone()),
+                    "--format" if format.is_none() => format = pair[1].to_str().map(str::to_owned),
+                    _ => {
+                        return Err(CodeNoesisErrorV26::configuration_invalid_arguments());
+                    }
+                }
+            }
+            if file.as_ref().is_some_and(|value| value.is_empty())
+                || format.as_deref() != Some("json")
+                || configuration.is_some() && file.is_some()
+            {
+                return Err(CodeNoesisErrorV26::configuration_invalid_arguments());
+            }
+            configuration = configuration.or(file);
+        }
+        if arguments.len() < 2 && leading_configuration {
+            return Err(CodeNoesisErrorV26::configuration_invalid_arguments());
+        }
+        Ok(Self {
+            arguments,
+            configuration,
+            validate_requested,
+            g1_requested: leading_configuration || validate_requested,
+        })
+    }
+}
+
+#[derive(Debug)]
+struct G1Failure {
+    error: CodeNoesisErrorV26,
+    exit_code: u8,
+}
+
+fn resolve_startup_configuration(
+    path: Option<&OsStr>,
+) -> Result<codenoesis_contracts::LocalConfigurationReportV1, G1Failure> {
+    let (bytes, source) = if let Some(path) = path {
+        (
+            read_stable_configuration(std::path::Path::new(path))?,
+            LocalConfigurationSource::ExplicitFile,
+        )
+    } else {
+        (
+            codenoesis_contracts::DEFAULT_LOCAL_CLI_CONFIGURATION_V1.to_vec(),
+            LocalConfigurationSource::EmbeddedDefault,
+        )
+    };
+    local_configuration_report_v1(&bytes, source).map_err(|error| G1Failure {
+        exit_code: if error == LocalConfigurationError::ContractInvalid {
+            1
+        } else {
+            2
+        },
+        error: CodeNoesisErrorV26::from_configuration(error),
+    })
+}
+
+fn read_stable_configuration(path: &std::path::Path) -> Result<Vec<u8>, G1Failure> {
+    let invalid = || G1Failure {
+        error: CodeNoesisErrorV26::configuration_invalid_file(),
+        exit_code: 2,
+    };
+    let unstable = || G1Failure {
+        error: CodeNoesisErrorV26::configuration_unstable_input(),
+        exit_code: 2,
+    };
+    let path_identity_before = FileIdentity::from_path(path).map_err(|_| invalid())?;
+    let path_before = fs::symlink_metadata(path).map_err(|_| invalid())?;
+    if path_before.file_type().is_symlink() || !path_before.is_file() {
+        return Err(invalid());
+    }
+    let mut file = File::open(path).map_err(|_| invalid())?;
+    let before = file.metadata().map_err(|_| invalid())?;
+    let identity =
+        FileIdentity::from_file(file.try_clone().map_err(|_| invalid())?).map_err(|_| invalid())?;
+    let mut bytes = Vec::new();
+    Read::by_ref(&mut file)
+        .take(u64::try_from(MAX_LOCAL_CONFIGURATION_BYTES).unwrap_or(u64::MAX) + 1)
+        .read_to_end(&mut bytes)
+        .map_err(|_| invalid())?;
+    if bytes.len() > MAX_LOCAL_CONFIGURATION_BYTES {
+        return Err(invalid());
+    }
+    file.rewind().map_err(|_| unstable())?;
+    let mut verification = Vec::new();
+    Read::by_ref(&mut file)
+        .take(u64::try_from(MAX_LOCAL_CONFIGURATION_BYTES).unwrap_or(u64::MAX) + 1)
+        .read_to_end(&mut verification)
+        .map_err(|_| unstable())?;
+    let after = file.metadata().map_err(|_| unstable())?;
+    let path_after = fs::symlink_metadata(path).map_err(|_| unstable())?;
+    let path_identity_matches =
+        FileIdentity::from_path(path).is_ok_and(|path_identity| path_identity == identity);
+    if bytes != verification
+        || path_identity_before != identity
+        || before.len() != u64::try_from(bytes.len()).unwrap_or(u64::MAX)
+        || !g1_same_file_metadata(&path_before, &before)
+        || !g1_same_file_metadata(&before, &after)
+        || !g1_same_file_metadata(&after, &path_after)
+        || !path_identity_matches
+        || path_after.file_type().is_symlink()
+    {
+        return Err(unstable());
+    }
+    Ok(bytes)
+}
+
+#[cfg(unix)]
+fn g1_same_file_metadata(left: &Metadata, right: &Metadata) -> bool {
+    use std::os::unix::fs::MetadataExt as _;
+    left.dev() == right.dev()
+        && left.ino() == right.ino()
+        && left.len() == right.len()
+        && left.mtime() == right.mtime()
+        && left.mtime_nsec() == right.mtime_nsec()
+}
+
+#[cfg(windows)]
+fn g1_same_file_metadata(left: &Metadata, right: &Metadata) -> bool {
+    use std::os::windows::fs::MetadataExt as _;
+    left.file_size() == right.file_size()
+        && left.last_write_time() == right.last_write_time()
+        && left.creation_time() == right.creation_time()
+        && left.file_attributes() == right.file_attributes()
+}
+
+#[cfg(not(any(unix, windows)))]
+fn g1_same_file_metadata(left: &Metadata, right: &Metadata) -> bool {
+    left.len() == right.len()
+        && left.modified().ok() == right.modified().ok()
+        && left.file_type() == right.file_type()
 }
 
 fn run_s0(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
@@ -5904,7 +6106,18 @@ fn emit_internal_error_v25() -> ExitCode {
     emit_error_v25(&CodeNoesisErrorV25::contract_invalid(), 1)
 }
 
+fn emit_internal_error_v26() -> ExitCode {
+    emit_error_v26(&CodeNoesisErrorV26::internal(), 1)
+}
+
 fn emit_error_v1(error: &CodeNoesisErrorV1, code: u8) -> ExitCode {
+    if let Ok(bytes) = error.canonical_stderr() {
+        let _ = io::stderr().lock().write_all(&bytes);
+    }
+    ExitCode::from(code)
+}
+
+fn emit_error_v26(error: &CodeNoesisErrorV26, code: u8) -> ExitCode {
     if let Ok(bytes) = error.canonical_stderr() {
         let _ = io::stderr().lock().write_all(&bytes);
     }
@@ -8266,6 +8479,145 @@ mod s4_root_argument_tests {
     use super::*;
 
     #[test]
+    fn pt_fr_cfg_001_accepts_fifty_configuration_argument_constructions() {
+        for seed in 0..50 {
+            let mut pairs = [("--file", "configuration.json"), ("--format", "json")];
+            let pair_count = pairs.len();
+            pairs.rotate_left(seed % pair_count);
+            let mut arguments = vec![OsString::from("noesis"), OsString::from("config")];
+            arguments.push(OsString::from("validate"));
+            for (flag, value) in pairs {
+                arguments.push(OsString::from(flag));
+                arguments.push(OsString::from(value));
+            }
+            let bootstrap = ConfigurationBootstrap::parse(arguments).expect("valid G1 command");
+            assert!(bootstrap.validate_requested);
+            assert!(bootstrap.g1_requested);
+            assert_eq!(
+                bootstrap.configuration.as_deref(),
+                Some(OsStr::new("configuration.json"))
+            );
+        }
+    }
+
+    #[test]
+    fn fr_cfg_001_global_configuration_is_only_a_leading_pair() {
+        let bootstrap = ConfigurationBootstrap::parse(
+            [
+                "noesis",
+                "--config",
+                "configuration.json",
+                "profile",
+                "--id",
+                "local-experimental-r17",
+                "--format",
+                "json",
+            ]
+            .map(OsString::from)
+            .to_vec(),
+        )
+        .expect("leading configuration is valid");
+        assert_eq!(bootstrap.arguments[1], "profile");
+        assert_eq!(
+            bootstrap.configuration.as_deref(),
+            Some(OsStr::new("configuration.json"))
+        );
+
+        for arguments in [
+            vec!["noesis", "--config"],
+            vec!["noesis", "--config", "configuration.json"],
+            vec!["noesis", "profile", "--config", "configuration.json"],
+            vec!["noesis", "config", "validate", "--format", "text"],
+            vec![
+                "noesis",
+                "config",
+                "validate",
+                "--file",
+                "configuration.json",
+                "--file",
+                "configuration.json",
+            ],
+            vec![
+                "noesis",
+                "--config",
+                "configuration.json",
+                "config",
+                "validate",
+                "--file",
+                "configuration.json",
+                "--format",
+                "json",
+            ],
+        ] {
+            assert!(
+                ConfigurationBootstrap::parse(arguments.into_iter().map(OsString::from).collect())
+                    .is_err()
+            );
+        }
+    }
+
+    #[test]
+    fn fr_cfg_001_selector_absence_preserves_historical_dispatch_arguments() {
+        let arguments = [
+            "noesis",
+            "profile",
+            "--id",
+            "local-experimental-r17",
+            "--format",
+            "json",
+        ]
+        .map(OsString::from)
+        .to_vec();
+        let bootstrap = ConfigurationBootstrap::parse(arguments.clone()).expect("historical args");
+        assert_eq!(bootstrap.arguments, arguments);
+        assert!(bootstrap.configuration.is_none());
+        assert!(!bootstrap.validate_requested);
+        assert!(!bootstrap.g1_requested);
+
+        let empty = ConfigurationBootstrap::parse(vec![OsString::from("noesis")])
+            .expect("historical empty invocation");
+        assert_eq!(empty.arguments, [OsString::from("noesis")]);
+    }
+
+    #[test]
+    fn inv_bnd_001_configuration_maximum_and_plus_one_are_exact() {
+        let root = G1TestDirectory::new("configuration-boundary");
+        let configuration = root.path().join("configuration.json");
+        let mut maximum = codenoesis_contracts::DEFAULT_LOCAL_CLI_CONFIGURATION_V1.to_vec();
+        maximum.resize(MAX_LOCAL_CONFIGURATION_BYTES, b' ');
+        fs::write(&configuration, &maximum).expect("write maximum configuration");
+        assert_eq!(
+            read_stable_configuration(&configuration).expect("read maximum configuration"),
+            maximum
+        );
+
+        maximum.push(b' ');
+        fs::write(&configuration, maximum).expect("write oversized configuration");
+        let failure = read_stable_configuration(&configuration).unwrap_err();
+        assert_eq!(failure.exit_code, 2);
+        assert_eq!(failure.error.value()["code"], "configuration.invalid_file");
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn sec_fr_cfg_001_symlink_configuration_is_rejected() {
+        use std::os::unix::fs::symlink;
+
+        let root = G1TestDirectory::new("configuration-symlink");
+        let configuration = root.path().join("configuration.json");
+        fs::write(
+            &configuration,
+            codenoesis_contracts::DEFAULT_LOCAL_CLI_CONFIGURATION_V1,
+        )
+        .expect("write configuration");
+        let link = root.path().join("configuration-link.json");
+        symlink(&configuration, &link).expect("link configuration");
+        let failure = read_stable_configuration(&link).unwrap_err();
+        assert_eq!(failure.exit_code, 2);
+        assert_eq!(failure.error.value()["code"], "configuration.invalid_file");
+    }
+
+    #[test]
     fn pt_fr_cli_007_g0_profile_accepts_fifty_pair_orderings() {
         let pairs = [("--id", "local-experimental-r17"), ("--format", "json")];
         for seed in 0..50 {
@@ -8628,5 +8980,37 @@ mod s4_root_argument_tests {
             .position(|argument| argument == flag)
             .expect("reviewed option");
         arguments.drain(index..=index + 1);
+    }
+
+    struct G1TestDirectory {
+        path: std::path::PathBuf,
+    }
+
+    impl G1TestDirectory {
+        fn new(label: &str) -> Self {
+            static SEQUENCE: AtomicU64 = AtomicU64::new(0);
+            let sequence = SEQUENCE.fetch_add(1, Ordering::Relaxed);
+            let path = env::temp_dir().join(format!(
+                "codenoesis-g1-{label}-{}-{sequence}",
+                std::process::id()
+            ));
+            if path.exists() {
+                fs::remove_dir_all(&path).expect("remove stale G1 test root");
+            }
+            fs::create_dir(&path).expect("create G1 test root");
+            Self { path }
+        }
+
+        fn path(&self) -> &std::path::Path {
+            &self.path
+        }
+    }
+
+    impl Drop for G1TestDirectory {
+        fn drop(&mut self) {
+            if self.path.exists() {
+                fs::remove_dir_all(&self.path).expect("remove G1 test root");
+            }
+        }
     }
 }
