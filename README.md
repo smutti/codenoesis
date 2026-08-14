@@ -61,14 +61,23 @@ explicit install, upgrade, rollback, and uninstall procedures. It remains
 unsigned experimental engineering material, not a supported or published
 release.
 
-Issue [#184](https://github.com/smutti/codenoesis/issues/184) and
-[Decision 0035](docs/software/decisions/0035-local-upgrade-safety.md) define the
-Proposed Local Upgrade Safety G2a/G5-local/G7a/S14 candidate. It adds
-output-only `FR-CMP-001` exact-bundle upgrade and `FR-CLI-009` exact-plan
-rollback preflights, local
-tamper/race/privacy rejection, and observational performance evidence without
-activating a bundle or creating a compatibility, support, signing, publication,
-SLO, or GA promise.
+Issue [#184](https://github.com/smutti/codenoesis/issues/184),
+[Decision 0035](docs/software/decisions/0035-local-upgrade-safety.md), and
+protected PR #185 made Local Upgrade Safety G2a/G5-local/G7a/S14 Approved and
+Implemented but not Verified. Its output-only `FR-CMP-001` exact-bundle upgrade
+and `FR-CLI-009` exact-plan rollback preflights reject tamper, race, privacy,
+unsupported-contract, and limit failures without activation, migration,
+support, signing, publication, SLO, or GA authority.
+
+Issue [#186](https://github.com/smutti/codenoesis/issues/186) and
+[Decision 0036](docs/software/decisions/0036-local-verifiable-distribution.md)
+define the Proposed critical G1b/G8-local/S14 candidate. It adds a deterministic
+installable ZIP carrier under `FR-REL-003` and `FR-CLI-010`, offline candidate
+verification, CycloneDX SBOM,
+locked-dependency, license, advisory, and transitive-unsafe evidence, plus a
+protected-main-only keyless GitHub attestation workflow. It creates no tag,
+GitHub Release, package publication, deployment, support, release channel, or
+GA authority.
 Complete independent evidence acceptance, broader language coverage,
 operations, and the remaining production-readiness slices are still pending.
 

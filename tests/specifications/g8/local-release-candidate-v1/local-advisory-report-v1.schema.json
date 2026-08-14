@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/local-advisory-report-v1.schema.json",
+  "title": "LocalAdvisoryReportV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "cargo_lock_sha256",
+    "tool",
+    "database",
+    "status",
+    "vulnerabilities",
+    "warnings"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.local-advisory-report/v1"
+    },
+    "cargo_lock_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "tool": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "#tool",
+      "title": "AuditToolV1",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version"
+      ],
+      "properties": {
+        "name": {
+          "const": "cargo-audit"
+        },
+        "version": {
+          "const": "0.22.2"
+        }
+      }
+    },
+    "database": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "#database",
+      "title": "AdvisoryDatabaseV1",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commit",
+        "updated"
+      ],
+      "properties": {
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "updated": {
+          "type": "string",
+          "maxLength": 64
+        }
+      }
+    },
+    "status": {
+      "const": "accepted"
+    },
+    "vulnerabilities": {
+      "type": "array",
+      "maxItems": 0
+    },
+    "warnings": {
+      "type": "array",
+      "maxItems": 512
+    }
+  }
+}

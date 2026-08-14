@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/local-release-candidate-verification-v1.schema.json",
+  "title": "LocalReleaseCandidateVerificationV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_name",
+    "profile_id",
+    "target",
+    "source_commit",
+    "archive_sha256",
+    "manifest_sha256",
+    "checksums_sha256",
+    "evidence",
+    "verified",
+    "signature_verification",
+    "publication",
+    "support",
+    "release_status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.local-release-candidate-verification/v1"
+    },
+    "candidate_name": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "profile_id": {
+      "const": "local-experimental-r17"
+    },
+    "target": {
+      "enum": [
+        "aarch64-apple-darwin",
+        "x86_64-pc-windows-msvc",
+        "x86_64-unknown-linux-gnu"
+      ]
+    },
+    "source_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "archive_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "checksums_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "#evidence",
+        "title": "EvidenceRecordV1",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "schema",
+          "length",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "enum": [
+              "evidence/advisory-report.json",
+              "evidence/dependency-lock.json",
+              "evidence/license-report.json",
+              "evidence/sbom.cdx.json",
+              "evidence/unsafe-inventory.json"
+            ]
+          },
+          "schema": {
+            "enum": [
+              "codenoesis.local-advisory-report/v1",
+              "codenoesis.local-dependency-lock/v1",
+              "codenoesis.local-license-report/v1",
+              "CycloneDX-1.6",
+              "codenoesis.local-unsafe-inventory/v1"
+            ]
+          },
+          "length": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4194304
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "verified": {
+      "const": true
+    },
+    "signature_verification": {
+      "const": "external-gh-required"
+    },
+    "publication": {
+      "const": false
+    },
+    "support": {
+      "const": "none"
+    },
+    "release_status": {
+      "const": "not-ga"
+    }
+  }
+}

@@ -1,9 +1,9 @@
 # CodeNoesis release profiles
 
-> Status: the issue #180 / Decision 0033 G0 machine contract is Approved and
-> Implemented after protected PR #181, but not Verified. Issue #182 / Decision
-> 0034 is a Proposed G1a branch candidate. A profile or staged bundle is not a
-> release and does not make any capability supported or generally available.
+> Status: G0, G1a, and bounded G2a are Approved and Implemented but not Verified
+> after protected PRs #181, #183, and #185. Issue #186 / Decision 0036 defines
+> a Proposed G1b/G8-local carrier candidate. No profile or candidate artifact is
+> a supported or generally available release.
 
 ## Profile classes
 
@@ -48,11 +48,11 @@ by `FR-REL-001` and `FR-CLI-007`. Signing and attestation are
 and is not release provenance; publication, deployment, and secret authority
 are false. The exact G0 package is Approved and Implemented but not Verified.
 
-## Proposed G1a staged bundle
+## G1a staged bundle
 
-Issue #182 and Decision 0034 propose a local-only unsigned staged-directory
-bundle under Proposed `FR-CFG-001`, `FR-REL-002`, and `FR-CLI-008` for the same
-experimental profile. Its digest-named directory contains the current-target
+Issue #182, Decision 0034, and protected PR #183 made the local-only unsigned
+staged-directory bundle under `FR-CFG-001`, `FR-REL-002`, and `FR-CLI-008`
+Approved and Implemented but not Verified. Its digest-named directory contains the current-target
 binary, one fixed-policy configuration, its closed schema, installation
 procedures, the protected license, and a canonical manifest.
 
@@ -69,7 +69,22 @@ The bundle is unsigned, not published, not supported, not Verified, and not
 GA. It is not an archive, installer, automatic updater, server artifact,
 signature, attestation, SBOM, provenance statement, or release channel.
 
-Promotion still requires separate G1/G2/G5/G8 packages for installable
-artifacts, compatibility windows, security policy, SBOMs, signatures,
-attestations, release provenance, and distribution, followed by G9 support and
-GA decisions.
+## Proposed G1b/G8-local carrier
+
+Issue #186 and Decision 0036 propose an outer deterministic ZIP carrier for the
+unchanged G1a directory. Candidate metadata binds exact source and target,
+CycloneDX SBOM, Cargo.lock graph, license/advisory policy, transitive unsafe
+inventory, checksums, and an external GitHub/Sigstore build-provenance
+attestation. Offline product verification and external signer verification are
+separate, explicit steps.
+
+The existing `local-experimental-r17` runtime profile remains byte-identical and
+continues to report source-build-only, no signed-distribution capability, no
+support, and no GA. The outer candidate evidence does not rewrite that runtime
+authority. Protected merge would implement only the carrier and trusted
+post-merge attestation mechanism; independent evidence acceptance remains
+required before Verified.
+
+Promotion still requires G9 pilot, release, support, channel, vulnerability
+response, EOL, and GA decisions. Server artifacts and image signing remain
+future G1/G8 work.
