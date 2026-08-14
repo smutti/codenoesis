@@ -1,0 +1,13 @@
+success_exit=0
+success_stdout_bytes=1786
+success_stdout_sha256=d2e2ae26a1d0779245c0dc8da05f6101445af304b291d757be3e0edd61bb6d4e
+success_stderr_bytes=0
+working_directory_tree_unchanged=true
+privacy_canaries=absent
+unknown_exit=2
+unknown_stdout_bytes=0
+unknown_stderr={"code":"profile.unknown","context":{},"message":"unknown release profile","retryable":false,"schema_version":"codenoesis.error/v25","stage":"profile"}
+format_exit=2
+format_stdout_bytes=0
+format_stderr={"code":"input.invalid_format","context":{},"message":"invalid output format","retryable":false,"schema_version":"codenoesis.error/v25","stage":"input"}
+observation_root=/private/tmp/codenoesis-g0-observation.UjemYb

@@ -29,7 +29,8 @@ immutable local Git revision
   -> evidence-backed Rust ontology through R16
   -> atomic local snapshot
   -> evidence-backed Markdown, exact-ID query, and portable export
-  -> versioned offline-explorer artifact and proposed function context
+  -> versioned offline-explorer artifact and function context
+  -> proposed bounded G0 release-profile preflight
 ```
 
 The implemented compatibility profile is bounded rather than general:
@@ -49,9 +50,10 @@ The implemented compatibility profile is bounded rather than general:
   resolution, active `cfg`, type/ownership/runtime semantics, and general graph
   traversal remain unsupported or explicit gaps;
 - LocalExplorerV1-V9 support their matching PortableGraph versions after
-  protected PR #177. Issue #178 and Decision 0032 propose opt-in
-  FunctionContextV1 and additive LocalExplorerV10 navigation over unchanged
-  R16/PortableGraphV9 facts; R17 remains ineffective before protected merge.
+  protected PR #177. Protected PR #179 made opt-in FunctionContextV1 and
+  additive LocalExplorerV10 navigation over unchanged R16/PortableGraphV9
+  facts Approved and Implemented but not Verified. Issue #180 and Decision 0033
+  now propose the bounded G0 machine profile and preflight.
 
 ## Real-world Rust compatibility target
 
@@ -128,8 +130,10 @@ Decision 0030 `rust-safe-constant-evaluation-v1` package Approved and
 Implemented, but not Verified. Its generated LocalExplorerV9 manifest and
 PortableGraphV9 are deterministic. Protected PR #177 made the Decision 0031
 exact-schema LocalExplorerV3-V9 correction Approved and Implemented but not
-Verified. Issue #178 and Decision 0032 now define the Proposed R17 function
-context/navigation package without changing any R16 graph semantics.
+Verified. Protected PR #179 made the Issue #178 / Decision 0032 R17 function
+context/navigation package Approved and Implemented but not Verified without
+changing any R16 graph semantics. Issue #180 / Decision 0033 proposes the
+critical G0/S14 release-profile registry and preflight.
 
 | Order | Planning item | Outcome | Governance dependency | Candidate acceptance gate |
 |---|---|---|---|---|
@@ -153,7 +157,7 @@ context/navigation package without changing any R16 graph semantics.
 | `R14/R15 correction` | Real-repository fail-closed source-only journey | Implemented but not Verified after protected merge #171: bound complex K1 target spelling, skip callables outside inherited authority, omit incomplete R14 edge families, type gitlink rejection, and add the operational `local-snapshot-256m-v1` scan envelope. | Issue #170, Decision 0029, and protected merge #171; no dependency, schema, identity, ontology-family, boundary-composition, or control-plane change. | The exact project-owned fixture and pinned Lekton/RustDesk pilots satisfy immutable counts/digests, privacy, 50 permutations, ten schedules, 256 MiB max/plus-one, 4 GiB RSS, 60 s extraction, full positive journeys, and typed negative boundary failures. |
 | `R16` | Bounded safe Rust constant evaluation | Implemented but not Verified after protected PR #173: preserve corrected R15 and add checked target-independent primitive constants plus fixed-repr unit-enum discriminants as `rust.evaluated_value` and `EVALUATES_TO`, with exact derivations and typed gaps. | Issue #172, Decision 0030, and merge `c3d05994a56e747fbe3157173998f8ac76ef7333`; no new dependency, execution, compiler, target, cfg, boundary, or control-plane authority. | The project-owned fixture emits seven exact values, two dependencies, 42 entities, 42 relationships, 84 claims, 33 evidence, zero diagnostics, 32 coverage records, exact V15/V18 hashes, 50 permutations, ten schedules, all boundaries, two deterministic Lekton journeys, and the typed RustDesk boundary negative. Artifact generation succeeds, but the V9 browser journey remains blocked by the exact-schema frontend defect. |
 | `R10-R16 explorer correction` | Matching portable-graph browser loading | Implemented but not Verified after protected PR #177: LocalExplorerV3-V9 accept only exact matching PortableGraphV3-V9 and expose real search, bounded SVG neighborhoods, relationship, evidence, derivation, and uncertainty inspection. | Issue #176, Decision 0031, merge `f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`, retained browser evidence, and immutable V1/V2 assets. | Each generated explorer loads its matching graph in a real browser; mismatches and malformed, oversized, unsafe, racing, or private inputs fail closed; independent verification remains open. |
-| `R17` | Function-centered context and navigation | Proposed branch-scoped candidate: group one existing R16 function/method, declared signature, ordered parameters, return spelling, body facts, proven calls, evidence, claims, derivations, uncertainty, and navigation roles into canonical FunctionContextV1; add LocalExplorerV10 over unchanged PortableGraphV9. | Issue #178, Decision 0032, exact base `f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`, `local-experimental-r17`, no new dependency, and protected manual merge. | The project-owned method card and two pinned Lekton journeys are deterministic; CLI/browser fields match; all limits/security/privacy failures close safely; QueryV13, PortableGraphV9, and ExplorerV1-V9 bytes remain immutable. |
+| `R17` | Function-centered context and navigation | Approved and Implemented but not Verified after protected PR #179: group one existing R16 function/method, declared signature, ordered parameters, return spelling, body facts, proven calls, evidence, claims, derivations, uncertainty, and navigation roles into canonical FunctionContextV1; add LocalExplorerV10 over unchanged PortableGraphV9. | Issue #178, Decision 0032, merge `f0bdb5290566bb85bb103e24291e952d4c557156`, `local-experimental-r17`, and no new dependency. | The project-owned method card and two pinned Lekton journeys are deterministic; CLI/browser fields match; all limits/security/privacy failures close safely; QueryV13, PortableGraphV9, and ExplorerV1-V9 bytes remain immutable. |
 
 ### Earliest useful real-world checkpoint
 
@@ -171,12 +175,12 @@ future slice without changing that slice's approved meaning.
 
 ### Post-R16 delivery sequence
 
-1. Complete issue #178 / Decision 0032: deliver the bounded LLM-ready
-   FunctionContextV1 and LocalExplorerV10 function navigation over unchanged
-   R16 facts.
-2. Continue `G0` beyond the source-build-only experimental profile by fixing
-   supported platforms, capability matrix, owners, artifacts, support terms,
-   signing, provenance, and release boundaries.
+1. Protected PR #179 completed issue #178 / Decision 0032: bounded LLM-ready
+   FunctionContextV1 and LocalExplorerV10 navigation are Approved and
+   Implemented but not Verified.
+2. Complete issue #180 / Decision 0033: add Proposed `FR-REL-001` and
+   `FR-CLI-007` for the source-build-only experimental matrix, owner,
+   capabilities, and explicit no-signing/no-publication release boundaries.
 3. Add opt-in trusted local evidence-to-source retrieval under repository,
    privacy, path, race, and output authority; R17 intentionally excludes it.
 4. Extend implementation-aware API and semantic diff to compare contracts with
@@ -246,7 +250,7 @@ single-PR vertical package as its implementation.
 
 | Order | Planning item | Outcome | Existing SRS mapping | Candidate acceptance gate |
 |---|---|---|---|---|
-| `G0` | Release profiles and support matrix | Define Local GA and Server GA capabilities, supported operating systems/architectures, sandbox tiers, deployment profiles, excluded experimental features, owners, and support windows. | `NFR-PORT-001`, `OD-SBX-001`, `S9`, `S14` | Every release artifact and document names one profile and exact capability set; unsupported combinations fail before work starts. |
+| `G0` | Release profiles and support matrix | Proposed issue #180 candidate: add one source-build-only `local-experimental-r17` registry and target preflight with exact capabilities, exclusions, owner, three observed platform tiers, and explicit no-support/no-signing/no-publication authority. Local GA and Server GA profiles remain future work. | Proposed `FR-REL-001`, `FR-CLI-007`, bounded `NFR-PORT-001`/`OD-SBX-001`, Decision 0033, `S14` | Each accepted target emits its exact canonical ReleaseProfileV1 before repository work; every other target and invalid profile fails closed; existing product bytes remain immutable. |
 | `G1` | Distribution and configuration | Produce installable CLI and server artifacts with versioned configuration schemas, deterministic defaults, secret references, startup validation, installation, upgrade, uninstall, and rollback procedures. | `NFR-CMP-001`, `NFR-SEC-003`, `NFR-SUP-001`, `S10`, `S14`; installation and release-channel semantics require an approved requirement. | Clean install, invalid configuration, secret rotation, upgrade, rollback, and uninstall scenarios pass on every supported profile without hidden state or secret leakage. |
 | `G2` | Compatibility and migration | Classify JSON, configuration, ontology, artifact, database, REST, MCP, WIT, and plugin changes; support the declared read/write window, explicit migrations, downgrade refusal, and rollback or rebuild paths. | `NFR-CMP-001`, `OD-STO-001`, `OD-API-001`, `S10`, `S11`, `S14` | Compatibility fixtures block unapproved breaks; migration from at least two releases and rollback/rebuild drills preserve or explicitly reject state without partial publication. |
 | `G3` | Data lifecycle and disaster recovery | Define classification, retention, export, deletion, legal hold, residency, backup expiry, consistency, RPO, RTO, restore, and search/index reconstruction. | `NFR-DR-001`, `NFR-PRV-002`, `OD-DAT-001`, `S10`, `S12`, `S14` | Lifecycle conformance and complete restore exercises validate snapshot heads, objects, indexes, audit continuity, purge deadlines, and backup expiry. |

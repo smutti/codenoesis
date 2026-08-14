@@ -1,0 +1,78 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "README.md",
+      "sha256": "628e94e1a1ada86ca5d718216bbfdbb028e8ea09de95cbc8776975104552459a"
+    },
+    {
+      "path": "crates/noesis/tests/e2e_fr_rel_001_release_profile.rs",
+      "sha256": "911f4a0b1d0aaf1eff6b37a712d2f52a5ddd834f7b45a65afb9a591a6af1c36d"
+    },
+    {
+      "path": "docs/software/architecture.md",
+      "sha256": "ef5fb82182c1a8365d4146f6088838555f7b2ecb21e387df85c5cd80542bc9bb"
+    },
+    {
+      "path": "docs/software/decisions/0033-g0-release-profile-registry.md",
+      "sha256": "574a6b721f09ff3d746ee7d3cc79e60641e95a002aa68ca82cbe0fe4f937184b"
+    },
+    {
+      "path": "docs/software/release-profiles.md",
+      "sha256": "4669172d40a6d704528db82afc49d6b40e91144292c2fec4218c45d49a2b0864"
+    },
+    {
+      "path": "docs/software/roadmap.md",
+      "sha256": "80cd494228173de53d5b50a01e333a5ffd75355d21ab776a3be30567bd7aa79b"
+    },
+    {
+      "path": "docs/software/software-requirements-specification.md",
+      "sha256": "0d149b1724a9a5937a1747bbbeca112a13a55fd39842d9aba83a6f044ef2fd74"
+    },
+    {
+      "path": "scripts/tests/test_g0_release_profile_contract.py",
+      "sha256": "2e53d303a42dbf68ef0fc0a34e13f6d2b5c2d6285bb69855491cb38c02af591e"
+    },
+    {
+      "path": "tests/specifications/g0/release-profile-v1/codenoesis-error-v25.schema.json",
+      "sha256": "23ef955666f1c7f4322a01e9d3d7d9bdb36093d6ddb1132ca03b90d91902dfce"
+    },
+    {
+      "path": "tests/specifications/g0/release-profile-v1/contract-v1.json",
+      "sha256": "6db0a04b39ba6204a38ca0c419fbdb00f7d275522d59719bf9e2b5f4092b3f0e"
+    },
+    {
+      "path": "tests/specifications/g0/release-profile-v1/e2e_fr_rel_001_release_profile.json",
+      "sha256": "62461feeab23e286b7f38cbf1742d220642d5adef043c5b8e0f062784f35ab24"
+    },
+    {
+      "path": "tests/specifications/g0/release-profile-v1/expected-aarch64-apple-darwin.json",
+      "sha256": "d2e2ae26a1d0779245c0dc8da05f6101445af304b291d757be3e0edd61bb6d4e"
+    },
+    {
+      "path": "tests/specifications/g0/release-profile-v1/expected-x86_64-pc-windows-msvc.json",
+      "sha256": "f14c8c7187756b233d7b251a50480074dfa3186cc6cecada28be50051e6b111d"
+    },
+    {
+      "path": "tests/specifications/g0/release-profile-v1/expected-x86_64-unknown-linux-gnu.json",
+      "sha256": "b9bdb754f707fd2e5ff542fb3e4dc87f68b37d29f2a7384ec0eadcbf87254087"
+    },
+    {
+      "path": "tests/specifications/g0/release-profile-v1/registry-v1.json",
+      "sha256": "30ab53244923170cd85414f371a1020c75438416a587e6c51c9f5b0e54cb6074"
+    },
+    {
+      "path": "tests/specifications/g0/release-profile-v1/release-profile-v1.schema.json",
+      "sha256": "ba4b23a45a7f74cbd765c632a881d10d72776a136bfb419907b03244e96a010c"
+    },
+    {
+      "path": "tests/specifications/s4/r17/contract-bundle.json",
+      "sha256": "7ddb828f2c637ffba3652dfc2c36d76a63e5351ac954b6c390b3e47663499bc0"
+    }
+  ],
+  "bundle_sha256": "e8f73828c75dd807e723e6172498373bdffdff336d4198aac28a2df4c0e46fcd"
+}

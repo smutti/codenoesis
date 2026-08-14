@@ -1,0 +1,54 @@
+issue=https://github.com/smutti/codenoesis/issues/180
+requirement_status=Proposed branch-scoped candidate
+planning_item=G0
+slice=S14
+risk=critical
+tested_head=b336b6327e7f91b6552d7650e2748f6d8a019769
+tested_tree=b2d973dfa60d4b853ca8526c0b03efa547a50415
+correction_round=2
+started_at_utc=2026-08-14T12:07:39Z
+completed_at_utc=2026-08-14T12:15:26Z
+duration_seconds=467
+shell=set -e with pipefail
+
+command=actionlint -no-color
+exit=0
+
+command=python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json
+exit=0
+
+command=cargo fmt --all --check
+exit=0
+
+command=cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+exit=0
+
+command=cargo test --workspace --all-targets --all-features --locked
+exit=0
+
+command=cargo test --workspace --doc --all-features --locked
+exit=0
+
+rust_tests_passed_including_zero_doctests=606
+test_result_groups=130
+
+command=python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+exit=0
+tests_passed=344
+
+command=python3 scripts/validate_benchmark_assets.py
+exit=0
+result=benchmark assets valid: status=scaffold, suites=0
+
+command=cargo bench --workspace --all-features --no-run --locked
+exit=0
+
+overall_exit=0
+raw_local_log_path=/private/tmp/codenoesis-issue-180-correction-2-complete-gate.log
+raw_local_log_bytes=73779
+raw_local_log_sha256=3e1155871c78223a11ebc09dd20039a2e4ab5ae685447f61e41245fddbfd8159
+environment=macOS 26.5.2 build 25F84; Darwin arm64; rustc 1.97.1 (8bab26f4f 2026-07-14); cargo 1.97.1 (c980f4866 2026-06-30); Python 3.9.6; git 2.50.1; actionlint 1.7.12
+known_warning=the pre-existing exact toml dependency requirement includes ignored semver metadata; no Cargo manifest, lockfile, or dependency changed
+result=green
+three_platform_gate=unchanged base-controlled GitHub Actions remains required after evidence publication
+independent_review=required before protected manual merge

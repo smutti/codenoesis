@@ -1,7 +1,8 @@
 # CodeNoesis release profiles
 
-> Status: Proposed G0 planning baseline. A profile is not a release and does not
-> make any capability Verified or generally available.
+> Status: Proposed G0 machine-contract candidate under issue #180 and Decision
+> 0033. A profile is not a release and does not make any capability Verified or
+> generally available.
 
 ## Profile classes
 
@@ -17,8 +18,10 @@ release-channel, deprecation, or availability commitments.
 
 ## `local-experimental-r17`
 
-- lifecycle before protected merge: Proposed branch candidate;
-- delivery: source build only from the exact reviewed revision;
+- lifecycle: protected PR #179 made R17 Approved and Implemented but not
+  Verified; issue #180 remains a Proposed G0 branch candidate;
+- delivery: source build only (`source-build-only`) from an exact reviewed
+  revision;
 - product boundary: local immutable Git acquisition, bounded Rust R16 analysis,
   deterministic docs/query/PortableGraphV9, and opt-in R17 FunctionContextV1
   plus LocalExplorerV10;
@@ -28,12 +31,22 @@ release-channel, deprecation, or availability commitments.
   script, proc macro, target binary, plugin, model, browser auto-launch, or
   analysis network access;
 - data boundary: no raw source or snippets in portable/context/viewer output;
-- platforms: repository CI observations are evidence only; no operating system,
-  architecture, installer, or support commitment is made by this profile;
+- candidate platform matrix: `x86_64-unknown-linux-gnu` with normative Linux
+  seccomp/Landlock evidence, plus functional-only
+  `aarch64-apple-darwin` and `x86_64-pc-windows-msvc`; these are experimental
+  source-build observations, not support commitments;
 - compatibility: existing R0-R16/K1/S7 and LocalExplorerV1-V9 contracts remain
   immutable; R17 is additive and explicitly selected;
 - release status: not Local GA, not signed, not supported, and not Verified.
 
-Promotion requires a separate G0/G1/G2/G5/G8 package that fixes supported
-platforms, artifacts, installation, compatibility windows, security policy,
-signing, provenance, ownership, and support terms.
+The issue #180 / Decision 0033 candidate adds the machine-readable
+`codenoesis.release-profile/v1` registry and `noesis profile` preflight required
+by Proposed `FR-REL-001` and `FR-CLI-007`. Signing and attestation are
+`not-available`; build provenance is limited to protected Git and CI evidence
+and is not release provenance; publication, deployment, and secret authority
+are false.
+
+Promotion still requires separate G1/G2/G5/G8 packages for installable
+artifacts, compatibility windows, security policy, SBOMs, signatures,
+attestations, release provenance, and distribution, followed by G9 support and
+GA decisions.

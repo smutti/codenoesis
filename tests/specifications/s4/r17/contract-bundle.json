@@ -7,7 +7,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "12c7f8d937801d0841af6d10f3094a4f39448bbeb1891c6c06a2453d1060b5b5"
+      "sha256": "628e94e1a1ada86ca5d718216bbfdbb028e8ea09de95cbc8776975104552459a"
     },
     {
       "path": "crates/noesis/tests/e2e_fr_ctx_001_function_context.rs",
@@ -23,7 +23,7 @@
     },
     {
       "path": "docs/software/architecture.md",
-      "sha256": "05317576aa2878d2caa322f54cbc4cb9c1d717485e825e5e0adc45855fd50665"
+      "sha256": "ef5fb82182c1a8365d4146f6088838555f7b2ecb21e387df85c5cd80542bc9bb"
     },
     {
       "path": "docs/software/decisions/0032-s4-r17-function-context-navigation.md",
@@ -31,15 +31,15 @@
     },
     {
       "path": "docs/software/release-profiles.md",
-      "sha256": "04335ad0d4b4b91e6fda680c3ae77c4a26a78ea7105ffe8157bb9c976f8a583f"
+      "sha256": "4669172d40a6d704528db82afc49d6b40e91144292c2fec4218c45d49a2b0864"
     },
     {
       "path": "docs/software/roadmap.md",
-      "sha256": "8b99647b50f5bc0c5026f04e98d8befc427edac9c29a16afc8dee6d902fbd5a7"
+      "sha256": "80cd494228173de53d5b50a01e333a5ffd75355d21ab776a3be30567bd7aa79b"
     },
     {
       "path": "docs/software/software-requirements-specification.md",
-      "sha256": "bc31e560a6413319d94ded565e4b3ccd50683ddc1fcc56680e3a0e00cde243ec"
+      "sha256": "0d149b1724a9a5937a1747bbbeca112a13a55fd39842d9aba83a6f044ef2fd74"
     },
     {
       "path": "scripts/tests/test_s4_r17_function_context_contract.py",
@@ -67,7 +67,7 @@
     },
     {
       "path": "tests/specifications/s4/r16/contract-bundle.json",
-      "sha256": "3a29e6eb598ee4616a252263d628d53ba1c074806c1973ffa5a73da263b097ed"
+      "sha256": "3656d6c009b129f5504320e10c3886c48ac9a4adbe40e78129a48b49c655805b"
     },
     {
       "path": "tests/specifications/s4/r17/contract-v1.json",
@@ -86,5 +86,5 @@
       "sha256": "99052438ac575e27213a6ba90d5050eae857fd74fb0d737673a0c094cb9da839"
     }
   ],
-  "bundle_sha256": "6311874d88127ddc0bdfbadd2e91dc94ef6de65b68ac9114ec6b2825310dd8dc"
+  "bundle_sha256": "bd97811014bc8b825203b7f57f10d55f511d18d090a257f70ac877d361380bd2"
 }

@@ -31,13 +31,14 @@ use codenoesis_contracts::{
     CodeNoesisErrorV12, CodeNoesisErrorV13, CodeNoesisErrorV14, CodeNoesisErrorV15,
     CodeNoesisErrorV16, CodeNoesisErrorV17, CodeNoesisErrorV18, CodeNoesisErrorV19,
     CodeNoesisErrorV20, CodeNoesisErrorV21, CodeNoesisErrorV22, CodeNoesisErrorV23,
-    CodeNoesisErrorV24, DocumentationContractError, FunctionContextError, FunctionContextV1,
-    IncrementalRefreshReportError, IncrementalRefreshReportInput, IncrementalRefreshReportV1,
-    K1ContractError, NestedRepositoryUnavailableReason, PortableGraphV1, PortableGraphV2,
-    PortableGraphV3, PortableGraphV4, PortableGraphV5, PortableGraphV6, PortableGraphV7,
-    PortableGraphV8, PortableGraphV9, QueryContractError, R8ContractError, R10ContractError,
-    R11ContractError, R12_PORTABLE_GRAPH_VERSION, R12ContractError, R13_PORTABLE_GRAPH_VERSION,
-    R13ContractError, R14ContractError, R15ContractError, R16ContractError, R17_CONTEXT_PROFILE,
+    CodeNoesisErrorV24, CodeNoesisErrorV25, DocumentationContractError, FunctionContextError,
+    FunctionContextV1, IncrementalRefreshReportError, IncrementalRefreshReportInput,
+    IncrementalRefreshReportV1, K1ContractError, MAX_RELEASE_PROFILE_TEXT_BYTES,
+    NestedRepositoryUnavailableReason, PortableGraphV1, PortableGraphV2, PortableGraphV3,
+    PortableGraphV4, PortableGraphV5, PortableGraphV6, PortableGraphV7, PortableGraphV8,
+    PortableGraphV9, QueryContractError, R8ContractError, R10ContractError, R11ContractError,
+    R12_PORTABLE_GRAPH_VERSION, R12ContractError, R13_PORTABLE_GRAPH_VERSION, R13ContractError,
+    R14ContractError, R15ContractError, R16ContractError, R17_CONTEXT_PROFILE, ReleaseProfileError,
     RepositorySnapshotV2Error, RepositorySnapshotV3, RepositorySnapshotV3Error,
     RepositorySnapshotV4, RepositorySnapshotV4Error, RepositorySnapshotV5,
     RepositorySnapshotV5Error, RepositorySnapshotV6, RepositorySnapshotV6Error,
@@ -49,18 +50,18 @@ use codenoesis_contracts::{
     RepositorySnapshotV14Error, RepositorySnapshotV15, RepositorySnapshotV15Error,
     RepositorySnapshotV16, RepositorySnapshotV16Error, RepositorySnapshotV17,
     RepositorySnapshotV17Error, RepositorySnapshotV18, RepositorySnapshotV18Error,
-    SnapshotEnvelopeV1, ValidatedS4Head, generate_documentation_v1, local_query_result_v1,
-    local_query_result_v2, local_query_result_v3, local_query_result_v4, local_query_result_v5,
-    local_query_result_v6, local_query_result_v7, local_query_result_v8, local_query_result_v9,
-    local_query_result_v10, local_query_result_v11, local_query_result_v12, local_query_result_v13,
-    validate_stored_snapshot_semantic_v4, validate_stored_snapshot_semantic_v5,
-    validate_stored_snapshot_semantic_v6, validate_stored_snapshot_semantic_v7,
-    validate_stored_snapshot_semantic_v8, validate_stored_snapshot_semantic_v9,
-    validate_stored_snapshot_semantic_v10, validate_stored_snapshot_semantic_v11,
-    validate_stored_snapshot_semantic_v12, validate_stored_snapshot_semantic_v13,
-    validate_stored_snapshot_semantic_v14, validate_stored_snapshot_semantic_v15,
-    validate_stored_snapshot_semantic_v16, validate_stored_snapshot_semantic_v17,
-    validate_stored_snapshot_semantic_v18,
+    SnapshotEnvelopeV1, ValidatedS4Head, current_release_profile_v1, generate_documentation_v1,
+    local_query_result_v1, local_query_result_v2, local_query_result_v3, local_query_result_v4,
+    local_query_result_v5, local_query_result_v6, local_query_result_v7, local_query_result_v8,
+    local_query_result_v9, local_query_result_v10, local_query_result_v11, local_query_result_v12,
+    local_query_result_v13, validate_stored_snapshot_semantic_v4,
+    validate_stored_snapshot_semantic_v5, validate_stored_snapshot_semantic_v6,
+    validate_stored_snapshot_semantic_v7, validate_stored_snapshot_semantic_v8,
+    validate_stored_snapshot_semantic_v9, validate_stored_snapshot_semantic_v10,
+    validate_stored_snapshot_semantic_v11, validate_stored_snapshot_semantic_v12,
+    validate_stored_snapshot_semantic_v13, validate_stored_snapshot_semantic_v14,
+    validate_stored_snapshot_semantic_v15, validate_stored_snapshot_semantic_v16,
+    validate_stored_snapshot_semantic_v17, validate_stored_snapshot_semantic_v18,
 };
 use codenoesis_domain::knowledge::KnowledgeError;
 use codenoesis_domain::s1_boundaries::LOCAL_GITLINKS_V1;
@@ -166,6 +167,7 @@ impl Drop for ScanWorker {
 #[allow(clippy::too_many_lines)]
 fn main() -> ExitCode {
     let arguments = env::args_os().collect::<Vec<_>>();
+    let profile_requested = arguments.get(1).is_some_and(|value| value == "profile");
     let r10_scan_requested = rust_cfg_alternatives_requested(&arguments);
     let r12_scan_requested = rust_callable_cfg_alternatives_requested(&arguments);
     let r13_scan_requested = rust_callable_scip_requested(&arguments);
@@ -237,7 +239,9 @@ fn main() -> ExitCode {
     let s4_error_lineage = s4_requested || docs_requested || query_requested;
     let s3_error_lineage = s3_requested || s4_error_lineage;
     let s2_requested = requested_profile(&arguments, "standard-local-s2");
-    let result = if impact_requested {
+    let result = if profile_requested {
+        run_profile(&arguments)
+    } else if impact_requested {
         impact::run(arguments).map_err(Failure::S7)
     } else if output_capacity_requested {
         run_s4(arguments, scan_worker.as_mut())
@@ -277,6 +281,7 @@ fn main() -> ExitCode {
     match result {
         Ok(stdout) => match io::stdout().lock().write_all(&stdout) {
             Ok(()) => ExitCode::SUCCESS,
+            Err(_) if profile_requested => emit_internal_error_v25(),
             Err(_) if impact_requested => emit_internal_error_v23(),
             Err(_) if r16_requested => emit_internal_error_v24(),
             Err(_) if r15_requested => emit_internal_error_v22(),
@@ -301,6 +306,7 @@ fn main() -> ExitCode {
             Err(_) if profiled => emit_internal_error_v2(),
             Err(_) => emit_internal_error_v1(),
         },
+        Err(Failure::G0(failure)) => emit_error_v25(&failure.error, failure.exit_code),
         Err(Failure::S7(failure)) => emit_error_v23(&failure.error, failure.exit_code),
         Err(Failure::R16(failure)) => emit_error_v24(&failure.error, failure.exit_code),
         Err(Failure::R15(failure)) => emit_error_v22(&failure.error, failure.exit_code),
@@ -409,6 +415,70 @@ fn main() -> ExitCode {
         Err(Failure::Docs(error)) => emit_docs_error(error),
         Err(Failure::Query(error)) => emit_query_error(error),
     }
+}
+
+fn run_profile(arguments: &[OsString]) -> Result<Vec<u8>, Failure> {
+    let invocation = ProfileInvocation::parse(arguments).map_err(|error| match error {
+        ProfileInvocationError::InvalidCommand => {
+            g0_failure(CodeNoesisErrorV25::invalid_command(), 2)
+        }
+        ProfileInvocationError::InvalidFormat => {
+            g0_failure(CodeNoesisErrorV25::invalid_format(), 2)
+        }
+    })?;
+    let profile = current_release_profile_v1(&invocation.profile_id).map_err(|error| {
+        let exit_code = if error == ReleaseProfileError::ContractInvalid {
+            1
+        } else {
+            2
+        };
+        g0_failure(CodeNoesisErrorV25::from_release_profile(error), exit_code)
+    })?;
+    profile
+        .canonical_stdout()
+        .map_err(|error| g0_failure(CodeNoesisErrorV25::from_release_profile(error), 1))
+}
+
+struct ProfileInvocation {
+    profile_id: String,
+}
+
+impl ProfileInvocation {
+    fn parse(arguments: &[OsString]) -> Result<Self, ProfileInvocationError> {
+        if arguments.len() != 6 || arguments.get(1).is_none_or(|value| value != "profile") {
+            return Err(ProfileInvocationError::InvalidCommand);
+        }
+        let mut profile_id = None;
+        let mut format = None;
+        for pair in arguments[2..].chunks_exact(2) {
+            let flag = pair[0]
+                .to_str()
+                .ok_or(ProfileInvocationError::InvalidCommand)?;
+            let value = pair[1]
+                .to_str()
+                .ok_or(ProfileInvocationError::InvalidCommand)?;
+            match flag {
+                "--id" if profile_id.is_none() => profile_id = Some(value.to_owned()),
+                "--format" if format.is_none() => format = Some(value),
+                _ => return Err(ProfileInvocationError::InvalidCommand),
+            }
+        }
+        let profile_id = profile_id.ok_or(ProfileInvocationError::InvalidCommand)?;
+        if profile_id.is_empty() || profile_id.len() > MAX_RELEASE_PROFILE_TEXT_BYTES {
+            return Err(ProfileInvocationError::InvalidCommand);
+        }
+        let format = format.ok_or(ProfileInvocationError::InvalidCommand)?;
+        if format != "json" {
+            return Err(ProfileInvocationError::InvalidFormat);
+        }
+        Ok(Self { profile_id })
+    }
+}
+
+#[derive(Debug)]
+enum ProfileInvocationError {
+    InvalidCommand,
+    InvalidFormat,
 }
 
 fn run_s0(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
@@ -5830,6 +5900,10 @@ fn emit_internal_error_v23() -> ExitCode {
     emit_error_v23(&CodeNoesisErrorV23::internal(), 1)
 }
 
+fn emit_internal_error_v25() -> ExitCode {
+    emit_error_v25(&CodeNoesisErrorV25::contract_invalid(), 1)
+}
+
 fn emit_error_v1(error: &CodeNoesisErrorV1, code: u8) -> ExitCode {
     if let Ok(bytes) = error.canonical_stderr() {
         let _ = io::stderr().lock().write_all(&bytes);
@@ -5916,6 +5990,17 @@ fn emit_error_v10(error: &CodeNoesisErrorV10, code: u8) -> ExitCode {
 }
 
 fn emit_error_v23(error: &CodeNoesisErrorV23, code: u8) -> ExitCode {
+    let Ok(bytes) = error.canonical_stderr() else {
+        return ExitCode::from(1);
+    };
+    if io::stderr().lock().write_all(&bytes).is_ok() {
+        ExitCode::from(code)
+    } else {
+        ExitCode::from(1)
+    }
+}
+
+fn emit_error_v25(error: &CodeNoesisErrorV25, code: u8) -> ExitCode {
     let Ok(bytes) = error.canonical_stderr() else {
         return ExitCode::from(1);
     };
@@ -6151,6 +6236,7 @@ fn emit_query_error(error: QueryFailure) -> ExitCode {
 }
 
 enum Failure {
+    G0(G0Failure),
     S7(impact::ImpactFailure),
     R16(R16Failure),
     R15(R15Failure),
@@ -6176,6 +6262,15 @@ enum Failure {
     Docs(GeneratedDocsError),
     Query(QueryFailure),
     Internal,
+}
+
+struct G0Failure {
+    error: CodeNoesisErrorV25,
+    exit_code: u8,
+}
+
+fn g0_failure(error: CodeNoesisErrorV25, exit_code: u8) -> Failure {
+    Failure::G0(G0Failure { error, exit_code })
 }
 
 struct R16Failure {
@@ -8169,6 +8264,68 @@ fn civil_date(days_since_epoch: i64) -> (i64, i64, i64) {
 #[cfg(test)]
 mod s4_root_argument_tests {
     use super::*;
+
+    #[test]
+    fn pt_fr_cli_007_g0_profile_accepts_fifty_pair_orderings() {
+        let pairs = [("--id", "local-experimental-r17"), ("--format", "json")];
+        for seed in 0..50 {
+            let mut permutation = pairs;
+            let distance = seed % permutation.len();
+            permutation.rotate_left(distance);
+            let mut arguments = vec![OsString::from("noesis"), OsString::from("profile")];
+            for (flag, value) in permutation {
+                arguments.push(OsString::from(flag));
+                arguments.push(OsString::from(value));
+            }
+            let invocation = ProfileInvocation::parse(&arguments).expect("valid G0 command");
+            assert_eq!(invocation.profile_id, "local-experimental-r17");
+        }
+    }
+
+    #[test]
+    fn sec_fr_cli_007_g0_profile_argument_matrix_fails_closed() {
+        for arguments in [
+            vec!["noesis", "profile"],
+            vec![
+                "noesis",
+                "profile",
+                "--id",
+                "local-experimental-r17",
+                "--format",
+                "text",
+            ],
+            vec![
+                "noesis",
+                "profile",
+                "--target",
+                "aarch64-apple-darwin",
+                "--format",
+                "json",
+            ],
+            vec![
+                "noesis",
+                "profile",
+                "--id",
+                "local-experimental-r17",
+                "--id",
+                "local-experimental-r17",
+            ],
+            vec![
+                "noesis",
+                "profile",
+                "--id",
+                "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                "--format",
+                "json",
+            ],
+        ] {
+            let arguments = arguments
+                .into_iter()
+                .map(OsString::from)
+                .collect::<Vec<_>>();
+            assert!(ProfileInvocation::parse(&arguments).is_err());
+        }
+    }
 
     #[test]
     fn pt_nfr_det_001_r17_query_selector_accepts_fifty_argument_permutations() {

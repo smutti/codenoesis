@@ -33,14 +33,21 @@ schema and exposes bounded graph inspection while preserving the immutable
 V1/V2 viewer assets. The correction is Approved and Implemented but not
 Verified.
 
-Issue [#178](https://github.com/smutti/codenoesis/issues/178) and
-[Decision 0032](docs/software/decisions/0032-s4-r17-function-context-navigation.md)
-define the Proposed high-risk R17/S4 function-context package. It adds an
-opt-in deterministic `FunctionContextV1` projection and an additive
-LocalExplorerV10 function view over unchanged R16 facts, so humans and LLM
-consumers can inspect declared inputs, output spelling, calls, evidence, and
-uncertainty without reconstructing raw graph identifiers. The branch remains
-a candidate until protected manual merge.
+Issue [#178](https://github.com/smutti/codenoesis/issues/178),
+[Decision 0032](docs/software/decisions/0032-s4-r17-function-context-navigation.md),
+and protected PR #179 made the high-risk R17/S4 function-context package
+Approved and Implemented but not Verified. Its opt-in deterministic
+`FunctionContextV1` projection and additive LocalExplorerV10 function view over
+unchanged R16 facts let humans and LLM consumers inspect declared inputs,
+output spelling, calls, evidence, and uncertainty without reconstructing raw
+graph identifiers.
+
+Issue [#180](https://github.com/smutti/codenoesis/issues/180) and
+[Decision 0033](docs/software/decisions/0033-g0-release-profile-registry.md)
+define the Proposed critical G0/S14 package. It adds a machine-readable
+`FR-REL-001` experimental release-profile registry and output-only profile
+preflight while explicitly granting no signing, publication, support, or GA
+authority.
 Complete independent evidence acceptance, broader language coverage,
 operations, and the remaining production-readiness slices are still pending.
 
