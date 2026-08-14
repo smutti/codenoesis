@@ -1,0 +1,81 @@
+{
+  "schema_version": "codenoesis.evidence/g2-local-upgrade-implementation/v1",
+  "issue": 184,
+  "requirement_ids": ["FR-CMP-001", "FR-CLI-009"],
+  "requirement_status": "proposed_branch_scoped_candidate",
+  "planning_package": ["G2a", "G5-local", "G7a"],
+  "slice": "S14",
+  "risk": "high",
+  "authority": {
+    "base_sha": "e7643d83965dca2f9342080264e7c6c58f3dd761",
+    "checkpoint_sha": "09ed3149676cfa416164e1da904d06a1852d659e",
+    "red_evidence_sha": "9d4dee782d1db6a0b2c8a98a1d131c031e8d70a2",
+    "implementation_source_sha": "49f43e98f6962e729b1e61f696d081e155675ce6"
+  },
+  "red": {
+    "status": "retained_expected_failure",
+    "path": "crates/noesis/tests/evidence/g2/local-upgrade-safety-v1/red-local.json",
+    "reason": "exact checkpoint rejected the unimplemented public command with byte-exact ErrorV26 distribution.invalid_arguments"
+  },
+  "focused_green": [
+    {
+      "command": "python3 -m unittest scripts.tests.test_g2_local_upgrade_safety_contract",
+      "exit": 0,
+      "result": "6 passed"
+    },
+    {
+      "command": "cargo fmt --all --check",
+      "exit": 0
+    },
+    {
+      "command": "cargo clippy --locked -p codenoesis-contracts -p xtask --all-targets --all-features -- -D warnings",
+      "exit": 0
+    },
+    {
+      "command": "cargo test --locked -p codenoesis-contracts --test g2_local_upgrade_safety",
+      "exit": 0,
+      "result": "3 passed"
+    },
+    {
+      "command": "cargo test --locked -p xtask --all-targets",
+      "exit": 0,
+      "result": "G2 contract, public journey, security, determinism, benchmark compilation and unchanged G1 distribution regression passed"
+    },
+    {
+      "command": "cargo bench --locked -p xtask --bench local_upgrade_safety -- --test --nocapture",
+      "exit": 0,
+      "result": "30/30 warm observations retained with nearest-rank p50/p95/p99 and no threshold"
+    }
+  ],
+  "effects": {
+    "bundle_activation": false,
+    "automatic_update": false,
+    "binary_execution": false,
+    "migration": false,
+    "network": false,
+    "new_dependency": false,
+    "control_plane": false,
+    "signing": false,
+    "publication": false,
+    "support": "none",
+    "ga": false
+  },
+  "corrections": {
+    "used": 1,
+    "budget": 5,
+    "path": "crates/noesis/tests/evidence/g2/local-upgrade-safety-v1/correction-round-1.json"
+  },
+  "known_limitations": [
+    "the requirements remain Proposed until manual protected merge",
+    "independent evidence acceptance is required before Verified",
+    "only exact G1a fixed-policy bundles are supported",
+    "no migration engine, release ordering, SLO, support, signing, publication or GA authority is added",
+    "the complete repository gate and independent GitHub review remain PR evidence"
+  ],
+  "agent": {
+    "interface": "Codex",
+    "model_identity": "not exposed to repository process",
+    "duration": "not available",
+    "cost": "not available"
+  }
+}

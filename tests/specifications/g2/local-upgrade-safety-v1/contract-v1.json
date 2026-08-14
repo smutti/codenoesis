@@ -1,0 +1,13 @@
+{
+  "schema_version": "codenoesis.g2-local-upgrade-safety-contract/v1",
+  "issue": 184,
+  "requirements": ["FR-CMP-001", "FR-CLI-009"],
+  "slice": "S14",
+  "risk": "high",
+  "base_sha": "e7643d83965dca2f9342080264e7c6c58f3dd761",
+  "contracts": ["codenoesis.local-upgrade-plan/v1", "codenoesis.local-rollback-report/v1", "codenoesis.error/v27"],
+  "limits": {"bundles": 2, "files_per_bundle": 6, "plan_bytes": 65536, "constructions": 50, "schedules": 10, "benchmark_repetitions": 30},
+  "fixture_binaries": {"current_sha256": "f82e988be32ec8a3f077e49f4034d42847adc415cd05ec82a9affec2fe25fb6b", "candidate_sha256": "9d0005fbbae37436afe941a35dd6324b015be474371f808c6016b031f24d92ad"},
+  "expected_red": {"exit": 2, "stdout_bytes": 0, "stderr_bytes": 170, "stderr_sha256": "cd5f646ce966c60887ae0ed110142ba22c4a5f6a05a792c72bfbab5ba3a94311", "schema_version": "codenoesis.error/v26", "code": "distribution.invalid_arguments"},
+  "authority": {"activation": false, "automatic_update": false, "execution": false, "migration": false, "publication": false, "signing": false, "support": "none", "ga": false}
+}

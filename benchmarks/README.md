@@ -21,6 +21,13 @@ Generated reports belong under `benchmarks/results/` and are ignored by Git.
 Release evidence must be stored as an immutable CI artifact with the exact
 source revision and corpus identity.
 
+Issue #184 adds one dependency-free observational G7a runner for the
+project-owned two-generation G1a bundle fixture. It records raw warm
+single-threaded samples, nearest-rank p50/p95/p99, success rate, corpus,
+host/toolchain, cache and revision metadata. It does not activate this global
+manifest, establish a regression threshold, resolve `NFR-PER-002` or
+`OD-SLO-001`, or make an SLO, release-artifact, cross-host or GA claim.
+
 Before changing `status` to `active`:
 
 1. add a versioned, licensed corpus or an immutable corpus descriptor;

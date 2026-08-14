@@ -492,12 +492,13 @@ distribution as source-build-only. It is not a release subsystem. G1, G2, G5,
 G8, and G9 retain authority over distribution, compatibility, security,
 supply-chain release evidence, support, and GA.
 
-### G1a local configuration and staged distribution candidate
+### G1a local configuration and staged distribution
 
-Issue [#182](https://github.com/smutti/codenoesis/issues/182) and
+Issue [#182](https://github.com/smutti/codenoesis/issues/182),
 [Decision 0034](decisions/0034-g1a-local-cli-distribution-configuration.md)
-define Proposed `FR-CFG-001`, `FR-REL-002`, and `FR-CLI-008` for one high-risk
-S14 candidate. The inward contract owns a closed fixed-policy
+and protected PR #183 made `FR-CFG-001`, `FR-REL-002`, and `FR-CLI-008`
+Approved and Implemented but not Verified for one high-risk S14 package. The
+inward contract owns a closed fixed-policy
 `LocalCliConfigurationV1`, canonical `LocalConfigurationReportV1`, canonical
 `LocalDistributionManifestV1`, and strict `CodeNoesisErrorV26`.
 
@@ -523,6 +524,31 @@ selected directory. There is no launcher, service, hidden `current` pointer,
 package database, automatic updater, or server artifact. G1 remains incomplete
 until its remaining local and server distribution, secret, release-channel,
 and supported-installation semantics are separately approved.
+
+### Local Upgrade Safety candidate
+
+Issue [#184](https://github.com/smutti/codenoesis/issues/184) and
+[Decision 0035](decisions/0035-local-upgrade-safety.md) define Proposed
+`FR-CMP-001` and `FR-CLI-009` for one high-risk G2a/G5-local/G7a S14 package.
+The inward contract owns canonical `LocalUpgradePlanV1`,
+`LocalRollbackReportV1`, and strict `CodeNoesisErrorV27`. The repository
+maintenance adapter owns stable filesystem reads of two complete G1a bundles
+and one optional exact prior plan; compatibility policy and report construction
+remain filesystem-independent.
+
+The adapter validates exact bundle names, manifests, payloads, modes, digests,
+targets, profiles, configuration authority, tree membership, and pre/post-read
+file identities. Upgrade succeeds only for two distinct same-target G1a
+bundles and states that no migration is required for the identical immutable V1
+configuration. Rollback succeeds only when the exact prior plan binds current
+and retained bundle digests. Arbitrary downgrade, substitution, tampering,
+symlinks, races, unknown contracts, and excess input fail closed.
+
+Both commands are output-only. They do not activate a bundle, execute either
+binary, mutate a path, create a hidden pointer, migrate product data, read a
+secret source, open network, sign, publish, or establish support or GA. The
+G7a runner is observational only and does not resolve `NFR-PER-002` or
+`OD-SLO-001`.
 
 ### S7 implementation-aware runtime boundary
 

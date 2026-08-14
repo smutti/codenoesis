@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/local-rollback-report-v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["activation", "compatibility", "configuration_transition", "current", "downgrade", "operation", "plan_sha256", "platform_target", "profile_id", "publication", "release_status", "schema_version", "signing", "support", "target_bundle", "verification"],
+  "properties": {
+    "activation": {"const": "caller-owned"},
+    "compatibility": {"const": "exact-plan-match"},
+    "configuration_transition": {"const": "identical-v1-no-migration"},
+    "current": {"$ref": "#/$defs/bundle"},
+    "downgrade": {"const": "exact-plan-only"},
+    "operation": {"const": "rollback-preflight"},
+    "plan_sha256": {"$ref": "#/$defs/sha256"},
+    "platform_target": {"enum": ["aarch64-apple-darwin", "x86_64-pc-windows-msvc", "x86_64-unknown-linux-gnu"]},
+    "profile_id": {"const": "local-experimental-r17"},
+    "publication": {"const": false},
+    "release_status": {"const": "not-ga"},
+    "schema_version": {"const": "codenoesis.local-rollback-report/v1"},
+    "signing": {"const": "not-available"},
+    "support": {"const": "none"},
+    "target_bundle": {"$ref": "#/$defs/bundle"},
+    "verification": {"const": "not-verified"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "bundle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["binary_sha256", "bundle_name", "manifest_sha256"],
+      "properties": {
+        "binary_sha256": {"$ref": "#/$defs/sha256"},
+        "bundle_name": {"type": "string", "pattern": "^codenoesis-local-experimental-r17-[A-Za-z0-9_-]+-[0-9a-f]{64}$", "maxLength": 192},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/codenoesis-error-v27.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["code", "context", "message", "retryable", "schema_version", "stage"],
+  "properties": {
+    "code": {"enum": ["compatibility.incompatible", "compatibility.internal", "compatibility.invalid_arguments", "compatibility.invalid_bundle", "compatibility.invalid_plan", "compatibility.limit_exceeded", "compatibility.unstable_input"]},
+    "context": {"type": "object", "additionalProperties": false, "properties": {"limit": {"const": "plan_bytes"}, "maximum": {"const": 65536}}},
+    "message": {"type": "string", "minLength": 1, "maxLength": 96},
+    "retryable": {"const": false},
+    "schema_version": {"const": "codenoesis.error/v27"},
+    "stage": {"enum": ["compatibility", "input", "internal"]}
+  }
+}

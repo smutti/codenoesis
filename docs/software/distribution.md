@@ -1,8 +1,9 @@
 # CodeNoesis local distribution
 
-> Status: Proposed G1a/S14 branch-scoped candidate under issue #182 and
-> Decision 0034. The staged directory described here is unsigned experimental
-> engineering material, not a supported or published release.
+> Status: G1a/S14 is Approved and Implemented but not Verified after protected
+> PR #183. The staged directory described here remains unsigned experimental
+> engineering material, not a supported or published release. Local Upgrade
+> Safety under issue #184 and Decision 0035 remains Proposed until merge.
 
 ## Boundary
 
@@ -51,6 +52,40 @@ configuration, package-manager state, registry/plist values, services,
 scheduled jobs, or a hidden `current` pointer. The caller owns activation and
 retention. G2 must define a compatibility window before any supported upgrade
 claim.
+
+## Local Upgrade Safety candidate
+
+The G2a `FR-CMP-001` preflight compares two complete G1a directories without
+executing either binary, while `FR-CLI-009` fixes the two public commands. It
+validates exact canonical manifests, payload digests and
+modes, target/profile/configuration identity, bundle names, tree membership,
+and stable non-symlink file identities. A compatible pair emits
+`LocalUpgradePlanV1` and classifies the fixed V1 configuration transition as
+`identical-v1-no-migration`.
+
+The branch-scoped candidate is exercised with:
+
+```text
+cargo run --locked -p xtask -- preflight-local-upgrade \
+  --current <g1a-bundle-a> --candidate <g1a-bundle-b>
+
+cargo run --locked -p xtask -- preflight-local-rollback \
+  --plan <local-upgrade-plan-v1.json> \
+  --current <g1a-bundle-b> --target <g1a-bundle-a>
+```
+
+The caller retains the first command's exact stdout as the rollback plan. A
+failure emits only canonical `codenoesis.error/v27` on stderr and exits 2.
+
+Rollback requires that exact plan, the exact candidate as current, and the
+exact retained prior bundle as target. It emits `LocalRollbackReportV1` only
+after all three inputs revalidate. A reversed pair without the plan, a third
+bundle, a changed file, an unsupported contract, or arbitrary downgrade is
+rejected. Preflight never changes the caller-owned invocation path or any file.
+
+The package covers only two exact experimental G1a generations. It creates no
+general compatibility window, data migration, package manager, updater,
+support policy, signing, publication, release channel, SLO, or GA authority.
 
 ## Deferred authority
 

@@ -1,23 +1,53 @@
 //! Repository-maintenance entry point.
 
 use std::env;
+use std::ffi::OsString;
 use std::io::{self, Write as _};
 use std::process::ExitCode;
 
 fn main() -> ExitCode {
-    match xtask::distribution::run(env::args_os()) {
+    let arguments = env::args_os().collect::<Vec<_>>();
+    if xtask::upgrade::is_upgrade_command(arguments.get(1)) {
+        run_upgrade(arguments)
+    } else {
+        run_distribution(arguments)
+    }
+}
+
+fn run_distribution(arguments: Vec<OsString>) -> ExitCode {
+    match xtask::distribution::run(arguments) {
         Ok(stdout) => {
             if io::stdout().lock().write_all(&stdout).is_ok() {
                 ExitCode::SUCCESS
             } else {
-                emit_failure(&xtask::distribution::DistributionFailure::internal())
+                emit_distribution_failure(&xtask::distribution::DistributionFailure::internal())
             }
         }
-        Err(failure) => emit_failure(&failure),
+        Err(failure) => emit_distribution_failure(&failure),
     }
 }
 
-fn emit_failure(failure: &xtask::distribution::DistributionFailure) -> ExitCode {
+fn run_upgrade(arguments: Vec<OsString>) -> ExitCode {
+    match xtask::upgrade::run(arguments) {
+        Ok(stdout) => {
+            if io::stdout().lock().write_all(&stdout).is_ok() {
+                ExitCode::SUCCESS
+            } else {
+                emit_upgrade_failure(&xtask::upgrade::UpgradeFailure::internal())
+            }
+        }
+        Err(failure) => emit_upgrade_failure(&failure),
+    }
+}
+
+fn emit_distribution_failure(failure: &xtask::distribution::DistributionFailure) -> ExitCode {
+    if let Ok(stderr) = failure.error().canonical_stderr() {
+        let _ = io::stderr().lock().write_all(&stderr);
+    }
+    ExitCode::from(failure.exit_code())
+}
+
+fn emit_upgrade_failure(failure: &xtask::upgrade::UpgradeFailure) -> ExitCode {
     if let Ok(stderr) = failure.error().canonical_stderr() {
         let _ = io::stderr().lock().write_all(&stderr);
     }

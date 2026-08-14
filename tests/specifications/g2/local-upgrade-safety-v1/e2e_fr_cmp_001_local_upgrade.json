@@ -1,0 +1,10 @@
+{
+  "schema_version": "codenoesis.acceptance/local-upgrade-safety/v1",
+  "requirement_ids": ["FR-CMP-001", "FR-CLI-009"],
+  "upgrade_command": ["xtask", "preflight-local-upgrade", "--current", "<bundle-a>", "--candidate", "<bundle-b>"],
+  "rollback_command": ["xtask", "preflight-local-rollback", "--plan", "<plan>", "--current", "<bundle-b>", "--target", "<bundle-a>"],
+  "success": {"exit": 0, "stderr_bytes": 0, "single_stdout_write": true, "mutation": false},
+  "failure": {"exit": 2, "stdout_bytes": 0, "schema_version": "codenoesis.error/v27"},
+  "determinism": {"constructions": 50, "schedules": 10},
+  "security": {"binary_execution": false, "network": false, "secret_sources": false, "ambient_discovery": false, "hidden_activation": false}
+}

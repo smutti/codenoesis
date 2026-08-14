@@ -1,0 +1,33 @@
+{
+  "schema_version": "codenoesis.evidence/g2-local-upgrade-performance/v1",
+  "issue": 184,
+  "requirement_id": "NFR-PER-001",
+  "planning_item": "G7a",
+  "slice": "S14",
+  "risk": "high",
+  "authority_base_sha": "e7643d83965dca2f9342080264e7c6c58f3dd761",
+  "measured_source_sha": "49f43e98f6962e729b1e61f696d081e155675ce6",
+  "command": "cargo bench --locked -p xtask --bench local_upgrade_safety -- --test --nocapture",
+  "exit": 0,
+  "observation": {
+    "path": "crates/noesis/tests/evidence/g2/local-upgrade-safety-v1/performance-observation-local.json",
+    "bytes": 1152,
+    "sha256": "a166918274a3d326dc82d6e255df381e97b47c9b33ce53f8f3effbc1db447d95",
+    "raw_samples": 30,
+    "successes": 30,
+    "percentile_method": "nearest-rank"
+  },
+  "harness_log": {
+    "bytes": 1763,
+    "sha256": "8a606f06a0930dee7e989a41def2c2f6a0296a0d76e5c11561a75afd0ddb927a",
+    "committed": false,
+    "reason": "Cargo emitted a local absolute workspace path; the privacy-safe canonical observation with every raw sample is retained instead"
+  },
+  "claims": {
+    "regression_threshold": false,
+    "slo": false,
+    "cross_host": false,
+    "release": false,
+    "ga": false
+  }
+}
