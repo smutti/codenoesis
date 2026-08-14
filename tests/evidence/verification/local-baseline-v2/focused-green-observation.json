@@ -1,0 +1,23 @@
+{
+  "schema_version": "codenoesis.local-baseline-focused-green/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/188",
+  "base_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+  "governance_checkpoint_sha": "1daa23ffbaa0ea13f5fc5910aa5798c7523f254c",
+  "red_commit_sha": "6fef76a4ba7fff8435d85a6df4c6efb3b1d1991b",
+  "evidence_parent_sha": "b754282d56dc65df8044d3e6d4acc672b5ae8cde",
+  "observed_at": "2026-08-14T23:13:43.729423Z",
+  "command": "python3 -m unittest scripts/tests/test_local_baseline_verification_v2.py",
+  "exit_status": 0,
+  "tests_run": 17,
+  "result": "green",
+  "log_path": "tests/evidence/verification/local-baseline-v2/focused-green.log",
+  "log_sha256": "1019817a0f99e1b173035271646446752574f27abf66ad2820e2d7e68222e552",
+  "log_bytes": 116,
+  "environment": {
+    "os": "macOS-26.5.2-arm64-arm-64bit",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)"
+  }
+}

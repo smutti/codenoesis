@@ -33,6 +33,12 @@ immutable local Git revision
   -> bounded G0/G1a/G2a release, distribution, and upgrade preflights
 ```
 
+Issue #188 defines the LocalBaselineVerificationV2 candidate Verified pending
+independent review and protected manual merge for this exact baseline. The
+candidate adds only verification governance, contracts, retained evidence, and
+a fail-closed local validator; it does not alter product or release behavior.
+G9 remains a separate governed package.
+
 The implemented compatibility profile is bounded rather than general:
 
 - acquisition accepts verified loose and packed SHA-1 Git objects and models

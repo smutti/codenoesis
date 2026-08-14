@@ -1,0 +1,400 @@
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8730896Z             "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8731213Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8731474Z           "add_prefer_source" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8731901Z             "title" : "Whether to always prefer source files over class files.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8733052Z             "description" : "A value indicating whether source files should be preferred over class files. If set to 'true', the extraction adds '-Xprefer:source' to the javac command line. If set to 'false', the extraction uses the default javac behavior ('-Xprefer:newer'). The default is 'true'.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8734104Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8734459Z             "pattern" : "^(false|true)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8734782Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8735067Z           "buildless" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8735467Z             "title" : "Whether to use buildless (standalone) extraction (experimental).",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8737118Z             "description" : "A value indicating, which type of extraction the autobuilder should perform. If 'true', then the standalone extractor will be used, otherwise tracing extraction will be performed. The default is 'false'. Note that buildless extraction will generally yield less accurate analysis results, and should only be used in cases where it is not possible to build the code (for example if it uses inaccessible dependencies).\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8738600Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8738993Z             "pattern" : "^(false|true)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8739398Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8739677Z           "buildless_dependency_dir" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8740140Z             "title" : "The path where buildless (standalone) extraction should keep dependencies.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8740870Z             "description" : "If set, the buildless (standalone) extractor will store dependencies in this directory.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8741409Z             "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8741701Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8741994Z           "minimize_dependency_jars" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8742473Z             "title" : "Whether to rewrite and minimize downloaded JAR dependencies (experimental).",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8743413Z             "description" : "If 'true', JAR dependencies downloaded during extraction will be rewritten to remove unneeded data, such as method bodies. The default is 'false'.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8744117Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8744413Z             "pattern" : "^(false|true)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8744758Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8745013Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8745294Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8745552Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8745805Z     "rust" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8746078Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8746431Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/rust",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8746867Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8747202Z           "trap" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8747513Z             "title" : "Options pertaining to TRAP.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8748001Z             "description" : "Options pertaining to TRAP.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8748375Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8748765Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8749098Z               "compression" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8749535Z                 "title" : "Controls compression for the TRAP files written by the extractor.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8750578Z                 "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'gzip' (to write gzip-compressed TRAP) 'zstd' (to write Zstandard-compressed TRAP) and 'none' (the default, to write uncompressed TRAP).\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8751529Z                 "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8751892Z                 "pattern" : "^(none|gzip|zstd)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8752272Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8752531Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8752754Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8753078Z           "cargo_target_dir" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8753457Z             "title" : "Directory to use for cargo output files.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8754548Z             "description" : "This value is an optional path to use as `CARGO_TARGET_DIR` for the internal cargo commands the extractor uses. Pointing it to a persistent directory may reduce execution time of consecutive extractor runs. By default, a new scratch directory is used for each run.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8755570Z             "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8755864Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8756149Z           "cargo_target" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8756490Z             "title" : "Target architecture",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8757098Z             "description" : "Target architecture to use for analysis, analogous to `cargo --target`. By default the host architecture is used.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8757726Z             "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8758016Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8758288Z           "cargo_features" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8758646Z             "title" : "Cargo features to turn on",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8759862Z             "description" : "Comma-separated list of features to turn on. By default all features are enabled. If any features are specified, then only those features are enabled. The `default` feature must be explicitly specified if only default features are desired. Can be repeated.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8760880Z             "type" : "array"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8761170Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8761509Z           "cargo_cfg_overrides" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8761891Z             "title" : "Cargo cfg overrides",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8762456Z             "description" : "Comma-separated list of cfg settings to enable, or disable if prefixed with `-`. Can be repeated.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8763009Z             "type" : "array"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8763310Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8763572Z           "logging" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8763948Z             "title" : "Options pertaining to logging.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8764347Z             "description" : "Options pertaining to logging.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8764705Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8765036Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8765335Z               "verbosity" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8765699Z                 "title" : "Extractor logging verbosity level.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8766742Z                 "description" : "Controls the level of verbosity of the extractor. The supported levels are (in order of increasing verbosity):\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8767682Z                 "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8768243Z                 "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8768843Z               },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8769158Z               "flamegraph" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8769556Z                 "title" : "[Experimental] File path for write flame graph log",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8770657Z                 "description" : "Collect flame graph data using the `tracing-flame` crate. To render a flame graph or chart, run the `inferno-flamegraph` command. See also: https://crates.io/crates/tracing-flame\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8771512Z                 "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8771823Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8772118Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8772398Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8772690Z           "extract_dependencies_as_source" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8773101Z             "title" : "Extract dependencies as source code",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8773667Z             "description" : "Extract the full source code of dependencies instead of only extracting signatures.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8774210Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8774556Z             "pattern" : "^(false|true)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8774873Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8775127Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8775388Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8775664Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8775928Z     "swift" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8776190Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8776527Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/swift"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8776971Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8777236Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8777489Z     "xml" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8777758Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8778102Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/xml"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8778519Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8778851Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8779098Z     "html" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8779389Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8779735Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/html"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8780147Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8780425Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8780676Z     "csv" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8780946Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8781291Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/csv"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8781681Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8781947Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8782218Z     "yaml" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8782489Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8782840Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/yaml"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8783244Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8783497Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8783776Z     "go" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8784025Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8784460Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/go",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8784879Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8785195Z           "extract_tests" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8785621Z             "title" : "Whether to include Go test files in the CodeQL database.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8786297Z             "description" : "A value indicating whether Go test files should be included in the CodeQL database. The default is 'false'.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8786899Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8787214Z             "pattern" : "^(false|true)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8787513Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8787835Z           "extract_vendor_dirs" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8788262Z             "title" : "Whether to include Go vendor directories in the CodeQL database.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8789262Z             "description" : "A value indicating whether Go vendor directories should be included in the CodeQL database. The default is 'false'.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8789907Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8790228Z             "pattern" : "^(false|true)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8790597Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8790858Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8791101Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8791384Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8791646Z     "cpp" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8791957Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8792327Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/cpp",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8792759Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8793124Z           "trap" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8793429Z             "title" : "TRAP options",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8793882Z             "description" : "Options about how the extractor handles TRAP files",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8794311Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8794619Z             "visibility" : 3,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8795314Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8795627Z               "cache" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8795965Z                 "title" : "TRAP cache options",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8796445Z                 "description" : "Options about how the extractor handles its TRAP cache",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8796881Z                 "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8797200Z                 "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8797519Z                   "dir" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8797869Z                     "title" : "TRAP cache directory",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8798306Z                     "description" : "The directory of the TRAP cache to use",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8798767Z                     "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8799152Z                   },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8799475Z                   "bound" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8799815Z                     "title" : "TRAP cache bound",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8800255Z                     "description" : "A soft limit (in MB) on the size of the TRAP cache",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8800706Z                     "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8801039Z                     "pattern" : "[0-9]+"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8801386Z                   },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8801782Z                   "write" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8802169Z                     "title" : "TRAP cache writeable",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8802790Z                     "description" : "Whether to write to the TRAP cache as well as reading it",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8803763Z                     "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8804237Z                     "pattern" : "(true|TRUE|false|FALSE)"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8804610Z                   }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8804879Z                 }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8805155Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8805418Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8805664Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8805961Z           "scale_timeouts" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8806372Z             "title" : "Value to scale compiler introspection timeouts with",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8807778Z             "description" : "The extractor attempts to determine what compiler the source code being extracted is compiled with. To this end the extractor makes additional calls to the compiler, some of which are expected to return within a certain fixed time (either 10s or 15s). On some systems that are under high load this time might be too short, and can be scaled up using this option.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8809496Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8809815Z             "pattern" : "[0-9]+"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8810165Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8810440Z           "log_verbosity" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8810771Z             "title" : "Verbosity of the extractor logging",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8811474Z             "description" : "Set the verbosity of the extractor logging to 'quiet' (0), 'normal' (1), 'chatty' (2), or 'noisy' (3). The default is 'normal'.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8812128Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8812471Z             "pattern" : "[0-3]"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8813261Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8813528Z           "frontend_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8813921Z             "title" : "C/C++ extractor frontend options",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8814461Z             "description" : "Set additional options that should be passed to the C/C++ extractor frontend.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8814994Z             "type" : "array",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8815311Z             "visibility" : 3
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8815604Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8815869Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8816116Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8816372Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8816654Z     "ruby" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8816911Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8817264Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/ruby",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8817705Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8818027Z           "trap" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8818353Z             "title" : "Options pertaining to TRAP.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8818853Z             "description" : "Options pertaining to TRAP.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8819215Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8819557Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8819859Z               "compression" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8820371Z                 "title" : "Controls compression for the TRAP files written by the extractor.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8821455Z                 "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'gzip' (the default, to write gzip-compressed TRAP) 'zstd' (to write Zstandard-compressed TRAP) and 'none' (to write uncompressed TRAP).\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8822376Z                 "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8822733Z                 "pattern" : "^(none|gzip|zstd)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8823068Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8823343Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8823628Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8823873Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8824126Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8824384Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8824672Z     "properties" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8824963Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8825329Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/properties"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8825748Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8826021Z     ]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8826294Z   }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8826548Z }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.9019856Z rust does not support TRAP caching (missing option group)
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.9020366Z Found 0 languages that support TRAP caching
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.9021575Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.9035670Z While resolving threads, found a cgroup CPUs file with 4 CPUs in /sys/fs/cgroup/cpuset.cpus.effective.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.9039714Z Skipping download of dependency cache for rust as we have no caching configuration for it.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.9050070Z Writing augmented user configuration file to /home/runner/work/_temp/user-config.yaml
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.9051533Z ##[group]Augmented user configuration file contents
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.9074933Z default-setup:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.9075587Z   org:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.9076084Z     model-packs: []
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.9076762Z threat-models: []
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.9077126Z 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.9077930Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.9080392Z [command]/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/codeql database init --force-overwrite --db-cluster /home/runner/work/_temp/codeql_databases --source-root=/home/runner/work/codenoesis/codenoesis --calculate-language-specific-baseline --sublanguage-file-coverage --extractor-include-aliases --language=rust --codescanning-config=/home/runner/work/_temp/user-config.yaml --build-mode=none
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:14.1470748Z Package install location: /home/runner/.codeql/packages
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:14.1500210Z Nothing downloaded.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:14.6451548Z Calculating baseline information in /home/runner/work/codenoesis/codenoesis
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:14.7731963Z Running command in /home/runner/work/codenoesis/codenoesis: [/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/actions/tools/configure-baseline.sh]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:14.7851170Z Calculated baseline information for languages: actions, kotlin, python, rust (136ms).
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.0775939Z Resolving extractor rust.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.0816721Z Successfully loaded extractor Rust (rust) from /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/rust.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.1140944Z Created skeleton CodeQL database at /home/runner/work/_temp/codeql_databases/rust. This in-progress database is ready to be populated by an extractor.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4322637Z ##[group]Run github/codeql-action/analyze@v4
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4323000Z with:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4323320Z   category: /language:rust
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4323644Z   output: ../results
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4324376Z   upload: always
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4324725Z   skip-queries: false
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4325088Z   checkout_path: /home/runner/work/codenoesis/codenoesis
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4325505Z   upload-database: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4325823Z   wait-for-processing: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4328250Z   token: ***
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4328937Z   matrix: {
+Analyze (rust)	UNKNOWN STEP	  "language": "rust",
+Analyze (rust)	UNKNOWN STEP	  "category": "/language:rust",
+Analyze (rust)	UNKNOWN STEP	  "build-mode": "none",
+Analyze (rust)	UNKNOWN STEP	  "runner": "[\"ubuntu-latest\"]"
+Analyze (rust)	UNKNOWN STEP	}
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4329567Z   expect-error: false
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4329887Z env:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4330178Z   CODE_SCANNING_REF: refs/heads/main
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4330518Z   CODE_SCANNING_BASE_BRANCH: 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4330925Z   CODE_SCANNING_IS_ANALYZING_DEFAULT_BRANCH: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4331398Z   CODE_SCANNING_IS_STEADY_STATE_DEFAULT_SETUP: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4336788Z   CODE_SCANNING_WORKFLOW_FILE: H4sIAAAAAAAA/+xVTW/jNhC9+1cM3ALZPci5FD0IWGAVR07cGnbWUrBNFwFBUyOZtUxq+eGsdpv/XlCUY6lx6vTjWJ+s4eObGc68GUG3GMJwLDP8MBsOlBWBN33/7RsU3KztaoQ7FGbERWWNHjGZIdGMCsFFQZQVxOHh8XEgRQhZLeiWs8EAxS4cAIwXlzFJxtF8Pp1fkWU8eTUx5o7zzwwXURKTi2U0H1+/lmlFNZKVooKtjzFOExLNo9ndr+7jMp5Et7P0b3rgmlBBy/qr+8gwp7Y0f+0xSePo8o4kaZTGT06TOL29CcEoi8/ufFwsf57MFh/JZDqLXxvXg1SbvJQPJOdlU6HBb3KlXVl8uOj+Avh6R94Ebxz3lhrFv4xKKgpLC3f3bQNVVujA1dmBciW3PyWL+ZsWrawQqN76lAEqVFuuNZdCez8AlJnmExTSrLUxKQwK0zdWlG1ogX2jRmYVN3XQpKxDeFDcYHvIs8DIDYqu1VFzYTGQIkClpAohp6X2h9ooarCo97HllJdBTrXpgqB9iT0IgAtW2gwPBoAA9u8U7jPsnAIw50eqOoTzJ+Ax3MryMgu2MsMQhBTYO/SPG8LZp6FdWWFsUFKD2gzvz14IparNWoqTkRyB/ceBKKvNyTCegf5VENpg1XZd0Pb3eI1sI60BhZXU3EhVt5RWu0ZrK3LOWtz73Y+DHkGCxlZQKfmlhlwqUFhwbRRH/dSCoT/u8XqZnjtlfi4D7+VcG6pM0IDf735o8Q/crA99daAnTGGGwnBaaq88jUyh0aOraXp9e0GW8dU0SZfTOCE3y8Uvd3sFut+hDMd13c9xKrhzw78i+I1wOhUuuDnk0I59/3Mj7MPMx0SuF0naRu+KM2qSH0lrmsHVfJG11KYbfI/gZrE8SVBJ9TLBOCLjeJlOJ9NxlManqBglDJXhOXft+iLp7XKWnKKyqtQHgn6Zm0msuQ42XGQ6BPe4wX6CP6uifrGMx2TTgR7MXXCGFYoMBasDRtmai8Jf8vIaodhxJcUWhYF37+DM1z9wVcLsrEv02aLr1BCGQ/gOLv0KbKw1aHuY0s1MznkRwu8dPbcrM9BOYWFP6FIVfQOAS6IM3IbQIXx65Sr0PUuaW/D4CPcdUrNWSE3zOGVDCfeDvixuUOVSbVtN+FWpuT4tjnbP/q+Pf6yPw67odPPe6C79EQAA//9GS/k2wQoAAA==
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4342628Z   CODEQL_ACTION_JOB_RUN_UUID: 3f54b912-5e5d-4628-846d-1d7a27ebbce7
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4343075Z   CODEQL_ACTION_FEATURE_MULTI_LANGUAGE: false
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4343437Z   CODEQL_ACTION_FEATURE_SANDWICH: false
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4343802Z   CODEQL_ACTION_FEATURE_SARIF_COMBINE: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4344305Z   CODEQL_ACTION_FEATURE_WILL_UPLOAD: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4344661Z   CODEQL_ACTION_VERSION: 4.37.7
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4345015Z   CODEQL_ACTION_INIT_HAS_RUN: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4345433Z   CODEQL_ACTION_ANALYSIS_KEY: dynamic/github-code-scanning/codeql:analyze
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4345930Z   CODEQL_WORKFLOW_STARTED_AT: 2026-08-14T21:26:04.806Z
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4351051Z   CODEQL_ACTION_CLI_VERSION_INFO: {"cmd":"/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/codeql","version":{"productName":"CodeQL","vendor":"GitHub","version":"2.26.3","sha":"7d097a43199effe04ecd9c6bd3ad9bb02a45b3d7","branches":["codeql-cli-2.26.3"],"copyright":"Copyright (C) 2019-2026 GitHub, Inc.","unpackedLocation":"/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql","configFileLocation":"/home/runner/.config/codeql/config","configFileFound":false,"overlayVersion":4,"features":{"analysisSummaryV2Default":true,"buildModeOption":true,"bundleSupportsIncludeDiagnostics":true,"bundleSupportsIncludeLogs":true,"bundleSupportsOverlay":true,"databaseInterpretResultsSupportsSarifRunProperty":true,"featuresInVersionResult":true,"indirectTracingSupportsStaticBinaries":false,"informsAboutUnsupportedPathFilters":true,"supportsPython312":true,"mrvaPackCreate":true,"threatModelOption":true,"traceCommandUseBuildMode":true,"v2ramSizing":true,"mrvaPackCreateMultipleQueries":true,"setsCodeqlRunnerEnvVar":true,"sarifMergeRunsFromEqualCategory":true,"forceOverwrite":true,"generateSummarySymbolMap":true,"pythonDefaultIsToNotExtractStdlib":true,"queryServerRunQueries":true,"queryServerTrimCacheWithMode":true,"builtinExtractorsSpecifyDefaultQueries":true,"bqrsDiffResultSets":true,"bundleSupportsIncludeOption":true,"suppressesMissingFileBaselineWarning":true}}}
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4355810Z   CODEQL_RAM: 14574
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4356110Z   CODEQL_THREADS: 4
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4356394Z   CODEQL_PROXY_HOST: 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4356738Z   CODEQL_PROXY_PORT: 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4357083Z   CODEQL_PROXY_CA_CERTIFICATE: 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4357417Z   CODEQL_PROXY_URLS: 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.4357731Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.6662665Z Existing job run UUID is 3f54b912-5e5d-4628-846d-1d7a27ebbce7.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.9191036Z While resolving threads, found a cgroup CPUs file with 4 CPUs in /sys/fs/cgroup/cpuset.cpus.effective.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.9221463Z ##[group]Generating diff range extension pack
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.9222661Z No precomputed diff ranges found; skipping diff-informed analysis stage.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.9223627Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.9272599Z ##[group]Extracting rust
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:15.9276545Z [command]/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/codeql database trace-command --use-build-mode --working-dir /home/runner/work/codenoesis/codenoesis /home/runner/work/_temp/codeql_databases/rust
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:16.7398953Z Running command in /home/runner/work/codenoesis/codenoesis: [/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/rust/tools/autobuild.sh]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.4754949Z [2026-08-14 21:26:17] [build-stderr] Scanning for files in /home/runner/work/codenoesis/codenoesis...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6113552Z [2026-08-14 21:26:17] [build-stderr] /home/runner/work/_temp/codeql_databases/rust: Indexing files in in /home/runner/work/codenoesis/codenoesis...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6396224Z [2026-08-14 21:26:17] [build-stderr] Running command in /home/runner/work/codenoesis/codenoesis: [/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/rust/tools/index-files.sh, /home/runner/work/_temp/codeql_databases/rust/working/files-to-index18438627905321522408.list]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6580636Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout] ^[[32m INFO^[[0m configuration: {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6600451Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     scratch_dir: "/home/runner/work/_temp/codeql_databases/rust/working",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6606696Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     trap_dir: "/home/runner/work/_temp/codeql_databases/rust/trap/rust",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6611675Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     source_archive_dir: "/home/runner/work/_temp/codeql_databases/rust/src",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6613885Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     diagnostic_dir: "/home/runner/work/_temp/codeql_databases/rust/diagnostic/extractors/rust",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6615830Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     cargo_target_dir: None,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6617577Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     cargo_target: None,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6619548Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     cargo_features: [],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6620585Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     cargo_cfg_overrides: [],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6621709Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     cargo_extra_env: {},
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6622747Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     cargo_extra_args: [],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6623727Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     cargo_all_targets: false,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6624879Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     logging_flamegraph: None,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6626160Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     logging_verbosity: Some(
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6627170Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]         "progress",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6628085Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     ),
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6630856Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     trap_compression: None,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6633133Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     number of inputs: 311,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6635326Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     qltest: false,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6637194Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     qltest_cargo_check: false,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6638846Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     qltest_dependencies: [],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6640799Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     qltest_use_nightly: false,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6642356Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     sysroot: None,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6644496Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     sysroot_src: None,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6645518Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     rustc_src: None,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6647000Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     build_script_command: [],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6647984Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     extra_includes: [],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6649150Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     proc_macro_server: None,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6650312Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     extract_dependencies_as_source: false,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6651719Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]     force_library_mode: false,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6662709Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout] }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6663975Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout] ^[[32m INFO^[[0m found manifests:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6665499Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]   /home/runner/work/codenoesis/codenoesis/tests/fixtures/s1/safe-inventory-v1/revision-a/Cargo.toml
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6667382Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]   /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/rust-callable-inherited-uncertainty-v1/repository/Cargo.toml
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6669855Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]   /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/compiler-index-v1/repository/Cargo.toml
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6671795Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]   /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/root-package-workspace-v1/shared-tree/crates/cli/Cargo.toml
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6673806Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]   /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/rust-callable-inherited-uncertainty-v1/imported-owner-repository/Cargo.toml
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6675567Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]   /home/runner/work/codenoesis/codenoesis/Cargo.toml
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6676558Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]   /home/runner/work/codenoesis/codenoesis/tests/fixtures/s2/rust-knowledge-v1/revision-a/Cargo.toml
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6677694Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]   /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/rust-empty-semantic-extension-v1/repository/Cargo.toml
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6679528Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]   /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/framework-declarations-v1/repository/Cargo.toml
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6680931Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout]   /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/rust-local-flow-v1/repository/Cargo.toml
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:17.6681895Z [2026-08-14 21:26:17] [build-stdout] [2026-08-14 21:26:17] [build-stdout] and 12 more
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:29.2696492Z [2026-08-14 21:26:29] [build-stdout] [2026-08-14 21:26:29] [build-stdout] ^[[31mERROR^[[0m failed to load workspace for /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/rust-function-context-v1/repository/Cargo.toml: Failed to load the project at /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/rust-function-context-v1/repository/Cargo.toml
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:29.2700332Z [2026-08-14 21:26:29] [build-stdout] [2026-08-14 21:26:29] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/rust-function-context-v1/repository/src/lib.rs:1:1: semantic analyzer unavailable (unable to load manifest): macro expansion will be skipped.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:29.3662326Z [2026-08-14 21:26:29] [build-stdout] [2026-08-14 21:26:29] [build-stdout] ^[[31mERROR^[[0m failed to load workspace for /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/rust-real-repository-shapes-v1/repository/Cargo.toml: Failed to load the project at /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/rust-real-repository-shapes-v1/repository/Cargo.toml
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:29.3667604Z [2026-08-14 21:26:29] [build-stdout] [2026-08-14 21:26:29] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/rust-real-repository-shapes-v1/repository/src/lib.rs:1:1: semantic analyzer unavailable (unable to load manifest): macro expansion will be skipped.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:29.9950743Z [2026-08-14 21:26:29] [build-stdout] [2026-08-14 21:26:29] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/workspace-docs-v1/revision-a/crates/app/build.rs:1:1: macro expansion failed for '$crate::panic::panic_2021'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:45.0824409Z [2026-08-14 21:26:45] [build-stdout] [2026-08-14 21:26:45] [build-stdout] ^[[31mERROR^[[0m failed to load workspace for /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/root-package-workspace-v1/shared-tree/crates/cli/Cargo.toml: Failed to load the project at /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/root-package-workspace-v1/shared-tree/crates/cli/Cargo.toml
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:45.0836407Z [2026-08-14 21:26:45] [build-stdout] [2026-08-14 21:26:45] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/root-package-workspace-v1/shared-tree/crates/cli/src/bin/inspect/main.rs:1:1: semantic analyzer unavailable (unable to load manifest): macro expansion will be skipped.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:45.0842951Z [2026-08-14 21:26:45] [build-stdout] [2026-08-14 21:26:45] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/root-package-workspace-v1/shared-tree/crates/cli/src/main.rs:1:1: semantic analyzer unavailable (unable to load manifest): macro expansion will be skipped.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:45.6971548Z [2026-08-14 21:26:45] [build-stdout] [2026-08-14 21:26:45] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/tests/fixtures/s5/incremental-refresh-v1/revision-b/crates/app/build.rs:1:1: macro expansion failed for '$crate::panic::panic_2021'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:45.8283202Z [2026-08-14 21:26:45] [build-stdout] [2026-08-14 21:26:45] [build-stdout] ^[[31mERROR^[[0m failed to load workspace for /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/rust-callable-semantics-v1/repository/Cargo.toml: Failed to load the project at /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/rust-callable-semantics-v1/repository/Cargo.toml
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:45.8290208Z [2026-08-14 21:26:45] [build-stdout] [2026-08-14 21:26:45] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/rust-callable-semantics-v1/repository/build.rs:1:1: semantic analyzer unavailable (unable to load manifest): macro expansion will be skipped.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:45.8292807Z [2026-08-14 21:26:45] [build-stdout] [2026-08-14 21:26:45] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/rust-callable-semantics-v1/repository/src/lib.rs:1:1: semantic analyzer unavailable (unable to load manifest): macro expansion will be skipped.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:45.8311866Z [2026-08-14 21:26:45] [build-stdout] [2026-08-14 21:26:45] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/tests/fixtures/s4/rust-callable-semantics-v1/repository/src/model.rs:1:1: semantic analyzer unavailable (unable to load manifest): macro expansion will be skipped.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.7944565Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/src/s1_boundaries.rs:90:21: macro expansion failed for 'matches'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8033390Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/src/s4_r10.rs:189:9: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8162075Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/src/s4_r3.rs:205:17: macro expansion failed for 'matches'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8197654Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/src/s4_r4.rs:206:17: macro expansion failed for 'matches'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8321032Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/src/s5.rs:317:9: macro expansion failed for 'assert'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8324516Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/src/s5.rs:320:9: macro expansion failed for 'assert'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8327351Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/src/s5.rs:326:22: macro expansion failed for 'vec'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8386574Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/src/s6.rs:126:5: macro expansion failed for 'format'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8406305Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:35:31: macro expansion failed for 'vec'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8459278Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:44:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8472265Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:45:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8475049Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:46:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8478092Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:60:31: macro expansion failed for 'vec'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8480956Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:69:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8483576Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:77:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8486052Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:78:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8488495Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:92:31: macro expansion failed for 'vec'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8491165Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:101:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8493743Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:102:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8496330Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:103:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8498924Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:115:31: macro expansion failed for 'vec'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8501369Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:122:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8514051Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:128:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8516784Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:129:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8522756Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:150:27: macro expansion failed for 'vec'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8525868Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:208:16: macro expansion failed for '$crate::panic::panic_2021'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8528430Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s1_boundaries.rs:241:30: macro expansion failed for 'vec'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8531421Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_framework_declarations.rs:37:16: macro expansion failed for '$crate::panic::panic_2021'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8534571Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_framework_declarations.rs:40:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8537329Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_framework_declarations.rs:41:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8568584Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_framework_declarations.rs:42:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8572561Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_framework_declarations.rs:74:13: macro expansion failed for 'vec'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8577453Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_framework_declarations.rs:106:9: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8580359Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_framework_declarations.rs:107:9: macro expansion failed for 'assert'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8583036Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_framework_declarations.rs:108:9: macro expansion failed for 'assert'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8586094Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_k1_rust_callable_semantics.rs:18:16: macro expansion failed for '$crate::panic::panic_2021'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8589123Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_k1_rust_callable_semantics.rs:20:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8591951Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_k1_rust_callable_semantics.rs:52:13: macro expansion failed for 'vec'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8594759Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_r10_cfg_declaration_alternatives.rs:38:16: macro expansion failed for '$crate::panic::panic_2021'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8607614Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_r10_cfg_declaration_alternatives.rs:40:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8610983Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_r10_cfg_declaration_alternatives.rs:41:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8613724Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_r10_cfg_declaration_alternatives.rs:42:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8616371Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_r10_cfg_declaration_alternatives.rs:74:13: macro expansion failed for 'vec'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8619503Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_r10_cfg_declaration_alternatives.rs:106:9: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8670870Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_r10_cfg_declaration_alternatives.rs:107:9: macro expansion failed for 'assert'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8677445Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_r10_cfg_declaration_alternatives.rs:108:9: macro expansion failed for 'assert'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8708306Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_r11_k1_repository_boundary_composition.rs:43:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8728112Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_r11_k1_repository_boundary_composition.rs:49:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8731512Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_r11_k1_repository_boundary_composition.rs:50:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8734438Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_r11_k1_repository_boundary_composition.rs:51:5: macro expansion failed for 'assert_eq'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:49.8737367Z [2026-08-14 21:26:49] [build-stdout] [2026-08-14 21:26:49] [build-stdout] ^[[33m WARN^[[0m /home/runner/work/codenoesis/codenoesis/crates/codenoesis-application/tests/s4_r11_k1_repository_boundary_composition.rs:78:17: macro expansion failed for 'vec'

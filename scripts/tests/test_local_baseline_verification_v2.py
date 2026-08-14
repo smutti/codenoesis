@@ -1,8 +1,13 @@
 from __future__ import annotations
 
+import copy
+import importlib.util
 import json
+import tempfile
 import unittest
 from pathlib import Path
+from types import ModuleType
+from typing import Callable
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -85,6 +90,30 @@ class LocalBaselineVerificationV2ContractTests(unittest.TestCase):
         cls.plan = json.loads(PLAN_PATH.read_text(encoding="utf-8"))
         cls.catalog = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
         cls.s0_schema = json.loads(S0_SCHEMA_PATH.read_text(encoding="utf-8"))
+        cls.manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+        module_spec = importlib.util.spec_from_file_location(
+            "verify_local_baseline_v2",
+            VALIDATOR_PATH,
+        )
+        if module_spec is None or module_spec.loader is None:
+            raise RuntimeError("cannot load the LocalBaselineVerificationV2 validator")
+        validator = importlib.util.module_from_spec(module_spec)
+        module_spec.loader.exec_module(validator)
+        cls.validator: ModuleType = validator
+
+    def validate_mutation(
+        self,
+        mutation: Callable[[dict[str, object]], None],
+    ) -> list[str]:
+        manifest = copy.deepcopy(self.manifest)
+        mutation(manifest)
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            manifest_path = Path(temporary_directory) / "manifest.json"
+            manifest_path.write_text(
+                json.dumps(manifest, ensure_ascii=False) + "\n",
+                encoding="utf-8",
+            )
+            return self.validator.validate_manifest(ROOT, manifest_path)
 
     def test_plan_fixes_exact_authority_and_scope(self) -> None:
         self.assertEqual(self.plan["issue"], ISSUE)
@@ -182,6 +211,82 @@ class LocalBaselineVerificationV2ContractTests(unittest.TestCase):
                 normalized,
                 f"verification status marker is absent from {document_path}",
             )
+
+    def test_candidate_manifest_is_complete_and_valid(self) -> None:
+        self.assertEqual(self.validator.validate_manifest(ROOT, MANIFEST_PATH), [])
+
+    def test_missing_profile_fails_closed(self) -> None:
+        errors = self.validate_mutation(lambda manifest: manifest["profiles"].pop())
+        self.assertTrue(
+            any("profile order or scope" in error for error in errors),
+            errors,
+        )
+
+    def test_wrong_product_tree_fails_closed(self) -> None:
+        def mutate(manifest: dict[str, object]) -> None:
+            manifest["product_tree_sha256"] = "0" * 64
+
+        errors = self.validate_mutation(mutate)
+        self.assertTrue(any("must equal base product tree" in error for error in errors))
+
+    def test_tampered_repository_digest_fails_closed(self) -> None:
+        def mutate(manifest: dict[str, object]) -> None:
+            manifest["repository_evidence"][0]["sha256"] = "0" * 64
+
+        errors = self.validate_mutation(mutate)
+        self.assertTrue(any("digest mismatch" in error for error in errors), errors)
+
+    def test_dangling_profile_evidence_fails_closed(self) -> None:
+        def mutate(manifest: dict[str, object]) -> None:
+            manifest["profiles"][0]["evidence_classes"][0]["evidence"].append(
+                "missing-evidence"
+            )
+
+        errors = self.validate_mutation(mutate)
+        self.assertTrue(any("dangling evidence reference" in error for error in errors))
+
+    def test_wrong_remote_log_digest_fails_closed(self) -> None:
+        def mutate(manifest: dict[str, object]) -> None:
+            manifest["remote_logs"][0]["committed_log_sha256"] = "0" * 64
+
+        errors = self.validate_mutation(mutate)
+        self.assertTrue(any("committed digest mismatch" in error for error in errors))
+
+    def test_unsafe_evidence_path_fails_closed(self) -> None:
+        def mutate(manifest: dict[str, object]) -> None:
+            manifest["repository_evidence"][0]["path"] = "../outside.json"
+
+        errors = self.validate_mutation(mutate)
+        self.assertTrue(any("path is unsafe" in error for error in errors), errors)
+
+    def test_gate_with_dangling_evidence_fails_closed(self) -> None:
+        def mutate(manifest: dict[str, object]) -> None:
+            manifest["required_gates"][0]["evidence"].append("missing-evidence")
+
+        errors = self.validate_mutation(mutate)
+        self.assertTrue(any("gate" in error and "dangling" in error for error in errors))
+
+    def test_schema_extension_fails_closed(self) -> None:
+        def mutate(manifest: dict[str, object]) -> None:
+            manifest["environment"]["unexpected"] = True
+
+        errors = self.validate_mutation(mutate)
+        self.assertTrue(any("not allowed by the schema" in error for error in errors))
+
+    def test_independent_review_cannot_self_activate(self) -> None:
+        def mutate(manifest: dict[str, object]) -> None:
+            manifest["review"] = {
+                "state": "accepted",
+                "required_actor": "agent",
+                "activation": "self-approved",
+                "decision_url": ISSUE,
+            }
+
+        errors = self.validate_mutation(mutate)
+        self.assertTrue(
+            any("pending independent activation" in error for error in errors),
+            errors,
+        )
 
 
 if __name__ == "__main__":

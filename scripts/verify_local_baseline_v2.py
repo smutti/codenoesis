@@ -9,6 +9,7 @@ import json
 import re
 import subprocess
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -27,11 +28,97 @@ PLAN_PATH = Path("tests/specifications/verification/local-baseline-v2/plan.json"
 CATALOG_PATH = Path(
     "tests/specifications/verification/local-baseline-v2/profile-catalog.json"
 )
+MANIFEST_SCHEMA_PATH = Path(
+    "tests/specifications/verification/local-baseline-v2/manifest.schema.json"
+)
 REMOTE_RUNS_PATH = Path(
     "tests/evidence/verification/local-baseline-v2/remote-runs.json"
 )
+CODEQL_LOG_INDEX_PATH = Path(
+    "tests/evidence/verification/local-baseline-v2/codeql-rust-log/index.json"
+)
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 GIT_SHA1 = re.compile(r"^[0-9a-f]{40}$")
+
+CHECKPOINT_CONTRACT_DIGESTS = {
+    "docs/software/decisions/0037-local-baseline-verification-v2.md": (
+        "c149645a7a5914e956ec41ce79578cb14f563daf7bb39b393194289cfe7d9072"
+    ),
+    "docs/software/verification.md": (
+        "86569b0274aa5a7f088a3007b1d9237418c505fd34ec8a1724e99ebb8ccfb754"
+    ),
+    "tests/specifications/s0/evidence-manifest-v1.schema.json": (
+        "d1a09942c260115282364bad8be5eada0103a48d13245af384d852b84cb72216"
+    ),
+    "tests/specifications/verification/local-baseline-v2/manifest.schema.json": (
+        "72bb571a0d00b12543ccb4a3e4a42e13211942e1cdf78787f4b379252cb9a2bb"
+    ),
+    "tests/specifications/verification/local-baseline-v2/plan.json": (
+        "2b3a6a5e71f35823faeb9a676a0bdd281ebac4095004bc0cd2f84f2f4264cc0f"
+    ),
+    "tests/specifications/verification/local-baseline-v2/profile-catalog.json": (
+        "23d175dd5e73f0c67e2d8c9d8fdf36c921220f41fcfaaf6586514ed6d632172b"
+    ),
+}
+
+PINNED_REPOSITORY_EVIDENCE = {
+    "v2-red-log": (
+        "tests/evidence/verification/local-baseline-v2/red.log",
+        "ba91fcc0d23684a57f1356db70ce41f41db36c9c718851bbfbb6cd0603124ca4",
+    ),
+    "v2-red-observation": (
+        "tests/evidence/verification/local-baseline-v2/red-observation.json",
+        "6db8f580239db79e4a206fe1d3dc33a998382e127fee9d6aae5dcf4817e80fad",
+    ),
+    "v2-focused-green-log": (
+        "tests/evidence/verification/local-baseline-v2/focused-green.log",
+        "1019817a0f99e1b173035271646446752574f27abf66ad2820e2d7e68222e552",
+    ),
+    "v2-focused-green-observation": (
+        "tests/evidence/verification/local-baseline-v2/focused-green-observation.json",
+        "3200b184e470a9f19337af69318951a0a604848a7385d39fb7f8bd91ed150f8a",
+    ),
+    "remote-runs": (
+        "tests/evidence/verification/local-baseline-v2/remote-runs.json",
+        "98926c041270ff1d7346f018efe8a2b25f6b912a30510813a7bcee18e8d60b34",
+    ),
+    "g8-post-merge": (
+        "tests/evidence/verification/local-baseline-v2/g8-post-merge/post-merge-evidence.json",
+        "7f27251aeabd013d8894c18561c885af1fe23dabbd8cfb40d32bb9451aa0e323",
+    ),
+    "g8-run-metadata": (
+        "tests/evidence/verification/local-baseline-v2/g8-post-merge/run-metadata.json",
+        "55feac9c04a9fce07814e5e6645033be7cf60f1f139a17664835346e7fbb1fcf",
+    ),
+    "g8-attestation-bundle": (
+        "tests/evidence/verification/local-baseline-v2/g8-post-merge/attestation.jsonl",
+        "3048d8078a79a00dc75015b36b0ebb00718ebf13cd71258060821d837270f28f",
+    ),
+    "g8-attestation-positive": (
+        "tests/evidence/verification/local-baseline-v2/g8-post-merge/attestation-positive.log",
+        "ffba6ad834f421c8cc79a96558d3ce02e7c9fd2276fae5c558d857852009802c",
+    ),
+    "g8-attestation-negative": (
+        "tests/evidence/verification/local-baseline-v2/g8-post-merge/attestation-negative.log",
+        "25ca3eb9285198c3ed81d7474aaec97dfa2158d5703b6fbea57f3fd293d77c2f",
+    ),
+    "g8-candidate-verification": (
+        "tests/evidence/verification/local-baseline-v2/g8-post-merge/candidate-verification.log",
+        "af8f9ff48f6b9e5363acb7b3b9ef7dcf024a42b7b72304cdf5bd1e2bc5c825e8",
+    ),
+}
+
+EXPECTED_REMOTE_LOG_DIGESTS = {
+    "base-benchmark-validation": "4e3dc0113f1373ca3ff3b203d248eaa760bd7907e75e571d213c43ecf0129f74",
+    "base-ci-linux": "86069e86b74a07f9f3e688f7402f9c4a92d7c3573ee4262531b0b5b2dd31489d",
+    "base-ci-macos": "0c60785f96e3dbb8c2156ddc1822e4cfc73e3565020e290577ab443a570259bc",
+    "base-ci-quality": "baa3bb0c3de514eeb34184ac259a2ab97eb27129f5b5e1f9af969065a333a523",
+    "base-ci-supply-chain": "57f4f4b0ba16ba63737c432bae516d4bd120347d9a374af85b0b690c1574f5d0",
+    "base-ci-windows": "d5ef2c107eec5664fc60bf65471d08bcbe995497fe53ad44da19802eb0f15874",
+    "base-release-attestation": "3c5151e403cc8dc4442eefc3fafaca3629371667647e3d9f8ead39d7a223b2bc",
+    "base-release-supply": "47de713d883fa1a08d31206114acc636c206d6df542b48c6d733d5981fbdbf82",
+    "s0-pr15-quality": "5887763bfc16ba9ddbc32590793b82fc567efb16ed17336bf07dfbf2ce6f16fa",
+}
 
 MANIFEST_FIELDS = {
     "schema_version",
@@ -133,6 +220,158 @@ def sha256_bytes(value: bytes) -> str:
 
 def sha256_file(path: Path) -> str:
     return sha256_bytes(path.read_bytes())
+
+
+def json_type_matches(value: Any, expected: str) -> bool:
+    if expected == "object":
+        return isinstance(value, dict)
+    if expected == "array":
+        return isinstance(value, list)
+    if expected == "string":
+        return isinstance(value, str)
+    if expected == "integer":
+        return isinstance(value, int) and not isinstance(value, bool)
+    if expected == "boolean":
+        return isinstance(value, bool)
+    if expected == "null":
+        return value is None
+    return False
+
+
+def resolve_schema_ref(schema_root: dict[str, Any], reference: str) -> dict[str, Any]:
+    if not reference.startswith("#/"):
+        raise ValueError(f"unsupported JSON Schema reference: {reference}")
+    value: Any = schema_root
+    for raw_part in reference[2:].split("/"):
+        part = raw_part.replace("~1", "/").replace("~0", "~")
+        if not isinstance(value, dict) or part not in value:
+            raise ValueError(f"unresolved JSON Schema reference: {reference}")
+        value = value[part]
+    if not isinstance(value, dict):
+        raise ValueError(f"JSON Schema reference is not an object: {reference}")
+    return value
+
+
+def validate_json_schema(
+    value: Any,
+    schema: dict[str, Any],
+    schema_root: dict[str, Any],
+    location: str,
+    errors: list[str],
+) -> None:
+    reference = schema.get("$ref")
+    if isinstance(reference, str):
+        validate_json_schema(
+            value,
+            resolve_schema_ref(schema_root, reference),
+            schema_root,
+            location,
+            errors,
+        )
+        return
+
+    expected_types = schema.get("type")
+    if isinstance(expected_types, str):
+        expected_types = [expected_types]
+    if isinstance(expected_types, list) and not any(
+        isinstance(expected, str) and json_type_matches(value, expected)
+        for expected in expected_types
+    ):
+        errors.append(
+            f"{location} must have JSON type {' or '.join(expected_types)}"
+        )
+        return
+
+    if "const" in schema and value != schema["const"]:
+        errors.append(f"{location} differs from its schema constant")
+    enum = schema.get("enum")
+    if isinstance(enum, list) and value not in enum:
+        errors.append(f"{location} is outside its schema enum")
+
+    if isinstance(value, dict):
+        required = schema.get("required", [])
+        for field in required:
+            if field not in value:
+                errors.append(f"{location}.{field} is required by the schema")
+        properties = schema.get("properties", {})
+        if schema.get("additionalProperties") is False:
+            for field in value:
+                if field not in properties:
+                    errors.append(f"{location}.{field} is not allowed by the schema")
+        for field, child in value.items():
+            child_schema = properties.get(field)
+            if isinstance(child_schema, dict):
+                validate_json_schema(
+                    child,
+                    child_schema,
+                    schema_root,
+                    f"{location}.{field}",
+                    errors,
+                )
+
+    if isinstance(value, list):
+        minimum_items = schema.get("minItems")
+        maximum_items = schema.get("maxItems")
+        if isinstance(minimum_items, int) and len(value) < minimum_items:
+            errors.append(f"{location} has fewer than {minimum_items} items")
+        if isinstance(maximum_items, int) and len(value) > maximum_items:
+            errors.append(f"{location} has more than {maximum_items} items")
+        item_schema = schema.get("items")
+        if isinstance(item_schema, dict):
+            for index, item in enumerate(value):
+                validate_json_schema(
+                    item,
+                    item_schema,
+                    schema_root,
+                    f"{location}[{index}]",
+                    errors,
+                )
+
+    if isinstance(value, str):
+        minimum_length = schema.get("minLength")
+        maximum_length = schema.get("maxLength")
+        if isinstance(minimum_length, int) and len(value) < minimum_length:
+            errors.append(f"{location} is shorter than {minimum_length} characters")
+        if isinstance(maximum_length, int) and len(value) > maximum_length:
+            errors.append(f"{location} is longer than {maximum_length} characters")
+        pattern = schema.get("pattern")
+        if isinstance(pattern, str) and re.fullmatch(pattern, value) is None:
+            errors.append(f"{location} does not match its schema pattern")
+        if schema.get("format") == "date-time":
+            try:
+                parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+            except ValueError:
+                errors.append(f"{location} is not an RFC 3339 date-time")
+            else:
+                if parsed.tzinfo is None or parsed.utcoffset() != timezone.utc.utcoffset(None):
+                    errors.append(f"{location} must be an explicit UTC date-time")
+
+    minimum = schema.get("minimum")
+    if isinstance(value, int) and not isinstance(value, bool):
+        if isinstance(minimum, int) and value < minimum:
+            errors.append(f"{location} is below schema minimum {minimum}")
+
+
+def validate_checkpoint_contracts(root: Path, errors: list[str]) -> None:
+    for relative_path, expected_digest in CHECKPOINT_CONTRACT_DIGESTS.items():
+        current_path = root / relative_path
+        if not current_path.is_file():
+            errors.append(f"checkpoint contract is missing: {relative_path}")
+            continue
+        current_digest = sha256_file(current_path)
+        if current_digest != expected_digest:
+            errors.append(f"checkpoint contract changed after Red: {relative_path}")
+        try:
+            checkpoint_bytes = git(
+                root,
+                ["show", f"{CHECKPOINT_SHA}:{relative_path}"],
+                binary=True,
+            )
+        except ValueError as error:
+            errors.append(str(error))
+            continue
+        if sha256_bytes(checkpoint_bytes) != expected_digest:
+            errors.append(f"checkpoint digest does not bind {relative_path}")
 
 
 def git(root: Path, arguments: Iterable[str], *, binary: bool = False) -> Any:
@@ -372,6 +611,13 @@ def validate_catalog(
         for item in manifest.get("repository_evidence", [])
         if isinstance(item, dict)
     }
+    repository_path_to_id = {
+        item.get("path"): item.get("id")
+        for item in manifest.get("repository_evidence", [])
+        if isinstance(item, dict)
+        and isinstance(item.get("path"), str)
+        and isinstance(item.get("id"), str)
+    }
     remote_log_ids = {
         item.get("id")
         for item in manifest.get("remote_logs", [])
@@ -385,6 +631,24 @@ def validate_catalog(
 
     for result in results:
         profile_id = result["id"]
+        catalog_profile = catalog_by_id[profile_id]
+        expected_catalog_evidence = {
+            repository_path_to_id.get(relative_path)
+            for field in ("oracle_paths", "evidence_paths")
+            for relative_path in catalog_profile[field]
+        }
+        if None in expected_catalog_evidence:
+            missing_paths = sorted(
+                relative_path
+                for field in ("oracle_paths", "evidence_paths")
+                for relative_path in catalog_profile[field]
+                if relative_path not in repository_path_to_id
+            )
+            errors.append(
+                f"manifest profile {profile_id} has unbound catalog paths: "
+                f"{', '.join(missing_paths)}"
+            )
+            expected_catalog_evidence.discard(None)
         if set(result) != {
             "id",
             "catalog_entry_sha256",
@@ -393,7 +657,7 @@ def validate_catalog(
         }:
             errors.append(f"manifest profile {profile_id} has unexpected fields")
             continue
-        expected_catalog_digest = sha256_bytes(canonical_json(catalog_by_id[profile_id]))
+        expected_catalog_digest = sha256_bytes(canonical_json(catalog_profile))
         if result.get("catalog_entry_sha256") != expected_catalog_digest:
             errors.append(f"manifest profile {profile_id} catalog digest mismatch")
         if result.get("result") != "green":
@@ -406,6 +670,7 @@ def validate_catalog(
         if class_ids != required_classes:
             errors.append(f"manifest profile {profile_id} evidence classes differ from plan")
             continue
+        referenced_evidence: set[str] = set()
         for evidence_class in evidence_classes:
             if set(evidence_class) != {"id", "result", "evidence", "rationale"}:
                 errors.append(
@@ -430,20 +695,28 @@ def validate_catalog(
                 errors.append(
                     f"manifest profile {profile_id} green evidence class is empty"
                 )
+            if len(evidence) != len(set(evidence)):
+                errors.append(
+                    f"manifest profile {profile_id} evidence references are duplicated"
+                )
+            referenced_evidence.update(evidence)
             if not isinstance(rationale, str) or not rationale:
                 errors.append(
                     f"manifest profile {profile_id} evidence rationale is empty"
                 )
-            known_references = repository_ids | remote_log_ids | remote_run_ids | {
-                f"catalog:{profile_id}:oracle",
-                f"catalog:{profile_id}:evidence",
-            }
+            known_references = repository_ids | remote_log_ids | remote_run_ids
             for reference in evidence:
                 if reference not in known_references:
                     errors.append(
                         f"manifest profile {profile_id} has dangling evidence reference: "
                         f"{reference}"
                     )
+        missing_catalog_evidence = expected_catalog_evidence - referenced_evidence
+        if missing_catalog_evidence:
+            errors.append(
+                f"manifest profile {profile_id} does not reference every catalog file: "
+                f"{', '.join(sorted(missing_catalog_evidence))}"
+            )
 
 
 def validate_repository_evidence(
@@ -457,13 +730,17 @@ def validate_repository_evidence(
         return
     ids: list[Any] = []
     paths: list[Any] = []
+    evidence_by_id: dict[str, dict[str, Any]] = {}
     for index, item in enumerate(evidence):
         label = f"repository_evidence[{index}]"
         if not isinstance(item, dict) or set(item) != {"id", "path", "sha256", "kind"}:
             errors.append(f"{label} has unexpected fields")
             continue
-        ids.append(item.get("id"))
+        evidence_id = item.get("id")
+        ids.append(evidence_id)
         paths.append(item.get("path"))
+        if isinstance(evidence_id, str):
+            evidence_by_id[evidence_id] = item
         validate_path_digest(
             root,
             {"path": item.get("path"), "sha256": item.get("sha256")},
@@ -474,6 +751,15 @@ def validate_repository_evidence(
         errors.append("repository_evidence IDs must be unique")
     if len(paths) != len(set(paths)):
         errors.append("repository_evidence paths must be unique")
+    for evidence_id, (expected_path, expected_digest) in (
+        PINNED_REPOSITORY_EVIDENCE.items()
+    ):
+        item = evidence_by_id.get(evidence_id)
+        if item is None:
+            errors.append(f"pinned repository evidence is missing: {evidence_id}")
+            continue
+        if item.get("path") != expected_path or item.get("sha256") != expected_digest:
+            errors.append(f"pinned repository evidence changed: {evidence_id}")
 
 
 def validate_remote_runs(
@@ -482,6 +768,10 @@ def validate_remote_runs(
     errors: list[str],
 ) -> dict[int, dict[str, Any]]:
     metadata = load_json(root / REMOTE_RUNS_PATH)
+    if metadata.get("schema_version") != "codenoesis.github-actions-run-evidence/v1":
+        errors.append("remote-runs.json schema version is invalid")
+    if metadata.get("repository") != "smutti/codenoesis":
+        errors.append("remote-runs.json repository is invalid")
     metadata_runs = metadata.get("runs")
     if not isinstance(metadata_runs, list):
         errors.append("remote-runs.json must contain runs")
@@ -489,6 +779,46 @@ def validate_remote_runs(
     metadata_by_id = {item["run_id"]: item for item in metadata_runs}
     if set(metadata_by_id) != EXPECTED_REMOTE_RUN_IDS:
         errors.append("remote-runs.json does not contain the exact required run set")
+    for run_id, item in metadata_by_id.items():
+        if item.get("run_attempt") != 1 or item.get("conclusion") != "success":
+            errors.append(f"remote run {run_id} is not the successful first attempt")
+        expected_url = f"https://github.com/smutti/codenoesis/actions/runs/{run_id}"
+        if item.get("url") != expected_url:
+            errors.append(f"remote run {run_id} URL is not canonical")
+        head_sha = item.get("head_sha")
+        if not isinstance(head_sha, str) or not GIT_SHA1.fullmatch(head_sha):
+            errors.append(f"remote run {run_id} head is invalid")
+        else:
+            actual_tree = git(root, ["rev-parse", f"{head_sha}^{{tree}}"])
+            if item.get("tree_sha") != actual_tree:
+                errors.append(f"remote run {run_id} tree does not match its head")
+        jobs = item.get("jobs")
+        if not isinstance(jobs, list) or not jobs:
+            errors.append(f"remote run {run_id} has no retained jobs")
+        else:
+            job_ids = [job.get("job_id") for job in jobs if isinstance(job, dict)]
+            if len(job_ids) != len(jobs) or len(job_ids) != len(set(job_ids)):
+                errors.append(f"remote run {run_id} job identities are invalid")
+            if any(job.get("conclusion") != "success" for job in jobs):
+                errors.append(f"remote run {run_id} contains a non-Green job")
+
+    g8_run = metadata_by_id.get(31843845301, {})
+    if (
+        g8_run.get("artifact_id") != 9235430119
+        or g8_run.get("artifact_digest")
+        != "sha256:3c15eabb8fb3125dfe01e48c51c0322231f6e64a733eb72380bad8d86f8ecea8"
+        or g8_run.get("attestation_id") != 40843198
+        or g8_run.get("attestation_bundle_sha256")
+        != "3048d8078a79a00dc75015b36b0ebb00718ebf13cd71258060821d837270f28f"
+    ):
+        errors.append("G1b/G8 retained run identities differ from issue #188")
+    codeql_run = metadata_by_id.get(31842394592, {})
+    if (
+        codeql_run.get("downloaded_rust_job_log_sha256")
+        != "e6f3ae953eff416ebdf4dd7c3d517f17e5d755ed200dedab0164bd06dfa32067"
+        or codeql_run.get("downloaded_rust_job_log_bytes") != 1867883
+    ):
+        errors.append("CodeQL retained Rust log identity is invalid")
 
     runs = manifest.get("remote_runs")
     if not isinstance(runs, list):
@@ -607,6 +937,36 @@ def validate_remote_logs(
             errors.append(f"remote log {log_id} committed digest mismatch")
         if item.get("source_log_sha256") != committed_digest:
             errors.append(f"remote log {log_id} source and identity normalization differ")
+        expected_digest = EXPECTED_REMOTE_LOG_DIGESTS[log_id]
+        if committed_digest != expected_digest:
+            errors.append(f"remote log {log_id} differs from its retained source digest")
+        if item.get("check_name") != item.get("job_name"):
+            errors.append(f"remote log {log_id} check name mismatch")
+        expected_workflow_ref = f"refs/heads/{run.get('head_branch')}"
+        if item.get("workflow_ref") != expected_workflow_ref:
+            errors.append(f"remote log {log_id} workflow ref mismatch")
+
+        try:
+            retained_bytes = git(
+                root,
+                ["show", f"{evidence_parent}:{relative_path}"],
+                binary=True,
+            )
+        except ValueError as error:
+            errors.append(str(error))
+        else:
+            if sha256_bytes(retained_bytes) != committed_digest:
+                errors.append(f"remote log {log_id} evidence-head bytes mismatch")
+        parent = git(root, ["rev-parse", f"{evidence_parent}^"])
+        existed_before = subprocess.run(
+            ["git", "cat-file", "-e", f"{parent}:{relative_path}"],
+            cwd=root,
+            check=False,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        if existed_before.returncode == 0:
+            errors.append(f"remote log {log_id} predates its first-retention commit")
 
         workflow_path = item.get("workflow_path")
         if workflow_path != run.get("workflow_path"):
@@ -629,6 +989,105 @@ def validate_remote_logs(
             errors.append(f"remote log {log_id} Git tree mismatch")
 
 
+def validate_codeql_log(
+    root: Path,
+    manifest: dict[str, Any],
+    metadata_by_id: dict[int, dict[str, Any]],
+    errors: list[str],
+) -> None:
+    index = load_json(root / CODEQL_LOG_INDEX_PATH)
+    expected_fields = {
+        "schema_version",
+        "repository",
+        "run_id",
+        "run_attempt",
+        "job_id",
+        "job_name",
+        "command",
+        "normalization",
+        "source_log_sha256",
+        "source_log_bytes",
+        "chunks",
+    }
+    if not isinstance(index, dict) or set(index) != expected_fields:
+        errors.append("CodeQL retained-log index has unexpected fields")
+        return
+    if index.get("schema_version") != "codenoesis.git-retained-command-log/v1":
+        errors.append("CodeQL retained-log index schema is invalid")
+    if index.get("repository") != "smutti/codenoesis":
+        errors.append("CodeQL retained-log repository is invalid")
+    if index.get("run_id") != 31842394592 or index.get("run_attempt") != 1:
+        errors.append("CodeQL retained-log run identity is invalid")
+    if index.get("job_id") != 94901863459 or index.get("job_name") != "Analyze (rust)":
+        errors.append("CodeQL retained-log job identity is invalid")
+    if index.get("command") != (
+        "gh run view 31842394592 --repo smutti/codenoesis "
+        "--job 94901863459 --log"
+    ):
+        errors.append("CodeQL retained-log command is invalid")
+    if index.get("normalization") != "gh-run-view-job-log/v1":
+        errors.append("CodeQL retained-log normalization is invalid")
+
+    run = metadata_by_id.get(31842394592, {})
+    jobs = {job.get("job_id"): job for job in run.get("jobs", [])}
+    if jobs.get(94901863459, {}).get("conclusion") != "success":
+        errors.append("CodeQL retained-log job is not Green")
+
+    repository_by_path = {
+        item.get("path"): item
+        for item in manifest.get("repository_evidence", [])
+        if isinstance(item, dict)
+    }
+    chunks = index.get("chunks")
+    if not isinstance(chunks, list) or not chunks:
+        errors.append("CodeQL retained-log chunks are missing")
+        return
+    reconstructed = bytearray()
+    observed_paths: list[str] = []
+    for chunk_index, chunk in enumerate(chunks):
+        label = f"CodeQL retained-log chunk {chunk_index}"
+        if not isinstance(chunk, dict) or set(chunk) != {"path", "sha256", "bytes"}:
+            errors.append(f"{label} has unexpected fields")
+            continue
+        relative_path = chunk.get("path")
+        if not safe_relative_path(relative_path):
+            errors.append(f"{label} path is unsafe")
+            continue
+        observed_paths.append(relative_path)
+        path = root / relative_path
+        if not path.is_file():
+            errors.append(f"{label} file is missing")
+            continue
+        content = path.read_bytes()
+        digest = sha256_bytes(content)
+        if chunk.get("sha256") != digest or chunk.get("bytes") != len(content):
+            errors.append(f"{label} digest or length mismatch")
+        repository_item = repository_by_path.get(relative_path)
+        if (
+            repository_item is None
+            or repository_item.get("sha256") != digest
+            or repository_item.get("kind") != "security"
+        ):
+            errors.append(f"{label} is not bound as repository security evidence")
+        reconstructed.extend(content)
+    if observed_paths != sorted(observed_paths) or len(observed_paths) != len(
+        set(observed_paths)
+    ):
+        errors.append("CodeQL retained-log chunk order or identity is invalid")
+    reconstructed_digest = sha256_bytes(bytes(reconstructed))
+    if (
+        index.get("source_log_sha256") != reconstructed_digest
+        or index.get("source_log_bytes") != len(reconstructed)
+    ):
+        errors.append("CodeQL retained log does not reconstruct its source bytes")
+    if (
+        reconstructed_digest
+        != "e6f3ae953eff416ebdf4dd7c3d517f17e5d755ed200dedab0164bd06dfa32067"
+        or len(reconstructed) != 1867883
+    ):
+        errors.append("CodeQL retained log differs from the bound remote observation")
+
+
 def validate_gates(manifest: dict[str, Any], errors: list[str]) -> None:
     gates = manifest.get("required_gates")
     if not isinstance(gates, list):
@@ -638,6 +1097,21 @@ def validate_gates(manifest: dict[str, Any], errors: list[str]) -> None:
     if set(gate_ids) != EXPECTED_GATE_IDS or len(gate_ids) != len(set(gate_ids)):
         errors.append("required_gates does not contain the exact gate set")
         return
+    known_references = {
+        item.get("id")
+        for item in manifest.get("repository_evidence", [])
+        if isinstance(item, dict)
+    }
+    known_references.update(
+        item.get("id")
+        for item in manifest.get("remote_logs", [])
+        if isinstance(item, dict)
+    )
+    known_references.update(
+        f"run:{item.get('run_id')}"
+        for item in manifest.get("remote_runs", [])
+        if isinstance(item, dict)
+    )
     for gate in gates:
         gate_id = gate["id"]
         if set(gate) != {"id", "result", "evidence", "command"}:
@@ -650,8 +1124,20 @@ def validate_gates(manifest: dict[str, Any], errors: list[str]) -> None:
             errors.append(f"gate {gate_id} evidence must be a list")
         elif gate.get("result") == "green" and not evidence:
             errors.append(f"gate {gate_id} green evidence is empty")
+        elif isinstance(evidence, list):
+            if len(evidence) != len(set(evidence)):
+                errors.append(f"gate {gate_id} evidence is duplicated")
+            for reference in evidence:
+                if reference not in known_references:
+                    errors.append(
+                        f"gate {gate_id} has dangling evidence reference: {reference}"
+                    )
         if gate_id == "independent-review-activation":
-            if gate.get("result") != "not_applicable" or gate.get("command") is not None:
+            if (
+                gate.get("result") != "not_applicable"
+                or gate.get("command") is not None
+                or evidence != []
+            ):
                 errors.append("independent review must remain an external activation gate")
         elif gate.get("result") != "green":
             errors.append(f"mandatory gate {gate_id} is not green")
@@ -708,6 +1194,22 @@ def validate_review(manifest: dict[str, Any], errors: list[str]) -> None:
         errors.append("limitations must preserve the G9 boundary")
 
 
+def validate_environment(root: Path, manifest: dict[str, Any], errors: list[str]) -> None:
+    environment = manifest.get("environment")
+    if not isinstance(environment, dict):
+        errors.append("environment must be an object")
+        return
+    expected_file_digests = {
+        "toolchain_file_sha256": sha256_file(root / "rust-toolchain.toml"),
+        "policy_sha256": sha256_file(root / ".github/codex/policy.json"),
+    }
+    for field, expected in expected_file_digests.items():
+        if environment.get(field) != expected:
+            errors.append(f"environment {field} does not match repository bytes")
+    if environment.get("run_identifier") != "issue-188-local-baseline-verification-v2":
+        errors.append("environment run identifier is invalid")
+
+
 def validate_manifest(root: Path, manifest_path: Path) -> list[str]:
     errors: list[str] = []
     manifest = load_json(manifest_path)
@@ -721,11 +1223,17 @@ def validate_manifest(root: Path, manifest_path: Path) -> list[str]:
         if unexpected:
             errors.append(f"manifest has unexpected fields: {', '.join(unexpected)}")
 
+    manifest_schema = load_json(root / MANIFEST_SCHEMA_PATH)
+    if not isinstance(manifest_schema, dict):
+        return ["manifest schema must be a JSON object"]
+    validate_json_schema(manifest, manifest_schema, manifest_schema, "$", errors)
+
     plan = load_json(root / PLAN_PATH)
     catalog = load_json(root / CATALOG_PATH)
     if not isinstance(plan, dict) or not isinstance(catalog, dict):
         return ["plan and catalog must be JSON objects"]
 
+    validate_checkpoint_contracts(root, errors)
     validate_authority(root, manifest, plan, errors)
     validate_changed_paths(root, errors)
     validate_path_digest(root, manifest.get("plan"), "plan", errors)
@@ -734,11 +1242,13 @@ def validate_manifest(root: Path, manifest_path: Path) -> list[str]:
     validate_repository_evidence(root, manifest, errors)
     metadata_by_id = validate_remote_runs(root, manifest, errors)
     validate_remote_logs(root, manifest, metadata_by_id, errors)
+    validate_codeql_log(root, manifest, metadata_by_id, errors)
     validate_catalog(root, manifest, plan, catalog, errors)
     validate_gates(manifest, errors)
     validate_status_documents(root, errors)
     validate_s0_evidence_contract(root, errors)
     validate_review(manifest, errors)
+    validate_environment(root, manifest, errors)
     return errors
 
 
