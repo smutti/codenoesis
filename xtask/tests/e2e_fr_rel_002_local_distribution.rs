@@ -58,10 +58,7 @@ fn e2e_fr_rel_002_packages_local_cli() {
         fs::read(specification_path("default-config.json")).unwrap()
     );
     assert_eq!(
-        fs::read(bundle.join(
-            "share/codenoesis/schemas/local-cli-config-v1.schema.json"
-        ))
-        .unwrap(),
+        fs::read(bundle.join("share/codenoesis/schemas/local-cli-config-v1.schema.json")).unwrap(),
         fs::read(specification_path("local-cli-config-v1.schema.json")).unwrap()
     );
     assert_eq!(
@@ -139,10 +136,8 @@ struct TestDirectory {
 impl TestDirectory {
     fn new() -> Self {
         let sequence = NEXT_TEST_DIRECTORY.fetch_add(1, Ordering::Relaxed);
-        let path = std::env::temp_dir().join(format!(
-            "codenoesis-g1a-{}-{sequence}",
-            std::process::id()
-        ));
+        let path =
+            std::env::temp_dir().join(format!("codenoesis-g1a-{}-{sequence}", std::process::id()));
         if path.exists() {
             fs::remove_dir_all(&path).expect("remove stale test directory");
         }

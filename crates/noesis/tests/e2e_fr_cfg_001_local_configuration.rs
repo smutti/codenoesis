@@ -100,8 +100,7 @@ fn fail_if_expected_checkpoint_red(output: &Output) {
     let Ok(error) = serde_json::from_slice::<serde_json::Value>(&output.stderr) else {
         return;
     };
-    if error["schema_version"] == "codenoesis.error/v1"
-        && error["code"] == "input.invalid_revision"
+    if error["schema_version"] == "codenoesis.error/v1" && error["code"] == "input.invalid_revision"
     {
         assert!(output.stdout.is_empty());
         panic!(

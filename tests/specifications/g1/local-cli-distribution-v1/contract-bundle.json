@@ -2,7 +2,7 @@
   "schema_version": "codenoesis.contract-bundle/v1",
   "files": [
     { "path": "LICENSE", "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4" },
-    { "path": "crates/noesis/tests/e2e_fr_cfg_001_local_configuration.rs", "sha256": "08c0949aa14e0ba2b6f7ee23bbc26bb346dfc7fcfbe2cedd5231f7bbda182fdc" },
+    { "path": "crates/noesis/tests/e2e_fr_cfg_001_local_configuration.rs", "sha256": "3562fd5240fd5034f4287248590b7f7c544a3cdbb775cfb746d68582fb1e61ee" },
     { "path": "docs/software/decisions/0034-g1a-local-cli-distribution-configuration.md", "sha256": "4da57b5db5bc1b022d9de02227dedca7fb42c76a306e2838a9bc8eef4d61390d" },
     { "path": "tests/specifications/g1/local-cli-distribution-v1/codenoesis-error-v26.schema.json", "sha256": "d2b8f9a83e1fbbe2c9d1bd81da7d650a0f4641ad880aea9b6ee7d9284fead6d4" },
     { "path": "tests/specifications/g1/local-cli-distribution-v1/contract-v1.json", "sha256": "9fe2d1d0e643e052c7c5287e229cae26fa4eaa0f6617c2433c7de35104e708de" },
@@ -22,7 +22,7 @@
     { "path": "tests/specifications/g1/local-cli-distribution-v1/local-configuration-report-v1.schema.json", "sha256": "bdf0f8deb60a68405734fefb1f650bad2d100e6ad66578cb17d062dfc3cdacd9" },
     { "path": "tests/specifications/g1/local-cli-distribution-v1/local-distribution-manifest-v1.schema.json", "sha256": "a9b56d3a787029bd3755bc02e5a0aef8a79c490d63b2e92110eefca96e2049d0" },
     { "path": "tests/specifications/g1/local-cli-distribution-v1/tree-v1.json", "sha256": "3d689c8a9a4e205f3ada3919f51c0be8f253f569c76ac55a2e7d1be2f673a8fe" },
-    { "path": "xtask/tests/e2e_fr_rel_002_local_distribution.rs", "sha256": "45ee452e8922d2fa8f7f58370253502bf28f4c3b563fe5d4e53c8295aa61dbad" }
+    { "path": "xtask/tests/e2e_fr_rel_002_local_distribution.rs", "sha256": "14bee9bae5ab0eb75fb44edd60c13aefac25f354d3c4ba80c73f701e481c5e3e" }
   ],
-  "bundle_sha256": "f3e1684dcef93b5edbfa9b7af531ec60662137e7204a684a99e7ee5ecd9c003f"
+  "bundle_sha256": "aed9a7718b510e18ece1917fb4d3097f9396d81288f8a3854d31f3e3ec5cb526"
 }
