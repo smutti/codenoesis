@@ -27,15 +27,16 @@ fn e2e_fr_rel_001_reports_bound_profile() {
         assert_error(&first, "profile.unsupported_platform");
         return;
     };
+    let expected = canonical_lf_golden(expected);
 
-    assert_success(&first, expected);
+    assert_success(&first, &expected);
     let reordered = run_profile(&["--format", "json", "--id", "local-experimental-r17"]);
-    assert_success(&reordered, expected);
+    assert_success(&reordered, &expected);
     assert_eq!(reordered.stdout, first.stdout);
 
     for schedule in 0..10 {
         let output = run_profile(&["--id", "local-experimental-r17", "--format", "json"]);
-        assert_success(&output, expected);
+        assert_success(&output, &expected);
         assert_eq!(output.stdout, first.stdout, "schedule {schedule}");
     }
 
@@ -67,6 +68,20 @@ fn e2e_fr_rel_001_reports_bound_profile() {
         ]),
         "input.invalid_profile_command",
     );
+}
+
+fn canonical_lf_golden(checked_out: &[u8]) -> Vec<u8> {
+    let body = checked_out
+        .strip_suffix(b"\r\n")
+        .or_else(|| checked_out.strip_suffix(b"\n"))
+        .expect("golden has one final LF or CRLF");
+    assert!(!body.contains(&b'\r'));
+    assert!(!body.contains(&b'\n'));
+
+    let mut canonical = Vec::with_capacity(body.len() + 1);
+    canonical.extend_from_slice(body);
+    canonical.push(b'\n');
+    canonical
 }
 
 fn run_profile(arguments: &[&str]) -> Output {

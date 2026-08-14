@@ -11,7 +11,7 @@
     },
     {
       "path": "crates/noesis/tests/e2e_fr_rel_001_release_profile.rs",
-      "sha256": "23b232378212bf29b744cb6a48d018a11f7f2687852e83e39fb565bb2fa84259"
+      "sha256": "911f4a0b1d0aaf1eff6b37a712d2f52a5ddd834f7b45a65afb9a591a6af1c36d"
     },
     {
       "path": "docs/software/architecture.md",
@@ -74,5 +74,5 @@
       "sha256": "7ddb828f2c637ffba3652dfc2c36d76a63e5351ac954b6c390b3e47663499bc0"
     }
   ],
-  "bundle_sha256": "d2e7dc26cb16dfdcac5eed2914749e5cd33241931655252f37f660b8ff4c9a65"
+  "bundle_sha256": "e8f73828c75dd807e723e6172498373bdffdff336d4198aac28a2df4c0e46fcd"
 }

@@ -36,9 +36,23 @@ fn conf_fr_rel_001_each_target_matches_exact_golden() {
             .expect("accepted target");
         assert_eq!(
             report.canonical_stdout().expect("canonical report"),
-            expected
+            canonical_lf_golden(expected)
         );
     }
+}
+
+fn canonical_lf_golden(checked_out: &[u8]) -> Vec<u8> {
+    let body = checked_out
+        .strip_suffix(b"\r\n")
+        .or_else(|| checked_out.strip_suffix(b"\n"))
+        .expect("golden has one final LF or CRLF");
+    assert!(!body.contains(&b'\r'));
+    assert!(!body.contains(&b'\n'));
+
+    let mut canonical = Vec::with_capacity(body.len() + 1);
+    canonical.extend_from_slice(body);
+    canonical.push(b'\n');
+    canonical
 }
 
 #[test]
