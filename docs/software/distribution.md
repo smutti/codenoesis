@@ -1,9 +1,11 @@
 # CodeNoesis local distribution
 
 > Status: G1a/S14 and bounded Local Upgrade Safety are Approved and Implemented
-> but not Verified after protected PRs #183 and #185. The staged directory
-> remains unsigned experimental engineering material. Issue #186 / Decision
-> 0036 defines a Proposed G1b/G8-local verifiable carrier candidate.
+> but not Verified after protected PRs #183 and #185.
+> Issue #184 / Decision 0035 records the bounded G2a package.
+> The staged directory remains unsigned
+> experimental engineering material. Issue #186 / Decision 0036 defines a
+> Proposed G1b/G8-local verifiable carrier candidate.
 
 ## Boundary
 
