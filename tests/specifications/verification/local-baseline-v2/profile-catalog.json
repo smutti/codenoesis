@@ -1,0 +1,261 @@
+{
+  "schema_version": "codenoesis.local-baseline-verification-profile-catalog/v2",
+  "profiles": [
+    {
+      "id": "s0-walking-skeleton",
+      "slice": "S0",
+      "requirements": ["DR-ART-001", "DR-ART-002", "FR-ACQ-001", "FR-CLI-003", "NFR-DET-001", "NFR-MNT-001", "NFR-SEC-005", "NFR-TST-001", "NFR-TST-002"],
+      "implementation_prs": [15],
+      "oracle_paths": ["tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json", "tests/specifications/s0/evidence-manifest-v1.schema.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s0/red-observation-corrected-contract.json", "crates/noesis/tests/evidence/s0/green-observation-local.json"]
+    },
+    {
+      "id": "s1-safe-inventory",
+      "slice": "S1",
+      "requirements": ["DR-EVD-001", "FR-ACQ-002", "FR-INV-001", "NFR-SEC-001"],
+      "implementation_prs": [21],
+      "oracle_paths": ["tests/specifications/s1/e2e_fr_inv_001_safe_inventory.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s1/green-observation-local.json"]
+    },
+    {
+      "id": "r1-packed-sha1",
+      "slice": "S1",
+      "requirements": ["FR-ACQ-004"],
+      "implementation_prs": [77],
+      "oracle_paths": ["tests/specifications/s1/e2e_fr_acq_004_packed_sha1.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s1/packed/green-observation-local.json"]
+    },
+    {
+      "id": "r2-gitlink-boundaries",
+      "slice": "S1",
+      "requirements": ["FR-ACQ-005"],
+      "implementation_prs": [95],
+      "oracle_paths": ["tests/specifications/s1/e2e_fr_acq_005_gitlink_boundaries.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s1/gitlinks/green-observation-local.json"]
+    },
+    {
+      "id": "s2-rust-knowledge",
+      "slice": "S2",
+      "requirements": ["DR-IDN-001", "FR-EXT-001", "FR-EXT-002", "FR-KNW-001", "FR-KNW-002", "FR-KNW-003"],
+      "implementation_prs": [27],
+      "oracle_paths": ["tests/specifications/s2/e2e_fr_ext_002_rust_knowledge.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s2/green-observation-local.json"]
+    },
+    {
+      "id": "s3-atomic-storage",
+      "slice": "S3",
+      "requirements": ["FR-SNP-001", "FR-STO-001", "INV-SNP-001", "NFR-REL-001"],
+      "implementation_prs": [35],
+      "oracle_paths": ["tests/specifications/s3/e2e_fr_sto_001_atomic_local_storage.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s3/green-observation-local.json"]
+    },
+    {
+      "id": "s4-workspace-docs-query",
+      "slice": "S4",
+      "requirements": ["DR-IDN-002", "FR-CLI-001", "FR-DOC-001", "FR-DOC-002", "FR-DOC-003", "FR-EXT-007", "FR-QRY-001"],
+      "implementation_prs": [52],
+      "oracle_paths": ["tests/specifications/s4/e2e_fr_cli_001_workspace_docs_query.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/green-observation-local.json"]
+    },
+    {
+      "id": "r3-root-package-workspace",
+      "slice": "S4",
+      "requirements": ["FR-EXT-008"],
+      "implementation_prs": [99],
+      "oracle_paths": ["tests/specifications/s4/r3/e2e_fr_ext_008_root_package_workspace.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/r3/implementation-observation-local.json"]
+    },
+    {
+      "id": "r4-cargo-manifest-facts",
+      "slice": "S4",
+      "requirements": ["FR-EXT-009"],
+      "implementation_prs": [109],
+      "oracle_paths": ["tests/specifications/s4/r4/e2e_fr_ext_009_cargo_manifest_facts.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/r4/pilot-observations-local.json"]
+    },
+    {
+      "id": "r5-rust-semantic-depth",
+      "slice": "S4",
+      "requirements": ["FR-EXT-010"],
+      "implementation_prs": [116],
+      "oracle_paths": ["tests/specifications/s4/r5/e2e_fr_ext_010_rust_semantic_depth.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/r5/implementation-observation-local.json"]
+    },
+    {
+      "id": "r6-framework-declarations",
+      "slice": "S4",
+      "requirements": ["FR-EXT-011"],
+      "implementation_prs": [122],
+      "oracle_paths": ["tests/specifications/s4/r6/e2e_fr_ext_011_framework_declarations.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/r6/implementation-observation-local.json"]
+    },
+    {
+      "id": "r7-scip-import",
+      "slice": "S4",
+      "requirements": ["FR-EXT-005"],
+      "implementation_prs": [130, 133],
+      "oracle_paths": ["tests/specifications/s4/r7/e2e_fr_ext_005_scip_import.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/r7/implementation-observation-local.json"]
+    },
+    {
+      "id": "r8-portable-explorer",
+      "slice": "S4",
+      "requirements": ["FR-CLI-001", "FR-DOC-003", "FR-EXP-001", "FR-QRY-001", "FR-QRY-002", "NFR-DET-001", "NFR-PRV-002", "NFR-SEC-001", "NFR-SEC-005"],
+      "implementation_prs": [135],
+      "oracle_paths": ["tests/specifications/s4/r8/e2e_fr_exp_001_portable_explorer.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/r8/implementation-observation-local.json"]
+    },
+    {
+      "id": "s5-incremental-refresh",
+      "slice": "S5",
+      "requirements": ["FR-CLI-004", "FR-INC-001", "FR-INC-002", "FR-INC-003", "INV-INC-001"],
+      "implementation_prs": [73],
+      "oracle_paths": ["tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s5/green-observation-local.json"]
+    },
+    {
+      "id": "s6-openapi-federation",
+      "slice": "S6",
+      "requirements": ["FR-CLI-005", "FR-EXT-004", "FR-FED-001", "FR-FED-002"],
+      "implementation_prs": [91],
+      "oracle_paths": ["tests/specifications/s6/e2e_fr_fed_001_openapi_federation.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s6/implementation-observation-local.json"]
+    },
+    {
+      "id": "k1-callable-value-semantics",
+      "slice": "S4",
+      "requirements": ["FR-CLI-001", "FR-DOC-001", "FR-EXP-002", "FR-EXT-012", "FR-QRY-001"],
+      "implementation_prs": [143, 146],
+      "oracle_paths": ["tests/specifications/s4/k1/e2e_fr_ext_012_rust_callable_semantics.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/k1/implementation-observation-local.json"]
+    },
+    {
+      "id": "r9-output-capacity",
+      "slice": "S4",
+      "requirements": ["FR-CLI-001", "FR-EXT-012", "INV-BND-001", "NFR-DET-001", "NFR-TST-001", "NFR-TST-002"],
+      "implementation_prs": [150],
+      "oracle_paths": ["tests/specifications/s4/r9-output-capacity/output-capacity-profile-v1.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/r9-output-capacity/red-observation.json", "crates/noesis/tests/evidence/s4/r9-output-capacity/implementation-observation-local.json"]
+    },
+    {
+      "id": "r10-cfg-declaration-alternatives",
+      "slice": "S4",
+      "requirements": ["FR-CLI-001", "FR-DOC-001", "FR-DOC-002", "FR-DOC-003", "FR-EXP-003", "FR-EXT-013", "FR-QRY-001", "NFR-DET-001", "NFR-TST-001", "NFR-TST-002"],
+      "implementation_prs": [154],
+      "oracle_paths": ["tests/specifications/s4/r10/e2e_fr_ext_013_cfg_declaration_alternatives.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/r10-cfg-declaration-alternatives/red-observation.json", "crates/noesis/tests/evidence/s4/r10-cfg-declaration-alternatives/implementation-observation-local.json"]
+    },
+    {
+      "id": "r11-k1-repository-boundaries",
+      "slice": "S4",
+      "requirements": ["FR-ACQ-005", "FR-CLI-001", "FR-DOC-001", "FR-DOC-002", "FR-DOC-003", "FR-EXP-002", "FR-EXT-012", "FR-QRY-001", "NFR-DET-001", "NFR-PRV-002", "NFR-SEC-001", "NFR-SEC-005", "NFR-TST-001", "NFR-TST-002"],
+      "implementation_prs": [156],
+      "oracle_paths": ["tests/specifications/s4/r11/e2e_fr_ext_012_k1_repository_boundaries.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/r11-k1-repository-boundaries/implementation-observation-local.json"]
+    },
+    {
+      "id": "r12-k1-cfg-alternatives",
+      "slice": "S4",
+      "requirements": ["FR-EXP-004", "FR-EXT-014"],
+      "implementation_prs": [159],
+      "oracle_paths": ["tests/specifications/s4/r12/e2e_fr_ext_014_k1_cfg_alternatives.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/r12-k1-cfg-alternatives/implementation-observation-local.json"]
+    },
+    {
+      "id": "r13-k1-scip-composition",
+      "slice": "S4",
+      "requirements": ["FR-EXP-005", "FR-EXT-015"],
+      "implementation_prs": [161],
+      "oracle_paths": ["tests/specifications/s4/r13/e2e_fr_ext_015_k1_scip_composition.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/r13-k1-scip-composition/implementation-observation-local.json"]
+    },
+    {
+      "id": "r14-expression-bindings",
+      "slice": "S4",
+      "requirements": ["FR-EXP-006", "FR-EXT-016"],
+      "implementation_prs": [163],
+      "oracle_paths": ["tests/specifications/s4/r14/e2e_fr_ext_016_rust_expression_bindings.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/r14-rust-expression-bindings/implementation-observation-local.json"]
+    },
+    {
+      "id": "r15-local-flow",
+      "slice": "S4",
+      "requirements": ["FR-EXP-007", "FR-EXT-017"],
+      "implementation_prs": [167],
+      "oracle_paths": ["tests/specifications/s4/r15/e2e_fr_ext_017_rust_local_flow.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/r15-rust-local-flow/red-observation.json", "crates/noesis/tests/evidence/s4/r15-rust-local-flow/implementation-observation-local.json"]
+    },
+    {
+      "id": "r14-r15-real-repository-correction",
+      "slice": "S4",
+      "requirements": ["FR-EXP-006", "FR-EXP-007", "FR-EXT-012", "FR-EXT-016", "FR-EXT-017"],
+      "implementation_prs": [171],
+      "oracle_paths": ["tests/specifications/s4/r14-r15-real-repository-correction/correction-v1.json", "tests/specifications/s4/r14-r15-real-repository-correction/real-repository-pilots-v1.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/red-observation.json", "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/green-observation.json"]
+    },
+    {
+      "id": "r16-safe-constant-evaluation",
+      "slice": "S4",
+      "requirements": ["FR-EXP-008", "FR-EXT-020"],
+      "implementation_prs": [173],
+      "oracle_paths": ["tests/specifications/s4/r16/e2e_fr_ext_020_rust_safe_constant_evaluation.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/r16-safe-constant-evaluation/red-observation.json", "crates/noesis/tests/evidence/s4/r16-safe-constant-evaluation/implementation-observation-local.json"]
+    },
+    {
+      "id": "r10-r16-versioned-explorer-correction",
+      "slice": "S4",
+      "requirements": ["FR-EXP-003", "FR-EXP-004", "FR-EXP-005", "FR-EXP-006", "FR-EXP-007", "FR-EXP-008"],
+      "implementation_prs": [177],
+      "oracle_paths": ["tests/specifications/s4/versioned-local-explorer/contract-v1.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/versioned-local-explorer/red-observation-local.json", "crates/noesis/tests/evidence/s4/versioned-local-explorer/green-observation-local.json", "crates/noesis/tests/evidence/s4/versioned-local-explorer/browser-observation-local.json"]
+    },
+    {
+      "id": "r17-function-context",
+      "slice": "S4",
+      "requirements": ["FR-CTX-001", "FR-EXP-009"],
+      "implementation_prs": [179],
+      "oracle_paths": ["tests/specifications/s4/r17/e2e_fr_ctx_001_function_context.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s4/r17-function-context/red-observation-local.json", "crates/noesis/tests/evidence/s4/r17-function-context/implementation-observation-local.json", "crates/noesis/tests/evidence/s4/r17-function-context/traceability.json"]
+    },
+    {
+      "id": "s7-implementation-aware-api",
+      "slice": "S7",
+      "requirements": ["DR-SEM-001", "FR-CLI-006", "FR-EXT-018", "FR-EXT-019", "FR-IMP-004", "FR-IMP-005"],
+      "implementation_prs": [169],
+      "oracle_paths": ["tests/specifications/s7/e2e_fr_imp_004_implementation_aware_api_diff.json", "tests/specifications/s7/runtime-v1/runtime-contract-v1.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/s7/implementation-aware-api-v1/governance-red-observation.json", "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/product-red-observation.json", "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/implementation-observation-local.json", "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/traceability.json"]
+    },
+    {
+      "id": "g0-release-profile",
+      "slice": "S14",
+      "requirements": ["FR-CLI-007", "FR-REL-001"],
+      "implementation_prs": [181],
+      "oracle_paths": ["tests/specifications/g0/release-profile-v1/e2e_fr_rel_001_release_profile.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/g0/release-profile-v1/red-observation-local.json", "crates/noesis/tests/evidence/g0/release-profile-v1/implementation-observation-local.json", "crates/noesis/tests/evidence/g0/release-profile-v1/traceability.json"]
+    },
+    {
+      "id": "g1a-local-distribution",
+      "slice": "S14",
+      "requirements": ["FR-CFG-001", "FR-CLI-008", "FR-REL-002"],
+      "implementation_prs": [183],
+      "oracle_paths": ["tests/specifications/g1/local-cli-distribution-v1/e2e_fr_cfg_001_local_configuration.json", "tests/specifications/g1/local-cli-distribution-v1/e2e_fr_rel_002_local_distribution.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/g1/local-cli-distribution-v1/red-observation.json", "crates/noesis/tests/evidence/g1/local-cli-distribution-v1/implementation-observation-local.json", "crates/noesis/tests/evidence/g1/local-cli-distribution-v1/complete-gate-local.json"]
+    },
+    {
+      "id": "g2a-local-upgrade-safety",
+      "slice": "S14",
+      "requirements": ["FR-CLI-009", "FR-CMP-001"],
+      "implementation_prs": [185],
+      "oracle_paths": ["tests/specifications/g2/local-upgrade-safety-v1/e2e_fr_cmp_001_local_upgrade.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/g2/local-upgrade-safety-v1/red-local.json", "crates/noesis/tests/evidence/g2/local-upgrade-safety-v1/implementation-observation-local.json", "crates/noesis/tests/evidence/g2/local-upgrade-safety-v1/performance-evidence-local.json"]
+    },
+    {
+      "id": "g1b-g8-verifiable-distribution",
+      "slice": "S14",
+      "requirements": ["FR-CLI-010", "FR-REL-001", "FR-REL-002", "FR-REL-003", "NFR-CMP-001", "NFR-MNT-002", "NFR-PORT-001", "NFR-SEC-004", "NFR-SUP-001", "NFR-TST-001", "NFR-TST-002"],
+      "implementation_prs": [187],
+      "oracle_paths": ["tests/specifications/g8/local-release-candidate-v1/e2e_fr_rel_003_local_release_candidate.json"],
+      "evidence_paths": ["crates/noesis/tests/evidence/g8/local-release-candidate-v1/red-observation.json", "crates/noesis/tests/evidence/g8/local-release-candidate-v1/implementation-observation-local.json", "crates/noesis/tests/evidence/g8/local-release-candidate-v1/supply-chain-observation-local.json", "crates/noesis/tests/evidence/g8/local-release-candidate-v1/traceability.json"]
+    }
+  ]
+}
