@@ -232,6 +232,7 @@ fn package_candidate(
     bundle.revalidate()?;
     supply.revalidate()?;
     archive.revalidate()?;
+    drop(archive);
     output.revalidate()?;
     output.ensure_single_directory(staging.path())?;
     ensure_absent(&final_path)?;

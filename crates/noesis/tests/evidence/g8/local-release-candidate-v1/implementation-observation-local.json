@@ -121,8 +121,8 @@
   },
   "corrections": {
     "budget": 5,
-    "rounds_used": 3,
-    "rounds_remaining": 2,
+    "rounds_used": 4,
+    "rounds_remaining": 1,
     "rounds": [
       {
         "round": 1,
@@ -148,6 +148,15 @@
         "changes": [
           "Keep the exact expected_sha equality guard while checking out only the trusted workflow context github.sha.",
           "Strengthen the workflow contract against checkout refs derived from workflow_dispatch input."
+        ],
+        "requirement_or_oracle_changed": false
+      },
+      {
+        "round": 4,
+        "kind": "Windows atomic publication correction",
+        "changes": [
+          "Release the stable archive identity handle after final revalidation and before atomically renaming its staging directory.",
+          "Retain the Windows Red as Actions run 31836645169 job 94884386131, where sec_fr_rel_003_candidate_tree_and_archive_tamper_fail_closed returned release.internal during candidate publication."
         ],
         "requirement_or_oracle_changed": false
       }
