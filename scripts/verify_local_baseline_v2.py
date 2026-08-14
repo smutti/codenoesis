@@ -18,6 +18,12 @@ ISSUE = "https://github.com/smutti/codenoesis/issues/188"
 BASE_SHA = "9ecdc3acefd43495daf76b9f2ab69a7bbacff172"
 CHECKPOINT_SHA = "1daa23ffbaa0ea13f5fc5910aa5798c7523f254c"
 RED_COMMIT_SHA = "6fef76a4ba7fff8435d85a6df4c6efb3b1d1991b"
+LEGACY_S0_BUNDLE_SHA256 = (
+    "978a7128498d54a6c4a6b3fec11d195e37d2f67e179d2babb5320668c4e44811"
+)
+CURRENT_S0_BUNDLE_SHA256 = (
+    "7f8c7b67651a9ff56431c14410e8b8a551f28e207eb0a882d887add74ccabf3a"
+)
 STATUS = "candidate_verified_pending_merge"
 STATUS_MARKER = (
     "LocalBaselineVerificationV2 candidate Verified pending independent review "
@@ -147,6 +153,8 @@ ALLOWED_EXACT_PATHS = {
     "docs/software/roadmap.md",
     "docs/software/verification.md",
     "docs/software/decisions/0037-local-baseline-verification-v2.md",
+    "crates/noesis/tests/s0_conformance.rs",
+    "tests/specifications/s0/contract-bundle.json",
     "tests/specifications/s0/evidence-manifest-v1.schema.json",
     "scripts/verify_local_baseline_v2.py",
     "scripts/tests/test_local_baseline_verification_v2.py",
@@ -154,6 +162,10 @@ ALLOWED_EXACT_PATHS = {
 ALLOWED_PREFIXES = (
     "tests/specifications/verification/local-baseline-v2/",
     "tests/evidence/verification/local-baseline-v2/",
+)
+AUTHORIZED_PRODUCT_TREE_EXCLUSIONS = (
+    "crates/noesis/tests/s0_conformance.rs",
+    "tests/specifications/s0/contract-bundle.json",
 )
 
 EXPECTED_REMOTE_LOG_IDS = {
@@ -538,8 +550,9 @@ def validate_product_tree(
     if any(not safe_relative_path(path) for path in exclusions):
         errors.append("plan product_tree_exclusions contains an unsafe path")
         return
-    base_digest = product_tree_digest(root, BASE_SHA, exclusions)
-    head_digest = product_tree_digest(root, "HEAD", exclusions)
+    effective_exclusions = [*exclusions, *AUTHORIZED_PRODUCT_TREE_EXCLUSIONS]
+    base_digest = product_tree_digest(root, BASE_SHA, effective_exclusions)
+    head_digest = product_tree_digest(root, "HEAD", effective_exclusions)
     expected = manifest.get("product_tree_sha256")
     if expected != base_digest:
         errors.append(
@@ -1175,6 +1188,97 @@ def validate_s0_evidence_contract(root: Path, errors: list[str]) -> None:
         "codenoesis.github-actions-log-normalization/v1"
     ):
         errors.append("S0 Git-retained normalization is invalid")
+
+    bundle = load_json(root / "tests/specifications/s0/contract-bundle.json")
+    files = bundle.get("files")
+    if not isinstance(files, list):
+        errors.append("S0 contract bundle files are invalid")
+        return
+    evidence_entries = [
+        entry
+        for entry in files
+        if isinstance(entry, dict)
+        and entry.get("path")
+        == "tests/specifications/s0/evidence-manifest-v1.schema.json"
+    ]
+    if evidence_entries != [
+        {
+            "path": "tests/specifications/s0/evidence-manifest-v1.schema.json",
+            "sha256": CHECKPOINT_CONTRACT_DIGESTS[
+                "tests/specifications/s0/evidence-manifest-v1.schema.json"
+            ],
+        }
+    ]:
+        errors.append("S0 contract bundle does not bind the additive evidence schema")
+    bundle_payload = {
+        "schema_version": bundle.get("schema_version"),
+        "files": files,
+    }
+    bundle_digest = sha256_bytes(canonical_json(bundle_payload))
+    if bundle.get("bundle_sha256") != bundle_digest:
+        errors.append("S0 contract bundle digest does not match its canonical payload")
+    if bundle_digest != CURRENT_S0_BUNDLE_SHA256:
+        errors.append("S0 contract bundle differs from the authorized correction")
+    srs = (root / "docs/software/software-requirements-specification.md").read_text(
+        encoding="utf-8"
+    )
+    if f"S0 contract bundle: `sha256:{CURRENT_S0_BUNDLE_SHA256}`" not in srs:
+        errors.append("SRS does not bind the corrected S0 contract bundle")
+
+    legacy_bundle_bytes = git(
+        root,
+        ["show", f"{BASE_SHA}:tests/specifications/s0/contract-bundle.json"],
+        binary=True,
+    )
+    try:
+        legacy_bundle = json.loads(legacy_bundle_bytes.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        errors.append("legacy S0 contract bundle is not valid UTF-8 JSON")
+        return
+    legacy_payload = {
+        "schema_version": legacy_bundle.get("schema_version"),
+        "files": legacy_bundle.get("files"),
+    }
+    legacy_digest = sha256_bytes(canonical_json(legacy_payload))
+    if (
+        legacy_bundle.get("bundle_sha256") != LEGACY_S0_BUNDLE_SHA256
+        or legacy_digest != LEGACY_S0_BUNDLE_SHA256
+    ):
+        errors.append("exact base does not retain the historical S0 bundle")
+    legacy_schema_bytes = git(
+        root,
+        [
+            "show",
+            f"{BASE_SHA}:tests/specifications/s0/evidence-manifest-v1.schema.json",
+        ],
+        binary=True,
+    )
+    if sha256_bytes(legacy_schema_bytes) != (
+        "5e3746d5d97a170959b87f24a1eeb9f3422d50b1d5f4ccdb0763cb30502f8743"
+    ):
+        errors.append("exact base does not retain the historical S0 evidence schema")
+
+    historical_evidence = {
+        "crates/noesis/tests/evidence/s0/red-observation-corrected-contract.json": (
+            "1f12680a8f5127bb853ea289a50f6d9751063dc736b9d2ec74c77c42e0f439b4"
+        ),
+        "crates/noesis/tests/evidence/s0/green-observation-local.json": (
+            "16260290deb395355041e3acfb4451deee21b46b76e209c0655f4aadbc2d3561"
+        ),
+    }
+    for relative_path, expected_digest in historical_evidence.items():
+        current_bytes = (root / relative_path).read_bytes()
+        base_bytes = git(
+            root,
+            ["show", f"{BASE_SHA}:{relative_path}"],
+            binary=True,
+        )
+        if current_bytes != base_bytes or sha256_bytes(current_bytes) != expected_digest:
+            errors.append(f"historical S0 evidence changed: {relative_path}")
+            continue
+        evidence = json.loads(current_bytes.decode("utf-8"))
+        if evidence.get("oracle_bundle_sha256") != LEGACY_S0_BUNDLE_SHA256:
+            errors.append(f"historical S0 evidence lost its bundle identity: {relative_path}")
 
 
 def validate_review(manifest: dict[str, Any], errors: list[str]) -> None:

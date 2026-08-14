@@ -241,7 +241,7 @@ pull request may bind these exact IDs to the full commit SHA on `main` that
 contains the byte-identical SRS. Until that policy PR is reviewed and merged,
 autonomous authorization must fail closed.
 
-S0 contract bundle: `sha256:978a7128498d54a6c4a6b3fec11d195e37d2f67e179d2babb5320668c4e44811`.
+S0 contract bundle: `sha256:7f8c7b67651a9ff56431c14410e8b8a551f28e207eb0a882d887add74ccabf3a`.
 The bundle manifest binds the decision, strict schemas, acceptance oracle,
 fixture, reviewed goldens, and maintenance guard. A change to any bound file
 requires a new bundle digest in this SRS and therefore invalidates an earlier

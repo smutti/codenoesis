@@ -5,7 +5,7 @@
   "governance_checkpoint_sha": "1daa23ffbaa0ea13f5fc5910aa5798c7523f254c",
   "evidence_parent_sha": "b754282d56dc65df8044d3e6d4acc672b5ae8cde",
   "verification_subject": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
-  "product_tree_sha256": "da2e763f5552efcebf2489fadafce455fc1049bc10b9d8c681e7668900247914",
+  "product_tree_sha256": "a52370ace76e25e5f2168124317697c089db43de3cf68fdee1871cc8716d2278",
   "status": "candidate_verified_pending_merge",
   "plan": {
     "path": "tests/specifications/verification/local-baseline-v2/plan.json",

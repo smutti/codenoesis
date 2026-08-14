@@ -17,6 +17,11 @@ use support::{
     read_repository_text, repository_root, scan, unique_temp_root,
 };
 
+const LEGACY_S0_CONTRACT_BUNDLE_SHA256: &str =
+    "978a7128498d54a6c4a6b3fec11d195e37d2f67e179d2babb5320668c4e44811";
+const CURRENT_S0_CONTRACT_BUNDLE_SHA256: &str =
+    "7f8c7b67651a9ff56431c14410e8b8a551f28e207eb0a882d887add74ccabf3a";
+
 fn encode_lower_hex(bytes: &[u8]) -> String {
     const DIGITS: &[u8; 16] = b"0123456789abcdef";
 
@@ -147,7 +152,11 @@ fn conf_nfr_tst_001_requires_fixture_oracle_evidence_links() {
 
     assert_eq!(observation["slice"], specification["slice"]);
     assert_eq!(observation["requirements"], specification["requirements"]);
-    assert_eq!(observation["oracle_bundle_sha256"], bundle["bundle_sha256"]);
+    assert_eq!(bundle["bundle_sha256"], CURRENT_S0_CONTRACT_BUNDLE_SHA256);
+    assert_eq!(
+        observation["oracle_bundle_sha256"],
+        LEGACY_S0_CONTRACT_BUNDLE_SHA256
+    );
     assert_eq!(observation["status"], "red_observed");
     assert_eq!(observation["red"]["test_id"], specification["test_id"]);
     assert_eq!(observation["red"]["runner_exit_code"], 101);
@@ -157,7 +166,10 @@ fn conf_nfr_tst_001_requires_fixture_oracle_evidence_links() {
         "962f070adf7bdb682b0636e91153ed1177aec8b8"
     );
     assert_eq!(green["requirements"], specification["requirements"]);
-    assert_eq!(green["oracle_bundle_sha256"], bundle["bundle_sha256"]);
+    assert_eq!(
+        green["oracle_bundle_sha256"],
+        LEGACY_S0_CONTRACT_BUNDLE_SHA256
+    );
     assert_eq!(green["verified"], false);
     assert_eq!(
         green["implementation_sha"],
