@@ -5,7 +5,7 @@
   "planning_item": "G0",
   "slice": "S14",
   "risk": "critical",
-  "tested_head": "75db38aa2583ccf269a94651dcfaf7a7ec917575",
+  "tested_head": "b336b6327e7f91b6552d7650e2748f6d8a019769",
   "requirements": {
     "FR-REL-001": {
       "tests": [
@@ -21,6 +21,7 @@
         "red-observation-local.json",
         "focused-green.log",
         "local-observation.log",
+        "correction-round-2.log",
         "complete-gate-summary.log"
       ]
     },
@@ -54,6 +55,7 @@
       ],
       "evidence": [
         "implementation-observation-local.json",
+        "correction-round-2.log",
         "complete-gate-summary.log"
       ],
       "remaining_evidence": "base-controlled Linux x86_64, macOS arm64, and Windows x86_64 PR checks"
@@ -96,6 +98,7 @@
       "evidence": [
         "red-observation-local.json",
         "focused-green.log",
+        "correction-round-2.log",
         "complete-gate-summary.log"
       ]
     },

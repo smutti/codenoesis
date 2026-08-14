@@ -29,8 +29,9 @@
   "governance_checkpoint_sha": "b4631d86f9f22c6b4760efe96577e1ffac1ccfb8",
   "red_evidence_commit_sha": "e38be8b096702ebd6a715e8698765ea0c2bfe74a",
   "product_implementation_sha": "75db38aa2583ccf269a94651dcfaf7a7ec917575",
-  "tested_head_sha": "75db38aa2583ccf269a94651dcfaf7a7ec917575",
-  "tested_tree_sha": "eac9856fa6571ec7b0601cbc1de58e7f5df31ea6",
+  "windows_transport_correction_sha": "b336b6327e7f91b6552d7650e2748f6d8a019769",
+  "tested_head_sha": "b336b6327e7f91b6552d7650e2748f6d8a019769",
+  "tested_tree_sha": "b2d973dfa60d4b853ca8526c0b03efa547a50415",
   "final_review_head": "recorded by the pull request after this evidence commit; a commit cannot contain its own SHA",
   "branch": "codex/180-g0-release-profile",
   "authorization": {
@@ -38,10 +39,12 @@
     "accountable_maintainer_decision": "Autorizzo issue #180 e il pacchetto completo critical G0/S14 descritto sulla baseline f0bdb5290566bb85bb103e24291e952d4c557156.",
     "correction_round_1_decision": "autorizzo e procedi",
     "correction_round_1_scope": "only the inherited R16/R17 rolling-governance contract-bundle digest rebind described in issue comment 5292410118",
+    "correction_round_2_basis": "the existing issue authority permits bounded CI corrections within the declared paths, behavior, dependencies, risk, and five-round budget",
+    "correction_round_2_scope": "strict LF-or-CRLF checkout transport normalization in the two allowed Rust oracle paths plus the correlated G0 bundle and evidence rebind; product and golden bytes remain unchanged",
     "maintainer_supervised_interactive_lane": true,
     "governance_and_code_single_pr": true,
     "correction_budget": 5,
-    "correction_rounds_used": 1,
+    "correction_rounds_used": 2,
     "manual_independent_review_and_merge_required": true,
     "self_approval": false,
     "self_merge": false,
@@ -70,8 +73,8 @@
     ]
   },
   "contract_digests": {
-    "bundle_semantic_sha256": "d2e7dc26cb16dfdcac5eed2914749e5cd33241931655252f37f660b8ff4c9a65",
-    "bundle_file_sha256": "c5c1663412a1e9193707ace84cb1faeaccef812830873e2fa37c325548ba8ee6",
+    "bundle_semantic_sha256": "e8f73828c75dd807e723e6172498373bdffdff336d4198aac28a2df4c0e46fcd",
+    "bundle_file_sha256": "e29d6484cc845c45ffd37f36b0a884dff8e7c92f15da9ca43c2e3dfb4f08c97e",
     "contract_sha256": "6db0a04b39ba6204a38ca0c419fbdb00f7d275522d59719bf9e2b5f4092b3f0e",
     "registry_sha256": "30ab53244923170cd85414f371a1020c75438416a587e6c51c9f5b0e54cb6074",
     "report_schema_sha256": "ba4b23a45a7f74cbd765c632a881d10d72776a136bfb419907b03244e96a010c",
@@ -122,14 +125,32 @@
       "raw_local_log_sha256": "f3618f34d94aa959423fb516edb7ce67f50e1b51117a992c4755dd10e54bd87c"
     },
     "complete_repository_gate": {
-      "tested_head": "75db38aa2583ccf269a94651dcfaf7a7ec917575",
+      "tested_head": "b336b6327e7f91b6552d7650e2748f6d8a019769",
       "exit_code": 0,
       "rust_tests_passed_including_zero_doctests": 606,
       "python_tests_passed": 344,
       "summary": "crates/noesis/tests/evidence/g0/release-profile-v1/complete-gate-summary.log",
-      "raw_local_log_bytes": 74134,
-      "raw_local_log_sha256": "a17b42d22abb24658e469baa18c822ce8185caa69a575d98666f164e9953a9b5",
+      "raw_local_log_bytes": 73779,
+      "raw_local_log_sha256": "3e1155871c78223a11ebc09dd20039a2e4ab5ae685447f61e41245fddbfd8159",
       "final_review_head": "base-controlled GitHub checks remain pending"
+    },
+    "ci_correction_round_2": {
+      "initial_review_head": "2d4877cd49a13e465abec04a1e6f13aea058930b",
+      "workflow_run": "https://github.com/smutti/codenoesis/actions/runs/31798156670",
+      "windows_job": "https://github.com/smutti/codenoesis/actions/runs/31798156670/job/94759731458",
+      "windows_failure": "conf_fr_rel_001_each_target_matches_exact_golden compared canonical LF product bytes with a checkout-transformed final CRLF",
+      "same_run_green_jobs": [
+        "Rust quality gate",
+        "Test (ubuntu-latest)",
+        "Test (macos-latest)"
+      ],
+      "corrected_head": "b336b6327e7f91b6552d7650e2748f6d8a019769",
+      "fix": "accept only one single-line JSON fixture ending in LF or CRLF and reconstruct the frozen LF oracle; reject embedded or lone CR and embedded LF",
+      "golden_bytes_changed": false,
+      "product_bytes_changed": false,
+      "focused_tests": "Green locally",
+      "complete_repository_gate": "Green locally",
+      "base_controlled_rerun": "pending after publication"
     },
     "three_platform_base_controlled_ci": "pending after pull-request publication"
   },

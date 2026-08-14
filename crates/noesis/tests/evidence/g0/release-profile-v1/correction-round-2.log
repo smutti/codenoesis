@@ -1,0 +1,50 @@
+issue=https://github.com/smutti/codenoesis/issues/180
+pull_request=https://github.com/smutti/codenoesis/pull/181
+requirement_status=Proposed branch-scoped candidate
+planning_item=G0
+slice=S14
+risk=critical
+correction_round=2
+correction_budget=5
+issue_record=https://github.com/smutti/codenoesis/issues/180#issuecomment-5293086704
+
+initial_review_head=2d4877cd49a13e465abec04a1e6f13aea058930b
+workflow_run=https://github.com/smutti/codenoesis/actions/runs/31798156670
+windows_job=https://github.com/smutti/codenoesis/actions/runs/31798156670/job/94759731458
+windows_result=failure
+failed_test=conf_fr_rel_001_each_target_matches_exact_golden
+failure=canonical product output ended in LF while GitHub checkout transformed the tracked golden final LF into CRLF before include_bytes compilation
+same_run_rust_quality_gate=green
+same_run_ubuntu=green
+same_run_macos=green
+
+corrected_head=b336b6327e7f91b6552d7650e2748f6d8a019769
+corrected_tree=b2d973dfa60d4b853ca8526c0b03efa547a50415
+fix=normalize only one single-line JSON checkout fixture ending in exact LF or CRLF back to the frozen LF oracle; reject missing final newline, embedded LF, embedded CR, and lone CR
+changed_test_paths=crates/codenoesis-contracts/tests/g0_release_profile.rs,crates/noesis/tests/e2e_fr_rel_001_release_profile.rs
+correlated_contract_path=tests/specifications/g0/release-profile-v1/contract-bundle.json
+product_source_changed=false
+golden_bytes_changed=false
+schema_or_registry_changed=false
+dependency_changed=false
+release_signing_publication_effect=false
+
+command=python3 -m unittest scripts.tests.test_g0_release_profile_contract -v
+exit=0
+tests_passed=7
+
+command=cargo test -p codenoesis-contracts --test g0_release_profile --locked
+exit=0
+tests_passed=5
+
+command=cargo test -p noesis --test e2e_fr_rel_001_release_profile e2e_fr_rel_001_reports_bound_profile --locked -- --exact --nocapture
+exit=0
+tests_passed=1
+
+command=complete repository gate from AGENTS.md
+exit=0
+rust_tests_passed_including_zero_doctests=606
+python_tests_passed=344
+raw_local_log_bytes=73779
+raw_local_log_sha256=3e1155871c78223a11ebc09dd20039a2e4ab5ae685447f61e41245fddbfd8159
+base_controlled_windows_rerun=pending after corrected evidence publication
