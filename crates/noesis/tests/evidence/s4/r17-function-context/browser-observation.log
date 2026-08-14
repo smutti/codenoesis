@@ -1,0 +1,75 @@
+issue=https://github.com/smutti/codenoesis/issues/178
+requirement_status=Proposed branch-scoped candidate
+browser_observed_date_utc=2026-08-14
+viewer=LocalExplorerV10
+profile=rust-function-context-v1
+network=disabled
+console_warning_count=0
+console_error_count=0
+
+[project-fixture]
+portable_graph_bytes=305364
+portable_graph_sha256=e94a35dee15d8fad18a529cb79bb0ab2d82f7126c27100692ebff8918fe964af
+viewer_bytes=33657
+viewer_sha256=1494f3868a4dae29d20c46d423e4f368e4a33db9eeb0b9490884bfff621c8b54
+manifest_bytes=1493
+manifest_sha256=1a4554a3bb72e3a5467fc8f24a035ccac6108a021595c521eb6a8884ff5f680b
+observation=loaded two callable subjects; selected the reviewed method; navigated parameter -> owning callable -> clamp; exercised deterministic URL fragment and back/forward; reconstructed the free-function signature from declared facts
+fixture_screenshot_bytes=79408
+fixture_screenshot_sha256=2b84ca3991d4dc9984b236d2a29d3e508b5a8325e876618b04d157f2446918b6
+
+[lekton-run-1]
+portable_graph_bytes=109151989
+portable_graph_sha256=d870552471265cd5593e7db13cef8d27c343d2270806ac97c7ac72f887b6872b
+viewer_bytes=33657
+viewer_sha256=1494f3868a4dae29d20c46d423e4f368e4a33db9eeb0b9490884bfff621c8b54
+manifest_bytes=1496
+manifest_sha256=104938fb4ece1750793d745e0ac3e965a7335eacd9e5957ed24651e84f05af6e
+callable_subjects=778
+selected_callable=render_markdown
+selected_callable_id=urn:codenoesis:entity:blake3:7a67b3d505cf548a62a82de696318152ae6f81ffca6457941c0409f9684c1ee6
+display_signature=pub fn render_markdown(raw: &str) -> String
+parameter=0 raw &str none
+return_type=String
+navigation=parameter -> function -> add_heading_ids_simple -> back -> evidence -> back/forward
+url_fragment=deterministic
+bounded_graph=rendered
+dom_observation_bytes=57528
+dom_observation_sha256=65580c8af0def87967bb89a2985f54b77b393b7675a0021868e6d61644627819
+screenshot_path=crates/noesis/tests/evidence/s4/r17-function-context/lekton-r17-function-context.png
+screenshot_bytes=82623
+screenshot_sha256=a0c509b39dfd6360b7f239b93c984984240fea70b4388df045e3d0f84c1e61d6
+
+[lekton-run-2]
+fresh_store=true
+callable_subjects=778
+selected_callable=render_markdown
+display_signature=pub fn render_markdown(raw: &str) -> String
+parameter=0 raw &str none
+navigation=parameter -> function -> callee -> back/forward
+url_fragment=deterministic
+console_warning_count=0
+console_error_count=0
+
+[cli-browser-parity]
+schema_fields=callable,signature,parameters,calls,body_facts,claims,evidence,diagnostics,coverage_gaps,derivations,limitations
+signature_equal=true
+parameter_order_equal=true
+declared_return_equal=true
+outgoing_call_order_equal=true
+section_order=Signature,Parameters,Outgoing,Incoming,Body,Claims,Evidence,Diagnostics,Gaps,Derivations,Limitations
+final_head_artifact_match=true
+observation_boundary=the browser automation API isolated the page custom window object; no bypass was attempted, so parity is retained from visible DOM fields and ordering rather than an inaccessible hidden JavaScript object
+
+[security]
+rendering=textContent and createElementNS only
+network_requests=none
+storage=none
+cookies=none
+telemetry=none
+clipboard=none
+dynamic_code=none
+source_access=none
+process_execution=none
+
+result=browser_green_not_verified

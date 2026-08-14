@@ -1,0 +1,136 @@
+{
+  "schema_version": "codenoesis.r17-traceability/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/178",
+  "requirement_status": "Proposed branch-scoped candidate",
+  "slice": "S4",
+  "risk": "high",
+  "tested_head": "81811308ea93f678a2165aa54673bab8c5262644",
+  "requirements": {
+    "FR-CTX-001": {
+      "tests": [
+        "s4_r17::tests::ft_fr_ctx_001_structural_failures_are_typed_and_closed",
+        "s4_r17::tests::pt_nfr_det_001_ten_context_schedules_are_byte_identical",
+        "e2e_fr_ctx_001_function_context_and_navigation"
+      ],
+      "evidence": [
+        "focused-green.log",
+        "real-repository-pilots.log",
+        "browser-observation.log"
+      ]
+    },
+    "FR-EXP-009": {
+      "tests": [
+        "portable_explorer::tests::sec_fr_exp_009_function_context_viewer_is_exact_and_offline",
+        "s4_r17::tests::sec_fr_exp_009_viewer_security_checks_reject_active_content",
+        "e2e_fr_ctx_001_function_context_and_navigation"
+      ],
+      "evidence": [
+        "browser-observation.log",
+        "lekton-r17-function-context.png"
+      ]
+    },
+    "FR-QRY-001": {
+      "tests": [
+        "e2e_fr_ctx_001_function_context_and_navigation"
+      ],
+      "evidence": [
+        "real-repository-pilots.log"
+      ]
+    },
+    "FR-QRY-002-bounded-local-subset": {
+      "tests": [
+        "portable_explorer::tests::sec_fr_exp_009_function_context_viewer_is_exact_and_offline"
+      ],
+      "evidence": [
+        "browser-observation.log"
+      ]
+    },
+    "FR-CLI-001": {
+      "tests": [
+        "s4_root_argument_tests::pt_nfr_det_001_r17_query_selector_accepts_fifty_argument_permutations",
+        "s4_root_argument_tests::sec_fr_ctx_001_r17_selector_matrix_fails_closed"
+      ],
+      "evidence": [
+        "focused-green.log"
+      ]
+    },
+    "NFR-DET-001": {
+      "tests": [
+        "s4_r17::tests::pt_nfr_det_001_ten_context_schedules_are_byte_identical",
+        "e2e_fr_ctx_001_function_context_and_navigation"
+      ],
+      "evidence": [
+        "focused-green.log",
+        "real-repository-pilots.log"
+      ]
+    },
+    "NFR-PER-001": {
+      "tests": [
+        "s4_r17_function_context::pt_fr_ctx_001_exact_maxima_are_accepted",
+        "s4_r17_function_context::pt_fr_ctx_001_each_maximum_plus_one_fails_closed"
+      ],
+      "evidence": [
+        "real-repository-pilots.log"
+      ]
+    },
+    "NFR-SEC-001": {
+      "tests": [
+        "s4_r17::tests::sec_fr_exp_009_viewer_security_checks_reject_active_content",
+        "portable_explorer::tests::sec_fr_exp_009_function_context_viewer_is_exact_and_offline"
+      ],
+      "evidence": [
+        "browser-observation.log"
+      ]
+    },
+    "NFR-SEC-005": {
+      "tests": [
+        "portable_explorer::tests::race_nfr_sec_005_r17_mutable_input_is_rejected",
+        "portable_explorer::tests::race_nfr_sec_005_r17_output_replacement_is_rejected_or_blocked",
+        "portable_explorer::tests::sec_nfr_sec_005_r17_path_capacity_and_symlink_inputs_fail_closed"
+      ],
+      "evidence": [
+        "focused-green.log",
+        "complete-gate-summary.log"
+      ]
+    },
+    "NFR-PRV-002": {
+      "tests": [
+        "s4_r17::tests::sec_nfr_prv_002_private_fields_and_urls_are_rejected"
+      ],
+      "evidence": [
+        "focused-green.log"
+      ]
+    },
+    "NFR-TST-001": {
+      "tests": [
+        "scripts.tests.test_s4_r17_function_context_contract"
+      ],
+      "evidence": [
+        "red-observation-local.json",
+        "focused-green.log",
+        "complete-gate-summary.log"
+      ]
+    },
+    "NFR-TST-002": {
+      "tests": [
+        "e2e_fr_ctx_001_function_context_and_navigation"
+      ],
+      "evidence": [
+        "focused-green.log",
+        "real-repository-pilots.log"
+      ]
+    },
+    "INV-BND-001": {
+      "tests": [
+        "s4_r17::tests::ft_fr_ctx_001_structural_failures_are_typed_and_closed",
+        "portable_explorer::tests::sec_nfr_sec_005_r17_path_capacity_and_symlink_inputs_fail_closed"
+      ],
+      "evidence": [
+        "focused-green.log",
+        "complete-gate-summary.log"
+      ]
+    }
+  },
+  "independent_review": "pending",
+  "verification": "not Verified"
+}
