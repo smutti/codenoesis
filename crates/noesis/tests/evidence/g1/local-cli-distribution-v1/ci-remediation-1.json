@@ -1,0 +1,61 @@
+{
+  "schema_version": "codenoesis.ci-remediation-observation/v1",
+  "issue": 182,
+  "pull_request": 183,
+  "sequence": 1,
+  "risk": "high",
+  "authorization": "accountable-maintainer authorization to complete all necessary implementation corrections without further interruption",
+  "authorization_record": "https://github.com/smutti/codenoesis/issues/182#issuecomment-5294810218",
+  "pull_request_record": "https://github.com/smutti/codenoesis/pull/183#issuecomment-5294810180",
+  "failed_head_sha": "9801b20a5a1e15af531368228fc527f490916b5b",
+  "workflow_run": "https://github.com/smutti/codenoesis/actions/runs/31811517556",
+  "failures": [
+    {
+      "job": "Test (ubuntu-latest)",
+      "log_bytes": 143585,
+      "log_sha256": "7356e4a46e61550c8cfe13e5d20ce34a8dbf5d77fdac5865592d2db2b0f47b31",
+      "root_cause": "The Linux seccomp boundary was installed before the inherited scan worker spawned, so thread creation failed and R5 gitlink scans failed closed."
+    },
+    {
+      "job": "Rust quality gate",
+      "log_bytes": 154753,
+      "log_sha256": "7f8c9c95bc6bb5e01b41cb8f71ee44734078fb40b83497a6e0a7371283d45798",
+      "root_cause": "The quality gate reproduced the same Linux scan-worker ordering failure."
+    },
+    {
+      "job": "Test (windows-latest)",
+      "log_bytes": 70464,
+      "log_sha256": "fae928186bfb0165e2abed20f3316235702173d14c09661c79e9a66a716dbff6",
+      "root_cause": "Windows checkout converted newly frozen G1 text assets from LF to CRLF while canonical product output correctly remained LF."
+    }
+  ],
+  "changed_paths": [
+    ".gitattributes",
+    "crates/noesis/src/main.rs",
+    "crates/noesis/tests/evidence/g1/local-cli-distribution-v1/ci-remediation-1.json"
+  ],
+  "remediation": [
+    "validate configuration before worker or command activity",
+    "spawn the inherited scan worker before installing the inherited Linux seccomp boundary",
+    "install the security boundary before every command dispatch",
+    "force LF for the protected license and G1 distribution/specification text assets",
+    "keep G1 binary fixtures non-text"
+  ],
+  "local_green": {
+    "tests": 21,
+    "format": "Green",
+    "policy": "Green",
+    "attributes": "Green",
+    "clippy": "Green",
+    "log_bytes": 5056,
+    "log_sha256": "2d29f31d3074a80bd22b81549ad305d45824ecf89185b3e55c3fd086e5eb46e1"
+  },
+  "remote_rerun": "pending new head",
+  "preserved": [
+    "all requirement and public contract semantics",
+    "all schema, golden semantic content, fixture, ontology, and identity values",
+    "all manifest values, dependency versions, targets, and public errors",
+    "the inherited Linux security policy and pre-dispatch confinement",
+    "all workflow, permission, release, signing, publication, support, and GA boundaries"
+  ]
+}

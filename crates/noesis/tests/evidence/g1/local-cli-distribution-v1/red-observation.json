@@ -1,0 +1,76 @@
+{
+  "schema_version": "codenoesis.red-observation/v1",
+  "issue": 182,
+  "requirements": [
+    "FR-CFG-001",
+    "FR-REL-002",
+    "FR-CLI-008"
+  ],
+  "requirement_status": "Proposed branch-scoped candidate",
+  "planning_item": "G1a",
+  "slice": "S14",
+  "risk": "high",
+  "exact_base_sha": "a525126228205901885038586e21d30db745b1ec",
+  "checkpoint_sha": "0b9df6d2dffd08ab2e1ab848b16f8fa7fc3c56e5",
+  "governance": {
+    "command": "python3 -m unittest scripts.tests.test_g0_release_profile_contract scripts.tests.test_g1_local_distribution_contract -v",
+    "exit_status": 0,
+    "tests_run": 15,
+    "log_sha256": "093c43b54848eaeaea92c698dd330706e6fa6f6f8bf7c800f21446ea6490ca4f"
+  },
+  "red": [
+    {
+      "requirement": "FR-CFG-001",
+      "command": "cargo test -p noesis --test e2e_fr_cfg_001_local_configuration e2e_fr_cfg_001_validates_embedded_default --locked -- --exact --nocapture",
+      "exit_status": 101,
+      "expected_failure": "unimplemented config command is rejected by the exact base as input.invalid_revision",
+      "actual_failure": {
+        "child_exit": 2,
+        "child_stdout_bytes": 0,
+        "child_stderr_bytes": 149,
+        "schema_version": "codenoesis.error/v1",
+        "code": "input.invalid_revision"
+      },
+      "log_sha256": "01ced2da80bbfc4839aa98dab37d52dbb5cb55251dde7d4b6438adcb7ccabfd8"
+    },
+    {
+      "requirement": "FR-REL-002",
+      "command": "cargo test -p xtask --test e2e_fr_rel_002_local_distribution e2e_fr_rel_002_packages_local_cli --locked -- --exact --nocapture",
+      "exit_status": 101,
+      "expected_failure": "exact-base xtask emits only its bootstrap sentence and creates no bundle",
+      "actual_failure": {
+        "child_exit": 0,
+        "child_stdout_bytes": 123,
+        "child_stderr_bytes": 0,
+        "bundle_created": false
+      },
+      "log_sha256": "1da3f52474dda7cef6e23da4f46e119d2a06dc7973520947312704be806e9876"
+    }
+  ],
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "target": "aarch64-apple-darwin",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "features": "focused default test features",
+    "network_or_model_provider": "not used"
+  },
+  "ai_participation": {
+    "agent": "OpenAI Codex coding agent",
+    "model": "not exposed by runtime",
+    "policy": "repository AGENTS.md plus issue #182",
+    "run_identifier": "issue-182-maintainer-supervised-interactive",
+    "duration": "not retained by runtime",
+    "cost": "not exposed by runtime"
+  },
+  "human_approvals": [
+    "accountable-maintainer authorization of the complete issue #182 package",
+    "accountable-maintainer authorization of the bounded G0 historical-guard correction"
+  ],
+  "known_limitations": [
+    "Red evidence is local aarch64-apple-darwin only; base-controlled CI evidence is required on the final head",
+    "no implementation or distribution artifact exists at this checkpoint",
+    "requirements remain Proposed and no behavior is Verified, supported, published, signed, or GA"
+  ]
+}

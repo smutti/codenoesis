@@ -1,0 +1,21 @@
+{
+  "schema_version": "codenoesis.local-distribution-tree/v1",
+  "logical_file_count": 6,
+  "payload_count": 5,
+  "paths": [
+    { "path": "bin/noesis", "windows_path": "bin/noesis.exe", "mode": "executable" },
+    { "path": "etc/codenoesis/config.json", "mode": "data" },
+    { "path": "share/codenoesis/schemas/local-cli-config-v1.schema.json", "mode": "data" },
+    { "path": "share/doc/codenoesis/INSTALL.md", "mode": "data" },
+    { "path": "share/doc/codenoesis/LICENSE", "mode": "data" },
+    { "path": "manifest.json", "mode": "data" }
+  ],
+  "lifecycle": {
+    "clean_install": "complete_digest_directory",
+    "upgrade": "side_by_side_then_caller_selects",
+    "rollback": "caller_selects_retained_prior_digest",
+    "uninstall": "remove_exact_selected_digest_directory",
+    "hidden_activation_state": false,
+    "path_or_system_mutation": false
+  }
+}

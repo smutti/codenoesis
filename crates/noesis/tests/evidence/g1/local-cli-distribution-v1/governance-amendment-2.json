@@ -1,0 +1,34 @@
+{
+  "schema_version": "codenoesis.governance-amendment/v1",
+  "issue": 182,
+  "correction_round": 2,
+  "risk": "high",
+  "authorization": "accountable-maintainer authorization of the bounded rustfmt correction",
+  "authorization_record": "https://github.com/smutti/codenoesis/issues/182#issuecomment-5294069980",
+  "checkpoint_sha": "0b9df6d2dffd08ab2e1ab848b16f8fa7fc3c56e5",
+  "reason": "Rust 1.97.1 rustfmt output conflicted with two frozen acceptance-test source bytes",
+  "semantic_change": false,
+  "red_oracle_change": false,
+  "changed_records": [
+    {
+      "path": "crates/noesis/tests/e2e_fr_cfg_001_local_configuration.rs",
+      "before_sha256": "08c0949aa14e0ba2b6f7ee23bbc26bb346dfc7fcfbe2cedd5231f7bbda182fdc",
+      "after_sha256": "3562fd5240fd5034f4287248590b7f7c544a3cdbb775cfb746d68582fb1e61ee"
+    },
+    {
+      "path": "xtask/tests/e2e_fr_rel_002_local_distribution.rs",
+      "before_sha256": "45ee452e8922d2fa8f7f58370253502bf28f4c3b563fe5d4e53c8295aa61dbad",
+      "after_sha256": "14bee9bae5ab0eb75fb44edd60c13aefac25f354d3c4ba80c73f701e481c5e3e"
+    }
+  ],
+  "before_contract_bundle_sha256": "f3e1684dcef93b5edbfa9b7af531ec60662137e7204a684a99e7ee5ecd9c003f",
+  "after_contract_bundle_sha256": "aed9a7718b510e18ece1917fb4d3097f9396d81288f8a3854d31f3e3ec5cb526",
+  "preserved": [
+    "test names",
+    "test commands",
+    "assertions",
+    "expected Red and Green behavior",
+    "contracts, schemas, fixtures, and product semantics",
+    "original checkpoint and retained Red evidence"
+  ]
+}

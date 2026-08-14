@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/local-cli-config-v1.schema.json",
+  "title": "LocalCliConfigurationV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "release_profile",
+    "execution",
+    "output",
+    "secrets"
+  ],
+  "properties": {
+    "schema_version": { "const": "codenoesis.configuration/local-cli/v1" },
+    "release_profile": { "const": "local-experimental-r17" },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "network",
+        "model_providers",
+        "target_execution",
+        "browser_auto_open"
+      ],
+      "properties": {
+        "network": { "const": "disabled" },
+        "model_providers": { "const": "disabled" },
+        "target_execution": { "const": "disabled" },
+        "browser_auto_open": { "const": "disabled" }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format"],
+      "properties": {
+        "format": { "const": "json" }
+      }
+    },
+    "secrets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "references"],
+      "properties": {
+        "mode": { "const": "forbidden" },
+        "references": {
+          "type": "array",
+          "maxItems": 0,
+          "items": false
+        }
+      }
+    }
+  }
+}

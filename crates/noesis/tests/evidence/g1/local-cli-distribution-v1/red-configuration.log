@@ -1,0 +1,24 @@
+command: cargo test -p noesis --test e2e_fr_cfg_001_local_configuration e2e_fr_cfg_001_validates_embedded_default --locked -- --exact --nocapture
+checkpoint: 0b9df6d2dffd08ab2e1ab848b16f8fa7fc3c56e5
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s
+Running tests/e2e_fr_cfg_001_local_configuration.rs
+
+running 1 test
+
+thread 'e2e_fr_cfg_001_validates_embedded_default' panicked at crates/noesis/tests/e2e_fr_cfg_001_local_configuration.rs:107:9:
+expected Red: the exact base rejects the unimplemented config command as input.invalid_revision
+test e2e_fr_cfg_001_validates_embedded_default ... FAILED
+
+failures:
+    e2e_fr_cfg_001_validates_embedded_default
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
+
+error: test failed, to rerun pass `-p noesis --test e2e_fr_cfg_001_local_configuration`
+exit_status: 101
+observed_child_exit: 2
+observed_child_stdout_bytes: 0
+observed_child_stderr_bytes: 149
+observed_child_schema: codenoesis.error/v1
+observed_child_code: input.invalid_revision

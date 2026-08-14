@@ -1,0 +1,40 @@
+{
+  "schema_version": "codenoesis.governance-amendment/v1",
+  "issue": 182,
+  "correction_round": 3,
+  "risk": "high",
+  "authorization": "accountable-maintainer authorization of the bounded S0 architecture-oracle correction",
+  "authorization_record": "https://github.com/smutti/codenoesis/issues/182#issuecomment-5294245454",
+  "proposal_record": "https://github.com/smutti/codenoesis/issues/182#issuecomment-5294212941",
+  "product_head_sha": "277e101268e662acb2feb57901dad703f2d3bde6",
+  "failed_gate": {
+    "command": "cargo test --workspace --all-targets --all-features --locked",
+    "exit_status": 101,
+    "failed_test": "conf_nfr_mnt_001_dependency_rules",
+    "path": "crates/noesis/tests/s0_conformance.rs",
+    "log_bytes": 70756,
+    "log_sha256": "df7d1972eca5f218647c42ae6462b0a6e58f576787523edae4afe190e24d6f02"
+  },
+  "reason": "The G1a package explicitly authorizes xtask to depend on codenoesis-contracts, while the historical S0 oracle expected no first-party xtask dependency.",
+  "architectural_oracle_change": true,
+  "product_semantic_change": false,
+  "g1_acceptance_oracle_change": false,
+  "changed_records": [
+    {
+      "path": "crates/noesis/tests/s0_conformance.rs",
+      "change": "expect the authorized xtask to codenoesis-contracts first-party edge"
+    },
+    {
+      "path": "crates/noesis/tests/evidence/g1/local-cli-distribution-v1/governance-amendment-3.json",
+      "change": "retain correction authorization and failed-gate evidence"
+    }
+  ],
+  "preserved": [
+    "all production source and manifests",
+    "the seeded forbidden repository-to-contracts edge check",
+    "all other S0 architecture assertions",
+    "G1a contracts, schemas, fixtures, targets, dependencies, and product behavior",
+    "the governance checkpoint and retained Red evidence",
+    "risk, authority, correction budget, and stop conditions"
+  ]
+}

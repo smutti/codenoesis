@@ -1,0 +1,28 @@
+{
+  "schema_version": "codenoesis.contract-bundle/v1",
+  "files": [
+    { "path": "LICENSE", "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4" },
+    { "path": "crates/noesis/tests/e2e_fr_cfg_001_local_configuration.rs", "sha256": "3562fd5240fd5034f4287248590b7f7c544a3cdbb775cfb746d68582fb1e61ee" },
+    { "path": "docs/software/decisions/0034-g1a-local-cli-distribution-configuration.md", "sha256": "4da57b5db5bc1b022d9de02227dedca7fb42c76a306e2838a9bc8eef4d61390d" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/codenoesis-error-v26.schema.json", "sha256": "d2b8f9a83e1fbbe2c9d1bd81da7d650a0f4641ad880aea9b6ee7d9284fead6d4" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/contract-v1.json", "sha256": "9fe2d1d0e643e052c7c5287e229cae26fa4eaa0f6617c2433c7de35104e708de" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/default-config.json", "sha256": "a923dcf8937410ed942f6c6f3ec7899f9a2fcccc52b91653bf8aaa3df6e4e327" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/e2e_fr_cfg_001_local_configuration.json", "sha256": "fe32b6a14f0439ba046adc0872142220e5a3c328a62a69a4e9f44a5963af67b9" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/e2e_fr_rel_002_local_distribution.json", "sha256": "4cbf916d00c9f18e1586cac74eded2c772abbc89da35c5cbcd0a7a2c1357adb1" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/expected-config-embedded.json", "sha256": "8fedf703dfef1883b74266c17bf81e27fdaa710684dffb1f421adfe8bfd384f3" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/expected-config-explicit.json", "sha256": "9540f018a3cc5629019c3389195c246b1c1614a7168265054cfbd0d3aa005dc9" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/expected-manifest-aarch64-apple-darwin.json", "sha256": "757a9253736f2712dbe60a480af4ffa6b7d3b06a39458bc0e8714be288caf7b1" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/expected-manifest-x86_64-pc-windows-msvc.json", "sha256": "409e6050f606b5067ed63896ca54b9a1fbe3577fe20e253152ab79aec45486e5" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/expected-manifest-x86_64-unknown-linux-gnu.json", "sha256": "d332001a85f9ae7608cf6ec8dd4f0aad03e6c77478052bf526bca63693eb6faf" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/fixtures/noesis-v1.bin", "sha256": "f82e988be32ec8a3f077e49f4034d42847adc415cd05ec82a9affec2fe25fb6b" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/fixtures/noesis-v2.bin", "sha256": "9d0005fbbae37436afe941a35dd6324b015be474371f808c6016b031f24d92ad" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/install-v1.md", "sha256": "7faf884c53a5c2595850636823227076ef7f71456a3856fef648e705053ee46c" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/invalid-cases-v1.json", "sha256": "259fa45586e0e1d9e2ea174b5dd23677008709fa90b5e200d4a8a6ecadcc626c" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/local-cli-config-v1.schema.json", "sha256": "e9a5b92168e2163533d20c974e6472fdda8fc43399cad7329d82d2d3eefc30c4" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/local-configuration-report-v1.schema.json", "sha256": "bdf0f8deb60a68405734fefb1f650bad2d100e6ad66578cb17d062dfc3cdacd9" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/local-distribution-manifest-v1.schema.json", "sha256": "a9b56d3a787029bd3755bc02e5a0aef8a79c490d63b2e92110eefca96e2049d0" },
+    { "path": "tests/specifications/g1/local-cli-distribution-v1/tree-v1.json", "sha256": "3d689c8a9a4e205f3ada3919f51c0be8f253f569c76ac55a2e7d1be2f673a8fe" },
+    { "path": "xtask/tests/e2e_fr_rel_002_local_distribution.rs", "sha256": "14bee9bae5ab0eb75fb44edd60c13aefac25f354d3c4ba80c73f701e481c5e3e" }
+  ],
+  "bundle_sha256": "aed9a7718b510e18ece1917fb4d3097f9396d81288f8a3854d31f3e3ec5cb526"
+}

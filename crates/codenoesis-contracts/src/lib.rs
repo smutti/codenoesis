@@ -1,6 +1,7 @@
 //! Versioned JSON contracts for the `CodeNoesis` S0 through S3 slices.
 
 mod g0;
+mod g1;
 mod s1_boundaries;
 mod s1_packed;
 mod s4;
@@ -24,6 +25,7 @@ mod s6;
 mod s7;
 
 pub use g0::*;
+pub use g1::*;
 pub use s1_boundaries::*;
 pub use s1_packed::*;
 pub use s4::*;

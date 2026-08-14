@@ -1,0 +1,46 @@
+{
+  "schema_version": "codenoesis.e2e-spec/v1",
+  "id": "e2e_fr_cfg_001_validates_embedded_default",
+  "requirements": [
+    "FR-CFG-001",
+    "FR-CLI-008",
+    "FR-CLI-002",
+    "NFR-CMP-001",
+    "NFR-SEC-003",
+    "NFR-PORT-001",
+    "NFR-TST-001",
+    "NFR-TST-002",
+    "INV-BND-001"
+  ],
+  "status": "Proposed branch-scoped candidate",
+  "planning_item": "G1a",
+  "slice": "S14",
+  "risk": "high",
+  "exact_base": "a525126228205901885038586e21d30db745b1ec",
+  "command": ["config", "validate", "--format", "json"],
+  "expected_red": {
+    "exit": 2,
+    "stdout_bytes": 0,
+    "stderr_bytes": 149,
+    "schema_version": "codenoesis.error/v1",
+    "code": "input.invalid_revision"
+  },
+  "expected_green": {
+    "exit": 0,
+    "stderr_bytes": 0,
+    "schema_version": "codenoesis.configuration-report/v1",
+    "configuration_schema": "codenoesis.configuration/local-cli/v1",
+    "embedded_and_explicit": true,
+    "argument_constructions": 50,
+    "schedules": 10,
+    "output_bytes_maximum_including_lf": 65536
+  },
+  "failure": {
+    "schema_version": "codenoesis.error/v26",
+    "stdout": "empty",
+    "downstream_work": "none",
+    "repair": false,
+    "fallback": false,
+    "ambient_configuration": false
+  }
+}

@@ -1,0 +1,25 @@
+command: cargo test -p xtask --test e2e_fr_rel_002_local_distribution e2e_fr_rel_002_packages_local_cli --locked -- --exact --nocapture
+checkpoint: 0b9df6d2dffd08ab2e1ab848b16f8fa7fc3c56e5
+warning: /Users/smutti/Documents/personal/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+Compiling xtask v0.0.0 (/Users/smutti/Documents/personal/codenoesis/xtask)
+Finished `test` profile [unoptimized + debuginfo] target(s) in 1.05s
+Running tests/e2e_fr_rel_002_local_distribution.rs
+
+running 1 test
+
+thread 'e2e_fr_rel_002_packages_local_cli' panicked at xtask/tests/e2e_fr_rel_002_local_distribution.rs:109:9:
+expected Red: the exact base xtask emits only its bootstrap sentence
+test e2e_fr_rel_002_packages_local_cli ... FAILED
+
+failures:
+    e2e_fr_rel_002_packages_local_cli
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
+
+error: test failed, to rerun pass `-p xtask --test e2e_fr_rel_002_local_distribution`
+exit_status: 101
+observed_child_exit: 0
+observed_child_stdout_bytes: 123
+observed_child_stderr_bytes: 0
+observed_child_stdout: CodeNoesis workspace bootstrap: no product slice is implemented. See docs/software/software-requirements-specification.md.
+observed_bundle_created: false

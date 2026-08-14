@@ -1,0 +1,71 @@
+{
+  "schema_version": "codenoesis.actual-binary-smoke/v1",
+  "issue": 182,
+  "requirements": [
+    "FR-CFG-001",
+    "FR-REL-002",
+    "FR-CLI-008"
+  ],
+  "requirement_status": "Proposed branch-scoped candidate",
+  "planning_item": "G1a",
+  "slice": "S14",
+  "risk": "high",
+  "observed_head_sha": "03a72ca52886dcd9baf0246cee3c231e2bdeb5b4",
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "target": "aarch64-apple-darwin",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "network": "not used",
+    "model_provider": "not used"
+  },
+  "commands": [
+    {
+      "command": "cargo build --release --locked -p noesis",
+      "exit_status": 0
+    },
+    {
+      "command": "target/debug/xtask package-local-cli --binary target/release/noesis --output <existing-empty-output-root>",
+      "exit_status": 0
+    },
+    {
+      "command": "./bin/noesis --config etc/codenoesis/config.json config validate --format json",
+      "exit_status": 0
+    },
+    {
+      "command": "./bin/noesis --config etc/codenoesis/config.json profile --id local-experimental-r17 --format json",
+      "exit_status": 0
+    }
+  ],
+  "binary": {
+    "bytes": 19904576,
+    "sha256": "313c57b8d57f9e9e42edc5e6942b6294c45d1ab05331c907bcf7f502342a1d76"
+  },
+  "bundle": {
+    "name": "codenoesis-local-experimental-r17-aarch64-apple-darwin-313c57b8d57f9e9e42edc5e6942b6294c45d1ab05331c907bcf7f502342a1d76",
+    "files": 6,
+    "symlinks": 0,
+    "manifest_bytes": 1185,
+    "manifest_sha256": "b936ae1f2526d299fba8db56439384fdc234b318be4ef2f641c7273c40068205",
+    "stdout_manifest_byte_identical": true
+  },
+  "preflight": {
+    "configuration_report_bytes": 622,
+    "configuration_report_sha256": "9540f018a3cc5629019c3389195c246b1c1614a7168265054cfbd0d3aa005dc9",
+    "release_profile_bytes": 1786,
+    "release_profile_sha256": "d2e2ae26a1d0779245c0dc8da05f6101445af304b291d757be3e0edd61bb6d4e"
+  },
+  "checks": {
+    "payload_lengths_digests_and_modes_valid": true,
+    "privacy_canaries_absent": true,
+    "hidden_current_absent": true,
+    "uninstall_prefix_empty": true,
+    "writes_outside_explicit_roots_observed": false
+  },
+  "local_log": {
+    "bytes": 1090,
+    "sha256": "4dcf54bec171f99178b0df86b032d505cb4bfc9a388dd7156dca64f698b503ac"
+  },
+  "result": "Green local observation; not verification, signing, support, publication, provenance, or GA"
+}

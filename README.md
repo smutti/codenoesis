@@ -44,10 +44,19 @@ graph identifiers.
 
 Issue [#180](https://github.com/smutti/codenoesis/issues/180) and
 [Decision 0033](docs/software/decisions/0033-g0-release-profile-registry.md)
-define the Proposed critical G0/S14 package. It adds a machine-readable
-`FR-REL-001` experimental release-profile registry and output-only profile
-preflight while explicitly granting no signing, publication, support, or GA
-authority.
+were protected by PR #181, merged as
+`a525126228205901885038586e21d30db745b1ec`. The exact G0/S14 registry and
+output-only profile preflight under `FR-REL-001` and `FR-CLI-007` are Approved
+and Implemented but not Verified; they grant no signing, publication, support,
+or GA authority.
+
+Issue [#182](https://github.com/smutti/codenoesis/issues/182) and
+[Decision 0034](docs/software/decisions/0034-g1a-local-cli-distribution-configuration.md)
+define the Proposed high-risk G1a/S14 local-first candidate. It adds a closed
+`FR-CFG-001` configuration contract, `FR-CLI-008` fail-closed startup
+validation, and an unsigned `FR-REL-002` digest-named staged CLI bundle with
+explicit install, upgrade, rollback, and uninstall procedures. Before protected
+merge it remains a candidate and is not a supported or published release.
 Complete independent evidence acceptance, broader language coverage,
 operations, and the remaining production-readiness slices are still pending.
 

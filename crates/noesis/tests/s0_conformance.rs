@@ -92,7 +92,7 @@ fn conf_nfr_mnt_001_dependency_rules() {
                 "codenoesis-store-local",
             ]),
         ),
-        ("xtask", BTreeSet::new()),
+        ("xtask", BTreeSet::from(["codenoesis-contracts"])),
     ]);
     let packages = metadata["packages"]
         .as_array()

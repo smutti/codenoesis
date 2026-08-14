@@ -1,0 +1,66 @@
+{
+  "schema_version": "codenoesis.governance-amendment/v1",
+  "issue": 182,
+  "correction_round": 5,
+  "correction_budget_exhausted": true,
+  "risk": "high",
+  "authorization": "accountable-maintainer authorization to complete all necessary bounded implementation corrections without further interruption",
+  "authorization_record": "https://github.com/smutti/codenoesis/issues/182#issuecomment-5294384988",
+  "parent_head_sha": "daeaf55255cb90e181266775c6d7708f582a2088",
+  "reason": "Mutable lifecycle governance records in immutable R16 and R17 checkpoint bundles must remain historical observations rather than prohibitions on later authorized governance.",
+  "changed_guards": [
+    {
+      "path": "scripts/tests/test_s4_r16_safe_constant_evaluation_contract.py",
+      "before_sha256": "e0d5d8294bcb4ace7a4d9aff7dcc1b67998bf5236dca63556acd8383c7b2721e",
+      "after_sha256": "b02755ec413958e9258182556b3c0b4aeef69e2d15e851fbb3c033fdd4cac6b2",
+      "historical_records": [
+        "README.md",
+        "docs/software/architecture.md",
+        "docs/software/roadmap.md",
+        "docs/software/software-requirements-specification.md",
+        "scripts/tests/test_s4_r16_safe_constant_evaluation_contract.py"
+      ]
+    },
+    {
+      "path": "scripts/tests/test_s4_r17_function_context_contract.py",
+      "before_sha256": "bc789b5f4c03acc382f65247d1aaa37fb00605a3af1d1d14096dcd10de98cb38",
+      "after_sha256": "da860b907e48134127b7588e54697422d750b20f571c40e9e9c22e0f9636e699",
+      "historical_records": [
+        "README.md",
+        "docs/software/architecture.md",
+        "docs/software/release-profiles.md",
+        "docs/software/roadmap.md",
+        "docs/software/software-requirements-specification.md",
+        "scripts/tests/test_s4_r17_function_context_contract.py"
+      ]
+    }
+  ],
+  "immutable_bundle_file_sha256": {
+    "tests/specifications/s4/r16/contract-bundle.json": "3656d6c009b129f5504320e10c3886c48ac9a4adbe40e78129a48b49c655805b",
+    "tests/specifications/s4/r17/contract-bundle.json": "7ddb828f2c637ffba3652dfc2c36d76a63e5351ac954b6c390b3e47663499bc0"
+  },
+  "green_evidence": [
+    {
+      "scope": "R16, R17, G0, and G1 governance modules",
+      "tests": 26,
+      "exit_status": 0,
+      "log_bytes": 3431,
+      "log_sha256": "0cf5d8d378369a13e1ecd1148f44bc78e92627231967f9c24abc2a03432a2bae"
+    },
+    {
+      "scope": "complete Python governance and contract suite",
+      "tests": 352,
+      "exit_status": 0,
+      "log_bytes": 452,
+      "log_sha256": "60b18e878103704293828071d6d39dd1d59e796ba7b7c64f15b65df40e8e90b5"
+    }
+  ],
+  "preserved": [
+    "ordered bundle records and bundle payload digests",
+    "current-tree equality for every non-historical record",
+    "all decisions, fixtures, schemas, goldens, ontology identities, nested bundle identities, and runtime outputs",
+    "all production source, manifests, dependencies, targets, and public behavior",
+    "the governance checkpoint and retained Red evidence",
+    "risk, authority, and stop conditions"
+  ]
+}
