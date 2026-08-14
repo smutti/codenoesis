@@ -1,2 +1,8 @@
 tests/fixtures/s4/workspace-docs-v1/expected-docs/overview.md text eol=lf
 tests/fixtures/s4/workspace-docs-v1/expected-docs/modules/*.md text eol=lf
+LICENSE text eol=lf
+distribution/local-cli/*.json text eol=lf
+distribution/local-cli/*.md text eol=lf
+tests/specifications/g1/local-cli-distribution-v1/*.json text eol=lf
+tests/specifications/g1/local-cli-distribution-v1/*.md text eol=lf
+tests/specifications/g1/local-cli-distribution-v1/fixtures/*.bin -text

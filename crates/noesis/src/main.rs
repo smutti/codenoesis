@@ -173,18 +173,14 @@ fn main() -> ExitCode {
         Ok(bootstrap) => bootstrap,
         Err(error) => return emit_error_v26(&error, 2),
     };
-    if noesis::install_s0_security_boundary().is_err() {
-        return if bootstrap.g1_requested {
-            emit_internal_error_v26()
-        } else {
-            emit_internal_error_v1()
-        };
-    }
     let configuration = match resolve_startup_configuration(bootstrap.configuration.as_deref()) {
         Ok(configuration) => configuration,
         Err(failure) => return emit_error_v26(&failure.error, failure.exit_code),
     };
     if bootstrap.validate_requested {
+        if noesis::install_s0_security_boundary().is_err() {
+            return emit_internal_error_v26();
+        }
         let Ok(stdout) = configuration.canonical_stdout() else {
             return emit_internal_error_v26();
         };
@@ -194,6 +190,8 @@ fn main() -> ExitCode {
             emit_internal_error_v26()
         };
     }
+    drop(configuration);
+    let g1_requested = bootstrap.g1_requested;
     let arguments = bootstrap.arguments;
     let profile_requested = arguments.get(1).is_some_and(|value| value == "profile");
     let r10_scan_requested = rust_cfg_alternatives_requested(&arguments);
@@ -259,6 +257,13 @@ fn main() -> ExitCode {
     } else {
         None
     };
+    if noesis::install_s0_security_boundary().is_err() {
+        return if g1_requested {
+            emit_internal_error_v26()
+        } else {
+            emit_internal_error_v1()
+        };
+    }
     let s4_requested = requested_profile(&arguments, "standard-local-s4");
     let s3_requested = requested_profile(&arguments, "standard-local-s3");
     let s4_error_lineage = s4_requested || docs_requested || query_requested;
