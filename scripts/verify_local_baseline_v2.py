@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -18,7 +19,9 @@ ISSUE = "https://github.com/smutti/codenoesis/issues/188"
 BASE_SHA = "9ecdc3acefd43495daf76b9f2ab69a7bbacff172"
 CHECKPOINT_SHA = "1daa23ffbaa0ea13f5fc5910aa5798c7523f254c"
 RED_COMMIT_SHA = "6fef76a4ba7fff8435d85a6df4c6efb3b1d1991b"
+EVIDENCE_PARENT_SHA = "b754282d56dc65df8044d3e6d4acc672b5ae8cde"
 FULL_GATE_HEAD_SHA = "5b3a4ea54dc9252a384d729e683f4cbb1ade8ce8"
+LEGACY_REMOTE_HEAD_SHA = "b80c08935c32293f1315ae6dd1b4f1a7f52cd6c5"
 LEGACY_S0_BUNDLE_SHA256 = (
     "978a7128498d54a6c4a6b3fec11d195e37d2f67e179d2babb5320668c4e44811"
 )
@@ -216,6 +219,11 @@ EXPECTED_GATE_IDS = {
     "supply-chain",
     "traceability",
     "windows-native",
+}
+CANONICAL_ORIGIN_URLS = {
+    "git@github.com:smutti/codenoesis.git",
+    "https://github.com/smutti/codenoesis",
+    "https://github.com/smutti/codenoesis.git",
 }
 
 
@@ -423,6 +431,84 @@ def git_is_ancestor(root: Path, ancestor: str, descendant: str) -> bool:
     return completed.returncode == 0
 
 
+def git_commit_exists(root: Path, revision: str) -> bool:
+    completed = subprocess.run(
+        ["git", "cat-file", "-e", f"{revision}^{{commit}}"],
+        cwd=root,
+        check=False,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    return completed.returncode == 0
+
+
+def ensure_required_git_history(root: Path, errors: list[str]) -> None:
+    head = git(root, ["rev-parse", "HEAD"])
+    required_revisions = (
+        BASE_SHA,
+        CHECKPOINT_SHA,
+        RED_COMMIT_SHA,
+        EVIDENCE_PARENT_SHA,
+        FULL_GATE_HEAD_SHA,
+        LEGACY_REMOTE_HEAD_SHA,
+        head,
+    )
+    missing = [
+        revision
+        for revision in required_revisions
+        if not git_commit_exists(root, revision)
+    ]
+    if not missing:
+        return
+    if git(root, ["rev-parse", "--is-shallow-repository"]) != "true":
+        errors.append(
+            "required Git history is missing from a non-shallow repository: "
+            + ", ".join(missing)
+        )
+        return
+    if os.environ.get("GITHUB_ACTIONS") != "true":
+        errors.append(
+            "required Git history is unavailable in an offline shallow checkout: "
+            + ", ".join(missing)
+        )
+        return
+    origin = git(root, ["remote", "get-url", "origin"])
+    if origin not in CANONICAL_ORIGIN_URLS:
+        errors.append("shallow history hydration requires the canonical origin")
+        return
+    fetch_revisions = sorted(set((*missing, head)))
+    command = [
+        "git",
+        "fetch",
+        "--no-tags",
+        "--no-recurse-submodules",
+        "--depth=512",
+        "origin",
+        *fetch_revisions,
+    ]
+    completed = subprocess.run(
+        command,
+        cwd=root,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if completed.returncode != 0:
+        diagnostic = completed.stderr.decode("utf-8", errors="replace").strip()
+        errors.append(f"exact shallow history hydration failed: {diagnostic}")
+        return
+    still_missing = [
+        revision
+        for revision in required_revisions
+        if not git_commit_exists(root, revision)
+    ]
+    if still_missing:
+        errors.append(
+            "exact shallow history hydration is incomplete: "
+            + ", ".join(still_missing)
+        )
+
+
 def safe_relative_path(value: Any) -> bool:
     if not isinstance(value, str) or not value or "\x00" in value:
         return False
@@ -493,6 +579,7 @@ def validate_authority(
         "issue": ISSUE,
         "base_sha": BASE_SHA,
         "governance_checkpoint_sha": CHECKPOINT_SHA,
+        "evidence_parent_sha": EVIDENCE_PARENT_SHA,
         "verification_subject": BASE_SHA,
         "status": STATUS,
     }
@@ -1501,6 +1588,10 @@ def validate_manifest(root: Path, manifest_path: Path) -> list[str]:
     if not isinstance(plan, dict) or not isinstance(catalog, dict):
         return ["plan and catalog must be JSON objects"]
 
+    history_error_count = len(errors)
+    ensure_required_git_history(root, errors)
+    if len(errors) != history_error_count:
+        return errors
     validate_checkpoint_contracts(root, errors)
     validate_authority(root, manifest, plan, errors)
     validate_changed_paths(root, errors)
