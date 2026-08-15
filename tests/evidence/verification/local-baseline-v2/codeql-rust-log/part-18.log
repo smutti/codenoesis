@@ -1,0 +1,177 @@
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5251800Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/security/CWE-020/RegexInjection.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5329656Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-020/RegexInjection.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5331521Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/security/CWE-295/DisabledCertificateCheck.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5410317Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-295/DisabledCertificateCheck.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5435737Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/security/CWE-311/CleartextTransmission.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5471760Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-311/CleartextTransmission.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5477422Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/security/CWE-918/RequestForgery.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5542755Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-918/RequestForgery.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5560078Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/security/CWE-079/XSS.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5629965Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-079/XSS.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5650499Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/security/CWE-614/InsecureCookie.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5694553Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-614/InsecureCookie.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5711182Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/security/CWE-022/TaintedPath.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5790095Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-022/TaintedPath.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5819999Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/security/CWE-327/WeakSensitiveDataHashing.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5849923Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-327/WeakSensitiveDataHashing.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5851617Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/security/CWE-327/BrokenCryptoAlgorithm.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5910436Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-327/BrokenCryptoAlgorithm.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5925802Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/security/CWE-770/UncontrolledAllocationSize.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5962881Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-770/UncontrolledAllocationSize.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.5991096Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/security/CWE-319/UseOfHttp.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6040113Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-319/UseOfHttp.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6041940Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/telemetry/DatabaseQualityDiagnostics.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6085142Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/telemetry/DatabaseQualityDiagnostics.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6088525Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/diagnostics/CfgConsistencyCounts.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6148425Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/CfgConsistencyCounts.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6151353Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/diagnostics/DataFlowConsistencyCounts.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6204718Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/DataFlowConsistencyCounts.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6215491Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/diagnostics/ExtractionErrors.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6280003Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/ExtractionErrors.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6289923Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/diagnostics/UnextractedElements.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6330045Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/UnextractedElements.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6331841Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/diagnostics/ExtractionWarnings.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6391455Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/ExtractionWarnings.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6420107Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/diagnostics/UnresolvedMacroCalls.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6451304Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/UnresolvedMacroCalls.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6470860Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/diagnostics/AstConsistencyCounts.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6509347Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/AstConsistencyCounts.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6530394Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/diagnostics/TypeInferenceConsistencyCounts.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6566961Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/TypeInferenceConsistencyCounts.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6569104Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/diagnostics/SsaConsistencyCounts.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6639917Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/SsaConsistencyCounts.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6667370Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/diagnostics/ExtractedFiles.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6699941Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/ExtractedFiles.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6727811Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/summary/LinesOfUserCode.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6759965Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/summary/LinesOfUserCode.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6789137Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/summary/SummaryStats.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6819873Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/summary/SummaryStats.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6840674Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/summary/SummaryStatsReduced.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6873462Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/summary/SummaryStatsReduced.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6900817Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/summary/NodesWithTypeAtLengthLimit.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6921368Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/summary/NodesWithTypeAtLengthLimit.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6951010Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/summary/LinesOfCode.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6985417Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/summary/LinesOfCode.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.6995353Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/summary/NumberOfFilesExtractedWithErrors.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7045812Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/summary/NumberOfFilesExtractedWithErrors.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7051664Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/summary/NumberOfSuccessfullyExtractedFiles.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7100571Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/summary/NumberOfSuccessfullyExtractedFiles.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7105613Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/summary/QuerySinkCounts.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7153058Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/summary/QuerySinkCounts.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7157695Z Interpreting /opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/qlpacks/codeql/rust-queries/0.1.40/queries/telemetry/ExtractorInformation.ql...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7213960Z  ... found results file at /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/telemetry/ExtractorInformation.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7589899Z Interpreted pathproblem query "Database query built from user-controlled sources" (rust/sql-injection) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-089/SqlInjection.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7594036Z Interpreted pathproblem query "Access of invalid pointer" (rust/access-invalid-pointer) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-825/AccessInvalidPointer.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7599922Z Interpreted pathproblem query "Cleartext logging of sensitive information" (rust/cleartext-logging) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-312/CleartextLogging.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7619684Z Interpreted pathproblem query "Cleartext storage of sensitive information in a database" (rust/cleartext-storage-database) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-312/CleartextStorageDatabase.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7622636Z Interpreted pathproblem query "Hard-coded cryptographic value" (rust/hard-coded-cryptographic-value) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-798/HardcodedCryptographicValue.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7625236Z Interpreted pathproblem query "Regular expression injection" (rust/regex-injection) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-020/RegexInjection.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7635511Z Interpreted pathproblem query "Disabled TLS certificate check" (rust/disabled-certificate-check) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-295/DisabledCertificateCheck.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7652994Z Interpreted pathproblem query "Cleartext transmission of sensitive information" (rust/cleartext-transmission) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-311/CleartextTransmission.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7660110Z Interpreted pathproblem query "Server-side request forgery" (rust/request-forgery) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-918/RequestForgery.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7662645Z Interpreted pathproblem query "Cross-site scripting" (rust/xss) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-079/XSS.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7665128Z Interpreted pathproblem query "'Secure' attribute is not set to true" (rust/insecure-cookie) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-614/InsecureCookie.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7667458Z Interpreted pathproblem query "Uncontrolled data used in path expression" (rust/path-injection) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-022/TaintedPath.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7670213Z Interpreted pathproblem query "Use of a broken or weak cryptographic hashing algorithm on sensitive data" (rust/weak-sensitive-data-hashing) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-327/WeakSensitiveDataHashing.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7673296Z Interpreted problem query "Use of a broken or weak cryptographic algorithm" (rust/weak-cryptographic-algorithm) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-327/BrokenCryptoAlgorithm.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7675982Z Interpreted pathproblem query "Uncontrolled allocation size" (rust/uncontrolled-allocation-size) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-770/UncontrolledAllocationSize.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7678491Z Interpreted pathproblem query "Failure to use HTTPS URLs" (rust/non-https-url) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/security/CWE-319/UseOfHttp.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7683065Z Interpreted diagnostic query "Low Rust analysis quality" (rust/diagnostic/database-quality) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/telemetry/DatabaseQualityDiagnostics.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7685947Z Interpreted diagnostic query "Control flow graph inconsistency counts" (rust/diagnostics/cfg-consistency-counts) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/CfgConsistencyCounts.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7691591Z Interpreted diagnostic query "Data flow inconsistency counts" (rust/diagnostics/data-flow-consistency-counts) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/DataFlowConsistencyCounts.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7694363Z Interpreted diagnostic query "Extraction errors" (rust/diagnostics/extraction-errors) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/ExtractionErrors.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7696885Z Interpreted diagnostic query "Unextracted Elements" (rust/diagnostics/unextracted-elements) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/UnextractedElements.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7699418Z Interpreted diagnostic query "Extraction warnings" (rust/diagnostics/extraction-warnings) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/ExtractionWarnings.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7703596Z Interpreted diagnostic query "Unresolved Macro Calls" (rust/diagnostics/unresolved-macro-calls) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/UnresolvedMacroCalls.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7706132Z Interpreted diagnostic query "Abstract syntax tree inconsistency counts" (rust/diagnostics/ast-consistency-counts) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/AstConsistencyCounts.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7711529Z Interpreted diagnostic query "Type inference inconsistency counts" (rust/diagnostics/type-inference-consistency-counts) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/TypeInferenceConsistencyCounts.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7714700Z Interpreted diagnostic query "Static single assignment inconsistency counts" (rust/diagnostics/ssa-consistency-counts) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/SsaConsistencyCounts.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7717224Z Interpreted diagnostic query "Extracted files" (rust/diagnostics/successfully-extracted-files) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/diagnostics/ExtractedFiles.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7735354Z Interpreted metric query "Total lines of user written Rust code in the database" (rust/summary/lines-of-user-code) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/summary/LinesOfUserCode.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7742231Z Interpreted metric query "Summary Statistics" (rust/summary/summary-statistics) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/summary/SummaryStats.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7760097Z Interpreted metric query "Summary Statistics Reduced" (rust/summary/reduced-summary-statistics) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/summary/SummaryStatsReduced.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7765637Z Interpreted metric query "Nodes With Type At Length Limit" (rust/summary/nodes-at-type-path-length-limit) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/summary/NodesWithTypeAtLengthLimit.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7768175Z Interpreted metric query "Total lines of Rust code in the database" (rust/summary/lines-of-code) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/summary/LinesOfCode.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7771244Z Interpreted metric query "Total number of Rust files that were extracted with errors" (rust/summary/number-of-files-extracted-with-errors) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/summary/NumberOfFilesExtractedWithErrors.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7774457Z Interpreted metric query "Total number of Rust files that were extracted without error" (rust/summary/number-of-successfully-extracted-files) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/summary/NumberOfSuccessfullyExtractedFiles.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7777183Z Interpreted metric query "Query Sink Counts" (rust/summary/query-sink-counts) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/summary/QuerySinkCounts.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7779691Z Interpreted metric query "Rust extraction information" (rust/telemetry/extraction-information) at path /home/runner/work/_temp/codeql_databases/rust/results/codeql/rust-queries/queries/telemetry/ExtractorInformation.bqrs.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:17.7781409Z Reading source archive /home/runner/work/_temp/codeql_databases/rust/src.zip
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.1153276Z Loaded file baseline information.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.1234544Z Interpreting file coverage baseline information
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.1259989Z Finished interpreting file coverage baseline information.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.1260800Z Interpreting diagnostic messages...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.1483788Z Found 2 raw diagnostic messages.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.1559409Z Processed diagnostic messages (removed 0 due to limits, created 0 summary diagnostics for status page).
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.1579382Z Interpreted diagnostic messages (30ms).
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.4441434Z Exporting results to SARIF...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.8410322Z Exported results to SARIF (395ms).
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.8668827Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.8669699Z CodeQL scanned 311 out of 311 Rust files in this invocation. Check the status page for overall coverage information: https://github.com/smutti/codenoesis/security/code-scanning/tools/CodeQL/status/
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.8670793Z Analysis produced the following metric data:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.8671012Z 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.8671156Z |                            Metric                            | Value |
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.8671541Z +--------------------------------------------------------------+-------+
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.8671978Z | Total number of Rust files that were extracted with errors   |   276 |
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.8672428Z | Total number of Rust files that were extracted without error |    35 |
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.8672697Z 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.8672701Z 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.8678619Z Post-processing sarif files: ["/home/runner/work/codenoesis/results/rust.sarif"]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.9180882Z Adding fingerprints to SARIF file. See https://docs.github.com/en/code-security/reference/code-scanning/sarif-support-for-code-scanning#data-for-preventing-duplicated-alerts for more information.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:18.9182034Z ##[group]Uploading code scanning results
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:19.0043604Z Uploading results
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:19.8310781Z Successfully uploaded results
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:19.8311467Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:19.8315882Z ##[group]Cleaning up databases
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:19.8317079Z [command]/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/codeql database cleanup /home/runner/work/_temp/codeql_databases/rust --cache-cleanup=clear
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:20.4923471Z Cleaning up existing TRAP files after import...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:20.4968307Z TRAP files cleaned up (2ms).
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:20.4969469Z Cleaning up scratch directory...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:20.4979122Z Scratch directory cleaned up (0ms).
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:20.5541466Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:20.5548426Z [command]/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/codeql database bundle /home/runner/work/_temp/codeql_databases/rust --output=/home/runner/work/_temp/codeql_databases/rust.zip --name=rust
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:21.3400744Z Creating bundle metadata for /home/runner/work/_temp/codeql_databases/rust...
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:21.5091261Z Creating zip file at /home/runner/work/_temp/codeql_databases/rust.zip.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:28.1327068Z Skipping upload of dependency cache for rust as we have no caching configuration for it.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:28.1329348Z ##[group]Waiting for processing to finish
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:33.3298085Z Analysis upload status is complete.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:33.3299110Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:33.5623129Z Post job cleanup.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:33.8038377Z Post job cleanup.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.2084001Z CodeQL job status was success.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.2100746Z Sending status report for init-post step.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.3641818Z Status report sent for init-post step.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.3744093Z Post job cleanup.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.6389791Z Post job cleanup.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7210502Z [command]/usr/bin/git version
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7248678Z git version 2.54.0
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7285188Z Temporarily overriding HOME='/home/runner/work/_temp/49e84260-9f2b-44b2-b240-4c49e37aaffe' before making global git config changes
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7286454Z Adding repository directory to the temporary git global config as a safe directory
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7291315Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/codenoesis/codenoesis
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7322181Z Removing SSH command configuration
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7329016Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7361992Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7587368Z Removing HTTP extra header
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7593443Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7625042Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7821708Z Removing includeIf entries pointing to credentials config files
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7829011Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7853835Z includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7854788Z includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7855510Z includeif.gitdir:/github/workspace/.git.path
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7856128Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7866046Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7884079Z /home/runner/work/_temp/git-credentials-0cc6157e-c12c-441a-8ea9-a57f865227b5.config
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7894631Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path /home/runner/work/_temp/git-credentials-0cc6157e-c12c-441a-8ea9-a57f865227b5.config
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7926734Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7946535Z /home/runner/work/_temp/git-credentials-0cc6157e-c12c-441a-8ea9-a57f865227b5.config
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7956072Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-0cc6157e-c12c-441a-8ea9-a57f865227b5.config
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.7985785Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.8005489Z /github/runner_temp/git-credentials-0cc6157e-c12c-441a-8ea9-a57f865227b5.config
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.8014232Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-0cc6157e-c12c-441a-8ea9-a57f865227b5.config
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.8044961Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.8063415Z /github/runner_temp/git-credentials-0cc6157e-c12c-441a-8ea9-a57f865227b5.config
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.8081044Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-0cc6157e-c12c-441a-8ea9-a57f865227b5.config
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.8118042Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.8313080Z Removing credentials config '/home/runner/work/_temp/git-credentials-0cc6157e-c12c-441a-8ea9-a57f865227b5.config'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:28:34.8437737Z Cleaning up orphan processes

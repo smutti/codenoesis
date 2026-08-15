@@ -77,7 +77,7 @@
         "observed_failure": {"type": "string", "minLength": 1, "maxLength": 512},
         "pre_implementation_sha": {"$ref": "#/$defs/git_sha1"},
         "observed_at": {"$ref": "#/$defs/rfc3339_utc"},
-        "log_artifact": {"$ref": "#/$defs/github_actions_artifact"}
+        "log_artifact": {"$ref": "#/$defs/retained_ci_evidence"}
       }
     },
     "green": {
@@ -182,7 +182,7 @@
               "items": false
             },
             "observed_at": {"$ref": "#/$defs/rfc3339_utc"},
-            "report_artifact": {"$ref": "#/$defs/github_actions_artifact"}
+            "report_artifact": {"$ref": "#/$defs/retained_ci_evidence"}
           }
         }
       ]
@@ -221,7 +221,7 @@
         "seccomp_profile_sha256": {
           "const": "5664635f8ad76dff5421f5eeb1f20ffdf0450203d8cb9c692606c026a39ee1ad"
         },
-        "seccomp_self_test_report": {"$ref": "#/$defs/github_actions_artifact"},
+        "seccomp_self_test_report": {"$ref": "#/$defs/retained_ci_evidence"},
         "inherited_file_descriptors": {"const": [0, 1, 2]},
         "inherited_socket_descriptors": {"type": "array", "maxItems": 0},
         "features": {
@@ -243,6 +243,12 @@
     }
   ],
   "$defs": {
+    "retained_ci_evidence": {
+      "oneOf": [
+        {"$ref": "#/$defs/github_actions_artifact"},
+        {"$ref": "#/$defs/git_retained_github_actions_log"}
+      ]
+    },
     "github_actions_artifact": {
       "type": "object",
       "additionalProperties": false,
@@ -270,6 +276,69 @@
         "retention_until": {"$ref": "#/$defs/rfc3339_utc"}
       }
     },
+    "git_retained_github_actions_log": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "format",
+        "repository",
+        "workflow_path",
+        "workflow_sha256",
+        "workflow_ref",
+        "run_id",
+        "run_attempt",
+        "job_id",
+        "job_name",
+        "check_name",
+        "head_sha",
+        "tree_sha",
+        "conclusion",
+        "base_controlled",
+        "source_log_sha256",
+        "normalization",
+        "committed_log_path",
+        "committed_log_sha256",
+        "first_retained_commit",
+        "evidence_head"
+      ],
+      "properties": {
+        "provider": {"const": "github_actions"},
+        "format": {"const": "git-retained-github-actions-log/v1"},
+        "repository": {"const": "smutti/codenoesis"},
+        "workflow_path": {
+          "type": "string",
+          "pattern": "^\\.github/workflows/[A-Za-z0-9._/-]+\\.ya?ml$"
+        },
+        "workflow_sha256": {"$ref": "#/$defs/sha256"},
+        "workflow_ref": {
+          "type": "string",
+          "pattern": "^refs/(heads|tags)/[A-Za-z0-9._/-]+$"
+        },
+        "run_id": {"type": "integer", "minimum": 1},
+        "run_attempt": {"type": "integer", "minimum": 1},
+        "job_id": {"type": "integer", "minimum": 1},
+        "job_name": {"type": "string", "minLength": 1, "maxLength": 256},
+        "check_name": {"type": "string", "minLength": 1, "maxLength": 256},
+        "head_sha": {"$ref": "#/$defs/git_sha1"},
+        "tree_sha": {"$ref": "#/$defs/git_sha1"},
+        "conclusion": {"const": "success"},
+        "base_controlled": {"const": true},
+        "source_log_sha256": {"$ref": "#/$defs/sha256"},
+        "normalization": {
+          "const": "codenoesis.github-actions-log-normalization/v1"
+        },
+        "committed_log_path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+        },
+        "committed_log_sha256": {"$ref": "#/$defs/sha256"},
+        "first_retained_commit": {"$ref": "#/$defs/git_sha1"},
+        "evidence_head": {"$ref": "#/$defs/git_sha1"}
+      }
+    },
     "passed_test_result": {
       "type": "object",
       "additionalProperties": false,
@@ -278,7 +347,7 @@
         "test_name": {"type": "string"},
         "status": {"const": "passed"},
         "runner_exit_code": {"const": 0},
-        "result_artifact": {"$ref": "#/$defs/github_actions_artifact"}
+        "result_artifact": {"$ref": "#/$defs/retained_ci_evidence"}
       }
     },
     "sha256": {

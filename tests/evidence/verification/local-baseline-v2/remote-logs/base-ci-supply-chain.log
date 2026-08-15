@@ -1,0 +1,887 @@
+Local release supply-chain gate	UNKNOWN STEP	﻿2026-08-14T21:26:02.3234157Z Current runner version: '2.336.0'
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3259773Z ##[group]Runner Image Provisioner
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3260682Z Hosted Compute Agent
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3261261Z Version: 20260729.566
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3262017Z Commit: cf7153fe6e25b664e8693c24944bf2b00355d109
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3262807Z Build Date: 2026-07-29T19:17:02Z
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3263542Z Worker ID: {2beb737a-7d4c-4ceb-a8c0-2da7d2378b27}
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3264293Z Azure Region: westus
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3264874Z ##[endgroup]
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3266418Z ##[group]Operating System
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3267112Z Ubuntu
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3267623Z 24.04.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3268277Z LTS
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3269097Z ##[endgroup]
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3269842Z ##[group]Runner Image
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3270509Z Image: ubuntu-24.04
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3271083Z Version: 20260810.271.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3272462Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260810.271/images/ubuntu/Ubuntu2404-Readme.md
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3274070Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260810.271
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3275089Z ##[endgroup]
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3276144Z ##[group]GITHUB_TOKEN Permissions
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3278159Z Contents: read
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3278998Z Metadata: read
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3279779Z ##[endgroup]
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3281912Z Secret source: Actions
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3283446Z Prepare workflow directory
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3817353Z Prepare all required actions
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.3865263Z Getting action download info
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.7296652Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:02.9702268Z Complete job name: Local release supply-chain gate
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0577653Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0578955Z with:
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0579440Z   repository: smutti/codenoesis
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0583307Z   token: ***
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0583749Z   ssh-strict: true
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0584203Z   ssh-user: git
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0584656Z   persist-credentials: true
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0585156Z   clean: true
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0585611Z   sparse-checkout-cone-mode: true
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0586141Z   fetch-depth: 1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0586583Z   fetch-tags: false
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0587036Z   show-progress: true
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0587493Z   lfs: false
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0587912Z   submodules: false
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0588382Z   set-safe-directory: true
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0589323Z   allow-unsafe-pr-checkout: false
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0590206Z env:
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0590679Z   CARGO_INCREMENTAL: 0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0591174Z   CARGO_TERM_COLOR: never
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0591699Z   RUST_BACKTRACE: 1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.0592146Z ##[endgroup]
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1630236Z Syncing repository: smutti/codenoesis
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1632925Z ##[group]Getting Git version info
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1634195Z Working directory is '/home/runner/work/codenoesis/codenoesis'
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1635995Z [command]/usr/bin/git version
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1717796Z git version 2.54.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1746751Z ##[endgroup]
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1760965Z Temporarily overriding HOME='/home/runner/work/_temp/e72628bf-4fc6-45ff-8814-2594e32e9ebe' before making global git config changes
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1763671Z Adding repository directory to the temporary git global config as a safe directory
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1768214Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/codenoesis/codenoesis
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1823259Z Deleting the contents of '/home/runner/work/codenoesis/codenoesis'
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1827214Z ##[group]Determining repository object format
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1829343Z ##[endgroup]
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1830669Z ##[group]Initializing the repository
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1834911Z [command]/usr/bin/git init /home/runner/work/codenoesis/codenoesis
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1950081Z hint: Using 'master' as the name for the initial branch. This default branch name
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1951527Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1952705Z hint: to use in all of your new repositories, which will suppress this warning,
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1953666Z hint: call:
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1954204Z hint:
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1954855Z hint: 	git config --global init.defaultBranch <name>
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1955620Z hint:
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1956341Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1957481Z hint: 'development'. The just-created branch can be renamed via this command:
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1958405Z hint:
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1959201Z hint: 	git branch -m <name>
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1959805Z hint:
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1960483Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1966874Z Initialized empty Git repository in /home/runner/work/codenoesis/codenoesis/.git/
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.1977094Z [command]/usr/bin/git remote add origin https://github.com/smutti/codenoesis
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.2036263Z ##[endgroup]
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.2037511Z ##[group]Disabling automatic garbage collection
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.2041044Z [command]/usr/bin/git config --local gc.auto 0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.2076796Z ##[endgroup]
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.2078379Z ##[group]Setting up auth
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.2080017Z Removing SSH command configuration
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.2083671Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.2135225Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.2494293Z Removing HTTP extra header
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.2500400Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.2536609Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.2757143Z Removing includeIf entries pointing to credentials config files
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.2762676Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.2799642Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.3056061Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-af85bca3-7f47-4f7d-9859-6e8c521a6c0c.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.3100311Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path /home/runner/work/_temp/git-credentials-af85bca3-7f47-4f7d-9859-6e8c521a6c0c.config
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.3137116Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-af85bca3-7f47-4f7d-9859-6e8c521a6c0c.config
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.3175813Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-af85bca3-7f47-4f7d-9859-6e8c521a6c0c.config
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.3210384Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-af85bca3-7f47-4f7d-9859-6e8c521a6c0c.config
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.3241229Z ##[endgroup]
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.3242003Z ##[group]Fetching the repository
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:03.3250371Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +9ecdc3acefd43495daf76b9f2ab69a7bbacff172:refs/remotes/origin/main
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.0498056Z From https://github.com/smutti/codenoesis
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.0499999Z  * [new ref]         9ecdc3acefd43495daf76b9f2ab69a7bbacff172 -> origin/main
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.0555254Z [command]/usr/bin/git branch --list --remote origin/main
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.0592949Z   origin/main
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.0603115Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.0632242Z 9ecdc3acefd43495daf76b9f2ab69a7bbacff172
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.0646432Z ##[endgroup]
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.0647875Z ##[group]Determining the checkout info
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.0649697Z ##[endgroup]
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.0650649Z [command]/usr/bin/git sparse-checkout disable
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.0721112Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.0753613Z ##[group]Checking out the ref
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.0757668Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.1784111Z Switched to a new branch 'main'
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.1785743Z branch 'main' set up to track 'origin/main'.
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.1796899Z ##[endgroup]
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.1847726Z [command]/usr/bin/git log -1 --format=%H
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.1878323Z 9ecdc3acefd43495daf76b9f2ab69a7bbacff172
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.2107798Z ##[group]Run cargo install cargo-audit --version 0.22.2 --locked
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.2109652Z ^[[36;1mcargo install cargo-audit --version 0.22.2 --locked^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.2152669Z shell: /usr/bin/bash -e {0}
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.2153375Z env:
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.2153844Z   CARGO_INCREMENTAL: 0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.2154477Z   CARGO_TERM_COLOR: never
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.2155126Z   RUST_BACKTRACE: 1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.2155669Z ##[endgroup]
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.2718319Z info: syncing channel updates for 1.97.1-x86_64-unknown-linux-gnu
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.3875014Z info: latest update on 2026-07-16 for version 1.97.1 (8bab26f4f 2026-07-14)
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:04.3895967Z info: downloading 5 components
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:12.6658403Z     Updating crates.io index
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:12.6906721Z  Downloading crates ...
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:12.7184695Z   Downloaded cargo-audit v0.22.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:12.7440615Z   Installing cargo-audit v0.22.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:12.7441921Z warning: default toolchain implicitly overridden with `1.97.1-x86_64-unknown-linux-gnu` by rustup toolchain file
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:12.7443229Z   |
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:12.7444341Z   = help: use `cargo +stable install` if you meant to use the stable toolchain
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:12.7446359Z   = note: rustup selects the toolchain based on the parent environment and not the environment of the package being installed
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:12.7507437Z     Updating crates.io index
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.4099498Z     Updating crates.io index
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5193538Z  Downloading crates ...
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5416621Z   Downloaded abscissa_derive v0.9.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5428871Z   Downloaded anstyle-query v1.1.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5469841Z   Downloaded arrayvec v0.7.6
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5493706Z   Downloaded abscissa_core v0.9.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5557289Z   Downloaded allocator-api2 v0.2.21
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5597443Z   Downloaded colorchoice v1.0.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5612642Z   Downloaded arc-swap v1.9.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5676826Z   Downloaded canonical-path v2.0.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5687245Z   Downloaded cargo-lock v11.0.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5735654Z   Downloaded auditable-serde v0.9.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5747661Z   Downloaded auditable-extract v0.3.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5760245Z   Downloaded auditable-info v0.10.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5772835Z   Downloaded binfarce v0.2.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5793838Z   Downloaded clru v0.6.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5812374Z   Downloaded compression-codecs v0.4.38
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5859308Z   Downloaded gix-sec v0.14.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5875447Z   Downloaded adler2 v2.0.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5888549Z   Downloaded aho-corasick v1.1.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5949085Z   Downloaded anstyle-parse v1.0.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5969334Z   Downloaded atomic-waker v1.1.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.5983878Z   Downloaded autocfg v1.5.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6006060Z   Downloaded bitflags v2.11.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6060772Z   Downloaded borsh v1.6.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6145563Z   Downloaded cfg_aliases v0.2.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6157287Z   Downloaded clap v4.6.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6290949Z   Downloaded cmake v0.1.58
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6311241Z   Downloaded crc32fast v1.5.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6339045Z   Downloaded crossbeam-deque v0.8.6
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6359459Z   Downloaded crossbeam-epoch v0.9.18
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6393411Z   Downloaded gix-negotiate v0.32.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6407396Z   Downloaded addr2line v0.25.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6432262Z   Downloaded cfg-if v1.0.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6450309Z   Downloaded block-buffer v0.10.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6468348Z   Downloaded clap_derive v4.6.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6495959Z   Downloaded cpufeatures v0.2.17
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6512690Z   Downloaded compression-core v0.4.32
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6526071Z   Downloaded gix-refspec v0.42.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6546911Z   Downloaded gix-tempfile v23.0.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6563157Z   Downloaded gix-glob v0.26.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6579295Z   Downloaded gix-pathspec v0.18.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6597537Z   Downloaded gix-traverse v0.58.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6618961Z   Downloaded idna_adapter v1.2.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6641269Z   Downloaded matchers v0.2.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6652666Z   Downloaded hashbrown v0.17.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6729578Z   Downloaded lock_api v0.4.14
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6735683Z   Downloaded miniz_oxide v0.8.9
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6766452Z   Downloaded gix-submodule v0.31.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6784436Z   Downloaded nu-ansi-term v0.50.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6818815Z   Downloaded anstyle v1.0.14
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6837929Z   Downloaded byteorder v1.5.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6856253Z   Downloaded gix-protocol v0.62.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6898274Z   Downloaded anstream v1.0.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6918599Z   Downloaded camino v1.2.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6938894Z   Downloaded clap_lex v1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6949747Z   Downloaded filetime v0.2.28
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6966491Z   Downloaded gix-packetline v0.21.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.6985108Z   Downloaded base64 v0.22.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7025010Z   Downloaded bytes v1.11.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7070417Z   Downloaded cc v1.2.62
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7101629Z   Downloaded async-compression v0.4.42
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7176848Z   Downloaded crossbeam-channel v0.5.15
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7218418Z   Downloaded fnv v1.0.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7227265Z   Downloaded backtrace v0.3.76
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7279206Z   Downloaded fixedbitset v0.5.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7298040Z   Downloaded gix-prompt v0.15.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7310892Z   Downloaded home v0.5.12
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7321720Z   Downloaded clap_builder v4.6.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7385590Z   Downloaded crossbeam-utils v0.8.21
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7412715Z   Downloaded futures-io v0.3.32
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7421475Z   Downloaded getrandom v0.2.17
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7451184Z   Downloaded gix-shallow v0.12.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7461126Z   Downloaded gix-url v0.36.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7474283Z   Downloaded gix-validate v0.11.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7485903Z   Downloaded form_urlencoded v1.2.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7494026Z   Downloaded futures-sink v0.3.32
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7502674Z   Downloaded futures-task v0.3.32
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7514530Z   Downloaded generic-array v0.14.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7529371Z   Downloaded jobserver v0.1.34
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7550308Z   Downloaded gix-features v0.48.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7575299Z   Downloaded topological-sort v0.2.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7586375Z   Downloaded fs_extra v1.3.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7602307Z   Downloaded futures-channel v0.3.32
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7621504Z   Downloaded gix-actor v0.41.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7633340Z   Downloaded gix-revision v0.46.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7651405Z   Downloaded gix-worktree v0.53.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7667149Z   Downloaded dunce v1.0.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7676821Z   Downloaded find-msvc-tools v0.1.9
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7692730Z   Downloaded foldhash v0.2.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7705237Z   Downloaded gix-bitmap v0.3.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7714709Z   Downloaded gix-hash v0.25.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7729154Z   Downloaded termcolor v1.4.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7741568Z   Downloaded tinyvec_macros v0.1.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7749969Z   Downloaded gix-index v0.52.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7789081Z   Downloaded heck v0.5.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7801959Z   Downloaded indenter v0.3.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7814837Z   Downloaded semver v1.0.28
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7838326Z   Downloaded aws-lc-rs v1.16.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7944222Z   Downloaded crypto-common v0.1.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7953449Z   Downloaded futures-core v0.3.32
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7967180Z   Downloaded gix-config-value v0.18.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7980055Z   Downloaded gix-worktree-stream v0.33.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.7993286Z   Downloaded http-body-util v0.1.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8011307Z   Downloaded gix-ref v0.64.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8055854Z   Downloaded heapless v0.8.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8094237Z   Downloaded httparse v1.10.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8119503Z   Downloaded object v0.39.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8233440Z   Downloaded display-error-chain v0.2.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8244741Z   Downloaded errno v0.3.14
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8260555Z   Downloaded gix-attributes v0.33.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8276329Z   Downloaded gix-chunk v0.7.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8288238Z   Downloaded gix-error v0.2.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8304908Z   Downloaded gix-transport v0.57.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8342830Z   Downloaded gix-worktree-state v0.31.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8356656Z   Downloaded equivalent v1.0.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8367137Z   Downloaded gix-command v0.9.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8376867Z   Downloaded either v1.15.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8391530Z   Downloaded foldhash v0.1.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8403851Z   Downloaded gix-commitgraph v0.37.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8419503Z   Downloaded gix-credentials v0.38.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8436245Z   Downloaded gix-date v0.15.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8452335Z   Downloaded gix-discover v0.52.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8467495Z   Downloaded gix-revwalk v0.32.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8479855Z   Downloaded hash32 v0.3.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8494351Z   Downloaded is_terminal_polyfill v1.70.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8504513Z   Downloaded gix-hashtable v0.15.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8513816Z   Downloaded ident_case v1.0.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8522423Z   Downloaded lazy_static v1.5.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8540537Z   Downloaded num-conv v0.2.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8549075Z   Downloaded potential_utf v0.1.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8559750Z   Downloaded gix-trace v0.1.20
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8570388Z   Downloaded hashbrown v0.16.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8622099Z   Downloaded http v1.4.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8658132Z   Downloaded icu_provider v2.1.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8684022Z   Downloaded openssl-probe v0.2.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8695745Z   Downloaded faster-hex v0.10.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8711143Z   Downloaded gix-utils v0.3.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8722656Z   Downloaded icu_properties v2.1.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8744233Z   Downloaded stable_deref_trait v1.2.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8753169Z   Downloaded fastrand v2.4.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8767011Z   Downloaded fs-err v3.3.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8786655Z   Downloaded gix-ignore v0.21.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8797545Z   Downloaded ipnet v2.12.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8814639Z   Downloaded nonempty v0.12.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8826382Z   Downloaded gix-quote v0.7.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8836830Z   Downloaded icu_collections v2.1.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8899161Z   Downloaded zerovec-derive v0.11.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8914430Z   Downloaded deranged v0.5.8
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8928400Z   Downloaded lru-slab v0.1.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8936884Z   Downloaded mime v0.3.17
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8950362Z   Downloaded parking_lot v0.12.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8975570Z   Downloaded strsim v0.11.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.8988540Z   Downloaded subtle v2.6.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9000714Z   Downloaded uluru v3.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9009792Z   Downloaded unicode-bom v2.0.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9022771Z   Downloaded writeable v0.6.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9043341Z   Downloaded zerofrom-derive v0.1.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9053644Z   Downloaded pin-project-lite v0.2.17
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9113647Z   Downloaded serde_spanned v1.1.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9125164Z   Downloaded sync_wrapper v1.0.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9133439Z   Downloaded wait-timeout v0.2.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9148861Z   Downloaded zmij v1.0.21
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9167155Z   Downloaded digest v0.10.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9185450Z   Downloaded eyre v0.6.12
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9221011Z   Downloaded getrandom v0.3.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9257691Z   Downloaded gix-config v0.57.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9305134Z   Downloaded gix-path v0.12.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9324588Z   Downloaded rand_chacha v0.9.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9337763Z   Downloaded secrecy v0.10.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9347074Z   Downloaded shell-words v1.1.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9357297Z   Downloaded shlex v1.3.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9373645Z   Downloaded simd-adler32 v0.3.9
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9392913Z   Downloaded slab v0.4.12
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9405952Z   Downloaded synstructure v0.13.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9416145Z   Downloaded try-lock v0.2.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9490984Z   Downloaded untrusted v0.9.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9491850Z   Downloaded version_check v0.9.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9492772Z   Downloaded displaydoc v0.2.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9493344Z   Downloaded gix-fs v0.21.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9505236Z   Downloaded rustc-stable-hash v0.1.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9522655Z   Downloaded rustls-pki-types v1.14.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9548953Z   Downloaded static_assertions v1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9563592Z   Downloaded cvss v2.2.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9619449Z   Downloaded getrandom v0.4.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9658234Z   Downloaded gix-diff v0.64.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9687872Z   Downloaded smol_str v0.3.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9703963Z   Downloaded rustls-native-certs v0.8.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9728651Z   Downloaded http-body v1.0.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9738497Z   Downloaded percent-encoding v2.3.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9747320Z   Downloaded smallvec v1.15.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9768604Z   Downloaded twox-hash v2.1.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9791997Z   Downloaded flate2 v1.1.9
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9842495Z   Downloaded gix-filter v0.31.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9868377Z   Downloaded itoa v1.0.18
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9883424Z   Downloaded want v0.3.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9892748Z   Downloaded icu_locale_core v2.1.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9962190Z   Downloaded sharded-slab v0.1.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:13.9995893Z   Downloaded hyper-util v0.1.20
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0061435Z   Downloaded io-close v0.3.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0073202Z   Downloaded proc-macro2 v1.0.106
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0103467Z   Downloaded rayon-core v1.13.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0141604Z   Downloaded rustls-platform-verifier v0.7.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0181587Z   Downloaded same-file v1.0.6
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0195558Z   Downloaded scopeguard v1.2.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0207998Z   Downloaded utf8_iter v1.0.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0218350Z   Downloaded serde_derive v1.0.228
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0249872Z   Downloaded thread_local v1.1.9
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0264892Z   Downloaded tinystr v0.8.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0285859Z   Downloaded rustls-webpki v0.103.13
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0316884Z   Downloaded rustsec v0.33.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0368032Z   Downloaded toml_datetime v1.1.1+spec-1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0381403Z   Downloaded tower-service v0.3.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0398755Z   Downloaded gix-lock v23.0.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0410772Z   Downloaded time-core v0.1.8
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0421462Z   Downloaded powerfmt v0.2.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0432557Z   Downloaded tracing-log v0.2.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0445996Z   Downloaded socket2 v0.6.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0464042Z   Downloaded thiserror-impl v2.0.18
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0478575Z   Downloaded tower-layer v0.3.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0488229Z   Downloaded quinn v0.11.9
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0520707Z   Downloaded serde_core v1.0.228
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0547976Z   Downloaded zeroize v1.8.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0561157Z   Downloaded prodash v31.0.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0600944Z   Downloaded url v2.5.8
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0627273Z   Downloaded toml_datetime v0.7.5+spec-1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0640989Z   Downloaded futures-util v0.3.32
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0777155Z   Downloaded gix-object v0.61.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0810635Z   Downloaded maybe-async v0.2.10
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0838757Z   Downloaded tracing-attributes v0.1.31
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0865729Z   Downloaded zerofrom v0.1.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0875405Z   Downloaded toml v1.1.2+spec-1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0916836Z   Downloaded toml v0.9.12+spec-1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0958132Z   Downloaded toml-span v0.7.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.0975017Z   Downloaded bstr v1.12.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.1053230Z   Downloaded tracing-core v0.1.36
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.1080328Z   Downloaded unicode-ident v1.0.24
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.1108464Z   Downloaded unicode-normalization v0.1.25
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.1142889Z   Downloaded rayon v1.12.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.1239703Z   Downloaded regex v1.12.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.1293369Z   Downloaded time-macros v0.2.27
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.1315679Z   Downloaded zerotrie v0.2.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.1355361Z   Downloaded zerovec v0.11.6
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.1417008Z   Downloaded zlib-rs v0.6.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.1470630Z   Downloaded gimli v0.32.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.1540817Z   Downloaded winnow v0.7.15
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.1640691Z   Downloaded kstring v2.0.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.1657428Z   Downloaded wasmparser v0.207.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.1723259Z   Downloaded wasmparser v0.247.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.1807012Z   Downloaded gix v0.84.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.1982456Z   Downloaded syn v2.0.117
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2091644Z   Downloaded time v0.3.47
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2224278Z   Downloaded zerocopy v0.8.48
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2450373Z   Downloaded color-eyre v0.6.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2523681Z   Downloaded regex-syntax v0.8.10
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2592400Z   Downloaded h2 v0.4.14
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2657988Z   Downloaded hyper-rustls v0.27.9
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2672464Z   Downloaded utf8parse v0.2.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2682232Z   Downloaded quote v1.0.45
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2709783Z   Downloaded quitters v0.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2717709Z   Downloaded regex-automata v0.4.14
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2858555Z   Downloaded ppv-lite86 v0.2.21
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2871933Z   Downloaded once_cell v1.21.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2897782Z   Downloaded sha1 v0.10.6
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2914385Z   Downloaded icu_normalizer_data v2.1.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2934911Z   Downloaded rustc-hash v2.1.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2947905Z   Downloaded yoke-derive v0.8.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2959753Z   Downloaded owo-colors v4.3.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.2978527Z   Downloaded rustversion v1.0.22
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3007241Z   Downloaded sha1-checked v0.10.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3067147Z   Downloaded thiserror v2.0.18
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3134933Z   Downloaded parking_lot_core v0.9.12
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3156016Z   Downloaded tinyvec v1.11.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3182077Z   Downloaded toml_writer v1.1.1+spec-1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3196151Z   Downloaded platforms v3.10.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3215983Z   Downloaded walkdir v2.5.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3234327Z   Downloaded yoke v0.8.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3252338Z   Downloaded quinn-udp v0.5.14
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3269953Z   Downloaded rand_core v0.9.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3283148Z   Downloaded rustc-demangle v0.1.27
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3299873Z   Downloaded log v0.4.29
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3324408Z   Downloaded litemap v0.8.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3347556Z   Downloaded toml_parser v1.1.2+spec-1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3370645Z   Downloaded tokio-rustls v0.26.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3391425Z   Downloaded icu_normalizer v2.1.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3426558Z   Downloaded memmap2 v0.9.10
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3443920Z   Downloaded serde v1.0.228
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3478694Z   Downloaded tempfile v3.27.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3504876Z   Downloaded jiff-static v0.2.28
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3530857Z   Downloaded gix-odb v0.81.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3564101Z   Downloaded memchr v2.8.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3619065Z   Downloaded gix-pack v0.71.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3685887Z   Downloaded indexmap v2.14.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3728772Z   Downloaded tame-index v0.26.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3773191Z   Downloaded mio v1.2.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3833821Z   Downloaded quinn-proto v0.11.14
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3900805Z   Downloaded rand v0.9.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.3938772Z   Downloaded encoding_rs v0.8.35
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.4137187Z   Downloaded serde_json v1.0.149
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.4211749Z   Downloaded idna v1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.4246715Z   Downloaded tower-http v0.6.10
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.4339501Z   Downloaded winnow v1.0.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.4441822Z   Downloaded hashbrown v0.15.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.4490986Z   Downloaded hyper v1.9.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.4558976Z   Downloaded tower v0.5.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.4663114Z   Downloaded typenum v1.20.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.4698908Z   Downloaded tokio-util v0.7.18
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.4777803Z   Downloaded reqwest v0.13.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.4832512Z   Downloaded icu_properties_data v2.1.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.4936664Z   Downloaded tracing-subscriber v0.3.23
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.5021164Z   Downloaded object v0.37.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.5132589Z   Downloaded libc v0.2.186
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.5570001Z   Downloaded rustls v0.23.40
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.5690016Z   Downloaded rustix v1.1.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.5968324Z   Downloaded tracing v0.1.44
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.6125008Z   Downloaded aws-lc-sys v0.40.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.8666070Z   Downloaded jiff v0.2.28
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.8833935Z   Downloaded petgraph v0.8.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.9040478Z   Downloaded tokio v1.52.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.9507854Z   Downloaded ring v0.17.14
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:14.9929600Z   Downloaded linux-raw-sys v0.12.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:15.1645672Z    Compiling proc-macro2 v1.0.106
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:15.1648518Z    Compiling quote v1.0.45
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:15.1649864Z    Compiling unicode-ident v1.0.24
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:15.1650495Z    Compiling libc v0.2.186
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:15.2214929Z    Compiling memchr v2.8.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:15.3229823Z    Compiling cfg-if v1.0.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:15.3519948Z    Compiling regex-syntax v0.8.10
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:16.1749780Z    Compiling syn v2.0.117
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:16.3369731Z    Compiling aho-corasick v1.1.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:16.4981796Z    Compiling smallvec v1.15.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:16.7009913Z    Compiling once_cell v1.21.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:16.8739753Z    Compiling bytes v1.11.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:17.8579747Z    Compiling regex-automata v0.4.14
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:21.3179744Z    Compiling bstr v1.12.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:22.9479965Z    Compiling stable_deref_trait v1.2.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:22.9789480Z    Compiling thiserror v2.0.18
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:23.2017632Z    Compiling thiserror-impl v2.0.18
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:23.2111871Z    Compiling crc32fast v1.5.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:23.3299765Z    Compiling crossbeam-utils v0.8.21
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:23.4929706Z    Compiling tinyvec_macros v0.1.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:23.5199674Z    Compiling gix-trace v0.1.20
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:23.5770075Z    Compiling tinyvec v1.11.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:24.1050240Z    Compiling gix-validate v0.11.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:24.3810205Z    Compiling fastrand v2.4.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:24.6550063Z    Compiling bitflags v2.11.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:24.7160198Z    Compiling parking_lot_core v0.9.12
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:24.7590202Z    Compiling gix-path v0.12.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:24.8509610Z    Compiling unicode-normalization v0.1.25
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:25.0329974Z    Compiling scopeguard v1.2.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:25.0804444Z    Compiling itoa v1.0.18
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:25.2730037Z    Compiling gix-utils v0.3.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:25.3729971Z    Compiling lock_api v0.4.14
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:25.5690208Z    Compiling crossbeam-channel v0.5.15
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:25.7580206Z    Compiling parking_lot v0.12.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:26.0849946Z    Compiling foldhash v0.2.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:26.2330758Z    Compiling allocator-api2 v0.2.21
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:26.2570560Z    Compiling same-file v1.0.6
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:26.3570093Z    Compiling equivalent v1.0.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:26.3929817Z    Compiling walkdir v2.5.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:26.5959787Z    Compiling prodash v31.0.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:26.6819908Z    Compiling zlib-rs v0.6.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:27.0966910Z    Compiling gix-error v0.2.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:27.4890574Z    Compiling version_check v0.9.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:27.6944711Z    Compiling generic-array v0.14.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:27.7679610Z    Compiling hashbrown v0.17.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:28.4899840Z    Compiling typenum v1.20.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:28.5488358Z    Compiling serde_core v1.0.228
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:28.7050264Z    Compiling byteorder v1.5.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:28.8387884Z    Compiling heapless v0.8.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:29.0059475Z    Compiling hash32 v0.3.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:29.7969852Z    Compiling gix-features v0.48.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:31.1309814Z    Compiling crypto-common v0.1.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:31.2009894Z    Compiling block-buffer v0.10.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:31.6309834Z    Compiling digest v0.10.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:31.7560287Z    Compiling faster-hex v0.10.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:31.7605022Z    Compiling synstructure v0.13.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:32.1326977Z    Compiling cpufeatures v0.2.17
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:32.1720228Z    Compiling sha1 v0.10.6
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:32.2659709Z    Compiling jiff v0.2.28
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:32.2950194Z    Compiling sha1-checked v0.10.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:32.6016511Z    Compiling gix-hash v0.25.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:33.1090338Z    Compiling zerofrom-derive v0.1.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:33.1660465Z    Compiling yoke-derive v0.8.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:34.0609816Z    Compiling pin-project-lite v0.2.17
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:34.1022172Z    Compiling rustix v1.1.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:34.2396207Z    Compiling zerofrom v0.1.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:34.3190299Z    Compiling yoke v0.8.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:34.4650181Z    Compiling gix-hashtable v0.15.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:34.5550099Z    Compiling linux-raw-sys v0.12.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:35.2520134Z    Compiling jobserver v0.1.34
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:35.5140290Z    Compiling zerovec-derive v0.11.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:36.4270532Z    Compiling gix-date v0.15.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:36.4899852Z    Compiling shlex v1.3.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:36.6189839Z    Compiling find-msvc-tools v0.1.9
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:36.7830204Z    Compiling gix-actor v0.41.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:37.1550025Z    Compiling gix-object v0.61.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:38.4930247Z    Compiling cc v1.2.62
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:39.0370188Z    Compiling zerovec v0.11.6
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:39.6339944Z    Compiling displaydoc v0.2.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:39.9380328Z    Compiling memmap2 v0.9.10
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:40.1015253Z    Compiling serde v1.0.228
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:40.1088319Z    Compiling getrandom v0.4.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:40.2026988Z    Compiling cmake v0.1.58
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:40.2259899Z    Compiling serde_derive v1.0.228
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:40.2599817Z    Compiling fs_extra v1.3.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:40.4680183Z    Compiling futures-core v0.3.32
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:40.4955116Z    Compiling dunce v1.0.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:40.5317471Z    Compiling aws-lc-sys v0.40.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:40.6809848Z    Compiling socket2 v0.6.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:41.2999998Z    Compiling mio v1.2.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:41.6550125Z    Compiling zeroize v1.8.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:41.7740280Z    Compiling tokio v1.52.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:43.5624963Z    Compiling tempfile v3.27.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:44.3144516Z    Compiling tinystr v0.8.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:44.4450836Z    Compiling gix-fs v0.21.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:44.9567290Z    Compiling gix-chunk v0.7.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:45.0572227Z    Compiling adler2 v2.0.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:45.1345688Z    Compiling writeable v0.6.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:45.1589798Z    Compiling litemap v0.8.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:45.2642684Z    Compiling simd-adler32 v0.3.9
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:45.3017818Z    Compiling percent-encoding v2.3.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:45.4971580Z    Compiling futures-sink v0.3.32
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:45.5454143Z    Compiling miniz_oxide v0.8.9
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:46.0342917Z    Compiling icu_locale_core v2.1.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:47.0369740Z    Compiling gix-tempfile v23.0.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:47.6949839Z    Compiling zerotrie v0.2.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:48.0410052Z    Compiling potential_utf v0.1.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:48.1280308Z    Compiling gix-quote v0.7.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:48.2270312Z    Compiling tracing-core v0.1.36
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:48.3926154Z    Compiling nonempty v0.12.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:48.5072376Z    Compiling icu_properties_data v2.1.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:48.5840966Z    Compiling icu_normalizer_data v2.1.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:48.6553371Z    Compiling aws-lc-rs v1.16.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:48.8169961Z    Compiling icu_collections v2.1.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:49.1346662Z    Compiling icu_provider v2.1.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:49.4227835Z    Compiling http v1.4.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:49.4799851Z    Compiling tracing-attributes v0.1.31
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:50.4509619Z    Compiling slab v0.4.12
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:50.5872804Z    Compiling fnv v1.0.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:50.6302900Z    Compiling tracing v0.1.44
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:51.0129919Z    Compiling gix-commitgraph v0.37.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:51.0350187Z    Compiling rustls-pki-types v1.14.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:51.3731870Z    Compiling gix-glob v0.26.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:51.8797366Z    Compiling indexmap v2.14.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:51.8842309Z    Compiling gix-revwalk v0.32.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:52.0949381Z    Compiling icu_normalizer v2.1.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:52.1280308Z    Compiling icu_properties v2.1.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:52.6149724Z    Compiling http-body v1.0.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:52.6966440Z    Compiling gix-lock v23.0.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:53.1020025Z    Compiling tokio-util v0.7.18
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:53.3469453Z    Compiling rustls v0.23.40
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:53.4132612Z    Compiling futures-task v0.3.32
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:53.5098142Z    Compiling futures-io v0.3.32
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:53.6200326Z    Compiling untrusted v0.9.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:53.6819815Z    Compiling httparse v1.10.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:53.7509912Z    Compiling futures-util v0.3.32
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:53.8710141Z    Compiling idna_adapter v1.2.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:53.9379966Z    Compiling subtle v2.6.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:54.0210163Z    Compiling unicode-bom v2.0.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:54.1196133Z    Compiling utf8_iter v1.0.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:54.1440447Z    Compiling tower-service v0.3.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:54.1850475Z    Compiling try-lock v0.2.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:54.2140029Z    Compiling log v0.4.29
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:54.2380667Z    Compiling atomic-waker v1.1.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:54.2970259Z    Compiling h2 v0.4.14
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:54.3949935Z    Compiling want v0.3.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:54.4989679Z    Compiling idna v1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:56.7429780Z    Compiling flate2 v1.1.9
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:56.9443948Z    Compiling futures-channel v0.3.32
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:57.0745858Z    Compiling form_urlencoded v1.2.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:57.1966818Z    Compiling gix-config-value v0.18.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:57.2579650Z    Compiling static_assertions v1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:57.2916144Z    Compiling shell-words v1.1.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:57.4120690Z    Compiling compression-core v0.4.32
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:57.4980744Z    Compiling compression-codecs v0.4.38
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:57.7611290Z    Compiling gix-command v0.9.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:57.9738845Z    Compiling kstring v2.0.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:58.1020273Z    Compiling url v2.5.8
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:26:58.2949140Z    Compiling hyper v1.9.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:00.6610319Z    Compiling sync_wrapper v1.0.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:00.6819786Z    Compiling gix-sec v0.14.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:00.7111816Z    Compiling encoding_rs v0.8.35
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:00.9570116Z    Compiling base64 v0.22.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:01.4144146Z    Compiling tower-layer v0.3.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:01.5740104Z    Compiling openssl-probe v0.2.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:01.7490242Z    Compiling ipnet v2.12.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:01.9624936Z    Compiling hyper-util v0.1.20
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:02.8720148Z    Compiling rustls-native-certs v0.8.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:03.5230023Z    Compiling tower v0.5.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:04.0389903Z    Compiling gix-attributes v0.33.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:04.6492309Z    Compiling async-compression v0.4.42
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:05.0332932Z    Compiling http-body-util v0.1.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:05.2299855Z    Compiling semver v1.0.28
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:05.8160238Z    Compiling zmij v1.0.21
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:05.8409864Z    Compiling rustversion v1.0.22
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:05.9589929Z    Compiling tower-http v0.6.10
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:06.0249802Z    Compiling gix-ref v0.64.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:06.5430252Z    Compiling gix-url v0.36.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:06.5793135Z    Compiling gix-packetline v0.21.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:06.9069879Z    Compiling mime v0.3.17
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:07.2857646Z    Compiling serde_json v1.0.149
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:07.3650150Z    Compiling winnow v1.0.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:07.7129845Z    Compiling toml_parser v1.1.2+spec-1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:08.5274176Z    Compiling gix-prompt v0.15.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:08.9416005Z    Compiling gix-revision v0.46.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:09.0762966Z    Compiling gix-traverse v0.58.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:09.9910187Z    Compiling serde_spanned v1.1.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:10.0669688Z    Compiling gix-bitmap v0.3.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:10.3324967Z    Compiling hashbrown v0.16.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:11.0190026Z    Compiling crossbeam-epoch v0.9.18
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:11.1129932Z    Compiling filetime v0.2.28
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:11.2550208Z    Compiling autocfg v1.5.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:11.3114116Z    Compiling arrayvec v0.7.6
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:11.3813661Z    Compiling rayon-core v1.13.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:11.4530110Z    Compiling object v0.37.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:11.4889738Z    Compiling utf8parse v0.2.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:11.5417765Z    Compiling toml_writer v1.1.1+spec-1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:11.5499822Z    Compiling fs-err v3.3.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:11.5960311Z    Compiling anstyle-parse v1.0.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:11.6229990Z    Compiling uluru v3.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:11.6873635Z    Compiling crossbeam-deque v0.8.6
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:11.7080016Z    Compiling gix-index v0.52.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:11.7107573Z    Compiling clru v0.6.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:11.8318904Z    Compiling gix-refspec v0.42.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:11.8650846Z    Compiling gix-credentials v0.38.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:13.8110155Z    Compiling arc-swap v1.9.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:14.0441238Z    Compiling gix-ignore v0.21.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:14.4060301Z    Compiling toml_datetime v0.7.5+spec-1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:14.7705665Z    Compiling winnow v0.7.15
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:15.9369909Z    Compiling gimli v0.32.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:16.6234159Z    Compiling camino v1.2.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:16.7515914Z    Compiling owo-colors v4.3.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:17.0309926Z    Compiling foldhash v0.1.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:17.1781997Z    Compiling colorchoice v1.0.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:17.2250320Z    Compiling is_terminal_polyfill v1.70.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:17.2340261Z    Compiling anstyle-query v1.1.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:17.2629785Z    Compiling eyre v0.6.12
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:17.2732350Z    Compiling anstyle v1.0.14
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:17.4560288Z    Compiling anstream v1.0.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:17.4649961Z    Compiling hashbrown v0.15.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:18.0609998Z    Compiling toml v0.9.12+spec-1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:18.0719640Z    Compiling gix-worktree v0.53.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:18.9780540Z    Compiling addr2line v0.25.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:19.0990602Z    Compiling gix-pack v0.71.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:23.0699905Z    Compiling gix-config v0.57.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:24.0550537Z    Compiling gix-filter v0.31.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:25.1579705Z    Compiling gix-pathspec v0.18.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:27.1900016Z    Compiling gix-shallow v0.12.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:27.9124918Z    Compiling gix-negotiate v0.32.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:28.1909646Z    Compiling wasmparser v0.207.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:29.2828292Z    Compiling maybe-async v0.2.10
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:29.6079806Z    Compiling regex v1.12.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:29.7659821Z    Compiling io-close v0.3.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:29.8670285Z    Compiling clap_lex v1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:30.1410172Z    Compiling heck v0.5.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:30.2860265Z    Compiling rustc-demangle v0.1.27
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:30.9079788Z    Compiling indenter v0.3.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:30.9660168Z    Compiling powerfmt v0.2.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:31.1700106Z    Compiling topological-sort v0.2.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:31.2649828Z    Compiling fixedbitset v0.5.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:31.3729880Z    Compiling binfarce v0.2.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:31.7189788Z    Compiling either v1.15.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:31.8729797Z    Compiling strsim v0.11.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:32.6869746Z    Compiling lazy_static v1.5.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:33.6111565Z    Compiling sharded-slab v0.1.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:34.1840109Z    Compiling clap_builder v4.6.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:34.6629943Z    Compiling rayon v1.12.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:35.2139880Z    Compiling auditable-extract v0.3.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:35.3669762Z    Compiling petgraph v0.8.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:37.1749859Z    Compiling auditable-serde v0.9.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:38.0760159Z    Compiling deranged v0.5.8
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:38.9639836Z    Compiling backtrace v0.3.76
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:39.4319900Z    Compiling clap_derive v4.6.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:41.0279845Z    Compiling gix-worktree-state v0.31.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:41.6099828Z    Compiling gix-submodule v0.31.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:43.8909786Z    Compiling gix-odb v0.81.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:45.8659786Z    Compiling gix-discover v0.52.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:46.2499989Z    Compiling tracing-log v0.2.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:46.5289891Z    Compiling smol_str v0.3.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:46.7149973Z    Compiling gix-diff v0.64.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:46.9729981Z    Compiling toml_datetime v1.1.1+spec-1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:47.0305789Z    Compiling matchers v0.2.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:47.0926148Z    Compiling toml-span v0.7.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:47.3385619Z    Compiling thread_local v1.1.9
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:47.5425915Z    Compiling twox-hash v2.1.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:47.6260278Z    Compiling time-core v0.1.8
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:47.7279778Z    Compiling rustc-stable-hash v0.1.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:47.8505189Z    Compiling nu-ansi-term v0.50.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:48.2659749Z    Compiling ident_case v1.0.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:48.3170184Z    Compiling object v0.39.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:48.4139227Z    Compiling num-conv v0.2.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:48.4934411Z    Compiling time v0.3.47
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:50.0317381Z    Compiling abscissa_derive v0.9.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:50.3223476Z    Compiling tracing-subscriber v0.3.23
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:50.5367635Z    Compiling toml v1.1.2+spec-1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:52.0030315Z    Compiling color-eyre v0.6.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:53.2317632Z    Compiling clap v4.6.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:53.2720198Z    Compiling cargo-lock v11.0.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:55.2039748Z    Compiling auditable-info v0.10.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:56.5709209Z    Compiling quitters v0.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:56.7777518Z    Compiling platforms v3.10.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:57.2180037Z    Compiling secrecy v0.10.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:57.2835989Z    Compiling cvss v2.2.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:57.3238303Z    Compiling wasmparser v0.247.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:59.0297409Z    Compiling wait-timeout v0.2.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:59.4100066Z    Compiling home v0.5.12
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:59.5000027Z    Compiling canonical-path v2.0.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:59.5389996Z    Compiling termcolor v1.4.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:27:59.9159782Z    Compiling abscissa_core v0.9.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:28:03.8298858Z    Compiling display-error-chain v0.2.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:28:21.6113994Z    Compiling rustls-webpki v0.103.13
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:28:24.8036701Z    Compiling tokio-rustls v0.26.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:28:24.8037598Z    Compiling rustls-platform-verifier v0.7.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:28:25.0309888Z    Compiling hyper-rustls v0.27.9
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:28:25.3174285Z    Compiling reqwest v0.13.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:28:27.0414382Z    Compiling gix-transport v0.57.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:28:28.1417996Z    Compiling gix-protocol v0.62.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:28:31.9939820Z    Compiling gix v0.84.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:28:33.1703262Z    Compiling tame-index v0.26.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:28:40.6830132Z    Compiling rustsec v0.33.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:28:43.1399799Z    Compiling cargo-audit v0.22.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.2377596Z     Finished `release` profile [optimized] target(s) in 2m 52s
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.2589271Z   Installing /home/runner/.cargo/bin/cargo-audit
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.2594486Z    Installed package `cargo-audit v0.22.2` (executable `cargo-audit`)
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4161510Z ##[group]Run set -euo pipefail
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4161860Z ^[[36;1mset -euo pipefail^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4162192Z ^[[36;1mtest "$(cargo-audit --version)" = "cargo-audit 0.22.2"^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4162621Z ^[[36;1mcargo fetch --locked --target x86_64-unknown-linux-gnu^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4163096Z ^[[36;1mcargo metadata --locked --filter-platform x86_64-unknown-linux-gnu \^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4163766Z ^[[36;1m  --format-version 1 > "$RUNNER_TEMP/metadata.json"^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4164158Z ^[[36;1mcargo audit --json > "$RUNNER_TEMP/audit.json"^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4164518Z ^[[36;1mmkdir "$RUNNER_TEMP/supply-chain"^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4164897Z ^[[36;1mpython3 scripts/generate_local_supply_chain_evidence.py \^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4165304Z ^[[36;1m  --metadata "$RUNNER_TEMP/metadata.json" \^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4165622Z ^[[36;1m  --cargo-lock Cargo.lock \^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4165910Z ^[[36;1m  --audit "$RUNNER_TEMP/audit.json" \^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4183796Z ^[[36;1m  --audit-version 0.22.2 \^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4184206Z ^[[36;1m  --policy supply-chain/local-release-policy-v1.json \^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4184612Z ^[[36;1m  --target x86_64-unknown-linux-gnu \^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4184944Z ^[[36;1m  --output "$RUNNER_TEMP/supply-chain"^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4185395Z ^[[36;1mtest "$(find "$RUNNER_TEMP/supply-chain" -maxdepth 1 -type f | wc -l)" -eq 5^[[0m
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4225014Z shell: /usr/bin/bash -e {0}
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4225272Z env:
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4225474Z   CARGO_INCREMENTAL: 0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4225711Z   CARGO_TERM_COLOR: never
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4225950Z   RUST_BACKTRACE: 1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4226164Z ##[endgroup]
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4689596Z warning: /home/runner/work/codenoesis/codenoesis/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.4710501Z     Updating crates.io index
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.5469300Z  Downloading crates ...
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.5877741Z   Downloaded cpufeatures v0.3.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.5936313Z   Downloaded getrandom v0.4.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.5976313Z   Downloaded fastrand v2.5.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.5991177Z   Downloaded digest v0.11.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6015489Z   Downloaded thiserror v2.0.19
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6082119Z   Downloaded constant_time_eq v0.4.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6102801Z   Downloaded enumflags2_derive v0.7.12
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6111939Z   Downloaded arrayref v0.3.9
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6124520Z   Downloaded simd-adler32 v0.3.10
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6143458Z   Downloaded hashlink v0.11.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6162626Z   Downloaded bitflags v2.13.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6208513Z   Downloaded sha2 v0.11.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6246794Z   Downloaded block-buffer v0.12.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6259371Z   Downloaded shlex v2.0.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6274207Z   Downloaded pkg-config v0.3.33
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6290061Z   Downloaded serde_core v1.0.229
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6317558Z   Downloaded fallible-iterator v0.3.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6332108Z   Downloaded thiserror-impl v2.0.19
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6346755Z   Downloaded sha1 v0.11.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6372487Z   Downloaded tree-sitter-language v0.1.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6397632Z   Downloaded crypto-common v0.2.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6414488Z   Downloaded toml_writer v1.1.2+spec-1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6433026Z   Downloaded protobuf-support v3.7.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6449728Z   Downloaded arraydeque v0.5.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6462345Z   Downloaded zmij v1.0.23
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6479881Z   Downloaded thiserror v1.0.69
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6539484Z   Downloaded enumflags2 v0.7.12
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6558838Z   Downloaded hybrid-array v0.4.13
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6586117Z   Downloaded cc v1.3.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6626192Z   Downloaded thiserror-impl v1.0.69
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6643712Z   Downloaded toml_parser v1.1.3+spec-1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6671998Z   Downloaded landlock v0.4.7
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6703638Z   Downloaded streaming-iterator v0.1.9
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6715742Z   Downloaded const-oid v0.10.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6745595Z   Downloaded smallvec v1.15.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6765255Z   Downloaded typenum v1.20.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6811367Z   Downloaded proc-macro2 v1.0.107
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6841269Z   Downloaded seccompiler v0.5.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6878053Z   Downloaded tinyvec v1.12.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6904967Z   Downloaded memchr v2.8.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6961291Z   Downloaded scip v0.9.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.6978567Z   Downloaded toml v1.1.4+spec-1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.7022390Z   Downloaded yaml-rust2 v0.11.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.7057492Z   Downloaded protobuf v3.7.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.7169879Z   Downloaded regex v1.13.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.7223657Z   Downloaded winnow v1.0.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.7321749Z   Downloaded serde_json v1.0.151
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.7395762Z   Downloaded tree-sitter v0.26.11
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.7457342Z   Downloaded rusqlite v0.40.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.7526340Z   Downloaded blake3 v1.8.5
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.7606382Z   Downloaded vcpkg v0.2.15
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.8164342Z   Downloaded syn v3.0.3
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.8274000Z   Downloaded syn v2.0.119
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.8382076Z   Downloaded tree-sitter-rust v0.24.2
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.8493419Z   Downloaded regex-syntax v0.8.11
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.8564204Z   Downloaded regex-automata v0.4.16
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.8711891Z   Downloaded libc v0.2.189
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.9157746Z   Downloaded sha1collisiondetection v0.3.4
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.9224378Z   Downloaded quote v1.0.47
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.9251878Z   Downloaded arrayvec v0.7.8
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.9272857Z   Downloaded tree-sitter-kotlin-ng v1.1.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.9574046Z   Downloaded fallible-streaming-iterator v0.1.9
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:05.9583082Z   Downloaded libsqlite3-sys v0.38.1
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.2979410Z Post job cleanup.
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.3807729Z [command]/usr/bin/git version
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.3853201Z git version 2.54.0
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.3924252Z Temporarily overriding HOME='/home/runner/work/_temp/2a716ba8-511a-44fc-8fdb-869345fa9d78' before making global git config changes
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.3925603Z Adding repository directory to the temporary git global config as a safe directory
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.3939190Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/codenoesis/codenoesis
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.3972112Z Removing SSH command configuration
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.3979274Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4018413Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4279169Z Removing HTTP extra header
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4281629Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4320993Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4566744Z Removing includeIf entries pointing to credentials config files
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4589115Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4618170Z includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4620070Z includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4621529Z includeif.gitdir:/github/workspace/.git.path
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4622775Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4629679Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4658458Z /home/runner/work/_temp/git-credentials-af85bca3-7f47-4f7d-9859-6e8c521a6c0c.config
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4670544Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-af85bca3\-7f47\-4f7d\-9859\-6e8c521a6c0c\.config
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4710477Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4739649Z /home/runner/work/_temp/git-credentials-af85bca3-7f47-4f7d-9859-6e8c521a6c0c.config
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4750979Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-af85bca3\-7f47\-4f7d\-9859\-6e8c521a6c0c\.config
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4789973Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4824441Z /github/runner_temp/git-credentials-af85bca3-7f47-4f7d-9859-6e8c521a6c0c.config
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4833621Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-af85bca3\-7f47\-4f7d\-9859\-6e8c521a6c0c\.config
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4869775Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4899059Z /github/runner_temp/git-credentials-af85bca3-7f47-4f7d-9859-6e8c521a6c0c.config
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4908173Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-af85bca3\-7f47\-4f7d\-9859\-6e8c521a6c0c\.config
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.4951058Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.5194821Z Removing credentials config '/home/runner/work/_temp/git-credentials-af85bca3-7f47-4f7d-9859-6e8c521a6c0c.config'
+Local release supply-chain gate	UNKNOWN STEP	2026-08-14T21:29:30.5375536Z Cleaning up orphan processes

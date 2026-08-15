@@ -1,0 +1,307 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:local-baseline-verification:v2",
+  "title": "CodeNoesis LocalBaselineVerificationV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "issue",
+    "base_sha",
+    "governance_checkpoint_sha",
+    "evidence_parent_sha",
+    "verification_subject",
+    "product_tree_sha256",
+    "status",
+    "plan",
+    "profile_catalog",
+    "profiles",
+    "repository_evidence",
+    "remote_logs",
+    "remote_runs",
+    "required_gates",
+    "environment",
+    "limitations",
+    "review"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.local-baseline-verification/v2"
+    },
+    "issue": {
+      "const": "https://github.com/smutti/codenoesis/issues/188"
+    },
+    "base_sha": {
+      "const": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172"
+    },
+    "governance_checkpoint_sha": {"$ref": "#/$defs/git_sha1"},
+    "evidence_parent_sha": {"$ref": "#/$defs/git_sha1"},
+    "verification_subject": {
+      "const": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172"
+    },
+    "product_tree_sha256": {"$ref": "#/$defs/sha256"},
+    "status": {
+      "const": "candidate_verified_pending_merge"
+    },
+    "plan": {"$ref": "#/$defs/path_digest"},
+    "profile_catalog": {"$ref": "#/$defs/path_digest"},
+    "profiles": {
+      "type": "array",
+      "minItems": 32,
+      "maxItems": 32,
+      "items": {"$ref": "#/$defs/profile_result"}
+    },
+    "repository_evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/repository_evidence"}
+    },
+    "remote_logs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/git_retained_log"}
+    },
+    "remote_runs": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"$ref": "#/$defs/remote_run"}
+    },
+    "required_gates": {
+      "type": "array",
+      "minItems": 10,
+      "items": {"$ref": "#/$defs/gate"}
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observed_at",
+        "os",
+        "architecture",
+        "python",
+        "rustc",
+        "cargo",
+        "toolchain_file_sha256",
+        "policy_sha256",
+        "agent",
+        "model",
+        "run_identifier",
+        "duration_seconds",
+        "cost"
+      ],
+      "properties": {
+        "observed_at": {"$ref": "#/$defs/rfc3339_utc"},
+        "os": {"type": "string", "minLength": 1},
+        "architecture": {"type": "string", "minLength": 1},
+        "python": {"type": "string", "minLength": 1},
+        "rustc": {"type": "string", "minLength": 1},
+        "cargo": {"type": "string", "minLength": 1},
+        "toolchain_file_sha256": {"$ref": "#/$defs/sha256"},
+        "policy_sha256": {"$ref": "#/$defs/sha256"},
+        "agent": {"const": "OpenAI Codex"},
+        "model": {"type": "string", "minLength": 1},
+        "run_identifier": {"type": "string", "minLength": 1},
+        "duration_seconds": {"type": ["integer", "null"], "minimum": 0},
+        "cost": {"type": ["string", "null"]}
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "required_actor", "activation", "decision_url"],
+      "properties": {
+        "state": {"const": "pending_independent_review"},
+        "required_actor": {"const": "github:smutti"},
+        "activation": {
+          "const": "independent_review_then_protected_manual_merge_of_exact_head"
+        },
+        "decision_url": {"type": "null"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "git_sha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "rfc3339_utc": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,9})?Z$"
+    },
+    "path_digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+        },
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "profile_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "catalog_entry_sha256",
+        "evidence_classes",
+        "result"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+        "catalog_entry_sha256": {"$ref": "#/$defs/sha256"},
+        "evidence_classes": {
+          "type": "array",
+          "minItems": 15,
+          "maxItems": 15,
+          "items": {"$ref": "#/$defs/evidence_class"}
+        },
+        "result": {"const": "green"}
+      }
+    },
+    "evidence_class": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "result", "evidence", "rationale"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "result": {"enum": ["green", "not_applicable"]},
+        "evidence": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "rationale": {"type": "string", "minLength": 1}
+      }
+    },
+    "repository_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "path", "sha256", "kind"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+        "path": {"type": "string", "minLength": 1, "maxLength": 512},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "kind": {
+          "enum": [
+            "red",
+            "green",
+            "regression",
+            "traceability",
+            "security",
+            "browser",
+            "pilot",
+            "supply_chain",
+            "attestation",
+            "review"
+          ]
+        }
+      }
+    },
+    "git_retained_log": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "provider",
+        "format",
+        "repository",
+        "workflow_path",
+        "workflow_sha256",
+        "workflow_ref",
+        "run_id",
+        "run_attempt",
+        "job_id",
+        "job_name",
+        "check_name",
+        "head_sha",
+        "tree_sha",
+        "conclusion",
+        "base_controlled",
+        "source_log_sha256",
+        "normalization",
+        "committed_log_path",
+        "committed_log_sha256",
+        "first_retained_commit",
+        "evidence_head"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+        "provider": {"const": "github_actions"},
+        "format": {"const": "git-retained-github-actions-log/v1"},
+        "repository": {"const": "smutti/codenoesis"},
+        "workflow_path": {"type": "string", "minLength": 1},
+        "workflow_sha256": {"$ref": "#/$defs/sha256"},
+        "workflow_ref": {"type": "string", "minLength": 1},
+        "run_id": {"type": "integer", "minimum": 1},
+        "run_attempt": {"type": "integer", "minimum": 1},
+        "job_id": {"type": "integer", "minimum": 1},
+        "job_name": {"type": "string", "minLength": 1},
+        "check_name": {"type": "string", "minLength": 1},
+        "head_sha": {"$ref": "#/$defs/git_sha1"},
+        "tree_sha": {"$ref": "#/$defs/git_sha1"},
+        "conclusion": {"const": "success"},
+        "base_controlled": {"const": true},
+        "source_log_sha256": {"$ref": "#/$defs/sha256"},
+        "normalization": {
+          "const": "codenoesis.github-actions-log-normalization/v1"
+        },
+        "committed_log_path": {"type": "string", "minLength": 1},
+        "committed_log_sha256": {"$ref": "#/$defs/sha256"},
+        "first_retained_commit": {"$ref": "#/$defs/git_sha1"},
+        "evidence_head": {"$ref": "#/$defs/git_sha1"}
+      }
+    },
+    "remote_run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "run_attempt",
+        "head_sha",
+        "workflow",
+        "workflow_path",
+        "event",
+        "url",
+        "conclusion"
+      ],
+      "properties": {
+        "run_id": {"type": "integer", "minimum": 1},
+        "run_attempt": {"type": "integer", "minimum": 1},
+        "head_sha": {"$ref": "#/$defs/git_sha1"},
+        "workflow": {"type": "string", "minLength": 1},
+        "workflow_path": {"type": "string", "minLength": 1},
+        "event": {"type": "string", "minLength": 1},
+        "url": {
+          "type": "string",
+          "pattern": "^https://github\\.com/smutti/codenoesis/actions/runs/[0-9]+$"
+        },
+        "conclusion": {"const": "success"}
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "result", "evidence", "command"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+        "result": {"enum": ["green", "not_applicable"]},
+        "evidence": {"type": "array", "items": {"type": "string"}},
+        "command": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

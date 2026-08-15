@@ -1,0 +1,621 @@
+{
+  "schema_version": "codenoesis.g8-post-merge-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/186",
+  "pull_request": "https://github.com/smutti/codenoesis/pull/187",
+  "requirement_status": "Approved and Implemented; independent acceptance pending; not Verified",
+  "run": {
+    "conclusion": "success",
+    "createdAt": "2026-08-14T21:46:04Z",
+    "event": "workflow_dispatch",
+    "headBranch": "main",
+    "headSha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+    "jobs": [
+      {
+        "completedAt": "2026-08-14T21:46:12Z",
+        "conclusion": "success",
+        "databaseId": 94906162427,
+        "name": "Validate protected source identity",
+        "startedAt": "2026-08-14T21:46:08Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-08-14T21:46:09Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-08-14T21:46:09Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:46:09Z",
+            "conclusion": "success",
+            "name": "Require exact protected main revision",
+            "number": 2,
+            "startedAt": "2026-08-14T21:46:09Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:46:10Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 3,
+            "startedAt": "2026-08-14T21:46:09Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/smutti/codenoesis/actions/runs/31843845301/job/94906162427"
+      },
+      {
+        "completedAt": "2026-08-14T21:50:36Z",
+        "conclusion": "success",
+        "databaseId": 94906188056,
+        "name": "Generate exact target supply evidence",
+        "startedAt": "2026-08-14T21:46:17Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-08-14T21:46:18Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-08-14T21:46:18Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:46:20Z",
+            "conclusion": "success",
+            "name": "Check out exact source",
+            "number": 2,
+            "startedAt": "2026-08-14T21:46:18Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:49:30Z",
+            "conclusion": "success",
+            "name": "Install exact advisory scanner",
+            "number": 3,
+            "startedAt": "2026-08-14T21:46:20Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:50:32Z",
+            "conclusion": "success",
+            "name": "Generate three target evidence sets",
+            "number": 4,
+            "startedAt": "2026-08-14T21:49:30Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:50:34Z",
+            "conclusion": "success",
+            "name": "Upload immutable supply evidence",
+            "number": 5,
+            "startedAt": "2026-08-14T21:50:32Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:50:34Z",
+            "conclusion": "success",
+            "name": "Post Check out exact source",
+            "number": 10,
+            "startedAt": "2026-08-14T21:50:34Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:50:34Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 11,
+            "startedAt": "2026-08-14T21:50:34Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/smutti/codenoesis/actions/runs/31843845301/job/94906188056"
+      },
+      {
+        "completedAt": "2026-08-14T21:54:13Z",
+        "conclusion": "success",
+        "databaseId": 94907096937,
+        "name": "Build macOS candidate",
+        "startedAt": "2026-08-14T21:50:41Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-08-14T21:50:42Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-08-14T21:50:41Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:50:45Z",
+            "conclusion": "success",
+            "name": "Check out exact source",
+            "number": 2,
+            "startedAt": "2026-08-14T21:50:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:50:46Z",
+            "conclusion": "success",
+            "name": "Download exact supply evidence",
+            "number": 3,
+            "startedAt": "2026-08-14T21:50:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:54:06Z",
+            "conclusion": "success",
+            "name": "Build package verify and smoke macOS",
+            "number": 4,
+            "startedAt": "2026-08-14T21:50:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:54:09Z",
+            "conclusion": "success",
+            "name": "Upload macOS candidate",
+            "number": 5,
+            "startedAt": "2026-08-14T21:54:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:54:10Z",
+            "conclusion": "success",
+            "name": "Post Check out exact source",
+            "number": 10,
+            "startedAt": "2026-08-14T21:54:09Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:54:11Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 11,
+            "startedAt": "2026-08-14T21:54:10Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/smutti/codenoesis/actions/runs/31843845301/job/94907096937"
+      },
+      {
+        "completedAt": "2026-08-14T21:56:02Z",
+        "conclusion": "success",
+        "databaseId": 94907096940,
+        "name": "Build Windows candidate",
+        "startedAt": "2026-08-14T21:50:39Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-08-14T21:50:41Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-08-14T21:50:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:50:48Z",
+            "conclusion": "success",
+            "name": "Check out exact source",
+            "number": 2,
+            "startedAt": "2026-08-14T21:50:41Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:50:49Z",
+            "conclusion": "success",
+            "name": "Download exact supply evidence",
+            "number": 3,
+            "startedAt": "2026-08-14T21:50:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:55:58Z",
+            "conclusion": "success",
+            "name": "Build package verify and smoke Windows",
+            "number": 4,
+            "startedAt": "2026-08-14T21:50:49Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:55:59Z",
+            "conclusion": "success",
+            "name": "Upload Windows candidate",
+            "number": 5,
+            "startedAt": "2026-08-14T21:55:58Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:56:01Z",
+            "conclusion": "success",
+            "name": "Post Check out exact source",
+            "number": 10,
+            "startedAt": "2026-08-14T21:55:59Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:56:01Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 11,
+            "startedAt": "2026-08-14T21:56:01Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/smutti/codenoesis/actions/runs/31843845301/job/94907096940"
+      },
+      {
+        "completedAt": "2026-08-14T21:53:53Z",
+        "conclusion": "success",
+        "databaseId": 94907097060,
+        "name": "Build Linux candidate",
+        "startedAt": "2026-08-14T21:50:41Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-08-14T21:50:44Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-08-14T21:50:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:50:46Z",
+            "conclusion": "success",
+            "name": "Check out exact source",
+            "number": 2,
+            "startedAt": "2026-08-14T21:50:44Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:50:47Z",
+            "conclusion": "success",
+            "name": "Download exact supply evidence",
+            "number": 3,
+            "startedAt": "2026-08-14T21:50:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:53:48Z",
+            "conclusion": "success",
+            "name": "Build package verify and smoke Linux",
+            "number": 4,
+            "startedAt": "2026-08-14T21:50:47Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:53:50Z",
+            "conclusion": "success",
+            "name": "Upload Linux candidate",
+            "number": 5,
+            "startedAt": "2026-08-14T21:53:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:53:50Z",
+            "conclusion": "success",
+            "name": "Post Check out exact source",
+            "number": 10,
+            "startedAt": "2026-08-14T21:53:50Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:53:50Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 11,
+            "startedAt": "2026-08-14T21:53:50Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/smutti/codenoesis/actions/runs/31843845301/job/94907097060"
+      },
+      {
+        "completedAt": "2026-08-14T21:56:18Z",
+        "conclusion": "success",
+        "databaseId": 94908208375,
+        "name": "Attest immutable candidate subjects",
+        "startedAt": "2026-08-14T21:56:06Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-08-14T21:56:09Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-08-14T21:56:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:56:11Z",
+            "conclusion": "success",
+            "name": "Download immutable candidate subjects",
+            "number": 2,
+            "startedAt": "2026-08-14T21:56:09Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:56:11Z",
+            "conclusion": "success",
+            "name": "Verify fixed subject checksums",
+            "number": 3,
+            "startedAt": "2026-08-14T21:56:11Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:56:13Z",
+            "conclusion": "success",
+            "name": "Attest every immutable subject",
+            "number": 4,
+            "startedAt": "2026-08-14T21:56:11Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:56:14Z",
+            "conclusion": "success",
+            "name": "Assemble retained offline evidence",
+            "number": 5,
+            "startedAt": "2026-08-14T21:56:13Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:56:17Z",
+            "conclusion": "success",
+            "name": "Upload retained candidates and offline bundle",
+            "number": 6,
+            "startedAt": "2026-08-14T21:56:14Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-08-14T21:56:17Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 7,
+            "startedAt": "2026-08-14T21:56:17Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/smutti/codenoesis/actions/runs/31843845301/job/94908208375"
+      }
+    ],
+    "status": "completed",
+    "updatedAt": "2026-08-14T21:56:19Z",
+    "url": "https://github.com/smutti/codenoesis/actions/runs/31843845301"
+  },
+  "artifact": {
+    "id": 9235430119,
+    "node_id": "MDg6QXJ0aWZhY3Q5MjM1NDMwMTE5",
+    "name": "local-release-candidates-9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+    "size_in_bytes": 18517299,
+    "url": "https://api.github.com/repos/smutti/codenoesis/actions/artifacts/9235430119",
+    "archive_download_url": "https://api.github.com/repos/smutti/codenoesis/actions/artifacts/9235430119/zip",
+    "expired": false,
+    "digest": "sha256:3c15eabb8fb3125dfe01e48c51c0322231f6e64a733eb72380bad8d86f8ecea8",
+    "created_at": "2026-08-14T21:56:17Z",
+    "updated_at": "2026-08-14T21:56:17Z",
+    "expires_at": "2026-09-13T21:56:14Z",
+    "workflow_run": {
+      "id": 31843845301,
+      "repository_id": 1304169953,
+      "head_repository_id": 1304169953,
+      "head_branch": "main",
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172"
+    }
+  },
+  "candidates": [
+    {
+      "archive_sha256": "3f1953e7542e62d95bf91b1be653f5573734a2f57bd806c26244ffbbc1e2f10e",
+      "candidate_name": "codenoesis-local-release-candidate-r17-aarch64-apple-darwin-3f1953e7542e62d95bf91b1be653f5573734a2f57bd806c26244ffbbc1e2f10e",
+      "checksums_sha256": "fc8093c483a443982078d0caea384478b70ea27fbd341fae0e9f9d19ceeee0b5",
+      "evidence": [
+        {
+          "length": 351,
+          "path": "evidence/advisory-report.json",
+          "schema": "codenoesis.local-advisory-report/v1",
+          "sha256": "d48ed3c56c9bfcbb66a7c96bcb041127dd0aa6141c5140fd88e36f3e6fe4c650"
+        },
+        {
+          "length": 23319,
+          "path": "evidence/dependency-lock.json",
+          "schema": "codenoesis.local-dependency-lock/v1",
+          "sha256": "c55e19a78f18e9dbac77fc3a4ac63f4257afd3895b45a3b8ece700e09ea94f84"
+        },
+        {
+          "length": 7651,
+          "path": "evidence/license-report.json",
+          "schema": "codenoesis.local-license-report/v1",
+          "sha256": "7a445ce8b001e56ef64f22c886591ba96803b92a6fc1830046bf509d4a6a9779"
+        },
+        {
+          "length": 35542,
+          "path": "evidence/sbom.cdx.json",
+          "schema": "CycloneDX-1.6",
+          "sha256": "9bcfdfe5fa585e99ce205282064cb5a2d2191798b0c1e2cafc8a9e86503f1b6f"
+        },
+        {
+          "length": 16466,
+          "path": "evidence/unsafe-inventory.json",
+          "schema": "codenoesis.local-unsafe-inventory/v1",
+          "sha256": "33c89db959e19b764e1540f299b9ff0cea78473c6e625aed5b00c018f4c4644a"
+        }
+      ],
+      "manifest_sha256": "238886dceb7e253056f2be0ab92a1c1fa085c281ba5c9cace820af1dd6fd536d",
+      "profile_id": "local-experimental-r17",
+      "publication": false,
+      "release_status": "not-ga",
+      "schema_version": "codenoesis.local-release-candidate-verification/v1",
+      "signature_verification": "external-gh-required",
+      "source_commit": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "support": "none",
+      "target": "aarch64-apple-darwin",
+      "verified": true
+    },
+    {
+      "archive_sha256": "cb1b9b0f2d64c6e61d53d9296d96487c795f5bb95092ef8a761bf6f8da836a2c",
+      "candidate_name": "codenoesis-local-release-candidate-r17-x86_64-pc-windows-msvc-cb1b9b0f2d64c6e61d53d9296d96487c795f5bb95092ef8a761bf6f8da836a2c",
+      "checksums_sha256": "6e4e6e848f3a2059ab39c70873add01fbf002f4710dc3ccf0358e25e22545b14",
+      "evidence": [
+        {
+          "length": 351,
+          "path": "evidence/advisory-report.json",
+          "schema": "codenoesis.local-advisory-report/v1",
+          "sha256": "d48ed3c56c9bfcbb66a7c96bcb041127dd0aa6141c5140fd88e36f3e6fe4c650"
+        },
+        {
+          "length": 24440,
+          "path": "evidence/dependency-lock.json",
+          "schema": "codenoesis.local-dependency-lock/v1",
+          "sha256": "fc5afc07eacd605b5787e257eb38a93be9b4ec3a8b9a5bab725e81518f827ec0"
+        },
+        {
+          "length": 7962,
+          "path": "evidence/license-report.json",
+          "schema": "codenoesis.local-license-report/v1",
+          "sha256": "f5eb579d23b8ff5f3c9eed2271fcb8552a18e4719349ab6341d029077354804f"
+        },
+        {
+          "length": 37192,
+          "path": "evidence/sbom.cdx.json",
+          "schema": "CycloneDX-1.6",
+          "sha256": "f4dc8174e3cae16aefea5903453ddde92d75e9028f3050244aa03e401ab3bac2"
+        },
+        {
+          "length": 17023,
+          "path": "evidence/unsafe-inventory.json",
+          "schema": "codenoesis.local-unsafe-inventory/v1",
+          "sha256": "6539b445e4b448a493e8d75f61a5b8798b4c8f12012183efd8ec6c97f2a2270c"
+        }
+      ],
+      "manifest_sha256": "7917d1638143e49847dea0c7793c93253852d737d88905ce57015e596efbe536",
+      "profile_id": "local-experimental-r17",
+      "publication": false,
+      "release_status": "not-ga",
+      "schema_version": "codenoesis.local-release-candidate-verification/v1",
+      "signature_verification": "external-gh-required",
+      "source_commit": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "support": "none",
+      "target": "x86_64-pc-windows-msvc",
+      "verified": true
+    },
+    {
+      "archive_sha256": "84ccae6e941d3d60cf3b962bebef22a0792cdabbed2392e1af4d9dcc99d55fb0",
+      "candidate_name": "codenoesis-local-release-candidate-r17-x86_64-unknown-linux-gnu-84ccae6e941d3d60cf3b962bebef22a0792cdabbed2392e1af4d9dcc99d55fb0",
+      "checksums_sha256": "bf54c368b8184aa0fe29e199b9ae44d60252ff9771476cf3d69a377221aad452",
+      "evidence": [
+        {
+          "length": 351,
+          "path": "evidence/advisory-report.json",
+          "schema": "codenoesis.local-advisory-report/v1",
+          "sha256": "d48ed3c56c9bfcbb66a7c96bcb041127dd0aa6141c5140fd88e36f3e6fe4c650"
+        },
+        {
+          "length": 25497,
+          "path": "evidence/dependency-lock.json",
+          "schema": "codenoesis.local-dependency-lock/v1",
+          "sha256": "fc3d6d122b1e7fb861e4cbab6cc5699c52a5196fcc2c26c002839c1964007879"
+        },
+        {
+          "length": 8348,
+          "path": "evidence/license-report.json",
+          "schema": "codenoesis.local-license-report/v1",
+          "sha256": "ea2faefa9cdbc06bb2bfd40e12a34cd11a15b8f6874a7998b6458690e463a3e4"
+        },
+        {
+          "length": 38877,
+          "path": "evidence/sbom.cdx.json",
+          "schema": "CycloneDX-1.6",
+          "sha256": "73dcab0692f07e85debbb0c4269996f63e8db6998f5effada2aef03d930321d6"
+        },
+        {
+          "length": 18130,
+          "path": "evidence/unsafe-inventory.json",
+          "schema": "codenoesis.local-unsafe-inventory/v1",
+          "sha256": "8057bc3854b8a473ec1a2ff159ff9d0770120599af6bff1b8d794b6b46652df6"
+        }
+      ],
+      "manifest_sha256": "6320beb04779fbf9d1e509d3eb12cd24073c939b57a66b998059c8d91c92bd30",
+      "profile_id": "local-experimental-r17",
+      "publication": false,
+      "release_status": "not-ga",
+      "schema_version": "codenoesis.local-release-candidate-verification/v1",
+      "signature_verification": "external-gh-required",
+      "source_commit": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "support": "none",
+      "target": "x86_64-unknown-linux-gnu",
+      "verified": true
+    }
+  ],
+  "attestation": {
+    "url": "https://github.com/smutti/codenoesis/attestations/40843198",
+    "rekor_url": "https://search.sigstore.dev?logIndex=2469385444",
+    "bundle_sha256": "3048d8078a79a00dc75015b36b0ebb00718ebf13cd71258060821d837270f28f",
+    "subject_count": 22,
+    "certificate": {
+      "certificateIssuer": "CN=sigstore-intermediate,O=sigstore.dev",
+      "subjectAlternativeName": "https://github.com/smutti/codenoesis/.github/workflows/local-release-candidate.yml@refs/heads/main",
+      "issuer": "https://token.actions.githubusercontent.com",
+      "githubWorkflowTrigger": "workflow_dispatch",
+      "githubWorkflowSHA": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "githubWorkflowName": "Local release candidate",
+      "githubWorkflowRepository": "smutti/codenoesis",
+      "githubWorkflowRef": "refs/heads/main",
+      "buildSignerURI": "https://github.com/smutti/codenoesis/.github/workflows/local-release-candidate.yml@refs/heads/main",
+      "buildSignerDigest": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "runnerEnvironment": "github-hosted",
+      "sourceRepositoryURI": "https://github.com/smutti/codenoesis",
+      "sourceRepositoryDigest": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "sourceRepositoryRef": "refs/heads/main",
+      "sourceRepositoryIdentifier": "1304169953",
+      "sourceRepositoryOwnerURI": "https://github.com/smutti",
+      "sourceRepositoryOwnerIdentifier": "8921208",
+      "buildConfigURI": "https://github.com/smutti/codenoesis/.github/workflows/local-release-candidate.yml@refs/heads/main",
+      "buildConfigDigest": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "buildTrigger": "workflow_dispatch",
+      "runInvocationURI": "https://github.com/smutti/codenoesis/actions/runs/31843845301/attempts/1",
+      "sourceRepositoryVisibilityAtSigning": "public"
+    },
+    "positive_archives": 3,
+    "positive_exit_status": 0,
+    "negative_cases": [
+      {
+        "name": "artifact-substitution",
+        "exit_status": 1
+      },
+      {
+        "name": "bundle-substitution",
+        "exit_status": 1
+      },
+      {
+        "name": "repo-substitution",
+        "exit_status": 1
+      },
+      {
+        "name": "signer-substitution",
+        "exit_status": 1
+      },
+      {
+        "name": "ref-substitution",
+        "exit_status": 1
+      },
+      {
+        "name": "digest-substitution",
+        "exit_status": 1
+      }
+    ]
+  },
+  "actions": {
+    "checkout": "3d3c42e5aac5ba805825da76410c181273ba90b1",
+    "upload_artifact": "043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+    "download_artifact": "3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c",
+    "attest_build_provenance": "4d101475d8b20a2381f78447822ac1eab6504dd8",
+    "nested_attest": "508db95dd578ae2727ebd6217d5ba78e4fbda05d"
+  },
+  "local_logs": {
+    "candidate_verification_sha256": "af8f9ff48f6b9e5363acb7b3b9ef7dcf024a42b7b72304cdf5bd1e2bc5c825e8",
+    "attestation_positive_sha256": "ffba6ad834f421c8cc79a96558d3ce02e7c9fd2276fae5c558d857852009802c",
+    "attestation_negative_sha256": "25ca3eb9285198c3ed81d7474aaec97dfa2158d5703b6fbea57f3fd293d77c2f"
+  }
+}

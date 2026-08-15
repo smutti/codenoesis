@@ -1,0 +1,109 @@
+{
+  "schema_version": "codenoesis.git-retained-command-log/v1",
+  "repository": "smutti/codenoesis",
+  "run_id": 31842394592,
+  "run_attempt": 1,
+  "job_id": 94901863459,
+  "job_name": "Analyze (rust)",
+  "command": "gh run view 31842394592 --repo smutti/codenoesis --job 94901863459 --log",
+  "normalization": "gh-run-view-job-log/v1",
+  "source_log_sha256": "e6f3ae953eff416ebdf4dd7c3d517f17e5d755ed200dedab0164bd06dfa32067",
+  "source_log_bytes": 1867883,
+  "chunks": [
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-00.log",
+      "sha256": "b8513d779f334772e6407da9528e1e2fb30fa4446f08c07a2b0bda0af1c50cc3",
+      "bytes": 45046
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-01.log",
+      "sha256": "10541c092ee098db5cb8b9da60e22c1e0c14ec4ec1c5e79f784bb24f3b5c2f59",
+      "bytes": 41395
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-02.log",
+      "sha256": "6434ae99983241a51b40961f5142bb85aa71cb9dbbfd586d95824aa26ce5637c",
+      "bytes": 61355
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-03.log",
+      "sha256": "84e4ccfd26f6e8783a7b12537dccaf70c2e26bd38bd56801c7d6358986f9e78a",
+      "bytes": 110611
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-04.log",
+      "sha256": "04f538f0f27a9bd95e7a055c735aa4518642b8f83108be9b10444b80f2c0d620",
+      "bytes": 109112
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-05.log",
+      "sha256": "86da08de2c7b87c9b107e6816b4a7b65f616d3e03a218ce77d0e92e2eb89d11a",
+      "bytes": 110239
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-06.log",
+      "sha256": "3980e70d4f6374a2e6a700ea782dd01f15091014e4e47e324f2cdc398ca364a0",
+      "bytes": 116138
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-07.log",
+      "sha256": "952fb21afc1ec3efc0495c8ba4cce2479428ce5eda6f6f4a3d0faddd9952af3b",
+      "bytes": 112873
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-08.log",
+      "sha256": "98bc6d75ead934285aa7c5cbe85829328eee7066565d16f7ca67c81fcf655f67",
+      "bytes": 112999
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-09.log",
+      "sha256": "868ad3430200a010cecc4002b96476a96a3d2f02e66411c7c90163fcc65d6477",
+      "bytes": 118851
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-10.log",
+      "sha256": "81490f8ba64087c8df8dacf9fd9b3e79524c5b944363f5343104182acb1ecda9",
+      "bytes": 111355
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-11.log",
+      "sha256": "44475d0d9aaaf2550c5295d10311fde5a7e583d9eef8e8c33b3033fe50b8c21e",
+      "bytes": 112396
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-12.log",
+      "sha256": "94efb3972c3e24dcadc03b8ec736bc38414e92f63720ef779ebf383ec249fd77",
+      "bytes": 115418
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-13.log",
+      "sha256": "416c0c59ce8f3d6d3cb94897ec26376b14cb148441984b47f261ff6696df7581",
+      "bytes": 117785
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-14.log",
+      "sha256": "93030665ff69cb16d70e8b37a9e6806848155c2286095f6d67ecb73583f4edf4",
+      "bytes": 118004
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-15.log",
+      "sha256": "1bbe2821d11e2f99522f790fd4dbafb653096a82646aeb28c8a0e0547d877bc1",
+      "bytes": 115389
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-16.log",
+      "sha256": "2b7c31aa6d0c61cb666e224662ad85616474c16d2c9a1cbd7dccf7eec2481d65",
+      "bytes": 107862
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-17.log",
+      "sha256": "b856d29728626c6a61033e17a0dc25ce414b07aef3fac7e2ae058fcc1f3348c1",
+      "bytes": 98043
+    },
+    {
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-18.log",
+      "sha256": "8fc347e2f4c13801ef95d0f5a4ca05db003a777504ddb691c3a30cc33b026a63",
+      "bytes": 33012
+    }
+  ]
+}

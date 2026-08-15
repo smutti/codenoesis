@@ -1,0 +1,188 @@
+Validate benchmark contract	UNKNOWN STEP	﻿2026-08-14T21:26:01.2267138Z Current runner version: '2.336.0'
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2293126Z ##[group]Runner Image Provisioner
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2294054Z Hosted Compute Agent
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2294719Z Version: 20260729.566
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2295381Z Commit: cf7153fe6e25b664e8693c24944bf2b00355d109
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2296092Z Build Date: 2026-07-29T19:17:02Z
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2296842Z Worker ID: {29f42e5e-c32a-4f60-b85c-b509d2d6eac0}
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2297571Z Azure Region: westus
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2298159Z ##[endgroup]
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2299940Z ##[group]Operating System
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2300591Z Ubuntu
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2301194Z 24.04.4
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2301739Z LTS
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2302266Z ##[endgroup]
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2302876Z ##[group]Runner Image
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2303503Z Image: ubuntu-24.04
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2304161Z Version: 20260810.271.1
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2305453Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260810.271/images/ubuntu/Ubuntu2404-Readme.md
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2306968Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260810.271
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2307909Z ##[endgroup]
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2309626Z ##[group]GITHUB_TOKEN Permissions
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2311638Z Contents: read
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2312224Z Metadata: read
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2312893Z ##[endgroup]
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2314976Z Secret source: Actions
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2316580Z Prepare workflow directory
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2731441Z Prepare all required actions
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.2781806Z Getting action download info
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.6291367Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.8456588Z Complete job name: Validate benchmark contract
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9343917Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9344989Z with:
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9345437Z   repository: smutti/codenoesis
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9349695Z   token: ***
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9350163Z   ssh-strict: true
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9350623Z   ssh-user: git
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9351069Z   persist-credentials: true
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9351548Z   clean: true
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9352012Z   sparse-checkout-cone-mode: true
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9352534Z   fetch-depth: 1
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9352965Z   fetch-tags: false
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9353404Z   show-progress: true
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9353845Z   lfs: false
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9354257Z   submodules: false
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9354696Z   set-safe-directory: true
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9355197Z   allow-unsafe-pr-checkout: false
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9355962Z env:
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9356377Z   CARGO_INCREMENTAL: 0
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9356855Z   CARGO_TERM_COLOR: never
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:01.9357360Z ##[endgroup]
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0360379Z Syncing repository: smutti/codenoesis
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0362477Z ##[group]Getting Git version info
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0363292Z Working directory is '/home/runner/work/codenoesis/codenoesis'
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0364345Z [command]/usr/bin/git version
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0469998Z git version 2.54.0
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0496296Z ##[endgroup]
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0508851Z Temporarily overriding HOME='/home/runner/work/_temp/d3ea1ec4-59f8-49ba-9f2a-1298fced3f72' before making global git config changes
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0511462Z Adding repository directory to the temporary git global config as a safe directory
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0521863Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/codenoesis/codenoesis
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0574488Z Deleting the contents of '/home/runner/work/codenoesis/codenoesis'
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0577488Z ##[group]Determining repository object format
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0580007Z ##[endgroup]
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0581742Z ##[group]Initializing the repository
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0585551Z [command]/usr/bin/git init /home/runner/work/codenoesis/codenoesis
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0726619Z hint: Using 'master' as the name for the initial branch. This default branch name
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0728958Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0730509Z hint: to use in all of your new repositories, which will suppress this warning,
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0731762Z hint: call:
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0732520Z hint:
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0733414Z hint: 	git config --global init.defaultBranch <name>
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0734481Z hint:
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0735515Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0737054Z hint: 'development'. The just-created branch can be renamed via this command:
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0738224Z hint:
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0739110Z hint: 	git branch -m <name>
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0739839Z hint:
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0740830Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0742511Z Initialized empty Git repository in /home/runner/work/codenoesis/codenoesis/.git/
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0745260Z [command]/usr/bin/git remote add origin https://github.com/smutti/codenoesis
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0804615Z ##[endgroup]
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0805849Z ##[group]Disabling automatic garbage collection
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0808225Z [command]/usr/bin/git config --local gc.auto 0
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0845452Z ##[endgroup]
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0846262Z ##[group]Setting up auth
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0847010Z Removing SSH command configuration
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0869858Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.0895178Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.1291250Z Removing HTTP extra header
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.1296590Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.1333571Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.1556686Z Removing includeIf entries pointing to credentials config files
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.1561873Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.1604274Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.1835840Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-ecf354ec-8765-435e-a89e-3a2055228046.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.1876528Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path /home/runner/work/_temp/git-credentials-ecf354ec-8765-435e-a89e-3a2055228046.config
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.1910453Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-ecf354ec-8765-435e-a89e-3a2055228046.config
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.1960903Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-ecf354ec-8765-435e-a89e-3a2055228046.config
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.1988975Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-ecf354ec-8765-435e-a89e-3a2055228046.config
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.2025086Z ##[endgroup]
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.2025873Z ##[group]Fetching the repository
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:02.2036064Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +9ecdc3acefd43495daf76b9f2ab69a7bbacff172:refs/remotes/origin/main
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.3364445Z From https://github.com/smutti/codenoesis
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.3366464Z  * [new ref]         9ecdc3acefd43495daf76b9f2ab69a7bbacff172 -> origin/main
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.3412017Z [command]/usr/bin/git branch --list --remote origin/main
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.3447253Z   origin/main
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.3457446Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.3488379Z 9ecdc3acefd43495daf76b9f2ab69a7bbacff172
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.3502452Z ##[endgroup]
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.3504116Z ##[group]Determining the checkout info
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.3505744Z ##[endgroup]
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.3506930Z [command]/usr/bin/git sparse-checkout disable
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.3563274Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.3605998Z ##[group]Checking out the ref
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.3611171Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.4638874Z Switched to a new branch 'main'
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.4640529Z branch 'main' set up to track 'origin/main'.
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.4651662Z ##[endgroup]
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.4702504Z [command]/usr/bin/git log -1 --format=%H
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.4732527Z 9ecdc3acefd43495daf76b9f2ab69a7bbacff172
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.4976642Z ##[group]Run python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.4979033Z ^[[36;1mpython3 -m unittest discover -s scripts/tests -p 'test_*.py'^[[0m
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.5021904Z shell: /usr/bin/bash -e {0}
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.5022808Z env:
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.5023491Z   CARGO_INCREMENTAL: 0
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.5024322Z   CARGO_TERM_COLOR: never
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:03.5025151Z ##[endgroup]
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.4605640Z ...............................................................................................................................................................................................................................................................................................................................................................................
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.4607527Z ----------------------------------------------------------------------
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.4608328Z Ran 367 tests in 10.650s
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.4608898Z 
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.4609107Z OK
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.4792682Z ##[group]Run python3 scripts/validate_benchmark_assets.py
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.4793270Z ^[[36;1mpython3 scripts/validate_benchmark_assets.py^[[0m
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.4831772Z shell: /usr/bin/bash -e {0}
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.4832088Z env:
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.4832336Z   CARGO_INCREMENTAL: 0
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.4832612Z   CARGO_TERM_COLOR: never
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.4832882Z ##[endgroup]
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5177594Z benchmark assets valid: status=scaffold, suites=0
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5258243Z ##[group]Run python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5259065Z ^[[36;1mpython3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"^[[0m
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5259439Z ^[[36;1mimport json^[[0m
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5259729Z ^[[36;1mfrom pathlib import Path^[[0m
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5260027Z ^[[36;1m^[[0m
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5260466Z ^[[36;1mmanifest = json.loads(Path("benchmarks/manifest.json").read_text(encoding="utf-8"))^[[0m
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5261002Z ^[[36;1mprint("### Benchmark contract")^[[0m
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5261496Z ^[[36;1mprint(f"Validated `{len(manifest['suites'])}` suite(s); status is `{manifest['status']}`.")^[[0m
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5262025Z ^[[36;1mif manifest["status"] == "scaffold":^[[0m
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5262565Z ^[[36;1m    print("No performance claim is made until a reviewed executable suite and corpus are added.")^[[0m
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5263081Z ^[[36;1mPY^[[0m
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5301973Z shell: /usr/bin/bash -e {0}
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5302300Z env:
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5302576Z   CARGO_INCREMENTAL: 0
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5302861Z   CARGO_TERM_COLOR: never
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5303136Z ##[endgroup]
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.5847148Z Post job cleanup.
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.6739390Z [command]/usr/bin/git version
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.6769548Z git version 2.54.0
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.6817211Z Temporarily overriding HOME='/home/runner/work/_temp/56b6f132-54f4-4ba1-8985-f700fdf9ec34' before making global git config changes
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.6819642Z Adding repository directory to the temporary git global config as a safe directory
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.6824129Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/codenoesis/codenoesis
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.6863398Z Removing SSH command configuration
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.6871857Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.6914281Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7230575Z Removing HTTP extra header
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7242869Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7291947Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7598240Z Removing includeIf entries pointing to credentials config files
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7604737Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7639276Z includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7640572Z includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7641848Z includeif.gitdir:/github/workspace/.git.path
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7642851Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7652005Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7679544Z /home/runner/work/_temp/git-credentials-ecf354ec-8765-435e-a89e-3a2055228046.config
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7694483Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-ecf354ec\-8765\-435e\-a89e\-3a2055228046\.config
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7738258Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7771976Z /home/runner/work/_temp/git-credentials-ecf354ec-8765-435e-a89e-3a2055228046.config
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7815385Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-ecf354ec\-8765\-435e\-a89e\-3a2055228046\.config
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7827218Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7856065Z /github/runner_temp/git-credentials-ecf354ec-8765-435e-a89e-3a2055228046.config
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7864859Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-ecf354ec\-8765\-435e\-a89e\-3a2055228046\.config
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7902823Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7928393Z /github/runner_temp/git-credentials-ecf354ec-8765-435e-a89e-3a2055228046.config
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7937378Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-ecf354ec\-8765\-435e\-a89e\-3a2055228046\.config
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.7975848Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.8203987Z Removing credentials config '/home/runner/work/_temp/git-credentials-ecf354ec-8765-435e-a89e-3a2055228046.config'
+Validate benchmark contract	UNKNOWN STEP	2026-08-14T21:26:14.8354884Z Cleaning up orphan processes

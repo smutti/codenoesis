@@ -78,6 +78,13 @@ locked-dependency, license, advisory, and transitive-unsafe evidence, plus a
 protected-main-only keyless GitHub attestation workflow. It creates no tag,
 GitHub Release, package publication, deployment, support, release channel, or
 GA authority.
+
+Issue [#188](https://github.com/smutti/codenoesis/issues/188) defines the
+LocalBaselineVerificationV2 candidate Verified pending independent review and
+protected manual merge. Its evidence manifest verifies the exact protected
+baseline without changing product, control-plane, dependency, or release
+bytes. G9 remains a separate governed package.
+
 Complete independent evidence acceptance, broader language coverage,
 operations, and the remaining production-readiness slices are still pending.
 

@@ -1,0 +1,400 @@
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8733834Z             "description" : "Options about how the extractor handles TRAP files",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8734305Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8734624Z             "visibility" : 3,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8734947Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8735279Z               "cache" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8735613Z                 "title" : "TRAP cache options",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8736066Z                 "description" : "Options about how the extractor handles its TRAP cache",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8736498Z                 "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8736850Z                 "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8737198Z                   "dir" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8737526Z                     "title" : "TRAP cache directory",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8737964Z                     "description" : "The directory of the TRAP cache to use",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8738379Z                     "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8738840Z                   },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8739145Z                   "bound" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8739482Z                     "title" : "TRAP cache bound",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8739961Z                     "description" : "A soft limit (in MB) on the size of the TRAP cache",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8740396Z                     "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8740730Z                     "pattern" : "[0-9]+"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8741057Z                   },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8741365Z                   "write" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8741720Z                     "title" : "TRAP cache writeable",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8742190Z                     "description" : "Whether to write to the TRAP cache as well as reading it",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8742634Z                     "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8743017Z                     "pattern" : "(true|TRUE|false|FALSE)"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8743390Z                   }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8743678Z                 }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8743954Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8744225Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8744525Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8744828Z           "scale_timeouts" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8745209Z             "title" : "Value to scale compiler introspection timeouts with",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8746633Z             "description" : "The extractor attempts to determine what compiler the source code being extracted is compiled with. To this end the extractor makes additional calls to the compiler, some of which are expected to return within a certain fixed time (either 10s or 15s). On some systems that are under high load this time might be too short, and can be scaled up using this option.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8748229Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8748628Z             "pattern" : "[0-9]+"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8749292Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8749660Z           "log_verbosity" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8750230Z             "title" : "Verbosity of the extractor logging",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8751391Z             "description" : "Set the verbosity of the extractor logging to 'quiet' (0), 'normal' (1), 'chatty' (2), or 'noisy' (3). The default is 'normal'.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8752350Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8752838Z             "pattern" : "[0-3]"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8753267Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8753734Z           "frontend_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8754247Z             "title" : "C/C++ extractor frontend options",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8755115Z             "description" : "Set additional options that should be passed to the C/C++ extractor frontend.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8755966Z             "type" : "array",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8756404Z             "visibility" : 3
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8756830Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8757196Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8757546Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8757941Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8758390Z     "java" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8758820Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8759392Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/java",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8760042Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8760528Z           "exclude" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8761025Z             "title" : "A glob excluding files from analysis.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8762540Z             "description" : "A glob indicating what files to exclude from the analysis. This accepts glob patterns that are supported by Java's 'getPathMatcher' implementation.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8763680Z             "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8764104Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8764504Z           "add_prefer_source" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8765139Z             "title" : "Whether to always prefer source files over class files.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8766965Z             "description" : "A value indicating whether source files should be preferred over class files. If set to 'true', the extraction adds '-Xprefer:source' to the javac command line. If set to 'false', the extraction uses the default javac behavior ('-Xprefer:newer'). The default is 'true'.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8768673Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8769282Z             "pattern" : "^(false|true)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8769764Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8770174Z           "buildless" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8770828Z             "title" : "Whether to use buildless (standalone) extraction (experimental).",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8773400Z             "description" : "A value indicating, which type of extraction the autobuilder should perform. If 'true', then the standalone extractor will be used, otherwise tracing extraction will be performed. The default is 'false'. Note that buildless extraction will generally yield less accurate analysis results, and should only be used in cases where it is not possible to build the code (for example if it uses inaccessible dependencies).\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8775813Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8776302Z             "pattern" : "^(false|true)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8776804Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8777208Z           "buildless_dependency_dir" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8777918Z             "title" : "The path where buildless (standalone) extraction should keep dependencies.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8779116Z             "description" : "If set, the buildless (standalone) extractor will store dependencies in this directory.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8780039Z             "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8780472Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8780874Z           "minimize_dependency_jars" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8781601Z             "title" : "Whether to rewrite and minimize downloaded JAR dependencies (experimental).",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8782952Z             "description" : "If 'true', JAR dependencies downloaded during extraction will be rewritten to remove unneeded data, such as method bodies. The default is 'false'.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8784080Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8784513Z             "pattern" : "^(false|true)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8785126Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8785483Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8785841Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8786236Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8786596Z     "go" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8786974Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8787492Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/go",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8788111Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8788632Z           "extract_tests" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8789314Z             "title" : "Whether to include Go test files in the CodeQL database.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8790376Z             "description" : "A value indicating whether Go test files should be included in the CodeQL database. The default is 'false'.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8791331Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8791768Z             "pattern" : "^(false|true)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8792304Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8792772Z           "extract_vendor_dirs" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8793428Z             "title" : "Whether to include Go vendor directories in the CodeQL database.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8794583Z             "description" : "A value indicating whether Go vendor directories should be included in the CodeQL database. The default is 'false'.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8795540Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8796045Z             "pattern" : "^(false|true)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8796501Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8796840Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8797230Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8797584Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8797992Z     "actions" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8798418Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8799885Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/actions",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8800587Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8801040Z           "trap" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8801449Z             "title" : "TRAP options",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8802160Z             "description" : "Options about how the extractor handles TRAP files",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8802806Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8803365Z             "visibility" : 3,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8803825Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8804291Z               "cache" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8804766Z                 "title" : "TRAP cache options",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8805452Z                 "description" : "Options about how the extractor handles its TRAP cache",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8806106Z                 "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8806606Z                 "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8807051Z                   "dir" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8807551Z                     "title" : "TRAP cache directory",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8808189Z                     "description" : "The directory of the TRAP cache to use",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8808887Z                     "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8809376Z                   },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8809781Z                   "bound" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8810252Z                     "title" : "TRAP cache bound",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8810948Z                     "description" : "A soft limit (in MB) on the size of the TRAP cache",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8811598Z                     "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8812080Z                     "pattern" : "[0-9]+"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8812555Z                   },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8812977Z                   "write" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8813468Z                     "title" : "TRAP cache writeable",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8814225Z                     "description" : "Whether to write to the TRAP cache as well as reading it",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8814889Z                     "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8815439Z                     "pattern" : "(true|TRUE|false|FALSE)"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8815974Z                   }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8816363Z                 }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8816754Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8817136Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8817519Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8817898Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8818496Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8818970Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8819337Z     "javascript" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8819732Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8820321Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/javascript",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8821003Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8821467Z           "trap" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8821890Z             "title" : "TRAP options",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8822501Z             "description" : "Options about how the extractor handles TRAP files",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8823194Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8823633Z             "visibility" : 3,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8824094Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8824544Z               "cache" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8824992Z                 "title" : "TRAP cache options",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8826003Z                 "description" : "Options about how the extractor handles its TRAP cache",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8826694Z                 "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8827220Z                 "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8827680Z                   "dir" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8828138Z                     "title" : "TRAP cache directory",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8828889Z                     "description" : "The directory of the TRAP cache to use",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8829494Z                     "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8829920Z                   },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8830347Z                   "bound" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8830807Z                     "title" : "TRAP cache bound",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8831497Z                     "description" : "A soft limit (in MB) on the size of the TRAP cache",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8832164Z                     "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8832634Z                     "pattern" : "[0-9]+"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8833111Z                   },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8834018Z                   "write" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8834498Z                     "title" : "TRAP cache writeable",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8835241Z                     "description" : "Whether to write to the TRAP cache as well as reading it",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8835927Z                     "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8836449Z                     "pattern" : "(true|TRUE|false|FALSE)"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8836962Z                   }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8837378Z                 }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8837771Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8838137Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8838482Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8838981Z           "skip_types" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8839492Z             "title" : "Skip type extraction for TypeScript",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8840311Z             "description" : "Whether to skip the extraction of types in a TypeScript application",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8841039Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8841492Z             "pattern" : "^(false|true)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8841973Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8842324Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8842691Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8843078Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8843433Z     "swift" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8843806Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8844335Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/swift"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8844985Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8845344Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8845687Z     "ruby" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8846036Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8846583Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/ruby",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8847514Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8847984Z           "trap" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8848439Z             "title" : "Options pertaining to TRAP.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8849413Z             "description" : "Options pertaining to TRAP.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8849983Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8850460Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8850889Z               "compression" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8851574Z                 "title" : "Controls compression for the TRAP files written by the extractor.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8853394Z                 "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'gzip' (the default, to write gzip-compressed TRAP) 'zstd' (to write Zstandard-compressed TRAP) and 'none' (to write uncompressed TRAP).\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8854902Z                 "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8855472Z                 "pattern" : "^(none|gzip|zstd)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8856002Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8856433Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8856821Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8857178Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8857623Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8857986Z     ]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8858370Z   }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8858883Z }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.9055694Z Languages from configuration: rust
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.9121756Z Using Git version 2.54.0
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.9126189Z Using overlay database mode: none without caching.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.9130580Z Not performing diff-informed analysis because we are not analyzing a pull request.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.9135039Z [command]/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/codeql resolve languages --format=betterjson --extractor-options-verbosity=4 --extractor-include-aliases
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8623280Z {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8639822Z   "aliases" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8640685Z     "c" : "cpp",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8641415Z     "c++" : "cpp",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8642197Z     "c-c++" : "cpp",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8642823Z     "c-cpp" : "cpp",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8643463Z     "c#" : "csharp",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8644121Z     "java-kotlin" : "java",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8644823Z     "kotlin" : "java",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8645625Z     "javascript-typescript" : "javascript",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8646405Z     "typescript" : "javascript"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8647069Z   },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8647616Z   "extractors" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8648238Z     "csharp" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8648987Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8649779Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/csharp",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8650575Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8651178Z           "trap" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8651806Z             "title" : "Options pertaining to TRAP.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8652548Z             "description" : "Options pertaining to TRAP.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8653232Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8653806Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8654399Z               "compression" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8655191Z                 "title" : "Controls compression for the TRAP files written by the extractor.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8656897Z                 "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'brotli' (the default, to write brotli-compressed TRAP), 'gzip', and 'none' (to write uncompressed TRAP).\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8658504Z                 "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8659361Z                 "pattern" : "^(none|gzip|brotli)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8660057Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8660552Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8661035Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8661566Z           "buildless" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8662255Z             "title" : "DEPRECATED - Whether to use buildless (standalone) extraction.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8664160Z             "description" : "DEPRECATED: Use `--build-mode none` instead.\nA value indicating, which type of extraction the autobuilder should perform. If 'true', then the standalone extractor will be used, otherwise tracing extraction will be performed. The default is 'false'. Note that buildless extraction will generally yield less accurate analysis results, and should only be used in cases where it is not possible to build the code (for example if it uses inaccessible dependencies).\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8665902Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8666331Z             "pattern" : "^(false|true)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8667050Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8667413Z           "logging" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8667835Z             "title" : "Options pertaining to logging.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8668407Z             "description" : "Options pertaining to logging.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8669387Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8669815Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8670352Z               "verbosity" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8670938Z                 "title" : "Extractor logging verbosity level.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8672451Z                 "description" : "Controls the level of verbosity of the extractor. The supported levels are (in order of increasing verbosity):\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8674353Z                 "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8675152Z                 "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8675735Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8676035Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8676327Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8676597Z           "binlog" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8676903Z             "title" : "Binlog",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8677636Z             "description" : "[EXPERIMENTAL] The value is a path to the MsBuild binary log file that should be extracted. This option only works when `--build-mode none` is also specified.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8678381Z             "type" : "array"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8678699Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8679214Z           "buildless_dependency_dir" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8679750Z             "title" : "The path where buildless (standalone) extraction should keep dependencies.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8680444Z             "description" : "If set, the buildless (standalone) extractor will store dependencies in this directory.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8680982Z             "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8681325Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8681586Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8681856Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8682103Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8682345Z     "python" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8682666Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8683036Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/python",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8683485Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8683803Z           "logging" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8684131Z             "title" : "Options pertaining to logging.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8684574Z             "description" : "Options pertaining to logging.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8684947Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8685237Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8685578Z               "verbosity" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8685941Z                 "title" : "Python extractor logging verbosity level.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8687008Z                 "description" : "Controls the level of verbosity of the CodeQL Python extractor.\nThe supported levels are (in order of increasing verbosity):\n\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8688139Z                 "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8688662Z                 "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8689491Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8689759Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8690141Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8690455Z           "python_executable_name" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8690920Z             "title" : "Controls the name of the Python executable used by the Python extractor.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8692328Z             "description" : "The Python extractor uses platform-dependent heuristics to determine the name of the Python executable to use. Specifying a value for this option overrides the name of the Python executable used by the extractor. Accepted values are py, python and python3. Use this setting with caution, the Python extractor requires Python 3 to run.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8693690Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8694050Z             "pattern" : "^(py|python|python3)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8694397Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8694652Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8694919Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8695669Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8696003Z     "javascript" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8696321Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8696691Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/javascript",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8697158Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8697473Z           "trap" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8697793Z             "title" : "TRAP options",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8698228Z             "description" : "Options about how the extractor handles TRAP files",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8698855Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8699225Z             "visibility" : 3,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8699643Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8699985Z               "cache" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8700350Z                 "title" : "TRAP cache options",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8700930Z                 "description" : "Options about how the extractor handles its TRAP cache",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8701410Z                 "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8701751Z                 "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8702116Z                   "dir" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8702446Z                     "title" : "TRAP cache directory",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8702922Z                     "description" : "The directory of the TRAP cache to use",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8703352Z                     "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8703695Z                   },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8704022Z                   "bound" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8704359Z                     "title" : "TRAP cache bound",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8704848Z                     "description" : "A soft limit (in MB) on the size of the TRAP cache",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8705302Z                     "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8705632Z                     "pattern" : "[0-9]+"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8705997Z                   },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8706324Z                   "write" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8706677Z                     "title" : "TRAP cache writeable",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8707217Z                     "description" : "Whether to write to the TRAP cache as well as reading it",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8707686Z                     "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8708051Z                     "pattern" : "(true|TRUE|false|FALSE)"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8708425Z                   }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8708689Z                 }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8709194Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8709469Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8709733Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8710045Z           "skip_types" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8710407Z             "title" : "Skip type extraction for TypeScript",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8710952Z             "description" : "Whether to skip the extraction of types in a TypeScript application",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8711447Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8711777Z             "pattern" : "^(false|true)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8712163Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8712422Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8712676Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8712942Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8713208Z     "actions" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8713515Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8713884Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/actions",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8714331Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8714664Z           "trap" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8714953Z             "title" : "TRAP options",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8715365Z             "description" : "Options about how the extractor handles TRAP files",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8715825Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8716130Z             "visibility" : 3,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8716448Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8716841Z               "cache" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8717160Z                 "title" : "TRAP cache options",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8717632Z                 "description" : "Options about how the extractor handles its TRAP cache",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8718115Z                 "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8718454Z                 "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8718932Z                   "dir" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8719357Z                     "title" : "TRAP cache directory",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8719813Z                     "description" : "The directory of the TRAP cache to use",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8720217Z                     "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8720530Z                   },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8720822Z                   "bound" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8721167Z                     "title" : "TRAP cache bound",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8721687Z                     "description" : "A soft limit (in MB) on the size of the TRAP cache",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8722117Z                     "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8722425Z                     "pattern" : "[0-9]+"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8722777Z                   },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8723085Z                   "write" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8723619Z                     "title" : "TRAP cache writeable",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8724096Z                     "description" : "Whether to write to the TRAP cache as well as reading it",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8724552Z                     "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8724908Z                     "pattern" : "(true|TRUE|false|FALSE)"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8725273Z                   }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8725530Z                 }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8725828Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8726096Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8726353Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8726642Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8726891Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8727181Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8727432Z     "java" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8727679Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8728104Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/java",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8728558Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8729042Z           "exclude" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8729394Z             "title" : "A glob excluding files from analysis.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:12.8730168Z             "description" : "A glob indicating what files to exclude from the analysis. This accepts glob patterns that are supported by Java's 'getPathMatcher' implementation.\n",

@@ -1,0 +1,400 @@
+Analyze (rust)	UNKNOWN STEP	﻿2026-08-14T21:26:02.0943242Z Current runner version: '2.336.0'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0971320Z ##[group]Runner Image Provisioner
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0972130Z Hosted Compute Agent
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0972741Z Version: 20260729.566
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0973403Z Commit: cf7153fe6e25b664e8693c24944bf2b00355d109
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0974085Z Build Date: 2026-07-29T19:17:02Z
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0974753Z Worker ID: {5ec223f7-972d-48f6-bcd2-722c836900c1}
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0975417Z Azure Region: northcentralus
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0975973Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0977199Z ##[group]Operating System
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0977763Z Ubuntu
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0978258Z 24.04.4
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0978933Z LTS
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0979442Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0980011Z ##[group]Runner Image
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0980551Z Image: ubuntu-24.04
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0981066Z Version: 20260810.271.1
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0982260Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260810.271/images/ubuntu/Ubuntu2404-Readme.md
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0983678Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260810.271
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0984542Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0985844Z ##[group]GITHUB_TOKEN Permissions
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0988122Z Actions: read
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0989086Z Contents: read
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0989693Z Metadata: read
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0990200Z Packages: read
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0990712Z SecurityEvents: write
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0991258Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0993162Z Secret source: Actions
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.0994403Z Prepare workflow directory
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.1602337Z Prepare all required actions
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.1670035Z Getting action download info
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.3870595Z Download action repository 'actions/checkout@v6' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:02.5666957Z Download action repository 'github/codeql-action@v4' (SHA:ff2f1c621b7f889edc0d3c761ac2e6a3f8cdb0dd)
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2226518Z Complete job name: Analyze (rust)
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2841082Z ##[group]Run actions/checkout@v6
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2841956Z with:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2842478Z   repository: smutti/codenoesis
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2846663Z   token: ***
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2847195Z   ssh-strict: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2847761Z   ssh-user: git
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2848329Z   persist-credentials: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2849105Z   clean: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2849702Z   sparse-checkout-cone-mode: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2850332Z   fetch-depth: 1
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2850847Z   fetch-tags: false
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2851656Z   show-progress: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2852202Z   lfs: false
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2852762Z   submodules: false
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2853337Z   set-safe-directory: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2853948Z   allow-unsafe-pr-checkout: false
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2854754Z env:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2855271Z   CODE_SCANNING_REF: refs/heads/main
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2855936Z   CODE_SCANNING_BASE_BRANCH: 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2856754Z   CODE_SCANNING_IS_ANALYZING_DEFAULT_BRANCH: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2857533Z   CODE_SCANNING_IS_STEADY_STATE_DEFAULT_SETUP: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2867958Z   CODE_SCANNING_WORKFLOW_FILE: H4sIAAAAAAAA/+xVTW/jNhC9+1cM3ALZPci5FD0IWGAVR07cGnbWUrBNFwFBUyOZtUxq+eGsdpv/XlCUY6lx6vTjWJ+s4eObGc68GUG3GMJwLDP8MBsOlBWBN33/7RsU3KztaoQ7FGbERWWNHjGZIdGMCsFFQZQVxOHh8XEgRQhZLeiWs8EAxS4cAIwXlzFJxtF8Pp1fkWU8eTUx5o7zzwwXURKTi2U0H1+/lmlFNZKVooKtjzFOExLNo9ndr+7jMp5Et7P0b3rgmlBBy/qr+8gwp7Y0f+0xSePo8o4kaZTGT06TOL29CcEoi8/ufFwsf57MFh/JZDqLXxvXg1SbvJQPJOdlU6HBb3KlXVl8uOj+Avh6R94Ebxz3lhrFv4xKKgpLC3f3bQNVVujA1dmBciW3PyWL+ZsWrawQqN76lAEqVFuuNZdCez8AlJnmExTSrLUxKQwK0zdWlG1ogX2jRmYVN3XQpKxDeFDcYHvIs8DIDYqu1VFzYTGQIkClpAohp6X2h9ooarCo97HllJdBTrXpgqB9iT0IgAtW2gwPBoAA9u8U7jPsnAIw50eqOoTzJ+Ax3MryMgu2MsMQhBTYO/SPG8LZp6FdWWFsUFKD2gzvz14IparNWoqTkRyB/ceBKKvNyTCegf5VENpg1XZd0Pb3eI1sI60BhZXU3EhVt5RWu0ZrK3LOWtz73Y+DHkGCxlZQKfmlhlwqUFhwbRRH/dSCoT/u8XqZnjtlfi4D7+VcG6pM0IDf735o8Q/crA99daAnTGGGwnBaaq88jUyh0aOraXp9e0GW8dU0SZfTOCE3y8Uvd3sFut+hDMd13c9xKrhzw78i+I1wOhUuuDnk0I59/3Mj7MPMx0SuF0naRu+KM2qSH0lrmsHVfJG11KYbfI/gZrE8SVBJ9TLBOCLjeJlOJ9NxlManqBglDJXhOXft+iLp7XKWnKKyqtQHgn6Zm0msuQ42XGQ6BPe4wX6CP6uifrGMx2TTgR7MXXCGFYoMBasDRtmai8Jf8vIaodhxJcUWhYF37+DM1z9wVcLsrEv02aLr1BCGQ/gOLv0KbKw1aHuY0s1MznkRwu8dPbcrM9BOYWFP6FIVfQOAS6IM3IbQIXx65Sr0PUuaW/D4CPcdUrNWSE3zOGVDCfeDvixuUOVSbVtN+FWpuT4tjnbP/q+Pf6yPw67odPPe6C79EQAA//9GS/k2wQoAAA==
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.2879054Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.3888698Z Syncing repository: smutti/codenoesis
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.3891928Z ##[group]Getting Git version info
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.3893273Z Working directory is '/home/runner/work/codenoesis/codenoesis'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.3895182Z [command]/usr/bin/git version
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.3905697Z git version 2.54.0
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.3932467Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.3938539Z Temporarily overriding HOME='/home/runner/work/_temp/2ae16692-d0a8-42e3-b9ce-b1ea47641e7c' before making global git config changes
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.3940938Z Adding repository directory to the temporary git global config as a safe directory
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.3943381Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/codenoesis/codenoesis
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.3984291Z Deleting the contents of '/home/runner/work/codenoesis/codenoesis'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.3987040Z ##[group]Determining repository object format
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.3989050Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.3990549Z ##[group]Initializing the repository
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.3996722Z [command]/usr/bin/git init /home/runner/work/codenoesis/codenoesis
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4082705Z hint: Using 'master' as the name for the initial branch. This default branch name
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4084125Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4085326Z hint: to use in all of your new repositories, which will suppress this warning,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4086183Z hint: call:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4086704Z hint:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4087362Z hint: 	git config --global init.defaultBranch <name>
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4088345Z hint:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4089431Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4090734Z hint: 'development'. The just-created branch can be renamed via this command:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4091609Z hint:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4092173Z hint: 	git branch -m <name>
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4092775Z hint:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4093680Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4097028Z Initialized empty Git repository in /home/runner/work/codenoesis/codenoesis/.git/
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4107714Z [command]/usr/bin/git remote add origin https://github.com/smutti/codenoesis
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4147647Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4148602Z ##[group]Disabling automatic garbage collection
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4152326Z [command]/usr/bin/git config --local gc.auto 0
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4179292Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4180875Z ##[group]Setting up auth
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4181906Z Removing SSH command configuration
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4194189Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4220353Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4541058Z Removing HTTP extra header
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4548482Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4583592Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4775764Z Removing includeIf entries pointing to credentials config files
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4777417Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4811956Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.4996309Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-0cc6157e-c12c-441a-8ea9-a57f865227b5.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.5032418Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path /home/runner/work/_temp/git-credentials-0cc6157e-c12c-441a-8ea9-a57f865227b5.config
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.5062599Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-0cc6157e-c12c-441a-8ea9-a57f865227b5.config
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.5100684Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-0cc6157e-c12c-441a-8ea9-a57f865227b5.config
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.5129881Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-0cc6157e-c12c-441a-8ea9-a57f865227b5.config
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.5153950Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.5155217Z ##[group]Fetching the repository
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:03.5162506Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +9ecdc3acefd43495daf76b9f2ab69a7bbacff172:refs/remotes/origin/main
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.1459678Z From https://github.com/smutti/codenoesis
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.1462113Z  * [new ref]         9ecdc3acefd43495daf76b9f2ab69a7bbacff172 -> origin/main
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.1510380Z [command]/usr/bin/git branch --list --remote origin/main
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.1538922Z   origin/main
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.1548326Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.1572560Z 9ecdc3acefd43495daf76b9f2ab69a7bbacff172
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.1583515Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.1585388Z ##[group]Determining the checkout info
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.1593564Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.1595904Z [command]/usr/bin/git sparse-checkout disable
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.1630698Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.1662387Z ##[group]Checking out the ref
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.1665672Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.2521381Z Switched to a new branch 'main'
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.2524322Z branch 'main' set up to track 'origin/main'.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.2531316Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.2574022Z [command]/usr/bin/git log -1 --format=%H
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.2598321Z 9ecdc3acefd43495daf76b9f2ab69a7bbacff172
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.2978884Z ##[group]Run github/codeql-action/start-proxy@v4
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.2980376Z with:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.2981294Z   language: rust
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.2982292Z   registry_secrets: []
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.2991686Z   token: ***
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.2993651Z   matrix: {
+Analyze (rust)	UNKNOWN STEP	  "language": "rust",
+Analyze (rust)	UNKNOWN STEP	  "category": "/language:rust",
+Analyze (rust)	UNKNOWN STEP	  "build-mode": "none",
+Analyze (rust)	UNKNOWN STEP	  "runner": "[\"ubuntu-latest\"]"
+Analyze (rust)	UNKNOWN STEP	}
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.2996168Z env:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.2997124Z   CODE_SCANNING_REF: refs/heads/main
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.2998355Z   CODE_SCANNING_BASE_BRANCH: 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.2999767Z   CODE_SCANNING_IS_ANALYZING_DEFAULT_BRANCH: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.3001314Z   CODE_SCANNING_IS_STEADY_STATE_DEFAULT_SETUP: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.3025279Z   CODE_SCANNING_WORKFLOW_FILE: H4sIAAAAAAAA/+xVTW/jNhC9+1cM3ALZPci5FD0IWGAVR07cGnbWUrBNFwFBUyOZtUxq+eGsdpv/XlCUY6lx6vTjWJ+s4eObGc68GUG3GMJwLDP8MBsOlBWBN33/7RsU3KztaoQ7FGbERWWNHjGZIdGMCsFFQZQVxOHh8XEgRQhZLeiWs8EAxS4cAIwXlzFJxtF8Pp1fkWU8eTUx5o7zzwwXURKTi2U0H1+/lmlFNZKVooKtjzFOExLNo9ndr+7jMp5Et7P0b3rgmlBBy/qr+8gwp7Y0f+0xSePo8o4kaZTGT06TOL29CcEoi8/ufFwsf57MFh/JZDqLXxvXg1SbvJQPJOdlU6HBb3KlXVl8uOj+Avh6R94Ebxz3lhrFv4xKKgpLC3f3bQNVVujA1dmBciW3PyWL+ZsWrawQqN76lAEqVFuuNZdCez8AlJnmExTSrLUxKQwK0zdWlG1ogX2jRmYVN3XQpKxDeFDcYHvIs8DIDYqu1VFzYTGQIkClpAohp6X2h9ooarCo97HllJdBTrXpgqB9iT0IgAtW2gwPBoAA9u8U7jPsnAIw50eqOoTzJ+Ax3MryMgu2MsMQhBTYO/SPG8LZp6FdWWFsUFKD2gzvz14IparNWoqTkRyB/ceBKKvNyTCegf5VENpg1XZd0Pb3eI1sI60BhZXU3EhVt5RWu0ZrK3LOWtz73Y+DHkGCxlZQKfmlhlwqUFhwbRRH/dSCoT/u8XqZnjtlfi4D7+VcG6pM0IDf735o8Q/crA99daAnTGGGwnBaaq88jUyh0aOraXp9e0GW8dU0SZfTOCE3y8Uvd3sFut+hDMd13c9xKrhzw78i+I1wOhUuuDnk0I59/3Mj7MPMx0SuF0naRu+KM2qSH0lrmsHVfJG11KYbfI/gZrE8SVBJ9TLBOCLjeJlOJ9NxlManqBglDJXhOXft+iLp7XKWnKKyqtQHgn6Zm0msuQ42XGQ6BPe4wX6CP6uifrGMx2TTgR7MXXCGFYoMBasDRtmai8Jf8vIaodhxJcUWhYF37+DM1z9wVcLsrEv02aLr1BCGQ/gOLv0KbKw1aHuY0s1MznkRwu8dPbcrM9BOYWFP6FIVfQOAS6IM3IbQIXx65Sr0PUuaW/D4CPcdUrNWSE3zOGVDCfeDvixuUOVSbVtN+FWpuT4tjnbP/q+Pf6yPw67odPPe6C79EQAA//9GS/k2wQoAAA==
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.3048938Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5323413Z Job run UUID is 3f54b912-5e5d-4628-846d-1d7a27ebbce7.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5344342Z Using registry_secrets input.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5346382Z No credentials found, skipping proxy setup.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5728137Z ##[group]Run github/codeql-action/init@v4
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5729673Z with:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5730663Z   analysis-kinds: code-scanning
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5731828Z   languages: rust
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5732753Z   build-mode: none
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5733707Z   dependency-caching: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5735141Z   config: default-setup:
+Analyze (rust)	UNKNOWN STEP	  org:
+Analyze (rust)	UNKNOWN STEP	    model-packs: [  ]
+Analyze (rust)	UNKNOWN STEP	threat-models: [  ]
+Analyze (rust)	UNKNOWN STEP	
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5743718Z   token: ***
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5745517Z   matrix: {
+Analyze (rust)	UNKNOWN STEP	  "language": "rust",
+Analyze (rust)	UNKNOWN STEP	  "category": "/language:rust",
+Analyze (rust)	UNKNOWN STEP	  "build-mode": "none",
+Analyze (rust)	UNKNOWN STEP	  "runner": "[\"ubuntu-latest\"]"
+Analyze (rust)	UNKNOWN STEP	}
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5747571Z   debug: false
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5748655Z   check-run-id: 94901863459
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5749884Z env:
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5750789Z   CODE_SCANNING_REF: refs/heads/main
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5751936Z   CODE_SCANNING_BASE_BRANCH: 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5753198Z   CODE_SCANNING_IS_ANALYZING_DEFAULT_BRANCH: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5754676Z   CODE_SCANNING_IS_STEADY_STATE_DEFAULT_SETUP: true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5774456Z   CODE_SCANNING_WORKFLOW_FILE: H4sIAAAAAAAA/+xVTW/jNhC9+1cM3ALZPci5FD0IWGAVR07cGnbWUrBNFwFBUyOZtUxq+eGsdpv/XlCUY6lx6vTjWJ+s4eObGc68GUG3GMJwLDP8MBsOlBWBN33/7RsU3KztaoQ7FGbERWWNHjGZIdGMCsFFQZQVxOHh8XEgRQhZLeiWs8EAxS4cAIwXlzFJxtF8Pp1fkWU8eTUx5o7zzwwXURKTi2U0H1+/lmlFNZKVooKtjzFOExLNo9ndr+7jMp5Et7P0b3rgmlBBy/qr+8gwp7Y0f+0xSePo8o4kaZTGT06TOL29CcEoi8/ufFwsf57MFh/JZDqLXxvXg1SbvJQPJOdlU6HBb3KlXVl8uOj+Avh6R94Ebxz3lhrFv4xKKgpLC3f3bQNVVujA1dmBciW3PyWL+ZsWrawQqN76lAEqVFuuNZdCez8AlJnmExTSrLUxKQwK0zdWlG1ogX2jRmYVN3XQpKxDeFDcYHvIs8DIDYqu1VFzYTGQIkClpAohp6X2h9ooarCo97HllJdBTrXpgqB9iT0IgAtW2gwPBoAA9u8U7jPsnAIw50eqOoTzJ+Ax3MryMgu2MsMQhBTYO/SPG8LZp6FdWWFsUFKD2gzvz14IparNWoqTkRyB/ceBKKvNyTCegf5VENpg1XZd0Pb3eI1sI60BhZXU3EhVt5RWu0ZrK3LOWtz73Y+DHkGCxlZQKfmlhlwqUFhwbRRH/dSCoT/u8XqZnjtlfi4D7+VcG6pM0IDf735o8Q/crA99daAnTGGGwnBaaq88jUyh0aOraXp9e0GW8dU0SZfTOCE3y8Uvd3sFut+hDMd13c9xKrhzw78i+I1wOhUuuDnk0I59/3Mj7MPMx0SuF0naRu+KM2qSH0lrmsHVfJG11KYbfI/gZrE8SVBJ9TLBOCLjeJlOJ9NxlManqBglDJXhOXft+iLp7XKWnKKyqtQHgn6Zm0msuQ42XGQ6BPe4wX6CP6uifrGMx2TTgR7MXXCGFYoMBasDRtmai8Jf8vIaodhxJcUWhYF37+DM1z9wVcLsrEv02aLr1BCGQ/gOLv0KbKw1aHuY0s1MznkRwu8dPbcrM9BOYWFP6FIVfQOAS6IM3IbQIXx65Sr0PUuaW/D4CPcdUrNWSE3zOGVDCfeDvixuUOVSbVtN+FWpuT4tjnbP/q+Pf6yPw67odPPe6C79EQAA//9GS/k2wQoAAA==
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5795405Z   CODEQL_ACTION_JOB_RUN_UUID: 3f54b912-5e5d-4628-846d-1d7a27ebbce7
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5796969Z   CODEQL_PROXY_HOST: 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5798067Z   CODEQL_PROXY_PORT: 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5799396Z   CODEQL_PROXY_CA_CERTIFICATE: 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5800625Z   CODEQL_PROXY_URLS: 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.5801726Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:04.8078484Z Existing job run UUID is 3f54b912-5e5d-4628-846d-1d7a27ebbce7.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:05.6170421Z ##[group]Setup CodeQL tools
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:05.6232574Z [command]/usr/bin/tar --version
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:05.6269753Z tar (GNU tar) 1.35
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:05.6270484Z Copyright (C) 2023 Free Software Foundation, Inc.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:05.6271342Z License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:05.6272210Z This is free software: you are free to change and redistribute it.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:05.6273232Z There is NO WARRANTY, to the extent permitted by law.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:05.6273632Z 
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:05.6273844Z Written by John Gilmore and Jay Fenlason.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:05.6280146Z Found gnu tar version 1.35.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:05.6307236Z Did not find CodeQL tools version 2.26.3 in the toolcache.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:05.6310522Z Using CodeQL CLI version 2.26.3 sourced from https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.26.3/codeql-bundle-linux64.tar.zst .
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:05.6315426Z Downloading CodeQL tools from https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.26.3/codeql-bundle-linux64.tar.zst . This may take a while.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:05.6316548Z Streaming the extraction of the CodeQL bundle.
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:05.7586213Z [command]tar -x --zstd --ignore-zeros --warning=no-unknown-keyword --overwrite -f - -C /opt/hostedtoolcache/CodeQL/2.26.3/x64
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:09.9006728Z Finished downloading and extracting CodeQL bundle to /opt/hostedtoolcache/CodeQL/2.26.3/x64 (4.3s).
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:09.9008203Z Created toolcache marker file /opt/hostedtoolcache/CodeQL/2.26.3/x64.complete
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8658424Z {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8659519Z   "productName": "CodeQL",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8660118Z   "vendor": "GitHub",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8660669Z   "version": "2.26.3",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8661228Z   "sha": "7d097a43199effe04ecd9c6bd3ad9bb02a45b3d7",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8661895Z   "branches": [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8662380Z     "codeql-cli-2.26.3"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8662828Z   ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8663273Z   "copyright": "Copyright (C) 2019-2026 GitHub, Inc.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8664115Z   "unpackedLocation": "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8664891Z   "configFileLocation": "/home/runner/.config/codeql/config",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8665514Z   "configFileFound": false,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8666083Z   "overlayVersion": 4,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8666527Z   "features": {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8667053Z     "analysisSummaryV2Default": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8667568Z     "buildModeOption": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8668001Z     "bundleSupportsIncludeDiagnostics": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8668574Z     "bundleSupportsIncludeLogs": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8669287Z     "bundleSupportsOverlay": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8669962Z     "databaseInterpretResultsSupportsSarifRunProperty": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8670671Z     "featuresInVersionResult": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8671239Z     "indirectTracingSupportsStaticBinaries": false,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8671860Z     "informsAboutUnsupportedPathFilters": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8672427Z     "supportsPython312": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8672866Z     "mrvaPackCreate": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8673394Z     "threatModelOption": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8673893Z     "traceCommandUseBuildMode": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8674457Z     "v2ramSizing": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8674955Z     "mrvaPackCreateMultipleQueries": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8675516Z     "setsCodeqlRunnerEnvVar": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8676071Z     "sarifMergeRunsFromEqualCategory": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8676636Z     "forceOverwrite": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8677105Z     "generateSummarySymbolMap": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8677714Z     "pythonDefaultIsToNotExtractStdlib": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8678266Z     "queryServerRunQueries": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8678969Z     "queryServerTrimCacheWithMode": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8679634Z     "builtinExtractorsSpecifyDefaultQueries": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8680229Z     "bqrsDiffResultSets": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8680764Z     "bundleSupportsIncludeOption": true,
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8681350Z     "suppressesMissingFileBaselineWarning": true
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8681831Z   }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8682231Z }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8683174Z ##[endgroup]
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8683952Z ##[group]Load language configuration
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:10.8707665Z [command]/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/codeql resolve languages --format=betterjson --extractor-options-verbosity=4 --extractor-include-aliases --filter-to-languages-with-queries
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8493447Z {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8520295Z   "aliases" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8560189Z     "c" : "cpp",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8560703Z     "c++" : "cpp",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8610282Z     "c-c++" : "cpp",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8611117Z     "c-cpp" : "cpp",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8611764Z     "c#" : "csharp",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8612344Z     "java-kotlin" : "java",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8612857Z     "kotlin" : "java",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8613416Z     "javascript-typescript" : "javascript",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8614023Z     "typescript" : "javascript"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8614511Z   },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8615012Z   "extractors" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8615480Z     "rust" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8615927Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8616920Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/rust",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8617665Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8618306Z           "trap" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8619023Z             "title" : "Options pertaining to TRAP.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8619729Z             "description" : "Options pertaining to TRAP.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8620409Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8620931Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8621496Z               "compression" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8622221Z                 "title" : "Controls compression for the TRAP files written by the extractor.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8623983Z                 "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'gzip' (to write gzip-compressed TRAP) 'zstd' (to write Zstandard-compressed TRAP) and 'none' (the default, to write uncompressed TRAP).\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8625730Z                 "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8626350Z                 "pattern" : "^(none|gzip|zstd)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8626992Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8627475Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8627973Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8628491Z           "cargo_target_dir" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8629293Z             "title" : "Directory to use for cargo output files.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8631219Z             "description" : "This value is an optional path to use as `CARGO_TARGET_DIR` for the internal cargo commands the extractor uses. Pointing it to a persistent directory may reduce execution time of consecutive extractor runs. By default, a new scratch directory is used for each run.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8632966Z             "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8633455Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8633907Z           "cargo_target" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8634433Z             "title" : "Target architecture",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8635575Z             "description" : "Target architecture to use for analysis, analogous to `cargo --target`. By default the host architecture is used.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8636692Z             "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8637178Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8637623Z           "cargo_features" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8638173Z             "title" : "Cargo features to turn on",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8640046Z             "description" : "Comma-separated list of features to turn on. By default all features are enabled. If any features are specified, then only those features are enabled. The `default` feature must be explicitly specified if only default features are desired. Can be repeated.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8641769Z             "type" : "array"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8642243Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8642695Z           "cargo_cfg_overrides" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8643259Z             "title" : "Cargo cfg overrides",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8644236Z             "description" : "Comma-separated list of cfg settings to enable, or disable if prefixed with `-`. Can be repeated.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8645183Z             "type" : "array"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8645662Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8646073Z           "logging" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8647219Z             "title" : "Options pertaining to logging.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8647918Z             "description" : "Options pertaining to logging.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8648581Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8649269Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8649758Z               "verbosity" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8650390Z                 "title" : "Extractor logging verbosity level.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8652006Z                 "description" : "Controls the level of verbosity of the extractor. The supported levels are (in order of increasing verbosity):\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8653531Z                 "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8654539Z                 "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8655447Z               },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8655964Z               "flamegraph" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8656598Z                 "title" : "[Experimental] File path for write flame graph log",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8658105Z                 "description" : "Collect flame graph data using the `tracing-flame` crate. To render a flame graph or chart, run the `inferno-flamegraph` command. See also: https://crates.io/crates/tracing-flame\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8659683Z                 "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8660312Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8679767Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8680359Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8680879Z           "extract_dependencies_as_source" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8681542Z             "title" : "Extract dependencies as source code",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8682503Z             "description" : "Extract the full source code of dependencies instead of only extracting signatures.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8683459Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8684066Z             "pattern" : "^(false|true)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8684564Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8685016Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8685353Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8685713Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8686210Z     "csharp" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8686602Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8687180Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/csharp",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8688150Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8688571Z           "trap" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8689150Z             "title" : "Options pertaining to TRAP.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8689563Z             "description" : "Options pertaining to TRAP.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8689951Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8690265Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8690560Z               "compression" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8691074Z                 "title" : "Controls compression for the TRAP files written by the extractor.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8692073Z                 "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'brotli' (the default, to write brotli-compressed TRAP), 'gzip', and 'none' (to write uncompressed TRAP).\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8692947Z                 "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8693300Z                 "pattern" : "^(none|gzip|brotli)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8693639Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8694030Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8694295Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8694555Z           "buildless" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8695009Z             "title" : "DEPRECATED - Whether to use buildless (standalone) extraction.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8696838Z             "description" : "DEPRECATED: Use `--build-mode none` instead.\nA value indicating, which type of extraction the autobuilder should perform. If 'true', then the standalone extractor will be used, otherwise tracing extraction will be performed. The default is 'false'. Note that buildless extraction will generally yield less accurate analysis results, and should only be used in cases where it is not possible to build the code (for example if it uses inaccessible dependencies).\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8699003Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8699436Z             "pattern" : "^(false|true)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8699860Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8700255Z           "logging" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8700756Z             "title" : "Options pertaining to logging.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8701785Z             "description" : "Options pertaining to logging.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8702205Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8702526Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8702853Z               "verbosity" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8703207Z                 "title" : "Extractor logging verbosity level.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8704392Z                 "description" : "Controls the level of verbosity of the extractor. The supported levels are (in order of increasing verbosity):\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8705418Z                 "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8705990Z                 "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8706560Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8706849Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8707153Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8707433Z           "binlog" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8707720Z             "title" : "Binlog",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8708428Z             "description" : "[EXPERIMENTAL] The value is a path to the MsBuild binary log file that should be extracted. This option only works when `--build-mode none` is also specified.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8709553Z             "type" : "array"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8712785Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8713109Z           "buildless_dependency_dir" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8713655Z             "title" : "The path where buildless (standalone) extraction should keep dependencies.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8714327Z             "description" : "If set, the buildless (standalone) extractor will store dependencies in this directory.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8714892Z             "type" : "string"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8715217Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8715474Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8715733Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8715985Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8716271Z     "python" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8716559Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8716912Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/python",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8717381Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8717684Z           "logging" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8718011Z             "title" : "Options pertaining to logging.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8718453Z             "description" : "Options pertaining to logging.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8719115Z             "type" : "object",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8719446Z             "properties" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8719753Z               "verbosity" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8720100Z                 "title" : "Python extractor logging verbosity level.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8721197Z                 "description" : "Controls the level of verbosity of the CodeQL Python extractor.\nThe supported levels are (in order of increasing verbosity):\n\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8722216Z                 "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8722908Z                 "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8723627Z               }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8723954Z             }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8724296Z           },
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8724697Z           "python_executable_name" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8725320Z             "title" : "Controls the name of the Python executable used by the Python extractor.",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8727489Z             "description" : "The Python extractor uses platform-dependent heuristics to determine the name of the Python executable to use. Specifying a value for this option overrides the name of the Python executable used by the extractor. Accepted values are py, python and python3. Use this setting with caution, the Python extractor requires Python 3 to run.\n",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8729426Z             "type" : "string",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8729866Z             "pattern" : "^(py|python|python3)$"
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8730381Z           }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8730704Z         }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8730985Z       }
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8731237Z     ],
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8731481Z     "cpp" : [
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8731812Z       {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8732175Z         "extractor_root" : "/opt/hostedtoolcache/CodeQL/2.26.3/x64/codeql/cpp",
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8732711Z         "extractor_options" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8733048Z           "trap" : {
+Analyze (rust)	UNKNOWN STEP	2026-08-14T21:26:11.8733382Z             "title" : "TRAP options",

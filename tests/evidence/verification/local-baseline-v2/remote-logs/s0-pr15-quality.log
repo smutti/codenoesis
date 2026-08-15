@@ -1,0 +1,530 @@
+Rust quality gate	UNKNOWN STEP	﻿2026-07-22T20:30:33.0392446Z Current runner version: '2.335.1'
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0417483Z ##[group]Runner Image Provisioner
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0418423Z Hosted Compute Agent
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0419424Z Version: 20260707.563
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0420152Z Commit: 02667638d2b423fbc733a8e32a88b44996a3ba6e
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0420917Z Build Date: 2026-07-07T19:33:50Z
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0421665Z Worker ID: {04aa88e7-f3b0-4e2c-89dc-dac70e24efb5}
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0422397Z Azure Region: eastus
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0422976Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0424649Z ##[group]Operating System
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0425324Z Ubuntu
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0425912Z 24.04.4
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0426445Z LTS
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0426971Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0427618Z ##[group]Runner Image
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0428276Z Image: ubuntu-24.04
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0429024Z Version: 20260714.240.1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0430377Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260714.240/images/ubuntu/Ubuntu2404-Readme.md
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0432514Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260714.240
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0433526Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0434750Z ##[group]GITHUB_TOKEN Permissions
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0436911Z Contents: read
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0437552Z Metadata: read
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0438219Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0441180Z Secret source: Actions
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0442036Z Prepare workflow directory
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0837164Z Prepare all required actions
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.0874992Z Getting action download info
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.3190600Z Download action repository 'actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0' (SHA:9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.5432390Z Complete job name: Rust quality gate
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6253660Z ##[group]Run actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6254753Z with:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6255273Z   repository: smutti/codenoesis
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6259516Z   token: ***
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6259975Z   ssh-strict: true
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6260428Z   ssh-user: git
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6260889Z   persist-credentials: true
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6261386Z   clean: true
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6261843Z   sparse-checkout-cone-mode: true
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6262381Z   fetch-depth: 1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6262820Z   fetch-tags: false
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6263275Z   show-progress: true
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6263730Z   lfs: false
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6264147Z   submodules: false
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6264598Z   set-safe-directory: true
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6265109Z   allow-unsafe-pr-checkout: false
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6265920Z env:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6266350Z   CARGO_INCREMENTAL: 0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6266829Z   CARGO_TERM_COLOR: never
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6267337Z   RUST_BACKTRACE: 1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.6267783Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7260627Z Syncing repository: smutti/codenoesis
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7263196Z ##[group]Getting Git version info
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7264414Z Working directory is '/home/runner/work/codenoesis/codenoesis'
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7265582Z [command]/usr/bin/git version
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7360277Z git version 2.54.0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7389061Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7402604Z Temporarily overriding HOME='/home/runner/work/_temp/1d30475d-9f87-494a-85d2-1c3162316f57' before making global git config changes
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7404343Z Adding repository directory to the temporary git global config as a safe directory
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7410483Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/codenoesis/codenoesis
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7465251Z Deleting the contents of '/home/runner/work/codenoesis/codenoesis'
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7470002Z ##[group]Determining repository object format
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7471619Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7472796Z ##[group]Initializing the repository
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7476798Z [command]/usr/bin/git init /home/runner/work/codenoesis/codenoesis
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7613601Z hint: Using 'master' as the name for the initial branch. This default branch name
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7616477Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7619043Z hint: to use in all of your new repositories, which will suppress this warning,
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7620676Z hint: call:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7621493Z hint:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7622476Z hint: 	git config --global init.defaultBranch <name>
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7623257Z hint:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7624340Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7625520Z hint: 'development'. The just-created branch can be renamed via this command:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7626516Z hint:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7626976Z hint: 	git branch -m <name>
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7627508Z hint:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7628175Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7630075Z Initialized empty Git repository in /home/runner/work/codenoesis/codenoesis/.git/
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7633096Z [command]/usr/bin/git remote add origin https://github.com/smutti/codenoesis
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7691600Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7693314Z ##[group]Disabling automatic garbage collection
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7696198Z [command]/usr/bin/git config --local gc.auto 0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7734715Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7735851Z ##[group]Setting up auth
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7736664Z Removing SSH command configuration
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7742277Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.7785918Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.8184765Z Removing HTTP extra header
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.8191472Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.8227629Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.8444017Z Removing includeIf entries pointing to credentials config files
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.8449588Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.8485376Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.8708961Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-54c4cef5-0005-4540-a3b4-55fa2c29e97b.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.8747730Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path /home/runner/work/_temp/git-credentials-54c4cef5-0005-4540-a3b4-55fa2c29e97b.config
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.8780939Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-54c4cef5-0005-4540-a3b4-55fa2c29e97b.config
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.8818227Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-54c4cef5-0005-4540-a3b4-55fa2c29e97b.config
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.8852327Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-54c4cef5-0005-4540-a3b4-55fa2c29e97b.config
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.8950810Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.8952381Z ##[group]Fetching the repository
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:33.8954530Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +034bfa9951a0cd55d6d9c1750f6ae7f0ab2a824f:refs/remotes/pull/15/merge
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1048740Z From https://github.com/smutti/codenoesis
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1050469Z  * [new ref]         034bfa9951a0cd55d6d9c1750f6ae7f0ab2a824f -> pull/15/merge
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1091809Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1093527Z ##[group]Determining the checkout info
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1095189Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1097926Z [command]/usr/bin/git sparse-checkout disable
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1151974Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1190528Z ##[group]Checking out the ref
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1194466Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/15/merge
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1321031Z Note: switching to 'refs/remotes/pull/15/merge'.
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1322710Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1324044Z You are in 'detached HEAD' state. You can look around, make experimental
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1326721Z changes and commit them, and you can discard any commits you make in this
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1329799Z state without impacting any branches by switching back to a branch.
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1331266Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1332237Z If you want to create a new branch to retain commits you create, you may
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1334420Z do so (now or later) by using -c with the switch command. Example:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1335841Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1336353Z   git switch -c <new-branch-name>
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1337208Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1337691Z Or undo this operation with:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1338447Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1339206Z   git switch -
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1339790Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1340774Z Turn off this advice by setting config variable advice.detachedHead to false
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1342366Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1344103Z HEAD is now at 034bfa9 Merge b80c08935c32293f1315ae6dd1b4f1a7f52cd6c5 into f9500c6d9b285f9e3a9dd65f2d43efbe65717a05
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1349010Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1384166Z [command]/usr/bin/git log -1 --format=%H
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1413571Z 034bfa9951a0cd55d6d9c1750f6ae7f0ab2a824f
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1657999Z ##[group]Run rustc --version --verbose
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1659640Z ^[[36;1mrustc --version --verbose^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1660920Z ^[[36;1mcargo --version --verbose^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1746140Z shell: /usr/bin/bash -e {0}
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1747291Z env:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1748142Z   CARGO_INCREMENTAL: 0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1749518Z   CARGO_TERM_COLOR: never
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1750564Z   RUST_BACKTRACE: 1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.1751490Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.2400581Z info: syncing channel updates for 1.97.1-x86_64-unknown-linux-gnu
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.3585561Z info: latest update on 2026-07-16 for version 1.97.1 (8bab26f4f 2026-07-14)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:34.3604992Z info: downloading 5 components
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.5587254Z rustc 1.97.1 (8bab26f4f 2026-07-14)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.5588094Z binary: rustc
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.5589149Z commit-hash: 8bab26f4f68e0e26f0bb7960be334d5b520ea452
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.5590154Z commit-date: 2026-07-14
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.5591017Z host: x86_64-unknown-linux-gnu
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.5591782Z release: 1.97.1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.5592986Z LLVM version: 22.1.6
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.5947802Z cargo 1.97.1 (c980f4866 2026-06-30)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.5948352Z release: 1.97.1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.5949221Z commit-hash: c980f4866141969fab6254a680546a277789d6f0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.5949807Z commit-date: 2026-06-30
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.5950276Z host: x86_64-unknown-linux-gnu
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.5951609Z libgit2: 1.9.2 (sys:0.20.4 vendored)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.5952569Z libcurl: 8.20.0-DEV (sys:0.4.88+curl-8.20.0 vendored ssl:OpenSSL/3.6.2)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.5953735Z ssl: OpenSSL 3.6.2 7 Apr 2026
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.5954610Z os: Ubuntu 24.4.0 (noble) [64-bit]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.6078210Z ##[group]Run cargo metadata --locked --no-deps --format-version 1 > /dev/null
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.6079268Z ^[[36;1mcargo metadata --locked --no-deps --format-version 1 > /dev/null^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.6141660Z shell: /usr/bin/bash -e {0}
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.6141975Z env:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.6142223Z   CARGO_INCREMENTAL: 0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.6142514Z   CARGO_TERM_COLOR: never
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.6143017Z   RUST_BACKTRACE: 1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.6143290Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.6612653Z ##[group]Run cargo fmt --all --check
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.6613085Z ^[[36;1mcargo fmt --all --check^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.6678383Z shell: /usr/bin/bash -e {0}
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.6678889Z env:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.6679145Z   CARGO_INCREMENTAL: 0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.6679466Z   CARGO_TERM_COLOR: never
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.6679803Z   RUST_BACKTRACE: 1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.6680080Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7632797Z ##[group]Run set -euo pipefail
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7633214Z ^[[36;1mset -euo pipefail^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7633572Z ^[[36;1marchive="$RUNNER_TEMP/actionlint.tar.gz"^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7633999Z ^[[36;1mdestination="$RUNNER_TEMP/actionlint-bin"^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7634421Z ^[[36;1mcurl --fail --silent --show-error --location \^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7634822Z ^[[36;1m  --output "$archive" \^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7635552Z ^[[36;1m  "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7636386Z ^[[36;1mprintf '%s  %s\n' "$ACTIONLINT_SHA256" "$archive" | sha256sum -c -^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7636831Z ^[[36;1mmkdir -p "$destination"^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7637207Z ^[[36;1mtar -xzf "$archive" -C "$destination" actionlint^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7637625Z ^[[36;1mecho "$destination" >> "$GITHUB_PATH"^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7703403Z shell: /usr/bin/bash -e {0}
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7703757Z env:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7704012Z   CARGO_INCREMENTAL: 0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7704301Z   CARGO_TERM_COLOR: never
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7704622Z   RUST_BACKTRACE: 1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7704908Z   ACTIONLINT_VERSION: 1.7.12
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7705379Z   ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.7705891Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.8640571Z /home/runner/work/_temp/actionlint.tar.gz: OK
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9198095Z ##[group]Run set -euo pipefail
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9198794Z ^[[36;1mset -euo pipefail^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9199172Z ^[[36;1mshellcheck --version^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9199445Z ^[[36;1mactionlint -no-color^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9199828Z ^[[36;1mruby -e 'require "yaml"; ARGV.each { |path| YAML.load_file(path) }' \^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9200298Z ^[[36;1m  .github/ISSUE_TEMPLATE/agent-task.yml \^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9200638Z ^[[36;1m  .github/ISSUE_TEMPLATE/config.yml \^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9200952Z ^[[36;1m  .github/dependabot.yml^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9201333Z ^[[36;1mpython3 .github/codex/scripts/codex_policy.py validate-policy \^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9201751Z ^[[36;1m  --policy .github/codex/policy.json^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9202138Z ^[[36;1mpython3 -m json.tool .github/codex/policy.json >/dev/null^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9202612Z ^[[36;1mpython3 -m json.tool .github/codex/policy.schema.json >/dev/null^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9203260Z ^[[36;1mpython3 -m json.tool .github/codex/schemas/proposal-output.schema.json >/dev/null^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9203879Z ^[[36;1mpython3 -m json.tool .github/codex/schemas/review-output.schema.json >/dev/null^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9270791Z shell: /usr/bin/bash -e {0}
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9271063Z env:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9271266Z   CARGO_INCREMENTAL: 0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9271502Z   CARGO_TERM_COLOR: never
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9271740Z   RUST_BACKTRACE: 1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:42.9271958Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:43.5056231Z ShellCheck - shell script analysis tool
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:43.5056580Z version: 0.9.0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:43.5056829Z license: GNU General Public License, version 3
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:43.5057173Z website: https://www.shellcheck.net
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:44.6820625Z {"approved_requirement_count":9,"hard_protected_pattern_count":13,"status":"valid","version":1}
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:44.8179365Z ##[group]Run cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:44.8180080Z ^[[36;1mcargo clippy --workspace --all-targets --all-features --locked -- -D warnings^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:44.8238371Z shell: /usr/bin/bash -e {0}
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:44.8238768Z env:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:44.8238971Z   CARGO_INCREMENTAL: 0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:44.8239213Z   CARGO_TERM_COLOR: never
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:44.8239457Z   RUST_BACKTRACE: 1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:44.8239670Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:44.9036830Z     Updating crates.io index
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0010000Z  Downloading crates ...
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0430680Z   Downloaded arrayref v0.3.9
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0450329Z   Downloaded block-buffer v0.10.4
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0467189Z   Downloaded generic-array v0.14.7
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0480162Z   Downloaded adler2 v2.0.1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0497722Z   Downloaded cpufeatures v0.3.0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0518096Z   Downloaded digest v0.10.7
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0539640Z   Downloaded shlex v2.0.1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0559812Z   Downloaded arrayvec v0.7.8
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0583484Z   Downloaded blake3 v1.8.5
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0672755Z   Downloaded zmij v1.0.23
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0690784Z   Downloaded crc32fast v1.5.0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0710101Z   Downloaded sha1 v0.10.7
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0725626Z   Downloaded miniz_oxide v0.8.9
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0751208Z   Downloaded serde_json v1.0.151
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0825402Z   Downloaded version_check v0.9.5
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0838180Z   Downloaded simd-adler32 v0.3.10
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0860891Z   Downloaded sha2 v0.10.9
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0886484Z   Downloaded cc v1.3.0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0916333Z   Downloaded itoa v1.0.18
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0930923Z   Downloaded seccompiler v0.5.0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0967603Z   Downloaded constant_time_eq v0.4.2
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.0988450Z   Downloaded cpufeatures v0.2.17
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.1002366Z   Downloaded cfg-if v1.0.4
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.1016128Z   Downloaded crypto-common v0.1.7
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.1025546Z   Downloaded find-msvc-tools v0.1.9
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.1041739Z   Downloaded serde_core v1.0.229
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.1069146Z   Downloaded memchr v2.8.3
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.1125995Z   Downloaded flate2 v1.1.9
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.1178758Z   Downloaded libc v0.2.189
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.7926578Z   Downloaded typenum v1.20.1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.8225010Z     Checking cfg-if v1.0.4
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.8232690Z    Compiling version_check v0.9.5
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.8233444Z     Checking typenum v1.20.1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.8246277Z    Compiling find-msvc-tools v0.1.9
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.8416278Z     Checking codenoesis-domain v0.1.0 (/home/runner/work/codenoesis/codenoesis/crates/codenoesis-domain)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.9326676Z    Compiling shlex v2.0.1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:45.9799557Z    Compiling zmij v1.0.23
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:46.0379653Z    Compiling generic-array v0.14.7
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:46.0489577Z    Compiling cc v1.3.0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:46.1250417Z    Compiling serde_core v1.0.229
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:46.1649806Z    Compiling serde_json v1.0.151
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:46.4955171Z     Checking constant_time_eq v0.4.2
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:46.5479769Z     Checking memchr v2.8.3
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:46.9269763Z     Checking arrayvec v0.7.8
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.0057547Z     Checking crypto-common v0.1.7
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.0559955Z     Checking block-buffer v0.10.4
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.0575226Z     Checking cpufeatures v0.3.0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.0811406Z     Checking arrayref v0.3.9
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.1026348Z    Compiling crc32fast v1.5.0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.1235003Z     Checking itoa v1.0.18
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.2085217Z     Checking digest v0.10.7
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.2520041Z     Checking codenoesis-ports v0.1.0 (/home/runner/work/codenoesis/codenoesis/crates/codenoesis-ports)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.2752156Z     Checking cpufeatures v0.2.17
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.2994863Z     Checking adler2 v2.0.1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.3229714Z     Checking simd-adler32 v0.3.10
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.3767620Z    Compiling blake3 v1.8.5
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.4111482Z     Checking miniz_oxide v0.8.9
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.4142836Z    Compiling libc v0.2.189
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.6735260Z     Checking sha1 v0.10.7
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.7065562Z     Checking flate2 v1.1.9
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:47.9568413Z     Checking codenoesis-repository v0.1.0 (/home/runner/work/codenoesis/codenoesis/crates/codenoesis-repository)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:48.0769476Z     Checking sha2 v0.10.9
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:48.1770009Z     Checking xtask v0.0.0 (/home/runner/work/codenoesis/codenoesis/xtask)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:48.5504293Z     Checking seccompiler v0.5.0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:48.6691552Z     Checking codenoesis-contracts v0.1.0 (/home/runner/work/codenoesis/codenoesis/crates/codenoesis-contracts)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:48.7252384Z     Checking codenoesis-application v0.1.0 (/home/runner/work/codenoesis/codenoesis/crates/codenoesis-application)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:48.7654583Z     Checking noesis v0.1.0 (/home/runner/work/codenoesis/codenoesis/crates/noesis)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:48.9911570Z     Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.11s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.0076568Z ##[group]Run cargo test --workspace --all-targets --all-features --locked
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.0077138Z ^[[36;1mcargo test --workspace --all-targets --all-features --locked^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.0140459Z shell: /usr/bin/bash -e {0}
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.0140731Z env:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.0140938Z   CARGO_INCREMENTAL: 0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.0141188Z   CARGO_TERM_COLOR: never
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.0141434Z   RUST_BACKTRACE: 1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.0141654Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.1035005Z    Compiling cfg-if v1.0.4
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.1035714Z    Compiling typenum v1.20.1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.1037125Z    Compiling codenoesis-domain v0.1.0 (/home/runner/work/codenoesis/codenoesis/crates/codenoesis-domain)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.1066572Z    Compiling serde_core v1.0.229
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.1323744Z    Compiling zmij v1.0.23
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.2170467Z    Compiling itoa v1.0.18
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.3502069Z    Compiling memchr v2.8.3
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.4197640Z    Compiling arrayref v0.3.9
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.4460295Z    Compiling cpufeatures v0.3.0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.4800234Z    Compiling constant_time_eq v0.4.2
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.5989602Z    Compiling arrayvec v0.7.8
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.7319413Z    Compiling blake3 v1.8.5
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:49.8497261Z    Compiling generic-array v0.14.7
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:50.1063185Z    Compiling codenoesis-ports v0.1.0 (/home/runner/work/codenoesis/codenoesis/crates/codenoesis-ports)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:50.1347042Z    Compiling adler2 v2.0.1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:50.1959804Z    Compiling simd-adler32 v0.3.10
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:50.3447965Z    Compiling cpufeatures v0.2.17
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:50.3736001Z    Compiling crypto-common v0.1.7
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:50.3790702Z    Compiling block-buffer v0.10.4
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:50.4349744Z    Compiling digest v0.10.7
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:50.4378842Z    Compiling miniz_oxide v0.8.9
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:50.5729624Z    Compiling crc32fast v1.5.0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:50.6850828Z    Compiling sha1 v0.10.7
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:50.8279740Z    Compiling flate2 v1.1.9
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:50.8540132Z    Compiling libc v0.2.189
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:51.1504974Z    Compiling codenoesis-repository v0.1.0 (/home/runner/work/codenoesis/codenoesis/crates/codenoesis-repository)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:51.2129866Z    Compiling sha2 v0.10.9
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:51.4846740Z    Compiling serde_json v1.0.151
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:51.4900668Z    Compiling xtask v0.0.0 (/home/runner/work/codenoesis/codenoesis/xtask)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:51.8263610Z    Compiling seccompiler v0.5.0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:52.1811110Z    Compiling codenoesis-contracts v0.1.0 (/home/runner/work/codenoesis/codenoesis/crates/codenoesis-contracts)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:52.2602148Z    Compiling codenoesis-application v0.1.0 (/home/runner/work/codenoesis/codenoesis/crates/codenoesis-application)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:52.3119997Z    Compiling noesis v0.1.0 (/home/runner/work/codenoesis/codenoesis/crates/noesis)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.2891296Z     Finished `test` profile [unoptimized + debuginfo] target(s) in 4.24s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.2913916Z      Running unittests src/lib.rs (target/debug/deps/codenoesis_application-044d2ca0b586f1e3)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.2926237Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.2926411Z running 0 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.2926925Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.2927348Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.2928004Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.2929058Z      Running unittests src/lib.rs (target/debug/deps/codenoesis_contracts-eed8b4eb8a3fc7cc)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.2937969Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.2938133Z running 3 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.2953946Z test tests::conf_dr_art_001_repository_snapshot_v1 ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3027196Z test tests::pt_nfr_det_001_permutation_and_schedule_invariant ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3159149Z test tests::pt_dr_art_002_volatile_envelope_preserves_semantic_hash ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3160005Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3160608Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3161221Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3161901Z      Running unittests src/lib.rs (target/debug/deps/codenoesis_domain-205a2f1f18eb4b6c)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3171440Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3171624Z running 0 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3171905Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3172412Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3173019Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3173919Z      Running unittests src/lib.rs (target/debug/deps/codenoesis_ports-c78bea0ead5cdbbd)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3193598Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3193754Z running 0 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3194019Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3194866Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3195459Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3195895Z      Running unittests src/lib.rs (target/debug/deps/codenoesis_repository-22be58b0182e2748)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3196387Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3196554Z running 0 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3196782Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3197101Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3197478Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3197858Z      Running unittests src/lib.rs (target/debug/deps/noesis-747384bc5445deb2)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3206307Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3207101Z running 0 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3207325Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3207740Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3208282Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3208849Z      Running unittests src/main.rs (target/debug/deps/noesis-ebebf8753ae7231c)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3217739Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3217924Z running 0 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3218172Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3218853Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3219490Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3220844Z      Running tests/e2e_fr_acq_001_immutable_commit.rs (target/debug/deps/e2e_fr_acq_001_immutable_commit-7e2d7b2c6003195c)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3230552Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3230745Z running 10 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3279640Z test e2e_fr_acq_001_non_git_returns_typed_error ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3471897Z test e2e_fr_acq_001_revision_not_commit_returns_typed_error ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3482054Z test e2e_fr_acq_001_inconsistent_object_returns_typed_error ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3489902Z test e2e_fr_acq_001_immutable_commit ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3490857Z test e2e_fr_acq_001_missing_object_returns_typed_error ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3689831Z test e2e_fr_acq_001_revision_not_found_returns_typed_error ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3694060Z test e2e_fr_acq_001_unexpected_failure_is_strict_internal ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3709690Z test e2e_fr_cli_003_invalid_identity_returns_strict_error ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3710173Z test e2e_fr_cli_003_invalid_revision_returns_strict_error ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3871081Z test it_fr_acq_001_ref_move_after_binding_keeps_original_commit ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3871415Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3871715Z test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3872117Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3874436Z      Running tests/s0_conformance.rs (target/debug/deps/s0_conformance-f43b8fbcae3af0f7)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3883797Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3883961Z running 4 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.3949633Z test conf_nfr_tst_001_requires_fixture_oracle_evidence_links ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.4200097Z test conf_nfr_mnt_001_dependency_rules ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.6236962Z test pt_nfr_tst_002_replays_are_parallel_and_order_independent ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8513833Z test sec_nfr_sec_005_scan_launches_no_child_and_opens_no_network ... ok
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8514377Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8514689Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.46s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8515168Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8519032Z      Running unittests src/lib.rs (target/debug/deps/xtask-7e9319f7d599ae1a)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8527345Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8527794Z running 0 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8528058Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8528809Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8529357Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8530312Z      Running unittests src/main.rs (target/debug/deps/xtask-477fcdb00f85d0f7)
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8539400Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8539653Z running 0 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8539903Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8540366Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8540985Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8598931Z ##[group]Run cargo test --workspace --doc --all-features --locked
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8599493Z ^[[36;1mcargo test --workspace --doc --all-features --locked^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8656675Z shell: /usr/bin/bash -e {0}
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8656950Z env:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8657162Z   CARGO_INCREMENTAL: 0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8657411Z   CARGO_TERM_COLOR: never
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8657660Z   RUST_BACKTRACE: 1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.8657884Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9269804Z     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.02s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9280297Z    Doc-tests codenoesis_application
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9429986Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9431358Z running 0 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9431701Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9432342Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9433236Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9441927Z    Doc-tests codenoesis_contracts
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9621667Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9622036Z running 0 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9622225Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9622514Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9622884Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9632896Z    Doc-tests codenoesis_domain
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9792012Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9792250Z running 0 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9792432Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9792717Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9793086Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9802306Z    Doc-tests codenoesis_ports
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9922228Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9922482Z running 0 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9922689Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9922988Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9923373Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:53.9932056Z    Doc-tests codenoesis_repository
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0094626Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0094848Z running 0 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0095062Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0095396Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0095765Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0104420Z    Doc-tests noesis
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0272996Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0273303Z running 0 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0273591Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0274117Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0274835Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0284546Z    Doc-tests xtask
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0400417Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0400657Z running 0 tests
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0400911Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0401365Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0402258Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0457577Z ##[group]Run python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0458123Z ^[[36;1mpython3 -m unittest discover -s scripts/tests -p 'test_*.py'^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0515497Z shell: /usr/bin/bash -e {0}
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0515769Z env:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0515975Z   CARGO_INCREMENTAL: 0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0516216Z   CARGO_TERM_COLOR: never
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0516454Z   RUST_BACKTRACE: 1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.0516667Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.5941774Z .............................................................................
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.5942521Z ----------------------------------------------------------------------
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.5942961Z Ran 77 tests in 0.382s
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.5943122Z 
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.5943199Z OK
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.6082433Z ##[group]Run python3 scripts/validate_benchmark_assets.py
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.6082905Z ^[[36;1mpython3 scripts/validate_benchmark_assets.py^[[0m
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.6141228Z shell: /usr/bin/bash -e {0}
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.6141502Z env:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.6141706Z   CARGO_INCREMENTAL: 0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.6141948Z   CARGO_TERM_COLOR: never
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.6142219Z   RUST_BACKTRACE: 1
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.6142445Z ##[endgroup]
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.6504938Z benchmark assets valid: status=scaffold, suites=0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.6653550Z Post job cleanup.
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.7478944Z [command]/usr/bin/git version
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.7535870Z git version 2.54.0
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.7578971Z Temporarily overriding HOME='/home/runner/work/_temp/f21769e5-a444-4b71-9899-d87aa6cf4646' before making global git config changes
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.7580400Z Adding repository directory to the temporary git global config as a safe directory
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.7585521Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/codenoesis/codenoesis
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.7620621Z Removing SSH command configuration
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.7627267Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.7664703Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.7918968Z Removing HTTP extra header
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.7919948Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.7956941Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8224993Z Removing includeIf entries pointing to credentials config files
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8235833Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8271304Z includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8272186Z includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8272907Z includeif.gitdir:/github/workspace/.git.path
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8273457Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8287020Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8315655Z /home/runner/work/_temp/git-credentials-54c4cef5-0005-4540-a3b4-55fa2c29e97b.config
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8327635Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git.path /home/runner/work/_temp/git-credentials-54c4cef5-0005-4540-a3b4-55fa2c29e97b.config
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8371798Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8402625Z /home/runner/work/_temp/git-credentials-54c4cef5-0005-4540-a3b4-55fa2c29e97b.config
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8414181Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/codenoesis/codenoesis/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-54c4cef5-0005-4540-a3b4-55fa2c29e97b.config
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8494884Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8525460Z /github/runner_temp/git-credentials-54c4cef5-0005-4540-a3b4-55fa2c29e97b.config
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8536527Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-54c4cef5-0005-4540-a3b4-55fa2c29e97b.config
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8571480Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8598409Z /github/runner_temp/git-credentials-54c4cef5-0005-4540-a3b4-55fa2c29e97b.config
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8605670Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-54c4cef5-0005-4540-a3b4-55fa2c29e97b.config
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8641453Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8859643Z Removing credentials config '/home/runner/work/_temp/git-credentials-54c4cef5-0005-4540-a3b4-55fa2c29e97b.config'
+Rust quality gate	UNKNOWN STEP	2026-07-22T20:30:54.8996617Z Cleaning up orphan processes

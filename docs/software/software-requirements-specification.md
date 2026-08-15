@@ -6,6 +6,13 @@
 > 0033 define the branch-scoped G0 release-profile candidate over that exact
 > protected baseline.
 
+Issue #188 defines the LocalBaselineVerificationV2 candidate Verified pending
+independent review and protected manual merge over exact base
+`9ecdc3acefd43495daf76b9f2ab69a7bbacff172`. The candidate verifies retained
+baseline evidence without changing product requirements, runtime, control
+plane, dependencies, or release authority. G9 remains a separate governed
+package.
+
 ## 1. Document control
 
 | Field | Value |
@@ -61,6 +68,7 @@
 | `0.9+explorer-correction` | 2026-08-14 | Reconciled protected PR #177 and merge `f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`: the exact Issue #176 / Decision 0031 LocalExplorerV3-V9 browser correction is Approved and Implemented but not Verified. Historical viewer, ontology, query, and portable contracts remain immutable. |
 | `0.9+r17-candidate` | 2026-08-14 | Proposed issue #178 and Decision 0032 on exact protected base `f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`: add opt-in deterministic `FunctionContextV1`, additive LocalExplorerV10 function navigation over unchanged PortableGraphV9, and the source-build-only `local-experimental-r17` G0 profile. The package remains ineffective until protected manual merge. |
 | `0.9+g0-candidate` | 2026-08-14 | Reconciled protected PR #179 and merge `f0bdb5290566bb85bb103e24291e952d4c557156` as R17 Approved and Implemented but not Verified, then proposed issue #180 and Decision 0033 for `FR-REL-001`, `FR-CLI-007`, canonical `ReleaseProfileV1`, strict `CodeNoesisErrorV25`, the exact three-target source-build-only matrix, and an output-only preflight with no release, signing, publication, support, secret, or deployment authority. |
+| `0.9+verification-v2-candidate` | 2026-08-15 | Bound issue #188 LocalBaselineVerificationV2 to exact protected base `9ecdc3acefd43495daf76b9f2ab69a7bbacff172`, a closed 32-profile catalog, immutable local and GitHub Actions evidence, fail-closed validation, and independent-review activation without changing product or release authority. |
 
 This document is the normative statement of **what** the software must do and
 how conformance will be demonstrated. The architecture describes **how** the
@@ -233,7 +241,7 @@ pull request may bind these exact IDs to the full commit SHA on `main` that
 contains the byte-identical SRS. Until that policy PR is reviewed and merged,
 autonomous authorization must fail closed.
 
-S0 contract bundle: `sha256:978a7128498d54a6c4a6b3fec11d195e37d2f67e179d2babb5320668c4e44811`.
+S0 contract bundle: `sha256:7f8c7b67651a9ff56431c14410e8b8a551f28e207eb0a882d887add74ccabf3a`.
 The bundle manifest binds the decision, strict schemas, acceptance oracle,
 fixture, reviewed goldens, and maintenance guard. A change to any bound file
 requires a new bundle digest in this SRS and therefore invalidates an earlier

@@ -1,0 +1,208 @@
+Attest immutable candidate subjects	Set up job	﻿2026-08-14T21:56:06.8826335Z Current runner version: '2.336.0'
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8848659Z ##[group]Runner Image Provisioner
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8849371Z Hosted Compute Agent
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8849921Z Version: 20260729.566
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8850432Z Commit: cf7153fe6e25b664e8693c24944bf2b00355d109
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8851038Z Build Date: 2026-07-29T19:17:02Z
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8851644Z Worker ID: {4ebcf334-a246-40eb-b519-25bea1225163}
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8852269Z Azure Region: westus
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8852751Z ##[endgroup]
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8853889Z ##[group]Operating System
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8854415Z Ubuntu
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8854900Z 24.04.4
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8855315Z LTS
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8855716Z ##[endgroup]
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8856368Z ##[group]Runner Image
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8856894Z Image: ubuntu-24.04
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8857384Z Version: 20260810.271.1
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8858236Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260810.271/images/ubuntu/Ubuntu2404-Readme.md
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8859640Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260810.271
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8860426Z ##[endgroup]
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8861469Z ##[group]GITHUB_TOKEN Permissions
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8863209Z Attestations: write
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8863704Z Contents: read
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8864241Z Metadata: read
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8864713Z ##[endgroup]
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8867274Z Secret source: Actions
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.8868226Z Prepare workflow directory
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.9667672Z Prepare all required actions
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:06.9708938Z Getting action download info
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:07.2977772Z Download action repository 'actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c' (SHA:3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c)
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:07.8638486Z Download action repository 'actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8' (SHA:4d101475d8b20a2381f78447822ac1eab6504dd8)
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:08.0298598Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:08.5130107Z Getting action download info
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:08.6761206Z Download action repository 'actions/attest@508db95dd578ae2727ebd6217d5ba78e4fbda05d' (SHA:508db95dd578ae2727ebd6217d5ba78e4fbda05d)
+Attest immutable candidate subjects	Set up job	2026-08-14T21:56:09.1025597Z Complete job name: Attest immutable candidate subjects
+Attest immutable candidate subjects	Download immutable candidate subjects	﻿2026-08-14T21:56:09.1591290Z ##[group]Run actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:09.1592053Z with:
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:09.1592372Z   pattern: candidate-*-9ecdc3acefd43495daf76b9f2ab69a7bbacff172
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:09.1592697Z   path: intermediate
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:09.1592917Z   merge-multiple: true
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:09.1593149Z   repository: smutti/codenoesis
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:09.1593380Z   run-id: 31843845301
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:09.1593597Z   skip-decompress: false
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:09.1593836Z   digest-mismatch: error
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:09.1594183Z ##[endgroup]
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:09.5396731Z Found 4 artifact(s)
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:09.5407187Z Filtering artifacts by pattern 'candidate-*-9ecdc3acefd43495daf76b9f2ab69a7bbacff172'
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:09.5408062Z Preparing to download the following artifacts:
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:09.5409262Z - candidate-windows-9ecdc3acefd43495daf76b9f2ab69a7bbacff172 (ID: 9235423539, Size: 5862680, Expected Digest: sha256:5dfbbafd26d455cc1cad79b6f5ec3a73e73212539c8ee9cf2aa9b3bdae2c1a07)
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:09.5412136Z - candidate-macos-9ecdc3acefd43495daf76b9f2ab69a7bbacff172 (ID: 9235381006, Size: 6021272, Expected Digest: sha256:2edccdfe71e88c3ba9367e4597452c86c919032c63642fc6d7c886e9485a6fec)
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:09.5414256Z - candidate-linux-9ecdc3acefd43495daf76b9f2ab69a7bbacff172 (ID: 9235373549, Size: 6624446, Expected Digest: sha256:5da7765c897b4759f1d7bb38c798564c03f66499f1ab75e0792b7f6e5a8235cd)
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:10.0220357Z Redirecting to blob download url: https://productionresultssa1.blob.core.windows.net/actions-results/95704c15-6e50-47b9-851d-5b8870dc0db5/workflow-job-run-5d61f5cc-9bf4-598e-a150-29c2b8ff1152/artifacts/64d4bd11341989a27643de63286b532452eb3e169bd4fdb2176a663602502ddf.zip
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:10.0221857Z Starting download of artifact to: /home/runner/work/codenoesis/codenoesis/intermediate
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:10.0384374Z Redirecting to blob download url: https://productionresultssa1.blob.core.windows.net/actions-results/95704c15-6e50-47b9-851d-5b8870dc0db5/workflow-job-run-7e0971dc-a382-594a-999b-c0653ff5eadb/artifacts/96a2f055658b23b51a9ad8b571e2f00727d91dd9e6d101d7aa05bbd1b612af0f.zip
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:10.0386024Z Starting download of artifact to: /home/runner/work/codenoesis/codenoesis/intermediate
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:10.0890319Z Redirecting to blob download url: https://productionresultssa1.blob.core.windows.net/actions-results/95704c15-6e50-47b9-851d-5b8870dc0db5/workflow-job-run-6b3f4dfb-45e4-5f18-a322-a06c660dce97/artifacts/e6b06d299421cec9065c6dcee6ad19ffea58d23bc066b2b49850a42ca089e4d5.zip
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:10.0891690Z Starting download of artifact to: /home/runner/work/codenoesis/codenoesis/intermediate
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:10.3484693Z (node:1864) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:10.3485712Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:11.4534678Z SHA256 digest of downloaded artifact is 2edccdfe71e88c3ba9367e4597452c86c919032c63642fc6d7c886e9485a6fec
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:11.4535986Z Artifact download completed successfully.
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:11.4809166Z SHA256 digest of downloaded artifact is 5da7765c897b4759f1d7bb38c798564c03f66499f1ab75e0792b7f6e5a8235cd
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:11.4810004Z Artifact download completed successfully.
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:11.6220877Z SHA256 digest of downloaded artifact is 5dfbbafd26d455cc1cad79b6f5ec3a73e73212539c8ee9cf2aa9b3bdae2c1a07
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:11.6221752Z Artifact download completed successfully.
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:11.6222216Z Total of 3 artifact(s) downloaded
+Attest immutable candidate subjects	Download immutable candidate subjects	2026-08-14T21:56:11.6225030Z Download artifact has finished successfully
+Attest immutable candidate subjects	Verify fixed subject checksums	﻿2026-08-14T21:56:11.6384338Z ##[group]Run set -euo pipefail
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.6384671Z ^[[36;1mset -euo pipefail^[[0m
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.6384963Z ^[[36;1mtest "$(find intermediate -type f | wc -l)" -eq 24^[[0m
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.6385360Z ^[[36;1mwhile IFS= read -r checksums^[[0m
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.6385659Z ^[[36;1mdo^[[0m
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.6386112Z ^[[36;1m  (cd "$(dirname "$checksums")" && sha256sum -c checksums.sha256)^[[0m
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.6386500Z ^[[36;1mdone < <(find intermediate -type f -name checksums.sha256 | sort)^[[0m
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.6421096Z shell: /usr/bin/bash -e {0}
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.6421344Z ##[endgroup]
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7168089Z codenoesis-local-experimental-r17-aarch64-apple-darwin-40e591b4314816a8f9adb2b71db9932cb809056561695400fe6d2b3bcab94ee3.zip: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7169013Z evidence/advisory-report.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7169263Z evidence/dependency-lock.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7169539Z evidence/license-report.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7169789Z evidence/sbom.cdx.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7170071Z evidence/unsafe-inventory.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7170331Z manifest.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7321319Z codenoesis-local-experimental-r17-x86_64-pc-windows-msvc-f0916612d8e3ae15462135bdf271422f92e6c1e6295800b802e188862a4af6c9.zip: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7322024Z evidence/advisory-report.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7322397Z evidence/dependency-lock.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7322741Z evidence/license-report.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7323098Z evidence/sbom.cdx.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7323337Z evidence/unsafe-inventory.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7323577Z manifest.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7501988Z codenoesis-local-experimental-r17-x86_64-unknown-linux-gnu-14ddd9b6f71f6ab90b7949ebb28b0acd56e754430421a622ae59322c85c6c3f6.zip: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7502688Z evidence/advisory-report.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7502935Z evidence/dependency-lock.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7503712Z evidence/license-report.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7504213Z evidence/sbom.cdx.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7504670Z evidence/unsafe-inventory.json: OK
+Attest immutable candidate subjects	Verify fixed subject checksums	2026-08-14T21:56:11.7505121Z manifest.json: OK
+Attest immutable candidate subjects	Attest every immutable subject	﻿2026-08-14T21:56:11.7676271Z ##[group]Run actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7676669Z with:
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7677101Z   subject-path: intermediate/**/*.zip
+Attest immutable candidate subjects	Attest every immutable subject	intermediate/**/manifest.json
+Attest immutable candidate subjects	Attest every immutable subject	intermediate/**/checksums.sha256
+Attest immutable candidate subjects	Attest every immutable subject	intermediate/**/evidence/*.json
+Attest immutable candidate subjects	Attest every immutable subject	
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7677563Z   show-summary: true
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7677767Z   push-to-registry: false
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7677977Z   create-storage-record: true
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7680235Z   github-token: ***
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7680432Z ##[endgroup]
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7728287Z ##[start-action display=Attest;id=provenance.attest]
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7780778Z ##[group]Run actions/attest@508db95dd578ae2727ebd6217d5ba78e4fbda05d
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7781109Z with:
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7781531Z   subject-path: intermediate/**/*.zip
+Attest immutable candidate subjects	Attest every immutable subject	intermediate/**/manifest.json
+Attest immutable candidate subjects	Attest every immutable subject	intermediate/**/checksums.sha256
+Attest immutable candidate subjects	Attest every immutable subject	intermediate/**/evidence/*.json
+Attest immutable candidate subjects	Attest every immutable subject	
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7782110Z   push-to-registry: false
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7782363Z   create-storage-record: true
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7782614Z   show-summary: true
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7784912Z   github-token: ***
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7785107Z env:
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7785314Z   NODE_OPTIONS: --max-http-header-size=32768
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.7785562Z ##[endgroup]
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:11.9063416Z Attestation type: Build Provenance
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9524732Z Attestation created for 22 subjects
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9529321Z ##[group]^[[36mAttestation signed using certificate from Public Good Sigstore instance^[[39m
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9529854Z -----BEGIN CERTIFICATE-----
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9530361Z MIIHSjCCBtGgAwIBAgIUZsubrdYSuGvL5ivIohuPHOGP8WowCgYIKoZIzj0EAwMw
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9531054Z NzEVMBMGA1UEChMMc2lnc3RvcmUuZGV2MR4wHAYDVQQDExVzaWdzdG9yZS1pbnRl
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9531798Z cm1lZGlhdGUwHhcNMjYwODE0MjE1NjEzWhcNMjYwODE0MjIwNjEzWjAAMFkwEwYH
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9532475Z KoZIzj0CAQYIKoZIzj0DAQcDQgAEqfx7mLuGxRKwegAsylKspVm2sr7k2zOSCQdw
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9533166Z xMOrlX0lj+G33wOhaUKG3Lr1NlC38lrhAZveNqU+1Wk7+J984KOCBfAwggXsMA4G
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9533868Z A1UdDwEB/wQEAwIHgDATBgNVHSUEDDAKBggrBgEFBQcDAzAdBgNVHQ4EFgQU7Q+n
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9534509Z eGoG/82Bvn7ESnkd/NyuE80wHwYDVR0jBBgwFoAU39Ppz1YkEZb5qNjpKFWixi4Y
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9535148Z ZD8wcAYDVR0RAQH/BGYwZIZiaHR0cHM6Ly9naXRodWIuY29tL3NtdXR0aS9jb2Rl
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9535920Z bm9lc2lzLy5naXRodWIvd29ya2Zsb3dzL2xvY2FsLXJlbGVhc2UtY2FuZGlkYXRl
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9536604Z LnltbEByZWZzL2hlYWRzL21haW4wOQYKKwYBBAGDvzABAQQraHR0cHM6Ly90b2tl
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9537274Z bi5hY3Rpb25zLmdpdGh1YnVzZXJjb250ZW50LmNvbTAfBgorBgEEAYO/MAECBBF3
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9537875Z b3JrZmxvd19kaXNwYXRjaDA2BgorBgEEAYO/MAEDBCg5ZWNkYzNhY2VmZDQzNDk1
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9538505Z ZGFmNzZiOWYyYWI2OWE3YmJhY2ZmMTcyMCUGCisGAQQBg78wAQQEF0xvY2FsIHJl
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9539202Z bGVhc2UgY2FuZGlkYXRlMB8GCisGAQQBg78wAQUEEXNtdXR0aS9jb2Rlbm9lc2lz
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9539854Z MB0GCisGAQQBg78wAQYED3JlZnMvaGVhZHMvbWFpbjA7BgorBgEEAYO/MAEIBC0M
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9540517Z K2h0dHBzOi8vdG9rZW4uYWN0aW9ucy5naXRodWJ1c2VyY29udGVudC5jb20wcgYK
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9541225Z KwYBBAGDvzABCQRkDGJodHRwczovL2dpdGh1Yi5jb20vc211dHRpL2NvZGVub2Vz
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9541908Z aXMvLmdpdGh1Yi93b3JrZmxvd3MvbG9jYWwtcmVsZWFzZS1jYW5kaWRhdGUueW1s
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9542558Z QHJlZnMvaGVhZHMvbWFpbjA4BgorBgEEAYO/MAEKBCoMKDllY2RjM2FjZWZkNDM0
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9543228Z OTVkYWY3NmI5ZjJhYjY5YTdiYmFjZmYxNzIwHQYKKwYBBAGDvzABCwQPDA1naXRo
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9543951Z dWItaG9zdGVkMDQGCisGAQQBg78wAQwEJgwkaHR0cHM6Ly9naXRodWIuY29tL3Nt
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9544640Z dXR0aS9jb2Rlbm9lc2lzMDgGCisGAQQBg78wAQ0EKgwoOWVjZGMzYWNlZmQ0MzQ5
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9545200Z NWRhZjc2YjlmMmFiNjlhN2JiYWNmZjE3MjAfBgorBgEEAYO/MAEOBBEMD3JlZnMv
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9545775Z aGVhZHMvbWFpbjAaBgorBgEEAYO/MAEPBAwMCjEzMDQxNjk5NTMwKQYKKwYBBAGD
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9546708Z vzABEAQbDBlodHRwczovL2dpdGh1Yi5jb20vc211dHRpMBcGCisGAQQBg78wAREE
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9547310Z CQwHODkyMTIwODByBgorBgEEAYO/MAESBGQMYmh0dHBzOi8vZ2l0aHViLmNvbS9z
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9547894Z bXV0dGkvY29kZW5vZXNpcy8uZ2l0aHViL3dvcmtmbG93cy9sb2NhbC1yZWxlYXNl
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9548788Z LWNhbmRpZGF0ZS55bWxAcmVmcy9oZWFkcy9tYWluMDgGCisGAQQBg78wARMEKgwo
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9549388Z OWVjZGMzYWNlZmQ0MzQ5NWRhZjc2YjlmMmFiNjlhN2JiYWNmZjE3MjAhBgorBgEE
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9549996Z AYO/MAEUBBMMEXdvcmtmbG93X2Rpc3BhdGNoMFgGCisGAQQBg78wARUESgxIaHR0
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9550575Z cHM6Ly9naXRodWIuY29tL3NtdXR0aS9jb2Rlbm9lc2lzL2FjdGlvbnMvcnVucy8z
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9551142Z MTg0Mzg0NTMwMS9hdHRlbXB0cy8xMBYGCisGAQQBg78wARYECAwGcHVibGljME0G
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9551838Z CisGAQQBg78wARgEPww9cmVwbzpzbXV0dGlAODkyMTIwOC9jb2Rlbm9lc2lzQDEz
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9552541Z MDQxNjk5NTM6cmVmOnJlZnMvaGVhZHMvbWFpbjCBigYKKwYBBAHWeQIEAgR8BHoA
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9553193Z eAB2AN09MGrGxxEyYxkeHJlnNwKiSl643jyt/4eKcoAvKe6OAAABoAJGjJYAAAQD
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9553791Z AEcwRQIgUcq4e3U1EUOMlz2gX1kpj0XUNZsX/TJi47JRQj0PSN4CIQD23OiORl9V
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9554420Z eTqiCroM/PgKI/w2H9ulsBPMkLvFQHfO8DAKBggqhkjOPQQDAwNnADBkAjAXruIg
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9554985Z gvf3IcSHGCPs7t38l3/FPQ6X5yLOkM2DkF5/xnPDVj8Oj8E8UWMUgaqa6IUCMBCz
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9555591Z gj0CMUg1SGnqAocnlARalppZZTAF/2Y5LPen9lyRJcFBA6p7Lm5LgYadC52HHQ==
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9556198Z -----END CERTIFICATE-----
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9556433Z 
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9556995Z ##[endgroup]
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9557550Z ^[[36mAttestation signature uploaded to Rekor transparency log^[[39m
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9558077Z https://search.sigstore.dev?logIndex=2469385444
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9558551Z ^[[36mAttestation uploaded to repository^[[39m
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9558989Z https://github.com/smutti/codenoesis/attestations/40843198
+Attest immutable candidate subjects	Attest every immutable subject	2026-08-14T21:56:13.9865111Z ##[end-action id=provenance.attest;outcome=success;conclusion=success;duration_ms=2213]
+Attest immutable candidate subjects	Assemble retained offline evidence	﻿2026-08-14T21:56:13.9913907Z ##[group]Run set -euo pipefail
+Attest immutable candidate subjects	Assemble retained offline evidence	2026-08-14T21:56:13.9914206Z ^[[36;1mset -euo pipefail^[[0m
+Attest immutable candidate subjects	Assemble retained offline evidence	2026-08-14T21:56:13.9914428Z ^[[36;1mmkdir retained^[[0m
+Attest immutable candidate subjects	Assemble retained offline evidence	2026-08-14T21:56:13.9914664Z ^[[36;1mcp -R intermediate/. retained/^[[0m
+Attest immutable candidate subjects	Assemble retained offline evidence	2026-08-14T21:56:13.9915057Z ^[[36;1mcp "/home/runner/work/_temp/wKhJt4/attestation.json" retained/attestation.jsonl^[[0m
+Attest immutable candidate subjects	Assemble retained offline evidence	2026-08-14T21:56:13.9947477Z shell: /usr/bin/bash -e {0}
+Attest immutable candidate subjects	Assemble retained offline evidence	2026-08-14T21:56:13.9947708Z ##[endgroup]
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	﻿2026-08-14T21:56:14.0238080Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:14.0238421Z with:
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:14.0238714Z   name: local-release-candidates-9ecdc3acefd43495daf76b9f2ab69a7bbacff172
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:14.0239046Z   path: retained
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:14.0239239Z   if-no-files-found: error
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:14.0239444Z   retention-days: 30
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:14.0239640Z   compression-level: 6
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:14.0239826Z   overwrite: false
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:14.0240016Z   include-hidden-files: false
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:14.0240251Z   archive: true
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:14.0240462Z ##[endgroup]
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:14.1446981Z With the provided path, there will be 25 files uploaded
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:14.1447691Z Artifact name is valid!
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:14.1448055Z Root directory input is valid!
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:14.4618578Z Uploading artifact: local-release-candidates-9ecdc3acefd43495daf76b9f2ab69a7bbacff172.zip
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:14.4649765Z Beginning upload of artifact content to blob storage
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:16.0201363Z Uploaded bytes 8388608
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:16.7307061Z Uploaded bytes 16777216
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:16.8464187Z Uploaded bytes 18517299
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:16.9234780Z Finished uploading artifact content to blob storage!
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:16.9237411Z SHA256 digest of uploaded artifact is 3c15eabb8fb3125dfe01e48c51c0322231f6e64a733eb72380bad8d86f8ecea8
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:16.9239006Z Finalizing artifact upload
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:17.2720341Z Artifact local-release-candidates-9ecdc3acefd43495daf76b9f2ab69a7bbacff172 successfully finalized. Artifact ID 9235430119
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:17.2722214Z Artifact local-release-candidates-9ecdc3acefd43495daf76b9f2ab69a7bbacff172 has been successfully uploaded! Final size is 18517299 bytes. Artifact ID is 9235430119
+Attest immutable candidate subjects	Upload retained candidates and offline bundle	2026-08-14T21:56:17.2723421Z Artifact download URL: https://github.com/smutti/codenoesis/actions/runs/31843845301/artifacts/9235430119
+Attest immutable candidate subjects	Complete job	﻿2026-08-14T21:56:17.2869034Z Cleaning up orphan processes

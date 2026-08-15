@@ -1,0 +1,5647 @@
+{
+  "schema_version": "codenoesis.local-baseline-verification/v2",
+  "issue": "https://github.com/smutti/codenoesis/issues/188",
+  "base_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+  "governance_checkpoint_sha": "1daa23ffbaa0ea13f5fc5910aa5798c7523f254c",
+  "evidence_parent_sha": "b754282d56dc65df8044d3e6d4acc672b5ae8cde",
+  "verification_subject": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+  "product_tree_sha256": "a52370ace76e25e5f2168124317697c089db43de3cf68fdee1871cc8716d2278",
+  "status": "candidate_verified_pending_merge",
+  "plan": {
+    "path": "tests/specifications/verification/local-baseline-v2/plan.json",
+    "sha256": "2b3a6a5e71f35823faeb9a676a0bdd281ebac4095004bc0cd2f84f2f4264cc0f"
+  },
+  "profile_catalog": {
+    "path": "tests/specifications/verification/local-baseline-v2/profile-catalog.json",
+    "sha256": "23d175dd5e73f0c67e2d8c9d8fdf36c921220f41fcfaaf6586514ed6d632172b"
+  },
+  "profiles": [
+    {
+      "id": "s0-walking-skeleton",
+      "catalog_entry_sha256": "36039704ae20d8e1d12d3566e5f8a0409303bc93952a7be848e49777bbb15c6b",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-dfaed63bdf115fa6ee66",
+            "catalog-file-e6563987df8a72981d16",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-dfaed63bdf115fa6ee66",
+            "catalog-file-e6563987df8a72981d16",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted real-repository pilot obligation."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-aebc721250eb9d7e0afe",
+            "catalog-file-c7583a126176862feb55",
+            "catalog-file-dfaed63bdf115fa6ee66",
+            "catalog-file-e6563987df8a72981d16",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "s1-safe-inventory",
+      "catalog_entry_sha256": "ec8098264674be44de0dfa15ee23e98645f3aef5bb4a95c61af4ffe7b754095e",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-4995b7f5bf5a4741c0e3",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-4995b7f5bf5a4741c0e3",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted real-repository pilot obligation."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-2c0d2f537c00a932bdb8",
+            "catalog-file-4995b7f5bf5a4741c0e3",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r1-packed-sha1",
+      "catalog_entry_sha256": "35f174f1bd812bf8877ac385b0ce8d3b84d72b0f31c8fbe543694b34564ab33b",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-c0798b89c60111d66fae",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-c0798b89c60111d66fae",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted real-repository pilot obligation."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-65f15cdb31cb9b99e9ab",
+            "catalog-file-c0798b89c60111d66fae",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r2-gitlink-boundaries",
+      "catalog_entry_sha256": "53698ed972336983390ad8d5f74ef1220bed2e8ba3cc3a4c9347a9a1f95a85ae",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-de74741700398a7aaf69",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-de74741700398a7aaf69",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted real-repository pilot obligation."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-4c268dcf99d443cf728b",
+            "catalog-file-de74741700398a7aaf69",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "s2-rust-knowledge",
+      "catalog_entry_sha256": "434d8495f65271dfd517a78735ff079b92b1ae07b7bcd5afade0c41718e9b22c",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-5d8585c3caf0aa1ec8ea",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-5d8585c3caf0aa1ec8ea",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted real-repository pilot obligation."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-484c6303d87dd1b0d8c0",
+            "catalog-file-5d8585c3caf0aa1ec8ea",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "s3-atomic-storage",
+      "catalog_entry_sha256": "c47dfac0a961428d7a8c63ba8d7f738725a634420837632591a0b86b51346bf8",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-8cd6d20fd224bc828889",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-8cd6d20fd224bc828889",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted real-repository pilot obligation."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-dcef4855c2db06b7adee",
+            "catalog-file-8cd6d20fd224bc828889",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "s4-workspace-docs-query",
+      "catalog_entry_sha256": "a77dd3ccc76a52699e8885624b5c8efe9df3ad030af895b0eba455a030367a8e",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-44f49e59e9c9b03ae3be",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-44f49e59e9c9b03ae3be",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted real-repository pilot obligation."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-13f3aadaa11a9b828b9f",
+            "catalog-file-44f49e59e9c9b03ae3be",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r3-root-package-workspace",
+      "catalog_entry_sha256": "78fdf6a7d0ec09d97e96865079674daf259ca61a5706d4652b579054bf943bd8",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-ceba66e76f2a900e97ee",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-ceba66e76f2a900e97ee",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-ceba66e76f2a900e97ee",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-edfcd6c29a3bf2d325c2",
+            "catalog-file-ceba66e76f2a900e97ee",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r4-cargo-manifest-facts",
+      "catalog_entry_sha256": "3ac4e08654eacec9e70ca67b3da2d75d51ba6c05ec923bd1db30bbba6d61afba",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-1e8c9c92ad0f1b399d11",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-1e8c9c92ad0f1b399d11",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-1e8c9c92ad0f1b399d11",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-15e2b46c91138e561d7a",
+            "catalog-file-1e8c9c92ad0f1b399d11",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r5-rust-semantic-depth",
+      "catalog_entry_sha256": "e9271afe6ebcfd3ece2c492a2eb765e8ac2058279565ac14e81b1844191594fc",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-e6eaf9698591817c80e4",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-e6eaf9698591817c80e4",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-e6eaf9698591817c80e4",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-87a45664edde011cf50f",
+            "catalog-file-e6eaf9698591817c80e4",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r6-framework-declarations",
+      "catalog_entry_sha256": "2d34f07c5ea57c27c0f9b3314a93d26aa4fc9139a8e690bd0eaa4d65ede4a58b",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-f8715c2f82a051a1c53b",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-f8715c2f82a051a1c53b",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-f8715c2f82a051a1c53b",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-8c876756371a768a2dec",
+            "catalog-file-f8715c2f82a051a1c53b",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r7-scip-import",
+      "catalog_entry_sha256": "788d169fb3140d94668b3cf0e762a092175803591cd7ab8426a8b001ae39b5a5",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-a0e50d20f0aadbbf0d29",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-a0e50d20f0aadbbf0d29",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-a0e50d20f0aadbbf0d29",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-eb073560bb2022188012",
+            "catalog-file-a0e50d20f0aadbbf0d29",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r8-portable-explorer",
+      "catalog_entry_sha256": "a36f321d01832c73580ff59d41b22ae2ccc9be736aa583f5801fdaaa8b4ce033",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-6cdfd56a5a6fb04a915e",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-6cdfd56a5a6fb04a915e",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "green",
+          "evidence": [
+            "versioned-explorer-browser"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-6cdfd56a5a6fb04a915e",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-439b198e2a22a1a79637",
+            "catalog-file-6cdfd56a5a6fb04a915e",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "s5-incremental-refresh",
+      "catalog_entry_sha256": "ab4dc9985d3617ade3916e2ebff7db25f5617287b400b6651a345df6d193739b",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-a441bbadfa4d69cbd5b3",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-a441bbadfa4d69cbd5b3",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted real-repository pilot obligation."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-48f95313eff51006b584",
+            "catalog-file-a441bbadfa4d69cbd5b3",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "s6-openapi-federation",
+      "catalog_entry_sha256": "dcf7021e2ff96d608a179d9595aae1f34c8a180c81ba49c8ba221e971924d7da",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-1b323f54de7416773e06",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-1b323f54de7416773e06",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted real-repository pilot obligation."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-864010b2ab231f2f6bef",
+            "catalog-file-1b323f54de7416773e06",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "k1-callable-value-semantics",
+      "catalog_entry_sha256": "71a21f1cc752f6bec1b0cc169349b32f4102fbf9c9465f9089ce425d6290e57e",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-96790193d53d28e938d0",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-96790193d53d28e938d0",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "green",
+          "evidence": [
+            "versioned-explorer-browser"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-96790193d53d28e938d0",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-4312219ccc1ef41a36a5",
+            "catalog-file-96790193d53d28e938d0",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r9-output-capacity",
+      "catalog_entry_sha256": "1db8b3dd8981a5054fe2422b769e690787f6065a7e595172cc01b2f0e84fd397",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-e9f64f2216c67d0cd6d4",
+            "catalog-file-6b8e24622fa704828faf",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-e9f64f2216c67d0cd6d4",
+            "catalog-file-6b8e24622fa704828faf",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-e9f64f2216c67d0cd6d4",
+            "catalog-file-6b8e24622fa704828faf",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-8d1f9576abefb980d6f6",
+            "catalog-file-e9f64f2216c67d0cd6d4",
+            "catalog-file-6b8e24622fa704828faf",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r10-cfg-declaration-alternatives",
+      "catalog_entry_sha256": "781e281294bf9d713930ee9d8c91eb23154b40cf6f944725400d635b522b46f4",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-51f6200a49615ff8a86c",
+            "catalog-file-1682d5665827c5c94a78",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-51f6200a49615ff8a86c",
+            "catalog-file-1682d5665827c5c94a78",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "green",
+          "evidence": [
+            "versioned-explorer-browser"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-51f6200a49615ff8a86c",
+            "catalog-file-1682d5665827c5c94a78",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-fbe443999f9630fa1fde",
+            "catalog-file-51f6200a49615ff8a86c",
+            "catalog-file-1682d5665827c5c94a78",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r11-k1-repository-boundaries",
+      "catalog_entry_sha256": "1b47d88b0b070e3e30a3cd5c96219d825f74136251eaba5e76746af14137a087",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-4a01c90a121373e0390f",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-4a01c90a121373e0390f",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "green",
+          "evidence": [
+            "versioned-explorer-browser"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-4a01c90a121373e0390f",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-92ba77af27d168c075db",
+            "catalog-file-4a01c90a121373e0390f",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r12-k1-cfg-alternatives",
+      "catalog_entry_sha256": "8a17526274b1b522fda115e851fbcafcb96307fe97479e73f9a921a5fce72420",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-9148d3331b3c384d7379",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-9148d3331b3c384d7379",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "green",
+          "evidence": [
+            "versioned-explorer-browser"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-9148d3331b3c384d7379",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-d6337d9ec0400ac7f9f8",
+            "catalog-file-9148d3331b3c384d7379",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r13-k1-scip-composition",
+      "catalog_entry_sha256": "52d22b986918c781a7ea411cb2f2c522c90f4fc99df11332a6032523775ce82d",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-90ef45ed13232bcd7137",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-90ef45ed13232bcd7137",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "green",
+          "evidence": [
+            "versioned-explorer-browser"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-90ef45ed13232bcd7137",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-629d45954e5d91fcdfb1",
+            "catalog-file-90ef45ed13232bcd7137",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r14-expression-bindings",
+      "catalog_entry_sha256": "3d6ddb3976c5ae9616eb315adfc3fc42482d97aded4544822660924f33fea07e",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-681549cf859e5ca5aeca",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-681549cf859e5ca5aeca",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "green",
+          "evidence": [
+            "versioned-explorer-browser"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-681549cf859e5ca5aeca",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-623aad5d851e9570d507",
+            "catalog-file-681549cf859e5ca5aeca",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r15-local-flow",
+      "catalog_entry_sha256": "f11441df202241fa4e5a47d409aa90d32fd428643d09b9195e620997ffbafae7",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-f844f1157ba4d5a9c0a1",
+            "catalog-file-a8039a992274a2364d51",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-f844f1157ba4d5a9c0a1",
+            "catalog-file-a8039a992274a2364d51",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "green",
+          "evidence": [
+            "versioned-explorer-browser"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-f844f1157ba4d5a9c0a1",
+            "catalog-file-a8039a992274a2364d51",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-4adaed625962b058cbe5",
+            "catalog-file-f844f1157ba4d5a9c0a1",
+            "catalog-file-a8039a992274a2364d51",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r14-r15-real-repository-correction",
+      "catalog_entry_sha256": "3f378e2b325b4f482644c627839f115f4f460a5da7670b17c8284ad4851ffb02",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-a6c2f4505285f1e4db04",
+            "catalog-file-810c66c2162ce8ebc73a",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-a6c2f4505285f1e4db04",
+            "catalog-file-810c66c2162ce8ebc73a",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "green",
+          "evidence": [
+            "versioned-explorer-browser"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-a6c2f4505285f1e4db04",
+            "catalog-file-810c66c2162ce8ebc73a",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-82e661cd466e62788f0b",
+            "catalog-file-6c22562bdfb7f32b6e5d",
+            "catalog-file-a6c2f4505285f1e4db04",
+            "catalog-file-810c66c2162ce8ebc73a",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r16-safe-constant-evaluation",
+      "catalog_entry_sha256": "8fa729a61ce34b47410fed51fc86cad67dfef3e967cd8692cd068dd4de7a9e98",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-7f4b6f93fec3b2cfa6de",
+            "catalog-file-bb0b40e1dcd4b3c496ed",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-7f4b6f93fec3b2cfa6de",
+            "catalog-file-bb0b40e1dcd4b3c496ed",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "green",
+          "evidence": [
+            "versioned-explorer-browser"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-7f4b6f93fec3b2cfa6de",
+            "catalog-file-bb0b40e1dcd4b3c496ed",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-051005fd314b14e143a6",
+            "catalog-file-7f4b6f93fec3b2cfa6de",
+            "catalog-file-bb0b40e1dcd4b3c496ed",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r10-r16-versioned-explorer-correction",
+      "catalog_entry_sha256": "1aac0633ff892fb48847f9db91a703d70564f498c01231f6e40ab4a34255448d",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-cfe4444601a5ea9930f6",
+            "catalog-file-048aa14a78d4e387c6c1",
+            "versioned-explorer-browser",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-cfe4444601a5ea9930f6",
+            "catalog-file-048aa14a78d4e387c6c1",
+            "versioned-explorer-browser",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "green",
+          "evidence": [
+            "versioned-explorer-browser"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted real-repository pilot obligation."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-ee9b91cfa5015db0a50a",
+            "catalog-file-cfe4444601a5ea9930f6",
+            "catalog-file-048aa14a78d4e387c6c1",
+            "versioned-explorer-browser",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "r17-function-context",
+      "catalog_entry_sha256": "abc0ae04191c96521dce05c21edb56e8cb1049428ee78335f9ea724328d46826",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-280ce6262bc588edfc1c",
+            "catalog-file-4337649557c6788590cf",
+            "catalog-file-efa593e29407472df4e0",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-280ce6262bc588edfc1c",
+            "catalog-file-4337649557c6788590cf",
+            "catalog-file-efa593e29407472df4e0",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "green",
+          "evidence": [
+            "versioned-explorer-browser"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "green",
+          "evidence": [
+            "catalog-file-280ce6262bc588edfc1c",
+            "catalog-file-4337649557c6788590cf",
+            "catalog-file-efa593e29407472df4e0",
+            "r16-pilots"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-84f5ed5c85e501e3b8d6",
+            "catalog-file-280ce6262bc588edfc1c",
+            "catalog-file-4337649557c6788590cf",
+            "catalog-file-efa593e29407472df4e0",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "s7-implementation-aware-api",
+      "catalog_entry_sha256": "3d500074939b309b79a78e9dbc9af212a963ec89e8a50a8929088b10348537f6",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-5cc25e2d26b8ac0c9774",
+            "catalog-file-556cb67553e0371f0d47",
+            "catalog-file-81edfbaee6d37dd06ba5",
+            "s7-traceability",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-5cc25e2d26b8ac0c9774",
+            "catalog-file-556cb67553e0371f0d47",
+            "catalog-file-81edfbaee6d37dd06ba5",
+            "s7-traceability",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted real-repository pilot obligation."
+        },
+        {
+          "id": "supply_chain",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Supply-chain release evidence is outside this profile boundary."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-8af4af9bc13ad5b16e58",
+            "catalog-file-315cb215b665e1fe8ff5",
+            "catalog-file-5cc25e2d26b8ac0c9774",
+            "catalog-file-556cb67553e0371f0d47",
+            "catalog-file-81edfbaee6d37dd06ba5",
+            "s7-traceability",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "g0-release-profile",
+      "catalog_entry_sha256": "4b3cebe91da4d1941adedafc22118c480086a6ad393097e0df02c300a070cd16",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-8e3b73889fff5c4b1402",
+            "catalog-file-f9ac2a10af2833140b2a",
+            "g0-traceability",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-8e3b73889fff5c4b1402",
+            "catalog-file-f9ac2a10af2833140b2a",
+            "g0-traceability",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted real-repository pilot obligation."
+        },
+        {
+          "id": "supply_chain",
+          "result": "green",
+          "evidence": [
+            "base-ci-supply-chain",
+            "g8-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-b955f33e2619c579cb5d",
+            "catalog-file-8e3b73889fff5c4b1402",
+            "catalog-file-f9ac2a10af2833140b2a",
+            "g0-traceability",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "g1a-local-distribution",
+      "catalog_entry_sha256": "44f873d8f844154fc0e76e79bf3dae34b79c129b75ed15b2daac1b655ed0a3e9",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-1b99609598d8b3ea2a48",
+            "g1-implementation",
+            "catalog-file-a0c71404f0e648b64124",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-1b99609598d8b3ea2a48",
+            "g1-implementation",
+            "catalog-file-a0c71404f0e648b64124",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted real-repository pilot obligation."
+        },
+        {
+          "id": "supply_chain",
+          "result": "green",
+          "evidence": [
+            "base-ci-supply-chain",
+            "g8-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-9d896c300c621ff67b77",
+            "catalog-file-9adf8be5b4d74011181a",
+            "catalog-file-1b99609598d8b3ea2a48",
+            "g1-implementation",
+            "catalog-file-a0c71404f0e648b64124",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "g2a-local-upgrade-safety",
+      "catalog_entry_sha256": "b5fa5a4c06171825abd0819dc1f8157b3a3d74f50b0ebaca90c55e9598ec6d36",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-325b969d556ba7e52de0",
+            "g2-implementation",
+            "catalog-file-b60a7547fc18299e700d",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-325b969d556ba7e52de0",
+            "g2-implementation",
+            "catalog-file-b60a7547fc18299e700d",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted real-repository pilot obligation."
+        },
+        {
+          "id": "supply_chain",
+          "result": "green",
+          "evidence": [
+            "base-ci-supply-chain",
+            "g8-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-d83192fcabdfa76aeb50",
+            "catalog-file-325b969d556ba7e52de0",
+            "g2-implementation",
+            "catalog-file-b60a7547fc18299e700d",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    },
+    {
+      "id": "g1b-g8-verifiable-distribution",
+      "catalog_entry_sha256": "3fb70d2f12c6f83fa333a5aa2430df232c832ddb3fd721df1aa72d0c11e8c8c7",
+      "evidence_classes": [
+        {
+          "id": "retained_red",
+          "result": "green",
+          "evidence": [
+            "catalog-file-c664d3a507fde991e692",
+            "catalog-file-4971368487b4b80f796d",
+            "g8-supply-chain",
+            "g8-traceability",
+            "v2-red-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "focused_green",
+          "result": "green",
+          "evidence": [
+            "catalog-file-c664d3a507fde991e692",
+            "catalog-file-4971368487b4b80f796d",
+            "g8-supply-chain",
+            "g8-traceability",
+            "base-ci-quality",
+            "v2-focused-green-log",
+            "v2-focused-green-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "full_regression",
+          "result": "green",
+          "evidence": [
+            "base-ci-quality",
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "linux_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "macos_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-macos"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "windows_native",
+          "result": "green",
+          "evidence": [
+            "base-ci-windows"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "codeql",
+          "result": "green",
+          "evidence": [
+            "run:31842394592",
+            "codeql-rust-log-index"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "benchmark_integrity",
+          "result": "green",
+          "evidence": [
+            "base-benchmark-validation",
+            "run:31842394863"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "policy_gate",
+          "result": "green",
+          "evidence": [
+            "run:31842394871"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "security",
+          "result": "green",
+          "evidence": [
+            "base-ci-linux",
+            "base-ci-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "browser",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted browser contract."
+        },
+        {
+          "id": "real_repository_pilot",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "This profile has no accepted real-repository pilot obligation."
+        },
+        {
+          "id": "supply_chain",
+          "result": "green",
+          "evidence": [
+            "base-ci-supply-chain",
+            "g8-supply-chain"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "traceability",
+          "result": "green",
+          "evidence": [
+            "catalog-file-792a15c557111b33b16e",
+            "catalog-file-c664d3a507fde991e692",
+            "catalog-file-4971368487b4b80f796d",
+            "g8-supply-chain",
+            "g8-traceability",
+            "remote-runs"
+          ],
+          "rationale": "Required evidence is bound and recomputed by the V2 validator."
+        },
+        {
+          "id": "independent_review",
+          "result": "not_applicable",
+          "evidence": [],
+          "rationale": "Independent review is an external activation gate and remains pending while the pull request is open."
+        }
+      ],
+      "result": "green"
+    }
+  ],
+  "repository_evidence": [
+    {
+      "id": "decision-0037",
+      "path": "docs/software/decisions/0037-local-baseline-verification-v2.md",
+      "sha256": "c149645a7a5914e956ec41ce79578cb14f563daf7bb39b393194289cfe7d9072",
+      "kind": "traceability"
+    },
+    {
+      "id": "verification-plan",
+      "path": "tests/specifications/verification/local-baseline-v2/plan.json",
+      "sha256": "2b3a6a5e71f35823faeb9a676a0bdd281ebac4095004bc0cd2f84f2f4264cc0f",
+      "kind": "traceability"
+    },
+    {
+      "id": "profile-catalog",
+      "path": "tests/specifications/verification/local-baseline-v2/profile-catalog.json",
+      "sha256": "23d175dd5e73f0c67e2d8c9d8fdf36c921220f41fcfaaf6586514ed6d632172b",
+      "kind": "traceability"
+    },
+    {
+      "id": "v2-red-log",
+      "path": "tests/evidence/verification/local-baseline-v2/red.log",
+      "sha256": "ba91fcc0d23684a57f1356db70ce41f41db36c9c718851bbfbb6cd0603124ca4",
+      "kind": "red"
+    },
+    {
+      "id": "v2-red-observation",
+      "path": "tests/evidence/verification/local-baseline-v2/red-observation.json",
+      "sha256": "6db8f580239db79e4a206fe1d3dc33a998382e127fee9d6aae5dcf4817e80fad",
+      "kind": "red"
+    },
+    {
+      "id": "remote-runs",
+      "path": "tests/evidence/verification/local-baseline-v2/remote-runs.json",
+      "sha256": "98926c041270ff1d7346f018efe8a2b25f6b912a30510813a7bcee18e8d60b34",
+      "kind": "traceability"
+    },
+    {
+      "id": "g8-post-merge",
+      "path": "tests/evidence/verification/local-baseline-v2/g8-post-merge/post-merge-evidence.json",
+      "sha256": "7f27251aeabd013d8894c18561c885af1fe23dabbd8cfb40d32bb9451aa0e323",
+      "kind": "attestation"
+    },
+    {
+      "id": "g8-attestation-bundle",
+      "path": "tests/evidence/verification/local-baseline-v2/g8-post-merge/attestation.jsonl",
+      "sha256": "3048d8078a79a00dc75015b36b0ebb00718ebf13cd71258060821d837270f28f",
+      "kind": "attestation"
+    },
+    {
+      "id": "g8-attestation-positive",
+      "path": "tests/evidence/verification/local-baseline-v2/g8-post-merge/attestation-positive.log",
+      "sha256": "ffba6ad834f421c8cc79a96558d3ce02e7c9fd2276fae5c558d857852009802c",
+      "kind": "attestation"
+    },
+    {
+      "id": "g8-attestation-negative",
+      "path": "tests/evidence/verification/local-baseline-v2/g8-post-merge/attestation-negative.log",
+      "sha256": "25ca3eb9285198c3ed81d7474aaec97dfa2158d5703b6fbea57f3fd293d77c2f",
+      "kind": "attestation"
+    },
+    {
+      "id": "g8-candidate-verification",
+      "path": "tests/evidence/verification/local-baseline-v2/g8-post-merge/candidate-verification.log",
+      "sha256": "af8f9ff48f6b9e5363acb7b3b9ef7dcf024a42b7b72304cdf5bd1e2bc5c825e8",
+      "kind": "green"
+    },
+    {
+      "id": "versioned-explorer-browser",
+      "path": "crates/noesis/tests/evidence/s4/versioned-local-explorer/browser-observation-local.json",
+      "sha256": "85dbc790f7d3f3d299ecb47380684d339d239c11827e5749e7302fd46fa356ce",
+      "kind": "browser"
+    },
+    {
+      "id": "versioned-explorer-screenshot",
+      "path": "crates/noesis/tests/evidence/s4/versioned-local-explorer/browser-v9-valid.png",
+      "sha256": "99bd8ce1f83202a1d9f805525a24ff41d5c3c0dcfe40c7a69f5dbf20ab0ed0da",
+      "kind": "browser"
+    },
+    {
+      "id": "r17-browser",
+      "path": "crates/noesis/tests/evidence/s4/r17-function-context/browser-observation.log",
+      "sha256": "80e87bcec065105e40d1ae1a69a3c3f24258bd79048214d5676eff23d16683a9",
+      "kind": "browser"
+    },
+    {
+      "id": "r17-browser-screenshot",
+      "path": "crates/noesis/tests/evidence/s4/r17-function-context/lekton-r17-function-context.png",
+      "sha256": "a0c509b39dfd6360b7f239b93c984984240fea70b4388df045e3d0f84c1e61d6",
+      "kind": "browser"
+    },
+    {
+      "id": "r14-r15-pilots",
+      "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/real-repository-pilots.log",
+      "sha256": "0ff2378ded35da50f628da0b62d17b24f94861dd6a8d7dd0b910e54007231ffb",
+      "kind": "pilot"
+    },
+    {
+      "id": "r16-pilots",
+      "path": "crates/noesis/tests/evidence/s4/r16-safe-constant-evaluation/real-repository-pilots.log",
+      "sha256": "7a66d1519bc0de8cb91e17dda2ae0594d17b07680c295a34ad4eed24366872b6",
+      "kind": "pilot"
+    },
+    {
+      "id": "r17-pilots",
+      "path": "crates/noesis/tests/evidence/s4/r17-function-context/real-repository-pilots.log",
+      "sha256": "e4e451149e6677a4da353278f3a345215eac993ec25461d0ce2bdf69bf4ca55a",
+      "kind": "pilot"
+    },
+    {
+      "id": "s7-traceability",
+      "path": "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/traceability.json",
+      "sha256": "c87cfebb20668db240bfe5b7eb3c1f5d8d0bfdaa7b96074652678c78e1103feb",
+      "kind": "traceability"
+    },
+    {
+      "id": "g0-traceability",
+      "path": "crates/noesis/tests/evidence/g0/release-profile-v1/traceability.json",
+      "sha256": "85f5a7097adddddecc5565fe3799e9f8d905b19b953b680ecc2f55bb7e2cbeed",
+      "kind": "traceability"
+    },
+    {
+      "id": "g1-implementation",
+      "path": "crates/noesis/tests/evidence/g1/local-cli-distribution-v1/implementation-observation-local.json",
+      "sha256": "c7517ebb2f84a04162fd442372f6d03fc054738a15753061a325d9df2a4a0c3b",
+      "kind": "green"
+    },
+    {
+      "id": "g2-implementation",
+      "path": "crates/noesis/tests/evidence/g2/local-upgrade-safety-v1/implementation-observation-local.json",
+      "sha256": "43f12a31bd03a0a60e6a3e2b003ec6b3867586191fef6c0757eac1403970e604",
+      "kind": "green"
+    },
+    {
+      "id": "g8-traceability",
+      "path": "crates/noesis/tests/evidence/g8/local-release-candidate-v1/traceability.json",
+      "sha256": "088b21d5a8f64ee1b903d9f3eab26b952cdf00ff39719f16b968ad229b733468",
+      "kind": "traceability"
+    },
+    {
+      "id": "g8-supply-chain",
+      "path": "crates/noesis/tests/evidence/g8/local-release-candidate-v1/supply-chain-observation-local.json",
+      "sha256": "34ba1b1eb8d43fc3942b8dd0a097e7cb56356d01ba3b4c67054e7bc838a93bcc",
+      "kind": "supply_chain"
+    },
+    {
+      "id": "g8-run-metadata",
+      "path": "tests/evidence/verification/local-baseline-v2/g8-post-merge/run-metadata.json",
+      "sha256": "55feac9c04a9fce07814e5e6645033be7cf60f1f139a17664835346e7fbb1fcf",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-aebc721250eb9d7e0afe",
+      "path": "tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json",
+      "sha256": "ff8d5893adb6a8a9bd2c1ffcb558edb19480f60f411a2ffb94545123ab673c44",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-c7583a126176862feb55",
+      "path": "tests/specifications/s0/evidence-manifest-v1.schema.json",
+      "sha256": "d1a09942c260115282364bad8be5eada0103a48d13245af384d852b84cb72216",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-dfaed63bdf115fa6ee66",
+      "path": "crates/noesis/tests/evidence/s0/red-observation-corrected-contract.json",
+      "sha256": "1f12680a8f5127bb853ea289a50f6d9751063dc736b9d2ec74c77c42e0f439b4",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-e6563987df8a72981d16",
+      "path": "crates/noesis/tests/evidence/s0/green-observation-local.json",
+      "sha256": "16260290deb395355041e3acfb4451deee21b46b76e209c0655f4aadbc2d3561",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-2c0d2f537c00a932bdb8",
+      "path": "tests/specifications/s1/e2e_fr_inv_001_safe_inventory.json",
+      "sha256": "25ea508afca9655652862ce3d4304b162d0b221d07fc48ea0674174e97aa320d",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-4995b7f5bf5a4741c0e3",
+      "path": "crates/noesis/tests/evidence/s1/green-observation-local.json",
+      "sha256": "cdad8a86d0660a8087da457369b26164bc984c18e1b5cee1d62023bce4a8d7cf",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-65f15cdb31cb9b99e9ab",
+      "path": "tests/specifications/s1/e2e_fr_acq_004_packed_sha1.json",
+      "sha256": "41ade77f2e0c806c0586f6234c830f932286c18a9419f21ef5f9689a41a5338d",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-c0798b89c60111d66fae",
+      "path": "crates/noesis/tests/evidence/s1/packed/green-observation-local.json",
+      "sha256": "d022fd3ad1f337f1a426dd0f6dae1dc7660b2865254ea79a62f77151ad6ca6ff",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-4c268dcf99d443cf728b",
+      "path": "tests/specifications/s1/e2e_fr_acq_005_gitlink_boundaries.json",
+      "sha256": "812e2f448784ba42076d98fb85428b06569df9695099c926db00ffad6ad2a4ba",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-de74741700398a7aaf69",
+      "path": "crates/noesis/tests/evidence/s1/gitlinks/green-observation-local.json",
+      "sha256": "45da6185815b0eef93aa8eda805202588dd93f7c24465f00bde420ba1097c491",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-484c6303d87dd1b0d8c0",
+      "path": "tests/specifications/s2/e2e_fr_ext_002_rust_knowledge.json",
+      "sha256": "b42d9a0451572aaf5f607e9c4c82ca456f3c83e9d2a14a1cb634bfaf3abc83de",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-5d8585c3caf0aa1ec8ea",
+      "path": "crates/noesis/tests/evidence/s2/green-observation-local.json",
+      "sha256": "463fe0a3bb9d9354875bf33d39d6149429e90bbb3921d014b9bc5388e0430907",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-dcef4855c2db06b7adee",
+      "path": "tests/specifications/s3/e2e_fr_sto_001_atomic_local_storage.json",
+      "sha256": "06a97d28d0643a5527c777d1d913e866c899e633314c5b8eb60de296f438669c",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-8cd6d20fd224bc828889",
+      "path": "crates/noesis/tests/evidence/s3/green-observation-local.json",
+      "sha256": "7b2a6b0c162b385682fa653d9b9833ad08cb5c039b8734e0720c404095599c20",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-13f3aadaa11a9b828b9f",
+      "path": "tests/specifications/s4/e2e_fr_cli_001_workspace_docs_query.json",
+      "sha256": "8bbca0c0618e58ad49628de83ce61537463becb39693ef8cec1ef1f70abc3641",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-44f49e59e9c9b03ae3be",
+      "path": "crates/noesis/tests/evidence/s4/green-observation-local.json",
+      "sha256": "ef51d0f27866a0dcd445bde215764c561ddd8d1f78eca2412ec33418dc579859",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-edfcd6c29a3bf2d325c2",
+      "path": "tests/specifications/s4/r3/e2e_fr_ext_008_root_package_workspace.json",
+      "sha256": "c8323edf2b700b97118c74e2e565da82d8450769b892e0f9c1e2a42af95b20a6",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-ceba66e76f2a900e97ee",
+      "path": "crates/noesis/tests/evidence/s4/r3/implementation-observation-local.json",
+      "sha256": "4502bca215edeacfcdd37bb1805fe24437003699621e09805a00b7ecd8e655c7",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-15e2b46c91138e561d7a",
+      "path": "tests/specifications/s4/r4/e2e_fr_ext_009_cargo_manifest_facts.json",
+      "sha256": "effee80b8a1dbeaf17786db188e8d32ece73acc812df47a4805603e87d355e4b",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-1e8c9c92ad0f1b399d11",
+      "path": "crates/noesis/tests/evidence/s4/r4/pilot-observations-local.json",
+      "sha256": "52da027258a4103345cf1b0794732b54585f36514da07573f7bcb8f6df07fc63",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-87a45664edde011cf50f",
+      "path": "tests/specifications/s4/r5/e2e_fr_ext_010_rust_semantic_depth.json",
+      "sha256": "116ffc8e443215eefe89446061f3d8dedce46dcc304afa1bd640e9a5c22f0642",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-e6eaf9698591817c80e4",
+      "path": "crates/noesis/tests/evidence/s4/r5/implementation-observation-local.json",
+      "sha256": "8fcb2f6f270a302d1556c86a701c5abb2967952e6dec42d0d52821052c9fc88e",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-8c876756371a768a2dec",
+      "path": "tests/specifications/s4/r6/e2e_fr_ext_011_framework_declarations.json",
+      "sha256": "0b5441ace9af054a3655ec227ecdd45556cc8172433942b7513cc94e04756288",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-f8715c2f82a051a1c53b",
+      "path": "crates/noesis/tests/evidence/s4/r6/implementation-observation-local.json",
+      "sha256": "a99a6ed5602621efef2f4379e1563a186b44ff498b7a46884de373ed15c936ec",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-eb073560bb2022188012",
+      "path": "tests/specifications/s4/r7/e2e_fr_ext_005_scip_import.json",
+      "sha256": "33a101d05d4bb1a478cf0aaff43517b1d8397e4685f3e13876eb6049c400c06d",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-a0e50d20f0aadbbf0d29",
+      "path": "crates/noesis/tests/evidence/s4/r7/implementation-observation-local.json",
+      "sha256": "76ac090f6fb60850b9c83b39f007e5834d485b6b5c0366eb0201a0fa50f61ca3",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-439b198e2a22a1a79637",
+      "path": "tests/specifications/s4/r8/e2e_fr_exp_001_portable_explorer.json",
+      "sha256": "4e8dd8be33301a34bdaee595ac25bf00ba86e9e8f9a0fb6c0cf28757ea557581",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-6cdfd56a5a6fb04a915e",
+      "path": "crates/noesis/tests/evidence/s4/r8/implementation-observation-local.json",
+      "sha256": "002b05c4e1acf58b528ae1f6e851f6f6d85cda6806cea1b5037b444cc09cc1b6",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-48f95313eff51006b584",
+      "path": "tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json",
+      "sha256": "a594df02d9b6e1d3e2768e9b70e2ad13561cd43b361c14fc7722e3c70be56fe7",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-a441bbadfa4d69cbd5b3",
+      "path": "crates/noesis/tests/evidence/s5/green-observation-local.json",
+      "sha256": "789bfe13db4451fcedfceac9f3601537b7c4be82662b9d2a58cfe6a6f86fcb7a",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-864010b2ab231f2f6bef",
+      "path": "tests/specifications/s6/e2e_fr_fed_001_openapi_federation.json",
+      "sha256": "f5bd4ecd3244e17ab4e8ba76d7ddb8eed3ea083977039257345ae14fc928f2c6",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-1b323f54de7416773e06",
+      "path": "crates/noesis/tests/evidence/s6/implementation-observation-local.json",
+      "sha256": "a700d742f11467bb40f6817b406f59fbcd67c285926d3b0952c90d173bf08454",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-4312219ccc1ef41a36a5",
+      "path": "tests/specifications/s4/k1/e2e_fr_ext_012_rust_callable_semantics.json",
+      "sha256": "6eb9665ee1f9f0143d6ebeade6626b8813c4799767dc4089e4bbef03c545eb11",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-96790193d53d28e938d0",
+      "path": "crates/noesis/tests/evidence/s4/k1/implementation-observation-local.json",
+      "sha256": "02f210fcc5ab88db680d670cf3bcbdae0388fcbff09cda865b01458d85afb936",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-8d1f9576abefb980d6f6",
+      "path": "tests/specifications/s4/r9-output-capacity/output-capacity-profile-v1.json",
+      "sha256": "afe27d286bea34158b205a7888c93fb7abeff7d3293784a400a5c15366f0b6a0",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-e9f64f2216c67d0cd6d4",
+      "path": "crates/noesis/tests/evidence/s4/r9-output-capacity/red-observation.json",
+      "sha256": "788ab4767a78bad7a26e0836e07de27dcbf666b284d8f9ee96cdd70a52da3013",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-6b8e24622fa704828faf",
+      "path": "crates/noesis/tests/evidence/s4/r9-output-capacity/implementation-observation-local.json",
+      "sha256": "5016c705590a874a688d3364fe34ce3ae26f98f90155cb78e221dfe79990169d",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-fbe443999f9630fa1fde",
+      "path": "tests/specifications/s4/r10/e2e_fr_ext_013_cfg_declaration_alternatives.json",
+      "sha256": "7f86c239a3b8173ad919b40ee3a2328608de86dfc756afc1cc80eb262b361d48",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-51f6200a49615ff8a86c",
+      "path": "crates/noesis/tests/evidence/s4/r10-cfg-declaration-alternatives/red-observation.json",
+      "sha256": "48d68df2b95736192e4cc8c6b3982e96579ebf438ad361c4a2563bbf50cd9ab1",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-1682d5665827c5c94a78",
+      "path": "crates/noesis/tests/evidence/s4/r10-cfg-declaration-alternatives/implementation-observation-local.json",
+      "sha256": "fde509e024c7e976bbf829caa6c49277cedef87592ada2e9f4bd3f78d25f2ab9",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-92ba77af27d168c075db",
+      "path": "tests/specifications/s4/r11/e2e_fr_ext_012_k1_repository_boundaries.json",
+      "sha256": "3a464738c1a7ba6a2a3d26b78ed207cc34a9526e56876bf7d9b824f49bf513e5",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-4a01c90a121373e0390f",
+      "path": "crates/noesis/tests/evidence/s4/r11-k1-repository-boundaries/implementation-observation-local.json",
+      "sha256": "baa0337d41ec9d2b3167d7a83f8870d42f858d79b0fbe3f9ae24478a1db0a0df",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-d6337d9ec0400ac7f9f8",
+      "path": "tests/specifications/s4/r12/e2e_fr_ext_014_k1_cfg_alternatives.json",
+      "sha256": "9b3dd45f7cf9f50691a8fbbbf6596d8ca708dee3b8b0dfbf140dc4b2cbec9ba1",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-9148d3331b3c384d7379",
+      "path": "crates/noesis/tests/evidence/s4/r12-k1-cfg-alternatives/implementation-observation-local.json",
+      "sha256": "a922b1f4aa94f2a739ae54744b2330f64516af177261b8ddf33389ac8f4061b0",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-629d45954e5d91fcdfb1",
+      "path": "tests/specifications/s4/r13/e2e_fr_ext_015_k1_scip_composition.json",
+      "sha256": "442252cf3eda5f8c38b198671517f44ed4d2cf810c157acb73c02a9099eb28a6",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-90ef45ed13232bcd7137",
+      "path": "crates/noesis/tests/evidence/s4/r13-k1-scip-composition/implementation-observation-local.json",
+      "sha256": "b29827a0db7f5cf7f42ad419566fcb945736d4885bb54dcea4ff656e08e3297e",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-623aad5d851e9570d507",
+      "path": "tests/specifications/s4/r14/e2e_fr_ext_016_rust_expression_bindings.json",
+      "sha256": "98e90308204bdda24bfd7a8ef85e53a7447ca248640f654b8eefc0ba94bd9378",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-681549cf859e5ca5aeca",
+      "path": "crates/noesis/tests/evidence/s4/r14-rust-expression-bindings/implementation-observation-local.json",
+      "sha256": "a5bf7dc6710526572e29dc650d38c8e998212bfcad632900ee95dd6f0343b954",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-4adaed625962b058cbe5",
+      "path": "tests/specifications/s4/r15/e2e_fr_ext_017_rust_local_flow.json",
+      "sha256": "54a3de2f244e28652354d545400f30088c54db4255ce42c0c82097cfcbaae799",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-f844f1157ba4d5a9c0a1",
+      "path": "crates/noesis/tests/evidence/s4/r15-rust-local-flow/red-observation.json",
+      "sha256": "70c69860bd853970f457246207176d230149159f1dddba50fe2dded5ecb53d6e",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-a8039a992274a2364d51",
+      "path": "crates/noesis/tests/evidence/s4/r15-rust-local-flow/implementation-observation-local.json",
+      "sha256": "2af84b506ab4716d8525e3a63a947f04932c2730400274d02070fd8814b12393",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-82e661cd466e62788f0b",
+      "path": "tests/specifications/s4/r14-r15-real-repository-correction/correction-v1.json",
+      "sha256": "8b3678894c3e9259d065f64b4753c3f1f9ac02b58363414dc29fa1e85ca478a1",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-6c22562bdfb7f32b6e5d",
+      "path": "tests/specifications/s4/r14-r15-real-repository-correction/real-repository-pilots-v1.json",
+      "sha256": "7bb2997a39b807c4182861823dbac4791d24f75aeb2c1bf4760363ec1f981c35",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-a6c2f4505285f1e4db04",
+      "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/red-observation.json",
+      "sha256": "85400de6b6f572b7f2a90f3eb82ecd44b6540f87fc8fb904823fe322b6c5b6cf",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-810c66c2162ce8ebc73a",
+      "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/green-observation.json",
+      "sha256": "2ca6ebb60499464c29014814e8cf84b8ca826ebeb82ccdb294eac4d249dc7b5b",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-051005fd314b14e143a6",
+      "path": "tests/specifications/s4/r16/e2e_fr_ext_020_rust_safe_constant_evaluation.json",
+      "sha256": "08c2118e2568ea72b49df7b26bb2adee21436cf3de2e933ca6cfbc50b7e09b3b",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-7f4b6f93fec3b2cfa6de",
+      "path": "crates/noesis/tests/evidence/s4/r16-safe-constant-evaluation/red-observation.json",
+      "sha256": "1b3dce6ee3ed8d635793c3a79dcf9743e4a0217cc039f50ba94bb0862ff5de69",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-bb0b40e1dcd4b3c496ed",
+      "path": "crates/noesis/tests/evidence/s4/r16-safe-constant-evaluation/implementation-observation-local.json",
+      "sha256": "8d4e568d4a59a50e6926a7b1cc5b564442c3bf643cfc20d6b8d89be0fee20657",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-ee9b91cfa5015db0a50a",
+      "path": "tests/specifications/s4/versioned-local-explorer/contract-v1.json",
+      "sha256": "433799f799d2910fb40ad729772c02b5b32b0f8f033d93784b7ff846716141fa",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-cfe4444601a5ea9930f6",
+      "path": "crates/noesis/tests/evidence/s4/versioned-local-explorer/red-observation-local.json",
+      "sha256": "e8d04de052a3de38e462dbaf081f26688c9ce3455e9b20399c26732743d0a4e7",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-048aa14a78d4e387c6c1",
+      "path": "crates/noesis/tests/evidence/s4/versioned-local-explorer/green-observation-local.json",
+      "sha256": "c77575b241cc64b82ed5a0321701ccea8bf43ced595f49e41cf8560e2c644ab3",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-84f5ed5c85e501e3b8d6",
+      "path": "tests/specifications/s4/r17/e2e_fr_ctx_001_function_context.json",
+      "sha256": "a89229f56075263b97badf9d944374d70f492fc193ed71acb81aa52f145615f3",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-280ce6262bc588edfc1c",
+      "path": "crates/noesis/tests/evidence/s4/r17-function-context/red-observation-local.json",
+      "sha256": "ebea30c575c3e8d6cf817bd7980eaa4f6165a5221b1c19f2f17b940c59969c15",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-4337649557c6788590cf",
+      "path": "crates/noesis/tests/evidence/s4/r17-function-context/implementation-observation-local.json",
+      "sha256": "28425481774b59f0631998430b0a52ad00d7fb58c7912bf65fb3fa8f532abff7",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-efa593e29407472df4e0",
+      "path": "crates/noesis/tests/evidence/s4/r17-function-context/traceability.json",
+      "sha256": "5c9a310f22abf3de3ba6d83fdc7bc58130a5126f4d085bca0017924fe86420ec",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-8af4af9bc13ad5b16e58",
+      "path": "tests/specifications/s7/e2e_fr_imp_004_implementation_aware_api_diff.json",
+      "sha256": "d17072db81a456d8ca94b64094f5f09c9fc99004d27458fc8237e911d7386af4",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-315cb215b665e1fe8ff5",
+      "path": "tests/specifications/s7/runtime-v1/runtime-contract-v1.json",
+      "sha256": "7434e8e94f28893894ca6eb34eefc219633a2b31beff7886d36403ccc6fa4459",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-5cc25e2d26b8ac0c9774",
+      "path": "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/governance-red-observation.json",
+      "sha256": "aa0ff305f8d1a90454c174e1c64ec4137547a45ffc4064b9a43bb487d26d2ef2",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-556cb67553e0371f0d47",
+      "path": "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/product-red-observation.json",
+      "sha256": "5d2b558a6aded15673ff8f2f47df73b168f425ef0257f7110f663be86c8633c7",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-81edfbaee6d37dd06ba5",
+      "path": "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/implementation-observation-local.json",
+      "sha256": "5528afcfbf99cf5928975cd63d56515618bf8fc1118df0746423d5e4ec2a6d15",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-b955f33e2619c579cb5d",
+      "path": "tests/specifications/g0/release-profile-v1/e2e_fr_rel_001_release_profile.json",
+      "sha256": "62461feeab23e286b7f38cbf1742d220642d5adef043c5b8e0f062784f35ab24",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-8e3b73889fff5c4b1402",
+      "path": "crates/noesis/tests/evidence/g0/release-profile-v1/red-observation-local.json",
+      "sha256": "29b4c140f7880af365447dc51b15fe33041e83c0753bb7f1afa293313b1de9f7",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-f9ac2a10af2833140b2a",
+      "path": "crates/noesis/tests/evidence/g0/release-profile-v1/implementation-observation-local.json",
+      "sha256": "65c7ed07528fda6c1ed8bdbc1bf772be996e9ca967470a0be3027e9a71f8187b",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-9d896c300c621ff67b77",
+      "path": "tests/specifications/g1/local-cli-distribution-v1/e2e_fr_cfg_001_local_configuration.json",
+      "sha256": "fe32b6a14f0439ba046adc0872142220e5a3c328a62a69a4e9f44a5963af67b9",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-9adf8be5b4d74011181a",
+      "path": "tests/specifications/g1/local-cli-distribution-v1/e2e_fr_rel_002_local_distribution.json",
+      "sha256": "4cbf916d00c9f18e1586cac74eded2c772abbc89da35c5cbcd0a7a2c1357adb1",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-1b99609598d8b3ea2a48",
+      "path": "crates/noesis/tests/evidence/g1/local-cli-distribution-v1/red-observation.json",
+      "sha256": "1a1aed99474f4f86fe780ea3275050f52ca097e7fa3d4a94f80e651549c59096",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-a0c71404f0e648b64124",
+      "path": "crates/noesis/tests/evidence/g1/local-cli-distribution-v1/complete-gate-local.json",
+      "sha256": "585063d2e924a0c830b26ca62e0d5a05904bc09ee6fc3829750d5b35f6988c40",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-d83192fcabdfa76aeb50",
+      "path": "tests/specifications/g2/local-upgrade-safety-v1/e2e_fr_cmp_001_local_upgrade.json",
+      "sha256": "90203085e0e82f1f6ec3f1817837edd96a6c96e7fbbc17fb04b8a8f85f165df0",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-325b969d556ba7e52de0",
+      "path": "crates/noesis/tests/evidence/g2/local-upgrade-safety-v1/red-local.json",
+      "sha256": "445cd4b814f7d26511754d1f63645c8f68e6d4a24f271726117815249aac9bd7",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-b60a7547fc18299e700d",
+      "path": "crates/noesis/tests/evidence/g2/local-upgrade-safety-v1/performance-evidence-local.json",
+      "sha256": "366165ebd8a372a5a818f550ff9134334c25f397e6fd5d548361a24736a3eb9d",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-792a15c557111b33b16e",
+      "path": "tests/specifications/g8/local-release-candidate-v1/e2e_fr_rel_003_local_release_candidate.json",
+      "sha256": "290289907b6040e5be158738ce94dcf0cc345bc1f0077cc8f5504b96873ae7f8",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-c664d3a507fde991e692",
+      "path": "crates/noesis/tests/evidence/g8/local-release-candidate-v1/red-observation.json",
+      "sha256": "61b8cff65e711b19e0fa9ebefd428542e75585220c69db1e613537e23406aec1",
+      "kind": "traceability"
+    },
+    {
+      "id": "catalog-file-4971368487b4b80f796d",
+      "path": "crates/noesis/tests/evidence/g8/local-release-candidate-v1/implementation-observation-local.json",
+      "sha256": "b5b365887abee651718768dde4db76e80036bc5f93a8ff4da384f55f96cab2fa",
+      "kind": "traceability"
+    },
+    {
+      "id": "codeql-rust-log-index",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/index.json",
+      "sha256": "7c19eb74b02f6d3ca7e5cf54b2a175122a3542b197e1750ce07a0dc7b787f82e",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-00",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-00.log",
+      "sha256": "b8513d779f334772e6407da9528e1e2fb30fa4446f08c07a2b0bda0af1c50cc3",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-01",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-01.log",
+      "sha256": "10541c092ee098db5cb8b9da60e22c1e0c14ec4ec1c5e79f784bb24f3b5c2f59",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-02",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-02.log",
+      "sha256": "6434ae99983241a51b40961f5142bb85aa71cb9dbbfd586d95824aa26ce5637c",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-03",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-03.log",
+      "sha256": "84e4ccfd26f6e8783a7b12537dccaf70c2e26bd38bd56801c7d6358986f9e78a",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-04",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-04.log",
+      "sha256": "04f538f0f27a9bd95e7a055c735aa4518642b8f83108be9b10444b80f2c0d620",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-05",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-05.log",
+      "sha256": "86da08de2c7b87c9b107e6816b4a7b65f616d3e03a218ce77d0e92e2eb89d11a",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-06",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-06.log",
+      "sha256": "3980e70d4f6374a2e6a700ea782dd01f15091014e4e47e324f2cdc398ca364a0",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-07",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-07.log",
+      "sha256": "952fb21afc1ec3efc0495c8ba4cce2479428ce5eda6f6f4a3d0faddd9952af3b",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-08",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-08.log",
+      "sha256": "98bc6d75ead934285aa7c5cbe85829328eee7066565d16f7ca67c81fcf655f67",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-09",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-09.log",
+      "sha256": "868ad3430200a010cecc4002b96476a96a3d2f02e66411c7c90163fcc65d6477",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-10",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-10.log",
+      "sha256": "81490f8ba64087c8df8dacf9fd9b3e79524c5b944363f5343104182acb1ecda9",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-11",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-11.log",
+      "sha256": "44475d0d9aaaf2550c5295d10311fde5a7e583d9eef8e8c33b3033fe50b8c21e",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-12",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-12.log",
+      "sha256": "94efb3972c3e24dcadc03b8ec736bc38414e92f63720ef779ebf383ec249fd77",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-13",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-13.log",
+      "sha256": "416c0c59ce8f3d6d3cb94897ec26376b14cb148441984b47f261ff6696df7581",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-14",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-14.log",
+      "sha256": "93030665ff69cb16d70e8b37a9e6806848155c2286095f6d67ecb73583f4edf4",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-15",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-15.log",
+      "sha256": "1bbe2821d11e2f99522f790fd4dbafb653096a82646aeb28c8a0e0547d877bc1",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-16",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-16.log",
+      "sha256": "2b7c31aa6d0c61cb666e224662ad85616474c16d2c9a1cbd7dccf7eec2481d65",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-17",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-17.log",
+      "sha256": "b856d29728626c6a61033e17a0dc25ce414b07aef3fac7e2ae058fcc1f3348c1",
+      "kind": "security"
+    },
+    {
+      "id": "codeql-rust-log-part-18",
+      "path": "tests/evidence/verification/local-baseline-v2/codeql-rust-log/part-18.log",
+      "sha256": "8fc347e2f4c13801ef95d0f5a4ca05db003a777504ddb691c3a30cc33b026a63",
+      "kind": "security"
+    },
+    {
+      "id": "v2-focused-green-log",
+      "path": "tests/evidence/verification/local-baseline-v2/focused-green.log",
+      "sha256": "1019817a0f99e1b173035271646446752574f27abf66ad2820e2d7e68222e552",
+      "kind": "green"
+    },
+    {
+      "id": "v2-focused-green-observation",
+      "path": "tests/evidence/verification/local-baseline-v2/focused-green-observation.json",
+      "sha256": "3200b184e470a9f19337af69318951a0a604848a7385d39fb7f8bd91ed150f8a",
+      "kind": "green"
+    },
+    {
+      "id": "v2-full-gate-log",
+      "path": "tests/evidence/verification/local-baseline-v2/full-gate.log",
+      "sha256": "fb883c5ba638d9ab8f6c28629d49d11d1906b8b906a33de8794a2514f37d412e",
+      "kind": "green"
+    },
+    {
+      "id": "v2-full-gate-observation",
+      "path": "tests/evidence/verification/local-baseline-v2/full-gate-observation.json",
+      "sha256": "8b4fe9b5f4a88571502127b224c3926891439e35868a45eabc60ece1a7a66351",
+      "kind": "green"
+    }
+  ],
+  "remote_logs": [
+    {
+      "id": "base-ci-quality",
+      "provider": "github_actions",
+      "format": "git-retained-github-actions-log/v1",
+      "repository": "smutti/codenoesis",
+      "workflow_path": ".github/workflows/ci.yml",
+      "workflow_sha256": "2468f920879872cdd777745d28adea694caa160295b22540b908322b0ad1cd45",
+      "workflow_ref": "refs/heads/main",
+      "run_id": 31842394871,
+      "run_attempt": 1,
+      "job_id": 94901860547,
+      "job_name": "Rust quality gate",
+      "check_name": "Rust quality gate",
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "tree_sha": "a7bc24209a1b372aac66891d648dd88f99d17bb3",
+      "conclusion": "success",
+      "base_controlled": true,
+      "source_log_sha256": "baa3bb0c3de514eeb34184ac259a2ab97eb27129f5b5e1f9af969065a333a523",
+      "normalization": "codenoesis.github-actions-log-normalization/v1",
+      "committed_log_path": "tests/evidence/verification/local-baseline-v2/remote-logs/base-ci-quality.log",
+      "committed_log_sha256": "baa3bb0c3de514eeb34184ac259a2ab97eb27129f5b5e1f9af969065a333a523",
+      "first_retained_commit": "b754282d56dc65df8044d3e6d4acc672b5ae8cde",
+      "evidence_head": "b754282d56dc65df8044d3e6d4acc672b5ae8cde"
+    },
+    {
+      "id": "base-ci-linux",
+      "provider": "github_actions",
+      "format": "git-retained-github-actions-log/v1",
+      "repository": "smutti/codenoesis",
+      "workflow_path": ".github/workflows/ci.yml",
+      "workflow_sha256": "2468f920879872cdd777745d28adea694caa160295b22540b908322b0ad1cd45",
+      "workflow_ref": "refs/heads/main",
+      "run_id": 31842394871,
+      "run_attempt": 1,
+      "job_id": 94901860583,
+      "job_name": "Test (ubuntu-latest)",
+      "check_name": "Test (ubuntu-latest)",
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "tree_sha": "a7bc24209a1b372aac66891d648dd88f99d17bb3",
+      "conclusion": "success",
+      "base_controlled": true,
+      "source_log_sha256": "86069e86b74a07f9f3e688f7402f9c4a92d7c3573ee4262531b0b5b2dd31489d",
+      "normalization": "codenoesis.github-actions-log-normalization/v1",
+      "committed_log_path": "tests/evidence/verification/local-baseline-v2/remote-logs/base-ci-linux.log",
+      "committed_log_sha256": "86069e86b74a07f9f3e688f7402f9c4a92d7c3573ee4262531b0b5b2dd31489d",
+      "first_retained_commit": "b754282d56dc65df8044d3e6d4acc672b5ae8cde",
+      "evidence_head": "b754282d56dc65df8044d3e6d4acc672b5ae8cde"
+    },
+    {
+      "id": "base-ci-macos",
+      "provider": "github_actions",
+      "format": "git-retained-github-actions-log/v1",
+      "repository": "smutti/codenoesis",
+      "workflow_path": ".github/workflows/ci.yml",
+      "workflow_sha256": "2468f920879872cdd777745d28adea694caa160295b22540b908322b0ad1cd45",
+      "workflow_ref": "refs/heads/main",
+      "run_id": 31842394871,
+      "run_attempt": 1,
+      "job_id": 94901860606,
+      "job_name": "Test (macos-latest)",
+      "check_name": "Test (macos-latest)",
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "tree_sha": "a7bc24209a1b372aac66891d648dd88f99d17bb3",
+      "conclusion": "success",
+      "base_controlled": true,
+      "source_log_sha256": "0c60785f96e3dbb8c2156ddc1822e4cfc73e3565020e290577ab443a570259bc",
+      "normalization": "codenoesis.github-actions-log-normalization/v1",
+      "committed_log_path": "tests/evidence/verification/local-baseline-v2/remote-logs/base-ci-macos.log",
+      "committed_log_sha256": "0c60785f96e3dbb8c2156ddc1822e4cfc73e3565020e290577ab443a570259bc",
+      "first_retained_commit": "b754282d56dc65df8044d3e6d4acc672b5ae8cde",
+      "evidence_head": "b754282d56dc65df8044d3e6d4acc672b5ae8cde"
+    },
+    {
+      "id": "base-ci-windows",
+      "provider": "github_actions",
+      "format": "git-retained-github-actions-log/v1",
+      "repository": "smutti/codenoesis",
+      "workflow_path": ".github/workflows/ci.yml",
+      "workflow_sha256": "2468f920879872cdd777745d28adea694caa160295b22540b908322b0ad1cd45",
+      "workflow_ref": "refs/heads/main",
+      "run_id": 31842394871,
+      "run_attempt": 1,
+      "job_id": 94901860613,
+      "job_name": "Test (windows-latest)",
+      "check_name": "Test (windows-latest)",
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "tree_sha": "a7bc24209a1b372aac66891d648dd88f99d17bb3",
+      "conclusion": "success",
+      "base_controlled": true,
+      "source_log_sha256": "d5ef2c107eec5664fc60bf65471d08bcbe995497fe53ad44da19802eb0f15874",
+      "normalization": "codenoesis.github-actions-log-normalization/v1",
+      "committed_log_path": "tests/evidence/verification/local-baseline-v2/remote-logs/base-ci-windows.log",
+      "committed_log_sha256": "d5ef2c107eec5664fc60bf65471d08bcbe995497fe53ad44da19802eb0f15874",
+      "first_retained_commit": "b754282d56dc65df8044d3e6d4acc672b5ae8cde",
+      "evidence_head": "b754282d56dc65df8044d3e6d4acc672b5ae8cde"
+    },
+    {
+      "id": "base-ci-supply-chain",
+      "provider": "github_actions",
+      "format": "git-retained-github-actions-log/v1",
+      "repository": "smutti/codenoesis",
+      "workflow_path": ".github/workflows/ci.yml",
+      "workflow_sha256": "2468f920879872cdd777745d28adea694caa160295b22540b908322b0ad1cd45",
+      "workflow_ref": "refs/heads/main",
+      "run_id": 31842394871,
+      "run_attempt": 1,
+      "job_id": 94901860582,
+      "job_name": "Local release supply-chain gate",
+      "check_name": "Local release supply-chain gate",
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "tree_sha": "a7bc24209a1b372aac66891d648dd88f99d17bb3",
+      "conclusion": "success",
+      "base_controlled": true,
+      "source_log_sha256": "57f4f4b0ba16ba63737c432bae516d4bd120347d9a374af85b0b690c1574f5d0",
+      "normalization": "codenoesis.github-actions-log-normalization/v1",
+      "committed_log_path": "tests/evidence/verification/local-baseline-v2/remote-logs/base-ci-supply-chain.log",
+      "committed_log_sha256": "57f4f4b0ba16ba63737c432bae516d4bd120347d9a374af85b0b690c1574f5d0",
+      "first_retained_commit": "b754282d56dc65df8044d3e6d4acc672b5ae8cde",
+      "evidence_head": "b754282d56dc65df8044d3e6d4acc672b5ae8cde"
+    },
+    {
+      "id": "base-benchmark-validation",
+      "provider": "github_actions",
+      "format": "git-retained-github-actions-log/v1",
+      "repository": "smutti/codenoesis",
+      "workflow_path": ".github/workflows/benchmark.yml",
+      "workflow_sha256": "55c12bcfa8c547737758cb50f7c4215d643a27eff64832b5a6f4e4c6f1b91b0a",
+      "workflow_ref": "refs/heads/main",
+      "run_id": 31842394863,
+      "run_attempt": 1,
+      "job_id": 94901860465,
+      "job_name": "Validate benchmark contract",
+      "check_name": "Validate benchmark contract",
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "tree_sha": "a7bc24209a1b372aac66891d648dd88f99d17bb3",
+      "conclusion": "success",
+      "base_controlled": true,
+      "source_log_sha256": "4e3dc0113f1373ca3ff3b203d248eaa760bd7907e75e571d213c43ecf0129f74",
+      "normalization": "codenoesis.github-actions-log-normalization/v1",
+      "committed_log_path": "tests/evidence/verification/local-baseline-v2/remote-logs/base-benchmark-validation.log",
+      "committed_log_sha256": "4e3dc0113f1373ca3ff3b203d248eaa760bd7907e75e571d213c43ecf0129f74",
+      "first_retained_commit": "b754282d56dc65df8044d3e6d4acc672b5ae8cde",
+      "evidence_head": "b754282d56dc65df8044d3e6d4acc672b5ae8cde"
+    },
+    {
+      "id": "base-release-supply",
+      "provider": "github_actions",
+      "format": "git-retained-github-actions-log/v1",
+      "repository": "smutti/codenoesis",
+      "workflow_path": ".github/workflows/local-release-candidate.yml",
+      "workflow_sha256": "269082c6b679e630a13faca740c27edaa942c224f8933598c4b28489d8e0b8e5",
+      "workflow_ref": "refs/heads/main",
+      "run_id": 31843845301,
+      "run_attempt": 1,
+      "job_id": 94906188056,
+      "job_name": "Generate exact target supply evidence",
+      "check_name": "Generate exact target supply evidence",
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "tree_sha": "a7bc24209a1b372aac66891d648dd88f99d17bb3",
+      "conclusion": "success",
+      "base_controlled": true,
+      "source_log_sha256": "47de713d883fa1a08d31206114acc636c206d6df542b48c6d733d5981fbdbf82",
+      "normalization": "codenoesis.github-actions-log-normalization/v1",
+      "committed_log_path": "tests/evidence/verification/local-baseline-v2/remote-logs/base-release-supply.log",
+      "committed_log_sha256": "47de713d883fa1a08d31206114acc636c206d6df542b48c6d733d5981fbdbf82",
+      "first_retained_commit": "b754282d56dc65df8044d3e6d4acc672b5ae8cde",
+      "evidence_head": "b754282d56dc65df8044d3e6d4acc672b5ae8cde"
+    },
+    {
+      "id": "base-release-attestation",
+      "provider": "github_actions",
+      "format": "git-retained-github-actions-log/v1",
+      "repository": "smutti/codenoesis",
+      "workflow_path": ".github/workflows/local-release-candidate.yml",
+      "workflow_sha256": "269082c6b679e630a13faca740c27edaa942c224f8933598c4b28489d8e0b8e5",
+      "workflow_ref": "refs/heads/main",
+      "run_id": 31843845301,
+      "run_attempt": 1,
+      "job_id": 94908208375,
+      "job_name": "Attest immutable candidate subjects",
+      "check_name": "Attest immutable candidate subjects",
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "tree_sha": "a7bc24209a1b372aac66891d648dd88f99d17bb3",
+      "conclusion": "success",
+      "base_controlled": true,
+      "source_log_sha256": "3c5151e403cc8dc4442eefc3fafaca3629371667647e3d9f8ead39d7a223b2bc",
+      "normalization": "codenoesis.github-actions-log-normalization/v1",
+      "committed_log_path": "tests/evidence/verification/local-baseline-v2/remote-logs/base-release-attestation.log",
+      "committed_log_sha256": "3c5151e403cc8dc4442eefc3fafaca3629371667647e3d9f8ead39d7a223b2bc",
+      "first_retained_commit": "b754282d56dc65df8044d3e6d4acc672b5ae8cde",
+      "evidence_head": "b754282d56dc65df8044d3e6d4acc672b5ae8cde"
+    },
+    {
+      "id": "s0-pr15-quality",
+      "provider": "github_actions",
+      "format": "git-retained-github-actions-log/v1",
+      "repository": "smutti/codenoesis",
+      "workflow_path": ".github/workflows/ci.yml",
+      "workflow_sha256": "3b86c320d378425bf375a7ac1f445115868d159a12df9d5191864075a8404524",
+      "workflow_ref": "refs/heads/codex/9-s0-walking-skeleton",
+      "run_id": 29955409362,
+      "run_attempt": 1,
+      "job_id": 89043105431,
+      "job_name": "Rust quality gate",
+      "check_name": "Rust quality gate",
+      "head_sha": "b80c08935c32293f1315ae6dd1b4f1a7f52cd6c5",
+      "tree_sha": "afc89d7fac6b263397c4bdebce7a23ebbc0a8207",
+      "conclusion": "success",
+      "base_controlled": true,
+      "source_log_sha256": "5887763bfc16ba9ddbc32590793b82fc567efb16ed17336bf07dfbf2ce6f16fa",
+      "normalization": "codenoesis.github-actions-log-normalization/v1",
+      "committed_log_path": "tests/evidence/verification/local-baseline-v2/remote-logs/s0-pr15-quality.log",
+      "committed_log_sha256": "5887763bfc16ba9ddbc32590793b82fc567efb16ed17336bf07dfbf2ce6f16fa",
+      "first_retained_commit": "b754282d56dc65df8044d3e6d4acc672b5ae8cde",
+      "evidence_head": "b754282d56dc65df8044d3e6d4acc672b5ae8cde"
+    }
+  ],
+  "remote_runs": [
+    {
+      "run_id": 29955409362,
+      "run_attempt": 1,
+      "head_sha": "b80c08935c32293f1315ae6dd1b4f1a7f52cd6c5",
+      "workflow": "CI",
+      "workflow_path": ".github/workflows/ci.yml",
+      "event": "pull_request",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/29955409362",
+      "conclusion": "success"
+    },
+    {
+      "run_id": 31842394871,
+      "run_attempt": 1,
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "workflow": "CI",
+      "workflow_path": ".github/workflows/ci.yml",
+      "event": "push",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/31842394871",
+      "conclusion": "success"
+    },
+    {
+      "run_id": 31842394863,
+      "run_attempt": 1,
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "workflow": "Benchmark integrity",
+      "workflow_path": ".github/workflows/benchmark.yml",
+      "event": "push",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/31842394863",
+      "conclusion": "success"
+    },
+    {
+      "run_id": 31842394592,
+      "run_attempt": 1,
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "workflow": "CodeQL",
+      "workflow_path": "dynamic/github-code-scanning/codeql",
+      "event": "dynamic",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/31842394592",
+      "conclusion": "success"
+    },
+    {
+      "run_id": 31843845301,
+      "run_attempt": 1,
+      "head_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+      "workflow": "Local release candidate",
+      "workflow_path": ".github/workflows/local-release-candidate.yml",
+      "event": "workflow_dispatch",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/31843845301",
+      "conclusion": "success"
+    }
+  ],
+  "required_gates": [
+    {
+      "id": "benchmark-integrity",
+      "result": "green",
+      "evidence": [
+        "base-benchmark-validation",
+        "run:31842394863"
+      ],
+      "command": "python3 scripts/validate_benchmark_assets.py"
+    },
+    {
+      "id": "browser",
+      "result": "green",
+      "evidence": [
+        "versioned-explorer-browser",
+        "r17-browser"
+      ],
+      "command": null
+    },
+    {
+      "id": "codeql",
+      "result": "green",
+      "evidence": [
+        "run:31842394592",
+        "codeql-rust-log-index"
+      ],
+      "command": null
+    },
+    {
+      "id": "expected-red",
+      "result": "green",
+      "evidence": [
+        "v2-red-log",
+        "v2-red-observation"
+      ],
+      "command": "python3 -m unittest scripts/tests/test_local_baseline_verification_v2.py"
+    },
+    {
+      "id": "focused-green",
+      "result": "green",
+      "evidence": [
+        "v2-focused-green-log",
+        "v2-focused-green-observation"
+      ],
+      "command": "python3 -m unittest scripts/tests/test_local_baseline_verification_v2.py"
+    },
+    {
+      "id": "full-regression",
+      "result": "green",
+      "evidence": [
+        "base-ci-quality",
+        "run:31842394871",
+        "v2-full-gate-log",
+        "v2-full-gate-observation"
+      ],
+      "command": "cargo test --workspace --all-targets --all-features --locked"
+    },
+    {
+      "id": "g8-attestation",
+      "result": "green",
+      "evidence": [
+        "g8-post-merge",
+        "g8-attestation-bundle",
+        "g8-attestation-positive",
+        "g8-attestation-negative"
+      ],
+      "command": null
+    },
+    {
+      "id": "governance-checkpoint",
+      "result": "green",
+      "evidence": [
+        "decision-0037",
+        "v2-red-observation"
+      ],
+      "command": null
+    },
+    {
+      "id": "independent-review-activation",
+      "result": "not_applicable",
+      "evidence": [],
+      "command": null
+    },
+    {
+      "id": "linux-native",
+      "result": "green",
+      "evidence": [
+        "base-ci-linux"
+      ],
+      "command": null
+    },
+    {
+      "id": "macos-native",
+      "result": "green",
+      "evidence": [
+        "base-ci-macos"
+      ],
+      "command": null
+    },
+    {
+      "id": "policy-gate",
+      "result": "green",
+      "evidence": [
+        "run:31842394871"
+      ],
+      "command": null
+    },
+    {
+      "id": "product-tree",
+      "result": "green",
+      "evidence": [
+        "verification-plan"
+      ],
+      "command": null
+    },
+    {
+      "id": "profile-catalog",
+      "result": "green",
+      "evidence": [
+        "profile-catalog"
+      ],
+      "command": null
+    },
+    {
+      "id": "real-repository-pilot",
+      "result": "green",
+      "evidence": [
+        "r14-r15-pilots",
+        "r16-pilots",
+        "r17-pilots"
+      ],
+      "command": null
+    },
+    {
+      "id": "security",
+      "result": "green",
+      "evidence": [
+        "base-ci-linux",
+        "base-ci-supply-chain"
+      ],
+      "command": null
+    },
+    {
+      "id": "status-parity",
+      "result": "green",
+      "evidence": [
+        "verification-plan"
+      ],
+      "command": null
+    },
+    {
+      "id": "supply-chain",
+      "result": "green",
+      "evidence": [
+        "base-ci-supply-chain",
+        "g8-supply-chain",
+        "base-release-supply"
+      ],
+      "command": null
+    },
+    {
+      "id": "traceability",
+      "result": "green",
+      "evidence": [
+        "remote-runs",
+        "s7-traceability",
+        "g0-traceability",
+        "g8-traceability"
+      ],
+      "command": null
+    },
+    {
+      "id": "windows-native",
+      "result": "green",
+      "evidence": [
+        "base-ci-windows"
+      ],
+      "command": null
+    }
+  ],
+  "environment": {
+    "observed_at": "2026-08-14T22:48:06Z",
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "python": "Python 3.9.6",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "toolchain_file_sha256": "279d77167cec5426fa80f457cd066dc74a360fbe4e2816f4f3fa01487a918fdc",
+    "policy_sha256": "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993",
+    "agent": "OpenAI Codex",
+    "model": "not exposed by runtime",
+    "run_identifier": "issue-188-local-baseline-verification-v2",
+    "duration_seconds": null,
+    "cost": null
+  },
+  "limitations": [
+    "The candidate remains pending independent review and protected manual merge.",
+    "G9 remains a separate governed package; this evidence grants no GA, release, publication, support, SLA, or EOL authority.",
+    "CodeQL is a GitHub-managed dynamic workflow; its exact run/job identities and downloaded Rust-job log digest are retained, but no repository workflow byte exists to bind.",
+    "Historical target-repository build health is contextual pilot metadata and is not ontology truth evidence."
+  ],
+  "review": {
+    "state": "pending_independent_review",
+    "required_actor": "github:smutti",
+    "activation": "independent_review_then_protected_manual_merge_of_exact_head",
+    "decision_url": null
+  }
+}
