@@ -1,0 +1,51 @@
+{
+  "schema_version": "codenoesis.r18-traceability/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/190",
+  "requirement_status": "Proposed branch-scoped candidate",
+  "slice": "S4",
+  "risk": "high",
+  "tested_head": "25e7ba5bf2967c998bf434136b86e4db687c9615",
+  "requirements": {
+    "FR-CTX-002": {
+      "tests": [
+        "s4_r18::tests::conf_fr_ctx_002_positions_are_unicode_scalar_and_crlf_aware",
+        "s4_r18::tests::sec_fr_ctx_002_rejects_non_utf8_and_non_scalar_boundaries",
+        "s4_r18::tests::inv_bnd_001_excerpt_maximum_plus_one_is_rejected",
+        "s4_r18::tests::inv_bnd_001_exact_excerpt_and_stdout_limits_are_enforced",
+        "s4_r18::tests::sec_fr_ctx_002_repository_blob_path_and_span_mismatches_fail_closed",
+        "s4_r18::tests::sec_fr_ctx_002_repository_paths_are_bounded_and_relative",
+        "s4_r18::tests::sec_fr_ctx_002_lfs_pointer_is_never_resolved_as_remote_content",
+        "ct_fr_ctx_002_reviewed_oracle_is_strict_canonical_output",
+        "e2e_fr_ctx_002_retrieves_exact_committed_excerpt",
+        "e2e_fr_ctx_002_loose_packed_boundary_and_ten_schedules_are_identical",
+        "sec_fr_ctx_002_packed_corruption_is_a_typed_private_failure",
+        "race_fr_ctx_002_packed_replacement_is_success_or_typed_failure",
+        "conf_fr_cli_011_invalid_bindings_fail_closed_without_private_context"
+      ],
+      "evidence": [
+        "red-observation-local.json",
+        "focused-green.log",
+        "complete-gate-summary.log",
+        "lekton-diagnostic.log"
+      ]
+    },
+    "FR-CLI-011": {
+      "tests": [
+        "ct_fr_cli_011_contract_constants_are_exact",
+        "ct_fr_cli_011_error_v29_is_strict_private_and_lf_terminated",
+        "s4_root_argument_tests::pt_nfr_det_001_r18_source_accepts_fifty_argument_permutations",
+        "s4_root_argument_tests::sec_fr_cli_011_r18_source_argument_matrix_fails_closed",
+        "sec_fr_cli_011_symlink_repository_root_is_rejected",
+        "conf_fr_cli_011_stdout_failure_uses_internal_error_v29",
+        "conf_fr_cli_011_invalid_bindings_fail_closed_without_private_context"
+      ],
+      "evidence": [
+        "red.log",
+        "focused-green.log",
+        "complete-gate-summary.log"
+      ]
+    }
+  },
+  "independent_review": "pending",
+  "verification": "not Verified"
+}
