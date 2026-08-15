@@ -19,7 +19,7 @@ release-channel, deprecation, or availability commitments.
 
 ## `local-experimental-r17`
 
-- lifecycle: protected PRs #179 and #181 made R17 and the exact G0 registry and
+- lifecycle: protected PR #179 and protected PR #181 made R17 and the exact G0 registry and
   preflight effective; the exact 32-profile LocalBaselineVerificationV2 pack
   subsequently Verified their bounded evidence through protected PR #189;
 - delivery: source build only (`source-build-only`) from an exact reviewed
@@ -39,8 +39,8 @@ release-channel, deprecation, or availability commitments.
   source-build observations, not support commitments;
 - compatibility: existing R0-R16/K1/S7 and LocalExplorerV1-V9 contracts remain
   immutable; R17 is additive and explicitly selected;
-- release status: evidence-Verified only for the bounded local baseline; not
-  Local GA, signed, published, or supported.
+- release status: evidence-Verified only for the bounded local baseline; not Local GA,
+  signed, published, or supported.
 
 The issue #180 / Decision 0033 package adds the machine-readable
 `codenoesis.release-profile/v1` registry and `noesis profile` preflight required
@@ -49,6 +49,10 @@ by `FR-REL-001` and `FR-CLI-007`. Signing and attestation are
 and is not release provenance; publication, deployment, and secret authority
 are false. The exact G0 package is Approved, Implemented, and Verified only
 within the bounded LocalBaselineVerificationV2 catalog.
+
+The immutable pre-verification contract retained the historical label
+**Approved and Implemented but not Verified**; it is not the current lifecycle
+status after PR #189.
 
 ## G1a staged bundle
 

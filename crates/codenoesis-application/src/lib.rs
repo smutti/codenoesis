@@ -10,6 +10,7 @@ mod s4_r13;
 mod s4_r14;
 mod s4_r15;
 mod s4_r16;
+mod s4_r18;
 mod s4_r3;
 mod s4_r4;
 mod s4_r5;
@@ -37,6 +38,9 @@ pub use s4_r13::{CallableScipScanError, S4R13ScanOutput};
 pub use s4_r14::{ExpressionBindingsScanError, S4R14ScanOutput};
 pub use s4_r15::{LocalFlowScanError, S4R15ScanOutput};
 pub use s4_r16::{ConstantEvaluationScanError, S4R16ScanOutput};
+pub use s4_r18::{
+    TrustedSourceRequest, TrustedSourceRetrievalError, TrustedSourceRetrievalService,
+};
 pub use s5::{RefreshError, RefreshPlan, RefreshService};
 pub use s6::{FederationRequest, FederationService, FederationServiceError};
 pub use s7::ImpactService;

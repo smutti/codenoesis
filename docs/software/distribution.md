@@ -119,6 +119,11 @@ GitHub Release, package or OCI artifact,
 deployment, support commitment, release channel, EOL, or GA decision. Its
 thirty-day Actions artifact is retained engineering evidence, not publication.
 
+Historical conformance metadata retains issue #184 and Decision 0035 for
+`FR-CMP-001` and `FR-CLI-009`, plus issue #186 and Decision 0036 for
+`FR-REL-003` and `FR-CLI-010`. These identifiers do not grant new release
+authority.
+
 ## R18 source-retrieval exclusion
 
 Issue #190 and Decision 0038 propose `trusted-local-source-v1` on exact base

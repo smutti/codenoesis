@@ -25,6 +25,17 @@ export, versioned offline exploration, R17 `FunctionContextV1`, the bounded S7
 implementation-aware HTTP/JSON pilot, and local configuration, distribution,
 upgrade, and supply-chain preflights. Verification does not grant signing,
 publication, support, a release channel, EOL, SLA, or GA authority.
+The historical milestone **Implemented local Rust analysis through R14**
+remains an immutable compatibility checkpoint within that verified baseline.
+
+Immutable historical conformance metadata is retained for issue #170 and
+`local-snapshot-256m-v1`; issue #176 and Decision 0031; issue #178 and Decision 0032
+with `FunctionContextV1`; issue #180, Decision 0033, and `FR-REL-001`; issue
+#182, Decision 0034, and `FR-CFG-001`; issue #184, Decision 0035, `FR-CMP-001`,
+and `FR-CLI-009`; issue #186, Decision 0036, `FR-REL-003`, and `FR-CLI-010`;
+and `rust-safe-constant-evaluation-v1`. Their historical lifecycle label was
+**Approved and Implemented but not Verified**; the current bounded status is
+the independently verified baseline described above.
 
 Issue [#190](https://github.com/smutti/codenoesis/issues/190) and
 [Decision 0038](docs/software/decisions/0038-s4-trusted-local-source-retrieval.md)

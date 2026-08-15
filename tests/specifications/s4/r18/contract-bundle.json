@@ -5,19 +5,19 @@
   "files": [
     {
       "path": "README.md",
-      "sha256": "1a3f001d6b304e3ea8069108611851fec313456855832106f10914890ee22599"
+      "sha256": "02f4aebd2e80867bf6a23f417da4c081808f19c0291398879a54b7d7d517378a"
     },
     {
       "path": "crates/noesis/tests/e2e_fr_ctx_002_trusted_source_retrieval.rs",
-      "sha256": "b99815b25e9603339ee341b519d1d9952eb130f58196d646793fc5f07ed664cc"
+      "sha256": "4ba6ad83d4430fd19f32a5f8628eb760e0651e039c37d801172fa4374f002bff"
     },
     {
       "path": "crates/noesis/tests/support/mod.rs",
-      "sha256": "7750bfeb397c308dab83890f5a62e929999e423056e559ffd4d7c2c6a388ba58"
+      "sha256": "0a5de96b80c5de08a05d7e27214aed62602174858d8eaa1b820fb8e7cf0416d7"
     },
     {
       "path": "crates/noesis/tests/support/s4_r18.rs",
-      "sha256": "47d1aaed55d27dbf35104d039d1d191a7fcc3e3339c4b79d78f8bfe1f540348f"
+      "sha256": "ccdfd9b848ffeae92f0e5d7bed22c79c25fbce3b7110d7f1c7b7af7985872508"
     },
     {
       "path": "docs/software/architecture.md",
@@ -33,11 +33,11 @@
     },
     {
       "path": "docs/software/distribution.md",
-      "sha256": "4b95b5d812a880d51825661d8237fcbc52fdc908b422791a2edbc121b9289a7f"
+      "sha256": "43b9d743a4a16a35b081b7e443c8e591e4e4fb72c385eb51e7a7b7bbe9beec26"
     },
     {
       "path": "docs/software/release-profiles.md",
-      "sha256": "6943d0a01d4f821455a3687a112b9ad19c10d48d3759a6a1dc91244b44958137"
+      "sha256": "403d3a020897ddeac8c72a647846c455992075842a7940e52b65ec644e25efac"
     },
     {
       "path": "docs/software/roadmap.md",
@@ -92,5 +92,5 @@
       "sha256": "5f9220a1b6f0844e5d5fb1ed8318556e6dc190d96096920a492428a75b51f99a"
     }
   ],
-  "bundle_sha256": "63e6a6f9dcaef7e780fffcec1cc9f3ae848e1b4fe59e999ef74bf6729c9c5610"
+  "bundle_sha256": "8db39b303cca82d06e9d2c347184da205bfe350f421179b8299c5e3fe3f9c340"
 }
