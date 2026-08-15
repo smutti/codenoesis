@@ -1,11 +1,10 @@
 # CodeNoesis local distribution
 
-> Status: G1a/S14 and bounded Local Upgrade Safety are Approved and Implemented
-> but not Verified after protected PRs #183 and #185.
-> Issue #184 / Decision 0035 records the bounded G2a package.
-> The staged directory remains unsigned
-> experimental engineering material. Issue #186 / Decision 0036 defines a
-> Proposed G1b/G8-local verifiable carrier candidate.
+> Status: G1a, bounded Local Upgrade Safety, and G1b/G8-local are Approved,
+> Implemented, and evidence-Verified after protected PRs #183, #185, #187, and
+> LocalBaselineVerificationV2 PR #189. The staged directory and carrier remain
+> unsigned experimental engineering material, not a published or supported
+> release.
 
 ## Boundary
 
@@ -89,7 +88,7 @@ The package covers only two exact experimental G1a generations. It creates no
 general compatibility window, data migration, package manager, updater,
 support policy, signing, publication, release channel, SLO, or GA authority.
 
-## Proposed verifiable local candidate
+## Verifiable local candidate
 
 G1b wraps one exact validated G1a directory in a deterministic stored-entry ZIP
 without changing any embedded byte or runtime-profile claim. The digest-named
@@ -115,9 +114,19 @@ bundle. Consumers verify repository, signer workflow, source ref, hosted runner,
 predicate, and subject digest with the exact documented `gh attestation verify`
 boundary.
 
-The workflow creates no tag, GitHub Release, package or OCI artifact,
+The protected PR #187 implementation and PR #189 verification create no tag,
+GitHub Release, package or OCI artifact,
 deployment, support commitment, release channel, EOL, or GA decision. Its
 thirty-day Actions artifact is retained engineering evidence, not publication.
+
+## R18 source-retrieval exclusion
+
+Issue #190 and Decision 0038 propose `trusted-local-source-v1` on exact base
+`1de6a420f25a1c7eb74d07a99f1800dde90eefa8`. Its explicit transient stdout is
+not packaged into the G1a staged directory, G1b carrier, checksums, SBOM,
+attestation, upgrade plan, rollback report, or any release artifact. No source
+excerpt is retained, installed, published, signed, uploaded, or advertised by
+an existing release profile.
 
 ## Deferred authority
 

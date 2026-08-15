@@ -1,7 +1,7 @@
 # CodeNoesis Delivery Roadmap
 
 > Status: **Proposed planning companion — not implementation authority**.
-> Last updated: **2026-08-14**.
+> Last updated: **2026-08-15**.
 
 This roadmap sequences product and validation work without changing the
 normative meaning or approval status of the
@@ -19,8 +19,8 @@ SRS slice or requirement IDs. They must not be used to bypass the approved
 
 ## Current product baseline
 
-The repository contains the local `S0`–`S4` implementation journey through
-R16, plus the first bounded S7 C0-C4 runtime:
+The repository contains the Verified local `S0`–`S4` implementation journey
+through R17, plus the first bounded S7 C0-C4 runtime and G0-G8-local controls:
 
 ```text
 immutable local Git revision
@@ -33,11 +33,19 @@ immutable local Git revision
   -> bounded G0/G1a/G2a release, distribution, and upgrade preflights
 ```
 
-Issue #188 defines the LocalBaselineVerificationV2 candidate Verified pending
-independent review and protected manual merge for this exact baseline. The
-candidate adds only verification governance, contracts, retained evidence, and
-a fail-closed local validator; it does not alter product or release behavior.
-G9 remains a separate governed package.
+Issue #188 / protected PR #189 review head
+`a40a4cb0212e7b59b1eff81ab9818299c7ebc3b9` merged as
+`1de6a420f25a1c7eb74d07a99f1800dde90eefa8`, activating the exact 32-profile
+LocalBaselineVerificationV2 pack for bounded S0-S7, R0-R17, K1, and
+G0-G8-local. The retained `candidate_verified_pending_merge` artifact and the
+marker “LocalBaselineVerificationV2 candidate Verified pending independent
+review and protected manual merge” remain immutable pre-activation evidence.
+Issue #141 is closed as superseded. G9 remains a separate governed package.
+
+Issue #190 and Decision 0038 define the next Proposed R18/S4 package on that
+exact base: one explicit `trusted-local-source-v1` evidence-to-immutable-Git
+excerpt journey. It changes no existing ontology, snapshot, query, context,
+portable, explorer, store, distribution, or release byte.
 
 The implemented compatibility profile is bounded rather than general:
 
@@ -50,17 +58,16 @@ The implemented compatibility profile is bounded rather than general:
 - the Rust lineage through R16 adds declarations, framework-neutral source
   candidates, optional supplied SCIP facts, callable/value syntax, cfg
   alternatives, repository-boundary and compiler joins, expressions, lexical
-  local flow, and checked target-independent constants, while remaining not
-  Verified;
+  local flow, and checked target-independent constants;
 - Cargo feature worlds, macro expansion, compiler-grade generation or general
   resolution, active `cfg`, type/ownership/runtime semantics, and general graph
   traversal remain unsupported or explicit gaps;
 - LocalExplorerV1-V9 support their matching PortableGraph versions after
   protected PR #177. Protected PR #179 made opt-in FunctionContextV1 and
   additive LocalExplorerV10 navigation over unchanged R16/PortableGraphV9
-  facts Approved and Implemented but not Verified. Protected PRs #181, #183,
-  and #185 made bounded G0, G1a, and G2a release/distribution preflights
-  Approved and Implemented but not Verified.
+  facts effective. LocalBaselineVerificationV2 independently verified these
+  journeys and the bounded G0-G8-local controls without granting release or GA
+  authority.
 
 ## Real-world Rust compatibility target
 
@@ -133,14 +140,17 @@ R14/R15 fail-closed correction and explicit scan-only 256 MiB envelope
 effective without changing accepted ontology families or marking R14/R15
 Verified. Protected PR #173, merged as
 `c3d05994a56e747fbe3157173998f8ac76ef7333`, made the exact Issue #172 /
-Decision 0030 `rust-safe-constant-evaluation-v1` package Approved and
-Implemented, but not Verified. Its generated LocalExplorerV9 manifest and
-PortableGraphV9 are deterministic. Protected PR #177 made the Decision 0031
-exact-schema LocalExplorerV3-V9 correction Approved and Implemented but not
-Verified. Protected PR #179 made the Issue #178 / Decision 0032 R17 function
-context/navigation package Approved and Implemented but not Verified without
-changing any R16 graph semantics. Issue #180 / Decision 0033 proposes the
-critical G0/S14 release-profile registry and preflight.
+Decision 0030 `rust-safe-constant-evaluation-v1` package effective. Protected
+PR #177 corrected LocalExplorerV3-V9 exact-schema loading, and protected PR
+#179 made Issue #178 / Decision 0032 R17 function context/navigation effective
+without changing R16 graph semantics. LocalBaselineVerificationV2 subsequently
+verified these bounded outcomes and the G0-G8-local controls through protected
+PR #189.
+
+Rows below retain each capability's implementation-merge history. Where a row
+says “not Verified”, that historical state is superseded by the exact
+32-profile V2 activation for every catalogued S0-S7/R0-R17/K1/G0-G8-local
+profile; it does not broaden the row's semantic boundary.
 
 | Order | Planning item | Outcome | Governance dependency | Candidate acceptance gate |
 |---|---|---|---|---|
@@ -164,7 +174,8 @@ critical G0/S14 release-profile registry and preflight.
 | `R14/R15 correction` | Real-repository fail-closed source-only journey | Implemented but not Verified after protected merge #171: bound complex K1 target spelling, skip callables outside inherited authority, omit incomplete R14 edge families, type gitlink rejection, and add the operational `local-snapshot-256m-v1` scan envelope. | Issue #170, Decision 0029, and protected merge #171; no dependency, schema, identity, ontology-family, boundary-composition, or control-plane change. | The exact project-owned fixture and pinned Lekton/RustDesk pilots satisfy immutable counts/digests, privacy, 50 permutations, ten schedules, 256 MiB max/plus-one, 4 GiB RSS, 60 s extraction, full positive journeys, and typed negative boundary failures. |
 | `R16` | Bounded safe Rust constant evaluation | Implemented but not Verified after protected PR #173: preserve corrected R15 and add checked target-independent primitive constants plus fixed-repr unit-enum discriminants as `rust.evaluated_value` and `EVALUATES_TO`, with exact derivations and typed gaps. | Issue #172, Decision 0030, and merge `c3d05994a56e747fbe3157173998f8ac76ef7333`; no new dependency, execution, compiler, target, cfg, boundary, or control-plane authority. | The project-owned fixture emits seven exact values, two dependencies, 42 entities, 42 relationships, 84 claims, 33 evidence, zero diagnostics, 32 coverage records, exact V15/V18 hashes, 50 permutations, ten schedules, all boundaries, two deterministic Lekton journeys, and the typed RustDesk boundary negative. Artifact generation succeeds, but the V9 browser journey remains blocked by the exact-schema frontend defect. |
 | `R10-R16 explorer correction` | Matching portable-graph browser loading | Implemented but not Verified after protected PR #177: LocalExplorerV3-V9 accept only exact matching PortableGraphV3-V9 and expose real search, bounded SVG neighborhoods, relationship, evidence, derivation, and uncertainty inspection. | Issue #176, Decision 0031, merge `f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`, retained browser evidence, and immutable V1/V2 assets. | Each generated explorer loads its matching graph in a real browser; mismatches and malformed, oversized, unsafe, racing, or private inputs fail closed; independent verification remains open. |
-| `R17` | Function-centered context and navigation | Approved and Implemented but not Verified after protected PR #179: group one existing R16 function/method, declared signature, ordered parameters, return spelling, body facts, proven calls, evidence, claims, derivations, uncertainty, and navigation roles into canonical FunctionContextV1; add LocalExplorerV10 over unchanged PortableGraphV9. | Issue #178, Decision 0032, merge `f0bdb5290566bb85bb103e24291e952d4c557156`, `local-experimental-r17`, and no new dependency. | The project-owned method card and two pinned Lekton journeys are deterministic; CLI/browser fields match; all limits/security/privacy failures close safely; QueryV13, PortableGraphV9, and ExplorerV1-V9 bytes remain immutable. |
+| `R17` | Function-centered context and navigation | Approved, Implemented, and Verified: group one existing R16 function/method, declared signature, ordered parameters, return spelling, body facts, proven calls, evidence, claims, derivations, uncertainty, and navigation roles into canonical FunctionContextV1; add LocalExplorerV10 over unchanged PortableGraphV9. | Issue #178, Decision 0032, merge `f0bdb5290566bb85bb103e24291e952d4c557156`, LocalBaselineVerificationV2, `local-experimental-r17`, and no new dependency. | The project-owned method card and two pinned Lekton journeys are deterministic; CLI/browser fields match; all limits/security/privacy failures close safely; QueryV13, PortableGraphV9, and ExplorerV1-V9 bytes remain immutable. |
+| `R18` | Trusted local evidence-to-source retrieval | Proposed branch-scoped candidate: resolve one exact existing evidence identity to one bounded UTF-8 excerpt from immutable local Git objects under explicit `trusted-local-source-v1`, with exact repository/commit/tree/path/blob/span binding and transient-stdout-only disclosure. | Issue #190, Decision 0038, exact base `1de6a420f25a1c7eb74d07a99f1800dde90eefa8`, high-risk S4 package, no new dependency, and protected manual merge. | Loose and packed object stores emit byte-identical canonical `TrustedSourceExcerptV1`; UTF-8 positions, invalid/path/race/privacy/limit/stdout failures, 50 permutations, ten schedules, pinned Lekton diagnostic, no side effects, and immutable R0-R17/K1/S7/G0-G8-local bytes pass. |
 
 ### Earliest useful real-world checkpoint
 
@@ -180,22 +191,20 @@ silently folded into `S5`. Governance must either amend the delivery plan with
 bounded post-S4 compatibility slices or assign each behavior to an existing
 future slice without changing that slice's approved meaning.
 
-### Post-R16 delivery sequence
+### Post-R17 delivery sequence
 
-1. Protected PR #179 completed issue #178 / Decision 0032: bounded LLM-ready
-   FunctionContextV1 and LocalExplorerV10 navigation are Approved and
-   Implemented but not Verified.
-2. Complete issue #180 / Decision 0033: add Proposed `FR-REL-001` and
-   `FR-CLI-007` for the source-build-only experimental matrix, owner,
-   capabilities, and explicit no-signing/no-publication release boundaries.
-3. Add opt-in trusted local evidence-to-source retrieval under repository,
-   privacy, path, race, and output authority; R17 intentionally excludes it.
-4. Extend implementation-aware API and semantic diff to compare contracts with
+1. Protected PR #189 activated the exact 32-profile
+   LocalBaselineVerificationV2 evidence pack and closed issue #141 as
+   superseded; release, support, and GA authority remain separate.
+2. Complete issue #190 / Decision 0038 in one high-risk R18/S4 package: add
+   opt-in trusted local evidence-to-source retrieval under immutable Git-object,
+   privacy, path, race, UTF-8, and output authority.
+3. Extend implementation-aware API and semantic diff to compare contracts with
    provider/client behavior and versioned implementation evidence.
-5. Execute the reproducible conference evaluation over pinned, structurally
+4. Execute the reproducible conference evaluation over pinned, structurally
    independent repositories.
-6. Keep verification separate: R0-R17, K1, and applicable S7 behavior become
-   Verified only through independent acceptance of complete immutable evidence.
+5. Independently verify R18's complete immutable evidence without rewriting the
+   already Verified R0-R17/K1/S7/G0-G8-local baseline.
 
 ### Real-world compatibility completion definition
 

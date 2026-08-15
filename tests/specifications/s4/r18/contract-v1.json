@@ -1,0 +1,64 @@
+{
+  "schema_version": "codenoesis.r18-trusted-source-contract/v1",
+  "issue": 190,
+  "exact_base_sha": "1de6a420f25a1c7eb74d07a99f1800dde90eefa8",
+  "status": "proposed_branch_scoped_candidate",
+  "slice": "S4",
+  "risk": "high",
+  "requirements": [
+    "FR-CTX-002",
+    "FR-CLI-011"
+  ],
+  "profile": "trusted-local-source-v1",
+  "contracts": {
+    "snapshot": "codenoesis.repository-snapshot/v18",
+    "graph": "codenoesis.knowledge-graph/v15",
+    "ontology": "codenoesis.ontology/rust/v15",
+    "function_context": "codenoesis.function-context/v1",
+    "source_excerpt": "codenoesis.trusted-source-excerpt/v1",
+    "error": "codenoesis.error/v29"
+  },
+  "limits": {
+    "evidence_records": 1,
+    "excerpt_bytes": 262144,
+    "canonical_stdout_bytes_including_lf": 524288,
+    "repository_path_bytes": 1024,
+    "argument_permutations": 50,
+    "process_schedules": 10,
+    "lekton_replays": 2
+  },
+  "authority": {
+    "source": "explicit_local_git_object_only",
+    "disclosure": "explicit_transient_stdout",
+    "working_tree_fallback": false,
+    "arbitrary_path": false,
+    "range_override": false,
+    "context_line_expansion": false,
+    "batch": false,
+    "nested_source": false
+  },
+  "forbidden_sinks": [
+    "clipboard",
+    "documents",
+    "explorer",
+    "model_input",
+    "portable_graph",
+    "release_artifact",
+    "retained_evidence",
+    "snapshot",
+    "store",
+    "telemetry"
+  ],
+  "limitations": [
+    "exact_committed_bytes_only",
+    "no_context_line_expansion",
+    "no_retention_or_export",
+    "no_working_tree_fallback",
+    "single_evidence_only",
+    "utf8_only"
+  ],
+  "new_dependency": false,
+  "migration": false,
+  "control_plane_effect": false,
+  "release_effect": false
+}

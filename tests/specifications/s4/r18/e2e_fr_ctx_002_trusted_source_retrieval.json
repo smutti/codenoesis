@@ -1,0 +1,56 @@
+{
+  "schema_version": "codenoesis.e2e-spec/v1",
+  "id": "e2e_fr_ctx_002_retrieves_exact_committed_excerpt",
+  "requirements": [
+    "FR-CTX-002",
+    "FR-CLI-011",
+    "FR-QRY-001",
+    "NFR-DET-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-PRV-002",
+    "NFR-TST-001",
+    "NFR-TST-002",
+    "INV-BND-001"
+  ],
+  "status": "Proposed branch-scoped candidate",
+  "slice": "S4",
+  "risk": "high",
+  "exact_base": "1de6a420f25a1c7eb74d07a99f1800dde90eefa8",
+  "fixture": "urn:codenoesis:fixture:s4-rust-function-context-v1",
+  "source_profile": "trusted-local-source-v1",
+  "journey": [
+    "scan_r16",
+    "docs",
+    "function_context_v1",
+    "select_evidence_id",
+    "trusted_source_excerpt_v1"
+  ],
+  "expected_red": {
+    "command": "cargo test -p noesis --test e2e_fr_ctx_002_trusted_source_retrieval --locked -- --exact e2e_fr_ctx_002_retrieves_exact_committed_excerpt",
+    "exit": 2,
+    "stdout_bytes": 0,
+    "reason": "the exact protected base has no source command, trusted-local-source-v1 profile, or TrustedSourceExcerptV1"
+  },
+  "expected_green": {
+    "schema_version": "codenoesis.trusted-source-excerpt/v1",
+    "evidence_records": 1,
+    "excerpt_bytes": 98,
+    "loose_packed_byte_identical": true,
+    "function_context_v1_byte_identical": true,
+    "portable_graph_v9_byte_identical": true,
+    "argument_permutations": 50,
+    "process_schedules": 10,
+    "lekton_replays": 2
+  },
+  "oracle": "tests/fixtures/s4/trusted-source-retrieval-v1/expected-source-excerpt.json",
+  "failure": {
+    "stdout": "empty",
+    "store_mutation": false,
+    "repository_mutation": false,
+    "retention": false,
+    "repair": false,
+    "truncation": false,
+    "working_tree_fallback": false
+  }
+}

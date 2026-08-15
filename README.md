@@ -6,87 +6,38 @@ CodeNoesis is an early-stage project exploring how to turn software repositories
 
 ## Status
 
-**Implemented local Rust analysis through R16 and the first bounded S7 runtime;
-the product is not yet production-ready or Verified.** The pinned Rust
-workspace now provides deterministic repository acquisition, evidence-backed
-Rust ontology extraction, local persistence, documentation, exact-ID query,
-portable export, and versioned offline-explorer artifacts. The protected
-milestone **Implemented local Rust analysis through R14** remains an immutable
-compatibility checkpoint; later protected merges extend it rather than
-replacing it.
-The latest protected merges add committed-source expression and lexical-binding
-facts, closed source-normal local flow, the bounded implementation-aware
-HTTP/JSON impact pilot, the Issue #170 / Decision 0029 accepted R14/R15
-fail-closed correction with its explicit scan-only `local-snapshot-256m-v1`
-output envelope, and bounded safe Rust constant evaluation. Protected PR #173,
-merged as `c3d05994a56e747fbe3157173998f8ac76ef7333`, made the exact Issue #172 /
-Decision 0030 `rust-safe-constant-evaluation-v1` package Approved and
-Implemented, but not Verified. It derives only checked target-independent
-primitive constants and fixed-repr enum discriminants while retaining explicit
-gaps for every unsupported case.
+**The bounded local baseline through S0-S7, R0-R17, K1, and G0-G8-local is
+Verified; the product is not yet production-ready or generally available.**
+Issue [#188](https://github.com/smutti/codenoesis/issues/188) and protected PR
+#189 independently accepted an exact 32-profile evidence pack. Review head
+`a40a4cb0212e7b59b1eff81ab9818299c7ebc3b9` merged as
+`1de6a420f25a1c7eb74d07a99f1800dde90eefa8`. The retained
+`candidate_verified_pending_merge` manifest and the sentence
+“LocalBaselineVerificationV2 candidate Verified pending independent review and
+protected manual merge” remain immutable pre-activation evidence; protected
+manual merge is the external lifecycle event. Issue #141 is closed as
+superseded. G9 remains a separate governed package.
 
-Issue [#176](https://github.com/smutti/codenoesis/issues/176),
-[Decision 0031](docs/software/decisions/0031-s4-versioned-local-explorer-browser.md),
-and protected PR #177 corrected the LocalExplorerV3-V9 browser defect on
-`main`. Each generated explorer now binds to its exact PortableGraphV3-V9
-schema and exposes bounded graph inspection while preserving the immutable
-V1/V2 viewer assets. The correction is Approved and Implemented but not
-Verified.
+That Verified baseline provides deterministic loose/packed local Git
+acquisition, safe gitlink boundaries, evidence-backed Rust ontology extraction
+through R16, atomic local persistence, documentation, exact-ID query, portable
+export, versioned offline exploration, R17 `FunctionContextV1`, the bounded S7
+implementation-aware HTTP/JSON pilot, and local configuration, distribution,
+upgrade, and supply-chain preflights. Verification does not grant signing,
+publication, support, a release channel, EOL, SLA, or GA authority.
 
-Issue [#178](https://github.com/smutti/codenoesis/issues/178),
-[Decision 0032](docs/software/decisions/0032-s4-r17-function-context-navigation.md),
-and protected PR #179 made the high-risk R17/S4 function-context package
-Approved and Implemented but not Verified. Its opt-in deterministic
-`FunctionContextV1` projection and additive LocalExplorerV10 function view over
-unchanged R16 facts let humans and LLM consumers inspect declared inputs,
-output spelling, calls, evidence, and uncertainty without reconstructing raw
-graph identifiers.
+Issue [#190](https://github.com/smutti/codenoesis/issues/190) and
+[Decision 0038](docs/software/decisions/0038-s4-trusted-local-source-retrieval.md)
+define the Proposed high-risk R18/S4 package on exact base
+`1de6a420f25a1c7eb74d07a99f1800dde90eefa8`. Its explicit
+`trusted-local-source-v1` selector retrieves one exact evidence-backed UTF-8
+excerpt from immutable local Git objects without changing the ontology,
+snapshot, query, context, portable graph, explorer, store, or release bytes.
+It remains a branch-scoped candidate until independent review and protected
+manual merge.
 
-Issue [#180](https://github.com/smutti/codenoesis/issues/180) and
-[Decision 0033](docs/software/decisions/0033-g0-release-profile-registry.md)
-were protected by PR #181, merged as
-`a525126228205901885038586e21d30db745b1ec`. The exact G0/S14 registry and
-output-only profile preflight under `FR-REL-001` and `FR-CLI-007` are Approved
-and Implemented but not Verified; they grant no signing, publication, support,
-or GA authority.
-
-Issue [#182](https://github.com/smutti/codenoesis/issues/182) and
-[Decision 0034](docs/software/decisions/0034-g1a-local-cli-distribution-configuration.md)
-were protected by PR #183, merged as
-`e7643d83965dca2f9342080264e7c6c58f3dd761`. The high-risk G1a/S14 package is
-Approved and Implemented but not Verified. It adds a closed
-`FR-CFG-001` configuration contract, `FR-CLI-008` fail-closed startup
-validation, and an unsigned `FR-REL-002` digest-named staged CLI bundle with
-explicit install, upgrade, rollback, and uninstall procedures. It remains
-unsigned experimental engineering material, not a supported or published
-release.
-
-Issue [#184](https://github.com/smutti/codenoesis/issues/184),
-[Decision 0035](docs/software/decisions/0035-local-upgrade-safety.md), and
-protected PR #185 made Local Upgrade Safety G2a/G5-local/G7a/S14 Approved and
-Implemented but not Verified. Its output-only `FR-CMP-001` exact-bundle upgrade
-and `FR-CLI-009` exact-plan rollback preflights reject tamper, race, privacy,
-unsupported-contract, and limit failures without activation, migration,
-support, signing, publication, SLO, or GA authority.
-
-Issue [#186](https://github.com/smutti/codenoesis/issues/186) and
-[Decision 0036](docs/software/decisions/0036-local-verifiable-distribution.md)
-define the Proposed critical G1b/G8-local/S14 candidate. It adds a deterministic
-installable ZIP carrier under `FR-REL-003` and `FR-CLI-010`, offline candidate
-verification, CycloneDX SBOM,
-locked-dependency, license, advisory, and transitive-unsafe evidence, plus a
-protected-main-only keyless GitHub attestation workflow. It creates no tag,
-GitHub Release, package publication, deployment, support, release channel, or
-GA authority.
-
-Issue [#188](https://github.com/smutti/codenoesis/issues/188) defines the
-LocalBaselineVerificationV2 candidate Verified pending independent review and
-protected manual merge. Its evidence manifest verifies the exact protected
-baseline without changing product, control-plane, dependency, or release
-bytes. G9 remains a separate governed package.
-
-Complete independent evidence acceptance, broader language coverage,
-operations, and the remaining production-readiness slices are still pending.
+Broader language coverage, operations, semantic comparison, and the remaining
+production-readiness slices are still pending.
 
 ## Two development tracks
 
