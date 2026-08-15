@@ -18,6 +18,7 @@ ISSUE = "https://github.com/smutti/codenoesis/issues/188"
 BASE_SHA = "9ecdc3acefd43495daf76b9f2ab69a7bbacff172"
 CHECKPOINT_SHA = "1daa23ffbaa0ea13f5fc5910aa5798c7523f254c"
 RED_COMMIT_SHA = "6fef76a4ba7fff8435d85a6df4c6efb3b1d1991b"
+FULL_GATE_HEAD_SHA = "5b3a4ea54dc9252a384d729e683f4cbb1ade8ce8"
 LEGACY_S0_BUNDLE_SHA256 = (
     "978a7128498d54a6c4a6b3fec11d195e37d2f67e179d2babb5320668c4e44811"
 )
@@ -83,6 +84,14 @@ PINNED_REPOSITORY_EVIDENCE = {
     "v2-focused-green-observation": (
         "tests/evidence/verification/local-baseline-v2/focused-green-observation.json",
         "3200b184e470a9f19337af69318951a0a604848a7385d39fb7f8bd91ed150f8a",
+    ),
+    "v2-full-gate-log": (
+        "tests/evidence/verification/local-baseline-v2/full-gate.log",
+        "fb883c5ba638d9ab8f6c28629d49d11d1906b8b906a33de8794a2514f37d412e",
+    ),
+    "v2-full-gate-observation": (
+        "tests/evidence/verification/local-baseline-v2/full-gate-observation.json",
+        "8b4fe9b5f4a88571502127b224c3926891439e35868a45eabc60ece1a7a66351",
     ),
     "remote-runs": (
         "tests/evidence/verification/local-baseline-v2/remote-runs.json",
@@ -775,6 +784,161 @@ def validate_repository_evidence(
             errors.append(f"pinned repository evidence changed: {evidence_id}")
 
 
+def validate_full_gate_evidence(
+    root: Path,
+    manifest: dict[str, Any],
+    errors: list[str],
+) -> None:
+    observation_path = root / (
+        "tests/evidence/verification/local-baseline-v2/full-gate-observation.json"
+    )
+    observation = load_json(observation_path)
+    expected_fields = {
+        "schema_version",
+        "issue",
+        "base_sha",
+        "governance_checkpoint_sha",
+        "red_commit_sha",
+        "head_sha",
+        "started_at",
+        "completed_at",
+        "duration_seconds",
+        "result",
+        "commands",
+        "log_path",
+        "log_sha256",
+        "log_bytes",
+        "environment",
+    }
+    if not isinstance(observation, dict) or set(observation) != expected_fields:
+        errors.append("full-gate observation has unexpected fields")
+        return
+    expected_identity = {
+        "schema_version": "codenoesis.local-baseline-full-gate/v1",
+        "issue": ISSUE,
+        "base_sha": BASE_SHA,
+        "governance_checkpoint_sha": CHECKPOINT_SHA,
+        "red_commit_sha": RED_COMMIT_SHA,
+        "head_sha": FULL_GATE_HEAD_SHA,
+        "result": "green",
+        "log_path": "tests/evidence/verification/local-baseline-v2/full-gate.log",
+        "log_sha256": (
+            "fb883c5ba638d9ab8f6c28629d49d11d1906b8b906a33de8794a2514f37d412e"
+        ),
+        "log_bytes": 78876,
+    }
+    for field, expected in expected_identity.items():
+        if observation.get(field) != expected:
+            errors.append(f"full-gate observation {field} is invalid")
+
+    expected_commands = [
+        "python3 scripts/verify_local_baseline_v2.py --manifest "
+        "tests/evidence/verification/local-baseline-v2/manifest.json",
+        "actionlint -no-color",
+        "python3 .github/codex/scripts/codex_policy.py validate-policy --policy "
+        ".github/codex/policy.json",
+        "cargo fmt --all --check",
+        "cargo clippy --workspace --all-targets --all-features --locked -- "
+        "-D warnings",
+        "cargo test --workspace --all-targets --all-features --locked",
+        "cargo test --workspace --doc --all-features --locked",
+        "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+        "python3 scripts/validate_benchmark_assets.py",
+        "cargo bench --workspace --all-features --no-run --locked",
+    ]
+    commands = observation.get("commands")
+    if commands != [
+        {"command": command, "exit_status": 0} for command in expected_commands
+    ]:
+        errors.append("full-gate command sequence or result is invalid")
+
+    try:
+        started_at = datetime.fromisoformat(
+            observation["started_at"].replace("Z", "+00:00")
+        )
+        completed_at = datetime.fromisoformat(
+            observation["completed_at"].replace("Z", "+00:00")
+        )
+    except (AttributeError, TypeError, ValueError):
+        errors.append("full-gate timestamps are invalid")
+    else:
+        duration_seconds = int((completed_at - started_at).total_seconds())
+        if duration_seconds != 400 or observation.get("duration_seconds") != 400:
+            errors.append("full-gate duration is invalid")
+
+    expected_environment = {
+        "os": "Darwin 25.5.0",
+        "architecture": "arm64",
+        "python": "Python 3.9.6",
+        "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+        "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+        "actionlint": "1.7.12",
+        "policy_sha256": (
+            "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993"
+        ),
+    }
+    if observation.get("environment") != expected_environment:
+        errors.append("full-gate environment is invalid")
+
+    log_path = root / expected_identity["log_path"]
+    log_bytes = log_path.read_bytes()
+    if (
+        len(log_bytes) != observation["log_bytes"]
+        or sha256_bytes(log_bytes) != observation["log_sha256"]
+    ):
+        errors.append("full-gate retained log identity is invalid")
+    expected_prefix = (
+        "LocalBaselineVerificationV2 full gate\n"
+        f"head={FULL_GATE_HEAD_SHA}\n"
+        f"started_at={observation['started_at']}\n"
+    ).encode("utf-8")
+    expected_suffix = f"completed_at={observation['completed_at']}\n".encode("utf-8")
+    if not log_bytes.startswith(expected_prefix) or not log_bytes.endswith(
+        expected_suffix
+    ):
+        errors.append("full-gate retained log boundary is invalid")
+
+    if (
+        git(root, ["rev-parse", f"{FULL_GATE_HEAD_SHA}^{{commit}}"])
+        != FULL_GATE_HEAD_SHA
+    ):
+        errors.append("full-gate head commit is unavailable")
+    if git(root, ["merge-base", FULL_GATE_HEAD_SHA, "HEAD"]) != FULL_GATE_HEAD_SHA:
+        errors.append("full-gate head is not an ancestor of the review head")
+
+    required_references = {"v2-full-gate-log", "v2-full-gate-observation"}
+    for profile in manifest.get("profiles", []):
+        if not isinstance(profile, dict):
+            continue
+        classes = profile.get("evidence_classes", [])
+        full_regression = next(
+            (
+                item
+                for item in classes
+                if isinstance(item, dict) and item.get("id") == "full_regression"
+            ),
+            None,
+        )
+        if full_regression is None or not required_references.issubset(
+            set(full_regression.get("evidence", []))
+        ):
+            errors.append(
+                f"manifest profile {profile.get('id')} lacks full-gate evidence"
+            )
+    full_gate = next(
+        (
+            gate
+            for gate in manifest.get("required_gates", [])
+            if isinstance(gate, dict) and gate.get("id") == "full-regression"
+        ),
+        None,
+    )
+    if full_gate is None or not required_references.issubset(
+        set(full_gate.get("evidence", []))
+    ):
+        errors.append("full-regression gate lacks retained full-gate evidence")
+
+
 def validate_remote_runs(
     root: Path,
     manifest: dict[str, Any],
@@ -1344,6 +1508,7 @@ def validate_manifest(root: Path, manifest_path: Path) -> list[str]:
     validate_path_digest(root, manifest.get("profile_catalog"), "profile_catalog", errors)
     validate_product_tree(root, manifest, plan, errors)
     validate_repository_evidence(root, manifest, errors)
+    validate_full_gate_evidence(root, manifest, errors)
     metadata_by_id = validate_remote_runs(root, manifest, errors)
     validate_remote_logs(root, manifest, metadata_by_id, errors)
     validate_codeql_log(root, manifest, metadata_by_id, errors)

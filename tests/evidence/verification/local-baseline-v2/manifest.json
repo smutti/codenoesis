@@ -47,7 +47,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -178,7 +180,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -307,7 +311,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -436,7 +442,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -565,7 +573,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -694,7 +704,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -823,7 +835,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -952,7 +966,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -1084,7 +1100,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -1216,7 +1234,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -1348,7 +1368,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -1480,7 +1502,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -1612,7 +1636,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -1746,7 +1772,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -1875,7 +1903,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -2004,7 +2034,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -2140,7 +2172,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -2276,7 +2310,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -2412,7 +2448,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -2546,7 +2584,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -2680,7 +2720,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -2814,7 +2856,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -2950,7 +2994,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -3088,7 +3134,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -3227,7 +3275,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -3367,7 +3417,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -3504,7 +3556,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -3648,7 +3702,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -3785,7 +3841,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -3923,7 +3981,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -4062,7 +4122,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -4202,7 +4264,9 @@
           "result": "green",
           "evidence": [
             "base-ci-quality",
-            "run:31842394871"
+            "run:31842394871",
+            "v2-full-gate-log",
+            "v2-full-gate-observation"
           ],
           "rationale": "Required evidence is bound and recomputed by the V2 validator."
         },
@@ -5089,6 +5153,18 @@
       "path": "tests/evidence/verification/local-baseline-v2/focused-green-observation.json",
       "sha256": "3200b184e470a9f19337af69318951a0a604848a7385d39fb7f8bd91ed150f8a",
       "kind": "green"
+    },
+    {
+      "id": "v2-full-gate-log",
+      "path": "tests/evidence/verification/local-baseline-v2/full-gate.log",
+      "sha256": "fb883c5ba638d9ab8f6c28629d49d11d1906b8b906a33de8794a2514f37d412e",
+      "kind": "green"
+    },
+    {
+      "id": "v2-full-gate-observation",
+      "path": "tests/evidence/verification/local-baseline-v2/full-gate-observation.json",
+      "sha256": "8b4fe9b5f4a88571502127b224c3926891439e35868a45eabc60ece1a7a66351",
+      "kind": "green"
     }
   ],
   "remote_logs": [
@@ -5412,7 +5488,9 @@
       "result": "green",
       "evidence": [
         "base-ci-quality",
-        "run:31842394871"
+        "run:31842394871",
+        "v2-full-gate-log",
+        "v2-full-gate-observation"
       ],
       "command": "cargo test --workspace --all-targets --all-features --locked"
     },

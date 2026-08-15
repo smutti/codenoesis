@@ -1,0 +1,66 @@
+{
+  "schema_version": "codenoesis.local-baseline-full-gate/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/188",
+  "base_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+  "governance_checkpoint_sha": "1daa23ffbaa0ea13f5fc5910aa5798c7523f254c",
+  "red_commit_sha": "6fef76a4ba7fff8435d85a6df4c6efb3b1d1991b",
+  "head_sha": "5b3a4ea54dc9252a384d729e683f4cbb1ade8ce8",
+  "started_at": "2026-08-15T06:30:24Z",
+  "completed_at": "2026-08-15T06:37:04Z",
+  "duration_seconds": 400,
+  "result": "green",
+  "commands": [
+    {
+      "command": "python3 scripts/verify_local_baseline_v2.py --manifest tests/evidence/verification/local-baseline-v2/manifest.json",
+      "exit_status": 0
+    },
+    {
+      "command": "actionlint -no-color",
+      "exit_status": 0
+    },
+    {
+      "command": "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+      "exit_status": 0
+    },
+    {
+      "command": "cargo fmt --all --check",
+      "exit_status": 0
+    },
+    {
+      "command": "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "exit_status": 0
+    },
+    {
+      "command": "cargo test --workspace --all-targets --all-features --locked",
+      "exit_status": 0
+    },
+    {
+      "command": "cargo test --workspace --doc --all-features --locked",
+      "exit_status": 0
+    },
+    {
+      "command": "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "exit_status": 0
+    },
+    {
+      "command": "python3 scripts/validate_benchmark_assets.py",
+      "exit_status": 0
+    },
+    {
+      "command": "cargo bench --workspace --all-features --no-run --locked",
+      "exit_status": 0
+    }
+  ],
+  "log_path": "tests/evidence/verification/local-baseline-v2/full-gate.log",
+  "log_sha256": "fb883c5ba638d9ab8f6c28629d49d11d1906b8b906a33de8794a2514f37d412e",
+  "log_bytes": 78876,
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "python": "Python 3.9.6",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "actionlint": "1.7.12",
+    "policy_sha256": "98c1ad9e1897b3be091522100d401106e655f4a570458ba3d9c213c739775993"
+  }
+}
