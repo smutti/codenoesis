@@ -1,0 +1,65 @@
+{
+  "schema_version": "codenoesis.r18-red-observation/v1",
+  "issue": 190,
+  "requirements": [
+    "FR-CTX-002",
+    "FR-CLI-011"
+  ],
+  "requirement_status": "Proposed branch-scoped candidate",
+  "slice": "S4",
+  "risk": "high",
+  "exact_base_sha": "1de6a420f25a1c7eb74d07a99f1800dde90eefa8",
+  "checkpoint": {
+    "commit_sha": "2a306106a82929703c6c3a52cc62a1460ea49bd5",
+    "tree_sha": "0a5c6bd7b1d26ee12562e76e612904b801bcdda5",
+    "contains_production_source_edit": false
+  },
+  "observed_at_utc": "2026-08-15T08:45:44Z",
+  "command": "cargo test -p noesis --test e2e_fr_ctx_002_trusted_source_retrieval --locked -- --exact e2e_fr_ctx_002_retrieves_exact_committed_excerpt",
+  "command_exit_status": 101,
+  "expected_failure": {
+    "stage": "CLI dispatch before R18 source acquisition",
+    "underlying_source_exit_status": 2,
+    "stdout_bytes": 0,
+    "absent_capabilities": [
+      "source command dispatch",
+      "trusted-local-source-v1",
+      "TrustedSourceExcerptV1"
+    ]
+  },
+  "observed_failure": {
+    "matched_expected_reason": true,
+    "underlying_source_exit_status": 2,
+    "stdout_bytes": 0,
+    "stderr_schema_version": "codenoesis.error/v1",
+    "stderr_code": "input.invalid_revision",
+    "stderr_stage": "input",
+    "stderr_message": "invalid revision",
+    "stderr_bytes_including_lf": 149,
+    "stderr_sha256_including_lf": "ce9225d963d52e228c7d53ae2b481d969eb0e73992d48db919cc80801a9ee2e6",
+    "reason": "the inherited parser has no source dispatch and rejects the unrecognized command through its legacy scan input path before source acquisition",
+    "fixture_scan_succeeded": true,
+    "function_context_succeeded": true,
+    "source_excerpt_emitted": false
+  },
+  "log": {
+    "path": "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/red.log",
+    "normalization": "replace exact local repository root with $REPOSITORY_ROOT",
+    "byte_length": 1306,
+    "sha256": "f05991d9405325061350044372560d2d126d3c8698a03cc266bb1d3ad5a8b16e"
+  },
+  "environment": {
+    "operating_system": "macOS 26.5.2 (25F84)",
+    "kernel": "Darwin 25.5.0 arm64",
+    "architecture": "aarch64-apple-darwin",
+    "memory_bytes": 25769803776,
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "features": "noesis integration-test defaults; Cargo --locked"
+  },
+  "limitations": [
+    "local checkpoint observation only",
+    "independent review pending",
+    "base-controlled GitHub checks not run on the unpublished branch"
+  ]
+}
