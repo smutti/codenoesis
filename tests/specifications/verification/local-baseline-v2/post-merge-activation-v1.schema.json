@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codenoesis:schema:local-baseline-verification-post-merge-activation:v1",
+  "title": "CodeNoesis LocalBaselineVerificationV2 post-merge activation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "issue",
+    "pull_request",
+    "target_branch",
+    "base_sha",
+    "review_head_sha",
+    "review_tree_sha",
+    "merge_commit_sha",
+    "merge_parent_sha",
+    "merge_tree_sha",
+    "merge_method",
+    "merged_at",
+    "candidate_status",
+    "activated_status",
+    "activation",
+    "actor",
+    "decision_url",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.local-baseline-verification-post-merge-activation/v1"
+    },
+    "issue": {
+      "const": "https://github.com/smutti/codenoesis/issues/188"
+    },
+    "pull_request": {
+      "const": "https://github.com/smutti/codenoesis/pull/189"
+    },
+    "target_branch": {"const": "main"},
+    "base_sha": {
+      "const": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172"
+    },
+    "review_head_sha": {
+      "const": "a40a4cb0212e7b59b1eff81ab9818299c7ebc3b9"
+    },
+    "review_tree_sha": {
+      "const": "c13f40fa96017fa4407cb26052f8b5e3c7bb7009"
+    },
+    "merge_commit_sha": {
+      "const": "1de6a420f25a1c7eb74d07a99f1800dde90eefa8"
+    },
+    "merge_parent_sha": {
+      "const": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172"
+    },
+    "merge_tree_sha": {
+      "const": "c13f40fa96017fa4407cb26052f8b5e3c7bb7009"
+    },
+    "merge_method": {"const": "squash"},
+    "merged_at": {"const": "2026-08-15T07:26:52Z"},
+    "candidate_status": {"const": "candidate_verified_pending_merge"},
+    "activated_status": {"const": "verified"},
+    "activation": {
+      "const": "accountable_maintainer_protected_manual_merge_of_exact_tree"
+    },
+    "actor": {"const": "github:smutti"},
+    "decision_url": {
+      "const": "https://github.com/smutti/codenoesis/pull/189"
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "const": "The retained V2 manifest remains immutable pre-activation evidence."
+        },
+        {
+          "const": "This activation grants no product, release, support, SLA, or GA authority."
+        }
+      ],
+      "items": false
+    }
+  }
+}
