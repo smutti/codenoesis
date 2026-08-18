@@ -1,0 +1,25 @@
+LocalBaselineVerificationV2 post-merge activation expected Red
+issue=https://github.com/smutti/codenoesis/issues/194
+checkpoint=2a34468f864027867ae354c8318a3bc1de8575d6
+command=python3 -m unittest scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests.test_exact_squash_activation_is_supported
+exit=1
+expected_failure=post-merge activation resolver is absent
+actual_failure=post-merge activation resolver is absent
+raw_log_sha256=d737fc7846d2c5d9131a5ee25c471a3329ee4b440c6add004e5d038801da5152
+raw_log_bytes=704
+normalization=repository root replaced with <repository>; duration replaced with <duration>
+environment=Darwin arm64; Python 3.9.6; git version 2.50.1 (Apple Git-155)
+--- normalized unittest output ---
+F
+======================================================================
+FAIL: test_exact_squash_activation_is_supported (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repository>/scripts/tests/test_local_baseline_verification_v2.py", line 236, in test_exact_squash_activation_is_supported
+    self.assertTrue(
+AssertionError: False is not true : post-merge activation resolver is absent
+
+----------------------------------------------------------------------
+Ran 1 test in <duration>s
+
+FAILED (failures=1)
