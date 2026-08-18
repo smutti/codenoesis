@@ -109,6 +109,10 @@ class LocalBaselineVerificationV2ContractTests(unittest.TestCase):
         validator = importlib.util.module_from_spec(module_spec)
         module_spec.loader.exec_module(validator)
         cls.validator: ModuleType = validator
+        history_errors: list[str] = []
+        cls.validator.ensure_required_git_history(ROOT, history_errors)
+        if history_errors:
+            raise RuntimeError("; ".join(history_errors))
 
     def validate_mutation(
         self,
