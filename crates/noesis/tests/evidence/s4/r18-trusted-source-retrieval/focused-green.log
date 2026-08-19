@@ -1,0 +1,44 @@
+issue=https://github.com/smutti/codenoesis/issues/190
+requirement_status=Proposed branch-scoped candidate
+requirements=FR-CTX-002,FR-CLI-011
+slice=S4
+risk=high
+tested_head=25e7ba5bf2967c998bf434136b86e4db687c9615
+tested_tree=fedbb890d5db03def8c6bf2cf3a8f45aac2a4a4e
+
+command=python3 -m unittest scripts.tests.test_s4_r18_trusted_source_retrieval_contract
+exit=0
+tests_passed=5
+
+command=cargo test --locked -p codenoesis-contracts s4_r18::tests::
+exit=0
+tests_passed=7
+
+command=cargo test --locked -p codenoesis-contracts --test s4_r18_trusted_source_retrieval
+exit=0
+tests_passed=3
+
+command=cargo test --locked -p noesis --bin noesis r18
+exit=0
+tests_passed=2
+argument_permutations=50
+invalid_argument_matrix=closed
+
+command=cargo test --locked -p noesis --test e2e_fr_ctx_002_trusted_source_retrieval
+exit=0
+tests_passed=7
+process_schedules=10
+loose_packed_boundary_output=byte-identical
+mutable_working_tree=ignored
+store_source_retention=absent
+unknown_or_mismatched_authority=typed-private-failure
+packed_corruption=typed-private-failure
+packed_replacement_race=success-or-typed-private-failure
+symlink_repository_root=typed-private-failure
+stdout_failure=internal-error-v29
+
+focused_tests_passed=24
+raw_local_log_bytes=10377
+raw_local_log_sha256=49598e0b287a0d2d5f176b032e22709e7cd442f4b8143567d47048a89d2482a0
+raw_source_retained=false
+result=green

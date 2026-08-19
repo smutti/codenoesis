@@ -1,0 +1,67 @@
+issue=https://github.com/smutti/codenoesis/issues/190
+requirement_status=Proposed branch-scoped candidate
+requirements=FR-CTX-002,FR-CLI-011
+slice=S4
+risk=high
+tested_head=25e7ba5bf2967c998bf434136b86e4db687c9615
+tested_tree=fedbb890d5db03def8c6bf2cf3a8f45aac2a4a4e
+completed_at_utc=2026-08-15T10:05:00Z
+duration=not continuously measured
+
+command=actionlint -no-color
+exit=0
+
+command=python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json
+exit=0
+result={"approved_requirement_count":39,"hard_protected_pattern_count":13,"status":"valid","version":1}
+
+command=cargo fmt --all --check
+exit=0
+
+command=cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+exit=0
+
+command=cargo test --workspace --all-targets --all-features --locked
+exit=0
+rust_tests_passed=665
+test_result_groups=128
+
+command=cargo test --workspace --doc --all-features --locked
+exit=0
+doc_test_groups=12
+
+command=python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+exit=1
+tests_run=389
+failures=1
+failed_test=test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests.test_candidate_manifest_is_complete_and_valid
+r18_attributable_failures=0
+classification=inherited immutable baseline/head-binding failure outside issue #190 authority
+base_ci_run=https://github.com/smutti/codenoesis/actions/runs/31871969129
+base_benchmark_run=https://github.com/smutti/codenoesis/actions/runs/31871969190
+base_head=1de6a420f25a1c7eb74d07a99f1800dde90eefa8
+base_runs_failed_same_test=true
+base_failure_reasons=evidence parent is not an ancestor of current head; full-gate head is not an ancestor of the review head
+scope_decision=the V2 manifest, validator, decision, and evidence are protected or forbidden by issue #190 and were not changed
+
+command=python3 scripts/validate_benchmark_assets.py
+exit=0
+result=benchmark assets valid: status=scaffold, suites=0
+
+command=cargo bench --workspace --all-features --no-run --locked
+exit=0
+
+static_log_bytes=743
+static_log_sha256=cd71c1d1f8976db9a64bed3a92fd91276c70c2433665f918a9ff3b2ad09e5886
+rust_log_bytes=75240
+rust_log_sha256=bd7646292e3e46b7ed4d181548cd43ef4adcc804c665d95c345716451f87cdaf
+doc_bench_log_bytes=3944
+doc_bench_log_sha256=61ab8231d77cb9346989b9a2452177163fe7410ddf078541d9dbec009ca08a7f
+python_log_bytes=1346
+python_log_sha256=72796a860456505d1da49ddc81137fbcc4efc48888449b20ab2eaf498636f710
+raw_logs_retained_locally_outside_git=true
+raw_source_retained=false
+environment=macOS 26.5.2 build 25F84; Darwin 25.5.0 arm64; rustc 1.97.1; cargo 1.97.1; Python 3.9.6; git 2.50.1; actionlint 1.7.12
+known_warning=the inherited exact toml dependency requirement includes ignored semver metadata; no manifest, lockfile, or dependency changed
+result=R18 Green locally; complete repository Python gate retains one inherited base failure; not Verified
+final_review_head_gate=base-controlled GitHub checks and independent review remain required

@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/trusted-source-excerpt-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile",
+    "authority",
+    "disclosure",
+    "source",
+    "evidence",
+    "excerpt",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.trusted-source-excerpt/v1"
+    },
+    "profile": {
+      "const": "trusted-local-source-v1"
+    },
+    "authority": {
+      "const": "explicit_local_git_object_only"
+    },
+    "disclosure": {
+      "const": "explicit_transient_stdout"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository_identity",
+        "commit_oid",
+        "tree_oid",
+        "snapshot_id",
+        "snapshot_schema_version",
+        "graph_schema_version",
+        "ontology_version",
+        "snapshot_semantic_hash",
+        "graph_semantic_hash"
+      ],
+      "properties": {
+        "repository_identity": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:"
+        },
+        "commit_oid": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "tree_oid": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:snapshot:blake3:[0-9a-f]{64}$"
+        },
+        "snapshot_schema_version": {
+          "const": "codenoesis.repository-snapshot/v18"
+        },
+        "graph_schema_version": {
+          "const": "codenoesis.knowledge-graph/v15"
+        },
+        "ontology_version": {
+          "const": "codenoesis.ontology/rust/v15"
+        },
+        "snapshot_semantic_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "graph_semantic_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "path",
+        "blob_oid",
+        "span"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^urn:codenoesis:evidence:(blake3|sha256):[0-9a-f]{64}$"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "blob_oid": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "span": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unit",
+            "start",
+            "end",
+            "start_position",
+            "end_position"
+          ],
+          "properties": {
+            "unit": {
+              "const": "byte"
+            },
+            "start": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "start_position": {
+              "$ref": "#/$defs/position"
+            },
+            "end_position": {
+              "$ref": "#/$defs/position"
+            }
+          }
+        }
+      }
+    },
+    "excerpt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "encoding",
+        "text",
+        "byte_length",
+        "sha256"
+      ],
+      "properties": {
+        "encoding": {
+          "const": "utf-8"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "byte_length": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 262144
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "limitations": {
+      "const": [
+        "exact_committed_bytes_only",
+        "no_context_line_expansion",
+        "no_retention_or_export",
+        "no_working_tree_fallback",
+        "single_evidence_only",
+        "utf8_only"
+      ]
+    }
+  },
+  "$defs": {
+    "position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "line",
+        "column",
+        "unit"
+      ],
+      "properties": {
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "column": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "unit": {
+          "const": "unicode_scalar"
+        }
+      }
+    }
+  }
+}

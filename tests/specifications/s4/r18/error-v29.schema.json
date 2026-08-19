@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/error-v29.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "code",
+    "stage",
+    "message",
+    "retryable",
+    "context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "codenoesis.error/v29"
+    },
+    "code": {
+      "enum": [
+        "source.acquisition_rejected",
+        "source.content_rejected",
+        "source.evidence_not_found",
+        "source.internal",
+        "source.invalid_arguments",
+        "source.invalid_evidence",
+        "source.invalid_snapshot",
+        "source.limit_exceeded",
+        "source.path_rejected",
+        "source.repository_mismatch",
+        "source.unstable_input"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "input",
+        "source",
+        "internal"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1
+    },
+    "retryable": {
+      "const": false
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 0
+    }
+  }
+}

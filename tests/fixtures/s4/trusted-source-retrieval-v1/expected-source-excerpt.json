@@ -1,0 +1,51 @@
+{
+  "schema_version": "codenoesis.trusted-source-excerpt/v1",
+  "profile": "trusted-local-source-v1",
+  "authority": "explicit_local_git_object_only",
+  "disclosure": "explicit_transient_stdout",
+  "source": {
+    "repository_identity": "urn:codenoesis:fixture:s4-rust-function-context-v1",
+    "commit_oid": "09093916dfc9b925fa22c7de660b67103a4def01",
+    "tree_oid": "aed06ed2ea7447c85a25b03fa48dd9d591b7d825",
+    "snapshot_id": "urn:codenoesis:snapshot:blake3:d6eeba4c134e6b42684a2947cd1cb36cbb09b141edd796a66e9cbfd97266de48",
+    "snapshot_schema_version": "codenoesis.repository-snapshot/v18",
+    "graph_schema_version": "codenoesis.knowledge-graph/v15",
+    "ontology_version": "codenoesis.ontology/rust/v15",
+    "snapshot_semantic_hash": "8d7a7ee0b187a8e66024ef5e7e80b9395f53cee4816f00cfb3168acf5788661f",
+    "graph_semantic_hash": "6fcf3d9b2aefb521ca1bc85514ecb28a6175265c4e0f2c61d8754b62f61af73a"
+  },
+  "evidence": {
+    "id": "urn:codenoesis:evidence:blake3:3025c0ba243c210e5a923781cf1a57c420e36d393c24b358c1f965594c3002c8",
+    "path": "src/lib.rs",
+    "blob_oid": "3beb259d89c879b3b16f8d7de20b5f7d23ffcf88",
+    "span": {
+      "unit": "byte",
+      "start": 218,
+      "end": 316,
+      "start_position": {
+        "line": 14,
+        "column": 5,
+        "unit": "unicode_scalar"
+      },
+      "end_position": {
+        "line": 17,
+        "column": 5,
+        "unit": "unicode_scalar"
+      }
+    }
+  },
+  "excerpt": {
+    "encoding": "utf-8",
+    "text": "pub fn scale<T>(&self, value: i32, fallback: T) -> Result<i32, T>\n    where\n        T: Clone,\n    ",
+    "byte_length": 98,
+    "sha256": "2beedeaf7f4333bd21ec5b33de802f1b2006377ad6435ebc983b16029fd19f83"
+  },
+  "limitations": [
+    "exact_committed_bytes_only",
+    "no_context_line_expansion",
+    "no_retention_or_export",
+    "no_working_tree_fallback",
+    "single_evidence_only",
+    "utf8_only"
+  ]
+}

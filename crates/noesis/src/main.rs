@@ -22,7 +22,8 @@ use codenoesis_application::{
     CompilerIndexScanError, ConstantEvaluationScanError, ExpressionBindingsScanError,
     FrameworkScanError, LocalFlowScanError, PublicationService, RefreshError, RefreshService,
     RootPackageScanError, RustCfgAlternativesScanError, RustSemanticScanError, ScanError,
-    ScanRequest, ScanService,
+    ScanRequest, ScanService, TrustedSourceRequest, TrustedSourceRetrievalError,
+    TrustedSourceRetrievalService,
 };
 use codenoesis_contracts::{
     AnalysisCacheEntryV1, BoundaryManifestReason, CodeNoesisErrorV1, CodeNoesisErrorV2,
@@ -31,39 +32,41 @@ use codenoesis_contracts::{
     CodeNoesisErrorV12, CodeNoesisErrorV13, CodeNoesisErrorV14, CodeNoesisErrorV15,
     CodeNoesisErrorV16, CodeNoesisErrorV17, CodeNoesisErrorV18, CodeNoesisErrorV19,
     CodeNoesisErrorV20, CodeNoesisErrorV21, CodeNoesisErrorV22, CodeNoesisErrorV23,
-    CodeNoesisErrorV24, CodeNoesisErrorV25, CodeNoesisErrorV26, DocumentationContractError,
-    FunctionContextError, FunctionContextV1, IncrementalRefreshReportError,
-    IncrementalRefreshReportInput, IncrementalRefreshReportV1, K1ContractError,
-    LocalConfigurationError, LocalConfigurationSource, MAX_LOCAL_CONFIGURATION_BYTES,
-    MAX_RELEASE_PROFILE_TEXT_BYTES, NestedRepositoryUnavailableReason, PortableGraphV1,
-    PortableGraphV2, PortableGraphV3, PortableGraphV4, PortableGraphV5, PortableGraphV6,
-    PortableGraphV7, PortableGraphV8, PortableGraphV9, QueryContractError, R8ContractError,
-    R10ContractError, R11ContractError, R12_PORTABLE_GRAPH_VERSION, R12ContractError,
-    R13_PORTABLE_GRAPH_VERSION, R13ContractError, R14ContractError, R15ContractError,
-    R16ContractError, R17_CONTEXT_PROFILE, ReleaseProfileError, RepositorySnapshotV2Error,
-    RepositorySnapshotV3, RepositorySnapshotV3Error, RepositorySnapshotV4,
-    RepositorySnapshotV4Error, RepositorySnapshotV5, RepositorySnapshotV5Error,
-    RepositorySnapshotV6, RepositorySnapshotV6Error, RepositorySnapshotV7,
-    RepositorySnapshotV7Error, RepositorySnapshotV8, RepositorySnapshotV8Error,
-    RepositorySnapshotV9, RepositorySnapshotV9Error, RepositorySnapshotV10,
-    RepositorySnapshotV10Error, RepositorySnapshotV11, RepositorySnapshotV11Error,
-    RepositorySnapshotV12, RepositorySnapshotV12Error, RepositorySnapshotV13,
-    RepositorySnapshotV13Error, RepositorySnapshotV14, RepositorySnapshotV14Error,
-    RepositorySnapshotV15, RepositorySnapshotV15Error, RepositorySnapshotV16,
-    RepositorySnapshotV16Error, RepositorySnapshotV17, RepositorySnapshotV17Error,
-    RepositorySnapshotV18, RepositorySnapshotV18Error, SnapshotEnvelopeV1, ValidatedS4Head,
-    current_release_profile_v1, generate_documentation_v1, local_configuration_report_v1,
-    local_query_result_v1, local_query_result_v2, local_query_result_v3, local_query_result_v4,
-    local_query_result_v5, local_query_result_v6, local_query_result_v7, local_query_result_v8,
-    local_query_result_v9, local_query_result_v10, local_query_result_v11, local_query_result_v12,
-    local_query_result_v13, validate_stored_snapshot_semantic_v4,
-    validate_stored_snapshot_semantic_v5, validate_stored_snapshot_semantic_v6,
-    validate_stored_snapshot_semantic_v7, validate_stored_snapshot_semantic_v8,
-    validate_stored_snapshot_semantic_v9, validate_stored_snapshot_semantic_v10,
-    validate_stored_snapshot_semantic_v11, validate_stored_snapshot_semantic_v12,
-    validate_stored_snapshot_semantic_v13, validate_stored_snapshot_semantic_v14,
-    validate_stored_snapshot_semantic_v15, validate_stored_snapshot_semantic_v16,
-    validate_stored_snapshot_semantic_v17, validate_stored_snapshot_semantic_v18,
+    CodeNoesisErrorV24, CodeNoesisErrorV25, CodeNoesisErrorV26, CodeNoesisErrorV29,
+    DocumentationContractError, FunctionContextError, FunctionContextV1,
+    IncrementalRefreshReportError, IncrementalRefreshReportInput, IncrementalRefreshReportV1,
+    K1ContractError, LocalConfigurationError, LocalConfigurationSource,
+    MAX_LOCAL_CONFIGURATION_BYTES, MAX_RELEASE_PROFILE_TEXT_BYTES,
+    NestedRepositoryUnavailableReason, PortableGraphV1, PortableGraphV2, PortableGraphV3,
+    PortableGraphV4, PortableGraphV5, PortableGraphV6, PortableGraphV7, PortableGraphV8,
+    PortableGraphV9, QueryContractError, R8ContractError, R10ContractError, R11ContractError,
+    R12_PORTABLE_GRAPH_VERSION, R12ContractError, R13_PORTABLE_GRAPH_VERSION, R13ContractError,
+    R14ContractError, R15ContractError, R16ContractError, R17_CONTEXT_PROFILE, R18_SOURCE_PROFILE,
+    ReleaseProfileError, RepositorySnapshotV2Error, RepositorySnapshotV3,
+    RepositorySnapshotV3Error, RepositorySnapshotV4, RepositorySnapshotV4Error,
+    RepositorySnapshotV5, RepositorySnapshotV5Error, RepositorySnapshotV6,
+    RepositorySnapshotV6Error, RepositorySnapshotV7, RepositorySnapshotV7Error,
+    RepositorySnapshotV8, RepositorySnapshotV8Error, RepositorySnapshotV9,
+    RepositorySnapshotV9Error, RepositorySnapshotV10, RepositorySnapshotV10Error,
+    RepositorySnapshotV11, RepositorySnapshotV11Error, RepositorySnapshotV12,
+    RepositorySnapshotV12Error, RepositorySnapshotV13, RepositorySnapshotV13Error,
+    RepositorySnapshotV14, RepositorySnapshotV14Error, RepositorySnapshotV15,
+    RepositorySnapshotV15Error, RepositorySnapshotV16, RepositorySnapshotV16Error,
+    RepositorySnapshotV17, RepositorySnapshotV17Error, RepositorySnapshotV18,
+    RepositorySnapshotV18Error, SnapshotEnvelopeV1, TrustedSourceError, TrustedSourceSelectionV1,
+    ValidatedS4Head, current_release_profile_v1, generate_documentation_v1,
+    local_configuration_report_v1, local_query_result_v1, local_query_result_v2,
+    local_query_result_v3, local_query_result_v4, local_query_result_v5, local_query_result_v6,
+    local_query_result_v7, local_query_result_v8, local_query_result_v9, local_query_result_v10,
+    local_query_result_v11, local_query_result_v12, local_query_result_v13,
+    validate_stored_snapshot_semantic_v4, validate_stored_snapshot_semantic_v5,
+    validate_stored_snapshot_semantic_v6, validate_stored_snapshot_semantic_v7,
+    validate_stored_snapshot_semantic_v8, validate_stored_snapshot_semantic_v9,
+    validate_stored_snapshot_semantic_v10, validate_stored_snapshot_semantic_v11,
+    validate_stored_snapshot_semantic_v12, validate_stored_snapshot_semantic_v13,
+    validate_stored_snapshot_semantic_v14, validate_stored_snapshot_semantic_v15,
+    validate_stored_snapshot_semantic_v16, validate_stored_snapshot_semantic_v17,
+    validate_stored_snapshot_semantic_v18,
 };
 use codenoesis_domain::knowledge::KnowledgeError;
 use codenoesis_domain::s1_boundaries::LOCAL_GITLINKS_V1;
@@ -95,7 +98,7 @@ use codenoesis_domain::storage::{
     SNAPSHOT_SCHEMA_VERSION_V15, SNAPSHOT_SCHEMA_VERSION_V16, SNAPSHOT_SCHEMA_VERSION_V17,
     SNAPSHOT_SCHEMA_VERSION_V18, StorageComponent, StorageError,
 };
-use codenoesis_domain::{AcquisitionError, EntryPolicy, UnsupportedFeature};
+use codenoesis_domain::{AcquisitionError, EntryPolicy, RepositoryError, UnsupportedFeature};
 use codenoesis_domain::{
     InputError, K1OutputCapacityProfile, LOCAL_SNAPSHOT_64M_V1, LOCAL_SNAPSHOT_256M_V1, LimitKind,
     RepositoryIdentity, Revision, STANDARD_LOCAL_S1_LIMITS, limit_exceeded,
@@ -111,6 +114,7 @@ use noesis::generated_docs::{
 };
 use same_file::Handle as FileIdentity;
 use serde_json::Value;
+use sha2::{Digest as _, Sha256};
 
 static CORRELATION_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 const SCAN_WORKER_STACK_BYTES: usize = 16 * 1024 * 1024;
@@ -194,6 +198,7 @@ fn main() -> ExitCode {
     let g1_requested = bootstrap.g1_requested;
     let arguments = bootstrap.arguments;
     let profile_requested = arguments.get(1).is_some_and(|value| value == "profile");
+    let source_requested = arguments.get(1).is_some_and(|value| value == "source");
     let r10_scan_requested = rust_cfg_alternatives_requested(&arguments);
     let r12_scan_requested = rust_callable_cfg_alternatives_requested(&arguments);
     let r13_scan_requested = rust_callable_scip_requested(&arguments);
@@ -258,7 +263,9 @@ fn main() -> ExitCode {
         None
     };
     if noesis::install_s0_security_boundary().is_err() {
-        return if g1_requested {
+        return if source_requested {
+            emit_internal_error_v29()
+        } else if g1_requested {
             emit_internal_error_v26()
         } else {
             emit_internal_error_v1()
@@ -266,11 +273,13 @@ fn main() -> ExitCode {
     }
     let s4_requested = requested_profile(&arguments, "standard-local-s4");
     let s3_requested = requested_profile(&arguments, "standard-local-s3");
-    let s4_error_lineage = s4_requested || docs_requested || query_requested;
+    let s4_error_lineage = s4_requested || docs_requested || query_requested || source_requested;
     let s3_error_lineage = s3_requested || s4_error_lineage;
     let s2_requested = requested_profile(&arguments, "standard-local-s2");
     let result = if profile_requested {
         run_profile(&arguments)
+    } else if source_requested {
+        run_source(arguments)
     } else if impact_requested {
         impact::run(arguments).map_err(Failure::S7)
     } else if output_capacity_requested {
@@ -311,6 +320,7 @@ fn main() -> ExitCode {
     match result {
         Ok(stdout) => match io::stdout().lock().write_all(&stdout) {
             Ok(()) => ExitCode::SUCCESS,
+            Err(_) if source_requested => emit_internal_error_v29(),
             Err(_) if profile_requested => emit_internal_error_v25(),
             Err(_) if impact_requested => emit_internal_error_v23(),
             Err(_) if r16_requested => emit_internal_error_v24(),
@@ -336,6 +346,7 @@ fn main() -> ExitCode {
             Err(_) if profiled => emit_internal_error_v2(),
             Err(_) => emit_internal_error_v1(),
         },
+        Err(Failure::R18(failure)) => emit_error_v29(&failure.error, failure.exit_code),
         Err(Failure::G0(failure)) => emit_error_v25(&failure.error, failure.exit_code),
         Err(Failure::S7(failure)) => emit_error_v23(&failure.error, failure.exit_code),
         Err(Failure::R16(failure)) => emit_error_v24(&failure.error, failure.exit_code),
@@ -3416,6 +3427,103 @@ fn run_explore_r14(invocation: &ExploreInvocation) -> Result<Vec<u8>, Failure> {
         .map_err(|error| r14_portable_failure(error, 17, true))
 }
 
+fn run_source(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
+    let invocation = SourceInvocation::parse(arguments)?;
+    let loaded = load_s4_snapshot(&invocation.store, &invocation.identity)
+        .map_err(|_| r18_failure(CodeNoesisErrorV29::invalid_snapshot(), 2))?;
+    let selection = TrustedSourceSelectionV1::from_validated_v18(
+        &loaded.semantic,
+        &loaded.head,
+        &invocation.evidence_id,
+    )
+    .map_err(|error| r18_contract_failure(&error))?;
+    if selection.commit_oid() != &invocation.revision {
+        return Err(r18_failure(CodeNoesisErrorV29::repository_mismatch(), 2));
+    }
+    let acquirer = if invocation.packed_sha1 {
+        LocalGitRepository::new_packed_sha1()
+    } else {
+        LocalGitRepository::new()
+    };
+    let service = TrustedSourceRetrievalService::new(acquirer);
+    let request = TrustedSourceRequest::new(
+        invocation.repository,
+        selection,
+        invocation.boundary_profile,
+    );
+    let excerpt = service
+        .retrieve(
+            &request,
+            &repository_boundaries::Sha256BoundaryHasher,
+            r18_sha256,
+        )
+        .map_err(r18_retrieval_failure)?;
+    let reloaded = load_s4_snapshot(&invocation.store, &invocation.identity)
+        .map_err(|_| r18_failure(CodeNoesisErrorV29::unstable_input(), 2))?;
+    if reloaded.head != loaded.head || reloaded.semantic != loaded.semantic {
+        return Err(r18_failure(CodeNoesisErrorV29::unstable_input(), 2));
+    }
+    Ok(excerpt.canonical_stdout())
+}
+
+fn r18_retrieval_failure(error: TrustedSourceRetrievalError) -> Failure {
+    match error {
+        TrustedSourceRetrievalError::Repository(RepositoryError::Unexpected) => {
+            r18_internal_failure()
+        }
+        TrustedSourceRetrievalError::Repository(RepositoryError::Acquisition(error)) => {
+            r18_acquisition_failure(&error)
+        }
+        TrustedSourceRetrievalError::Boundary(RepositoryBoundaryError::LimitExceeded {
+            ..
+        }) => r18_failure(CodeNoesisErrorV29::limit_exceeded(), 2),
+        TrustedSourceRetrievalError::Boundary(_) => {
+            r18_failure(CodeNoesisErrorV29::acquisition_rejected(), 2)
+        }
+        TrustedSourceRetrievalError::Contract(error) => r18_contract_failure(&error),
+    }
+}
+
+fn r18_acquisition_failure(error: &AcquisitionError) -> Failure {
+    match error {
+        AcquisitionError::LimitExceeded { .. } => {
+            r18_failure(CodeNoesisErrorV29::limit_exceeded(), 2)
+        }
+        AcquisitionError::PathInvalid { .. }
+        | AcquisitionError::RootPolicyViolation { .. }
+        | AcquisitionError::EntryPolicyViolation { .. } => {
+            r18_failure(CodeNoesisErrorV29::path_rejected(), 2)
+        }
+        AcquisitionError::UnsupportedRepositoryShape {
+            feature:
+                UnsupportedFeature::PackedAcquisition(
+                    codenoesis_domain::s1_packed::PackedAcquisitionError::Changed(_),
+                ),
+        } => r18_failure(CodeNoesisErrorV29::unstable_input(), 2),
+        _ => r18_failure(CodeNoesisErrorV29::acquisition_rejected(), 2),
+    }
+}
+
+fn r18_contract_failure(error: &TrustedSourceError) -> Failure {
+    let exit_code = if error == &TrustedSourceError::Internal {
+        1
+    } else {
+        2
+    };
+    r18_failure(CodeNoesisErrorV29::from_contract(error), exit_code)
+}
+
+fn r18_sha256(bytes: &[u8]) -> String {
+    use std::fmt::Write as _;
+
+    let digest = Sha256::digest(bytes);
+    let mut output = String::with_capacity(64);
+    for byte in digest {
+        write!(&mut output, "{byte:02x}").expect("writing SHA-256 hex cannot fail");
+    }
+    output
+}
+
 fn run_docs(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, Failure> {
     let invocation = DocsInvocation::parse(arguments)?;
     let loaded =
@@ -5229,6 +5337,14 @@ fn r16_failure(error: CodeNoesisErrorV24, exit_code: u8) -> Failure {
     Failure::R16(R16Failure { error, exit_code })
 }
 
+fn r18_failure(error: CodeNoesisErrorV29, exit_code: u8) -> Failure {
+    Failure::R18(R18Failure { error, exit_code })
+}
+
+fn r18_internal_failure() -> Failure {
+    r18_failure(CodeNoesisErrorV29::internal(), 1)
+}
+
 fn r16_internal_failure() -> Failure {
     r16_failure(CodeNoesisErrorV24::internal("runtime"), 70)
 }
@@ -6372,6 +6488,17 @@ fn emit_error_v24(error: &CodeNoesisErrorV24, code: u8) -> ExitCode {
     }
 }
 
+fn emit_error_v29(error: &CodeNoesisErrorV29, code: u8) -> ExitCode {
+    let Ok(bytes) = error.canonical_stderr() else {
+        return ExitCode::from(1);
+    };
+    if io::stderr().lock().write_all(&bytes).is_ok() {
+        ExitCode::from(code)
+    } else {
+        ExitCode::from(1)
+    }
+}
+
 fn emit_internal_error_v10() -> ExitCode {
     emit_error_v10(&CodeNoesisErrorV10::internal(), 70)
 }
@@ -6428,6 +6555,10 @@ fn emit_internal_error_v24() -> ExitCode {
     emit_error_v24(&CodeNoesisErrorV24::internal("runtime"), 70)
 }
 
+fn emit_internal_error_v29() -> ExitCode {
+    emit_error_v29(&CodeNoesisErrorV29::internal(), 1)
+}
+
 fn emit_docs_error(error: GeneratedDocsError) -> ExitCode {
     let error = match error {
         GeneratedDocsError::UnmarkedNonemptyRoot => {
@@ -6454,6 +6585,7 @@ fn emit_query_error(error: QueryFailure) -> ExitCode {
 }
 
 enum Failure {
+    R18(R18Failure),
     G0(G0Failure),
     S7(impact::ImpactFailure),
     R16(R16Failure),
@@ -6480,6 +6612,11 @@ enum Failure {
     Docs(GeneratedDocsError),
     Query(QueryFailure),
     Internal,
+}
+
+struct R18Failure {
+    error: CodeNoesisErrorV29,
+    exit_code: u8,
 }
 
 struct G0Failure {
@@ -6916,6 +7053,119 @@ fn reject_parent_output(output: &OsStr, profile: PortableProfile) -> Result<(), 
     } else {
         Ok(())
     }
+}
+
+struct SourceInvocation {
+    repository: OsString,
+    revision: codenoesis_domain::ObjectId,
+    identity: RepositoryIdentity,
+    store: OsString,
+    evidence_id: String,
+    packed_sha1: bool,
+    boundary_profile: bool,
+}
+
+impl SourceInvocation {
+    fn parse(arguments: impl IntoIterator<Item = OsString>) -> Result<Self, Failure> {
+        let mut arguments = arguments.into_iter();
+        let _program = arguments.next();
+        if arguments.next().as_deref() != Some(OsStr::new("source")) {
+            return Err(r18_failure(CodeNoesisErrorV29::invalid_arguments(), 2));
+        }
+        let mut repository = None;
+        let mut revision = None;
+        let mut identity = None;
+        let mut store = None;
+        let mut evidence_id = None;
+        let mut source_profile = None;
+        let mut acquisition_profile = None;
+        let mut boundary_profile = None;
+        let mut format = None;
+        while let Some(flag) = arguments.next() {
+            let Some(value) = arguments.next() else {
+                return Err(r18_failure(CodeNoesisErrorV29::invalid_arguments(), 2));
+            };
+            match flag.to_str() {
+                Some("--repository") if repository.is_none() => repository = Some(value),
+                Some("--revision") if revision.is_none() => {
+                    revision = value.to_str().map(str::to_owned);
+                }
+                Some("--repository-id") if identity.is_none() => {
+                    identity = value.to_str().map(str::to_owned);
+                }
+                Some("--store") if store.is_none() => store = Some(value),
+                Some("--evidence-id") if evidence_id.is_none() => {
+                    evidence_id = value.to_str().map(str::to_owned);
+                }
+                Some("--source-profile") if source_profile.is_none() => {
+                    source_profile = value.to_str().map(str::to_owned);
+                }
+                Some("--acquisition-profile") if acquisition_profile.is_none() => {
+                    acquisition_profile = value.to_str().map(str::to_owned);
+                }
+                Some("--repository-boundary-profile") if boundary_profile.is_none() => {
+                    boundary_profile = value.to_str().map(str::to_owned);
+                }
+                Some("--format") if format.is_none() => {
+                    format = value.to_str().map(str::to_owned);
+                }
+                _ => return Err(r18_failure(CodeNoesisErrorV29::invalid_arguments(), 2)),
+            }
+        }
+        let repository = repository
+            .filter(|value: &OsString| !value.is_empty())
+            .ok_or_else(|| r18_failure(CodeNoesisErrorV29::invalid_arguments(), 2))?;
+        let revision = revision
+            .as_deref()
+            .and_then(codenoesis_domain::ObjectId::parse_sha1)
+            .ok_or_else(|| r18_failure(CodeNoesisErrorV29::invalid_arguments(), 2))?;
+        let identity = identity
+            .as_deref()
+            .and_then(|value| RepositoryIdentity::parse(value).ok())
+            .ok_or_else(|| r18_failure(CodeNoesisErrorV29::invalid_arguments(), 2))?;
+        let store = store
+            .filter(|value: &OsString| !value.is_empty())
+            .ok_or_else(|| r18_failure(CodeNoesisErrorV29::invalid_arguments(), 2))?;
+        let evidence_id = evidence_id
+            .filter(|value| valid_r18_evidence_id(value))
+            .ok_or_else(|| r18_failure(CodeNoesisErrorV29::invalid_arguments(), 2))?;
+        if source_profile.as_deref() != Some(R18_SOURCE_PROFILE)
+            || acquisition_profile
+                .as_deref()
+                .is_some_and(|profile| profile != LOCAL_GIT_SHA1_PACKED_V1)
+            || boundary_profile
+                .as_deref()
+                .is_some_and(|profile| profile != LOCAL_GITLINKS_V1)
+            || format.as_deref() != Some("json")
+        {
+            return Err(r18_failure(CodeNoesisErrorV29::invalid_arguments(), 2));
+        }
+        Ok(Self {
+            repository,
+            revision,
+            identity,
+            store,
+            evidence_id,
+            packed_sha1: acquisition_profile.is_some(),
+            boundary_profile: boundary_profile.is_some(),
+        })
+    }
+}
+
+fn valid_r18_evidence_id(value: &str) -> bool {
+    [
+        "urn:codenoesis:evidence:blake3:",
+        "urn:codenoesis:evidence:sha256:",
+    ]
+    .iter()
+    .any(|prefix| {
+        value.strip_prefix(prefix).is_some_and(|digest| {
+            digest.len() == 64
+                && digest
+                    .bytes()
+                    .all(|byte| byte.is_ascii_hexdigit() && !byte.is_ascii_uppercase())
+        })
+    })
 }
 
 struct DocsInvocation {
@@ -8715,6 +8965,109 @@ mod s4_root_argument_tests {
                 invocation.context_profile.as_deref(),
                 Some(R17_CONTEXT_PROFILE)
             );
+        }
+    }
+
+    #[test]
+    fn pt_nfr_det_001_r18_source_accepts_fifty_argument_permutations() {
+        let evidence_id = format!("urn:codenoesis:evidence:blake3:{}", "a".repeat(64));
+        let pairs = [
+            ("--repository", "repository"),
+            ("--revision", "1111111111111111111111111111111111111111"),
+            ("--repository-id", "urn:codenoesis:repository:test"),
+            ("--store", "store"),
+            ("--evidence-id", evidence_id.as_str()),
+            ("--source-profile", R18_SOURCE_PROFILE),
+            ("--acquisition-profile", LOCAL_GIT_SHA1_PACKED_V1),
+            ("--repository-boundary-profile", LOCAL_GITLINKS_V1),
+            ("--format", "json"),
+        ];
+        for seed in 0..50 {
+            let mut permutation = pairs;
+            for index in 0..permutation.len() {
+                let target = (seed * 19 + index * 13 + 5) % permutation.len();
+                permutation.swap(index, target);
+            }
+            let mut arguments = vec![OsString::from("noesis"), OsString::from("source")];
+            for (flag, value) in permutation {
+                arguments.push(OsString::from(flag));
+                arguments.push(OsString::from(value));
+            }
+            let Ok(invocation) = SourceInvocation::parse(arguments) else {
+                panic!("valid R18 source selector");
+            };
+            assert!(invocation.packed_sha1);
+            assert!(invocation.boundary_profile);
+            assert_eq!(invocation.evidence_id, evidence_id);
+        }
+    }
+
+    #[test]
+    fn sec_fr_cli_011_r18_source_argument_matrix_fails_closed() {
+        let evidence_id = format!("urn:codenoesis:evidence:blake3:{}", "a".repeat(64));
+        let valid = vec![
+            "noesis".to_owned(),
+            "source".to_owned(),
+            "--repository".to_owned(),
+            "repository".to_owned(),
+            "--revision".to_owned(),
+            "1111111111111111111111111111111111111111".to_owned(),
+            "--repository-id".to_owned(),
+            "urn:codenoesis:repository:test".to_owned(),
+            "--store".to_owned(),
+            "store".to_owned(),
+            "--evidence-id".to_owned(),
+            evidence_id,
+            "--source-profile".to_owned(),
+            R18_SOURCE_PROFILE.to_owned(),
+            "--format".to_owned(),
+            "json".to_owned(),
+        ];
+        assert!(SourceInvocation::parse(valid.iter().map(OsString::from)).is_ok());
+
+        for mutation in [
+            vec!["--revision", "refs/heads/main"],
+            vec!["--revision", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"],
+            vec!["--evidence-id", "not-an-evidence-id"],
+            vec![
+                "--evidence-id",
+                "urn:codenoesis:evidence:blake3:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            ],
+            vec!["--source-profile", "trusted-local-source-v2"],
+            vec!["--format", "text"],
+            vec!["--acquisition-profile", "unknown"],
+            vec!["--repository-boundary-profile", "unknown"],
+        ] {
+            let mut arguments = valid.clone();
+            let index = arguments
+                .iter()
+                .position(|argument| argument == mutation[0])
+                .unwrap_or_else(|| {
+                    arguments.push(mutation[0].to_owned());
+                    arguments.push(String::new());
+                    arguments.len() - 2
+                });
+            arguments[index + 1] = mutation[1].to_owned();
+            assert!(SourceInvocation::parse(arguments.into_iter().map(OsString::from)).is_err());
+        }
+
+        let mut duplicate = valid.clone();
+        duplicate.extend(["--store".to_owned(), "store".to_owned()]);
+        assert!(SourceInvocation::parse(duplicate.into_iter().map(OsString::from)).is_err());
+
+        let mut forbidden = valid;
+        forbidden.extend([
+            "--repository-boundary-manifest".to_owned(),
+            "boundaries.json".to_owned(),
+        ]);
+        assert!(SourceInvocation::parse(forbidden.into_iter().map(OsString::from)).is_err());
+
+        for incomplete in [
+            vec!["noesis", "source"],
+            vec!["noesis", "source", "--repository"],
+            vec!["noesis", "source", "--unknown", "value"],
+        ] {
+            assert!(SourceInvocation::parse(incomplete.into_iter().map(OsString::from)).is_err());
         }
     }
 

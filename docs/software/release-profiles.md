@@ -1,9 +1,9 @@
 # CodeNoesis release profiles
 
-> Status: G0, G1a, and bounded G2a are Approved and Implemented but not Verified
-> after protected PRs #181, #183, and #185. Issue #186 / Decision 0036 defines
-> a Proposed G1b/G8-local carrier candidate. No profile or candidate artifact is
-> a supported or generally available release.
+> Status: the bounded G0-G8-local evidence is Verified after protected PRs
+> #181, #183, #185, #187, and LocalBaselineVerificationV2 PR #189. Existing
+> runtime profile bytes remain experimental, unsigned, unsupported, and not
+> generally available; verification grants no release or GA authority.
 
 ## Profile classes
 
@@ -19,9 +19,9 @@ release-channel, deprecation, or availability commitments.
 
 ## `local-experimental-r17`
 
-- lifecycle: protected PR #179 made R17 Approved and Implemented but not
-  Verified; protected PR #181 made the exact G0 registry and preflight Approved
-  and Implemented but not Verified;
+- lifecycle: protected PR #179 and protected PR #181 made R17 and the exact G0 registry and
+  preflight effective; the exact 32-profile LocalBaselineVerificationV2 pack
+  subsequently Verified their bounded evidence through protected PR #189;
 - delivery: source build only (`source-build-only`) from an exact reviewed
   revision;
 - product boundary: local immutable Git acquisition, bounded Rust R16 analysis,
@@ -39,20 +39,26 @@ release-channel, deprecation, or availability commitments.
   source-build observations, not support commitments;
 - compatibility: existing R0-R16/K1/S7 and LocalExplorerV1-V9 contracts remain
   immutable; R17 is additive and explicitly selected;
-- release status: not Local GA, not signed, not supported, and not Verified.
+- release status: evidence-Verified only for the bounded local baseline; not Local GA,
+  signed, published, or supported.
 
 The issue #180 / Decision 0033 package adds the machine-readable
 `codenoesis.release-profile/v1` registry and `noesis profile` preflight required
 by `FR-REL-001` and `FR-CLI-007`. Signing and attestation are
 `not-available`; build provenance is limited to protected Git and CI evidence
 and is not release provenance; publication, deployment, and secret authority
-are false. The exact G0 package is Approved and Implemented but not Verified.
+are false. The exact G0 package is Approved, Implemented, and Verified only
+within the bounded LocalBaselineVerificationV2 catalog.
+
+The immutable pre-verification contract retained the historical label
+**Approved and Implemented but not Verified**; it is not the current lifecycle
+status after PR #189.
 
 ## G1a staged bundle
 
 Issue #182, Decision 0034, and protected PR #183 made the local-only unsigned
 staged-directory bundle under `FR-CFG-001`, `FR-REL-002`, and `FR-CLI-008`
-Approved and Implemented but not Verified. Its digest-named directory contains the current-target
+effective; LocalBaselineVerificationV2 later Verified its bounded evidence. Its digest-named directory contains the current-target
 binary, one fixed-policy configuration, its closed schema, installation
 procedures, the protected license, and a canonical manifest.
 
@@ -65,14 +71,14 @@ remove only an explicitly selected path during uninstall. It mutates no PATH,
 home/system state, package database, registry/plist, service, schedule, or
 hidden activation pointer.
 
-The bundle is unsigned, not published, not supported, not Verified, and not
-GA. It is not an archive, installer, automatic updater, server artifact,
+The bundle is evidence-Verified but remains unsigned, unpublished, unsupported,
+and not GA. It is not an archive, installer, automatic updater, server artifact,
 signature, attestation, SBOM, provenance statement, or release channel.
 
-## Proposed G1b/G8-local carrier
+## G1b/G8-local carrier
 
-Issue #186 and Decision 0036 propose an outer deterministic ZIP carrier for the
-unchanged G1a directory. Candidate metadata binds exact source and target,
+Issue #186, Decision 0036, and protected PR #187 added an outer deterministic
+ZIP carrier for the unchanged G1a directory. Metadata binds exact source and target,
 CycloneDX SBOM, Cargo.lock graph, license/advisory policy, transitive unsafe
 inventory, checksums, and an external GitHub/Sigstore build-provenance
 attestation. Offline product verification and external signer verification are
@@ -80,10 +86,18 @@ separate, explicit steps.
 
 The existing `local-experimental-r17` runtime profile remains byte-identical and
 continues to report source-build-only, no signed-distribution capability, no
-support, and no GA. The outer candidate evidence does not rewrite that runtime
-authority. Protected merge would implement only the carrier and trusted
-post-merge attestation mechanism; independent evidence acceptance remains
-required before Verified.
+support, and no GA. The outer evidence does not rewrite that runtime authority.
+LocalBaselineVerificationV2 Verified the bounded G1b/G8-local evidence through
+PR #189; no publication or release authority followed.
+
+## R18 candidate boundary
+
+Issue #190 and Decision 0038 propose `trusted-local-source-v1` on exact base
+`1de6a420f25a1c7eb74d07a99f1800dde90eefa8`. The selector is an explicit
+source-build-only local command and is not added to the immutable
+`local-experimental-r17` registry, staged bundle, release-candidate carrier, or
+runtime profile JSON. It grants no signing, publication, support, release
+channel, EOL, SLA, or GA authority.
 
 Promotion still requires G9 pilot, release, support, channel, vulnerability
 response, EOL, and GA decisions. Server artifacts and image signing remain

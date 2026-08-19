@@ -1,0 +1,96 @@
+{
+  "schema_version": "codenoesis.r18-contract-bundle/v1",
+  "issue": 190,
+  "exact_base_sha": "1de6a420f25a1c7eb74d07a99f1800dde90eefa8",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "02f4aebd2e80867bf6a23f417da4c081808f19c0291398879a54b7d7d517378a"
+    },
+    {
+      "path": "crates/noesis/tests/e2e_fr_ctx_002_trusted_source_retrieval.rs",
+      "sha256": "4ba6ad83d4430fd19f32a5f8628eb760e0651e039c37d801172fa4374f002bff"
+    },
+    {
+      "path": "crates/noesis/tests/support/mod.rs",
+      "sha256": "0a5de96b80c5de08a05d7e27214aed62602174858d8eaa1b820fb8e7cf0416d7"
+    },
+    {
+      "path": "crates/noesis/tests/support/s4_r18.rs",
+      "sha256": "ccdfd9b848ffeae92f0e5d7bed22c79c25fbce3b7110d7f1c7b7af7985872508"
+    },
+    {
+      "path": "docs/software/architecture.md",
+      "sha256": "f4a2c25da9f27093f46d1a2c041c95a4a30be3000ada548dbdc8c56e6ac945b3"
+    },
+    {
+      "path": "docs/software/decisions/0037-local-baseline-verification-v2.md",
+      "sha256": "c149645a7a5914e956ec41ce79578cb14f563daf7bb39b393194289cfe7d9072"
+    },
+    {
+      "path": "docs/software/decisions/0038-s4-trusted-local-source-retrieval.md",
+      "sha256": "7da1cea8447e3dc3793a2c857aa79a4ff9e4c643466cf20bbe57b4c43bce766d"
+    },
+    {
+      "path": "docs/software/distribution.md",
+      "sha256": "43b9d743a4a16a35b081b7e443c8e591e4e4fb72c385eb51e7a7b7bbe9beec26"
+    },
+    {
+      "path": "docs/software/release-profiles.md",
+      "sha256": "403d3a020897ddeac8c72a647846c455992075842a7940e52b65ec644e25efac"
+    },
+    {
+      "path": "docs/software/roadmap.md",
+      "sha256": "cdbdea10246312f02009abf3b12c435dea2eeecf10c3e70dcb48fbb8fa0ea9bd"
+    },
+    {
+      "path": "docs/software/software-requirements-specification.md",
+      "sha256": "207121c599ab6118b49d36763cb750c3731d497617e697de2b39e57efc3869ae"
+    },
+    {
+      "path": "docs/software/verification.md",
+      "sha256": "86569b0274aa5a7f088a3007b1d9237418c505fd34ec8a1724e99ebb8ccfb754"
+    },
+    {
+      "path": "scripts/tests/test_s4_r18_trusted_source_retrieval_contract.py",
+      "sha256": "2180aa4ce662711dc0f81f64bc2dd3ce0a9db2e4818e7fcb1750e0acaff7073e"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-function-context-v1/manifest.json",
+      "sha256": "9bb0fe1c9c84213db6e8ebd42d166a6187c1d32657bdb2592ad2ab9cbe6093a4"
+    },
+    {
+      "path": "tests/fixtures/s4/rust-function-context-v1/repository/src/lib.rs",
+      "sha256": "66c45fce26cae70bf7d07e1c2d5bd7a37dac51cb884d80babfe54b96c8176981"
+    },
+    {
+      "path": "tests/fixtures/s4/trusted-source-retrieval-v1/README.md",
+      "sha256": "cd57e7d425be995d94ad905732ac9ea9b82ac5c651e34684562a22635f339b10"
+    },
+    {
+      "path": "tests/fixtures/s4/trusted-source-retrieval-v1/expected-source-excerpt.json",
+      "sha256": "fcad075efeca349116527a58a9b7961f8be4206caac871b801b7fa5d914529fe"
+    },
+    {
+      "path": "tests/fixtures/s4/trusted-source-retrieval-v1/manifest.json",
+      "sha256": "2c592130d2e6b12828d2ceab37f76047def6d15b173a8d38eab186607dd03fee"
+    },
+    {
+      "path": "tests/specifications/s4/r18/contract-v1.json",
+      "sha256": "0347024fb6a1e17f2ecfcb6a886ed996fad14a6d751bdb39aa435dffc97c2ebc"
+    },
+    {
+      "path": "tests/specifications/s4/r18/e2e_fr_ctx_002_trusted_source_retrieval.json",
+      "sha256": "68964637f81b69ff8383526dcf6550d3883d1245d97f1e51dede0e6f525647cb"
+    },
+    {
+      "path": "tests/specifications/s4/r18/error-v29.schema.json",
+      "sha256": "6549fb4a7bee3cacd4b20b5530327d2eaa32be5ea089711820ff2aba7afd9403"
+    },
+    {
+      "path": "tests/specifications/s4/r18/trusted-source-excerpt-v1.schema.json",
+      "sha256": "5f9220a1b6f0844e5d5fb1ed8318556e6dc190d96096920a492428a75b51f99a"
+    }
+  ],
+  "bundle_sha256": "8db39b303cca82d06e9d2c347184da205bfe350f421179b8299c5e3fe3f9c340"
+}

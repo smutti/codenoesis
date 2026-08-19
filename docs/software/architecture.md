@@ -1,9 +1,8 @@
 # CodeNoesis Software Architecture
 
-> Status: **implementation architecture through R17, bounded S7 C0-C4, G1a,
-> and local upgrade safety; G1b/G8-local is a Proposed branch candidate**.
-> Implemented behavior remains not Verified. The repository
-> contains working Rust crates and the `noesis` local CLI, but no production
+> Status: **the bounded S0-S7/R0-R17/K1/G0-G8-local architecture is Verified;
+> R18 is a Proposed branch candidate**. Protected PR #189 activated the exact
+> 32-profile LocalBaselineVerificationV2 pack without granting a production
 > server deployment or production-ready release.
 
 This document is the implementation baseline for the [CodeNoesis software track](README.md). Research-only ideas must first define an experiment and acceptance evidence in the [research track](../research/README.md); they enter this architecture only through an explicit engineering decision.
@@ -435,8 +434,8 @@ Protected PR #177 made the behavior effective; it remains not Verified.
 
 Issue [#178](https://github.com/smutti/codenoesis/issues/178),
 [Decision 0032](decisions/0032-s4-r17-function-context-navigation.md), and
-protected PR #179 define one Approved and Implemented but not Verified
-high-risk S4 package over exact protected merge
+protected PR #179 define one Approved and Implemented high-risk S4 package over
+exact protected merge
 `f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`. It adds no ontology family,
 identity, snapshot, query version, or PortableGraph version. The explicit
 `rust-function-context-v1` selector projects one validated R16 callable into
@@ -466,7 +465,45 @@ or browser-launch authority.
 R17 is exposed only by the source-build `local-experimental-r17` profile. That
 profile starts G0 classification but grants no GA, signing, support, release,
 deployment, publication, or compatibility promise. Protected PR #179 made the
-behavior effective; it remains not Verified.
+behavior effective; the exact 32-profile LocalBaselineVerificationV2 package
+made the bounded behavior Verified through protected PR #189 without changing
+Decision 0032 or its artifacts.
+
+### R18 trusted local evidence-to-source retrieval candidate
+
+Issue [#190](https://github.com/smutti/codenoesis/issues/190) and
+[Decision 0038](decisions/0038-s4-trusted-local-source-retrieval.md) define one
+Proposed high-risk S4 package on exact Verified base
+`1de6a420f25a1c7eb74d07a99f1800dde90eefa8`. The explicit
+`trusted-local-source-v1` command is an output adapter over a focused
+application service and the existing inward-owned repository-acquisition port.
+It adds no domain entity, relationship, claim, evidence, snapshot, query,
+portable graph, explorer, persistence, or release-profile version.
+
+The CLI loads and validates one visible RepositorySnapshotV18 and passes only
+its exact evidence record and immutable source binding inward. The application
+service asks the existing local Git adapter to reacquire the explicit repository
+at the exact snapshot commit, then verifies repository identity, commit, tree,
+path, blob OID, and half-open byte span against the returned bounded inventory.
+The evidence path is compared as data and is never joined to a mutable
+working-tree root. Loose and explicitly selected packed-object acquisition keep
+their existing integrity, path, symlink/reparse, race, and resource checks.
+
+The inward contract emits one canonical `TrustedSourceExcerptV1` only for a
+non-empty UTF-8 span on scalar boundaries. It computes one-based line and
+Unicode-scalar columns, exact byte length and SHA-256, and fixes authority to
+`explicit_local_git_object_only` and disclosure to
+`explicit_transient_stdout`. The output adapter buffers and validates the
+complete value under the 524,288-byte stdout bound before one write. Typed
+`CodeNoesisErrorV29` failures contain no source text or absolute root and cause
+no store, repository, artifact, process, network, model, clipboard, browser,
+telemetry, signing, publication, or release effect.
+
+The retained LocalBaselineVerificationV2 marker
+“LocalBaselineVerificationV2 candidate Verified pending independent review and
+protected manual merge” remains immutable pre-activation evidence, while PR
+#189 is the external activation event. Issue #141 is closed as superseded. R18
+remains ineffective before protected manual merge. G9 remains a separate governed package.
 
 ### G0 bounded release-profile registry
 

@@ -1,0 +1,26 @@
+{
+  "schema_version": "codenoesis.r18-fixture-descriptor/v1",
+  "repository_identity": "urn:codenoesis:fixture:s4-rust-function-context-v1",
+  "external_source_vendored": false,
+  "inherited_fixture": "tests/fixtures/s4/rust-function-context-v1/manifest.json",
+  "commit_oid": "09093916dfc9b925fa22c7de660b67103a4def01",
+  "tree_oid": "aed06ed2ea7447c85a25b03fa48dd9d591b7d825",
+  "source": {
+    "path": "tests/fixtures/s4/rust-function-context-v1/repository/src/lib.rs",
+    "byte_length": 510,
+    "blob_oid": "3beb259d89c879b3b16f8d7de20b5f7d23ffcf88",
+    "sha256": "66c45fce26cae70bf7d07e1c2d5bd7a37dac51cb884d80babfe54b96c8176981"
+  },
+  "selected_evidence_id": "urn:codenoesis:evidence:blake3:3025c0ba243c210e5a923781cf1a57c420e36d393c24b358c1f965594c3002c8",
+  "expected_oracle": "tests/fixtures/s4/trusted-source-retrieval-v1/expected-source-excerpt.json",
+  "sentinels": {
+    "working_tree_read_permitted": false,
+    "network_access_permitted": false,
+    "process_execution_permitted": false,
+    "store_mutation_permitted": false,
+    "source_retention_permitted": false,
+    "portable_source_permitted": false,
+    "explorer_source_permitted": false,
+    "model_provider_permitted": false
+  }
+}
