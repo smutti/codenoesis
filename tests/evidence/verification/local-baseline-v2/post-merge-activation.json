@@ -1,0 +1,23 @@
+{
+  "schema_version": "codenoesis.local-baseline-verification-post-merge-activation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/188",
+  "pull_request": "https://github.com/smutti/codenoesis/pull/189",
+  "target_branch": "main",
+  "base_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+  "review_head_sha": "a40a4cb0212e7b59b1eff81ab9818299c7ebc3b9",
+  "review_tree_sha": "c13f40fa96017fa4407cb26052f8b5e3c7bb7009",
+  "merge_commit_sha": "1de6a420f25a1c7eb74d07a99f1800dde90eefa8",
+  "merge_parent_sha": "9ecdc3acefd43495daf76b9f2ab69a7bbacff172",
+  "merge_tree_sha": "c13f40fa96017fa4407cb26052f8b5e3c7bb7009",
+  "merge_method": "squash",
+  "merged_at": "2026-08-15T07:26:52Z",
+  "candidate_status": "candidate_verified_pending_merge",
+  "activated_status": "verified",
+  "activation": "accountable_maintainer_protected_manual_merge_of_exact_tree",
+  "actor": "github:smutti",
+  "decision_url": "https://github.com/smutti/codenoesis/pull/189",
+  "limitations": [
+    "The retained V2 manifest remains immutable pre-activation evidence.",
+    "This activation grants no product, release, support, SLA, or GA authority."
+  ]
+}

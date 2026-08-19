@@ -1,0 +1,55 @@
+{
+  "schema_version": "codenoesis.verification-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/194",
+  "requirements": [
+    "INV-BND-001",
+    "NFR-MNT-001",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "delivery_slice": "S14",
+  "risk": "high",
+  "head_sha": "f7c41083e9041668798b499d11cd491032b03512",
+  "result": "green",
+  "commands": [
+    {
+      "command": "python3 -m unittest scripts/tests/test_local_baseline_verification_v2.py",
+      "exit_status": 0,
+      "tests": 22
+    },
+    {
+      "command": "python3 scripts/verify_local_baseline_v2.py --manifest tests/evidence/verification/local-baseline-v2/manifest.json",
+      "exit_status": 0,
+      "profiles": 32,
+      "remote_runs": 5,
+      "remote_logs": 9
+    }
+  ],
+  "raw_log_sha256": "28c2bd285ade9eb569deec939d96623d9d5a839765bbfab232899f2f0e5905af",
+  "raw_log_bytes": 567,
+  "retained_log": {
+    "path": "tests/evidence/verification/local-baseline-v2/post-merge-correction/focused-green.log",
+    "sha256": "988f559ad243482755143c005b785aaa6d702246cd50d5d9b4b9cb0cc5e2f826",
+    "bytes": 572,
+    "normalization": "duration replaced with <duration>"
+  },
+  "r18_descendant_replay": {
+    "correction_head": "f7c41083e9041668798b499d11cd491032b03512",
+    "r18_head": "6e183486e182409a2ea39f28a1bac7426be94ab7",
+    "local_merge_sha": "651e89d74c9410141727120850560271533a2d4f",
+    "result": "green",
+    "validator_exit_status": 0,
+    "contract_test_exit_status": 0
+  },
+  "environment": {
+    "os": "Darwin 26.5.2",
+    "architecture": "arm64",
+    "python": "Python 3.9.6",
+    "git": "git version 2.50.1 (Apple Git-155)"
+  },
+  "agent": "OpenAI Codex",
+  "model": "not exposed by runtime",
+  "run_identifier": "issue-194-v2-post-merge-activation",
+  "duration_seconds": null,
+  "cost": null
+}

@@ -1,0 +1,12 @@
+LocalBaselineVerificationV2 post-merge correction focused Green
+head=f7c41083e9041668798b499d11cd491032b03512
+command=python3 -m unittest scripts/tests/test_local_baseline_verification_v2.py
+......................
+----------------------------------------------------------------------
+Ran 22 tests in <duration>s
+
+OK
+exit=0
+command=python3 scripts/verify_local_baseline_v2.py --manifest tests/evidence/verification/local-baseline-v2/manifest.json
+local baseline verification valid: status=candidate_verified_pending_merge, profiles=32, remote_runs=5, remote_logs=9
+exit=0

@@ -12,7 +12,7 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Optional
 
 
 ISSUE = "https://github.com/smutti/codenoesis/issues/188"
@@ -22,6 +22,16 @@ RED_COMMIT_SHA = "6fef76a4ba7fff8435d85a6df4c6efb3b1d1991b"
 EVIDENCE_PARENT_SHA = "b754282d56dc65df8044d3e6d4acc672b5ae8cde"
 FULL_GATE_HEAD_SHA = "5b3a4ea54dc9252a384d729e683f4cbb1ade8ce8"
 LEGACY_REMOTE_HEAD_SHA = "b80c08935c32293f1315ae6dd1b4f1a7f52cd6c5"
+REVIEW_HEAD_SHA = "a40a4cb0212e7b59b1eff81ab9818299c7ebc3b9"
+REVIEW_TREE_SHA = "c13f40fa96017fa4407cb26052f8b5e3c7bb7009"
+MERGE_COMMIT_SHA = "1de6a420f25a1c7eb74d07a99f1800dde90eefa8"
+MERGE_TREE_SHA = REVIEW_TREE_SHA
+ACTIVATION_SCHEMA_SHA256 = (
+    "21b6747fa803848a25476832c474b27f420127c96e2c1d1755a9ec97f60918cf"
+)
+ACTIVATION_RECORD_SHA256 = (
+    "f3d7b3ec3803f2216583e3440484e7924cff9c7a18eac1d16813b12c446e7138"
+)
 LEGACY_S0_BUNDLE_SHA256 = (
     "978a7128498d54a6c4a6b3fec11d195e37d2f67e179d2babb5320668c4e44811"
 )
@@ -40,6 +50,13 @@ CATALOG_PATH = Path(
 )
 MANIFEST_SCHEMA_PATH = Path(
     "tests/specifications/verification/local-baseline-v2/manifest.schema.json"
+)
+ACTIVATION_SCHEMA_PATH = Path(
+    "tests/specifications/verification/local-baseline-v2/"
+    "post-merge-activation-v1.schema.json"
+)
+ACTIVATION_RECORD_PATH = Path(
+    "tests/evidence/verification/local-baseline-v2/post-merge-activation.json"
 )
 REMOTE_RUNS_PATH = Path(
     "tests/evidence/verification/local-baseline-v2/remote-runs.json"
@@ -451,6 +468,8 @@ def ensure_required_git_history(root: Path, errors: list[str]) -> None:
         EVIDENCE_PARENT_SHA,
         FULL_GATE_HEAD_SHA,
         LEGACY_REMOTE_HEAD_SHA,
+        REVIEW_HEAD_SHA,
+        MERGE_COMMIT_SHA,
         head,
     )
     missing = [
@@ -507,6 +526,69 @@ def ensure_required_git_history(root: Path, errors: list[str]) -> None:
             "exact shallow history hydration is incomplete: "
             + ", ".join(still_missing)
         )
+
+
+def validate_post_merge_activation(
+    root: Path,
+    activation: dict[str, Any],
+    current_head: str,
+    errors: list[str],
+) -> None:
+    schema_path = root / ACTIVATION_SCHEMA_PATH
+    record_path = root / ACTIVATION_RECORD_PATH
+    if not schema_path.is_file():
+        errors.append("post-merge activation schema is missing")
+        return
+    if not record_path.is_file():
+        errors.append("post-merge activation record is missing")
+        return
+    if sha256_file(schema_path) != ACTIVATION_SCHEMA_SHA256:
+        errors.append("post-merge activation schema digest is invalid")
+    if sha256_file(record_path) != ACTIVATION_RECORD_SHA256:
+        errors.append("post-merge activation record digest is invalid")
+
+    schema = load_json(schema_path)
+    if not isinstance(schema, dict):
+        errors.append("post-merge activation schema must be an object")
+        return
+    validate_json_schema(activation, schema, schema, "$activation", errors)
+
+    if not git_is_ancestor(root, MERGE_COMMIT_SHA, current_head):
+        errors.append("exact activation merge is not an ancestor of current head")
+
+    review_tree = git(root, ["rev-parse", f"{REVIEW_HEAD_SHA}^{{tree}}"])
+    merge_tree = git(root, ["rev-parse", f"{MERGE_COMMIT_SHA}^{{tree}}"])
+    if review_tree != REVIEW_TREE_SHA:
+        errors.append("review head tree differs from the authorized identity")
+    if merge_tree != MERGE_TREE_SHA:
+        errors.append("activation merge tree differs from the authorized identity")
+    if review_tree != merge_tree:
+        errors.append("review head and activation merge trees differ")
+
+    merge_line = git(
+        root,
+        ["rev-list", "--parents", "-n", "1", MERGE_COMMIT_SHA],
+    ).split()
+    if merge_line != [MERGE_COMMIT_SHA, BASE_SHA]:
+        errors.append("activation merge must have only the exact protected base parent")
+
+
+def resolve_validation_subject(
+    root: Path,
+    current_head: str,
+    activation: dict[str, Any],
+    errors: list[str],
+) -> Optional[str]:
+    if git_is_ancestor(root, MERGE_COMMIT_SHA, current_head):
+        error_count = len(errors)
+        validate_post_merge_activation(root, activation, current_head, errors)
+        if len(errors) != error_count:
+            return None
+        return REVIEW_HEAD_SHA
+    if git_is_ancestor(root, EVIDENCE_PARENT_SHA, current_head):
+        return current_head
+    errors.append("current head is not on a recognized lineage for V2 verification")
+    return None
 
 
 def safe_relative_path(value: Any) -> bool:
@@ -572,6 +654,7 @@ def validate_authority(
     root: Path,
     manifest: dict[str, Any],
     plan: dict[str, Any],
+    validation_subject: str,
     errors: list[str],
 ) -> None:
     constants = {
@@ -592,8 +675,13 @@ def validate_authority(
         errors.append("evidence_parent_sha is invalid")
         return
 
-    head = git(root, ["rev-parse", "HEAD"])
-    for revision in (BASE_SHA, CHECKPOINT_SHA, RED_COMMIT_SHA, evidence_parent, head):
+    for revision in (
+        BASE_SHA,
+        CHECKPOINT_SHA,
+        RED_COMMIT_SHA,
+        evidence_parent,
+        validation_subject,
+    ):
         try:
             git(root, ["cat-file", "-e", f"{revision}^{{commit}}"])
         except ValueError as error:
@@ -603,7 +691,11 @@ def validate_authority(
         (BASE_SHA, CHECKPOINT_SHA, "base is not an ancestor of checkpoint"),
         (CHECKPOINT_SHA, RED_COMMIT_SHA, "checkpoint is not an ancestor of Red"),
         (RED_COMMIT_SHA, evidence_parent, "Red is not an ancestor of evidence parent"),
-        (evidence_parent, head, "evidence parent is not an ancestor of current head"),
+        (
+            evidence_parent,
+            validation_subject,
+            "evidence parent is not an ancestor of validation subject",
+        ),
     )
     for ancestor, descendant, message in ancestry:
         if not git_is_ancestor(root, ancestor, descendant):
@@ -624,8 +716,15 @@ def validate_authority(
             errors.append(f"plan {field} must remain false")
 
 
-def validate_changed_paths(root: Path, errors: list[str]) -> None:
-    changed = git(root, ["diff", "--name-only", f"{BASE_SHA}..HEAD"])
+def validate_changed_paths(
+    root: Path,
+    validation_subject: str,
+    errors: list[str],
+) -> None:
+    changed = git(
+        root,
+        ["diff", "--name-only", f"{BASE_SHA}..{validation_subject}"],
+    )
     changed_paths = [path for path in changed.splitlines() if path]
     for path in changed_paths:
         if path in ALLOWED_EXACT_PATHS or path.startswith(ALLOWED_PREFIXES):
@@ -637,6 +736,7 @@ def validate_product_tree(
     root: Path,
     manifest: dict[str, Any],
     plan: dict[str, Any],
+    validation_subject: str,
     errors: list[str],
 ) -> None:
     exclusions = plan.get("product_tree_exclusions")
@@ -648,7 +748,11 @@ def validate_product_tree(
         return
     effective_exclusions = [*exclusions, *AUTHORIZED_PRODUCT_TREE_EXCLUSIONS]
     base_digest = product_tree_digest(root, BASE_SHA, effective_exclusions)
-    head_digest = product_tree_digest(root, "HEAD", effective_exclusions)
+    head_digest = product_tree_digest(
+        root,
+        validation_subject,
+        effective_exclusions,
+    )
     expected = manifest.get("product_tree_sha256")
     if expected != base_digest:
         errors.append(
@@ -874,6 +978,7 @@ def validate_repository_evidence(
 def validate_full_gate_evidence(
     root: Path,
     manifest: dict[str, Any],
+    validation_subject: str,
     errors: list[str],
 ) -> None:
     observation_path = root / (
@@ -990,7 +1095,7 @@ def validate_full_gate_evidence(
         != FULL_GATE_HEAD_SHA
     ):
         errors.append("full-gate head commit is unavailable")
-    if git(root, ["merge-base", FULL_GATE_HEAD_SHA, "HEAD"]) != FULL_GATE_HEAD_SHA:
+    if not git_is_ancestor(root, FULL_GATE_HEAD_SHA, validation_subject):
         errors.append("full-gate head is not an ancestor of the review head")
 
     required_references = {"v2-full-gate-log", "v2-full-gate-observation"}
@@ -1592,14 +1697,26 @@ def validate_manifest(root: Path, manifest_path: Path) -> list[str]:
     ensure_required_git_history(root, errors)
     if len(errors) != history_error_count:
         return errors
+    activation = load_json(root / ACTIVATION_RECORD_PATH)
+    if not isinstance(activation, dict):
+        return [*errors, "post-merge activation record must be an object"]
+    current_head = git(root, ["rev-parse", "HEAD"])
+    validation_subject = resolve_validation_subject(
+        root,
+        current_head,
+        activation,
+        errors,
+    )
+    if validation_subject is None:
+        return errors
     validate_checkpoint_contracts(root, errors)
-    validate_authority(root, manifest, plan, errors)
-    validate_changed_paths(root, errors)
+    validate_authority(root, manifest, plan, validation_subject, errors)
+    validate_changed_paths(root, validation_subject, errors)
     validate_path_digest(root, manifest.get("plan"), "plan", errors)
     validate_path_digest(root, manifest.get("profile_catalog"), "profile_catalog", errors)
-    validate_product_tree(root, manifest, plan, errors)
+    validate_product_tree(root, manifest, plan, validation_subject, errors)
     validate_repository_evidence(root, manifest, errors)
-    validate_full_gate_evidence(root, manifest, errors)
+    validate_full_gate_evidence(root, manifest, validation_subject, errors)
     metadata_by_id = validate_remote_runs(root, manifest, errors)
     validate_remote_logs(root, manifest, metadata_by_id, errors)
     validate_codeql_log(root, manifest, metadata_by_id, errors)
