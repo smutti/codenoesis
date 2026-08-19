@@ -1,0 +1,81 @@
+{
+  "schema_version": "codenoesis.complete-gate-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/194",
+  "requirements": [
+    "INV-BND-001",
+    "NFR-MNT-001",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "delivery_slice": "S14",
+  "risk": "high",
+  "head_sha": "f7c41083e9041668798b499d11cd491032b03512",
+  "started_at": "2026-08-18T17:57:01Z",
+  "completed_at": "2026-08-18T18:02:47Z",
+  "duration_seconds": 346,
+  "result": "green",
+  "commands": [
+    {"command": "actionlint -no-color", "exit_status": 0},
+    {
+      "command": "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+      "exit_status": 0
+    },
+    {"command": "cargo fmt --all --check", "exit_status": 0},
+    {
+      "command": "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "exit_status": 0
+    },
+    {
+      "command": "cargo test --workspace --all-targets --all-features --locked",
+      "exit_status": 0
+    },
+    {
+      "command": "cargo test --workspace --doc --all-features --locked",
+      "exit_status": 0
+    },
+    {
+      "command": "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "exit_status": 0,
+      "tests": 389
+    },
+    {
+      "command": "python3 scripts/validate_benchmark_assets.py",
+      "exit_status": 0
+    },
+    {
+      "command": "cargo bench --workspace --all-features --no-run --locked",
+      "exit_status": 0
+    }
+  ],
+  "raw_log": {
+    "sha256": "7ad28d29c38e7172d541b59e8ea6aea57a7bf0abd3c80b4b337419f76eabbb46",
+    "bytes": 90447
+  },
+  "normalized_log": {
+    "sha256": "724959d64002d6759e1c945c8dcc64509e9c21f40527e9abce621b66447d6355",
+    "bytes": 88807,
+    "normalization": "exact repository root replaced with <repository>"
+  },
+  "retained_encoding": {
+    "path": "tests/evidence/verification/local-baseline-v2/post-merge-correction/full-gate.normalized.log.gz.base64",
+    "sha256": "cc9f544ac0fc2f6c5f56c1b7eec1450098b7aeec63bdeb66909b99bafa7a2665",
+    "bytes": 23182,
+    "encoding": "base64 of gzip -n over normalized UTF-8 log"
+  },
+  "environment": {
+    "os": "Darwin 26.5.2",
+    "architecture": "arm64",
+    "python": "Python 3.9.6",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "actionlint": "1.7.12"
+  },
+  "known_limitations": [
+    "PR #189 exposes no formal GitHub review event; separation is the accountable human maintainer reviewing and manually merging an agent-authored candidate under the recorded issue authority.",
+    "The existing toml dependency requirement emits a non-failing semver-metadata warning; this correction does not change dependencies."
+  ],
+  "agent": "OpenAI Codex",
+  "model": "not exposed by runtime",
+  "run_identifier": "issue-194-v2-post-merge-activation",
+  "cost": null
+}

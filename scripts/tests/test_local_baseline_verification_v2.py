@@ -18,6 +18,11 @@ SCHEMA_PATH = SPEC_ROOT / "manifest.schema.json"
 PLAN_PATH = SPEC_ROOT / "plan.json"
 CATALOG_PATH = SPEC_ROOT / "profile-catalog.json"
 MANIFEST_PATH = ROOT / "tests/evidence/verification/local-baseline-v2/manifest.json"
+ACTIVATION_SCHEMA_PATH = SPEC_ROOT / "post-merge-activation-v1.schema.json"
+ACTIVATION_PATH = (
+    ROOT
+    / "tests/evidence/verification/local-baseline-v2/post-merge-activation.json"
+)
 VALIDATOR_PATH = ROOT / "scripts/verify_local_baseline_v2.py"
 S0_SCHEMA_PATH = ROOT / "tests/specifications/s0/evidence-manifest-v1.schema.json"
 SRS_PATH = ROOT / "docs/software/software-requirements-specification.md"
@@ -91,6 +96,10 @@ class LocalBaselineVerificationV2ContractTests(unittest.TestCase):
         cls.catalog = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
         cls.s0_schema = json.loads(S0_SCHEMA_PATH.read_text(encoding="utf-8"))
         cls.manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+        cls.activation_schema = json.loads(
+            ACTIVATION_SCHEMA_PATH.read_text(encoding="utf-8")
+        )
+        cls.activation = json.loads(ACTIVATION_PATH.read_text(encoding="utf-8"))
         module_spec = importlib.util.spec_from_file_location(
             "verify_local_baseline_v2",
             VALIDATOR_PATH,
@@ -100,6 +109,10 @@ class LocalBaselineVerificationV2ContractTests(unittest.TestCase):
         validator = importlib.util.module_from_spec(module_spec)
         module_spec.loader.exec_module(validator)
         cls.validator: ModuleType = validator
+        history_errors: list[str] = []
+        cls.validator.ensure_required_git_history(ROOT, history_errors)
+        if history_errors:
+            raise RuntimeError("; ".join(history_errors))
 
     def validate_mutation(
         self,
@@ -214,6 +227,82 @@ class LocalBaselineVerificationV2ContractTests(unittest.TestCase):
 
     def test_candidate_manifest_is_complete_and_valid(self) -> None:
         self.assertEqual(self.validator.validate_manifest(ROOT, MANIFEST_PATH), [])
+
+    def test_post_merge_activation_contract_is_closed_and_exact(self) -> None:
+        self.assertFalse(self.activation_schema["additionalProperties"])
+        properties = self.activation_schema["properties"]
+        for field, value in self.activation.items():
+            if field == "limitations":
+                continue
+            self.assertEqual(properties[field]["const"], value, field)
+
+    def test_exact_squash_activation_is_supported(self) -> None:
+        self.assertTrue(
+            hasattr(self.validator, "resolve_validation_subject"),
+            "post-merge activation resolver is absent",
+        )
+        errors: list[str] = []
+        current_head = self.validator.git(ROOT, ["rev-parse", "HEAD"])
+        subject = self.validator.resolve_validation_subject(
+            ROOT,
+            current_head,
+            self.activation,
+            errors,
+        )
+        self.assertEqual(errors, [])
+        self.assertEqual(
+            subject,
+            "a40a4cb0212e7b59b1eff81ab9818299c7ebc3b9",
+        )
+
+    def test_candidate_lineage_keeps_original_subject(self) -> None:
+        self.assertTrue(hasattr(self.validator, "resolve_validation_subject"))
+        review_head = "a40a4cb0212e7b59b1eff81ab9818299c7ebc3b9"
+        errors: list[str] = []
+        subject = self.validator.resolve_validation_subject(
+            ROOT,
+            review_head,
+            self.activation,
+            errors,
+        )
+        self.assertEqual(errors, [])
+        self.assertEqual(subject, review_head)
+
+    def test_activation_identity_mutations_fail_closed(self) -> None:
+        self.assertTrue(hasattr(self.validator, "validate_post_merge_activation"))
+        mutations = {
+            "review_tree_sha": "0" * 40,
+            "merge_tree_sha": "0" * 40,
+            "merge_parent_sha": "0" * 40,
+            "merge_commit_sha": "0" * 40,
+            "pull_request": "https://github.com/smutti/codenoesis/pull/188",
+            "actor": "github:agent",
+            "activated_status": "candidate",
+        }
+        for field, value in mutations.items():
+            with self.subTest(field=field):
+                activation = copy.deepcopy(self.activation)
+                activation[field] = value
+                errors: list[str] = []
+                self.validator.validate_post_merge_activation(
+                    ROOT,
+                    activation,
+                    self.validator.git(ROOT, ["rev-parse", "HEAD"]),
+                    errors,
+                )
+                self.assertTrue(errors, field)
+
+    def test_non_descendant_cannot_activate(self) -> None:
+        self.assertTrue(hasattr(self.validator, "resolve_validation_subject"))
+        errors: list[str] = []
+        subject = self.validator.resolve_validation_subject(
+            ROOT,
+            BASE_SHA,
+            self.activation,
+            errors,
+        )
+        self.assertIsNone(subject)
+        self.assertTrue(any("recognized lineage" in error for error in errors), errors)
 
     def test_missing_profile_fails_closed(self) -> None:
         errors = self.validate_mutation(lambda manifest: manifest["profiles"].pop())

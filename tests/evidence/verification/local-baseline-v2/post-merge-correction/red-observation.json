@@ -1,0 +1,38 @@
+{
+  "schema_version": "codenoesis.verification-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/194",
+  "requirements": [
+    "INV-BND-001",
+    "NFR-MNT-001",
+    "NFR-TST-001",
+    "NFR-TST-002"
+  ],
+  "delivery_slice": "S14",
+  "risk": "high",
+  "checkpoint_sha": "2a34468f864027867ae354c8318a3bc1de8575d6",
+  "observed_at": "2026-08-18T17:53:23Z",
+  "command": "python3 -m unittest scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests.test_exact_squash_activation_is_supported",
+  "exit_status": 1,
+  "expected_failure": "post-merge activation resolver is absent",
+  "actual_failure": "post-merge activation resolver is absent",
+  "unexpected_failures": 0,
+  "raw_log_sha256": "d737fc7846d2c5d9131a5ee25c471a3329ee4b440c6add004e5d038801da5152",
+  "raw_log_bytes": 704,
+  "retained_log": {
+    "path": "tests/evidence/verification/local-baseline-v2/post-merge-correction/red.log",
+    "sha256": "75c41a5012f975f7e0fe030d32fdcea1427b75749cf06787b8f495f40d29f79e",
+    "bytes": 1419,
+    "normalization": "repository root replaced with <repository>; duration replaced with <duration>"
+  },
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "python": "Python 3.9.6",
+    "git": "git version 2.50.1 (Apple Git-155)"
+  },
+  "agent": "OpenAI Codex",
+  "model": "not exposed by runtime",
+  "run_identifier": "issue-194-v2-post-merge-activation",
+  "duration_seconds": null,
+  "cost": null
+}
