@@ -1,0 +1,46 @@
+{
+  "schema_version": "codenoesis.r19-red-observation/v1",
+  "issue": 196,
+  "requirements": ["FR-IMP-006", "FR-CLI-006", "FR-CLI-012"],
+  "slice": "S7",
+  "risk": "high",
+  "exact_base_sha": "fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b",
+  "checkpoint_sha": "740802a0fc2c513545beb208488dc0be7645ba3a",
+  "run_identifier": "r19-red-local-2026-08-21",
+  "agent": "OpenAI Codex",
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "host": "aarch64-apple-darwin",
+    "network_used": false,
+    "model_provider_used_by_product": false
+  },
+  "observations": [
+    {
+      "kind": "governance_red",
+      "command": "python3 -m unittest scripts.tests.test_s7_r19_git_evidence_contract.S7R19GitEvidenceContractTests.test_production_registration_is_absent -v",
+      "exit_status": 1,
+      "expected_failure": "R19 production registration is absent",
+      "actual_failure": "contracts registration mod s7_r19 is absent",
+      "log": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/governance-red.log",
+      "log_sha256": "6f4e732e4177c85a2a4724de65f9b20a8943c9ccf3524709db404bb2ea221c94",
+      "raw_local_log_sha256": "741b998f32a1bf89b7d55a7a2a944134bbb4a7a027a653af1c5b0de8c3b2cfd3",
+      "accepted": true
+    },
+    {
+      "kind": "product_red",
+      "command": "cargo test -p noesis --test e2e_fr_imp_006_git_evidence_navigation --locked -- --exact e2e_fr_imp_006_git_bound_semantic_diff_is_navigable",
+      "exit_status": 101,
+      "expected_failure": "Git-backed impact profile is absent before acquisition",
+      "actual_failure": "CodeNoesisErrorV23 impact.invalid_workspace reason invalid_profile, empty stdout",
+      "log": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/product-red.log",
+      "log_sha256": "0cafdc2aef92d9bd4b896bb3dc22f36ebbf1336c3142cd19294721d2d1b613d5",
+      "raw_local_log_sha256": "1f68213bb79a5e3f5868585ff8d6d04e8d3bac5cdcd319ffc4deed710a6865ec",
+      "accepted": true
+    }
+  ],
+  "unexpected_failures": [],
+  "production_source_changed_before_red": false
+}

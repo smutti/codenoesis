@@ -1,0 +1,13 @@
+schema_version=codenoesis.r19-red-log/v1
+issue=196
+checkpoint=740802a0fc2c513545beb208488dc0be7645ba3a
+command=cargo test -p noesis --test e2e_fr_imp_006_git_evidence_navigation --locked -- --exact e2e_fr_imp_006_git_bound_semantic_diff_is_navigable
+exit_status=101
+test_status=2
+stdout_bytes=0
+error_schema=codenoesis.error/v23
+error_code=impact.invalid_workspace
+error_reason=invalid_profile
+actual_failure=expected R19 Git-backed impact success; observed the approved absent-profile Red
+raw_local_log_sha256=1f68213bb79a5e3f5868585ff8d6d04e8d3bac5cdcd319ffc4deed710a6865ec
+result=expected_red
