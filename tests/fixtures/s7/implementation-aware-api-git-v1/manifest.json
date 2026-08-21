@@ -1,0 +1,85 @@
+{
+  "schema_version": "codenoesis.s7-r19-fixture-manifest/v1",
+  "fixture_identity": "urn:codenoesis:fixture:s7-implementation-aware-api-git-v1",
+  "inherited_fixture": "tests/fixtures/s7/implementation-aware-api-v1/manifest.json",
+  "inherited_federation_report": {
+    "path": "tests/fixtures/s6/openapi-federation-v1/expected-federation-report.json",
+    "byte_length": 12556,
+    "sha256": "7a301b0eb5d0e5e702a647422e57f42e1611d9e1cac5aedb39be26c7f1064628"
+  },
+  "analysis_profile": "implementation-aware-http-json-git-v1",
+  "source_profile": "trusted-local-impact-source-v1",
+  "provider": {
+    "repository_identity": "urn:codenoesis:fixture:s7-provider",
+    "baseline": {
+      "commit_oid": "73cc0752413bd337a6507ffcc422d7d5a4458523",
+      "tree_oid": "2db6dc09134ee6a34cddd3e03b90f4161156f0a9",
+      "source_blob_oid": "c59fa0cd20c3a4943e9f227a5240024d1935a978",
+      "contract_blob_oid": "9a4c74716d852985514158ae22efc13b98fd32a4",
+      "federation_revision": "fixture-provider-a",
+      "message": "fixture: provider baseline",
+      "timestamp": "946684800 +0000"
+    },
+    "target": {
+      "commit_oid": "fd6c8a3b1988e6a963a46824da09ec6132cf0290",
+      "tree_oid": "e74b2e82beb8bddad07325067fe4566df371da26",
+      "source_blob_oid": "eebc8b024bf414e22a5ac7248236d033bd6bc552",
+      "contract_blob_oid": "9a4c74716d852985514158ae22efc13b98fd32a4",
+      "federation_revision": "fixture-provider-a",
+      "message": "fixture: provider target",
+      "timestamp": "946684801 +0000"
+    }
+  },
+  "clients": [
+    {
+      "role": "decoy",
+      "repository_identity": "urn:codenoesis:fixture:s7-client-decoy",
+      "commit_oid": "4c878122e919f211a953440732a2fed8f100df9f",
+      "tree_oid": "4d67adb26677f9648df59f944e0940ee2ffb10c7",
+      "blob_oid": "1487e3805a2b8d853c3c85aaf61db2102c27ea70",
+      "federation_revision": "fixture-client-v1",
+      "message": "fixture: decoy client"
+    },
+    {
+      "role": "safe",
+      "repository_identity": "urn:codenoesis:fixture:s7-client-safe",
+      "commit_oid": "d22bdc44624becac8459ccfa78874f245dd390b5",
+      "tree_oid": "340456a1d823ba466bc143ad6097bbbcb774460b",
+      "blob_oid": "f89daf3bee07c65e124796400aa7181e911df53e",
+      "federation_revision": "fixture-client-v1",
+      "message": "fixture: safe client"
+    },
+    {
+      "role": "strict",
+      "repository_identity": "urn:codenoesis:fixture:s7-client-strict",
+      "commit_oid": "51a50dbf08ee9c90a222455a6a8fde1baa812b7d",
+      "tree_oid": "7aa4e543551473676dcdf7d1fdaed994e383599e",
+      "blob_oid": "56159d29ef0975197ad418a4ca7e7ef0c07ccc3c",
+      "federation_revision": "fixture-client-v1",
+      "message": "fixture: strict client"
+    }
+  ],
+  "expected_report": {
+    "schema_version": "codenoesis.semantic-compatibility-report/v2",
+    "semantic_diffs": 2,
+    "client_assessments": 2,
+    "rejected_candidates": 1,
+    "evidence": 9,
+    "coverage_gaps": 1,
+    "all_evidence_navigable": true
+  },
+  "immutable_v1_report": {
+    "path": "tests/fixtures/s7/implementation-aware-api-v1/expected-semantic-compatibility-report.json",
+    "byte_length": 14991,
+    "sha256": "cfd9a8d4dcb2d04bcd9eaffd15f1ae947ffdaba80e07daee43375c9a67c15750"
+  },
+  "sentinels": {
+    "external_source_vendored": false,
+    "compile_or_build": false,
+    "target_process": false,
+    "network": false,
+    "model_provider": false,
+    "working_tree_authority": false,
+    "source_retention": false
+  }
+}

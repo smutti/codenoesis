@@ -1,0 +1,75 @@
+{
+  "schema_version": "codenoesis.r19-git-impact-contract/v1",
+  "issue": 196,
+  "exact_base_sha": "fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b",
+  "status": "proposed_branch_scoped_candidate",
+  "slice": "S7",
+  "risk": "high",
+  "requirements": [
+    "FR-IMP-006",
+    "FR-CLI-006",
+    "FR-CLI-012"
+  ],
+  "contracts": {
+    "workspace": "codenoesis.impact-git-workspace/v1",
+    "report": "codenoesis.semantic-compatibility-report/v2",
+    "pipeline": "codenoesis.pipeline/s7-git-v1",
+    "evidence_lineage": "codenoesis.source-evidence/git-v1",
+    "analysis_profile": "implementation-aware-http-json-git-v1",
+    "source_profile": "trusted-local-impact-source-v1",
+    "source_result": "codenoesis.trusted-impact-source-excerpt/v1",
+    "error": "codenoesis.error/v30"
+  },
+  "inherited_capabilities": [
+    "codenoesis.contract-capability/openapi-3.1-http-json/v1",
+    "rust-direct-json-map/v1",
+    "kotlin-direct-json-access/v1"
+  ],
+  "limits": {
+    "provider_repositories": 1,
+    "provider_revisions": 2,
+    "client_repositories_minimum": 1,
+    "client_repositories_maximum": 32,
+    "workspace_bytes": 1048576,
+    "federation_report_bytes": 67108864,
+    "semantic_report_bytes": 67108864,
+    "source_bytes_per_file": 2097152,
+    "total_selected_source_bytes": 268435456,
+    "logical_path_bytes": 1024,
+    "symbol_bytes": 1024,
+    "excerpt_bytes": 262144,
+    "excerpt_stdout_bytes_including_lf": 524288,
+    "argument_permutations": 50,
+    "process_schedules": 10
+  },
+  "authority": {
+    "revision": "full_lowercase_sha1_commit_only",
+    "source": "explicit_local_git_object_only",
+    "disclosure": "explicit_transient_stdout",
+    "span": "zero_based_half_open_bytes",
+    "position": "one_based_unicode_scalar",
+    "working_tree_fallback": false,
+    "arbitrary_path": false,
+    "range_override": false,
+    "context_expansion": false,
+    "batch": false,
+    "truncation": false,
+    "repair": false,
+    "retry": false
+  },
+  "oracle": {
+    "semantic_diffs": 2,
+    "client_assessments": 2,
+    "rejected_candidates": 1,
+    "evidence": 9,
+    "coverage_gaps": 1,
+    "all_evidence_navigable": true,
+    "loose_packed_byte_identical": true,
+    "v1_golden_bytes": 14991,
+    "v1_golden_sha256": "cfd9a8d4dcb2d04bcd9eaffd15f1ae947ffdaba80e07daee43375c9a67c15750"
+  },
+  "new_dependency": false,
+  "migration": false,
+  "control_plane_effect": false,
+  "release_effect": false
+}

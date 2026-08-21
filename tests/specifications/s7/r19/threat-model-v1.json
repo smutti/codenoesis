@@ -1,0 +1,73 @@
+{
+  "schema_version": "codenoesis.r19-threat-model/v1",
+  "issue": 196,
+  "assets": [
+    "immutable_git_object_identity",
+    "semantic_report_integrity",
+    "source_confidentiality",
+    "s7_v1_compatibility"
+  ],
+  "untrusted_inputs": [
+    "workspace_bytes",
+    "federation_report_bytes",
+    "semantic_report_bytes",
+    "repository_roots",
+    "git_objects",
+    "paths",
+    "source_bytes",
+    "symbols",
+    "evidence_ids"
+  ],
+  "threats": [
+    {
+      "id": "R19-T01",
+      "threat": "working_tree_substitution",
+      "control": "read only validated immutable Git objects and reject fallback"
+    },
+    {
+      "id": "R19-T02",
+      "threat": "path_or_span_as_authority",
+      "control": "match report locator against reacquired inventory path, blob and UTF-8 boundaries"
+    },
+    {
+      "id": "R19-T03",
+      "threat": "repository_or_revision_confusion",
+      "control": "require exact repository identity, commit and tree equality"
+    },
+    {
+      "id": "R19-T04",
+      "threat": "mutable_report_race",
+      "control": "stable-handle read and complete strict validation before acquisition"
+    },
+    {
+      "id": "R19-T05",
+      "threat": "source_disclosure_through_errors_or_sinks",
+      "control": "redacted ErrorV30 and explicit transient stdout only"
+    },
+    {
+      "id": "R19-T06",
+      "threat": "resource_exhaustion",
+      "control": "closed repository, file, byte, path, symbol, report and stdout limits"
+    },
+    {
+      "id": "R19-T07",
+      "threat": "semantic_oracle_weakening",
+      "control": "reuse unchanged ImpactService and preserve exact V1 golden digest"
+    }
+  ],
+  "forbidden_authority": [
+    "network",
+    "target_process",
+    "build_or_toolchain",
+    "nested_repository_traversal",
+    "model_provider",
+    "working_tree",
+    "ambient_path",
+    "persistence",
+    "telemetry",
+    "clipboard",
+    "documents",
+    "explorer",
+    "release"
+  ]
+}

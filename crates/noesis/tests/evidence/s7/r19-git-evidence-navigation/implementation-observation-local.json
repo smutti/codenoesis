@@ -1,0 +1,81 @@
+{
+  "schema_version": "codenoesis.r19-local-implementation-observation/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/196",
+  "requirements": ["FR-IMP-006", "FR-CLI-006", "FR-CLI-012"],
+  "requirement_status": "Proposed branch-scoped candidate until protected manual merge",
+  "slice": "S7",
+  "roadmap_capability": "R19",
+  "risk": "high",
+  "authorization": {
+    "ready_issue": "https://github.com/smutti/codenoesis/issues/196",
+    "maintainer_supervised_interactive_lane": true,
+    "correction_budget": 5,
+    "manual_independent_review_and_merge_required": true
+  },
+  "commits": {
+    "exact_base": "fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b",
+    "governance_checkpoint": "740802a0fc2c513545beb208488dc0be7645ba3a",
+    "retained_red": "837ccfaf36626b1e9ac3d1c01064e14afa73391b",
+    "tested_product_head": "6fd7f480094da2f152b5d1cbb1dc6ab4db372f59",
+    "final_review_head": "recorded by the pull request after evidence publication"
+  },
+  "red_evidence": {
+    "observation": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/red-observation.json",
+    "governance_log": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/governance-red.log",
+    "product_log": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/product-red.log",
+    "expected_only": true
+  },
+  "green_evidence": {
+    "focused": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/focused-green.log",
+    "complete_gate": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/complete-gate-summary.log",
+    "complete_gate_exit_status": 0,
+    "complete_gate_log_sha256": "2f6c30cacafde9d513c66570d46d5e99237a5acb7c266c1e40624df76514d244",
+    "exact_head_ci": "pending_pull_request"
+  },
+  "observed_outcome": {
+    "report_schema": "codenoesis.semantic-compatibility-report/v2",
+    "evidence_lineage": "codenoesis.source-evidence/git-v1",
+    "source_result": "codenoesis.trusted-impact-source-excerpt/v1",
+    "semantic_diffs": 2,
+    "client_assessments": 2,
+    "rejected_candidates": 1,
+    "evidence": 9,
+    "coverage_gaps": 1,
+    "all_evidence_navigable": true,
+    "loose_packed_byte_identical": true,
+    "argument_permutations": 50,
+    "process_schedules": 10,
+    "working_tree_fallback": false,
+    "v1_golden_bytes": 14991,
+    "v1_golden_sha256": "cfd9a8d4dcb2d04bcd9eaffd15f1ae947ffdaba80e07daee43375c9a67c15750"
+  },
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "network_used_by_product": false,
+    "model_provider_used_by_product": false
+  },
+  "agent": {
+    "identity": "OpenAI Codex",
+    "policy": "repository AGENTS.md plus issue #196",
+    "run_identifier": "r19-local-2026-08-21",
+    "duration": "not recorded",
+    "cost": "not available"
+  },
+  "changes": {
+    "new_dependency": false,
+    "cargo_files_changed": false,
+    "migration": false,
+    "control_plane_effect": false,
+    "release_effect": false,
+    "historical_s7_artifacts_changed": false,
+    "r0_through_r18_or_k1_changed": false
+  },
+  "known_limitations": [
+    "The candidate is not Approved, Implemented on main, or Verified before protected manual merge and independent review.",
+    "Exact-head GitHub CI evidence is pending pull-request publication.",
+    "Navigation emits only the exact selected evidence span and intentionally provides no context expansion, batch retrieval, working-tree fallback, or remote acquisition."
+  ]
+}

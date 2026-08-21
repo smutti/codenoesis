@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/codenoesis-error-v30.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "code", "stage", "message", "retryable", "context"],
+  "properties": {
+    "schema_version": { "const": "codenoesis.error/v30" },
+    "code": {
+      "enum": [
+        "impact_git.acquisition_rejected",
+        "impact_git.invalid_federation_report",
+        "impact_git.invalid_workspace",
+        "impact_git.limit_exceeded",
+        "impact_git.source_rejected",
+        "impact_git.unstable_input",
+        "impact_source.acquisition_rejected",
+        "impact_source.content_rejected",
+        "impact_source.evidence_not_found",
+        "impact_source.internal",
+        "impact_source.invalid_arguments",
+        "impact_source.invalid_evidence",
+        "impact_source.invalid_report",
+        "impact_source.limit_exceeded",
+        "impact_source.path_rejected",
+        "impact_source.repository_mismatch",
+        "impact_source.unstable_input"
+      ]
+    },
+    "stage": { "enum": ["input", "acquisition", "impact", "source", "internal"] },
+    "message": { "type": "string", "minLength": 1 },
+    "retryable": { "const": false },
+    "context": { "type": "object", "additionalProperties": false, "maxProperties": 0 }
+  }
+}
