@@ -3,6 +3,8 @@
 mod compiler_index;
 mod federation;
 mod impact;
+mod impact_git;
+mod impact_source;
 mod repository_boundaries;
 
 use std::collections::BTreeMap;
@@ -33,7 +35,7 @@ use codenoesis_contracts::{
     CodeNoesisErrorV16, CodeNoesisErrorV17, CodeNoesisErrorV18, CodeNoesisErrorV19,
     CodeNoesisErrorV20, CodeNoesisErrorV21, CodeNoesisErrorV22, CodeNoesisErrorV23,
     CodeNoesisErrorV24, CodeNoesisErrorV25, CodeNoesisErrorV26, CodeNoesisErrorV29,
-    DocumentationContractError, FunctionContextError, FunctionContextV1,
+    CodeNoesisErrorV30, DocumentationContractError, FunctionContextError, FunctionContextV1,
     IncrementalRefreshReportError, IncrementalRefreshReportInput, IncrementalRefreshReportV1,
     K1ContractError, LocalConfigurationError, LocalConfigurationSource,
     MAX_LOCAL_CONFIGURATION_BYTES, MAX_RELEASE_PROFILE_TEXT_BYTES,
@@ -199,6 +201,7 @@ fn main() -> ExitCode {
     let arguments = bootstrap.arguments;
     let profile_requested = arguments.get(1).is_some_and(|value| value == "profile");
     let source_requested = arguments.get(1).is_some_and(|value| value == "source");
+    let impact_source_requested = impact_source::requested(&arguments);
     let r10_scan_requested = rust_cfg_alternatives_requested(&arguments);
     let r12_scan_requested = rust_callable_cfg_alternatives_requested(&arguments);
     let r13_scan_requested = rust_callable_scip_requested(&arguments);
@@ -230,6 +233,7 @@ fn main() -> ExitCode {
         && !r12_scan_requested
         && !r13_scan_requested;
     let federation_requested = federation::requested(&arguments);
+    let impact_git_requested = impact_git::requested(&arguments);
     let impact_requested = impact::requested(&arguments);
     let docs_requested = arguments.get(1).is_some_and(|value| value == "docs");
     let query_requested = arguments.get(1).is_some_and(|value| value == "query");
@@ -263,7 +267,9 @@ fn main() -> ExitCode {
         None
     };
     if noesis::install_s0_security_boundary().is_err() {
-        return if source_requested {
+        return if impact_source_requested || impact_git_requested {
+            emit_internal_error_v30()
+        } else if source_requested {
             emit_internal_error_v29()
         } else if g1_requested {
             emit_internal_error_v26()
@@ -280,6 +286,10 @@ fn main() -> ExitCode {
         run_profile(&arguments)
     } else if source_requested {
         run_source(arguments)
+    } else if impact_source_requested {
+        impact_source::run(arguments).map_err(Failure::R19Source)
+    } else if impact_git_requested {
+        impact_git::run(arguments).map_err(Failure::R19)
     } else if impact_requested {
         impact::run(arguments).map_err(Failure::S7)
     } else if output_capacity_requested {
@@ -320,6 +330,7 @@ fn main() -> ExitCode {
     match result {
         Ok(stdout) => match io::stdout().lock().write_all(&stdout) {
             Ok(()) => ExitCode::SUCCESS,
+            Err(_) if impact_source_requested || impact_git_requested => emit_internal_error_v30(),
             Err(_) if source_requested => emit_internal_error_v29(),
             Err(_) if profile_requested => emit_internal_error_v25(),
             Err(_) if impact_requested => emit_internal_error_v23(),
@@ -346,6 +357,8 @@ fn main() -> ExitCode {
             Err(_) if profiled => emit_internal_error_v2(),
             Err(_) => emit_internal_error_v1(),
         },
+        Err(Failure::R19Source(failure)) => emit_error_v30(&failure.error, failure.exit_code),
+        Err(Failure::R19(failure)) => emit_error_v30(&failure.error, failure.exit_code),
         Err(Failure::R18(failure)) => emit_error_v29(&failure.error, failure.exit_code),
         Err(Failure::G0(failure)) => emit_error_v25(&failure.error, failure.exit_code),
         Err(Failure::S7(failure)) => emit_error_v23(&failure.error, failure.exit_code),
@@ -6499,6 +6512,17 @@ fn emit_error_v29(error: &CodeNoesisErrorV29, code: u8) -> ExitCode {
     }
 }
 
+fn emit_error_v30(error: &CodeNoesisErrorV30, code: u8) -> ExitCode {
+    let Ok(bytes) = error.canonical_stderr() else {
+        return ExitCode::from(1);
+    };
+    if io::stderr().lock().write_all(&bytes).is_ok() {
+        ExitCode::from(code)
+    } else {
+        ExitCode::from(1)
+    }
+}
+
 fn emit_internal_error_v10() -> ExitCode {
     emit_error_v10(&CodeNoesisErrorV10::internal(), 70)
 }
@@ -6559,6 +6583,10 @@ fn emit_internal_error_v29() -> ExitCode {
     emit_error_v29(&CodeNoesisErrorV29::internal(), 1)
 }
 
+fn emit_internal_error_v30() -> ExitCode {
+    emit_error_v30(&CodeNoesisErrorV30::source_internal(), 1)
+}
+
 fn emit_docs_error(error: GeneratedDocsError) -> ExitCode {
     let error = match error {
         GeneratedDocsError::UnmarkedNonemptyRoot => {
@@ -6585,6 +6613,8 @@ fn emit_query_error(error: QueryFailure) -> ExitCode {
 }
 
 enum Failure {
+    R19Source(impact_source::ImpactSourceFailure),
+    R19(impact_git::ImpactGitFailure),
     R18(R18Failure),
     G0(G0Failure),
     S7(impact::ImpactFailure),

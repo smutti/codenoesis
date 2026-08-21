@@ -19,6 +19,7 @@ mod s4_r7;
 mod s5;
 mod s6;
 mod s7;
+mod s7_r19;
 
 pub use s1_boundaries::{
     BoundaryScanError, PreparedNestedRepositoryRoot, RepositoryBoundaryScanInput,
@@ -44,6 +45,11 @@ pub use s4_r18::{
 pub use s5::{RefreshError, RefreshPlan, RefreshService};
 pub use s6::{FederationRequest, FederationService, FederationServiceError};
 pub use s7::ImpactService;
+pub use s7_r19::{
+    GitImpactAcquisitionError, GitImpactAcquisitionService, GitImpactRepositoryRequest,
+    TrustedImpactSourceRequest, TrustedImpactSourceRetrievalError,
+    TrustedImpactSourceRetrievalService,
+};
 
 use std::ffi::OsString;
 
