@@ -312,12 +312,20 @@ fn commit(
 fn copy_file(source: &Path, target: &Path) {
     fs::create_dir_all(target.parent().expect("R19 target parent"))
         .expect("create R19 target directory");
-    fs::write(
-        target,
-        fs::read(source)
-            .unwrap_or_else(|error| panic!("read R19 fixture {}: {error}", source.display())),
-    )
-    .unwrap_or_else(|error| panic!("write R19 fixture {}: {error}", target.display()));
+    let bytes = fs::read(source)
+        .unwrap_or_else(|error| panic!("read R19 fixture {}: {error}", source.display()));
+    let bytes = normalize_reviewed_git_fixture_bytes(&bytes).unwrap_or_else(|reason| {
+        panic!(
+            "invalid reviewed R19 fixture {}: {reason}",
+            source.display()
+        )
+    });
+    fs::write(target, bytes)
+        .unwrap_or_else(|error| panic!("write R19 fixture {}: {error}", target.display()));
+}
+
+pub fn normalize_reviewed_git_fixture_bytes(bytes: &[u8]) -> Result<Vec<u8>, &'static str> {
+    crate::support::s7::normalize_reviewed_fixture_bytes(bytes)
 }
 
 fn git_command(global_config: &Path) -> Command {

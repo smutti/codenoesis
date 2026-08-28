@@ -4,9 +4,9 @@
   "exact_base_sha": "fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b",
   "files": [
     { "path": "README.md", "sha256": "02f4aebd2e80867bf6a23f417da4c081808f19c0291398879a54b7d7d517378a" },
-    { "path": "crates/noesis/tests/e2e_fr_imp_006_git_evidence_navigation.rs", "sha256": "1a155a6506058eab4715ee17faaf1511fc7ce4817dfb44a3bb27cdc986e3b954" },
+    { "path": "crates/noesis/tests/e2e_fr_imp_006_git_evidence_navigation.rs", "sha256": "bc4f7179fd357629dc9774b45d0161e2d6470f5e6245499928e7f852e8bddb50" },
     { "path": "crates/noesis/tests/support/mod.rs", "sha256": "0a5de96b80c5de08a05d7e27214aed62602174858d8eaa1b820fb8e7cf0416d7" },
-    { "path": "crates/noesis/tests/support/s7_r19.rs", "sha256": "aba6d26a272f3a39088e7b35fa27dad272421686501b9bbd3acecf0ba71daa5c" },
+    { "path": "crates/noesis/tests/support/s7_r19.rs", "sha256": "d1251eb8bebc96684f0a95b76faaa4b791286902fabdf9d4b48867bc228669c4" },
     { "path": "docs/software/architecture.md", "sha256": "f4a2c25da9f27093f46d1a2c041c95a4a30be3000ada548dbdc8c56e6ac945b3" },
     { "path": "docs/software/decisions/0040-s7-git-backed-semantic-impact-evidence.md", "sha256": "aac1668d1b9ec82901ff64c4159f8cc7d80e01a4b579e0e62ef2d2a00de1204f" },
     { "path": "docs/software/roadmap.md", "sha256": "cdbdea10246312f02009abf3b12c435dea2eeecf10c3e70dcb48fbb8fa0ea9bd" },
@@ -23,5 +23,5 @@
     { "path": "tests/specifications/s7/r19/threat-model-v1.json", "sha256": "37d6486e99778797a6beb616dee88a8b45be1723a42d4d9964f7fa18d721e90c" },
     { "path": "tests/specifications/s7/r19/trusted-impact-source-excerpt-v1.schema.json", "sha256": "73d2ba99a9d1d5017d43753bcb678b48cabd1165e1611ce4411074e300d33f9b" }
   ],
-  "bundle_sha256": "9360ae178f41553df1e69a67641c6e77c257482d2707db154bec5947fa4fee16"
+  "bundle_sha256": "270e1cb3a7cd907125f465854c1e63573809294f85d928ed84ebed24ea454a94"
 }

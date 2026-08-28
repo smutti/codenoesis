@@ -2,7 +2,26 @@
 mod s7_r19;
 mod support;
 
-use s7_r19::MaterializedGitImpactWorkspace;
+use s7_r19::{MaterializedGitImpactWorkspace, normalize_reviewed_git_fixture_bytes};
+
+#[test]
+fn conf_fr_imp_006_reviewed_git_fixture_materialization_is_platform_neutral() {
+    let canonical = b"reviewed\nfixture\n";
+    let windows = b"reviewed\r\nfixture\r\n";
+
+    assert_eq!(
+        normalize_reviewed_git_fixture_bytes(canonical),
+        Ok(canonical.to_vec())
+    );
+    assert_eq!(
+        normalize_reviewed_git_fixture_bytes(windows),
+        Ok(canonical.to_vec())
+    );
+    assert_eq!(
+        normalize_reviewed_git_fixture_bytes(b"invalid\rcarriage-return"),
+        Err("reviewed S7 fixture contains a bare carriage return")
+    );
+}
 
 #[test]
 fn e2e_fr_imp_006_git_bound_semantic_diff_is_navigable() {
