@@ -1,0 +1,27 @@
+{
+  "schema_version": "codenoesis.r19-contract-bundle/v1",
+  "issue": 196,
+  "exact_base_sha": "fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b",
+  "files": [
+    { "path": "README.md", "sha256": "02f4aebd2e80867bf6a23f417da4c081808f19c0291398879a54b7d7d517378a" },
+    { "path": "crates/noesis/tests/e2e_fr_imp_006_git_evidence_navigation.rs", "sha256": "bc4f7179fd357629dc9774b45d0161e2d6470f5e6245499928e7f852e8bddb50" },
+    { "path": "crates/noesis/tests/support/mod.rs", "sha256": "0a5de96b80c5de08a05d7e27214aed62602174858d8eaa1b820fb8e7cf0416d7" },
+    { "path": "crates/noesis/tests/support/s7_r19.rs", "sha256": "d1251eb8bebc96684f0a95b76faaa4b791286902fabdf9d4b48867bc228669c4" },
+    { "path": "docs/software/architecture.md", "sha256": "f4a2c25da9f27093f46d1a2c041c95a4a30be3000ada548dbdc8c56e6ac945b3" },
+    { "path": "docs/software/decisions/0040-s7-git-backed-semantic-impact-evidence.md", "sha256": "aac1668d1b9ec82901ff64c4159f8cc7d80e01a4b579e0e62ef2d2a00de1204f" },
+    { "path": "docs/software/roadmap.md", "sha256": "cdbdea10246312f02009abf3b12c435dea2eeecf10c3e70dcb48fbb8fa0ea9bd" },
+    { "path": "docs/software/software-requirements-specification.md", "sha256": "207121c599ab6118b49d36763cb750c3731d497617e697de2b39e57efc3869ae" },
+    { "path": "docs/software/verification.md", "sha256": "86569b0274aa5a7f088a3007b1d9237418c505fd34ec8a1724e99ebb8ccfb754" },
+    { "path": "scripts/tests/test_s7_r19_git_evidence_contract.py", "sha256": "372450d2f7bdf7d1ad9208bd62fea1c75821bd47bcae4c8d356b9859814f4091" },
+    { "path": "tests/fixtures/s7/implementation-aware-api-git-v1/README.md", "sha256": "e4b83d0d6b49248f2dc10c6d3baa8ad03c460f391f4ce731c6a35074e481b474" },
+    { "path": "tests/fixtures/s7/implementation-aware-api-git-v1/manifest.json", "sha256": "ba99d58d55a67fd1d26b3297377c41e7dd7501adc51f27cf29ccab093f2ec817" },
+    { "path": "tests/specifications/s7/r19/codenoesis-error-v30.schema.json", "sha256": "134527cf19a562267218c80ca2745df27a876967ac2dbb8f9155ee589146fe5d" },
+    { "path": "tests/specifications/s7/r19/e2e_fr_imp_006_git_evidence_navigation.json", "sha256": "f1e202496e7b644b0864c6f14c86b42add60d935572903b0de48f4cd03ea77f5" },
+    { "path": "tests/specifications/s7/r19/impact-git-workspace-v1.schema.json", "sha256": "b1b7290f2b2a7a8a43ea2e05e175613850645375e5ca7cfa5098f7148dc51710" },
+    { "path": "tests/specifications/s7/r19/runtime-contract-v1.json", "sha256": "6656549b14dc6f7a3138fd73a9309e1aac2885e74d3f0c1fb31f70a77af0120c" },
+    { "path": "tests/specifications/s7/r19/semantic-compatibility-report-v2.schema.json", "sha256": "8e53ad032a6189c4ebf062e9efc571ba05e13dfc177fd9dd9e39bfcb9fffabee" },
+    { "path": "tests/specifications/s7/r19/threat-model-v1.json", "sha256": "37d6486e99778797a6beb616dee88a8b45be1723a42d4d9964f7fa18d721e90c" },
+    { "path": "tests/specifications/s7/r19/trusted-impact-source-excerpt-v1.schema.json", "sha256": "73d2ba99a9d1d5017d43753bcb678b48cabd1165e1611ce4411074e300d33f9b" }
+  ],
+  "bundle_sha256": "270e1cb3a7cd907125f465854c1e63573809294f85d928ed84ebed24ea454a94"
+}

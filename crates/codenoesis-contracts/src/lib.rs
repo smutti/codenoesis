@@ -26,6 +26,7 @@ mod s4_r8;
 mod s5;
 mod s6;
 mod s7;
+mod s7_r19;
 
 pub use g0::*;
 pub use g1::*;
@@ -53,6 +54,7 @@ pub use s4_r18::*;
 pub use s5::*;
 pub use s6::*;
 pub use s7::*;
+pub use s7_r19::*;
 
 use std::collections::BTreeMap;
 use std::error::Error;

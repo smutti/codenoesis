@@ -1,0 +1,9 @@
+schema_version=codenoesis.r19-red-log/v1
+issue=196
+checkpoint=740802a0fc2c513545beb208488dc0be7645ba3a
+command=python3 -m unittest scripts.tests.test_s7_r19_git_evidence_contract.S7R19GitEvidenceContractTests.test_production_registration_is_absent -v
+exit_status=1
+expected_failure=R19 production registration is absent
+actual_failure=AssertionError: mod s7_r19; not found in crates/codenoesis-contracts/src/lib.rs
+raw_local_log_sha256=741b998f32a1bf89b7d55a7a2a944134bbb4a7a027a653af1c5b0de8c3b2cfd3
+result=expected_red

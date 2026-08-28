@@ -1,0 +1,60 @@
+{
+  "schema_version": "codenoesis.e2e-spec/v1",
+  "id": "e2e_fr_imp_006_git_bound_semantic_diff_is_navigable",
+  "requirements": [
+    "FR-IMP-006",
+    "FR-CLI-006",
+    "FR-CLI-012",
+    "NFR-DET-001",
+    "NFR-SEC-001",
+    "NFR-SEC-005",
+    "NFR-PRV-002",
+    "NFR-TST-001",
+    "NFR-TST-002",
+    "INV-BND-001"
+  ],
+  "status": "Proposed branch-scoped candidate",
+  "slice": "S7",
+  "risk": "high",
+  "exact_base": "fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b",
+  "fixture": "urn:codenoesis:fixture:s7-implementation-aware-api-git-v1",
+  "analysis_profile": "implementation-aware-http-json-git-v1",
+  "source_profile": "trusted-local-impact-source-v1",
+  "journey": [
+    "materialize_immutable_git_repositories",
+    "semantic_compatibility_report_v2",
+    "select_each_evidence_id",
+    "trusted_impact_source_excerpt_v1"
+  ],
+  "expected_red": {
+    "governance_command": "python3 -m unittest scripts.tests.test_s7_r19_git_evidence_contract.S7R19GitEvidenceContractTests.test_production_registration_is_absent -v",
+    "product_command": "cargo test -p noesis --test e2e_fr_imp_006_git_evidence_navigation --locked -- --exact e2e_fr_imp_006_git_bound_semantic_diff_is_navigable",
+    "exit": 101,
+    "reason": "the exact protected base has no R19 production registration, Git-backed impact profile, or impact-source command"
+  },
+  "expected_green": {
+    "semantic_diffs": 2,
+    "client_assessments": 2,
+    "rejected_candidates": 1,
+    "evidence": 9,
+    "coverage_gaps": 1,
+    "navigable_evidence": 9,
+    "strict_target_impact": "breaking",
+    "safe_target_impact": "compatible",
+    "decoy_state": "rejected",
+    "custom_mapping_state": "unresolved",
+    "loose_packed_byte_identical": true,
+    "argument_permutations": 50,
+    "process_schedules": 10,
+    "v1_golden_byte_identical": true
+  },
+  "failure": {
+    "stdout": "empty",
+    "repository_mutation": false,
+    "retention": false,
+    "repair": false,
+    "truncation": false,
+    "working_tree_fallback": false,
+    "source_in_error": false
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "schema_version": "codenoesis.r19-traceability/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/196",
+  "slice": "S7",
+  "roadmap_capability": "R19",
+  "risk": "high",
+  "requirements": [
+    {
+      "id": "FR-IMP-006",
+      "role": "primary",
+      "tests": [
+        "e2e_fr_imp_006_git_bound_semantic_diff_is_navigable",
+        "conf_fr_imp_006_reviewed_git_fixture_materialization_is_platform_neutral",
+        "conf_fr_imp_006_all_git_evidence_is_independently_navigable",
+        "pt_nfr_det_001_r19_fifty_permutations_and_ten_schedules_are_identical"
+      ]
+    },
+    {
+      "id": "FR-CLI-012",
+      "role": "primary",
+      "tests": [
+        "conf_fr_cli_012_invalid_authority_and_limits_fail_closed",
+        "conf_fr_cli_012_report_binding_mismatches_are_private",
+        "conf_fr_cli_012_stdout_failure_uses_internal_error_v30",
+        "sec_fr_cli_012_symlink_repository_and_packed_race_fail_closed"
+      ]
+    },
+    {
+      "id": "FR-CLI-006",
+      "role": "bounded amendment",
+      "tests": [
+        "e2e_fr_imp_006_git_bound_semantic_diff_is_navigable",
+        "reg_fr_imp_004_v1_report_remains_byte_identical"
+      ]
+    }
+  ],
+  "evidence": [
+    "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/red-observation.json",
+    "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/governance-red.log",
+    "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/product-red.log",
+    "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/focused-green.log",
+    "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/complete-gate-summary.log",
+    "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/correction-round-1.log",
+    "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/implementation-observation-local.json",
+    "exact-head pull-request checks after publication"
+  ],
+  "contracts": [
+    "codenoesis.impact-git-workspace/v1",
+    "codenoesis.semantic-compatibility-report/v2",
+    "codenoesis.pipeline/s7-git-v1",
+    "codenoesis.source-evidence/git-v1",
+    "codenoesis.trusted-impact-source-excerpt/v1",
+    "codenoesis.error/v30"
+  ],
+  "status": "candidate_green_locally_pending_independent_review_and_merge"
+}

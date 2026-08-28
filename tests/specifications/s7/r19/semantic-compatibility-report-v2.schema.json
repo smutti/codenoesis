@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/semantic-compatibility-report-v2.schema.json",
+  "title": "CodeNoesis SemanticCompatibilityReportV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "analysis_profile",
+    "configuration_hash",
+    "pipeline_version",
+    "ontology_versions",
+    "extractor_versions",
+    "evidence_lineage_version",
+    "rule_catalog_version",
+    "provider",
+    "semantic_diffs",
+    "client_assessments",
+    "rejected_candidates",
+    "evidence",
+    "coverage_gaps"
+  ],
+  "properties": {
+    "schema_version": { "const": "codenoesis.semantic-compatibility-report/v2" },
+    "analysis_profile": { "const": "implementation-aware-http-json-git-v1" },
+    "configuration_hash": { "type": "string", "pattern": "^blake3:[0-9a-f]{64}$" },
+    "pipeline_version": { "const": "codenoesis.pipeline/s7-git-v1" },
+    "ontology_versions": { "type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": { "type": "string" } },
+    "extractor_versions": { "type": "array", "minItems": 1, "maxItems": 64, "uniqueItems": true, "items": { "$ref": "../semantic-compatibility-report-v1.schema.json#/$defs/extractor_version" } },
+    "evidence_lineage_version": { "const": "codenoesis.source-evidence/git-v1" },
+    "rule_catalog_version": { "const": "codenoesis.compatibility-rules/http-json/v1" },
+    "provider": { "$ref": "../semantic-compatibility-report-v1.schema.json#/$defs/provider" },
+    "semantic_diffs": { "type": "array", "maxItems": 200000, "uniqueItems": true, "items": { "$ref": "../semantic-compatibility-report-v1.schema.json#/$defs/semantic_diff" } },
+    "client_assessments": { "type": "array", "maxItems": 10000, "uniqueItems": true, "items": { "$ref": "../semantic-compatibility-report-v1.schema.json#/$defs/client_assessment" } },
+    "rejected_candidates": { "type": "array", "maxItems": 10000, "uniqueItems": true, "items": { "$ref": "../semantic-compatibility-report-v1.schema.json#/$defs/rejected_candidate" } },
+    "evidence": { "type": "array", "maxItems": 1000000, "uniqueItems": true, "items": { "$ref": "#/$defs/git_evidence" } },
+    "coverage_gaps": { "type": "array", "maxItems": 200000, "uniqueItems": true, "items": { "$ref": "../semantic-compatibility-report-v1.schema.json#/$defs/coverage_gap" } }
+  },
+  "$defs": {
+    "position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["line", "column", "unit"],
+      "properties": {
+        "line": { "type": "integer", "minimum": 1 },
+        "column": { "type": "integer", "minimum": 1 },
+        "unit": { "const": "unicode_scalar" }
+      }
+    },
+    "git_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "repository_identity", "revision", "path", "start_line", "end_line", "excerpt_sha256", "source_kind", "claim_state", "capability_version", "source_binding"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^urn:codenoesis:evidence:blake3:[0-9a-f]{64}$" },
+        "repository_identity": { "$ref": "../semantic-compatibility-report-v1.schema.json#/$defs/identity" },
+        "revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "path": { "$ref": "../semantic-compatibility-report-v1.schema.json#/$defs/safe_path" },
+        "start_line": { "type": "integer", "minimum": 1, "maximum": 10000000 },
+        "end_line": { "type": "integer", "minimum": 1, "maximum": 10000000 },
+        "excerpt_sha256": { "$ref": "../semantic-compatibility-report-v1.schema.json#/$defs/digest" },
+        "source_kind": { "enum": ["declared_contract", "provider_implementation", "client_assumption", "test_observation", "runtime_observation"] },
+        "claim_state": { "$ref": "../semantic-compatibility-report-v1.schema.json#/$defs/claim_state" },
+        "capability_version": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._/-]+/v[1-9][0-9]*$" },
+        "source_binding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["commit_oid", "tree_oid", "blob_oid", "span"],
+          "properties": {
+            "commit_oid": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+            "tree_oid": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+            "blob_oid": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+            "span": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["unit", "start", "end", "start_position", "end_position"],
+              "properties": {
+                "unit": { "const": "byte" },
+                "start": { "type": "integer", "minimum": 0 },
+                "end": { "type": "integer", "minimum": 1 },
+                "start_position": { "$ref": "#/$defs/position" },
+                "end_position": { "$ref": "#/$defs/position" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

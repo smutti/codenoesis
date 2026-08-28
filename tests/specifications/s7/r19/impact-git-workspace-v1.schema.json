@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/impact-git-workspace-v1.schema.json",
+  "title": "CodeNoesis ImpactGitWorkspaceV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "analysis_profile",
+    "pipeline",
+    "contract_capability",
+    "provider_capability",
+    "client_capability",
+    "provider",
+    "clients",
+    "federation_report"
+  ],
+  "properties": {
+    "schema_version": { "const": "codenoesis.impact-git-workspace/v1" },
+    "analysis_profile": { "const": "implementation-aware-http-json-git-v1" },
+    "pipeline": { "const": "codenoesis.pipeline/s7-git-v1" },
+    "contract_capability": { "const": "codenoesis.contract-capability/openapi-3.1-http-json/v1" },
+    "provider_capability": { "const": "rust-direct-json-map/v1" },
+    "client_capability": { "const": "kotlin-direct-json-access/v1" },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository_identity", "root", "baseline", "target"],
+      "properties": {
+        "repository_identity": { "$ref": "#/$defs/repository_identity" },
+        "root": { "$ref": "#/$defs/safe_path" },
+        "baseline": { "$ref": "#/$defs/provider_revision" },
+        "target": { "$ref": "#/$defs/provider_revision" }
+      }
+    },
+    "clients": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "items": { "$ref": "#/$defs/client" }
+    },
+    "federation_report": { "$ref": "#/$defs/bound_file" }
+  },
+  "$defs": {
+    "repository_identity": {
+      "type": "string",
+      "minLength": 17,
+      "maxLength": 271,
+      "pattern": "^urn:codenoesis:[a-z0-9][a-z0-9._:-]*$"
+    },
+    "sha1": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "safe_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\u0000]+$"
+    },
+    "symbol": { "type": "string", "minLength": 1, "maxLength": 1024 },
+    "provider_revision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["revision", "federation_revision", "contract_path", "source_path", "callable_symbol"],
+      "properties": {
+        "revision": { "$ref": "#/$defs/sha1" },
+        "federation_revision": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "contract_path": { "$ref": "#/$defs/safe_path" },
+        "source_path": { "$ref": "#/$defs/safe_path" },
+        "callable_symbol": { "$ref": "#/$defs/symbol" }
+      }
+    },
+    "client": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "repository_identity", "root", "revision", "federation_revision", "source_path", "decoder_symbol", "call_symbol"],
+      "properties": {
+        "role": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "repository_identity": { "$ref": "#/$defs/repository_identity" },
+        "root": { "$ref": "#/$defs/safe_path" },
+        "revision": { "$ref": "#/$defs/sha1" },
+        "federation_revision": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "source_path": { "$ref": "#/$defs/safe_path" },
+        "decoder_symbol": { "$ref": "#/$defs/symbol" },
+        "call_symbol": { "$ref": "#/$defs/symbol" }
+      }
+    },
+    "bound_file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/safe_path" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  }
+}

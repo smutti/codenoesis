@@ -17,8 +17,8 @@ use codenoesis_domain::s6::{
 use codenoesis_domain::s7::{
     CLIENT_CAPABILITY, CONTRACT_CAPABILITY, ClientFact, ContractProjection, EvidenceSourceKind,
     FederationState, ImpactAnalysisError, ImpactAnalysisInput, ProviderFieldFact,
-    ProviderRevisionFacts, S7Limit, S7LimitExceeded, SourceEvidence, SourceEvidenceLocator,
-    SourceExtractionError, SourceSpan,
+    ProviderRevisionFacts, S7Limit, S7LimitExceeded, SemanticCompatibilityReport, SourceEvidence,
+    SourceEvidenceLocator, SourceExtractionError, SourceSpan,
 };
 use codenoesis_lang_kotlin::TreeSitterKotlinClientExtractor;
 use codenoesis_lang_rust::TreeSitterRustProviderExtractor;
@@ -39,6 +39,38 @@ const TOTAL_SOURCE_BYTES_MAXIMUM: u64 = S7Limit::TotalSourceBytes.maximum();
 pub(crate) struct ImpactFailure {
     pub(crate) error: CodeNoesisErrorV23,
     pub(crate) exit_code: u8,
+}
+
+pub(crate) struct MaterializedImpactInput {
+    pub(crate) provider_repository_identity: String,
+    pub(crate) baseline: MaterializedProviderRevision,
+    pub(crate) target: MaterializedProviderRevision,
+    pub(crate) clients: Vec<MaterializedClientRevision>,
+    pub(crate) federation_report_path: String,
+    pub(crate) federation_report: Vec<u8>,
+}
+
+pub(crate) struct MaterializedProviderRevision {
+    pub(crate) revision: String,
+    pub(crate) federation_revision: String,
+    pub(crate) contract_path: String,
+    pub(crate) contract_sha256: String,
+    pub(crate) contract_bytes: Vec<u8>,
+    pub(crate) source_path: String,
+    pub(crate) source_sha256: String,
+    pub(crate) source_bytes: Vec<u8>,
+    pub(crate) callable_symbol: String,
+}
+
+pub(crate) struct MaterializedClientRevision {
+    pub(crate) role: String,
+    pub(crate) repository_identity: String,
+    pub(crate) revision: String,
+    pub(crate) federation_revision: String,
+    pub(crate) source_path: String,
+    pub(crate) source_bytes: Vec<u8>,
+    pub(crate) decoder_symbol: String,
+    pub(crate) call_symbol: String,
 }
 
 pub(crate) fn requested(arguments: &[OsString]) -> bool {
@@ -256,6 +288,213 @@ pub(crate) fn run(arguments: Vec<OsString>) -> Result<Vec<u8>, ImpactFailure> {
     SemanticCompatibilityReportV1::from_domain(&report)
         .and_then(|report| report.canonical_stdout())
         .map_err(report_failure)
+}
+
+#[allow(clippy::too_many_lines)]
+pub(crate) fn analyze_materialized(
+    input: MaterializedImpactInput,
+) -> Result<SemanticCompatibilityReport, ImpactFailure> {
+    let authority = parse_s7_federation_authority(&input.federation_report)
+        .map_err(|error| federation_bytes_failure(&input.federation_report_path, error))?;
+    if authority.provider_repository_identity != input.provider_repository_identity
+        || authority.provider_revision != input.baseline.federation_revision
+    {
+        return Err(operation_failure(
+            CodeNoesisErrorV23::invalid_federation_report(
+                &input.federation_report_path,
+                "authority_mismatch",
+            ),
+        ));
+    }
+    let operation = authority
+        .operations
+        .first()
+        .filter(|_| authority.operations.len() == 1)
+        .ok_or_else(|| {
+            operation_failure(CodeNoesisErrorV23::invalid_federation_report(
+                &input.federation_report_path,
+                "unsupported_operation_set",
+            ))
+        })?;
+    let baseline_revision = materialized_revision_contract(&input.baseline);
+    let target_revision = materialized_revision_contract(&input.target);
+    let baseline_contract = project_contract(
+        OpenApi31HttpJsonExtractor::new(),
+        &input.provider_repository_identity,
+        &input.baseline.revision,
+        &baseline_revision.contract,
+        &authority.service_authority,
+        &operation.operation_id,
+        &input.baseline.contract_bytes,
+    )?;
+    let target_contract = project_contract(
+        OpenApi31HttpJsonExtractor::new(),
+        &input.provider_repository_identity,
+        &input.target.revision,
+        &target_revision.contract,
+        &authority.service_authority,
+        &operation.operation_id,
+        &input.target.contract_bytes,
+    )?;
+    validate_contract_authority(operation, &baseline_contract, &input.federation_report_path)?;
+    validate_contract_authority(operation, &target_contract, &input.federation_report_path)?;
+
+    let provider_extractor = TreeSitterRustProviderExtractor::new();
+    let baseline_provider = provider_extractor
+        .extract_s7_provider(
+            &input.baseline.source_bytes,
+            &input.baseline.callable_symbol,
+        )
+        .map_err(|error| source_failure(&error))?;
+    let target_provider = provider_extractor
+        .extract_s7_provider(&input.target.source_bytes, &input.target.callable_symbol)
+        .map_err(|error| source_failure(&error))?;
+    let mut evidence = Vec::new();
+    let baseline = provider_facts(
+        &input.provider_repository_identity,
+        &baseline_revision,
+        baseline_contract,
+        &input.baseline.contract_bytes,
+        &input.baseline.source_bytes,
+        baseline_provider,
+        &mut evidence,
+    )?;
+    let target = provider_facts(
+        &input.provider_repository_identity,
+        &target_revision,
+        target_contract,
+        &input.target.contract_bytes,
+        &input.target.source_bytes,
+        target_provider,
+        &mut evidence,
+    )?;
+
+    let client_extractor = TreeSitterKotlinClientExtractor::new();
+    let authority_by_repository = authority
+        .clients
+        .iter()
+        .map(|client| (client.repository_identity.as_str(), client))
+        .collect::<std::collections::BTreeMap<_, _>>();
+    let mut clients = Vec::with_capacity(input.clients.len());
+    for client in &input.clients {
+        let federated = authority_by_repository
+            .get(client.repository_identity.as_str())
+            .ok_or_else(|| {
+                operation_failure(CodeNoesisErrorV23::invalid_federation_report(
+                    &input.federation_report_path,
+                    "client_authority_missing",
+                ))
+            })?;
+        if federated.role != client.role || federated.revision != client.federation_revision {
+            return Err(operation_failure(
+                CodeNoesisErrorV23::invalid_federation_report(
+                    &input.federation_report_path,
+                    "client_authority_mismatch",
+                ),
+            ));
+        }
+        let extraction = client_extractor
+            .extract_s7_client(
+                &client.source_bytes,
+                &client.decoder_symbol,
+                &client.call_symbol,
+            )
+            .map_err(|error| source_failure(&error))?;
+        let source_evidence = evidence_for_span(
+            &client.repository_identity,
+            &client.revision,
+            &client.source_path,
+            &client.source_bytes,
+            extraction.evidence_span,
+            EvidenceSourceKind::ClientAssumption,
+            CLIENT_CAPABILITY,
+        )?;
+        let calculated_client_id = client_id(&client.repository_identity);
+        let federation_call_site_id = call_site_id(
+            &calculated_client_id,
+            &client.federation_revision,
+            &client.source_path,
+            &client.call_symbol,
+        );
+        if calculated_client_id != federated.client_id
+            || federation_call_site_id != federated.call_site_id
+        {
+            return Err(operation_failure(
+                CodeNoesisErrorV23::invalid_federation_report(
+                    &input.federation_report_path,
+                    "client_identity_mismatch",
+                ),
+            ));
+        }
+        let git_call_site_id = call_site_id(
+            &calculated_client_id,
+            &client.revision,
+            &client.source_path,
+            &client.call_symbol,
+        );
+        let federation = match &federated.state {
+            S7FederationState::Confirmed { operation_id } => FederationState::Confirmed {
+                operation_id: operation_id.clone(),
+            },
+            S7FederationState::Rejected {
+                operation_candidate_id,
+            } => FederationState::Rejected {
+                operation_candidate_id: operation_candidate_id.clone(),
+            },
+            S7FederationState::Unresolved => {
+                return Err(operation_failure(
+                    CodeNoesisErrorV23::invalid_federation_report(
+                        &input.federation_report_path,
+                        "unresolved_client_authority",
+                    ),
+                ));
+            }
+        };
+        clients.push(ClientFact {
+            repository_identity: client.repository_identity.clone(),
+            revision: client.revision.clone(),
+            client_id: calculated_client_id,
+            call_site_id: git_call_site_id,
+            call_symbol: client.call_symbol.clone(),
+            path_template: extraction.path_template,
+            assumptions: extraction
+                .assumptions
+                .into_iter()
+                .map(|fact| (format!("/{}", fact.field_name), fact.assumption))
+                .collect(),
+            evidence_id: source_evidence.id.clone(),
+            federation,
+        });
+        evidence.push(source_evidence);
+    }
+
+    evidence.sort_by(|left, right| left.id.cmp(&right.id));
+    ImpactService::analyze(ImpactAnalysisInput {
+        provider_repository_identity: input.provider_repository_identity,
+        baseline,
+        target,
+        clients,
+        evidence,
+    })
+    .map_err(|error| analysis_failure(&error))
+}
+
+fn materialized_revision_contract(
+    revision: &MaterializedProviderRevision,
+) -> codenoesis_contracts::ImpactRevisionInput {
+    codenoesis_contracts::ImpactRevisionInput {
+        revision: revision.revision.clone(),
+        root: String::new(),
+        contract: ImpactBoundFile {
+            path: revision.contract_path.clone(),
+            sha256: revision.contract_sha256.clone(),
+        },
+        source: ImpactBoundFile {
+            path: revision.source_path.clone(),
+            sha256: revision.source_sha256.clone(),
+        },
+        callable_symbol: revision.callable_symbol.clone(),
+    }
 }
 
 struct ImpactInvocation {
@@ -959,9 +1198,13 @@ fn s7_limit_failure(exceeded: S7LimitExceeded) -> ImpactFailure {
 }
 
 fn federation_failure(input: &BoundInput, error: S7FederationContractError) -> ImpactFailure {
+    federation_bytes_failure(&input.logical_path, error)
+}
+
+fn federation_bytes_failure(logical_path: &str, error: S7FederationContractError) -> ImpactFailure {
     match error {
         S7FederationContractError::Invalid => operation_failure(
-            CodeNoesisErrorV23::invalid_federation_report(&input.logical_path, "report_validation"),
+            CodeNoesisErrorV23::invalid_federation_report(logical_path, "report_validation"),
         ),
         S7FederationContractError::LimitExceeded { limit, observed } => {
             let maximum = match limit {

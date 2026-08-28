@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schema/trusted-impact-source-excerpt-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "profile", "authority", "disclosure", "report", "source", "evidence", "excerpt", "limitations"],
+  "properties": {
+    "schema_version": { "const": "codenoesis.trusted-impact-source-excerpt/v1" },
+    "profile": { "const": "trusted-local-impact-source-v1" },
+    "authority": { "const": "explicit_local_git_object_only" },
+    "disclosure": { "const": "explicit_transient_stdout" },
+    "report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "sha256"],
+      "properties": {
+        "schema_version": { "const": "codenoesis.semantic-compatibility-report/v2" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository_identity", "commit_oid", "tree_oid"],
+      "properties": {
+        "repository_identity": { "type": "string", "pattern": "^urn:codenoesis:" },
+        "commit_oid": { "$ref": "#/$defs/sha1" },
+        "tree_oid": { "$ref": "#/$defs/sha1" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "path", "blob_oid", "span"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^urn:codenoesis:evidence:blake3:[0-9a-f]{64}$" },
+        "path": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "blob_oid": { "$ref": "#/$defs/sha1" },
+        "span": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["unit", "start", "end", "start_position", "end_position"],
+          "properties": {
+            "unit": { "const": "byte" },
+            "start": { "type": "integer", "minimum": 0 },
+            "end": { "type": "integer", "minimum": 1 },
+            "start_position": { "$ref": "#/$defs/position" },
+            "end_position": { "$ref": "#/$defs/position" }
+          }
+        }
+      }
+    },
+    "excerpt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["encoding", "text", "byte_length", "sha256"],
+      "properties": {
+        "encoding": { "const": "utf-8" },
+        "text": { "type": "string", "minLength": 1 },
+        "byte_length": { "type": "integer", "minimum": 1, "maximum": 262144 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "limitations": {
+      "const": ["exact_committed_bytes_only", "no_context_expansion", "no_retention_or_export", "no_working_tree_fallback", "single_evidence_only", "utf8_only"]
+    }
+  },
+  "$defs": {
+    "sha1": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["line", "column", "unit"],
+      "properties": {
+        "line": { "type": "integer", "minimum": 1 },
+        "column": { "type": "integer", "minimum": 1 },
+        "unit": { "const": "unicode_scalar" }
+      }
+    }
+  }
+}
