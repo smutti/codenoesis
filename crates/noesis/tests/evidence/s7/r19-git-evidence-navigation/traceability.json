@@ -10,6 +10,7 @@
       "role": "primary",
       "tests": [
         "e2e_fr_imp_006_git_bound_semantic_diff_is_navigable",
+        "conf_fr_imp_006_reviewed_git_fixture_materialization_is_platform_neutral",
         "conf_fr_imp_006_all_git_evidence_is_independently_navigable",
         "pt_nfr_det_001_r19_fifty_permutations_and_ten_schedules_are_identical"
       ]
@@ -39,6 +40,7 @@
     "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/product-red.log",
     "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/focused-green.log",
     "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/complete-gate-summary.log",
+    "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/correction-round-1.log",
     "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/implementation-observation-local.json",
     "exact-head pull-request checks after publication"
   ],

@@ -16,7 +16,7 @@
     "exact_base": "fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b",
     "governance_checkpoint": "740802a0fc2c513545beb208488dc0be7645ba3a",
     "retained_red": "837ccfaf36626b1e9ac3d1c01064e14afa73391b",
-    "tested_product_head": "6fd7f480094da2f152b5d1cbb1dc6ab4db372f59",
+    "tested_product_head": "bc786d2038856a407261fbd7ab55bd7a61e5771d",
     "final_review_head": "recorded by the pull request after evidence publication"
   },
   "red_evidence": {
@@ -29,8 +29,8 @@
     "focused": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/focused-green.log",
     "complete_gate": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/complete-gate-summary.log",
     "complete_gate_exit_status": 0,
-    "complete_gate_log_sha256": "2f6c30cacafde9d513c66570d46d5e99237a5acb7c266c1e40624df76514d244",
-    "exact_head_ci": "pending_pull_request"
+    "complete_gate_log_sha256": "d769f190a1fb4e92a73658a35d3ad98b1342bbe424fc4529aff52320ab3896e5",
+    "exact_head_ci": "pending_correction_push"
   },
   "observed_outcome": {
     "report_schema": "codenoesis.semantic-compatibility-report/v2",
@@ -73,9 +73,19 @@
     "historical_s7_artifacts_changed": false,
     "r0_through_r18_or_k1_changed": false
   },
+  "corrections": [
+    {
+      "round": 1,
+      "failed_head": "82955609a7802e5ce9b02383a73f1c27e79079d0",
+      "corrected_product_head": "bc786d2038856a407261fbd7ab55bd7a61e5771d",
+      "reason": "Windows checkout CRLF transport changed reviewed fixture bytes before deterministic Git materialization.",
+      "scope": "R19 test fixture normalization, portability oracle, contract bundle digests, and evidence only.",
+      "evidence": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/correction-round-1.log"
+    }
+  ],
   "known_limitations": [
     "The candidate is not Approved, Implemented on main, or Verified before protected manual merge and independent review.",
-    "Exact-head GitHub CI evidence is pending pull-request publication.",
+    "Exact-head GitHub CI evidence is pending correction publication.",
     "Navigation emits only the exact selected evidence span and intentionally provides no context expansion, batch retrieval, working-tree fallback, or remote acquisition."
   ]
 }
