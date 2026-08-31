@@ -131,3 +131,32 @@ docs/software/verification.md`. After the correction, the same regression must
 prove both that the historical checkpoint blob still has its accepted digest
 and that the versioned current descendant does not invalidate V2. No product,
 dependency, control-plane, release, support, or GA authority is added.
+
+## Amendment 2: historical R18/R19 lifecycle contracts
+
+The accountable maintainer authorized the exact correction recorded in
+[issue comment #5479241530](https://github.com/smutti/codenoesis/issues/201#issuecomment-5479241530)
+and [authorization #5482161515](https://github.com/smutti/codenoesis/issues/201#issuecomment-5482161515).
+The immutable R18 and R19 contract bundles correctly bind the lifecycle
+documents accepted by their protected merges, but their conformance tests read
+those records from the current descendant working tree. V3 must reconcile the
+current lifecycle documents to the 34-profile baseline, so current bytes cannot
+also remain identical to both historical bundles.
+
+The correction adds only
+`scripts/tests/test_s4_r18_trusted_source_retrieval_contract.py` and
+`scripts/tests/test_s7_r19_git_evidence_contract.py` to the verification-only
+scope. A lifecycle-document record in an R18 bundle is read from protected
+merge `fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b`; an R19 lifecycle-document
+record is read from protected merge
+`c783b612777a86e2f88620ece987723bb230c51c`. Its bytes must retain the existing
+bundle digest. Every non-lifecycle bundle record remains bound to the current
+file, and every R18/R19 bundle, schema, fixture, oracle, product byte, and
+accepted digest remains immutable.
+
+Historical candidate wording is checked against the corresponding protected
+merge, while V3 independently checks the current lifecycle wording. Before
+editing either R18/R19 conformance test, this superseding checkpoint is
+committed and the three deterministic current-file failures are retained as
+the expected Red. No dependency, control-plane, release, support, or GA
+authority is added.

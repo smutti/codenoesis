@@ -75,6 +75,16 @@ this versioned descendant lifecycle document to remain byte-identical forever.
 All other V2 contracts and current-file pins remain unchanged. The correction
 has its own checkpoint, expected conflict Red, regression, and retained Green.
 
+The second issue #201 amendment preserves every R18/R19 bundle and accepted
+digest while correcting only their conformance tests. Lifecycle-document
+records are read from the exact protected merge that accepted each bundle:
+`fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b` for R18 and
+`c783b612777a86e2f88620ece987723bb230c51c` for R19. Non-lifecycle records
+remain current-file checks. V3 alone validates the current 34-profile lifecycle
+wording, so later versioned documentation cannot weaken historical product
+contracts or make their accepted byte identities depend on the descendant
+working tree.
+
 ## Promotion rule
 
 The V3 manifest uses `candidate_verified_pending_merge` on the branch.
