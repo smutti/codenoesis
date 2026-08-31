@@ -1,0 +1,21 @@
+test_versioned_descendant_keeps_historical_checkpoint_binding (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... FAIL
+
+======================================================================
+FAIL: test_versioned_descendant_keeps_historical_checkpoint_binding (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$REPOSITORY/scripts/tests/test_local_baseline_verification_v2.py", line 383, in test_versioned_descendant_keeps_historical_checkpoint_binding
+    self.assertEqual(errors, [])
+AssertionError: Lists differ: ['checkpoint contract changed after Red: docs/software/verification.md'] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+'checkpoint contract changed after Red: docs/software/verification.md'
+
+- ['checkpoint contract changed after Red: docs/software/verification.md']
++ []
+
+----------------------------------------------------------------------
+Ran 1 test in 0.125s
+
+FAILED (failures=1)

@@ -1,0 +1,28 @@
+{
+  "schema_version": "codenoesis.local-baseline-verification-v2-compatibility-red/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/201",
+  "authorization": "https://github.com/smutti/codenoesis/issues/201#issuecomment-5479036431",
+  "base_sha": "c783b612777a86e2f88620ece987723bb230c51c",
+  "superseding_checkpoint_sha": "e84be9244f219e0613f0083f8327bc2ba6d904db",
+  "superseding_checkpoint_tree": "e30d5d94d537e23f5a843f11912089c20e7f1d6c",
+  "command": "python3 -m unittest scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests.test_versioned_descendant_keeps_historical_checkpoint_binding -v",
+  "exit_status": 1,
+  "expected_failure": "The unchanged V2 validator rejects the versioned current docs/software/verification.md while its historical checkpoint blob remains valid.",
+  "actual_failure": "checkpoint contract changed after Red: docs/software/verification.md",
+  "log": {
+    "path": "tests/evidence/verification/local-baseline-v3/v2-compatibility-red.log",
+    "sha256": "f29166d815f1ef89c3df22f5018cefe099ef828121915d8a2d093f71eca24d46"
+  },
+  "normalization": "Replace the isolated local repository root with $REPOSITORY; preserve all other UTF-8 bytes and LF endings.",
+  "captured_at": "2026-08-31T13:28:01Z",
+  "environment": {
+    "os": "Darwin 25.6.0",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "network_product_path": "disabled",
+    "model_provider_path": "disabled"
+  },
+  "limitations": [
+    "This Red authorizes only the versioned-descendant compatibility correction; no other V2 pin or semantic contract may change."
+  ]
+}
