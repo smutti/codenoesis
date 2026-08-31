@@ -1244,6 +1244,24 @@
       "class": "real_repository_pilot",
       "path": "tests/specifications/s7/r19/e2e_fr_imp_006_git_evidence_navigation.json",
       "sha256": "f1e202496e7b644b0864c6f14c86b42add60d935572903b0de48f4cd03ea77f5"
+    },
+    {
+      "id": "v3-focused-green-log",
+      "class": "focused_green",
+      "path": "tests/evidence/verification/local-baseline-v3/focused-green.log",
+      "sha256": "e8e4b402f0ac98fe97a1f52582d683b8421da0e5585725fbd72d1ecd118665d2"
+    },
+    {
+      "id": "v3-focused-green-observation",
+      "class": "focused_green",
+      "path": "tests/evidence/verification/local-baseline-v3/focused-green-observation.json",
+      "sha256": "31e0860a9cdfc7b4c3e0aaafca7f16adfd21161e32584f49c1898ae01d2b9dc0"
+    },
+    {
+      "id": "v3-public-command",
+      "class": "focused_green",
+      "path": "tests/evidence/verification/local-baseline-v3/public-command.log",
+      "sha256": "38f8d98e5c8c31d5444c12159b4c7f9d386de10bec8694044ecc707c8e3b1071"
     }
   ],
   "remote_runs": [
@@ -1418,7 +1436,10 @@
       "status": "green",
       "evidence_ids": [
         "r18-focused-green",
-        "r19-focused-green"
+        "r19-focused-green",
+        "v3-focused-green-log",
+        "v3-focused-green-observation",
+        "v3-public-command"
       ]
     },
     {

@@ -1,0 +1,56 @@
+{
+  "schema_version": "codenoesis.local-baseline-verification-green-observation/v3",
+  "issue": "https://github.com/smutti/codenoesis/issues/201",
+  "implementation_sha": "cfac413291b99e522ab913a2db38288053ba7a6a",
+  "implementation_tree": "e1e3ae507e437d83a7277d581bb3bb88b35597de",
+  "commands": [
+    {
+      "command": "python3 -m unittest scripts.tests.test_local_baseline_verification_v3 -v",
+      "exit_status": 0,
+      "result": "11 tests passed",
+      "log": {
+        "path": "tests/evidence/verification/local-baseline-v3/focused-green.log",
+        "sha256": "e8e4b402f0ac98fe97a1f52582d683b8421da0e5585725fbd72d1ecd118665d2"
+      }
+    },
+    {
+      "command": "python3 scripts/verify_local_baseline_v3.py --manifest tests/evidence/verification/local-baseline-v3/manifest.json",
+      "exit_status": 0,
+      "stdout": {
+        "path": "tests/evidence/verification/local-baseline-v3/public-command.log",
+        "sha256": "38f8d98e5c8c31d5444c12159b4c7f9d386de10bec8694044ecc707c8e3b1071"
+      },
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "validator": {
+    "path": "scripts/verify_local_baseline_v3.py",
+    "sha256": "c9b5cfc3a5c82e1effeb15b26280daa2878901c46fa81e969bc4cd5a2fc6d0fa"
+  },
+  "manifest": {
+    "path": "tests/evidence/verification/local-baseline-v3/manifest.json",
+    "sha256": "2ddd73db0dfb4f4239572c6859f245614678fc4494d439681aa5762ab64e94c8"
+  },
+  "captured_at": "2026-08-31T11:19:47Z",
+  "environment": {
+    "os": "Darwin 25.6.0",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "features": "workspace --all-targets --all-features --locked",
+    "network_product_path": "disabled",
+    "model_provider_path": "disabled"
+  },
+  "agent": {
+    "identity": "OpenAI Codex coding agent",
+    "model": "not exposed by runtime",
+    "policy": "repository AGENTS.md at base c783b612777a86e2f88620ece987723bb230c51c",
+    "run_identifier": "issue-201-local-baseline-verification-v3",
+    "duration": "focused suite 2.522 seconds; total package duration not measured",
+    "cost": "not exposed by runtime"
+  },
+  "limitations": [
+    "This is author-generated Green evidence, not independent V3 review or activation.",
+    "Independent review and protected manual merge remain mandatory."
+  ]
+}
