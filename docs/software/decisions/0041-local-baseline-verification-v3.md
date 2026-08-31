@@ -103,3 +103,31 @@ dependency, path, authority, or release effect changes; any V2 or product byte
 must change; required evidence is unavailable, contradictory, flaky, private,
 or non-reproducible; the expected Red has another cause; a gate can pass only
 by weakening completeness; or five correction rounds are exhausted.
+
+## Amendment 1: versioned descendant lifecycle compatibility
+
+The accountable maintainer authorized the exact correction recorded in
+[issue comment #5477605850](https://github.com/smutti/codenoesis/issues/201#issuecomment-5477605850)
+and [authorization #5479036431](https://github.com/smutti/codenoesis/issues/201#issuecomment-5479036431).
+The unchanged V2 validator binds `docs/software/verification.md` both to the
+historical V2 checkpoint object and to the current descendant working tree.
+V3 must version that current lifecycle document, so the two required SHA-256
+contents cannot coexist and the complete Python gate cannot be Green.
+
+The correction adds only `scripts/verify_local_baseline_v2.py` and
+`scripts/tests/test_local_baseline_verification_v2.py` to the verification-only
+scope. V2 must continue recomputing every historical checkpoint blob from
+`CHECKPOINT_SHA` and rejecting any historical digest mismatch. It may exempt
+only `docs/software/verification.md` from current-descendant byte identity so a
+later verification version can describe its own lifecycle. Every other V2
+current-file pin, plan, catalog, schema, manifest, evidence, activation,
+product-tree meaning, and failure remains unchanged.
+
+Before the validator correction, a superseding checkpoint must commit this
+amendment, the expanded plan, and a regression that calls the current V2
+checkpoint validator. The retained Red is acceptable only when that regression
+fails with `checkpoint contract changed after Red:
+docs/software/verification.md`. After the correction, the same regression must
+prove both that the historical checkpoint blob still has its accepted digest
+and that the versioned current descendant does not invalidate V2. No product,
+dependency, control-plane, release, support, or GA authority is added.

@@ -2,6 +2,7 @@
   "schema_version": "codenoesis.local-baseline-verification-plan/v3",
   "issue": "https://github.com/smutti/codenoesis/issues/201",
   "authorization": "https://github.com/smutti/codenoesis/issues/201#issuecomment-5477071815",
+  "correction_authorization": "https://github.com/smutti/codenoesis/issues/201#issuecomment-5479036431",
   "base_sha": "c783b612777a86e2f88620ece987723bb230c51c",
   "delivery_slice": "S14",
   "risk": "high",
@@ -75,8 +76,16 @@
     "tests/specifications/verification/local-baseline-v3",
     "tests/evidence/verification/local-baseline-v3",
     "scripts/verify_local_baseline_v3.py",
-    "scripts/tests/test_local_baseline_verification_v3.py"
+    "scripts/tests/test_local_baseline_verification_v3.py",
+    "scripts/verify_local_baseline_v2.py",
+    "scripts/tests/test_local_baseline_verification_v2.py"
   ],
+  "v2_descendant_lifecycle_compatibility": {
+    "historical_checkpoint_digest_required": true,
+    "versioned_current_path": "docs/software/verification.md",
+    "all_other_v2_current_pins_immutable": true,
+    "product_behavior_change": false
+  },
   "activation": "independent_review_then_protected_manual_merge_of_exact_head",
   "excluded": [
     "G9",

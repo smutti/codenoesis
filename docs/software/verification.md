@@ -68,6 +68,13 @@ contracts, schemas, traceability, Linux/macOS/Windows conclusions, security,
 privacy, race, limit, benchmark, CodeQL, policy, and normalized remote logs.
 The authoring agent is not an independent reviewer.
 
+The issue #201 amendment permits one verification-only compatibility
+correction: the V2 validator continues reading and digesting its historical
+`docs/software/verification.md` checkpoint blob from Git, but does not require
+this versioned descendant lifecycle document to remain byte-identical forever.
+All other V2 contracts and current-file pins remain unchanged. The correction
+has its own checkpoint, expected conflict Red, regression, and retained Green.
+
 ## Promotion rule
 
 The V3 manifest uses `candidate_verified_pending_merge` on the branch.

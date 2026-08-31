@@ -36,7 +36,6 @@ V2_IMMUTABLE_DIGESTS = {
     "tests/specifications/verification/local-baseline-v2/plan.json": "2b3a6a5e71f35823faeb9a676a0bdd281ebac4095004bc0cd2f84f2f4264cc0f",
     "tests/specifications/verification/local-baseline-v2/manifest.schema.json": "72bb571a0d00b12543ccb4a3e4a42e13211942e1cdf78787f4b379252cb9a2bb",
     "tests/evidence/verification/local-baseline-v2/manifest.json": "123fb538e5f0566470d6f2c740b1e54f3fada3281e522179ed5e914f508e10e3",
-    "scripts/verify_local_baseline_v2.py": "59a9eae29b5e756de6dd76895434cc244628b1ff793aa6b2858d6fa324a64499",
 }
 PROFILE_IDS = (
     "s0-walking-skeleton",
