@@ -1,7 +1,7 @@
 # CodeNoesis Delivery Roadmap
 
 > Status: **Proposed planning companion — not implementation authority**.
-> Last updated: **2026-08-15**.
+> Last updated: **2026-08-31**.
 
 This roadmap sequences product and validation work without changing the
 normative meaning or approval status of the
@@ -42,10 +42,12 @@ marker “LocalBaselineVerificationV2 candidate Verified pending independent
 review and protected manual merge” remain immutable pre-activation evidence.
 Issue #141 is closed as superseded. G9 remains a separate governed package.
 
-Issue #190 and Decision 0038 define the next Proposed R18/S4 package on that
-exact base: one explicit `trusted-local-source-v1` evidence-to-immutable-Git
-excerpt journey. It changes no existing ontology, snapshot, query, context,
-portable, explorer, store, distribution, or release byte.
+Protected PRs #191 and #197 made R18 trusted local source retrieval and R19
+Git-backed semantic impact Approved and Implemented but not Verified. Issue
+#201 and Decision 0041 define the exact 34-profile verification-only candidate.
+Its pre-activation marker is “LocalBaselineVerificationV3 candidate Verified
+pending independent review and protected manual merge”. It changes no product,
+ontology, schema, fixture, workflow, release, support, or GA byte.
 
 The implemented compatibility profile is bounded rather than general:
 
@@ -175,7 +177,8 @@ profile; it does not broaden the row's semantic boundary.
 | `R16` | Bounded safe Rust constant evaluation | Implemented but not Verified after protected PR #173: preserve corrected R15 and add checked target-independent primitive constants plus fixed-repr unit-enum discriminants as `rust.evaluated_value` and `EVALUATES_TO`, with exact derivations and typed gaps. | Issue #172, Decision 0030, and merge `c3d05994a56e747fbe3157173998f8ac76ef7333`; no new dependency, execution, compiler, target, cfg, boundary, or control-plane authority. | The project-owned fixture emits seven exact values, two dependencies, 42 entities, 42 relationships, 84 claims, 33 evidence, zero diagnostics, 32 coverage records, exact V15/V18 hashes, 50 permutations, ten schedules, all boundaries, two deterministic Lekton journeys, and the typed RustDesk boundary negative. Artifact generation succeeds, but the V9 browser journey remains blocked by the exact-schema frontend defect. |
 | `R10-R16 explorer correction` | Matching portable-graph browser loading | Implemented but not Verified after protected PR #177: LocalExplorerV3-V9 accept only exact matching PortableGraphV3-V9 and expose real search, bounded SVG neighborhoods, relationship, evidence, derivation, and uncertainty inspection. | Issue #176, Decision 0031, merge `f0d0fc998a9158e7c8e96a5b70c8830a3150dd22`, retained browser evidence, and immutable V1/V2 assets. | Each generated explorer loads its matching graph in a real browser; mismatches and malformed, oversized, unsafe, racing, or private inputs fail closed; independent verification remains open. |
 | `R17` | Function-centered context and navigation | Approved, Implemented, and Verified: group one existing R16 function/method, declared signature, ordered parameters, return spelling, body facts, proven calls, evidence, claims, derivations, uncertainty, and navigation roles into canonical FunctionContextV1; add LocalExplorerV10 over unchanged PortableGraphV9. | Issue #178, Decision 0032, merge `f0bdb5290566bb85bb103e24291e952d4c557156`, LocalBaselineVerificationV2, `local-experimental-r17`, and no new dependency. | The project-owned method card and two pinned Lekton journeys are deterministic; CLI/browser fields match; all limits/security/privacy failures close safely; QueryV13, PortableGraphV9, and ExplorerV1-V9 bytes remain immutable. |
-| `R18` | Trusted local evidence-to-source retrieval | Proposed branch-scoped candidate: resolve one exact existing evidence identity to one bounded UTF-8 excerpt from immutable local Git objects under explicit `trusted-local-source-v1`, with exact repository/commit/tree/path/blob/span binding and transient-stdout-only disclosure. | Issue #190, Decision 0038, exact base `1de6a420f25a1c7eb74d07a99f1800dde90eefa8`, high-risk S4 package, no new dependency, and protected manual merge. | Loose and packed object stores emit byte-identical canonical `TrustedSourceExcerptV1`; UTF-8 positions, invalid/path/race/privacy/limit/stdout failures, 50 permutations, ten schedules, pinned Lekton diagnostic, no side effects, and immutable R0-R17/K1/S7/G0-G8-local bytes pass. |
+| `R18` | Trusted local evidence-to-source retrieval | Approved and Implemented but not Verified after protected PR #191: resolve one exact existing evidence identity to one bounded UTF-8 excerpt from immutable local Git objects under explicit `trusted-local-source-v1`, with exact repository/commit/tree/path/blob/span binding and transient-stdout-only disclosure. | Issue #190, Decision 0038, review head `16ef5ceaea6ad14d9838f84856f6ca3d445daa67`, merge `fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b`, no new dependency, and LocalBaselineVerificationV3 candidate. | Loose and packed object stores emit byte-identical canonical `TrustedSourceExcerptV1`; UTF-8 positions, invalid/path/race/privacy/limit/stdout failures, 50 permutations, ten schedules, pinned Lekton diagnostic, no side effects, and immutable R0-R17/K1/S7/G0-G8-local bytes pass. |
+| `R19` | Git-backed implementation-aware semantic impact | Approved and Implemented but not Verified after protected PR #197: bind provider/client behavior evidence and bounded source navigation to immutable local Git objects under explicit V2 selectors while preserving V1 bytes. | Issue #196, Decision 0040, review head `c3cbced9ee2017b61ec8e0b10191553edc733004`, merge `c783b612777a86e2f88620ece987723bb230c51c`, no new dependency, and LocalBaselineVerificationV3 candidate. | Loose/packed replay, exact evidence/source binding, Windows CRLF correction, path/race/privacy/UTF-8/output failures, semantic report V2, retained correction history, and immutable V1/R0-R18/K1/G0-G8-local regressions pass. |
 
 ### Earliest useful real-world checkpoint
 
@@ -196,15 +199,15 @@ future slice without changing that slice's approved meaning.
 1. Protected PR #189 activated the exact 32-profile
    LocalBaselineVerificationV2 evidence pack and closed issue #141 as
    superseded; release, support, and GA authority remain separate.
-2. Complete issue #190 / Decision 0038 in one high-risk R18/S4 package: add
-   opt-in trusted local evidence-to-source retrieval under immutable Git-object,
-   privacy, path, race, UTF-8, and output authority.
-3. Extend implementation-aware API and semantic diff to compare contracts with
-   provider/client behavior and versioned implementation evidence.
-4. Execute the reproducible conference evaluation over pinned, structurally
+2. Protected PR #191 completed R18 trusted local evidence-to-source retrieval.
+3. Protected PR #197 completed R19 Git-backed implementation-aware semantic
+   impact while preserving the accepted V1 contract.
+4. Complete issue #201 / Decision 0041: independently verify the exact V2 plus
+   R18/R19 34-profile baseline without rewriting any accepted V2 or product byte.
+5. Build the LLM-ready projection over verified callable, evidence, source, and
+   semantic-impact facts without promoting model output to product evidence.
+6. Execute the reproducible conference evaluation over pinned, structurally
    independent repositories.
-5. Independently verify R18's complete immutable evidence without rewriting the
-   already Verified R0-R17/K1/S7/G0-G8-local baseline.
 
 ### Real-world compatibility completion definition
 
