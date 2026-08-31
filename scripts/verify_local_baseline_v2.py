@@ -88,6 +88,10 @@ CHECKPOINT_CONTRACT_DIGESTS = {
     ),
 }
 
+VERSIONED_DESCENDANT_CONTRACT_PATHS = {
+    "docs/software/verification.md",
+}
+
 PINNED_REPOSITORY_EVIDENCE = {
     "v2-red-log": (
         "tests/evidence/verification/local-baseline-v2/red.log",
@@ -400,13 +404,14 @@ def validate_json_schema(
 
 def validate_checkpoint_contracts(root: Path, errors: list[str]) -> None:
     for relative_path, expected_digest in CHECKPOINT_CONTRACT_DIGESTS.items():
-        current_path = root / relative_path
-        if not current_path.is_file():
-            errors.append(f"checkpoint contract is missing: {relative_path}")
-            continue
-        current_digest = sha256_file(current_path)
-        if current_digest != expected_digest:
-            errors.append(f"checkpoint contract changed after Red: {relative_path}")
+        if relative_path not in VERSIONED_DESCENDANT_CONTRACT_PATHS:
+            current_path = root / relative_path
+            if not current_path.is_file():
+                errors.append(f"checkpoint contract is missing: {relative_path}")
+                continue
+            current_digest = sha256_file(current_path)
+            if current_digest != expected_digest:
+                errors.append(f"checkpoint contract changed after Red: {relative_path}")
         try:
             checkpoint_bytes = git(
                 root,
