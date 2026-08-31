@@ -6,11 +6,11 @@
   "red_commit_sha": "5345165af9f513a0737c40641246674f71e2485a",
   "evidence_parent_sha": "332759213fb319f0b70d1820b568db5000cc8d47",
   "verification_subject": "c783b612777a86e2f88620ece987723bb230c51c",
-  "product_tree_sha256": "884e1d77ee6dba801144786700133a65e591e6a53ec02b34be496d93a2ebe098",
+  "product_tree_sha256": "017aa12aeb25b397a63aae2485698376fb290dd315ac9b73dcfccbc027836fb1",
   "status": "candidate_verified_pending_merge",
   "plan": {
     "path": "tests/specifications/verification/local-baseline-v3/plan.json",
-    "sha256": "c4ee51307e819675f71f659b64b4e168a6f9635e259e11e7c1b4a730ed61515a"
+    "sha256": "069bd983ea8b31448902aee4e7f9b0f7ee14fe31123a44944824493846b68c3c"
   },
   "profile_catalog": {
     "path": "tests/specifications/verification/local-baseline-v3/profile-catalog.json",
@@ -35,7 +35,7 @@
     },
     "validator": {
       "path": "scripts/verify_local_baseline_v2.py",
-      "sha256": "59a9eae29b5e756de6dd76895434cc244628b1ff793aa6b2858d6fa324a64499"
+      "sha256": "b05c5bf1f9bba0ae6e2ea256489ba777b47f0dfb74c25b9a76cf36c86edaa2b0"
     },
     "profile_count": 32,
     "activation_merge": "1de6a420f25a1c7eb74d07a99f1800dde90eefa8"
@@ -1195,13 +1195,13 @@
       "id": "decision-0041",
       "class": "traceability",
       "path": "docs/software/decisions/0041-local-baseline-verification-v3.md",
-      "sha256": "0c99a9bff50dae44d0926bfcc61f122ae5980df876f9a438d20ad6737ea95ce7"
+      "sha256": "5df0f5037786edbed59f200e3ee6bb1a101f28a54241aa2c112f929b66ce6b8b"
     },
     {
       "id": "v3-plan",
       "class": "traceability",
       "path": "tests/specifications/verification/local-baseline-v3/plan.json",
-      "sha256": "c4ee51307e819675f71f659b64b4e168a6f9635e259e11e7c1b4a730ed61515a"
+      "sha256": "069bd983ea8b31448902aee4e7f9b0f7ee14fe31123a44944824493846b68c3c"
     },
     {
       "id": "v3-catalog",
@@ -1262,6 +1262,48 @@
       "class": "focused_green",
       "path": "tests/evidence/verification/local-baseline-v3/public-command.log",
       "sha256": "38f8d98e5c8c31d5444c12159b4c7f9d386de10bec8694044ecc707c8e3b1071"
+    },
+    {
+      "id": "v2-compatibility-red-log",
+      "class": "retained_red",
+      "path": "tests/evidence/verification/local-baseline-v3/v2-compatibility-red.log",
+      "sha256": "f29166d815f1ef89c3df22f5018cefe099ef828121915d8a2d093f71eca24d46"
+    },
+    {
+      "id": "v2-compatibility-red-observation",
+      "class": "retained_red",
+      "path": "tests/evidence/verification/local-baseline-v3/v2-compatibility-red-observation.json",
+      "sha256": "dab9a99f7d3a234260022c71fbd81e4a95ffb2951334993be22d21fa864e2a95"
+    },
+    {
+      "id": "v2-compatibility-green-log",
+      "class": "focused_green",
+      "path": "tests/evidence/verification/local-baseline-v3/v2-compatibility-green.log",
+      "sha256": "4409d00e75c0d2da68cadd6807cd21708ee0815717ab5bb19f9d539c499fa012"
+    },
+    {
+      "id": "v2-validator-green-log",
+      "class": "focused_green",
+      "path": "tests/evidence/verification/local-baseline-v3/v2-validator-green.log",
+      "sha256": "f0ce1139a6a774292dc5da35d8c670964edcac136f31522bbbbda3d95a7d1546"
+    },
+    {
+      "id": "v2-compatibility-green-observation",
+      "class": "focused_green",
+      "path": "tests/evidence/verification/local-baseline-v3/v2-compatibility-green-observation.json",
+      "sha256": "ad3c29660cb75cc7bcc68c7d47847b2f6ad38b6cd4ec50916278ba0664463cf5"
+    },
+    {
+      "id": "corrected-v2-validator",
+      "class": "traceability",
+      "path": "scripts/verify_local_baseline_v2.py",
+      "sha256": "b05c5bf1f9bba0ae6e2ea256489ba777b47f0dfb74c25b9a76cf36c86edaa2b0"
+    },
+    {
+      "id": "v2-compatibility-regression",
+      "class": "traceability",
+      "path": "scripts/tests/test_local_baseline_verification_v2.py",
+      "sha256": "7fdab3e515b0f6fbc48f0962ef5c385b64432f5e9aca0508c0a595719b113c8b"
     }
   ],
   "remote_runs": [
@@ -1428,7 +1470,9 @@
       "status": "green",
       "evidence_ids": [
         "v3-red-log",
-        "v3-red-observation"
+        "v3-red-observation",
+        "v2-compatibility-red-log",
+        "v2-compatibility-red-observation"
       ]
     },
     {
@@ -1439,7 +1483,10 @@
         "r19-focused-green",
         "v3-focused-green-log",
         "v3-focused-green-observation",
-        "v3-public-command"
+        "v3-public-command",
+        "v2-compatibility-green-log",
+        "v2-validator-green-log",
+        "v2-compatibility-green-observation"
       ]
     },
     {
@@ -1544,7 +1591,9 @@
         "r19-traceability",
         "remote-runs",
         "v3-plan",
-        "v3-catalog"
+        "v3-catalog",
+        "corrected-v2-validator",
+        "v2-compatibility-regression"
       ]
     },
     {
