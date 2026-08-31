@@ -1,0 +1,147 @@
+﻿2026-08-28T19:25:22.0047403Z Current runner version: '2.336.0'
+2026-08-28T19:25:22.0077342Z ##[group]Runner Image Provisioner
+2026-08-28T19:25:22.0078705Z Hosted Compute Agent
+2026-08-28T19:25:22.0079465Z Version: 20260819.586
+2026-08-28T19:25:22.0080329Z Commit: 3cc4a88dfa507ef76119ad1bb3eccc6378bb2b76
+2026-08-28T19:25:22.0081235Z Build Date: 2026-08-18T23:20:18Z
+2026-08-28T19:25:22.0082862Z Worker ID: {094936c6-ecba-438b-b4d2-f64db3fea39d}
+2026-08-28T19:25:22.0084006Z Azure Region: eastus
+2026-08-28T19:25:22.0084761Z ##[endgroup]
+2026-08-28T19:25:22.0086973Z ##[group]Operating System
+2026-08-28T19:25:22.0087720Z Ubuntu
+2026-08-28T19:25:22.0088490Z 24.04.4
+2026-08-28T19:25:22.0089234Z LTS
+2026-08-28T19:25:22.0089845Z ##[endgroup]
+2026-08-28T19:25:22.0090523Z ##[group]Runner Image
+2026-08-28T19:25:22.0091313Z Image: ubuntu-24.04
+2026-08-28T19:25:22.0092074Z Version: 20260823.283.1
+2026-08-28T19:25:22.0093696Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260823.283/images/ubuntu/Ubuntu2404-Readme.md
+2026-08-28T19:25:22.0095660Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260823.283
+2026-08-28T19:25:22.0096861Z ##[endgroup]
+2026-08-28T19:25:22.0098821Z ##[group]GITHUB_TOKEN Permissions
+2026-08-28T19:25:22.0101249Z Contents: read
+2026-08-28T19:25:22.0102053Z Issues: write
+2026-08-28T19:25:22.0102711Z Metadata: read
+2026-08-28T19:25:22.0103476Z PullRequests: write
+2026-08-28T19:25:22.0104201Z Statuses: write
+2026-08-28T19:25:22.0104835Z ##[endgroup]
+2026-08-28T19:25:22.0107295Z Secret source: Actions
+2026-08-28T19:25:22.0108801Z Prepare workflow directory
+2026-08-28T19:25:22.0481182Z Prepare all required actions
+2026-08-28T19:25:22.0539412Z Getting action download info
+2026-08-28T19:25:22.2009848Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-08-28T19:25:22.2999738Z Download action repository 'actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c' (SHA:3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c)
+2026-08-28T19:25:22.4705012Z Download action repository 'actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3' (SHA:3a2844b7e9c422d3c10d287c895573f7108da1b3)
+2026-08-28T19:25:22.6655225Z Complete job name: Codex review orchestrator
+2026-08-28T19:25:22.7209199Z ##[group]Run set -euo pipefail
+2026-08-28T19:25:22.7209748Z set -euo pipefail
+2026-08-28T19:25:22.7210158Z state=pending
+2026-08-28T19:25:22.7210556Z reason="AI review is pending"
+2026-08-28T19:25:22.7210993Z review_ready=false
+2026-08-28T19:25:22.7211436Z if [ "$PREPARE_RESULT" != "success" ]; then
+2026-08-28T19:25:22.7211917Z   state=failure
+2026-08-28T19:25:22.7212391Z   reason="Trusted review target could not be resolved"
+2026-08-28T19:25:22.7212936Z elif [ "$CANDIDATE" != "true" ]; then
+2026-08-28T19:25:22.7213417Z   if [ "$PREPARE_REASON" = "draft" ]; then
+2026-08-28T19:25:22.7213869Z     state=pending
+2026-08-28T19:25:22.7214375Z     reason="AI review waits until the pull request is ready"
+2026-08-28T19:25:22.7214898Z   else
+2026-08-28T19:25:22.7215237Z     state=success
+2026-08-28T19:25:22.7215799Z     reason="AI review not applicable; human ownership remains required"
+2026-08-28T19:25:22.7216360Z   fi
+2026-08-28T19:25:22.7216738Z elif [ "$INSPECT_RESULT" != "success" ]; then
+2026-08-28T19:25:22.7217200Z   state=failure
+2026-08-28T19:25:22.7217701Z   reason="Immutable pull-request scope could not be inspected"
+2026-08-28T19:25:22.7218511Z elif [ "$ELIGIBLE" != "true" ]; then
+2026-08-28T19:25:22.7218963Z   state=success
+2026-08-28T19:25:22.7219445Z   reason="Protected or oversized scope requires human review"
+2026-08-28T19:25:22.7220013Z elif [ "$REVIEW_ENABLED" != "true" ]; then
+2026-08-28T19:25:22.7220460Z   state=success
+2026-08-28T19:25:22.7220953Z   reason="AI review disabled by dedicated repository review switch"
+2026-08-28T19:25:22.7221807Z elif [ "$REVIEW_RESULT" != "success" ]; then
+2026-08-28T19:25:22.7222263Z   state=failure
+2026-08-28T19:25:22.7222727Z   reason="Required read-only AI review did not complete"
+2026-08-28T19:25:22.7223234Z else
+2026-08-28T19:25:22.7223566Z   review_ready=true
+2026-08-28T19:25:22.7223932Z fi
+2026-08-28T19:25:22.7224248Z {
+2026-08-28T19:25:22.7224708Z   echo "state=$state"
+2026-08-28T19:25:22.7225316Z   echo "reason=$reason"
+2026-08-28T19:25:22.7225744Z   echo "review_ready=$review_ready"
+2026-08-28T19:25:22.7226188Z } >> "$GITHUB_OUTPUT"
+2026-08-28T19:25:22.7263811Z shell: /usr/bin/bash -e {0}
+2026-08-28T19:25:22.7264393Z env:
+2026-08-28T19:25:22.7264719Z   REVIEW_ENABLED: 
+2026-08-28T19:25:22.7265068Z   CANDIDATE: true
+2026-08-28T19:25:22.7265405Z   ELIGIBLE: true
+2026-08-28T19:25:22.7265787Z   INSPECT_RESULT: success
+2026-08-28T19:25:22.7266186Z   PREPARE_RESULT: success
+2026-08-28T19:25:22.7266563Z   PREPARE_REASON: candidate
+2026-08-28T19:25:22.7266954Z   REVIEW_RESULT: skipped
+2026-08-28T19:25:22.7267310Z ##[endgroup]
+2026-08-28T19:25:22.7530030Z ##[group]Run set -euo pipefail
+2026-08-28T19:25:22.7530515Z set -euo pipefail
+2026-08-28T19:25:22.7530921Z state="$PREFLIGHT_STATE"
+2026-08-28T19:25:22.7531351Z reason="$PREFLIGHT_REASON"
+2026-08-28T19:25:22.7600341Z if [ "$PREFLIGHT_OUTCOME" != "success" ]; then
+2026-08-28T19:25:22.7600896Z   state=failure
+2026-08-28T19:25:22.7601410Z   reason="Review preflight failed unexpectedly"
+2026-08-28T19:25:22.7602031Z elif [ "$REVIEW_READY" = "true" ]; then
+2026-08-28T19:25:22.7602560Z   if [ "$CHECKOUT_OUTCOME" != "success" ] || \
+2026-08-28T19:25:22.7603072Z      [ "$EVIDENCE_OUTCOME" != "success" ] || \
+2026-08-28T19:25:22.7603559Z      [ "$RENDER_OUTCOME" != "success" ] || \
+2026-08-28T19:25:22.7604071Z      [ "$COMMENT_OUTCOME" != "success" ] || \
+2026-08-28T19:25:22.7604571Z      [ "$VERDICT_OUTCOME" != "success" ]; then
+2026-08-28T19:25:22.7605059Z     state=failure
+2026-08-28T19:25:22.7605568Z     reason="Review evidence could not be validated and published"
+2026-08-28T19:25:22.7606123Z   else
+2026-08-28T19:25:22.7606463Z     state="$VERDICT_STATE"
+2026-08-28T19:25:22.7606876Z     reason="$VERDICT_REASON"
+2026-08-28T19:25:22.7607274Z   fi
+2026-08-28T19:25:22.7607590Z fi
+2026-08-28T19:25:22.7608105Z {
+2026-08-28T19:25:22.7608451Z   echo "state=$state"
+2026-08-28T19:25:22.7608847Z   echo "reason=$reason"
+2026-08-28T19:25:22.7609245Z } >> "$GITHUB_OUTPUT"
+2026-08-28T19:25:22.7643798Z shell: /usr/bin/bash -e {0}
+2026-08-28T19:25:22.7644200Z env:
+2026-08-28T19:25:22.7644529Z   PREFLIGHT_OUTCOME: success
+2026-08-28T19:25:22.7645095Z   PREFLIGHT_REASON: AI review disabled by dedicated repository review switch
+2026-08-28T19:25:22.7645682Z   PREFLIGHT_STATE: success
+2026-08-28T19:25:22.7646050Z   REVIEW_READY: false
+2026-08-28T19:25:22.7646419Z   CHECKOUT_OUTCOME: skipped
+2026-08-28T19:25:22.7646802Z   EVIDENCE_OUTCOME: skipped
+2026-08-28T19:25:22.7647175Z   RENDER_OUTCOME: skipped
+2026-08-28T19:25:22.7647547Z   COMMENT_OUTCOME: skipped
+2026-08-28T19:25:22.7648106Z   VERDICT_OUTCOME: skipped
+2026-08-28T19:25:22.7648475Z   VERDICT_REASON: 
+2026-08-28T19:25:22.7648806Z   VERDICT_STATE: 
+2026-08-28T19:25:22.7649130Z ##[endgroup]
+2026-08-28T19:25:22.7803030Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-08-28T19:25:22.7803654Z with:
+2026-08-28T19:25:22.7805985Z   script: if (!/^[0-9a-f]{40}$/.test(process.env.HEAD_SHA ?? "")) {
+  core.setFailed("Cannot publish review policy status without an immutable head SHA.");
+  return;
+}
+await github.rest.repos.createCommitStatus({
+  owner: context.repo.owner,
+  repo: context.repo.repo,
+  sha: process.env.HEAD_SHA,
+  state: process.env.POLICY_STATE,
+  context: "Codex review policy gate",
+  description: process.env.POLICY_REASON.slice(0, 140),
+  target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+});
+
+2026-08-28T19:25:22.7811466Z   github-token: ***
+2026-08-28T19:25:22.7811817Z   debug: false
+2026-08-28T19:25:22.7812169Z   user-agent: actions/github-script
+2026-08-28T19:25:22.7812592Z   result-encoding: json
+2026-08-28T19:25:22.7812951Z   retries: 0
+2026-08-28T19:25:22.7813350Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-08-28T19:25:22.7813800Z env:
+2026-08-28T19:25:22.7814158Z   HEAD_SHA: c3cbced9ee2017b61ec8e0b10191553edc733004
+2026-08-28T19:25:22.7814749Z   POLICY_REASON: AI review disabled by dedicated repository review switch
+2026-08-28T19:25:22.7815299Z   POLICY_STATE: success
+2026-08-28T19:25:22.7815731Z ##[endgroup]
+2026-08-28T19:25:23.1813300Z Cleaning up orphan processes
