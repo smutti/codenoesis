@@ -9184,6 +9184,90 @@ mod s4_root_argument_tests {
     }
 
     #[test]
+    fn conf_nfr_per_001_benchmark_execution_limit_profile_is_exact() {
+        let exact = r16_b1a_arguments();
+        let invocation = parse_s4_invocation(exact.clone()).expect("valid B1a selector matrix");
+        assert!(invocation.packed_sha1);
+        assert!(invocation.rust_constant_profile);
+        assert_eq!(
+            invocation.execution_limit_profile,
+            ScanExecutionLimitProfile::RealWorldRustBenchmark75sV1
+        );
+
+        let mut absent = exact.clone();
+        remove_option(&mut absent, "--execution-limit-profile");
+        assert_eq!(
+            parse_s4_invocation(absent)
+                .expect("selector absence remains valid")
+                .execution_limit_profile,
+            ScanExecutionLimitProfile::Standard
+        );
+
+        let mut unknown = exact.clone();
+        replace_option_value(&mut unknown, "--execution-limit-profile", "unknown");
+        assert!(parse_s4_invocation(unknown).is_err());
+
+        let mut duplicate = exact.clone();
+        duplicate.extend([
+            OsString::from("--execution-limit-profile"),
+            OsString::from(B1A_EXECUTION_LIMIT_PROFILE),
+        ]);
+        assert!(parse_s4_invocation(duplicate).is_err());
+
+        let mut incomplete = exact.clone();
+        remove_option(&mut incomplete, "--execution-limit-profile");
+        incomplete.push(OsString::from("--execution-limit-profile"));
+        assert!(parse_s4_invocation(incomplete).is_err());
+
+        let mut unpacked = exact.clone();
+        remove_option(&mut unpacked, "--acquisition-profile");
+        assert!(parse_s4_invocation(unpacked).is_err());
+
+        let mut wrong_capacity = exact.clone();
+        replace_option_value(
+            &mut wrong_capacity,
+            "--output-capacity-profile",
+            LOCAL_SNAPSHOT_64M_V1,
+        );
+        assert!(parse_s4_invocation(wrong_capacity).is_err());
+
+        let mut boundary = exact;
+        boundary.extend([
+            OsString::from("--repository-boundary-profile"),
+            OsString::from(LOCAL_GITLINKS_V1),
+        ]);
+        assert!(matches!(
+            parse_s4_invocation(boundary),
+            Err(InvocationError::InvalidR16Composition(
+                "repository_boundary_not_supported"
+            ))
+        ));
+    }
+
+    #[test]
+    fn inv_bnd_001_benchmark_execution_limit_boundary_is_exact() {
+        assert_eq!(
+            ScanExecutionLimitProfile::Standard.maximum_milliseconds(),
+            60_000
+        );
+        assert_eq!(
+            ScanExecutionLimitProfile::RealWorldRustBenchmark75sV1.maximum_milliseconds(),
+            75_000
+        );
+        assert!(check_scan_wall_milliseconds(75_000, 75_000).is_ok());
+
+        let failure = check_scan_wall_milliseconds(75_001, 75_000).unwrap_err();
+        assert!(matches!(
+            failure,
+            Failure::Scan(ScanError::Acquisition(AcquisitionError::LimitExceeded {
+                limit: LimitKind::ScanWallMilliseconds,
+                maximum: 75_000,
+                observed: 75_001,
+            }))
+        ));
+    }
+
+    #[test]
     fn conf_fr_cli_001_r14_r15_256m_profile_has_an_exact_selector_matrix() {
         let r14 = r14_256m_arguments();
         let Ok(invocation) = parse_s4_invocation(r14.clone()) else {
@@ -9352,6 +9436,21 @@ mod s4_root_argument_tests {
         ]
         .map(OsString::from)
         .to_vec()
+    }
+
+    fn r16_b1a_arguments() -> Vec<OsString> {
+        let mut arguments = r14_256m_arguments();
+        arguments.extend([
+            OsString::from("--acquisition-profile"),
+            OsString::from(LOCAL_GIT_SHA1_PACKED_V1),
+            OsString::from("--rust-flow-profile"),
+            OsString::from(R15_PROFILE),
+            OsString::from("--rust-constant-profile"),
+            OsString::from(R16_PROFILE),
+            OsString::from("--execution-limit-profile"),
+            OsString::from(B1A_EXECUTION_LIMIT_PROFILE),
+        ]);
+        arguments
     }
 
     fn replace_option_value(arguments: &mut [OsString], flag: &str, value: &str) {
