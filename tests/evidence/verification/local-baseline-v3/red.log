@@ -1,0 +1,14 @@
+test_validator_and_manifest_are_complete (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) ... FAIL
+
+======================================================================
+FAIL: test_validator_and_manifest_are_complete (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$REPOSITORY/scripts/tests/test_local_baseline_verification_v3.py", line 209, in test_validator_and_manifest_are_complete
+    self.assertTrue(
+AssertionError: False is not true : LocalBaselineVerificationV3 validator and canonical 34-profile manifest are absent
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)

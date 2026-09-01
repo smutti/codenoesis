@@ -1,0 +1,29 @@
+{
+  "schema_version": "codenoesis.local-baseline-verification-red-observation/v3",
+  "issue": "https://github.com/smutti/codenoesis/issues/201",
+  "base_sha": "c783b612777a86e2f88620ece987723bb230c51c",
+  "governance_checkpoint_sha": "94618026a8c7ef34aa6ee0ae22b6e7b1aad9299b",
+  "governance_checkpoint_tree": "7fef8c23ddf4184c55635b3c8ebb9ad5105b95a7",
+  "command": "python3 -m unittest scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests.test_validator_and_manifest_are_complete -v",
+  "exit_status": 1,
+  "expected_failure": "The V3 validator and canonical 34-profile manifest/evidence pack are absent.",
+  "actual_failure": "LocalBaselineVerificationV3 validator and canonical 34-profile manifest are absent",
+  "log": {
+    "path": "tests/evidence/verification/local-baseline-v3/red.log",
+    "sha256": "861923bd496522c1a9017983956f98d412a2efbf9e411717be729f4ad516a402"
+  },
+  "normalization": "Replace the isolated local repository root with $REPOSITORY; preserve all other UTF-8 bytes and LF endings.",
+  "captured_at": "2026-08-31T10:54:02Z",
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "network_product_path": "disabled",
+    "model_provider_path": "disabled"
+  },
+  "notes": [
+    "A preliminary shell wrapper used zsh's read-only variable name status after the same test invocation; that wrapper error was not retained as product Red evidence.",
+    "The retained invocation was rerun unchanged and failed for the exact authorized absence reason."
+  ]
+}

@@ -37,15 +37,16 @@ and `rust-safe-constant-evaluation-v1`. Their historical lifecycle label was
 **Approved and Implemented but not Verified**; the current bounded status is
 the independently verified baseline described above.
 
-Issue [#190](https://github.com/smutti/codenoesis/issues/190) and
-[Decision 0038](docs/software/decisions/0038-s4-trusted-local-source-retrieval.md)
-define the Proposed high-risk R18/S4 package on exact base
-`1de6a420f25a1c7eb74d07a99f1800dde90eefa8`. Its explicit
-`trusted-local-source-v1` selector retrieves one exact evidence-backed UTF-8
-excerpt from immutable local Git objects without changing the ontology,
-snapshot, query, context, portable graph, explorer, store, or release bytes.
-It remains a branch-scoped candidate until independent review and protected
-manual merge.
+Protected PR #191 made R18 trusted local evidence-to-source retrieval Approved
+and Implemented, and protected PR #197 made R19 Git-backed
+implementation-aware semantic impact Approved and Implemented. Both remain not
+independently Verified on the current base. Issue
+[#201](https://github.com/smutti/codenoesis/issues/201) and
+[Decision 0041](docs/software/decisions/0041-local-baseline-verification-v3.md)
+define the verification-only 34-profile candidate. Its exact pre-activation
+status marker is “LocalBaselineVerificationV3 candidate Verified pending
+independent review and protected manual merge”. It changes no product,
+ontology, schema, fixture, workflow, release, support, or GA behavior.
 
 Broader language coverage, operations, semantic comparison, and the remaining
 production-readiness slices are still pending.

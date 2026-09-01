@@ -1,0 +1,30 @@
+{
+  "schema_version": "codenoesis.local-baseline-verification-r18-r19-self-binding-green/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/201",
+  "authorization": "https://github.com/smutti/codenoesis/issues/201#issuecomment-5494828860",
+  "base_sha": "c783b612777a86e2f88620ece987723bb230c51c",
+  "checkpoint_sha": "f699c84a3c777ac2420a7ef545391bc5baeaf7f0",
+  "red_sha": "9ece5d3f697aa9042aff23deb9c22443e0faf32d",
+  "implementation_sha": "24cf365ec490f7875b72dc01218f4de17816c9e5",
+  "command": "python3 -m unittest scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests.test_r18_r19_bundle_self_records_use_historical_bytes scripts.tests.test_s4_r18_trusted_source_retrieval_contract scripts.tests.test_s7_r19_git_evidence_contract -v",
+  "exit_status": 0,
+  "result": "The V3 self-record acceptance regression and all eleven R18/R19 historical contract tests passed without changing either immutable bundle.",
+  "log": {
+    "path": "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-green.log",
+    "sha256": "2de3b194941f2635f36464e5962249ce3e5e84754df9c64bd991d9d50d44f0f9"
+  },
+  "captured_at": "2026-09-01T13:41:31Z",
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "network_product_path": "disabled",
+    "model_provider_path": "disabled"
+  },
+  "invariants": [
+    "R18 and R19 bundle bytes and accepted digests remain immutable.",
+    "Every product and non-lifecycle non-self record remains current-tree-bound.",
+    "Only lifecycle documents and the exact historical self-record are read from each protected merge."
+  ]
+}

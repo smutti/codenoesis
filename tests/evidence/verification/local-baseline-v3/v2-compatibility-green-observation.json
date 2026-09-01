@@ -1,0 +1,49 @@
+{
+  "schema_version": "codenoesis.local-baseline-verification-v2-compatibility-green/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/201",
+  "authorization": "https://github.com/smutti/codenoesis/issues/201#issuecomment-5479036431",
+  "implementation_sha": "457a3fcb33f6e434aeef596a1dee442e1059be59",
+  "implementation_tree": "f0277acd89406a60bf8752a644eeb9f29a3e4866",
+  "commands": [
+    {
+      "command": "python3 -m unittest scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests.test_versioned_descendant_keeps_historical_checkpoint_binding -v",
+      "exit_status": 0,
+      "result": "1 test passed",
+      "log": {
+        "path": "tests/evidence/verification/local-baseline-v3/v2-compatibility-green.log",
+        "sha256": "4409d00e75c0d2da68cadd6807cd21708ee0815717ab5bb19f9d539c499fa012"
+      }
+    },
+    {
+      "command": "python3 scripts/verify_local_baseline_v2.py --manifest tests/evidence/verification/local-baseline-v2/manifest.json",
+      "exit_status": 0,
+      "result": "32-profile V2 candidate manifest valid",
+      "stdout": {
+        "path": "tests/evidence/verification/local-baseline-v3/v2-validator-green.log",
+        "sha256": "f0ce1139a6a774292dc5da35d8c670964edcac136f31522bbbbda3d95a7d1546"
+      },
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "corrected_validator": {
+    "path": "scripts/verify_local_baseline_v2.py",
+    "sha256": "b05c5bf1f9bba0ae6e2ea256489ba777b47f0dfb74c25b9a76cf36c86edaa2b0"
+  },
+  "historical_checkpoint": {
+    "commit": "1daa23ffbaa0ea13f5fc5910aa5798c7523f254c",
+    "path": "docs/software/verification.md",
+    "sha256": "86569b0274aa5a7f088a3007b1d9237418c505fd34ec8a1724e99ebb8ccfb754"
+  },
+  "captured_at": "2026-08-31T13:30:31Z",
+  "environment": {
+    "os": "Darwin 25.6.0",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "network_product_path": "disabled",
+    "model_provider_path": "disabled"
+  },
+  "limitations": [
+    "Only docs/software/verification.md is versioned across V2 descendants; every other V2 checkpoint current-file pin remains active.",
+    "This author-generated Green is not independent V3 review or activation."
+  ]
+}

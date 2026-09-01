@@ -1,0 +1,105 @@
+{
+  "schema_version": "codenoesis.local-baseline-verification-profile-catalog/v3",
+  "issue": "https://github.com/smutti/codenoesis/issues/201",
+  "base_sha": "c783b612777a86e2f88620ece987723bb230c51c",
+  "profile_count": 34,
+  "inherited_catalog": {
+    "path": "tests/specifications/verification/local-baseline-v2/profile-catalog.json",
+    "sha256": "23d175dd5e73f0c67e2d8c9d8fdf36c921220f41fcfaaf6586514ed6d632172b",
+    "profile_count": 32
+  },
+  "required_profile_ids": [
+    "s0-walking-skeleton",
+    "s1-safe-inventory",
+    "r1-packed-sha1",
+    "r2-gitlink-boundaries",
+    "s2-rust-knowledge",
+    "s3-atomic-storage",
+    "s4-workspace-docs-query",
+    "r3-root-package-workspace",
+    "r4-cargo-manifest-facts",
+    "r5-rust-semantic-depth",
+    "r6-framework-declarations",
+    "r7-scip-import",
+    "r8-portable-explorer",
+    "s5-incremental-refresh",
+    "s6-openapi-federation",
+    "k1-callable-value-semantics",
+    "r9-output-capacity",
+    "r10-cfg-declaration-alternatives",
+    "r11-k1-repository-boundaries",
+    "r12-k1-cfg-alternatives",
+    "r13-k1-scip-composition",
+    "r14-expression-bindings",
+    "r15-local-flow",
+    "r14-r15-real-repository-correction",
+    "r16-safe-constant-evaluation",
+    "r10-r16-versioned-explorer-correction",
+    "r17-function-context",
+    "s7-implementation-aware-api",
+    "g0-release-profile",
+    "g1a-local-distribution",
+    "g2a-local-upgrade-safety",
+    "g1b-g8-verifiable-distribution",
+    "r18-trusted-local-source",
+    "r19-git-backed-semantic-impact"
+  ],
+  "additive_profiles": [
+    {
+      "id": "r18-trusted-local-source",
+      "slice": "S4",
+      "requirements": ["FR-CLI-011", "FR-CTX-002"],
+      "issue": "https://github.com/smutti/codenoesis/issues/190",
+      "decision": "docs/software/decisions/0038-s4-trusted-local-source-retrieval.md",
+      "implementation_prs": [191],
+      "review_head": "16ef5ceaea6ad14d9838f84856f6ca3d445daa67",
+      "merge_commit": "fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b",
+      "oracle_paths": [
+        "tests/specifications/s4/r18/contract-bundle.json",
+        "tests/specifications/s4/r18/contract-v1.json",
+        "tests/specifications/s4/r18/e2e_fr_ctx_002_trusted_source_retrieval.json",
+        "tests/specifications/s4/r18/error-v29.schema.json",
+        "tests/specifications/s4/r18/trusted-source-excerpt-v1.schema.json"
+      ],
+      "evidence_paths": [
+        "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/complete-gate-summary.log",
+        "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/focused-green.log",
+        "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/implementation-observation-local.json",
+        "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/lekton-diagnostic.log",
+        "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/red-observation-local.json",
+        "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/red.log",
+        "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/traceability.json"
+      ]
+    },
+    {
+      "id": "r19-git-backed-semantic-impact",
+      "slice": "S7",
+      "requirements": ["FR-CLI-006", "FR-CLI-012", "FR-IMP-006"],
+      "issue": "https://github.com/smutti/codenoesis/issues/196",
+      "decision": "docs/software/decisions/0040-s7-git-backed-semantic-impact-evidence.md",
+      "implementation_prs": [197],
+      "review_head": "c3cbced9ee2017b61ec8e0b10191553edc733004",
+      "merge_commit": "c783b612777a86e2f88620ece987723bb230c51c",
+      "oracle_paths": [
+        "tests/specifications/s7/r19/codenoesis-error-v30.schema.json",
+        "tests/specifications/s7/r19/contract-bundle.json",
+        "tests/specifications/s7/r19/e2e_fr_imp_006_git_evidence_navigation.json",
+        "tests/specifications/s7/r19/impact-git-workspace-v1.schema.json",
+        "tests/specifications/s7/r19/runtime-contract-v1.json",
+        "tests/specifications/s7/r19/semantic-compatibility-report-v2.schema.json",
+        "tests/specifications/s7/r19/threat-model-v1.json",
+        "tests/specifications/s7/r19/trusted-impact-source-excerpt-v1.schema.json"
+      ],
+      "evidence_paths": [
+        "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/complete-gate-summary.log",
+        "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/correction-round-1.log",
+        "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/focused-green.log",
+        "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/governance-red.log",
+        "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/implementation-observation-local.json",
+        "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/product-red.log",
+        "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/red-observation.json",
+        "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/traceability.json"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+test_r18_r19_bundle_self_records_use_historical_bytes (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) ...
+======================================================================
+FAIL: test_r18_r19_bundle_self_records_use_historical_bytes (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) (path='test_s4_r18_trusted_source_retrieval_contract.py')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$REPOSITORY/scripts/tests/test_local_baseline_verification_v3.py", line 235, in test_r18_r19_bundle_self_records_use_historical_bytes
+    self.assertTrue(
+AssertionError: False is not true : historical bundle-record resolver is absent: test_s4_r18_trusted_source_retrieval_contract.py
+
+======================================================================
+FAIL: test_r18_r19_bundle_self_records_use_historical_bytes (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) (path='test_s7_r19_git_evidence_contract.py')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$REPOSITORY/scripts/tests/test_local_baseline_verification_v3.py", line 235, in test_r18_r19_bundle_self_records_use_historical_bytes
+    self.assertTrue(
+AssertionError: False is not true : historical bundle-record resolver is absent: test_s7_r19_git_evidence_contract.py
+
+----------------------------------------------------------------------
+Ran 1 test in 0.004s
+
+FAILED (failures=2)

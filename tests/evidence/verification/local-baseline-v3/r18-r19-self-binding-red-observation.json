@@ -1,0 +1,29 @@
+{
+  "schema_version": "codenoesis.local-baseline-verification-r18-r19-self-binding-red/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/201",
+  "authorization": "https://github.com/smutti/codenoesis/issues/201#issuecomment-5494828860",
+  "base_sha": "c783b612777a86e2f88620ece987723bb230c51c",
+  "superseding_checkpoint_sha": "f699c84a3c777ac2420a7ef545391bc5baeaf7f0",
+  "superseding_checkpoint_tree": "07452af3ed48dacb5ae65480e2829e3649a91e4e",
+  "command": "python3 -m unittest scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests.test_r18_r19_bundle_self_records_use_historical_bytes -v",
+  "exit_status": 1,
+  "expected_failure": "Both historical bundle self-record resolvers are absent before the authorized two-test correction.",
+  "actual_failure": "The V3 acceptance regression reports exactly the absent R18 and R19 historical bundle-record resolvers.",
+  "log": {
+    "path": "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-red.log",
+    "sha256": "4f66195374c9444ef1792d4a377723d909c64e4892c07d28f1dadb191765d648"
+  },
+  "normalization": "Replace the isolated local repository root with $REPOSITORY; preserve all other UTF-8 bytes and LF endings.",
+  "captured_at": "2026-09-01T13:39:54Z",
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "network_product_path": "disabled",
+    "model_provider_path": "disabled"
+  },
+  "limitations": [
+    "This Red authorizes only the historical self-record handling in the same two R18/R19 conformance tests; no bundle or product record may change."
+  ]
+}

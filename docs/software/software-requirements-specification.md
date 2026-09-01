@@ -1,17 +1,17 @@
 # CodeNoesis Software Requirements Specification
 
-> Status: **0.9+r18-candidate — the bounded S0-S7, R0-R17, K1, and
-> G0-G8-local baseline is Verified; R18 is Proposed**. Issue #188 / protected
-> PR #189 review head `a40a4cb0212e7b59b1eff81ab9818299c7ebc3b9` merged as
-> `1de6a420f25a1c7eb74d07a99f1800dde90eefa8`, activating the exact 32-profile
-> LocalBaselineVerificationV2 evidence pack.
+> Status: **0.9+verification-v3-candidate — the bounded 32-profile V2 baseline
+> is Verified; R18 and R19 are Approved and Implemented but not Verified**.
+> Issue #201 / Decision 0041 defines the verification-only 34-profile V3
+> candidate on exact base `c783b612777a86e2f88620ece987723bb230c51c`.
 
 The retained `candidate_verified_pending_merge` artifact and the marker
 “LocalBaselineVerificationV2 candidate Verified pending independent review and
 protected manual merge” remain immutable pre-activation evidence. Issue #141 is
-closed as superseded. Issue #190 and Decision 0038 define the branch-scoped
-`trusted-local-source-v1` candidate on that exact Verified base. G9 remains a
-separate governed package.
+closed as superseded. Protected PRs #191 and #197 made R18 and R19 effective
+without independently verifying them. The exact V3 pre-activation marker is
+“LocalBaselineVerificationV3 candidate Verified pending independent review and
+protected manual merge”. G9 remains a separate governed package.
 
 ## 1. Document control
 
@@ -19,8 +19,8 @@ separate governed package.
 |---|---|
 | Scope | CodeNoesis software track, from the first local slice through version `1.0` |
 | Version | `0.9` |
-| Status | The exact 32-profile LocalBaselineVerificationV2 pack is effective and Verified for bounded S0-S7, R0-R17, K1, and G0-G8-local after protected PR #189 merged review head `a40a4cb0212e7b59b1eff81ab9818299c7ebc3b9` as `1de6a420f25a1c7eb74d07a99f1800dde90eefa8`. Issue #190 / Decision 0038 is a Proposed R18/S4 candidate and is ineffective before protected manual merge. |
-| Date | 2026-08-15 |
+| Status | The exact 32-profile LocalBaselineVerificationV2 pack is effective and Verified. R18 and R19 are Approved and Implemented after protected PRs #191 and #197 but remain not Verified. Issue #201 / Decision 0041 is a verification-only V3 candidate; it becomes effective only after independent review and protected manual merge of the exact evidence-complete head. |
+| Date | 2026-08-31 |
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
@@ -30,6 +30,7 @@ separate governed package.
 
 | Version | Date | Change |
 |---|---|---|
+| `0.9+verification-v3-candidate` | 2026-08-31 | Recorded protected R18/R19 merges #191/#197 as Approved and Implemented but not Verified, and proposed issue #201 / Decision 0041 to bind the immutable 32-profile V2 baseline plus only R18/R19 in one exact 34-profile LocalBaselineVerificationV3 evidence pack without product, control-plane, release, support, or GA change. |
 | `0.1` | 2026-07-17 | Initial proposed requirements, TDD policy, vertical slices, gates, and open decisions. |
 | `0.2` | 2026-07-18 | Ratified the exact S0 approval set under single-maintainer governance, adopted the repository-wide Apache-2.0 license, split atomic scan-CLI and execution-isolation requirements, and bound the S0 contract and Red oracle. |
 | `0.3` | 2026-07-23 | Recorded the implemented-but-not-Verified S0 state and ratified the exact S1 safe-inventory requirement set, explicit compatibility profile, limits, evidence model, malicious fixture, filesystem-security oracle, and expected Red. |
@@ -2431,22 +2432,23 @@ support window, deployment, publication, or compatibility authority.
 Independent acceptance of R17's complete immutable evidence pack became
 effective through protected PR #189. It grants no release or GA authority.
 
-### 2.31.1 S4 R18 trusted local source retrieval candidate register
+### 2.31.1 S4 R18 trusted local source retrieval lifecycle register
 
 Issue [#190](https://github.com/smutti/codenoesis/issues/190), the accountable
 maintainer's explicit high-risk authorization, and
 [Decision 0038](decisions/0038-s4-trusted-local-source-retrieval.md) govern one
-maintainer-supervised branch-scoped package on exact Verified base
-`1de6a420f25a1c7eb74d07a99f1800dde90eefa8`. Every requirement below remains
-Proposed until independent review and protected manual merge of the exact
-implementation head. G9 remains a separate governed package.
+maintainer-supervised package on exact Verified base
+`1de6a420f25a1c7eb74d07a99f1800dde90eefa8`. Protected PR #191 made the exact
+bounded behavior Approved and Implemented. It remains not Verified until
+independent acceptance of the complete immutable V3 evidence. G9 remains a
+separate governed package.
 
-| Requirement | Current state | Target after protected merge | Slice | Ratification material |
+| Requirement | Current state | Verification target | Slice | Ratification material |
 |---|---|---|---|---|
-| `FR-CTX-002` | Proposed branch-scoped candidate | Approved and Implemented only for one exact `trusted-local-source-v1` evidence-to-immutable-Git-object excerpt | `S4` | Issue #190, Decision 0038, strict schema, inherited fixture descriptor, exact source oracle, retained Red/Green, and complete gate |
-| `FR-CLI-011` | Proposed branch-scoped candidate | Approved and Implemented only for output-only `noesis source` with the exact argument, stream, exit, and no-side-effect contract | `S4` | Issue #190, Decision 0038, public E2E oracle, ErrorV29 schema, privacy/path/race/limit tests, and complete gate |
-| Bounded R18 amendment to `FR-QRY-001` | Existing LocalQueryResultV1-V13 and FunctionContextV1 are Approved, Implemented, and Verified | Permit one explicit existing evidence identity as the source selector without changing any prior query or context byte | `S4` | Selector-absence regressions and Decision 0038 |
-| Bounded R18 amendments to `NFR-DET-001`, `NFR-SEC-001/005`, `NFR-PRV-002`, `NFR-TST-001/002`, and `INV-BND-001` | Existing bounded controls are Approved, Implemented, and Verified | Add only exact immutable-object binding, UTF-8 positions, transient-stdout classification, limits, and fail-closed source retrieval | `S4` | R18 contracts, invalid/security corpus, retained evidence, and complete gate |
+| `FR-CTX-002` | Approved and Implemented after protected PR #191; not Verified | Verify only the exact `trusted-local-source-v1` evidence-to-immutable-Git-object excerpt | `S4` | Issue #190, Decision 0038, strict schema, inherited fixture descriptor, exact source oracle, retained Red/Green, complete gate, and LocalBaselineVerificationV3 |
+| `FR-CLI-011` | Approved and Implemented after protected PR #191; not Verified | Verify only output-only `noesis source` with the exact argument, stream, exit, and no-side-effect contract | `S4` | Issue #190, Decision 0038, public E2E oracle, ErrorV29 schema, privacy/path/race/limit tests, complete gate, and LocalBaselineVerificationV3 |
+| Bounded R18 amendment to `FR-QRY-001` | Approved and Implemented after protected PR #191; not independently Verified | Verify one explicit existing evidence identity as the source selector without changing any prior query or context byte | `S4` | Selector-absence regressions, Decision 0038, and LocalBaselineVerificationV3 |
+| Bounded R18 amendments to `NFR-DET-001`, `NFR-SEC-001/005`, `NFR-PRV-002`, `NFR-TST-001/002`, and `INV-BND-001` | Approved and Implemented after protected PR #191; not Verified | Verify exact immutable-object binding, UTF-8 positions, transient-stdout classification, limits, and fail-closed source retrieval | `S4` | R18 contracts, invalid/security corpus, retained evidence, and LocalBaselineVerificationV3 |
 
 The command MUST load one validated visible RepositorySnapshotV18, select one
 exact evidence record, and independently reacquire the explicitly supplied
@@ -2468,6 +2470,21 @@ the snapshot, ontology, store, documents, query, FunctionContextV1,
 PortableGraphV1-V9, LocalExplorerV1-V10, retained evidence, telemetry, model
 input, clipboard, configuration, distribution, or release artifacts. Existing
 R0-R17/K1/S7/G0-G8-local bytes remain immutable.
+
+### 2.31.2 S7 R19 Git-backed semantic-impact lifecycle register
+
+Issue [#196](https://github.com/smutti/codenoesis/issues/196),
+[Decision 0040](decisions/0040-s7-git-backed-semantic-impact-evidence.md), and
+protected PR #197 made the exact Git-backed semantic-impact package Approved
+and Implemented. It remains not Verified until independent acceptance of the
+complete immutable V3 evidence. No V1 report, ontology, snapshot, query,
+explorer, source-retrieval, or release contract changes.
+
+| Requirement | Current state | Verification target | Slice | Ratification material |
+|---|---|---|---|---|
+| `FR-IMP-006` | Approved and Implemented after protected PR #197; not Verified | Verify exact provider/client implementation evidence from immutable local Git objects in `SemanticCompatibilityReportV2` | `S7` | Issue #196, Decision 0040, runtime contract, V2 schema, threat model, retained Red/Green/correction evidence, and LocalBaselineVerificationV3 |
+| `FR-CLI-012` | Approved and Implemented after protected PR #197; not Verified | Verify output-only trusted impact-source navigation with exact streams, exits, privacy, limits, and no side effects | `S7` | Issue #196, Decision 0040, E2E oracle, ErrorV30, loose/packed replay, Windows CRLF correction, and LocalBaselineVerificationV3 |
+| Bounded R19 amendment to `FR-CLI-006` | Existing V1 semantic impact remains immutable and Verified | Verify only explicit `implementation-aware-http-json-git-v1` V2 selection and unchanged selector-absence behavior | `S7` | Decision 0040, exact V1 regression, V2 contract bundle, and LocalBaselineVerificationV3 |
 
 ### 2.32 G0/S14 release-profile registry lifecycle
 

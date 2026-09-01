@@ -1,0 +1,1720 @@
+{
+  "schema_version": "codenoesis.local-baseline-verification/v3",
+  "issue": "https://github.com/smutti/codenoesis/issues/201",
+  "base_sha": "c783b612777a86e2f88620ece987723bb230c51c",
+  "governance_checkpoint_sha": "94618026a8c7ef34aa6ee0ae22b6e7b1aad9299b",
+  "red_commit_sha": "5345165af9f513a0737c40641246674f71e2485a",
+  "evidence_parent_sha": "332759213fb319f0b70d1820b568db5000cc8d47",
+  "verification_subject": "c783b612777a86e2f88620ece987723bb230c51c",
+  "product_tree_sha256": "5e4c6cb564cd9fc4c0e41d687a488ef73027fc6a7f2b1f36ac49791306d961bd",
+  "status": "candidate_verified_pending_merge",
+  "plan": {
+    "path": "tests/specifications/verification/local-baseline-v3/plan.json",
+    "sha256": "5684a31449720fedea068b53e3ea992c8fab55aa869a4a2208fe99e0edef448a"
+  },
+  "profile_catalog": {
+    "path": "tests/specifications/verification/local-baseline-v3/profile-catalog.json",
+    "sha256": "f8a2186adea45ff052138b759b6aee4915b195d0802e31b41f4265a227c9c732"
+  },
+  "v2_inheritance": {
+    "catalog": {
+      "path": "tests/specifications/verification/local-baseline-v2/profile-catalog.json",
+      "sha256": "23d175dd5e73f0c67e2d8c9d8fdf36c921220f41fcfaaf6586514ed6d632172b"
+    },
+    "plan": {
+      "path": "tests/specifications/verification/local-baseline-v2/plan.json",
+      "sha256": "2b3a6a5e71f35823faeb9a676a0bdd281ebac4095004bc0cd2f84f2f4264cc0f"
+    },
+    "manifest_schema": {
+      "path": "tests/specifications/verification/local-baseline-v2/manifest.schema.json",
+      "sha256": "72bb571a0d00b12543ccb4a3e4a42e13211942e1cdf78787f4b379252cb9a2bb"
+    },
+    "manifest": {
+      "path": "tests/evidence/verification/local-baseline-v2/manifest.json",
+      "sha256": "123fb538e5f0566470d6f2c740b1e54f3fada3281e522179ed5e914f508e10e3"
+    },
+    "validator": {
+      "path": "scripts/verify_local_baseline_v2.py",
+      "sha256": "b05c5bf1f9bba0ae6e2ea256489ba777b47f0dfb74c25b9a76cf36c86edaa2b0"
+    },
+    "profile_count": 32,
+    "activation_merge": "1de6a420f25a1c7eb74d07a99f1800dde90eefa8"
+  },
+  "profiles": [
+    {
+      "id": "s0-walking-skeleton",
+      "slice": "S0",
+      "requirements": [
+        "DR-ART-001",
+        "DR-ART-002",
+        "FR-ACQ-001",
+        "FR-CLI-003",
+        "NFR-DET-001",
+        "NFR-MNT-001",
+        "NFR-SEC-005",
+        "NFR-TST-001",
+        "NFR-TST-002"
+      ],
+      "implementation_prs": [
+        15
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s0/e2e_fr_acq_001_immutable_commit.json",
+          "sha256": "ff8d5893adb6a8a9bd2c1ffcb558edb19480f60f411a2ffb94545123ab673c44"
+        },
+        {
+          "path": "tests/specifications/s0/evidence-manifest-v1.schema.json",
+          "sha256": "d1a09942c260115282364bad8be5eada0103a48d13245af384d852b84cb72216"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s0/red-observation-corrected-contract.json",
+          "sha256": "1f12680a8f5127bb853ea289a50f6d9751063dc736b9d2ec74c77c42e0f439b4"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s0/green-observation-local.json",
+          "sha256": "16260290deb395355041e3acfb4451deee21b46b76e209c0655f4aadbc2d3561"
+        }
+      ]
+    },
+    {
+      "id": "s1-safe-inventory",
+      "slice": "S1",
+      "requirements": [
+        "DR-EVD-001",
+        "FR-ACQ-002",
+        "FR-INV-001",
+        "NFR-SEC-001"
+      ],
+      "implementation_prs": [
+        21
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s1/e2e_fr_inv_001_safe_inventory.json",
+          "sha256": "25ea508afca9655652862ce3d4304b162d0b221d07fc48ea0674174e97aa320d"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s1/green-observation-local.json",
+          "sha256": "cdad8a86d0660a8087da457369b26164bc984c18e1b5cee1d62023bce4a8d7cf"
+        }
+      ]
+    },
+    {
+      "id": "r1-packed-sha1",
+      "slice": "S1",
+      "requirements": [
+        "FR-ACQ-004"
+      ],
+      "implementation_prs": [
+        77
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s1/e2e_fr_acq_004_packed_sha1.json",
+          "sha256": "41ade77f2e0c806c0586f6234c830f932286c18a9419f21ef5f9689a41a5338d"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s1/packed/green-observation-local.json",
+          "sha256": "d022fd3ad1f337f1a426dd0f6dae1dc7660b2865254ea79a62f77151ad6ca6ff"
+        }
+      ]
+    },
+    {
+      "id": "r2-gitlink-boundaries",
+      "slice": "S1",
+      "requirements": [
+        "FR-ACQ-005"
+      ],
+      "implementation_prs": [
+        95
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s1/e2e_fr_acq_005_gitlink_boundaries.json",
+          "sha256": "812e2f448784ba42076d98fb85428b06569df9695099c926db00ffad6ad2a4ba"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s1/gitlinks/green-observation-local.json",
+          "sha256": "45da6185815b0eef93aa8eda805202588dd93f7c24465f00bde420ba1097c491"
+        }
+      ]
+    },
+    {
+      "id": "s2-rust-knowledge",
+      "slice": "S2",
+      "requirements": [
+        "DR-IDN-001",
+        "FR-EXT-001",
+        "FR-EXT-002",
+        "FR-KNW-001",
+        "FR-KNW-002",
+        "FR-KNW-003"
+      ],
+      "implementation_prs": [
+        27
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s2/e2e_fr_ext_002_rust_knowledge.json",
+          "sha256": "b42d9a0451572aaf5f607e9c4c82ca456f3c83e9d2a14a1cb634bfaf3abc83de"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s2/green-observation-local.json",
+          "sha256": "463fe0a3bb9d9354875bf33d39d6149429e90bbb3921d014b9bc5388e0430907"
+        }
+      ]
+    },
+    {
+      "id": "s3-atomic-storage",
+      "slice": "S3",
+      "requirements": [
+        "FR-SNP-001",
+        "FR-STO-001",
+        "INV-SNP-001",
+        "NFR-REL-001"
+      ],
+      "implementation_prs": [
+        35
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s3/e2e_fr_sto_001_atomic_local_storage.json",
+          "sha256": "06a97d28d0643a5527c777d1d913e866c899e633314c5b8eb60de296f438669c"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s3/green-observation-local.json",
+          "sha256": "7b2a6b0c162b385682fa653d9b9833ad08cb5c039b8734e0720c404095599c20"
+        }
+      ]
+    },
+    {
+      "id": "s4-workspace-docs-query",
+      "slice": "S4",
+      "requirements": [
+        "DR-IDN-002",
+        "FR-CLI-001",
+        "FR-DOC-001",
+        "FR-DOC-002",
+        "FR-DOC-003",
+        "FR-EXT-007",
+        "FR-QRY-001"
+      ],
+      "implementation_prs": [
+        52
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/e2e_fr_cli_001_workspace_docs_query.json",
+          "sha256": "8bbca0c0618e58ad49628de83ce61537463becb39693ef8cec1ef1f70abc3641"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/green-observation-local.json",
+          "sha256": "ef51d0f27866a0dcd445bde215764c561ddd8d1f78eca2412ec33418dc579859"
+        }
+      ]
+    },
+    {
+      "id": "r3-root-package-workspace",
+      "slice": "S4",
+      "requirements": [
+        "FR-EXT-008"
+      ],
+      "implementation_prs": [
+        99
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r3/e2e_fr_ext_008_root_package_workspace.json",
+          "sha256": "c8323edf2b700b97118c74e2e565da82d8450769b892e0f9c1e2a42af95b20a6"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r3/implementation-observation-local.json",
+          "sha256": "4502bca215edeacfcdd37bb1805fe24437003699621e09805a00b7ecd8e655c7"
+        }
+      ]
+    },
+    {
+      "id": "r4-cargo-manifest-facts",
+      "slice": "S4",
+      "requirements": [
+        "FR-EXT-009"
+      ],
+      "implementation_prs": [
+        109
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r4/e2e_fr_ext_009_cargo_manifest_facts.json",
+          "sha256": "effee80b8a1dbeaf17786db188e8d32ece73acc812df47a4805603e87d355e4b"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r4/pilot-observations-local.json",
+          "sha256": "52da027258a4103345cf1b0794732b54585f36514da07573f7bcb8f6df07fc63"
+        }
+      ]
+    },
+    {
+      "id": "r5-rust-semantic-depth",
+      "slice": "S4",
+      "requirements": [
+        "FR-EXT-010"
+      ],
+      "implementation_prs": [
+        116
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r5/e2e_fr_ext_010_rust_semantic_depth.json",
+          "sha256": "116ffc8e443215eefe89446061f3d8dedce46dcc304afa1bd640e9a5c22f0642"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r5/implementation-observation-local.json",
+          "sha256": "8fcb2f6f270a302d1556c86a701c5abb2967952e6dec42d0d52821052c9fc88e"
+        }
+      ]
+    },
+    {
+      "id": "r6-framework-declarations",
+      "slice": "S4",
+      "requirements": [
+        "FR-EXT-011"
+      ],
+      "implementation_prs": [
+        122
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r6/e2e_fr_ext_011_framework_declarations.json",
+          "sha256": "0b5441ace9af054a3655ec227ecdd45556cc8172433942b7513cc94e04756288"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r6/implementation-observation-local.json",
+          "sha256": "a99a6ed5602621efef2f4379e1563a186b44ff498b7a46884de373ed15c936ec"
+        }
+      ]
+    },
+    {
+      "id": "r7-scip-import",
+      "slice": "S4",
+      "requirements": [
+        "FR-EXT-005"
+      ],
+      "implementation_prs": [
+        130,
+        133
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r7/e2e_fr_ext_005_scip_import.json",
+          "sha256": "33a101d05d4bb1a478cf0aaff43517b1d8397e4685f3e13876eb6049c400c06d"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r7/implementation-observation-local.json",
+          "sha256": "76ac090f6fb60850b9c83b39f007e5834d485b6b5c0366eb0201a0fa50f61ca3"
+        }
+      ]
+    },
+    {
+      "id": "r8-portable-explorer",
+      "slice": "S4",
+      "requirements": [
+        "FR-CLI-001",
+        "FR-DOC-003",
+        "FR-EXP-001",
+        "FR-QRY-001",
+        "FR-QRY-002",
+        "NFR-DET-001",
+        "NFR-PRV-002",
+        "NFR-SEC-001",
+        "NFR-SEC-005"
+      ],
+      "implementation_prs": [
+        135
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r8/e2e_fr_exp_001_portable_explorer.json",
+          "sha256": "4e8dd8be33301a34bdaee595ac25bf00ba86e9e8f9a0fb6c0cf28757ea557581"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r8/implementation-observation-local.json",
+          "sha256": "002b05c4e1acf58b528ae1f6e851f6f6d85cda6806cea1b5037b444cc09cc1b6"
+        }
+      ]
+    },
+    {
+      "id": "s5-incremental-refresh",
+      "slice": "S5",
+      "requirements": [
+        "FR-CLI-004",
+        "FR-INC-001",
+        "FR-INC-002",
+        "FR-INC-003",
+        "INV-INC-001"
+      ],
+      "implementation_prs": [
+        73
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s5/e2e_fr_inc_001_incremental_refresh.json",
+          "sha256": "a594df02d9b6e1d3e2768e9b70e2ad13561cd43b361c14fc7722e3c70be56fe7"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s5/green-observation-local.json",
+          "sha256": "789bfe13db4451fcedfceac9f3601537b7c4be82662b9d2a58cfe6a6f86fcb7a"
+        }
+      ]
+    },
+    {
+      "id": "s6-openapi-federation",
+      "slice": "S6",
+      "requirements": [
+        "FR-CLI-005",
+        "FR-EXT-004",
+        "FR-FED-001",
+        "FR-FED-002"
+      ],
+      "implementation_prs": [
+        91
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s6/e2e_fr_fed_001_openapi_federation.json",
+          "sha256": "f5bd4ecd3244e17ab4e8ba76d7ddb8eed3ea083977039257345ae14fc928f2c6"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s6/implementation-observation-local.json",
+          "sha256": "a700d742f11467bb40f6817b406f59fbcd67c285926d3b0952c90d173bf08454"
+        }
+      ]
+    },
+    {
+      "id": "k1-callable-value-semantics",
+      "slice": "S4",
+      "requirements": [
+        "FR-CLI-001",
+        "FR-DOC-001",
+        "FR-EXP-002",
+        "FR-EXT-012",
+        "FR-QRY-001"
+      ],
+      "implementation_prs": [
+        143,
+        146
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/k1/e2e_fr_ext_012_rust_callable_semantics.json",
+          "sha256": "6eb9665ee1f9f0143d6ebeade6626b8813c4799767dc4089e4bbef03c545eb11"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/k1/implementation-observation-local.json",
+          "sha256": "02f210fcc5ab88db680d670cf3bcbdae0388fcbff09cda865b01458d85afb936"
+        }
+      ]
+    },
+    {
+      "id": "r9-output-capacity",
+      "slice": "S4",
+      "requirements": [
+        "FR-CLI-001",
+        "FR-EXT-012",
+        "INV-BND-001",
+        "NFR-DET-001",
+        "NFR-TST-001",
+        "NFR-TST-002"
+      ],
+      "implementation_prs": [
+        150
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r9-output-capacity/output-capacity-profile-v1.json",
+          "sha256": "afe27d286bea34158b205a7888c93fb7abeff7d3293784a400a5c15366f0b6a0"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r9-output-capacity/red-observation.json",
+          "sha256": "788ab4767a78bad7a26e0836e07de27dcbf666b284d8f9ee96cdd70a52da3013"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s4/r9-output-capacity/implementation-observation-local.json",
+          "sha256": "5016c705590a874a688d3364fe34ce3ae26f98f90155cb78e221dfe79990169d"
+        }
+      ]
+    },
+    {
+      "id": "r10-cfg-declaration-alternatives",
+      "slice": "S4",
+      "requirements": [
+        "FR-CLI-001",
+        "FR-DOC-001",
+        "FR-DOC-002",
+        "FR-DOC-003",
+        "FR-EXP-003",
+        "FR-EXT-013",
+        "FR-QRY-001",
+        "NFR-DET-001",
+        "NFR-TST-001",
+        "NFR-TST-002"
+      ],
+      "implementation_prs": [
+        154
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r10/e2e_fr_ext_013_cfg_declaration_alternatives.json",
+          "sha256": "7f86c239a3b8173ad919b40ee3a2328608de86dfc756afc1cc80eb262b361d48"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r10-cfg-declaration-alternatives/red-observation.json",
+          "sha256": "48d68df2b95736192e4cc8c6b3982e96579ebf438ad361c4a2563bbf50cd9ab1"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s4/r10-cfg-declaration-alternatives/implementation-observation-local.json",
+          "sha256": "fde509e024c7e976bbf829caa6c49277cedef87592ada2e9f4bd3f78d25f2ab9"
+        }
+      ]
+    },
+    {
+      "id": "r11-k1-repository-boundaries",
+      "slice": "S4",
+      "requirements": [
+        "FR-ACQ-005",
+        "FR-CLI-001",
+        "FR-DOC-001",
+        "FR-DOC-002",
+        "FR-DOC-003",
+        "FR-EXP-002",
+        "FR-EXT-012",
+        "FR-QRY-001",
+        "NFR-DET-001",
+        "NFR-PRV-002",
+        "NFR-SEC-001",
+        "NFR-SEC-005",
+        "NFR-TST-001",
+        "NFR-TST-002"
+      ],
+      "implementation_prs": [
+        156
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r11/e2e_fr_ext_012_k1_repository_boundaries.json",
+          "sha256": "3a464738c1a7ba6a2a3d26b78ed207cc34a9526e56876bf7d9b824f49bf513e5"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r11-k1-repository-boundaries/implementation-observation-local.json",
+          "sha256": "baa0337d41ec9d2b3167d7a83f8870d42f858d79b0fbe3f9ae24478a1db0a0df"
+        }
+      ]
+    },
+    {
+      "id": "r12-k1-cfg-alternatives",
+      "slice": "S4",
+      "requirements": [
+        "FR-EXP-004",
+        "FR-EXT-014"
+      ],
+      "implementation_prs": [
+        159
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r12/e2e_fr_ext_014_k1_cfg_alternatives.json",
+          "sha256": "9b3dd45f7cf9f50691a8fbbbf6596d8ca708dee3b8b0dfbf140dc4b2cbec9ba1"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r12-k1-cfg-alternatives/implementation-observation-local.json",
+          "sha256": "a922b1f4aa94f2a739ae54744b2330f64516af177261b8ddf33389ac8f4061b0"
+        }
+      ]
+    },
+    {
+      "id": "r13-k1-scip-composition",
+      "slice": "S4",
+      "requirements": [
+        "FR-EXP-005",
+        "FR-EXT-015"
+      ],
+      "implementation_prs": [
+        161
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r13/e2e_fr_ext_015_k1_scip_composition.json",
+          "sha256": "442252cf3eda5f8c38b198671517f44ed4d2cf810c157acb73c02a9099eb28a6"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r13-k1-scip-composition/implementation-observation-local.json",
+          "sha256": "b29827a0db7f5cf7f42ad419566fcb945736d4885bb54dcea4ff656e08e3297e"
+        }
+      ]
+    },
+    {
+      "id": "r14-expression-bindings",
+      "slice": "S4",
+      "requirements": [
+        "FR-EXP-006",
+        "FR-EXT-016"
+      ],
+      "implementation_prs": [
+        163
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r14/e2e_fr_ext_016_rust_expression_bindings.json",
+          "sha256": "98e90308204bdda24bfd7a8ef85e53a7447ca248640f654b8eefc0ba94bd9378"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r14-rust-expression-bindings/implementation-observation-local.json",
+          "sha256": "a5bf7dc6710526572e29dc650d38c8e998212bfcad632900ee95dd6f0343b954"
+        }
+      ]
+    },
+    {
+      "id": "r15-local-flow",
+      "slice": "S4",
+      "requirements": [
+        "FR-EXP-007",
+        "FR-EXT-017"
+      ],
+      "implementation_prs": [
+        167
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r15/e2e_fr_ext_017_rust_local_flow.json",
+          "sha256": "54a3de2f244e28652354d545400f30088c54db4255ce42c0c82097cfcbaae799"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r15-rust-local-flow/red-observation.json",
+          "sha256": "70c69860bd853970f457246207176d230149159f1dddba50fe2dded5ecb53d6e"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s4/r15-rust-local-flow/implementation-observation-local.json",
+          "sha256": "2af84b506ab4716d8525e3a63a947f04932c2730400274d02070fd8814b12393"
+        }
+      ]
+    },
+    {
+      "id": "r14-r15-real-repository-correction",
+      "slice": "S4",
+      "requirements": [
+        "FR-EXP-006",
+        "FR-EXP-007",
+        "FR-EXT-012",
+        "FR-EXT-016",
+        "FR-EXT-017"
+      ],
+      "implementation_prs": [
+        171
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r14-r15-real-repository-correction/correction-v1.json",
+          "sha256": "8b3678894c3e9259d065f64b4753c3f1f9ac02b58363414dc29fa1e85ca478a1"
+        },
+        {
+          "path": "tests/specifications/s4/r14-r15-real-repository-correction/real-repository-pilots-v1.json",
+          "sha256": "7bb2997a39b807c4182861823dbac4791d24f75aeb2c1bf4760363ec1f981c35"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/red-observation.json",
+          "sha256": "85400de6b6f572b7f2a90f3eb82ecd44b6540f87fc8fb904823fe322b6c5b6cf"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s4/r14-r15-real-repository-correction/green-observation.json",
+          "sha256": "2ca6ebb60499464c29014814e8cf84b8ca826ebeb82ccdb294eac4d249dc7b5b"
+        }
+      ]
+    },
+    {
+      "id": "r16-safe-constant-evaluation",
+      "slice": "S4",
+      "requirements": [
+        "FR-EXP-008",
+        "FR-EXT-020"
+      ],
+      "implementation_prs": [
+        173
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r16/e2e_fr_ext_020_rust_safe_constant_evaluation.json",
+          "sha256": "08c2118e2568ea72b49df7b26bb2adee21436cf3de2e933ca6cfbc50b7e09b3b"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r16-safe-constant-evaluation/red-observation.json",
+          "sha256": "1b3dce6ee3ed8d635793c3a79dcf9743e4a0217cc039f50ba94bb0862ff5de69"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s4/r16-safe-constant-evaluation/implementation-observation-local.json",
+          "sha256": "8d4e568d4a59a50e6926a7b1cc5b564442c3bf643cfc20d6b8d89be0fee20657"
+        }
+      ]
+    },
+    {
+      "id": "r10-r16-versioned-explorer-correction",
+      "slice": "S4",
+      "requirements": [
+        "FR-EXP-003",
+        "FR-EXP-004",
+        "FR-EXP-005",
+        "FR-EXP-006",
+        "FR-EXP-007",
+        "FR-EXP-008"
+      ],
+      "implementation_prs": [
+        177
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/versioned-local-explorer/contract-v1.json",
+          "sha256": "433799f799d2910fb40ad729772c02b5b32b0f8f033d93784b7ff846716141fa"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/versioned-local-explorer/red-observation-local.json",
+          "sha256": "e8d04de052a3de38e462dbaf081f26688c9ce3455e9b20399c26732743d0a4e7"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s4/versioned-local-explorer/green-observation-local.json",
+          "sha256": "c77575b241cc64b82ed5a0321701ccea8bf43ced595f49e41cf8560e2c644ab3"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s4/versioned-local-explorer/browser-observation-local.json",
+          "sha256": "85dbc790f7d3f3d299ecb47380684d339d239c11827e5749e7302fd46fa356ce"
+        }
+      ]
+    },
+    {
+      "id": "r17-function-context",
+      "slice": "S4",
+      "requirements": [
+        "FR-CTX-001",
+        "FR-EXP-009"
+      ],
+      "implementation_prs": [
+        179
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r17/e2e_fr_ctx_001_function_context.json",
+          "sha256": "a89229f56075263b97badf9d944374d70f492fc193ed71acb81aa52f145615f3"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r17-function-context/red-observation-local.json",
+          "sha256": "ebea30c575c3e8d6cf817bd7980eaa4f6165a5221b1c19f2f17b940c59969c15"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s4/r17-function-context/implementation-observation-local.json",
+          "sha256": "28425481774b59f0631998430b0a52ad00d7fb58c7912bf65fb3fa8f532abff7"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s4/r17-function-context/traceability.json",
+          "sha256": "5c9a310f22abf3de3ba6d83fdc7bc58130a5126f4d085bca0017924fe86420ec"
+        }
+      ]
+    },
+    {
+      "id": "s7-implementation-aware-api",
+      "slice": "S7",
+      "requirements": [
+        "DR-SEM-001",
+        "FR-CLI-006",
+        "FR-EXT-018",
+        "FR-EXT-019",
+        "FR-IMP-004",
+        "FR-IMP-005"
+      ],
+      "implementation_prs": [
+        169
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s7/e2e_fr_imp_004_implementation_aware_api_diff.json",
+          "sha256": "d17072db81a456d8ca94b64094f5f09c9fc99004d27458fc8237e911d7386af4"
+        },
+        {
+          "path": "tests/specifications/s7/runtime-v1/runtime-contract-v1.json",
+          "sha256": "7434e8e94f28893894ca6eb34eefc219633a2b31beff7886d36403ccc6fa4459"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/governance-red-observation.json",
+          "sha256": "aa0ff305f8d1a90454c174e1c64ec4137547a45ffc4064b9a43bb487d26d2ef2"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/product-red-observation.json",
+          "sha256": "5d2b558a6aded15673ff8f2f47df73b168f425ef0257f7110f663be86c8633c7"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/implementation-observation-local.json",
+          "sha256": "5528afcfbf99cf5928975cd63d56515618bf8fc1118df0746423d5e4ec2a6d15"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s7/implementation-aware-api-v1/traceability.json",
+          "sha256": "c87cfebb20668db240bfe5b7eb3c1f5d8d0bfdaa7b96074652678c78e1103feb"
+        }
+      ]
+    },
+    {
+      "id": "g0-release-profile",
+      "slice": "S14",
+      "requirements": [
+        "FR-CLI-007",
+        "FR-REL-001"
+      ],
+      "implementation_prs": [
+        181
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/g0/release-profile-v1/e2e_fr_rel_001_release_profile.json",
+          "sha256": "62461feeab23e286b7f38cbf1742d220642d5adef043c5b8e0f062784f35ab24"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/g0/release-profile-v1/red-observation-local.json",
+          "sha256": "29b4c140f7880af365447dc51b15fe33041e83c0753bb7f1afa293313b1de9f7"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/g0/release-profile-v1/implementation-observation-local.json",
+          "sha256": "65c7ed07528fda6c1ed8bdbc1bf772be996e9ca967470a0be3027e9a71f8187b"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/g0/release-profile-v1/traceability.json",
+          "sha256": "85f5a7097adddddecc5565fe3799e9f8d905b19b953b680ecc2f55bb7e2cbeed"
+        }
+      ]
+    },
+    {
+      "id": "g1a-local-distribution",
+      "slice": "S14",
+      "requirements": [
+        "FR-CFG-001",
+        "FR-CLI-008",
+        "FR-REL-002"
+      ],
+      "implementation_prs": [
+        183
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/g1/local-cli-distribution-v1/e2e_fr_cfg_001_local_configuration.json",
+          "sha256": "fe32b6a14f0439ba046adc0872142220e5a3c328a62a69a4e9f44a5963af67b9"
+        },
+        {
+          "path": "tests/specifications/g1/local-cli-distribution-v1/e2e_fr_rel_002_local_distribution.json",
+          "sha256": "4cbf916d00c9f18e1586cac74eded2c772abbc89da35c5cbcd0a7a2c1357adb1"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/g1/local-cli-distribution-v1/red-observation.json",
+          "sha256": "1a1aed99474f4f86fe780ea3275050f52ca097e7fa3d4a94f80e651549c59096"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/g1/local-cli-distribution-v1/implementation-observation-local.json",
+          "sha256": "c7517ebb2f84a04162fd442372f6d03fc054738a15753061a325d9df2a4a0c3b"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/g1/local-cli-distribution-v1/complete-gate-local.json",
+          "sha256": "585063d2e924a0c830b26ca62e0d5a05904bc09ee6fc3829750d5b35f6988c40"
+        }
+      ]
+    },
+    {
+      "id": "g2a-local-upgrade-safety",
+      "slice": "S14",
+      "requirements": [
+        "FR-CLI-009",
+        "FR-CMP-001"
+      ],
+      "implementation_prs": [
+        185
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/g2/local-upgrade-safety-v1/e2e_fr_cmp_001_local_upgrade.json",
+          "sha256": "90203085e0e82f1f6ec3f1817837edd96a6c96e7fbbc17fb04b8a8f85f165df0"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/g2/local-upgrade-safety-v1/red-local.json",
+          "sha256": "445cd4b814f7d26511754d1f63645c8f68e6d4a24f271726117815249aac9bd7"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/g2/local-upgrade-safety-v1/implementation-observation-local.json",
+          "sha256": "43f12a31bd03a0a60e6a3e2b003ec6b3867586191fef6c0757eac1403970e604"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/g2/local-upgrade-safety-v1/performance-evidence-local.json",
+          "sha256": "366165ebd8a372a5a818f550ff9134334c25f397e6fd5d548361a24736a3eb9d"
+        }
+      ]
+    },
+    {
+      "id": "g1b-g8-verifiable-distribution",
+      "slice": "S14",
+      "requirements": [
+        "FR-CLI-010",
+        "FR-REL-001",
+        "FR-REL-002",
+        "FR-REL-003",
+        "NFR-CMP-001",
+        "NFR-MNT-002",
+        "NFR-PORT-001",
+        "NFR-SEC-004",
+        "NFR-SUP-001",
+        "NFR-TST-001",
+        "NFR-TST-002"
+      ],
+      "implementation_prs": [
+        187
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/g8/local-release-candidate-v1/e2e_fr_rel_003_local_release_candidate.json",
+          "sha256": "290289907b6040e5be158738ce94dcf0cc345bc1f0077cc8f5504b96873ae7f8"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/g8/local-release-candidate-v1/red-observation.json",
+          "sha256": "61b8cff65e711b19e0fa9ebefd428542e75585220c69db1e613537e23406aec1"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/g8/local-release-candidate-v1/implementation-observation-local.json",
+          "sha256": "b5b365887abee651718768dde4db76e80036bc5f93a8ff4da384f55f96cab2fa"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/g8/local-release-candidate-v1/supply-chain-observation-local.json",
+          "sha256": "34ba1b1eb8d43fc3942b8dd0a097e7cb56356d01ba3b4c67054e7bc838a93bcc"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/g8/local-release-candidate-v1/traceability.json",
+          "sha256": "088b21d5a8f64ee1b903d9f3eab26b952cdf00ff39719f16b968ad229b733468"
+        }
+      ]
+    },
+    {
+      "id": "r18-trusted-local-source",
+      "slice": "S4",
+      "requirements": [
+        "FR-CLI-011",
+        "FR-CTX-002"
+      ],
+      "implementation_prs": [
+        191
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s4/r18/contract-bundle.json",
+          "sha256": "e0f9403268b7337fd672135cb60350ec5a05495395be865e0ebbf78c95e431e4"
+        },
+        {
+          "path": "tests/specifications/s4/r18/contract-v1.json",
+          "sha256": "0347024fb6a1e17f2ecfcb6a886ed996fad14a6d751bdb39aa435dffc97c2ebc"
+        },
+        {
+          "path": "tests/specifications/s4/r18/e2e_fr_ctx_002_trusted_source_retrieval.json",
+          "sha256": "68964637f81b69ff8383526dcf6550d3883d1245d97f1e51dede0e6f525647cb"
+        },
+        {
+          "path": "tests/specifications/s4/r18/error-v29.schema.json",
+          "sha256": "6549fb4a7bee3cacd4b20b5530327d2eaa32be5ea089711820ff2aba7afd9403"
+        },
+        {
+          "path": "tests/specifications/s4/r18/trusted-source-excerpt-v1.schema.json",
+          "sha256": "5f9220a1b6f0844e5d5fb1ed8318556e6dc190d96096920a492428a75b51f99a"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/complete-gate-summary.log",
+          "sha256": "66cb417fade4d13da837b339c777c8d991099860b31350e645e7cbdc2411f675"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/focused-green.log",
+          "sha256": "09cc758d8c4f308f6f46a3b399c95c60a91233015bc11526b818fc004dd7a30d"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/implementation-observation-local.json",
+          "sha256": "539dc83184eead4cb02947ac60fbf2a4aefc6e709baa802009b92e80491246e7"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/lekton-diagnostic.log",
+          "sha256": "e7bd32749c0ed4c0a926ce4239ae436e052074ec0d4b2935a4b438d699c514f1"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/red-observation-local.json",
+          "sha256": "b58a9ce5465a09a1c23c30344183d0c4de342b93aa603ec6ccef0ef2074b62ae"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/red.log",
+          "sha256": "f05991d9405325061350044372560d2d126d3c8698a03cc266bb1d3ad5a8b16e"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/traceability.json",
+          "sha256": "a04c680c33e59c2e3803186b18661fb141aef33c93c6fb3e8566d1232b8bdda1"
+        }
+      ]
+    },
+    {
+      "id": "r19-git-backed-semantic-impact",
+      "slice": "S7",
+      "requirements": [
+        "FR-CLI-006",
+        "FR-CLI-012",
+        "FR-IMP-006"
+      ],
+      "implementation_prs": [
+        197
+      ],
+      "oracle_paths": [
+        {
+          "path": "tests/specifications/s7/r19/codenoesis-error-v30.schema.json",
+          "sha256": "134527cf19a562267218c80ca2745df27a876967ac2dbb8f9155ee589146fe5d"
+        },
+        {
+          "path": "tests/specifications/s7/r19/contract-bundle.json",
+          "sha256": "c1b16f7e9ed01f9ba9c80e86e89c3f53b51aa2b11c9423246179d5aef68f0e5b"
+        },
+        {
+          "path": "tests/specifications/s7/r19/e2e_fr_imp_006_git_evidence_navigation.json",
+          "sha256": "f1e202496e7b644b0864c6f14c86b42add60d935572903b0de48f4cd03ea77f5"
+        },
+        {
+          "path": "tests/specifications/s7/r19/impact-git-workspace-v1.schema.json",
+          "sha256": "b1b7290f2b2a7a8a43ea2e05e175613850645375e5ca7cfa5098f7148dc51710"
+        },
+        {
+          "path": "tests/specifications/s7/r19/runtime-contract-v1.json",
+          "sha256": "6656549b14dc6f7a3138fd73a9309e1aac2885e74d3f0c1fb31f70a77af0120c"
+        },
+        {
+          "path": "tests/specifications/s7/r19/semantic-compatibility-report-v2.schema.json",
+          "sha256": "8e53ad032a6189c4ebf062e9efc571ba05e13dfc177fd9dd9e39bfcb9fffabee"
+        },
+        {
+          "path": "tests/specifications/s7/r19/threat-model-v1.json",
+          "sha256": "37d6486e99778797a6beb616dee88a8b45be1723a42d4d9964f7fa18d721e90c"
+        },
+        {
+          "path": "tests/specifications/s7/r19/trusted-impact-source-excerpt-v1.schema.json",
+          "sha256": "73d2ba99a9d1d5017d43753bcb678b48cabd1165e1611ce4411074e300d33f9b"
+        }
+      ],
+      "evidence_paths": [
+        {
+          "path": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/complete-gate-summary.log",
+          "sha256": "8e5dab74eb9c8423ada42e00026d10c360f5884d34c6336d3d71ca9a2910f7b9"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/correction-round-1.log",
+          "sha256": "ad5ff84216d148869b3a9daecaca60f71872099eb072b3a178a0e7420ec13266"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/focused-green.log",
+          "sha256": "c63a6969b5b27445a79cb982f0b8d1c6177351a48c7c0f913d424b70dfe9770c"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/governance-red.log",
+          "sha256": "6f4e732e4177c85a2a4724de65f9b20a8943c9ccf3524709db404bb2ea221c94"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/implementation-observation-local.json",
+          "sha256": "b5d58ccf780a6523bf579053e985712001f7a1875f38ef2dd4a00a5be2bfe21d"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/product-red.log",
+          "sha256": "0cafdc2aef92d9bd4b896bb3dc22f36ebbf1336c3142cd19294721d2d1b613d5"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/red-observation.json",
+          "sha256": "d241b20c62324fff43b8dbef6172c3f1953ae8e9d9ad24fe62ab8bdd09995777"
+        },
+        {
+          "path": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/traceability.json",
+          "sha256": "beac71d641cc5e8c263418802ed3e81c7bc06238d15b6ffa1084406d8200ba3c"
+        }
+      ]
+    }
+  ],
+  "repository_evidence": [
+    {
+      "id": "v3-red-log",
+      "class": "retained_red",
+      "path": "tests/evidence/verification/local-baseline-v3/red.log",
+      "sha256": "861923bd496522c1a9017983956f98d412a2efbf9e411717be729f4ad516a402"
+    },
+    {
+      "id": "v3-red-observation",
+      "class": "retained_red",
+      "path": "tests/evidence/verification/local-baseline-v3/red-observation.json",
+      "sha256": "ad92c72bc9494a468e4ca30880bf270393b2a0b2dd9d1c9f70e6d13bf3ebceb3"
+    },
+    {
+      "id": "r18-focused-green",
+      "class": "focused_green",
+      "path": "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/focused-green.log",
+      "sha256": "09cc758d8c4f308f6f46a3b399c95c60a91233015bc11526b818fc004dd7a30d"
+    },
+    {
+      "id": "r19-focused-green",
+      "class": "focused_green",
+      "path": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/focused-green.log",
+      "sha256": "c63a6969b5b27445a79cb982f0b8d1c6177351a48c7c0f913d424b70dfe9770c"
+    },
+    {
+      "id": "r18-complete-gate",
+      "class": "full_regression",
+      "path": "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/complete-gate-summary.log",
+      "sha256": "66cb417fade4d13da837b339c777c8d991099860b31350e645e7cbdc2411f675"
+    },
+    {
+      "id": "r19-complete-gate",
+      "class": "full_regression",
+      "path": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/complete-gate-summary.log",
+      "sha256": "8e5dab74eb9c8423ada42e00026d10c360f5884d34c6336d3d71ca9a2910f7b9"
+    },
+    {
+      "id": "r18-implementation-observation",
+      "class": "security",
+      "path": "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/implementation-observation-local.json",
+      "sha256": "539dc83184eead4cb02947ac60fbf2a4aefc6e709baa802009b92e80491246e7"
+    },
+    {
+      "id": "r19-implementation-observation",
+      "class": "security",
+      "path": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/implementation-observation-local.json",
+      "sha256": "b5d58ccf780a6523bf579053e985712001f7a1875f38ef2dd4a00a5be2bfe21d"
+    },
+    {
+      "id": "r18-traceability",
+      "class": "traceability",
+      "path": "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/traceability.json",
+      "sha256": "a04c680c33e59c2e3803186b18661fb141aef33c93c6fb3e8566d1232b8bdda1"
+    },
+    {
+      "id": "r19-traceability",
+      "class": "traceability",
+      "path": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/traceability.json",
+      "sha256": "beac71d641cc5e8c263418802ed3e81c7bc06238d15b6ffa1084406d8200ba3c"
+    },
+    {
+      "id": "r18-lekton-pilot",
+      "class": "real_repository_pilot",
+      "path": "crates/noesis/tests/evidence/s4/r18-trusted-source-retrieval/lekton-diagnostic.log",
+      "sha256": "e7bd32749c0ed4c0a926ce4239ae436e052074ec0d4b2935a4b438d699c514f1"
+    },
+    {
+      "id": "r19-correction",
+      "class": "full_regression",
+      "path": "crates/noesis/tests/evidence/s7/r19-git-evidence-navigation/correction-round-1.log",
+      "sha256": "ad5ff84216d148869b3a9daecaca60f71872099eb072b3a178a0e7420ec13266"
+    },
+    {
+      "id": "v2-manifest",
+      "class": "full_regression",
+      "path": "tests/evidence/verification/local-baseline-v2/manifest.json",
+      "sha256": "123fb538e5f0566470d6f2c740b1e54f3fada3281e522179ed5e914f508e10e3"
+    },
+    {
+      "id": "remote-runs",
+      "class": "traceability",
+      "path": "tests/evidence/verification/local-baseline-v3/remote-runs.json",
+      "sha256": "c81c55174f4a646110af8fddd79253bf74961131c5b990af1df3e55ab471c2e7"
+    },
+    {
+      "id": "remote-log-index",
+      "class": "traceability",
+      "path": "tests/evidence/verification/local-baseline-v3/remote-log-index.json",
+      "sha256": "93cfbf7b149825a7c7e444ef27fe2f2ff0e4d7e065f48744493a86ef64d694d6"
+    },
+    {
+      "id": "decision-0041",
+      "class": "traceability",
+      "path": "docs/software/decisions/0041-local-baseline-verification-v3.md",
+      "sha256": "01152f62c0f4e70b84faf3debd215e2e12cacc645d743e98cfb9c7e476ff43e2"
+    },
+    {
+      "id": "v3-plan",
+      "class": "traceability",
+      "path": "tests/specifications/verification/local-baseline-v3/plan.json",
+      "sha256": "5684a31449720fedea068b53e3ea992c8fab55aa869a4a2208fe99e0edef448a"
+    },
+    {
+      "id": "v3-catalog",
+      "class": "traceability",
+      "path": "tests/specifications/verification/local-baseline-v3/profile-catalog.json",
+      "sha256": "f8a2186adea45ff052138b759b6aee4915b195d0802e31b41f4265a227c9c732"
+    },
+    {
+      "id": "v3-schema",
+      "class": "traceability",
+      "path": "tests/specifications/verification/local-baseline-v3/manifest.schema.json",
+      "sha256": "efebb43d3e794ba71735e83ad32ceed9b5f178b9ba1da0983749915273b7c2d7"
+    },
+    {
+      "id": "r18-contract",
+      "class": "security",
+      "path": "tests/specifications/s4/r18/contract-bundle.json",
+      "sha256": "e0f9403268b7337fd672135cb60350ec5a05495395be865e0ebbf78c95e431e4"
+    },
+    {
+      "id": "r18-error-schema",
+      "class": "security",
+      "path": "tests/specifications/s4/r18/error-v29.schema.json",
+      "sha256": "6549fb4a7bee3cacd4b20b5530327d2eaa32be5ea089711820ff2aba7afd9403"
+    },
+    {
+      "id": "r19-contract",
+      "class": "security",
+      "path": "tests/specifications/s7/r19/contract-bundle.json",
+      "sha256": "c1b16f7e9ed01f9ba9c80e86e89c3f53b51aa2b11c9423246179d5aef68f0e5b"
+    },
+    {
+      "id": "r19-threat-model",
+      "class": "security",
+      "path": "tests/specifications/s7/r19/threat-model-v1.json",
+      "sha256": "37d6486e99778797a6beb616dee88a8b45be1723a42d4d9964f7fa18d721e90c"
+    },
+    {
+      "id": "r19-e2e",
+      "class": "real_repository_pilot",
+      "path": "tests/specifications/s7/r19/e2e_fr_imp_006_git_evidence_navigation.json",
+      "sha256": "f1e202496e7b644b0864c6f14c86b42add60d935572903b0de48f4cd03ea77f5"
+    },
+    {
+      "id": "v3-focused-green-log",
+      "class": "focused_green",
+      "path": "tests/evidence/verification/local-baseline-v3/focused-green.log",
+      "sha256": "e8e4b402f0ac98fe97a1f52582d683b8421da0e5585725fbd72d1ecd118665d2"
+    },
+    {
+      "id": "v3-focused-green-observation",
+      "class": "focused_green",
+      "path": "tests/evidence/verification/local-baseline-v3/focused-green-observation.json",
+      "sha256": "31e0860a9cdfc7b4c3e0aaafca7f16adfd21161e32584f49c1898ae01d2b9dc0"
+    },
+    {
+      "id": "v3-public-command",
+      "class": "focused_green",
+      "path": "tests/evidence/verification/local-baseline-v3/public-command.log",
+      "sha256": "38f8d98e5c8c31d5444c12159b4c7f9d386de10bec8694044ecc707c8e3b1071"
+    },
+    {
+      "id": "v2-compatibility-red-log",
+      "class": "retained_red",
+      "path": "tests/evidence/verification/local-baseline-v3/v2-compatibility-red.log",
+      "sha256": "f29166d815f1ef89c3df22f5018cefe099ef828121915d8a2d093f71eca24d46"
+    },
+    {
+      "id": "v2-compatibility-red-observation",
+      "class": "retained_red",
+      "path": "tests/evidence/verification/local-baseline-v3/v2-compatibility-red-observation.json",
+      "sha256": "dab9a99f7d3a234260022c71fbd81e4a95ffb2951334993be22d21fa864e2a95"
+    },
+    {
+      "id": "v2-compatibility-green-log",
+      "class": "focused_green",
+      "path": "tests/evidence/verification/local-baseline-v3/v2-compatibility-green.log",
+      "sha256": "4409d00e75c0d2da68cadd6807cd21708ee0815717ab5bb19f9d539c499fa012"
+    },
+    {
+      "id": "v2-validator-green-log",
+      "class": "focused_green",
+      "path": "tests/evidence/verification/local-baseline-v3/v2-validator-green.log",
+      "sha256": "f0ce1139a6a774292dc5da35d8c670964edcac136f31522bbbbda3d95a7d1546"
+    },
+    {
+      "id": "v2-compatibility-green-observation",
+      "class": "focused_green",
+      "path": "tests/evidence/verification/local-baseline-v3/v2-compatibility-green-observation.json",
+      "sha256": "ad3c29660cb75cc7bcc68c7d47847b2f6ad38b6cd4ec50916278ba0664463cf5"
+    },
+    {
+      "id": "corrected-v2-validator",
+      "class": "traceability",
+      "path": "scripts/verify_local_baseline_v2.py",
+      "sha256": "b05c5bf1f9bba0ae6e2ea256489ba777b47f0dfb74c25b9a76cf36c86edaa2b0"
+    },
+    {
+      "id": "v2-compatibility-regression",
+      "class": "traceability",
+      "path": "scripts/tests/test_local_baseline_verification_v2.py",
+      "sha256": "7fdab3e515b0f6fbc48f0962ef5c385b64432f5e9aca0508c0a595719b113c8b"
+    },
+    {
+      "id": "v3-current-lifecycle",
+      "class": "traceability",
+      "path": "docs/software/verification.md",
+      "sha256": "cc793c30f55dad9932c407f08f485fe16838d64eeff3d1e27a4ff62c45b632aa"
+    },
+    {
+      "id": "v3-self-binding-regression",
+      "class": "traceability",
+      "path": "scripts/tests/test_local_baseline_verification_v3.py",
+      "sha256": "6e3eb38915dd74307cc6d2a4ccc7b9a6ac723c643f41714999d3d648fc33d118"
+    },
+    {
+      "id": "r18-corrected-contract-test",
+      "class": "traceability",
+      "path": "scripts/tests/test_s4_r18_trusted_source_retrieval_contract.py",
+      "sha256": "47af74ac061ff9cbb9daf5f91d0479af78b2833d070300df746063c5e3622eac"
+    },
+    {
+      "id": "r19-corrected-contract-test",
+      "class": "traceability",
+      "path": "scripts/tests/test_s7_r19_git_evidence_contract.py",
+      "sha256": "52ed799722ee3139c4eb54da8c60c9161a1bf778a9c15317df694c79a1ef2f28"
+    },
+    {
+      "id": "r18-r19-lifecycle-red-log",
+      "class": "retained_red",
+      "path": "tests/evidence/verification/local-baseline-v3/r18-r19-lifecycle-red.log",
+      "sha256": "5c003eba49c1b774500b02141c1e93edcb949514aa8ae06fd4ab7831249971b9"
+    },
+    {
+      "id": "r18-r19-lifecycle-red-observation",
+      "class": "retained_red",
+      "path": "tests/evidence/verification/local-baseline-v3/r18-r19-lifecycle-red-observation.json",
+      "sha256": "c19d008e269011a0ebf6add55ee3089bdf13ecee240f636d81c8adc5f71244c5"
+    },
+    {
+      "id": "r18-r19-self-binding-red-log",
+      "class": "retained_red",
+      "path": "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-red.log",
+      "sha256": "4f66195374c9444ef1792d4a377723d909c64e4892c07d28f1dadb191765d648"
+    },
+    {
+      "id": "r18-r19-self-binding-red-observation",
+      "class": "retained_red",
+      "path": "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-red-observation.json",
+      "sha256": "5c7493ebb0eaae271fdbb4e8ea12bffc7dea260c38975e0482769b80d1615de7"
+    },
+    {
+      "id": "r18-r19-self-binding-green-log",
+      "class": "focused_green",
+      "path": "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-green.log",
+      "sha256": "2de3b194941f2635f36464e5962249ce3e5e84754df9c64bd991d9d50d44f0f9"
+    },
+    {
+      "id": "r18-r19-self-binding-green-observation",
+      "class": "focused_green",
+      "path": "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-green-observation.json",
+      "sha256": "ad2dff539c34eb86eb0b52a4264f31c2699d6eda54a78c785f1734c846bccdc7"
+    },
+    {
+      "id": "v3-complete-gate-summary",
+      "class": "full_regression",
+      "path": "tests/evidence/verification/local-baseline-v3/complete-gate-summary.log",
+      "sha256": "b3a4ac56bd8f546ea32510baafc4bd70166d4d0d6d14b1c8f2934d2a345f1b1a"
+    },
+    {
+      "id": "v3-complete-gate-log",
+      "class": "full_regression",
+      "path": "tests/evidence/verification/local-baseline-v3/complete-gate.log.gz.base64",
+      "sha256": "e7770645f0a9dd6c133710bb16ff8259bcb2a5e723f25aba377c859366625262"
+    },
+    {
+      "id": "v3-complete-gate-observation",
+      "class": "full_regression",
+      "path": "tests/evidence/verification/local-baseline-v3/complete-gate-observation.json",
+      "sha256": "bb2bbd4d3cb7525110a2a7b8d10517d640ffe04802e086aa82f881319d476d84"
+    }
+  ],
+  "remote_runs": [
+    {
+      "profile": "r18-trusted-local-source",
+      "kind": "ci",
+      "run_id": 32229313149,
+      "head_sha": "16ef5ceaea6ad14d9838f84856f6ca3d445daa67",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/32229313149"
+    },
+    {
+      "profile": "r18-trusted-local-source",
+      "kind": "benchmark",
+      "run_id": 32229313162,
+      "head_sha": "16ef5ceaea6ad14d9838f84856f6ca3d445daa67",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/32229313162"
+    },
+    {
+      "profile": "r18-trusted-local-source",
+      "kind": "codeql",
+      "run_id": 32229311917,
+      "head_sha": "16ef5ceaea6ad14d9838f84856f6ca3d445daa67",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/32229311917"
+    },
+    {
+      "profile": "r18-trusted-local-source",
+      "kind": "review-policy",
+      "run_id": 32229313006,
+      "head_sha": "16ef5ceaea6ad14d9838f84856f6ca3d445daa67",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/32229313006"
+    },
+    {
+      "profile": "r19-git-backed-semantic-impact",
+      "kind": "ci",
+      "run_id": 33203760261,
+      "head_sha": "c3cbced9ee2017b61ec8e0b10191553edc733004",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/33203760261"
+    },
+    {
+      "profile": "r19-git-backed-semantic-impact",
+      "kind": "benchmark",
+      "run_id": 33203760248,
+      "head_sha": "c3cbced9ee2017b61ec8e0b10191553edc733004",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/33203760248"
+    },
+    {
+      "profile": "r19-git-backed-semantic-impact",
+      "kind": "codeql",
+      "run_id": 33203757887,
+      "head_sha": "c3cbced9ee2017b61ec8e0b10191553edc733004",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/33203757887"
+    },
+    {
+      "profile": "r19-git-backed-semantic-impact",
+      "kind": "review-policy",
+      "run_id": 33203758766,
+      "head_sha": "c3cbced9ee2017b61ec8e0b10191553edc733004",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/33203758766"
+    }
+  ],
+  "remote_logs": [
+    {
+      "id": "r18-ci-policy",
+      "run_id": 32229313149,
+      "job_id": 96001112520,
+      "head_sha": "16ef5ceaea6ad14d9838f84856f6ca3d445daa67",
+      "source_sha256": "cbbe8f2ae8f57b1d6bf8772062d24d37373faebf29896e0f6de9900fd0895cbb",
+      "normalization": "crlf-to-lf-and-strip-ansi-v1",
+      "path": "tests/evidence/verification/local-baseline-v3/remote-logs/r18-ci-policy.log",
+      "sha256": "65d1e631c89ff132a0e46e0fb2415a352b44df53df6a2ad204bf18be86855bed"
+    },
+    {
+      "id": "r18-benchmark-policy",
+      "run_id": 32229313162,
+      "job_id": 95996197939,
+      "head_sha": "16ef5ceaea6ad14d9838f84856f6ca3d445daa67",
+      "source_sha256": "bc24fc28d769c83c8d941db2c3251fc3920d49055dfec2f921cc8417e0a51b25",
+      "normalization": "crlf-to-lf-and-strip-ansi-v1",
+      "path": "tests/evidence/verification/local-baseline-v3/remote-logs/r18-benchmark-policy.log",
+      "sha256": "6b618cd308f24618bb9c6f725d6bfc80727be42a1dcba2b2e81d6eb02f2aac48"
+    },
+    {
+      "id": "r18-codeql-rust",
+      "run_id": 32229311917,
+      "job_id": 95995561830,
+      "head_sha": "16ef5ceaea6ad14d9838f84856f6ca3d445daa67",
+      "source_sha256": "41d1c26fc2354937d6178aed724ef4102704e43e7eeb2a8dba76a6ede840eeab",
+      "normalization": "crlf-to-lf-and-strip-ansi-v1",
+      "path": "tests/evidence/verification/local-baseline-v3/remote-logs/r18-codeql-rust.log.gz.base64",
+      "sha256": "c77a47beba87b99e8e5f8ff36105069cd0dce37dd5995cfd9af21910b65c52ee"
+    },
+    {
+      "id": "r18-review-orchestrator",
+      "run_id": 32229313006,
+      "job_id": 95995638485,
+      "head_sha": "16ef5ceaea6ad14d9838f84856f6ca3d445daa67",
+      "source_sha256": "cba2920f4dc59e65a2acd1a86e3742259c195ec02fb9173f78c5eae739cbf327",
+      "normalization": "crlf-to-lf-and-strip-ansi-v1",
+      "path": "tests/evidence/verification/local-baseline-v3/remote-logs/r18-review-orchestrator.log",
+      "sha256": "aec6bde81c8ee47a89b177510f121374aafe1f61e6c710f80be84761da9716ac"
+    },
+    {
+      "id": "r19-ci-windows",
+      "run_id": 33203760261,
+      "job_id": 98959469058,
+      "head_sha": "c3cbced9ee2017b61ec8e0b10191553edc733004",
+      "source_sha256": "ff7ba5a111f8bc62fc958f0a8d5195575d2adb67f0c94003f4fae1e56c397c03",
+      "normalization": "crlf-to-lf-and-strip-ansi-v1",
+      "path": "tests/evidence/verification/local-baseline-v3/remote-logs/r19-ci-windows.log",
+      "sha256": "8910b2044ff815756f673ad80fab5580b9619941e9141f9a010187048cfa5d44"
+    },
+    {
+      "id": "r19-ci-policy",
+      "run_id": 33203760261,
+      "job_id": 98965049693,
+      "head_sha": "c3cbced9ee2017b61ec8e0b10191553edc733004",
+      "source_sha256": "0938451a9813e958f48319f86cefe1690626d99e08ad8a12ea0e6e9012e2b420",
+      "normalization": "crlf-to-lf-and-strip-ansi-v1",
+      "path": "tests/evidence/verification/local-baseline-v3/remote-logs/r19-ci-policy.log",
+      "sha256": "df0e08ad37d17b0a4e6de5452bff2e6606ff533b55074c266f2b08b60f211ffb"
+    },
+    {
+      "id": "r19-benchmark-policy",
+      "run_id": 33203760248,
+      "job_id": 98960148501,
+      "head_sha": "c3cbced9ee2017b61ec8e0b10191553edc733004",
+      "source_sha256": "5f08942ab1b6c7f46fb4f5c094a4c42eec39bc2ed4daefd82777e588d46d2f00",
+      "normalization": "crlf-to-lf-and-strip-ansi-v1",
+      "path": "tests/evidence/verification/local-baseline-v3/remote-logs/r19-benchmark-policy.log",
+      "sha256": "a499b50e6a9d02ef1081ee44cdbb44c2f4d1e9422dc90c5e722bad5975b29583"
+    },
+    {
+      "id": "r19-codeql-rust",
+      "run_id": 33203757887,
+      "job_id": 98959463958,
+      "head_sha": "c3cbced9ee2017b61ec8e0b10191553edc733004",
+      "source_sha256": "a523387de851a6e116e8241b2d94896f192d4b699c5c422b47e142055e81c5ad",
+      "normalization": "crlf-to-lf-and-strip-ansi-v1",
+      "path": "tests/evidence/verification/local-baseline-v3/remote-logs/r19-codeql-rust.log",
+      "sha256": "f831f5522d53f9094c42bee5165d6c04800f97a0f960ba7faa8c3035514a9406"
+    },
+    {
+      "id": "r19-review-orchestrator",
+      "run_id": 33203758766,
+      "job_id": 98959551038,
+      "head_sha": "c3cbced9ee2017b61ec8e0b10191553edc733004",
+      "source_sha256": "4e7bdef89f38bc97689f1ea30cb41fdaaf931a4af4e6ace28b567bfc9a264678",
+      "normalization": "crlf-to-lf-and-strip-ansi-v1",
+      "path": "tests/evidence/verification/local-baseline-v3/remote-logs/r19-review-orchestrator.log",
+      "sha256": "dfc7b722f1fec3ed38328063f5f326dd37d39697763323eef615abfa5b19daf1"
+    }
+  ],
+  "required_gates": [
+    {
+      "id": "retained_red",
+      "status": "green",
+      "evidence_ids": [
+        "v3-red-log",
+        "v3-red-observation",
+        "v2-compatibility-red-log",
+        "v2-compatibility-red-observation",
+        "r18-r19-lifecycle-red-log",
+        "r18-r19-lifecycle-red-observation",
+        "r18-r19-self-binding-red-log",
+        "r18-r19-self-binding-red-observation"
+      ]
+    },
+    {
+      "id": "focused_green",
+      "status": "green",
+      "evidence_ids": [
+        "r18-focused-green",
+        "r19-focused-green",
+        "v3-focused-green-log",
+        "v3-focused-green-observation",
+        "v3-public-command",
+        "v2-compatibility-green-log",
+        "v2-validator-green-log",
+        "v2-compatibility-green-observation",
+        "r18-r19-self-binding-green-log",
+        "r18-r19-self-binding-green-observation"
+      ]
+    },
+    {
+      "id": "full_regression",
+      "status": "green",
+      "evidence_ids": [
+        "r18-complete-gate",
+        "r19-complete-gate",
+        "v2-manifest",
+        "v3-complete-gate-summary",
+        "v3-complete-gate-log",
+        "v3-complete-gate-observation"
+      ]
+    },
+    {
+      "id": "linux_native",
+      "status": "green",
+      "evidence_ids": [
+        "run:32229313149",
+        "run:33203760261"
+      ]
+    },
+    {
+      "id": "macos_native",
+      "status": "green",
+      "evidence_ids": [
+        "run:32229313149",
+        "run:33203760261"
+      ]
+    },
+    {
+      "id": "windows_native",
+      "status": "green",
+      "evidence_ids": [
+        "run:32229313149",
+        "run:33203760261",
+        "r19-ci-windows"
+      ]
+    },
+    {
+      "id": "codeql",
+      "status": "green",
+      "evidence_ids": [
+        "r18-codeql-rust",
+        "r19-codeql-rust"
+      ]
+    },
+    {
+      "id": "benchmark_integrity",
+      "status": "green",
+      "evidence_ids": [
+        "r18-benchmark-policy",
+        "r19-benchmark-policy"
+      ]
+    },
+    {
+      "id": "policy_gate",
+      "status": "green",
+      "evidence_ids": [
+        "r18-ci-policy",
+        "r19-ci-policy"
+      ]
+    },
+    {
+      "id": "security",
+      "status": "green",
+      "evidence_ids": [
+        "r18-implementation-observation",
+        "r19-implementation-observation",
+        "r19-threat-model",
+        "r18-codeql-rust",
+        "r19-codeql-rust"
+      ]
+    },
+    {
+      "id": "browser",
+      "status": "green",
+      "evidence_ids": [
+        "v2-manifest"
+      ]
+    },
+    {
+      "id": "real_repository_pilot",
+      "status": "green",
+      "evidence_ids": [
+        "r18-lekton-pilot",
+        "r19-e2e",
+        "r19-implementation-observation"
+      ]
+    },
+    {
+      "id": "supply_chain",
+      "status": "green",
+      "evidence_ids": [
+        "run:32229313149",
+        "run:33203760261",
+        "v2-manifest"
+      ]
+    },
+    {
+      "id": "traceability",
+      "status": "green",
+      "evidence_ids": [
+        "r18-traceability",
+        "r19-traceability",
+        "remote-runs",
+        "v3-plan",
+        "v3-catalog",
+        "corrected-v2-validator",
+        "v2-compatibility-regression",
+        "v3-current-lifecycle",
+        "v3-self-binding-regression",
+        "r18-corrected-contract-test",
+        "r19-corrected-contract-test"
+      ]
+    },
+    {
+      "id": "independent_review",
+      "status": "green",
+      "evidence_ids": [
+        "r18-review-orchestrator",
+        "r19-review-orchestrator"
+      ]
+    }
+  ],
+  "environment": {
+    "os": "Darwin 25.6.0",
+    "architecture": "arm64",
+    "rust_toolchain": "1.97.1 (8bab26f4f 2026-07-14)",
+    "features": "workspace --all-targets --all-features --locked",
+    "python": "3.9.6",
+    "network_product_path": "disabled",
+    "model_provider_path": "disabled"
+  },
+  "limitations": [
+    "V3 verifies exactly the immutable V2 32-profile baseline plus R18 and R19; no other profile is promoted.",
+    "The V3 authoring agent is not the independent verifier; activation remains pending independent review and protected manual merge.",
+    "G9, release, publication, support, SLA, EOL, Local GA, and Server GA remain outside this package.",
+    "Remote source-log digests bind the downloaded GitHub records; committed normalized carriers permit offline replay without granting network authority."
+  ],
+  "review": {
+    "authoring_agent_is_independent_reviewer": false,
+    "required": true,
+    "activation": "independent_review_then_protected_manual_merge_of_exact_head",
+    "release_authority": false
+  }
+}

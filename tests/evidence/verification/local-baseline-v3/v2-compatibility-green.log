@@ -1,0 +1,6 @@
+test_versioned_descendant_keeps_historical_checkpoint_binding (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.146s
+
+OK

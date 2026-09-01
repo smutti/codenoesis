@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codenoesis.dev/schemas/local-baseline-verification-v3.json",
+  "title": "LocalBaselineVerificationV3 evidence manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "issue",
+    "base_sha",
+    "governance_checkpoint_sha",
+    "red_commit_sha",
+    "evidence_parent_sha",
+    "verification_subject",
+    "product_tree_sha256",
+    "status",
+    "plan",
+    "profile_catalog",
+    "v2_inheritance",
+    "profiles",
+    "repository_evidence",
+    "remote_runs",
+    "remote_logs",
+    "required_gates",
+    "environment",
+    "limitations",
+    "review"
+  ],
+  "properties": {
+    "schema_version": {"const": "codenoesis.local-baseline-verification/v3"},
+    "issue": {"const": "https://github.com/smutti/codenoesis/issues/201"},
+    "base_sha": {"const": "c783b612777a86e2f88620ece987723bb230c51c"},
+    "governance_checkpoint_sha": {"$ref": "#/$defs/git_sha"},
+    "red_commit_sha": {"$ref": "#/$defs/git_sha"},
+    "evidence_parent_sha": {"$ref": "#/$defs/git_sha"},
+    "verification_subject": {"const": "c783b612777a86e2f88620ece987723bb230c51c"},
+    "product_tree_sha256": {"$ref": "#/$defs/sha256"},
+    "status": {"const": "candidate_verified_pending_merge"},
+    "plan": {"$ref": "#/$defs/path_digest"},
+    "profile_catalog": {"$ref": "#/$defs/path_digest"},
+    "v2_inheritance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["catalog", "plan", "manifest_schema", "manifest", "validator", "profile_count", "activation_merge"],
+      "properties": {
+        "catalog": {"$ref": "#/$defs/path_digest"},
+        "plan": {"$ref": "#/$defs/path_digest"},
+        "manifest_schema": {"$ref": "#/$defs/path_digest"},
+        "manifest": {"$ref": "#/$defs/path_digest"},
+        "validator": {"$ref": "#/$defs/path_digest"},
+        "profile_count": {"const": 32},
+        "activation_merge": {"const": "1de6a420f25a1c7eb74d07a99f1800dde90eefa8"}
+      }
+    },
+    "profiles": {
+      "type": "array",
+      "minItems": 34,
+      "maxItems": 34,
+      "items": {"$ref": "#/$defs/profile"}
+    },
+    "repository_evidence": {
+      "type": "array",
+      "minItems": 15,
+      "items": {"$ref": "#/$defs/named_path_digest"}
+    },
+    "remote_runs": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {"$ref": "#/$defs/remote_run"}
+    },
+    "remote_logs": {
+      "type": "array",
+      "minItems": 8,
+      "items": {"$ref": "#/$defs/remote_log"}
+    },
+    "required_gates": {
+      "type": "array",
+      "minItems": 15,
+      "maxItems": 15,
+      "items": {"$ref": "#/$defs/gate"}
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["os", "architecture", "rust_toolchain", "features", "python", "network_product_path", "model_provider_path"],
+      "properties": {
+        "os": {"type": "string", "minLength": 1},
+        "architecture": {"type": "string", "minLength": 1},
+        "rust_toolchain": {"type": "string", "minLength": 1},
+        "features": {"type": "string", "minLength": 1},
+        "python": {"type": "string", "minLength": 1},
+        "network_product_path": {"const": "disabled"},
+        "model_provider_path": {"const": "disabled"}
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authoring_agent_is_independent_reviewer", "required", "activation", "release_authority"],
+      "properties": {
+        "authoring_agent_is_independent_reviewer": {"const": false},
+        "required": {"const": true},
+        "activation": {"const": "independent_review_then_protected_manual_merge_of_exact_head"},
+        "release_authority": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "git_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "safe_path": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\u0000).+$"},
+    "path_digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/safe_path"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "named_path_digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "class", "path", "sha256"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "class": {"type": "string", "minLength": 1},
+        "path": {"$ref": "#/$defs/safe_path"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "slice", "requirements", "implementation_prs", "oracle_paths", "evidence_paths"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "slice": {"type": "string", "pattern": "^S(?:[0-9]|1[0-4])$"},
+        "requirements": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "implementation_prs": {"type": "array", "minItems": 1, "items": {"type": "integer", "minimum": 1}},
+        "oracle_paths": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/path_digest"}},
+        "evidence_paths": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/path_digest"}}
+      }
+    },
+    "remote_run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile", "kind", "run_id", "head_sha", "conclusion", "url"],
+      "properties": {
+        "profile": {"enum": ["r18-trusted-local-source", "r19-git-backed-semantic-impact"]},
+        "kind": {"enum": ["ci", "benchmark", "codeql", "review-policy"]},
+        "run_id": {"type": "integer", "minimum": 1},
+        "head_sha": {"$ref": "#/$defs/git_sha"},
+        "conclusion": {"const": "success"},
+        "url": {"type": "string", "pattern": "^https://github\\.com/smutti/codenoesis/actions/runs/[0-9]+$"}
+      }
+    },
+    "remote_log": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "run_id", "job_id", "head_sha", "source_sha256", "normalization", "path", "sha256"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "run_id": {"type": "integer", "minimum": 1},
+        "job_id": {"type": "integer", "minimum": 1},
+        "head_sha": {"$ref": "#/$defs/git_sha"},
+        "source_sha256": {"$ref": "#/$defs/sha256"},
+        "normalization": {"const": "crlf-to-lf-and-strip-ansi-v1"},
+        "path": {"$ref": "#/$defs/safe_path"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "evidence_ids"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "status": {"const": "green"},
+        "evidence_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  }
+}

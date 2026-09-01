@@ -1,9 +1,9 @@
 # CodeNoesis Software Architecture
 
-> Status: **the bounded S0-S7/R0-R17/K1/G0-G8-local architecture is Verified;
-> R18 is a Proposed branch candidate**. Protected PR #189 activated the exact
-> 32-profile LocalBaselineVerificationV2 pack without granting a production
-> server deployment or production-ready release.
+> Status: **the bounded 32-profile V2 architecture is Verified; R18 and R19 are
+> Approved and Implemented but not Verified**. Issue #201 / Decision 0041
+> defines a verification-only 34-profile V3 candidate without changing product,
+> server, workflow, release, support, or GA architecture.
 
 This document is the implementation baseline for the [CodeNoesis software track](README.md). Research-only ideas must first define an experiment and acceptance evidence in the [research track](../research/README.md); they enter this architecture only through an explicit engineering decision.
 
@@ -469,11 +469,11 @@ behavior effective; the exact 32-profile LocalBaselineVerificationV2 package
 made the bounded behavior Verified through protected PR #189 without changing
 Decision 0032 or its artifacts.
 
-### R18 trusted local evidence-to-source retrieval candidate
+### R18 trusted local evidence-to-source retrieval
 
 Issue [#190](https://github.com/smutti/codenoesis/issues/190) and
 [Decision 0038](decisions/0038-s4-trusted-local-source-retrieval.md) define one
-Proposed high-risk S4 package on exact Verified base
+high-risk S4 package on exact Verified base
 `1de6a420f25a1c7eb74d07a99f1800dde90eefa8`. The explicit
 `trusted-local-source-v1` command is an output adapter over a focused
 application service and the existing inward-owned repository-acquisition port.
@@ -502,8 +502,25 @@ telemetry, signing, publication, or release effect.
 The retained LocalBaselineVerificationV2 marker
 “LocalBaselineVerificationV2 candidate Verified pending independent review and
 protected manual merge” remains immutable pre-activation evidence, while PR
-#189 is the external activation event. Issue #141 is closed as superseded. R18
-remains ineffective before protected manual merge. G9 remains a separate governed package.
+#189 is the external V2 activation event. Issue #141 is closed as superseded.
+Protected PR #191 made R18 Approved and Implemented, but it remains not
+Verified pending independent acceptance of LocalBaselineVerificationV3.
+
+### R19 Git-backed implementation-aware semantic impact
+
+Issue [#196](https://github.com/smutti/codenoesis/issues/196),
+[Decision 0040](decisions/0040-s7-git-backed-semantic-impact-evidence.md), and
+protected PR #197 add only the explicit
+`implementation-aware-http-json-git-v1` path. It binds provider/client
+implementation evidence and bounded source excerpts to immutable local Git
+objects while preserving the accepted V1 report and all prior product bytes.
+The inward comparison remains deterministic and evidence-backed; the adapters
+retain path, race, UTF-8, privacy, output, and no-side-effect boundaries.
+
+R19 is Approved and Implemented but not Verified. Issue #201 and Decision 0041
+bind R18/R19 to the immutable V2 baseline in one exact pre-activation marker:
+“LocalBaselineVerificationV3 candidate Verified pending independent review and
+protected manual merge”. G9 remains a separate governed package.
 
 ### G0 bounded release-profile registry
 

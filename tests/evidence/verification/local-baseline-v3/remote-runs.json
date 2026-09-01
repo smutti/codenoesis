@@ -1,0 +1,160 @@
+{
+  "schema_version": "codenoesis.local-baseline-verification-remote-runs/v3",
+  "repository": "smutti/codenoesis",
+  "runs": [
+    {
+      "profile": "r18-trusted-local-source",
+      "kind": "ci",
+      "run_id": 32229313149,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "workflow": ".github/workflows/ci.yml",
+      "head_sha": "16ef5ceaea6ad14d9838f84856f6ca3d445daa67",
+      "head_tree_sha": "a1446f7621d5ce524792db74ce7b32640da80df4",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/32229313149",
+      "jobs": [
+        {"id": 95995562078, "name": "Test (ubuntu-latest)", "conclusion": "success"},
+        {"id": 95995562149, "name": "Local release supply-chain gate", "conclusion": "success"},
+        {"id": 95995562220, "name": "Test (macos-latest)", "conclusion": "success"},
+        {"id": 95995562272, "name": "Rust quality gate", "conclusion": "success"},
+        {"id": 95995562337, "name": "Test (windows-latest)", "conclusion": "success"},
+        {"id": 96001112520, "name": "CI policy gate", "conclusion": "success"}
+      ]
+    },
+    {
+      "profile": "r18-trusted-local-source",
+      "kind": "benchmark",
+      "run_id": 32229313162,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "workflow": ".github/workflows/benchmark.yml",
+      "head_sha": "16ef5ceaea6ad14d9838f84856f6ca3d445daa67",
+      "head_tree_sha": "a1446f7621d5ce524792db74ce7b32640da80df4",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/32229313162",
+      "jobs": [
+        {"id": 95995562404, "name": "Compile Rust benchmark targets", "conclusion": "success"},
+        {"id": 95995562880, "name": "Validate benchmark contract", "conclusion": "success"},
+        {"id": 95996197939, "name": "Benchmark policy gate", "conclusion": "success"}
+      ]
+    },
+    {
+      "profile": "r18-trusted-local-source",
+      "kind": "codeql",
+      "run_id": 32229311917,
+      "run_attempt": 1,
+      "event": "dynamic",
+      "workflow": "dynamic/github-code-scanning/codeql",
+      "head_sha": "16ef5ceaea6ad14d9838f84856f6ca3d445daa67",
+      "head_tree_sha": "a1446f7621d5ce524792db74ce7b32640da80df4",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/32229311917",
+      "jobs": [
+        {"id": 95995561830, "name": "Analyze (rust)", "conclusion": "success"},
+        {"id": 95995561963, "name": "Analyze (actions)", "conclusion": "success"},
+        {"id": 95995562025, "name": "Analyze (python)", "conclusion": "success"}
+      ]
+    },
+    {
+      "profile": "r18-trusted-local-source",
+      "kind": "review-policy",
+      "run_id": 32229313006,
+      "run_attempt": 1,
+      "event": "pull_request_target",
+      "workflow": ".github/workflows/codex-review.yml",
+      "head_sha": "16ef5ceaea6ad14d9838f84856f6ca3d445daa67",
+      "head_tree_sha": "a1446f7621d5ce524792db74ce7b32640da80df4",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/32229313006",
+      "jobs": [
+        {"id": 95995561449, "name": "Resolve trusted review target", "conclusion": "success"},
+        {"id": 95995599054, "name": "Inspect immutable PR scope", "conclusion": "success"},
+        {"id": 95995638485, "name": "Codex review orchestrator", "conclusion": "success"},
+        {"id": 95995639392, "name": "Generate structured review", "conclusion": "skipped"}
+      ]
+    },
+    {
+      "profile": "r19-git-backed-semantic-impact",
+      "kind": "ci",
+      "run_id": 33203760261,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "workflow": ".github/workflows/ci.yml",
+      "head_sha": "c3cbced9ee2017b61ec8e0b10191553edc733004",
+      "head_tree_sha": "f66ab5dfda426054d8591b246337293bbb85246a",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/33203760261",
+      "jobs": [
+        {"id": 98959468941, "name": "Local release supply-chain gate", "conclusion": "success"},
+        {"id": 98959469058, "name": "Test (windows-latest)", "conclusion": "success"},
+        {"id": 98959469109, "name": "Rust quality gate", "conclusion": "success"},
+        {"id": 98959469170, "name": "Test (macos-latest)", "conclusion": "success"},
+        {"id": 98959469285, "name": "Test (ubuntu-latest)", "conclusion": "success"},
+        {"id": 98965049693, "name": "CI policy gate", "conclusion": "success"}
+      ]
+    },
+    {
+      "profile": "r19-git-backed-semantic-impact",
+      "kind": "benchmark",
+      "run_id": 33203760248,
+      "run_attempt": 1,
+      "event": "pull_request",
+      "workflow": ".github/workflows/benchmark.yml",
+      "head_sha": "c3cbced9ee2017b61ec8e0b10191553edc733004",
+      "head_tree_sha": "f66ab5dfda426054d8591b246337293bbb85246a",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/33203760248",
+      "jobs": [
+        {"id": 98959468933, "name": "Validate benchmark contract", "conclusion": "success"},
+        {"id": 98959469108, "name": "Compile Rust benchmark targets", "conclusion": "success"},
+        {"id": 98960148501, "name": "Benchmark policy gate", "conclusion": "success"}
+      ]
+    },
+    {
+      "profile": "r19-git-backed-semantic-impact",
+      "kind": "codeql",
+      "run_id": 33203757887,
+      "run_attempt": 1,
+      "event": "dynamic",
+      "workflow": "dynamic/github-code-scanning/codeql",
+      "head_sha": "c3cbced9ee2017b61ec8e0b10191553edc733004",
+      "head_tree_sha": "f66ab5dfda426054d8591b246337293bbb85246a",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/33203757887",
+      "jobs": [
+        {"id": 98959463759, "name": "Analyze (python)", "conclusion": "success"},
+        {"id": 98959463958, "name": "Analyze (rust)", "conclusion": "success"},
+        {"id": 98959464079, "name": "Analyze (actions)", "conclusion": "success"}
+      ]
+    },
+    {
+      "profile": "r19-git-backed-semantic-impact",
+      "kind": "review-policy",
+      "run_id": 33203758766,
+      "run_attempt": 1,
+      "event": "pull_request_target",
+      "workflow": ".github/workflows/codex-review.yml",
+      "head_sha": "c3cbced9ee2017b61ec8e0b10191553edc733004",
+      "head_tree_sha": "f66ab5dfda426054d8591b246337293bbb85246a",
+      "conclusion": "success",
+      "url": "https://github.com/smutti/codenoesis/actions/runs/33203758766",
+      "jobs": [
+        {"id": 98959463326, "name": "Resolve trusted review target", "conclusion": "success"},
+        {"id": 98959500139, "name": "Inspect immutable PR scope", "conclusion": "success"},
+        {"id": 98959551038, "name": "Codex review orchestrator", "conclusion": "success"},
+        {"id": 98959551902, "name": "Generate structured review", "conclusion": "skipped"}
+      ]
+    }
+  ],
+  "required_jobs": {
+    "r18_linux": 95995562078,
+    "r18_macos": 95995562220,
+    "r18_windows": 95995562337,
+    "r18_policy": 96001112520,
+    "r19_linux": 98959469285,
+    "r19_macos": 98959469170,
+    "r19_windows": 98959469058,
+    "r19_policy": 98965049693
+  }
+}

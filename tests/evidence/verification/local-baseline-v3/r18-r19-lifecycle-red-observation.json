@@ -1,0 +1,31 @@
+{
+  "schema_version": "codenoesis.local-baseline-verification-r18-r19-lifecycle-red/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/201",
+  "authorization": "https://github.com/smutti/codenoesis/issues/201#issuecomment-5482161515",
+  "base_sha": "c783b612777a86e2f88620ece987723bb230c51c",
+  "superseding_checkpoint_sha": "fb4ea89b11323a5b1bbb13cfdb709c2c884b2841",
+  "superseding_checkpoint_tree": "508b08b5dcfcdfa8028d9a59209c82189dca11d4",
+  "command": "python3 -m unittest scripts.tests.test_s4_r18_trusted_source_retrieval_contract.R18TrustedSourceRetrievalContractTest.test_candidate_governance_and_status_reconciliation_are_complete scripts.tests.test_s4_r18_trusted_source_retrieval_contract.R18TrustedSourceRetrievalContractTest.test_contract_bundle scripts.tests.test_s7_r19_git_evidence_contract.S7R19GitEvidenceContractTests.test_contract_bundle -v",
+  "exit_status": 1,
+  "expected_failure": "The R18 and R19 historical conformance tests incorrectly read versioned lifecycle documents from the current V3 descendant tree.",
+  "actual_failure": "Exactly three assertions failed: current README lacks the historical R18 candidate marker, and both immutable bundles reject the current README digest instead of reading their protected merge bytes.",
+  "log": {
+    "path": "tests/evidence/verification/local-baseline-v3/r18-r19-lifecycle-red.log",
+    "sha256": "5c003eba49c1b774500b02141c1e93edcb949514aa8ae06fd4ab7831249971b9"
+  },
+  "normalization": "Replace the isolated local repository root with $REPOSITORY and collapse the oversized current lifecycle document representation to a semantic placeholder; preserve test identities, assertion sites, compared digests, UTF-8, and LF endings.",
+  "captured_at": "2026-08-31T17:48:02Z",
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "network_product_path": "disabled",
+    "model_provider_path": "disabled"
+  },
+  "notes": [
+    "A preliminary shell wrapper used zsh's read-only variable name status after the same test invocation; the wrapper error occurred after the three expected failures and was not retained as product Red evidence.",
+    "The retained invocation was rerun unchanged with an explicit exit code and failed only for the three authorized historical-lifecycle reasons.",
+    "This Red authorizes only the two R18/R19 conformance-test corrections; historical bundle bytes and all product contracts remain immutable."
+  ]
+}

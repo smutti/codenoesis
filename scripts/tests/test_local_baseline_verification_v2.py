@@ -377,6 +377,21 @@ class LocalBaselineVerificationV2ContractTests(unittest.TestCase):
             errors,
         )
 
+    def test_versioned_descendant_keeps_historical_checkpoint_binding(self) -> None:
+        errors: list[str] = []
+        self.validator.validate_checkpoint_contracts(ROOT, errors)
+        self.assertEqual(errors, [])
+        relative_path = "docs/software/verification.md"
+        checkpoint_bytes = self.validator.git(
+            ROOT,
+            ["show", f"{self.validator.CHECKPOINT_SHA}:{relative_path}"],
+            binary=True,
+        )
+        self.assertEqual(
+            self.validator.sha256_bytes(checkpoint_bytes),
+            self.validator.CHECKPOINT_CONTRACT_DIGESTS[relative_path],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

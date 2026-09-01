@@ -1,0 +1,20 @@
+source_commit=1fab35f252abaad538b087a5d5b2b1cd38b63507
+source_tree=29a56f30f6436650baa58ecf01643f53839151cf
+actionlint.exit=0
+codex_policy.exit=0
+codex_policy.status=valid
+cargo_fmt.exit=0
+cargo_clippy.exit=0
+cargo_test.exit=0
+cargo_test.passed=682
+cargo_doc_test.exit=0
+cargo_doc_test.passed=0
+python_unittest.exit=0
+python_unittest.passed=413
+benchmark_assets.exit=0
+benchmark_assets.status=scaffold
+benchmark_assets.suites=0
+cargo_bench_no_run.exit=0
+cargo_bench_no_run.executables=15
+warning.known_semver_metadata=toml =1.1.4+spec-1.1.0 metadata ignored
+complete_gate=green

@@ -1,0 +1,32 @@
+test_candidate_governance_and_status_reconciliation_are_complete (scripts.tests.test_s4_r18_trusted_source_retrieval_contract.R18TrustedSourceRetrievalContractTest) ... FAIL
+test_contract_bundle (scripts.tests.test_s4_r18_trusted_source_retrieval_contract.R18TrustedSourceRetrievalContractTest) ... FAIL
+test_contract_bundle (scripts.tests.test_s7_r19_git_evidence_contract.S7R19GitEvidenceContractTests) ... FAIL
+
+======================================================================
+FAIL: test_candidate_governance_and_status_reconciliation_are_complete (scripts.tests.test_s4_r18_trusted_source_retrieval_contract.R18TrustedSourceRetrievalContractTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$REPOSITORY/scripts/tests/test_s4_r18_trusted_source_retrieval_contract.py", line 141, in test_candidate_governance_and_status_reconciliation_are_complete
+    self.assertIn("#190", text, relative)
+AssertionError: '#190' not found in <current descendant lifecycle document>
+
+======================================================================
+FAIL: test_contract_bundle (scripts.tests.test_s4_r18_trusted_source_retrieval_contract.R18TrustedSourceRetrievalContractTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$REPOSITORY/scripts/tests/test_s4_r18_trusted_source_retrieval_contract.py", line 197, in test_contract_bundle
+    self.assertEqual(sha256(ROOT / record["path"]), record["sha256"], record["path"])
+AssertionError: '2c045fdf288aa519e27945a74996c30ebdb991402a6120324edc92bdb3663ba9' != '02f4aebd2e80867bf6a23f417da4c081808f19c0291398879a54b7d7d517378a' : README.md
+
+======================================================================
+FAIL: test_contract_bundle (scripts.tests.test_s7_r19_git_evidence_contract.S7R19GitEvidenceContractTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "$REPOSITORY/scripts/tests/test_s7_r19_git_evidence_contract.py", line 174, in test_contract_bundle
+    self.assertEqual(sha256(ROOT / record["path"]), record["sha256"], record["path"])
+AssertionError: '2c045fdf288aa519e27945a74996c30ebdb991402a6120324edc92bdb3663ba9' != '02f4aebd2e80867bf6a23f417da4c081808f19c0291398879a54b7d7d517378a' : README.md
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.002s
+
+FAILED (failures=3)

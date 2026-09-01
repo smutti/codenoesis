@@ -1,0 +1,1903 @@
+﻿2026-08-28T19:25:04.6078742Z Current runner version: '2.336.0'
+2026-08-28T19:25:04.6104136Z ##[group]Runner Image Provisioner
+2026-08-28T19:25:04.6104987Z Hosted Compute Agent
+2026-08-28T19:25:04.6105868Z Version: 20260819.586
+2026-08-28T19:25:04.6106506Z Commit: 3cc4a88dfa507ef76119ad1bb3eccc6378bb2b76
+2026-08-28T19:25:04.6107187Z Build Date: 2026-08-18T23:20:18Z
+2026-08-28T19:25:04.6107815Z Worker ID: {c7d9c0f9-b272-40b2-b55b-a36ff73f7a10}
+2026-08-28T19:25:04.6108480Z Azure Region: westus
+2026-08-28T19:25:04.6109000Z ##[endgroup]
+2026-08-28T19:25:04.6110448Z ##[group]Operating System
+2026-08-28T19:25:04.6111074Z Microsoft Windows Server 2025
+2026-08-28T19:25:04.6111679Z 10.0.26100
+2026-08-28T19:25:04.6112163Z Datacenter
+2026-08-28T19:25:04.6112650Z ##[endgroup]
+2026-08-28T19:25:04.6113152Z ##[group]Runner Image
+2026-08-28T19:25:04.6113700Z Image: windows-2025-vs2026
+2026-08-28T19:25:04.6114265Z Version: 20260824.214.3
+2026-08-28T19:25:04.6115753Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20260824.214/images/windows/Windows2025-VS2026-Readme.md
+2026-08-28T19:25:04.6117351Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20260824.214
+2026-08-28T19:25:04.6118318Z ##[endgroup]
+2026-08-28T19:25:04.6119369Z ##[group]GITHUB_TOKEN Permissions
+2026-08-28T19:25:04.6121214Z Contents: read
+2026-08-28T19:25:04.6121768Z Metadata: read
+2026-08-28T19:25:04.6122659Z ##[endgroup]
+2026-08-28T19:25:04.6124769Z Secret source: Actions
+2026-08-28T19:25:04.6126049Z Prepare workflow directory
+2026-08-28T19:25:04.6653688Z Prepare all required actions
+2026-08-28T19:25:04.6701446Z Getting action download info
+2026-08-28T19:25:05.0039317Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-08-28T19:25:05.2426042Z Complete job name: Test (windows-latest)
+2026-08-28T19:25:05.3952521Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-08-28T19:25:05.3953816Z with:
+2026-08-28T19:25:05.3954320Z   repository: smutti/codenoesis
+2026-08-28T19:25:05.3958223Z   token: ***
+2026-08-28T19:25:05.3958675Z   ssh-strict: true
+2026-08-28T19:25:05.3959132Z   ssh-user: git
+2026-08-28T19:25:05.3959801Z   persist-credentials: true
+2026-08-28T19:25:05.3960573Z   clean: true
+2026-08-28T19:25:05.3961055Z   sparse-checkout-cone-mode: true
+2026-08-28T19:25:05.3961603Z   fetch-depth: 1
+2026-08-28T19:25:05.3962052Z   fetch-tags: false
+2026-08-28T19:25:05.3962520Z   show-progress: true
+2026-08-28T19:25:05.3962992Z   lfs: false
+2026-08-28T19:25:05.3963460Z   submodules: false
+2026-08-28T19:25:05.3963934Z   set-safe-directory: true
+2026-08-28T19:25:05.3964468Z   allow-unsafe-pr-checkout: false
+2026-08-28T19:25:05.3965282Z env:
+2026-08-28T19:25:05.3965706Z   CARGO_INCREMENTAL: 0
+2026-08-28T19:25:05.3966198Z   CARGO_TERM_COLOR: never
+2026-08-28T19:25:05.3966734Z   RUST_BACKTRACE: 1
+2026-08-28T19:25:05.3967186Z ##[endgroup]
+2026-08-28T19:25:05.5584700Z Syncing repository: smutti/codenoesis
+2026-08-28T19:25:05.5587533Z ##[group]Getting Git version info
+2026-08-28T19:25:05.5588759Z Working directory is 'D:\a\codenoesis\codenoesis'
+2026-08-28T19:25:05.6966141Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-08-28T19:25:06.0953828Z git version 2.55.0.windows.5
+2026-08-28T19:25:06.1011502Z ##[endgroup]
+2026-08-28T19:25:06.1029002Z Temporarily overriding HOME='D:\a\_temp\726c05d0-c453-4867-a62c-77bf707b8817' before making global git config changes
+2026-08-28T19:25:06.1033324Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-28T19:25:06.1039857Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\codenoesis\codenoesis
+2026-08-28T19:25:06.1655966Z Deleting the contents of 'D:\a\codenoesis\codenoesis'
+2026-08-28T19:25:06.1661517Z ##[group]Determining repository object format
+2026-08-28T19:25:06.1664437Z ##[endgroup]
+2026-08-28T19:25:06.1665867Z ##[group]Initializing the repository
+2026-08-28T19:25:06.1675852Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\codenoesis\codenoesis
+2026-08-28T19:25:06.2534472Z Initialized empty Git repository in D:/a/codenoesis/codenoesis/.git/
+2026-08-28T19:25:06.2585079Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/smutti/codenoesis
+2026-08-28T19:25:06.3197266Z ##[endgroup]
+2026-08-28T19:25:06.3200121Z ##[group]Disabling automatic garbage collection
+2026-08-28T19:25:06.3208137Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-08-28T19:25:06.3578431Z ##[endgroup]
+2026-08-28T19:25:06.3580921Z ##[group]Setting up auth
+2026-08-28T19:25:06.3582716Z Removing SSH command configuration
+2026-08-28T19:25:06.3588828Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-08-28T19:25:06.3929501Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-08-28T19:25:07.8015217Z Removing HTTP extra header
+2026-08-28T19:25:07.8030919Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-28T19:25:07.8345229Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-08-28T19:25:08.4058594Z Removing includeIf entries pointing to credentials config files
+2026-08-28T19:25:08.4073672Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-28T19:25:08.4380211Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-08-28T19:25:08.9781062Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-7c002213-e916-4d9d-a9e4-c84dfd78dad4.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-08-28T19:25:09.0108718Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/codenoesis/codenoesis/.git.path D:\a\_temp\git-credentials-7c002213-e916-4d9d-a9e4-c84dfd78dad4.config
+2026-08-28T19:25:09.0438840Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/codenoesis/codenoesis/.git/worktrees/*.path D:\a\_temp\git-credentials-7c002213-e916-4d9d-a9e4-c84dfd78dad4.config
+2026-08-28T19:25:09.0818276Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-7c002213-e916-4d9d-a9e4-c84dfd78dad4.config
+2026-08-28T19:25:09.1144177Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-7c002213-e916-4d9d-a9e4-c84dfd78dad4.config
+2026-08-28T19:25:09.1478978Z ##[endgroup]
+2026-08-28T19:25:09.1479688Z ##[group]Fetching the repository
+2026-08-28T19:25:09.1481348Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +ef5191d3f0167c637e1324fdfe2e5f61086bb945:refs/remotes/pull/197/merge
+2026-08-28T19:25:10.6579376Z From https://github.com/smutti/codenoesis
+2026-08-28T19:25:10.6580373Z  * [new ref]         ef5191d3f0167c637e1324fdfe2e5f61086bb945 -> pull/197/merge
+2026-08-28T19:25:10.6633951Z ##[endgroup]
+2026-08-28T19:25:10.6634610Z ##[group]Determining the checkout info
+2026-08-28T19:25:10.6635312Z ##[endgroup]
+2026-08-28T19:25:10.6645673Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-08-28T19:25:10.7134394Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-08-28T19:25:10.7475736Z ##[group]Checking out the ref
+2026-08-28T19:25:10.7485342Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force refs/remotes/pull/197/merge
+2026-08-28T19:25:11.2065644Z Note: switching to 'refs/remotes/pull/197/merge'.
+2026-08-28T19:25:11.2065966Z 
+2026-08-28T19:25:11.2066195Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-08-28T19:25:11.2066734Z changes and commit them, and you can discard any commits you make in this
+2026-08-28T19:25:11.2067229Z state without impacting any branches by switching back to a branch.
+2026-08-28T19:25:11.2067524Z 
+2026-08-28T19:25:11.2067743Z If you want to create a new branch to retain commits you create, you may
+2026-08-28T19:25:11.2068221Z do so (now or later) by using -c with the switch command. Example:
+2026-08-28T19:25:11.2068479Z 
+2026-08-28T19:25:11.2068597Z   git switch -c <new-branch-name>
+2026-08-28T19:25:11.2068820Z 
+2026-08-28T19:25:11.2069002Z Or undo this operation with:
+2026-08-28T19:25:11.2069161Z 
+2026-08-28T19:25:11.2069247Z   git switch -
+2026-08-28T19:25:11.2069357Z 
+2026-08-28T19:25:11.2069583Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-08-28T19:25:11.2069889Z 
+2026-08-28T19:25:11.2084535Z HEAD is now at ef5191d Merge c3cbced9ee2017b61ec8e0b10191553edc733004 into fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b
+2026-08-28T19:25:11.2201171Z ##[endgroup]
+2026-08-28T19:25:11.2620551Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-08-28T19:25:11.2915170Z ef5191d3f0167c637e1324fdfe2e5f61086bb945
+2026-08-28T19:25:11.3345843Z ##[group]Run rustc --version --verbose
+2026-08-28T19:25:11.3346247Z rustc --version --verbose
+2026-08-28T19:25:11.3346524Z cargo --version --verbose
+2026-08-28T19:25:11.5102908Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-08-28T19:25:11.5103452Z env:
+2026-08-28T19:25:11.5103720Z   CARGO_INCREMENTAL: 0
+2026-08-28T19:25:11.5104016Z   CARGO_TERM_COLOR: never
+2026-08-28T19:25:11.5104321Z   RUST_BACKTRACE: 1
+2026-08-28T19:25:11.5104585Z ##[endgroup]
+2026-08-28T19:25:12.4984508Z info: syncing channel updates for 1.97.1-x86_64-pc-windows-msvc
+2026-08-28T19:25:12.9555217Z info: latest update on 2026-07-16 for version 1.97.1 (8bab26f4f 2026-07-14)
+2026-08-28T19:25:12.9652966Z info: downloading 5 components
+2026-08-28T19:25:22.5317030Z rustc 1.97.1 (8bab26f4f 2026-07-14)
+2026-08-28T19:25:22.5317697Z binary: rustc
+2026-08-28T19:25:22.5318277Z commit-hash: 8bab26f4f68e0e26f0bb7960be334d5b520ea452
+2026-08-28T19:25:22.5319063Z commit-date: 2026-07-14
+2026-08-28T19:25:22.5319492Z host: x86_64-pc-windows-msvc
+2026-08-28T19:25:22.5320192Z release: 1.97.1
+2026-08-28T19:25:22.5323033Z LLVM version: 22.1.6
+2026-08-28T19:25:23.2193885Z cargo 1.97.1 (c980f4866 2026-06-30)
+2026-08-28T19:25:23.2194510Z release: 1.97.1
+2026-08-28T19:25:23.2195062Z commit-hash: c980f4866141969fab6254a680546a277789d6f0
+2026-08-28T19:25:23.2195465Z commit-date: 2026-06-30
+2026-08-28T19:25:23.2195752Z host: x86_64-pc-windows-msvc
+2026-08-28T19:25:23.2196051Z libgit2: 1.9.2 (sys:0.20.4 vendored)
+2026-08-28T19:25:23.2196493Z libcurl: 8.20.0-DEV (sys:0.4.88+curl-8.20.0 vendored ssl:Schannel)
+2026-08-28T19:25:23.2197015Z os: Windows 10.0.26100 (Windows 11 ServerDatacenter) [64-bit]
+2026-08-28T19:25:23.3643898Z ##[group]Run cargo test --workspace --all-targets --all-features --locked
+2026-08-28T19:25:23.3644530Z cargo test --workspace --all-targets --all-features --locked
+2026-08-28T19:25:23.3743063Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-08-28T19:25:23.3743423Z env:
+2026-08-28T19:25:23.3743607Z   CARGO_INCREMENTAL: 0
+2026-08-28T19:25:23.3743825Z   CARGO_TERM_COLOR: never
+2026-08-28T19:25:23.3744038Z   RUST_BACKTRACE: 1
+2026-08-28T19:25:23.3744227Z ##[endgroup]
+2026-08-28T19:25:23.6878240Z warning: D:\a\codenoesis\codenoesis\crates\codenoesis-lang-rust\Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+2026-08-28T19:25:23.7505534Z     Updating crates.io index
+2026-08-28T19:25:24.1005238Z  Downloading crates ...
+2026-08-28T19:25:24.2171284Z   Downloaded adler2 v2.0.1
+2026-08-28T19:25:24.2591298Z   Downloaded arrayref v0.3.9
+2026-08-28T19:25:24.2755594Z   Downloaded atomicwrites v0.4.4
+2026-08-28T19:25:24.2956966Z   Downloaded block-buffer v0.12.1
+2026-08-28T19:25:24.3124791Z   Downloaded cpufeatures v0.3.0
+2026-08-28T19:25:24.3263841Z   Downloaded crypto-common v0.2.2
+2026-08-28T19:25:24.3372128Z   Downloaded fallible-streaming-iterator v0.1.9
+2026-08-28T19:25:24.3458413Z   Downloaded serde_spanned v1.1.1
+2026-08-28T19:25:24.3600546Z   Downloaded tree-sitter-language v0.1.7
+2026-08-28T19:25:24.3758857Z   Downloaded version_check v0.9.5
+2026-08-28T19:25:24.3882646Z   Downloaded windows-targets v0.52.6
+2026-08-28T19:25:24.3989292Z   Downloaded constant_time_eq v0.4.2
+2026-08-28T19:25:24.4185897Z   Downloaded fallible-iterator v0.3.0
+2026-08-28T19:25:24.4287795Z   Downloaded cfg-if v1.0.4
+2026-08-28T19:25:24.4448037Z   Downloaded fastrand v2.5.0
+2026-08-28T19:25:24.4588366Z   Downloaded quote v1.0.47
+2026-08-28T19:25:24.4906161Z   Downloaded toml_writer v1.1.2+spec-1.1.0
+2026-08-28T19:25:24.5031791Z   Downloaded arraydeque v0.5.1
+2026-08-28T19:25:24.5173916Z   Downloaded bitflags v2.13.1
+2026-08-28T19:25:24.5685016Z   Downloaded foldhash v0.2.0
+2026-08-28T19:25:24.5838240Z   Downloaded hybrid-array v0.4.13
+2026-08-28T19:25:24.6034307Z   Downloaded arrayvec v0.7.8
+2026-08-28T19:25:24.6263099Z   Downloaded digest v0.11.3
+2026-08-28T19:25:24.6485759Z   Downloaded sha2 v0.11.0
+2026-08-28T19:25:24.6930425Z   Downloaded smallvec v1.15.2
+2026-08-28T19:25:24.7034905Z   Downloaded thiserror-impl v1.0.69
+2026-08-28T19:25:24.7200597Z   Downloaded tempfile v3.27.0
+2026-08-28T19:25:24.7399457Z   Downloaded once_cell v1.21.4
+2026-08-28T19:25:24.7671485Z   Downloaded unicode-ident v1.0.24
+2026-08-28T19:25:24.7936137Z   Downloaded cc v1.3.0
+2026-08-28T19:25:24.8229694Z   Downloaded scip v0.9.0
+2026-08-28T19:25:24.8331802Z   Downloaded toml v1.1.4+spec-1.1.0
+2026-08-28T19:25:24.8775976Z   Downloaded crc32fast v1.5.0
+2026-08-28T19:25:24.8930336Z   Downloaded hashbrown v0.16.1
+2026-08-28T19:25:24.9352590Z   Downloaded equivalent v1.0.2
+2026-08-28T19:25:24.9486042Z   Downloaded aho-corasick v1.1.4
+2026-08-28T19:25:24.9909008Z   Downloaded blake3 v1.8.5
+2026-08-28T19:25:25.0743627Z   Downloaded const-oid v0.10.2
+2026-08-28T19:25:25.0928870Z   Downloaded protobuf v3.7.2
+2026-08-28T19:25:25.2062981Z   Downloaded regex-syntax v0.8.11
+2026-08-28T19:25:25.2471774Z   Downloaded itoa v1.0.18
+2026-08-28T19:25:25.2600242Z   Downloaded pkg-config v0.3.33
+2026-08-28T19:25:25.2737082Z   Downloaded miniz_oxide v0.8.9
+2026-08-28T19:25:25.2962963Z   Downloaded hashlink v0.11.1
+2026-08-28T19:25:25.3149340Z   Downloaded find-msvc-tools v0.1.9
+2026-08-28T19:25:25.3339482Z   Downloaded generic-array v0.14.7
+2026-08-28T19:25:25.3494484Z   Downloaded protobuf-support v3.7.2
+2026-08-28T19:25:25.3683881Z   Downloaded sha1 v0.11.0
+2026-08-28T19:25:25.3869445Z   Downloaded streaming-iterator v0.1.9
+2026-08-28T19:25:25.5945731Z   Downloaded thiserror v1.0.69
+2026-08-28T19:25:26.0788608Z   Downloaded proc-macro2 v1.0.107
+2026-08-28T19:25:26.1125103Z   Downloaded zmij v1.0.23
+2026-08-28T19:25:26.1346803Z   Downloaded toml_parser v1.1.3+spec-1.1.0
+2026-08-28T19:25:26.1592211Z   Downloaded same-file v1.0.6
+2026-08-28T19:25:26.1737557Z   Downloaded tinyvec_macros v0.1.1
+2026-08-28T19:25:26.1846473Z   Downloaded winapi-util v0.1.11
+2026-08-28T19:25:26.1982300Z   Downloaded windows-link v0.2.1
+2026-08-28T19:25:26.2064441Z   Downloaded getrandom v0.4.3
+2026-08-28T19:25:26.2459159Z   Downloaded shlex v2.0.1
+2026-08-28T19:25:26.2580586Z   Downloaded simd-adler32 v0.3.10
+2026-08-28T19:25:26.2810783Z   Downloaded toml_datetime v1.1.1+spec-1.1.0
+2026-08-28T19:25:26.2914837Z   Downloaded memchr v2.8.3
+2026-08-28T19:25:26.3397366Z   Downloaded serde_core v1.0.229
+2026-08-28T19:25:26.3701193Z   Downloaded yaml-rust2 v0.11.0
+2026-08-28T19:25:26.4012970Z   Downloaded tinyvec v1.12.0
+2026-08-28T19:25:26.4253961Z   Downloaded indexmap v2.14.0
+2026-08-28T19:25:26.4641676Z   Downloaded flate2 v1.1.9
+2026-08-28T19:25:26.5130158Z   Downloaded tree-sitter v0.26.11
+2026-08-28T19:25:26.5816454Z   Downloaded typenum v1.20.1
+2026-08-28T19:25:26.6215440Z   Downloaded hashbrown v0.17.1
+2026-08-28T19:25:26.8284041Z   Downloaded unicode-normalization v0.1.25
+2026-08-28T19:25:26.9668474Z   Downloaded regex v1.13.1
+2026-08-28T19:25:27.6215626Z   Downloaded serde_json v1.0.151
+2026-08-28T19:25:28.0541520Z   Downloaded rusqlite v0.40.1
+2026-08-28T19:25:28.2677305Z   Downloaded winnow v1.0.4
+2026-08-28T19:25:28.8773592Z   Downloaded vcpkg v0.2.15
+2026-08-28T19:25:30.4484759Z   Downloaded syn v2.0.119
+2026-08-28T19:25:30.5510999Z   Downloaded tree-sitter-rust v0.24.2
+2026-08-28T19:25:30.5826645Z   Downloaded regex-automata v0.4.16
+2026-08-28T19:25:30.6927800Z   Downloaded windows-sys v0.52.0
+2026-08-28T19:25:31.0704262Z   Downloaded windows_x86_64_msvc v0.52.6
+2026-08-28T19:25:31.0941480Z   Downloaded sha1collisiondetection v0.3.4
+2026-08-28T19:25:31.5511599Z   Downloaded tree-sitter-kotlin-ng v1.1.0
+2026-08-28T19:25:31.6020800Z   Downloaded windows-sys v0.61.2
+2026-08-28T19:25:32.4395231Z   Downloaded libsqlite3-sys v0.38.1
+2026-08-28T19:25:32.9865000Z    Compiling find-msvc-tools v0.1.9
+2026-08-28T19:25:32.9865642Z    Compiling shlex v2.0.1
+2026-08-28T19:25:32.9867886Z    Compiling cfg-if v1.0.4
+2026-08-28T19:25:32.9869027Z    Compiling cpufeatures v0.3.0
+2026-08-28T19:25:33.0514794Z    Compiling memchr v2.8.3
+2026-08-28T19:25:33.0516081Z    Compiling arrayvec v0.7.8
+2026-08-28T19:25:33.2435010Z    Compiling arrayref v0.3.9
+2026-08-28T19:25:33.3023207Z    Compiling constant_time_eq v0.4.2
+2026-08-28T19:25:33.3241716Z    Compiling zmij v1.0.23
+2026-08-28T19:25:33.5401406Z    Compiling cc v1.3.0
+2026-08-28T19:25:34.1664414Z    Compiling itoa v1.0.18
+2026-08-28T19:25:34.2905514Z    Compiling serde_core v1.0.229
+2026-08-28T19:25:34.3886927Z    Compiling serde_json v1.0.151
+2026-08-28T19:25:35.2833592Z    Compiling tree-sitter-language v0.1.7
+2026-08-28T19:25:35.4217916Z    Compiling blake3 v1.8.5
+2026-08-28T19:25:36.1068462Z    Compiling hashbrown v0.17.1
+2026-08-28T19:25:36.1478134Z    Compiling equivalent v1.0.2
+2026-08-28T19:25:37.0156526Z    Compiling indexmap v2.14.0
+2026-08-28T19:25:38.0511398Z    Compiling aho-corasick v1.1.4
+2026-08-28T19:25:39.1247082Z    Compiling codenoesis-domain v0.1.0 (D:\a\codenoesis\codenoesis\crates\codenoesis-domain)
+2026-08-28T19:25:41.6972642Z    Compiling regex-syntax v0.8.11
+2026-08-28T19:25:41.8505635Z    Compiling tree-sitter v0.26.11
+2026-08-28T19:25:42.1921066Z    Compiling windows-link v0.2.1
+2026-08-28T19:25:42.2483828Z    Compiling typenum v1.20.1
+2026-08-28T19:25:42.9074323Z    Compiling windows-sys v0.61.2
+2026-08-28T19:25:44.8521815Z    Compiling codenoesis-contracts v0.1.0 (D:\a\codenoesis\codenoesis\crates\codenoesis-contracts)
+2026-08-28T19:25:47.0710452Z    Compiling codenoesis-ports v0.1.0 (D:\a\codenoesis\codenoesis\crates\codenoesis-ports)
+2026-08-28T19:25:47.1537992Z    Compiling regex-automata v0.4.16
+2026-08-28T19:25:47.5300228Z    Compiling streaming-iterator v0.1.9
+2026-08-28T19:25:47.9843017Z    Compiling tinyvec_macros v0.1.1
+2026-08-28T19:25:48.0404148Z    Compiling tinyvec v1.12.0
+2026-08-28T19:25:48.5772699Z    Compiling unicode-normalization v0.1.25
+2026-08-28T19:25:49.3700175Z    Compiling hybrid-array v0.4.13
+2026-08-28T19:25:50.1713710Z    Compiling regex v1.13.1
+2026-08-28T19:25:52.3517966Z    Compiling tree-sitter-rust v0.24.2
+2026-08-28T19:25:52.6503512Z    Compiling winnow v1.0.4
+2026-08-28T19:25:53.2309253Z    Compiling toml_parser v1.1.3+spec-1.1.0
+2026-08-28T19:25:55.2901948Z    Compiling toml_datetime v1.1.1+spec-1.1.0
+2026-08-28T19:25:55.7625536Z    Compiling serde_spanned v1.1.1
+2026-08-28T19:25:55.9312491Z    Compiling toml_writer v1.1.2+spec-1.1.0
+2026-08-28T19:25:56.0900034Z    Compiling crypto-common v0.2.2
+2026-08-28T19:25:56.2114142Z    Compiling toml v1.1.4+spec-1.1.0
+2026-08-28T19:25:58.2429828Z    Compiling block-buffer v0.12.1
+2026-08-28T19:25:58.4163371Z    Compiling const-oid v0.10.2
+2026-08-28T19:25:58.7205238Z    Compiling digest v0.11.3
+2026-08-28T19:25:58.9101835Z    Compiling once_cell v1.21.4
+2026-08-28T19:25:59.1981978Z    Compiling codenoesis-lang-rust v0.1.0 (D:\a\codenoesis\codenoesis\crates\codenoesis-lang-rust)
+2026-08-28T19:25:59.5936360Z    Compiling winapi-util v0.1.11
+2026-08-28T19:25:59.9566227Z    Compiling crc32fast v1.5.0
+2026-08-28T19:26:00.3392250Z    Compiling same-file v1.0.6
+2026-08-28T19:26:00.5198674Z    Compiling getrandom v0.4.3
+2026-08-28T19:26:01.0889107Z    Compiling codenoesis-application v0.1.0 (D:\a\codenoesis\codenoesis\crates\codenoesis-application)
+2026-08-28T19:26:02.1002507Z    Compiling fastrand v2.5.0
+2026-08-28T19:26:02.4185797Z    Compiling proc-macro2 v1.0.107
+2026-08-28T19:26:03.0944853Z    Compiling tempfile v3.27.0
+2026-08-28T19:26:03.9066751Z    Compiling sha2 v0.11.0
+2026-08-28T19:26:05.5466807Z    Compiling quote v1.0.47
+2026-08-28T19:26:05.9090438Z    Compiling unicode-ident v1.0.24
+2026-08-28T19:26:07.4916361Z    Compiling windows_x86_64_msvc v0.52.6
+2026-08-28T19:26:07.7597889Z    Compiling syn v2.0.119
+2026-08-28T19:26:09.3799530Z    Compiling vcpkg v0.2.15
+2026-08-28T19:26:10.4977482Z    Compiling foldhash v0.2.0
+2026-08-28T19:26:10.7502784Z    Compiling pkg-config v0.3.33
+2026-08-28T19:26:11.5668622Z    Compiling thiserror v1.0.69
+2026-08-28T19:26:11.7793333Z    Compiling version_check v0.9.5
+2026-08-28T19:26:12.0293008Z    Compiling thiserror-impl v1.0.69
+2026-08-28T19:26:12.1898034Z    Compiling generic-array v0.14.7
+2026-08-28T19:26:12.4569998Z    Compiling libsqlite3-sys v0.38.1
+2026-08-28T19:26:12.9289007Z    Compiling hashbrown v0.16.1
+2026-08-28T19:26:13.8837051Z    Compiling windows-targets v0.52.6
+2026-08-28T19:26:13.9409704Z    Compiling hashlink v0.11.1
+2026-08-28T19:26:14.3858438Z    Compiling tree-sitter-kotlin-ng v1.1.0
+2026-08-28T19:26:14.6819446Z    Compiling arraydeque v0.5.1
+2026-08-28T19:26:14.9382569Z    Compiling sha1collisiondetection v0.3.4
+2026-08-28T19:26:15.1988058Z    Compiling simd-adler32 v0.3.10
+2026-08-28T19:26:15.5007358Z    Compiling adler2 v2.0.1
+2026-08-28T19:26:15.6613530Z    Compiling protobuf v3.7.2
+2026-08-28T19:26:16.0025866Z    Compiling miniz_oxide v0.8.9
+2026-08-28T19:26:17.3145735Z    Compiling yaml-rust2 v0.11.0
+2026-08-28T19:26:20.0937039Z    Compiling protobuf-support v3.7.2
+2026-08-28T19:26:21.0370534Z    Compiling windows-sys v0.52.0
+2026-08-28T19:26:21.7746680Z    Compiling bitflags v2.13.1
+2026-08-28T19:26:21.9712299Z    Compiling smallvec v1.15.2
+2026-08-28T19:26:22.0807348Z    Compiling fallible-streaming-iterator v0.1.9
+2026-08-28T19:26:22.2664407Z    Compiling fallible-iterator v0.3.0
+2026-08-28T19:26:22.2764357Z    Compiling atomicwrites v0.4.4
+2026-08-28T19:26:22.7488717Z    Compiling rusqlite v0.40.1
+2026-08-28T19:26:25.6818348Z    Compiling flate2 v1.1.9
+2026-08-28T19:26:26.3852007Z    Compiling sha1 v0.11.0
+2026-08-28T19:26:26.7483215Z    Compiling codenoesis-contract-extractors v0.1.0 (D:\a\codenoesis\codenoesis\crates\codenoesis-contract-extractors)
+2026-08-28T19:26:28.2737230Z    Compiling scip v0.9.0
+2026-08-28T19:26:31.7258023Z    Compiling codenoesis-repository v0.1.0 (D:\a\codenoesis\codenoesis\crates\codenoesis-repository)
+2026-08-28T19:26:32.1231021Z    Compiling codenoesis-store-local v0.1.0 (D:\a\codenoesis\codenoesis\crates\codenoesis-store-local)
+2026-08-28T19:26:34.7842400Z    Compiling codenoesis-lang-kotlin v0.1.0 (D:\a\codenoesis\codenoesis\crates\codenoesis-lang-kotlin)
+2026-08-28T19:26:35.5705304Z    Compiling codenoesis-scip v0.1.0 (D:\a\codenoesis\codenoesis\crates\codenoesis-scip)
+2026-08-28T19:26:35.6496696Z    Compiling xtask v0.0.0 (D:\a\codenoesis\codenoesis\xtask)
+2026-08-28T19:26:38.8349225Z    Compiling noesis v0.1.0 (D:\a\codenoesis\codenoesis\crates\noesis)
+2026-08-28T19:26:38.9668503Z warning: unused import: `File`
+2026-08-28T19:26:38.9712565Z  --> crates\noesis\src\generated_docs.rs:2:21
+2026-08-28T19:26:38.9748895Z   |
+2026-08-28T19:26:38.9758677Z 2 | use std::fs::{self, File, OpenOptions};
+2026-08-28T19:26:38.9989939Z   |                     ^^^^
+2026-08-28T19:26:39.0017369Z   |
+2026-08-28T19:26:39.0033514Z   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+2026-08-28T19:26:39.0034477Z 
+2026-08-28T19:26:41.5184662Z warning: `noesis` (lib) generated 1 warning (run `cargo fix --lib -p noesis` to apply 1 suggestion)
+2026-08-28T19:26:42.8443579Z warning: unused import: `unique_temp_root`
+2026-08-28T19:26:42.8496960Z   --> crates\noesis\tests\support\s4_r10.rs:16:80
+2026-08-28T19:26:42.8742505Z    |
+2026-08-28T19:26:42.8854474Z 16 | use super::{git_command, read_repository_text, stdout_line, successful_output, unique_temp_root};
+2026-08-28T19:26:42.8952147Z    |                                                                                ^^^^^^^^^^^^^^^^
+2026-08-28T19:26:42.9071414Z    |
+2026-08-28T19:26:42.9232349Z    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+2026-08-28T19:26:42.9270725Z 
+2026-08-28T19:26:42.9412726Z warning: unused import: `unique_temp_root`
+2026-08-28T19:26:42.9566389Z   --> crates\noesis\tests\support\s4_r11.rs:14:80
+2026-08-28T19:26:42.9647677Z    |
+2026-08-28T19:26:42.9808024Z 14 | use super::{git_command, read_repository_text, stdout_line, successful_output, unique_temp_root};
+2026-08-28T19:26:42.9828701Z    |                                                                                ^^^^^^^^^^^^^^^^
+2026-08-28T19:26:42.9904250Z 
+2026-08-28T19:26:42.9911841Z warning: unused import: `unique_temp_root`
+2026-08-28T19:26:42.9913434Z   --> crates\noesis\tests\support\s4_r12.rs:14:80
+2026-08-28T19:26:42.9915606Z    |
+2026-08-28T19:26:42.9970816Z 14 | use super::{git_command, read_repository_text, stdout_line, successful_output, unique_temp_root};
+2026-08-28T19:26:42.9978275Z    |                                                                                ^^^^^^^^^^^^^^^^
+2026-08-28T19:26:43.0170125Z 
+2026-08-28T19:26:46.9983819Z warning: `noesis` (test "e2e_fr_ext_014_k1_cfg_alternatives") generated 3 warnings (run `cargo fix --test "e2e_fr_ext_014_k1_cfg_alternatives" -p noesis` to apply 3 suggestions)
+2026-08-28T19:26:47.8766567Z warning: `noesis` (test "e2e_fr_ext_012_rust_callable_semantics") generated 3 warnings (3 duplicates)
+2026-08-28T19:26:51.1347946Z warning: `noesis` (test "e2e_fr_ext_016_rust_expression_bindings") generated 3 warnings (3 duplicates)
+2026-08-28T19:26:51.6554499Z warning: `noesis` (test "s0_conformance") generated 3 warnings (3 duplicates)
+2026-08-28T19:26:53.0858549Z warning: function `assert_store_unpublished` is never used
+2026-08-28T19:26:53.0859490Z    --> crates\noesis\tests\e2e_fr_acq_005_gitlink_boundaries.rs:436:4
+2026-08-28T19:26:53.0926272Z     |
+2026-08-28T19:26:53.1167218Z 436 | fn assert_store_unpublished(store: &Path) {
+2026-08-28T19:26:53.1186741Z     |    ^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-28T19:26:53.1252405Z     |
+2026-08-28T19:26:53.1361358Z     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+2026-08-28T19:26:53.1371741Z 
+2026-08-28T19:26:53.3850368Z warning: `noesis` (test "e2e_fr_inc_001_incremental_refresh") generated 3 warnings (3 duplicates)
+2026-08-28T19:26:55.2492512Z warning: `noesis` (test "e2e_fr_acq_005_gitlink_boundaries") generated 4 warnings (3 duplicates)
+2026-08-28T19:26:56.4522773Z warning: `noesis` (test "s7_r19_git_evidence_conformance") generated 3 warnings (3 duplicates)
+2026-08-28T19:26:56.5163023Z warning: `noesis` (test "e2e_fr_exp_001_portable_explorer") generated 3 warnings (3 duplicates)
+2026-08-28T19:26:57.1994261Z warning: `noesis` (test "e2e_fr_imp_004_implementation_aware_api_diff") generated 3 warnings (3 duplicates)
+2026-08-28T19:26:58.9859682Z warning: `noesis` (test "e2e_fr_ctx_001_function_context") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:01.6104557Z warning: `noesis` (test "e2e_fr_ext_016_017_real_repository_fail_closed") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:01.8043587Z warning: `noesis` (test "e2e_fr_sto_001_atomic_local_storage") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:04.2370095Z warning: `noesis` (test "e2e_fr_ext_017_rust_local_flow") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:05.2967210Z warning: `noesis` (test "e2e_fr_ext_009_cargo_manifest_facts") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:05.4873480Z warning: `noesis` (test "e2e_fr_acq_004_packed_sha1") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:06.4338966Z warning: `noesis` (test "e2e_fr_ext_020_rust_safe_constant_evaluation") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:08.0508190Z warning: `noesis` (test "e2e_fr_cli_001_workspace_docs_query") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:10.1350724Z warning: `noesis` (test "e2e_fr_ext_010_rust_semantic_depth") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:10.2485753Z warning: `noesis` (test "e2e_fr_ext_015_k1_scip_composition") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:13.1574447Z warning: `noesis` (lib test) generated 1 warning (1 duplicate)
+2026-08-28T19:27:13.5025651Z warning: `noesis` (test "e2e_fr_ext_008_root_package_workspace") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:15.8939765Z warning: `noesis` (test "e2e_fr_ext_005_scip_import") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:16.6380023Z warning: `noesis` (test "e2e_fr_acq_001_immutable_commit") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:17.4800647Z warning: `noesis` (test "e2e_fr_ext_011_framework_declarations") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:19.9041621Z warning: `noesis` (test "e2e_fr_ext_012_k1_repository_boundaries") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:21.7159944Z warning: `noesis` (test "e2e_fr_inv_001_safe_inventory") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:22.3453788Z warning: `noesis` (test "e2e_fr_ext_013_cfg_declaration_alternatives") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:24.1584164Z warning: `noesis` (test "e2e_fr_imp_006_git_evidence_navigation") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:25.1021228Z warning: `noesis` (test "e2e_fr_ext_012_k1_output_capacity") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:27.0364919Z warning: `noesis` (test "e2e_fr_ctx_002_trusted_source_retrieval") generated 3 warnings (3 duplicates)
+2026-08-28T19:27:28.0570479Z warning: `noesis` (test "e2e_fr_ext_002_rust_knowledge") generated 3 warnings (3 duplicates)
+2026-08-28T19:28:30.5569472Z     Finished `test` profile [unoptimized + debuginfo] target(s) in 3m 06s
+2026-08-28T19:28:30.6446445Z      Running unittests src\lib.rs (target\debug\deps\codenoesis_application-439740f5af9b243d.exe)
+2026-08-28T19:28:30.6553772Z 
+2026-08-28T19:28:30.6554238Z running 2 tests
+2026-08-28T19:28:30.6558062Z test s4_r10::tests::pt_fr_ext_013_invalid_v12_contract_remains_typed ... ok
+2026-08-28T19:28:30.6559083Z test s5::tests::pt_fr_inc_002_module_mapping_changes_force_stronger_scope ... ok
+2026-08-28T19:28:30.6559765Z 
+2026-08-28T19:28:30.6560269Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:30.6562160Z 
+2026-08-28T19:28:30.6575437Z      Running tests\s1_boundaries.rs (target\debug\deps\s1_boundaries-1f761f8828f5f502.exe)
+2026-08-28T19:28:30.6673536Z 
+2026-08-28T19:28:30.6673820Z running 4 tests
+2026-08-28T19:28:30.6687925Z test conf_fr_acq_005_root_manifest_mismatch_precedes_root_acquisition ... ok
+2026-08-28T19:28:30.6688845Z test gt_fr_acq_005_missing_manifest_boundary_precedes_nested_open ... ok
+2026-08-28T19:28:30.6689420Z test gt_fr_acq_005_nested_path_failure_follows_oid_match ... ok
+2026-08-28T19:28:30.6689922Z test gt_fr_acq_005_nested_oid_mismatch_precedes_nested_open ... ok
+2026-08-28T19:28:30.6690211Z 
+2026-08-28T19:28:30.6690641Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:30.6691307Z 
+2026-08-28T19:28:30.6704662Z      Running tests\s4_framework_declarations.rs (target\debug\deps\s4_framework_declarations-82e13d89a9c11f3f.exe)
+2026-08-28T19:28:30.6802537Z 
+2026-08-28T19:28:30.6803264Z running 1 test
+2026-08-28T19:28:30.6809090Z test gt_fr_ext_011_application_propagates_typed_r6_failure ... ok
+2026-08-28T19:28:30.6809455Z 
+2026-08-28T19:28:30.6809722Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:30.6810112Z 
+2026-08-28T19:28:30.6825540Z      Running tests\s4_k1_rust_callable_semantics.rs (target\debug\deps\s4_k1_rust_callable_semantics-73cb40e90309bfbc.exe)
+2026-08-28T19:28:30.6924357Z 
+2026-08-28T19:28:30.6924613Z running 1 test
+2026-08-28T19:28:30.6931232Z test gt_fr_ext_012_application_preserves_typed_k1_failure ... ok
+2026-08-28T19:28:30.6931748Z 
+2026-08-28T19:28:30.6932110Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:30.6932590Z 
+2026-08-28T19:28:30.6947550Z      Running tests\s4_r10_cfg_declaration_alternatives.rs (target\debug\deps\s4_r10_cfg_declaration_alternatives-12528cb66776a3f0.exe)
+2026-08-28T19:28:30.7046474Z 
+2026-08-28T19:28:30.7046710Z running 1 test
+2026-08-28T19:28:30.7052719Z test ft_fr_ext_013_application_propagates_typed_r10_failure_atomically ... ok
+2026-08-28T19:28:30.7053096Z 
+2026-08-28T19:28:30.7053401Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:30.7053769Z 
+2026-08-28T19:28:30.7069256Z      Running tests\s4_r11_k1_repository_boundary_composition.rs (target\debug\deps\s4_r11_k1_repository_boundary_composition-4f6c16906a58c8c5.exe)
+2026-08-28T19:28:30.7174215Z 
+2026-08-28T19:28:30.7174502Z running 1 test
+2026-08-28T19:28:30.7189055Z test gt_fr_ext_012_application_passes_only_canonical_boundary_pairs_to_k1 ... ok
+2026-08-28T19:28:30.7189515Z 
+2026-08-28T19:28:30.7189813Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:30.7190218Z 
+2026-08-28T19:28:30.7206096Z      Running tests\s4_r12_k1_cfg_alternatives.rs (target\debug\deps\s4_r12_k1_cfg_alternatives-2f1dc75478ce4fc4.exe)
+2026-08-28T19:28:30.7307073Z 
+2026-08-28T19:28:30.7307366Z running 1 test
+2026-08-28T19:28:30.7323361Z test gt_fr_ext_014_application_passes_only_canonical_boundary_pairs_to_r12 ... ok
+2026-08-28T19:28:30.7324088Z 
+2026-08-28T19:28:30.7324568Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:30.7325288Z 
+2026-08-28T19:28:30.7341237Z      Running tests\s4_r14_rust_expression_bindings.rs (target\debug\deps\s4_r14_rust_expression_bindings-3d4246e96804c0b9.exe)
+2026-08-28T19:28:30.7443541Z 
+2026-08-28T19:28:30.7443804Z running 1 test
+2026-08-28T19:28:30.7450463Z test gt_fr_ext_016_application_acquires_once_and_preserves_typed_r14_failure ... ok
+2026-08-28T19:28:30.7450988Z 
+2026-08-28T19:28:30.7451303Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:30.7451709Z 
+2026-08-28T19:28:30.7466733Z      Running tests\s4_r15_rust_local_flow.rs (target\debug\deps\s4_r15_rust_local_flow-8a47b2db90e9d436.exe)
+2026-08-28T19:28:30.7564582Z 
+2026-08-28T19:28:30.7564851Z running 1 test
+2026-08-28T19:28:30.7571494Z test gt_fr_ext_017_application_acquires_once_and_preserves_typed_r15_failure ... ok
+2026-08-28T19:28:30.7572333Z 
+2026-08-28T19:28:30.7572659Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:30.7573267Z 
+2026-08-28T19:28:30.7588870Z      Running tests\s4_r16_safe_constant_evaluation.rs (target\debug\deps\s4_r16_safe_constant_evaluation-8f5278896904e54c.exe)
+2026-08-28T19:28:30.7688239Z 
+2026-08-28T19:28:30.7688507Z running 1 test
+2026-08-28T19:28:30.7695163Z test gt_fr_ext_020_application_acquires_once_and_preserves_typed_r16_failure ... ok
+2026-08-28T19:28:30.7695802Z 
+2026-08-28T19:28:30.7696083Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:30.7697869Z 
+2026-08-28T19:28:30.7712015Z      Running tests\s4_root_package_workspace.rs (target\debug\deps\s4_root_package_workspace-301c38203c57f9fb.exe)
+2026-08-28T19:28:30.7811049Z 
+2026-08-28T19:28:30.7811349Z running 1 test
+2026-08-28T19:28:30.7874355Z test sec_fr_ext_008_gitlink_member_stays_external_in_application ... ok
+2026-08-28T19:28:30.7874830Z 
+2026-08-28T19:28:30.7875134Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-08-28T19:28:30.7875537Z 
+2026-08-28T19:28:30.7893685Z      Running tests\s6_federation.rs (target\debug\deps\s6_federation-5063aae644d5aaac.exe)
+2026-08-28T19:28:30.7992122Z 
+2026-08-28T19:28:30.7992456Z running 2 tests
+2026-08-28T19:28:30.8003967Z test conf_fr_cli_005_application_rejects_unbound_input_cardinality ... ok
+2026-08-28T19:28:30.8016196Z test conf_fr_cli_005_application_buffers_one_validated_report ... ok
+2026-08-28T19:28:30.8016645Z 
+2026-08-28T19:28:30.8016918Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:30.8017323Z 
+2026-08-28T19:28:30.8032806Z      Running tests\s7_r19_git_evidence.rs (target\debug\deps\s7_r19_git_evidence-869c492d3e322310.exe)
+2026-08-28T19:28:30.8131136Z 
+2026-08-28T19:28:30.8131448Z running 3 tests
+2026-08-28T19:28:30.8140943Z test ct_fr_imp_006_application_rejects_missing_and_duplicate_selection ... ok
+2026-08-28T19:28:30.8141605Z test gt_fr_imp_006_application_selects_only_requested_git_files_canonically ... ok
+2026-08-28T19:28:30.8161546Z test pt_fr_imp_006_application_file_limit_has_maximum_and_plus_one ... ok
+2026-08-28T19:28:30.8162232Z 
+2026-08-28T19:28:30.8162727Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:30.8163451Z 
+2026-08-28T19:28:30.8179168Z      Running unittests src\lib.rs (target\debug\deps\codenoesis_contract_extractors-e818a7b7ed4b522f.exe)
+2026-08-28T19:28:30.8276975Z 
+2026-08-28T19:28:30.8277284Z running 0 tests
+2026-08-28T19:28:30.8277562Z 
+2026-08-28T19:28:30.8278021Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:30.8278459Z 
+2026-08-28T19:28:30.8292169Z      Running tests\openapi_s6.rs (target\debug\deps\openapi_s6-f01ffc7962a9f75b.exe)
+2026-08-28T19:28:30.8390526Z 
+2026-08-28T19:28:30.8390982Z running 4 tests
+2026-08-28T19:28:30.8430436Z test fz_fr_ext_004_malformed_contract_seeds_fail_closed ... ok
+2026-08-28T19:28:30.8431825Z test gt_fr_ext_004_yaml_json_semantic_projection_is_equivalent ... ok
+2026-08-28T19:28:30.8432699Z test gt_fr_ext_004_unsupported_semantics_become_exact_gaps ... ok
+2026-08-28T19:28:30.8434940Z test sec_fr_ext_004_restricted_yaml_and_refs_fail_closed ... ok
+2026-08-28T19:28:30.8435480Z 
+2026-08-28T19:28:30.8436059Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:30.8436768Z 
+2026-08-28T19:28:30.8454133Z      Running tests\s7_openapi_projection.rs (target\debug\deps\s7_openapi_projection-bb15e48beaf70b51.exe)
+2026-08-28T19:28:30.8552428Z 
+2026-08-28T19:28:30.8553136Z running 1 test
+2026-08-28T19:28:30.8571130Z test conf_fr_imp_004_projects_exact_s6_operation ... ok
+2026-08-28T19:28:30.8571633Z 
+2026-08-28T19:28:30.8572140Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:30.8572819Z 
+2026-08-28T19:28:30.8588497Z      Running unittests src\lib.rs (target\debug\deps\codenoesis_contracts-db305ac6805b42d7.exe)
+2026-08-28T19:28:30.8685693Z 
+2026-08-28T19:28:30.8686062Z running 31 tests
+2026-08-28T19:28:30.8696401Z test g0::tests::fr_rel_001_exact_limits_accept_maximum_and_reject_plus_one ... ok
+2026-08-28T19:28:30.8698360Z test s4_k1::output_capacity_tests::reg_fr_cli_001_k1_output_capacity_preserves_small_bytes ... ok
+2026-08-28T19:28:30.8702297Z test g0::tests::fr_rel_001_malformed_and_private_registries_fail_closed ... ok
+2026-08-28T19:28:30.8703801Z test s4_r10::tests::pt_fr_exp_003_portable_alternative_limits_are_exact ... ok
+2026-08-28T19:28:30.8705315Z test s4_r10::tests::pt_fr_exp_003_json_nesting_maximum_and_plus_one_are_exact ... ok
+2026-08-28T19:28:30.8712023Z test s4_r10::tests::pt_fr_exp_003_portable_size_maximum_and_plus_one_are_exact ... ok
+2026-08-28T19:28:30.8713376Z test s4_r10::tests::sec_fr_exp_003_portable_paths_are_closed_and_relative ... ok
+2026-08-28T19:28:30.8720358Z test s4_r11::tests::ct_fr_cli_001_acquisition_limit_is_promoted_to_error_v18 ... ok
+2026-08-28T19:28:30.8722196Z test s4_r11::tests::ct_fr_exp_002_boundary_projection_rejects_unknown_shape_and_summary_drift ... ok
+2026-08-28T19:28:30.8723293Z test s4_r11::tests::pt_fr_ext_012_v13_hash_domains_are_additive ... ok
+2026-08-28T19:28:30.8727398Z test s4_r11::tests::ct_fr_exp_002_boundary_projection_accepts_declaration_subject_gaps ... ok
+2026-08-28T19:28:30.8729189Z test s4_r13::tests::pt_fr_exp_005_json_nesting_has_exact_maximum_and_plus_one ... ok
+2026-08-28T19:28:30.8730840Z test s4_r13::tests::pt_fr_exp_005_portable_size_has_exact_maximum_and_plus_one ... ok
+2026-08-28T19:28:30.8753617Z test s4_r17::tests::ct_fr_ctx_001_display_signature_uses_only_declared_facts_when_root_has_no_card ... ok
+2026-08-28T19:28:30.8755351Z test s4_r17::tests::ft_fr_ctx_001_structural_failures_are_typed_and_closed ... ok
+2026-08-28T19:28:30.8780560Z test s4_r17::tests::sec_fr_exp_009_viewer_security_checks_reject_active_content ... ok
+2026-08-28T19:28:30.8791944Z test s4_r17::tests::sec_nfr_prv_002_private_fields_and_urls_are_rejected ... ok
+2026-08-28T19:28:30.8801869Z test s4_r18::tests::conf_fr_ctx_002_positions_are_unicode_scalar_and_crlf_aware ... ok
+2026-08-28T19:28:30.8856929Z test s4_r17::tests::pt_nfr_det_001_ten_context_schedules_are_byte_identical ... ok
+2026-08-28T19:28:30.8866705Z test s4_r18::tests::inv_bnd_001_excerpt_maximum_plus_one_is_rejected ... ok
+2026-08-28T19:28:30.8873884Z test s4_r18::tests::sec_fr_ctx_002_lfs_pointer_is_never_resolved_as_remote_content ... ok
+2026-08-28T19:28:30.8878410Z test s4_r18::tests::sec_fr_ctx_002_rejects_non_utf8_and_non_scalar_boundaries ... ok
+2026-08-28T19:28:30.8883645Z test s4_r18::tests::sec_fr_ctx_002_repository_blob_path_and_span_mismatches_fail_closed ... ok
+2026-08-28T19:28:30.8888235Z test s4_r18::tests::sec_fr_ctx_002_repository_paths_are_bounded_and_relative ... ok
+2026-08-28T19:28:30.8900161Z test tests::conf_dr_art_001_repository_snapshot_v1 ... ok
+2026-08-28T19:28:30.9073964Z test s4_r18::tests::inv_bnd_001_exact_excerpt_and_stdout_limits_are_enforced ... ok
+2026-08-28T19:28:30.9292710Z test tests::pt_dr_art_002_volatile_envelope_preserves_semantic_hash ... ok
+2026-08-28T19:28:30.9445277Z test tests::pt_nfr_det_001_permutation_and_schedule_invariant ... ok
+2026-08-28T19:28:34.8061586Z test tests::pt_fr_acq_002_canonical_output_has_max_and_plus_one ... ok
+2026-08-28T19:28:40.5065258Z test s4_k1::output_capacity_tests::pt_inv_bnd_001_k1_output_capacity_maximum_plus_one ... ok
+2026-08-28T19:28:53.8483977Z test s4_r14::output_capacity_tests::pt_nfr_per_001_r14_256m_output_capacity_maximum_plus_one ... ok
+2026-08-28T19:28:53.8484676Z 
+2026-08-28T19:28:53.8486854Z test result: ok. 31 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 22.98s
+2026-08-28T19:28:53.8487816Z 
+2026-08-28T19:28:53.8511576Z      Running tests\g0_release_profile.rs (target\debug\deps\g0_release_profile-6f0e2710baadd403.exe)
+2026-08-28T19:28:53.8623898Z 
+2026-08-28T19:28:53.8624152Z running 5 tests
+2026-08-28T19:28:53.8636977Z test conf_fr_rel_001_embedded_registry_matches_reviewed_fixture ... ok
+2026-08-28T19:28:53.8638085Z test conf_fr_cli_007_unknown_and_unsupported_are_strict_error_v25 ... ok
+2026-08-28T19:28:53.8642670Z test sec_fr_rel_001_invalid_private_and_oversized_registry_fails_closed ... ok
+2026-08-28T19:28:53.8649959Z test conf_fr_rel_001_each_target_matches_exact_golden ... ok
+2026-08-28T19:28:53.8848228Z test pt_fr_rel_001_fifty_constructions_and_ten_schedules_are_identical ... ok
+2026-08-28T19:28:53.8849586Z 
+2026-08-28T19:28:53.8850225Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+2026-08-28T19:28:53.8851155Z 
+2026-08-28T19:28:53.8868565Z      Running tests\g1_local_configuration.rs (target\debug\deps\g1_local_configuration-af02aaefd7c7ac7e.exe)
+2026-08-28T19:28:53.8985161Z 
+2026-08-28T19:28:53.8985654Z running 6 tests
+2026-08-28T19:28:53.8996615Z test fr_cfg_001_errors_are_strict_and_private ... ok
+2026-08-28T19:28:53.9002774Z test fr_cfg_001_accepts_semantic_whitespace_but_rejects_duplicate_keys ... ok
+2026-08-28T19:28:53.9004214Z test fr_cfg_001_emits_the_frozen_embedded_report ... ok
+2026-08-28T19:28:53.9007391Z test fr_rel_002_builds_the_frozen_current_target_manifest ... ok
+2026-08-28T19:28:53.9009243Z test fr_rel_002_rejects_unbounded_or_noncanonical_manifest_inputs ... ok
+2026-08-28T19:28:53.9029387Z test fr_cfg_001_enforces_closed_values_and_exact_size_boundaries ... ok
+2026-08-28T19:28:53.9029969Z 
+2026-08-28T19:28:53.9030456Z test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:53.9031092Z 
+2026-08-28T19:28:53.9051188Z      Running tests\g2_local_upgrade_safety.rs (target\debug\deps\g2_local_upgrade_safety-d0023c4432ff7e7f.exe)
+2026-08-28T19:28:53.9160490Z 
+2026-08-28T19:28:53.9160863Z running 3 tests
+2026-08-28T19:28:53.9168873Z test ct_fr_cli_009_error_v27_matches_exact_goldens ... ok
+2026-08-28T19:28:53.9174248Z test sec_fr_cmp_001_noncanonical_plan_and_substitution_fail_closed ... ok
+2026-08-28T19:28:53.9196259Z test ct_fr_cmp_001_target_plans_and_rollbacks_match_exact_goldens ... ok
+2026-08-28T19:28:53.9196874Z 
+2026-08-28T19:28:53.9197323Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:53.9198001Z 
+2026-08-28T19:28:53.9214415Z      Running tests\g8_local_release_candidate.rs (target\debug\deps\g8_local_release_candidate-90cf1071741cc5b1.exe)
+2026-08-28T19:28:53.9316341Z 
+2026-08-28T19:28:53.9316765Z running 4 tests
+2026-08-28T19:28:53.9327663Z test ct_fr_cli_010_error_v28_matches_frozen_public_bytes ... ok
+2026-08-28T19:28:53.9329090Z test sec_nfr_sec_004_noncanonical_and_private_evidence_fails_closed ... ok
+2026-08-28T19:28:53.9350890Z test ct_nfr_sup_001_supply_documents_are_closed_and_cross_bound ... ok
+2026-08-28T19:28:53.9361328Z test ct_fr_rel_003_all_target_manifests_and_verifications_are_exact ... ok
+2026-08-28T19:28:53.9362018Z 
+2026-08-28T19:28:53.9362502Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:53.9363209Z 
+2026-08-28T19:28:53.9379502Z      Running tests\s1_boundaries_contracts.rs (target\debug\deps\s1_boundaries_contracts-aa325662658c8008.exe)
+2026-08-28T19:28:53.9479273Z 
+2026-08-28T19:28:53.9479571Z running 8 tests
+2026-08-28T19:28:53.9490269Z test conf_fr_acq_005_boundary_input_v1_rejects_duplicate_members ... ok
+2026-08-28T19:28:53.9493833Z test conf_fr_acq_005_boundary_input_v1_enforces_identity_contract ... ok
+2026-08-28T19:28:53.9495280Z test conf_fr_acq_005_boundary_input_v1_rejects_duplicate_and_recursive_entries ... ok
+2026-08-28T19:28:53.9499503Z test conf_fr_acq_005_error_v9_is_closed_and_redacted ... ok
+2026-08-28T19:28:53.9548915Z test pt_fr_acq_005_explicit_roots_have_max_and_plus_one ... ok
+2026-08-28T19:28:53.9610253Z test pt_fr_acq_005_boundary_manifest_bytes_have_max_and_plus_one ... ok
+2026-08-28T19:28:53.9725820Z test conf_fr_acq_005_boundary_input_v1_is_strict_and_ordered ... ok
+2026-08-28T19:28:55.9858411Z test pt_fr_acq_005_boundary_report_bytes_have_exact_max_and_plus_one ... ok
+2026-08-28T19:28:55.9859231Z 
+2026-08-28T19:28:55.9859701Z test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.04s
+2026-08-28T19:28:55.9860393Z 
+2026-08-28T19:28:55.9883558Z      Running tests\s1_packed_contracts.rs (target\debug\deps\s1_packed_contracts-22ad5af4c42a3c33.exe)
+2026-08-28T19:28:55.9985479Z 
+2026-08-28T19:28:55.9986031Z running 1 test
+2026-08-28T19:28:55.9992211Z test conf_fr_acq_004_error_v6_exact_contexts ... ok
+2026-08-28T19:28:55.9992633Z 
+2026-08-28T19:28:55.9992972Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:55.9993355Z 
+2026-08-28T19:28:56.0008739Z      Running tests\s4_contracts.rs (target\debug\deps\s4_contracts-3fce20d8ed6410f9.exe)
+2026-08-28T19:28:56.0104740Z 
+2026-08-28T19:28:56.0105215Z running 6 tests
+2026-08-28T19:28:56.0121744Z test conf_fr_cli_001_reviewed_v5_errors_are_exact ... ok
+2026-08-28T19:28:56.0181618Z test fr_doc_003_document_limits_plus_one_fail_closed ... ok
+2026-08-28T19:28:56.0208941Z test e2e_fr_qry_001_exact_id_results ... ok
+2026-08-28T19:28:56.0264361Z test gt_fr_doc_001_deterministic_markdown ... ok
+2026-08-28T19:28:56.0937133Z test fr_sto_001_loaded_s4_semantic_must_match_every_head_artifact ... ok
+2026-08-28T19:28:56.2024204Z test fr_qry_001_query_result_limit_plus_one_fails_closed ... ok
+2026-08-28T19:28:56.2024599Z 
+2026-08-28T19:28:56.2024875Z test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+2026-08-28T19:28:56.2025282Z 
+2026-08-28T19:28:56.2047548Z      Running tests\s4_k1_contracts.rs (target\debug\deps\s4_k1_contracts-a3f0ee21928a7ada.exe)
+2026-08-28T19:28:56.2151259Z 
+2026-08-28T19:28:56.2151586Z running 5 tests
+2026-08-28T19:28:56.2163603Z test conf_fr_ext_012_snapshot_v11_graph_v8_error_v16 ... ok
+2026-08-28T19:28:56.2172453Z test conf_fr_qry_001_v11_uses_local_query_result_v6 ... ok
+2026-08-28T19:28:56.2176248Z test conf_fr_exp_002_portable_graph_v2_lossless_reimport ... ok
+2026-08-28T19:28:56.2178449Z test sec_fr_exp_002_excludes_body_expression_and_source_text ... ok
+2026-08-28T19:28:56.2181970Z test conf_fr_exp_002_local_explorer_v2_is_offline ... ok
+2026-08-28T19:28:56.2182473Z 
+2026-08-28T19:28:56.2182849Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.2183268Z 
+2026-08-28T19:28:56.2199089Z      Running tests\s4_r10_contracts.rs (target\debug\deps\s4_r10_contracts-d794b35842151374.exe)
+2026-08-28T19:28:56.2295730Z 
+2026-08-28T19:28:56.2296111Z running 2 tests
+2026-08-28T19:28:56.2301534Z test conf_fr_exp_003_error_v17_contract_matrix_is_typed ... ok
+2026-08-28T19:28:56.2303369Z test conf_fr_ext_013_error_v17_extraction_matrix_is_typed ... ok
+2026-08-28T19:28:56.2303714Z 
+2026-08-28T19:28:56.2304017Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.2304388Z 
+2026-08-28T19:28:56.2319635Z      Running tests\s4_r11_k1_repository_boundary_composition.rs (target\debug\deps\s4_r11_k1_repository_boundary_composition-32024cf9a963f475.exe)
+2026-08-28T19:28:56.2419390Z 
+2026-08-28T19:28:56.2419757Z running 4 tests
+2026-08-28T19:28:56.2430402Z test conf_fr_cli_001_r11_contract_failures_emit_error_v18 ... ok
+2026-08-28T19:28:56.2436407Z test ft_fr_exp_002_v4_reimport_rejects_unknown_top_level_fields ... ok
+2026-08-28T19:28:56.2437624Z test ft_fr_exp_002_v4_reimport_rejects_unknown_schema_before_projection ... ok
+2026-08-28T19:28:56.2439068Z test ft_nfr_prv_002_v4_reimport_rejects_private_boundary_payloads ... ok
+2026-08-28T19:28:56.2439736Z 
+2026-08-28T19:28:56.2440243Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.2440880Z 
+2026-08-28T19:28:56.2454885Z      Running tests\s4_r12_k1_cfg_alternatives.rs (target\debug\deps\s4_r12_k1_cfg_alternatives-e13b295da6448773.exe)
+2026-08-28T19:28:56.2554015Z 
+2026-08-28T19:28:56.2554283Z running 7 tests
+2026-08-28T19:28:56.2571455Z test conf_fr_exp_004_v5_reimports_one_canonical_closed_projection ... ok
+2026-08-28T19:28:56.2572473Z test conf_fr_cli_001_r12_typed_failures_emit_only_error_v19_codes ... ok
+2026-08-28T19:28:56.2579875Z test ft_fr_exp_004_v5_reimport_rejects_unknown_schema_before_projection ... ok
+2026-08-28T19:28:56.2582641Z test ft_fr_exp_004_v5_reimport_rejects_duplicate_and_dangling_graph_records ... ok
+2026-08-28T19:28:56.2587026Z test ft_fr_exp_004_v5_reimport_rejects_unknown_and_noncanonical_payloads ... ok
+2026-08-28T19:28:56.2588787Z test ft_nfr_prv_002_v5_reimport_rejects_private_payloads ... ok
+2026-08-28T19:28:56.2613754Z test ft_fr_exp_004_v5_reimport_rejects_nested_entity_reference_mismatches ... ok
+2026-08-28T19:28:56.2614328Z 
+2026-08-28T19:28:56.2614612Z test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-08-28T19:28:56.2615021Z 
+2026-08-28T19:28:56.2631510Z      Running tests\s4_r13_k1_scip_composition.rs (target\debug\deps\s4_r13_k1_scip_composition-49a906bfae330bcf.exe)
+2026-08-28T19:28:56.2730609Z 
+2026-08-28T19:28:56.2730981Z running 9 tests
+2026-08-28T19:28:56.2746788Z test conf_fr_cli_001_r13_typed_failures_emit_only_error_v20_codes ... ok
+2026-08-28T19:28:56.2759426Z test conf_fr_exp_005_v6_reimports_one_canonical_closed_projection ... ok
+2026-08-28T19:28:56.2765832Z test ft_fr_exp_005_v6_rejects_duplicate_and_dangling_records ... ok
+2026-08-28T19:28:56.2767152Z test ft_fr_exp_005_v6_rejects_document_and_statement_reference_mismatches ... ok
+2026-08-28T19:28:56.2774050Z test ft_fr_exp_005_v6_rejects_unknown_schema_before_projection ... ok
+2026-08-28T19:28:56.2775045Z test ft_fr_exp_005_v6_rejects_unknown_and_noncanonical_payloads ... ok
+2026-08-28T19:28:56.2782788Z test sec_fr_exp_005_v6_explorer_rejects_changed_viewer_and_active_csp ... ok
+2026-08-28T19:28:56.2786415Z test ft_nfr_prv_002_v6_rejects_private_and_unsafe_path_payloads ... ok
+2026-08-28T19:28:56.2796164Z test ft_fr_exp_005_v6_rejects_incomplete_callable_compiler_join_lineage ... ok
+2026-08-28T19:28:56.2796734Z 
+2026-08-28T19:28:56.2797046Z test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-08-28T19:28:56.2797455Z 
+2026-08-28T19:28:56.2813489Z      Running tests\s4_r14_r15_real_repository_correction.rs (target\debug\deps\s4_r14_r15_real_repository_correction-dce18564feb92720.exe)
+2026-08-28T19:28:56.2913145Z 
+2026-08-28T19:28:56.2913499Z running 1 test
+2026-08-28T19:28:56.2916932Z test conf_fr_cli_001_r14_r15_share_the_bounded_256m_envelope ... ok
+2026-08-28T19:28:56.2917418Z 
+2026-08-28T19:28:56.2917711Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.2918118Z 
+2026-08-28T19:28:56.2931701Z      Running tests\s4_r14_rust_expression_bindings.rs (target\debug\deps\s4_r14_rust_expression_bindings-1daf049483356028.exe)
+2026-08-28T19:28:56.3030455Z 
+2026-08-28T19:28:56.3030858Z running 6 tests
+2026-08-28T19:28:56.3045440Z test conf_fr_cli_001_r14_typed_failures_emit_only_error_v21_codes ... ok
+2026-08-28T19:28:56.3053695Z test ft_fr_exp_006_v7_rejects_unknown_schema_fields_and_noncanonical_bytes ... ok
+2026-08-28T19:28:56.3054705Z test conf_fr_exp_006_v7_reimports_one_canonical_closed_projection ... ok
+2026-08-28T19:28:56.3063438Z test sec_fr_exp_006_v7_explorer_rejects_changed_unbalanced_or_active_viewer ... ok
+2026-08-28T19:28:56.3065397Z test ft_fr_exp_006_v7_rejects_duplicate_dangling_and_hash_mismatches ... ok
+2026-08-28T19:28:56.3073136Z test ft_nfr_prv_002_v7_rejects_private_fields_urls_and_unsafe_paths ... ok
+2026-08-28T19:28:56.3073530Z 
+2026-08-28T19:28:56.3073840Z test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.3074289Z 
+2026-08-28T19:28:56.3089304Z      Running tests\s4_r15_rust_local_flow.rs (target\debug\deps\s4_r15_rust_local_flow-c4c37293140d21f5.exe)
+2026-08-28T19:28:56.3185424Z 
+2026-08-28T19:28:56.3185801Z running 5 tests
+2026-08-28T19:28:56.3200473Z test conf_fr_cli_001_r15_typed_failures_emit_only_error_v22_codes ... ok
+2026-08-28T19:28:56.3213616Z test conf_fr_exp_007_v8_reimports_canonical_lossless_local_flow_projection ... ok
+2026-08-28T19:28:56.3221730Z test sec_fr_exp_007_v8_explorer_preserves_reviewed_asset_authority ... ok
+2026-08-28T19:28:56.3234687Z test ft_fr_exp_007_v8_rejects_unknown_private_and_missing_derivation_inputs ... ok
+2026-08-28T19:28:56.3251417Z test ft_fr_exp_007_v8_rejects_order_reference_hash_path_and_noncanonical_bytes ... ok
+2026-08-28T19:28:56.3252058Z 
+2026-08-28T19:28:56.3252395Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-08-28T19:28:56.3252802Z 
+2026-08-28T19:28:56.3269882Z      Running tests\s4_r16_safe_constant_evaluation.rs (target\debug\deps\s4_r16_safe_constant_evaluation-498139797da20dfe.exe)
+2026-08-28T19:28:56.3368401Z 
+2026-08-28T19:28:56.3368714Z running 5 tests
+2026-08-28T19:28:56.3384376Z test conf_fr_cli_001_r16_typed_failures_emit_only_error_v24_codes ... ok
+2026-08-28T19:28:56.3410727Z test conf_fr_exp_008_v9_reimports_canonical_lossless_constant_projection ... ok
+2026-08-28T19:28:56.3417647Z test sec_fr_exp_008_v9_explorer_rejects_remote_dynamic_and_script_close_content ... ok
+2026-08-28T19:28:56.3498467Z test ft_fr_exp_008_v9_rejects_unknown_order_derivation_privacy_and_path_failures ... ok
+2026-08-28T19:28:56.3516275Z test ft_fr_exp_008_v9_rejects_value_derivation_index_and_cycle_mismatches ... ok
+2026-08-28T19:28:56.3516941Z 
+2026-08-28T19:28:56.3517277Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-08-28T19:28:56.3517655Z 
+2026-08-28T19:28:56.3534600Z      Running tests\s4_r17_function_context.rs (target\debug\deps\s4_r17_function_context-87e685a059c2e23a.exe)
+2026-08-28T19:28:56.3632420Z 
+2026-08-28T19:28:56.3632651Z running 3 tests
+2026-08-28T19:28:56.3638148Z test ct_fr_exp_009_additive_contract_values_are_exact ... ok
+2026-08-28T19:28:56.3638847Z test pt_fr_ctx_001_exact_maxima_are_accepted ... ok
+2026-08-28T19:28:56.3639340Z test pt_fr_ctx_001_each_maximum_plus_one_fails_closed ... ok
+2026-08-28T19:28:56.3639641Z 
+2026-08-28T19:28:56.3639938Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.3640309Z 
+2026-08-28T19:28:56.3654651Z      Running tests\s4_r18_trusted_source_retrieval.rs (target\debug\deps\s4_r18_trusted_source_retrieval-cadd51b6f7e0133f.exe)
+2026-08-28T19:28:56.3752988Z 
+2026-08-28T19:28:56.3753187Z running 3 tests
+2026-08-28T19:28:56.3757832Z test ct_fr_cli_011_contract_constants_are_exact ... ok
+2026-08-28T19:28:56.3764446Z test ct_fr_cli_011_error_v29_is_strict_private_and_lf_terminated ... ok
+2026-08-28T19:28:56.3769397Z test ct_fr_ctx_002_reviewed_oracle_is_strict_canonical_output ... ok
+2026-08-28T19:28:56.3769851Z 
+2026-08-28T19:28:56.3770159Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.3770533Z 
+2026-08-28T19:28:56.3785905Z      Running tests\s4_r3_contracts.rs (target\debug\deps\s4_r3_contracts-f6d694924d524e0f.exe)
+2026-08-28T19:28:56.3882068Z 
+2026-08-28T19:28:56.3882313Z running 3 tests
+2026-08-28T19:28:56.4015954Z test e2e_fr_doc_001_r3_coverage_is_documented ... ok
+2026-08-28T19:28:56.4047794Z test e2e_fr_qry_001_r3_exact_id_results ... ok
+2026-08-28T19:28:56.4141080Z test conf_fr_ext_008_snapshot_v6_graph_v3_error_v10 ... ok
+2026-08-28T19:28:56.4141582Z 
+2026-08-28T19:28:56.4142282Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+2026-08-28T19:28:56.4142716Z 
+2026-08-28T19:28:56.4162423Z      Running tests\s4_r4_contracts.rs (target\debug\deps\s4_r4_contracts-bd3a45ba1a181f71.exe)
+2026-08-28T19:28:56.4264282Z 
+2026-08-28T19:28:56.4264540Z running 2 tests
+2026-08-28T19:28:56.4286565Z test conf_fr_ext_009_snapshot_v7_graph_v4_error_v11 ... ok
+2026-08-28T19:28:56.4290077Z test reg_fr_doc_001_r4_declared_import_survives_omitted_r3_coverage ... ok
+2026-08-28T19:28:56.4290583Z 
+2026-08-28T19:28:56.4290899Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.4291279Z 
+2026-08-28T19:28:56.4308845Z      Running tests\s4_r5_contracts.rs (target\debug\deps\s4_r5_contracts-99434ba598d45867.exe)
+2026-08-28T19:28:56.4404624Z 
+2026-08-28T19:28:56.4404936Z running 2 tests
+2026-08-28T19:28:56.4415856Z test conf_fr_qry_001_v8_uses_local_query_result_v3 ... ok
+2026-08-28T19:28:56.4417459Z test conf_fr_ext_010_snapshot_v8_graph_v5_error_v12 ... ok
+2026-08-28T19:28:56.4418006Z 
+2026-08-28T19:28:56.4418482Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.4419182Z 
+2026-08-28T19:28:56.4433556Z      Running tests\s4_r6_contracts.rs (target\debug\deps\s4_r6_contracts-d8da823792f69d04.exe)
+2026-08-28T19:28:56.4534576Z 
+2026-08-28T19:28:56.4535341Z running 3 tests
+2026-08-28T19:28:56.4547121Z test conf_fr_qry_001_v9_uses_local_query_result_v4 ... ok
+2026-08-28T19:28:56.4548329Z test conf_fr_ext_011_error_v13_invalid_matrix_is_strict ... ok
+2026-08-28T19:28:56.4551116Z test conf_fr_ext_011_snapshot_v9_graph_v6_error_v13 ... ok
+2026-08-28T19:28:56.4551642Z 
+2026-08-28T19:28:56.4552198Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.4552589Z 
+2026-08-28T19:28:56.4568686Z      Running tests\s4_r7_contracts.rs (target\debug\deps\s4_r7_contracts-f486b0043d5c8518.exe)
+2026-08-28T19:28:56.4662682Z 
+2026-08-28T19:28:56.4662946Z running 2 tests
+2026-08-28T19:28:56.4695526Z test conf_fr_ext_005_snapshot_v10_graph_v7_error_v14 ... ok
+2026-08-28T19:28:56.4706339Z test conf_fr_qry_001_v10_uses_local_query_result_v5 ... ok
+2026-08-28T19:28:56.4706865Z 
+2026-08-28T19:28:56.4707428Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.4707824Z 
+2026-08-28T19:28:56.4723970Z      Running tests\s4_r8_contracts.rs (target\debug\deps\s4_r8_contracts-c5894fe3fa13aa4a.exe)
+2026-08-28T19:28:56.4820184Z 
+2026-08-28T19:28:56.4820471Z running 4 tests
+2026-08-28T19:28:56.4831176Z test conf_fr_exp_001_error_v15_is_strict_and_lf_terminated ... ok
+2026-08-28T19:28:56.4861770Z test conf_fr_exp_001_portable_graph_v1_lossless_reimport ... ok
+2026-08-28T19:28:56.4992181Z test gt_fr_exp_001_duplicate_loss_reorder_and_hash_rejection ... ok
+2026-08-28T19:28:56.5363832Z test conf_fr_exp_001_fifty_source_permutations_are_byte_identical ... ok
+2026-08-28T19:28:56.5364219Z 
+2026-08-28T19:28:56.5364769Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+2026-08-28T19:28:56.5365728Z 
+2026-08-28T19:28:56.5388931Z      Running tests\s4_r9_output_capacity_contracts.rs (target\debug\deps\s4_r9_output_capacity_contracts-8aebb60917c2d271.exe)
+2026-08-28T19:28:56.5493081Z 
+2026-08-28T19:28:56.5493374Z running 2 tests
+2026-08-28T19:28:56.5497089Z test conf_fr_ext_012_k1_output_capacity_profile_is_additive ... ok
+2026-08-28T19:28:56.5514575Z test reg_fr_exp_002_k1_script_close_source_spelling_is_inert_data ... ok
+2026-08-28T19:28:56.5515632Z 
+2026-08-28T19:28:56.5515940Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.5516335Z 
+2026-08-28T19:28:56.5532237Z      Running tests\s5_contracts.rs (target\debug\deps\s5_contracts-75e47d9689e26b89.exe)
+2026-08-28T19:28:56.5628068Z 
+2026-08-28T19:28:56.5628393Z running 2 tests
+2026-08-28T19:28:56.5640234Z test conf_fr_cli_004_error_v7_is_closed_and_typed ... ok
+2026-08-28T19:28:56.5682995Z test conf_fr_inc_003_analysis_cache_v1_round_trip ... ok
+2026-08-28T19:28:56.5683951Z 
+2026-08-28T19:28:56.5684471Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-08-28T19:28:56.5685495Z 
+2026-08-28T19:28:56.5702708Z      Running tests\s6_contracts.rs (target\debug\deps\s6_contracts-9c04f0989ef3b61f.exe)
+2026-08-28T19:28:56.5805475Z 
+2026-08-28T19:28:56.5805839Z running 3 tests
+2026-08-28T19:28:56.5818157Z test conf_fr_cli_005_reviewed_error_values_are_exact ... ok
+2026-08-28T19:28:56.5820382Z test conf_fr_cli_005_workspace_and_client_contracts_are_closed ... ok
+2026-08-28T19:28:56.5833434Z test sec_fr_cli_005_logical_paths_are_bounded_and_platform_neutral ... ok
+2026-08-28T19:28:56.5834436Z 
+2026-08-28T19:28:56.5834965Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.5836018Z 
+2026-08-28T19:28:56.5851740Z      Running tests\s7_implementation_aware_api.rs (target\debug\deps\s7_implementation_aware_api-ce93e5e1cd5be641.exe)
+2026-08-28T19:28:56.5950789Z 
+2026-08-28T19:28:56.5951061Z running 3 tests
+2026-08-28T19:28:56.5970082Z test pt_fr_cli_006_workspace_path_and_symbol_limits_are_typed ... ok
+2026-08-28T19:28:56.6003722Z test conf_fr_imp_004_s6_authority_is_strictly_accepted ... ok
+2026-08-28T19:28:56.6025580Z test sec_fr_imp_004_s6_authority_rejects_unknown_fields_and_hash_tampering ... ok
+2026-08-28T19:28:56.6026195Z 
+2026-08-28T19:28:56.6027608Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-08-28T19:28:56.6028078Z 
+2026-08-28T19:28:56.6046371Z      Running tests\s7_r19_git_evidence.rs (target\debug\deps\s7_r19_git_evidence-e05d6513c1de5007.exe)
+2026-08-28T19:28:56.6145435Z 
+2026-08-28T19:28:56.6145793Z running 6 tests
+2026-08-28T19:28:56.6151352Z test ct_fr_cli_012_r19_contract_constants_are_exact ... ok
+2026-08-28T19:28:56.6162941Z test ct_fr_imp_006_workspace_rejects_ambiguous_or_non_commit_authority ... ok
+2026-08-28T19:28:56.6164015Z test ct_fr_cli_012_error_v30_is_strict_private_and_lf_terminated ... ok
+2026-08-28T19:28:56.6168832Z test ct_fr_cli_012_source_binding_rejects_digest_utf8_and_scalar_mismatch ... ok
+2026-08-28T19:28:56.6214728Z test ct_fr_imp_006_workspace_boundaries_have_maximum_and_plus_one ... ok
+2026-08-28T19:28:56.6529467Z test pt_fr_cli_012_excerpt_limits_have_maximum_and_plus_one ... ok
+2026-08-28T19:28:56.6530401Z 
+2026-08-28T19:28:56.6530941Z test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+2026-08-28T19:28:56.6531696Z 
+2026-08-28T19:28:56.6551880Z      Running unittests src\lib.rs (target\debug\deps\codenoesis_domain-5e91416d7c1f8a5d.exe)
+2026-08-28T19:28:56.6666323Z 
+2026-08-28T19:28:56.6666659Z running 5 tests
+2026-08-28T19:28:56.6674145Z test s4_r10::tests::pt_fr_ext_013_source_and_snapshot_limit_boundaries_are_exact ... ok
+2026-08-28T19:28:56.6675407Z test s4_r13::tests::pt_fr_ext_015_join_limit_has_exact_maximum_and_plus_one ... ok
+2026-08-28T19:28:56.6676475Z test s4_r5::tests::ut_fr_ext_010_empty_additive_collections_are_neutral_only_together ... ok
+2026-08-28T19:28:56.6677500Z test tests::pt_fr_acq_002_limits_have_max_and_plus_one ... ok
+2026-08-28T19:28:56.6684980Z test tests::pt_fr_inv_001_inventory_is_order_invariant ... ok
+2026-08-28T19:28:56.6685641Z 
+2026-08-28T19:28:56.6686164Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.6686920Z 
+2026-08-28T19:28:56.6705416Z      Running tests\s1_boundaries.rs (target\debug\deps\s1_boundaries-46f9f657a68d2115.exe)
+2026-08-28T19:28:56.6813056Z 
+2026-08-28T19:28:56.6813427Z running 10 tests
+2026-08-28T19:28:56.6833743Z test conf_fr_acq_005_gitmodules_subset_rejects_each_closed_reason ... ok
+2026-08-28T19:28:56.6835369Z test conf_fr_acq_005_duplicate_derived_ids_are_rejected ... ok
+2026-08-28T19:28:56.6859191Z test fz_fr_acq_005_gitmodules_seed_corpus_is_deterministic ... ok
+2026-08-28T19:28:56.6861313Z test gt_fr_acq_005_boundary_states_and_gaps_are_complete ... ok
+2026-08-28T19:28:56.6899399Z test pt_fr_acq_005_limits_have_max_and_plus_one ... ok
+2026-08-28T19:28:56.6901010Z test conf_fr_acq_005_gitmodules_subset_rejects_limit_plus_one ... ok
+2026-08-28T19:28:56.6927535Z test sec_fr_acq_005_url_redaction_and_classification_are_exact ... ok
+2026-08-28T19:28:56.6968011Z test pt_fr_acq_005_parallel_replay ... ok
+2026-08-28T19:28:56.7215269Z test pt_fr_acq_005_order_invariant ... ok
+2026-08-28T19:28:56.7382933Z test conf_fr_acq_005_gitmodules_subset_accepts_exact_limits ... ok
+2026-08-28T19:28:56.7383552Z 
+2026-08-28T19:28:56.7384015Z test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+2026-08-28T19:28:56.7384735Z 
+2026-08-28T19:28:56.7404882Z      Running tests\s1_packed.rs (target\debug\deps\s1_packed-7f41c4ede3601f09.exe)
+2026-08-28T19:28:56.7502010Z 
+2026-08-28T19:28:56.7502296Z running 2 tests
+2026-08-28T19:28:56.7507048Z test conf_fr_acq_004_invalid_context_is_shape_safe ... ok
+2026-08-28T19:28:56.7507708Z test pt_fr_acq_004_limits_have_max_and_plus_one ... ok
+2026-08-28T19:28:56.7508032Z 
+2026-08-28T19:28:56.7508325Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.7508790Z 
+2026-08-28T19:28:56.7522570Z      Running tests\s2_knowledge.rs (target\debug\deps\s2_knowledge-82438eed90501488.exe)
+2026-08-28T19:28:56.7618596Z 
+2026-08-28T19:28:56.7618956Z running 3 tests
+2026-08-28T19:28:56.7624008Z test pt_fr_knw_002_claim_state_machine ... ok
+2026-08-28T19:28:56.7628514Z test pt_dr_idn_001_stable_ids_match_reviewed_preimages ... ok
+2026-08-28T19:28:56.7761757Z test pt_dr_idn_001_stable_ids_ignore_order_and_revision ... ok
+2026-08-28T19:28:56.7762147Z 
+2026-08-28T19:28:56.7762480Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-08-28T19:28:56.7762883Z 
+2026-08-28T19:28:56.7780820Z      Running tests\s3_storage.rs (target\debug\deps\s3_storage-cc7caf51e698c81c.exe)
+2026-08-28T19:28:56.7876876Z 
+2026-08-28T19:28:56.7877265Z running 3 tests
+2026-08-28T19:28:56.7882672Z test pt_fr_snp_001_artifact_and_boundary_orders_are_closed ... ok
+2026-08-28T19:28:56.7883733Z test pt_fr_snp_001_only_contention_and_head_conflict_are_retryable ... ok
+2026-08-28T19:28:56.8007781Z test pt_fr_snp_001_snapshot_and_artifact_ids_match_reviewed_preimages ... ok
+2026-08-28T19:28:56.8008363Z 
+2026-08-28T19:28:56.8008647Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-08-28T19:28:56.8009064Z 
+2026-08-28T19:28:56.8025832Z      Running tests\s4_compiler_index.rs (target\debug\deps\s4_compiler_index-5e9e8a3d69114cbf.exe)
+2026-08-28T19:28:56.8125210Z 
+2026-08-28T19:28:56.8125508Z running 2 tests
+2026-08-28T19:28:56.8129349Z test pt_fr_ext_005_determinism_budget_is_fixed ... ok
+2026-08-28T19:28:56.8130046Z test pt_fr_ext_005_limits_have_max_and_plus_one ... ok
+2026-08-28T19:28:56.8130367Z 
+2026-08-28T19:28:56.8130639Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.8131032Z 
+2026-08-28T19:28:56.8145627Z      Running tests\s4_framework_declarations.rs (target\debug\deps\s4_framework_declarations-3981fbd3fe01a0c8.exe)
+2026-08-28T19:28:56.8242586Z 
+2026-08-28T19:28:56.8242908Z running 2 tests
+2026-08-28T19:28:56.8247262Z test pt_fr_ext_011_limits_have_max_and_plus_one ... ok
+2026-08-28T19:28:56.8250217Z test pt_dr_idn_002_r6_framework_identity_nfc ... ok
+2026-08-28T19:28:56.8250700Z 
+2026-08-28T19:28:56.8251080Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.8251532Z 
+2026-08-28T19:28:56.8266361Z      Running tests\s4_k1_rust_callable_semantics.rs (target\debug\deps\s4_k1_rust_callable_semantics-cf892d844396d95f.exe)
+2026-08-28T19:28:56.8363875Z 
+2026-08-28T19:28:56.8364103Z running 2 tests
+2026-08-28T19:28:56.8369429Z test pt_fr_ext_012_all_limits_have_maximum_plus_one ... ok
+2026-08-28T19:28:56.8374478Z test pt_dr_idn_002_k1_identity_preimages_and_collisions ... ok
+2026-08-28T19:28:56.8374978Z 
+2026-08-28T19:28:56.8375266Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.8375684Z 
+2026-08-28T19:28:56.8390640Z      Running tests\s4_r10_cfg_declaration_alternatives.rs (target\debug\deps\s4_r10_cfg_declaration_alternatives-f8ea20d98d0cc022.exe)
+2026-08-28T19:28:56.8487340Z 
+2026-08-28T19:28:56.8487985Z running 2 tests
+2026-08-28T19:28:56.8491295Z test conf_fr_ext_013_r10_contract_versions_are_exact ... ok
+2026-08-28T19:28:56.8494817Z test gt_fr_ext_013_reviewed_identity_preimages_are_frozen ... ok
+2026-08-28T19:28:56.8495369Z 
+2026-08-28T19:28:56.8495649Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.8496319Z 
+2026-08-28T19:28:56.8510810Z      Running tests\s4_r11_k1_repository_boundary_composition.rs (target\debug\deps\s4_r11_k1_repository_boundary_composition-3547ba8d2c9694d8.exe)
+2026-08-28T19:28:56.8609603Z 
+2026-08-28T19:28:56.8609894Z running 2 tests
+2026-08-28T19:28:56.8614339Z test conf_fr_ext_012_r11_contract_versions_are_exact ... ok
+2026-08-28T19:28:56.8614947Z test conf_fr_ext_012_r11_hash_domains_are_additive ... ok
+2026-08-28T19:28:56.8615256Z 
+2026-08-28T19:28:56.8615555Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.8616011Z 
+2026-08-28T19:28:56.8630369Z      Running tests\s4_r12_k1_cfg_alternatives.rs (target\debug\deps\s4_r12_k1_cfg_alternatives-2244e97c99b12575.exe)
+2026-08-28T19:28:56.8729157Z 
+2026-08-28T19:28:56.8729538Z running 2 tests
+2026-08-28T19:28:56.8734036Z test conf_fr_ext_014_r12_contract_versions_are_exact ... ok
+2026-08-28T19:28:56.8734730Z test conf_fr_ext_014_r12_hash_domains_are_additive ... ok
+2026-08-28T19:28:56.8735003Z 
+2026-08-28T19:28:56.8735311Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.8735704Z 
+2026-08-28T19:28:56.8750368Z      Running tests\s4_r13_k1_scip_composition.rs (target\debug\deps\s4_r13_k1_scip_composition-7dcbd02bdf1ea6a3.exe)
+2026-08-28T19:28:56.8846278Z 
+2026-08-28T19:28:56.8846665Z running 3 tests
+2026-08-28T19:28:56.8851115Z test conf_fr_ext_015_r13_contract_versions_are_exact ... ok
+2026-08-28T19:28:56.8851973Z test conf_fr_ext_015_r13_hash_domains_are_additive ... ok
+2026-08-28T19:28:56.8853134Z test gt_fr_ext_015_reviewed_join_identity_preimage_is_frozen ... ok
+2026-08-28T19:28:56.8853628Z 
+2026-08-28T19:28:56.8853906Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.8854308Z 
+2026-08-28T19:28:56.8869275Z      Running tests\s4_r14_r15_output_capacity.rs (target\debug\deps\s4_r14_r15_output_capacity-87be877ed30d44a7.exe)
+2026-08-28T19:28:56.8968459Z 
+2026-08-28T19:28:56.8968779Z running 1 test
+2026-08-28T19:28:56.8972146Z test conf_fr_cli_001_r14_r15_256m_capacity_is_exact_and_explicit ... ok
+2026-08-28T19:28:56.8972633Z 
+2026-08-28T19:28:56.8972907Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.8973277Z 
+2026-08-28T19:28:56.8989602Z      Running tests\s4_r14_rust_expression_bindings.rs (target\debug\deps\s4_r14_rust_expression_bindings-b971d499ce879011.exe)
+2026-08-28T19:28:56.9090555Z 
+2026-08-28T19:28:56.9090885Z running 4 tests
+2026-08-28T19:28:56.9095635Z test conf_fr_ext_016_r14_contract_versions_are_exact ... ok
+2026-08-28T19:28:56.9096503Z test ft_fr_ext_016_every_r14_limit_accepts_maximum_and_rejects_maximum_plus_one ... ok
+2026-08-28T19:28:56.9097626Z test conf_fr_ext_016_r14_hash_domains_are_additive ... ok
+2026-08-28T19:28:56.9098855Z test gt_fr_ext_016_reviewed_argument_and_relationship_preimages_are_frozen ... ok
+2026-08-28T19:28:56.9099375Z 
+2026-08-28T19:28:56.9100114Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.9100492Z 
+2026-08-28T19:28:56.9115450Z      Running tests\s4_r15_rust_local_flow.rs (target\debug\deps\s4_r15_rust_local_flow-4c03e9abbd99f8b9.exe)
+2026-08-28T19:28:56.9216500Z 
+2026-08-28T19:28:56.9216759Z running 2 tests
+2026-08-28T19:28:56.9221945Z test pt_fr_ext_017_each_limit_accepts_maximum_and_rejects_plus_one ... ok
+2026-08-28T19:28:56.9224465Z test fr_ext_017_r15_contract_constants_and_reviewed_identities_are_exact ... ok
+2026-08-28T19:28:56.9225013Z 
+2026-08-28T19:28:56.9225316Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.9225755Z 
+2026-08-28T19:28:56.9241589Z      Running tests\s4_r16_safe_constant_evaluation.rs (target\debug\deps\s4_r16_safe_constant_evaluation-d61a5a8609777f03.exe)
+2026-08-28T19:28:56.9340608Z 
+2026-08-28T19:28:56.9340817Z running 2 tests
+2026-08-28T19:28:56.9345656Z test pt_fr_ext_020_each_r16_limit_accepts_maximum_and_rejects_plus_one ... ok
+2026-08-28T19:28:56.9347414Z test fr_ext_020_r16_contract_constants_and_reviewed_identities_are_exact ... ok
+2026-08-28T19:28:56.9347775Z 
+2026-08-28T19:28:56.9348040Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.9348405Z 
+2026-08-28T19:28:56.9363770Z      Running tests\s4_rust_semantic_depth.rs (target\debug\deps\s4_rust_semantic_depth-aab282459a0af47b.exe)
+2026-08-28T19:28:56.9459043Z 
+2026-08-28T19:28:56.9459442Z running 2 tests
+2026-08-28T19:28:56.9463839Z test pt_fr_ext_010_limits_have_max_and_plus_one ... ok
+2026-08-28T19:28:56.9467934Z test pt_dr_idn_002_r5_member_identities_and_cardinalities ... ok
+2026-08-28T19:28:56.9468244Z 
+2026-08-28T19:28:56.9468500Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.9468877Z 
+2026-08-28T19:28:56.9483778Z      Running tests\s4_workspace_docs_query.rs (target\debug\deps\s4_workspace_docs_query-bd298f5c4b388493.exe)
+2026-08-28T19:28:56.9579243Z 
+2026-08-28T19:28:56.9579442Z running 2 tests
+2026-08-28T19:28:56.9587430Z test pt_dr_idn_002_evidence_and_relationship_identity ... ok
+2026-08-28T19:28:56.9588099Z test pt_dr_idn_002_workspace_identity_stability ... ok
+2026-08-28T19:28:56.9588341Z 
+2026-08-28T19:28:56.9588592Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:56.9588935Z 
+2026-08-28T19:28:56.9603422Z      Running tests\s5_incremental.rs (target\debug\deps\s5_incremental-3e3ff89cee423e50.exe)
+2026-08-28T19:28:56.9698146Z 
+2026-08-28T19:28:56.9698444Z running 6 tests
+2026-08-28T19:28:56.9706633Z test pt_fr_inc_002_inventory_only_excludes_source_and_mapping_inputs ... ok
+2026-08-28T19:28:56.9707631Z test pt_fr_inc_002_version_rebuild_matrix ... ok
+2026-08-28T19:28:56.9708805Z test pt_fr_inc_001_mode_only_change_is_modified ... ok
+2026-08-28T19:28:56.9709537Z test pt_fr_inc_002_versioned_rule_precedence ... ok
+2026-08-28T19:28:56.9713706Z test pt_fr_inc_003_revision_neutral_cache_identity ... ok
+2026-08-28T19:28:57.4088734Z test pt_fr_inc_001_changed_path_limit_boundaries ... ok
+2026-08-28T19:28:57.4089217Z 
+2026-08-28T19:28:57.4089656Z test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.44s
+2026-08-28T19:28:57.4090284Z 
+2026-08-28T19:28:57.4113416Z      Running tests\s6_federation.rs (target\debug\deps\s6_federation-87e2166d5499832a.exe)
+2026-08-28T19:28:57.4215386Z 
+2026-08-28T19:28:57.4215569Z running 5 tests
+2026-08-28T19:28:57.4223555Z test pt_fr_fed_001_every_counter_accepts_max_and_rejects_plus_one ... ok
+2026-08-28T19:28:57.4224584Z test conf_fr_fed_001_yaml_evidence_preimage_is_reproducible ... ok
+2026-08-28T19:28:57.4229781Z test pt_fr_fed_001_reviewed_identity_preimages_are_exact ... ok
+2026-08-28T19:28:57.4259032Z test pt_fr_fed_001_conflicts_and_multi_call_sites_are_order_invariant ... ok
+2026-08-28T19:28:57.4581556Z test pt_fr_fed_001_provider_collection_orders_are_invariant ... ok
+2026-08-28T19:28:57.4582990Z 
+2026-08-28T19:28:57.4583283Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+2026-08-28T19:28:57.4583631Z 
+2026-08-28T19:28:57.4603634Z      Running tests\s7_implementation_aware_api.rs (target\debug\deps\s7_implementation_aware_api-f46afa1754d91a1e.exe)
+2026-08-28T19:28:57.4707294Z 
+2026-08-28T19:28:57.4707489Z running 2 tests
+2026-08-28T19:28:57.4711981Z test pt_od_lim_001_s7_every_limit_accepts_maximum_and_rejects_plus_one ... ok
+2026-08-28T19:28:57.4714031Z test conf_fr_imp_004_stable_identity_preimages_match_golden ... ok
+2026-08-28T19:28:57.4714571Z 
+2026-08-28T19:28:57.4715504Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:57.4716179Z 
+2026-08-28T19:28:57.4730653Z      Running unittests src\lib.rs (target\debug\deps\codenoesis_lang_kotlin-066bb53c3b37091d.exe)
+2026-08-28T19:28:57.4827530Z 
+2026-08-28T19:28:57.4827801Z running 0 tests
+2026-08-28T19:28:57.4828275Z 
+2026-08-28T19:28:57.4828860Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:28:57.4829529Z 
+2026-08-28T19:28:57.4844538Z      Running tests\s7_client.rs (target\debug\deps\s7_client-0d1b7e27a43a9721.exe)
+2026-08-28T19:28:57.4942796Z 
+2026-08-28T19:28:57.4943111Z running 3 tests
+2026-08-28T19:28:57.4975129Z test sec_fr_ext_019_dynamic_path_and_unguarded_index_fail_closed ... ok
+2026-08-28T19:28:57.4993469Z test sec_fr_ext_019_throwing_safe_chain_and_indirect_call_fail_closed ... ok
+2026-08-28T19:28:57.5011338Z test conf_fr_ext_019_strict_safe_and_decoy_paths ... ok
+2026-08-28T19:28:57.5011741Z 
+2026-08-28T19:28:57.5012126Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-08-28T19:28:57.5012496Z 
+2026-08-28T19:28:57.5033085Z      Running unittests src\lib.rs (target\debug\deps\codenoesis_lang_rust-42d185384fcd7706.exe)
+2026-08-28T19:28:57.5135123Z 
+2026-08-28T19:28:57.5135363Z running 12 tests
+2026-08-28T19:28:57.5143410Z test expression_bindings::tests::fr_ext_016_roles_are_canonical ... ok
+2026-08-28T19:28:57.5145396Z test local_flow::tests::fr_ext_017_block_roles_and_relationship_kinds_are_canonical ... ok
+2026-08-28T19:28:57.5146678Z test semantic_depth::tests::sec_fr_ext_010_cross_file_cfg_owner_alternatives_remain_conflicts ... ok
+2026-08-28T19:28:57.5148079Z test semantic_depth::tests::sec_fr_ext_010_cross_chunk_cfg_member_alternatives_remain_conflicts ... ok
+2026-08-28T19:28:57.5192899Z test tests::gt_dr_idn_001_unicode_normalization_collision ... ok
+2026-08-28T19:28:57.5370997Z test tests::gt_fr_ext_002_malformed_syntax_is_explicit ... ok
+2026-08-28T19:28:57.5492296Z test tests::conf_fr_ext_001_extraction_chunk_v1 ... ok
+2026-08-28T19:28:57.5504781Z test tests::fz_fr_ext_001_extraction_contract_seed_corpus ... ok
+2026-08-28T19:28:57.5557503Z test tests::gt_fr_ext_002_reviewed_rust_graph ... ok
+2026-08-28T19:28:57.5924436Z test tests::pt_fr_knw_003_rule_provenance_replays ... ok
+2026-08-28T19:28:57.5943291Z test tests::pt_fr_knw_001_graph_invariants ... ok
+2026-08-28T19:28:59.4996750Z test tests::fz_fr_ext_002_rust_parser_seed_corpus ... ok
+2026-08-28T19:28:59.4997035Z 
+2026-08-28T19:28:59.4997291Z test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.99s
+2026-08-28T19:28:59.4997651Z 
+2026-08-28T19:28:59.5023054Z      Running tests\s4_cargo_manifest_facts.rs (target\debug\deps\s4_cargo_manifest_facts-53157ee039483c43.exe)
+2026-08-28T19:28:59.5134003Z 
+2026-08-28T19:28:59.5134311Z running 11 tests
+2026-08-28T19:28:59.5139876Z test conf_fr_ext_009_reviewed_fixture_newlines_are_platform_neutral ... ok
+2026-08-28T19:28:59.5315031Z test gt_fr_ext_009_standard_dependency_tables_are_declarations ... ok
+2026-08-28T19:28:59.5394440Z test gt_fr_ext_009_legacy_badges_is_typed_unsupported ... ok
+2026-08-28T19:28:59.5486258Z test negative_fr_ext_009_manifest_variants_fail_closed ... ok
+2026-08-28T19:28:59.5616140Z test gt_fr_ext_009_manifest_declaration_entities ... ok
+2026-08-28T19:28:59.5617653Z test gt_fr_ext_009_workspace_inheritance_references_declarations ... ok
+2026-08-28T19:28:59.5851408Z test pt_dr_idn_002_r4_preserves_rust_v3_identity_domains ... ok
+2026-08-28T19:28:59.6296450Z test sec_fr_ext_009_external_locators_are_digest_only ... ok
+2026-08-28T19:28:59.6456723Z test sec_fr_ext_009_manifest_facts_never_resolve_fetch_or_execute ... ok
+2026-08-28T19:28:59.7197186Z test pt_fr_ext_009_limits_have_max_and_plus_one ... ok
+2026-08-28T19:29:01.1329672Z test pt_nfr_det_001_r4_permutation_and_schedule_invariant ... ok
+2026-08-28T19:29:01.1330027Z 
+2026-08-28T19:29:01.1330284Z test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.62s
+2026-08-28T19:29:01.1330651Z 
+2026-08-28T19:29:01.1357653Z      Running tests\s4_framework_declarations.rs (target\debug\deps\s4_framework_declarations-6ee798f0b22b1341.exe)
+2026-08-28T19:29:01.1466255Z 
+2026-08-28T19:29:01.1466684Z running 12 tests
+2026-08-28T19:29:01.1472480Z test conf_fr_ext_011_reviewed_fixture_newlines_are_platform_neutral ... ok
+2026-08-28T19:29:01.1722061Z test gt_fr_ext_011_qualified_simple_method_wrapper_is_reviewed ... ok
+2026-08-28T19:29:01.1879654Z test pt_dr_idn_002_r6_nfc_collision_is_rejected ... ok
+2026-08-28T19:29:01.2783540Z test gt_fr_ext_011_explicit_builder_declarations ... ok
+2026-08-28T19:29:01.2795401Z test gt_fr_ext_011_attribute_macro_candidates_remain_unresolved ... ok
+2026-08-28T19:29:01.2798809Z test gt_fr_ext_011_unique_local_targets_only ... ok
+2026-08-28T19:29:01.3108929Z test sec_fr_ext_011_comment_only_repository_emits_no_declaration ... ok
+2026-08-28T19:29:01.3536097Z test sec_fr_ext_011_malformed_private_and_unsafe_inputs_are_typed ... ok
+2026-08-28T19:29:01.4159882Z test sec_fr_ext_011_hard_negative_source_forms ... ok
+2026-08-28T19:29:01.4766223Z test sec_fr_ext_011_never_executes_or_expands_target_worlds ... ok
+2026-08-28T19:29:04.3349900Z test pt_fr_ext_011_adapter_limits_have_max_and_plus_one ... ok
+2026-08-28T19:29:06.0371570Z test pt_nfr_det_001_r6_permutation_and_replay_invariant ... ok
+2026-08-28T19:29:06.0371910Z 
+2026-08-28T19:29:06.0372195Z test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.89s
+2026-08-28T19:29:06.0372572Z 
+2026-08-28T19:29:06.0407931Z      Running tests\s4_k1_rust_callable_semantics.rs (target\debug\deps\s4_k1_rust_callable_semantics-c738ee78244415a2.exe)
+2026-08-28T19:29:06.0516559Z 
+2026-08-28T19:29:06.0516814Z running 8 tests
+2026-08-28T19:29:06.1873878Z test gt_fr_ext_012_complete_signatures_and_parameters ... ok
+2026-08-28T19:29:06.1888933Z test gt_fr_ext_012_calls_controls_and_lexical_nesting ... ok
+2026-08-28T19:29:06.1985892Z test gt_fr_ext_012_declared_values_are_bounded_and_honest ... ok
+2026-08-28T19:29:06.2314761Z test reg_fr_ext_012_k1_matches_inherited_imported_owner_resolution ... ok
+2026-08-28T19:29:06.2437045Z test reg_fr_ext_012_k1_preserves_inherited_uncertainty ... ok
+2026-08-28T19:29:06.2566234Z test sec_fr_knw_003_complex_call_targets_are_bounded_without_changing_simple_targets ... ok
+2026-08-28T19:29:06.3070996Z test sec_fr_ext_012_never_executes_target_or_toolchain ... ok
+2026-08-28T19:29:10.6395195Z test pt_nfr_det_001_k1_fifty_permutations_ten_schedules ... ok
+2026-08-28T19:29:10.6395560Z 
+2026-08-28T19:29:10.6395819Z test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.59s
+2026-08-28T19:29:10.6396178Z 
+2026-08-28T19:29:10.6427232Z      Running tests\s4_r10_cfg_declaration_alternatives.rs (target\debug\deps\s4_r10_cfg_declaration_alternatives-bd5e4dcd143a87e0.exe)
+2026-08-28T19:29:10.6538227Z 
+2026-08-28T19:29:10.6538508Z running 12 tests
+2026-08-28T19:29:10.6544636Z test conf_fr_ext_013_reviewed_fixture_newlines_are_platform_neutral ... ok
+2026-08-28T19:29:10.6626050Z test ft_fr_ext_013_malformed_source_fails_without_alternatives ... ok
+2026-08-28T19:29:10.6709799Z test ft_fr_ext_013_unicode_nfc_collisions_fail_typed ... ok
+2026-08-28T19:29:10.6822514Z test conf_fr_ext_013_homogeneous_direct_cfg_methods_are_alternatives ... ok
+2026-08-28T19:29:10.6927532Z test ft_fr_ext_013_mixed_or_non_direct_cfg_fails_typed ... ok
+2026-08-28T19:29:10.6935407Z test gt_fr_ext_013_reviewed_heterogeneous_alternatives_are_exact ... ok
+2026-08-28T19:29:10.6962183Z test ft_fr_ext_013_identity_duplicate_overlap_and_cross_source_fail_typed ... ok
+2026-08-28T19:29:10.7255271Z test pt_fr_ext_013_signature_limit_accepts_4096_and_rejects_4097 ... ok
+2026-08-28T19:29:10.7843977Z test pt_fr_ext_013_method_limit_accepts_32_and_rejects_33 ... ok
+2026-08-28T19:29:10.7914243Z test pt_fr_ext_013_attribute_limits_accept_maxima_and_reject_plus_one ... ok
+2026-08-28T19:29:11.6170964Z test pt_nfr_det_001_r10_fifty_permutations_and_ten_schedules_are_identical ... ok
+2026-08-28T19:29:17.7124736Z test pt_fr_ext_013_source_limit_accepts_4096_and_rejects_4097 ... ok
+2026-08-28T19:29:17.7126137Z 
+2026-08-28T19:29:17.7126744Z test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.06s
+2026-08-28T19:29:17.7127599Z 
+2026-08-28T19:29:17.7159036Z      Running tests\s4_r11_k1_repository_boundary_composition.rs (target\debug\deps\s4_r11_k1_repository_boundary_composition-921964f5d2015934.exe)
+2026-08-28T19:29:17.7272047Z 
+2026-08-28T19:29:17.7272878Z running 2 tests
+2026-08-28T19:29:17.7542487Z test gt_fr_ext_012_boundary_aware_k1_keeps_gitlink_external ... ok
+2026-08-28T19:29:18.4314523Z test pt_nfr_det_001_r11_fifty_permutations_ten_schedules ... ok
+2026-08-28T19:29:18.4314856Z 
+2026-08-28T19:29:18.4315111Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.70s
+2026-08-28T19:29:18.4315480Z 
+2026-08-28T19:29:18.4342901Z      Running tests\s4_r12_k1_cfg_alternatives.rs (target\debug\deps\s4_r12_k1_cfg_alternatives-4096d38562b93965.exe)
+2026-08-28T19:29:18.4452891Z 
+2026-08-28T19:29:18.4453196Z running 7 tests
+2026-08-28T19:29:18.4459176Z test conf_fr_ext_014_reviewed_fixture_newlines_are_platform_neutral ... ok
+2026-08-28T19:29:18.6451447Z test gt_fr_ext_014_callable_counts_match_reviewed_oracle ... ok
+2026-08-28T19:29:18.6890813Z test gt_fr_ext_014_cfg_occurrences_are_k1_callable_subjects ... ok
+2026-08-28T19:29:18.7041080Z test ft_fr_ext_014_cross_occurrence_evidence_is_rejected ... ok
+2026-08-28T19:29:19.3917130Z test pt_nfr_det_001_r12_parallel_schedules_are_deterministic ... ok
+2026-08-28T19:29:19.5545611Z test ft_fr_ext_014_cross_layer_shape_failures_are_typed ... ok
+2026-08-28T19:29:24.9970729Z test pt_nfr_det_001_r12_inventory_order_is_deterministic ... ok
+2026-08-28T19:29:24.9971091Z 
+2026-08-28T19:29:24.9971355Z test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.55s
+2026-08-28T19:29:24.9971707Z 
+2026-08-28T19:29:25.0003003Z      Running tests\s4_r14_rust_expression_bindings.rs (target\debug\deps\s4_r14_rust_expression_bindings-c2bc3406fc200937.exe)
+2026-08-28T19:29:25.0113514Z 
+2026-08-28T19:29:25.0113778Z running 6 tests
+2026-08-28T19:29:25.1057140Z test gt_fr_ext_016_partial_real_syntax_is_omitted_as_complete_families ... ok
+2026-08-28T19:29:25.3758993Z test gt_fr_ext_016_reviewed_fixture_matches_expression_binding_oracle ... ok
+2026-08-28T19:29:25.4231867Z test gt_fr_ext_016_unsupported_syntax_emits_coverage_without_guessed_facts ... ok
+2026-08-28T19:29:26.4553090Z test pt_nfr_det_001_r14_parallel_schedules_are_deterministic ... ok
+2026-08-28T19:29:27.8160729Z test ft_fr_ext_016_corrupt_expression_graph_fails_with_exact_typed_errors ... ok
+2026-08-28T19:29:35.1552353Z test pt_nfr_det_001_r14_inventory_order_is_deterministic ... ok
+2026-08-28T19:29:35.1552698Z 
+2026-08-28T19:29:35.1552960Z test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.14s
+2026-08-28T19:29:35.1553332Z 
+2026-08-28T19:29:35.1588596Z      Running tests\s4_r15_rust_local_flow.rs (target\debug\deps\s4_r15_rust_local_flow-b3fb911329b3b648.exe)
+2026-08-28T19:29:35.1696778Z 
+2026-08-28T19:29:35.1696993Z running 7 tests
+2026-08-28T19:29:35.2224248Z test gt_fr_ext_017_compound_assignment_preserves_read_then_write ... ok
+2026-08-28T19:29:35.2549553Z test gt_fr_ext_017_callables_absent_from_k1_are_skipped ... ok
+2026-08-28T19:29:35.2869568Z test gt_fr_ext_017_one_arm_assignment_remains_may_reaching ... ok
+2026-08-28T19:29:35.2929129Z test ft_fr_ext_017_validator_rejects_missing_branch_and_wrong_r14_derivation_input ... ok
+2026-08-28T19:29:35.3311165Z test gt_fr_ext_017_reviewed_fixture_matches_closed_local_flow_oracle ... ok
+2026-08-28T19:29:35.6924014Z test ft_fr_ext_017_loop_and_missing_else_reject_the_whole_callable ... ok
+2026-08-28T19:29:44.5123470Z test pt_fr_ext_017_nested_branches_are_deterministic_and_enforce_depth_boundary ... ok
+2026-08-28T19:29:44.5123893Z 
+2026-08-28T19:29:44.5124152Z test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.34s
+2026-08-28T19:29:44.5124862Z 
+2026-08-28T19:29:44.5163445Z      Running tests\s4_r16_safe_constant_evaluation.rs (target\debug\deps\s4_r16_safe_constant_evaluation-a5a8643c0d9c90d7.exe)
+2026-08-28T19:29:44.5273319Z 
+2026-08-28T19:29:44.5273583Z running 5 tests
+2026-08-28T19:29:44.5802946Z test gt_fr_ext_020_cfg_subject_value_is_exact_but_cannot_authorize_a_dependency ... ok
+2026-08-28T19:29:44.6236360Z test ft_fr_ext_020_unsupported_sources_emit_typed_gaps_without_guessed_values ... ok
+2026-08-28T19:29:44.6408732Z test gt_fr_ext_020_closed_constant_grammar_is_exact_and_deterministic ... ok
+2026-08-28T19:29:44.6639008Z test pt_fr_ext_020_syntax_node_boundary_is_hard_and_typed ... ok
+2026-08-28T19:29:44.9909442Z test pt_fr_ext_020_dependency_depth_is_cache_and_order_independent ... ok
+2026-08-28T19:29:44.9909794Z 
+2026-08-28T19:29:44.9910039Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.46s
+2026-08-28T19:29:44.9910397Z 
+2026-08-28T19:29:44.9943890Z      Running tests\s4_root_package_workspace.rs (target\debug\deps\s4_root_package_workspace-20ae32f34a6a2f20.exe)
+2026-08-28T19:29:45.0050621Z 
+2026-08-28T19:29:45.0050915Z running 8 tests
+2026-08-28T19:29:45.0084555Z test gt_fr_ext_008_invalid_manifests_fail_closed ... ok
+2026-08-28T19:29:45.0307381Z test pt_dr_idn_002_r3_preserves_v2_identity_domains ... ok
+2026-08-28T19:29:45.0367115Z test sec_fr_ext_008_compiler_dependent_source_is_deferred ... ok
+2026-08-28T19:29:45.0792515Z test sec_fr_ext_008_deferred_cargo_meaning_never_executes ... ok
+2026-08-28T19:29:45.0962205Z test gt_fr_ext_008_root_membership_and_targets ... ok
+2026-08-28T19:29:45.1041605Z test sec_fr_ext_008_gitlink_member_stays_external ... ok
+2026-08-28T19:29:46.1242315Z test pt_nfr_det_001_r3_permutation_and_schedule_invariant ... ok
+2026-08-28T19:29:46.7201057Z test pt_fr_ext_008_limits_have_max_and_plus_one ... ok
+2026-08-28T19:29:46.7201341Z 
+2026-08-28T19:29:46.7201602Z test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.72s
+2026-08-28T19:29:46.7201988Z 
+2026-08-28T19:29:46.7230700Z      Running tests\s4_rust_semantic_depth.rs (target\debug\deps\s4_rust_semantic_depth-07d5f8fbba619378.exe)
+2026-08-28T19:29:46.7335590Z 
+2026-08-28T19:29:46.7335988Z running 15 tests
+2026-08-28T19:29:46.7512632Z test gt_fr_ext_010_cfg_member_alternatives_merge_attribute_evidence ... ok
+2026-08-28T19:29:46.7667397Z test gt_fr_ext_010_cfg_alternatives_cover_every_r5_member_kind ... ok
+2026-08-28T19:29:46.7695568Z test gt_fr_ext_010_cfg_owner_alternatives_preserve_uncertainty ... ok
+2026-08-28T19:29:46.7855859Z test gt_fr_ext_010_empty_additive_extension_is_valid_and_fail_closed ... ok
+2026-08-28T19:29:46.8136724Z test gt_fr_ext_010_attributes_preserve_declarations_and_gaps ... ok
+2026-08-28T19:29:46.8224296Z test gt_fr_ext_010_constants_statics_and_associated_types ... ok
+2026-08-28T19:29:46.8259906Z test gt_fr_ext_010_paired_constant_still_emits_supported_r5_member ... ok
+2026-08-28T19:29:46.8405235Z test gt_fr_ext_010_fields_and_variants_are_owned ... ok
+2026-08-28T19:29:46.8568004Z test gt_fr_ext_010_method_context_prevents_trait_collisions ... ok
+2026-08-28T19:29:46.9358222Z test sec_fr_ext_010_cfg_member_attribute_maximum_and_plus_one_are_typed ... ok
+2026-08-28T19:29:46.9473613Z test sec_fr_ext_010_cfg_owner_alternative_boundary_failures_remain_typed ... ok
+2026-08-28T19:29:47.0086276Z test sec_fr_ext_010_malformed_and_limit_plus_one_fail_closed ... ok
+2026-08-28T19:29:47.0492561Z test sec_fr_ext_010_never_executes_or_interprets_target_worlds ... ok
+2026-08-28T19:29:48.9567221Z test pt_nfr_det_001_cfg_alternatives_are_permutation_and_schedule_invariant ... ok
+2026-08-28T19:29:49.5527296Z test pt_nfr_det_001_r5_permutation_and_schedule_invariant ... ok
+2026-08-28T19:29:49.5527925Z 
+2026-08-28T19:29:49.5528375Z test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.82s
+2026-08-28T19:29:49.5528979Z 
+2026-08-28T19:29:49.5558133Z      Running tests\s4_workspace.rs (target\debug\deps\s4_workspace-a84eebbaa0ffd549.exe)
+2026-08-28T19:29:49.5665370Z 
+2026-08-28T19:29:49.5665605Z running 5 tests
+2026-08-28T19:29:49.5704203Z test fr_ext_007_workspace_crate_limit_plus_one_is_typed ... ok
+2026-08-28T19:29:49.5707540Z test gt_fr_ext_007_requires_literal_supported_manifest_metadata ... ok
+2026-08-28T19:29:49.5725804Z test pt_dr_idn_002_normalization_collisions_fail_closed ... ok
+2026-08-28T19:29:49.5756675Z test gt_fr_ext_007_inline_modules_and_multiple_targets_are_supported ... ok
+2026-08-28T19:29:49.5780733Z test gt_fr_ext_007_workspace_graph_v2 ... ok
+2026-08-28T19:29:49.5781113Z 
+2026-08-28T19:29:49.5781449Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-08-28T19:29:49.5781828Z 
+2026-08-28T19:29:49.5804251Z      Running tests\s5_incremental.rs (target\debug\deps\s5_incremental-5585790758e6b0b0.exe)
+2026-08-28T19:29:49.5906059Z 
+2026-08-28T19:29:49.5906289Z running 2 tests
+2026-08-28T19:29:49.6176365Z test pt_fr_inc_003_only_changed_source_is_reparsed ... ok
+2026-08-28T19:29:49.7490778Z test pt_fr_inc_003_cache_order_does_not_change_target ... ok
+2026-08-28T19:29:49.7491550Z 
+2026-08-28T19:29:49.7492153Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+2026-08-28T19:29:49.7492912Z 
+2026-08-28T19:29:49.7522366Z      Running tests\s7_provider.rs (target\debug\deps\s7_provider-dd8e6889ad554039.exe)
+2026-08-28T19:29:49.7655645Z 
+2026-08-28T19:29:49.7656792Z running 3 tests
+2026-08-28T19:29:49.7678261Z test sec_fr_ext_018_dynamic_key_and_loop_fail_closed ... ok
+2026-08-28T19:29:49.7691577Z test sec_fr_ext_018_helper_mutation_and_non_terminal_publication_fail_closed ... ok
+2026-08-28T19:29:49.7698553Z test conf_fr_ext_018_direct_map_presence_and_custom_gap ... ok
+2026-08-28T19:29:49.7699035Z 
+2026-08-28T19:29:49.7699456Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:29:49.7700090Z 
+2026-08-28T19:29:49.7724587Z      Running unittests src\lib.rs (target\debug\deps\codenoesis_ports-c49e55e102746fed.exe)
+2026-08-28T19:29:49.7846762Z 
+2026-08-28T19:29:49.7847165Z running 0 tests
+2026-08-28T19:29:49.7847650Z 
+2026-08-28T19:29:49.7849986Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:29:49.7853401Z 
+2026-08-28T19:29:49.7871439Z      Running unittests src\lib.rs (target\debug\deps\codenoesis_repository-f021072172961708.exe)
+2026-08-28T19:29:49.7971206Z 
+2026-08-28T19:29:49.7971392Z running 14 tests
+2026-08-28T19:29:49.7980667Z test packed::delta::tests::sec_fr_acq_004_delta_program_accepts_bounded_copy_and_insert ... ok
+2026-08-28T19:29:49.7982540Z test packed::delta::tests::sec_fr_acq_004_delta_program_rejects_result_size_mismatch ... ok
+2026-08-28T19:29:49.7984270Z test packed::delta::tests::pt_fr_acq_004_delta_limits_charge_before_allocation_or_instruction ... ok
+2026-08-28T19:29:49.7985821Z test packed::delta::tests::sec_fr_acq_004_delta_program_rejects_reviewed_malformed_opcodes ... ok
+2026-08-28T19:29:49.7992279Z test packed::hash::tests::conf_fr_acq_004_reviewed_sha1_collision_vector ... ok
+2026-08-28T19:29:49.7994339Z test packed::index::tests::conf_fr_acq_004_index_sha1_collision_boundary ... ok
+2026-08-28T19:29:49.7996238Z test packed::pack::tests::sec_fr_acq_004_pack_sha1_collision_boundary ... ok
+2026-08-28T19:29:49.7998119Z test packed::tests::pt_fr_acq_004_delta_depth_maximum_and_plus_one ... ok
+2026-08-28T19:29:49.8000212Z test packed::tests::conf_fr_acq_004_object_sha1_collision_boundary ... ok
+2026-08-28T19:29:49.8001164Z test tests::pt_fr_acq_002_adapter_counters_have_max_and_plus_one ... ok
+2026-08-28T19:29:49.8005273Z test tests::pt_fr_acq_002_path_boundaries_and_invalid_components_are_typed ... ok
+2026-08-28T19:29:49.8091770Z test tests::sec_nfr_sec_001_declared_blob_bomb_stops_before_body ... ok
+2026-08-28T19:29:49.8119106Z test packed::catalog::tests::race_fr_acq_004_tracked_file_schedules_are_changed ... ok
+2026-08-28T19:29:49.8135855Z test tests::race_fr_acq_005_nested_replacement_is_retryable_changed ... ok
+2026-08-28T19:29:49.8136410Z 
+2026-08-28T19:29:49.8136796Z test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+2026-08-28T19:29:49.8137164Z 
+2026-08-28T19:29:49.8154839Z      Running tests\s1_boundaries.rs (target\debug\deps\s1_boundaries-6076f7a078d25691.exe)
+2026-08-28T19:29:49.8257561Z 
+2026-08-28T19:29:49.8257753Z running 6 tests
+2026-08-28T19:29:50.1002542Z test gt_fr_acq_005_nested_missing_object_is_typed ... ok
+2026-08-28T19:29:50.2712685Z test gt_fr_acq_005_explicit_nested_binding_is_loose_packed_equivalent ... ok
+2026-08-28T19:29:50.3597130Z test reg_fr_acq_005_legacy_gitlink_rejection_is_unchanged ... ok
+2026-08-28T19:29:50.3993315Z test pt_fr_acq_005_gitlinks_have_exact_128_maximum ... ok
+2026-08-28T19:29:50.4800041Z test sec_fr_acq_005_unsupplied_worktree_is_never_opened ... ok
+2026-08-28T19:29:50.4962754Z test pt_fr_acq_005_gitmodules_bytes_are_rejected_before_capture ... ok
+2026-08-28T19:29:50.4963412Z 
+2026-08-28T19:29:50.4963928Z test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.67s
+2026-08-28T19:29:50.4964597Z 
+2026-08-28T19:29:50.4983460Z      Running unittests src\lib.rs (target\debug\deps\codenoesis_scip-1ee2667202917a3a.exe)
+2026-08-28T19:29:50.5087863Z 
+2026-08-28T19:29:50.5088047Z running 8 tests
+2026-08-28T19:29:50.5097194Z test binding::tests::sec_fr_ext_005_artifact_must_be_adjacent_to_binding ... ok
+2026-08-28T19:29:50.5108626Z test normalize::tests::pt_dr_idn_001_r7_global_local_symbol_identity_nfc ... ok
+2026-08-28T19:29:50.5115313Z test acquire::tests::reg_fr_ext_005_unchanged_artifact_preserves_bytes_and_digest ... ok
+2026-08-28T19:29:50.5120372Z test normalize::tests::sec_nfr_prv_002_r7_private_canary_cannot_be_embedded ... ok
+2026-08-28T19:29:50.5124804Z test acquire::tests::race_fr_ext_005_path_replacement_is_binding_mismatch ... ok
+2026-08-28T19:29:50.5146101Z test wire::tests::sec_fr_ext_005_protobuf_preflight_precedes_decode ... ok
+2026-08-28T19:29:50.5485265Z test acquire::tests::race_fr_ext_005_mutable_artifact_read_is_binding_mismatch ... ok
+2026-08-28T19:29:50.6280211Z test normalize::tests::pt_fr_ext_005_input_permutations_preserve_identity_projection ... ok
+2026-08-28T19:29:50.6280661Z 
+2026-08-28T19:29:50.6280917Z test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+2026-08-28T19:29:50.6281269Z 
+2026-08-28T19:29:50.6302624Z      Running unittests src\lib.rs (target\debug\deps\codenoesis_store_local-778dde394b1286cd.exe)
+2026-08-28T19:29:50.6408778Z 
+2026-08-28T19:29:50.6408963Z running 1 test
+2026-08-28T19:29:50.6630166Z test cache::tests::ft_fr_inc_003_cache_stage_and_reload ... ok
+2026-08-28T19:29:50.6630579Z 
+2026-08-28T19:29:50.6630838Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+2026-08-28T19:29:50.6631198Z 
+2026-08-28T19:29:50.6647396Z      Running tests\s3_contract.rs (target\debug\deps\s3_contract-5eea44bb9b5fd8c2.exe)
+2026-08-28T19:29:50.6746811Z 
+2026-08-28T19:29:50.6747028Z running 2 tests
+2026-08-28T19:29:51.6305569Z test ct_fr_sto_001_cas_parity ... ok
+2026-08-28T19:29:52.2088979Z test ct_fr_sto_001_metadata_store_parity ... ok
+2026-08-28T19:29:52.2089357Z 
+2026-08-28T19:29:52.2089632Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.53s
+2026-08-28T19:29:52.2089984Z 
+2026-08-28T19:29:52.2113110Z      Running unittests src\lib.rs (target\debug\deps\noesis-812d75ae0c5baa3c.exe)
+2026-08-28T19:29:52.2218084Z 
+2026-08-28T19:29:52.2218449Z running 28 tests
+2026-08-28T19:29:52.3692459Z test generated_docs::tests::ft_fr_doc_003_abandoned_staging_is_resumed ... ok
+2026-08-28T19:29:52.3710060Z test generated_docs::tests::sec_fr_doc_003_overlap_fails_without_creating_output ... ok
+2026-08-28T19:29:52.3964482Z test generated_docs::tests::sec_fr_doc_003_unlisted_overview_is_not_owned ... ok
+2026-08-28T19:29:52.4008919Z test generated_docs::tests::sec_fr_doc_003_unmarked_nonempty_root_is_unchanged ... ok
+2026-08-28T19:29:52.4051362Z test generated_docs::tests::sec_fr_doc_003_unrecognized_marked_entry_fails_closed ... ok
+2026-08-28T19:29:52.4077669Z test generated_docs::tests::ft_fr_doc_003_precommit_files_are_resumed_without_overwrite ... ok
+2026-08-28T19:29:52.4098623Z test portable_explorer::tests::race_fr_exp_003_r10_mutable_input_is_rejected ... ok
+2026-08-28T19:29:52.4124434Z test portable_explorer::tests::race_fr_exp_003_r10_output_replacement_is_rejected_or_blocked ... ok
+2026-08-28T19:29:52.4152297Z test portable_explorer::tests::race_nfr_sec_005_mutable_input_is_rejected ... ok
+2026-08-28T19:29:52.4159272Z test generated_docs::tests::sec_fr_doc_003_complete_generation_rejects_snapshot_replacement ... ok
+2026-08-28T19:29:52.4169723Z test generated_docs::tests::sec_fr_doc_003_corrupt_complete_generation_fails_closed ... ok
+2026-08-28T19:29:52.4180083Z test portable_explorer::tests::race_nfr_sec_005_output_replacement_is_rejected_or_blocked ... ok
+2026-08-28T19:29:52.4181463Z test portable_explorer::tests::race_nfr_sec_005_r11_mutable_input_is_rejected ... ok
+2026-08-28T19:29:52.4199078Z test portable_explorer::tests::race_nfr_sec_005_r11_output_replacement_is_rejected_or_blocked ... ok
+2026-08-28T19:29:52.4201002Z test portable_explorer::tests::race_nfr_sec_005_r12_mutable_input_is_rejected ... ok
+2026-08-28T19:29:52.4211147Z test portable_explorer::tests::race_nfr_sec_005_r12_output_replacement_is_rejected_or_blocked ... ok
+2026-08-28T19:29:52.4222847Z test portable_explorer::tests::race_nfr_sec_005_r13_mutable_input_is_rejected ... ok
+2026-08-28T19:29:52.4231221Z test portable_explorer::tests::race_nfr_sec_005_r13_output_replacement_is_rejected_or_blocked ... ok
+2026-08-28T19:29:52.4235095Z test portable_explorer::tests::race_nfr_sec_005_r14_mutable_input_is_rejected ... ok
+2026-08-28T19:29:52.4256450Z test portable_explorer::tests::race_nfr_sec_005_r14_output_replacement_is_rejected_or_blocked ... ok
+2026-08-28T19:29:52.4257654Z test portable_explorer::tests::race_nfr_sec_005_r15_mutable_input_is_rejected ... ok
+2026-08-28T19:29:52.4267945Z test portable_explorer::tests::race_nfr_sec_005_r15_output_replacement_is_rejected_or_blocked ... ok
+2026-08-28T19:29:52.4280878Z test portable_explorer::tests::race_nfr_sec_005_r17_mutable_input_is_rejected ... ok
+2026-08-28T19:29:52.4284877Z test portable_explorer::tests::sec_nfr_sec_001_checkout_text_normalization_is_closed ... ok
+2026-08-28T19:29:52.4288168Z test portable_explorer::tests::race_nfr_sec_005_r17_output_replacement_is_rejected_or_blocked ... ok
+2026-08-28T19:29:52.4305181Z test portable_explorer::tests::sec_nfr_sec_005_r17_path_capacity_and_symlink_inputs_fail_closed ... ok
+2026-08-28T19:29:52.4869637Z test portable_explorer::tests::sec_fr_exp_009_function_context_viewer_is_exact_and_offline ... ok
+2026-08-28T19:29:52.8840352Z test portable_explorer::tests::pt_nfr_det_001_versioned_viewers_are_exact_and_deterministic ... ok
+2026-08-28T19:29:52.8841254Z 
+2026-08-28T19:29:52.8841762Z test result: ok. 28 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.66s
+2026-08-28T19:29:52.8842507Z 
+2026-08-28T19:29:52.8866051Z      Running unittests src\main.rs (target\debug\deps\noesis-47e34a4508c84160.exe)
+2026-08-28T19:29:52.8968638Z 
+2026-08-28T19:29:52.8976851Z running 14 tests
+2026-08-28T19:29:52.8977690Z test s4_root_argument_tests::fr_cfg_001_selector_absence_preserves_historical_dispatch_arguments ... ok
+2026-08-28T19:29:52.8981349Z test s4_root_argument_tests::fr_cfg_001_global_configuration_is_only_a_leading_pair ... ok
+2026-08-28T19:29:52.8983294Z test s4_root_argument_tests::conf_fr_cli_001_r14_r15_256m_profile_has_an_exact_selector_matrix ... ok
+2026-08-28T19:29:52.8988396Z test s4_root_argument_tests::pt_fr_cfg_001_accepts_fifty_configuration_argument_constructions ... ok
+2026-08-28T19:29:52.8989556Z test s4_root_argument_tests::pt_fr_cli_007_g0_profile_accepts_fifty_pair_orderings ... ok
+2026-08-28T19:29:52.9000138Z test s4_root_argument_tests::pt_nfr_det_001_r17_query_selector_accepts_fifty_argument_permutations ... ok
+2026-08-28T19:29:52.9003489Z test impact::tests::race_fr_cli_006_mutable_input_is_rejected ... ok
+2026-08-28T19:29:52.9004481Z test s4_root_argument_tests::pt_nfr_det_001_r18_source_accepts_fifty_argument_permutations ... ok
+2026-08-28T19:29:52.9007352Z test s4_root_argument_tests::sec_fr_cli_001_docs_traversal_is_rejected_during_parsing ... ok
+2026-08-28T19:29:52.9009366Z test s4_root_argument_tests::sec_fr_cli_007_g0_profile_argument_matrix_fails_closed ... ok
+2026-08-28T19:29:52.9010768Z test s4_root_argument_tests::sec_fr_cli_001_query_traversal_is_rejected_during_parsing ... ok
+2026-08-28T19:29:52.9013283Z test s4_root_argument_tests::sec_fr_ctx_001_r17_selector_matrix_fails_closed ... ok
+2026-08-28T19:29:52.9017015Z test s4_root_argument_tests::sec_fr_cli_011_r18_source_argument_matrix_fails_closed ... ok
+2026-08-28T19:29:52.9023676Z test s4_root_argument_tests::inv_bnd_001_configuration_maximum_and_plus_one_are_exact ... ok
+2026-08-28T19:29:52.9024178Z 
+2026-08-28T19:29:52.9024435Z test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-08-28T19:29:52.9024792Z 
+2026-08-28T19:29:52.9042583Z      Running tests\e2e_fr_acq_001_immutable_commit.rs (target\debug\deps\e2e_fr_acq_001_immutable_commit-6943931d1e86d8dc.exe)
+2026-08-28T19:29:52.9145227Z 
+2026-08-28T19:29:52.9145423Z running 10 tests
+2026-08-28T19:29:52.9479972Z test e2e_fr_acq_001_non_git_returns_typed_error ... ok
+2026-08-28T19:29:53.3934325Z test e2e_fr_acq_001_immutable_commit ... ok
+2026-08-28T19:29:53.4417269Z test e2e_fr_acq_001_revision_not_commit_returns_typed_error ... ok
+2026-08-28T19:29:53.4445733Z test e2e_fr_acq_001_inconsistent_object_returns_typed_error ... ok
+2026-08-28T19:29:53.4476768Z test e2e_fr_acq_001_missing_object_returns_typed_error ... ok
+2026-08-28T19:29:53.9329863Z test e2e_fr_cli_003_invalid_identity_returns_strict_error ... ok
+2026-08-28T19:29:53.9388305Z test e2e_fr_acq_001_revision_not_found_returns_typed_error ... ok
+2026-08-28T19:29:53.9598442Z test e2e_fr_cli_003_invalid_revision_returns_strict_error ... ok
+2026-08-28T19:29:53.9774537Z test e2e_fr_acq_001_unexpected_failure_is_strict_internal ... ok
+2026-08-28T19:29:54.3618006Z test it_fr_acq_001_ref_move_after_binding_keeps_original_commit ... ok
+2026-08-28T19:29:54.3618351Z 
+2026-08-28T19:29:54.3618598Z test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.45s
+2026-08-28T19:29:54.3618947Z 
+2026-08-28T19:29:54.3635230Z      Running tests\e2e_fr_acq_004_packed_sha1.rs (target\debug\deps\e2e_fr_acq_004_packed_sha1-c3be4e92e4586ae9.exe)
+2026-08-28T19:29:54.3737546Z 
+2026-08-28T19:29:54.3737734Z running 15 tests
+2026-08-28T19:29:59.4096457Z test conf_fr_acq_004_entry_integrity ... ok
+2026-08-28T19:30:03.0603644Z test conf_fr_acq_004_index_v2 ... ok
+2026-08-28T19:30:03.1725574Z test conf_fr_acq_004_pack_catalog_v1 ... ok
+2026-08-28T19:30:04.8987938Z test diff_fr_acq_004_offline_reference_readers ... ok
+2026-08-28T19:30:04.9663317Z test e2e_fr_acq_004_packed_sha1_equivalence ... ok
+2026-08-28T19:30:12.0088505Z test conf_fr_acq_004_ofs_delta ... ok
+2026-08-28T19:30:15.6025299Z test pt_fr_acq_004_location_and_order_invariant ... ok
+2026-08-28T19:30:17.5047360Z test race_fr_acq_004_pack_replacement ... ok
+2026-08-28T19:30:18.6696685Z test pt_fr_acq_004_limits_have_max_and_plus_one ... ok
+2026-08-28T19:30:25.7170476Z test fz_fr_acq_004_pack_index_delta_seed_corpus ... ok
+2026-08-28T19:30:29.7687318Z test reg_fr_acq_004_legacy_profiles_unchanged ... ok
+2026-08-28T19:30:31.5863567Z test sec_fr_acq_004_scan_has_no_new_authority ... ok
+2026-08-28T19:30:32.6578508Z test sec_fr_acq_004_pack_integrity ... ok
+2026-08-28T19:30:42.2012580Z test sec_fr_acq_004_delta_adversarial ... ok
+2026-08-28T19:30:48.5693206Z test conf_fr_acq_004_ref_delta ... ok
+2026-08-28T19:30:48.5694064Z 
+2026-08-28T19:30:48.5695172Z test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 54.20s
+2026-08-28T19:30:48.5696291Z 
+2026-08-28T19:30:48.5715633Z      Running tests\e2e_fr_acq_005_gitlink_boundaries.rs (target\debug\deps\e2e_fr_acq_005_gitlink_boundaries-23bef7f3fe88dc0f.exe)
+2026-08-28T19:30:48.5824774Z 
+2026-08-28T19:30:48.5824950Z running 12 tests
+2026-08-28T19:30:49.8452960Z test conf_fr_acq_005_boundary_manifest_failures_are_side_effect_free ... ok
+2026-08-28T19:30:49.8693580Z test conf_fr_acq_005_selector_profile_matrix ... ok
+2026-08-28T19:30:51.4057016Z test e2e_fr_acq_005_gitlink_boundaries ... ok
+2026-08-28T19:30:51.9553327Z test conf_fr_acq_005_v5_store_docs_query ... ok
+2026-08-28T19:30:52.4957108Z test gt_fr_acq_005_nested_failure_precedence ... ok
+2026-08-28T19:30:54.0111220Z test gt_fr_acq_005_explicit_nested_binding ... ok
+2026-08-28T19:30:54.6785536Z test pt_fr_acq_005_manifest_bytes_have_public_max_and_plus_one ... ok
+2026-08-28T19:30:58.7220302Z test reg_fr_acq_004_packed_sha1_composes_with_r2 ... ok
+2026-08-28T19:30:59.1151393Z test sec_fr_acq_005_no_ambient_nested_authority ... ok
+2026-08-28T19:31:00.8247983Z test sec_fr_acq_005_url_canary_never_reaches_output_or_store ... ok
+2026-08-28T19:31:00.8370424Z test pt_fr_acq_005_public_limits_use_128_gitlinks_and_256_sections ... ok
+2026-08-28T19:31:02.5075713Z test pt_fr_acq_005_explicit_roots_have_public_max_and_plus_one ... ok
+2026-08-28T19:31:02.5076406Z 
+2026-08-28T19:31:02.5077486Z test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 13.93s
+2026-08-28T19:31:02.5078288Z 
+2026-08-28T19:31:02.5097584Z      Running tests\e2e_fr_cfg_001_local_configuration.rs (target\debug\deps\e2e_fr_cfg_001_local_configuration-68c2520fe89f6536.exe)
+2026-08-28T19:31:02.5205179Z 
+2026-08-28T19:31:02.5205395Z running 1 test
+2026-08-28T19:31:02.6188243Z test e2e_fr_cfg_001_validates_embedded_default ... ok
+2026-08-28T19:31:02.6188735Z 
+2026-08-28T19:31:02.6189486Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+2026-08-28T19:31:02.6190151Z 
+2026-08-28T19:31:02.6206824Z      Running tests\e2e_fr_cli_001_workspace_docs_query.rs (target\debug\deps\e2e_fr_cli_001_workspace_docs_query-e9f1ac046349bc5d.exe)
+2026-08-28T19:31:02.6310733Z 
+2026-08-28T19:31:02.6310938Z running 1 test
+2026-08-28T19:31:04.4222812Z test e2e_fr_cli_001_workspace_docs_query ... ok
+2026-08-28T19:31:04.4223110Z 
+2026-08-28T19:31:04.4223381Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.79s
+2026-08-28T19:31:04.4223744Z 
+2026-08-28T19:31:04.4243261Z      Running tests\e2e_fr_ctx_001_function_context.rs (target\debug\deps\e2e_fr_ctx_001_function_context-41773e9d72236b6b.exe)
+2026-08-28T19:31:04.4352824Z 
+2026-08-28T19:31:04.4353108Z running 1 test
+2026-08-28T19:31:22.5679970Z test e2e_fr_ctx_001_function_context_and_navigation ... ok
+2026-08-28T19:31:22.5680295Z 
+2026-08-28T19:31:22.5680563Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 18.13s
+2026-08-28T19:31:22.5680947Z 
+2026-08-28T19:31:22.5703421Z      Running tests\e2e_fr_ctx_002_trusted_source_retrieval.rs (target\debug\deps\e2e_fr_ctx_002_trusted_source_retrieval-6a2d1b390c9d76d6.exe)
+2026-08-28T19:31:22.5815204Z 
+2026-08-28T19:31:22.5815460Z running 5 tests
+2026-08-28T19:31:29.9822858Z test conf_fr_cli_011_stdout_failure_uses_internal_error_v29 ... ok
+2026-08-28T19:31:32.3070125Z test e2e_fr_ctx_002_retrieves_exact_committed_excerpt ... ok
+2026-08-28T19:31:33.5002700Z test conf_fr_cli_011_invalid_bindings_fail_closed_without_private_context ... ok
+2026-08-28T19:31:35.0050389Z test sec_fr_ctx_002_packed_corruption_is_a_typed_private_failure ... ok
+2026-08-28T19:31:41.3712923Z test e2e_fr_ctx_002_loose_packed_boundary_and_ten_schedules_are_identical ... ok
+2026-08-28T19:31:41.3713563Z 
+2026-08-28T19:31:41.3714014Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 18.79s
+2026-08-28T19:31:41.3714614Z 
+2026-08-28T19:31:41.3736495Z      Running tests\e2e_fr_exp_001_portable_explorer.rs (target\debug\deps\e2e_fr_exp_001_portable_explorer-ef6e751b497ae0c9.exe)
+2026-08-28T19:31:41.3846201Z 
+2026-08-28T19:31:41.3846712Z running 15 tests
+2026-08-28T19:31:41.3874560Z test conf_fr_qry_002_bounded_deterministic_neighborhood ... ok
+2026-08-28T19:31:41.3900311Z test conf_fr_qry_001_r8_preserves_all_v5_subject_families ... ok
+2026-08-28T19:31:41.4402668Z test conf_fr_cli_001_export_explore_are_explicit ... ok
+2026-08-28T19:31:41.4417536Z test gt_fr_exp_001_exact_identity_reference_and_evidence_preservation ... ok
+2026-08-28T19:31:44.8518388Z test ft_fr_exp_001_corrupt_visible_snapshot_fails_before_publication ... ok
+2026-08-28T19:31:44.8686911Z test pt_od_lim_001_r8_all_limits_have_maximum_plus_one ... ok
+2026-08-28T19:31:45.0606126Z test conf_fr_exp_001_invalid_security_matrix ... ok
+2026-08-28T19:31:45.3273229Z test e2e_fr_exp_001_export_and_explore_offline ... ok
+2026-08-28T19:31:45.3423323Z test sec_fr_exp_001_xss_payloads_render_as_text ... ok
+2026-08-28T19:31:48.2772149Z test sec_nfr_prv_002_r8_excludes_source_contents_and_snippets ... ok
+2026-08-28T19:31:48.2864885Z test sec_nfr_sec_001_r8_csp_forbids_active_remote_content ... ok
+2026-08-28T19:31:48.3439066Z test sec_nfr_sec_005_r8_path_symlink_and_destination_confinement ... ok
+2026-08-28T19:31:49.2162666Z test reg_fr_cli_001_r7_commands_and_stored_head_unchanged ... ok
+2026-08-28T19:31:49.2223205Z test reg_fr_qry_001_r7_exact_query_bytes_unchanged ... ok
+2026-08-28T19:32:05.4210565Z test pt_nfr_det_001_r8_fifty_permutation_replay ... ok
+2026-08-28T19:32:05.4210861Z 
+2026-08-28T19:32:05.4211136Z test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 24.04s
+2026-08-28T19:32:05.4211510Z 
+2026-08-28T19:32:05.4236499Z      Running tests\e2e_fr_ext_002_rust_knowledge.rs (target\debug\deps\e2e_fr_ext_002_rust_knowledge-3d0a4a98fc8ee5ec.exe)
+2026-08-28T19:32:05.4343094Z 
+2026-08-28T19:32:05.4343405Z running 5 tests
+2026-08-28T19:32:05.9892741Z test e2e_fr_ext_002_rust_knowledge ... ok
+2026-08-28T19:32:06.1597288Z test gt_dr_idn_001_unicode_normalization_collision ... ok
+2026-08-28T19:32:06.2127496Z test gt_fr_ext_002_malformed_syntax_is_explicit ... ok
+2026-08-28T19:32:06.2846451Z test conf_fr_ext_001_snapshot_v3_and_error_v3 ... ok
+2026-08-28T19:32:06.4555112Z test sec_fr_ext_002_target_never_executes ... ok
+2026-08-28T19:32:06.4555440Z 
+2026-08-28T19:32:06.4555705Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.02s
+2026-08-28T19:32:06.4556057Z 
+2026-08-28T19:32:06.4577365Z      Running tests\e2e_fr_ext_005_scip_import.rs (target\debug\deps\e2e_fr_ext_005_scip_import-74cc59f918455c9d.exe)
+2026-08-28T19:32:06.4682321Z 
+2026-08-28T19:32:06.4682627Z running 12 tests
+2026-08-28T19:32:11.0713045Z test e2e_fr_doc_001_r7_provenance_conflict_and_gap_wording ... ok
+2026-08-28T19:32:11.4379253Z test conf_fr_ext_005_snapshot_v10_graph_v7_error_v14 ... ok
+2026-08-28T19:32:14.0654005Z test e2e_fr_ext_005_revision_bound_scip_import ... ok
+2026-08-28T19:32:14.6254278Z test gt_fr_ext_005_cross_crate_symbol_resolution ... ok
+2026-08-28T19:32:17.1260587Z test gt_fr_ext_005_explicit_implementation_and_type_relations ... ok
+2026-08-28T19:32:17.6136969Z test conf_fr_qry_001_v10_uses_local_query_result_v5 ... ok
+2026-08-28T19:32:17.7326843Z test gt_fr_ext_005_external_and_generated_symbols_remain_bounded ... ok
+2026-08-28T19:32:18.8668936Z test reg_fr_cli_001_r7_selector_absence_is_byte_identical ... ok
+2026-08-28T19:32:22.0983941Z test sec_fr_ext_005_never_executes_indexer_or_target ... ok
+2026-08-28T19:32:23.7595485Z test sec_fr_ext_005_binding_path_race_and_privacy ... ok
+2026-08-28T19:32:43.9691446Z test conf_fr_ext_005_invalid_security_matrix ... ok
+2026-08-28T19:33:17.1370363Z test pt_nfr_det_001_r7_permutation_and_replay_invariant has been running for over 60 seconds
+2026-08-28T19:35:45.1974198Z test pt_nfr_det_001_r7_permutation_and_replay_invariant ... ok
+2026-08-28T19:35:45.1974646Z 
+2026-08-28T19:35:45.1975263Z test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 218.73s
+2026-08-28T19:35:45.1975715Z 
+2026-08-28T19:35:45.1997149Z      Running tests\e2e_fr_ext_008_root_package_workspace.rs (target\debug\deps\e2e_fr_ext_008_root_package_workspace-e372d02eb785a0b5.exe)
+2026-08-28T19:35:45.2107892Z 
+2026-08-28T19:35:45.2108213Z running 6 tests
+2026-08-28T19:35:49.3886535Z test e2e_fr_ext_008_root_package_workspace ... ok
+2026-08-28T19:35:49.9211012Z test e2e_fr_doc_001_r3_coverage_is_documented ... ok
+2026-08-28T19:35:50.3061209Z test conf_fr_ext_008_error_v10_and_r2_precedence ... ok
+2026-08-28T19:35:50.7914386Z test e2e_fr_qry_001_r3_exact_id_results ... ok
+2026-08-28T19:35:51.5088446Z test reg_fr_cli_001_r3_selector_absence_is_byte_identical ... ok
+2026-08-28T19:35:57.1517318Z test gt_fr_ext_008_public_root_variants ... ok
+2026-08-28T19:35:57.1517792Z 
+2026-08-28T19:35:57.1518236Z test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.94s
+2026-08-28T19:35:57.1518977Z 
+2026-08-28T19:35:57.1540753Z      Running tests\e2e_fr_ext_009_cargo_manifest_facts.rs (target\debug\deps\e2e_fr_ext_009_cargo_manifest_facts-99cd11a0f28d32f4.exe)
+2026-08-28T19:35:57.1646818Z 
+2026-08-28T19:35:57.1647164Z running 4 tests
+2026-08-28T19:35:58.4300101Z test reg_fr_cli_001_r4_selector_absence_is_byte_identical ... ok
+2026-08-28T19:36:00.4492545Z test e2e_fr_ext_009_cargo_manifest_facts ... ok
+2026-08-28T19:36:01.0694173Z test e2e_fr_doc_001_r4_declared_vs_resolved_is_documented ... ok
+2026-08-28T19:36:07.5475238Z test e2e_fr_qry_001_r4_exact_id_results ... ok
+2026-08-28T19:36:07.5475719Z 
+2026-08-28T19:36:07.5476110Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.38s
+2026-08-28T19:36:07.5476637Z 
+2026-08-28T19:36:07.5498154Z      Running tests\e2e_fr_ext_010_rust_semantic_depth.rs (target\debug\deps\e2e_fr_ext_010_rust_semantic_depth-504e7b7238b1cf5b.exe)
+2026-08-28T19:36:07.5608951Z 
+2026-08-28T19:36:07.5609382Z running 13 tests
+2026-08-28T19:36:07.6105684Z test conf_fr_ext_010_empty_semantic_extension_checkpoint_is_bound ... ok
+2026-08-28T19:36:15.1020420Z test e2e_fr_ext_010_rust_semantic_depth ... ok
+2026-08-28T19:36:15.3201194Z test e2e_fr_ext_010_cfg_owner_alternatives_publish_one_logical_owner ... ok
+2026-08-28T19:36:16.1427995Z test e2e_fr_ext_010_empty_semantic_extension_reaches_r14 ... ok
+2026-08-28T19:36:17.3134623Z test e2e_fr_doc_001_r5_declared_and_unresolved_are_documented ... ok
+2026-08-28T19:36:17.4260755Z test reg_fr_cli_001_r5_selector_absence_is_byte_identical ... ok
+2026-08-28T19:36:18.5051622Z test sec_fr_ext_010_heterogeneous_cfg_method_alternatives_keep_error_v12 ... ok
+2026-08-28T19:36:19.8649863Z test reg_fr_ext_010_paired_constant_reaches_r14_without_silent_drop ... ok
+2026-08-28T19:36:19.9050203Z test sec_fr_ext_010_invalid_composition_precedes_acquisition ... ok
+2026-08-28T19:36:20.8442436Z test sec_fr_ext_010_unconditional_owner_duplicates_keep_error_v12 ... ok
+2026-08-28T19:36:20.8667021Z test sec_fr_ext_010_malformed_has_error_v12_no_publication ... ok
+2026-08-28T19:36:27.5836151Z test e2e_fr_qry_001_r5_exact_id_results ... ok
+2026-08-28T19:37:15.3214167Z test pt_nfr_det_001_empty_semantic_extension_has_fifty_permutations_and_ten_schedules has been running for over 60 seconds
+2026-08-28T19:37:32.7961289Z test pt_nfr_det_001_empty_semantic_extension_has_fifty_permutations_and_ten_schedules ... ok
+2026-08-28T19:37:32.7961953Z 
+2026-08-28T19:37:32.7962393Z test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 85.24s
+2026-08-28T19:37:32.7962969Z 
+2026-08-28T19:37:32.7984650Z      Running tests\e2e_fr_ext_011_framework_declarations.rs (target\debug\deps\e2e_fr_ext_011_framework_declarations-59fcd3762ec9787d.exe)
+2026-08-28T19:37:32.8096563Z 
+2026-08-28T19:37:32.8096855Z running 6 tests
+2026-08-28T19:37:34.2623141Z test reg_fr_cli_001_r6_selector_absence_is_byte_identical ... ok
+2026-08-28T19:37:36.8338941Z test sec_fr_ext_011_invalid_composition_precedes_acquisition ... ok
+2026-08-28T19:37:38.3625282Z test e2e_fr_ext_011_framework_declarations ... ok
+2026-08-28T19:37:39.1775578Z test sec_fr_ext_011_r6_prerequisite_parse_failures_use_v13 ... ok
+2026-08-28T19:37:39.5611158Z test e2e_fr_doc_001_r6_declaration_candidate_non_runtime_wording ... ok
+2026-08-28T19:37:49.4852477Z test e2e_fr_qry_001_r6_exact_id_results ... ok
+2026-08-28T19:37:49.4852981Z 
+2026-08-28T19:37:49.4853705Z test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 16.68s
+2026-08-28T19:37:49.4854159Z 
+2026-08-28T19:37:49.4875558Z      Running tests\e2e_fr_ext_012_k1_output_capacity.rs (target\debug\deps\e2e_fr_ext_012_k1_output_capacity-6954815228d20590.exe)
+2026-08-28T19:37:49.4983751Z 
+2026-08-28T19:37:49.4984177Z running 2 tests
+2026-08-28T19:37:52.4262627Z test conf_fr_cli_001_output_capacity_composition_is_closed ... ok
+2026-08-28T19:37:54.2415543Z test e2e_fr_ext_012_explicit_output_capacity_profile ... ok
+2026-08-28T19:37:54.2416172Z 
+2026-08-28T19:37:54.2416631Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.74s
+2026-08-28T19:37:54.2417289Z 
+2026-08-28T19:37:54.2442340Z      Running tests\e2e_fr_ext_012_k1_repository_boundaries.rs (target\debug\deps\e2e_fr_ext_012_k1_repository_boundaries-6e20f47c787685e2.exe)
+2026-08-28T19:37:54.2553717Z 
+2026-08-28T19:37:54.2554044Z running 7 tests
+2026-08-28T19:37:54.2561276Z test conf_nfr_det_001_r11_viewer_checkout_transport_is_platform_neutral ... ok
+2026-08-28T19:37:55.0938630Z test ft_fr_cli_001_r11_forbidden_composition_fails_before_store_creation ... ok
+2026-08-28T19:37:55.3794886Z test diag_fr_ext_012_r11_semantic_identity_conflict_is_deterministic_error_v18 ... ok
+2026-08-28T19:38:02.5632673Z test e2e_fr_qry_001_r11_links_external_workspace_member_and_declaration_gap ... ok
+2026-08-28T19:38:02.8902245Z test reg_fr_ext_012_r11_output_capacity_is_non_semantic ... ok
+2026-08-28T19:38:03.1301071Z test sec_nfr_sec_001_r11_unbound_nested_worktree_has_no_semantic_authority ... ok
+2026-08-28T19:38:08.8616657Z test e2e_fr_ext_012_k1_gitlink_boundaries_complete_local_journey ... ok
+2026-08-28T19:38:08.8617045Z 
+2026-08-28T19:38:08.8617361Z test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 14.61s
+2026-08-28T19:38:08.8617740Z 
+2026-08-28T19:38:08.8637348Z      Running tests\e2e_fr_ext_012_rust_callable_semantics.rs (target\debug\deps\e2e_fr_ext_012_rust_callable_semantics-92bbb9a5081e591e.exe)
+2026-08-28T19:38:08.8746081Z 
+2026-08-28T19:38:08.8746794Z running 3 tests
+2026-08-28T19:38:08.9047907Z test reg_fr_cli_001_selector_absence_preserves_r0_r8_bytes ... ok
+2026-08-28T19:38:12.7961722Z test sec_fr_exp_002_xss_csp_path_and_race_fail_closed ... ok
+2026-08-28T19:38:14.5655716Z test e2e_fr_ext_012_rust_callable_semantics ... ok
+2026-08-28T19:38:14.5656490Z 
+2026-08-28T19:38:14.5657083Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.69s
+2026-08-28T19:38:14.5657892Z 
+2026-08-28T19:38:14.5682129Z      Running tests\e2e_fr_ext_013_cfg_declaration_alternatives.rs (target\debug\deps\e2e_fr_ext_013_cfg_declaration_alternatives-56d765850784988a.exe)
+2026-08-28T19:38:14.5856726Z 
+2026-08-28T19:38:14.5858379Z running 11 tests
+2026-08-28T19:38:14.5914173Z test conf_fr_ext_013_fixture_bytes_are_reviewed ... ok
+2026-08-28T19:38:16.1871460Z test conf_fr_cli_001_r10_optional_gitlink_boundary_profile_composes ... ok
+2026-08-28T19:38:17.2394103Z test e2e_fr_exp_003_r10_lossless_local_journey ... ok
+2026-08-28T19:38:17.5736322Z test e2e_fr_ext_013_cfg_method_alternatives_publish_declarations ... ok
+2026-08-28T19:38:17.6631995Z test conf_fr_cli_001_r10_invalid_profile_matrix_is_pre_acquisition ... ok
+2026-08-28T19:38:17.7687725Z test conf_fr_cli_001_r10_forbidden_compositions_fail_before_acquisition ... ok
+2026-08-28T19:38:18.4037258Z test sec_fr_exp_003_r10_parent_outputs_fail_before_read_or_mutation ... ok
+2026-08-28T19:38:18.4346570Z test reg_fr_ext_010_r10_fixture_preserves_legacy_r5_failure_bytes ... ok
+2026-08-28T19:38:18.4700045Z test int_fr_ext_013_r10_application_builds_snapshot_v12 ... ok
+2026-08-28T19:38:18.7194350Z test ft_fr_qry_001_r10_corrupt_documents_fail_with_error_v17 ... ok
+2026-08-28T19:38:19.6236875Z test sec_fr_exp_003_r10_portable_reimport_rejects_invalid_or_private_data ... ok
+2026-08-28T19:38:19.6237580Z 
+2026-08-28T19:38:19.6238038Z test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.04s
+2026-08-28T19:38:19.6238436Z 
+2026-08-28T19:38:19.6288742Z      Running tests\e2e_fr_ext_014_k1_cfg_alternatives.rs (target\debug\deps\e2e_fr_ext_014_k1_cfg_alternatives-a7dd71efecd2561b.exe)
+2026-08-28T19:38:19.6444545Z 
+2026-08-28T19:38:19.6445143Z running 3 tests
+2026-08-28T19:38:19.6453445Z test conf_nfr_det_001_r12_viewer_checkout_transport_is_platform_neutral ... ok
+2026-08-28T19:38:22.1635141Z test e2e_fr_cli_001_r12_invalid_selector_matrix_fails_before_acquisition ... ok
+2026-08-28T19:38:32.4472737Z test e2e_fr_ext_014_k1_cfg_alternatives_complete_local_journey ... ok
+2026-08-28T19:38:32.4473388Z 
+2026-08-28T19:38:32.4474065Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 12.80s
+2026-08-28T19:38:32.4474788Z 
+2026-08-28T19:38:32.4496709Z      Running tests\e2e_fr_ext_015_k1_scip_composition.rs (target\debug\deps\e2e_fr_ext_015_k1_scip_composition-6fc1a4d6800fc81a.exe)
+2026-08-28T19:38:32.4615271Z 
+2026-08-28T19:38:32.4616079Z running 3 tests
+2026-08-28T19:38:33.3535881Z test conf_fr_cli_001_r13_selector_dispatch_is_closed_and_side_effect_free ... ok
+2026-08-28T19:38:39.7238864Z test e2e_fr_ext_015_k1_scip_composition_complete_local_journey ... ok
+2026-08-28T19:39:32.4659405Z test pt_nfr_det_001_r13_fifty_permutations_and_ten_schedules_are_identical has been running for over 60 seconds
+2026-08-28T19:40:30.8154871Z test pt_nfr_det_001_r13_fifty_permutations_and_ten_schedules_are_identical ... ok
+2026-08-28T19:40:30.8156932Z 
+2026-08-28T19:40:30.8157365Z test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 118.35s
+2026-08-28T19:40:30.8157768Z 
+2026-08-28T19:40:30.8180815Z      Running tests\e2e_fr_ext_016_017_real_repository_fail_closed.rs (target\debug\deps\e2e_fr_ext_016_017_real_repository_fail_closed-55318f887fb088d6.exe)
+2026-08-28T19:40:30.8293386Z 
+2026-08-28T19:40:30.8293889Z running 5 tests
+2026-08-28T19:40:31.9962596Z test sec_inv_bnd_001_r14_gitlink_is_typed_before_publication ... ok
+2026-08-28T19:40:33.2395594Z test sec_inv_bnd_001_r15_gitlink_is_typed_before_publication ... ok
+2026-08-28T19:40:35.9914221Z test conf_fr_cli_001_r14_r15_256m_profile_is_explicit ... ok
+2026-08-28T19:40:36.0220025Z test e2e_fr_ext_016_real_repository_shapes_are_fail_closed ... ok
+2026-08-28T19:40:36.5856103Z test e2e_fr_ext_017_real_repository_shapes_are_fail_closed ... ok
+2026-08-28T19:40:36.5856830Z 
+2026-08-28T19:40:36.5857401Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.76s
+2026-08-28T19:40:36.5858220Z 
+2026-08-28T19:40:36.5880511Z      Running tests\e2e_fr_ext_016_rust_expression_bindings.rs (target\debug\deps\e2e_fr_ext_016_rust_expression_bindings-a160a58d9ae635e2.exe)
+2026-08-28T19:40:36.6004265Z 
+2026-08-28T19:40:36.6004741Z running 4 tests
+2026-08-28T19:40:36.6011689Z test conf_nfr_det_001_r14_viewer_checkout_transport_is_platform_neutral ... ok
+2026-08-28T19:40:39.9272708Z test conf_fr_cli_001_r14_selector_dispatch_is_closed_and_side_effect_free ... ok
+2026-08-28T19:41:15.6607114Z test e2e_fr_ext_016_rust_expression_bindings_complete_local_journey ... ok
+2026-08-28T19:41:36.6944967Z test pt_nfr_det_001_r14_fifty_permutations_and_ten_schedules_are_identical has been running for over 60 seconds
+2026-08-28T19:42:29.6173804Z test pt_nfr_det_001_r14_fifty_permutations_and_ten_schedules_are_identical ... ok
+2026-08-28T19:42:29.6175027Z 
+2026-08-28T19:42:29.6175732Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 113.02s
+2026-08-28T19:42:29.6177913Z 
+2026-08-28T19:42:29.6205300Z      Running tests\e2e_fr_ext_017_rust_local_flow.rs (target\debug\deps\e2e_fr_ext_017_rust_local_flow-0ea1b5d461785490.exe)
+2026-08-28T19:42:29.6363515Z 
+2026-08-28T19:42:29.6364056Z running 4 tests
+2026-08-28T19:42:30.3280235Z test conf_fr_cli_001_r15_forbidden_composition_fails_before_acquisition ... ok
+2026-08-28T19:42:32.1823110Z test conf_fr_cli_001_r15_selector_absence_is_exact_r14 ... ok
+2026-08-28T19:42:39.3461436Z test e2e_fr_ext_017_rust_local_flow_complete_local_journey ... ok
+2026-08-28T19:43:09.9128717Z test pt_nfr_det_001_r15_fifty_permutations_and_ten_schedules_are_identical ... ok
+2026-08-28T19:43:09.9129521Z 
+2026-08-28T19:43:09.9130090Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 40.28s
+2026-08-28T19:43:09.9131090Z 
+2026-08-28T19:43:09.9151856Z      Running tests\e2e_fr_ext_020_rust_safe_constant_evaluation.rs (target\debug\deps\e2e_fr_ext_020_rust_safe_constant_evaluation-ff540bbf594c378a.exe)
+2026-08-28T19:43:09.9262060Z 
+2026-08-28T19:43:10.4999085Z running 5 tests
+2026-08-28T19:43:10.5000124Z test conf_fr_cli_001_r16_repository_boundary_fails_before_acquisition ... ok
+2026-08-28T19:43:13.6063456Z test conf_fr_cli_001_r16_selector_absence_is_exact_r15 ... ok
+2026-08-28T19:43:17.8783302Z test e2e_fr_exp_008_local_explorer_v9_is_bound_to_portable_v9 ... ok
+2026-08-28T19:43:20.9019260Z test e2e_fr_ext_020_rust_safe_constant_evaluation_complete_local_journey ... ok
+2026-08-28T19:43:53.5522137Z test pt_nfr_det_001_r16_fifty_permutations_and_ten_schedules_are_identical ... ok
+2026-08-28T19:43:53.5522582Z 
+2026-08-28T19:43:53.5522908Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 43.63s
+2026-08-28T19:43:53.5523329Z 
+2026-08-28T19:43:53.5543344Z      Running tests\e2e_fr_fed_001_openapi_federation.rs (target\debug\deps\e2e_fr_fed_001_openapi_federation-6946cac516a94a84.exe)
+2026-08-28T19:43:53.5655529Z 
+2026-08-28T19:43:53.5655836Z running 15 tests
+2026-08-28T19:43:53.5668487Z test conf_fr_cli_005_reviewed_fixture_materialization_is_platform_neutral ... ok
+2026-08-28T19:43:53.5922316Z test conf_fr_cli_005_stdout_failure_uses_internal_error_v8 ... ok
+2026-08-28T19:43:53.6032329Z test conf_fr_fed_002_conflicting_authority_fails_closed ... ok
+2026-08-28T19:43:53.6257575Z test conf_fr_cli_005_invocation_and_digest_fail_without_stdout ... ok
+2026-08-28T19:43:53.6304677Z test gt_fr_cli_005_provider_only_workspace_is_exact ... ok
+2026-08-28T19:43:53.6376040Z test e2e_fr_fed_001_openapi_federation ... ok
+2026-08-28T19:43:53.6690610Z test conf_fr_fed_002_heuristic_selection_is_exact ... ok
+2026-08-28T19:43:53.6782816Z test gt_fr_ext_004_unsupported_semantics_are_exact_gaps ... ok
+2026-08-28T19:43:53.7786163Z test gt_fr_ext_004_yaml_json_reports_are_semantically_equivalent ... ok
+2026-08-28T19:43:53.7796540Z test pt_fr_fed_001_ten_parallel_schedules_are_byte_identical ... ok
+2026-08-28T19:43:53.8177294Z test sec_fr_fed_001_standard_path_does_not_mutate_inputs ... ok
+2026-08-28T19:43:53.9589699Z test sec_fr_ext_004_hostile_contracts_fail_closed ... ok
+2026-08-28T19:43:54.1585714Z test sec_fr_fed_001_unsafe_workspace_paths_are_rejected_before_reads ... ok
+2026-08-28T19:43:54.9055482Z test pt_fr_fed_001_fifty_input_orders_are_byte_identical ... ok
+2026-08-28T19:44:53.6713474Z test pt_fr_fed_001_public_limits_accept_max_and_reject_plus_one has been running for over 60 seconds
+2026-08-28T19:45:24.3537157Z test pt_fr_fed_001_public_limits_accept_max_and_reject_plus_one ... ok
+2026-08-28T19:45:24.3537818Z 
+2026-08-28T19:45:24.3538356Z test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 90.79s
+2026-08-28T19:45:24.3539019Z 
+2026-08-28T19:45:24.3570912Z      Running tests\e2e_fr_imp_004_implementation_aware_api_diff.rs (target\debug\deps\e2e_fr_imp_004_implementation_aware_api_diff-c42772693f3ac0fd.exe)
+2026-08-28T19:45:24.3698119Z 
+2026-08-28T19:45:24.3698767Z running 4 tests
+2026-08-28T19:45:24.3708400Z test conf_fr_cli_006_s7_reviewed_fixture_materialization_is_platform_neutral ... ok
+2026-08-28T19:45:24.4929003Z test e2e_fr_imp_004_implementation_aware_api_diff ... ok
+2026-08-28T19:45:24.5476262Z test sec_fr_cli_006_traversal_oversize_and_malformed_source_fail_closed ... ok
+2026-08-28T19:45:26.4091470Z test pt_nfr_det_001_s7_replays_and_schedules_are_byte_identical ... ok
+2026-08-28T19:45:26.4091984Z 
+2026-08-28T19:45:26.4092314Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.04s
+2026-08-28T19:45:26.4092707Z 
+2026-08-28T19:45:26.4114060Z      Running tests\e2e_fr_imp_006_git_evidence_navigation.rs (target\debug\deps\e2e_fr_imp_006_git_evidence_navigation-244b2a01ce3cc31d.exe)
+2026-08-28T19:45:26.4236312Z 
+2026-08-28T19:45:26.4236633Z running 2 tests
+2026-08-28T19:45:26.4242083Z test conf_fr_imp_006_reviewed_git_fixture_materialization_is_platform_neutral ... ok
+2026-08-28T19:45:27.9365738Z test e2e_fr_imp_006_git_bound_semantic_diff_is_navigable ... ok
+2026-08-28T19:45:27.9366350Z 
+2026-08-28T19:45:27.9366844Z test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.51s
+2026-08-28T19:45:27.9367347Z 
+2026-08-28T19:45:27.9391261Z      Running tests\e2e_fr_inc_001_incremental_refresh.rs (target\debug\deps\e2e_fr_inc_001_incremental_refresh-3adaad318a18b651.exe)
+2026-08-28T19:45:27.9513710Z 
+2026-08-28T19:45:30.5985494Z running 10 tests
+2026-08-28T19:45:30.5986204Z test e2e_fr_cli_004_recognized_refresh_uses_error_v7_for_input ... ok
+2026-08-28T19:45:30.7330794Z test e2e_fr_cli_004_missing_baseline_is_error_v7 ... ok
+2026-08-28T19:45:34.3002896Z test e2e_fr_cli_004_non_s4_baseline_is_incompatible ... ok
+2026-08-28T19:45:37.4744548Z test e2e_fr_inc_002_incompatible_cache_selects_full_rebuild ... ok
+2026-08-28T19:45:38.1898403Z test e2e_fr_inc_003_corrupt_cache_preserves_baseline_head ... ok
+2026-08-28T19:45:38.8182963Z test e2e_fr_inc_001_incremental_refresh ... ok
+2026-08-28T19:45:39.6519005Z test e2e_fr_inc_002_source_add_selects_full_workspace ... ok
+2026-08-28T19:45:43.4257687Z test e2e_fr_inc_003_missing_cache_recomputes_without_cold_substitution ... ok
+2026-08-28T19:45:43.6782962Z test e2e_fr_inc_003_valid_but_false_cache_fails_equivalence ... ok
+2026-08-28T19:45:44.6687107Z test ft_fr_cli_004_concurrent_head_movement_is_retryable ... ok
+2026-08-28T19:45:44.6687612Z 
+2026-08-28T19:45:44.6688043Z test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 16.72s
+2026-08-28T19:45:44.6688622Z 
+2026-08-28T19:45:44.6720332Z      Running tests\e2e_fr_inv_001_safe_inventory.rs (target\debug\deps\e2e_fr_inv_001_safe_inventory-fb4ac75df338d692.exe)
+2026-08-28T19:45:44.6835078Z 
+2026-08-28T19:45:44.6835378Z running 14 tests
+2026-08-28T19:45:46.5090874Z test conf_dr_evd_001_source_evidence_resolves ... ok
+2026-08-28T19:45:46.5741959Z test conf_fr_inv_001_repository_snapshot_v2_and_error_v2 ... ok
+2026-08-28T19:45:46.8112657Z test e2e_fr_acq_002_dirty_worktree_is_ignored ... ok
+2026-08-28T19:45:46.9306822Z test e2e_fr_acq_002_gitlink_rejected ... ok
+2026-08-28T19:45:48.3684639Z test e2e_fr_acq_002_non_git_uses_error_v2 ... ok
+2026-08-28T19:45:48.4819532Z test e2e_fr_acq_002_packed_object_database_is_rejected ... ok
+2026-08-28T19:45:48.8407777Z test e2e_fr_acq_002_symlink_rejected ... ok
+2026-08-28T19:45:49.0160602Z test e2e_fr_acq_002_traversal_rejected ... ok
+2026-08-28T19:45:50.2715711Z test e2e_fr_inv_001_safe_inventory ... ok
+2026-08-28T19:45:50.4116280Z test gt_fr_inv_001_exact_inventory_and_coverage_gaps ... ok
+2026-08-28T19:45:50.7242548Z test sec_nfr_sec_001_alternate_object_database_is_not_opened ... ok
+2026-08-28T19:45:52.1327286Z test pt_fr_inv_001_public_inventory_is_replay_and_schedule_invariant ... ok
+2026-08-28T19:45:52.1466474Z test sec_nfr_sec_001_sentinel_scripts_never_execute ... ok
+2026-08-28T19:46:00.1040979Z test sec_nfr_sec_001_bombs_and_parser_inputs_are_bounded ... ok
+2026-08-28T19:46:00.1041573Z 
+2026-08-28T19:46:00.1042437Z test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 15.42s
+2026-08-28T19:46:00.1043020Z 
+2026-08-28T19:46:00.1064332Z      Running tests\e2e_fr_rel_001_release_profile.rs (target\debug\deps\e2e_fr_rel_001_release_profile-0a11098e16ae0a59.exe)
+2026-08-28T19:46:00.1170866Z 
+2026-08-28T19:46:00.1171155Z running 1 test
+2026-08-28T19:46:00.2320251Z test e2e_fr_rel_001_reports_bound_profile ... ok
+2026-08-28T19:46:00.2320583Z 
+2026-08-28T19:46:00.2320922Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+2026-08-28T19:46:00.2321632Z 
+2026-08-28T19:46:00.2338643Z      Running tests\e2e_fr_sto_001_atomic_local_storage.rs (target\debug\deps\e2e_fr_sto_001_atomic_local_storage-67c51d3d2ba4a1be.exe)
+2026-08-28T19:46:00.2442173Z 
+2026-08-28T19:46:00.2442414Z running 12 tests
+2026-08-28T19:46:04.2015495Z test ft_fr_snp_001_orphan_sweep_preserves_reachable ... ok
+2026-08-28T19:46:04.2049649Z test conf_fr_sto_001_store_v1_and_error_v4 ... ok
+2026-08-28T19:46:04.7771693Z test e2e_fr_sto_001_atomic_local_storage ... ok
+2026-08-28T19:46:07.0948193Z test it_fr_sto_001_restart_preserves_head ... ok
+2026-08-28T19:46:09.8573866Z test it_fr_sto_001_corruption_fails_closed ... ok
+2026-08-28T19:46:10.8944293Z test reg_fr_sto_001_legacy_profiles_unchanged ... ok
+2026-08-28T19:46:10.9131649Z test s3_head_probe_process ... ok
+2026-08-28T19:46:10.9450978Z test s3_publication_probe_process ... ok
+2026-08-28T19:46:11.9649808Z test pt_inv_snp_001_reader_visibility ... ok
+2026-08-28T19:46:12.6038281Z test sec_fr_sto_001_store_root_confinement ... ok
+2026-08-28T19:46:31.1679566Z test pt_fr_snp_001_idempotent_retry ... ok
+2026-08-28T19:46:41.9269065Z test ft_fr_snp_001_publication_failpoint_matrix ... ok
+2026-08-28T19:46:41.9269713Z 
+2026-08-28T19:46:41.9270413Z test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 41.68s
+2026-08-28T19:46:41.9271145Z 
+2026-08-28T19:46:41.9302634Z      Running tests\s0_conformance.rs (target\debug\deps\s0_conformance-6efcd5e93c7ed038.exe)
+2026-08-28T19:46:41.9433902Z 
+2026-08-28T19:46:41.9434417Z running 4 tests
+2026-08-28T19:46:41.9512819Z test conf_nfr_tst_001_requires_fixture_oracle_evidence_links ... ok
+2026-08-28T19:46:42.0461228Z test conf_nfr_mnt_001_dependency_rules ... ok
+2026-08-28T19:46:42.6423463Z test sec_nfr_sec_005_scan_launches_no_child_and_opens_no_network ... ok
+2026-08-28T19:46:47.5396045Z test pt_nfr_tst_002_replays_are_parallel_and_order_independent ... ok
+2026-08-28T19:46:47.5396752Z 
+2026-08-28T19:46:47.5397238Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.60s
+2026-08-28T19:46:47.5398247Z 
+2026-08-28T19:46:47.5415035Z      Running tests\s7_r19_git_evidence_conformance.rs (target\debug\deps\s7_r19_git_evidence_conformance-fa4ac2a5d74b13e3.exe)
+2026-08-28T19:46:47.5536809Z 
+2026-08-28T19:46:47.5537437Z running 5 tests
+2026-08-28T19:46:49.9984795Z test conf_fr_cli_012_stdout_failure_uses_internal_error_v30 ... ok
+2026-08-28T19:46:50.3602622Z test conf_fr_cli_012_report_binding_mismatches_are_private ... ok
+2026-08-28T19:46:51.8003325Z test conf_fr_imp_006_all_git_evidence_is_independently_navigable ... ok
+2026-08-28T19:46:53.3294019Z test conf_fr_cli_012_invalid_authority_and_limits_fail_closed ... ok
+2026-08-28T19:46:55.6813918Z test pt_nfr_det_001_r19_fifty_permutations_and_ten_schedules_are_identical ... ok
+2026-08-28T19:46:55.6814632Z 
+2026-08-28T19:46:55.6815162Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.13s
+2026-08-28T19:46:55.6815848Z 
+2026-08-28T19:46:55.6835655Z      Running tests\sec_nfr_sec_001_filesystem_boundary.rs (target\debug\deps\sec_nfr_sec_001_filesystem_boundary-db19e2988a83b38b.exe)
+2026-08-28T19:46:55.6941482Z 
+2026-08-28T19:46:55.6941934Z running 0 tests
+2026-08-28T19:46:55.6942425Z 
+2026-08-28T19:46:55.6943184Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:46:55.6944304Z 
+2026-08-28T19:46:55.6962821Z      Running unittests src\lib.rs (target\debug\deps\xtask-0fbfdffe6a6e3b9a.exe)
+2026-08-28T19:46:55.7060456Z 
+2026-08-28T19:46:55.7060910Z running 15 tests
+2026-08-28T19:46:55.7115920Z test distribution::tests::ft_fr_rel_002_abandoned_private_staging_is_cleaned ... ok
+2026-08-28T19:46:55.7122487Z test distribution::tests::inv_bnd_001_binary_maximum_plus_one_is_rejected_before_output ... ok
+2026-08-28T19:46:56.4587019Z test distribution::tests::ft_fr_rel_002_side_by_side_upgrade_rollback_and_uninstall_are_explicit ... ok
+2026-08-28T19:46:56.4593251Z test distribution::tests::sec_fr_rel_002_argument_matrix_is_strict ... ok
+2026-08-28T19:46:56.4920904Z test distribution::tests::sec_fr_rel_002_invalid_inputs_fail_closed_without_partial_bundle ... ok
+2026-08-28T19:46:56.4957661Z test release::tests::sec_fr_cli_010_invalid_arguments_and_nonempty_output_fail_closed ... ok
+2026-08-28T19:46:56.5803118Z test distribution::tests::pt_fr_rel_002_ten_parallel_schedules_are_byte_identical ... ok
+2026-08-28T19:46:56.7799403Z test release::tests::sec_nfr_sup_001_vulnerability_rejects_without_partial_candidate ... ok
+2026-08-28T19:46:57.1961448Z test release::tests::sec_fr_rel_003_candidate_tree_and_archive_tamper_fail_closed ... ok
+2026-08-28T19:46:57.2672503Z test upgrade::tests::pt_fr_cmp_001_ten_parallel_schedules_are_byte_identical ... ok
+2026-08-28T19:46:57.2766135Z test upgrade::tests::sec_fr_cmp_001_post_read_revalidation_detects_mutation ... ok
+2026-08-28T19:46:57.4911442Z test upgrade::tests::sec_fr_cli_009_plan_limit_substitution_and_arguments_fail_closed ... ok
+2026-08-28T19:46:57.5267981Z test upgrade::tests::sec_fr_cmp_001_tamper_extra_tree_and_same_bundle_fail_closed ... ok
+2026-08-28T19:46:59.4515047Z test distribution::tests::pt_fr_rel_002_fifty_argument_constructions_are_byte_identical ... ok
+2026-08-28T19:47:12.3625103Z test distribution::tests::inv_bnd_001_binary_maximum_is_accepted_with_bounded_memory ... ok
+2026-08-28T19:47:12.3625831Z 
+2026-08-28T19:47:12.3626396Z test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 16.66s
+2026-08-28T19:47:12.3627091Z 
+2026-08-28T19:47:12.3655945Z      Running unittests src\main.rs (target\debug\deps\xtask-34519bda8f9fee0a.exe)
+2026-08-28T19:47:12.3796634Z 
+2026-08-28T19:47:12.3797092Z running 0 tests
+2026-08-28T19:47:12.3797540Z 
+2026-08-28T19:47:12.3798334Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-28T19:47:12.3799169Z 
+2026-08-28T19:47:12.3819022Z      Running tests\e2e_fr_cmp_001_local_upgrade.rs (target\debug\deps\e2e_fr_cmp_001_local_upgrade-d91273192d4aa4fa.exe)
+2026-08-28T19:47:12.3960197Z 
+2026-08-28T19:47:12.3960978Z running 1 test
+2026-08-28T19:47:14.0266108Z test e2e_fr_cmp_001_preflights_local_upgrade_and_rollback ... ok
+2026-08-28T19:47:14.0266699Z 
+2026-08-28T19:47:14.0267195Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.63s
+2026-08-28T19:47:14.0267874Z 
+2026-08-28T19:47:14.0285581Z      Running tests\e2e_fr_rel_002_local_distribution.rs (target\debug\deps\e2e_fr_rel_002_local_distribution-4d78b7768bde56b6.exe)
+2026-08-28T19:47:14.0395767Z 
+2026-08-28T19:47:14.0397019Z running 1 test
+2026-08-28T19:47:14.1034598Z test e2e_fr_rel_002_packages_local_cli ... ok
+2026-08-28T19:47:14.1035085Z 
+2026-08-28T19:47:14.1035569Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+2026-08-28T19:47:14.1036271Z 
+2026-08-28T19:47:14.1053328Z      Running tests\e2e_fr_rel_003_local_release_candidate.rs (target\debug\deps\e2e_fr_rel_003_local_release_candidate-dd107562d50cbf51.exe)
+2026-08-28T19:47:14.1164951Z 
+2026-08-28T19:47:14.1165564Z running 1 test
+2026-08-28T19:47:19.4382897Z test e2e_fr_rel_003_packages_and_verifies_exact_candidate ... ok
+2026-08-28T19:47:19.4383282Z 
+2026-08-28T19:47:19.4383556Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.32s
+2026-08-28T19:47:19.4384244Z 
+2026-08-28T19:47:19.4404263Z      Running benches\local_upgrade_safety.rs (target\debug\deps\local_upgrade_safety-349fe1b50d8fe5b2.exe)
+2026-08-28T19:47:19.4509274Z 
+2026-08-28T19:47:19.4509685Z running 1 test
+2026-08-28T19:47:19.9454205Z test nfr_per_001_observes_local_upgrade_preflight_without_threshold ... ok
+2026-08-28T19:47:19.9454614Z 
+2026-08-28T19:47:19.9454927Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.49s
+2026-08-28T19:47:19.9455331Z 
+2026-08-28T19:47:20.3176999Z Post job cleanup.
+2026-08-28T19:47:20.9809848Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-08-28T19:47:21.0106497Z git version 2.55.0.windows.5
+2026-08-28T19:47:21.0333090Z Temporarily overriding HOME='D:\a\_temp\812b25aa-3e96-4992-8e2d-6c55d354c7dc' before making global git config changes
+2026-08-28T19:47:21.0334776Z Adding repository directory to the temporary git global config as a safe directory
+2026-08-28T19:47:21.0343211Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\codenoesis\codenoesis
+2026-08-28T19:47:21.0651048Z Removing SSH command configuration
+2026-08-28T19:47:21.0661398Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-08-28T19:47:21.0967780Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-08-28T19:47:21.7052654Z Removing HTTP extra header
+2026-08-28T19:47:21.7062546Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-08-28T19:47:21.7361529Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-08-28T19:47:22.2795309Z Removing includeIf entries pointing to credentials config files
+2026-08-28T19:47:22.2805932Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-08-28T19:47:22.3067176Z includeif.gitdir:D:/a/codenoesis/codenoesis/.git.path
+2026-08-28T19:47:22.3067833Z includeif.gitdir:D:/a/codenoesis/codenoesis/.git/worktrees/*.path
+2026-08-28T19:47:22.3068936Z includeif.gitdir:/github/workspace/.git.path
+2026-08-28T19:47:22.3069563Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-28T19:47:22.3104797Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/codenoesis/codenoesis/.git.path
+2026-08-28T19:47:22.3359004Z D:\a\_temp\git-credentials-7c002213-e916-4d9d-a9e4-c84dfd78dad4.config
+2026-08-28T19:47:22.3399487Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/codenoesis/codenoesis/.git.path D\:\\a\\_temp\\git\-credentials\-7c002213\-e916\-4d9d\-a9e4\-c84dfd78dad4\.config
+2026-08-28T19:47:22.3694217Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/codenoesis/codenoesis/.git/worktrees/*.path
+2026-08-28T19:47:22.3944003Z D:\a\_temp\git-credentials-7c002213-e916-4d9d-a9e4-c84dfd78dad4.config
+2026-08-28T19:47:22.3983019Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/codenoesis/codenoesis/.git/worktrees/*.path D\:\\a\\_temp\\git\-credentials\-7c002213\-e916\-4d9d\-a9e4\-c84dfd78dad4\.config
+2026-08-28T19:47:22.4280126Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-08-28T19:47:22.4534676Z /github/runner_temp/git-credentials-7c002213-e916-4d9d-a9e4-c84dfd78dad4.config
+2026-08-28T19:47:22.4574182Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-7c002213\-e916\-4d9d\-a9e4\-c84dfd78dad4\.config
+2026-08-28T19:47:22.4864673Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-08-28T19:47:22.5110528Z /github/runner_temp/git-credentials-7c002213-e916-4d9d-a9e4-c84dfd78dad4.config
+2026-08-28T19:47:22.5199108Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-7c002213\-e916\-4d9d\-a9e4\-c84dfd78dad4\.config
+2026-08-28T19:47:22.5507528Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-08-28T19:47:23.0732861Z Removing credentials config 'D:\a\_temp\git-credentials-7c002213-e916-4d9d-a9e4-c84dfd78dad4.config'
+2026-08-28T19:47:23.0953096Z Cleaning up orphan processes
