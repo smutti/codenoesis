@@ -1,0 +1,1 @@
+{"code":"benchmark.sample_failed","message":"positive sample did not complete cleanly","retryable":false,"schema_version":"codenoesis.real-world-rust-benchmark-error/v1","stage":"input"}

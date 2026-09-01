@@ -1,0 +1,128 @@
+{
+  "schema_version": "codenoesis.real-world-rust-benchmark-blocked-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/205",
+  "authorization": "https://github.com/smutti/codenoesis/issues/205#issuecomment-5498148191",
+  "requirement_ids": [
+    "NFR-PER-001"
+  ],
+  "slice": "S14",
+  "risk": "high",
+  "status": "human_required",
+  "exact_base_commit": "3fb6504d1d6cb39f204eca032ff816266194e1ec",
+  "governance_checkpoint_commit": "ea1f158a1046dfc1c2ef57c88228ab6f72b7beb7",
+  "red_evidence_commit": "f40db72a465d67a0f06510467a9beb76ff08450c",
+  "implementation_commit": "183d74bc5468e2b9d56d60b4aef3be4e28712bf8",
+  "implementation_tree": "282ce99998898a49070faa223256975c97568a40",
+  "contracts": {
+    "manifest_sha256": "1fd91459e72c85ab24cddcf7ddb700d1a0ed8385d55a040c082f3b5aa3573bc8",
+    "corpus_sha256": "1e92e9ab09b762c62c77622b86b67d0e087fa665ad9a9794479fd28e759fcd5f",
+    "policy_sha256": "0e5ab44d447ee86e48a7ef7261d0175b02f870cb4dafe02297d3c5f45cf1493a",
+    "oracle_sha256": "4f39231460e6d93e78b4efc367cf9071f9b8fa7b7d07f9e6fc660449fae0445e",
+    "runner_sha256": "3401cc323bea2f0f29ff8d45ce1f5b078f566cb05f5184d3fdbeeec189d17e33"
+  },
+  "binaries": {
+    "base_product_commit": "3fb6504d1d6cb39f204eca032ff816266194e1ec",
+    "candidate_product_commit": "183d74bc5468e2b9d56d60b4aef3be4e28712bf8",
+    "base_sha256": "8a8dce8b31cf4eefaf092ec8d9ef9fe7ae64efb5942767095de0e67ab2fbb684",
+    "candidate_sha256": "8a8dce8b31cf4eefaf092ec8d9ef9fe7ae64efb5942767095de0e67ab2fbb684",
+    "product_bytes_changed": false,
+    "profile": "release"
+  },
+  "corpus_preflight": {
+    "lekton": {
+      "revision": "247b8f42fb045db41166d70a276a41c2e079b6eb",
+      "tree": "55ba428493a4ffae86ba492422a049f46d567a30",
+      "full_non_shallow": true,
+      "clean_before": true,
+      "clean_after": true
+    },
+    "rustdesk": {
+      "revision": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "tree": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+      "full_non_shallow": true,
+      "clean_before": true,
+      "clean_after": true,
+      "gitlinks_materialized": false
+    }
+  },
+  "focused_green": {
+    "command": "python3 -m unittest scripts.tests.test_real_world_rust_benchmark scripts.tests.test_validate_benchmark_assets -v",
+    "exit_code": 0,
+    "tests_passed": 34,
+    "asset_validation_command": "python3 scripts/validate_benchmark_assets.py",
+    "asset_validation_exit_code": 0
+  },
+  "baseline_attempt_1": {
+    "command": "python3 scripts/run_real_world_rust_benchmark.py run --manifest benchmarks/manifest.json --suite rust-real-world-stability-v1 --binary <base-release-noesis> --product-commit 3fb6504d1d6cb39f204eca032ff816266194e1ec --lekton <exact-local-lekton-clone> --rustdesk <exact-local-rustdesk-clone> --host-profile macos-arm64-apple-m5-pro-24g-v1 --memory-class-bytes 25769803776 --output <new-baseline-report.json>",
+    "exit_code": 2,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "tests/evidence/benchmarks/real-world-rust-stability-v1/baseline-attempt-1.stderr.log",
+    "stderr_sha256": "f9f1bec7b28f1fb5ba645bbcf7d27cc066e788a9407e931673ac1507110b262a",
+    "final_report_created": false,
+    "accepted_as_benchmark_evidence": false
+  },
+  "diagnostics_not_accepted_as_samples": [
+    {
+      "result": "success",
+      "wall_time_ns": 56974538416,
+      "exit_code": 0,
+      "stdout_bytes": 164576087,
+      "stderr_bytes": 0
+    },
+    {
+      "result": "failure",
+      "wall_time_ns": 55760044541,
+      "exit_code": 12,
+      "failure_detail": "not retained by the pre-correction runner; this diagnostic is not accepted evidence"
+    },
+    {
+      "result": "typed_limit_failure",
+      "wall_time_ns": 62555672500,
+      "exit_code": 10,
+      "stderr": "tests/evidence/benchmarks/real-world-rust-stability-v1/diagnostic-scan-limit.stderr.log",
+      "stderr_sha256": "339fc8269eac06f1a0f419c49a29b3ad1ce2e8eef5f4c50fceed2769a9f0121c",
+      "product_limit_milliseconds": 60000,
+      "observed_milliseconds": 60001
+    }
+  ],
+  "blocking_evidence": {
+    "summary": "the pinned Lekton journey is not stable under the immutable product scan-wall limit",
+    "contract_conflict": "B1 permits an observational Lekton p95 up to 75 seconds, while the unchanged product fails closed at 60 seconds; an observed run crossed that product limit",
+    "stop_condition": "a real-repository sample failed and diagnostics demonstrated non-deterministic completion around the immutable product limit",
+    "prohibited_workarounds": [
+      "discard or retry the failed sample as acceptable evidence",
+      "weaken the three-of-three success oracle",
+      "raise a threshold or product limit without a new decision",
+      "change product bytes in issue #205",
+      "replace the pinned corpus without a new decision"
+    ],
+    "smallest_human_decision": "authorize a new bounded package that either changes the product scan-wall limit for this exact local profile or revises the corpus/protocol/oracle"
+  },
+  "environment": {
+    "operating_system": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "logical_cpu_count": 18,
+    "declared_memory_class_bytes": 25769803776,
+    "host_profile": "macos-arm64-apple-m5-pro-24g-v1",
+    "rust_toolchain": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "python": "3.9.6",
+    "git": "2.50.1 (Apple Git-155)"
+  },
+  "agent": {
+    "identity": "OpenAI Codex",
+    "model": "not exposed by the execution environment",
+    "policy": "repository AGENTS.md plus issue #205 branch-scoped authorization",
+    "run_identifier": "not exposed by the execution environment",
+    "duration": "not fully retained",
+    "cost": "not exposed by the execution environment"
+  },
+  "verification": {
+    "requirement_verified": false,
+    "complete_repository_gate": "not run after the blocking real-repository evidence",
+    "candidate_report": "not created",
+    "comparison": "not run",
+    "remote_checks": "not run",
+    "independent_review": "not requested while human-required"
+  }
+}
