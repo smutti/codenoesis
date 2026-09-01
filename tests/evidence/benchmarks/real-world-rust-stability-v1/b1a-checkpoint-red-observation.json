@@ -1,0 +1,45 @@
+{
+  "schema_version": "codenoesis.benchmark-red-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/206",
+  "authorization": "https://github.com/smutti/codenoesis/issues/206#issuecomment-5499625925",
+  "run_id": "b1a-206-local-red-1",
+  "observed_on": "2026-09-01",
+  "exact_dependent_base": "74bd959128472c3e95baeb5fd1a29cfc09b2c686",
+  "checkpoint_commit": "4db691467a3880af3e1bc4a05531c90b84a20f5a",
+  "checkpoint_correction_commit": "91bf437564ec216263e333c28fd9c652ba361e6c",
+  "checkpoint_tree": "240f84becab2791024a748677ce2b19ba7e12670",
+  "expected_failure": "the exact benchmark-only execution-limit selector is not registered and the B1 runner does not emit it",
+  "observations": [
+    {
+      "command": "cargo test -p noesis --test s4_r16_benchmark_execution_limit e2e_nfr_per_001_benchmark_r16_accepts_explicit_75s_execution_limit -- --exact",
+      "exit_status": 101,
+      "actual_failure": "the exact packed R16 256 MiB invocation exits 2 before acquisition because the unregistered execution-limit pair is rejected by the current input parser",
+      "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1a-checkpoint-red-rust.log",
+      "log_sha256": "98665a8081d5910ce981c3b4adf5357e0b72a7850fc9085674fe55117f6f8588"
+    },
+    {
+      "command": "python3 -m unittest scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests.test_scan_command_selects_benchmark_only_75s_execution_limit -v",
+      "exit_status": 1,
+      "actual_failure": "the exact B1 scan command omits --execution-limit-profile and real-world-rust-benchmark-75s-v1",
+      "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1a-checkpoint-red-runner.log",
+      "log_sha256": "ccdd5c3ccbc7351379aa85682412a1010ea67f3815025d8c5782b3e6069f2670"
+    }
+  ],
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "git": "2.50.1 (Apple Git-155)",
+    "network_used": false,
+    "external_repositories_used": false
+  },
+  "agent": {
+    "identity": "OpenAI Codex",
+    "model": "not exposed by runtime",
+    "policy": "AGENTS.md plus issues #205 and #206",
+    "duration_seconds": "not available",
+    "cost": "not available"
+  },
+  "result": "expected_red"
+}

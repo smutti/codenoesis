@@ -1,0 +1,26 @@
+warning: /Users/smutti/Documents/personal/codenoesis/.worktrees/205/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+   Compiling noesis v0.1.0 (/Users/smutti/Documents/personal/codenoesis/.worktrees/205/crates/noesis)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.04s
+     Running tests/s4_r16_benchmark_execution_limit.rs (target/debug/deps/s4_r16_benchmark_execution_limit-3c70e214b9fac3ac)
+
+running 1 test
+test e2e_nfr_per_001_benchmark_r16_accepts_explicit_75s_execution_limit ... FAILED
+
+failures:
+
+---- e2e_nfr_per_001_benchmark_r16_accepts_explicit_75s_execution_limit stdout ----
+
+thread 'e2e_nfr_per_001_benchmark_r16_accepts_explicit_75s_execution_limit' (30102216) panicked at crates/noesis/tests/s4_r16_benchmark_execution_limit.rs:22:5:
+assertion `left == right` failed: benchmark R16 selector failed: {"code":"input.invalid_revision","context":{},"message":"invalid revision","retryable":false,"schema_version":"codenoesis.error/v6","stage":"input"}
+
+  left: Some(2)
+ right: Some(0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    e2e_nfr_per_001_benchmark_r16_accepts_explicit_75s_execution_limit
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.17s
+
+error: test failed, to rerun pass `-p noesis --test s4_r16_benchmark_execution_limit`
