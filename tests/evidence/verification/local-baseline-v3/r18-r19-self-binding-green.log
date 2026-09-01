@@ -1,0 +1,17 @@
+test_r18_r19_bundle_self_records_use_historical_bytes (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) ... ok
+test_acceptance_contract_is_red_first_and_closed (scripts.tests.test_s4_r18_trusted_source_retrieval_contract.R18TrustedSourceRetrievalContractTest) ... ok
+test_candidate_governance_and_status_reconciliation_are_complete (scripts.tests.test_s4_r18_trusted_source_retrieval_contract.R18TrustedSourceRetrievalContractTest) ... ok
+test_contract_bundle (scripts.tests.test_s4_r18_trusted_source_retrieval_contract.R18TrustedSourceRetrievalContractTest) ... ok
+test_exact_authority_and_contract_family (scripts.tests.test_s4_r18_trusted_source_retrieval_contract.R18TrustedSourceRetrievalContractTest) ... ok
+test_inherited_fixture_and_exact_oracle (scripts.tests.test_s4_r18_trusted_source_retrieval_contract.R18TrustedSourceRetrievalContractTest) ... ok
+test_candidate_governance_and_red_contract_are_complete (scripts.tests.test_s7_r19_git_evidence_contract.S7R19GitEvidenceContractTests) ... ok
+test_contract_bundle (scripts.tests.test_s7_r19_git_evidence_contract.S7R19GitEvidenceContractTests) ... ok
+test_exact_authority_contracts_and_limits (scripts.tests.test_s7_r19_git_evidence_contract.S7R19GitEvidenceContractTests) ... ok
+test_production_registration_is_absent (scripts.tests.test_s7_r19_git_evidence_contract.S7R19GitEvidenceContractTests) ... ok
+test_project_owned_git_fixture_and_v1_oracle_are_immutable (scripts.tests.test_s7_r19_git_evidence_contract.S7R19GitEvidenceContractTests) ... ok
+test_schemas_are_closed_and_bind_git_objects (scripts.tests.test_s7_r19_git_evidence_contract.S7R19GitEvidenceContractTests) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.237s
+
+OK
