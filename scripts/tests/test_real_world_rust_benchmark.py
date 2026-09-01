@@ -70,9 +70,11 @@ class RealWorldRustBenchmarkContractTests(unittest.TestCase):
         self.assertEqual([entry["id"] for entry in corpus["entries"]], ["lekton", "rustdesk"])
         self.assertFalse(corpus["network_allowed"])
         self.assertFalse(corpus["source_vendored"])
-        self.assertEqual(
-            corpus["execution_limit_profile"],
-            "real-world-rust-benchmark-75s-v1",
+        self.assertTrue(
+            all(
+                entry["profiles"][-1] == "real-world-rust-benchmark-75s-v1"
+                for entry in corpus["entries"]
+            )
         )
         self.assertEqual(policy["suite_id"], suite["id"])
         self.assertEqual(policy["requirements"], ["NFR-PER-001"])

@@ -3,7 +3,6 @@
   "id": "real-world-rust-stability",
   "version": "1",
   "source_mode": "caller_supplied_full_non_shallow_local_clone",
-  "execution_limit_profile": "real-world-rust-benchmark-75s-v1",
   "network_allowed": false,
   "source_vendored": false,
   "entries": [
@@ -25,7 +24,8 @@
         "rust-expression-bindings-v1",
         "rust-local-flow-v1",
         "rust-safe-constant-evaluation-v1",
-        "local-snapshot-256m-v1"
+        "local-snapshot-256m-v1",
+        "real-world-rust-benchmark-75s-v1"
       ]
     },
     {
@@ -47,7 +47,8 @@
         "rust-expression-bindings-v1",
         "rust-local-flow-v1",
         "rust-safe-constant-evaluation-v1",
-        "local-snapshot-256m-v1"
+        "local-snapshot-256m-v1",
+        "real-world-rust-benchmark-75s-v1"
       ]
     }
   ]
