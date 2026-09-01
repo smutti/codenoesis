@@ -23,6 +23,13 @@ EVIDENCE_PARENT_SHA = "332759213fb319f0b70d1820b568db5000cc8d47"
 AMENDMENT_CHECKPOINT_SHA = "e84be9244f219e0613f0083f8327bc2ba6d904db"
 COMPATIBILITY_RED_SHA = "6e51ba20869db2eb1cc1bbe1facc0375fc860bf5"
 COMPATIBILITY_IMPLEMENTATION_SHA = "457a3fcb33f6e434aeef596a1dee442e1059be59"
+COMPATIBILITY_EVIDENCE_SHA = "72e844940313609c7efbd001fe8b3bf5832bf5d7"
+LIFECYCLE_CHECKPOINT_SHA = "fb4ea89b11323a5b1bbb13cfdb709c2c884b2841"
+LIFECYCLE_RED_SHA = "6d5fffaf3813e9a38e37b2e4b0ac7882f44feaae"
+SELF_BINDING_CHECKPOINT_SHA = "f699c84a3c777ac2420a7ef545391bc5baeaf7f0"
+SELF_BINDING_RED_SHA = "9ece5d3f697aa9042aff23deb9c22443e0faf32d"
+SELF_BINDING_IMPLEMENTATION_SHA = "24cf365ec490f7875b72dc01218f4de17816c9e5"
+SELF_BINDING_EVIDENCE_SHA = "d8669a8fce57573f9a27c7a3f3cbb39a8495370d"
 V2_ACTIVATION_MERGE = "1de6a420f25a1c7eb74d07a99f1800dde90eefa8"
 R18_REVIEW_HEAD = "16ef5ceaea6ad14d9838f84856f6ca3d445daa67"
 R18_REVIEW_TREE = "a1446f7621d5ce524792db74ce7b32640da80df4"
@@ -161,6 +168,20 @@ AMENDMENT_CHECKPOINT_CONTRACT_DIGESTS = {
     "scripts/tests/test_local_baseline_verification_v2.py": "7fdab3e515b0f6fbc48f0962ef5c385b64432f5e9aca0508c0a595719b113c8b",
 }
 
+LIFECYCLE_CHECKPOINT_CONTRACT_DIGESTS = {
+    "docs/software/decisions/0041-local-baseline-verification-v3.md": "5d165c6b975925975c4ad72528264ffac4c5d7567318fa1755d00d5338877e73",
+    "docs/software/verification.md": "8dbdb38f718c84ea6177fdd7b8534838d780e9d1eb68dedb5a4ed9cc35c512bc",
+    "tests/specifications/verification/local-baseline-v3/plan.json": "3026b638b7029a3c8b85598fa2bd842fa6a78b9ca5fb13f0c8498a456916d106",
+    "scripts/tests/test_local_baseline_verification_v3.py": "67132358e7261c64d724cca681550a39efee47579aa949c1d27eaf0ad5be9310",
+}
+
+SELF_BINDING_CHECKPOINT_CONTRACT_DIGESTS = {
+    "docs/software/decisions/0041-local-baseline-verification-v3.md": "01152f62c0f4e70b84faf3debd215e2e12cacc645d743e98cfb9c7e476ff43e2",
+    "docs/software/verification.md": "cc793c30f55dad9932c407f08f485fe16838d64eeff3d1e27a4ff62c45b632aa",
+    "tests/specifications/verification/local-baseline-v3/plan.json": "5684a31449720fedea068b53e3ea992c8fab55aa869a4a2208fe99e0edef448a",
+    "scripts/tests/test_local_baseline_verification_v3.py": "6e3eb38915dd74307cc6d2a4ccc7b9a6ac723c643f41714999d3d648fc33d118",
+}
+
 V2_IMMUTABLE_DIGESTS = {
     "tests/specifications/verification/local-baseline-v2/profile-catalog.json": "23d175dd5e73f0c67e2d8c9d8fdf36c921220f41fcfaaf6586514ed6d632172b",
     "tests/specifications/verification/local-baseline-v2/plan.json": "2b3a6a5e71f35823faeb9a676a0bdd281ebac4095004bc0cd2f84f2f4264cc0f",
@@ -182,6 +203,17 @@ PINNED_EVIDENCE_DIGESTS = {
     "tests/evidence/verification/local-baseline-v3/v2-compatibility-green.log": "4409d00e75c0d2da68cadd6807cd21708ee0815717ab5bb19f9d539c499fa012",
     "tests/evidence/verification/local-baseline-v3/v2-validator-green.log": "f0ce1139a6a774292dc5da35d8c670964edcac136f31522bbbbda3d95a7d1546",
     "tests/evidence/verification/local-baseline-v3/v2-compatibility-green-observation.json": "ad3c29660cb75cc7bcc68c7d47847b2f6ad38b6cd4ec50916278ba0664463cf5",
+    "tests/evidence/verification/local-baseline-v3/r18-r19-lifecycle-red.log": "5c003eba49c1b774500b02141c1e93edcb949514aa8ae06fd4ab7831249971b9",
+    "tests/evidence/verification/local-baseline-v3/r18-r19-lifecycle-red-observation.json": "c19d008e269011a0ebf6add55ee3089bdf13ecee240f636d81c8adc5f71244c5",
+    "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-red.log": "4f66195374c9444ef1792d4a377723d909c64e4892c07d28f1dadb191765d648",
+    "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-red-observation.json": "5c7493ebb0eaae271fdbb4e8ea12bffc7dea260c38975e0482769b80d1615de7",
+    "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-green.log": "2de3b194941f2635f36464e5962249ce3e5e84754df9c64bd991d9d50d44f0f9",
+    "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-green-observation.json": "ad2dff539c34eb86eb0b52a4264f31c2699d6eda54a78c785f1734c846bccdc7",
+}
+
+CORRECTED_CONFORMANCE_DIGESTS = {
+    "scripts/tests/test_s4_r18_trusted_source_retrieval_contract.py": "47af74ac061ff9cbb9daf5f91d0479af78b2833d070300df746063c5e3622eac",
+    "scripts/tests/test_s7_r19_git_evidence_contract.py": "52ed799722ee3139c4eb54da8c60c9161a1bf778a9c15317df694c79a1ef2f28",
 }
 
 EXPECTED_REMOTE_RUNS = {
@@ -217,6 +249,8 @@ ALLOWED_EXACT_PATHS = {
     "scripts/tests/test_local_baseline_verification_v3.py",
     "scripts/verify_local_baseline_v2.py",
     "scripts/tests/test_local_baseline_verification_v2.py",
+    "scripts/tests/test_s4_r18_trusted_source_retrieval_contract.py",
+    "scripts/tests/test_s7_r19_git_evidence_contract.py",
 }
 ALLOWED_PREFIXES = (
     "tests/specifications/verification/local-baseline-v3/",
@@ -307,39 +341,33 @@ def validate_digest_record(
 
 
 def validate_checkpoint(root: Path, errors: list[str]) -> None:
-    for relative_path, expected_digest in ORIGINAL_CHECKPOINT_CONTRACT_DIGESTS.items():
-        try:
-            checkpoint_content = git(
-                root,
-                ["show", f"{CHECKPOINT_SHA}:{relative_path}"],
-                binary=True,
-            )
-        except ValueError as error:
-            errors.append(str(error))
-            continue
-        if sha256_bytes(checkpoint_content) != expected_digest:
-            errors.append(f"checkpoint does not bind {relative_path}")
-
-    for relative_path, expected_digest in AMENDMENT_CHECKPOINT_CONTRACT_DIGESTS.items():
-        absolute_path = root / relative_path
-        if not absolute_path.is_file():
-            errors.append(f"amendment checkpoint contract is missing: {relative_path}")
-            continue
-        if sha256_file(absolute_path) != expected_digest:
-            errors.append(
-                f"amendment checkpoint contract changed after Red: {relative_path}"
-            )
-        try:
-            checkpoint_content = git(
-                root,
-                ["show", f"{AMENDMENT_CHECKPOINT_SHA}:{relative_path}"],
-                binary=True,
-            )
-        except ValueError as error:
-            errors.append(str(error))
-            continue
-        if sha256_bytes(checkpoint_content) != expected_digest:
-            errors.append(f"amendment checkpoint does not bind {relative_path}")
+    checkpoints = (
+        (CHECKPOINT_SHA, ORIGINAL_CHECKPOINT_CONTRACT_DIGESTS, "original"),
+        (AMENDMENT_CHECKPOINT_SHA, AMENDMENT_CHECKPOINT_CONTRACT_DIGESTS, "V2"),
+        (
+            LIFECYCLE_CHECKPOINT_SHA,
+            LIFECYCLE_CHECKPOINT_CONTRACT_DIGESTS,
+            "R18/R19 lifecycle",
+        ),
+        (
+            SELF_BINDING_CHECKPOINT_SHA,
+            SELF_BINDING_CHECKPOINT_CONTRACT_DIGESTS,
+            "R18/R19 self-binding",
+        ),
+    )
+    for checkpoint_sha, contract_digests, label in checkpoints:
+        for relative_path, expected_digest in contract_digests.items():
+            try:
+                checkpoint_content = git(
+                    root,
+                    ["show", f"{checkpoint_sha}:{relative_path}"],
+                    binary=True,
+                )
+            except ValueError as error:
+                errors.append(str(error))
+                continue
+            if sha256_bytes(checkpoint_content) != expected_digest:
+                errors.append(f"{label} checkpoint does not bind {relative_path}")
 
 
 def validate_pinned_files(root: Path, errors: list[str]) -> None:
@@ -357,6 +385,12 @@ def validate_pinned_files(root: Path, errors: list[str]) -> None:
         errors.append("corrected V2 validator is missing")
     elif sha256_file(corrected_validator) != CORRECTED_V2_VALIDATOR_DIGEST:
         errors.append("corrected V2 validator digest changed")
+    for relative_path, expected_digest in CORRECTED_CONFORMANCE_DIGESTS.items():
+        absolute_path = root / relative_path
+        if not absolute_path.is_file():
+            errors.append(f"corrected conformance test is missing: {relative_path}")
+        elif sha256_file(absolute_path) != expected_digest:
+            errors.append(f"corrected conformance test digest changed: {relative_path}")
 
 
 def validate_lineage(root: Path, current_head: str, errors: list[str]) -> None:
@@ -368,6 +402,13 @@ def validate_lineage(root: Path, current_head: str, errors: list[str]) -> None:
         AMENDMENT_CHECKPOINT_SHA,
         COMPATIBILITY_RED_SHA,
         COMPATIBILITY_IMPLEMENTATION_SHA,
+        COMPATIBILITY_EVIDENCE_SHA,
+        LIFECYCLE_CHECKPOINT_SHA,
+        LIFECYCLE_RED_SHA,
+        SELF_BINDING_CHECKPOINT_SHA,
+        SELF_BINDING_RED_SHA,
+        SELF_BINDING_IMPLEMENTATION_SHA,
+        SELF_BINDING_EVIDENCE_SHA,
         V2_ACTIVATION_MERGE,
         R18_MERGE,
         R19_MERGE,
@@ -404,8 +445,43 @@ def validate_lineage(root: Path, current_head: str, errors: list[str]) -> None:
         ),
         (
             COMPATIBILITY_IMPLEMENTATION_SHA,
+            COMPATIBILITY_EVIDENCE_SHA,
+            "compatibility implementation is not an ancestor of its evidence",
+        ),
+        (
+            COMPATIBILITY_EVIDENCE_SHA,
+            LIFECYCLE_CHECKPOINT_SHA,
+            "compatibility evidence is not an ancestor of lifecycle checkpoint",
+        ),
+        (
+            LIFECYCLE_CHECKPOINT_SHA,
+            LIFECYCLE_RED_SHA,
+            "lifecycle checkpoint is not an ancestor of lifecycle Red",
+        ),
+        (
+            LIFECYCLE_RED_SHA,
+            SELF_BINDING_CHECKPOINT_SHA,
+            "lifecycle Red is not an ancestor of self-binding checkpoint",
+        ),
+        (
+            SELF_BINDING_CHECKPOINT_SHA,
+            SELF_BINDING_RED_SHA,
+            "self-binding checkpoint is not an ancestor of self-binding Red",
+        ),
+        (
+            SELF_BINDING_RED_SHA,
+            SELF_BINDING_IMPLEMENTATION_SHA,
+            "self-binding Red is not an ancestor of its implementation",
+        ),
+        (
+            SELF_BINDING_IMPLEMENTATION_SHA,
+            SELF_BINDING_EVIDENCE_SHA,
+            "self-binding implementation is not an ancestor of its evidence",
+        ),
+        (
+            SELF_BINDING_EVIDENCE_SHA,
             current_head,
-            "compatibility implementation is not an ancestor of current head",
+            "self-binding evidence is not an ancestor of current head",
         ),
     )
     for ancestor, descendant, message in ancestry:
@@ -895,6 +971,14 @@ def validate_authority(
         "https://github.com/smutti/codenoesis/issues/201#issuecomment-5479036431"
     ):
         errors.append("V2 compatibility correction authorization is invalid")
+    if plan.get("r18_r19_correction_authorization") != (
+        "https://github.com/smutti/codenoesis/issues/201#issuecomment-5482161515"
+    ):
+        errors.append("R18/R19 lifecycle correction authorization is invalid")
+    if plan.get("r18_r19_self_binding_authorization") != (
+        "https://github.com/smutti/codenoesis/issues/201#issuecomment-5494828860"
+    ):
+        errors.append("R18/R19 self-binding authorization is invalid")
     expected_compatibility = {
         "historical_checkpoint_digest_required": True,
         "versioned_current_path": "docs/software/verification.md",
@@ -903,6 +987,24 @@ def validate_authority(
     }
     if plan.get("v2_descendant_lifecycle_compatibility") != expected_compatibility:
         errors.append("V2 descendant lifecycle compatibility plan is invalid")
+    expected_r18_r19_compatibility = {
+        "r18_protected_merge": R18_MERGE,
+        "r19_protected_merge": R19_MERGE,
+        "historical_bundle_digests_immutable": True,
+        "historical_candidate_wording_required": True,
+        "historical_self_records": {
+            "scripts/tests/test_s4_r18_trusted_source_retrieval_contract.py": R18_MERGE,
+            "scripts/tests/test_s7_r19_git_evidence_contract.py": R19_MERGE,
+        },
+        "non_lifecycle_current_file_checks_required": True,
+        "corrected_current_test_digests_pinned_by_v3": True,
+        "product_behavior_change": False,
+    }
+    if (
+        plan.get("r18_r19_historical_lifecycle_compatibility")
+        != expected_r18_r19_compatibility
+    ):
+        errors.append("R18/R19 historical lifecycle compatibility plan is invalid")
     if tuple(plan.get("required_profile_ids", [])) != PROFILE_IDS:
         errors.append("plan profile set differs from the exact 34 profiles")
     if tuple(plan.get("required_evidence_classes", [])) != EVIDENCE_CLASSES:
@@ -967,6 +1069,47 @@ def validate_red(root: Path, errors: list[str]) -> None:
         "V2 compatibility Red log",
         errors,
     )
+
+    correction_observations = (
+        (
+            "tests/evidence/verification/local-baseline-v3/"
+            "r18-r19-lifecycle-red-observation.json",
+            {
+                "superseding_checkpoint_sha": LIFECYCLE_CHECKPOINT_SHA,
+                "exit_status": 1,
+                "actual_failure": (
+                    "Exactly three assertions failed: current README lacks the "
+                    "historical R18 candidate marker, and both immutable bundles "
+                    "reject the current README digest instead of reading their "
+                    "protected merge bytes."
+                ),
+            },
+            "R18/R19 lifecycle Red",
+        ),
+        (
+            "tests/evidence/verification/local-baseline-v3/"
+            "r18-r19-self-binding-red-observation.json",
+            {
+                "superseding_checkpoint_sha": SELF_BINDING_CHECKPOINT_SHA,
+                "exit_status": 1,
+                "actual_failure": (
+                    "The V3 acceptance regression reports exactly the absent R18 "
+                    "and R19 historical bundle-record resolvers."
+                ),
+            },
+            "R18/R19 self-binding Red",
+        ),
+    )
+    for relative_path, expected_fields, label in correction_observations:
+        try:
+            observation = load_json(root / relative_path)
+        except (OSError, UnicodeError, json.JSONDecodeError) as error:
+            errors.append(f"cannot load {label} observation: {error}")
+            continue
+        for field, value in expected_fields.items():
+            if observation.get(field) != value:
+                errors.append(f"{label} differs in {field}")
+        validate_digest_record(root, observation.get("log"), f"{label} log", errors)
 
 
 def validate_manifest(root: Path, manifest_path: Path) -> list[str]:

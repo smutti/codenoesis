@@ -6,11 +6,11 @@
   "red_commit_sha": "5345165af9f513a0737c40641246674f71e2485a",
   "evidence_parent_sha": "332759213fb319f0b70d1820b568db5000cc8d47",
   "verification_subject": "c783b612777a86e2f88620ece987723bb230c51c",
-  "product_tree_sha256": "017aa12aeb25b397a63aae2485698376fb290dd315ac9b73dcfccbc027836fb1",
+  "product_tree_sha256": "5e4c6cb564cd9fc4c0e41d687a488ef73027fc6a7f2b1f36ac49791306d961bd",
   "status": "candidate_verified_pending_merge",
   "plan": {
     "path": "tests/specifications/verification/local-baseline-v3/plan.json",
-    "sha256": "069bd983ea8b31448902aee4e7f9b0f7ee14fe31123a44944824493846b68c3c"
+    "sha256": "5684a31449720fedea068b53e3ea992c8fab55aa869a4a2208fe99e0edef448a"
   },
   "profile_catalog": {
     "path": "tests/specifications/verification/local-baseline-v3/profile-catalog.json",
@@ -1195,13 +1195,13 @@
       "id": "decision-0041",
       "class": "traceability",
       "path": "docs/software/decisions/0041-local-baseline-verification-v3.md",
-      "sha256": "5df0f5037786edbed59f200e3ee6bb1a101f28a54241aa2c112f929b66ce6b8b"
+      "sha256": "01152f62c0f4e70b84faf3debd215e2e12cacc645d743e98cfb9c7e476ff43e2"
     },
     {
       "id": "v3-plan",
       "class": "traceability",
       "path": "tests/specifications/verification/local-baseline-v3/plan.json",
-      "sha256": "069bd983ea8b31448902aee4e7f9b0f7ee14fe31123a44944824493846b68c3c"
+      "sha256": "5684a31449720fedea068b53e3ea992c8fab55aa869a4a2208fe99e0edef448a"
     },
     {
       "id": "v3-catalog",
@@ -1304,6 +1304,66 @@
       "class": "traceability",
       "path": "scripts/tests/test_local_baseline_verification_v2.py",
       "sha256": "7fdab3e515b0f6fbc48f0962ef5c385b64432f5e9aca0508c0a595719b113c8b"
+    },
+    {
+      "id": "v3-current-lifecycle",
+      "class": "traceability",
+      "path": "docs/software/verification.md",
+      "sha256": "cc793c30f55dad9932c407f08f485fe16838d64eeff3d1e27a4ff62c45b632aa"
+    },
+    {
+      "id": "v3-self-binding-regression",
+      "class": "traceability",
+      "path": "scripts/tests/test_local_baseline_verification_v3.py",
+      "sha256": "6e3eb38915dd74307cc6d2a4ccc7b9a6ac723c643f41714999d3d648fc33d118"
+    },
+    {
+      "id": "r18-corrected-contract-test",
+      "class": "traceability",
+      "path": "scripts/tests/test_s4_r18_trusted_source_retrieval_contract.py",
+      "sha256": "47af74ac061ff9cbb9daf5f91d0479af78b2833d070300df746063c5e3622eac"
+    },
+    {
+      "id": "r19-corrected-contract-test",
+      "class": "traceability",
+      "path": "scripts/tests/test_s7_r19_git_evidence_contract.py",
+      "sha256": "52ed799722ee3139c4eb54da8c60c9161a1bf778a9c15317df694c79a1ef2f28"
+    },
+    {
+      "id": "r18-r19-lifecycle-red-log",
+      "class": "retained_red",
+      "path": "tests/evidence/verification/local-baseline-v3/r18-r19-lifecycle-red.log",
+      "sha256": "5c003eba49c1b774500b02141c1e93edcb949514aa8ae06fd4ab7831249971b9"
+    },
+    {
+      "id": "r18-r19-lifecycle-red-observation",
+      "class": "retained_red",
+      "path": "tests/evidence/verification/local-baseline-v3/r18-r19-lifecycle-red-observation.json",
+      "sha256": "c19d008e269011a0ebf6add55ee3089bdf13ecee240f636d81c8adc5f71244c5"
+    },
+    {
+      "id": "r18-r19-self-binding-red-log",
+      "class": "retained_red",
+      "path": "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-red.log",
+      "sha256": "4f66195374c9444ef1792d4a377723d909c64e4892c07d28f1dadb191765d648"
+    },
+    {
+      "id": "r18-r19-self-binding-red-observation",
+      "class": "retained_red",
+      "path": "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-red-observation.json",
+      "sha256": "5c7493ebb0eaae271fdbb4e8ea12bffc7dea260c38975e0482769b80d1615de7"
+    },
+    {
+      "id": "r18-r19-self-binding-green-log",
+      "class": "focused_green",
+      "path": "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-green.log",
+      "sha256": "2de3b194941f2635f36464e5962249ce3e5e84754df9c64bd991d9d50d44f0f9"
+    },
+    {
+      "id": "r18-r19-self-binding-green-observation",
+      "class": "focused_green",
+      "path": "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-green-observation.json",
+      "sha256": "ad2dff539c34eb86eb0b52a4264f31c2699d6eda54a78c785f1734c846bccdc7"
     }
   ],
   "remote_runs": [
@@ -1472,7 +1532,11 @@
         "v3-red-log",
         "v3-red-observation",
         "v2-compatibility-red-log",
-        "v2-compatibility-red-observation"
+        "v2-compatibility-red-observation",
+        "r18-r19-lifecycle-red-log",
+        "r18-r19-lifecycle-red-observation",
+        "r18-r19-self-binding-red-log",
+        "r18-r19-self-binding-red-observation"
       ]
     },
     {
@@ -1486,7 +1550,9 @@
         "v3-public-command",
         "v2-compatibility-green-log",
         "v2-validator-green-log",
-        "v2-compatibility-green-observation"
+        "v2-compatibility-green-observation",
+        "r18-r19-self-binding-green-log",
+        "r18-r19-self-binding-green-observation"
       ]
     },
     {
@@ -1593,7 +1659,11 @@
         "v3-plan",
         "v3-catalog",
         "corrected-v2-validator",
-        "v2-compatibility-regression"
+        "v2-compatibility-regression",
+        "v3-current-lifecycle",
+        "v3-self-binding-regression",
+        "r18-corrected-contract-test",
+        "r19-corrected-contract-test"
       ]
     },
     {
