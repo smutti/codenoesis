@@ -11,6 +11,10 @@ const BENCHMARK_EXECUTION_LIMIT_PROFILE: &str = "real-world-rust-benchmark-75s-v
 fn e2e_nfr_per_001_benchmark_r16_accepts_explicit_75s_execution_limit() {
     let repository = MaterializedConstantEvaluationRepository::fixture();
     let output = repository.scan_with_options(&[
+        "--acquisition-profile",
+        "local-git-sha1-packed-v1",
+        "--output-capacity-profile",
+        "local-snapshot-256m-v1",
         "--execution-limit-profile",
         BENCHMARK_EXECUTION_LIMIT_PROFILE,
     ]);
