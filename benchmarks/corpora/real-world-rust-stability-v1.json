@@ -3,6 +3,7 @@
   "id": "real-world-rust-stability",
   "version": "1",
   "source_mode": "caller_supplied_full_non_shallow_local_clone",
+  "execution_limit_profile": "real-world-rust-benchmark-75s-v1",
   "network_allowed": false,
   "source_vendored": false,
   "entries": [

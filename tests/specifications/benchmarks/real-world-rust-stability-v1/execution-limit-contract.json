@@ -1,0 +1,16 @@
+{
+  "schema_version": "codenoesis.real-world-rust-benchmark-execution-limit-contract/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/206",
+  "authorization": "https://github.com/smutti/codenoesis/issues/206#issuecomment-5499625925",
+  "exact_dependent_base": "74bd959128472c3e95baeb5fd1a29cfc09b2c686",
+  "slice": "S14",
+  "risk": "high",
+  "profile": "real-world-rust-benchmark-75s-v1",
+  "standard_scan_wall_milliseconds": 60000,
+  "benchmark_scan_wall_milliseconds": 75000,
+  "runner_timeout_seconds": 90,
+  "accepted_lineage": "r16_source_only_packed_local_snapshot_256m_v1",
+  "semantic_configuration_included": false,
+  "workflow_changes_allowed": false,
+  "dependency_changes_allowed": false
+}

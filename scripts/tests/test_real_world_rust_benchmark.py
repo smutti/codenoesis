@@ -29,6 +29,7 @@ from run_real_world_rust_benchmark import (  # noqa: E402
     EXPECTED_SOURCE_IDENTITIES,
     REPORT_SCHEMA,
     RUNNER_VERSION,
+    build_scan_command,
     canonical_json_bytes,
     compare_reports,
     ensure_privacy,
@@ -69,6 +70,10 @@ class RealWorldRustBenchmarkContractTests(unittest.TestCase):
         self.assertEqual([entry["id"] for entry in corpus["entries"]], ["lekton", "rustdesk"])
         self.assertFalse(corpus["network_allowed"])
         self.assertFalse(corpus["source_vendored"])
+        self.assertEqual(
+            corpus["execution_limit_profile"],
+            "real-world-rust-benchmark-75s-v1",
+        )
         self.assertEqual(policy["suite_id"], suite["id"])
         self.assertEqual(policy["requirements"], ["NFR-PER-001"])
         self.assertFalse(policy["nfr_per_002_claimed"])
@@ -85,6 +90,24 @@ class RealWorldRustBenchmarkContractTests(unittest.TestCase):
             "input.unsupported_rust_constant_evaluation_composition",
         )
         self.assertTrue(RUNNER.is_file())
+
+    def test_scan_command_selects_benchmark_only_75s_execution_limit(self) -> None:
+        descriptor = {
+            "repository_id": "urn:codenoesis:test:b1",
+            "revision": "a" * 40,
+            "profiles": copy.deepcopy(EXPECTED_PROFILES["lekton"]),
+        }
+
+        command = build_scan_command(
+            Path("/tmp/noesis"),
+            Path("/tmp/repository"),
+            Path("/tmp/store"),
+            descriptor,
+        )
+
+        self.assertIn("--execution-limit-profile", command)
+        index = command.index("--execution-limit-profile")
+        self.assertEqual(command[index + 1], "real-world-rust-benchmark-75s-v1")
 
     @staticmethod
     def sample(entry_id: str, index: int, wall_time_ns: int) -> dict[str, object]:

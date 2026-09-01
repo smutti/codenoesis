@@ -2675,6 +2675,26 @@ the reviewed same-host boundary, absolute ceiling excess, private output, and
 partial report publication. Protected merge activates only this observational
 benchmark contract.
 
+### 2.37 B1a/G7/S14 benchmark-only execution-limit candidate register
+
+Issue [#206](https://github.com/smutti/codenoesis/issues/206), its accountable
+maintainer authorization, and
+[Decision 0043](decisions/0043-benchmark-only-r16-execution-limit.md) govern a
+dependent branch-scoped amendment on exact B1 head
+`74bd959128472c3e95baeb5fd1a29cfc09b2c686`.
+
+| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| `NFR-PER-001`, bounded `FR-CLI-001` | Approved; B1a implementation Proposed on the branch | The explicit operational selector `real-world-rust-benchmark-75s-v1` raises only the exact packed, source-only R16 B1 whole-scan wall maximum from 60,000 to 75,000 milliseconds | `S14` | Issue #206, Decision 0043, boundary and exact-composition tests, retained Red/Green and real-repository reports |
+| Bounded application of `NFR-DET-001`, `NFR-SEC-005`, `NFR-TST-001/002`, and `INV-BND-001` | Proposed only for the exact dependent package | Selector absence, acquisition, historical profiles, semantic configuration, ontology, identities, hashes, counts, schemas, goldens, stores, and publication remain unchanged; invalid composition fails before acquisition | `S14` | Issue #206, Decision 0043, compatibility, failure, and semantic-identity evidence |
+| `NFR-PER-002`, `OD-SLO-001` | Unresolved and outside B1a | The 75-second execution maximum and observational ceiling make no SLO, release, support, availability, cross-host, conference, or GA claim | `S14` | Explicit exclusion in issue #206 and Decision 0043 |
+
+The runner must pass the selector explicitly and record it as sanitized
+configuration identity. Its process timeout remains 90 seconds. The standard
+whole-scan and acquisition limits remain 60,000 milliseconds. RustDesk keeps
+the earlier exact repository-boundary rejection precedence. No environment or
+ambient override is permitted.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,

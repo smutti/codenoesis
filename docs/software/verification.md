@@ -129,3 +129,20 @@ base-controlled CI validates the committed benchmark contract but does not run
 the public repositories. Retained local evidence contains no external source
 or private path. `NFR-PER-002`, `OD-SLO-001`, release-artifact performance,
 availability, support, conference validity, and GA remain unresolved.
+
+## B1a benchmark-only execution-limit candidate
+
+Issue [#206](https://github.com/smutti/codenoesis/issues/206) and
+[Decision 0043](decisions/0043-benchmark-only-r16-execution-limit.md) define a
+dependent high-risk S14 checkpoint on exact B1 head
+`74bd959128472c3e95baeb5fd1a29cfc09b2c686`. The expected Red is the current
+R16 rejection of the explicit `real-world-rust-benchmark-75s-v1` selector plus
+the runner command's missing selector.
+
+Green requires exact 60,000 millisecond selector-absent behavior, exact 75,000
+millisecond selected behavior, maximum-plus-one failure without a timed test,
+fail-closed invalid compositions, and selector-present/absent R16 semantic
+identity. The B1 real-repository matrix then runs again without retry or sample
+discard. Acquisition, RustDesk error precedence, runner timeout, observational
+ceiling, schemas, goldens, ontology, dependencies, workflows, release, support,
+and GA remain unchanged.

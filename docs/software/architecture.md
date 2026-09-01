@@ -630,6 +630,18 @@ boundary, and absolute observational ceilings. The active manifest links only
 does not make release-artifact, availability, support, conference, cross-host,
 or GA claims.
 
+Issue [#206](https://github.com/smutti/codenoesis/issues/206) and
+[Decision 0043](decisions/0043-benchmark-only-r16-execution-limit.md) add one
+dependent operational boundary. The runner supplies
+`--execution-limit-profile real-world-rust-benchmark-75s-v1`; the CLI adapter
+accepts it only for the exact packed, source-only R16 B1 composition and passes
+a 75,000 millisecond final deadline inward. The standard domain limit and
+acquisition adapter remain 60,000 milliseconds. The selector is not part of
+semantic configuration and cannot affect ontology identities, hashes, counts,
+schemas, stores, or publication. Parsing rejects every unsupported composition
+before acquisition, while RustDesk's earlier boundary rejection retains
+precedence.
+
 ### G1b/G8-local verifiable distribution candidate
 
 Issue [#186](https://github.com/smutti/codenoesis/issues/186) and

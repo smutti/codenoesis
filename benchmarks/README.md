@@ -43,3 +43,11 @@ submodule initialization, LFS action, network access, model call, browser
 launch, or source mutation. Generated reports stay under ignored
 `benchmarks/results/`; retained review evidence contains only bounded public
 identities, digests, samples, and sanitized host metadata.
+
+Issue #206 and Decision 0043 add the explicit operational selector
+`real-world-rust-benchmark-75s-v1` to this suite. It raises only the exact
+packed, source-only R16 B1 whole-scan maximum from 60 to 75 seconds. The runner
+timeout remains 90 seconds, the observational Lekton p95 ceiling remains 75
+seconds, and every selector-absent or acquisition limit remains unchanged. The
+selector is report configuration, not an extractor, ontology input, SLO, or
+release/support claim.
