@@ -1,0 +1,37 @@
+{
+  "schema_version": "codenoesis.real-world-rust-benchmark-oracle/v1",
+  "suite_id": "rust-real-world-stability-v1",
+  "baseline_product_commit": "3fb6504d1d6cb39f204eca032ff816266194e1ec",
+  "entries": {
+    "lekton": {
+      "outcome": "success",
+      "snapshot_schema": "codenoesis.repository-snapshot/v18",
+      "semantic_hash": "8163e0a3e1e09e215e5b185207bfb660217c45b5a228bfc216b180b17b6ff2bc",
+      "semantic_projection_sha256": "ba87c5551fe630bfe9b6d9fcdf9e1ee9b8ca48e3add0b4dae849bf844b8c7700",
+      "counts": {
+        "entities": 26158,
+        "relationships": 43683,
+        "claims": 69841,
+        "evidence": 24522,
+        "diagnostics": 4211,
+        "coverage": 13177,
+        "evaluated_values": 8
+      }
+    },
+    "rustdesk": {
+      "outcome": "typed_rejection",
+      "exit_code": 2,
+      "stdout_bytes": 0,
+      "error_schema": "codenoesis.error/v24",
+      "error_code": "input.unsupported_rust_constant_evaluation_composition",
+      "error_stage": "input",
+      "error_reason": "repository_boundary_not_supported",
+      "store_created": false,
+      "nested_source_read": false
+    }
+  },
+  "historical_observation": {
+    "source": "crates/noesis/tests/evidence/s4/r16-safe-constant-evaluation/real-repository-pilots.log",
+    "status": "context_only_not_b1_samples"
+  }
+}

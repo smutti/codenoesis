@@ -2643,6 +2643,38 @@ package, OCI, deployment, secret, key, environment, support, or GA authority.
 The branch cannot produce trusted post-merge evidence; until independent
 acceptance, the requirements remain not Verified.
 
+### 2.36 B1/G7/S14 real-world Rust stability benchmark candidate register
+
+Issue [#205](https://github.com/smutti/codenoesis/issues/205), the accountable
+maintainer's high-risk authorization, and
+[Decision 0042](decisions/0042-real-world-rust-stability-benchmark.md) govern
+one branch-scoped benchmark candidate on exact protected base
+`3fb6504d1d6cb39f204eca032ff816266194e1ec`. Governance, active manifest,
+corpus, policy, oracle, runner, tests, real-repository evidence, and lifecycle
+documentation share one supervised pull request.
+
+| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| `NFR-PER-001` | Approved; B1 implementation Proposed on the branch | One active observational same-host suite with exact corpus, host, concurrency, cache state, extractors, repetitions, nearest-rank percentiles, success rate, raw samples, binary/toolchain/source identity, and no hidden failures | `S14` | Issue #205, Decision 0042, active manifest, corpus/policy/oracle, retained Red/Green and real-repository reports |
+| Bounded application of `NFR-DET-001`, `NFR-TST-001/002`, `NFR-SEC-001/005`, `NFR-PRV-001`, and `INV-BND-001` | Proposed only for the exact branch package | Exact Lekton semantic identity, exact RustDesk typed rejection, deterministic bounded reports, fail-closed input/race/privacy/limit behavior, no target execution and no runner network | `S14` | Issue #205, Decision 0042, conformance/security tests, negative controls, complete gate |
+| `NFR-PER-002`, `OD-SLO-001` | Unresolved and outside B1 | No SLO, release-artifact, availability, cross-host, support, conference-validity, or GA claim | `S14` | Explicit exclusion in issue #205, Decision 0042, manifest and policy |
+
+The suite uses exactly three baseline and three candidate repetitions for
+caller-supplied full local clones. Lekton commit
+`247b8f42fb045db41166d70a276a41c2e079b6eb` must preserve the accepted R16
+RepositorySnapshotV18 semantic hash, projection digest, and family counts.
+RustDesk commit `d412d198720aa56f6cfed2dfad262e8fb1322fb7`
+must preserve the exact ErrorV24 repository-boundary rejection, empty stdout,
+absent publication, and unread nested source.
+
+The runner performs no clone, fetch, checkout, submodule or LFS action, build,
+target execution, network access, model call, browser launch, or repository
+mutation. It retains every raw monotonic sample and rejects retry, discard,
+semantic/outcome drift, incomplete evidence, incomparable hosts, p95 beyond
+the reviewed same-host boundary, absolute ceiling excess, private output, and
+partial report publication. Protected merge activates only this observational
+benchmark contract.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,

@@ -1,0 +1,24 @@
+{
+  "schema_version": "codenoesis.real-world-rust-benchmark-contract/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/205",
+  "authorization": "https://github.com/smutti/codenoesis/issues/205#issuecomment-5498148191",
+  "exact_base": "3fb6504d1d6cb39f204eca032ff816266194e1ec",
+  "slice": "S14",
+  "risk": "high",
+  "suite_id": "rust-real-world-stability-v1",
+  "requirements": [
+    "NFR-PER-001"
+  ],
+  "candidate_status": "proposed_pending_protected_merge",
+  "required_paths": [
+    "benchmarks/manifest.json",
+    "benchmarks/corpora/real-world-rust-stability-v1.json",
+    "benchmarks/policies/real-world-rust-stability-v1.json",
+    "benchmarks/baselines/real-world-rust-stability-v1.json",
+    "scripts/run_real_world_rust_benchmark.py"
+  ],
+  "expected_red": "active manifest support and the executable B1 runner are absent",
+  "product_changes_allowed": false,
+  "workflow_changes_allowed": false,
+  "dependency_changes_allowed": false
+}

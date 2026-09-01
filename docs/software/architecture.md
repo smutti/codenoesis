@@ -605,6 +605,31 @@ secret source, open network, sign, publish, or establish support or GA. The
 G7a runner is observational only and does not resolve `NFR-PER-002` or
 `OD-SLO-001`.
 
+### Real-world Rust stability benchmark candidate
+
+Issue [#205](https://github.com/smutti/codenoesis/issues/205) and
+[Decision 0042](decisions/0042-real-world-rust-stability-benchmark.md) define
+one Proposed B1/G7/S14 benchmark boundary. The standard-library runner is an
+external measurement adapter around an explicitly supplied release `noesis`
+binary and two caller-supplied full local Git clones. It owns immutable Git
+preflight, fresh marker-owned stores, child-process timing, bounded output
+capture, semantic/outcome validation, canonical reports, and same-host report
+comparison. It owns no product extraction rule or ontology meaning.
+
+The runner may invoke only sanitized local Git inspection and the explicit
+`noesis` binary. It never clones, fetches, checks out, initializes submodules,
+builds, executes target code, opens network, loads a model, starts a browser,
+or mutates source repositories. Lekton is the positive R16 semantic oracle;
+RustDesk is the typed repository-boundary negative. Three baseline and three
+candidate samples are retained without retry or discard.
+
+The comparator rejects semantic or typed-outcome drift, incomplete samples,
+host/corpus/config mismatch, p95 above the reviewed same-host regression
+boundary, and absolute observational ceilings. The active manifest links only
+`NFR-PER-001`. This package does not resolve `NFR-PER-002` or `OD-SLO-001` and
+does not make release-artifact, availability, support, conference, cross-host,
+or GA claims.
+
 ### G1b/G8-local verifiable distribution candidate
 
 Issue [#186](https://github.com/smutti/codenoesis/issues/186) and

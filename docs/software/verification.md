@@ -1,6 +1,9 @@
-# CodeNoesis Local Baseline Verification
+# CodeNoesis Local Verification and Benchmark Evidence
 
-> Status: **Proposed `LocalBaselineVerificationV3` contract for issue #201**. “LocalBaselineVerificationV3 candidate Verified pending independent review and protected manual merge” is the exact pre-activation marker. No new `Verified`, release, support, or GA claim is effective before independent review and protected manual merge of the exact evidence-complete head.
+> Status: **LocalBaselineVerificationV3 activated by protected PR #204**.
+> The exact 34-profile catalog is Verified. Issue #205 adds only a Proposed B1
+> observational benchmark candidate; no SLO, release, support, or GA claim is
+> effective before independent review and protected manual merge.
 
 ## Purpose
 
@@ -11,10 +14,12 @@ oracle. Protected PR #189 already activated the immutable 32-profile
 trusted local source retrieval and R19 Git-backed semantic impact Approved and
 Implemented, but not Verified.
 
-Issue #201 consolidates only those two additive profiles with the exact V2
-baseline. The resolved V3 catalog contains exactly 34 profiles. It changes no
-product behavior, ontology, schema, fixture, golden, workflow, permission,
-dependency, release authority, support, or GA status.
+Issue #201 consolidated only those two additive profiles with the exact V2
+baseline. The resolved V3 catalog contains exactly 34 profiles. Protected PR
+#204 merged review head `75391c9061d691c1d6efdf8b726e120049389476` as
+`3fb6504d1d6cb39f204eca032ff816266194e1ec`, activating only those Verified
+profiles. It changed no product behavior, ontology, schema, fixture, golden,
+workflow, permission, dependency, release authority, support, or GA status.
 
 ## Authority
 
@@ -94,11 +99,33 @@ current verification correction remain reviewable.
 
 ## Promotion rule
 
-The V3 manifest uses `candidate_verified_pending_merge` on the branch.
-Protected manual merge of the exact independently accepted head makes only the
-34 catalogued profiles Verified. Missing, unavailable, flaky, contradictory,
-private, or non-reproducible evidence keeps the complete package open; subset
-promotion is forbidden.
+The retained V3 manifest uses `candidate_verified_pending_merge` as its
+immutable branch marker. Protected manual merge of the exact independently
+accepted head made only the 34 catalogued profiles Verified. Missing,
+unavailable, flaky, contradictory, private, or non-reproducible evidence would
+have kept the complete package open; subset promotion remains forbidden.
 
 G9 pilot, release, support, deprecation, EOL, publication, Local GA, and Server
 GA remain separate future governance.
+
+## B1 real-world Rust stability candidate
+
+Issue [#205](https://github.com/smutti/codenoesis/issues/205) and
+[Decision 0042](decisions/0042-real-world-rust-stability-benchmark.md) define
+one high-risk S14 benchmark package on exact V3 base
+`3fb6504d1d6cb39f204eca032ff816266194e1ec`. Its checkpoint precedes runner and
+active-validator implementation. The expected Red is the absent runner and the
+base validator's unconditional rejection of active status.
+
+Green requires three baseline and three candidate samples for each pinned
+entry. Lekton must preserve exact R16 semantic identity and counts. RustDesk
+must preserve the exact typed repository-boundary rejection with empty stdout
+and no publication. Reports retain every raw sample and all `NFR-PER-001`
+fields, compare only on the same sanitized host profile, and reject semantic,
+outcome, completeness, privacy, limit, or reviewed p95 violations.
+
+The B1 runner performs no external acquisition or source mutation. Existing
+base-controlled CI validates the committed benchmark contract but does not run
+the public repositories. Retained local evidence contains no external source
+or private path. `NFR-PER-002`, `OD-SLO-001`, release-artifact performance,
+availability, support, conference validity, and GA remain unresolved.

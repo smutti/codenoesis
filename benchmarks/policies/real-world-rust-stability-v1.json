@@ -1,0 +1,31 @@
+{
+  "schema_version": "codenoesis.real-world-rust-benchmark-policy/v1",
+  "suite_id": "rust-real-world-stability-v1",
+  "claim_scope": "observational_same_host_regression_only",
+  "requirements": [
+    "NFR-PER-001"
+  ],
+  "repetitions": 3,
+  "concurrency": 1,
+  "cache_state": "mixed",
+  "percentile_method": "nearest-rank",
+  "minimum_success_rate": 1.0,
+  "candidate_p95_ratio_max": 1.2,
+  "candidate_p95_additive_ns_max": 5000000000,
+  "absolute_p95_ns_max": {
+    "lekton": 75000000000,
+    "rustdesk": 10000000000
+  },
+  "timeout_seconds": {
+    "lekton": 90,
+    "rustdesk": 15
+  },
+  "report_bytes_max": 1048576,
+  "semantic_and_outcome_identity_required": true,
+  "cross_host_comparison_allowed": false,
+  "failed_sample_retry_allowed": false,
+  "nfr_per_002_claimed": false,
+  "slo_claimed": false,
+  "release_claimed": false,
+  "ga_claimed": false
+}

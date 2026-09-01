@@ -1,7 +1,7 @@
 # CodeNoesis Delivery Roadmap
 
 > Status: **Proposed planning companion — not implementation authority**.
-> Last updated: **2026-08-31**.
+> Last updated: **2026-09-01**.
 
 This roadmap sequences product and validation work without changing the
 normative meaning or approval status of the
@@ -19,8 +19,8 @@ SRS slice or requirement IDs. They must not be used to bypass the approved
 
 ## Current product baseline
 
-The repository contains the Verified local `S0`–`S4` implementation journey
-through R17, plus the first bounded S7 C0-C4 runtime and G0-G8-local controls:
+The repository contains the Verified 34-profile local `S0`–`S7` journey
+through R19, including R0-R17/K1 and G0-G8-local controls:
 
 ```text
 immutable local Git revision
@@ -30,6 +30,8 @@ immutable local Git revision
   -> atomic local snapshot
   -> evidence-backed Markdown, exact-ID query, and portable export
   -> versioned offline-explorer artifact and function context
+  -> trusted immutable evidence-to-source retrieval
+  -> Git-backed implementation-aware semantic impact
   -> bounded G0/G1a/G2a release, distribution, and upgrade preflights
 ```
 
@@ -43,11 +45,12 @@ review and protected manual merge” remain immutable pre-activation evidence.
 Issue #141 is closed as superseded. G9 remains a separate governed package.
 
 Protected PRs #191 and #197 made R18 trusted local source retrieval and R19
-Git-backed semantic impact Approved and Implemented but not Verified. Issue
-#201 and Decision 0041 define the exact 34-profile verification-only candidate.
-Its pre-activation marker is “LocalBaselineVerificationV3 candidate Verified
-pending independent review and protected manual merge”. It changes no product,
-ontology, schema, fixture, workflow, release, support, or GA byte.
+Git-backed semantic impact Approved and Implemented. Issue #201, Decision 0041,
+and protected PR #204 independently accepted the exact 34-profile V3 pack;
+review head `75391c9061d691c1d6efdf8b726e120049389476` merged as
+`3fb6504d1d6cb39f204eca032ff816266194e1ec`. The retained pre-activation marker
+remains immutable evidence. No release, support, SLO, publication, or GA status
+was granted.
 
 The implemented compatibility profile is bounded rather than general:
 
@@ -179,6 +182,7 @@ profile; it does not broaden the row's semantic boundary.
 | `R17` | Function-centered context and navigation | Approved, Implemented, and Verified: group one existing R16 function/method, declared signature, ordered parameters, return spelling, body facts, proven calls, evidence, claims, derivations, uncertainty, and navigation roles into canonical FunctionContextV1; add LocalExplorerV10 over unchanged PortableGraphV9. | Issue #178, Decision 0032, merge `f0bdb5290566bb85bb103e24291e952d4c557156`, LocalBaselineVerificationV2, `local-experimental-r17`, and no new dependency. | The project-owned method card and two pinned Lekton journeys are deterministic; CLI/browser fields match; all limits/security/privacy failures close safely; QueryV13, PortableGraphV9, and ExplorerV1-V9 bytes remain immutable. |
 | `R18` | Trusted local evidence-to-source retrieval | Approved and Implemented but not Verified after protected PR #191: resolve one exact existing evidence identity to one bounded UTF-8 excerpt from immutable local Git objects under explicit `trusted-local-source-v1`, with exact repository/commit/tree/path/blob/span binding and transient-stdout-only disclosure. | Issue #190, Decision 0038, review head `16ef5ceaea6ad14d9838f84856f6ca3d445daa67`, merge `fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b`, no new dependency, and LocalBaselineVerificationV3 candidate. | Loose and packed object stores emit byte-identical canonical `TrustedSourceExcerptV1`; UTF-8 positions, invalid/path/race/privacy/limit/stdout failures, 50 permutations, ten schedules, pinned Lekton diagnostic, no side effects, and immutable R0-R17/K1/S7/G0-G8-local bytes pass. |
 | `R19` | Git-backed implementation-aware semantic impact | Approved and Implemented but not Verified after protected PR #197: bind provider/client behavior evidence and bounded source navigation to immutable local Git objects under explicit V2 selectors while preserving V1 bytes. | Issue #196, Decision 0040, review head `c3cbced9ee2017b61ec8e0b10191553edc733004`, merge `c783b612777a86e2f88620ece987723bb230c51c`, no new dependency, and LocalBaselineVerificationV3 candidate. | Loose/packed replay, exact evidence/source binding, Windows CRLF correction, path/race/privacy/UTF-8/output failures, semantic report V2, retained correction history, and immutable V1/R0-R18/K1/G0-G8-local regressions pass. |
+| `B1` | Real-world Rust stability benchmark | Proposed branch-scoped candidate: activate one observational same-host suite over pinned Lekton success and RustDesk typed fail-closed behavior with raw samples and exact semantic/outcome comparison. | Issue #205, Decision 0042, exact V3 baseline `3fb6504d1d6cb39f204eca032ff816266194e1ec`, no dependency or product change. | Three baseline and three candidate runs per entry retain every sample, exact semantic/outcome identity, complete NFR-PER-001 context, reviewed p95 policy, privacy/no-network/no-target-execution controls, and no SLO or cross-host claim. |
 
 ### Earliest useful real-world checkpoint
 
@@ -202,11 +206,13 @@ future slice without changing that slice's approved meaning.
 2. Protected PR #191 completed R18 trusted local evidence-to-source retrieval.
 3. Protected PR #197 completed R19 Git-backed implementation-aware semantic
    impact while preserving the accepted V1 contract.
-4. Complete issue #201 / Decision 0041: independently verify the exact V2 plus
-   R18/R19 34-profile baseline without rewriting any accepted V2 or product byte.
-5. Build the LLM-ready projection over verified callable, evidence, source, and
+4. Protected PR #204 completed issue #201 / Decision 0041 and activated the
+   exact V2 plus R18/R19 34-profile baseline without rewriting product bytes.
+5. Complete issue #205 / Decision 0042: activate the first observational
+   real-world Rust stability benchmark without claiming an SLO.
+6. Build the LLM-ready projection over verified callable, evidence, source, and
    semantic-impact facts without promoting model output to product evidence.
-6. Execute the reproducible conference evaluation over pinned, structurally
+7. Execute the reproducible conference evaluation over pinned, structurally
    independent repositories.
 
 ### Real-world compatibility completion definition
@@ -276,7 +282,7 @@ single-PR vertical package as its implementation.
 | `G4` | Runtime resilience and flow control | Bound queues and concurrency; implement idempotency, leases, retries, cancellation, backpressure, graceful drain, dependency-loss behavior, failover, and overload shedding. | `INV-BND-001`, `INV-STO-001`, `FR-JOB-001`, `NFR-REL-002`, `NFR-OPS-001`, `S10`, `S14` | Duplicate, crash, timeout, saturation, restart, dependency outage, and drain scenarios preserve the last valid state and recover within approved limits. |
 | `G5` | Security, privacy, and tenancy | Maintain threat models, least privilege, secret isolation, authorization, tenant separation, sandboxing, network policy, rate limits, abuse controls, audit integrity, vulnerability exceptions, and privacy allowlists. | `INV-TEN-001`, `NFR-SEC-*`, `NFR-PRV-*`, `OD-AUT-001`, `OD-SBX-001`, `S9`, `S12`–`S14` | Malicious repository, cross-tenant, credential-canary, privilege, sandbox escape, denial-of-service, audit tamper, and external-transfer suites remain Green. |
 | `G6` | Observability and operations | Define privacy-safe logs, metrics, traces, correlation, SLIs, SLOs, error budgets, health transitions, alerts, dashboards, runbooks, on-call ownership, and incident exercises. | `NFR-OBS-001`, `NFR-OPS-001`, `OD-SLO-001`, `S10`–`S14`; incident-response service levels require an approved policy or requirement. | Success, failure, retry, cancellation, dependency loss, stuck work, and incident drills produce actionable signals without source, secret, or tenant leakage. |
-| `G7` | Performance and capacity | Publish reference corpora, cold/warm definitions, concurrency, cache state, ceilings, p50/p95/p99 methods, capacity models, load, soak, stress, and chaos evidence. | `NFR-PER-001/002`, `OD-LIM-001`, `OD-SLO-001`, `S14` | Exact release artifacts meet ratified latency, throughput, availability, resource, recovery, and success-rate thresholds with no discarded failures. |
+| `G7` | Performance and capacity | Issue #205 / Decision 0042 propose the first B1 observational package: one active same-host real-world Rust stability suite with raw samples and no SLO claim. Reference-release, load, soak, stress, chaos, capacity and contractual SLO work remain future G7. | `NFR-PER-001`; `NFR-PER-002`, `OD-LIM-001`, `OD-SLO-001`, `S14` remain unresolved beyond existing bounded product limits | Exact pinned Lekton/RustDesk outcomes and same-host p95 policy pass with no discarded failures; no release-artifact, availability, cross-host, support, conference or GA claim. |
 | `G8` | Supply chain and release integrity | Issue #186 / Decision 0036 proposes the local-only first package: lock and license/advisory policy, target SBOMs, transitive unsafe inventory, deterministic candidate association, and protected-main keyless provenance. Server images and independently accepted release evidence remain future work. | Proposed `FR-REL-003`, `FR-CLI-010`; bounded `NFR-MNT-002`, `NFR-SEC-004`, `NFR-SUP-001`, `S14` | Consumers verify exact local candidate bytes, SBOM association, policy reports, signer workflow, protected-main source identity, hosted runner, and absence of unaccepted findings; no release/publication claim precedes G9. |
 | `G9` | Pilot, release, and support | Run staged internal/public pilots, canary and rollback exercises, operational handoff, known-limit review, support and vulnerability-response processes, deprecation/EOL policy, and final GA decision. | `S14`; support, vulnerability-response, release-channel, and EOL commitments require approved policy or requirements. | Independent reviewers approve the exact release evidence pack; pilot exit criteria, rollback, incident response, residual risk, ownership, and support commitments are explicit. |
 
