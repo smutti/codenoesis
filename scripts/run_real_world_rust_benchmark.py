@@ -28,6 +28,7 @@ REPORT_SCHEMA = "codenoesis.real-world-rust-benchmark-report/v1"
 COMPARISON_SCHEMA = "codenoesis.real-world-rust-benchmark-comparison/v1"
 ERROR_SCHEMA = "codenoesis.real-world-rust-benchmark-error/v1"
 SUITE_ID = "rust-real-world-stability-v1"
+BENCHMARK_EXECUTION_LIMIT_PROFILE = "real-world-rust-benchmark-75s-v1"
 HEX_40 = re.compile(r"^[0-9a-f]{40}$")
 HOST_PROFILE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 EXPECTED_ENTRY_IDS = ("lekton", "rustdesk")
@@ -77,6 +78,10 @@ SCAN_PROFILE_ARGUMENTS = {
         "--output-capacity-profile",
         "local-snapshot-256m-v1",
     ),
+    BENCHMARK_EXECUTION_LIMIT_PROFILE: (
+        "--execution-limit-profile",
+        BENCHMARK_EXECUTION_LIMIT_PROFILE,
+    ),
 }
 EXPECTED_PROFILES = {
     "lekton": [
@@ -90,6 +95,7 @@ EXPECTED_PROFILES = {
         "rust-local-flow-v1",
         "rust-safe-constant-evaluation-v1",
         "local-snapshot-256m-v1",
+        BENCHMARK_EXECUTION_LIMIT_PROFILE,
     ],
     "rustdesk": [
         "local-git-sha1-packed-v1",
@@ -103,6 +109,7 @@ EXPECTED_PROFILES = {
         "rust-local-flow-v1",
         "rust-safe-constant-evaluation-v1",
         "local-snapshot-256m-v1",
+        BENCHMARK_EXECUTION_LIMIT_PROFILE,
     ],
 }
 EXPECTED_ORACLE_ENTRIES = {

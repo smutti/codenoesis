@@ -120,6 +120,24 @@ use sha2::{Digest as _, Sha256};
 
 static CORRELATION_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 const SCAN_WORKER_STACK_BYTES: usize = 16 * 1024 * 1024;
+const B1A_EXECUTION_LIMIT_PROFILE: &str = "real-world-rust-benchmark-75s-v1";
+const B1A_SCAN_WALL_MILLISECONDS: u64 = 75_000;
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+enum ScanExecutionLimitProfile {
+    #[default]
+    Standard,
+    RealWorldRustBenchmark75sV1,
+}
+
+impl ScanExecutionLimitProfile {
+    const fn maximum_milliseconds(self) -> u64 {
+        match self {
+            Self::Standard => STANDARD_LOCAL_S1_LIMITS.scan_wall_milliseconds,
+            Self::RealWorldRustBenchmark75sV1 => B1A_SCAN_WALL_MILLISECONDS,
+        }
+    }
+}
 
 type ScanJob = Box<dyn FnOnce() + Send + 'static>;
 
@@ -1175,6 +1193,7 @@ fn run_s4_r16(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Ve
         .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
     let repository = invocation.repository.clone();
     let output_capacity_profile = invocation.output_capacity_profile;
+    let scan_wall_milliseconds = invocation.execution_limit_profile.maximum_milliseconds();
     let started_at = Instant::now();
     let scan_repository = repository.clone();
     let scan = run_confined_scan(
@@ -1199,7 +1218,8 @@ fn run_s4_r16(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Ve
         },
     )
     .map_err(|()| r16_internal_failure())??;
-    enforce_scan_deadline(started_at).map_err(r16_upgrade_limit_failure)?;
+    enforce_scan_deadline_with_limit(started_at, scan_wall_milliseconds)
+        .map_err(r16_upgrade_limit_failure)?;
     let stdout = serialize_v18(&scan.snapshot)?;
     let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
         .is_err_and(|error| error.kind() == io::ErrorKind::NotFound);
@@ -4559,11 +4579,26 @@ fn serialize_v18(snapshot: &RepositorySnapshotV18) -> Result<Vec<u8>, Failure> {
 
 fn enforce_scan_deadline(started_at: Instant) -> Result<(), Failure> {
     let elapsed = u64::try_from(started_at.elapsed().as_millis()).map_err(|_| Failure::Internal)?;
-    if elapsed > STANDARD_LOCAL_S1_LIMITS.scan_wall_milliseconds {
-        return Err(Failure::Scan(ScanError::Acquisition(limit_exceeded(
-            LimitKind::ScanWallMilliseconds,
-            elapsed,
-        ))));
+    check_scan_wall_milliseconds(elapsed, STANDARD_LOCAL_S1_LIMITS.scan_wall_milliseconds)
+}
+
+fn enforce_scan_deadline_with_limit(
+    started_at: Instant,
+    maximum_milliseconds: u64,
+) -> Result<(), Failure> {
+    let elapsed = u64::try_from(started_at.elapsed().as_millis()).map_err(|_| Failure::Internal)?;
+    check_scan_wall_milliseconds(elapsed, maximum_milliseconds)
+}
+
+fn check_scan_wall_milliseconds(observed: u64, maximum_milliseconds: u64) -> Result<(), Failure> {
+    if observed > maximum_milliseconds {
+        return Err(Failure::Scan(ScanError::Acquisition(
+            AcquisitionError::LimitExceeded {
+                limit: LimitKind::ScanWallMilliseconds,
+                maximum: maximum_milliseconds,
+                observed: observed.min(maximum_milliseconds.saturating_add(1)),
+            },
+        )));
     }
     Ok(())
 }
@@ -7523,6 +7558,7 @@ fn parse_r16_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
     }
     let mut stripped = arguments.iter().take(2).cloned().collect::<Vec<_>>();
     let mut constant_profile = None;
+    let mut execution_limit_profile = None;
     let mut index = 2;
     while index < arguments.len() {
         let flag = &arguments[index];
@@ -7541,6 +7577,18 @@ fn parse_r16_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
                 return Err(InvocationError::InvalidR16Profile(String::new()));
             };
             constant_profile = Some(value.to_owned());
+        } else if flag == OsStr::new("--execution-limit-profile") {
+            if execution_limit_profile.is_some() {
+                return Err(InvocationError::InvalidR16Composition(
+                    "single_execution_limit_profile_required",
+                ));
+            }
+            let Some(value) = value.to_str() else {
+                return Err(InvocationError::InvalidR16Composition(
+                    "valid_execution_limit_profile_required",
+                ));
+            };
+            execution_limit_profile = Some(value.to_owned());
         } else {
             stripped.push(flag.clone());
             stripped.push(value.clone());
@@ -7555,6 +7603,15 @@ fn parse_r16_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
     if constant_profile != R16_PROFILE {
         return Err(InvocationError::InvalidR16Profile(constant_profile));
     }
+    let execution_limit_profile = match execution_limit_profile.as_deref() {
+        None => ScanExecutionLimitProfile::Standard,
+        Some(B1A_EXECUTION_LIMIT_PROFILE) => ScanExecutionLimitProfile::RealWorldRustBenchmark75sV1,
+        Some(_) => {
+            return Err(InvocationError::InvalidR16Composition(
+                "valid_execution_limit_profile_required",
+            ));
+        }
+    };
     let mut invocation = parse_r15_invocation(&stripped).map_err(|error| match error {
         InvocationError::Input(error) => InvocationError::Input(error),
         InvocationError::InvalidR15Profile(_) => {
@@ -7571,7 +7628,16 @@ fn parse_r16_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
             "complete_r15_source_only_profiles_required",
         ));
     }
+    if execution_limit_profile == ScanExecutionLimitProfile::RealWorldRustBenchmark75sV1
+        && (!invocation.packed_sha1
+            || invocation.output_capacity_profile != K1OutputCapacityProfile::LocalSnapshot256MV1)
+    {
+        return Err(InvocationError::InvalidR16Composition(
+            "benchmark_execution_limit_requires_packed_r16_256m",
+        ));
+    }
     invocation.rust_constant_profile = true;
+    invocation.execution_limit_profile = execution_limit_profile;
     Ok(invocation)
 }
 
@@ -8171,6 +8237,7 @@ struct Invocation {
     rust_expression_profile: bool,
     rust_flow_profile: bool,
     rust_constant_profile: bool,
+    execution_limit_profile: ScanExecutionLimitProfile,
     output_capacity_profile: K1OutputCapacityProfile,
     compiler_index_profile: bool,
     compiler_index_binding: Option<OsString>,
@@ -8683,6 +8750,7 @@ impl Invocation {
             rust_expression_profile: false,
             rust_flow_profile: false,
             rust_constant_profile: false,
+            execution_limit_profile: ScanExecutionLimitProfile::Standard,
             output_capacity_profile: K1OutputCapacityProfile::Standard,
             compiler_index_profile: false,
             compiler_index_binding: None,
@@ -9186,7 +9254,9 @@ mod s4_root_argument_tests {
     #[test]
     fn conf_nfr_per_001_benchmark_execution_limit_profile_is_exact() {
         let exact = r16_b1a_arguments();
-        let invocation = parse_s4_invocation(exact.clone()).expect("valid B1a selector matrix");
+        let Ok(invocation) = parse_s4_invocation(exact.clone()) else {
+            panic!("valid B1a selector matrix");
+        };
         assert!(invocation.packed_sha1);
         assert!(invocation.rust_constant_profile);
         assert_eq!(
@@ -9196,10 +9266,11 @@ mod s4_root_argument_tests {
 
         let mut absent = exact.clone();
         remove_option(&mut absent, "--execution-limit-profile");
+        let Ok(invocation) = parse_s4_invocation(absent) else {
+            panic!("selector absence remains valid");
+        };
         assert_eq!(
-            parse_s4_invocation(absent)
-                .expect("selector absence remains valid")
-                .execution_limit_profile,
+            invocation.execution_limit_profile,
             ScanExecutionLimitProfile::Standard
         );
 
