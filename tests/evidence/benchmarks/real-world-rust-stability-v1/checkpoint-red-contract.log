@@ -1,0 +1,14 @@
+test_active_suite_is_complete (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests.test_active_suite_is_complete) ... FAIL
+
+======================================================================
+FAIL: test_active_suite_is_complete (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests.test_active_suite_is_complete)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<workspace>/scripts/tests/test_real_world_rust_benchmark.py", line 55, in test_active_suite_is_complete
+    self.assertTrue(RUNNER.exists(), "expected Red: executable B1 runner is absent")
+AssertionError: False is not true : expected Red: executable B1 runner is absent
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)

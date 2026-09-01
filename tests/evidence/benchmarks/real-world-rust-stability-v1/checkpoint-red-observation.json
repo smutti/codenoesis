@@ -1,0 +1,44 @@
+{
+  "schema_version": "codenoesis.benchmark-red-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/205",
+  "authorization": "https://github.com/smutti/codenoesis/issues/205#issuecomment-5498148191",
+  "run_id": "b1-205-local-red-1",
+  "observed_on": "2026-09-01",
+  "exact_base": "3fb6504d1d6cb39f204eca032ff816266194e1ec",
+  "checkpoint_commit": "ea1f158a1046dfc1c2ef57c88228ab6f72b7beb7",
+  "checkpoint_tree": "4c26bed2441670e0d7afccfa69cd1f11952b3b1a",
+  "expected_failure": "active manifest support and the executable B1 runner are absent",
+  "observations": [
+    {
+      "command": "python3 -m unittest scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests.test_active_suite_is_complete -v",
+      "exit_status": 1,
+      "actual_failure": "the exact conformance assertion reports that scripts/run_real_world_rust_benchmark.py is absent",
+      "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/checkpoint-red-contract.log",
+      "log_sha256": "0a16fd94069743fc14d31387bfc52409ff7c646f34ec14e3a475c4f48573cc63"
+    },
+    {
+      "command": "python3 scripts/validate_benchmark_assets.py",
+      "exit_status": 1,
+      "actual_failure": "the exact base validator requires NFR-PER-002 and unconditionally disables active status until an executable runner exists",
+      "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/checkpoint-red-validator.log",
+      "log_sha256": "3573c094827219434a6039d942d046e52f64ca3fb9e12c5a3e05c7b43063d504"
+    }
+  ],
+  "environment": {
+    "os": "Darwin",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "git": "2.50.1 (Apple Git-155)",
+    "network_used": false,
+    "external_repositories_used": false
+  },
+  "agent": {
+    "identity": "OpenAI Codex",
+    "model": "not exposed by runtime",
+    "policy": "AGENTS.md plus issue #205",
+    "duration_seconds": "not available",
+    "cost": "not available"
+  },
+  "result": "expected_red"
+}
