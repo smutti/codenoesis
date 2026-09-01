@@ -1,6 +1,7 @@
 import hashlib
 import json
 import pathlib
+import subprocess
 import unittest
 
 
@@ -8,6 +9,19 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 SPEC = ROOT / "tests/specifications/s4/r18"
 FIXTURE = ROOT / "tests/fixtures/s4/trusted-source-retrieval-v1"
 DECISION = ROOT / "docs/software/decisions/0038-s4-trusted-local-source-retrieval.md"
+R18_PROTECTED_MERGE = "fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b"
+R18_HISTORICAL_BUNDLE_PATHS = frozenset(
+    {
+        "README.md",
+        "docs/software/architecture.md",
+        "docs/software/decisions/0037-local-baseline-verification-v2.md",
+        "docs/software/decisions/0038-s4-trusted-local-source-retrieval.md",
+        "docs/software/roadmap.md",
+        "docs/software/software-requirements-specification.md",
+        "docs/software/verification.md",
+        "scripts/tests/test_s4_r18_trusted_source_retrieval_contract.py",
+    }
+)
 
 
 def load_json(path: pathlib.Path):
@@ -20,6 +34,32 @@ def sha256_bytes(value: bytes):
 
 def sha256(path: pathlib.Path):
     return sha256_bytes(path.read_bytes())
+
+
+def git_blob(commit_sha: str, relative_path: str):
+    completed = subprocess.run(
+        ["git", "show", f"{commit_sha}:{relative_path}"],
+        cwd=ROOT,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if completed.returncode != 0:
+        diagnostic = completed.stderr.decode("utf-8", errors="replace").strip()
+        raise RuntimeError(
+            f"unable to read {relative_path} from {commit_sha}: {diagnostic}"
+        )
+    return completed.stdout
+
+
+def contract_bytes(relative_path: str):
+    if relative_path in R18_HISTORICAL_BUNDLE_PATHS:
+        return git_blob(R18_PROTECTED_MERGE, relative_path)
+    return (ROOT / relative_path).read_bytes()
+
+
+def historical_text(relative_path: str):
+    return git_blob(R18_PROTECTED_MERGE, relative_path).decode("utf-8")
 
 
 class R18TrustedSourceRetrievalContractTest(unittest.TestCase):
@@ -122,7 +162,7 @@ class R18TrustedSourceRetrievalContractTest(unittest.TestCase):
         )
 
     def test_candidate_governance_and_status_reconciliation_are_complete(self):
-        decision = DECISION.read_text(encoding="utf-8")
+        decision = historical_text(DECISION.relative_to(ROOT).as_posix())
         self.assertIn("Status: Proposed branch-scoped candidate", decision)
         self.assertIn("Issue: [#190]", decision)
         self.assertIn("FR-CTX-002", decision)
@@ -137,14 +177,14 @@ class R18TrustedSourceRetrievalContractTest(unittest.TestCase):
             "docs/software/roadmap.md",
             "docs/software/software-requirements-specification.md",
         ]:
-            text = (ROOT / relative).read_text(encoding="utf-8")
+            text = historical_text(relative)
             self.assertIn("#190", text, relative)
             self.assertIn("Decision 0038", text, relative)
             self.assertIn("trusted-local-source-v1", text, relative)
             self.assertIn("1de6a420f25a1c7eb74d07a99f1800dde90eefa8", text, relative)
             self.assertIn("G9 remains a separate governed package", text, relative)
 
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        readme = historical_text("README.md")
         self.assertIn("32-profile", readme)
         self.assertIn("#141", readme)
         self.assertIn("closed as", readme)
@@ -160,7 +200,9 @@ class R18TrustedSourceRetrievalContractTest(unittest.TestCase):
             ),
         }
         for relative, expected_digest in immutable_v2_documents.items():
-            self.assertEqual(sha256(ROOT / relative), expected_digest, relative)
+            self.assertEqual(
+                sha256_bytes(contract_bytes(relative)), expected_digest, relative
+            )
 
     def test_acceptance_contract_is_red_first_and_closed(self):
         e2e = load_json(SPEC / "e2e_fr_ctx_002_trusted_source_retrieval.json")
@@ -193,8 +235,13 @@ class R18TrustedSourceRetrievalContractTest(unittest.TestCase):
         bundle = load_json(bundle_path)
         paths = [record["path"] for record in bundle["files"]]
         self.assertEqual(paths, sorted(paths))
+        self.assertTrue(R18_HISTORICAL_BUNDLE_PATHS.issubset(paths))
         for record in bundle["files"]:
-            self.assertEqual(sha256(ROOT / record["path"]), record["sha256"], record["path"])
+            self.assertEqual(
+                sha256_bytes(contract_bytes(record["path"])),
+                record["sha256"],
+                record["path"],
+            )
         payload = "\n".join(
             f'{record["path"]}\0{record["sha256"]}' for record in bundle["files"]
         ).encode("utf-8")
