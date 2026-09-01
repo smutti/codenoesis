@@ -24,6 +24,10 @@ V2_CATALOG_PATH = (
 )
 MANIFEST_PATH = ROOT / "tests/evidence/verification/local-baseline-v3/manifest.json"
 VALIDATOR_PATH = ROOT / "scripts/verify_local_baseline_v3.py"
+R18_CONFORMANCE_TEST_PATH = (
+    ROOT / "scripts/tests/test_s4_r18_trusted_source_retrieval_contract.py"
+)
+R19_CONFORMANCE_TEST_PATH = ROOT / "scripts/tests/test_s7_r19_git_evidence_contract.py"
 STATUS_DOCUMENTS = (
     ROOT / "README.md",
     ROOT / "docs/software/software-requirements-specification.md",
@@ -120,6 +124,14 @@ class LocalBaselineVerificationV3ContractTests(unittest.TestCase):
         module_spec.loader.exec_module(validator)
         return validator
 
+    def load_contract_test(self, path: Path, module_name: str) -> ModuleType:
+        module_spec = importlib.util.spec_from_file_location(module_name, path)
+        if module_spec is None or module_spec.loader is None:
+            self.fail(f"cannot load historical contract test {path}")
+        module = importlib.util.module_from_spec(module_spec)
+        module_spec.loader.exec_module(module)
+        return module
+
     def validate_mutation(
         self,
         mutation: Callable[[dict[str, object]], None],
@@ -203,6 +215,36 @@ class LocalBaselineVerificationV3ContractTests(unittest.TestCase):
         for document_path in STATUS_DOCUMENTS:
             normalized = " ".join(document_path.read_text(encoding="utf-8").split())
             self.assertIn(STATUS_MARKER, normalized, str(document_path))
+
+    def test_r18_r19_bundle_self_records_use_historical_bytes(self) -> None:
+        cases = (
+            (
+                R18_CONFORMANCE_TEST_PATH,
+                "r18_historical_contract_test",
+                "fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b",
+            ),
+            (
+                R19_CONFORMANCE_TEST_PATH,
+                "r19_historical_contract_test",
+                "c783b612777a86e2f88620ece987723bb230c51c",
+            ),
+        )
+        for path, module_name, protected_merge in cases:
+            with self.subTest(path=path.name):
+                module = self.load_contract_test(path, module_name)
+                self.assertTrue(
+                    hasattr(module, "contract_bytes"),
+                    f"historical bundle-record resolver is absent: {path.name}",
+                )
+                relative_path = path.relative_to(ROOT).as_posix()
+                historical = subprocess.run(
+                    ["git", "show", f"{protected_merge}:{relative_path}"],
+                    cwd=ROOT,
+                    check=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                ).stdout
+                self.assertEqual(module.contract_bytes(relative_path), historical)
 
     def test_validator_and_manifest_are_complete(self) -> None:
         self.assertTrue(

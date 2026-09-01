@@ -4,6 +4,7 @@
   "authorization": "https://github.com/smutti/codenoesis/issues/201#issuecomment-5477071815",
   "correction_authorization": "https://github.com/smutti/codenoesis/issues/201#issuecomment-5479036431",
   "r18_r19_correction_authorization": "https://github.com/smutti/codenoesis/issues/201#issuecomment-5482161515",
+  "r18_r19_self_binding_authorization": "https://github.com/smutti/codenoesis/issues/201#issuecomment-5494828860",
   "base_sha": "c783b612777a86e2f88620ece987723bb230c51c",
   "delivery_slice": "S14",
   "risk": "high",
@@ -94,7 +95,12 @@
     "r19_protected_merge": "c783b612777a86e2f88620ece987723bb230c51c",
     "historical_bundle_digests_immutable": true,
     "historical_candidate_wording_required": true,
+    "historical_self_records": {
+      "scripts/tests/test_s4_r18_trusted_source_retrieval_contract.py": "fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b",
+      "scripts/tests/test_s7_r19_git_evidence_contract.py": "c783b612777a86e2f88620ece987723bb230c51c"
+    },
     "non_lifecycle_current_file_checks_required": true,
+    "corrected_current_test_digests_pinned_by_v3": true,
     "product_behavior_change": false
   },
   "activation": "independent_review_then_protected_manual_merge_of_exact_head",

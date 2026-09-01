@@ -160,3 +160,28 @@ editing either R18/R19 conformance test, this superseding checkpoint is
 committed and the three deterministic current-file failures are retained as
 the expected Red. No dependency, control-plane, release, support, or GA
 authority is added.
+
+## Amendment 3: immutable bundle self-records
+
+The accountable maintainer authorized the exact clarification recorded in
+[issue comment #5482287892](https://github.com/smutti/codenoesis/issues/201#issuecomment-5482287892)
+and [authorization #5494828860](https://github.com/smutti/codenoesis/issues/201#issuecomment-5494828860).
+Each immutable R18/R19 bundle contains the historical conformance test that
+validates it. Editing those two tests while requiring their current bytes to
+retain the accepted historical SHA-256 is impossible without a digest
+collision.
+
+The correction therefore reads from the same protected merge both the
+lifecycle-document records and exactly that bundle's own historical
+conformance-test record. Every other non-lifecycle record, including every
+product source record, remains bound to the current tree. The corrected current
+test bytes are pinned independently by V3 and excluded only from the product
+tree identity. No historical bundle, accepted digest, schema, fixture, oracle,
+product byte, dependency, control plane, release, support, or GA meaning
+changes.
+
+Before either R18/R19 test is edited, this amendment, the exact plan, and a V3
+acceptance regression are committed. The retained Red is acceptable only when
+that regression reports the absence of the historical bundle-record resolver.
+The implementation must then make the regression and both complete historical
+bundle tests Green without skipping a record.

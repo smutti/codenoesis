@@ -85,6 +85,13 @@ wording, so later versioned documentation cannot weaken historical product
 contracts or make their accepted byte identities depend on the descendant
 working tree.
 
+The third amendment handles the two bundle self-records without weakening
+coverage. Each corrected R18/R19 conformance test reads its own accepted
+historical record from the same protected merge as the lifecycle documents;
+every other non-lifecycle record remains current-tree-bound. V3 separately pins
+the corrected test bytes, so both the immutable historical bundle and the
+current verification correction remain reviewable.
+
 ## Promotion rule
 
 The V3 manifest uses `candidate_verified_pending_merge` on the branch.
