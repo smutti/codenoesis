@@ -30,6 +30,7 @@ SELF_BINDING_CHECKPOINT_SHA = "f699c84a3c777ac2420a7ef545391bc5baeaf7f0"
 SELF_BINDING_RED_SHA = "9ece5d3f697aa9042aff23deb9c22443e0faf32d"
 SELF_BINDING_IMPLEMENTATION_SHA = "24cf365ec490f7875b72dc01218f4de17816c9e5"
 SELF_BINDING_EVIDENCE_SHA = "d8669a8fce57573f9a27c7a3f3cbb39a8495370d"
+COMPLETE_GATE_SOURCE_SHA = "1fab35f252abaad538b087a5d5b2b1cd38b63507"
 V2_ACTIVATION_MERGE = "1de6a420f25a1c7eb74d07a99f1800dde90eefa8"
 R18_REVIEW_HEAD = "16ef5ceaea6ad14d9838f84856f6ca3d445daa67"
 R18_REVIEW_TREE = "a1446f7621d5ce524792db74ce7b32640da80df4"
@@ -209,6 +210,9 @@ PINNED_EVIDENCE_DIGESTS = {
     "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-red-observation.json": "5c7493ebb0eaae271fdbb4e8ea12bffc7dea260c38975e0482769b80d1615de7",
     "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-green.log": "2de3b194941f2635f36464e5962249ce3e5e84754df9c64bd991d9d50d44f0f9",
     "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-green-observation.json": "ad2dff539c34eb86eb0b52a4264f31c2699d6eda54a78c785f1734c846bccdc7",
+    "tests/evidence/verification/local-baseline-v3/complete-gate-summary.log": "b3a4ac56bd8f546ea32510baafc4bd70166d4d0d6d14b1c8f2934d2a345f1b1a",
+    "tests/evidence/verification/local-baseline-v3/complete-gate.log.gz.base64": "e7770645f0a9dd6c133710bb16ff8259bcb2a5e723f25aba377c859366625262",
+    "tests/evidence/verification/local-baseline-v3/complete-gate-observation.json": "bb2bbd4d3cb7525110a2a7b8d10517d640ffe04802e086aa82f881319d476d84",
 }
 
 CORRECTED_CONFORMANCE_DIGESTS = {
@@ -409,6 +413,7 @@ def validate_lineage(root: Path, current_head: str, errors: list[str]) -> None:
         SELF_BINDING_RED_SHA,
         SELF_BINDING_IMPLEMENTATION_SHA,
         SELF_BINDING_EVIDENCE_SHA,
+        COMPLETE_GATE_SOURCE_SHA,
         V2_ACTIVATION_MERGE,
         R18_MERGE,
         R19_MERGE,
@@ -480,8 +485,13 @@ def validate_lineage(root: Path, current_head: str, errors: list[str]) -> None:
         ),
         (
             SELF_BINDING_EVIDENCE_SHA,
+            COMPLETE_GATE_SOURCE_SHA,
+            "self-binding evidence is not an ancestor of complete gate source",
+        ),
+        (
+            COMPLETE_GATE_SOURCE_SHA,
             current_head,
-            "self-binding evidence is not an ancestor of current head",
+            "complete gate source is not an ancestor of current head",
         ),
     )
     for ancestor, descendant, message in ancestry:
@@ -1112,6 +1122,70 @@ def validate_red(root: Path, errors: list[str]) -> None:
         validate_digest_record(root, observation.get("log"), f"{label} log", errors)
 
 
+def validate_complete_gate(root: Path, errors: list[str]) -> None:
+    observation_path = (
+        root
+        / "tests/evidence/verification/local-baseline-v3/"
+        "complete-gate-observation.json"
+    )
+    try:
+        observation = load_json(observation_path)
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        errors.append(f"cannot load complete gate observation: {error}")
+        return
+    expected = {
+        "source_commit": COMPLETE_GATE_SOURCE_SHA,
+        "exit_status": 0,
+        "result": "All nine commands in the repository bootstrap gate completed successfully.",
+    }
+    for field, value in expected.items():
+        if observation.get(field) != value:
+            errors.append(f"complete gate observation differs in {field}")
+    commands = observation.get("commands")
+    if not isinstance(commands, list) or len(commands) != 9:
+        errors.append("complete gate must contain exactly nine commands")
+    validate_digest_record(root, observation.get("summary"), "complete gate summary", errors)
+
+    normalized_log = observation.get("normalized_log")
+    if not isinstance(normalized_log, dict):
+        errors.append("complete gate normalized log is invalid")
+        return
+    relative_path = normalized_log.get("path")
+    if not safe_relative_path(relative_path):
+        errors.append("complete gate carrier path is unsafe")
+        return
+    carrier_path = root / relative_path
+    try:
+        carrier = carrier_path.read_bytes()
+        compressed = base64.b64decode(b"".join(carrier.split()), validate=True)
+        normalized = gzip.decompress(compressed)
+    except (OSError, ValueError, gzip.BadGzipFile) as error:
+        errors.append(f"cannot decode complete gate log: {error}")
+        return
+    digest_checks = (
+        (sha256_bytes(carrier), normalized_log.get("carrier_sha256"), "carrier"),
+        (
+            sha256_bytes(compressed),
+            normalized_log.get("decoded_gzip_sha256"),
+            "compressed log",
+        ),
+        (
+            sha256_bytes(normalized),
+            normalized_log.get("uncompressed_sha256"),
+            "normalized log",
+        ),
+    )
+    for observed, expected_digest, label in digest_checks:
+        if observed != expected_digest:
+            errors.append(f"complete gate {label} digest mismatch")
+    if len(compressed) != normalized_log.get("decoded_gzip_bytes"):
+        errors.append("complete gate compressed byte length mismatch")
+    if len(normalized) != normalized_log.get("uncompressed_bytes"):
+        errors.append("complete gate normalized byte length mismatch")
+    if b"complete_gate=green\n" not in normalized:
+        errors.append("complete gate normalized log lacks Green conclusion")
+
+
 def validate_manifest(root: Path, manifest_path: Path) -> list[str]:
     errors: list[str] = []
     try:
@@ -1137,6 +1211,7 @@ def validate_manifest(root: Path, manifest_path: Path) -> list[str]:
     validate_changed_paths(root, current_head, errors)
     validate_product_tree(root, current_head, plan, manifest, errors)
     validate_red(root, errors)
+    validate_complete_gate(root, errors)
 
     validate_digest_record(root, manifest.get("plan"), "manifest.plan", errors)
     validate_digest_record(

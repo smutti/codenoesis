@@ -1,0 +1,52 @@
+{
+  "schema_version": "codenoesis.local-baseline-verification-complete-gate/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/201",
+  "source_commit": "1fab35f252abaad538b087a5d5b2b1cd38b63507",
+  "source_tree": "29a56f30f6436650baa58ecf01643f53839151cf",
+  "exit_status": 0,
+  "result": "All nine commands in the repository bootstrap gate completed successfully.",
+  "commands": [
+    "actionlint -no-color",
+    "python3 .github/codex/scripts/codex_policy.py validate-policy --policy .github/codex/policy.json",
+    "cargo fmt --all --check",
+    "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+    "cargo test --workspace --all-targets --all-features --locked",
+    "cargo test --workspace --doc --all-features --locked",
+    "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+    "python3 scripts/validate_benchmark_assets.py",
+    "cargo bench --workspace --all-features --no-run --locked"
+  ],
+  "summary": {
+    "path": "tests/evidence/verification/local-baseline-v3/complete-gate-summary.log",
+    "sha256": "b3a4ac56bd8f546ea32510baafc4bd70166d4d0d6d14b1c8f2934d2a345f1b1a"
+  },
+  "normalized_log": {
+    "encoding": "gzip-n-header-base64",
+    "path": "tests/evidence/verification/local-baseline-v3/complete-gate.log.gz.base64",
+    "carrier_sha256": "e7770645f0a9dd6c133710bb16ff8259bcb2a5e723f25aba377c859366625262",
+    "decoded_gzip_sha256": "91be97842c422087db489bb79ed701a0dc7c7d61b7909616091dfba0869236ba",
+    "decoded_gzip_bytes": 16549,
+    "uncompressed_sha256": "759ca6f79a01f5c89277c1db034d5edb2345eeeb2964567a35e8b137ee6441b1",
+    "uncompressed_bytes": 86143,
+    "normalization": "Replace the isolated local repository root with $REPOSITORY; preserve all other output bytes and LF endings."
+  },
+  "counts": {
+    "rust_tests_passed": 682,
+    "python_tests_passed": 413,
+    "doc_tests_passed": 0,
+    "benchmark_executables_compiled": 15
+  },
+  "captured_at": "2026-09-01T13:52:17Z",
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "network_product_path": "disabled",
+    "model_provider_path": "disabled"
+  },
+  "limitations": [
+    "The benchmark manifest intentionally remains scaffold with zero executable performance suites; activating B1/G7 is a separate future package.",
+    "The existing Cargo semver-metadata warning for toml =1.1.4+spec-1.1.0 is unchanged and did not affect the zero-warning Clippy result."
+  ]
+}

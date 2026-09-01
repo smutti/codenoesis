@@ -1364,6 +1364,24 @@
       "class": "focused_green",
       "path": "tests/evidence/verification/local-baseline-v3/r18-r19-self-binding-green-observation.json",
       "sha256": "ad2dff539c34eb86eb0b52a4264f31c2699d6eda54a78c785f1734c846bccdc7"
+    },
+    {
+      "id": "v3-complete-gate-summary",
+      "class": "full_regression",
+      "path": "tests/evidence/verification/local-baseline-v3/complete-gate-summary.log",
+      "sha256": "b3a4ac56bd8f546ea32510baafc4bd70166d4d0d6d14b1c8f2934d2a345f1b1a"
+    },
+    {
+      "id": "v3-complete-gate-log",
+      "class": "full_regression",
+      "path": "tests/evidence/verification/local-baseline-v3/complete-gate.log.gz.base64",
+      "sha256": "e7770645f0a9dd6c133710bb16ff8259bcb2a5e723f25aba377c859366625262"
+    },
+    {
+      "id": "v3-complete-gate-observation",
+      "class": "full_regression",
+      "path": "tests/evidence/verification/local-baseline-v3/complete-gate-observation.json",
+      "sha256": "bb2bbd4d3cb7525110a2a7b8d10517d640ffe04802e086aa82f881319d476d84"
     }
   ],
   "remote_runs": [
@@ -1561,7 +1579,10 @@
       "evidence_ids": [
         "r18-complete-gate",
         "r19-complete-gate",
-        "v2-manifest"
+        "v2-manifest",
+        "v3-complete-gate-summary",
+        "v3-complete-gate-log",
+        "v3-complete-gate-observation"
       ]
     },
     {
