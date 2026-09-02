@@ -163,3 +163,20 @@ counts, exact RustDesk rejection, Green same-host comparison, source cleanliness
 and byte-identical Rust product source after `cce8486`. Policy, limits, timeout,
 ontology, schemas, dependencies, workflow, release, support, and GA remain
 unchanged.
+
+## B1c bounded failed-sample observability
+
+Issue [#208](https://github.com/smutti/codenoesis/issues/208) and
+[Decision 0045](decisions/0045-b1-failed-sample-observability.md) define the
+dependent high-risk S14 correction on exact evidence head `71d05cd`. The
+expected Red is the existing generic `benchmark.sample_failed` message, which
+does not retain product exit, stream lengths, stderr digest, or safe typed-error
+identity after owned temporary cleanup.
+
+Green requires a message no longer than 256 characters containing only public
+entry/index/exit/length fields, exact stderr SHA-256, and allowlisted canonical
+product schema/code/stage. Invalid, oversized, non-UTF-8, multi-document, and
+private stderr must remain opaque. Existing timeout and mutation precedence,
+empty runner stdout, no report, no retry, and cleanup remain unchanged. The
+subsequent bounded Lekton diagnostic stops at the first failure or after five
+clean independent attempts and does not resume B1 acceptance.

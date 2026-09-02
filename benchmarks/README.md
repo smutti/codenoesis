@@ -57,3 +57,10 @@ first product commit supporting that selector, `cce8486`. They also bind the
 Lekton semantic oracle to the corpus repository identity instead of the older
 pilot identity. All counts, source revisions, policies, limits, timeouts, and
 observational exclusions remain unchanged.
+
+Issue #208 and Decision 0045 retain bounded failed-sample identity before owned
+temporary cleanup: public entry/index/exit/stream lengths, exact stderr SHA-256,
+and only allowlisted schema/code/stage from one canonical product error up to
+2,048 bytes. Product message/context and source or private values are never
+echoed. The runner V1 error protocol, report schema, no-retry policy, product,
+corpus, oracle, threshold, timeout, and observational exclusions stay unchanged.

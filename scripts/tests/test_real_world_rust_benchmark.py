@@ -446,6 +446,43 @@ class RealWorldRustBenchmarkContractTests(unittest.TestCase):
 
         self.assertEqual(raised.exception.code, "benchmark.mutable_input")
 
+    def test_failed_sample_retains_bounded_product_identity(self) -> None:
+        product_error = canonical_json_bytes(
+            {
+                "code": "input.repository_limit_exceeded",
+                "context": {"path": "/private/private-path-canary"},
+                "message": "private-message-canary",
+                "retryable": False,
+                "schema_version": "codenoesis.error/v24",
+                "stage": "input",
+            }
+        )
+        stderr_sha256 = hashlib.sha256(product_error).hexdigest()
+        with self.local_repository() as (repository, descriptor, _):
+            binary = repository.parent / "failing-product"
+            binary.write_text(
+                f"#!{sys.executable}\n"
+                "import sys\n"
+                f"sys.stderr.buffer.write({product_error!r})\n"
+                "raise SystemExit(12)\n",
+                encoding="utf-8",
+            )
+            binary.chmod(0o755)
+
+            with self.assertRaises(BenchmarkError) as raised:
+                run_sample(binary, repository, descriptor, EXPECTED_ORACLE_ENTRIES["lekton"], 5, 1)
+
+        self.assertEqual(raised.exception.code, "benchmark.sample_failed")
+        self.assertEqual(
+            raised.exception.message,
+            "sample_failed entry=lekton index=1 exit=12 stdout=0 "
+            f"stderr={len(product_error)} sha256={stderr_sha256} "
+            "product=codenoesis.error/v24|input.repository_limit_exceeded|input",
+        )
+        self.assertLessEqual(len(raised.exception.message.encode("utf-8")), 256)
+        self.assertNotIn("private-path-canary", raised.exception.message)
+        self.assertNotIn("private-message-canary", raised.exception.message)
+
     def test_timed_out_product_is_not_retried(self) -> None:
         with self.local_repository() as (repository, descriptor, _):
             binary = repository.parent / "sleeping-product"

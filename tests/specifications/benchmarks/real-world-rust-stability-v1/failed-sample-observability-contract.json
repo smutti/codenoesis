@@ -1,0 +1,39 @@
+{
+  "schema_version": "codenoesis.real-world-rust-benchmark-failed-sample-observability-contract/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/208",
+  "authorization": "accountable-maintainer authorization in issue #208",
+  "exact_dependent_base": "71d05cdb90c3cdd2af4824d5eeb712ec78e6b080",
+  "slice": "S14",
+  "risk": "high",
+  "runner_error_schema": "codenoesis.real-world-rust-benchmark-error/v1",
+  "runner_error_code": "benchmark.sample_failed",
+  "runner_error_stage": "input",
+  "message_bytes_max": 256,
+  "typed_stderr_bytes_max": 2048,
+  "retained_fields": [
+    "entry_id",
+    "sample_index",
+    "product_exit",
+    "stdout_bytes",
+    "stderr_bytes",
+    "stderr_sha256",
+    "product_error_schema_code_stage_or_unparseable"
+  ],
+  "forbidden_output": [
+    "product_message",
+    "product_context",
+    "source",
+    "path",
+    "host",
+    "user",
+    "environment",
+    "command",
+    "token",
+    "url"
+  ],
+  "diagnostic_attempts_max": 5,
+  "retry_allowed": false,
+  "acceptance_resume_allowed": false,
+  "workflow_changes_allowed": false,
+  "dependency_changes_allowed": false
+}

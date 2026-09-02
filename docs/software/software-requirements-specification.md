@@ -2715,6 +2715,25 @@ its canonical semantic projection SHA-256 is
 `7c800424b3176c96d4ea4164d4066adaf551134b3aea4b40a1e5647f74dc7fa9`.
 Only repository-identity-bound oracle values change.
 
+### 2.39 B1c/G7/S14 bounded failed-sample observability
+
+Issue [#208](https://github.com/smutti/codenoesis/issues/208), its accountable
+maintainer authorization, and
+[Decision 0045](decisions/0045-b1-failed-sample-observability.md) govern a
+dependent correction on exact B1b evidence head
+`71d05cdb90c3cdd2af4824d5eeb712ec78e6b080`.
+
+| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| Bounded `NFR-PER-001`, `NFR-OBS-001`, `NFR-TST-001/002`, `NFR-SEC-005`, `INV-BND-001` | Approved requirements; B1c correction Proposed on the branch | A failed product sample retains bounded public entry/index/exit/length identity, exact stderr SHA-256, and only strictly validated canonical product error schema/code/stage in the unchanged runner V1 error message | `S14` | Issue #208, Decision 0045, expected Red, privacy/limit/failure tests, and bounded real diagnostic evidence |
+| `NFR-PER-002`, `OD-SLO-001` | Unresolved and outside B1c | No retry, acceptance completion, policy, threshold, SLO, release, support, availability, cross-host, conference, or GA claim | `S14` | Explicit exclusion in issue #208 and Decision 0045 |
+
+The message is at most 256 characters. Product message/context, source, paths,
+host, user, environment, command, token, and URL values are never emitted.
+Stderr that is oversized, noncanonical, invalid, non-UTF-8, multi-document, or
+not selected by the public allowlist is identified only by byte length and
+SHA-256. Existing non-sample errors and cleanup behavior remain unchanged.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,

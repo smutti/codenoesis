@@ -651,6 +651,15 @@ The benchmark adapter validates hashes bound to the corpus repository identity
 rather than reusing hashes from a differently identified pilot. Counts,
 extractors, ontology, stores, and every execution policy remain unchanged.
 
+Issue [#208](https://github.com/smutti/codenoesis/issues/208) and
+[Decision 0045](decisions/0045-b1-failed-sample-observability.md) add bounded
+failure observability only at this external measurement adapter. Before deleting
+marker-owned sample files, the adapter derives byte lengths and stderr SHA-256
+and may select schema/code/stage from one small canonical product error through
+a closed public allowlist. It never copies product message/context or source and
+does not persist the temporary output. Runner error version, report protocol,
+product boundary, retry policy, and cleanup ownership remain unchanged.
+
 ### G1b/G8-local verifiable distribution candidate
 
 Issue [#186](https://github.com/smutti/codenoesis/issues/186) and
