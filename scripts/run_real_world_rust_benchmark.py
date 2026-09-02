@@ -30,8 +30,45 @@ ERROR_SCHEMA = "codenoesis.real-world-rust-benchmark-error/v1"
 SUITE_ID = "rust-real-world-stability-v1"
 BENCHMARK_EXECUTION_LIMIT_PROFILE = "real-world-rust-benchmark-75s-v1"
 BOOTSTRAP_BASELINE_COMMIT = "cce84869430ef129f55591998b30ea2ea728e1c3"
+FAILED_SAMPLE_MESSAGE_BYTES_MAX = 256
+TYPED_PRODUCT_STDERR_BYTES_MAX = 2048
 HEX_40 = re.compile(r"^[0-9a-f]{40}$")
 HOST_PROFILE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
+PUBLIC_PRODUCT_ERROR_CODE = re.compile(
+    r"^[a-z][a-z0-9_]{0,15}(?:\.[a-z][a-z0-9_]{0,63}){1,2}$"
+)
+PUBLIC_PRODUCT_ERROR_STAGES = frozenset(
+    {
+        "acquisition",
+        "contract",
+        "explorer",
+        "export",
+        "extraction",
+        "input",
+        "internal",
+        "publication",
+        "query",
+        "serialization",
+        "store",
+    }
+)
+PRIVATE_PRODUCT_ERROR_COMPONENTS = frozenset(
+    {
+        "canary",
+        "context",
+        "credential",
+        "host",
+        "message",
+        "password",
+        "path",
+        "private",
+        "secret",
+        "source",
+        "token",
+        "url",
+        "user",
+    }
+)
 EXPECTED_ENTRY_IDS = ("lekton", "rustdesk")
 EXPECTED_RUNNER_PREFIX = [
     "python3",
@@ -205,6 +242,90 @@ def sha256_file(path: Path) -> str:
     except OSError as error:
         raise BenchmarkError("benchmark.invalid_input", "cannot read an input file") from error
     return digest.hexdigest()
+
+
+def public_product_error_identity(stderr_path: Path) -> str:
+    try:
+        stderr_size = stderr_path.stat().st_size
+        if stderr_size == 0 or stderr_size > TYPED_PRODUCT_STDERR_BYTES_MAX:
+            return "unparseable"
+        stderr = stderr_path.read_bytes()
+    except OSError:
+        return "unparseable"
+    if len(stderr) != stderr_size:
+        return "unparseable"
+    try:
+        error = json.loads(stderr.decode("utf-8"))
+    except (UnicodeError, json.JSONDecodeError):
+        return "unparseable"
+    if not isinstance(error, dict) or set(error) != {
+        "code",
+        "context",
+        "message",
+        "retryable",
+        "schema_version",
+        "stage",
+    }:
+        return "unparseable"
+    try:
+        if canonical_json_bytes(error) != stderr:
+            return "unparseable"
+    except BenchmarkError:
+        return "unparseable"
+    schema = error.get("schema_version")
+    code = error.get("code")
+    stage = error.get("stage")
+    if (
+        schema != "codenoesis.error/v24"
+        or not isinstance(code, str)
+        or len(code) > 64
+        or PUBLIC_PRODUCT_ERROR_CODE.fullmatch(code) is None
+        or not isinstance(stage, str)
+        or stage not in PUBLIC_PRODUCT_ERROR_STAGES
+        or not isinstance(error.get("message"), str)
+        or not isinstance(error.get("context"), dict)
+        or error.get("retryable") is not False
+    ):
+        return "unparseable"
+    components = frozenset(re.split(r"[._]", code)) | {stage}
+    if components & PRIVATE_PRODUCT_ERROR_COMPONENTS:
+        return "unparseable"
+    if code != "internal.failure" and not code.startswith(f"{stage}."):
+        return "unparseable"
+    return f"{schema}|{code}|{stage}"
+
+
+def failed_sample_message(
+    entry_id: str,
+    index: int,
+    return_code: int,
+    stdout_bytes: int,
+    stderr_path: Path,
+) -> str:
+    try:
+        stderr_bytes = stderr_path.stat().st_size
+    except OSError as error:
+        raise BenchmarkError(
+            "benchmark.internal",
+            "failed sample identity is unavailable",
+            stage="internal",
+            exit_code=1,
+        ) from error
+    exit_identity = str(return_code) if return_code >= 0 else "signal"
+    product_identity = public_product_error_identity(stderr_path)
+    message = (
+        f"sample_failed entry={entry_id} index={index} exit={exit_identity} "
+        f"stdout={stdout_bytes} stderr={stderr_bytes} sha256={sha256_file(stderr_path)} "
+        f"product={product_identity}"
+    )
+    if len(message.encode("utf-8")) > FAILED_SAMPLE_MESSAGE_BYTES_MAX:
+        raise BenchmarkError(
+            "benchmark.internal",
+            "failed sample identity exceeds its byte limit",
+            stage="internal",
+            exit_code=1,
+        )
+    return message
 
 
 def load_json(path: Path, *, maximum_bytes: int | None = None) -> Any:
@@ -708,11 +829,21 @@ def run_sample(
         }
         if descriptor["outcome"] == "success":
             if return_code != 0 or stderr_bytes != 0:
-                raise BenchmarkError("benchmark.sample_failed", "positive sample did not complete cleanly")
+                raise BenchmarkError(
+                    "benchmark.sample_failed",
+                    failed_sample_message(
+                        descriptor["id"], index, return_code, stdout_bytes, stderr_path
+                    ),
+                )
             parse_success_sample(stdout_path, sample, expected)
         elif descriptor["outcome"] == "typed_rejection":
             if return_code != expected.get("exit_code") or stdout_bytes != expected.get("stdout_bytes"):
-                raise BenchmarkError("benchmark.sample_failed", "negative sample did not fail as specified")
+                raise BenchmarkError(
+                    "benchmark.sample_failed",
+                    failed_sample_message(
+                        descriptor["id"], index, return_code, stdout_bytes, stderr_path
+                    ),
+                )
             parse_rejection_sample(stderr_path, sample, expected, store_path.exists())
         else:
             raise BenchmarkError("benchmark.invalid_input", "corpus outcome is unknown")

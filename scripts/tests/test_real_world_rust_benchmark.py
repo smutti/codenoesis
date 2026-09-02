@@ -34,6 +34,7 @@ from run_real_world_rust_benchmark import (  # noqa: E402
     canonical_json_bytes,
     compare_reports,
     ensure_privacy,
+    failed_sample_message,
     load_json,
     nearest_rank,
     preflight_repository,
@@ -482,6 +483,85 @@ class RealWorldRustBenchmarkContractTests(unittest.TestCase):
         self.assertLessEqual(len(raised.exception.message.encode("utf-8")), 256)
         self.assertNotIn("private-path-canary", raised.exception.message)
         self.assertNotIn("private-message-canary", raised.exception.message)
+
+    def test_failed_sample_identity_rejects_unsafe_stderr_forms(self) -> None:
+        private_identity = canonical_json_bytes(
+            {
+                "code": "input.private_canary",
+                "context": {},
+                "message": "public",
+                "retryable": False,
+                "schema_version": "codenoesis.error/v24",
+                "stage": "input",
+            }
+        )
+        variants = (
+            b"\xff",
+            b"{}\n{}\n",
+            b'{"code":"input.repository_limit_exceeded"}\n',
+            private_identity,
+            b"x" * 2049,
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            stderr_path = Path(temporary) / "stderr"
+            for variant in variants:
+                with self.subTest(variant_sha256=hashlib.sha256(variant).hexdigest()):
+                    stderr_path.write_bytes(variant)
+                    message = failed_sample_message("lekton", 1, -9, 0, stderr_path)
+                    self.assertIn("exit=signal", message)
+                    self.assertIn(f"stderr={len(variant)}", message)
+                    self.assertIn(f"sha256={hashlib.sha256(variant).hexdigest()}", message)
+                    self.assertIn("product=unparseable", message)
+                    self.assertLessEqual(len(message.encode("utf-8")), 256)
+                    self.assertNotIn("private_canary", message)
+
+    def test_failed_sample_identity_accepts_exact_2048_byte_canonical_error(self) -> None:
+        error = {
+            "code": "input.repository_limit_exceeded",
+            "context": {"padding": ""},
+            "message": "repository input limit exceeded",
+            "retryable": False,
+            "schema_version": "codenoesis.error/v24",
+            "stage": "input",
+        }
+        base_length = len(canonical_json_bytes(error))
+        error["context"]["padding"] = "x" * (2048 - base_length)
+        encoded = canonical_json_bytes(error)
+        self.assertEqual(len(encoded), 2048)
+
+        with tempfile.TemporaryDirectory() as temporary:
+            stderr_path = Path(temporary) / "stderr"
+            stderr_path.write_bytes(encoded)
+            message = failed_sample_message("lekton", 3, 12, 0, stderr_path)
+
+        self.assertIn(
+            "product=codenoesis.error/v24|input.repository_limit_exceeded|input",
+            message,
+        )
+        self.assertLessEqual(len(message.encode("utf-8")), 256)
+
+    def test_failed_sample_identity_accepts_public_rustdesk_error(self) -> None:
+        error = canonical_json_bytes(
+            {
+                "code": "input.unsupported_rust_constant_evaluation_composition",
+                "context": {"reason": "repository_boundary_not_supported"},
+                "message": "unsupported rust constant-evaluation profile composition",
+                "retryable": False,
+                "schema_version": "codenoesis.error/v24",
+                "stage": "input",
+            }
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            stderr_path = Path(temporary) / "stderr"
+            stderr_path.write_bytes(error)
+            message = failed_sample_message("rustdesk", 3, 2, 0, stderr_path)
+
+        self.assertIn(
+            "product=codenoesis.error/v24|"
+            "input.unsupported_rust_constant_evaluation_composition|input",
+            message,
+        )
+        self.assertLessEqual(len(message.encode("utf-8")), 256)
 
     def test_timed_out_product_is_not_retried(self) -> None:
         with self.local_repository() as (repository, descriptor, _):
