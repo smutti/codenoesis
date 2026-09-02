@@ -1,0 +1,61 @@
+{
+  "schema_version": "codenoesis.benchmark-final-gate-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/208",
+  "run_id": "b1c-208-final-gate-1",
+  "observed_on": "2026-09-02",
+  "review_head": "d51618b0dd52b108667d977504ae93284ba74aaa",
+  "exact_dependent_base": "71d05cdb90c3cdd2af4824d5eeb712ec78e6b080",
+  "rust_or_cargo_paths_changed_by_issue_208": [],
+  "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1c-final-gate.log",
+  "log_sha256": "a6f26a008747139ec0e3e735341e3f8500d7ee687525657b796a49f5c10cebd7",
+  "commands": [
+    {
+      "id": "actionlint",
+      "exit_status": 0
+    },
+    {
+      "id": "codex_policy",
+      "exit_status": 0
+    },
+    {
+      "id": "cargo_fmt",
+      "exit_status": 0
+    },
+    {
+      "id": "cargo_clippy",
+      "exit_status": 101,
+      "classification": "existing Rust source on the exact issue #208 base; outside allowed paths",
+      "finding": "crates/noesis/src/main.rs parse_r16_invocation has 106 lines against the 100-line clippy limit"
+    },
+    {
+      "id": "cargo_test",
+      "exit_status": 0
+    },
+    {
+      "id": "cargo_doc_test",
+      "exit_status": 0
+    },
+    {
+      "id": "python_tests",
+      "exit_status": 1,
+      "classification": "frozen LocalBaselineVerificationV2/V3 authority gates reject the later B1 package; outside issue #208 allowed paths",
+      "finding": "five status/path/base/digest assertions failed; 441 Python tests passed"
+    },
+    {
+      "id": "benchmark_assets",
+      "exit_status": 0
+    },
+    {
+      "id": "cargo_bench_no_run",
+      "exit_status": 0
+    }
+  ],
+  "result": "seven_of_nine_green_not_ready",
+  "oracle_weakened": false,
+  "unrelated_source_modified": false,
+  "known_blockers": [
+    "the exact base Rust parser exceeds the current clippy line-count lint",
+    "the immutable V2/V3 local-baseline authority tests do not admit the post-verification B1 package"
+  ],
+  "smallest_decision": "Authorize a separate correction package for the pre-existing clippy finding and lifecycle extension of the frozen V2/V3 authority gate; issue #208 must not silently expand into those protected paths."
+}
