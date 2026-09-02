@@ -1,0 +1,14 @@
+attempt=1
+outcome=failed_stop
+runner_error_code=benchmark.sample_failed
+runner_error_stage=input
+runner_exit_status=2
+runner_error_message=sample_failed entry=lekton index=1 exit=12 stdout=0 stderr=239 sha256=ad8f094fd5abfeddbabd28ebb39820e517036974c1faab2ee066bfdcf976a48d product=unparseable
+retry_performed=false
+acceptance_resumed=false
+rustdesk_executed=false
+candidate_comparison_started=false
+lekton_head=247b8f42fb045db41166d70a276a41c2e079b6eb
+lekton_tree=55ba428493a4ffae86ba492422a049f46d567a30
+lekton_status_bytes_after=0
+marker_owned_temporary_roots_after=0
