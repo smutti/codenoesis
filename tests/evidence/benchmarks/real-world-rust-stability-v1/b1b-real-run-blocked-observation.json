@@ -1,0 +1,58 @@
+{
+  "schema_version": "codenoesis.benchmark-blocked-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/207",
+  "authorization": "https://github.com/smutti/codenoesis/issues/207#issuecomment-5508518302",
+  "observed_on": "2026-09-02",
+  "run_id": "b1b-207-local-real-repository-1",
+  "implementation_commit": "72914247fa75b64ef94555cf5d38e984e750a01b",
+  "baseline_product_commit": "cce84869430ef129f55591998b30ea2ea728e1c3",
+  "baseline_binary_sha256": "d1dc7785cad652e674c50565f66ff0a23ec15e85af2842c9107abff84775b247",
+  "candidate_binary_sha256": "d1dc7785cad652e674c50565f66ff0a23ec15e85af2842c9107abff84775b247",
+  "rust_source_changes_after_baseline": 0,
+  "accepted_samples": 0,
+  "observations": [
+    {
+      "id": "baseline_first_lekton_sample_failed",
+      "outcome": "human_required",
+      "detail": "The first and only B1b baseline acceptance attempt failed on Lekton before a report was published. The runner emitted benchmark.sample_failed with empty stdout and deleted its marker-owned temporary sample state. No failed sample was retried, discarded, or relabeled.",
+      "runner_exit_status": 2,
+      "runner_stdout_bytes": 0,
+      "runner_stderr_log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1b-baseline-sample-failure.stderr.log",
+      "runner_stderr_sha256": "f9f1bec7b28f1fb5ba645bbcf7d27cc066e788a9407e931673ac1507110b262a",
+      "baseline_report_published": false,
+      "product_exit_status": "not retained by runner v1",
+      "product_stderr_sha256": "not retained by runner v1"
+    },
+    {
+      "id": "separate_same_input_diagnostic_succeeded",
+      "outcome": "diagnostic_only_not_acceptance_evidence",
+      "detail": "One separately labelled exact-command diagnostic using the same baseline binary and input completed successfully. It cannot replace the failed acceptance sample and demonstrates nondeterministic behavior or an unobserved transient product failure requiring diagnosis.",
+      "product_exit_status": 0,
+      "wall_time_ns": 55336190250,
+      "stdout_bytes": 164576088,
+      "stdout_sha256": "985f50b486f4ae3c12bcb4b161c5486185c46e47a1a0ac6c62ee4e40e7587ec3",
+      "stderr_bytes": 0,
+      "snapshot_schema": "codenoesis.repository-snapshot/v18",
+      "semantic_hash": "22e32d20429d510d4674e0e6bdc5542f08dbc0e28874cd0098419e7512a334c1",
+      "semantic_projection_sha256": "7c800424b3176c96d4ea4164d4066adaf551134b3aea4b40a1e5647f74dc7fa9",
+      "counts": {
+        "entities": 26158,
+        "relationships": 43683,
+        "claims": 69841,
+        "evidence": 24522,
+        "diagnostics": 4211,
+        "coverage": 13177,
+        "evaluated_values": 8
+      }
+    }
+  ],
+  "source_clean_after": {
+    "lekton": true,
+    "rustdesk": true
+  },
+  "candidate_matrix_started": false,
+  "comparison_run": false,
+  "external_source_retained_in_git": false,
+  "result": "human_required",
+  "smallest_decision": "Authorize bounded runner failure forensics that retains sanitized product exit and stderr identity, then diagnose the nondeterministic R16 failure without accepting a retry as replacement evidence."
+}
