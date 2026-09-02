@@ -1,0 +1,15 @@
+test_bootstrap_baseline_and_repository_identity_oracle_are_exact (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... FAIL
+
+======================================================================
+FAIL: test_bootstrap_baseline_and_repository_identity_oracle_are_exact (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/.worktrees/205/scripts/tests/test_real_world_rust_benchmark.py", line 130, in test_bootstrap_baseline_and_repository_identity_oracle_are_exact
+    self.assertEqual(EXPECTED_ORACLE_ENTRIES["lekton"], lekton)
+AssertionError: {'out[88 chars]h': '8163e0a3e1e09e215e5b185207bfb660217c45b5a[272 chars]: 8}} != {'out[88 chars]h': '22e32d20429d510d4674e0e6bdc5542f08dbc0e28[272 chars]: 8}}
+Diff is 704 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)
