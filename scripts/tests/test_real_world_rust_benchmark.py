@@ -111,6 +111,28 @@ class RealWorldRustBenchmarkContractTests(unittest.TestCase):
         index = command.index("--execution-limit-profile")
         self.assertEqual(command[index + 1], "real-world-rust-benchmark-75s-v1")
 
+    def test_bootstrap_baseline_and_repository_identity_oracle_are_exact(self) -> None:
+        oracle = json.loads(ORACLE.read_text(encoding="utf-8"))
+        lekton = oracle["entries"]["lekton"]
+
+        self.assertEqual(
+            oracle["baseline_product_commit"],
+            "cce84869430ef129f55591998b30ea2ea728e1c3",
+        )
+        self.assertEqual(
+            lekton["semantic_hash"],
+            "22e32d20429d510d4674e0e6bdc5542f08dbc0e28874cd0098419e7512a334c1",
+        )
+        self.assertEqual(
+            lekton["semantic_projection_sha256"],
+            "7c800424b3176c96d4ea4164d4066adaf551134b3aea4b40a1e5647f74dc7fa9",
+        )
+        self.assertEqual(EXPECTED_ORACLE_ENTRIES["lekton"], lekton)
+        self.assertIn(
+            '"cce84869430ef129f55591998b30ea2ea728e1c3"',
+            RUNNER.read_text(encoding="utf-8"),
+        )
+
     @staticmethod
     def sample(entry_id: str, index: int, wall_time_ns: int) -> dict[str, object]:
         if entry_id == "lekton":

@@ -642,6 +642,15 @@ schemas, stores, or publication. Parsing rejects every unsupported composition
 before acquisition, while RustDesk's earlier boundary rejection retains
 precedence.
 
+Issue [#207](https://github.com/smutti/codenoesis/issues/207) and
+[Decision 0044](decisions/0044-b1-bootstrap-baseline-and-identity-oracle.md)
+correct the measurement boundary without changing product architecture. The
+first selector-supporting Rust product commit `cce8486` becomes the bootstrap
+baseline; the final candidate must rebuild byte-identical Rust product source.
+The benchmark adapter validates hashes bound to the corpus repository identity
+rather than reusing hashes from a differently identified pilot. Counts,
+extractors, ontology, stores, and every execution policy remain unchanged.
+
 ### G1b/G8-local verifiable distribution candidate
 
 Issue [#186](https://github.com/smutti/codenoesis/issues/186) and

@@ -51,3 +51,9 @@ timeout remains 90 seconds, the observational Lekton p95 ceiling remains 75
 seconds, and every selector-absent or acquisition limit remains unchanged. The
 selector is report configuration, not an extractor, ontology input, SLO, or
 release/support claim.
+
+Issue #207 and Decision 0044 define the honest B1 bootstrap baseline as the
+first product commit supporting that selector, `cce8486`. They also bind the
+Lekton semantic oracle to the corpus repository identity instead of the older
+pilot identity. All counts, source revisions, policies, limits, timeouts, and
+observational exclusions remain unchanged.

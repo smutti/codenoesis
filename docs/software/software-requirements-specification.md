@@ -2695,6 +2695,26 @@ whole-scan and acquisition limits remain 60,000 milliseconds. RustDesk keeps
 the earlier exact repository-boundary rejection precedence. No environment or
 ambient override is permitted.
 
+### 2.38 B1b/G7/S14 bootstrap-baseline and identity-oracle correction
+
+Issue [#207](https://github.com/smutti/codenoesis/issues/207), its accountable
+maintainer authorization, and
+[Decision 0044](decisions/0044-b1-bootstrap-baseline-and-identity-oracle.md)
+govern a dependent correction on exact B1a evidence head
+`7a7c6601981f915496a4648867323bbcfc91daac`.
+
+| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| `NFR-PER-001` | Approved; B1b correction Proposed on the branch | Use first selector-supporting product commit `cce84869430ef129f55591998b30ea2ea728e1c3` as the honest B1 V1 bootstrap baseline and retain separate three-sample baseline/candidate reports | `S14` | Issue #207, Decision 0044, exact binary/source association, real reports, and comparison |
+| Bounded `NFR-DET-001`, `NFR-TST-001/002`, `NFR-SEC-005`, `INV-BND-001` | Proposed only for the exact correction | Bind Lekton oracle hashes to corpus identity `urn:codenoesis:benchmark:lekton:b1` while preserving V18, all counts, RustDesk outcome, policy, product bytes, and fail-closed controls | `S14` | Issue #207, Decision 0044, old-base rejection, pilot-identity mismatch, corrected replay evidence |
+| `NFR-PER-002`, `OD-SLO-001` | Unresolved and outside B1b | No SLO, release, support, availability, cross-host, conference, or GA claim | `S14` | Explicit exclusion in issue #207 and Decision 0044 |
+
+The corrected Lekton semantic hash is
+`22e32d20429d510d4674e0e6bdc5542f08dbc0e28874cd0098419e7512a334c1`;
+its canonical semantic projection SHA-256 is
+`7c800424b3176c96d4ea4164d4066adaf551134b3aea4b40a1e5647f74dc7fa9`.
+Only repository-identity-bound oracle values change.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,

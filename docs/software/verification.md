@@ -146,3 +146,20 @@ identity. The B1 real-repository matrix then runs again without retry or sample
 discard. Acquisition, RustDesk error precedence, runner timeout, observational
 ceiling, schemas, goldens, ontology, dependencies, workflows, release, support,
 and GA remain unchanged.
+
+## B1b bootstrap-baseline and identity-oracle correction
+
+Issue [#207](https://github.com/smutti/codenoesis/issues/207) and
+[Decision 0044](decisions/0044-b1-bootstrap-baseline-and-identity-oracle.md)
+define the dependent high-risk S14 correction on exact evidence head
+`7a7c6601981f915496a4648867323bbcfc91daac`. The checkpoint selects baseline
+commit `cce8486` and the two Lekton hashes derived under the B1 corpus identity.
+The expected Red is the old runner and validator freezing `3fb6504` and the
+historical pilot hashes.
+
+Green requires separate three-sample baseline and candidate reports from
+honestly associated release builds, exact corrected Lekton hashes and unchanged
+counts, exact RustDesk rejection, Green same-host comparison, source cleanliness,
+and byte-identical Rust product source after `cce8486`. Policy, limits, timeout,
+ontology, schemas, dependencies, workflow, release, support, and GA remain
+unchanged.
