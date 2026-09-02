@@ -1,0 +1,17 @@
+test_failed_sample_retains_bounded_product_identity (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... FAIL
+
+======================================================================
+FAIL: test_failed_sample_retains_bounded_product_identity (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/.worktrees/205/scripts/tests/test_real_world_rust_benchmark.py", line 476, in test_failed_sample_retains_bounded_product_identity
+    self.assertEqual(
+AssertionError: 'positive sample did not complete cleanly' != 'sample_failed entry=lekton index=1 exit=1[156 chars]nput'
+- positive sample did not complete cleanly
++ sample_failed entry=lekton index=1 exit=12 stdout=0 stderr=202 sha256=f00a704fcb2a02ff31dc757840217410842e8d710941a91d4f54361454c1860b product=codenoesis.error/v24|input.repository_limit_exceeded|input
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.593s
+
+FAILED (failures=1)

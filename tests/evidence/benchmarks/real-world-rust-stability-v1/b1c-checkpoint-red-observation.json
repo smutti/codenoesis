@@ -1,0 +1,36 @@
+{
+  "schema_version": "codenoesis.benchmark-red-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/208",
+  "authorization": "accountable-maintainer authorization in issue #208",
+  "run_id": "b1c-208-local-red-1",
+  "observed_on": "2026-09-02",
+  "exact_dependent_base": "71d05cdb90c3cdd2af4824d5eeb712ec78e6b080",
+  "checkpoint_commit": "f9fcdbdb14613d718bbc76f441ef5e483c2cb544",
+  "checkpoint_tree": "cebd9ac14b43a363cd22eec21cf4281fdeb8fea8",
+  "expected_failure": "the runner still emits a generic failed-sample message and deletes product exit, stream lengths, stderr digest, and safe typed-error identity with owned temporary state",
+  "observations": [
+    {
+      "command": "python3 -m unittest scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests.test_failed_sample_retains_bounded_product_identity -v",
+      "exit_status": 1,
+      "actual_failure": "the exact assertion observed positive sample did not complete cleanly instead of the bounded identity required by issue #208",
+      "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1c-checkpoint-red.log",
+      "log_sha256": "2f12cc987ed465aa5f2e60c4fc9bd257f5aa33e594585790f77f54567ea9a1e3"
+    }
+  ],
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "git": "2.50.1 (Apple Git-155)",
+    "network_used": false,
+    "external_repositories_used": false
+  },
+  "agent": {
+    "identity": "OpenAI Codex",
+    "model": "not exposed by runtime",
+    "policy": "AGENTS.md plus issues #205, #206, #207, and #208",
+    "duration_seconds": "not available",
+    "cost": "not available"
+  },
+  "result": "expected_red"
+}
