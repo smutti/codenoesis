@@ -29,6 +29,7 @@ COMPARISON_SCHEMA = "codenoesis.real-world-rust-benchmark-comparison/v1"
 ERROR_SCHEMA = "codenoesis.real-world-rust-benchmark-error/v1"
 SUITE_ID = "rust-real-world-stability-v1"
 BENCHMARK_EXECUTION_LIMIT_PROFILE = "real-world-rust-benchmark-75s-v1"
+BOOTSTRAP_BASELINE_COMMIT = "cce84869430ef129f55591998b30ea2ea728e1c3"
 HEX_40 = re.compile(r"^[0-9a-f]{40}$")
 HOST_PROFILE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 EXPECTED_ENTRY_IDS = ("lekton", "rustdesk")
@@ -116,8 +117,8 @@ EXPECTED_ORACLE_ENTRIES = {
     "lekton": {
         "outcome": "success",
         "snapshot_schema": "codenoesis.repository-snapshot/v18",
-        "semantic_hash": "8163e0a3e1e09e215e5b185207bfb660217c45b5a228bfc216b180b17b6ff2bc",
-        "semantic_projection_sha256": "ba87c5551fe630bfe9b6d9fcdf9e1ee9b8ca48e3add0b4dae849bf844b8c7700",
+        "semantic_hash": "22e32d20429d510d4674e0e6bdc5542f08dbc0e28874cd0098419e7512a334c1",
+        "semantic_projection_sha256": "7c800424b3176c96d4ea4164d4066adaf551134b3aea4b40a1e5647f74dc7fa9",
         "counts": {
             "entities": 26_158,
             "relationships": 43_683,
@@ -425,6 +426,11 @@ def load_contracts(manifest_path: Path, suite_id: str) -> tuple[dict[str, Any], 
     entries = corpus.get("entries")
     if not isinstance(entries, list) or tuple(entry.get("id") for entry in entries) != EXPECTED_ENTRY_IDS:
         raise BenchmarkError("benchmark.invalid_input", "corpus entries do not match the suite")
+    if any(
+        not isinstance(entry, dict) or entry.get("profiles") != EXPECTED_PROFILES[entry_id]
+        for entry_id, entry in zip(EXPECTED_ENTRY_IDS, entries)
+    ):
+        raise BenchmarkError("benchmark.invalid_input", "corpus profile matrix is invalid")
     if corpus.get("network_allowed") is not False or corpus.get("source_vendored") is not False:
         raise BenchmarkError("benchmark.invalid_input", "corpus source policy is invalid")
     if policy.get("suite_id") != suite_id or policy.get("requirements") != ["NFR-PER-001"]:
@@ -435,8 +441,9 @@ def load_contracts(manifest_path: Path, suite_id: str) -> tuple[dict[str, Any], 
         policy.get(field) is not False for field in ("slo_claimed", "release_claimed", "ga_claimed")
     ):
         raise BenchmarkError("benchmark.invalid_input", "benchmark policy exceeds observational scope")
-    if oracle.get("suite_id") != suite_id or oracle.get("baseline_product_commit") != (
-        "3fb6504d1d6cb39f204eca032ff816266194e1ec"
+    if (
+        oracle.get("suite_id") != suite_id
+        or oracle.get("baseline_product_commit") != BOOTSTRAP_BASELINE_COMMIT
     ):
         raise BenchmarkError("benchmark.invalid_input", "benchmark oracle identity is invalid")
     return manifest, suite, corpus, policy, oracle, {
@@ -1126,7 +1133,7 @@ def compare_reports(
     candidate_report = validate_report(
         candidate, policy, expected_policy_sha256=policy_sha256
     )
-    if baseline_report["product"]["commit"] != "3fb6504d1d6cb39f204eca032ff816266194e1ec":
+    if baseline_report["product"]["commit"] != BOOTSTRAP_BASELINE_COMMIT:
         raise BenchmarkError("benchmark.incomparable", "baseline product commit is not authoritative")
     for field in (
         "suite_id",

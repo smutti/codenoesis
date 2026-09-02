@@ -293,6 +293,35 @@ def validate_active_suite_assets(root: Path, manifest: dict[str, Any]) -> list[s
                 "typed_rejection",
             ),
         ]
+        expected_profiles = [
+            [
+                "local-git-sha1-packed-v1",
+                "cargo-root-package-v1",
+                "cargo-manifest-facts-v1",
+                "rust-semantic-depth-v1",
+                "rust-framework-declarations-v1",
+                "rust-callable-semantics-v1",
+                "rust-expression-bindings-v1",
+                "rust-local-flow-v1",
+                "rust-safe-constant-evaluation-v1",
+                "local-snapshot-256m-v1",
+                "real-world-rust-benchmark-75s-v1",
+            ],
+            [
+                "local-git-sha1-packed-v1",
+                "local-gitlinks-v1",
+                "cargo-root-package-v1",
+                "cargo-manifest-facts-v1",
+                "rust-semantic-depth-v1",
+                "rust-framework-declarations-v1",
+                "rust-callable-semantics-v1",
+                "rust-expression-bindings-v1",
+                "rust-local-flow-v1",
+                "rust-safe-constant-evaluation-v1",
+                "local-snapshot-256m-v1",
+                "real-world-rust-benchmark-75s-v1",
+            ],
+        ]
         if not isinstance(entries, list) or len(entries) != 2:
             errors.append("active B1 corpus must contain exactly two entries")
         else:
@@ -309,6 +338,10 @@ def validate_active_suite_assets(root: Path, manifest: dict[str, Any]) -> list[s
             ]
             if observed_identities != expected_entry_identities:
                 errors.append("active B1 corpus revisions, trees, ordering, or outcomes changed")
+            if [entry.get("profiles") for entry in entries if isinstance(entry, dict)] != (
+                expected_profiles
+            ):
+                errors.append("active B1 corpus profile matrix changed")
             if any(
                 not isinstance(entry, dict)
                 or set(entry)
@@ -369,15 +402,15 @@ def validate_active_suite_assets(root: Path, manifest: dict[str, Any]) -> list[s
             oracle.get("schema_version") != "codenoesis.real-world-rust-benchmark-oracle/v1"
             or oracle.get("suite_id") != ACTIVE_SUITE_ID
             or oracle.get("baseline_product_commit")
-            != "3fb6504d1d6cb39f204eca032ff816266194e1ec"
+            != "cce84869430ef129f55591998b30ea2ea728e1c3"
         ):
             errors.append("active B1 oracle identity is invalid")
         entries = oracle.get("entries")
         expected_lekton = {
             "outcome": "success",
             "snapshot_schema": "codenoesis.repository-snapshot/v18",
-            "semantic_hash": "8163e0a3e1e09e215e5b185207bfb660217c45b5a228bfc216b180b17b6ff2bc",
-            "semantic_projection_sha256": "ba87c5551fe630bfe9b6d9fcdf9e1ee9b8ca48e3add0b4dae849bf844b8c7700",
+            "semantic_hash": "22e32d20429d510d4674e0e6bdc5542f08dbc0e28874cd0098419e7512a334c1",
+            "semantic_projection_sha256": "7c800424b3176c96d4ea4164d4066adaf551134b3aea4b40a1e5647f74dc7fa9",
             "counts": {
                 "entities": 26_158,
                 "relationships": 43_683,

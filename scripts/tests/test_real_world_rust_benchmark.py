@@ -24,6 +24,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from run_real_world_rust_benchmark import (  # noqa: E402
     BenchmarkError,
+    BOOTSTRAP_BASELINE_COMMIT,
     EXPECTED_ORACLE_ENTRIES,
     EXPECTED_PROFILES,
     EXPECTED_SOURCE_IDENTITIES,
@@ -82,10 +83,10 @@ class RealWorldRustBenchmarkContractTests(unittest.TestCase):
         self.assertFalse(policy["cross_host_comparison_allowed"])
         self.assertFalse(policy["failed_sample_retry_allowed"])
         self.assertEqual(oracle["suite_id"], suite["id"])
-        self.assertEqual(oracle["baseline_product_commit"], contract["exact_base"])
+        self.assertEqual(oracle["baseline_product_commit"], BOOTSTRAP_BASELINE_COMMIT)
         self.assertEqual(
             oracle["entries"]["lekton"]["semantic_projection_sha256"],
-            "ba87c5551fe630bfe9b6d9fcdf9e1ee9b8ca48e3add0b4dae849bf844b8c7700",
+            "7c800424b3176c96d4ea4164d4066adaf551134b3aea4b40a1e5647f74dc7fa9",
         )
         self.assertEqual(
             oracle["entries"]["rustdesk"]["error_code"],
@@ -164,7 +165,7 @@ class RealWorldRustBenchmarkContractTests(unittest.TestCase):
         }
 
     @classmethod
-    def report(cls, product_commit: str = "3fb6504d1d6cb39f204eca032ff816266194e1ec") -> dict:
+    def report(cls, product_commit: str = BOOTSTRAP_BASELINE_COMMIT) -> dict:
         entries = {}
         for entry_id in ("lekton", "rustdesk"):
             samples = [cls.sample(entry_id, index, index * 1_000_000_000) for index in (1, 2, 3)]

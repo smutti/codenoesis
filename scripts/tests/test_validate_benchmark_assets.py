@@ -146,6 +146,26 @@ class BenchmarkAssetValidationTests(unittest.TestCase):
 
         self.assertTrue(any("corpus revisions" in error for error in errors))
 
+    def test_active_validator_rejects_execution_limit_profile_matrix_drift(self) -> None:
+        mutations = {
+            "missing": lambda profiles: profiles.pop(),
+            "duplicate": lambda profiles: profiles.append(profiles[-1]),
+            "reordered": lambda profiles: profiles.__setitem__(
+                slice(-2, None), reversed(profiles[-2:])
+            ),
+            "different": lambda profiles: profiles.__setitem__(-1, "unknown"),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label), self.copied_assets() as root:
+                corpus_path = root / "benchmarks/corpora/real-world-rust-stability-v1.json"
+                corpus = json.loads(corpus_path.read_text(encoding="utf-8"))
+                mutate(corpus["entries"][0]["profiles"])
+                self.write_json(corpus_path, corpus)
+
+                errors, _ = validate_assets(root)
+
+            self.assertTrue(any("profile matrix" in error for error in errors))
+
     def test_active_validator_rejects_threshold_weakening(self) -> None:
         with self.copied_assets() as root:
             policy_path = root / "benchmarks/policies/real-world-rust-stability-v1.json"
