@@ -1,0 +1,70 @@
+{
+  "schema_version": "codenoesis.benchmark-implementation-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/208",
+  "authorization": "accountable-maintainer authorization in issue #208",
+  "run_id": "b1c-208-local-green-1",
+  "observed_on": "2026-09-02",
+  "exact_dependent_base": "71d05cdb90c3cdd2af4824d5eeb712ec78e6b080",
+  "checkpoint_commit": "f9fcdbdb14613d718bbc76f441ef5e483c2cb544",
+  "red_evidence_commit": "f33630c",
+  "implementation_commit": "f97b8650a677d0b222d0d0d019e665749486c37c",
+  "implementation_tree": "912e3b83c289f85b94c4fdea156291175541bfe2",
+  "result": "focused_green_global_regression_blocked_by_preexisting_baseline_authority_checks",
+  "behavior": {
+    "runner_schema_unchanged": "codenoesis.real-world-rust-benchmark-error/v1",
+    "runner_code_unchanged": "benchmark.sample_failed",
+    "runner_stage_unchanged": "input",
+    "message_bytes_max": 256,
+    "typed_stderr_bytes_max": 2048,
+    "stderr_hash": "sha256",
+    "product_message_or_context_emitted": false,
+    "sample_retry_allowed": false,
+    "partial_report_allowed": false,
+    "product_changed": false
+  },
+  "corrections": [
+    {
+      "round": 1,
+      "finding": "a private_canary code token passed the first segment filter",
+      "correction": "split public code identity on both dot and underscore before applying the closed private-token rejection set",
+      "regression": "test_failed_sample_identity_rejects_unsafe_stderr_forms"
+    }
+  ],
+  "commands": [
+    {
+      "command": "python3 -m unittest scripts.tests.test_real_world_rust_benchmark -v",
+      "exit_status": 0,
+      "summary": "27 B1 runner contract tests passed",
+      "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1c-green-runner.log",
+      "log_sha256": "9dcfabde7781c98be24879e8243e6c455a3f1ad6a307ba156ca42634175ba207"
+    },
+    {
+      "command": "python3 scripts/validate_benchmark_assets.py",
+      "exit_status": 0,
+      "summary": "active benchmark assets are valid",
+      "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1c-green-validator.log",
+      "log_sha256": "9dbe4f52b56856d62c7b6de0f3f5c8c2a34a501d030f467393d758e9d7e42a9d"
+    },
+    {
+      "command": "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "exit_status": 1,
+      "summary": "441 tests passed and five historical LocalBaselineVerificationV2/V3 authority assertions failed because their frozen pre-B1 status markers, path allowlists, product tree, and evidence digests reject the later B1 package",
+      "classification": "outside issue #208 allowed paths and not weakened or modified",
+      "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1c-green-python-regression.log",
+      "log_sha256": "c30488f596176093695f816b4b717aba7ccf2746b6ca805557b462757a74da7a"
+    }
+  ],
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "git": "2.50.1 (Apple Git-155)",
+    "network_used": false,
+    "external_repositories_used": false
+  },
+  "known_limitations": [
+    "the bounded real Lekton diagnostic has not yet run",
+    "B1 acceptance and candidate comparison remain blocked",
+    "the complete repository Python gate is not Green and is not claimed as evidence"
+  ]
+}
