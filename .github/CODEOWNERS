@@ -1,26 +1,2 @@
 # Default owner for all repository changes.
 * @smutti
-
-# Repository governance and autonomous-development control plane.
-/.github/ @smutti
-/.codex/ @smutti
-/AGENTS.md @smutti
-/CONTRIBUTING.md @smutti
-/SECURITY.md @smutti
-
-# Normative product and architecture baselines.
-/docs/software/software-requirements-specification.md @smutti
-/docs/software/architecture.md @smutti
-/docs/software/autonomous-development.md @smutti
-
-# Toolchain, dependency, contract, and release-sensitive paths. Some are
-# forward declarations for later slices and become active when introduced.
-/Cargo.toml @smutti
-/Cargo.lock @smutti
-/rust-toolchain.toml @smutti
-/ontology/ @smutti
-/schemas/ @smutti
-/migrations/ @smutti
-/tests/acceptance/ @smutti
-/tests/golden/ @smutti
-/benchmarks/baselines/ @smutti
