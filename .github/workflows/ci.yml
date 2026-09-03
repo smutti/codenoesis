@@ -75,11 +75,6 @@ jobs:
             .github/ISSUE_TEMPLATE/agent-task.yml \
             .github/ISSUE_TEMPLATE/config.yml \
             .github/dependabot.yml
-          python3 .github/codex/scripts/codex_policy.py validate-policy \
-            --policy .github/codex/policy.json
-          python3 -m json.tool .github/codex/policy.json >/dev/null
-          python3 -m json.tool .github/codex/policy.schema.json >/dev/null
-          python3 -m json.tool .github/codex/schemas/proposal-output.schema.json >/dev/null
           python3 -m json.tool .github/codex/schemas/review-output.schema.json >/dev/null
 
       - name: Lint all targets and features

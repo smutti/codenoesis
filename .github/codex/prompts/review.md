@@ -24,7 +24,7 @@ Review procedure:
    `git diff --find-renames "$CODEX_REVIEW_BASE_SHA"...HEAD`.
 2. Read only the surrounding source needed to understand each changed path.
 3. Check correctness, data loss, concurrency, security, compatibility,
-   architecture boundaries, tests, and requirement traceability.
+   architecture boundaries, acceptance criteria, tests, and benchmarks.
 4. Report only actionable findings introduced by the change. Every finding
    must contain concrete evidence and an exact repository-relative file path.
 5. Use P0 for catastrophic impact, P1 for a merge-blocking defect, P2 for an

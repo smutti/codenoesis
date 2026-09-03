@@ -1,21 +1,15 @@
 # CodeNoesis Delivery Roadmap
 
-> Status: **Proposed planning companion — not implementation authority**.
-> Last updated: **2026-09-01**.
+> Status: **Active planning companion**.
+> Last updated: **2026-09-03**.
 
-This roadmap sequences product and validation work without changing the
-normative meaning or approval status of the
-[Software Requirements Specification](software-requirements-specification.md)
-or an accepted architecture decision. The SRS and decisions remain
-authoritative. Every item below requires its own Ready issue, stable
-requirement IDs, one delivery slice, acceptance oracle, expected Red failure,
-risk classification, allowed paths, evidence, and human approvals. Production
-implementation requires either Approved requirements or the branch-scoped
-implementation authority defined by the single-PR vertical package below.
+This roadmap sequences product and validation work without silently changing
+the meaning of existing contracts. Items use the simplified delivery policy:
+plan, focused tests, a relevant benchmark, implementation, technical CI, and
+one pull request. An issue or separate governance package is optional.
 
-Roadmap identifiers such as `R1`, `P1`, and `G1` are planning identifiers, not
-SRS slice or requirement IDs. They must not be used to bypass the approved
-`S0`–`S14` delivery and governance process.
+Roadmap identifiers such as `R1`, `P1`, and `G1` are planning labels, not
+mandatory authorization tokens.
 
 ## Current product baseline
 
@@ -301,112 +295,30 @@ single-PR vertical package as its implementation.
 
 ## Delivery package policy
 
-The fastest safe unit is one review objective, not one file, requirement, or
-commit. Related artifacts may be reviewed together when they establish one
-coherent behavior and share the same risk boundary.
+The delivery unit is one coherent, testable outcome in one pull request. The
+default sequence is:
 
-### Maintainer-supervised accelerated package
+1. define the plan and observable acceptance criteria;
+2. add or update focused tests;
+3. add or run a benchmark for performance, scale, or real-repository work;
+4. implement the smallest complete behavior;
+5. run focused validation and the relevant full technical gate;
+6. submit the result for manual review and merge.
 
-Use one single-PR vertical package for one coherent capability instead of
-serial governance and implementation pull requests; one explicit human
-authorization in its linked Ready issue fixes stable requirement IDs and
-candidate semantics, one slice and public outcome, risk owner and rollback
-boundary, exact paths and dependencies, oracle and expected Red, evidence,
-correction budget, and stop conditions.
+The same pull request may contain required product governance, architecture,
+ontology, schemas, fixtures, documentation, dependencies, workflows,
+permissions, release configuration, tests, benchmarks, and implementation.
+There is no separate governance lane, risk classification, path authorization,
+base-SHA authorization, retained Red artifact, or correction-round budget.
 
-The package may combine product governance and production implementation in one
-pull request. Product governance includes its SRS changes, architecture
-decisions, threat model, schemas or ontology contracts, fixtures or oracles,
-limits, failure behavior, traceability, and operational documentation. It may
-also contain the minimum production code, focused domain, contract, and
-security tests, exact reviewed dependency and lockfile changes, and Green and
-regression evidence for the same outcome.
+Keep unrelated capabilities, opportunistic cleanup, and unrelated dependency
+upgrades separate. Secrets, publication, signing, deployment, release, and
+destructive external actions still require direct maintainer control. Agents do
+not push to `main`, approve, or merge their own pull requests.
 
-It may also combine product code and delivery control plane in one pull request.
-The delivery control plane includes `AGENTS.md`, `.github/**`, and `.codex/**`,
-policy and prompts, workflows and required checks, permissions, review,
-publication, signing, and release authority. The Ready issue fixes every changed
-control, privilege, post-merge effect, threat, and rollback path.
-
-The package may start from requirements already Approved on `main` or from a
-complete candidate that remains Proposed until merge. In the latter case, the
-maintainer decision grants branch-scoped implementation authority only for the
-exact package. Requirement approval and production behavior become effective
-atomically only after the accountable maintainer manually merges the exact pull
-request.
-
-The exact base SHA establishes immutable base authority for the complete pull
-request. Its required checks, branch protection, reviewer and merge authority,
-workflow trust, permission boundaries, and signing and release restrictions
-remain authoritative through manual merge. A head-authored control change is
-inert as authority for that same pull request. Its output is advisory unless an
-unchanged base-controlled gate independently evaluates the head tree.
-
-No unmerged head receives privileged secrets, elevated tokens, ruleset bypass,
-approval or merge authority, deployment credentials, signing keys, publication
-credentials, tags, or release execution. Each declarative workflow, permission,
-signing, or release-authority change activates only after manual merge and any
-explicitly authorized post-merge application.
-
-The package keeps one pull request but preserves this commit and evidence order:
-
-1. The builder creates a governance checkpoint, before any production source
-   edit, containing the complete candidate governance, exact base SHA, control
-   changes, and executable acceptance or conformance check.
-2. The builder runs that check against the checkpoint and records retained
-   expected Red evidence bound to the checkpoint identity, command, exit,
-   expected failure, log digest, and environment.
-3. Subsequent commits add the minimum implementation, focused coverage,
-   documentation, and Green evidence without rewriting away the checkpoint.
-4. Review and manual merge accept or reject the governance and behavior
-   atomically; no partial product authority reaches `main`.
-
-Multiple tightly related requirement IDs or sub-behaviors may share one package
-only when they have the same slice, public acceptance journey, risk owner,
-rollback boundary, and versioned fixture or oracle. A semantic requirement,
-oracle, scope, dependency, authority, or risk change invalidates the checkpoint
-and requires a new explicit maintainer decision. Bounded implementation
-corrections remain covered by the original authorization.
-
-The machine-policy projection may proceed in parallel or be included in the
-package, but the base-bound projection remains authoritative during review. The
-merged projection remains mandatory before unattended autonomous execution; a
-branch-scoped candidate is not eligible for unattended execution.
-
-### Unattended autonomous package
-
-Unattended autonomous execution retains the governance, machine-policy binding,
-and implementation sequence. The policy-binding package remains the minimal
-machine projection of merged governance and changes no requirement, oracle,
-workflow, or production behavior.
-
-When requirements are already Approved and no protected contract changes, a
-low- or medium-risk behavior may use one implementation pull request containing
-the complete Red-to-Green journey and evidence.
-
-### Mandatory separation
-
-Never bundle these merely to reduce pull-request count:
-
-- a delivery-control change whose exact privilege, workflow, permission,
-  signing, release, post-merge effect, threat, or rollback path is not explicitly
-  authorized, or that is intended to judge or authorize its own head instead of
-  remaining inert under immutable base authority;
-- unrelated capabilities or more than one behavioral implementation
-  objective;
-- unrelated dependency upgrades, formatter churn, generated refreshes, or
-  cleanup with a product behavior; an exact dependency named and reviewed in
-  the Ready issue may accompany the objective that requires it;
-- production code with a still-Proposed requirement outside the exact
-  branch-authorized package, or with an oracle whose meaning has not received
-  human review;
-- ontology, schema, migration, authorization, sandbox, release, or secret
-  changes that cross different risk owners or rollback boundaries.
-
-Independent packages may proceed in parallel when their files, decisions, and
-review evidence do not depend on one another. Stacked pull requests must name
-their base and merge order; evidence from an unmerged dependency is not treated
-as evidence on `main`.
+Deterministic CI and benchmark checks are the technical evidence. Optional AI
+review remains static and read-only; it may inspect every file category and is
+limited only by technical capacity.
 
 ## Polyglot adapter lane
 
@@ -485,38 +397,26 @@ and an LLM never upgrades a candidate to a deterministic fact.
 
 ### First S7 runtime package
 
-Issue #168 and Decision 0028 package C0-C4 in one high-risk outcome on the R15
-baseline, accepted by protected merge #169 but not yet Verified. It adds only `rust-direct-json-map/v1`,
+Issue #168 and Decision 0028 packaged C0-C4 on the R15 baseline. Protected merge
+#169 added only `rust-direct-json-map/v1`,
 `kotlin-direct-json-access/v1`, explicit `ImpactWorkspaceV1` authority, and
 output-only `noesis impact`; it introduces exactly
 `tree-sitter-kotlin-ng = 1.1.0`. The existing S7 report schema, rule catalog,
 fixture, identities, and exact 14,991-byte golden remain immutable. The package
-is not production-ready or Verified until independent evidence acceptance.
+is covered by the current verified local baseline but does not by itself make
+the product production-ready.
 
 ## Sequencing and evidence
 
-The recommended execution order is:
+The recommended execution order from the current verified baseline is:
 
-1. approve and retain `R0` baseline evidence;
-2. specify, Red-test, implement, and independently review `R1`;
-3. specify, Red-test, implement, and independently review `R2`;
-4. specify, Red-test, implement, and independently review `R3`;
-5. run the first partial S4 journey on one replaceable corpus entry;
-6. deliver `R5` and `R6` as separate ontology/framework objectives after the
-   implemented R4 baseline;
-7. retain and independently accept the implemented R7 importer evidence;
-   index generation remains S9 work under a distinct sandbox decision;
-8. retain the implemented `R8` and K1 evidence, deliver the separately
-   governed K1 output-capacity envelope, then execute `R9` on at least two
-   independent repositories;
-9. continue the polyglot lane one approved adapter at a time;
-10. after S5/S6 prerequisites, deliver `C0`–`C4` as one capability and one
-    behavioral implementation objective at a time, then extend through `C5`.
+1. run and stabilize the Rust real-repository benchmark suite;
+2. close correctness and coverage gaps exposed by Lekton and RustDesk;
+3. expand polyglot extraction through Kotlin/KMP and the next adapter lane;
+4. deepen contract-versus-implementation and semantic-version diff behavior;
+5. complete production packaging, observability, recovery, and release gates.
 
-Each implementation pull request keeps one coherent vertical outcome under the
-delivery package policy and includes the required issue, requirement status,
-slice, risk, paths, base/head SHAs, expected Red, Green/regression commands,
-deterministic environment, fixture, oracle, traceability, limitations, and
-human approvals. No pilot or conference claim upgrades a product requirement
-or marks a slice Verified by itself. The delivery package policy above reduces
-administrative pull requests without weakening this vertical boundary.
+Each implementation pull request records its objective, tests, benchmark result
+or `not applicable`, relevant compatibility/security impact, limitations, and
+checks not run. No pilot or conference claim upgrades product support by
+itself.

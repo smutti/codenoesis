@@ -31,16 +31,13 @@ jobs:
       head_sha: ${{ steps.pr.outputs.head_sha }}
       base_sha: ${{ steps.pr.outputs.base_sha }}
       reason: ${{ steps.pr.outputs.reason }}
-      allowed_bot_users: ${{ steps.pr.outputs.allowed_bot_users }}
     steps:
       - name: Resolve pull request
         id: pr
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
-          REVIEW_ENABLED: ${{ vars.CODEX_REVIEW_ENABLED }}
           REQUESTED_PR: ${{ inputs.pr_number || github.event.pull_request.number }}
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-          PUBLISHER_BOT_LOGIN: ${{ vars.CODEX_PUBLISHER_BOT_LOGIN }}
         with:
           script: |
             const raw = process.env.REQUESTED_PR;
@@ -50,10 +47,6 @@ jobs:
             }
 
             const number = Number(raw);
-            const reviewEnabled = process.env.REVIEW_ENABLED === "true";
-            const publisherLogin = process.env.PUBLISHER_BOT_LOGIN?.trim() ?? "";
-            const publisherConfigured = /^[A-Za-z0-9][A-Za-z0-9-]{0,99}$/.test(publisherLogin);
-
             const { data: pr } = await github.rest.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -63,15 +56,7 @@ jobs:
             const sameRepository = pr.head.repo?.full_name ===
               `${context.repo.owner}/${context.repo.repo}`;
             const targetsDefault = pr.base.ref === process.env.DEFAULT_BRANCH;
-            const publisherBot = publisherConfigured
-              ? `${publisherLogin}[bot]`
-              : null;
-            const machineBranch = /^codex\/issue-\d+-\d+-\d+$/.test(pr.head.ref);
-            const publisherAuthValid =
-              publisherConfigured && pr.user?.login === publisherBot;
-            const supportedAuthor = machineBranch
-              ? publisherAuthValid
-              : pr.user?.type !== "Bot" || publisherAuthValid;
+            const supportedAuthor = pr.user?.type !== "Bot";
             const candidate =
               sameRepository &&
               targetsDefault &&
@@ -95,25 +80,12 @@ jobs:
             core.setOutput("pr_number", String(number));
             core.setOutput("head_sha", pr.head.sha);
             core.setOutput("base_sha", pr.base.sha);
-            core.setOutput(
-              "allowed_bot_users",
-              publisherConfigured
-                ? `github-actions,${publisherLogin}`
-                : "github-actions"
-            );
-
-            if (reviewEnabled && machineBranch && !publisherAuthValid) {
-              core.setFailed(
-                "A reserved Codex proposal branch is not owned by the configured publisher App."
-              );
-            }
-
             if (!sameRepository) {
               core.notice("Fork pull requests are excluded from key-bearing review jobs.");
             } else if (!targetsDefault) {
               core.notice("AI review applies only to pull requests targeting the default branch.");
             } else if (!supportedAuthor) {
-              core.notice("Bot-authored pull requests other than the publisher App use human review and deterministic CI only.");
+              core.notice("Bot-authored pull requests use deterministic CI only.");
             } else if (pr.draft) {
               core.notice("Draft pull requests are reviewed after they become ready.");
             }
@@ -146,19 +118,6 @@ jobs:
       eligible: ${{ steps.scope.outputs.eligible }}
       reason: ${{ steps.scope.outputs.reason }}
     steps:
-      - name: Check out trusted base for policy
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ needs.prepare.outputs.base_sha }}
-          fetch-depth: 1
-          persist-credentials: false
-
-      - name: Copy trusted scope policy outside the checkout
-        run: |
-          set -euo pipefail
-          install -m 0600 .github/codex/policy.json "$RUNNER_TEMP/codex-policy.json"
-          install -m 0700 .github/codex/scripts/codex_policy.py "$RUNNER_TEMP/codex-policy.py"
-
       - name: Check out immutable pull-request head
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -166,7 +125,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Classify immutable changed paths
+      - name: Enforce technical review capacity
         id: scope
         env:
           BASE_SHA: ${{ needs.prepare.outputs.base_sha }}
@@ -178,14 +137,15 @@ jobs:
           git merge-base --is-ancestor "$BASE_SHA" "$HEAD_SHA"
           git diff --name-only -z --no-renames "$BASE_SHA"...HEAD \
             > "$RUNNER_TEMP/codex-review-paths"
-          python3 "$RUNNER_TEMP/codex-policy.py" classify-review \
-            --policy "$RUNNER_TEMP/codex-policy.json" \
-            --changed-paths-file "$RUNNER_TEMP/codex-review-paths" \
-            > "$RUNNER_TEMP/codex-review-scope.json"
-          echo "eligible=$(jq -r '.eligible' "$RUNNER_TEMP/codex-review-scope.json")" \
-            >> "$GITHUB_OUTPUT"
-          echo "reason=$(jq -c '.reasons' "$RUNNER_TEMP/codex-review-scope.json")" \
-            >> "$GITHUB_OUTPUT"
+          changed_files=$(tr -cd '\0' < "$RUNNER_TEMP/codex-review-paths" | wc -c | tr -d ' ')
+          if [ "$changed_files" -le 256 ]; then
+            echo "eligible=true" >> "$GITHUB_OUTPUT"
+            echo 'reason=[]' >> "$GITHUB_OUTPUT"
+          else
+            echo "eligible=false" >> "$GITHUB_OUTPUT"
+            printf 'reason=[{"kind":"file_count_limit","actual":%s,"maximum":256}]\n' \
+              "$changed_files" >> "$GITHUB_OUTPUT"
+          fi
 
   review:
     name: Generate structured review
@@ -245,7 +205,7 @@ jobs:
           permission-profile: ":read-only"
           safety-strategy: drop-sudo
           codex-args: '["--ephemeral"]'
-          allow-bot-users: ${{ needs.prepare.outputs.allowed_bot_users }}
+          allow-bot-users: github-actions
 
       - name: Upload immutable review evidence
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -298,7 +258,7 @@ jobs:
             reason="Immutable pull-request scope could not be inspected"
           elif [ "$ELIGIBLE" != "true" ]; then
             state=success
-            reason="Protected or oversized scope requires human review"
+            reason="Diff exceeds AI review file-count capacity"
           elif [ "$REVIEW_ENABLED" != "true" ]; then
             state=success
             reason="AI review disabled by dedicated repository review switch"

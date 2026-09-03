@@ -24,12 +24,13 @@ protected manual merge”. G9 remains a separate governed package.
 | Product owner | Andrea Moretti — explicitly a project governance persona represented by the accountable GitHub actor [`@smutti`](https://github.com/smutti), not a separate natural person |
 | Technical approver | [`@smutti`](https://github.com/smutti) — sole human maintainer under the documented single-maintainer bootstrap model |
 | Normative architecture | [Software architecture](architecture.md) after its decisions are ratified |
-| Delivery method | Incremental outside-in test-driven development |
+| Delivery method | Plan, tests, relevant benchmark, implementation, and one pull request |
 
 ### 1.1 Change history
 
 | Version | Date | Change |
 |---|---|---|
+| `0.9+delivery-v4` | 2026-09-03 | Simplified future delivery to one plan-tests-benchmark-implementation pull request, removed risk tiers, repeated authorization, path/base binding, mandatory retained Red evidence, correction budgets, and automated proposal publication while preserving deterministic CI, optional read-only AI review, manual merge, and all historical product contracts. |
 | `0.9+verification-v3-candidate` | 2026-08-31 | Recorded protected R18/R19 merges #191/#197 as Approved and Implemented but not Verified, and proposed issue #201 / Decision 0041 to bind the immutable 32-profile V2 baseline plus only R18/R19 in one exact 34-profile LocalBaselineVerificationV3 evidence pack without product, control-plane, release, support, or GA change. |
 | `0.1` | 2026-07-17 | Initial proposed requirements, TDD policy, vertical slices, gates, and open decisions. |
 | `0.2` | 2026-07-18 | Ratified the exact S0 approval set under single-maintainer governance, adopted the repository-wide Apache-2.0 license, split atomic scan-CLI and execution-isolation requirements, and bound the S0 contract and Red oracle. |
@@ -107,97 +108,38 @@ Proposed -> Approved -> Implemented -> Verified
 - **Deferred:** intentionally moved out of its target release with rationale.
 - **Rejected:** retained for traceability but no longer part of the product.
 
-Requirements remain **Proposed** unless an explicit register marks them
-**Approved**. Approval requires accountable ownership, resolved blocking
-decisions, and an accepted test oracle. In the current single-maintainer
-bootstrap, the same disclosed GitHub actor may hold product and technical
-accountability; this does not create a fictional separation of duties.
+Requirements remain **Proposed** until accepted on `main`. A pull request MAY
+update the requirement and its implementation together; separate ratification
+or a machine approval registry is not required. The review must still make the
+observable behavior, compatibility impact, tests, and unresolved decisions
+clear.
 
-For autonomous delivery, `.github/codex/policy.json` is the machine-enforced
-projection of those human approvals, not an independent source of approval. A
-record may be added only after the requirement is Approved here and must cite a
-`source_sha` whose SRS blob is byte-identical to the current SRS; the workflow
-checks that binding before any model call and again before publication. Any SRS
-change invalidates the binding until affected approvals are explicitly
-re-ratified.
+### 2.1.1 Simplified delivery workflow
 
-### 2.1.1 Maintainer-supervised accelerated delivery
+Every coherent outcome uses one reviewable pull request with this sequence:
 
-A linked Ready issue MAY select a maintainer-supervised single-PR vertical
-package through one explicit human authorization by the accountable maintainer.
-That authorization MUST fix one delivery slice, one coherent vertical outcome,
-exact stable requirement IDs and candidate semantics, risk owner and rollback
-boundary, allowed and protected paths, exact dependencies, acceptance oracle
-and expected Red, evidence, a bounded correction budget, and stop conditions.
+1. define the plan, acceptance criteria, and non-goals;
+2. add or update focused automated tests;
+3. add or run a benchmark when performance, scale, or real repositories are
+   affected, otherwise mark it not applicable;
+4. implement the smallest complete behavior;
+5. run focused checks and the relevant complete technical gate;
+6. document results, limitations, and checks not run.
 
-The package MAY combine product governance and production implementation in one
-pull request. Product governance includes the SRS, architecture decisions,
-threat models, schemas or ontology contracts, fixtures or oracles,
-traceability, and operational documentation. Multiple tightly related IDs or
-sub-behaviors MAY share it only when they have the same public acceptance
-journey, delivery slice, risk owner, rollback boundary, and versioned fixture or
-oracle. An exact dependency and lockfile update MAY accompany only the behavior
-that the issue names and reviews.
+The same pull request MAY include product code, requirements, architecture,
+ontology, schemas, fixtures, documentation, dependencies, workflows,
+permissions, signing configuration, and release configuration needed by that
+outcome. It does not require a linked issue, stable requirement ID, delivery
+slice, risk label, exact base SHA, path allowlist, governance checkpoint,
+retained failing log, correction budget, or repeated authorization.
 
-The package MAY also combine product code and delivery control plane in one
-pull request. The delivery control plane includes `AGENTS.md`, `.github/**`, and
-`.codex/**`, policy and prompts, workflows and required checks, permissions,
-review, publication, signing, and release authority. The Ready issue MUST fix
-the exact base SHA, complete changed paths, control and privilege effects,
-post-merge activation, threats, rollback, and evidence.
-
-The package MAY start from requirements already `Approved` on `main` or from a
-complete candidate that remains `Proposed` until merge. For the latter, the
-maintainer decision grants branch-scoped implementation authority only for the
-exact package. Requirement approval and production behavior become effective
-atomically only after the accountable maintainer manually merges the exact pull
-request; before merge they MUST be described as Proposed and candidate, not as
-an Approved, Implemented, or Verified fact on `main`.
-
-The author MUST, before any production source edit, create a governance
-checkpoint containing the complete candidate requirement and decisions, exact
-contracts and oracle, traceability, and the executable acceptance or
-conformance check. The check MUST run against that checkpoint and produce
-retained expected Red evidence bound to its identity, command, exit status,
-failure reason, log digest, and environment. Only subsequent commits may add
-production code and Green evidence, and the pull request MUST preserve the
-checkpoint and Red-before-code history for independent review.
-
-Within unchanged scope and risk, that one explicit human authorization permits
-the complete sequence, focused validation, documentation and evidence updates,
-pull request publication, and bounded correction without repeated
-authorization. A semantic requirement, oracle, scope, dependency, authority,
-or risk change after the checkpoint invalidates its authority and Red evidence
-and requires a new explicit maintainer decision. The default is three
-correction rounds; the issue MAY set a value from one through five.
-
-The exact base SHA establishes immutable base authority for the complete pull
-request. Its required checks, branch protection, reviewer and merge authority,
-workflow trust, permission boundaries, and signing and release restrictions
-remain authoritative through manual merge. A head-authored control change is
-inert as authority for that same pull request. Its result is advisory unless an
-unchanged base-controlled gate independently evaluates the head tree.
-
-No unmerged head receives privileged secrets, elevated tokens, ruleset bypass,
-approval or merge authority, deployment credentials, signing keys, publication
-credentials, tags, or release execution. Each declarative workflow, permission,
-signing, or release-authority change activates only after manual merge and any
-explicitly authorized post-merge application. Head controls cannot weaken the
-oracle, remove manual merge, or approve, merge, publish, sign, or release their
-own change.
-
-This supervised interactive lane may proceed without waiting for a new
-machine-policy projection. The base-bound `.github/codex/policy.json` remains
-authoritative for the pull request, and the merged projection remains mandatory
-before unattended autonomous execution. The lane never grants direct push,
-self-approval, self-merge, secret handling, destructive-data, unmerged release,
-or unattended authority.
-
-The original accelerated control-plane amendment was authorized by
-[#79](https://github.com/smutti/codenoesis/issues/79). The single-PR amendment
-is authorized by [#139](https://github.com/smutti/codenoesis/issues/139). Each
-becomes effective only after its protected manual merge by `@smutti`; the
-authoring agent does not approve or merge either change.
+Tests SHOULD precede or accompany implementation, but a preserved failing
+commit or Red evidence artifact is not required. Deterministic CI, relevant
+benchmarks, semantic review of changed oracles, and manual merge establish the
+delivery gate. Authors and agents MUST NOT push directly to `main`, approve, or
+merge their own pull requests. Secrets and execution of publication, signing,
+deployment, release, or destructive operations remain under direct maintainer
+control.
 
 ### 2.2 S0 ratification register
 
@@ -3025,36 +2967,28 @@ cannot replace their verification.
 | `NFR-MNT-001` | P0 | First-party crate dependencies MUST follow the approved inward dependency rules and first-party `unsafe` MUST remain forbidden. | An architecture fitness test rejects forbidden dependency edges, missing lint inheritance, and any first-party allowance of `unsafe`. `CONF` |
 | `NFR-MNT-002` | P1 | Transitive dependency `unsafe` use MUST be inventoried; every accepted exception MUST record package identity, scope, rationale, owner, review evidence, and expiry. | The supply-chain gate rejects an unregistered or expired exception and publishes the reviewed inventory. `CONF`, `SEC` |
 | `NFR-SUP-001` | P1 | Releases MUST produce a locked dependency graph, license/advisory evidence, SBOM, signed artifacts, and verifiable build provenance. | Consumers can verify artifact identity, signature, SBOM association, and provenance against source. `CONF`, `SEC` |
-| `NFR-TST-001` | P0 | Every Approved behavioural requirement MUST have a failing acceptance test before production implementation; every other Approved requirement MUST have an appropriate failing executable check. All requirements MUST retain a requirement-test-evidence link. | CI rejects an Implemented or Verified requirement with missing or non-green required evidence. `CONF` |
+| `NFR-TST-001` | P0 | Every product behavior change MUST include an appropriate automated acceptance, contract, or conformance check in the same pull request. A separately retained failing commit or Red evidence artifact is not required. | CI rejects missing or non-green required tests for the changed behavior. `CONF` |
 | `NFR-TST-002` | P0 | Required tests MUST be deterministic and parallel-safe. A retry MUST NOT convert a flaky test into acceptable release evidence. | Repeated shuffled execution detects no order dependency; quarantine requires an issue and cannot cover a release-blocking requirement. `PT`, `CONF` |
 
 ## 11. Test-driven development policy
 
 ### 11.1 Outside-in loop
 
-Every behavioural requirement is delivered through this outside-in loop.
-Constraints and process requirements use the same test-first discipline with
-the appropriate conformance, security, performance, or recovery check when a
-public black-box scenario is not meaningful.
+Every behavior is delivered through a compact outside-in loop:
 
-1. **Specify:** approve an atomic requirement, its oracle, failure behaviour,
-   and one public acceptance scenario.
-2. **Red:** implement the acceptance test through the narrowest public surface
-   available and record that it fails for the expected reason.
-3. **Drive inward:** add the smallest domain unit/property tests needed to
-   implement the next behaviour.
-4. **Green:** write the minimum production code that satisfies the behaviour.
-5. **Refactor:** improve names and boundaries while all tests remain green.
-6. **Contract:** apply the same port suite first to a controllable fake and then
-   to the real adapter.
-7. **Break it deliberately:** add invalid-input, limit, retry, crash, security,
-   and observability cases proportional to the risk.
-8. **Demonstrate:** run the black-box scenario on a versioned fixture and retain
-   machine-readable evidence.
-9. **Trace:** update requirement status and its test/evidence links in the same
-   change.
+1. **Plan:** define observable acceptance criteria and non-goals.
+2. **Test:** add the narrowest useful acceptance, contract, or conformance test.
+3. **Implement:** write the minimum production code that satisfies it.
+4. **Strengthen:** add focused domain, boundary, failure, security, and
+   observability cases where relevant.
+5. **Benchmark:** measure performance, scale, or real-repository behavior when
+   the change can affect them.
+6. **Validate:** run focused checks and then the relevant complete CI gate.
+7. **Document:** update contracts and user documentation in the same pull
+   request.
 
-Writing a unit test after the implementation does not satisfy this policy.
+Tests should normally be written before or with the implementation. The final
+review does not require a separately retained failing commit or log.
 
 ### 11.2 Test-double policy
 
@@ -3302,33 +3236,26 @@ detect a missing or stale link.
 
 ### 15.1 Requirement ready for implementation
 
-A requirement is Ready only when:
-
-- its statement is atomic and has one stable ID;
-- it is `Approved` on `main`, or its complete `Proposed` candidate and
-  branch-scoped implementation authority satisfy section 2.1.1;
-- priority, target slice, owner, rationale, and dependencies are known;
-- success, failure, limit, security, and observability behaviour are testable;
-- the fixture and oracle are reviewable and legally usable;
-- blocking open decisions are resolved;
-- the initial black-box test, or the appropriate executable non-behavioural
-  check, can be written without assuming private design.
+A change is Ready when its objective and observable acceptance criteria are
+clear enough to write a focused test. Record important non-goals, dependencies,
+compatibility constraints, and benchmark needs when they are relevant. An issue,
+approved status, requirement ID, slice, risk label, path list, or prior
+authorization is not required.
 
 ### 15.2 Requirement done
 
-A requirement is Done only when:
+A change is Done when:
 
-- the acceptance test or other required executable check was observed red for
-  the expected reason before the production implementation;
-- the minimal implementation and relevant unit/property tests are green;
-- every affected real adapter passes its contract suite;
-- invalid input, boundaries, failures, security, and telemetry are covered in
-  proportion to risk;
-- the public demo is reproducible from a clean checkout;
-- traceability and documentation are updated;
-- CI evidence is attached and no required test is flaky, ignored, or silently
-  retried into success;
-- the requirement state is `Verified`, not merely `Implemented`.
+- the implementation and relevant automated tests are green;
+- affected adapters pass their contract suites;
+- important invalid input, boundaries, failures, security, and observability
+  cases are covered;
+- relevant benchmarks and real-repository checks pass, or are documented as not
+  applicable;
+- contracts and documentation are current;
+- the relevant complete technical gate is green without weakening an oracle or
+  retrying a flaky failure into success;
+- the pull request records known limitations and checks not run.
 
 ## 16. Open decisions and approval gates
 
@@ -3458,26 +3385,23 @@ behavior remain open.
 
 ## 17. Change control
 
-- A requirement change and its tests MUST be reviewed together.
-- One maintainer-supervised single-PR vertical package MAY atomically review and
-  merge one capability's product governance, Red-first evidence, production
-  implementation, delivery control plane, and Green evidence under section
-  2.1.1.
-- A branch-scoped package MUST preserve its governance checkpoint and expected
-  Red evidence; merge is all-or-nothing and no candidate product contract or
-  implementation becomes authoritative on `main` independently.
-- A control-plane change in that package MUST remain inert for its own review;
-  the exact base authority and an unchanged base-controlled gate judge the head,
-  and privileged effects activate only after manual merge.
-- Removing or weakening an Approved requirement requires rationale, impact
-  analysis, and explicit approval.
+- A behavior or contract change and its tests MUST be reviewed together in one
+  coherent pull request.
+- Requirements, architecture, ontology, schemas, fixtures, documentation,
+  dependencies, control plane, workflows, permissions, release configuration,
+  benchmarks, and implementation MAY change together for that outcome.
+- Deterministic CI and relevant benchmarks MUST pass before manual merge.
+- Authors and agents MUST NOT push directly to `main`, self-approve, self-merge,
+  or execute publication, signing, deployment, release, or destructive actions.
+- Removing or weakening an accepted requirement requires rationale and impact
+  analysis in the pull request.
 - Breaking public-contract changes require compatibility classification and a
   migration/deprecation plan.
 - Test oracle changes require the same scrutiny as production changes; golden
   output must never be accepted solely because a snapshot-update command
   produced it.
-- Research evidence may create a Proposed requirement but cannot move it to
-  Approved automatically.
+- Research evidence may motivate a product change but does not silently alter
+  product behavior.
 - Production incidents and escaped defects MUST add or strengthen a regression
   scenario before the corrective implementation is accepted.
 
