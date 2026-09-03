@@ -2643,6 +2643,116 @@ package, OCI, deployment, secret, key, environment, support, or GA authority.
 The branch cannot produce trusted post-merge evidence; until independent
 acceptance, the requirements remain not Verified.
 
+### 2.36 B1/G7/S14 real-world Rust stability benchmark candidate register
+
+Issue [#205](https://github.com/smutti/codenoesis/issues/205), the accountable
+maintainer's high-risk authorization, and
+[Decision 0042](decisions/0042-real-world-rust-stability-benchmark.md) govern
+one branch-scoped benchmark candidate on exact protected base
+`3fb6504d1d6cb39f204eca032ff816266194e1ec`. Governance, active manifest,
+corpus, policy, oracle, runner, tests, real-repository evidence, and lifecycle
+documentation share one supervised pull request.
+
+| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| `NFR-PER-001` | Approved; B1 implementation Proposed on the branch | One active observational same-host suite with exact corpus, host, concurrency, cache state, extractors, repetitions, nearest-rank percentiles, success rate, raw samples, binary/toolchain/source identity, and no hidden failures | `S14` | Issue #205, Decision 0042, active manifest, corpus/policy/oracle, retained Red/Green and real-repository reports |
+| Bounded application of `NFR-DET-001`, `NFR-TST-001/002`, `NFR-SEC-001/005`, `NFR-PRV-001`, and `INV-BND-001` | Proposed only for the exact branch package | Exact Lekton semantic identity, exact RustDesk typed rejection, deterministic bounded reports, fail-closed input/race/privacy/limit behavior, no target execution and no runner network | `S14` | Issue #205, Decision 0042, conformance/security tests, negative controls, complete gate |
+| `NFR-PER-002`, `OD-SLO-001` | Unresolved and outside B1 | No SLO, release-artifact, availability, cross-host, support, conference-validity, or GA claim | `S14` | Explicit exclusion in issue #205, Decision 0042, manifest and policy |
+
+The suite uses exactly three baseline and three candidate repetitions for
+caller-supplied full local clones. Lekton commit
+`247b8f42fb045db41166d70a276a41c2e079b6eb` must preserve the accepted R16
+RepositorySnapshotV18 semantic hash, projection digest, and family counts.
+RustDesk commit `d412d198720aa56f6cfed2dfad262e8fb1322fb7`
+must preserve the exact ErrorV24 repository-boundary rejection, empty stdout,
+absent publication, and unread nested source.
+
+The runner performs no clone, fetch, checkout, submodule or LFS action, build,
+target execution, network access, model call, browser launch, or repository
+mutation. It retains every raw monotonic sample and rejects retry, discard,
+semantic/outcome drift, incomplete evidence, incomparable hosts, p95 beyond
+the reviewed same-host boundary, absolute ceiling excess, private output, and
+partial report publication. Protected merge activates only this observational
+benchmark contract.
+
+### 2.37 B1a/G7/S14 benchmark-only execution-limit candidate register
+
+Issue [#206](https://github.com/smutti/codenoesis/issues/206), its accountable
+maintainer authorization, and
+[Decision 0043](decisions/0043-benchmark-only-r16-execution-limit.md) govern a
+dependent branch-scoped amendment on exact B1 head
+`74bd959128472c3e95baeb5fd1a29cfc09b2c686`.
+
+| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| `NFR-PER-001`, bounded `FR-CLI-001` | Approved; B1a implementation Proposed on the branch | The explicit operational selector `real-world-rust-benchmark-75s-v1` raises only the exact packed, source-only R16 B1 whole-scan wall maximum from 60,000 to 75,000 milliseconds | `S14` | Issue #206, Decision 0043, boundary and exact-composition tests, retained Red/Green and real-repository reports |
+| Bounded application of `NFR-DET-001`, `NFR-SEC-005`, `NFR-TST-001/002`, and `INV-BND-001` | Proposed only for the exact dependent package | Selector absence, acquisition, historical profiles, semantic configuration, ontology, identities, hashes, counts, schemas, goldens, stores, and publication remain unchanged; invalid composition fails before acquisition | `S14` | Issue #206, Decision 0043, compatibility, failure, and semantic-identity evidence |
+| `NFR-PER-002`, `OD-SLO-001` | Unresolved and outside B1a | The 75-second execution maximum and observational ceiling make no SLO, release, support, availability, cross-host, conference, or GA claim | `S14` | Explicit exclusion in issue #206 and Decision 0043 |
+
+The runner must pass the selector explicitly and record it as sanitized
+configuration identity. Its process timeout remains 90 seconds. The standard
+whole-scan and acquisition limits remain 60,000 milliseconds. RustDesk keeps
+the earlier exact repository-boundary rejection precedence. No environment or
+ambient override is permitted.
+
+### 2.38 B1b/G7/S14 bootstrap-baseline and identity-oracle correction
+
+Issue [#207](https://github.com/smutti/codenoesis/issues/207), its accountable
+maintainer authorization, and
+[Decision 0044](decisions/0044-b1-bootstrap-baseline-and-identity-oracle.md)
+govern a dependent correction on exact B1a evidence head
+`7a7c6601981f915496a4648867323bbcfc91daac`.
+
+| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| `NFR-PER-001` | Approved; B1b correction Proposed on the branch | Use first selector-supporting product commit `cce84869430ef129f55591998b30ea2ea728e1c3` as the honest B1 V1 bootstrap baseline and retain separate three-sample baseline/candidate reports | `S14` | Issue #207, Decision 0044, exact binary/source association, real reports, and comparison |
+| Bounded `NFR-DET-001`, `NFR-TST-001/002`, `NFR-SEC-005`, `INV-BND-001` | Proposed only for the exact correction | Bind Lekton oracle hashes to corpus identity `urn:codenoesis:benchmark:lekton:b1` while preserving V18, all counts, RustDesk outcome, policy, product bytes, and fail-closed controls | `S14` | Issue #207, Decision 0044, old-base rejection, pilot-identity mismatch, corrected replay evidence |
+| `NFR-PER-002`, `OD-SLO-001` | Unresolved and outside B1b | No SLO, release, support, availability, cross-host, conference, or GA claim | `S14` | Explicit exclusion in issue #207 and Decision 0044 |
+
+The corrected Lekton semantic hash is
+`22e32d20429d510d4674e0e6bdc5542f08dbc0e28874cd0098419e7512a334c1`;
+its canonical semantic projection SHA-256 is
+`7c800424b3176c96d4ea4164d4066adaf551134b3aea4b40a1e5647f74dc7fa9`.
+Only repository-identity-bound oracle values change.
+
+### 2.39 B1c/G7/S14 bounded failed-sample observability
+
+Issue [#208](https://github.com/smutti/codenoesis/issues/208), its accountable
+maintainer authorization, and
+[Decision 0045](decisions/0045-b1-failed-sample-observability.md) govern a
+dependent correction on exact B1b evidence head
+`71d05cdb90c3cdd2af4824d5eeb712ec78e6b080`.
+
+| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| Bounded `NFR-PER-001`, `NFR-OBS-001`, `NFR-TST-001/002`, `NFR-SEC-005`, `INV-BND-001` | Approved requirements; B1c correction Proposed on the branch | A failed product sample retains bounded public entry/index/exit/length identity, exact stderr SHA-256, and only strictly validated canonical product error schema/code/stage in the unchanged runner V1 error message | `S14` | Issue #208, Decision 0045, expected Red, privacy/limit/failure tests, and bounded real diagnostic evidence |
+| `NFR-PER-002`, `OD-SLO-001` | Unresolved and outside B1c | No retry, acceptance completion, policy, threshold, SLO, release, support, availability, cross-host, conference, or GA claim | `S14` | Explicit exclusion in issue #208 and Decision 0045 |
+
+The message is at most 256 characters. Product message/context, source, paths,
+host, user, environment, command, token, and URL values are never emitted.
+Stderr that is oversized, noncanonical, invalid, non-UTF-8, multi-document, or
+not selected by the public allowlist is identified only by byte length and
+SHA-256. Existing non-sample errors and cleanup behavior remain unchanged.
+
+### 2.40 B1d/G7/S14 gate readiness and opaque-failure classification
+
+Issue [#209](https://github.com/smutti/codenoesis/issues/209), its accountable
+maintainer authorization, and
+[Decision 0046](decisions/0046-b1-gate-readiness-and-opaque-failure-classification.md)
+govern a dependent correction on exact B1c evidence head
+`09dd9df9c142ffbdea3b6e20c4cbeb0e7a9dd2d9`.
+
+| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| Bounded `NFR-PER-001`, `NFR-OBS-001`, `NFR-TST-001/002`, `NFR-DET-001`, `NFR-MNT-002`, `NFR-SEC-005`, `INV-BND-001` | Approved requirements; B1d correction Proposed on the branch | Restore complete-gate readiness through one semantics-neutral R16 parser extraction, historical-subject V2/V3 descendant validation, and one closed opaque-error validation category | `S14` | Issue #209, Decision 0046, three expected Reds, immutable historical digests, focused/full Green, and one bounded diagnostic |
+| `NFR-PER-002`, `OD-SLO-001` | Unresolved and outside B1d | No acceptance, retry, policy, threshold, timeout, SLO, release, support, availability, cross-host, conference, or GA claim | `S14` | Explicit exclusion in issue #209 and Decision 0046 |
+
+The `cce8486` baseline binary identity remains exact. A candidate may differ
+only by the private parser extraction and must preserve all public behavior.
+V2/V3 immutable artifacts remain exact and are evaluated from their historical
+Git subjects. Opaque stderr retains only its existing digest identity plus one
+closed category; no additional untrusted content is disclosed.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,

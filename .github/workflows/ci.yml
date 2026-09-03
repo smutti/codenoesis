@@ -27,6 +27,17 @@ jobs:
     steps:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Fetch exact historical verification subjects
+        run: |
+          git fetch --no-tags --no-write-fetch-head origin \
+            a40a4cb0212e7b59b1eff81ab9818299c7ebc3b9 \
+            b80c08935c32293f1315ae6dd1b4f1a7f52cd6c5 \
+            16ef5ceaea6ad14d9838f84856f6ca3d445daa67 \
+            c3cbced9ee2017b61ec8e0b10191553edc733004 \
+            75391c9061d691c1d6efdf8b726e120049389476
 
       - name: Record pinned toolchain
         run: |

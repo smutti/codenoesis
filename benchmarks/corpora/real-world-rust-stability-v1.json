@@ -1,0 +1,55 @@
+{
+  "schema_version": "codenoesis.real-world-rust-benchmark-corpus/v1",
+  "id": "real-world-rust-stability",
+  "version": "1",
+  "source_mode": "caller_supplied_full_non_shallow_local_clone",
+  "network_allowed": false,
+  "source_vendored": false,
+  "entries": [
+    {
+      "id": "lekton",
+      "repository_url": "https://github.com/dghilardi/lekton.git",
+      "revision": "247b8f42fb045db41166d70a276a41c2e079b6eb",
+      "tree": "55ba428493a4ffae86ba492422a049f46d567a30",
+      "observed_license": "AGPL-3.0-or-later",
+      "repository_id": "urn:codenoesis:benchmark:lekton:b1",
+      "outcome": "success",
+      "profiles": [
+        "local-git-sha1-packed-v1",
+        "cargo-root-package-v1",
+        "cargo-manifest-facts-v1",
+        "rust-semantic-depth-v1",
+        "rust-framework-declarations-v1",
+        "rust-callable-semantics-v1",
+        "rust-expression-bindings-v1",
+        "rust-local-flow-v1",
+        "rust-safe-constant-evaluation-v1",
+        "local-snapshot-256m-v1",
+        "real-world-rust-benchmark-75s-v1"
+      ]
+    },
+    {
+      "id": "rustdesk",
+      "repository_url": "https://github.com/rustdesk/rustdesk.git",
+      "revision": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "tree": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+      "observed_license": "AGPL-3.0",
+      "repository_id": "urn:codenoesis:benchmark:rustdesk:b1",
+      "outcome": "typed_rejection",
+      "profiles": [
+        "local-git-sha1-packed-v1",
+        "local-gitlinks-v1",
+        "cargo-root-package-v1",
+        "cargo-manifest-facts-v1",
+        "rust-semantic-depth-v1",
+        "rust-framework-declarations-v1",
+        "rust-callable-semantics-v1",
+        "rust-expression-bindings-v1",
+        "rust-local-flow-v1",
+        "rust-safe-constant-evaluation-v1",
+        "local-snapshot-256m-v1",
+        "real-world-rust-benchmark-75s-v1"
+      ]
+    }
+  ]
+}

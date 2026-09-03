@@ -1,6 +1,9 @@
-# CodeNoesis Local Baseline Verification
+# CodeNoesis Local Verification and Benchmark Evidence
 
-> Status: **Proposed `LocalBaselineVerificationV3` contract for issue #201**. “LocalBaselineVerificationV3 candidate Verified pending independent review and protected manual merge” is the exact pre-activation marker. No new `Verified`, release, support, or GA claim is effective before independent review and protected manual merge of the exact evidence-complete head.
+> Status: **LocalBaselineVerificationV3 activated by protected PR #204**.
+> The exact 34-profile catalog is Verified. Issue #205 adds only a Proposed B1
+> observational benchmark candidate; no SLO, release, support, or GA claim is
+> effective before independent review and protected manual merge.
 
 ## Purpose
 
@@ -11,10 +14,12 @@ oracle. Protected PR #189 already activated the immutable 32-profile
 trusted local source retrieval and R19 Git-backed semantic impact Approved and
 Implemented, but not Verified.
 
-Issue #201 consolidates only those two additive profiles with the exact V2
-baseline. The resolved V3 catalog contains exactly 34 profiles. It changes no
-product behavior, ontology, schema, fixture, golden, workflow, permission,
-dependency, release authority, support, or GA status.
+Issue #201 consolidated only those two additive profiles with the exact V2
+baseline. The resolved V3 catalog contains exactly 34 profiles. Protected PR
+#204 merged review head `75391c9061d691c1d6efdf8b726e120049389476` as
+`3fb6504d1d6cb39f204eca032ff816266194e1ec`, activating only those Verified
+profiles. It changed no product behavior, ontology, schema, fixture, golden,
+workflow, permission, dependency, release authority, support, or GA status.
 
 ## Authority
 
@@ -94,11 +99,100 @@ current verification correction remain reviewable.
 
 ## Promotion rule
 
-The V3 manifest uses `candidate_verified_pending_merge` on the branch.
-Protected manual merge of the exact independently accepted head makes only the
-34 catalogued profiles Verified. Missing, unavailable, flaky, contradictory,
-private, or non-reproducible evidence keeps the complete package open; subset
-promotion is forbidden.
+The retained V3 manifest uses `candidate_verified_pending_merge` as its
+immutable branch marker. Protected manual merge of the exact independently
+accepted head made only the 34 catalogued profiles Verified. Missing,
+unavailable, flaky, contradictory, private, or non-reproducible evidence would
+have kept the complete package open; subset promotion remains forbidden.
 
 G9 pilot, release, support, deprecation, EOL, publication, Local GA, and Server
 GA remain separate future governance.
+
+## B1 real-world Rust stability candidate
+
+Issue [#205](https://github.com/smutti/codenoesis/issues/205) and
+[Decision 0042](decisions/0042-real-world-rust-stability-benchmark.md) define
+one high-risk S14 benchmark package on exact V3 base
+`3fb6504d1d6cb39f204eca032ff816266194e1ec`. Its checkpoint precedes runner and
+active-validator implementation. The expected Red is the absent runner and the
+base validator's unconditional rejection of active status.
+
+Green requires three baseline and three candidate samples for each pinned
+entry. Lekton must preserve exact R16 semantic identity and counts. RustDesk
+must preserve the exact typed repository-boundary rejection with empty stdout
+and no publication. Reports retain every raw sample and all `NFR-PER-001`
+fields, compare only on the same sanitized host profile, and reject semantic,
+outcome, completeness, privacy, limit, or reviewed p95 violations.
+
+The B1 runner performs no external acquisition or source mutation. Existing
+base-controlled CI validates the committed benchmark contract but does not run
+the public repositories. Retained local evidence contains no external source
+or private path. `NFR-PER-002`, `OD-SLO-001`, release-artifact performance,
+availability, support, conference validity, and GA remain unresolved.
+
+## B1a benchmark-only execution-limit candidate
+
+Issue [#206](https://github.com/smutti/codenoesis/issues/206) and
+[Decision 0043](decisions/0043-benchmark-only-r16-execution-limit.md) define a
+dependent high-risk S14 checkpoint on exact B1 head
+`74bd959128472c3e95baeb5fd1a29cfc09b2c686`. The expected Red is the current
+R16 rejection of the explicit `real-world-rust-benchmark-75s-v1` selector plus
+the runner command's missing selector.
+
+Green requires exact 60,000 millisecond selector-absent behavior, exact 75,000
+millisecond selected behavior, maximum-plus-one failure without a timed test,
+fail-closed invalid compositions, and selector-present/absent R16 semantic
+identity. The B1 real-repository matrix then runs again without retry or sample
+discard. Acquisition, RustDesk error precedence, runner timeout, observational
+ceiling, schemas, goldens, ontology, dependencies, workflows, release, support,
+and GA remain unchanged.
+
+## B1b bootstrap-baseline and identity-oracle correction
+
+Issue [#207](https://github.com/smutti/codenoesis/issues/207) and
+[Decision 0044](decisions/0044-b1-bootstrap-baseline-and-identity-oracle.md)
+define the dependent high-risk S14 correction on exact evidence head
+`7a7c6601981f915496a4648867323bbcfc91daac`. The checkpoint selects baseline
+commit `cce8486` and the two Lekton hashes derived under the B1 corpus identity.
+The expected Red is the old runner and validator freezing `3fb6504` and the
+historical pilot hashes.
+
+Green requires separate three-sample baseline and candidate reports from
+honestly associated release builds, exact corrected Lekton hashes and unchanged
+counts, exact RustDesk rejection, Green same-host comparison, source cleanliness,
+and byte-identical Rust product source after `cce8486`. Policy, limits, timeout,
+ontology, schemas, dependencies, workflow, release, support, and GA remain
+unchanged.
+
+## B1c bounded failed-sample observability
+
+Issue [#208](https://github.com/smutti/codenoesis/issues/208) and
+[Decision 0045](decisions/0045-b1-failed-sample-observability.md) define the
+dependent high-risk S14 correction on exact evidence head `71d05cd`. The
+expected Red is the existing generic `benchmark.sample_failed` message, which
+does not retain product exit, stream lengths, stderr digest, or safe typed-error
+identity after owned temporary cleanup.
+
+Green requires a message no longer than 256 characters containing only public
+entry/index/exit/length fields, exact stderr SHA-256, and allowlisted canonical
+product schema/code/stage. Invalid, oversized, non-UTF-8, multi-document, and
+private stderr must remain opaque. Existing timeout and mutation precedence,
+empty runner stdout, no report, no retry, and cleanup remain unchanged. The
+subsequent bounded Lekton diagnostic stops at the first failure or after five
+clean independent attempts and does not resume B1 acceptance.
+
+## B1d gate readiness and opaque-failure classification
+
+Issue [#209](https://github.com/smutti/codenoesis/issues/209) and
+[Decision 0046](decisions/0046-b1-gate-readiness-and-opaque-failure-classification.md)
+define the dependent high-risk S14 correction on exact B1c head `09dd9df`.
+The three expected Reds are the 106-line R16 parser clippy finding, the exact
+five V2/V3 descendant-lifecycle failures, and the absent closed category on an
+otherwise bounded `product=unparseable` message.
+
+Green requires the complete gate, immutable V2/V3 protected artifact digests,
+exact R16 selector and error behavior, and all closed category privacy/boundary
+tests. One additional Lekton diagnostic must stop without retry and retain only
+the already-authorized B1c identity plus category. RustDesk, comparison, B1
+acceptance, policy/oracle changes, raw stderr, and product-semantic claims remain
+forbidden.

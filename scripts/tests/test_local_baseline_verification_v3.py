@@ -212,9 +212,16 @@ class LocalBaselineVerificationV3ContractTests(unittest.TestCase):
         self.assertEqual(properties["remote_runs"]["maxItems"], 8)
 
     def test_status_documents_are_aligned(self) -> None:
+        validator = self.load_validator()
         for document_path in STATUS_DOCUMENTS:
-            normalized = " ".join(document_path.read_text(encoding="utf-8").split())
-            self.assertIn(STATUS_MARKER, normalized, str(document_path))
+            relative_path = document_path.relative_to(ROOT).as_posix()
+            historical = validator.git(
+                ROOT,
+                ["show", f"{validator.V3_REVIEW_HEAD}:{relative_path}"],
+                binary=True,
+            )
+            normalized = " ".join(historical.decode("utf-8").split())
+            self.assertIn(STATUS_MARKER, normalized, relative_path)
 
     def test_r18_r19_bundle_self_records_use_historical_bytes(self) -> None:
         cases = (

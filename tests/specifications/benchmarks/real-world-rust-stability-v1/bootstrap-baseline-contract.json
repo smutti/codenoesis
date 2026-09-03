@@ -1,0 +1,16 @@
+{
+  "schema_version": "codenoesis.real-world-rust-benchmark-bootstrap-baseline-contract/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/207",
+  "authorization": "https://github.com/smutti/codenoesis/issues/207#issuecomment-5508518302",
+  "exact_dependent_base": "7a7c6601981f915496a4648867323bbcfc91daac",
+  "slice": "S14",
+  "risk": "high",
+  "bootstrap_baseline_product_commit": "cce84869430ef129f55591998b30ea2ea728e1c3",
+  "repository_identity": "urn:codenoesis:benchmark:lekton:b1",
+  "lekton_semantic_hash": "22e32d20429d510d4674e0e6bdc5542f08dbc0e28874cd0098419e7512a334c1",
+  "lekton_semantic_projection_sha256": "7c800424b3176c96d4ea4164d4066adaf551134b3aea4b40a1e5647f74dc7fa9",
+  "counts_unchanged": true,
+  "rust_product_changes_allowed": false,
+  "workflow_changes_allowed": false,
+  "dependency_changes_allowed": false
+}

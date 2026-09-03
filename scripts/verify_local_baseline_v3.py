@@ -38,6 +38,9 @@ R18_MERGE = "fcdd6eddec8a4dd9b372cb88ff424c2004b5c88b"
 R19_REVIEW_HEAD = "c3cbced9ee2017b61ec8e0b10191553edc733004"
 R19_REVIEW_TREE = "f66ab5dfda426054d8591b246337293bbb85246a"
 R19_MERGE = BASE_SHA
+V3_REVIEW_HEAD = "75391c9061d691c1d6efdf8b726e120049389476"
+V3_REVIEW_TREE = "93bade5e43f61017f0e8a4b1c78ce6c7085ca153"
+V3_MERGE = "3fb6504d1d6cb39f204eca032ff816266194e1ec"
 STATUS = "candidate_verified_pending_merge"
 SCHEMA_VERSION = "codenoesis.local-baseline-verification/v3"
 ERROR_SCHEMA_VERSION = "codenoesis.local-baseline-verification-error/v1"
@@ -318,6 +321,8 @@ def validate_digest_record(
     record: Any,
     label: str,
     errors: list[str],
+    *,
+    revision: Optional[str] = None,
 ) -> None:
     if not isinstance(record, dict) or set(record) != {"path", "sha256"}:
         errors.append(f"{label} must contain exactly path and sha256")
@@ -332,11 +337,23 @@ def validate_digest_record(
     ):
         errors.append(f"{label}.sha256 is invalid")
         return
-    absolute_path = root / relative_path
-    if not absolute_path.is_file():
-        errors.append(f"{label} path is missing: {relative_path}")
-        return
-    observed_digest = sha256_file(absolute_path)
+    if revision is None:
+        absolute_path = root / relative_path
+        if not absolute_path.is_file():
+            errors.append(f"{label} path is missing: {relative_path}")
+            return
+        observed_digest = sha256_file(absolute_path)
+    else:
+        try:
+            content = git(
+                root,
+                ["show", f"{revision}:{relative_path}"],
+                binary=True,
+            )
+        except ValueError as error:
+            errors.append(str(error))
+            return
+        observed_digest = sha256_bytes(content)
     if observed_digest != expected_digest:
         errors.append(
             f"{label} digest mismatch for {relative_path}: "
@@ -384,11 +401,17 @@ def validate_pinned_files(root: Path, errors: list[str]) -> None:
             errors.append(f"pinned file is missing: {relative_path}")
         elif sha256_file(absolute_path) != expected_digest:
             errors.append(f"pinned file digest changed: {relative_path}")
-    corrected_validator = root / "scripts/verify_local_baseline_v2.py"
-    if not corrected_validator.is_file():
-        errors.append("corrected V2 validator is missing")
-    elif sha256_file(corrected_validator) != CORRECTED_V2_VALIDATOR_DIGEST:
-        errors.append("corrected V2 validator digest changed")
+    try:
+        corrected_validator = git(
+            root,
+            ["show", f"{V3_REVIEW_HEAD}:scripts/verify_local_baseline_v2.py"],
+            binary=True,
+        )
+    except ValueError as error:
+        errors.append(str(error))
+    else:
+        if sha256_bytes(corrected_validator) != CORRECTED_V2_VALIDATOR_DIGEST:
+            errors.append("corrected V2 validator digest changed")
     for relative_path, expected_digest in CORRECTED_CONFORMANCE_DIGESTS.items():
         absolute_path = root / relative_path
         if not absolute_path.is_file():
@@ -397,7 +420,38 @@ def validate_pinned_files(root: Path, errors: list[str]) -> None:
             errors.append(f"corrected conformance test digest changed: {relative_path}")
 
 
-def validate_lineage(root: Path, current_head: str, errors: list[str]) -> None:
+def resolve_validation_subject(
+    root: Path,
+    current_head: str,
+    errors: list[str],
+) -> Optional[str]:
+    if git_is_ancestor(root, V3_MERGE, current_head):
+        try:
+            review_tree = git(root, ["rev-parse", f"{V3_REVIEW_HEAD}^{{tree}}"])
+            merge_tree = git(root, ["rev-parse", f"{V3_MERGE}^{{tree}}"])
+            merge_line = git(root, ["rev-list", "--parents", "-n", "1", V3_MERGE]).split()
+        except ValueError as error:
+            errors.append(str(error))
+            return None
+        if review_tree != V3_REVIEW_TREE or merge_tree != V3_REVIEW_TREE:
+            errors.append("V3 protected merge tree differs from reviewed tree")
+        if merge_line != [V3_MERGE, BASE_SHA]:
+            errors.append("V3 protected merge does not have the exact base parent")
+        if errors:
+            return None
+        return V3_REVIEW_HEAD
+    if git_is_ancestor(root, COMPLETE_GATE_SOURCE_SHA, current_head):
+        return current_head
+    errors.append("current head is not on a recognized V3 verification lineage")
+    return None
+
+
+def validate_lineage(
+    root: Path,
+    current_head: str,
+    validation_subject: str,
+    errors: list[str],
+) -> None:
     for revision in (
         BASE_SHA,
         CHECKPOINT_SHA,
@@ -417,6 +471,8 @@ def validate_lineage(root: Path, current_head: str, errors: list[str]) -> None:
         V2_ACTIVATION_MERGE,
         R18_MERGE,
         R19_MERGE,
+        V3_REVIEW_HEAD,
+        V3_MERGE,
     ):
         try:
             git(root, ["cat-file", "-e", f"{revision}^{{commit}}"])
@@ -490,8 +546,8 @@ def validate_lineage(root: Path, current_head: str, errors: list[str]) -> None:
         ),
         (
             COMPLETE_GATE_SOURCE_SHA,
-            current_head,
-            "complete gate source is not an ancestor of current head",
+            validation_subject,
+            "complete gate source is not an ancestor of validation subject",
         ),
     )
     for ancestor, descendant, message in ancestry:
@@ -510,6 +566,10 @@ def validate_lineage(root: Path, current_head: str, errors: list[str]) -> None:
             continue
         if observed_tree != expected_tree:
             errors.append(f"{label} merge tree differs from reviewed tree")
+    if validation_subject == V3_REVIEW_HEAD and not git_is_ancestor(
+        root, V3_MERGE, current_head
+    ):
+        errors.append("V3 protected merge is not an ancestor of current head")
 
 
 def is_excluded(path: str, exclusions: list[str]) -> bool:
@@ -848,6 +908,7 @@ def validate_remote_evidence(
 def validate_repository_evidence(
     root: Path,
     manifest: dict[str, Any],
+    validation_subject: str,
     errors: list[str],
 ) -> set[str]:
     repository_evidence = manifest.get("repository_evidence")
@@ -872,7 +933,13 @@ def validate_repository_evidence(
             evidence_ids.append(evidence_id)
         if not isinstance(evidence_class, str) or not evidence_class:
             errors.append(f"repository_evidence[{index}].class is invalid")
-        validate_digest_record(root, {"path": record.get("path"), "sha256": record.get("sha256")}, f"repository_evidence[{index}]", errors)
+        validate_digest_record(
+            root,
+            {"path": record.get("path"), "sha256": record.get("sha256")},
+            f"repository_evidence[{index}]",
+            errors,
+            revision=validation_subject,
+        )
     if len(evidence_ids) != len(set(evidence_ids)):
         errors.append("repository evidence IDs must be unique")
     return set(evidence_ids)
@@ -916,7 +983,11 @@ def validate_gates(
             )
 
 
-def validate_status_documents(root: Path, errors: list[str]) -> None:
+def validate_status_documents(
+    root: Path,
+    validation_subject: str,
+    errors: list[str],
+) -> None:
     documents = (
         "README.md",
         "docs/software/software-requirements-specification.md",
@@ -925,7 +996,16 @@ def validate_status_documents(root: Path, errors: list[str]) -> None:
         "docs/software/verification.md",
     )
     for relative_path in documents:
-        normalized = " ".join((root / relative_path).read_text(encoding="utf-8").split())
+        try:
+            content = git(
+                root,
+                ["show", f"{validation_subject}:{relative_path}"],
+                binary=True,
+            ).decode("utf-8")
+        except (UnicodeError, ValueError) as error:
+            errors.append(str(error))
+            continue
+        normalized = " ".join(content.split())
         if STATUS_MARKER not in normalized:
             errors.append(f"V3 status marker is absent from {relative_path}")
     prohibited_claims = (
@@ -933,9 +1013,19 @@ def validate_status_documents(root: Path, errors: list[str]) -> None:
         "LocalBaselineVerificationV3 is released",
         "LocalBaselineVerificationV3 is supported",
     )
-    combined = "\n".join(
-        (root / relative_path).read_text(encoding="utf-8") for relative_path in documents
-    )
+    historical_documents: list[str] = []
+    for relative_path in documents:
+        try:
+            historical_documents.append(
+                git(
+                    root,
+                    ["show", f"{validation_subject}:{relative_path}"],
+                    binary=True,
+                ).decode("utf-8")
+            )
+        except (UnicodeError, ValueError) as error:
+            errors.append(str(error))
+    combined = "\n".join(historical_documents)
     for claim in prohibited_claims:
         if claim in combined:
             errors.append(f"unsupported lifecycle claim is present: {claim}")
@@ -1204,12 +1294,16 @@ def validate_manifest(root: Path, manifest_path: Path) -> list[str]:
     except ValueError as error:
         return [str(error)]
 
+    validation_subject = resolve_validation_subject(root, current_head, errors)
+    if validation_subject is None:
+        return sorted(set(errors))
+
     validate_authority(manifest, plan, errors)
     validate_checkpoint(root, errors)
     validate_pinned_files(root, errors)
-    validate_lineage(root, current_head, errors)
-    validate_changed_paths(root, current_head, errors)
-    validate_product_tree(root, current_head, plan, manifest, errors)
+    validate_lineage(root, current_head, validation_subject, errors)
+    validate_changed_paths(root, validation_subject, errors)
+    validate_product_tree(root, validation_subject, plan, manifest, errors)
     validate_red(root, errors)
     validate_complete_gate(root, errors)
 
@@ -1249,14 +1343,25 @@ def validate_manifest(root: Path, manifest_path: Path) -> list[str]:
         errors.append("V2 inheritance differs from the immutable accepted baseline")
     else:
         for field in ("catalog", "plan", "manifest_schema", "manifest", "validator"):
-            validate_digest_record(root, v2_inheritance[field], f"v2_inheritance.{field}", errors)
+            validate_digest_record(
+                root,
+                v2_inheritance[field],
+                f"v2_inheritance.{field}",
+                errors,
+                revision=validation_subject,
+            )
 
     resolved = resolved_catalog(root, catalog, errors)
     validate_profiles(root, resolved, manifest.get("profiles"), errors)
     validate_remote_evidence(root, manifest, errors)
-    repository_ids = validate_repository_evidence(root, manifest, errors)
+    repository_ids = validate_repository_evidence(
+        root,
+        manifest,
+        validation_subject,
+        errors,
+    )
     validate_gates(manifest, repository_ids, errors)
-    validate_status_documents(root, errors)
+    validate_status_documents(root, validation_subject, errors)
 
     environment = manifest.get("environment")
     if not isinstance(environment, dict) or environment.get("network_product_path") != "disabled" or environment.get("model_provider_path") != "disabled":

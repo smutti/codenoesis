@@ -1,0 +1,1 @@
+{"code":"input.repository_limit_exceeded","context":{"limit":"scan_wall_milliseconds","maximum":60000,"observed":60001},"message":"repository input limit exceeded","retryable":false,"schema_version":"codenoesis.error/v24","stage":"input"}

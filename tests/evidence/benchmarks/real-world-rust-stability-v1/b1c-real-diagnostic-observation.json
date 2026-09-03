@@ -1,0 +1,58 @@
+{
+  "schema_version": "codenoesis.benchmark-bounded-diagnostic-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/208",
+  "authorization": "accountable-maintainer authorization in issue #208",
+  "run_id": "b1c-208-lekton-diagnostic-1",
+  "observed_on": "2026-09-02",
+  "exact_dependent_base": "71d05cdb90c3cdd2af4824d5eeb712ec78e6b080",
+  "runner_commit": "865f44b17cf386e603e66ee707b9f0df7672b2fb",
+  "baseline_product_commit": "cce84869430ef129f55591998b30ea2ea728e1c3",
+  "baseline_binary_sha256": "d1dc7785cad652e674c50565f66ff0a23ec15e85af2842c9107abff84775b247",
+  "protocol": {
+    "maximum_separate_attempts": 5,
+    "attempts_started": 1,
+    "attempts_completed": 1,
+    "stopped_at_first_failure": true,
+    "sample_retry_performed": false,
+    "acceptance_resumed": false,
+    "rustdesk_executed": false,
+    "candidate_comparison_started": false
+  },
+  "failure": {
+    "entry_id": "lekton",
+    "sample_index": 1,
+    "product_exit_status": 12,
+    "product_stdout_bytes": 0,
+    "product_stderr_bytes": 239,
+    "product_stderr_sha256": "ad8f094fd5abfeddbabd28ebb39820e517036974c1faab2ee066bfdcf976a48d",
+    "product_error_identity": "unparseable",
+    "runner_error_schema": "codenoesis.real-world-rust-benchmark-error/v1",
+    "runner_error_code": "benchmark.sample_failed",
+    "runner_error_stage": "input",
+    "runner_exit_status": 2,
+    "runner_stdout_bytes": 0,
+    "partial_report_published": false
+  },
+  "retained_evidence": {
+    "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1c-bounded-diagnostic.log",
+    "log_sha256": "a43319aecfe09eeb345ddeb1ee82e4a0580de944fba421839ad7badb30ba4f63",
+    "product_stderr_body_retained": false,
+    "product_stdout_body_retained": false,
+    "external_source_retained_in_git": false,
+    "private_path_retained": false
+  },
+  "source_after": {
+    "revision": "247b8f42fb045db41166d70a276a41c2e079b6eb",
+    "tree": "55ba428493a4ffae86ba492422a049f46d567a30",
+    "status_bytes": 0,
+    "marker_owned_temporary_roots": 0
+  },
+  "result": "diagnostic_failure_retained_b1_acceptance_remains_blocked",
+  "known_limitations": [
+    "the strict bounded parser could not select a public schema, code, and stage from the failed product stderr",
+    "the product stderr body was intentionally deleted and cannot be reconstructed from its digest",
+    "exit status 12 and stderr length do not authorize an inferred product error identity",
+    "the five-attempt protocol stopped after the first failure as required"
+  ],
+  "smallest_next_decision": "Authorize a separate bounded B1d package that retains only the failed public product-error validation category, without stderr body, retry, policy/oracle changes, or acceptance resumption."
+}

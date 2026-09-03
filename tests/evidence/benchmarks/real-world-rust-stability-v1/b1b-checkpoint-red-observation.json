@@ -1,0 +1,44 @@
+{
+  "schema_version": "codenoesis.benchmark-red-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/207",
+  "authorization": "https://github.com/smutti/codenoesis/issues/207#issuecomment-5508518302",
+  "run_id": "b1b-207-local-red-1",
+  "observed_on": "2026-09-02",
+  "exact_dependent_base": "7a7c6601981f915496a4648867323bbcfc91daac",
+  "checkpoint_commit": "b1d8abfb927538b2d17546fb15ce332794152bda",
+  "checkpoint_tree": "e6a7293c75bab555816f1cec15919d18bfef9163",
+  "expected_failure": "the runner and validator still freeze the pre-selector base commit and pilot-identity Lekton hashes",
+  "observations": [
+    {
+      "command": "python3 -m unittest scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests.test_bootstrap_baseline_and_repository_identity_oracle_are_exact -v",
+      "exit_status": 1,
+      "actual_failure": "the runner's fixed Lekton oracle still contains the pilot semantic hash instead of the B1 repository-identity hash",
+      "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1b-checkpoint-red-contract.log",
+      "log_sha256": "fc2d0ce6dd5f830a332706044f3cd250f5b0a9130e31914ab21edcf01ba97644"
+    },
+    {
+      "command": "python3 scripts/validate_benchmark_assets.py",
+      "exit_status": 1,
+      "actual_failure": "the validator rejects the corrected bootstrap commit and Lekton hashes as changes from its frozen old oracle",
+      "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1b-checkpoint-red-validator.log",
+      "log_sha256": "d7a627b9eb8185e6ccc0bc5bbd016c04aa6e1d7e5e375422d45b5e38a684c558"
+    }
+  ],
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "git": "2.50.1 (Apple Git-155)",
+    "network_used": false,
+    "external_repositories_used": false
+  },
+  "agent": {
+    "identity": "OpenAI Codex",
+    "model": "not exposed by runtime",
+    "policy": "AGENTS.md plus issues #205, #206, and #207",
+    "duration_seconds": "not available",
+    "cost": "not available"
+  },
+  "result": "expected_red"
+}

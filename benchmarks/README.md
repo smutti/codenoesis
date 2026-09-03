@@ -1,14 +1,14 @@
-# Benchmark scaffold
+# Benchmark contracts
 
 This directory defines the reproducibility contract for CodeNoesis performance
-evidence. It does **not** contain an executable benchmark or make a performance
-claim yet.
+evidence. Issue #205 proposes the first active observational suite over pinned
+real-world Rust repositories. The candidate remains ineffective until the
+exact independently reviewed pull request is manually merged.
 
-`manifest.json` remains in `scaffold` state until an implementation slice adds
-at least one reviewed suite, a versioned corpus, and a deterministic runner. CI
-validates the manifest and compiles every Rust benchmark target that exists; an
-empty suite list is reported explicitly rather than treated as measured
-performance.
+`manifest.json` selects exactly one B1 suite with a versioned descriptor,
+policy, semantic oracle, deterministic runner, raw samples, and same-host
+comparison. Existing CI validates the committed contract and compiles Rust
+benchmark targets; it does not clone or execute external repositories.
 
 Every future benchmark report must identify:
 
@@ -28,10 +28,46 @@ host/toolchain, cache and revision metadata. It does not activate this global
 manifest, establish a regression threshold, resolve `NFR-PER-002` or
 `OD-SLO-001`, or make an SLO, release-artifact, cross-host or GA claim.
 
-Before changing `status` to `active`:
+An active observational suite must:
 
 1. add a versioned, licensed corpus or an immutable corpus descriptor;
 2. add an executable suite with a stable command and reviewed metrics;
-3. add base-versus-head comparison with a ratified regression threshold;
+3. add base-versus-head comparison with a reviewed regression threshold;
 4. retain raw samples rather than only aggregate values;
-5. link the suite and CI evidence to `NFR-PER-001` or `NFR-PER-002`.
+5. link every claim to `NFR-PER-001`; `NFR-PER-002` remains separate until a
+   reference corpus and SLO are ratified.
+
+The `rust-real-world-stability-v1` candidate accepts caller-supplied local full
+clones only. It performs no clone, fetch, checkout, target build or execution,
+submodule initialization, LFS action, network access, model call, browser
+launch, or source mutation. Generated reports stay under ignored
+`benchmarks/results/`; retained review evidence contains only bounded public
+identities, digests, samples, and sanitized host metadata.
+
+Issue #206 and Decision 0043 add the explicit operational selector
+`real-world-rust-benchmark-75s-v1` to this suite. It raises only the exact
+packed, source-only R16 B1 whole-scan maximum from 60 to 75 seconds. The runner
+timeout remains 90 seconds, the observational Lekton p95 ceiling remains 75
+seconds, and every selector-absent or acquisition limit remains unchanged. The
+selector is report configuration, not an extractor, ontology input, SLO, or
+release/support claim.
+
+Issue #207 and Decision 0044 define the honest B1 bootstrap baseline as the
+first product commit supporting that selector, `cce8486`. They also bind the
+Lekton semantic oracle to the corpus repository identity instead of the older
+pilot identity. All counts, source revisions, policies, limits, timeouts, and
+observational exclusions remain unchanged.
+
+Issue #208 and Decision 0045 retain bounded failed-sample identity before owned
+temporary cleanup: public entry/index/exit/stream lengths, exact stderr SHA-256,
+and only allowlisted schema/code/stage from one canonical product error up to
+2,048 bytes. Product message/context and source or private values are never
+echoed. The runner V1 error protocol, report schema, no-retry policy, product,
+corpus, oracle, threshold, timeout, and observational exclusions stay unchanged.
+
+Issue #209 and Decision 0046 add one closed validation category when the B1c
+typed product identity is opaque, correct historical V2/V3 descendant
+verification, and permit one semantics-neutral private R16 parser extraction
+to restore the complete gate. The exact baseline binary stays frozen; candidate
+behavior, not binary identity, must match. One further Lekton diagnostic is
+allowed without retry, acceptance, comparison, or raw stderr retention.

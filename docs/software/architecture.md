@@ -605,6 +605,71 @@ secret source, open network, sign, publish, or establish support or GA. The
 G7a runner is observational only and does not resolve `NFR-PER-002` or
 `OD-SLO-001`.
 
+### Real-world Rust stability benchmark candidate
+
+Issue [#205](https://github.com/smutti/codenoesis/issues/205) and
+[Decision 0042](decisions/0042-real-world-rust-stability-benchmark.md) define
+one Proposed B1/G7/S14 benchmark boundary. The standard-library runner is an
+external measurement adapter around an explicitly supplied release `noesis`
+binary and two caller-supplied full local Git clones. It owns immutable Git
+preflight, fresh marker-owned stores, child-process timing, bounded output
+capture, semantic/outcome validation, canonical reports, and same-host report
+comparison. It owns no product extraction rule or ontology meaning.
+
+The runner may invoke only sanitized local Git inspection and the explicit
+`noesis` binary. It never clones, fetches, checks out, initializes submodules,
+builds, executes target code, opens network, loads a model, starts a browser,
+or mutates source repositories. Lekton is the positive R16 semantic oracle;
+RustDesk is the typed repository-boundary negative. Three baseline and three
+candidate samples are retained without retry or discard.
+
+The comparator rejects semantic or typed-outcome drift, incomplete samples,
+host/corpus/config mismatch, p95 above the reviewed same-host regression
+boundary, and absolute observational ceilings. The active manifest links only
+`NFR-PER-001`. This package does not resolve `NFR-PER-002` or `OD-SLO-001` and
+does not make release-artifact, availability, support, conference, cross-host,
+or GA claims.
+
+Issue [#206](https://github.com/smutti/codenoesis/issues/206) and
+[Decision 0043](decisions/0043-benchmark-only-r16-execution-limit.md) add one
+dependent operational boundary. The runner supplies
+`--execution-limit-profile real-world-rust-benchmark-75s-v1`; the CLI adapter
+accepts it only for the exact packed, source-only R16 B1 composition and passes
+a 75,000 millisecond final deadline inward. The standard domain limit and
+acquisition adapter remain 60,000 milliseconds. The selector is not part of
+semantic configuration and cannot affect ontology identities, hashes, counts,
+schemas, stores, or publication. Parsing rejects every unsupported composition
+before acquisition, while RustDesk's earlier boundary rejection retains
+precedence.
+
+Issue [#207](https://github.com/smutti/codenoesis/issues/207) and
+[Decision 0044](decisions/0044-b1-bootstrap-baseline-and-identity-oracle.md)
+correct the measurement boundary without changing product architecture. The
+first selector-supporting Rust product commit `cce8486` becomes the bootstrap
+baseline; the final candidate must rebuild byte-identical Rust product source.
+The benchmark adapter validates hashes bound to the corpus repository identity
+rather than reusing hashes from a differently identified pilot. Counts,
+extractors, ontology, stores, and every execution policy remain unchanged.
+
+Issue [#208](https://github.com/smutti/codenoesis/issues/208) and
+[Decision 0045](decisions/0045-b1-failed-sample-observability.md) add bounded
+failure observability only at this external measurement adapter. Before deleting
+marker-owned sample files, the adapter derives byte lengths and stderr SHA-256
+and may select schema/code/stage from one small canonical product error through
+a closed public allowlist. It never copies product message/context or source and
+does not persist the temporary output. Runner error version, report protocol,
+product boundary, retry policy, and cleanup ownership remain unchanged.
+
+Issue [#209](https://github.com/smutti/codenoesis/issues/209) and
+[Decision 0046](decisions/0046-b1-gate-readiness-and-opaque-failure-classification.md)
+correct three bounded S14 adapter and verification concerns. R16 invocation
+parsing delegates the operational B1a selector to a private helper without
+moving policy into the domain. Historical V2/V3 verification resolves immutable
+package bytes from their exact Git subjects rather than treating a descendant
+worktree as the historical review head. Failed-sample classification returns a
+closed reason enum without retaining or exposing the rejected stderr value.
+No component gains extraction, ontology, retry, release, or authority meaning.
+
 ### G1b/G8-local verifiable distribution candidate
 
 Issue [#186](https://github.com/smutti/codenoesis/issues/186) and

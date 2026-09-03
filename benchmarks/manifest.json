@@ -1,10 +1,9 @@
 {
   "$schema": "./manifest.schema.json",
   "schema_version": 1,
-  "status": "scaffold",
+  "status": "active",
   "requirements": [
-    "NFR-PER-001",
-    "NFR-PER-002"
+    "NFR-PER-001"
   ],
   "report_required_fields": [
     "cache_state",
@@ -16,5 +15,40 @@
     "repetitions",
     "success_rate"
   ],
-  "suites": []
+  "suites": [
+    {
+      "id": "rust-real-world-stability-v1",
+      "description": "Same-host semantic and latency stability over pinned Lekton and RustDesk",
+      "corpus": {
+        "id": "real-world-rust-stability",
+        "version": "1"
+      },
+      "host_profile": "declared-same-host-local-v1",
+      "concurrency": 1,
+      "cache_state": "mixed",
+      "enabled_extractors": [
+        "rust-r16-source-only"
+      ],
+      "repetitions": 3,
+      "percentile_method": "nearest-rank",
+      "minimum_success_rate": 1.0,
+      "metrics": [
+        "wall_time_ns",
+        "exit_code",
+        "stdout_bytes",
+        "stderr_bytes",
+        "semantic_hash",
+        "semantic_projection_sha256"
+      ],
+      "runner": [
+        "python3",
+        "scripts/run_real_world_rust_benchmark.py",
+        "run",
+        "--manifest",
+        "benchmarks/manifest.json",
+        "--suite",
+        "rust-real-world-stability-v1"
+      ]
+    }
+  ]
 }

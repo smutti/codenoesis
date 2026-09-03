@@ -6,25 +6,26 @@ CodeNoesis is an early-stage project exploring how to turn software repositories
 
 ## Status
 
-**The bounded local baseline through S0-S7, R0-R17, K1, and G0-G8-local is
-Verified; the product is not yet production-ready or generally available.**
-Issue [#188](https://github.com/smutti/codenoesis/issues/188) and protected PR
-#189 independently accepted an exact 32-profile evidence pack. Review head
-`a40a4cb0212e7b59b1eff81ab9818299c7ebc3b9` merged as
-`1de6a420f25a1c7eb74d07a99f1800dde90eefa8`. The retained
-`candidate_verified_pending_merge` manifest and the sentence
-“LocalBaselineVerificationV2 candidate Verified pending independent review and
-protected manual merge” remain immutable pre-activation evidence; protected
-manual merge is the external lifecycle event. Issue #141 is closed as
-superseded. G9 remains a separate governed package.
+**The bounded 34-profile local baseline through S0-S7, R0-R19, R0-R17/K1,
+and G0-G8-local is Verified; the product is not yet production-ready or
+generally available.** Issue
+[#201](https://github.com/smutti/codenoesis/issues/201) and protected PR #204
+independently accepted the exact 32-profile V2 baseline plus R18 trusted local
+source retrieval and R19 Git-backed semantic impact. Review head
+`75391c9061d691c1d6efdf8b726e120049389476` merged as
+`3fb6504d1d6cb39f204eca032ff816266194e1ec`. The retained V2/V3 candidate
+markers remain immutable pre-activation evidence; protected manual merge is
+the external lifecycle event. Issue #141 is closed as superseded. G9 remains a
+separate governed package.
 
 That Verified baseline provides deterministic loose/packed local Git
 acquisition, safe gitlink boundaries, evidence-backed Rust ontology extraction
 through R16, atomic local persistence, documentation, exact-ID query, portable
 export, versioned offline exploration, R17 `FunctionContextV1`, the bounded S7
-implementation-aware HTTP/JSON pilot, and local configuration, distribution,
-upgrade, and supply-chain preflights. Verification does not grant signing,
-publication, support, a release channel, EOL, SLA, or GA authority.
+implementation-aware HTTP/JSON pilot, R18 immutable evidence-to-source
+retrieval, R19 Git-backed semantic impact, and local configuration,
+distribution, upgrade, and supply-chain preflights. Verification does not grant
+signing, publication, support, a release channel, EOL, SLA, or GA authority.
 The historical milestone **Implemented local Rust analysis through R14**
 remains an immutable compatibility checkpoint within that verified baseline.
 
@@ -37,16 +38,12 @@ and `rust-safe-constant-evaluation-v1`. Their historical lifecycle label was
 **Approved and Implemented but not Verified**; the current bounded status is
 the independently verified baseline described above.
 
-Protected PR #191 made R18 trusted local evidence-to-source retrieval Approved
-and Implemented, and protected PR #197 made R19 Git-backed
-implementation-aware semantic impact Approved and Implemented. Both remain not
-independently Verified on the current base. Issue
-[#201](https://github.com/smutti/codenoesis/issues/201) and
-[Decision 0041](docs/software/decisions/0041-local-baseline-verification-v3.md)
-define the verification-only 34-profile candidate. Its exact pre-activation
-status marker is “LocalBaselineVerificationV3 candidate Verified pending
-independent review and protected manual merge”. It changes no product,
-ontology, schema, fixture, workflow, release, support, or GA behavior.
+Issue [#205](https://github.com/smutti/codenoesis/issues/205) and
+[Decision 0042](docs/software/decisions/0042-real-world-rust-stability-benchmark.md)
+define the Proposed high-risk B1/G7 observational benchmark candidate over
+pinned Lekton and RustDesk. It changes no product or ontology byte and makes no
+SLO, release, support, cross-host, conference-validity, or GA claim before
+independent review and protected merge.
 
 Broader language coverage, operations, semantic comparison, and the remaining
 production-readiness slices are still pending.

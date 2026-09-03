@@ -1,0 +1,60 @@
+{
+  "schema_version": "codenoesis.benchmark-bounded-diagnostic-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/209",
+  "authorization": "accountable-maintainer authorization in issue #209",
+  "run_id": "b1d-209-lekton-diagnostic-1",
+  "observed_on": "2026-09-03",
+  "exact_dependent_base": "09dd9df9c142ffbdea3b6e20c4cbeb0e7a9dd2d9",
+  "runner_commit": "3c4d9faf7420cb804ae9fa139e64307c764d342e",
+  "baseline_product_commit": "cce84869430ef129f55591998b30ea2ea728e1c3",
+  "baseline_binary_sha256": "d1dc7785cad652e674c50565f66ff0a23ec15e85af2842c9107abff84775b247",
+  "protocol": {
+    "maximum_additional_attempts": 1,
+    "product_attempts_started": 1,
+    "product_attempts_completed": 1,
+    "pre_product_wrapper_failures": 1,
+    "stopped_at_first_product_failure": true,
+    "sample_retry_performed": false,
+    "acceptance_resumed": false,
+    "rustdesk_executed": false,
+    "candidate_comparison_started": false
+  },
+  "failure": {
+    "entry_id": "lekton",
+    "sample_index": 1,
+    "product_exit_status": 12,
+    "product_stdout_bytes": 0,
+    "product_stderr_bytes": 239,
+    "product_stderr_sha256": "ad8f094fd5abfeddbabd28ebb39820e517036974c1faab2ee066bfdcf976a48d",
+    "product_error_identity": "unparseable",
+    "product_error_validation": "unsupported_schema",
+    "runner_error_schema": "codenoesis.real-world-rust-benchmark-error/v1",
+    "runner_error_code": "benchmark.sample_failed",
+    "runner_error_stage": "input",
+    "runner_exit_status": 2,
+    "runner_stdout_bytes": 0,
+    "partial_report_published": false
+  },
+  "retained_evidence": {
+    "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1d-lekton-diagnostic.log",
+    "log_sha256": "3c01a7600cfa66614998c2b1ab34d7883cb131beb6b00a4df7168d8ac39ad3d8",
+    "log_bytes": 601,
+    "product_stderr_body_retained": false,
+    "product_stdout_body_retained": false,
+    "external_source_retained_in_git": false,
+    "private_path_retained": false
+  },
+  "source_after": {
+    "revision": "247b8f42fb045db41166d70a276a41c2e079b6eb",
+    "tree": "55ba428493a4ffae86ba492422a049f46d567a30",
+    "status_bytes": 0,
+    "marker_owned_temporary_roots": 0
+  },
+  "result": "diagnostic_failure_classified_unsupported_schema_and_stopped",
+  "known_limitations": [
+    "the bounded category intentionally does not reveal the unsupported schema value",
+    "the product stderr body was intentionally deleted and cannot be reconstructed from its digest",
+    "B1 acceptance and candidate comparison remain blocked and were not resumed"
+  ],
+  "smallest_next_decision": "Authorize a separate package to reconcile the exact baseline product error contract or to run a bounded candidate diagnostic; do not infer or whitelist an unseen schema value."
+}

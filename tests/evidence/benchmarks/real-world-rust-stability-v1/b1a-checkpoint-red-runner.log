@@ -1,0 +1,14 @@
+test_scan_command_selects_benchmark_only_75s_execution_limit (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... FAIL
+
+======================================================================
+FAIL: test_scan_command_selects_benchmark_only_75s_execution_limit (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/.worktrees/205/scripts/tests/test_real_world_rust_benchmark.py", line 108, in test_scan_command_selects_benchmark_only_75s_execution_limit
+    self.assertIn("--execution-limit-profile", command)
+AssertionError: '--execution-limit-profile' not found in ['/tmp/noesis', 'scan', '--repository', '/tmp/repository', '--repository-id', 'urn:codenoesis:test:b1', '--revision', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '--profile', 'standard-local-s4', '--acquisition-profile', 'local-git-sha1-packed-v1', '--workspace-profile', 'cargo-root-package-v1', '--manifest-profile', 'cargo-manifest-facts-v1', '--rust-semantic-profile', 'rust-semantic-depth-v1', '--rust-framework-profile', 'rust-framework-declarations-v1', '--rust-callable-profile', 'rust-callable-semantics-v1', '--rust-expression-profile', 'rust-expression-bindings-v1', '--rust-flow-profile', 'rust-local-flow-v1', '--rust-constant-profile', 'rust-safe-constant-evaluation-v1', '--output-capacity-profile', 'local-snapshot-256m-v1', '--store', '/tmp/store', '--format', 'json']
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)

@@ -1,0 +1,71 @@
+{
+  "schema_version": "codenoesis.benchmark-implementation-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/209",
+  "authorization": "accountable-maintainer authorization in issue #209",
+  "run_id": "b1d-209-local-green-1",
+  "observed_on": "2026-09-03",
+  "exact_dependent_base": "09dd9df9c142ffbdea3b6e20c4cbeb0e7a9dd2d9",
+  "checkpoint_commit": "161ecd33f6ef745a4cade6471b97eff7b23ce083",
+  "red_evidence_commit": "fac0b612bbe2997a31abe6e9cbc06a2ccaade2be",
+  "implementation_commit": "3c4d9faf7420cb804ae9fa139e64307c764d342e",
+  "implementation_tree": "7d636b514b2e0c9089c387b240671b46604828b2",
+  "result": "focused_green_and_gate_ready",
+  "behavior": {
+    "r16_source_difference_since_cce8486": [
+      "crates/noesis/src/main.rs"
+    ],
+    "r16_change": "private execution-limit selector parser extraction",
+    "baseline_binary_sha256": "d1dc7785cad652e674c50565f66ff0a23ec15e85af2842c9107abff84775b247",
+    "candidate_binary_sha256": "9636cd949e6df718d031f47dbaa58f52acfcfe081b2a7a3ac66cbd6bb487af43",
+    "v2_v3_protected_artifacts_changed": [],
+    "historical_validation_subjects_used": true,
+    "runner_schema": "codenoesis.real-world-rust-benchmark-error/v1",
+    "runner_code": "benchmark.sample_failed",
+    "runner_stage": "input",
+    "message_bytes_max": 256,
+    "raw_product_output_retained": false,
+    "sample_retry_allowed": false
+  },
+  "corrections": [
+    {
+      "round": 1,
+      "finding": "the initial V3 historical-validator branch used invalid try/except/elif syntax",
+      "correction": "use an explicit else branch before comparing the historical validator digest",
+      "regression": "scripts.tests.test_local_baseline_verification_v3"
+    },
+    {
+      "round": 2,
+      "finding": "cargo fmt required one line-wrap change in the private R16 helper call",
+      "correction": "apply repository rustfmt without semantic changes",
+      "regression": "cargo fmt --all --check"
+    }
+  ],
+  "focused_green": {
+    "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1d-green-focused.log",
+    "log_sha256": "ad7f4e4076b69d1de1b01ed10411a56552c07c60ded80fa517a893224c7d8969",
+    "python_tests_passed": 36,
+    "rust_tests_passed": 3,
+    "exit_status": 0
+  },
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "cargo": "1.97.1 (c980f4866 2026-06-30)",
+    "git": "2.50.1 (Apple Git-155)",
+    "network_used_by_product": false,
+    "model_provider_used": false
+  },
+  "agent": {
+    "identity": "OpenAI Codex",
+    "model": "not exposed by runtime",
+    "policy": "AGENTS.md plus issues #205-#209",
+    "duration_seconds": "not available",
+    "cost": "not available"
+  },
+  "known_limitations": [
+    "B1 acceptance and candidate comparison remain outside issue #209",
+    "the candidate digest identifies the implementation commit rather than claiming byte identity with the baseline binary"
+  ]
+}

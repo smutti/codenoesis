@@ -1,0 +1,15 @@
+warning: /Users/smutti/Documents/personal/codenoesis/.worktrees/205/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Checking noesis v0.1.0 (/Users/smutti/Documents/personal/codenoesis/.worktrees/205/crates/noesis)
+error: this function has too many lines (106/100)
+    --> crates/noesis/src/main.rs:7535:1
+     |
+7535 | fn parse_r16_invocation(arguments: &[OsString]) -> Result<Invocation, InvocationError> {
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.97.0/index.html#too_many_lines
+     = note: `-D clippy::too-many-lines` implied by `-D warnings`
+     = help: to override `-D warnings` add `#[allow(clippy::too_many_lines)]`
+
+error: could not compile `noesis` (bin "noesis") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `noesis` (bin "noesis" test) due to 1 previous error

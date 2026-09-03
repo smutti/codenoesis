@@ -1,0 +1,3 @@
+benchmark assets are invalid:
+- requirements must include NFR-PER-001 and NFR-PER-002
+- active status is disabled until an executable runner validates corpus, samples, and base/head reports

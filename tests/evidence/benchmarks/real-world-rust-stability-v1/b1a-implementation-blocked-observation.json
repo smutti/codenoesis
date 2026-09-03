@@ -1,0 +1,63 @@
+{
+  "schema_version": "codenoesis.benchmark-blocked-evidence/v1",
+  "issues": [
+    "https://github.com/smutti/codenoesis/issues/205",
+    "https://github.com/smutti/codenoesis/issues/206"
+  ],
+  "observed_on": "2026-09-01",
+  "run_id": "b1a-206-local-real-repository-1",
+  "exact_b1_base": "3fb6504d1d6cb39f204eca032ff816266194e1ec",
+  "exact_b1a_base": "74bd959128472c3e95baeb5fd1a29cfc09b2c686",
+  "implementation_commit": "cce84869430ef129f55591998b30ea2ea728e1c3",
+  "profile": "real-world-rust-benchmark-75s-v1",
+  "binary_sha256": {
+    "b1_base": "8a8dce8b31cf4eefaf092ec8d9ef9fe7ae64efb5942767095de0e67ab2fbb684",
+    "b1a_candidate": "d1dc7785cad652e674c50565f66ff0a23ec15e85af2842c9107abff84775b247"
+  },
+  "observations": [
+    {
+      "id": "base_selector_incompatible",
+      "outcome": "human_required",
+      "detail": "The exact B1 base release predates the explicit B1a selector. Its exact Lekton command exits 2 before acquisition with ErrorV6 input.invalid_revision, empty stdout, and no store. The B1 runner therefore exits 2 on its first positive sample and publishes no report.",
+      "direct_error_log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1a-base-selector-rejection.stderr.log",
+      "direct_error_log_sha256": "c4fe7fe944a3edd54c6078e7f9815c688c336d2cb2e33e5ff218916e5ffd63c0",
+      "runner_error_log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1a-base-runner-rejection.stderr.log",
+      "runner_error_log_sha256": "f9f1bec7b28f1fb5ba645bbcf7d27cc066e788a9407e931673ac1507110b262a",
+      "report_published": false
+    },
+    {
+      "id": "candidate_limit_effective",
+      "outcome": "success_with_oracle_mismatch",
+      "detail": "The exact B1a candidate selector completes the pinned Lekton R16 scan with exit 0, empty stderr, and publication. This proves the product-side 75,000 millisecond scan boundary accepts the observed extraction without changing graph family counts.",
+      "stdout_bytes": 164576088,
+      "stdout_sha256": "a056d93f381ba34f4a83f78a290a94b9b52ddcfffb5e3d4e2290ba0108fdb3fb",
+      "stderr_bytes": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "snapshot_schema": "codenoesis.repository-snapshot/v18",
+      "semantic_hash": "22e32d20429d510d4674e0e6bdc5542f08dbc0e28874cd0098419e7512a334c1",
+      "semantic_projection_sha256": "7c800424b3176c96d4ea4164d4066adaf551134b3aea4b40a1e5647f74dc7fa9",
+      "counts": {
+        "entities": 26158,
+        "relationships": 43683,
+        "claims": 69841,
+        "evidence": 24522,
+        "diagnostics": 4211,
+        "coverage": 13177,
+        "evaluated_values": 8
+      },
+      "wall_time_ns": "not retained because the diagnostic shell timer overflowed; no latency claim is made"
+    },
+    {
+      "id": "b1_repository_identity_oracle_mismatch",
+      "outcome": "human_required",
+      "detail": "The B1 oracle hashes were copied from the historical pilot identity urn:codenoesis:pilot:lekton, while the active B1 corpus selects urn:codenoesis:benchmark:lekton:b1. The exact B1 candidate preserves all reviewed family counts but correctly emits repository-identity-bound hashes different from the frozen oracle. Changing either the corpus identity or oracle hashes exceeds issues #205 and #206."
+    }
+  ],
+  "source_clean_after": {
+    "lekton": true,
+    "rustdesk": true
+  },
+  "external_source_retained_in_git": false,
+  "result": "human_required",
+  "smallest_decision": "Ratify an honest first supporting B1 baseline and the repository-identity-correct Lekton semantic hashes before real baseline/candidate comparison."
+}

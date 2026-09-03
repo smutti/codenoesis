@@ -1,0 +1,32 @@
+test_active_suite_is_complete (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_atomic_publication_refuses_existing_destination (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_bootstrap_baseline_and_repository_identity_oracle_are_exact (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_comparator_rejects_absolute_threshold_plus_one (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_comparator_rejects_deleted_sample (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_comparator_rejects_host_mismatch (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_comparator_rejects_ratio_threshold_plus_one (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_comparator_rejects_retried_sample_index (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_comparator_rejects_semantic_drift (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_comparator_rejects_typed_outcome_drift (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_failed_sample_identity_accepts_exact_2048_byte_canonical_error (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_failed_sample_identity_accepts_public_rustdesk_error (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_failed_sample_identity_rejects_unsafe_stderr_forms (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_failed_sample_retains_bounded_product_identity (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_invalid_cli_is_typed_with_empty_stdout (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_malformed_report_fails_closed (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_mutating_product_is_rejected_even_when_output_is_invalid (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_nearest_rank_uses_unrounded_raw_values (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_privacy_canary_fails_closed (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_report_size_plus_one_fails_closed (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_repository_preflight_accepts_exact_clean_full_clone (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_repository_preflight_rejects_dirty_and_shallow_input (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_repository_preflight_rejects_path_substitution (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_repository_preflight_rejects_wrong_commit_and_tree (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_scan_command_selects_benchmark_only_75s_execution_limit (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_timed_out_product_is_not_retried (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_valid_report_and_same_host_comparison_pass (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 2.206s
+
+OK
