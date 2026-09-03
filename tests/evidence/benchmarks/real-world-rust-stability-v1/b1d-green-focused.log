@@ -1,0 +1,57 @@
+head=3c4d9faf7420cb804ae9fa139e64307c764d342e
+>>> python3 -m unittest -v scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests.test_unparseable_product_error_retains_closed_validation_category scripts.tests.test_local_baseline_verification_v2 scripts.tests.test_local_baseline_verification_v3
+test_unparseable_product_error_retains_closed_validation_category (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... ok
+test_activation_identity_mutations_fail_closed (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_candidate_lineage_keeps_original_subject (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_candidate_manifest_exists (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_candidate_manifest_is_complete_and_valid (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_catalog_is_complete_and_references_existing_inputs (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_dangling_profile_evidence_fails_closed (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_exact_squash_activation_is_supported (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_gate_with_dangling_evidence_fails_closed (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_independent_review_cannot_self_activate (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_manifest_schema_is_closed_and_base_bound (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_missing_profile_fails_closed (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_non_descendant_cannot_activate (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_plan_fixes_exact_authority_and_scope (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_post_merge_activation_contract_is_closed_and_exact (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_s0_schema_keeps_artifact_and_adds_strict_git_retention (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_schema_extension_fails_closed (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_status_documents_are_aligned (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_tampered_repository_digest_fails_closed (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_unsafe_evidence_path_fails_closed (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_validator_exists (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_versioned_descendant_keeps_historical_checkpoint_binding (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_wrong_product_tree_fails_closed (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_wrong_remote_log_digest_fails_closed (scripts.tests.test_local_baseline_verification_v2.LocalBaselineVerificationV2ContractTests) ... ok
+test_candidate_manifest_is_complete_and_valid (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) ... ok
+test_catalog_resolves_exact_v2_plus_r18_r19 (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) ... ok
+test_identity_digest_and_lifecycle_mutations_fail_closed (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) ... ok
+test_manifest_schema_is_closed_and_exact (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) ... ok
+test_plan_fixes_exact_authority_and_scope (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) ... ok
+test_profile_omission_duplication_and_order_fail_closed (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) ... ok
+test_public_cli_is_canonical_and_fail_closed (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) ... ok
+test_r18_r19_bundle_self_records_use_historical_bytes (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) ... ok
+test_remote_runs_are_exact_and_green (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) ... ok
+test_status_documents_are_aligned (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) ... ok
+test_v2_contracts_are_byte_immutable (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) ... ok
+test_validator_and_manifest_are_complete (scripts.tests.test_local_baseline_verification_v3.LocalBaselineVerificationV3ContractTests) ... ok
+
+----------------------------------------------------------------------
+Ran 36 tests in 21.322s
+
+OK
+<<< exit=0
+>>> cargo test -p noesis --test s4_r16_benchmark_execution_limit --locked
+warning: /Users/smutti/Documents/personal/codenoesis/.worktrees/205/crates/codenoesis-lang-rust/Cargo.toml: version requirement `=1.1.4+spec-1.1.0` for dependency `toml` includes semver metadata which will be ignored, removing the metadata is recommended to avoid confusion
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.15s
+     Running tests/s4_r16_benchmark_execution_limit.rs (target/debug/deps/s4_r16_benchmark_execution_limit-3c70e214b9fac3ac)
+
+running 3 tests
+test conf_fr_cli_001_benchmark_execution_limit_preserves_boundary_precedence ... ok
+test conf_fr_cli_001_benchmark_execution_limit_compositions_fail_closed ... ok
+test e2e_nfr_per_001_benchmark_r16_accepts_explicit_75s_execution_limit ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.41s
+
+<<< exit=0

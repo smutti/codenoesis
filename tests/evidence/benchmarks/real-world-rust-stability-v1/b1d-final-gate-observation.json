@@ -1,0 +1,57 @@
+{
+  "schema_version": "codenoesis.benchmark-final-gate-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/209",
+  "run_id": "b1d-209-final-gate-1",
+  "observed_on": "2026-09-03",
+  "review_source_head": "3c4d9faf7420cb804ae9fa139e64307c764d342e",
+  "exact_dependent_base": "09dd9df9c142ffbdea3b6e20c4cbeb0e7a9dd2d9",
+  "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1d-green-complete-gate.log",
+  "log_sha256": "83669ba8b279013c6622519009a2abd23922d925403683f3f6f1136babb54e8b",
+  "log_bytes": 83803,
+  "commands": [
+    {
+      "id": "actionlint",
+      "exit_status": 0
+    },
+    {
+      "id": "codex_policy",
+      "exit_status": 0
+    },
+    {
+      "id": "cargo_fmt",
+      "exit_status": 0
+    },
+    {
+      "id": "cargo_clippy",
+      "exit_status": 0
+    },
+    {
+      "id": "cargo_test",
+      "exit_status": 0
+    },
+    {
+      "id": "cargo_doc_test",
+      "exit_status": 0
+    },
+    {
+      "id": "python_tests",
+      "exit_status": 0,
+      "tests_passed": 447
+    },
+    {
+      "id": "benchmark_assets",
+      "exit_status": 0
+    },
+    {
+      "id": "cargo_bench_no_run",
+      "exit_status": 0
+    }
+  ],
+  "result": "nine_of_nine_green",
+  "oracle_weakened": false,
+  "protected_artifact_changed": false,
+  "unrelated_source_modified": false,
+  "known_warnings": [
+    "the pre-existing toml dependency requirement contains ignored semver metadata"
+  ]
+}
