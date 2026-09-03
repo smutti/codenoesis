@@ -108,6 +108,13 @@ class DeliveryWorkflowContractTests(unittest.TestCase):
         ]
         self.assertEqual(active_lines, ["* @smutti"])
 
+    def test_quality_gate_has_cold_runner_headroom(self) -> None:
+        ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text(
+            encoding="utf-8"
+        )
+        quality_job = ci.split("  quality:\n", 1)[1].split("  portability:\n", 1)[0]
+        self.assertIn("timeout-minutes: 25", quality_job)
+
 
 if __name__ == "__main__":
     unittest.main()
