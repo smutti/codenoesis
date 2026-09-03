@@ -1,0 +1,94 @@
+test_unparseable_product_error_retains_closed_validation_category (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) ... FAIL
+
+======================================================================
+FAIL: test_unparseable_product_error_retains_closed_validation_category (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) (category='empty')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/.worktrees/205/scripts/tests/test_real_world_rust_benchmark.py", line 600, in test_unparseable_product_error_retains_closed_validation_category
+    self.assertIn(f"validation={category}", message)
+AssertionError: 'validation=empty' not found in 'sample_failed entry=lekton index=1 exit=12 stdout=0 stderr=0 sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 product=unparseable'
+
+======================================================================
+FAIL: test_unparseable_product_error_retains_closed_validation_category (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) (category='oversized')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/.worktrees/205/scripts/tests/test_real_world_rust_benchmark.py", line 600, in test_unparseable_product_error_retains_closed_validation_category
+    self.assertIn(f"validation={category}", message)
+AssertionError: 'validation=oversized' not found in 'sample_failed entry=lekton index=1 exit=12 stdout=0 stderr=2049 sha256=d2bc1d811fcb4da2cc5719f1fc1654084a6ed72d777e7c1bed597f6dbf007829 product=unparseable'
+
+======================================================================
+FAIL: test_unparseable_product_error_retains_closed_validation_category (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) (category='non_utf8')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/.worktrees/205/scripts/tests/test_real_world_rust_benchmark.py", line 600, in test_unparseable_product_error_retains_closed_validation_category
+    self.assertIn(f"validation={category}", message)
+AssertionError: 'validation=non_utf8' not found in 'sample_failed entry=lekton index=1 exit=12 stdout=0 stderr=1 sha256=a8100ae6aa1940d0b663bb31cd466142ebbdbd5187131b92d93818987832eb89 product=unparseable'
+
+======================================================================
+FAIL: test_unparseable_product_error_retains_closed_validation_category (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) (category='invalid_json')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/.worktrees/205/scripts/tests/test_real_world_rust_benchmark.py", line 600, in test_unparseable_product_error_retains_closed_validation_category
+    self.assertIn(f"validation={category}", message)
+AssertionError: 'validation=invalid_json' not found in 'sample_failed entry=lekton index=1 exit=12 stdout=0 stderr=11 sha256=8c69fc307fed3936d6a8ac679c0079c9bfd11f9de2a43e20ae25ff2a899d9776 product=unparseable'
+
+======================================================================
+FAIL: test_unparseable_product_error_retains_closed_validation_category (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) (category='wrong_shape')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/.worktrees/205/scripts/tests/test_real_world_rust_benchmark.py", line 600, in test_unparseable_product_error_retains_closed_validation_category
+    self.assertIn(f"validation={category}", message)
+AssertionError: 'validation=wrong_shape' not found in 'sample_failed entry=lekton index=1 exit=12 stdout=0 stderr=3 sha256=37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570 product=unparseable'
+
+======================================================================
+FAIL: test_unparseable_product_error_retains_closed_validation_category (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) (category='noncanonical')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/.worktrees/205/scripts/tests/test_real_world_rust_benchmark.py", line 600, in test_unparseable_product_error_retains_closed_validation_category
+    self.assertIn(f"validation={category}", message)
+AssertionError: 'validation=noncanonical' not found in 'sample_failed entry=lekton index=1 exit=12 stdout=0 stderr=199 sha256=0624bfab618f360eadf6c9f7ea156b86a9e78dd20d75109cba05f0b8b31aea10 product=unparseable'
+
+======================================================================
+FAIL: test_unparseable_product_error_retains_closed_validation_category (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) (category='unsupported_schema')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/.worktrees/205/scripts/tests/test_real_world_rust_benchmark.py", line 600, in test_unparseable_product_error_retains_closed_validation_category
+    self.assertIn(f"validation={category}", message)
+AssertionError: 'validation=unsupported_schema' not found in 'sample_failed entry=lekton index=1 exit=12 stdout=0 stderr=174 sha256=5cb5b61e27ade5a614796f42900ae10da96011a5062c3b2ffe0e7e01882d4659 product=unparseable'
+
+======================================================================
+FAIL: test_unparseable_product_error_retains_closed_validation_category (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) (category='unsafe_code')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/.worktrees/205/scripts/tests/test_real_world_rust_benchmark.py", line 600, in test_unparseable_product_error_retains_closed_validation_category
+    self.assertIn(f"validation={category}", message)
+AssertionError: 'validation=unsafe_code' not found in 'sample_failed entry=lekton index=1 exit=12 stdout=0 stderr=163 sha256=9c6c681aa2d286e8e545a11f4f7d0df8ab345f95b66b597e00957ec2e0c1c3eb product=unparseable'
+
+======================================================================
+FAIL: test_unparseable_product_error_retains_closed_validation_category (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) (category='unsafe_stage')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/.worktrees/205/scripts/tests/test_real_world_rust_benchmark.py", line 600, in test_unparseable_product_error_retains_closed_validation_category
+    self.assertIn(f"validation={category}", message)
+AssertionError: 'validation=unsafe_stage' not found in 'sample_failed entry=lekton index=1 exit=12 stdout=0 stderr=176 sha256=f4fb2f89cd050f263d88ebb6bb2ba2b5af5dc082ca8003150201eaec54c5e4d7 product=unparseable'
+
+======================================================================
+FAIL: test_unparseable_product_error_retains_closed_validation_category (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests) (category='inconsistent_stage')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/.worktrees/205/scripts/tests/test_real_world_rust_benchmark.py", line 600, in test_unparseable_product_error_retains_closed_validation_category
+    self.assertIn(f"validation={category}", message)
+AssertionError: 'validation=inconsistent_stage' not found in 'sample_failed entry=lekton index=1 exit=12 stdout=0 stderr=174 sha256=cd18628609f97fc24cdbfd685b4e58938214c5e53a25b891916e00ced80a1e92 product=unparseable'
+
+======================================================================
+FAIL: test_unparseable_product_error_retains_closed_validation_category (scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/smutti/Documents/personal/codenoesis/.worktrees/205/scripts/tests/test_real_world_rust_benchmark.py", line 610, in test_unparseable_product_error_retains_closed_validation_category
+    self.assertIn("validation=accepted", message)
+AssertionError: 'validation=accepted' not found in 'sample_failed entry=lekton index=1 exit=12 stdout=0 stderr=174 sha256=5e8689e7a3f954138aff79edcdb8bbf5997b989d3108a8f45e42e165189d168f product=codenoesis.error/v24|input.repository_limit_exceeded|input'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.003s
+
+FAILED (failures=11)

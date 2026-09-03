@@ -1,0 +1,54 @@
+{
+  "schema_version": "codenoesis.benchmark-red-evidence/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/209",
+  "authorization": "accountable-maintainer authorization in issue #209",
+  "run_id": "b1d-209-local-red-1",
+  "observed_on": "2026-09-03",
+  "exact_dependent_base": "09dd9df9c142ffbdea3b6e20c4cbeb0e7a9dd2d9",
+  "checkpoint_commit": "161ecd33f6ef745a4cade6471b97eff7b23ce083",
+  "checkpoint_tree": "73bd08e2cd0a4d435c28ac46f79c4bc6b2ebf873",
+  "observations": [
+    {
+      "command": "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "exit_status": 101,
+      "expected_failure": "parse_r16_invocation exceeds the pinned clippy 100-line limit",
+      "actual_failure": "clippy reported 106/100 lines and no other error",
+      "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1d-checkpoint-red-clippy.log",
+      "log_sha256": "240e091d2049bc8d5a3c1bb8af3b60e57756e0eb1bb8e987fb4434e215b6e8f9"
+    },
+    {
+      "command": "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "exit_status": 1,
+      "expected_failure": "the five frozen LocalBaselineVerificationV2/V3 descendant-lifecycle assertions remain Red",
+      "actual_failure": "the exact five historical lifecycle failures remained, together with the separately expected additive B1d category-test failures",
+      "historical_failure_count": 5,
+      "additive_b1d_failure_count": 11,
+      "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1d-checkpoint-red-python.log",
+      "log_sha256": "749193774fb5f9f9cefc64484f231ad31ae1e41d5fb0255eb591fa40b2856104"
+    },
+    {
+      "command": "python3 -m unittest scripts.tests.test_real_world_rust_benchmark.RealWorldRustBenchmarkContractTests.test_unparseable_product_error_retains_closed_validation_category -v",
+      "exit_status": 1,
+      "expected_failure": "the B1c message has no validation category",
+      "actual_failure": "all ten opaque cases and the accepted case lacked their required validation category",
+      "log": "tests/evidence/benchmarks/real-world-rust-stability-v1/b1d-checkpoint-red-runner.log",
+      "log_sha256": "81e79a91a8483af0dfa3a5245a097dda195c724ccf9e0fd79f73f51ae5df7ca4"
+    }
+  ],
+  "environment": {
+    "os": "Darwin 25.5.0",
+    "architecture": "arm64",
+    "python": "3.9.6",
+    "rustc": "1.97.1 (8bab26f4f 2026-07-14)",
+    "network_used": false,
+    "external_repositories_used": false
+  },
+  "agent": {
+    "identity": "OpenAI Codex",
+    "model": "not exposed by runtime",
+    "policy": "AGENTS.md plus issues #205-#209",
+    "duration_seconds": "not available",
+    "cost": "not available"
+  },
+  "result": "expected_red"
+}
