@@ -563,6 +563,53 @@ class RealWorldRustBenchmarkContractTests(unittest.TestCase):
         )
         self.assertLessEqual(len(message.encode("utf-8")), 256)
 
+    def test_unparseable_product_error_retains_closed_validation_category(self) -> None:
+        canonical = {
+            "code": "input.repository_limit_exceeded",
+            "context": {},
+            "message": "repository input limit exceeded",
+            "retryable": False,
+            "schema_version": "codenoesis.error/v24",
+            "stage": "input",
+        }
+        variants = {
+            "empty": b"",
+            "oversized": b"x" * 2049,
+            "non_utf8": b"\xff",
+            "invalid_json": b"{not-json}\n",
+            "wrong_shape": canonical_json_bytes([]),
+            "noncanonical": json.dumps(canonical, indent=2).encode("utf-8") + b"\n",
+            "unsupported_schema": canonical_json_bytes(
+                {**canonical, "schema_version": "codenoesis.error/v23"}
+            ),
+            "unsafe_code": canonical_json_bytes(
+                {**canonical, "code": "input.private_canary"}
+            ),
+            "unsafe_stage": canonical_json_bytes({**canonical, "stage": "private"}),
+            "inconsistent_stage": canonical_json_bytes(
+                {**canonical, "stage": "store"}
+            ),
+        }
+        with tempfile.TemporaryDirectory() as temporary:
+            stderr_path = Path(temporary) / "stderr"
+            for category, stderr in variants.items():
+                with self.subTest(category=category):
+                    stderr_path.write_bytes(stderr)
+                    message = failed_sample_message("lekton", 1, 12, 0, stderr_path)
+                    self.assertIn("product=unparseable", message)
+                    self.assertIn(f"validation={category}", message)
+                    self.assertLessEqual(len(message.encode("utf-8")), 256)
+
+            accepted = canonical_json_bytes(canonical)
+            stderr_path.write_bytes(accepted)
+            message = failed_sample_message("lekton", 1, 12, 0, stderr_path)
+            self.assertIn(
+                "product=codenoesis.error/v24|input.repository_limit_exceeded|input",
+                message,
+            )
+            self.assertIn("validation=accepted", message)
+            self.assertLessEqual(len(message.encode("utf-8")), 256)
+
     def test_timed_out_product_is_not_retried(self) -> None:
         with self.local_repository() as (repository, descriptor, _):
             binary = repository.parent / "sleeping-product"

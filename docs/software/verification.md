@@ -180,3 +180,19 @@ private stderr must remain opaque. Existing timeout and mutation precedence,
 empty runner stdout, no report, no retry, and cleanup remain unchanged. The
 subsequent bounded Lekton diagnostic stops at the first failure or after five
 clean independent attempts and does not resume B1 acceptance.
+
+## B1d gate readiness and opaque-failure classification
+
+Issue [#209](https://github.com/smutti/codenoesis/issues/209) and
+[Decision 0046](decisions/0046-b1-gate-readiness-and-opaque-failure-classification.md)
+define the dependent high-risk S14 correction on exact B1c head `09dd9df`.
+The three expected Reds are the 106-line R16 parser clippy finding, the exact
+five V2/V3 descendant-lifecycle failures, and the absent closed category on an
+otherwise bounded `product=unparseable` message.
+
+Green requires the complete gate, immutable V2/V3 protected artifact digests,
+exact R16 selector and error behavior, and all closed category privacy/boundary
+tests. One additional Lekton diagnostic must stop without retry and retain only
+the already-authorized B1c identity plus category. RustDesk, comparison, B1
+acceptance, policy/oracle changes, raw stderr, and product-semantic claims remain
+forbidden.

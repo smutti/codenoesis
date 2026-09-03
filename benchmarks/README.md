@@ -64,3 +64,10 @@ and only allowlisted schema/code/stage from one canonical product error up to
 2,048 bytes. Product message/context and source or private values are never
 echoed. The runner V1 error protocol, report schema, no-retry policy, product,
 corpus, oracle, threshold, timeout, and observational exclusions stay unchanged.
+
+Issue #209 and Decision 0046 add one closed validation category when the B1c
+typed product identity is opaque, correct historical V2/V3 descendant
+verification, and permit one semantics-neutral private R16 parser extraction
+to restore the complete gate. The exact baseline binary stays frozen; candidate
+behavior, not binary identity, must match. One further Lekton diagnostic is
+allowed without retry, acceptance, comparison, or raw stderr retention.

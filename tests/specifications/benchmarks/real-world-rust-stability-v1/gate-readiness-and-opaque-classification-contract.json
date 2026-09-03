@@ -1,0 +1,30 @@
+{
+  "schema_version": "codenoesis.real-world-rust-benchmark-gate-readiness-contract/v1",
+  "issue": "https://github.com/smutti/codenoesis/issues/209",
+  "authorization": "accountable-maintainer authorization in issue #209",
+  "exact_dependent_base": "09dd9df9c142ffbdea3b6e20c4cbeb0e7a9dd2d9",
+  "slice": "S14",
+  "risk": "high",
+  "correction_budget": 5,
+  "dependencies": [],
+  "opaque_categories": [
+    "accepted",
+    "empty",
+    "oversized",
+    "non_utf8",
+    "invalid_json",
+    "wrong_shape",
+    "noncanonical",
+    "unsupported_schema",
+    "unsafe_code",
+    "unsafe_stage",
+    "inconsistent_stage"
+  ],
+  "additional_diagnostic_attempts": 1,
+  "retry_allowed": false,
+  "acceptance_resume_allowed": false,
+  "v2_v3_protected_artifacts_mutable": false,
+  "rust_source_exception": "private_r16_execution_limit_parser_extraction_only",
+  "workflow_changes_allowed": false,
+  "dependency_changes_allowed": false
+}

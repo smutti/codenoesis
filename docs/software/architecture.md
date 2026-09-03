@@ -660,6 +660,16 @@ a closed public allowlist. It never copies product message/context or source and
 does not persist the temporary output. Runner error version, report protocol,
 product boundary, retry policy, and cleanup ownership remain unchanged.
 
+Issue [#209](https://github.com/smutti/codenoesis/issues/209) and
+[Decision 0046](decisions/0046-b1-gate-readiness-and-opaque-failure-classification.md)
+correct three bounded S14 adapter and verification concerns. R16 invocation
+parsing delegates the operational B1a selector to a private helper without
+moving policy into the domain. Historical V2/V3 verification resolves immutable
+package bytes from their exact Git subjects rather than treating a descendant
+worktree as the historical review head. Failed-sample classification returns a
+closed reason enum without retaining or exposing the rejected stderr value.
+No component gains extraction, ontology, retry, release, or authority meaning.
+
 ### G1b/G8-local verifiable distribution candidate
 
 Issue [#186](https://github.com/smutti/codenoesis/issues/186) and

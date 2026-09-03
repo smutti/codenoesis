@@ -2734,6 +2734,25 @@ Stderr that is oversized, noncanonical, invalid, non-UTF-8, multi-document, or
 not selected by the public allowlist is identified only by byte length and
 SHA-256. Existing non-sample errors and cleanup behavior remain unchanged.
 
+### 2.40 B1d/G7/S14 gate readiness and opaque-failure classification
+
+Issue [#209](https://github.com/smutti/codenoesis/issues/209), its accountable
+maintainer authorization, and
+[Decision 0046](decisions/0046-b1-gate-readiness-and-opaque-failure-classification.md)
+govern a dependent correction on exact B1c evidence head
+`09dd9df9c142ffbdea3b6e20c4cbeb0e7a9dd2d9`.
+
+| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| Bounded `NFR-PER-001`, `NFR-OBS-001`, `NFR-TST-001/002`, `NFR-DET-001`, `NFR-MNT-002`, `NFR-SEC-005`, `INV-BND-001` | Approved requirements; B1d correction Proposed on the branch | Restore complete-gate readiness through one semantics-neutral R16 parser extraction, historical-subject V2/V3 descendant validation, and one closed opaque-error validation category | `S14` | Issue #209, Decision 0046, three expected Reds, immutable historical digests, focused/full Green, and one bounded diagnostic |
+| `NFR-PER-002`, `OD-SLO-001` | Unresolved and outside B1d | No acceptance, retry, policy, threshold, timeout, SLO, release, support, availability, cross-host, conference, or GA claim | `S14` | Explicit exclusion in issue #209 and Decision 0046 |
+
+The `cce8486` baseline binary identity remains exact. A candidate may differ
+only by the private parser extraction and must preserve all public behavior.
+V2/V3 immutable artifacts remain exact and are evaluated from their historical
+Git subjects. Opaque stderr retains only its existing digest identity plus one
+closed category; no additional untrusted content is disclosed.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,
