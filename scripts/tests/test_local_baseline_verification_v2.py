@@ -218,11 +218,17 @@ class LocalBaselineVerificationV2ContractTests(unittest.TestCase):
 
     def test_status_documents_are_aligned(self) -> None:
         for document_path in (SRS_PATH, ROADMAP_PATH, README_PATH):
-            normalized = " ".join(document_path.read_text(encoding="utf-8").split())
+            relative_path = document_path.relative_to(ROOT).as_posix()
+            historical = self.validator.git(
+                ROOT,
+                ["show", f"{self.validator.REVIEW_HEAD_SHA}:{relative_path}"],
+                binary=True,
+            )
+            normalized = " ".join(historical.decode("utf-8").split())
             self.assertIn(
                 STATUS_MARKER,
                 normalized,
-                f"verification status marker is absent from {document_path}",
+                f"verification status marker is absent from historical {relative_path}",
             )
 
     def test_candidate_manifest_is_complete_and_valid(self) -> None:

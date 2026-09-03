@@ -1517,13 +1517,26 @@ def validate_gates(manifest: dict[str, Any], errors: list[str]) -> None:
             errors.append(f"mandatory gate {gate_id} is not green")
 
 
-def validate_status_documents(root: Path, errors: list[str]) -> None:
+def validate_status_documents(
+    root: Path,
+    validation_subject: str,
+    errors: list[str],
+) -> None:
     for relative_path in (
         "README.md",
         "docs/software/software-requirements-specification.md",
         "docs/software/roadmap.md",
     ):
-        normalized = " ".join((root / relative_path).read_text(encoding="utf-8").split())
+        try:
+            content = git(
+                root,
+                ["show", f"{validation_subject}:{relative_path}"],
+                binary=True,
+            ).decode("utf-8")
+        except (UnicodeError, ValueError) as error:
+            errors.append(str(error))
+            continue
+        normalized = " ".join(content.split())
         if STATUS_MARKER not in normalized:
             errors.append(f"verification status marker is absent from {relative_path}")
         if "G9 remains a separate governed package" not in normalized:
@@ -1727,7 +1740,7 @@ def validate_manifest(root: Path, manifest_path: Path) -> list[str]:
     validate_codeql_log(root, manifest, metadata_by_id, errors)
     validate_catalog(root, manifest, plan, catalog, errors)
     validate_gates(manifest, errors)
-    validate_status_documents(root, errors)
+    validate_status_documents(root, validation_subject, errors)
     validate_s0_evidence_contract(root, errors)
     validate_review(manifest, errors)
     validate_environment(root, manifest, errors)

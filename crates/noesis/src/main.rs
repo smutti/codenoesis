@@ -7603,15 +7603,8 @@ fn parse_r16_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
     if constant_profile != R16_PROFILE {
         return Err(InvocationError::InvalidR16Profile(constant_profile));
     }
-    let execution_limit_profile = match execution_limit_profile.as_deref() {
-        None => ScanExecutionLimitProfile::Standard,
-        Some(B1A_EXECUTION_LIMIT_PROFILE) => ScanExecutionLimitProfile::RealWorldRustBenchmark75sV1,
-        Some(_) => {
-            return Err(InvocationError::InvalidR16Composition(
-                "valid_execution_limit_profile_required",
-            ));
-        }
-    };
+    let execution_limit_profile =
+        parse_r16_execution_limit_profile(execution_limit_profile.as_deref())?;
     let mut invocation = parse_r15_invocation(&stripped).map_err(|error| match error {
         InvocationError::Input(error) => InvocationError::Input(error),
         InvocationError::InvalidR15Profile(_) => {
@@ -7639,6 +7632,20 @@ fn parse_r16_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
     invocation.rust_constant_profile = true;
     invocation.execution_limit_profile = execution_limit_profile;
     Ok(invocation)
+}
+
+fn parse_r16_execution_limit_profile(
+    execution_limit_profile: Option<&str>,
+) -> Result<ScanExecutionLimitProfile, InvocationError> {
+    Ok(match execution_limit_profile {
+        None => ScanExecutionLimitProfile::Standard,
+        Some(B1A_EXECUTION_LIMIT_PROFILE) => ScanExecutionLimitProfile::RealWorldRustBenchmark75sV1,
+        Some(_) => {
+            return Err(InvocationError::InvalidR16Composition(
+                "valid_execution_limit_profile_required",
+            ));
+        }
+    })
 }
 
 fn parse_r15_invocation(arguments: &[OsString]) -> Result<Invocation, InvocationError> {

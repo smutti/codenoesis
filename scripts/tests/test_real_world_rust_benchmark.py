@@ -478,7 +478,8 @@ class RealWorldRustBenchmarkContractTests(unittest.TestCase):
             raised.exception.message,
             "sample_failed entry=lekton index=1 exit=12 stdout=0 "
             f"stderr={len(product_error)} sha256={stderr_sha256} "
-            "product=codenoesis.error/v24|input.repository_limit_exceeded|input",
+            "product=codenoesis.error/v24|input.repository_limit_exceeded|input "
+            "validation=accepted",
         )
         self.assertLessEqual(len(raised.exception.message.encode("utf-8")), 256)
         self.assertNotIn("private-path-canary", raised.exception.message)

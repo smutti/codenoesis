@@ -244,20 +244,26 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def public_product_error_identity(stderr_path: Path) -> str:
+def public_product_error_identity(stderr_path: Path) -> tuple[str, str]:
     try:
         stderr_size = stderr_path.stat().st_size
-        if stderr_size == 0 or stderr_size > TYPED_PRODUCT_STDERR_BYTES_MAX:
-            return "unparseable"
+        if stderr_size == 0:
+            return "unparseable", "empty"
+        if stderr_size > TYPED_PRODUCT_STDERR_BYTES_MAX:
+            return "unparseable", "oversized"
         stderr = stderr_path.read_bytes()
     except OSError:
-        return "unparseable"
+        return "unparseable", "wrong_shape"
     if len(stderr) != stderr_size:
-        return "unparseable"
+        return "unparseable", "wrong_shape"
     try:
-        error = json.loads(stderr.decode("utf-8"))
-    except (UnicodeError, json.JSONDecodeError):
-        return "unparseable"
+        decoded = stderr.decode("utf-8")
+    except UnicodeError:
+        return "unparseable", "non_utf8"
+    try:
+        error = json.loads(decoded)
+    except json.JSONDecodeError:
+        return "unparseable", "invalid_json"
     if not isinstance(error, dict) or set(error) != {
         "code",
         "context",
@@ -266,33 +272,38 @@ def public_product_error_identity(stderr_path: Path) -> str:
         "schema_version",
         "stage",
     }:
-        return "unparseable"
+        return "unparseable", "wrong_shape"
     try:
         if canonical_json_bytes(error) != stderr:
-            return "unparseable"
+            return "unparseable", "noncanonical"
     except BenchmarkError:
-        return "unparseable"
+        return "unparseable", "noncanonical"
     schema = error.get("schema_version")
     code = error.get("code")
     stage = error.get("stage")
     if (
-        schema != "codenoesis.error/v24"
-        or not isinstance(code, str)
-        or len(code) > 64
-        or PUBLIC_PRODUCT_ERROR_CODE.fullmatch(code) is None
-        or not isinstance(stage, str)
-        or stage not in PUBLIC_PRODUCT_ERROR_STAGES
-        or not isinstance(error.get("message"), str)
+        not isinstance(error.get("message"), str)
         or not isinstance(error.get("context"), dict)
         or error.get("retryable") is not False
     ):
-        return "unparseable"
-    components = frozenset(re.split(r"[._]", code)) | {stage}
-    if components & PRIVATE_PRODUCT_ERROR_COMPONENTS:
-        return "unparseable"
+        return "unparseable", "wrong_shape"
+    if schema != "codenoesis.error/v24":
+        return "unparseable", "unsupported_schema"
+    if (
+        not isinstance(code, str)
+        or len(code) > 64
+        or PUBLIC_PRODUCT_ERROR_CODE.fullmatch(code) is None
+    ):
+        return "unparseable", "unsafe_code"
+    if not isinstance(stage, str) or stage not in PUBLIC_PRODUCT_ERROR_STAGES:
+        return "unparseable", "unsafe_stage"
+    if frozenset(re.split(r"[._]", code)) & PRIVATE_PRODUCT_ERROR_COMPONENTS:
+        return "unparseable", "unsafe_code"
+    if stage in PRIVATE_PRODUCT_ERROR_COMPONENTS:
+        return "unparseable", "unsafe_stage"
     if code != "internal.failure" and not code.startswith(f"{stage}."):
-        return "unparseable"
-    return f"{schema}|{code}|{stage}"
+        return "unparseable", "inconsistent_stage"
+    return f"{schema}|{code}|{stage}", "accepted"
 
 
 def failed_sample_message(
@@ -312,11 +323,11 @@ def failed_sample_message(
             exit_code=1,
         ) from error
     exit_identity = str(return_code) if return_code >= 0 else "signal"
-    product_identity = public_product_error_identity(stderr_path)
+    product_identity, validation = public_product_error_identity(stderr_path)
     message = (
         f"sample_failed entry={entry_id} index={index} exit={exit_identity} "
         f"stdout={stdout_bytes} stderr={stderr_bytes} sha256={sha256_file(stderr_path)} "
-        f"product={product_identity}"
+        f"product={product_identity} validation={validation}"
     )
     if len(message.encode("utf-8")) > FAILED_SAMPLE_MESSAGE_BYTES_MAX:
         raise BenchmarkError(
