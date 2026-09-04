@@ -1,7 +1,7 @@
 {
   "schema_version": "codenoesis.public-rust-evaluation-oracle/v1",
   "suite_id": "rust-public-conference-v1",
-  "baseline_product_commit": "f50c0dc060288ea7d1d10728a65e4ffb9923229d",
+  "baseline_product_commit": "095518ec49ede920af90b5c408c58a7ab99fc754",
   "entries": {
     "hyperfine": {
       "highest_successful_stage": "constant",
@@ -112,13 +112,10 @@
       "terminal_stage": "workspace",
       "outcome": "typed_rejection",
       "exit_code": 11,
-      "error_schema": "codenoesis.error/v10",
-      "error_code": "extraction.invalid_workspace_manifest",
+      "error_schema": "codenoesis.error/v5",
+      "error_code": "extraction.unsupported_workspace",
       "error_stage": "extraction",
-      "error_context": {
-        "path": "benches/Cargo.toml",
-        "reason": "invalid_package_manifest"
-      }
+      "error_context": {}
     }
   }
 }

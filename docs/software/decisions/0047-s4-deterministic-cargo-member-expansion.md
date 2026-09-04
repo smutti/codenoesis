@@ -1,6 +1,6 @@
 # Decision 0047: deterministic Cargo workspace member expansion
 
-- Status: Proposed branch-scoped candidate
+- Status: Approved and implemented
 - Date: 2026-09-04
 - Issue: [#217](https://github.com/smutti/codenoesis/issues/217)
 - Exact dependent base: `b365d3069b8a1507d4a90dfd686a5c729d6d0747`
@@ -73,9 +73,11 @@ capacity boundaries, existing R3 and contract regressions, and a pinned wgpu
 run that advances to its next honest typed boundary. The complete eight-repository
 RW5 oracle and repository gate must pass.
 
-The candidate becomes Approved and Implemented only after independent review
-and protected manual merge. It changes no release, signing, workflow,
-permission, dependency, support, SLO, or GA authority.
+Protected PR
+[#218](https://github.com/smutti/codenoesis/pull/218) activated the requirement
+on merged commit `5a3671d590d7e4ad864fe4fbe277add636ddf843` after independent review and
+manual merge. It changes no release, signing, workflow, permission, dependency,
+support, SLO, or GA authority.
 
 ## Candidate evidence
 

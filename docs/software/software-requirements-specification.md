@@ -2695,22 +2695,40 @@ V2/V3 immutable artifacts remain exact and are evaluated from their historical
 Git subjects. Opaque stderr retains only its existing digest identity plus one
 closed category; no additional untrusted content is disclosed.
 
-### 2.41 S4 deterministic Cargo workspace member expansion candidate
+### 2.41 S4 deterministic Cargo workspace member expansion
 
 Issue [#217](https://github.com/smutti/codenoesis/issues/217) and
 [Decision 0047](decisions/0047-s4-deterministic-cargo-member-expansion.md)
-govern one high-risk S4 candidate on exact merged RW5 base
+govern the S4 extension implemented by protected PR
+[#218](https://github.com/smutti/codenoesis/pull/218) on exact merged RW5 base
 `b365d3069b8a1507d4a90dfd686a5c729d6d0747`.
+
+| Requirement | Current state | Implemented behavior | Slice | Ratification material |
+|---|---|---|---|---|
+| `FR-EXT-021` | Approved and Implemented | Expand only canonical trailing one-component `prefix/*` Cargo workspace members from committed inventory, with existing R3 representation and bounds | `S4` | Issue #217, Decision 0047, protected PR #218, synthetic acceptance/property/security tests, and the pinned wgpu journey |
+
+The extension changes no selector and preserves every literal-member output.
+It grants no filesystem discovery, Cargo execution, recursion, target-world
+selection, network access, gitlink traversal, or support for Cargo's wider glob
+language.
+
+### 2.42 S4 Cargo workspace package edition inheritance candidate
+
+Issue [#219](https://github.com/smutti/codenoesis/issues/219) and
+[Decision 0048](decisions/0048-s4-cargo-workspace-package-edition-inheritance.md)
+govern one S4 candidate on exact merged RW6 base
+`5a3671d590d7e4ad864fe4fbe277add636ddf843`.
 
 | Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
 |---|---|---|---|---|
-| `FR-EXT-021` | Proposed on the branch | Expand only canonical trailing one-component `prefix/*` Cargo workspace members from committed inventory, with existing R3 representation and bounds | `S4` | Issue #217, Decision 0047, focused expected Red, synthetic acceptance/property/security tests, and the pinned wgpu journey |
+| `FR-EXT-022` | Proposed on the branch | Validate `edition.workspace = true` from an exact non-empty root `[workspace.package].edition` string while preserving direct editions and R4 declaration-only facts | `S4` | Issue #219, Decision 0048, focused synthetic tests, R3/R4 regressions, and the complete pinned public Rust corpus |
 
-The candidate changes no selector and preserves every literal-member output.
-It grants no filesystem discovery, Cargo execution, recursion, target-world
-selection, network access, gitlink traversal, or support for Cargo's wider glob
-language. Requirement approval and product behavior become effective only if
-the accountable maintainer manually merges the exact protected pull request.
+The candidate materializes no effective package metadata and changes no public
+identity, schema, ontology family, golden, dependency, selector, or execution
+authority. All package fields other than the planner-required edition retain
+their existing R4 declaration-only treatment. Requirement approval and product
+behavior become effective only if the accountable maintainer manually merges
+the exact protected pull request.
 
 ## 3. Product intent and success definition
 
@@ -2861,6 +2879,7 @@ cannot replace their verification.
 | `FR-EXT-019` | P0 | `0.2` | The explicit S7 `kotlin-direct-json-access/v1` client capability MUST inspect only workspace-selected committed Kotlin/KMP decoder and call paths, prove `requires_present` from direct `JsonObject.getValue` and `handles_absent` from guarded indexed access, and bind a direct literal or interpolated `httpGet` path only to an already confirmed S6 operation identity. DTO spelling, annotations, generated serializers, custom codecs, reflection, aliases, extension indirection, dynamic paths, unresolved calls, Gradle, compiler, framework, configuration, and runtime meaning MUST remain `unknown`. | Strict and safe reviewed clients receive distinct assumptions from their actual access paths, the operation decoy is rejected despite similar names, every fact resolves to exact source evidence, and unsupported/resource/race cases fail or produce exact gaps without executing the project. `GT`, `E2E`, `CONF`, `PT`, `SEC` |
 | `FR-EXT-020` | P0 | `0.1` | The explicit R16 `rust-safe-constant-evaluation-v1` profile MUST preserve the complete corrected R15 graph and add only checked target-independent `bool`, fixed-width signed/unsigned integer constants, immutable statics, and closed fixed-repr unit-enum discriminants from the approved grammar as evidence-backed `rust.evaluated_value` and `EVALUATES_TO` derived facts. It MUST retain exact rule, input claim, evidence, and dependency IDs, publish typed gaps for every unsupported or undefined case, evaluate enums all-or-nothing, and MUST NOT infer types, targets, active `cfg`, compiler validity/layout, runtime state, ownership, side effects, or execute any project/toolchain code. | The project-owned R16 fixture matches ConfigurationV15/RepositorySnapshotV18/KnowledgeGraphV15 with seven exact values, two dependencies, exact identities/hashes/counts/gap discharge, arithmetic/dependency/enum negatives, every maximum and maximum-plus-one, 50 permutations, ten schedules, no execution/network/model authority, byte-identical legacy paths, two pinned Lekton journeys, and the typed RustDesk boundary negative in Decision 0030. `GT`, `E2E`, `CONF`, `PT`, `SEC` |
 | `FR-EXT-021` | P0 | `0.1` | The S4 root-package workspace planner MAY expand a declared Cargo member only when it has the exact canonical form `prefix/*`, where `prefix` is a non-empty repository-relative path and `*` denotes exactly one child component. Expansion MUST use only committed regular `<prefix>/<child>/Cargo.toml` inventory entries, apply literal exclusions, preserve the immutable R3 concrete-member representation, retain root-manifest evidence, enforce existing member/package/target bounds after expansion, and fail closed on an empty match or any wider glob syntax. | Synthetic fixtures prove one-level matching, literal exclusion, overlap precedence, empty-match rejection, maximum and maximum-plus-one capacity, inventory-order determinism, no ambient filesystem discovery, and unchanged R3 schema/ontology and literal-member outputs; the pinned wgpu workspace deterministically advances beyond its former `invalid_member_path` boundary. `GT`, `PT`, `SEC`, `E2E`, `CONF` |
+| `FR-EXT-022` | P0 | `0.1` | The S4 root-package workspace planner MAY satisfy its required package edition from `edition.workspace = true` only when that reference is an exact one-key true table and the committed root `[workspace.package]` table contains a non-empty string `edition`. Direct non-empty edition strings MUST retain existing behavior. Missing, empty, non-string, false, or structurally ambiguous references MUST fail closed as an invalid package manifest. The planner MUST NOT materialize an effective metadata value or alter the existing R4 declaration-only workspace-reference facts for edition or any other package field. | Synthetic virtual and non-virtual workspaces prove valid inheritance, direct compatibility, malformed/default/reference negatives, and unchanged R3/R4 regressions; the complete pinned public Rust corpus matches reviewed oracles and wgpu advances to its next typed source-extraction boundary without Cargo, rustc, filesystem discovery, dependency resolution, network, target execution, identity, schema, ontology, fixture, or golden changes. `GT`, `SEC`, `E2E`, `CONF` |
 
 ### 9.3 Knowledge graph, claims, and snapshots
 
