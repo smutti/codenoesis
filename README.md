@@ -38,15 +38,39 @@ and `rust-safe-constant-evaluation-v1`. Their historical lifecycle label was
 **Approved and Implemented but not Verified**; the current bounded status is
 the independently verified baseline described above.
 
-Issue [#205](https://github.com/smutti/codenoesis/issues/205) and
-[Decision 0042](docs/software/decisions/0042-real-world-rust-stability-benchmark.md)
-define the Proposed high-risk B1/G7 observational benchmark candidate over
-pinned Lekton and RustDesk. It changes no product or ontology byte and makes no
-SLO, release, support, cross-host, conference-validity, or GA claim before
-independent review and protected merge.
+Issue [#205](https://github.com/smutti/codenoesis/issues/205),
+[Decision 0042](docs/software/decisions/0042-real-world-rust-stability-benchmark.md),
+and merged PR #210 provide the active observational benchmark over pinned
+Lekton and RustDesk. It makes no SLO, release, support, cross-host,
+conference-validity, or GA claim.
 
 Broader language coverage, operations, semantic comparison, and the remaining
 production-readiness slices are still pending.
+
+## Generate the real-world Rust pilots
+
+Build the local CLI, provide full local clones containing the pinned commits,
+and generate both ontologies plus their offline explorers with one command:
+
+```sh
+cargo build -p noesis --release
+python3 scripts/generate_real_world_rust_pilots.py \
+  --binary target/release/noesis \
+  --lekton /path/to/lekton \
+  --rustdesk /path/to/rustdesk \
+  --output /path/to/codenoesis-pilots
+python3 -m http.server 8765 --directory /path/to/codenoesis-pilots
+```
+
+Open `http://127.0.0.1:8765/lekton/explorer/` or
+`http://127.0.0.1:8765/rustdesk/explorer/`. The runner reads only the pinned
+committed Git objects, performs no clone or fetch, and records exact snapshot,
+PortableGraph, viewer, revision, semantic hash, and family counts in
+`summary.json`. Lekton currently uses the complete R16 ontology and
+FunctionContextV1 viewer plus the existing benchmark-only 75-second scan
+profile; the standard scan limit remains unchanged. RustDesk uses the
+boundary-safe R12 callable ontology while R14-R16 gitlink composition remains
+the next compatibility increment.
 
 ## Two development tracks
 

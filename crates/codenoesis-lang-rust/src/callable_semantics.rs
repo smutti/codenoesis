@@ -343,6 +343,8 @@ struct ChunkBuilder<'a> {
     evidence: BTreeMap<String, WorkspaceEvidence>,
     diagnostics: BTreeMap<String, CallableDiagnostic>,
     coverage: BTreeMap<String, CallableCoverageGap>,
+    direct_cfg_declared_values: BTreeSet<String>,
+    declared_value_gap_ids: BTreeMap<String, String>,
     callable_count: usize,
 }
 
@@ -372,6 +374,8 @@ impl<'a> ChunkBuilder<'a> {
             evidence: BTreeMap::new(),
             diagnostics: BTreeMap::new(),
             coverage: BTreeMap::new(),
+            direct_cfg_declared_values: BTreeSet::new(),
+            declared_value_gap_ids: BTreeMap::new(),
             callable_count: 0,
         }
     }
@@ -419,6 +423,66 @@ impl<'a> ChunkBuilder<'a> {
             return Err(CallableSemanticsError::ContractInvalid);
         }
         Ok(())
+    }
+
+    fn insert_declared_value_entity(
+        &mut self,
+        entity: CallableSemanticEntity,
+        direct_cfg: bool,
+    ) -> Result<bool, CallableSemanticsError> {
+        let identifier = entity.id.clone();
+        let existing_is_direct_cfg = self.direct_cfg_declared_values.contains(&identifier);
+        if let Some(existing) = self.entities.get_mut(&identifier) {
+            if !direct_cfg
+                || !existing_is_direct_cfg
+                || existing.kind != CallableSemanticEntityKind::DeclaredValue
+                || entity.kind != CallableSemanticEntityKind::DeclaredValue
+                || existing.crate_id != entity.crate_id
+                || existing.module_path != entity.module_path
+                || existing.name != entity.name
+                || existing.subject_id != entity.subject_id
+                || existing.ordinal != entity.ordinal
+            {
+                return Err(CallableSemanticsError::ContractInvalid);
+            }
+            existing.evidence_ids.extend(entity.evidence_ids);
+            existing.evidence_ids.sort();
+            existing.evidence_ids.dedup();
+            existing.properties =
+                CallableSemanticProperties::DeclaredValue(DeclaredValueProperties {
+                    state: DeclaredValueState::Unresolved,
+                    syntax_kind: None,
+                    expression_digest: None,
+                    expression_byte_length: 0,
+                    normalized: None,
+                });
+            return Ok(true);
+        }
+        self.insert_entity(entity)?;
+        if direct_cfg {
+            self.direct_cfg_declared_values.insert(identifier);
+        }
+        Ok(false)
+    }
+
+    fn set_declared_value_gap(
+        &mut self,
+        capability: &str,
+        subject_id: &str,
+        evidence_ids: Vec<String>,
+    ) {
+        if let Some(previous_id) = self.declared_value_gap_ids.remove(subject_id) {
+            self.coverage.remove(&previous_id);
+        }
+        let gap = CallableCoverageGap::new(
+            capability,
+            CallableCoverageState::NotResolved,
+            subject_id.to_owned(),
+            evidence_ids,
+        );
+        self.declared_value_gap_ids
+            .insert(subject_id.to_owned(), gap.id.clone());
+        self.coverage.insert(gap.id.clone(), gap);
     }
 
     fn add_relationship(&mut self, relationship: CallableRelationship) {
@@ -863,6 +927,7 @@ fn process_value_node(
     kind: RustSemanticEntityKind,
     builder: &mut ChunkBuilder<'_>,
 ) -> Result<(), CallableSemanticsError> {
+    let direct_cfg = has_direct_cfg_attribute(node, builder.source);
     let name = normalized_name(node, builder.source, builder.path)?;
     let declaration_id = rust_semantic_member_id(
         builder.repository_identity,
@@ -917,29 +982,58 @@ fn process_value_node(
             normalized,
         }),
     };
-    builder.insert_entity(entity)?;
+    let cfg_alternatives = builder.insert_declared_value_entity(entity, direct_cfg)?;
     builder.add_relationship(CallableRelationship::new(
         CallableRelationshipKind::DeclaresValue,
         declaration_id,
         id.clone(),
         vec![evidence_id.clone()],
     ));
-    match state {
-        DeclaredValueState::NormalizedScalar => {}
-        DeclaredValueState::ExpressionOnly => builder.add_gap(
-            "rust.scalar_value_not_normalized",
-            CallableCoverageState::NotResolved,
+    if cfg_alternatives {
+        let evidence_ids = builder
+            .entities
+            .get(&id)
+            .map(|entity| entity.evidence_ids.clone())
+            .unwrap_or_default();
+        builder.set_declared_value_gap(
+            "rust.cfg_declared_value_alternatives_not_selected",
             &id,
-            &evidence_id,
-        ),
-        DeclaredValueState::Unresolved => builder.add_gap(
-            "rust.declared_value_not_explicit",
-            CallableCoverageState::NotResolved,
-            &id,
-            &evidence_id,
-        ),
+            evidence_ids,
+        );
+    } else {
+        match state {
+            DeclaredValueState::NormalizedScalar => {}
+            DeclaredValueState::ExpressionOnly => builder.set_declared_value_gap(
+                "rust.scalar_value_not_normalized",
+                &id,
+                vec![evidence_id.clone()],
+            ),
+            DeclaredValueState::Unresolved => builder.set_declared_value_gap(
+                "rust.declared_value_not_explicit",
+                &id,
+                vec![evidence_id.clone()],
+            ),
+        }
     }
     Ok(())
+}
+
+fn has_direct_cfg_attribute(node: Node<'_>, source: &str) -> bool {
+    let mut sibling = node.prev_named_sibling();
+    while let Some(attribute) = sibling {
+        if attribute.kind() != "attribute_item" {
+            break;
+        }
+        let compact = node_text(attribute, source)
+            .chars()
+            .filter(|character| !character.is_whitespace())
+            .collect::<String>();
+        if compact.starts_with("#[cfg(") && compact.ends_with(")]") {
+            return true;
+        }
+        sibling = attribute.prev_named_sibling();
+    }
+    false
 }
 
 #[allow(clippy::too_many_lines)]

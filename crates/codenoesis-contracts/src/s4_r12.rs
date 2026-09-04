@@ -1377,6 +1377,7 @@ fn validate_portable_value(value: &Value, sha256: R12Sha256) -> Result<(), R12Co
     let coverage_ids = validate_family(object, "coverage_gaps", "id")?;
     let document_ids = validate_family(object, "documents", "document_id")?;
     let statement_ids = validate_family(object, "document_statements", "statement_id")?;
+    let boundary_ids = boundary_document_reference_ids(&object["repository_boundaries"])?;
     let mut subject_ids = BTreeSet::from([repository_identity.to_owned()]);
     for ids in [
         &entity_ids,
@@ -1390,6 +1391,11 @@ fn validate_portable_value(value: &Value, sha256: R12Sha256) -> Result<(), R12Co
     ] {
         subject_ids.extend(ids.iter().cloned());
     }
+    subject_ids.extend(boundary_ids.subjects);
+    let mut statement_evidence_ids = evidence_ids.clone();
+    statement_evidence_ids.extend(boundary_ids.evidence);
+    let mut statement_coverage_ids = coverage_ids.clone();
+    statement_coverage_ids.extend(boundary_ids.coverage);
 
     for relationship in object["relationships"]
         .as_array()
@@ -1512,13 +1518,13 @@ fn validate_portable_value(value: &Value, sha256: R12Sha256) -> Result<(), R12Co
         validate_array_subset(
             statement,
             "evidence_ids",
-            &evidence_ids,
+            &statement_evidence_ids,
             "document_statements",
         )?;
         validate_array_subset(
             statement,
             "coverage_gap_ids",
-            &coverage_ids,
+            &statement_coverage_ids,
             "document_statements",
         )?;
     }
@@ -1534,6 +1540,54 @@ fn validate_portable_value(value: &Value, sha256: R12Sha256) -> Result<(), R12Co
         return Err(R12ContractError::InvalidProjection);
     }
     Ok(())
+}
+
+#[derive(Default)]
+struct BoundaryDocumentReferenceIds {
+    subjects: BTreeSet<String>,
+    evidence: BTreeSet<String>,
+    coverage: BTreeSet<String>,
+}
+
+fn boundary_document_reference_ids(
+    value: &Value,
+) -> Result<BoundaryDocumentReferenceIds, R12ContractError> {
+    if value.is_null() {
+        return Ok(BoundaryDocumentReferenceIds::default());
+    }
+    let object = value
+        .as_object()
+        .ok_or(R12ContractError::InvalidProjection)?;
+    let mut identifiers = BoundaryDocumentReferenceIds::default();
+    for (family, field) in [
+        ("boundaries", "boundary_id"),
+        ("declarations", "declaration_id"),
+        ("evidence", "evidence_id"),
+        ("coverage_gaps", "gap_id"),
+    ] {
+        for record in object
+            .get(family)
+            .and_then(Value::as_array)
+            .ok_or(R12ContractError::InvalidProjection)?
+        {
+            let identifier = record
+                .get(field)
+                .and_then(Value::as_str)
+                .ok_or(R12ContractError::InvalidProjection)?
+                .to_owned();
+            identifiers.subjects.insert(identifier.clone());
+            match family {
+                "evidence" => {
+                    identifiers.evidence.insert(identifier);
+                }
+                "coverage_gaps" => {
+                    identifiers.coverage.insert(identifier);
+                }
+                _ => {}
+            }
+        }
+    }
+    Ok(identifiers)
 }
 
 fn validate_family(

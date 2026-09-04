@@ -275,6 +275,7 @@ pub fn generate_documentation_v1(
         };
         drafts.push(module_document(&index, module, path)?);
     }
+    drafts = split_oversized_documents(&index.repository_identity, drafts)?;
     drafts.sort_by(|left, right| left.path.as_bytes().cmp(right.path.as_bytes()));
     if drafts.is_empty() || drafts.len() > MAX_DOCUMENTS {
         return Err(DocumentationContractError::LimitExceeded);
@@ -617,6 +618,142 @@ struct DocumentDraft {
     path: String,
     bytes: Vec<u8>,
     statements: Vec<Value>,
+}
+
+fn split_oversized_documents(
+    repository_identity: &str,
+    drafts: Vec<DocumentDraft>,
+) -> Result<Vec<DocumentDraft>, DocumentationContractError> {
+    let mut bounded = Vec::with_capacity(drafts.len());
+    for draft in drafts {
+        if draft.bytes.len() <= MAX_DOCUMENT_BYTES {
+            bounded.push(draft);
+        } else {
+            bounded.extend(split_oversized_document(repository_identity, draft)?);
+        }
+    }
+    Ok(bounded)
+}
+
+fn split_oversized_document(
+    repository_identity: &str,
+    draft: DocumentDraft,
+) -> Result<Vec<DocumentDraft>, DocumentationContractError> {
+    if draft.kind != "module" || draft.statements.len() < 2 {
+        return Err(DocumentationContractError::LimitExceeded);
+    }
+    let content = std::str::from_utf8(&draft.bytes)
+        .map_err(|_| DocumentationContractError::InvalidSnapshot)?;
+    let segments = document_statement_segments(content, draft.statements)?;
+
+    let mut groups = Vec::<Vec<(String, Value)>>::new();
+    let mut current = Vec::new();
+    let mut current_bytes = 0_usize;
+    for segment in segments {
+        let next_bytes = current_bytes
+            .checked_add(segment.0.len())
+            .ok_or(DocumentationContractError::LimitExceeded)?;
+        if !current.is_empty() && next_bytes > MAX_DOCUMENT_BYTES {
+            groups.push(current);
+            current = Vec::new();
+            current_bytes = 0;
+        }
+        if segment.0.len() > MAX_DOCUMENT_BYTES {
+            return Err(DocumentationContractError::LimitExceeded);
+        }
+        current_bytes = current_bytes
+            .checked_add(segment.0.len())
+            .ok_or(DocumentationContractError::LimitExceeded)?;
+        current.push(segment);
+    }
+    if !current.is_empty() {
+        groups.push(current);
+    }
+    if groups.len() < 2 {
+        return Err(DocumentationContractError::LimitExceeded);
+    }
+
+    let path_stem = draft
+        .path
+        .strip_suffix(".md")
+        .ok_or(DocumentationContractError::InvalidSnapshot)?;
+    let mut split = Vec::with_capacity(groups.len());
+    for (part, group) in groups.into_iter().enumerate() {
+        let part_number = part
+            .checked_add(1)
+            .ok_or(DocumentationContractError::LimitExceeded)?;
+        let document_id = stable_contract_id(
+            DOCUMENT_ID_PREFIX,
+            &[
+                DOCUMENT_ID_DOMAIN,
+                repository_identity,
+                "module-part",
+                &draft.subject_id,
+                &part_number.to_string(),
+                MARKDOWN_RENDERER_VERSION,
+            ],
+        );
+        let mut bytes = Vec::new();
+        let mut statements = Vec::with_capacity(group.len());
+        for (segment, mut statement) in group {
+            let previous_id = string_field(&statement, "statement_id")?;
+            let previous_marker = format!("<!-- statement:{previous_id} -->");
+            if segment.matches(&previous_marker).count() != 1 {
+                return Err(DocumentationContractError::InvalidSnapshot);
+            }
+            let statement_id = stable_contract_id(
+                STATEMENT_ID_PREFIX,
+                &[STATEMENT_ID_DOMAIN, &document_id, "split", previous_id],
+            );
+            let marker = format!("<!-- statement:{statement_id} -->");
+            let rewritten = segment.replacen(&previous_marker, &marker, 1);
+            statement["statement_id"] = Value::String(statement_id);
+            bytes.extend_from_slice(rewritten.as_bytes());
+            statements.push(statement);
+        }
+        if bytes.is_empty() || bytes.len() > MAX_DOCUMENT_BYTES {
+            return Err(DocumentationContractError::LimitExceeded);
+        }
+        split.push(DocumentDraft {
+            document_id,
+            kind: draft.kind,
+            subject_id: draft.subject_id.clone(),
+            path: format!("{path_stem}-part-{part_number:03}.md"),
+            bytes,
+            statements,
+        });
+    }
+    Ok(split)
+}
+
+fn document_statement_segments(
+    content: &str,
+    statements: Vec<Value>,
+) -> Result<Vec<(String, Value)>, DocumentationContractError> {
+    let mut cursor = 0_usize;
+    let mut segments = Vec::with_capacity(statements.len());
+    for statement in statements {
+        let marker = statement_marker(&statement)?;
+        let relative_end = content[cursor..]
+            .find(&marker)
+            .ok_or(DocumentationContractError::InvalidSnapshot)?
+            .checked_add(marker.len())
+            .ok_or(DocumentationContractError::LimitExceeded)?;
+        let end = cursor
+            .checked_add(relative_end)
+            .ok_or(DocumentationContractError::LimitExceeded)?;
+        segments.push((content[cursor..end].to_owned(), statement));
+        cursor = end;
+    }
+    if content[cursor..].contains("<!-- statement:") {
+        return Err(DocumentationContractError::InvalidSnapshot);
+    }
+    segments
+        .last_mut()
+        .ok_or(DocumentationContractError::InvalidSnapshot)?
+        .0
+        .push_str(&content[cursor..]);
+    Ok(segments)
 }
 
 #[allow(clippy::struct_excessive_bools)]
@@ -3298,4 +3435,88 @@ fn properties_value(properties: &BTreeMap<String, String>) -> Value {
             .map(|(key, value)| (key.clone(), Value::String(value.clone())))
             .collect(),
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn oversized_module_documents_split_at_statement_boundaries() {
+        let first = statement_value(
+            "original-document",
+            "fact",
+            "entity:first",
+            0,
+            "deterministic_fact",
+            vec!["entity:first".to_owned()],
+            vec!["evidence:first".to_owned()],
+            Vec::new(),
+        );
+        let second = statement_value(
+            "original-document",
+            "fact",
+            "entity:second",
+            1,
+            "deterministic_fact",
+            vec!["entity:second".to_owned()],
+            vec!["evidence:second".to_owned()],
+            Vec::new(),
+        );
+        let padding = "x".repeat(MAX_DOCUMENT_BYTES / 2);
+        let content = format!(
+            "{padding} {}\n{padding} {}\n",
+            statement_marker(&first).expect("first marker"),
+            statement_marker(&second).expect("second marker")
+        );
+        assert!(content.len() > MAX_DOCUMENT_BYTES);
+        let split = split_oversized_document(
+            "urn:codenoesis:test:documentation-split",
+            DocumentDraft {
+                document_id: "original-document".to_owned(),
+                kind: "module",
+                subject_id: "entity:module".to_owned(),
+                path: "modules/large.md".to_owned(),
+                bytes: content.into_bytes(),
+                statements: vec![first, second],
+            },
+        )
+        .expect("split oversized module documentation");
+
+        assert_eq!(split.len(), 2);
+        assert_eq!(split[0].path, "modules/large-part-001.md");
+        assert_eq!(split[1].path, "modules/large-part-002.md");
+        assert!(split.iter().all(|document| {
+            !document.bytes.is_empty()
+                && document.bytes.len() <= MAX_DOCUMENT_BYTES
+                && document.statements.len() == 1
+                && std::str::from_utf8(&document.bytes).is_ok_and(|markdown| {
+                    statement_marker(&document.statements[0])
+                        .is_ok_and(|marker| markdown.contains(&marker))
+                })
+        }));
+        assert_ne!(split[0].document_id, split[1].document_id);
+    }
+
+    #[test]
+    fn bounded_documents_remain_byte_identical() {
+        let original = b"bounded documentation\n".to_vec();
+        let bounded = split_oversized_documents(
+            "urn:codenoesis:test:documentation-split",
+            vec![DocumentDraft {
+                document_id: "document".to_owned(),
+                kind: "module",
+                subject_id: "entity:module".to_owned(),
+                path: "modules/bounded.md".to_owned(),
+                bytes: original.clone(),
+                statements: Vec::new(),
+            }],
+        )
+        .expect("preserve bounded documentation");
+
+        assert_eq!(bounded.len(), 1);
+        assert_eq!(bounded[0].document_id, "document");
+        assert_eq!(bounded[0].path, "modules/bounded.md");
+        assert_eq!(bounded[0].bytes, original);
+    }
 }
