@@ -180,7 +180,8 @@ profile; it does not broaden the row's semantic boundary.
 | `RW1` | Explorable real-world Rust pilots | Implemented by merged PR #212: one local runner generates snapshot, deterministic documentation, PortableGraph, and offline explorer for pinned Lekton at R16 and pinned RustDesk at boundary-safe R12. Generic fixes retain homogeneous direct-`cfg` value alternatives as unresolved evidence, split only oversized module documentation at statement boundaries under the unchanged 1 MiB limit, and admit validated gitlink references in PortableGraphV5 documentation. | Existing `FR-DOC-001`, `FR-EXP-004`, R12/R16 contracts, and the active B1 corpus identities; no new dependency or repository-specific ontology rule. | Focused synthetic regressions pass; the exact public repositories complete the combined runner with Lekton 26,158 entities and RustDesk 9,183 entities, and both produce loadable `index.html` explorers. |
 | `RW2` | RustDesk R14-R16 boundary composition | Implemented by merged PR #213: compose R12 cfg alternatives and gitlink boundaries through expression bindings, local flow, safe constant evaluation, QueryV13, PortableGraphV9, and LocalExplorerV10. Generic corrections cover non-simple match inputs, direct conditional classification, ambiguous cfg values, and URL scalar privacy without repository-specific rules. | The additive composition preserves historical source-only behavior, records raw URL literals only by digest, and never reads or fetches nested source. | The synthetic gitlink journey completes scan → docs → boundary query → export → FunctionContextV1 explorer. Pinned Lekton emits 26,158 entities and 43,683 relationships; pinned RustDesk emits 31,300 entities and 55,861 relationships, retains `libs/hbb_common` as `declared_unbound`, and produces a loadable explorer. A fresh RustDesk replay preserves byte-identical semantic content and semantic hash `b7434676719ba92c8726e7660f07ea05cb3a63a8b1a6f42030fcc93634253922`; only the non-semantic envelope differs. |
 | `RW3` | Ontology information adequacy audit | Implemented by merged PR #214: every real-world pilot emits a deterministic audit of callable I/O, enum and declared values, safe evaluated constants, calls and arguments, expression ownership, local flow, source evidence, and explicit uncertainty. | The audit validates only existing PortableGraphV9 facts, adds no inferred product facts or model dependency, and fails the pilot when the minimum reasoning core is structurally incomplete. Raw source remains an R18 query; implementation-aware API and version comparison remain separate S7 reports. | Pinned Lekton and RustDesk artifacts pass all eight information checks while honestly reporting partial cross-call/intra-call flow and unavailable compiler type resolution, side effects, and runtime observation. Two fresh RustDesk scans exposed the existing 75,001 ms guardrail and established the performance correction input without weakening the audit or timeout. |
-| `RW4` | RustDesk scale correction and compact LLM context | Implemented in this change: index claim subjects once during R13-R15 overlay validation, preserving exact ontology semantics while removing the observed quadratic RustDesk path; add deterministic `rust-llm-context-v1` as a bounded projection of verified FunctionContextV1 facts. | No ontology identity, schema, golden, dependency, timeout, model provider, or evidence authority changes. The compact projection is source-only, capped at 256 KiB, records omissions, and explicitly sets `model_authority=false`. | Exact pinned RustDesk R16 falls from 81.78 s to 39.00 s and 3.37 GB maximum RSS with unchanged semantic hash `b7434676719ba92c8726e7660f07ea05cb3a63a8b1a6f42030fcc93634253922`; the combined Lekton/RustDesk pilot completes, both eight-check audits pass, and each emits deterministic `llm-context.json`. |
+| `RW4` | RustDesk scale correction and compact LLM context | Implemented by merged PR #215: index claim subjects once during R13-R15 overlay validation, preserving exact ontology semantics while removing the observed quadratic RustDesk path; add deterministic `rust-llm-context-v1` as a bounded projection of verified FunctionContextV1 facts. | No ontology identity, schema, golden, dependency, timeout, model provider, or evidence authority changes. The compact projection is source-only, capped at 256 KiB, records omissions, and explicitly sets `model_authority=false`. | Exact pinned RustDesk R16 falls from 81.78 s to 39.00 s and 3.37 GB maximum RSS with unchanged semantic hash `b7434676719ba92c8726e7660f07ea05cb3a63a8b1a6f42030fcc93634253922`; the combined Lekton/RustDesk pilot completes, both eight-check audits pass, and each emits deterministic `llm-context.json`. |
+| `RW5` | Public Rust conference evaluation corpus | Implemented in this change: freeze eight permissively licensed public repositories selected for structural variation, then evaluate acquisition through R16 with exact success or typed-rejection oracles, three cold terminal samples, and no retry. | The runner accepts only caller-supplied full local clones matching exact commit, tree, and aggregate source metrics. It performs no network access, checkout, build, dependency resolution, target execution, or model call. | All eight initial oracles match; hyperfine, tower, and mio complete R16 while fd, delta, rustfmt, dioxus, and wgpu expose five distinct fail-closed compatibility boundaries. Aggregate stage coverage and graph, callable, parameter, enum/value, call, expression, flow, evidence, diagnostic, latency, and stream-size metrics are machine-readable. |
 
 ### Earliest useful real-world checkpoint
 
@@ -212,11 +213,14 @@ future slice without changing that slice's approved meaning.
    and confirmed deterministic RustDesk semantic replay.
 7. Merged PR #214 runs the ontology information adequacy audit on every
    real-world pilot.
-8. RW4 adds a compact LLM-ready projection over verified callable, evidence,
-   source, and uncertainty facts without promoting model output to product
-   evidence.
-9. Execute the reproducible conference evaluation over pinned, structurally
-   independent repositories.
+8. Merged PR #215 adds a compact LLM-ready projection over verified callable,
+   evidence, source, and uncertainty facts without promoting model output to
+   product evidence.
+9. RW5 executes the reproducible conference evaluation over eight pinned,
+   structurally independent public repositories.
+10. Close the observed generic compatibility gaps in breadth-first order:
+    workspace member paths, manifest metadata, cfg declaration identities,
+    local-flow access consistency, and bounded large-file acquisition.
 
 ### Real-world compatibility completion definition
 
@@ -419,11 +423,13 @@ the product production-ready.
 
 The recommended execution order from the current verified baseline is:
 
-1. run and stabilize the Rust real-repository benchmark suite;
-2. close correctness and coverage gaps exposed by Lekton and RustDesk;
-3. expand polyglot extraction through Kotlin/KMP and the next adapter lane;
-4. deepen contract-versus-implementation and semantic-version diff behavior;
-5. complete production packaging, observability, recovery, and release gates.
+1. keep the Lekton/RustDesk and eight-repository Rust suites deterministic;
+2. close the five typed compatibility gaps exposed by the public corpus;
+3. add a safe in-tree Git-symlink profile before admitting repositories such
+   as ripgrep, serde, axum, hyper, alacritty, and starship;
+4. expand polyglot extraction through Kotlin/KMP and the next adapter lane;
+5. deepen contract-versus-implementation and semantic-version diff behavior;
+6. complete production packaging, observability, recovery, and release gates.
 
 Each implementation pull request records its objective, tests, benchmark result
 or `not applicable`, relevant compatibility/security impact, limitations, and

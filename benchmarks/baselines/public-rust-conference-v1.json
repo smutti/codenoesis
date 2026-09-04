@@ -1,0 +1,124 @@
+{
+  "schema_version": "codenoesis.public-rust-evaluation-oracle/v1",
+  "suite_id": "rust-public-conference-v1",
+  "baseline_product_commit": "5c3141815415a620cc07c992f2600ce6317c735c",
+  "entries": {
+    "hyperfine": {
+      "highest_successful_stage": "constant",
+      "terminal_stage": "constant",
+      "outcome": "success",
+      "snapshot_schema": "codenoesis.repository-snapshot/v18",
+      "semantic_hash": "ccfee36d3230accfc00921247e9c29b673c128632c2aa35c5c4eed263030b39c",
+      "semantic_projection_sha256": "9fe1f5e6b3c8effef0ab847cd25d229998b4c10cec79d4537854e9bad04ab2e9",
+      "counts": {
+        "entities": 4450,
+        "relationships": 7730,
+        "claims": 12180,
+        "evidence": 3524,
+        "diagnostics": 643,
+        "coverage": 1561,
+        "evaluated_values": 0
+      }
+    },
+    "tower": {
+      "highest_successful_stage": "constant",
+      "terminal_stage": "constant",
+      "outcome": "success",
+      "snapshot_schema": "codenoesis.repository-snapshot/v18",
+      "semantic_hash": "a6fe9dc1a22ea5c073b6194e243b5425bb61cfafed05dd9133c537aeb90bef01",
+      "semantic_projection_sha256": "ba0b0e28e308a9c9f0f12312542aac2e6fefa5c5663093c73d968d85ada6203c",
+      "counts": {
+        "entities": 362,
+        "relationships": 484,
+        "claims": 846,
+        "evidence": 444,
+        "diagnostics": 118,
+        "coverage": 332,
+        "evaluated_values": 0
+      }
+    },
+    "mio": {
+      "highest_successful_stage": "constant",
+      "terminal_stage": "constant",
+      "outcome": "success",
+      "snapshot_schema": "codenoesis.repository-snapshot/v18",
+      "semantic_hash": "2e5217ea523b05965bec37368c2d653e055c626d848da4603a4b01c54f18c940",
+      "semantic_projection_sha256": "67fb143cf68773a0204f6efbde2b10d6b4f9eaaa0946ca338b84682aa6c064f1",
+      "counts": {
+        "entities": 416,
+        "relationships": 648,
+        "claims": 1064,
+        "evidence": 490,
+        "diagnostics": 114,
+        "coverage": 343,
+        "evaluated_values": 5
+      }
+    },
+    "fd": {
+      "highest_successful_stage": "workspace",
+      "terminal_stage": "manifest",
+      "outcome": "typed_rejection",
+      "exit_code": 11,
+      "error_schema": "codenoesis.error/v11",
+      "error_code": "extraction.invalid_cargo_manifest_fact",
+      "error_stage": "extraction",
+      "error_context": {
+        "fact_kind": "manifest",
+        "field": null,
+        "path": "Cargo.toml",
+        "reason": "unsupported_key"
+      }
+    },
+    "delta": {
+      "highest_successful_stage": "manifest",
+      "terminal_stage": "semantic",
+      "outcome": "typed_rejection",
+      "exit_code": 11,
+      "error_schema": "codenoesis.error/v12",
+      "error_code": "extraction.rust_semantic_identity_conflict",
+      "error_stage": "extraction",
+      "error_context": {
+        "member_kind": "rust.method",
+        "normalized_member": "try_create",
+        "owner_id": "urn:codenoesis:entity:blake3:940a336cf98b32c38200a73bd65c83161e57c5ed9e2cf8de0ae72b4ef3d54bef"
+      }
+    },
+    "rustfmt": {
+      "highest_successful_stage": "framework",
+      "terminal_stage": "flow",
+      "outcome": "typed_rejection",
+      "exit_code": 11,
+      "error_schema": "codenoesis.error/v22",
+      "error_code": "extraction.local_flow_access_mismatch",
+      "error_stage": "extraction",
+      "error_context": {}
+    },
+    "dioxus": {
+      "highest_successful_stage": null,
+      "terminal_stage": "acquisition",
+      "outcome": "typed_rejection",
+      "exit_code": 10,
+      "error_schema": "codenoesis.error/v6",
+      "error_code": "acquisition.limit_exceeded",
+      "error_stage": "acquisition",
+      "error_context": {
+        "limit": "single_file_bytes",
+        "maximum": 4194304,
+        "observed": 4194305
+      }
+    },
+    "wgpu": {
+      "highest_successful_stage": "acquisition",
+      "terminal_stage": "workspace",
+      "outcome": "typed_rejection",
+      "exit_code": 11,
+      "error_schema": "codenoesis.error/v10",
+      "error_code": "extraction.invalid_workspace_manifest",
+      "error_stage": "extraction",
+      "error_context": {
+        "path": "Cargo.toml",
+        "reason": "invalid_member_path"
+      }
+    }
+  }
+}

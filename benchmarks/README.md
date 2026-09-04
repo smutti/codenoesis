@@ -1,14 +1,16 @@
 # Benchmark contracts
 
 This directory defines the reproducibility contract for CodeNoesis performance
-evidence. Issue #205 proposes the first active observational suite over pinned
-real-world Rust repositories. The candidate remains ineffective until the
-exact independently reviewed pull request is manually merged.
+and real-repository compatibility evidence. `manifest.json` selects two
+observational Rust suites with versioned descriptors, policies, semantic
+oracles, deterministic runners, raw samples, and same-host constraints:
 
-`manifest.json` selects exactly one B1 suite with a versioned descriptor,
-policy, semantic oracle, deterministic runner, raw samples, and same-host
-comparison. Existing CI validates the committed contract and compiles Rust
-benchmark targets; it does not clone or execute external repositories.
+- `rust-real-world-stability-v1` measures the pinned Lekton/RustDesk pilot;
+- `rust-public-conference-v1` evaluates progressive extraction and ontology
+  information over eight additional pinned public repositories.
+
+Existing CI validates the committed contracts and compiles Rust benchmark
+targets; it does not clone, fetch, or execute external repositories.
 
 Every future benchmark report must identify:
 
@@ -71,3 +73,63 @@ verification, and permit one semantics-neutral private R16 parser extraction
 to restore the complete gate. The exact baseline binary stays frozen; candidate
 behavior, not binary identity, must match. One further Lekton diagnostic is
 allowed without retry, acceptance, comparison, or raw stderr retention.
+
+## Public Rust conference corpus
+
+`public-rust-conference-v1` uses purposeful maximum-variation sampling rather
+than popularity as a proxy for compatibility. It covers command-line tools,
+libraries, virtual workspaces, cross-platform systems code, terminal rendering,
+compiler-adjacent code, a UI framework, and a graphics stack:
+
+| Repository | Archetype | Rust files | Rust bytes | Current terminal result |
+|---|---:|---:|---:|---|
+| [hyperfine](https://github.com/sharkdp/hyperfine) | CLI | 41 | 198,410 | R16 success |
+| [tower](https://github.com/tower-rs/tower) | Async middleware workspace | 133 | 487,346 | R16 success |
+| [mio](https://github.com/tokio-rs/mio) | Systems I/O library | 82 | 681,387 | R16 success |
+| [fd](https://github.com/sharkdp/fd) | Filesystem CLI | 24 | 261,335 | Typed manifest rejection |
+| [delta](https://github.com/dandavison/delta) | Terminal renderer | 82 | 1,042,590 | Typed semantic rejection |
+| [rustfmt](https://github.com/rust-lang/rustfmt) | Compiler-adjacent formatter | 2,008 | 2,799,610 | Typed flow rejection |
+| [dioxus](https://github.com/DioxusLabs/dioxus) | UI framework workspace | 878 | 6,724,384 | Typed acquisition rejection |
+| [wgpu](https://github.com/gfx-rs/wgpu) | Graphics workspace | 849 | 14,349,544 | Typed workspace rejection |
+
+The exact commit, tree, observed license, source metrics, and repository ID are
+frozen in `corpora/public-rust-conference-v1.json`. The suite accepts only full,
+non-shallow local clones whose `HEAD`, tree, and aggregate source metrics match
+that descriptor. It performs no network operation, checkout, build, macro
+expansion, target execution, dependency resolution, or model call.
+
+Place the eight clones in directories named after their corpus IDs, build the
+release CLI, and run:
+
+```sh
+cargo build -p noesis --release
+python3 scripts/run_public_rust_evaluation.py run \
+  --manifest benchmarks/manifest.json \
+  --suite rust-public-conference-v1 \
+  --corpus benchmarks/corpora/public-rust-conference-v1.json \
+  --policy benchmarks/policies/public-rust-conference-v1.json \
+  --oracle benchmarks/baselines/public-rust-conference-v1.json \
+  --binary target/release/noesis \
+  --repository-root /path/to/public-rust-corpus-v1 \
+  --output benchmarks/results/public-rust-conference-v1-local.json \
+  --host-profile local-machine-v1 \
+  --product-commit 5c3141815415a620cc07c992f2600ce6317c735c
+```
+
+Each repository advances through acquisition, workspace, manifest, semantic,
+framework, flow, and constant stages until its frozen success or typed-rejection
+oracle. Three terminal samples with a fresh product store are retained without
+retry; operating-system filesystem caches are not reset. The report
+contains raw wall time and stream sizes, exact semantic identities, graph
+counts, callable/signature/parameter coverage, enum and value coverage, calls,
+expressions, bindings, basic blocks, evidence coverage, diagnostics, and
+aggregate stage coverage.
+
+The initial same-host macOS arm64 observation matched all eight oracles. Three
+repositories completed R16 and five failed closed at distinct compatibility
+boundaries. The three complete graphs contain 5,228 entities, 8,862
+relationships, 14,090 claims, 4,458 evidence records, 102 callable signatures,
+176 parameters, 60 enum variants, 74 declared values, 5 safely evaluated
+values, 561 call sites, and 19 uniquely resolved local calls. These are
+observational corpus results, not an SLO, supported-repository list, release,
+cross-host comparison, or conference-validity claim.
