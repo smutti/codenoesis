@@ -1,7 +1,7 @@
 {
   "schema_version": "codenoesis.public-rust-evaluation-oracle/v1",
   "suite_id": "rust-public-conference-v1",
-  "baseline_product_commit": "5c3141815415a620cc07c992f2600ce6317c735c",
+  "baseline_product_commit": "f50c0dc060288ea7d1d10728a65e4ffb9923229d",
   "entries": {
     "hyperfine": {
       "highest_successful_stage": "constant",
@@ -116,8 +116,8 @@
       "error_code": "extraction.invalid_workspace_manifest",
       "error_stage": "extraction",
       "error_context": {
-        "path": "Cargo.toml",
-        "reason": "invalid_member_path"
+        "path": "benches/Cargo.toml",
+        "reason": "invalid_package_manifest"
       }
     }
   }

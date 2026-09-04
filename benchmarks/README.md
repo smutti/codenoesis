@@ -90,7 +90,7 @@ compiler-adjacent code, a UI framework, and a graphics stack:
 | [delta](https://github.com/dandavison/delta) | Terminal renderer | 82 | 1,042,590 | Typed semantic rejection |
 | [rustfmt](https://github.com/rust-lang/rustfmt) | Compiler-adjacent formatter | 2,008 | 2,799,610 | Typed flow rejection |
 | [dioxus](https://github.com/DioxusLabs/dioxus) | UI framework workspace | 878 | 6,724,384 | Typed acquisition rejection |
-| [wgpu](https://github.com/gfx-rs/wgpu) | Graphics workspace | 849 | 14,349,544 | Typed workspace rejection |
+| [wgpu](https://github.com/gfx-rs/wgpu) | Graphics workspace | 849 | 14,349,544 | Typed inherited-package-field rejection after deterministic member expansion |
 
 The exact commit, tree, observed license, source metrics, and repository ID are
 frozen in `corpora/public-rust-conference-v1.json`. The suite accepts only full,
@@ -113,7 +113,7 @@ python3 scripts/run_public_rust_evaluation.py run \
   --repository-root /path/to/public-rust-corpus-v1 \
   --output benchmarks/results/public-rust-conference-v1-local.json \
   --host-profile local-machine-v1 \
-  --product-commit 5c3141815415a620cc07c992f2600ce6317c735c
+  --product-commit f50c0dc060288ea7d1d10728a65e4ffb9923229d
 ```
 
 Each repository advances through acquisition, workspace, manifest, semantic,
