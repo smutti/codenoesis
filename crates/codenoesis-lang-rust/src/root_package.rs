@@ -212,7 +212,13 @@ impl<'a> Planner<'a> {
                     Some(manifest_path),
                 ));
             }
-            packages.push(self.parse_package(member_path, *member_source, manifest_path, table)?);
+            packages.push(self.parse_package(
+                member_path,
+                *member_source,
+                manifest_path,
+                table,
+                workspace,
+            )?);
         }
         if u64::try_from(packages.len()).unwrap_or(u64::MAX) > MAX_R3_PACKAGE_MANIFESTS {
             return Err(root_package_limit_exceeded(
@@ -333,6 +339,7 @@ impl<'a> Planner<'a> {
         member_source: WorkspaceMemberSource,
         manifest_path: String,
         table: &toml::Table,
+        workspace: Option<&toml::Table>,
     ) -> Result<PackageDraft, RootPackageWorkspaceError> {
         let package = optional_table(table, "package", &manifest_path)?.ok_or_else(|| {
             invalid_manifest(
@@ -360,7 +367,7 @@ impl<'a> Planner<'a> {
         if self.manifest_facts {
             validate_r4_edition(package, &manifest_path)?;
         } else {
-            let _edition = required_nonempty_string(package, "edition", &manifest_path)?;
+            validate_r3_edition(package, workspace, &manifest_path)?;
         }
         if package_name.len() > 255 {
             return Err(invalid_manifest(
@@ -1054,6 +1061,34 @@ fn validate_r4_edition(
             || value.as_table().is_some_and(|table| {
                 table.len() == 1
                     && table.get("workspace").and_then(toml::Value::as_bool) == Some(true)
+            })
+    });
+    if valid {
+        Ok(())
+    } else {
+        Err(invalid_manifest(
+            WorkspaceManifestReason::InvalidPackageManifest,
+            Some(manifest_path.to_owned()),
+        ))
+    }
+}
+
+fn validate_r3_edition(
+    package: &toml::Table,
+    workspace: Option<&toml::Table>,
+    manifest_path: &str,
+) -> Result<(), RootPackageWorkspaceError> {
+    let valid = package.get("edition").is_some_and(|value| {
+        value.as_str().is_some_and(|edition| !edition.is_empty())
+            || value.as_table().is_some_and(|table| {
+                table.len() == 1
+                    && table.get("workspace").and_then(toml::Value::as_bool) == Some(true)
+                    && workspace
+                        .and_then(|table| table.get("package"))
+                        .and_then(toml::Value::as_table)
+                        .and_then(|table| table.get("edition"))
+                        .and_then(toml::Value::as_str)
+                        .is_some_and(|edition| !edition.is_empty())
             })
     });
     if valid {
