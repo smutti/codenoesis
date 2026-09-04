@@ -66,11 +66,11 @@ Open `http://127.0.0.1:8765/lekton/explorer/` or
 `http://127.0.0.1:8765/rustdesk/explorer/`. The runner reads only the pinned
 committed Git objects, performs no clone or fetch, and records exact snapshot,
 PortableGraph, viewer, revision, semantic hash, and family counts in
-`summary.json`. Lekton currently uses the complete R16 ontology and
+`summary.json`. Lekton and RustDesk use the complete R16 ontology and
 FunctionContextV1 viewer plus the existing benchmark-only 75-second scan
-profile; the standard scan limit remains unchanged. RustDesk uses the
-boundary-safe R12 callable ontology while R14-R16 gitlink composition remains
-the next compatibility increment.
+profile; the standard scan limit remains unchanged. RustDesk retains
+`libs/hbb_common` as an unbound repository boundary and never fetches or reads
+its nested source.
 
 ## Two development tracks
 

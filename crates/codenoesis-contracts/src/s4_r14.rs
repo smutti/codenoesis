@@ -3,6 +3,7 @@ use std::error::Error;
 use std::fmt::{self, Display, Formatter};
 use std::path::{Component, Path};
 
+use codenoesis_domain::s1_boundaries::RepositoryBoundaryReport;
 use codenoesis_domain::s4_k1::{CallableSemanticsError, K1_GRAPH_VERSION, K1_ONTOLOGY_VERSION};
 use codenoesis_domain::s4_r3::R3_WORKSPACE_PROFILE;
 use codenoesis_domain::s4_r4::R4_MANIFEST_PROFILE;
@@ -30,8 +31,10 @@ use codenoesis_domain::{
 };
 use serde_json::{Map, Value, json};
 
+use super::s1_boundaries::CodeNoesisErrorV9;
 use super::s4::{MAX_QUERY_BYTES, QueryContractError, claim_value, evidence_value};
 use super::s4_k1::{RepositorySnapshotV11, RepositorySnapshotV11Error, local_query_result_v6};
+use super::s4_r12::{RepositorySnapshotV14, RepositorySnapshotV14Error, local_query_result_v9};
 use super::{
     LimitedVecWriter, PublicationCandidateError, SnapshotEnvelopeV1, publication_candidate,
     semantic_hash,
@@ -68,6 +71,13 @@ pub struct CodeNoesisErrorV21 {
 }
 
 impl CodeNoesisErrorV21 {
+    #[must_use]
+    pub fn from_boundary_error(error: &CodeNoesisErrorV9) -> Self {
+        let mut value = error.value().clone();
+        value["schema_version"] = Value::String(R14_ERROR_VERSION.to_owned());
+        Self { value }
+    }
+
     #[must_use]
     pub fn invalid_profile(profile: &str) -> Self {
         Self::new(
@@ -178,9 +188,9 @@ impl CodeNoesisErrorV21 {
                 "expression extraction limit exceeded",
                 json!({"limit": limit.as_str(), "maximum": maximum, "observed": observed}),
             ),
-            ExpressionBindingError::Source(_) | ExpressionBindingError::ContractInvalid => {
-                Self::internal("expression_extraction")
-            }
+            ExpressionBindingError::Source(_)
+            | ExpressionBindingError::CfgAlternatives(_)
+            | ExpressionBindingError::ContractInvalid => Self::internal("expression_extraction"),
         }
     }
 
@@ -379,16 +389,54 @@ impl RepositorySnapshotV16 {
         output_capacity_profile: K1OutputCapacityProfile,
         envelope: SnapshotEnvelopeV1,
     ) -> Result<Self, RepositorySnapshotV16Error> {
+        Self::from_inventory_expression_bindings_and_boundaries(
+            inventory,
+            knowledge,
+            None,
+            output_capacity_profile,
+            envelope,
+        )
+    }
+
+    /// Builds R14 over either the historical K1 lineage or the additive R12 boundary lineage.
+    ///
+    /// # Errors
+    ///
+    /// Returns the first R12, expression, boundary, serialization, or publication failure.
+    #[allow(clippy::too_many_lines)]
+    pub fn from_inventory_expression_bindings_and_boundaries(
+        inventory: &RepositoryInventory,
+        knowledge: &ExpressionBindingKnowledge,
+        boundaries: Option<&RepositoryBoundaryReport>,
+        output_capacity_profile: K1OutputCapacityProfile,
+        envelope: SnapshotEnvelopeV1,
+    ) -> Result<Self, RepositorySnapshotV16Error> {
         knowledge
             .validate()
             .map_err(|_| RepositorySnapshotV16Error::ContractInvalid)?;
-        let baseline = RepositorySnapshotV11::from_inventory_and_callable_semantics(
-            inventory,
-            &knowledge.callable,
-            envelope,
-        )
-        .map_err(map_k1_snapshot_error)?;
-        let mut value = baseline.value().clone();
+        if knowledge.callable_cfg_alternatives.is_none() && boundaries.is_some() {
+            return Err(RepositorySnapshotV16Error::ContractInvalid);
+        }
+        let mut value = if let Some(composition) = &knowledge.callable_cfg_alternatives {
+            RepositorySnapshotV14::from_inventory_callable_cfg_alternatives(
+                inventory,
+                composition,
+                boundaries,
+                envelope,
+            )
+            .map_err(map_r12_snapshot_error)?
+            .value()
+            .clone()
+        } else {
+            RepositorySnapshotV11::from_inventory_and_callable_semantics(
+                inventory,
+                &knowledge.callable,
+                envelope,
+            )
+            .map_err(map_k1_snapshot_error)?
+            .value()
+            .clone()
+        };
         let semantic = value
             .get_mut("semantic")
             .and_then(Value::as_object_mut)
@@ -401,17 +449,36 @@ impl RepositorySnapshotV16 {
                 Value::String("local-snapshot-64m-v1".to_owned())
             }
         };
-        let configuration_without_hash = json!({
-            "schema_version": R14_CONFIGURATION_VERSION,
-            "profile": "standard-local-s4",
-            "workspace_profile": R3_WORKSPACE_PROFILE,
-            "manifest_profile": R4_MANIFEST_PROFILE,
-            "rust_semantic_profile": R5_RUST_SEMANTIC_PROFILE,
-            "rust_framework_profile": R6_FRAMEWORK_PROFILE,
-            "rust_callable_profile": "rust-callable-semantics-v1",
-            "rust_expression_profile": R14_PROFILE,
-            "output_capacity_profile": capacity
-        });
+        let configuration_without_hash = if knowledge.callable_cfg_alternatives.is_some() {
+            let mut configuration = semantic
+                .get("configuration")
+                .and_then(Value::as_object)
+                .cloned()
+                .ok_or(RepositorySnapshotV16Error::ContractInvalid)?;
+            configuration.remove("semantic_hash");
+            configuration.insert(
+                "schema_version".to_owned(),
+                Value::String(R14_CONFIGURATION_VERSION.to_owned()),
+            );
+            configuration.insert(
+                "rust_expression_profile".to_owned(),
+                Value::String(R14_PROFILE.to_owned()),
+            );
+            configuration.insert("output_capacity_profile".to_owned(), capacity);
+            Value::Object(configuration)
+        } else {
+            json!({
+                "schema_version": R14_CONFIGURATION_VERSION,
+                "profile": "standard-local-s4",
+                "workspace_profile": R3_WORKSPACE_PROFILE,
+                "manifest_profile": R4_MANIFEST_PROFILE,
+                "rust_semantic_profile": R5_RUST_SEMANTIC_PROFILE,
+                "rust_framework_profile": R6_FRAMEWORK_PROFILE,
+                "rust_callable_profile": "rust-callable-semantics-v1",
+                "rust_expression_profile": R14_PROFILE,
+                "output_capacity_profile": capacity
+            })
+        };
         let configuration_hash =
             semantic_hash(CONFIGURATION_V13_HASH_DOMAIN, &configuration_without_hash);
         let mut configuration = configuration_without_hash;
@@ -592,6 +659,7 @@ impl LocalQueryResultV11 {
 /// # Errors
 ///
 /// Returns a strict snapshot, document, not-found, identity, or result-limit failure.
+#[allow(clippy::too_many_lines)]
 pub fn local_query_result_v11(
     semantic: &Value,
     manifest: &Value,
@@ -607,13 +675,31 @@ pub fn local_query_result_v11(
         return Err(QueryContractError::InvalidSnapshot);
     }
     let mut compatible = semantic.clone();
-    compatible["ontology_version"] = Value::String(K1_ONTOLOGY_VERSION.to_owned());
-    compatible["knowledge_graph"]["schema_version"] = Value::String(K1_GRAPH_VERSION.to_owned());
-    compatible["knowledge_graph"]["ontology_version"] =
-        Value::String(K1_ONTOLOGY_VERSION.to_owned());
-    let mut value = local_query_result_v6(&compatible, manifest, snapshot_id, requested_id)?
-        .value()
-        .clone();
+    let mut value = if semantic.get("repository_boundaries").is_some()
+        || semantic
+            .pointer("/configuration/rust_semantic_profile")
+            .and_then(Value::as_str)
+            == Some(codenoesis_domain::s4_r10::R10_PROFILE)
+    {
+        compatible["ontology_version"] =
+            Value::String(codenoesis_domain::s4_r12::R12_ONTOLOGY_VERSION.to_owned());
+        compatible["knowledge_graph"]["schema_version"] =
+            Value::String(codenoesis_domain::s4_r12::R12_GRAPH_VERSION.to_owned());
+        compatible["knowledge_graph"]["ontology_version"] =
+            Value::String(codenoesis_domain::s4_r12::R12_ONTOLOGY_VERSION.to_owned());
+        local_query_result_v9(&compatible, manifest, snapshot_id, requested_id)?
+            .value()
+            .clone()
+    } else {
+        compatible["ontology_version"] = Value::String(K1_ONTOLOGY_VERSION.to_owned());
+        compatible["knowledge_graph"]["schema_version"] =
+            Value::String(K1_GRAPH_VERSION.to_owned());
+        compatible["knowledge_graph"]["ontology_version"] =
+            Value::String(K1_ONTOLOGY_VERSION.to_owned());
+        local_query_result_v6(&compatible, manifest, snapshot_id, requested_id)?
+            .value()
+            .clone()
+    };
     let graph = semantic
         .get("knowledge_graph")
         .and_then(Value::as_object)
@@ -726,18 +812,16 @@ fn extraction_chunks_v13(
             Value::String(R14_ONTOLOGY_VERSION.to_owned()),
         );
         object.remove("semantic_hash");
-        if object
+        let source_file_id = object
             .get("subject")
-            .and_then(|subject| subject.get("kind"))
-            .and_then(Value::as_str)
-            == Some("rust_source")
-        {
-            let source_file_id = object
-                .get("subject")
-                .and_then(|subject| subject.get("source_file_id"))
-                .and_then(Value::as_str)
-                .ok_or(RepositorySnapshotV16Error::ContractInvalid)?
-                .to_owned();
+            .and_then(|subject| {
+                (subject.get("kind").and_then(Value::as_str) == Some("rust_source"))
+                    .then(|| subject.get("source_file_id").and_then(Value::as_str))
+                    .flatten()
+            })
+            .or_else(|| object.get("source_file_id").and_then(Value::as_str))
+            .map(str::to_owned);
+        if let Some(source_file_id) = source_file_id {
             let expression = additions
                 .remove(source_file_id.as_str())
                 .ok_or(RepositorySnapshotV16Error::ContractInvalid)?;
@@ -1050,6 +1134,21 @@ fn map_k1_snapshot_error(error: RepositorySnapshotV11Error) -> RepositorySnapsho
     }
 }
 
+fn map_r12_snapshot_error(error: RepositorySnapshotV14Error) -> RepositorySnapshotV16Error {
+    match error {
+        RepositorySnapshotV14Error::Serialization(error) => {
+            RepositorySnapshotV16Error::Serialization(error)
+        }
+        RepositorySnapshotV14Error::LimitExceeded(error) => {
+            RepositorySnapshotV16Error::LimitExceeded(error)
+        }
+        RepositorySnapshotV14Error::ContractInvalid => RepositorySnapshotV16Error::ContractInvalid,
+        RepositorySnapshotV14Error::OutputLengthOverflow => {
+            RepositorySnapshotV16Error::OutputLengthOverflow
+        }
+    }
+}
+
 #[derive(Clone, Debug)]
 pub struct PortableGraphV7 {
     value: Value,
@@ -1106,6 +1205,11 @@ impl PortableGraphV7 {
             "documents": documents,
             "document_statements": document_statements
         });
+        if let Some(boundaries) = semantic.get("repository_boundaries") {
+            super::s4_r12::validate_boundary_projection(boundaries)
+                .map_err(|_| R14ContractError::InvalidSnapshot)?;
+            value["repository_boundaries"] = boundaries.clone();
+        }
         value["projection"]["family_sha256"] = family_digests(&value, sha256)?;
         Self::from_generated_value(value, sha256)
     }
@@ -1385,7 +1489,7 @@ fn validate_portable_value(value: &Value, sha256: R14Sha256) -> Result<(), R14Co
     let object = value
         .as_object()
         .ok_or(R14ContractError::InvalidProjection)?;
-    let expected_keys = BTreeSet::from([
+    let mut expected_keys = BTreeSet::from([
         "claims",
         "coverage_gaps",
         "diagnostics",
@@ -1401,6 +1505,9 @@ fn validate_portable_value(value: &Value, sha256: R14Sha256) -> Result<(), R14Co
         "schema_version",
         "source_snapshot",
     ]);
+    if object.contains_key("repository_boundaries") {
+        expected_keys.insert("repository_boundaries");
+    }
     if object.keys().map(String::as_str).collect::<BTreeSet<_>>() != expected_keys {
         return Err(R14ContractError::InvalidProjection);
     }
@@ -1437,6 +1544,15 @@ fn validate_portable_value(value: &Value, sha256: R14Sha256) -> Result<(), R14Co
     let coverage_ids = validate_family(object, "coverage_gaps", "id")?;
     let document_ids = validate_family(object, "documents", "document_id")?;
     let statement_ids = validate_family(object, "document_statements", "statement_id")?;
+    let boundary_ids = object.get("repository_boundaries").map_or_else(
+        || Ok(super::s4_r12::BoundaryDocumentReferenceIds::default()),
+        |boundaries| {
+            super::s4_r12::validate_boundary_projection(boundaries)
+                .map_err(|_| R14ContractError::InvalidProjection)?;
+            super::s4_r12::boundary_document_reference_ids(boundaries)
+                .map_err(|_| R14ContractError::InvalidProjection)
+        },
+    )?;
     let mut subject_ids = BTreeSet::from([repository_identity.to_owned()]);
     for ids in [
         &entity_ids,
@@ -1450,6 +1566,11 @@ fn validate_portable_value(value: &Value, sha256: R14Sha256) -> Result<(), R14Co
     ] {
         subject_ids.extend(ids.iter().cloned());
     }
+    subject_ids.extend(boundary_ids.subjects);
+    let mut statement_evidence_ids = evidence_ids.clone();
+    statement_evidence_ids.extend(boundary_ids.evidence);
+    let mut statement_coverage_ids = coverage_ids.clone();
+    statement_coverage_ids.extend(boundary_ids.coverage);
     for relationship in object["relationships"]
         .as_array()
         .ok_or(R14ContractError::InvalidProjection)?
@@ -1538,13 +1659,13 @@ fn validate_portable_value(value: &Value, sha256: R14Sha256) -> Result<(), R14Co
         validate_reference_array_if_present(
             statement,
             "evidence_ids",
-            &evidence_ids,
+            &statement_evidence_ids,
             "document_statements",
         )?;
         validate_reference_array_if_present(
             statement,
             "coverage_gap_ids",
-            &coverage_ids,
+            &statement_coverage_ids,
             "document_statements",
         )?;
     }

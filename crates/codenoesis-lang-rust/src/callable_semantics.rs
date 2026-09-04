@@ -949,7 +949,9 @@ fn process_value_node(
         if let Some(value_node) = value {
             let text = node_text(value_node, builder.source).trim();
             enforce_limit(CallableSemanticsLimit::ExpressionMetadataBytes, text.len())?;
-            let normalized = normalized_scalar(text);
+            let normalized = normalized_scalar(text).filter(|value| {
+                !matches!(value, NormalizedScalarValue::String(value) if value.contains("://"))
+            });
             (
                 if normalized.is_some() {
                     DeclaredValueState::NormalizedScalar
@@ -1586,8 +1588,15 @@ fn decode_quoted(text: &str, quote: char) -> Option<String> {
 }
 
 fn control_kind(kind: &str, node: Node<'_>, source: &str) -> Option<ControlKind> {
+    let condition_contains_let = || {
+        node.child_by_field_name("condition")
+            .is_some_and(|condition| {
+                condition.kind() == "let_condition"
+                    || has_named_descendant(condition, "let_condition")
+            })
+    };
     match kind {
-        "if_expression" => Some(if has_named_descendant(node, "let_condition") {
+        "if_expression" => Some(if condition_contains_let() {
             ControlKind::IfLet
         } else {
             ControlKind::If
@@ -1595,7 +1604,7 @@ fn control_kind(kind: &str, node: Node<'_>, source: &str) -> Option<ControlKind>
         "match_expression" => Some(ControlKind::Match),
         "loop_expression" => Some(ControlKind::Loop),
         "while_expression" => Some(
-            if has_named_descendant(node, "let_condition")
+            if condition_contains_let()
                 || node_text(node, source)
                     .trim_start()
                     .starts_with("while let ")

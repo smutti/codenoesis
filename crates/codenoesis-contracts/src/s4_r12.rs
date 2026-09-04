@@ -1543,13 +1543,13 @@ fn validate_portable_value(value: &Value, sha256: R12Sha256) -> Result<(), R12Co
 }
 
 #[derive(Default)]
-struct BoundaryDocumentReferenceIds {
-    subjects: BTreeSet<String>,
-    evidence: BTreeSet<String>,
-    coverage: BTreeSet<String>,
+pub(crate) struct BoundaryDocumentReferenceIds {
+    pub(crate) subjects: BTreeSet<String>,
+    pub(crate) evidence: BTreeSet<String>,
+    pub(crate) coverage: BTreeSet<String>,
 }
 
-fn boundary_document_reference_ids(
+pub(crate) fn boundary_document_reference_ids(
     value: &Value,
 ) -> Result<BoundaryDocumentReferenceIds, R12ContractError> {
     if value.is_null() {
@@ -1772,7 +1772,7 @@ fn validate_array_subset(
     Ok(())
 }
 
-fn validate_boundary_projection(value: &Value) -> Result<(), R12ContractError> {
+pub(crate) fn validate_boundary_projection(value: &Value) -> Result<(), R12ContractError> {
     if value.is_null() {
         return Ok(());
     }

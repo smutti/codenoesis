@@ -329,23 +329,56 @@ fn conf_fr_cli_001_r16_selector_absence_is_exact_r15() {
 }
 
 #[test]
-fn conf_fr_cli_001_r16_repository_boundary_fails_before_acquisition() {
-    let repository = MaterializedConstantEvaluationRepository::fixture();
-    let output =
-        repository.scan_with_options(&["--repository-boundary-profile", "local-gitlinks-v1"]);
-    assert_eq!(output.status.code(), Some(2));
-    assert!(output.stdout.is_empty());
-    let error = parse_single_document(&output.stderr);
-    assert_eq!(error["schema_version"], "codenoesis.error/v24");
+fn e2e_rw2_r16_composes_cfg_alternatives_and_unbound_repository_boundaries() {
+    let repository = MaterializedConstantEvaluationRepository::fixture_with_gitlink();
+    let r14 = repository.scan_r14_with_boundaries();
+    assert_success(&r14, "R14 repository-boundary composition scan");
+    let r15 = repository.scan_r15_with_boundaries();
+    assert_success(&r15, "R15 repository-boundary composition scan");
+    let output = repository.scan_r16_with_boundaries();
+    assert_success(&output, "R16 repository-boundary composition scan");
+    let snapshot = parse_single_document(&output.stdout);
     assert_eq!(
-        error["code"],
-        "input.unsupported_rust_constant_evaluation_composition"
+        snapshot["schema_version"],
+        "codenoesis.repository-snapshot/v18"
     );
     assert_eq!(
-        error["context"]["reason"],
-        "repository_boundary_not_supported"
+        snapshot["semantic"]["configuration"]["rust_semantic_profile"],
+        "rust-cfg-declaration-alternatives-v1"
     );
-    assert!(!repository.store.exists());
+    assert_eq!(
+        snapshot["semantic"]["configuration"]["repository_boundary_profile"],
+        "local-gitlinks-v1"
+    );
+    let boundaries = &snapshot["semantic"]["repository_boundaries"];
+    assert_eq!(boundaries["summary"]["boundary_count"], 1);
+    assert_eq!(boundaries["summary"]["bound_count"], 0);
+    assert_eq!(boundaries["boundaries"][0]["path"], "libs/hbb_common");
+    assert_eq!(boundaries["boundaries"][0]["state"], "undeclared_unbound");
+
+    assert_success(&repository.docs(), "R16 boundary documentation");
+    let boundary_id = boundaries["boundaries"][0]["boundary_id"]
+        .as_str()
+        .expect("boundary ID");
+    let query = repository.query(boundary_id);
+    assert_success(&query, "R16 boundary exact-ID query");
+    let result = parse_single_document(&query.stdout);
+    assert_eq!(
+        result["schema_version"],
+        "codenoesis.local-query-result/v13"
+    );
+    assert_eq!(result["repository_boundary"]["boundary_id"], boundary_id);
+
+    let export = repository.export();
+    assert_success(&export, "R16 boundary portable export");
+    let portable = parse_single_document(&export.stdout);
+    assert_eq!(portable["schema_version"], "codenoesis.portable-graph/v9");
+    assert_eq!(portable["repository_boundaries"], *boundaries);
+
+    let explore = repository.explore_function_context();
+    assert_success(&explore, "R16 boundary function-context explorer");
+    let manifest = parse_single_document(&explore.stdout);
+    assert_eq!(manifest["schema_version"], "codenoesis.local-explorer/v10");
     assert!(!repository.build_sentinel().exists());
 }
 

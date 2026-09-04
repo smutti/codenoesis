@@ -381,6 +381,30 @@ pub fn test_only(value: i32) -> i32 { simple_target(value) }
     );
 }
 
+#[test]
+fn gt_rw2_r14_block_match_scrutinee_is_covered_without_guessed_bindings() {
+    let source = r"
+pub fn block_scrutinee(value: i32) -> i32 {
+    let chosen = match { value } {
+        0 => 1,
+        _ => 2,
+    };
+    chosen
+}
+";
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_expression_bindings(&correction_inventory(source))
+        .expect("extract block-scrutinee R14 syntax");
+    extraction
+        .knowledge
+        .validate()
+        .expect("validate block-scrutinee R14 syntax");
+
+    assert!(extraction.knowledge.graph.coverage.iter().any(|gap| {
+        gap.capability == "rust.pattern_input_unexpanded" && gap.state == "unsupported"
+    }));
+}
+
 fn extract_fixture(
     rotation: usize,
     reverse: bool,

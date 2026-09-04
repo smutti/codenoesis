@@ -84,7 +84,7 @@ PILOTS = (
     ),
     PilotSpec(
         name="rustdesk",
-        repository_id="urn:codenoesis:pilot:rustdesk:r12",
+        repository_id="urn:codenoesis:pilot:rustdesk:r16",
         revision="d412d198720aa56f6cfed2dfad262e8fb1322fb7",
         tree="df8d4c292c9d256a445480eb878e507df3de1dc4",
         scan_options=(
@@ -102,12 +102,20 @@ PILOTS = (
             "rust-framework-declarations-v1",
             "--rust-callable-profile",
             "rust-callable-semantics-v1",
+            "--rust-expression-profile",
+            "rust-expression-bindings-v1",
+            "--rust-flow-profile",
+            "rust-local-flow-v1",
+            "--rust-constant-profile",
+            "rust-safe-constant-evaluation-v1",
             "--output-capacity-profile",
-            "local-snapshot-64m-v1",
+            "local-snapshot-256m-v1",
+            "--execution-limit-profile",
+            "real-world-rust-benchmark-75s-v1",
         ),
-        portable_profile="rust-callable-semantics-v1",
-        explorer_profile="rust-callable-semantics-v1",
-        export_documents=False,
+        portable_profile="rust-safe-constant-evaluation-v1",
+        explorer_profile="rust-function-context-v1",
+        export_documents=True,
     ),
 )
 

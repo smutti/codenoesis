@@ -103,7 +103,7 @@ fn conf_fr_cli_001_benchmark_execution_limit_compositions_fail_closed() {
 }
 
 #[test]
-fn conf_fr_cli_001_benchmark_execution_limit_preserves_boundary_precedence() {
+fn conf_fr_cli_001_benchmark_execution_limit_requires_exact_r12_boundary_lineage() {
     assert_typed_rejection(
         &[
             "--acquisition-profile",
@@ -115,7 +115,7 @@ fn conf_fr_cli_001_benchmark_execution_limit_preserves_boundary_precedence() {
             "--repository-boundary-profile",
             "local-gitlinks-v1",
         ],
-        "repository_boundary_not_supported",
+        "exact_r15_selector_matrix_required",
     );
 }
 
