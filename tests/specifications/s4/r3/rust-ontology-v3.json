@@ -32,6 +32,7 @@
     ],
     "member_sources": [
       "literal_member",
+      "glob_expanded_member",
       "implicit_root_package",
       "explicit_root_member"
     ],

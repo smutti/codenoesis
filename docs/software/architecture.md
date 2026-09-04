@@ -776,6 +776,11 @@ The system writes only the current schema and reads the current and immediately 
 - Contract extractors cover OpenAPI, AsyncAPI, GraphQL, Protocol Buffers, Maven/Gradle, Cargo, npm, containers, Kubernetes, Backstage metadata, and CODEOWNERS.
 - Compiler-grade symbol and relationship data can be imported using [SCIP](https://github.com/sourcegraph/scip). A validated compiler/indexer edge outranks a syntax-only heuristic.
 - Standard scans never execute build scripts or target binaries and never follow a submodule or symlink beyond the allowed repository roots.
+- The S4 root-package planner may expand only a final one-component Cargo
+  member pattern `prefix/*`, solely by matching committed regular package
+  manifests already present in the immutable repository inventory. The
+  planner performs no ambient filesystem discovery and records the additive
+  `glob_expanded_member` provenance without changing entity identities.
 
 ### Extension model
 

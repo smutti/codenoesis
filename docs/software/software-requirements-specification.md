@@ -2695,6 +2695,23 @@ V2/V3 immutable artifacts remain exact and are evaluated from their historical
 Git subjects. Opaque stderr retains only its existing digest identity plus one
 closed category; no additional untrusted content is disclosed.
 
+### 2.41 S4 deterministic Cargo workspace member expansion candidate
+
+Issue [#217](https://github.com/smutti/codenoesis/issues/217) and
+[Decision 0047](decisions/0047-s4-deterministic-cargo-member-expansion.md)
+govern one high-risk S4 candidate on exact merged RW5 base
+`b365d3069b8a1507d4a90dfd686a5c729d6d0747`.
+
+| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| `FR-EXT-021` | Proposed on the branch | Expand only canonical trailing one-component `prefix/*` Cargo workspace members from committed inventory, with additive provenance and existing bounds | `S4` | Issue #217, Decision 0047, focused expected Red, synthetic acceptance/property/security tests, and the pinned wgpu journey |
+
+The candidate changes no selector and preserves every literal-member output.
+It grants no filesystem discovery, Cargo execution, recursion, target-world
+selection, network access, gitlink traversal, or support for Cargo's wider glob
+language. Requirement approval and product behavior become effective only if
+the accountable maintainer manually merges the exact protected pull request.
+
 ## 3. Product intent and success definition
 
 CodeNoesis will convert immutable software revisions into evidence-backed,
@@ -2843,6 +2860,7 @@ cannot replace their verification.
 | `FR-EXT-018` | P0 | `0.2` | The explicit S7 `rust-direct-json-map/v1` provider capability MUST inspect only one workspace-selected committed Rust callable and prove field presence only for the closed direct `serde_json::Map` insertion, supported `if`, and direct `serde_json::Value::Object` publication subset. It MUST distinguish `guaranteed_present`, `may_be_absent`, and `unknown`, retain exact source evidence, and MUST NOT traverse helpers or infer aliases, loops, early returns, macros, generated code, custom codecs, reflection, dynamic keys, compiler meaning, runtime configuration, or execution. | The reviewed baseline and target provider sources prove `/nickname` changing from guaranteed to maybe absent, retain the custom `/displayName` helper as an explicit gap, reject malformed/unsupported/resource/race cases, and remain deterministic without process, network, build, target, plugin, model, or ambient authority. `GT`, `E2E`, `CONF`, `PT`, `SEC` |
 | `FR-EXT-019` | P0 | `0.2` | The explicit S7 `kotlin-direct-json-access/v1` client capability MUST inspect only workspace-selected committed Kotlin/KMP decoder and call paths, prove `requires_present` from direct `JsonObject.getValue` and `handles_absent` from guarded indexed access, and bind a direct literal or interpolated `httpGet` path only to an already confirmed S6 operation identity. DTO spelling, annotations, generated serializers, custom codecs, reflection, aliases, extension indirection, dynamic paths, unresolved calls, Gradle, compiler, framework, configuration, and runtime meaning MUST remain `unknown`. | Strict and safe reviewed clients receive distinct assumptions from their actual access paths, the operation decoy is rejected despite similar names, every fact resolves to exact source evidence, and unsupported/resource/race cases fail or produce exact gaps without executing the project. `GT`, `E2E`, `CONF`, `PT`, `SEC` |
 | `FR-EXT-020` | P0 | `0.1` | The explicit R16 `rust-safe-constant-evaluation-v1` profile MUST preserve the complete corrected R15 graph and add only checked target-independent `bool`, fixed-width signed/unsigned integer constants, immutable statics, and closed fixed-repr unit-enum discriminants from the approved grammar as evidence-backed `rust.evaluated_value` and `EVALUATES_TO` derived facts. It MUST retain exact rule, input claim, evidence, and dependency IDs, publish typed gaps for every unsupported or undefined case, evaluate enums all-or-nothing, and MUST NOT infer types, targets, active `cfg`, compiler validity/layout, runtime state, ownership, side effects, or execute any project/toolchain code. | The project-owned R16 fixture matches ConfigurationV15/RepositorySnapshotV18/KnowledgeGraphV15 with seven exact values, two dependencies, exact identities/hashes/counts/gap discharge, arithmetic/dependency/enum negatives, every maximum and maximum-plus-one, 50 permutations, ten schedules, no execution/network/model authority, byte-identical legacy paths, two pinned Lekton journeys, and the typed RustDesk boundary negative in Decision 0030. `GT`, `E2E`, `CONF`, `PT`, `SEC` |
+| `FR-EXT-021` | P0 | `0.1` | The S4 root-package workspace planner MAY expand a declared Cargo member only when it has the exact canonical form `prefix/*`, where `prefix` is a non-empty repository-relative path and `*` denotes exactly one child component. Expansion MUST use only committed regular `<prefix>/<child>/Cargo.toml` inventory entries, apply literal exclusions, retain additive `glob_expanded_member` provenance, enforce existing member/package/target bounds after expansion, and fail closed on an empty match or any wider glob syntax. | Synthetic fixtures prove one-level matching, literal exclusion, overlap precedence, empty-match rejection, maximum and maximum-plus-one capacity, inventory-order determinism, no ambient filesystem discovery, and unchanged literal-member outputs; the pinned wgpu workspace deterministically advances beyond its former `invalid_member_path` boundary. `GT`, `PT`, `SEC`, `E2E`, `CONF` |
 
 ### 9.3 Knowledge graph, claims, and snapshots
 
