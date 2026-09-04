@@ -462,6 +462,60 @@ fn pt_fr_ext_021_expanded_member_capacity_has_max_and_plus_one() {
 }
 
 #[test]
+fn gt_fr_ext_022_workspace_edition_reference_uses_root_declaration() {
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_root_package_workspace_incremental(
+            &workspace_edition_inventory("edition=\"2024\"", "edition.workspace=true", false),
+            &[],
+            &[],
+        )
+        .expect("accept a package edition declared by the root workspace");
+    assert_eq!(
+        extraction
+            .knowledge
+            .plan
+            .targets
+            .iter()
+            .map(|target| (
+                target.manifest_path.as_str(),
+                target.package_name.as_str(),
+                target.source_path.as_str(),
+            ))
+            .collect::<Vec<_>>(),
+        [("member/Cargo.toml", "member", "member/src/lib.rs")]
+    );
+
+    let non_virtual = TreeSitterRustWorkspaceExtractor::new()
+        .extract_root_package_workspace_incremental(
+            &workspace_edition_inventory("edition=\"2024\"", "edition.workspace=true", true),
+            &[],
+            &[],
+        )
+        .expect("the root package may inherit from its own workspace");
+    assert_eq!(non_virtual.knowledge.plan.targets.len(), 2);
+}
+
+#[test]
+fn gt_fr_ext_022_invalid_workspace_edition_reference_fails_closed() {
+    for (workspace_default, member_edition) in [
+        ("", "edition.workspace=true"),
+        ("edition=\"\"", "edition.workspace=true"),
+        ("edition=2024", "edition.workspace=true"),
+        ("edition=\"2024\"", "edition.workspace=false"),
+        (
+            "edition=\"2024\"",
+            "edition={workspace=true, unexpected=true}",
+        ),
+    ] {
+        assert_invalid_manifest(
+            workspace_edition_files(workspace_default, member_edition, false),
+            WorkspaceManifestReason::InvalidPackageManifest,
+            Some("member/Cargo.toml"),
+        );
+    }
+}
+
+#[test]
 fn gt_fr_ext_008_invalid_manifests_fail_closed() {
     assert_invalid_manifest(
         vec![("Cargo.toml".to_owned(), b"[package\n".to_vec())],
@@ -887,6 +941,51 @@ fn glob_capacity_inventory(member_count: usize) -> RepositoryInventory {
         ));
     }
     synthetic_inventory(files)
+}
+
+fn workspace_edition_inventory(
+    workspace_default: &str,
+    member_edition: &str,
+    non_virtual: bool,
+) -> RepositoryInventory {
+    synthetic_inventory(workspace_edition_files(
+        workspace_default,
+        member_edition,
+        non_virtual,
+    ))
+}
+
+fn workspace_edition_files(
+    workspace_default: &str,
+    member_edition: &str,
+    non_virtual: bool,
+) -> Vec<(String, Vec<u8>)> {
+    let root_package = if non_virtual {
+        "[package]\nname=\"root\"\nedition.workspace=true\n[lib]\npath=\"src/lib.rs\"\n"
+    } else {
+        ""
+    };
+    vec![
+        (
+            "Cargo.toml".to_owned(),
+            format!(
+                "[workspace]\nmembers=[\"member\"]\n[workspace.package]\n{workspace_default}\n{root_package}"
+            )
+            .into_bytes(),
+        ),
+        (
+            "member/Cargo.toml".to_owned(),
+            format!(
+                "[package]\nname=\"member\"\n{member_edition}\n[lib]\npath=\"src/lib.rs\"\n"
+            )
+            .into_bytes(),
+        ),
+        (
+            "member/src/lib.rs".to_owned(),
+            b"pub struct Member;\n".to_vec(),
+        ),
+        ("src/lib.rs".to_owned(), b"pub struct Root;\n".to_vec()),
+    ]
 }
 
 fn target_inventory(binary_counts: &[usize]) -> RepositoryInventory {

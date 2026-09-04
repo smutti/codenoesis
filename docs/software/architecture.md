@@ -782,6 +782,12 @@ The system writes only the current schema and reads the current and immediately 
   planner performs no ambient filesystem discovery, preserves the immutable
   R3 concrete-member encoding and identities, and grounds each projection in
   root-manifest evidence.
+- The same planner accepts a package `edition.workspace = true` reference only
+  when the committed root manifest declares a non-empty string
+  `[workspace.package].edition`. It validates the required planner input
+  without materializing an effective metadata value; all other Cargo package
+  inheritance remains declaration-only in the existing R4 manifest-facts
+  model.
 
 ### Extension model
 
