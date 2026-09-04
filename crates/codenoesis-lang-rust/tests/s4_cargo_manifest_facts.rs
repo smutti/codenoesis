@@ -412,7 +412,7 @@ fn gt_fr_ext_009_standard_dependency_tables_are_declarations() {
 }
 
 #[test]
-fn gt_fr_ext_023_dotted_dependency_fields_are_one_declaration() {
+fn gt_fr_ext_024_dotted_dependency_fields_are_one_declaration() {
     let extraction = extract_inventory(&raw_manifest_inventory(
         "[package]\nname = \"limit-fixture\"\nversion = \"0.1.0\"\nedition = \"2024\"\n\n[workspace]\n\n[workspace.dependencies]\ntracy-client = \"1\"\n\n[dependencies]\ntracy-client.workspace = true\ntracy-client.optional = true\n\n[lib]\npath = \"src/lib.rs\"\n",
     ))
@@ -440,7 +440,7 @@ fn gt_fr_ext_023_dotted_dependency_fields_are_one_declaration() {
 }
 
 #[test]
-fn gt_fr_ext_023_dotted_dependency_conflicts_fail_closed() {
+fn gt_fr_ext_024_dotted_dependency_conflicts_fail_closed() {
     let mixed_declaration = extract_inventory(&manifest_inventory(
         "[dependencies]\nserde = \"1\"\nserde.optional = true\n",
     ));

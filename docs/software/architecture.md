@@ -788,6 +788,17 @@ The system writes only the current schema and reads the current and immediately 
   without materializing an effective metadata value; all other Cargo package
   inheritance remains declaration-only in the existing R4 manifest-facts
   model.
+- The tolerant S4 Rust parser may replace only a recognized bare macro `$`
+  token or parser-recovery `cfg` attribute on a struct-pattern field with
+  same-length whitespace. It reparses until clean or until no recognized site
+  remains, preserves source offsets and newlines, records unsupported coverage,
+  and rejects every remaining error or missing node. Downstream syntax profiles
+  may reuse that positional tree but cannot infer meaning for projected bytes.
+- The R4 manifest adapter groups legal two-segment dotted dependency fields by
+  declared dependency name before applying its existing field, inheritance,
+  source-selector, privacy, limit, evidence, and identity checks. Deeper keys,
+  mixed direct/dotted declarations, duplicates, and unresolved references fail
+  closed; no dependency graph is resolved.
 
 ### Extension model
 

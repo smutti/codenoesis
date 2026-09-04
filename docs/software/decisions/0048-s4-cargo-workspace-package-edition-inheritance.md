@@ -1,8 +1,10 @@
 # Decision 0048: Cargo workspace package edition inheritance
 
-- Status: Proposed branch candidate
+- Status: Approved and Implemented
 - Date: 2026-09-04
 - Issue: [#219](https://github.com/smutti/codenoesis/issues/219)
+- Pull request: [#220](https://github.com/smutti/codenoesis/pull/220)
+- Merge commit: `ddb0acafeaa18ea1e01ba9bc48502974c68aa97a`
 - Exact dependent base: `5a3671d590d7e4ad864fe4fbe277add636ddf843`
 - Requirement: `FR-EXT-022`
 - Slice: `S4`
@@ -76,6 +78,6 @@ All three wgpu samples return exit `11`, empty stdout, 169 stderr bytes, and the
 same typed error. Aggregate stage coverage is acquisition 7/8, workspace 6/8,
 manifest 5/8, semantic 4/8, framework 4/8, flow 3/8, and constant 3/8.
 
-The candidate becomes Approved and Implemented only after independent review
-and protected manual merge. It changes no dependency, release, signing,
-workflow, permission, support, SLO, or GA authority.
+Protected PR #220 was independently reviewed and manually merged. The decision
+is therefore Approved and Implemented. It changes no dependency, release,
+signing, workflow, permission, support, SLO, or GA authority.

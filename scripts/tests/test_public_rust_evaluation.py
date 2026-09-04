@@ -60,10 +60,13 @@ class PublicRustEvaluationTests(unittest.TestCase):
         self.assertEqual(self.policy["repetitions"], 3)
         self.assertEqual(self.policy["minimum_constant_stage_successes"], 3)
         self.assertEqual(set(entries), {entry["id"] for entry in self.corpus["entries"]})
-        self.assertEqual(
-            {entry["terminal_stage"] for entry in entries.values()},
-            {"acquisition", "workspace", "manifest", "semantic", "flow", "constant"},
-        )
+        terminal_stages = {entry["terminal_stage"] for entry in entries.values()}
+        highest_successful_stages = {
+            entry["highest_successful_stage"]
+            for entry in entries.values()
+            if entry["highest_successful_stage"] is not None
+        }
+        self.assertEqual(terminal_stages | highest_successful_stages, set(STAGES))
         self.assertEqual(
             sum(entry["outcome"] == "success" for entry in entries.values()),
             3,

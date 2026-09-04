@@ -2712,23 +2712,41 @@ It grants no filesystem discovery, Cargo execution, recursion, target-world
 selection, network access, gitlink traversal, or support for Cargo's wider glob
 language.
 
-### 2.42 S4 Cargo workspace package edition inheritance candidate
+### 2.42 S4 Cargo workspace package edition inheritance
 
 Issue [#219](https://github.com/smutti/codenoesis/issues/219) and
 [Decision 0048](decisions/0048-s4-cargo-workspace-package-edition-inheritance.md)
-govern one S4 candidate on exact merged RW6 base
+govern the S4 extension merged by protected PR
+[#220](https://github.com/smutti/codenoesis/pull/220) on exact merged RW6 base
 `5a3671d590d7e4ad864fe4fbe277add636ddf843`.
 
-| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
+| Requirement | Current state | Implemented behavior | Slice | Ratification material |
 |---|---|---|---|---|
-| `FR-EXT-022` | Proposed on the branch | Validate `edition.workspace = true` from an exact non-empty root `[workspace.package].edition` string while preserving direct editions and R4 declaration-only facts | `S4` | Issue #219, Decision 0048, focused synthetic tests, R3/R4 regressions, and the complete pinned public Rust corpus |
+| `FR-EXT-022` | Approved and Implemented | Validate `edition.workspace = true` from an exact non-empty root `[workspace.package].edition` string while preserving direct editions and R4 declaration-only facts | `S4` | Issue #219, Decision 0048, protected PR #220, focused synthetic tests, R3/R4 regressions, and the complete pinned public Rust corpus |
 
 The candidate materializes no effective package metadata and changes no public
 identity, schema, ontology family, golden, dependency, selector, or execution
 authority. All package fields other than the planner-required edition retain
-their existing R4 declaration-only treatment. Requirement approval and product
-behavior become effective only if the accountable maintainer manually merges
-the exact protected pull request.
+their existing R4 declaration-only treatment.
+
+### 2.43 S4 bounded Rust parser and Cargo dotted dependency compatibility candidate
+
+Issue [#221](https://github.com/smutti/codenoesis/issues/221) and
+[Decision 0049](decisions/0049-s4-wgpu-source-manifest-compatibility.md)
+govern one S4 compatibility candidate on exact merged RW7 base
+`ddb0acafeaa18ea1e01ba9bc48502974c68aa97a`.
+
+| Requirement | Current state | Candidate after protected merge | Slice | Ratification material |
+|---|---|---|---|---|
+| `FR-EXT-023` | Proposed on the branch | Reparse only exact recognized tree-sitter gaps for a bare macro `$` token and cfg-decorated struct-pattern fields through a same-length whitespace projection, accepting only a final error-free tree and retaining unsupported coverage | `S4` | Issue #221, Decision 0049, focused parser/semantic regressions, and pinned wgpu R3/R5 journeys |
+| `FR-EXT-024` | Proposed on the branch | Group legal two-segment Cargo dotted dependency fields into one existing R4 declaration while rejecting conflicts, nested keys, unsupported fields, and unresolved workspace references | `S4` | Issue #221, Decision 0049, focused manifest regressions, and pinned wgpu R4 journey |
+
+The candidate performs no macro expansion, syntax repair, Cargo or rustc
+execution, dependency resolution, active-cfg selection, schema or identity
+change, or repository-specific exception. Pinned wgpu must complete R3 and R4
+and stop at the next honest R5 typed identity conflict for direct cfg module
+alternatives. Requirement approval and product behavior become effective only
+if the accountable maintainer manually merges the exact protected pull request.
 
 ## 3. Product intent and success definition
 
@@ -2880,6 +2898,8 @@ cannot replace their verification.
 | `FR-EXT-020` | P0 | `0.1` | The explicit R16 `rust-safe-constant-evaluation-v1` profile MUST preserve the complete corrected R15 graph and add only checked target-independent `bool`, fixed-width signed/unsigned integer constants, immutable statics, and closed fixed-repr unit-enum discriminants from the approved grammar as evidence-backed `rust.evaluated_value` and `EVALUATES_TO` derived facts. It MUST retain exact rule, input claim, evidence, and dependency IDs, publish typed gaps for every unsupported or undefined case, evaluate enums all-or-nothing, and MUST NOT infer types, targets, active `cfg`, compiler validity/layout, runtime state, ownership, side effects, or execute any project/toolchain code. | The project-owned R16 fixture matches ConfigurationV15/RepositorySnapshotV18/KnowledgeGraphV15 with seven exact values, two dependencies, exact identities/hashes/counts/gap discharge, arithmetic/dependency/enum negatives, every maximum and maximum-plus-one, 50 permutations, ten schedules, no execution/network/model authority, byte-identical legacy paths, two pinned Lekton journeys, and the typed RustDesk boundary negative in Decision 0030. `GT`, `E2E`, `CONF`, `PT`, `SEC` |
 | `FR-EXT-021` | P0 | `0.1` | The S4 root-package workspace planner MAY expand a declared Cargo member only when it has the exact canonical form `prefix/*`, where `prefix` is a non-empty repository-relative path and `*` denotes exactly one child component. Expansion MUST use only committed regular `<prefix>/<child>/Cargo.toml` inventory entries, apply literal exclusions, preserve the immutable R3 concrete-member representation, retain root-manifest evidence, enforce existing member/package/target bounds after expansion, and fail closed on an empty match or any wider glob syntax. | Synthetic fixtures prove one-level matching, literal exclusion, overlap precedence, empty-match rejection, maximum and maximum-plus-one capacity, inventory-order determinism, no ambient filesystem discovery, and unchanged R3 schema/ontology and literal-member outputs; the pinned wgpu workspace deterministically advances beyond its former `invalid_member_path` boundary. `GT`, `PT`, `SEC`, `E2E`, `CONF` |
 | `FR-EXT-022` | P0 | `0.1` | The S4 root-package workspace planner MAY satisfy its required package edition from `edition.workspace = true` only when that reference is an exact one-key true table and the committed root `[workspace.package]` table contains a non-empty string `edition`. Direct non-empty edition strings MUST retain existing behavior. Missing, empty, non-string, false, or structurally ambiguous references MUST fail closed as an invalid package manifest. The planner MUST NOT materialize an effective metadata value or alter the existing R4 declaration-only workspace-reference facts for edition or any other package field. | Synthetic virtual and non-virtual workspaces prove valid inheritance, direct compatibility, malformed/default/reference negatives, and unchanged R3/R4 regressions; the complete pinned public Rust corpus matches reviewed oracles and wgpu advances to its next typed source-extraction boundary without Cargo, rustc, filesystem discovery, dependency resolution, network, target execution, identity, schema, ontology, fixture, or golden changes. `GT`, `SEC`, `E2E`, `CONF` |
+| `FR-EXT-023` | P0 | `0.1` | The tolerant S4 Rust source planner and downstream syntax profiles MAY reparse a same-length whitespace projection only when tree-sitter reports either an exact bare `$` token under a `macro_definition` token tree or a balanced `#[cfg(...)]` attribute on a named or renamed struct-pattern field that is contained in or exactly bracketed by its parser recovery nodes. Each iteration MUST remove a newly recognized site, preserve byte offsets and newlines, and accept only a final tree with no error or missing node. R3 MUST retain `rust_unsupported_construct` coverage, downstream profiles MUST NOT assign meaning to projected bytes, and the legacy strict extractor and every unrecognized or mixed malformed input MUST fail closed. | Focused positive, retained-cfg, iterative, malformed, missing-node, strict-legacy, and semantic regressions pass; pinned wgpu completes R3 while preserving exact source evidence and advances to the next typed profile boundary without grammar upgrade, macro expansion, syntax repair, repository-specific rules, execution, schema, identity, or dependency changes. `GT`, `SEC`, `E2E`, `CONF` |
+| `FR-EXT-024` | P0 | `0.1` | The S4 Cargo manifest profile MUST group legal two-segment dotted dependency fields with a common declaration name into one existing R4 dependency table and MUST apply the unchanged approved field, workspace-reference, source-selector, locator-privacy, limit, evidence, and identity validation. A mixed direct/dotted declaration, duplicate field, path deeper than two segments, unsupported field, missing workspace declaration, or invalid value MUST fail closed. The profile MUST NOT resolve an effective dependency graph, fetch source, or execute Cargo or target code. | Focused workspace-inherited, optional-field, direct/dotted conflict, nested-key, and unchanged R4 suite regressions pass; pinned wgpu completes R4 with 3,400 entities, 4,124 relationships, exact evidence-backed declarations, and a deterministic R5 typed boundary. `GT`, `SEC`, `E2E`, `CONF` |
 
 ### 9.3 Knowledge graph, claims, and snapshots
 

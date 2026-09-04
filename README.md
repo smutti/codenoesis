@@ -48,8 +48,10 @@ The public conference corpus extends that evidence with eight independently
 pinned Rust repositories: hyperfine, tower, mio, fd, delta, rustfmt, dioxus,
 and wgpu. Its progressive runner records exact ontology identities and
 reasoning-oriented metrics at each repository's highest supported stage. The
-initial observation completes R16 for three repositories and records five
-distinct typed compatibility gaps without retries or hidden exclusions. See
+current observation completes R16 for three repositories and records five
+distinct typed compatibility gaps without retries or hidden exclusions. Wgpu
+now completes source and Cargo manifest extraction before its typed R5
+cfg-module identity boundary. See
 [`benchmarks/README.md`](benchmarks/README.md) for pins, metrics, and the
 reproduction command.
 
@@ -138,7 +140,7 @@ python3 scripts/run_public_rust_evaluation.py run \
   --repository-root /path/to/public-rust-corpus-v1 \
   --output benchmarks/results/public-rust-conference-v1-local.json \
   --host-profile local-machine-v1 \
-  --product-commit 095518ec49ede920af90b5c408c58a7ab99fc754
+  --product-commit 8d6ab53406f543356b22c614be64104e4b32c6d7
 ```
 
 The ignored JSON report retains three cold terminal samples per repository,
