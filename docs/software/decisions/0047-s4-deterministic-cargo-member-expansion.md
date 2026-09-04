@@ -79,10 +79,10 @@ permission, dependency, support, SLO, or GA authority.
 
 ## Candidate evidence
 
-Product commit `81cfd50ff245f1d8b0aabd85db074365a94f215c` builds release binary
-SHA-256 `8b0c4d8afcbc8f5ccfe8f3b26f4c8c56801b3b34abb107cb602584fa347bd4ce`.
+Product commit `f50c0dc060288ea7d1d10728a65e4ffb9923229d` builds release binary
+SHA-256 `a87f22b25cf11eeb715867fd2cc7494759cb6a7eb4975e868f8eb0a73a2da43e`.
 The complete eight-repository evaluation passes every updated oracle and emits
-report SHA-256 `e58d66116dd4c363d6b96c85e029db19072ab6dd77e0812affeb062e304b3ee1`.
+report SHA-256 `7faa8ebbd984e2d8fc87890bcb5029fe07c441042a1f8d81ea7f70208ad3405a`.
 All three pinned wgpu terminal samples return exit `11`, empty stdout, and exact
 `extraction.invalid_workspace_manifest` context
 `{"path":"benches/Cargo.toml","reason":"invalid_package_manifest"}`. This

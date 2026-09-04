@@ -113,7 +113,7 @@ python3 scripts/run_public_rust_evaluation.py run \
   --repository-root /path/to/public-rust-corpus-v1 \
   --output benchmarks/results/public-rust-conference-v1-local.json \
   --host-profile local-machine-v1 \
-  --product-commit 81cfd50ff245f1d8b0aabd85db074365a94f215c
+  --product-commit f50c0dc060288ea7d1d10728a65e4ffb9923229d
 ```
 
 Each repository advances through acquisition, workspace, manifest, semantic,

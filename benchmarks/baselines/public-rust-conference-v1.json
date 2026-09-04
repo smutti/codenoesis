@@ -1,7 +1,7 @@
 {
   "schema_version": "codenoesis.public-rust-evaluation-oracle/v1",
   "suite_id": "rust-public-conference-v1",
-  "baseline_product_commit": "81cfd50ff245f1d8b0aabd85db074365a94f215c",
+  "baseline_product_commit": "f50c0dc060288ea7d1d10728a65e4ffb9923229d",
   "entries": {
     "hyperfine": {
       "highest_successful_stage": "constant",
