@@ -23,8 +23,8 @@ else:
         audit_ontology_information,
     )
 
-RUNNER_VERSION = "codenoesis.real-world-rust-pilot-runner/v2"
-SUMMARY_SCHEMA = "codenoesis.real-world-rust-pilot-summary/v2"
+RUNNER_VERSION = "codenoesis.real-world-rust-pilot-runner/v3"
+SUMMARY_SCHEMA = "codenoesis.real-world-rust-pilot-summary/v3"
 ERROR_SCHEMA = "codenoesis.real-world-rust-pilot-error/v1"
 
 
@@ -55,6 +55,7 @@ class PilotSpec:
     scan_options: tuple[str, ...]
     portable_profile: str
     explorer_profile: str
+    llm_context_profile: str
     export_documents: bool
 
 
@@ -90,6 +91,7 @@ PILOTS = (
         ),
         portable_profile="rust-safe-constant-evaluation-v1",
         explorer_profile="rust-function-context-v1",
+        llm_context_profile="rust-llm-context-v1",
         export_documents=True,
     ),
     PilotSpec(
@@ -125,6 +127,7 @@ PILOTS = (
         ),
         portable_profile="rust-safe-constant-evaluation-v1",
         explorer_profile="rust-function-context-v1",
+        llm_context_profile="rust-llm-context-v1",
         export_documents=True,
     ),
 )
@@ -223,6 +226,31 @@ def build_explore_command(
     ]
 
 
+def build_llm_context_command(
+    binary: Path,
+    store: Path,
+    documents: Path,
+    callable_id: str,
+    spec: PilotSpec,
+) -> list[str]:
+    return [
+        str(binary),
+        "query",
+        "--store",
+        str(store),
+        "--repository-id",
+        spec.repository_id,
+        "--documents",
+        str(documents),
+        "--id",
+        callable_id,
+        "--context-profile",
+        spec.llm_context_profile,
+        "--format",
+        "json",
+    ]
+
+
 def run_git(repository: Path, arguments: Sequence[str]) -> str:
     environment = os.environ.copy()
     environment.update(
@@ -297,7 +325,7 @@ def prepare_output_root(output: Path, repositories: Sequence[Path]) -> Path:
         raise PilotError("pilot.invalid_output", "output root overlaps an input repository")
     try:
         resolved.mkdir()
-        (resolved / ".codenoesis-real-world-rust-pilots-v2").write_text(
+        (resolved / ".codenoesis-real-world-rust-pilots-v3").write_text(
             RUNNER_VERSION + "\n", encoding="utf-8"
         )
     except OSError as error:
@@ -370,6 +398,106 @@ def snapshot_summary(snapshot_path: Path) -> dict[str, Any]:
         raise PilotError("pilot.invalid_artifact", "snapshot graph is incomplete") from error
 
 
+def select_representative_callable(portable_graph: dict[str, Any]) -> dict[str, str]:
+    entities = portable_graph.get("entities")
+    relationships = portable_graph.get("relationships")
+    if not isinstance(entities, list) or not isinstance(relationships, list):
+        raise PilotError("pilot.invalid_artifact", "portable graph is incomplete")
+    degree: dict[str, int] = {}
+    signature_ids: dict[str, list[str]] = {}
+    parameter_counts: dict[str, int] = {}
+    body_counts: dict[str, int] = {}
+    outgoing_call_counts: dict[str, int] = {}
+    incoming_call_counts: dict[str, int] = {}
+    for relationship in relationships:
+        if not isinstance(relationship, dict):
+            continue
+        source = relationship.get("source")
+        target = relationship.get("target")
+        kind = relationship.get("kind")
+        if isinstance(source, str):
+            degree[source] = degree.get(source, 0) + 1
+        if isinstance(target, str):
+            degree[target] = degree.get(target, 0) + 1
+        if not all(isinstance(value, str) for value in (source, target, kind)):
+            continue
+        if kind == "HAS_SIGNATURE":
+            signature_ids.setdefault(source, []).append(target)
+        elif kind == "HAS_PARAMETER":
+            parameter_counts[source] = parameter_counts.get(source, 0) + 1
+        elif kind == "HAS_BODY_FACT":
+            body_counts[source] = body_counts.get(source, 0) + 1
+        elif kind == "CALLS":
+            outgoing_call_counts[source] = outgoing_call_counts.get(source, 0) + 1
+            incoming_call_counts[target] = incoming_call_counts.get(target, 0) + 1
+    candidates = []
+    bounded_candidates = []
+    for entity in entities:
+        if not isinstance(entity, dict) or entity.get("kind") not in {
+            "rust.function",
+            "rust.method",
+        }:
+            continue
+        identifier = entity.get("id")
+        kind = entity.get("kind")
+        name = entity.get("name")
+        if not all(isinstance(value, str) and value for value in (identifier, kind, name)):
+            raise PilotError("pilot.invalid_artifact", "callable identity is invalid")
+        candidates.append((degree.get(identifier, 0), identifier, kind, name))
+        signatures = signature_ids.get(identifier, [])
+        if len(signatures) != 1:
+            continue
+        parameters = parameter_counts.get(signatures[0], 0)
+        body_facts = body_counts.get(identifier, 0)
+        outgoing_calls = outgoing_call_counts.get(identifier, 0)
+        incoming_calls = incoming_call_counts.get(identifier, 0)
+        if parameters > 16 or body_facts > 64 or outgoing_calls + incoming_calls > 32:
+            continue
+        bounded_candidates.append(
+            (
+                0 if outgoing_calls else 1,
+                0 if body_facts else 1,
+                0 if parameters else 1,
+                abs(body_facts - 8),
+                degree.get(identifier, 0),
+                identifier,
+                kind,
+                name,
+            )
+        )
+    if not candidates:
+        raise PilotError("pilot.invalid_artifact", "portable graph has no callable")
+    if bounded_candidates:
+        _, _, _, _, _, identifier, kind, name = min(bounded_candidates)
+    else:
+        _, identifier, kind, name = min(candidates)
+    return {"id": identifier, "kind": kind, "name": name}
+
+
+def validate_llm_context(
+    path: Path, representative: dict[str, str], spec: PilotSpec
+) -> dict[str, Any]:
+    context = load_json(path)
+    focus = context.get("focus")
+    if (
+        context.get("schema_version") != "codenoesis.llm-function-context/v1"
+        or context.get("profile") != spec.llm_context_profile
+        or context.get("authority") != "declared_source_only"
+        or context.get("model_authority") is not False
+        or not isinstance(focus, dict)
+        or focus.get("id") != representative["id"]
+        or focus.get("kind") != representative["kind"]
+        or focus.get("name") != representative["name"]
+    ):
+        raise PilotError("pilot.invalid_artifact", "LLM context contract is invalid")
+    return {
+        "byte_length": path.stat().st_size,
+        "callable": representative,
+        "profile": context["profile"],
+        "schema_version": context["schema_version"],
+    }
+
+
 def run_pilot(
     binary: Path,
     repository: Path,
@@ -386,6 +514,7 @@ def run_pilot(
     explorer = root / "explorer"
     snapshot = root / "snapshot.json"
     information_audit = root / "information-audit.json"
+    llm_context = root / "llm-context.json"
     run_stage(
         build_scan_command(binary, repository, store, spec),
         f"{spec.name}.scan",
@@ -406,8 +535,9 @@ def run_pilot(
         logs / "export.stderr.json",
         timeout_seconds,
     )
+    portable_graph_value = load_json(portable_graph)
     try:
-        audit = audit_ontology_information(load_json(portable_graph))
+        audit = audit_ontology_information(portable_graph_value)
     except OntologyAuditError as error:
         raise PilotError(
             "pilot.invalid_artifact",
@@ -421,6 +551,21 @@ def run_pilot(
             f"{spec.name} ontology is missing required reasoning information",
             stage=f"{spec.name}.audit",
         )
+    representative = select_representative_callable(portable_graph_value)
+    run_stage(
+        build_llm_context_command(
+            binary,
+            store,
+            documents,
+            representative["id"],
+            spec,
+        ),
+        f"{spec.name}.llm_context",
+        logs / "llm-context.stderr.json",
+        timeout_seconds,
+        llm_context,
+    )
+    llm_context_summary = validate_llm_context(llm_context, representative, spec)
     run_stage(
         build_explore_command(binary, portable_graph, explorer, spec),
         f"{spec.name}.explore",
@@ -439,6 +584,7 @@ def run_pilot(
             "tree": spec.tree,
             "portable_profile": spec.portable_profile,
             "explorer_profile": spec.explorer_profile,
+            "llm_context": llm_context_summary,
             "information_audit": {
                 "checks": {
                     check["capability"]: check["status"] for check in audit["checks"]
@@ -452,6 +598,7 @@ def run_pilot(
                 "portable_graph": str(portable_graph),
                 "explorer": str(index),
                 "information_audit": str(information_audit),
+                "llm_context": str(llm_context),
             },
         }
     )
