@@ -12,9 +12,19 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, NoReturn, Sequence
 
+if __package__:
+    from .audit_ontology_information import (
+        OntologyAuditError,
+        audit_ontology_information,
+    )
+else:
+    from audit_ontology_information import (
+        OntologyAuditError,
+        audit_ontology_information,
+    )
 
-RUNNER_VERSION = "codenoesis.real-world-rust-pilot-runner/v1"
-SUMMARY_SCHEMA = "codenoesis.real-world-rust-pilot-summary/v1"
+RUNNER_VERSION = "codenoesis.real-world-rust-pilot-runner/v2"
+SUMMARY_SCHEMA = "codenoesis.real-world-rust-pilot-summary/v2"
 ERROR_SCHEMA = "codenoesis.real-world-rust-pilot-error/v1"
 
 
@@ -287,7 +297,7 @@ def prepare_output_root(output: Path, repositories: Sequence[Path]) -> Path:
         raise PilotError("pilot.invalid_output", "output root overlaps an input repository")
     try:
         resolved.mkdir()
-        (resolved / ".codenoesis-real-world-rust-pilots-v1").write_text(
+        (resolved / ".codenoesis-real-world-rust-pilots-v2").write_text(
             RUNNER_VERSION + "\n", encoding="utf-8"
         )
     except OSError as error:
@@ -375,6 +385,7 @@ def run_pilot(
     portable = root / "portable"
     explorer = root / "explorer"
     snapshot = root / "snapshot.json"
+    information_audit = root / "information-audit.json"
     run_stage(
         build_scan_command(binary, repository, store, spec),
         f"{spec.name}.scan",
@@ -395,6 +406,21 @@ def run_pilot(
         logs / "export.stderr.json",
         timeout_seconds,
     )
+    try:
+        audit = audit_ontology_information(load_json(portable_graph))
+    except OntologyAuditError as error:
+        raise PilotError(
+            "pilot.invalid_artifact",
+            f"{spec.name} ontology information audit failed",
+            stage=f"{spec.name}.audit",
+        ) from error
+    information_audit.write_bytes(canonical_json_bytes(audit))
+    if audit["verdict"] == "insufficient_information":
+        raise PilotError(
+            "pilot.insufficient_information",
+            f"{spec.name} ontology is missing required reasoning information",
+            stage=f"{spec.name}.audit",
+        )
     run_stage(
         build_explore_command(binary, portable_graph, explorer, spec),
         f"{spec.name}.explore",
@@ -413,11 +439,19 @@ def run_pilot(
             "tree": spec.tree,
             "portable_profile": spec.portable_profile,
             "explorer_profile": spec.explorer_profile,
+            "information_audit": {
+                "checks": {
+                    check["capability"]: check["status"] for check in audit["checks"]
+                },
+                "reasoning_readiness": audit["reasoning_readiness"],
+                "verdict": audit["verdict"],
+            },
             "artifacts": {
                 "snapshot": str(snapshot),
                 "documents": str(documents),
                 "portable_graph": str(portable_graph),
                 "explorer": str(index),
+                "information_audit": str(information_audit),
             },
         }
     )

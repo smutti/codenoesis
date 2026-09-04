@@ -66,11 +66,33 @@ Open `http://127.0.0.1:8765/lekton/explorer/` or
 `http://127.0.0.1:8765/rustdesk/explorer/`. The runner reads only the pinned
 committed Git objects, performs no clone or fetch, and records exact snapshot,
 PortableGraph, viewer, revision, semantic hash, and family counts in
-`summary.json`. Lekton and RustDesk use the complete R16 ontology and
+`summary.json`. Each pilot also produces `information-audit.json`, which tests
+that callable inputs and outputs, enum and declared values, bounded evaluated
+constants, call arguments and targets, expression structure, local flow,
+source evidence, and explicit uncertainty remain navigable. The audit reports
+unsupported type resolution, cross-call resolution, side effects, and runtime
+behavior as limitations instead of treating them as facts. Lekton and RustDesk
+use the complete R16 ontology and
 FunctionContextV1 viewer plus the existing benchmark-only 75-second scan
 profile; the standard scan limit remains unchanged. RustDesk retains
 `libs/hbb_common` as an unbound repository boundary and never fetches or reads
 its nested source.
+
+To audit an already generated PortableGraph without repeating extraction:
+
+```sh
+python3 scripts/audit_ontology_information.py \
+  --input /path/to/portable/portable-graph.json \
+  --output /path/to/information-audit.json
+```
+
+The command exits unsuccessfully when the graph does not contain the minimum
+reasoning core. A successful `usable_with_explicit_gaps` verdict means the
+declared information is structurally navigable while the report still lists
+all unsupported semantic capabilities. Raw source excerpts remain available
+through the separate trusted R18 query, while API contract-versus-
+implementation and semantic-version comparison remain separate S7 reports;
+the audit does not pretend that those facts are embedded in PortableGraphV9.
 
 ## Two development tracks
 
