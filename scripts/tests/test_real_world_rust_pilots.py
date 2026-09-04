@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib
 import json
 import sys
 import tempfile
@@ -23,9 +24,14 @@ from generate_real_world_rust_pilots import (  # noqa: E402
 
 
 class RealWorldRustPilotTests(unittest.TestCase):
+    def test_runner_is_importable_as_a_scripts_module(self) -> None:
+        module = importlib.import_module("scripts.generate_real_world_rust_pilots")
+        self.assertEqual(module.RUNNER_VERSION, "codenoesis.real-world-rust-pilot-runner/v2")
+
     def test_readme_documents_both_explorer_routes(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn("scripts/generate_real_world_rust_pilots.py", readme)
+        self.assertIn("information-audit.json", readme)
         self.assertIn("/lekton/explorer/", readme)
         self.assertIn("/rustdesk/explorer/", readme)
 
