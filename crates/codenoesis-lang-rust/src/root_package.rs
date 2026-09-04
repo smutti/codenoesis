@@ -36,6 +36,20 @@ struct TargetDraft {
     path: String,
 }
 
+enum WorkspaceMemberDeclaration {
+    Literal(String),
+    OneLevelPattern { declaration: String, prefix: String },
+}
+
+impl WorkspaceMemberDeclaration {
+    fn declaration(&self) -> &str {
+        match self {
+            Self::Literal(path) => path,
+            Self::OneLevelPattern { declaration, .. } => declaration,
+        }
+    }
+}
+
 pub(super) fn plan_root_package_workspace(
     inventory: &RepositoryInventory,
     external_boundaries: &[ExternalWorkspaceBoundary],
@@ -118,11 +132,12 @@ impl<'a> Planner<'a> {
             }
         };
 
-        let (literal_members, excluded_paths, explicit_root) = if let Some(workspace) = workspace {
-            parse_workspace(workspace)?
-        } else {
-            (Vec::new(), Vec::new(), false)
-        };
+        let (member_declarations, excluded_paths, explicit_root) =
+            if let Some(workspace) = workspace {
+                parse_workspace(workspace)?
+            } else {
+                (Vec::new(), Vec::new(), false)
+            };
         if root_shape == RootPackageShape::VirtualWorkspace && explicit_root {
             return Err(invalid_manifest(
                 WorkspaceManifestReason::InvalidMemberPath,
@@ -133,18 +148,7 @@ impl<'a> Planner<'a> {
             .iter()
             .map(String::as_str)
             .collect::<BTreeSet<_>>();
-        if let Some(path) = literal_members
-            .iter()
-            .find(|path| path.as_str() != "." && excluded.contains(path.as_str()))
-        {
-            return Err(RootPackageWorkspaceError::MemberConflict { path: path.clone() });
-        }
-
-        let mut planned_members = literal_members
-            .into_iter()
-            .filter(|path| path != ".")
-            .map(|path| (path, WorkspaceMemberSource::LiteralMember))
-            .collect::<Vec<_>>();
+        let mut planned_members = self.expand_workspace_members(&member_declarations, &excluded)?;
         if package.is_some() {
             planned_members.push((
                 ".".to_owned(),
@@ -604,6 +608,64 @@ impl<'a> Planner<'a> {
         Ok(targets)
     }
 
+    fn expand_workspace_members(
+        &self,
+        declarations: &[WorkspaceMemberDeclaration],
+        excluded: &BTreeSet<&str>,
+    ) -> Result<Vec<(String, WorkspaceMemberSource)>, RootPackageWorkspaceError> {
+        let mut members = BTreeMap::<String, WorkspaceMemberSource>::new();
+        for declaration in declarations {
+            match declaration {
+                WorkspaceMemberDeclaration::Literal(path) if path == "." => {}
+                WorkspaceMemberDeclaration::Literal(path) => {
+                    if excluded.contains(path.as_str()) {
+                        return Err(RootPackageWorkspaceError::MemberConflict {
+                            path: path.clone(),
+                        });
+                    }
+                    members.insert(path.clone(), WorkspaceMemberSource::LiteralMember);
+                }
+                WorkspaceMemberDeclaration::OneLevelPattern { prefix, .. } => {
+                    let path_prefix = format!("{prefix}/");
+                    let mut matched = false;
+                    for manifest in self.files.keys() {
+                        let Some(relative) = manifest.strip_prefix(path_prefix.as_str()) else {
+                            continue;
+                        };
+                        let Some(child) = relative.strip_suffix("/Cargo.toml") else {
+                            continue;
+                        };
+                        if child.is_empty() || child.contains('/') {
+                            continue;
+                        }
+                        matched = true;
+                        let path = format!("{prefix}/{child}");
+                        if excluded.contains(path.as_str()) {
+                            continue;
+                        }
+                        members
+                            .entry(path)
+                            .or_insert(WorkspaceMemberSource::GlobExpandedMember);
+                    }
+                    if !matched {
+                        return Err(invalid_manifest(
+                            WorkspaceManifestReason::InvalidMemberPath,
+                            Some("Cargo.toml".to_owned()),
+                        ));
+                    }
+                }
+            }
+        }
+        let observed = u64::try_from(members.len()).unwrap_or(u64::MAX);
+        if observed > MAX_R3_LITERAL_MEMBERS {
+            return Err(root_package_limit_exceeded(
+                codenoesis_domain::s4_r3::RootPackageLimit::WorkspaceMembers,
+                observed,
+            ));
+        }
+        Ok(members.into_iter().collect())
+    }
+
     fn conventional_targets(
         &self,
         member_path: &str,
@@ -673,7 +735,7 @@ impl<'a> Planner<'a> {
 
 fn parse_workspace(
     workspace: &toml::Table,
-) -> Result<(Vec<String>, Vec<String>, bool), RootPackageWorkspaceError> {
+) -> Result<(Vec<WorkspaceMemberDeclaration>, Vec<String>, bool), RootPackageWorkspaceError> {
     const ALLOWED: &[&str] = &[
         "members",
         "exclude",
@@ -710,17 +772,24 @@ fn parse_workspace(
             u64::try_from(exclusions.len()).unwrap_or(u64::MAX),
         ));
     }
-    let mut normalized_members =
-        normalize_paths(members, true, WorkspaceManifestReason::InvalidMemberPath)?;
-    let explicit_root = normalized_members.iter().any(|path| path == ".");
-    normalized_members.sort_by(|left, right| left.as_bytes().cmp(right.as_bytes()));
-    if normalized_members.windows(2).any(|pair| pair[0] == pair[1]) {
+    let mut normalized_members = normalize_member_declarations(members)?;
+    let explicit_root = normalized_members
+        .iter()
+        .any(|member| matches!(member, WorkspaceMemberDeclaration::Literal(path) if path == "."));
+    normalized_members.sort_by(|left, right| {
+        left.declaration()
+            .as_bytes()
+            .cmp(right.declaration().as_bytes())
+    });
+    if normalized_members
+        .windows(2)
+        .any(|pair| pair[0].declaration() == pair[1].declaration())
+    {
         return Err(invalid_manifest(
             WorkspaceManifestReason::InvalidMemberPath,
             Some("Cargo.toml".to_owned()),
         ));
     }
-    normalized_members.dedup();
     let mut normalized_exclusions = normalize_paths(
         exclusions,
         false,
@@ -738,6 +807,47 @@ fn parse_workspace(
     }
     normalized_exclusions.dedup();
     Ok((normalized_members, normalized_exclusions, explicit_root))
+}
+
+fn normalize_member_declarations(
+    paths: Vec<&str>,
+) -> Result<Vec<WorkspaceMemberDeclaration>, RootPackageWorkspaceError> {
+    let mut normalized = Vec::with_capacity(paths.len());
+    let mut raw_by_normalized = BTreeMap::<String, &str>::new();
+    for path in paths {
+        let declaration = if path == "." {
+            WorkspaceMemberDeclaration::Literal(".".to_owned())
+        } else if valid_canonical_path(path) && !contains_glob(path) {
+            WorkspaceMemberDeclaration::Literal(path.to_owned())
+        } else if let Some(prefix) = one_level_member_pattern_prefix(path) {
+            WorkspaceMemberDeclaration::OneLevelPattern {
+                declaration: path.to_owned(),
+                prefix: prefix.to_owned(),
+            }
+        } else {
+            return Err(invalid_manifest(
+                WorkspaceManifestReason::InvalidMemberPath,
+                Some("Cargo.toml".to_owned()),
+            ));
+        };
+        let nfc = path.nfc().collect::<String>();
+        if let Some(previous) = raw_by_normalized.insert(nfc.clone(), path)
+            && previous != path
+        {
+            return Err(invalid_manifest(
+                WorkspaceManifestReason::UnicodeNormalizationCollision,
+                Some("Cargo.toml".to_owned()),
+            ));
+        }
+        if nfc != path {
+            return Err(invalid_manifest(
+                WorkspaceManifestReason::UnicodeNormalizationCollision,
+                Some("Cargo.toml".to_owned()),
+            ));
+        }
+        normalized.push(declaration);
+    }
+    Ok(normalized)
 }
 
 fn normalize_paths(
@@ -1160,6 +1270,15 @@ fn valid_canonical_path(path: &str) -> bool {
 
 fn contains_glob(path: &str) -> bool {
     path.contains(['*', '?', '[', ']', '{', '}'])
+}
+
+fn one_level_member_pattern_prefix(path: &str) -> Option<&str> {
+    let prefix = path.strip_suffix("/*")?;
+    (!prefix.is_empty()
+        && path.len() <= usize::try_from(STANDARD_LOCAL_S1_LIMITS.path_bytes).unwrap_or(usize::MAX)
+        && valid_canonical_path(prefix)
+        && !contains_glob(prefix))
+    .then_some(prefix)
 }
 
 fn target_order(left: &RootPackageTarget, right: &RootPackageTarget) -> std::cmp::Ordering {

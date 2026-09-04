@@ -29,6 +29,14 @@ const MANIFEST_OID: &str = "3333333333333333333333333333333333333333";
 const SOURCE_OID: &str = "4444444444444444444444444444444444444444";
 
 #[test]
+fn conf_fr_ext_021_glob_member_provenance_is_additive() {
+    assert_eq!(
+        WorkspaceMemberSource::GlobExpandedMember.as_str(),
+        "glob_expanded_member"
+    );
+}
+
+#[test]
 #[allow(clippy::too_many_lines)]
 fn conf_fr_ext_008_snapshot_v6_graph_v3_error_v10() {
     let (snapshot, crate_id, _) = reviewed_snapshot();

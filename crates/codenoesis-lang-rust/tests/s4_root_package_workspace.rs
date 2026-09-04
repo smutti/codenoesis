@@ -409,7 +409,7 @@ fn gt_fr_ext_021_trailing_member_pattern_uses_only_committed_inventory() {
             .map(|member| (member.path.as_str(), member.member_source))
             .collect::<Vec<_>>(),
         [
-            ("crates/a", WorkspaceMemberSource::GlobExpandedMember),
+            ("crates/a", WorkspaceMemberSource::LiteralMember),
             ("crates/b", WorkspaceMemberSource::GlobExpandedMember),
             ("tool", WorkspaceMemberSource::LiteralMember),
         ]
@@ -442,6 +442,23 @@ fn gt_fr_ext_021_unsupported_or_empty_member_patterns_fail_closed() {
             Some("Cargo.toml"),
         );
     }
+}
+
+#[test]
+fn pt_fr_ext_021_expanded_member_capacity_has_max_and_plus_one() {
+    TreeSitterRustWorkspaceExtractor::new()
+        .extract_root_package_workspace_incremental(&glob_capacity_inventory(200), &[], &[])
+        .expect("200 expanded workspace members are supported");
+    assert_limit(
+        TreeSitterRustWorkspaceExtractor::new().extract_root_package_workspace_incremental(
+            &glob_capacity_inventory(201),
+            &[],
+            &[],
+        ),
+        RootPackageLimit::WorkspaceMembers,
+        200,
+        201,
+    );
 }
 
 #[test]
@@ -782,10 +799,10 @@ fn package_inventory(package_count: usize) -> RepositoryInventory {
 }
 
 fn glob_member_inventory(reverse: bool) -> RepositoryInventory {
-    let mut files = vec![
+    let files = vec![
         (
             "Cargo.toml".to_owned(),
-            b"[workspace]\nmembers=[\"crates/*\",\"tool\"]\nexclude=[\"crates/excluded\"]\n"
+            b"[workspace]\nmembers=[\"crates/*\",\"crates/a\",\"tool\"]\nexclude=[\"crates/excluded\"]\n"
                 .to_vec(),
         ),
         (
@@ -827,8 +844,47 @@ fn glob_member_inventory(reverse: bool) -> RepositoryInventory {
         ),
         ("tool/src/lib.rs".to_owned(), b"pub struct Tool;\n".to_vec()),
     ];
+    let mut files = files
+        .into_iter()
+        .enumerate()
+        .map(|(index, (path, bytes))| {
+            AcquiredFile::new(
+                path,
+                RegularFileMode::Regular,
+                oid(&format!("{:040x}", index + 1)),
+                bytes,
+            )
+        })
+        .collect::<Vec<_>>();
     if reverse {
         files.reverse();
+    }
+    inventory(
+        "urn:codenoesis:test:r3-limits",
+        "1111111111111111111111111111111111111111",
+        "2222222222222222222222222222222222222222",
+        files,
+    )
+}
+
+fn glob_capacity_inventory(member_count: usize) -> RepositoryInventory {
+    let mut files = vec![(
+        "Cargo.toml".to_owned(),
+        b"[workspace]\nmembers=[\"members/*\"]\n".to_vec(),
+    )];
+    for index in 0..member_count {
+        let member = format!("members/{index:03}");
+        files.push((
+            format!("{member}/Cargo.toml"),
+            format!(
+                "[package]\nname=\"member-{index:03}\"\nedition=\"2024\"\n[lib]\npath=\"src/lib.rs\"\n"
+            )
+            .into_bytes(),
+        ));
+        files.push((
+            format!("{member}/src/lib.rs"),
+            b"pub struct Item;\n".to_vec(),
+        ));
     }
     synthetic_inventory(files)
 }

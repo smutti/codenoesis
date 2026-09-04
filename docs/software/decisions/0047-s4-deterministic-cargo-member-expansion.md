@@ -33,8 +33,7 @@ when the immutable repository inventory contains the committed regular file
 
 The planner sorts concrete paths by UTF-8 bytes and records each expanded
 member as `glob_expanded_member`. An exact literal declaration for the same
-concrete member takes provenance precedence. Multiple patterns may converge on
-one concrete member without duplicating it, while duplicate raw declarations
+concrete member takes provenance precedence, while duplicate raw declarations
 remain invalid. A literal exclusion removes a pattern-derived match; the
 existing literal-member/exclusion conflict remains a typed failure. A valid
 pattern with zero committed matches fails as `invalid_member_path`.
@@ -69,7 +68,7 @@ The focused checkpoint test is Red on the exact base because `crates/*` is
 rejected before planning. Green requires deterministic synthetic expansion,
 literal exclusion and precedence, unsupported/empty-pattern rejection,
 capacity boundaries, existing R3 and contract regressions, and a pinned wgpu
-run that advances to its next honest typed stage. The complete eight-repository
+run that advances to its next honest typed boundary. The complete eight-repository
 RW5 oracle and repository gate must pass.
 
 The candidate becomes Approved and Implemented only after independent review
