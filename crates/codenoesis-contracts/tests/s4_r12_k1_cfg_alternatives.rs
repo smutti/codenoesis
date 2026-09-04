@@ -42,6 +42,37 @@ fn conf_fr_exp_004_v5_reimports_one_canonical_closed_projection() {
 }
 
 #[test]
+fn conf_v5_document_statements_accept_validated_boundary_references() {
+    let mut value = valid_portable_shell();
+    value["repository"]["identity"] = Value::String("urn:codenoesis:pilot:rustdesk:r12".to_owned());
+    value["repository_boundaries"] = rustdesk_boundary_projection();
+    value["documents"] = json!([{
+        "document_id": "document:a",
+        "subject_id": "urn:codenoesis:pilot:rustdesk:r12"
+    }]);
+    value["document_statements"] = json!([{
+        "statement_id": "statement:a",
+        "document_id": "document:a",
+        "subject_ids": [
+            "urn:codenoesis:repository-boundary:sha256:4cc5105a068b6a39074ac1eea8e7f26968deac21f10aee1eb7132634e385341d",
+            "urn:codenoesis:gitmodules-declaration:sha256:e379c323b66a3d9123744f33056ee176b6fdda79058d79edc5c1270a17b8e034",
+            "urn:codenoesis:boundary-evidence:sha256:888b5e93f8b93ee7abfc38fe46bda260bdf19aeff46fe2146360627e454caa5d",
+            "urn:codenoesis:boundary-gap:sha256:4db27bc5fadf0c9b73a2417c4107d3c3fce0caaa5d96b8cca7535b9c4d542c0b"
+        ],
+        "evidence_ids": [
+            "urn:codenoesis:boundary-evidence:sha256:888b5e93f8b93ee7abfc38fe46bda260bdf19aeff46fe2146360627e454caa5d"
+        ],
+        "coverage_gap_ids": [
+            "urn:codenoesis:boundary-gap:sha256:4db27bc5fadf0c9b73a2417c4107d3c3fce0caaa5d96b8cca7535b9c4d542c0b"
+        ]
+    }]);
+    refresh_family_digests(&mut value);
+
+    PortableGraphV5::from_canonical_file(&canonical_file(&value), sha256)
+        .expect("accept validated repository-boundary document references");
+}
+
+#[test]
 fn ft_nfr_prv_002_v5_reimport_rejects_private_payloads() {
     let mut value = valid_portable_shell();
     value["repository"]["raw_url"] = Value::String("https://credential.invalid".to_owned());
@@ -299,6 +330,84 @@ fn valid_portable_with_references() -> Value {
     }]);
     refresh_family_digests(&mut value);
     value
+}
+
+fn rustdesk_boundary_projection() -> Value {
+    json!({
+        "schema_version": "codenoesis.repository-boundaries/v1",
+        "profile": "local-gitlinks-v1",
+        "root_repository": {
+            "identity": "urn:codenoesis:pilot:rustdesk:r12",
+            "vcs": "git",
+            "object_format": "sha1",
+            "commit_oid": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+            "tree_oid": "df8d4c292c9d256a445480eb878e507df3de1dc4"
+        },
+        "summary": {
+            "boundary_count": 1,
+            "declaration_count": 1,
+            "coverage_gap_count": 1,
+            "bound_count": 0,
+            "unbound_count": 1
+        },
+        "boundaries": [{
+            "boundary_id": "urn:codenoesis:repository-boundary:sha256:4cc5105a068b6a39074ac1eea8e7f26968deac21f10aee1eb7132634e385341d",
+            "path": "libs/hbb_common",
+            "gitlink_oid": "69cea8dafee147848ae88702029f4bf7df7224c3",
+            "state": "declared_unbound",
+            "declaration_id": "urn:codenoesis:gitmodules-declaration:sha256:e379c323b66a3d9123744f33056ee176b6fdda79058d79edc5c1270a17b8e034",
+            "nested_repository": null,
+            "evidence_ids": [
+                "urn:codenoesis:boundary-evidence:sha256:888b5e93f8b93ee7abfc38fe46bda260bdf19aeff46fe2146360627e454caa5d",
+                "urn:codenoesis:boundary-evidence:sha256:ad564882d85c15bcd1b13f62d74208268d2b636a98e5202a2141191faa66a863"
+            ],
+            "coverage_gap_ids": [
+                "urn:codenoesis:boundary-gap:sha256:4db27bc5fadf0c9b73a2417c4107d3c3fce0caaa5d96b8cca7535b9c4d542c0b"
+            ]
+        }],
+        "declarations": [{
+            "declaration_id": "urn:codenoesis:gitmodules-declaration:sha256:e379c323b66a3d9123744f33056ee176b6fdda79058d79edc5c1270a17b8e034",
+            "name_sha256": "d6fa95f1476bac33248cc3ba17950ae514fe1e3bd559d22457480d7fab9eec1d",
+            "path": "libs/hbb_common",
+            "url_kind": "https",
+            "url_sha256": "a368509517a1eb9faf1a7ab9d26e57b27dc16d6d8e910aecd97ef29f7051c9b5",
+            "unsupported_keys": [],
+            "boundary_id": "urn:codenoesis:repository-boundary:sha256:4cc5105a068b6a39074ac1eea8e7f26968deac21f10aee1eb7132634e385341d",
+            "evidence_id": "urn:codenoesis:boundary-evidence:sha256:ad564882d85c15bcd1b13f62d74208268d2b636a98e5202a2141191faa66a863"
+        }],
+        "coverage_gaps": [{
+            "gap_id": "urn:codenoesis:boundary-gap:sha256:4db27bc5fadf0c9b73a2417c4107d3c3fce0caaa5d96b8cca7535b9c4d542c0b",
+            "code": "boundary.nested_repository_unbound",
+            "subject_id": "urn:codenoesis:repository-boundary:sha256:4cc5105a068b6a39074ac1eea8e7f26968deac21f10aee1eb7132634e385341d",
+            "path": "libs/hbb_common",
+            "evidence_ids": [
+                "urn:codenoesis:boundary-evidence:sha256:888b5e93f8b93ee7abfc38fe46bda260bdf19aeff46fe2146360627e454caa5d",
+                "urn:codenoesis:boundary-evidence:sha256:ad564882d85c15bcd1b13f62d74208268d2b636a98e5202a2141191faa66a863"
+            ]
+        }],
+        "evidence": [{
+            "evidence_id": "urn:codenoesis:boundary-evidence:sha256:888b5e93f8b93ee7abfc38fe46bda260bdf19aeff46fe2146360627e454caa5d",
+            "kind": "git_tree_entry",
+            "repository": {
+                "identity": "urn:codenoesis:pilot:rustdesk:r12",
+                "commit_oid": "d412d198720aa56f6cfed2dfad262e8fb1322fb7"
+            },
+            "tree_oid": "c7041390104b9d59276e1e5c3388f2d281eb91b4",
+            "path": "libs/hbb_common",
+            "mode": "160000",
+            "object_oid": "69cea8dafee147848ae88702029f4bf7df7224c3"
+        }, {
+            "evidence_id": "urn:codenoesis:boundary-evidence:sha256:ad564882d85c15bcd1b13f62d74208268d2b636a98e5202a2141191faa66a863",
+            "kind": "gitmodules_declaration",
+            "repository": {
+                "identity": "urn:codenoesis:pilot:rustdesk:r12",
+                "commit_oid": "d412d198720aa56f6cfed2dfad262e8fb1322fb7"
+            },
+            "path": ".gitmodules",
+            "blob_oid": "d80e69aa84a4c7f764eea191622a386878cf852d",
+            "span": {"unit": "byte", "start": 0, "end": 100}
+        }]
+    })
 }
 
 fn refresh_family_digests(value: &mut Value) {

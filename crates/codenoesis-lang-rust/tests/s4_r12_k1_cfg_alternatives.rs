@@ -5,7 +5,10 @@ use std::sync::{Arc, Barrier};
 
 use codenoesis_domain::s4_k1::{
     CallableRelationshipKind, CallableSemanticEntityKind, CallableSemanticProperties,
+    DeclaredValueState,
 };
+use codenoesis_domain::s4_r5::RustSemanticError;
+use codenoesis_domain::s4_r10::RustCfgDeclarationAlternativesError;
 use codenoesis_domain::s4_r12::CallableCfgAlternativesError;
 use codenoesis_domain::{
     AcquiredFile, AcquiredRepository, BoundRevision, ObjectId, RegularFileMode, RepositoryIdentity,
@@ -141,6 +144,63 @@ fn gt_fr_ext_014_callable_counts_match_reviewed_oracle() {
     );
     assert_eq!(relationship_counts[&CallableRelationshipKind::Calls], 5);
     assert_eq!(graph.index.unresolved_call_site_ids.len(), 5);
+}
+
+#[test]
+fn gt_real_world_cfg_declared_values_remain_unresolved() {
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_callable_cfg_alternatives_with_boundaries(
+            &fixture_inventory_with_cfg_declared_value_alternatives(),
+            &[],
+        )
+        .expect("extract cfg-conditioned declared values");
+    let graph = &extraction.knowledge.callable.graph;
+    let values = graph
+        .entities
+        .iter()
+        .filter(|entity| {
+            entity.kind == CallableSemanticEntityKind::DeclaredValue
+                && entity.name == "PLATFORM_DATA"
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(values.len(), 1);
+    assert_eq!(values[0].evidence_ids.len(), 2);
+    assert!(matches!(
+        values[0].properties,
+        CallableSemanticProperties::DeclaredValue(ref properties)
+            if properties.state == DeclaredValueState::Unresolved
+    ));
+    let value_gaps = graph
+        .coverage
+        .iter()
+        .filter(|gap| gap.subject_id == values[0].id)
+        .collect::<Vec<_>>();
+    assert_eq!(value_gaps.len(), 1);
+    assert_eq!(
+        value_gaps[0].capability,
+        "rust.cfg_declared_value_alternatives_not_selected"
+    );
+    assert_eq!(value_gaps[0].evidence_ids, values[0].evidence_ids);
+}
+
+#[test]
+fn ft_duplicate_declared_values_without_cfg_remain_invalid() {
+    let error = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_callable_cfg_alternatives_with_boundaries(
+            &fixture_inventory_with_duplicate_declared_values(),
+            &[],
+        )
+        .expect_err("reject duplicate declared values without cfg");
+    assert!(matches!(
+        error,
+        CallableCfgAlternativesError::Alternatives(
+            RustCfgDeclarationAlternativesError::Source(RustSemanticError::IdentityConflict {
+                member_kind,
+                normalized_member,
+                ..
+            })
+        ) if member_kind == "rust.constant" && normalized_member == "DUPLICATE_VALUE"
+    ));
 }
 
 #[test]
@@ -311,6 +371,47 @@ fn fixture_inventory(rotation: usize, reverse: bool) -> RepositoryInventory {
     if reverse {
         files.reverse();
     }
+    RepositoryInventory::classify(AcquiredRepository::new(
+        BoundRevision::new(
+            RepositoryIdentity::parse(REPOSITORY_ID).expect("reviewed R12 repository identity"),
+            ObjectId::parse_sha1(COMMIT_OID).expect("reviewed R12 commit OID"),
+            ObjectId::parse_sha1(TREE_OID).expect("reviewed R12 tree OID"),
+        ),
+        u64::try_from(files.len()).expect("reviewed R12 file count"),
+        files,
+    ))
+}
+
+fn fixture_inventory_with_cfg_declared_value_alternatives() -> RepositoryInventory {
+    fixture_inventory_with_appended_source(
+        b"\n#[cfg(windows)]\nconst PLATFORM_DATA: &[u8] = include_bytes!(\"data.bin\");\n#[cfg(not(windows))]\nconst PLATFORM_DATA: &[u8] = &[];\n",
+    )
+}
+
+fn fixture_inventory_with_duplicate_declared_values() -> RepositoryInventory {
+    fixture_inventory_with_appended_source(
+        b"\nconst DUPLICATE_VALUE: u8 = 1;\nconst DUPLICATE_VALUE: u8 = 2;\n",
+    )
+}
+
+fn fixture_inventory_with_appended_source(appended_source: &[u8]) -> RepositoryInventory {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tests/fixtures/s4/rust-callable-cfg-alternatives-v1/repository");
+    let files = FIXTURE_FILES
+        .into_iter()
+        .map(|(path, blob_oid)| {
+            let mut contents = read_reviewed_fixture(&root.join(path));
+            if path == "src/lib.rs" {
+                contents.extend_from_slice(appended_source);
+            }
+            AcquiredFile::new(
+                path.to_owned(),
+                RegularFileMode::Regular,
+                ObjectId::parse_sha1(blob_oid).expect("reviewed R12 blob OID"),
+                contents,
+            )
+        })
+        .collect::<Vec<_>>();
     RepositoryInventory::classify(AcquiredRepository::new(
         BoundRevision::new(
             RepositoryIdentity::parse(REPOSITORY_ID).expect("reviewed R12 repository identity"),
