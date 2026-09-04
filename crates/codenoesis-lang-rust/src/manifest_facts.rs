@@ -2871,25 +2871,66 @@ fn dependency_declarations(
         }]);
     }
 
-    section
-        .entries
-        .iter()
-        .map(|entry| {
-            if entry.key_path.len() != 1 {
+    let mut declarations = Vec::<DependencyDeclaration>::new();
+    let mut declaration_indexes = BTreeMap::<String, usize>::new();
+    for entry in &section.entries {
+        let Some(name) = entry.key_path.first() else {
+            return Err(invalid_fact(
+                CargoFactReason::InvalidDeclarationName,
+                manifest_path,
+                CargoFactKind::Dependency,
+                None,
+            ));
+        };
+        match entry.key_path.as_slice() {
+            [_] => {
+                if declaration_indexes.contains_key(name) {
+                    return Err(conflict(manifest_path, CargoFactKind::Dependency, name));
+                }
+                declaration_indexes.insert(name.clone(), declarations.len());
+                declarations.push(DependencyDeclaration {
+                    name: name.clone(),
+                    value: entry.value.clone(),
+                    span: entry.span,
+                });
+            }
+            [_, field] => {
+                let index = if let Some(index) = declaration_indexes.get(name).copied() {
+                    index
+                } else {
+                    let index = declarations.len();
+                    declaration_indexes.insert(name.clone(), index);
+                    declarations.push(DependencyDeclaration {
+                        name: name.clone(),
+                        value: toml::Value::Table(toml::Table::new()),
+                        span: entry.span,
+                    });
+                    index
+                };
+                let declaration = declarations
+                    .get_mut(index)
+                    .ok_or(CargoManifestFactError::ContractInvalid)?;
+                let table = declaration
+                    .value
+                    .as_table_mut()
+                    .ok_or_else(|| conflict(manifest_path, CargoFactKind::Dependency, name))?;
+                if table.insert(field.clone(), entry.value.clone()).is_some() {
+                    return Err(conflict(manifest_path, CargoFactKind::Dependency, name));
+                }
+                declaration.span.start = declaration.span.start.min(entry.span.start);
+                declaration.span.end = declaration.span.end.max(entry.span.end);
+            }
+            _ => {
                 return Err(invalid_fact(
-                    CargoFactReason::InvalidDeclarationName,
+                    CargoFactReason::UnsupportedKey,
                     manifest_path,
                     CargoFactKind::Dependency,
                     None,
                 ));
             }
-            Ok(DependencyDeclaration {
-                name: entry.key_path[0].clone(),
-                value: entry.value.clone(),
-                span: entry.span,
-            })
-        })
-        .collect()
+        }
+    }
+    Ok(declarations)
 }
 
 fn declared_string_field(

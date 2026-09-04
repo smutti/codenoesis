@@ -412,6 +412,54 @@ fn gt_fr_ext_009_standard_dependency_tables_are_declarations() {
 }
 
 #[test]
+fn gt_fr_ext_023_dotted_dependency_fields_are_one_declaration() {
+    let extraction = extract_inventory(&raw_manifest_inventory(
+        "[package]\nname = \"limit-fixture\"\nversion = \"0.1.0\"\nedition = \"2024\"\n\n[workspace]\n\n[workspace.dependencies]\ntracy-client = \"1\"\n\n[dependencies]\ntracy-client.workspace = true\ntracy-client.optional = true\n\n[lib]\npath = \"src/lib.rs\"\n",
+    ))
+    .expect("Cargo dotted dependency fields form one declaration");
+    let dependency = extraction
+        .knowledge
+        .graph
+        .entities
+        .iter()
+        .find_map(|entity| match &entity.properties {
+            CargoEntityProperties::Dependency(properties)
+                if properties.declared_name == "tracy-client"
+                    && properties.source.kind == DependencySourceKind::WorkspaceInherited =>
+            {
+                Some(properties)
+            }
+            _ => None,
+        })
+        .expect("workspace-inherited dotted dependency");
+    assert_eq!(
+        dependency.optional.as_ref().map(|value| value.value),
+        Some(true)
+    );
+    assert!(dependency.source.workspace_reference_id.is_some());
+}
+
+#[test]
+fn gt_fr_ext_023_dotted_dependency_conflicts_fail_closed() {
+    let mixed_declaration = extract_inventory(&manifest_inventory(
+        "[dependencies]\nserde = \"1\"\nserde.optional = true\n",
+    ));
+    assert!(
+        mixed_declaration.is_err(),
+        "mixed direct and dotted dependency declarations must fail closed"
+    );
+    assert!(matches!(
+        extract_inventory(&manifest_inventory(
+            "[dependencies]\nserde.registry.name = \"private\"\n"
+        )),
+        Err(CargoManifestFactError::InvalidFact {
+            reason: CargoFactReason::UnsupportedKey,
+            ..
+        })
+    ));
+}
+
+#[test]
 fn pt_nfr_det_001_r4_permutation_and_schedule_invariant() {
     let expected = extract_fixture(0, false).knowledge;
     for permutation in 0..R4_DETERMINISM_PERMUTATIONS {

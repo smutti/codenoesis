@@ -1724,17 +1724,225 @@ fn parse_rust_source(
         .map_err(|_| WorkspaceError::ParserCancelled {
             path: path.to_owned(),
         })?;
-    let tree = parser
-        .parse(source, None)
-        .ok_or_else(|| WorkspaceError::ParserCancelled {
-            path: path.to_owned(),
-        })?;
+    let (tree, deferred_parser_error) =
+        parse_rust_tree_with_compatibility(&mut parser, source, tolerate_unsupported_rust)
+            .ok_or_else(|| WorkspaceError::ParserCancelled {
+                path: path.to_owned(),
+            })?;
     if tree.root_node().has_error() {
         return Err(WorkspaceError::MalformedSyntax {
             path: path.to_owned(),
         });
     }
-    parse_rust_scope(tree.root_node(), source, path, 0, tolerate_unsupported_rust)
+    let mut parsed =
+        parse_rust_scope(tree.root_node(), source, path, 0, tolerate_unsupported_rust)?;
+    parsed.unsupported_construct |= deferred_parser_error;
+    Ok(parsed)
+}
+
+pub(crate) fn parse_rust_tree_with_compatibility(
+    parser: &mut Parser,
+    source: &str,
+    tolerate_unsupported_rust: bool,
+) -> Option<(tree_sitter::Tree, bool)> {
+    let mut tree = parser.parse(source, None)?;
+    if !tolerate_unsupported_rust {
+        return Some((tree, false));
+    }
+    let mut parser_source = source.to_owned();
+    let mut deferred_parser_error = false;
+    while tree.root_node().has_error() {
+        let Some(compatibility_source) =
+            parser_compatibility_source(tree.root_node(), &parser_source)
+        else {
+            break;
+        };
+        tree = parser.parse(&compatibility_source, None)?;
+        parser_source = compatibility_source;
+        deferred_parser_error = true;
+    }
+    Some((tree, deferred_parser_error))
+}
+
+fn parser_compatibility_source(root: Node<'_>, source: &str) -> Option<String> {
+    let mut cursor = root.walk();
+    let mut parser_error_ranges = Vec::new();
+    let mut deferred_ranges = Vec::new();
+    loop {
+        let node = cursor.node();
+        if node.is_missing() {
+            return None;
+        }
+        if node.is_error() {
+            parser_error_ranges.push((node.start_byte(), node.end_byte()));
+            if is_bare_dollar_in_macro_definition(node, source) {
+                deferred_ranges.push((node.start_byte(), node.end_byte()));
+            }
+        }
+        if cursor.goto_first_child() {
+            continue;
+        }
+        loop {
+            if cursor.goto_next_sibling() {
+                break;
+            }
+            if !cursor.goto_parent() {
+                deferred_ranges.extend(
+                    cfg_pattern_field_attribute_ranges(source)
+                        .into_iter()
+                        .filter(|candidate| {
+                            cfg_attribute_participates_in_parser_error(
+                                *candidate,
+                                &parser_error_ranges,
+                                source,
+                            )
+                        }),
+                );
+                if deferred_ranges.is_empty() {
+                    return None;
+                }
+                let mut compatibility_source = source.as_bytes().to_vec();
+                for (start, end) in deferred_ranges {
+                    for byte in &mut compatibility_source[start..end] {
+                        if !matches!(*byte, b'\n' | b'\r') {
+                            *byte = b' ';
+                        }
+                    }
+                }
+                return String::from_utf8(compatibility_source).ok();
+            }
+        }
+    }
+}
+
+fn cfg_attribute_participates_in_parser_error(
+    (candidate_start, candidate_end): (usize, usize),
+    parser_error_ranges: &[(usize, usize)],
+    source: &str,
+) -> bool {
+    if parser_error_ranges.iter().any(|(error_start, error_end)| {
+        error_start <= &candidate_start && &candidate_end <= error_end
+    }) {
+        return true;
+    }
+    let bytes = source.as_bytes();
+    let mut field_start = candidate_end;
+    while bytes.get(field_start).is_some_and(u8::is_ascii_whitespace) {
+        field_start += 1;
+    }
+    let preceded_by_pattern_open = parser_error_ranges.iter().any(|(error_start, error_end)| {
+        *error_end <= candidate_start
+            && source
+                .get(*error_end..candidate_start)
+                .is_some_and(|gap| gap.bytes().all(|byte| byte.is_ascii_whitespace()))
+            && source
+                .get(*error_start..*error_end)
+                .is_some_and(|text| text.trim_end().ends_with('{'))
+    });
+    preceded_by_pattern_open
+        && parser_error_ranges
+            .iter()
+            .any(|(error_start, _)| *error_start == field_start)
+}
+
+fn cfg_pattern_field_attribute_ranges(source: &str) -> Vec<(usize, usize)> {
+    let bytes = source.as_bytes();
+    let mut ranges = Vec::new();
+    let mut search_start = 0;
+    while let Some(relative_start) = source[search_start..].find("#[cfg(") {
+        let start = search_start + relative_start;
+        let Some(end) = cfg_attribute_end(bytes, start) else {
+            search_start = start + 1;
+            continue;
+        };
+        let mut cursor = end;
+        while bytes.get(cursor).is_some_and(u8::is_ascii_whitespace) {
+            cursor += 1;
+        }
+        if bytes.get(cursor..cursor + 2) == Some(b"r#") {
+            cursor += 2;
+        }
+        if bytes
+            .get(cursor)
+            .is_none_or(|byte| !is_rust_identifier_start(*byte))
+        {
+            search_start = end;
+            continue;
+        }
+        cursor += 1;
+        while bytes
+            .get(cursor)
+            .is_some_and(|byte| is_rust_identifier_continue(*byte))
+        {
+            cursor += 1;
+        }
+        while bytes.get(cursor).is_some_and(u8::is_ascii_whitespace) {
+            cursor += 1;
+        }
+        if matches!(bytes.get(cursor), Some(b':' | b',')) {
+            ranges.push((start, end));
+        }
+        search_start = end;
+    }
+    ranges
+}
+
+fn cfg_attribute_end(bytes: &[u8], start: usize) -> Option<usize> {
+    let mut cursor = start + b"#[cfg(".len();
+    let mut parenthesis_depth = 1_u64;
+    let mut inside_string = false;
+    let mut escaped = false;
+    while let Some(byte) = bytes.get(cursor).copied() {
+        if inside_string {
+            if escaped {
+                escaped = false;
+            } else if byte == b'\\' {
+                escaped = true;
+            } else if byte == b'"' {
+                inside_string = false;
+            }
+        } else {
+            match byte {
+                b'"' => inside_string = true,
+                b'(' => parenthesis_depth += 1,
+                b')' => {
+                    parenthesis_depth -= 1;
+                    if parenthesis_depth == 0 {
+                        return (bytes.get(cursor + 1) == Some(&b']')).then_some(cursor + 2);
+                    }
+                }
+                _ => {}
+            }
+        }
+        cursor += 1;
+    }
+    None
+}
+
+const fn is_rust_identifier_start(byte: u8) -> bool {
+    byte.is_ascii_alphabetic() || byte == b'_'
+}
+
+const fn is_rust_identifier_continue(byte: u8) -> bool {
+    is_rust_identifier_start(byte) || byte.is_ascii_digit()
+}
+
+fn is_bare_dollar_in_macro_definition(node: Node<'_>, source: &str) -> bool {
+    if source.as_bytes().get(node.byte_range()) != Some(b"$") {
+        return false;
+    }
+    let mut ancestor = node.parent();
+    let mut inside_token_tree = false;
+    while let Some(parent) = ancestor {
+        match parent.kind() {
+            "token_tree" => inside_token_tree = true,
+            "macro_definition" => return inside_token_tree,
+            "source_file" => return false,
+            _ => {}
+        }
+        ancestor = parent.parent();
+    }
+    false
 }
 
 #[allow(clippy::too_many_lines)]

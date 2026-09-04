@@ -78,6 +78,7 @@ pub trait ConditionalTrait {
 pub trait ConditionalTrait {
     fn serialize(&self);
 }
+
 "#;
 const CFG_MEMBER_ALTERNATIVES_SOURCE: &str = r#"
 #[cfg(windows)]
@@ -717,6 +718,67 @@ fn sec_fr_ext_010_never_executes_or_interprets_target_worlds() {
         })
     );
     assert!(debug.contains("rust.macro_generated_items_not_analyzed"));
+}
+
+#[test]
+fn gt_fr_ext_023_parser_compatibility_remains_opaque_in_r5() {
+    let source = r#"
+macro_rules! with_dollar_sign {
+    ($($body:tt)*) => {
+        macro_rules! __with_dollar_sign { $($body)* }
+        __with_dollar_sign!($);
+    }
+}
+
+pub struct Conditional {
+    #[cfg(feature = "trace")]
+    value: u8,
+}
+
+enum State { Error { trace_commands: (), error: () } }
+
+fn inspect(value: State) {
+    match value {
+        State::Error {
+            #[cfg(feature = "trace")]
+            trace_commands,
+            error,
+        } => { let _ = (trace_commands, error); }
+    }
+}
+
+pub struct Stable;
+"#;
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_semantic_depth_incremental(&synthetic_inventory(source), &[], &[])
+        .expect("defer parser compatibility gaps without inventing semantic facts");
+    assert!(
+        extraction
+            .knowledge
+            .manifest
+            .workspace
+            .knowledge
+            .graph
+            .entities
+            .iter()
+            .any(|entity| entity.kind == EntityKind::RustStruct && entity.name == "Stable")
+    );
+    assert!(
+        extraction
+            .knowledge
+            .manifest
+            .workspace
+            .knowledge
+            .graph
+            .coverage
+            .iter()
+            .any(|gap| gap.capability == "rust_unsupported_construct")
+    );
+    assert!(extraction.knowledge.graph.entities.iter().any(|entity| {
+        entity.kind == RustSemanticEntityKind::Field
+            && entity.name == "value"
+            && entity.compilation_presence == CompilationPresence::ConditionalUnknown
+    }));
 }
 
 #[test]
