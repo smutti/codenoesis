@@ -74,3 +74,15 @@ RW5 oracle and repository gate must pass.
 The candidate becomes Approved and Implemented only after independent review
 and protected manual merge. It changes no release, signing, workflow,
 permission, dependency, support, SLO, or GA authority.
+
+## Candidate evidence
+
+Product commit `81cfd50ff245f1d8b0aabd85db074365a94f215c` builds release binary
+SHA-256 `8b0c4d8afcbc8f5ccfe8f3b26f4c8c56801b3b34abb107cb602584fa347bd4ce`.
+The complete eight-repository evaluation passes every updated oracle and emits
+report SHA-256 `e58d66116dd4c363d6b96c85e029db19072ab6dd77e0812affeb062e304b3ee1`.
+All three pinned wgpu terminal samples return exit `11`, empty stdout, and exact
+`extraction.invalid_workspace_manifest` context
+`{"path":"benches/Cargo.toml","reason":"invalid_package_manifest"}`. This
+is the next independent compatibility input: inherited package fields remain
+outside issue #217 and are not weakened or guessed here.

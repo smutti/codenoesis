@@ -138,7 +138,7 @@ python3 scripts/run_public_rust_evaluation.py run \
   --repository-root /path/to/public-rust-corpus-v1 \
   --output benchmarks/results/public-rust-conference-v1-local.json \
   --host-profile local-machine-v1 \
-  --product-commit 5c3141815415a620cc07c992f2600ce6317c735c
+  --product-commit 81cfd50ff245f1d8b0aabd85db074365a94f215c
 ```
 
 The ignored JSON report retains three cold terminal samples per repository,
