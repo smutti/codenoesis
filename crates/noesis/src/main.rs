@@ -915,15 +915,27 @@ fn run_s4(
     })?;
     if invocation.rust_constant_profile {
         let scan_worker = scan_worker.ok_or_else(r16_internal_failure)?;
-        return run_s4_r16(invocation, scan_worker);
+        return if invocation.boundary_profile {
+            run_s4_r16_boundaries(invocation, scan_worker)
+        } else {
+            run_s4_r16(invocation, scan_worker)
+        };
     }
     if invocation.rust_flow_profile {
         let scan_worker = scan_worker.ok_or_else(r15_internal_failure)?;
-        return run_s4_r15(invocation, scan_worker);
+        return if invocation.boundary_profile {
+            run_s4_r15_boundaries(invocation, scan_worker)
+        } else {
+            run_s4_r15(invocation, scan_worker)
+        };
     }
     if invocation.rust_expression_profile {
         let scan_worker = scan_worker.ok_or_else(r14_internal_failure)?;
-        return run_s4_r14(invocation, scan_worker);
+        return if invocation.boundary_profile {
+            run_s4_r14_boundaries(invocation, scan_worker)
+        } else {
+            run_s4_r14(invocation, scan_worker)
+        };
     }
     if invocation.rust_callable_profile && invocation.compiler_index_profile {
         let scan_worker = scan_worker.ok_or_else(r13_internal_failure)?;
@@ -1186,6 +1198,97 @@ fn run_s4_r15(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Ve
     Ok(stdout)
 }
 
+fn run_s4_r15_boundaries(
+    invocation: Invocation,
+    scan_worker: &mut ScanWorker,
+) -> Result<Vec<u8>, Failure> {
+    let mut prepared = repository_boundaries::prepare(
+        invocation.boundary_manifest.as_deref(),
+        &invocation.identity,
+        &invocation.revision,
+    )
+    .map_err(|failure| repository_boundary_input_failure_r15(&failure))?;
+    let store = invocation
+        .store
+        .clone()
+        .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
+    let repository = invocation.repository.clone();
+    let output_capacity_profile = invocation.output_capacity_profile;
+    if let Some(canonical_store) = canonical_existing_or_absent_leaf(&store) {
+        prepared.reject_overlaps(&canonical_store);
+    }
+    if let Ok(canonical_repository) = fs::canonicalize(std::path::Path::new(&repository)) {
+        prepared.reject_overlaps(&canonical_repository);
+    }
+    let manifest_path = prepared.manifest_path;
+    let nested_roots = prepared.nested_roots;
+    let started_at = Instant::now();
+    let scan_repository = repository.clone();
+    let scan = run_confined_scan(
+        scan_worker,
+        repository.clone(),
+        manifest_path.clone(),
+        nested_roots.clone(),
+        move || {
+            let envelope = current_envelope().ok_or_else(r15_internal_failure)?;
+            let request = ScanRequest::new(
+                invocation.repository,
+                invocation.identity,
+                invocation.revision,
+                envelope,
+            );
+            ScanService::new(repository_adapter(invocation.packed_sha1))
+                .scan_s4_r15_boundaries(
+                    request,
+                    prepared.scan_input,
+                    output_capacity_profile,
+                    |inventory, boundaries| {
+                        TreeSitterRustWorkspaceExtractor::new()
+                            .extract_rust_local_flow_with_cfg_alternatives(inventory, boundaries)
+                    },
+                    &repository_boundaries::Sha256BoundaryHasher,
+                )
+                .map_err(r15_scan_failure)
+        },
+    )
+    .map_err(|()| r15_internal_failure())??;
+    enforce_scan_deadline(started_at).map_err(r15_upgrade_limit_failure)?;
+    let stdout = serialize_v17(&scan.snapshot)?;
+    let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
+        .is_err_and(|error| error.kind() == io::ErrorKind::NotFound);
+    let mut rollback = EmptyStoreRollback::new(store.clone(), store_was_absent);
+    ensure_store_root_for_boundary(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    noesis::install_s1_boundaries_filesystem_boundary(
+        &scan_repository,
+        &store,
+        manifest_path.as_deref().map(std::path::Path::as_os_str),
+        &nested_roots,
+    )
+    .map_err(|_| r15_internal_failure())?;
+    let mut local_store = LocalStore::open(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    PublicationService::publish_v17(
+        &scan.snapshot,
+        &mut local_store.artifacts,
+        &mut local_store.metadata,
+        &mut NoopPublicationObserver,
+    )
+    .map_err(|error| match error {
+        ScanError::Internal => r15_internal_failure(),
+        other => Failure::Scan(other),
+    })?;
+    rollback.disarm();
+    stage_analysis_cache_best_effort(&mut local_store, &scan.analysis_cache_entries);
+    Ok(stdout)
+}
+
 fn run_s4_r16(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Vec<u8>, Failure> {
     let store = invocation
         .store
@@ -1251,6 +1354,101 @@ fn run_s4_r16(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Ve
     Ok(stdout)
 }
 
+fn run_s4_r16_boundaries(
+    invocation: Invocation,
+    scan_worker: &mut ScanWorker,
+) -> Result<Vec<u8>, Failure> {
+    let mut prepared = repository_boundaries::prepare(
+        invocation.boundary_manifest.as_deref(),
+        &invocation.identity,
+        &invocation.revision,
+    )
+    .map_err(|failure| repository_boundary_input_failure_r16(&failure))?;
+    let store = invocation
+        .store
+        .clone()
+        .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
+    let repository = invocation.repository.clone();
+    let output_capacity_profile = invocation.output_capacity_profile;
+    let scan_wall_milliseconds = invocation.execution_limit_profile.maximum_milliseconds();
+    if let Some(canonical_store) = canonical_existing_or_absent_leaf(&store) {
+        prepared.reject_overlaps(&canonical_store);
+    }
+    if let Ok(canonical_repository) = fs::canonicalize(std::path::Path::new(&repository)) {
+        prepared.reject_overlaps(&canonical_repository);
+    }
+    let manifest_path = prepared.manifest_path;
+    let nested_roots = prepared.nested_roots;
+    let started_at = Instant::now();
+    let scan_repository = repository.clone();
+    let scan = run_confined_scan(
+        scan_worker,
+        repository.clone(),
+        manifest_path.clone(),
+        nested_roots.clone(),
+        move || {
+            let envelope = current_envelope().ok_or_else(r16_internal_failure)?;
+            let request = ScanRequest::new(
+                invocation.repository,
+                invocation.identity,
+                invocation.revision,
+                envelope,
+            );
+            ScanService::new(repository_adapter(invocation.packed_sha1))
+                .scan_s4_r16_boundaries(
+                    request,
+                    prepared.scan_input,
+                    output_capacity_profile,
+                    |inventory, boundaries| {
+                        TreeSitterRustWorkspaceExtractor::new()
+                            .extract_rust_constant_evaluation_with_cfg_alternatives(
+                                inventory, boundaries,
+                            )
+                    },
+                    &repository_boundaries::Sha256BoundaryHasher,
+                )
+                .map_err(r16_scan_failure)
+        },
+    )
+    .map_err(|()| r16_internal_failure())??;
+    enforce_scan_deadline_with_limit(started_at, scan_wall_milliseconds)
+        .map_err(r16_upgrade_limit_failure)?;
+    let stdout = serialize_v18(&scan.snapshot)?;
+    let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
+        .is_err_and(|error| error.kind() == io::ErrorKind::NotFound);
+    let mut rollback = EmptyStoreRollback::new(store.clone(), store_was_absent);
+    ensure_store_root_for_boundary(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    noesis::install_s1_boundaries_filesystem_boundary(
+        &scan_repository,
+        &store,
+        manifest_path.as_deref().map(std::path::Path::as_os_str),
+        &nested_roots,
+    )
+    .map_err(|_| r16_internal_failure())?;
+    let mut local_store = LocalStore::open(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    PublicationService::publish_v18(
+        &scan.snapshot,
+        &mut local_store.artifacts,
+        &mut local_store.metadata,
+        &mut NoopPublicationObserver,
+    )
+    .map_err(|error| match error {
+        ScanError::Internal => r16_internal_failure(),
+        other => Failure::Scan(other),
+    })?;
+    rollback.disarm();
+    stage_analysis_cache_best_effort(&mut local_store, &scan.analysis_cache_entries);
+    Ok(stdout)
+}
+
 fn run_s4_r14(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Vec<u8>, Failure> {
     let store = invocation
         .store
@@ -1294,6 +1492,99 @@ fn run_s4_r14(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Ve
     .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
     noesis::install_s3_filesystem_boundary(&scan_repository, &store)
         .map_err(|_| r14_internal_failure())?;
+    let mut local_store = LocalStore::open(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    PublicationService::publish_v16(
+        &scan.snapshot,
+        &mut local_store.artifacts,
+        &mut local_store.metadata,
+        &mut NoopPublicationObserver,
+    )
+    .map_err(|error| match error {
+        ScanError::Internal => r14_internal_failure(),
+        other => Failure::Scan(other),
+    })?;
+    rollback.disarm();
+    stage_analysis_cache_best_effort(&mut local_store, &scan.analysis_cache_entries);
+    Ok(stdout)
+}
+
+fn run_s4_r14_boundaries(
+    invocation: Invocation,
+    scan_worker: &mut ScanWorker,
+) -> Result<Vec<u8>, Failure> {
+    let mut prepared = repository_boundaries::prepare(
+        invocation.boundary_manifest.as_deref(),
+        &invocation.identity,
+        &invocation.revision,
+    )
+    .map_err(|failure| repository_boundary_input_failure_r14(&failure))?;
+    let store = invocation
+        .store
+        .clone()
+        .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
+    let repository = invocation.repository.clone();
+    let output_capacity_profile = invocation.output_capacity_profile;
+    if let Some(canonical_store) = canonical_existing_or_absent_leaf(&store) {
+        prepared.reject_overlaps(&canonical_store);
+    }
+    if let Ok(canonical_repository) = fs::canonicalize(std::path::Path::new(&repository)) {
+        prepared.reject_overlaps(&canonical_repository);
+    }
+    let manifest_path = prepared.manifest_path;
+    let nested_roots = prepared.nested_roots;
+    let started_at = Instant::now();
+    let scan_repository = repository.clone();
+    let scan = run_confined_scan(
+        scan_worker,
+        repository.clone(),
+        manifest_path.clone(),
+        nested_roots.clone(),
+        move || {
+            let envelope = current_envelope().ok_or_else(r14_internal_failure)?;
+            let request = ScanRequest::new(
+                invocation.repository,
+                invocation.identity,
+                invocation.revision,
+                envelope,
+            );
+            ScanService::new(repository_adapter(invocation.packed_sha1))
+                .scan_s4_r14_boundaries(
+                    request,
+                    prepared.scan_input,
+                    output_capacity_profile,
+                    |inventory, boundaries| {
+                        TreeSitterRustWorkspaceExtractor::new()
+                            .extract_rust_expression_bindings_with_cfg_alternatives(
+                                inventory, boundaries,
+                            )
+                    },
+                    &repository_boundaries::Sha256BoundaryHasher,
+                )
+                .map_err(r14_scan_failure)
+        },
+    )
+    .map_err(|()| r14_internal_failure())??;
+    enforce_scan_deadline(started_at).map_err(r14_upgrade_limit_failure)?;
+    let stdout = serialize_v16(&scan.snapshot)?;
+    let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
+        .is_err_and(|error| error.kind() == io::ErrorKind::NotFound);
+    let mut rollback = EmptyStoreRollback::new(store.clone(), store_was_absent);
+    ensure_store_root_for_boundary(
+        std::path::Path::new(&scan_repository),
+        std::path::Path::new(&store),
+    )
+    .map_err(|error| Failure::Scan(ScanError::Storage(error)))?;
+    noesis::install_s1_boundaries_filesystem_boundary(
+        &scan_repository,
+        &store,
+        manifest_path.as_deref().map(std::path::Path::as_os_str),
+        &nested_roots,
+    )
+    .map_err(|_| r14_internal_failure())?;
     let mut local_store = LocalStore::open(
         std::path::Path::new(&scan_repository),
         std::path::Path::new(&store),
@@ -4723,6 +5014,14 @@ fn r16_invocation_failure(error: InvocationError) -> Failure {
         InvocationError::InvalidR16Composition(reason) => {
             r16_failure(CodeNoesisErrorV24::unsupported_composition(reason), 2)
         }
+        InvocationError::InvalidBoundaryProfile => r16_failure(
+            CodeNoesisErrorV24::from_boundary_error(&CodeNoesisErrorV9::invalid_profile()),
+            2,
+        ),
+        InvocationError::InvalidBoundaryManifest(reason) => r16_failure(
+            CodeNoesisErrorV24::from_boundary_error(&CodeNoesisErrorV9::invalid_manifest(reason)),
+            2,
+        ),
         _ => r16_failure(
             CodeNoesisErrorV24::unsupported_composition("exact_selector_matrix_required"),
             2,
@@ -4745,6 +5044,14 @@ fn r15_invocation_failure(error: InvocationError) -> Failure {
         InvocationError::InvalidR16Composition(reason) => {
             r16_failure(CodeNoesisErrorV24::unsupported_composition(reason), 2)
         }
+        InvocationError::InvalidBoundaryProfile => r15_failure(
+            CodeNoesisErrorV22::from_boundary_error(&CodeNoesisErrorV9::invalid_profile()),
+            2,
+        ),
+        InvocationError::InvalidBoundaryManifest(reason) => r15_failure(
+            CodeNoesisErrorV22::from_boundary_error(&CodeNoesisErrorV9::invalid_manifest(reason)),
+            2,
+        ),
         _ => r15_failure(
             CodeNoesisErrorV22::unsupported_composition("exact_selector_matrix_required"),
             2,
@@ -4761,6 +5068,14 @@ fn r14_invocation_failure(error: InvocationError) -> Failure {
         InvocationError::InvalidR14Composition(reason) => {
             r14_failure(CodeNoesisErrorV21::unsupported_composition(reason), 2)
         }
+        InvocationError::InvalidBoundaryProfile => r14_failure(
+            CodeNoesisErrorV21::from_boundary_error(&CodeNoesisErrorV9::invalid_profile()),
+            2,
+        ),
+        InvocationError::InvalidBoundaryManifest(reason) => r14_failure(
+            CodeNoesisErrorV21::from_boundary_error(&CodeNoesisErrorV9::invalid_manifest(reason)),
+            2,
+        ),
         _ => r14_failure(
             CodeNoesisErrorV21::unsupported_composition("exact_selector_matrix_required"),
             2,
@@ -4948,6 +5263,33 @@ fn repository_boundary_input_failure_r12(
 ) -> Failure {
     r12_failure(
         CodeNoesisErrorV19::from_boundary_error(&failure.error),
+        failure.exit_code,
+    )
+}
+
+fn repository_boundary_input_failure_r14(
+    failure: &repository_boundaries::RepositoryBoundaryFailure,
+) -> Failure {
+    r14_failure(
+        CodeNoesisErrorV21::from_boundary_error(&failure.error),
+        failure.exit_code,
+    )
+}
+
+fn repository_boundary_input_failure_r15(
+    failure: &repository_boundaries::RepositoryBoundaryFailure,
+) -> Failure {
+    r15_failure(
+        CodeNoesisErrorV22::from_boundary_error(&failure.error),
+        failure.exit_code,
+    )
+}
+
+fn repository_boundary_input_failure_r16(
+    failure: &repository_boundaries::RepositoryBoundaryFailure,
+) -> Failure {
+    r16_failure(
+        CodeNoesisErrorV24::from_boundary_error(&failure.error),
         failure.exit_code,
     )
 }
@@ -5209,6 +5551,13 @@ fn r14_scan_failure(error: ExpressionBindingsScanError) -> Failure {
         ExpressionBindingsScanError::InvalidSnapshot => {
             r14_failure(CodeNoesisErrorV21::invalid_snapshot(), 12)
         }
+        ExpressionBindingsScanError::Boundary(error) => match boundary_scan_failure(error) {
+            Failure::V9(failure) => r14_failure(
+                CodeNoesisErrorV21::from_boundary_error(&failure.error),
+                failure.exit_code,
+            ),
+            other => r14_upgrade_limit_failure(other),
+        },
     }
 }
 
@@ -5233,6 +5582,13 @@ fn r15_scan_failure(error: LocalFlowScanError) -> Failure {
         LocalFlowScanError::InvalidSnapshot => {
             r15_failure(CodeNoesisErrorV22::invalid_snapshot(), 12)
         }
+        LocalFlowScanError::Boundary(error) => match boundary_scan_failure(error) {
+            Failure::V9(failure) => r15_failure(
+                CodeNoesisErrorV22::from_boundary_error(&failure.error),
+                failure.exit_code,
+            ),
+            other => r15_upgrade_limit_failure(other),
+        },
     }
 }
 
@@ -5257,6 +5613,13 @@ fn r16_scan_failure(error: ConstantEvaluationScanError) -> Failure {
         ConstantEvaluationScanError::InvalidSnapshot => {
             r16_failure(CodeNoesisErrorV24::invalid_snapshot(), 12)
         }
+        ConstantEvaluationScanError::Boundary(error) => match boundary_scan_failure(error) {
+            Failure::V9(failure) => r16_failure(
+                CodeNoesisErrorV24::from_boundary_error(&failure.error),
+                failure.exit_code,
+            ),
+            other => r16_upgrade_limit_failure(other),
+        },
     }
 }
 
@@ -7541,16 +7904,8 @@ fn parse_r16_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
             "r15_source_only_without_boundaries_cfg_or_compiler_index",
         ));
     }
-    if option_requested(arguments, "--repository-boundary-profile")
-        || option_requested(arguments, "--repository-boundary-manifest")
-    {
-        return Err(InvocationError::InvalidR16Composition(
-            "repository_boundary_not_supported",
-        ));
-    }
     if option_requested(arguments, "--compiler-index-profile")
         || option_requested(arguments, "--compiler-index-binding")
-        || rust_cfg_alternatives_requested(arguments)
     {
         return Err(InvocationError::InvalidR16Composition(
             "r15_source_only_without_boundaries_cfg_or_compiler_index",
@@ -7607,16 +7962,16 @@ fn parse_r16_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
         parse_r16_execution_limit_profile(execution_limit_profile.as_deref())?;
     let mut invocation = parse_r15_invocation(&stripped).map_err(|error| match error {
         InvocationError::Input(error) => InvocationError::Input(error),
+        InvocationError::InvalidBoundaryProfile => InvocationError::InvalidBoundaryProfile,
+        InvocationError::InvalidBoundaryManifest(reason) => {
+            InvocationError::InvalidBoundaryManifest(reason)
+        }
         InvocationError::InvalidR15Profile(_) => {
             InvocationError::InvalidR16Composition("exact_r15_flow_profile_required")
         }
         _ => InvocationError::InvalidR16Composition("exact_r15_selector_matrix_required"),
     })?;
-    if !invocation.rust_flow_profile
-        || invocation.boundary_profile
-        || invocation.rust_cfg_alternatives_profile
-        || invocation.compiler_index_profile
-    {
+    if !invocation.rust_flow_profile || invocation.compiler_index_profile {
         return Err(InvocationError::InvalidR16Composition(
             "complete_r15_source_only_profiles_required",
         ));
@@ -7652,11 +8007,8 @@ fn parse_r15_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
     if arguments
         .get(1)
         .is_none_or(|value| value != OsStr::new("scan"))
-        || option_requested(arguments, "--repository-boundary-profile")
-        || option_requested(arguments, "--repository-boundary-manifest")
         || option_requested(arguments, "--compiler-index-profile")
         || option_requested(arguments, "--compiler-index-binding")
-        || rust_cfg_alternatives_requested(arguments)
     {
         return Err(InvocationError::InvalidR15Composition(
             "r14_source_only_without_boundaries_cfg_or_compiler_index",
@@ -7698,16 +8050,16 @@ fn parse_r15_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
     }
     let mut invocation = parse_r14_invocation(&stripped).map_err(|error| match error {
         InvocationError::Input(error) => InvocationError::Input(error),
+        InvocationError::InvalidBoundaryProfile => InvocationError::InvalidBoundaryProfile,
+        InvocationError::InvalidBoundaryManifest(reason) => {
+            InvocationError::InvalidBoundaryManifest(reason)
+        }
         InvocationError::InvalidR14Profile(_) => {
             InvocationError::InvalidR15Composition("exact_r14_expression_profile_required")
         }
         _ => InvocationError::InvalidR15Composition("exact_r14_selector_matrix_required"),
     })?;
-    if !invocation.rust_expression_profile
-        || invocation.boundary_profile
-        || invocation.rust_cfg_alternatives_profile
-        || invocation.compiler_index_profile
-    {
+    if !invocation.rust_expression_profile || invocation.compiler_index_profile {
         return Err(InvocationError::InvalidR15Composition(
             "complete_r14_source_only_profiles_required",
         ));
@@ -7716,15 +8068,13 @@ fn parse_r15_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
     Ok(invocation)
 }
 
+#[allow(clippy::too_many_lines)]
 fn parse_r14_invocation(arguments: &[OsString]) -> Result<Invocation, InvocationError> {
     if arguments
         .get(1)
         .is_none_or(|value| value != OsStr::new("scan"))
-        || option_requested(arguments, "--repository-boundary-profile")
-        || option_requested(arguments, "--repository-boundary-manifest")
         || option_requested(arguments, "--compiler-index-profile")
         || option_requested(arguments, "--compiler-index-binding")
-        || rust_cfg_alternatives_requested(arguments)
     {
         return Err(InvocationError::InvalidR14Composition(
             "k1_source_only_without_boundaries_cfg_or_compiler_index",
@@ -7787,24 +8137,39 @@ fn parse_r14_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
             ));
         }
     };
-    let mut invocation = parse_k1_invocation(&stripped).map_err(|error| match error {
-        InvocationError::Input(error) => InvocationError::Input(error),
-        InvocationError::InvalidRustCallableProfile(profile) => {
-            InvocationError::InvalidR14Composition(if profile.is_empty() {
-                "valid_callable_profile_required"
-            } else {
-                "exact_k1_callable_profile_required"
-            })
-        }
-        _ => InvocationError::InvalidR14Composition("exact_k1_selector_matrix_required"),
-    })?;
+    let r12_composition = option_requested(&stripped, "--repository-boundary-profile")
+        || option_requested(&stripped, "--repository-boundary-manifest")
+        || rust_cfg_alternatives_requested(&stripped);
+    let mut invocation = if r12_composition {
+        parse_r12_invocation(&stripped).map_err(|error| match error {
+            InvocationError::Input(error) => InvocationError::Input(error),
+            InvocationError::InvalidBoundaryProfile => InvocationError::InvalidBoundaryProfile,
+            InvocationError::InvalidBoundaryManifest(reason) => {
+                InvocationError::InvalidBoundaryManifest(reason)
+            }
+            InvocationError::InvalidR12Profile(_, _) => {
+                InvocationError::InvalidR14Composition("exact_r12_profiles_required")
+            }
+            _ => InvocationError::InvalidR14Composition("exact_r12_selector_matrix_required"),
+        })?
+    } else {
+        parse_k1_invocation(&stripped).map_err(|error| match error {
+            InvocationError::Input(error) => InvocationError::Input(error),
+            InvocationError::InvalidRustCallableProfile(profile) => {
+                InvocationError::InvalidR14Composition(if profile.is_empty() {
+                    "valid_callable_profile_required"
+                } else {
+                    "exact_k1_callable_profile_required"
+                })
+            }
+            _ => InvocationError::InvalidR14Composition("exact_k1_selector_matrix_required"),
+        })?
+    };
     if !(invocation.workspace_profile
         && invocation.manifest_profile
-        && invocation.rust_semantic_profile
+        && (invocation.rust_semantic_profile || invocation.rust_cfg_alternatives_profile)
         && invocation.rust_framework_profile
         && invocation.rust_callable_profile
-        && !invocation.boundary_profile
-        && !invocation.rust_cfg_alternatives_profile
         && !invocation.compiler_index_profile)
     {
         return Err(InvocationError::InvalidR14Composition(
@@ -9309,17 +9674,33 @@ mod s4_root_argument_tests {
         );
         assert!(parse_s4_invocation(wrong_capacity).is_err());
 
-        let mut boundary = exact;
-        boundary.extend([
+        let mut incompatible_boundary = exact.clone();
+        incompatible_boundary.extend([
             OsString::from("--repository-boundary-profile"),
             OsString::from(LOCAL_GITLINKS_V1),
         ]);
         assert!(matches!(
-            parse_s4_invocation(boundary),
+            parse_s4_invocation(incompatible_boundary),
             Err(InvocationError::InvalidR16Composition(
-                "repository_boundary_not_supported"
+                "exact_r15_selector_matrix_required"
             ))
         ));
+
+        let mut composed = exact;
+        replace_option_value(&mut composed, "--rust-semantic-profile", R10_PROFILE);
+        composed.extend([
+            OsString::from("--repository-boundary-profile"),
+            OsString::from(LOCAL_GITLINKS_V1),
+        ]);
+        let Ok(invocation) = parse_s4_invocation(composed) else {
+            panic!("valid RW2 benchmark boundary composition");
+        };
+        assert!(invocation.rust_cfg_alternatives_profile);
+        assert!(invocation.boundary_profile);
+        assert_eq!(
+            invocation.execution_limit_profile,
+            ScanExecutionLimitProfile::RealWorldRustBenchmark75sV1
+        );
     }
 
     #[test]

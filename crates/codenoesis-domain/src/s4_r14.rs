@@ -8,6 +8,10 @@ use crate::s4_k1::{
     CallableSemanticEntity, CallableSemanticEntityKind, CallableSemanticProperties,
     CallableSemanticsError, CallableSemanticsExtraction, CallableSemanticsKnowledge,
 };
+use crate::s4_r12::{
+    CallableCfgAlternativesError, CallableCfgAlternativesExtraction,
+    CallableCfgAlternativesKnowledge,
+};
 use crate::s5::AnalysisCacheEntry;
 
 pub const R14_CONFIGURATION_VERSION: &str = "codenoesis.configuration/v13";
@@ -409,6 +413,7 @@ pub struct ExpressionBindingGraph {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ExpressionBindingKnowledge {
     pub callable: CallableSemanticsKnowledge,
+    pub callable_cfg_alternatives: Option<CallableCfgAlternativesKnowledge>,
     pub extraction_chunks: Vec<ExpressionBindingSourceChunk>,
     pub graph: ExpressionBindingGraph,
 }
@@ -421,9 +426,18 @@ impl ExpressionBindingKnowledge {
     /// Returns the first identity, ordering, limit, evidence, scope, or reference failure.
     #[allow(clippy::too_many_lines)]
     pub fn validate(&self) -> Result<(), ExpressionBindingError> {
-        self.callable
-            .validate()
-            .map_err(ExpressionBindingError::Source)?;
+        if let Some(composition) = &self.callable_cfg_alternatives {
+            composition
+                .validate()
+                .map_err(ExpressionBindingError::CfgAlternatives)?;
+            if composition.callable != self.callable {
+                return Err(ExpressionBindingError::ContractInvalid);
+            }
+        } else {
+            self.callable
+                .validate()
+                .map_err(ExpressionBindingError::Source)?;
+        }
         if self.extraction_chunks.is_empty() {
             return Err(ExpressionBindingError::ContractInvalid);
         }
@@ -677,6 +691,27 @@ impl ExpressionBindingExtraction {
         Self {
             knowledge: ExpressionBindingKnowledge {
                 callable: source.knowledge,
+                callable_cfg_alternatives: None,
+                extraction_chunks,
+                graph,
+            },
+            cache_entries: source.cache_entries,
+            parser_invocation_count,
+        }
+    }
+
+    #[must_use]
+    pub fn from_r12(
+        source: CallableCfgAlternativesExtraction,
+        extraction_chunks: Vec<ExpressionBindingSourceChunk>,
+        graph: ExpressionBindingGraph,
+        parser_invocation_count: u64,
+    ) -> Self {
+        let callable = source.knowledge.callable.clone();
+        Self {
+            knowledge: ExpressionBindingKnowledge {
+                callable,
+                callable_cfg_alternatives: Some(source.knowledge),
                 extraction_chunks,
                 graph,
             },
@@ -731,6 +766,7 @@ impl ExpressionBindingLimit {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum ExpressionBindingError {
     Source(CallableSemanticsError),
+    CfgAlternatives(CallableCfgAlternativesError),
     InvalidSyntax {
         path: String,
         start_byte: u64,
@@ -759,6 +795,7 @@ impl Display for ExpressionBindingError {
     fn fmt(&self, formatter: &mut Formatter<'_>) -> fmt::Result {
         formatter.write_str(match self {
             Self::Source(_) => "R14 callable source extraction failed",
+            Self::CfgAlternatives(_) => "R14 callable cfg-alternatives extraction failed",
             Self::InvalidSyntax { .. } => "invalid R14 Rust expression syntax",
             Self::IdentityConflict => "R14 expression identity conflict",
             Self::ParentInvalid => "R14 expression parent is invalid",

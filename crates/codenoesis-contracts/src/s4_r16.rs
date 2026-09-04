@@ -4,6 +4,7 @@ use std::fmt::{self, Display, Formatter};
 use std::path::{Component, Path};
 
 use codenoesis_domain::knowledge::{ClaimState, ClaimSubjectKind};
+use codenoesis_domain::s1_boundaries::RepositoryBoundaryReport;
 use codenoesis_domain::s4::workspace_claim_id;
 use codenoesis_domain::s4_r16::{
     ConstantEvaluationCoverageGap, ConstantEvaluationDerivation, ConstantEvaluationError,
@@ -29,6 +30,7 @@ use codenoesis_domain::{
 };
 use serde_json::{Map, Value, json};
 
+use super::s1_boundaries::CodeNoesisErrorV9;
 use super::s4::{MAX_QUERY_BYTES, QueryContractError, claim_value};
 use super::s4_r15::{RepositorySnapshotV17, RepositorySnapshotV17Error, local_query_result_v12};
 use super::{
@@ -69,6 +71,13 @@ pub struct CodeNoesisErrorV24 {
 }
 
 impl CodeNoesisErrorV24 {
+    #[must_use]
+    pub fn from_boundary_error(error: &CodeNoesisErrorV9) -> Self {
+        let mut value = error.value().clone();
+        value["schema_version"] = Value::String(R16_ERROR_VERSION.to_owned());
+        Self { value }
+    }
+
     #[must_use]
     pub fn invalid_profile(profile: &str) -> Self {
         Self::new(
@@ -340,12 +349,34 @@ impl RepositorySnapshotV18 {
         output_capacity_profile: K1OutputCapacityProfile,
         envelope: SnapshotEnvelopeV1,
     ) -> Result<Self, RepositorySnapshotV18Error> {
+        Self::from_inventory_constant_evaluation_and_boundaries(
+            inventory,
+            knowledge,
+            None,
+            output_capacity_profile,
+            envelope,
+        )
+    }
+
+    /// Builds R16 over the historical R15 lineage or its additive R12 boundary composition.
+    ///
+    /// # Errors
+    ///
+    /// Returns the first R15, constant, boundary, serialization, or publication failure.
+    pub fn from_inventory_constant_evaluation_and_boundaries(
+        inventory: &RepositoryInventory,
+        knowledge: &ConstantEvaluationKnowledge,
+        boundaries: Option<&RepositoryBoundaryReport>,
+        output_capacity_profile: K1OutputCapacityProfile,
+        envelope: SnapshotEnvelopeV1,
+    ) -> Result<Self, RepositorySnapshotV18Error> {
         knowledge
             .validate()
             .map_err(|_| RepositorySnapshotV18Error::ContractInvalid)?;
-        let baseline = RepositorySnapshotV17::from_inventory_and_local_flow(
+        let baseline = RepositorySnapshotV17::from_inventory_local_flow_and_boundaries(
             inventory,
             &knowledge.local_flow,
+            boundaries,
             output_capacity_profile,
             envelope,
         )
@@ -713,18 +744,16 @@ fn extraction_chunks_v15(
             Value::String(R16_ONTOLOGY_VERSION.to_owned()),
         );
         object.remove("semantic_hash");
-        if object
+        let source_file_id = object
             .get("subject")
-            .and_then(|subject| subject.get("kind"))
-            .and_then(Value::as_str)
-            == Some("rust_source")
-        {
-            let source_file_id = object
-                .get("subject")
-                .and_then(|subject| subject.get("source_file_id"))
-                .and_then(Value::as_str)
-                .ok_or(RepositorySnapshotV18Error::ContractInvalid)?
-                .to_owned();
+            .and_then(|subject| {
+                (subject.get("kind").and_then(Value::as_str) == Some("rust_source"))
+                    .then(|| subject.get("source_file_id").and_then(Value::as_str))
+                    .flatten()
+            })
+            .or_else(|| object.get("source_file_id").and_then(Value::as_str))
+            .map(str::to_owned);
+        if let Some(source_file_id) = source_file_id {
             let overlay = additions
                 .remove(source_file_id.as_str())
                 .ok_or(RepositorySnapshotV18Error::ContractInvalid)?;
@@ -1042,6 +1071,11 @@ impl PortableGraphV9 {
             "documents": documents,
             "document_statements": document_statements
         });
+        if let Some(boundaries) = semantic.get("repository_boundaries") {
+            super::s4_r12::validate_boundary_projection(boundaries)
+                .map_err(|_| R16ContractError::InvalidSnapshot)?;
+            value["repository_boundaries"] = boundaries.clone();
+        }
         value["projection"]["family_sha256"] = family_digests(&value, sha256)?;
         Self::from_generated_value(value, sha256)
     }
@@ -1225,13 +1259,14 @@ impl Display for R16ContractError {
 
 impl Error for R16ContractError {}
 
+#[allow(clippy::too_many_lines)]
 fn validate_portable_value(value: &Value, sha256: R16Sha256) -> Result<(), R16ContractError> {
     ensure_nesting(value, 0)?;
     validate_private_fields(value)?;
     let object = value
         .as_object()
         .ok_or(R16ContractError::InvalidProjection)?;
-    let expected_keys = BTreeSet::from([
+    let mut expected_keys = BTreeSet::from([
         "claims",
         "constant_evaluation_index",
         "coverage_gaps",
@@ -1249,6 +1284,9 @@ fn validate_portable_value(value: &Value, sha256: R16Sha256) -> Result<(), R16Co
         "schema_version",
         "source_snapshot",
     ]);
+    if object.contains_key("repository_boundaries") {
+        expected_keys.insert("repository_boundaries");
+    }
     if object.keys().map(String::as_str).collect::<BTreeSet<_>>() != expected_keys {
         return Err(R16ContractError::InvalidProjection);
     }
@@ -1271,6 +1309,10 @@ fn validate_portable_value(value: &Value, sha256: R16Sha256) -> Result<(), R16Co
             != Some("codenoesis.lossless-portable-projection/v9")
     {
         return Err(R16ContractError::InvalidProjection);
+    }
+    if let Some(boundaries) = object.get("repository_boundaries") {
+        super::s4_r12::validate_boundary_projection(boundaries)
+            .map_err(|_| R16ContractError::InvalidProjection)?;
     }
     let entity_ids = validate_family(object, "entities", "id")?;
     let relationship_ids = validate_family(object, "relationships", "id")?;

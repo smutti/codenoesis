@@ -28,6 +28,16 @@ pub struct MaterializedConstantEvaluationRepository {
 impl MaterializedConstantEvaluationRepository {
     #[allow(clippy::too_many_lines)]
     pub fn fixture() -> Self {
+        Self::materialize(false)
+    }
+
+    #[allow(clippy::too_many_lines)]
+    pub fn fixture_with_gitlink() -> Self {
+        Self::materialize(true)
+    }
+
+    #[allow(clippy::too_many_lines)]
+    fn materialize(include_gitlink: bool) -> Self {
         let fixture = fixture_root();
         let manifest: Value = serde_json::from_slice(
             &fs::read(fixture.join("manifest.json")).expect("read R16 fixture manifest"),
@@ -88,10 +98,22 @@ impl MaterializedConstantEvaluationRepository {
             );
         }
 
+        if include_gitlink {
+            update_index(
+                &worktree,
+                &global_config,
+                "160000",
+                "69cea8dafee147848ae88702029f4bf7df7224c3",
+                "libs/hbb_common",
+            );
+        }
+
         let mut write_tree = git_command(&global_config);
         write_tree.arg("-C").arg(&worktree).arg("write-tree");
         let tree_oid = stdout_line(successful_output(write_tree, None));
-        assert_eq!(tree_oid, FIXTURE_TREE_OID);
+        if !include_gitlink {
+            assert_eq!(tree_oid, FIXTURE_TREE_OID);
+        }
 
         let materialization = &manifest["materialization"];
         let mut make_commit = git_command(&global_config);
@@ -133,7 +155,9 @@ impl MaterializedConstantEvaluationRepository {
             .as_str()
             .expect("R16 commit message");
         let commit_oid = stdout_line(successful_output(make_commit, Some(message.as_bytes())));
-        assert_eq!(commit_oid, FIXTURE_COMMIT_OID);
+        if !include_gitlink {
+            assert_eq!(commit_oid, FIXTURE_COMMIT_OID);
+        }
         let mut update_ref = git_command(&global_config);
         update_ref
             .arg("-C")
@@ -168,6 +192,60 @@ impl MaterializedConstantEvaluationRepository {
         let mut command = self.scan_command(true);
         command.args(extra_options);
         command.output().expect("launch R16 selector matrix scan")
+    }
+
+    pub fn scan_r16_with_boundaries(&self) -> Output {
+        self.scan_with_boundaries(false, false)
+    }
+
+    pub fn scan_r14_with_boundaries(&self) -> Output {
+        self.scan_with_boundaries(true, true)
+    }
+
+    pub fn scan_r15_with_boundaries(&self) -> Output {
+        self.scan_with_boundaries(false, true)
+    }
+
+    fn scan_with_boundaries(&self, omit_flow: bool, omit_constant: bool) -> Output {
+        let mut command = Command::new(env!("CARGO_BIN_EXE_noesis"));
+        command
+            .current_dir(&self.root)
+            .args(["scan", "--repository"])
+            .arg(&self.worktree)
+            .args(["--repository-id", REPOSITORY_ID, "--revision"])
+            .arg(&self.commit_oid)
+            .args([
+                "--profile",
+                "standard-local-s4",
+                "--repository-boundary-profile",
+                "local-gitlinks-v1",
+                "--workspace-profile",
+                "cargo-root-package-v1",
+                "--manifest-profile",
+                "cargo-manifest-facts-v1",
+                "--rust-semantic-profile",
+                "rust-cfg-declaration-alternatives-v1",
+                "--rust-framework-profile",
+                "rust-framework-declarations-v1",
+                "--rust-callable-profile",
+                "rust-callable-semantics-v1",
+                "--rust-expression-profile",
+                "rust-expression-bindings-v1",
+                "--output-capacity-profile",
+                "local-snapshot-256m-v1",
+            ]);
+        if !omit_flow {
+            command.args(["--rust-flow-profile", FLOW_PROFILE]);
+        }
+        if !omit_constant {
+            command.args(["--rust-constant-profile", CONSTANT_PROFILE]);
+        }
+        command
+            .arg("--store")
+            .arg(&self.store)
+            .args(["--format", "json"])
+            .output()
+            .expect("launch repository-boundary composition scan")
     }
 
     pub fn permuted_scan_command(&self, seed: u64) -> Command {
@@ -295,6 +373,22 @@ impl MaterializedConstantEvaluationRepository {
             .args(["--explorer-profile", CONSTANT_PROFILE, "--format", "json"])
             .output()
             .expect("launch R16 local explorer")
+    }
+
+    pub fn explore_function_context(&self) -> Output {
+        Command::new(env!("CARGO_BIN_EXE_noesis"))
+            .args(["explore", "--input"])
+            .arg(self.portable.join("portable-graph.json"))
+            .arg("--output")
+            .arg(&self.explorer)
+            .args([
+                "--explorer-profile",
+                "rust-function-context-v1",
+                "--format",
+                "json",
+            ])
+            .output()
+            .expect("launch R16 function-context explorer")
     }
 
     pub fn build_sentinel(&self) -> PathBuf {

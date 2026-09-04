@@ -6,6 +6,7 @@ use codenoesis_domain::s4::{WorkspaceEvidence, workspace_evidence_id};
 use codenoesis_domain::s4_k1::{
     CallableSemanticEntity, CallableSemanticEntityKind, CallableSemanticProperties, k1_digest,
 };
+use codenoesis_domain::s4_r3::ExternalWorkspaceBoundary;
 use codenoesis_domain::s4_r14::{
     BindingModifier, BindingOrigin, CallArgumentProperties, ExpressionBindingEntity,
     ExpressionBindingError, ExpressionBindingExtraction, ExpressionBindingGraph,
@@ -431,6 +432,49 @@ impl TreeSitterRustWorkspaceExtractor {
         let callable = self
             .extract_rust_callable_semantics(inventory)
             .map_err(ExpressionBindingError::Source)?;
+        Self::extract_expression_bindings_from_k1(inventory, callable)
+    }
+
+    /// Extracts R14 over the exact R12 cfg-alternatives and repository-boundary lineage.
+    ///
+    /// # Errors
+    ///
+    /// Returns an inherited R12 or typed expression, identity, scope, or limit failure.
+    pub fn extract_rust_expression_bindings_with_cfg_alternatives(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+    ) -> Result<ExpressionBindingExtraction, ExpressionBindingError> {
+        let callable = self
+            .extract_rust_callable_cfg_alternatives(inventory, external_boundaries)
+            .map_err(ExpressionBindingError::CfgAlternatives)?;
+        Self::extract_expression_bindings_from_r12(inventory, callable)
+    }
+
+    fn extract_expression_bindings_from_k1(
+        inventory: &RepositoryInventory,
+        callable: codenoesis_domain::s4_k1::CallableSemanticsExtraction,
+    ) -> Result<ExpressionBindingExtraction, ExpressionBindingError> {
+        Self::extract_expression_bindings(inventory, callable, None)
+    }
+
+    fn extract_expression_bindings_from_r12(
+        inventory: &RepositoryInventory,
+        composed: codenoesis_domain::s4_r12::CallableCfgAlternativesExtraction,
+    ) -> Result<ExpressionBindingExtraction, ExpressionBindingError> {
+        let callable = codenoesis_domain::s4_k1::CallableSemanticsExtraction {
+            knowledge: composed.knowledge.callable.clone(),
+            cache_entries: composed.cache_entries.clone(),
+            parser_invocation_count: composed.parser_invocation_count,
+        };
+        Self::extract_expression_bindings(inventory, callable, Some(composed))
+    }
+
+    fn extract_expression_bindings(
+        inventory: &RepositoryInventory,
+        callable: codenoesis_domain::s4_k1::CallableSemanticsExtraction,
+        composed: Option<codenoesis_domain::s4_r12::CallableCfgAlternativesExtraction>,
+    ) -> Result<ExpressionBindingExtraction, ExpressionBindingError> {
         let evidence = callable
             .knowledge
             .graph
@@ -472,8 +516,20 @@ impl TreeSitterRustWorkspaceExtractor {
         let parser_invocation_count = callable
             .parser_invocation_count
             .saturating_add(u64::try_from(chunks.len()).unwrap_or(u64::MAX));
-        let extraction =
-            ExpressionBindingExtraction::from_k1(callable, chunks, graph, parser_invocation_count);
+        let extraction = match composed {
+            Some(composition) => ExpressionBindingExtraction::from_r12(
+                composition,
+                chunks,
+                graph,
+                parser_invocation_count,
+            ),
+            None => ExpressionBindingExtraction::from_k1(
+                callable,
+                chunks,
+                graph,
+                parser_invocation_count,
+            ),
+        };
         extraction.knowledge.validate()?;
         Ok(extraction)
     }
@@ -1032,41 +1088,44 @@ fn collect_body_bindings(
         }
         "match_expression" => {
             let owner = control_owner(builder, callable_id, node, "match")?;
-            let scrutinee = expression_key(
-                expressions,
-                node.child_by_field_name("value")
-                    .or_else(|| first_expression_child(node))
-                    .ok_or(ExpressionBindingError::PatternUnsupported)?,
-            )?;
-            let body = node
-                .child_by_field_name("body")
-                .ok_or(ExpressionBindingError::BindingScopeInvalid)?;
-            let mut cursor = body.walk();
-            for arm in body
-                .named_children(&mut cursor)
-                .filter(|child| child.kind() == "match_arm")
-            {
-                if arm.child_by_field_name("condition").is_some() {
-                    builder.add_gap("rust.pattern_guard", &owner.id, arm)?;
-                    continue;
-                }
-                let pattern = arm
-                    .child_by_field_name("pattern")
-                    .ok_or(ExpressionBindingError::PatternUnsupported)?;
-                let value = arm
-                    .child_by_field_name("value")
+            let scrutinee_node = node
+                .child_by_field_name("value")
+                .or_else(|| first_expression_child(node))
+                .ok_or(ExpressionBindingError::PatternUnsupported)?;
+            if !selected_expression(scrutinee_node) || excluded_identifier_context(scrutinee_node) {
+                builder.add_gap("rust.pattern_input_unexpanded", &owner.id, scrutinee_node)?;
+            } else {
+                let scrutinee = expression_key(expressions, scrutinee_node)?;
+                let body = node
+                    .child_by_field_name("body")
                     .ok_or(ExpressionBindingError::BindingScopeInvalid)?;
-                collect_pattern_bindings(
-                    pattern,
-                    callable_id,
-                    &owner.id,
-                    BindingOrigin::MatchArm,
-                    BindingModifier::None,
-                    (value.start_byte(), value.end_byte()),
-                    Some(scrutinee.clone()),
-                    builder,
-                    output,
-                )?;
+                let mut cursor = body.walk();
+                for arm in body
+                    .named_children(&mut cursor)
+                    .filter(|child| child.kind() == "match_arm")
+                {
+                    if arm.child_by_field_name("condition").is_some() {
+                        builder.add_gap("rust.pattern_guard", &owner.id, arm)?;
+                        continue;
+                    }
+                    let pattern = arm
+                        .child_by_field_name("pattern")
+                        .ok_or(ExpressionBindingError::PatternUnsupported)?;
+                    let value = arm
+                        .child_by_field_name("value")
+                        .ok_or(ExpressionBindingError::BindingScopeInvalid)?;
+                    collect_pattern_bindings(
+                        pattern,
+                        callable_id,
+                        &owner.id,
+                        BindingOrigin::MatchArm,
+                        BindingModifier::None,
+                        (value.start_byte(), value.end_byte()),
+                        Some(scrutinee.clone()),
+                        builder,
+                        output,
+                    )?;
+                }
             }
         }
         _ => {}

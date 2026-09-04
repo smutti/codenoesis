@@ -341,6 +341,69 @@ pub fn calls(value: Client) {
     );
 }
 
+#[test]
+fn gt_rw2_k1_classifies_each_if_from_its_own_condition() {
+    let source = r"
+pub fn classify(value: Option<i32>, enabled: bool) -> i32 {
+    if enabled {
+        1
+    } else if let Some(value) = value {
+        value
+    } else {
+        0
+    }
+}
+";
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_callable_semantics(&synthetic_inventory(source))
+        .expect("extract nested conditional controls");
+    let controls = extraction
+        .knowledge
+        .graph
+        .entities
+        .iter()
+        .filter_map(|entity| match &entity.properties {
+            CallableSemanticProperties::Control(properties) => Some(properties.control_kind),
+            _ => None,
+        })
+        .fold(BTreeMap::new(), |mut counts, kind| {
+            *counts.entry(kind).or_insert(0_usize) += 1;
+            counts
+        });
+
+    assert_eq!(controls[&ControlKind::If], 1);
+    assert_eq!(controls[&ControlKind::IfLet], 1);
+}
+
+#[test]
+fn sec_rw2_k1_url_scalar_keeps_digest_without_raw_value() {
+    let source = r#"
+pub const DOCUMENTATION: &str = "https://example.invalid/private";
+"#;
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_callable_semantics(&synthetic_inventory(source))
+        .expect("extract URL-bearing declared value");
+    let properties = extraction
+        .knowledge
+        .graph
+        .entities
+        .iter()
+        .find_map(|entity| match &entity.properties {
+            CallableSemanticProperties::DeclaredValue(properties)
+                if entity.name == "DOCUMENTATION" =>
+            {
+                Some(properties)
+            }
+            _ => None,
+        })
+        .expect("URL-bearing declared value");
+
+    assert_eq!(properties.state, DeclaredValueState::ExpressionOnly);
+    assert!(properties.normalized.is_none());
+    assert!(properties.expression_digest.is_some());
+    assert!(!format!("{:?}", extraction.knowledge).contains("https://"));
+}
+
 fn entity_counts(
     graph: &codenoesis_domain::s4_k1::CallableSemanticsGraph,
 ) -> BTreeMap<CallableSemanticEntityKind, usize> {

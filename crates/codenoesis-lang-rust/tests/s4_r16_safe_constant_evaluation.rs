@@ -141,6 +141,28 @@ pub mod internal {
 }
 
 #[test]
+fn gt_rw2_r16_cfg_alternative_values_are_covered_without_selecting_a_world() {
+    let source = r"
+#[cfg(windows)]
+pub const SELECTED: u8 = 1;
+#[cfg(not(windows))]
+pub const SELECTED: u8 = 2;
+";
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_constant_evaluation(&inventory_with_source(source))
+        .expect("extract cfg-alternative R16 subjects");
+    extraction
+        .knowledge
+        .validate()
+        .expect("validate cfg-alternative R16 coverage");
+
+    assert!(evaluated_values(&extraction).is_empty());
+    assert!(extraction.knowledge.graph.coverage.iter().any(|gap| {
+        gap.capability == "rust.constant_expression_not_evaluated" && gap.state == "not_evaluated"
+    }));
+}
+
+#[test]
 fn pt_fr_ext_020_syntax_node_boundary_is_hard_and_typed() {
     let maximum = repeated_sum(256);
     let extraction = TreeSitterRustWorkspaceExtractor::new()

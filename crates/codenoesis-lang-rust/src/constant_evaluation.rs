@@ -4,6 +4,7 @@ use codenoesis_domain::RepositoryInventory;
 use codenoesis_domain::knowledge::{ClaimSubjectKind, RelationshipKind};
 use codenoesis_domain::s4::WorkspaceEvidence;
 use codenoesis_domain::s4_k1::CallableSemanticEntityKind;
+use codenoesis_domain::s4_r3::ExternalWorkspaceBoundary;
 use codenoesis_domain::s4_r5::{
     CompilationPresence, RustSemanticAttributeKind, RustSemanticEntity, RustSemanticEntityKind,
     RustSemanticForm, RustSemanticOwnerKind, RustSemanticProperties,
@@ -203,6 +204,7 @@ struct ExtractionCatalog<'a> {
     semantic_entities: BTreeMap<&'a str, &'a RustSemanticEntity>,
     declared_values: BTreeMap<&'a str, &'a codenoesis_domain::s4_k1::CallableSemanticEntity>,
     declared_by_span: BTreeMap<(&'a str, u64, u64), &'a str>,
+    ambiguous_declared_values: BTreeSet<&'a str>,
     claims_by_subject: BTreeMap<&'a str, &'a codenoesis_domain::s4::WorkspaceClaim>,
     declaration_evidence_by_subject: BTreeMap<&'a str, &'a Vec<String>>,
     evidence: BTreeMap<&'a str, &'a WorkspaceEvidence>,
@@ -225,6 +227,30 @@ impl TreeSitterRustWorkspaceExtractor {
         let local_flow = self
             .extract_rust_local_flow(inventory)
             .map_err(ConstantEvaluationError::Source)?;
+        Self::extract_constant_evaluation_from_local_flow(inventory, local_flow)
+    }
+
+    /// Extracts R16 over the exact R12 cfg-alternatives and repository-boundary lineage.
+    ///
+    /// # Errors
+    ///
+    /// Returns an inherited R12-R15 or typed source, dependency, arithmetic, or limit failure.
+    pub fn extract_rust_constant_evaluation_with_cfg_alternatives(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+    ) -> Result<ConstantEvaluationExtraction, ConstantEvaluationError> {
+        let local_flow = self
+            .extract_rust_local_flow_with_cfg_alternatives(inventory, external_boundaries)
+            .map_err(ConstantEvaluationError::Source)?;
+        Self::extract_constant_evaluation_from_local_flow(inventory, local_flow)
+    }
+
+    #[allow(clippy::too_many_lines)]
+    fn extract_constant_evaluation_from_local_flow(
+        inventory: &RepositoryInventory,
+        local_flow: codenoesis_domain::s4_r15::LocalFlowExtraction,
+    ) -> Result<ConstantEvaluationExtraction, ConstantEvaluationError> {
         let contexts = source_contexts(
             &local_flow
                 .knowledge
@@ -419,22 +445,28 @@ fn extraction_catalog(
         }
     }
     let mut declared_by_span = BTreeMap::new();
+    let mut ambiguous_declared_values = BTreeSet::new();
     for (identifier, entity) in &declared_values {
-        if entity.evidence_ids.len() != 1 {
+        if entity.evidence_ids.is_empty() {
             return Err(ConstantEvaluationError::ContractInvalid);
         }
-        let value = evidence
-            .get(entity.evidence_ids[0].as_str())
-            .copied()
-            .ok_or(ConstantEvaluationError::ContractInvalid)?;
-        if declared_by_span
-            .insert(
-                (value.path.as_str(), value.start_byte, value.end_byte),
-                *identifier,
-            )
-            .is_some()
-        {
-            return Err(ConstantEvaluationError::IdentityConflict);
+        if entity.evidence_ids.len() > 1 {
+            ambiguous_declared_values.insert(*identifier);
+        }
+        for evidence_id in &entity.evidence_ids {
+            let value = evidence
+                .get(evidence_id.as_str())
+                .copied()
+                .ok_or(ConstantEvaluationError::ContractInvalid)?;
+            if declared_by_span
+                .insert(
+                    (value.path.as_str(), value.start_byte, value.end_byte),
+                    *identifier,
+                )
+                .is_some_and(|existing| existing != *identifier)
+            {
+                return Err(ConstantEvaluationError::IdentityConflict);
+            }
         }
     }
     let mut claims_by_subject = semantic
@@ -482,6 +514,7 @@ fn extraction_catalog(
         semantic_entities,
         declared_values,
         declared_by_span,
+        ambiguous_declared_values,
         claims_by_subject,
         declaration_evidence_by_subject,
         evidence,
@@ -641,6 +674,16 @@ fn collect_typed_value(
         .get(semantic.id.as_str())
         .map(|claim| claim.evidence_ids.clone())
         .ok_or(ConstantEvaluationError::ContractInvalid)?;
+    if catalog.ambiguous_declared_values.contains(declared_id) {
+        unsupported.push(UnsupportedSubject {
+            capability: EXPRESSION_NOT_EVALUATED,
+            subject_id: declared.id.clone(),
+            evidence_ids,
+            legacy_evidence_ids: declaration_evidence_ids,
+            source_file_id: source_file_id.to_owned(),
+        });
+        return Ok(());
+    }
     if matches!(rust_type, "usize" | "isize") {
         unsupported.push(UnsupportedSubject {
             capability: TARGET_DEPENDENT,
@@ -753,6 +796,13 @@ fn collect_enum(
         enum_id.clone(),
         (source_file_id.to_owned(), enum_node_evidence.clone()),
     );
+    if variants.iter().any(|variant| {
+        declared_id_for_variant(catalog, path, *variant)
+            .is_some_and(|identifier| catalog.ambiguous_declared_values.contains(identifier))
+    }) {
+        push_enum_gap(unsupported, &enum_id, &enum_node_evidence, source_file_id);
+        return Ok(());
+    }
     let Some((rust_type, repr_evidence_id)) = direct_repr(node, source, path, catalog) else {
         push_enum_gap(unsupported, &enum_id, &enum_node_evidence, source_file_id);
         return Ok(());

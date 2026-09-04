@@ -36,11 +36,13 @@ class RealWorldRustPilotTests(unittest.TestCase):
         self.assertTrue(lekton.export_documents)
         self.assertIn("rust-safe-constant-evaluation-v1", lekton.scan_options)
         self.assertIn("real-world-rust-benchmark-75s-v1", lekton.scan_options)
-        self.assertEqual(rustdesk.portable_profile, "rust-callable-semantics-v1")
-        self.assertEqual(rustdesk.explorer_profile, "rust-callable-semantics-v1")
-        self.assertFalse(rustdesk.export_documents)
+        self.assertEqual(rustdesk.portable_profile, "rust-safe-constant-evaluation-v1")
+        self.assertEqual(rustdesk.explorer_profile, "rust-function-context-v1")
+        self.assertTrue(rustdesk.export_documents)
         self.assertIn("rust-cfg-declaration-alternatives-v1", rustdesk.scan_options)
         self.assertIn("local-gitlinks-v1", rustdesk.scan_options)
+        self.assertIn("rust-safe-constant-evaluation-v1", rustdesk.scan_options)
+        self.assertIn("real-world-rust-benchmark-75s-v1", rustdesk.scan_options)
         for spec in PILOTS:
             self.assertNotIn(spec.name, " ".join(spec.scan_options))
 

@@ -6,6 +6,7 @@ use codenoesis_domain::s4::WorkspaceEvidence;
 use codenoesis_domain::s4_k1::{
     CallableSemanticEntity, CallableSemanticEntityKind, CallableSemanticProperties,
 };
+use codenoesis_domain::s4_r3::ExternalWorkspaceBoundary;
 use codenoesis_domain::s4_r14::{
     BindingOrigin, ExpressionBindingEntity, ExpressionBindingError, ExpressionBindingKnowledge,
     ExpressionEntityKind, ExpressionEntityProperties, ExpressionRelationshipKind,
@@ -629,6 +630,30 @@ impl TreeSitterRustWorkspaceExtractor {
         let expression = self
             .extract_rust_expression_bindings(inventory)
             .map_err(LocalFlowError::Source)?;
+        Self::extract_local_flow_from_expression(inventory, expression)
+    }
+
+    /// Extracts R15 over the exact R12 cfg-alternatives and repository-boundary lineage.
+    ///
+    /// # Errors
+    ///
+    /// Returns an inherited R12/R14 or typed identity, flow, access, or limit failure.
+    pub fn extract_rust_local_flow_with_cfg_alternatives(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+    ) -> Result<LocalFlowExtraction, LocalFlowError> {
+        let expression = self
+            .extract_rust_expression_bindings_with_cfg_alternatives(inventory, external_boundaries)
+            .map_err(LocalFlowError::Source)?;
+        Self::extract_local_flow_from_expression(inventory, expression)
+    }
+
+    #[allow(clippy::too_many_lines)]
+    fn extract_local_flow_from_expression(
+        inventory: &RepositoryInventory,
+        expression: codenoesis_domain::s4_r14::ExpressionBindingExtraction,
+    ) -> Result<LocalFlowExtraction, LocalFlowError> {
         let contexts = source_contexts(
             &expression.knowledge.callable.framework.semantic.manifest,
             inventory,
