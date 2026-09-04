@@ -17,8 +17,10 @@ from generate_real_world_rust_pilots import (  # noqa: E402
     build_docs_command,
     build_explore_command,
     build_export_command,
+    build_llm_context_command,
     build_scan_command,
     prepare_output_root,
+    select_representative_callable,
     snapshot_summary,
 )
 
@@ -26,12 +28,14 @@ from generate_real_world_rust_pilots import (  # noqa: E402
 class RealWorldRustPilotTests(unittest.TestCase):
     def test_runner_is_importable_as_a_scripts_module(self) -> None:
         module = importlib.import_module("scripts.generate_real_world_rust_pilots")
-        self.assertEqual(module.RUNNER_VERSION, "codenoesis.real-world-rust-pilot-runner/v2")
+        self.assertEqual(module.RUNNER_VERSION, "codenoesis.real-world-rust-pilot-runner/v3")
 
     def test_readme_documents_both_explorer_routes(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn("scripts/generate_real_world_rust_pilots.py", readme)
         self.assertIn("information-audit.json", readme)
+        self.assertIn("llm-context.json", readme)
+        self.assertIn("rust-llm-context-v1", readme)
         self.assertIn("/lekton/explorer/", readme)
         self.assertIn("/rustdesk/explorer/", readme)
 
@@ -39,11 +43,13 @@ class RealWorldRustPilotTests(unittest.TestCase):
         lekton, rustdesk = PILOTS
         self.assertEqual(lekton.portable_profile, "rust-safe-constant-evaluation-v1")
         self.assertEqual(lekton.explorer_profile, "rust-function-context-v1")
+        self.assertEqual(lekton.llm_context_profile, "rust-llm-context-v1")
         self.assertTrue(lekton.export_documents)
         self.assertIn("rust-safe-constant-evaluation-v1", lekton.scan_options)
         self.assertIn("real-world-rust-benchmark-75s-v1", lekton.scan_options)
         self.assertEqual(rustdesk.portable_profile, "rust-safe-constant-evaluation-v1")
         self.assertEqual(rustdesk.explorer_profile, "rust-function-context-v1")
+        self.assertEqual(rustdesk.llm_context_profile, "rust-llm-context-v1")
         self.assertTrue(rustdesk.export_documents)
         self.assertIn("rust-cfg-declaration-alternatives-v1", rustdesk.scan_options)
         self.assertIn("local-gitlinks-v1", rustdesk.scan_options)
@@ -72,6 +78,13 @@ class RealWorldRustPilotTests(unittest.TestCase):
                 root / "explorer",
                 spec,
             )
+            llm_context = build_llm_context_command(
+                binary,
+                root / "store",
+                root / "documents",
+                "urn:codenoesis:entity:blake3:" + "a" * 64,
+                spec,
+            )
             self.assertEqual(scan[1], "scan")
             self.assertIn(spec.revision, scan)
             self.assertIn(spec.repository_id, scan)
@@ -81,6 +94,44 @@ class RealWorldRustPilotTests(unittest.TestCase):
             self.assertEqual("--documents" in export, spec.export_documents)
             self.assertEqual(explore[1], "explore")
             self.assertIn(spec.explorer_profile, explore)
+            self.assertEqual(llm_context[1], "query")
+            self.assertIn(spec.llm_context_profile, llm_context)
+
+    def test_representative_callable_is_selected_by_stable_id(self) -> None:
+        selected = select_representative_callable(
+            {
+                "entities": [
+                    {"id": "z", "kind": "rust.function", "name": "later"},
+                    {"id": "a", "kind": "rust.struct", "name": "ignored"},
+                    {"id": "b", "kind": "rust.method", "name": "chosen"},
+                ],
+                "relationships": [],
+            }
+        )
+        self.assertEqual(
+            selected,
+            {"id": "b", "kind": "rust.method", "name": "chosen"},
+        )
+
+    def test_representative_callable_prefers_bounded_body_and_calls(self) -> None:
+        selected = select_representative_callable(
+            {
+                "entities": [
+                    {"id": "a", "kind": "rust.method", "name": "empty"},
+                    {"id": "z", "kind": "rust.function", "name": "useful"},
+                ],
+                "relationships": [
+                    {"kind": "HAS_SIGNATURE", "source": "z", "target": "signature"},
+                    {"kind": "HAS_PARAMETER", "source": "signature", "target": "parameter"},
+                    {"kind": "HAS_BODY_FACT", "source": "z", "target": "body"},
+                    {"kind": "CALLS", "source": "z", "target": "a"},
+                ],
+            }
+        )
+        self.assertEqual(
+            selected,
+            {"id": "z", "kind": "rust.function", "name": "useful"},
+        )
 
     def test_snapshot_summary_reports_graph_families(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

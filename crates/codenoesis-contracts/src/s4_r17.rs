@@ -13,10 +13,13 @@ use super::s4_r16::{
 
 pub const R17_CONTEXT_PROFILE: &str = "rust-function-context-v1";
 pub const R17_FUNCTION_CONTEXT_VERSION: &str = "codenoesis.function-context/v1";
+pub const R17_LLM_CONTEXT_PROFILE: &str = "rust-llm-context-v1";
+pub const R17_LLM_CONTEXT_VERSION: &str = "codenoesis.llm-function-context/v1";
 pub const R17_LOCAL_EXPLORER_VERSION: &str = "codenoesis.local-explorer/v10";
 pub const R17_EXPLORER_SECURITY_PROFILE: &str = "codenoesis.local-explorer-security/v10";
 pub const R17_EXPLORER_MARKER: &str = ".codenoesis-local-explorer-v10";
 pub const MAX_R17_CONTEXT_OUTPUT_BYTES: u64 = 4_194_304;
+pub const MAX_R17_LLM_CONTEXT_OUTPUT_BYTES: u64 = 262_144;
 pub const MAX_R17_FUNCTION_PARAMETERS: u64 = 256;
 pub const MAX_R17_LINKED_SUBJECTS: u64 = 256;
 pub const MAX_R17_LINKED_RELATIONSHIPS: u64 = 512;
@@ -120,6 +123,19 @@ pub fn validate_function_context_output_bytes(observed: u64) -> Result<(), Funct
     enforce_limit(
         "context_output_bytes_including_lf",
         MAX_R17_CONTEXT_OUTPUT_BYTES,
+        observed,
+    )
+}
+
+/// Validates the canonical compact LLM context size, including its trailing LF.
+///
+/// # Errors
+///
+/// Returns [`FunctionContextError::LimitExceeded`] above the 256 KiB contract.
+pub fn validate_llm_context_output_bytes(observed: u64) -> Result<(), FunctionContextError> {
+    enforce_limit(
+        "llm_context_output_bytes_including_lf",
+        MAX_R17_LLM_CONTEXT_OUTPUT_BYTES,
         observed,
     )
 }
@@ -550,6 +566,214 @@ impl FunctionContextV1 {
 }
 
 #[derive(Clone, Debug)]
+pub struct LlmFunctionContextV1 {
+    value: Value,
+}
+
+impl LlmFunctionContextV1 {
+    /// Projects a compact, deterministic model input from one validated callable.
+    ///
+    /// The projection performs no model call and adds no inferred product fact.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed [`FunctionContextError`] when the source context is
+    /// invalid, unsafe, or larger than the compact output boundary.
+    pub fn from_validated_v18(
+        semantic: &Value,
+        head: &LocalSnapshotHead,
+        requested_id: &str,
+    ) -> Result<Self, FunctionContextError> {
+        let context = FunctionContextV1::from_validated_v18(semantic, head, requested_id)?;
+        Self::from_function_context(&context)
+    }
+
+    #[allow(clippy::too_many_lines)]
+    fn from_function_context(context: &FunctionContextV1) -> Result<Self, FunctionContextError> {
+        let context = context.value();
+        let callable = context
+            .get("callable")
+            .ok_or(FunctionContextError::InvalidSnapshot)?;
+        let signature = context
+            .get("signature")
+            .ok_or(FunctionContextError::InvalidSnapshot)?;
+        let signature_properties = signature
+            .get("properties")
+            .and_then(Value::as_object)
+            .ok_or(FunctionContextError::InvalidSnapshot)?;
+        let parameters = context
+            .get("parameters")
+            .and_then(Value::as_array)
+            .ok_or(FunctionContextError::InvalidSnapshot)?;
+        let inputs = parameters
+            .iter()
+            .map(compact_parameter)
+            .collect::<Result<Vec<_>, _>>()?;
+        let body_facts = context
+            .get("body_facts")
+            .and_then(Value::as_array)
+            .ok_or(FunctionContextError::InvalidSnapshot)?
+            .iter()
+            .map(compact_body_fact)
+            .collect::<Result<Vec<_>, _>>()?;
+        let evidence = context
+            .get("evidence")
+            .and_then(Value::as_array)
+            .ok_or(FunctionContextError::InvalidSnapshot)?;
+        let evidence_location_limit = usize::try_from(MAX_R17_LINKED_SUBJECTS)
+            .map_err(|_| FunctionContextError::InvalidSnapshot)?;
+        let evidence_locations = evidence
+            .iter()
+            .take(evidence_location_limit)
+            .map(compact_evidence)
+            .collect::<Result<Vec<_>, _>>()?;
+        let claims = context
+            .get("claims")
+            .and_then(Value::as_array)
+            .ok_or(FunctionContextError::InvalidSnapshot)?;
+        let claim_states = summarize_claim_states(claims)?;
+        let owner = match context.get("owner") {
+            None | Some(Value::Null) => Value::Null,
+            Some(owner) => json!({
+                "id": required_string(owner, "id")?,
+                "kind": required_string(owner, "kind")?,
+                "name": required_string(owner, "name")?,
+            }),
+        };
+        let calls = context
+            .get("calls")
+            .and_then(Value::as_object)
+            .ok_or(FunctionContextError::InvalidSnapshot)?;
+        let outgoing_calls = calls
+            .get("outgoing")
+            .and_then(Value::as_array)
+            .ok_or(FunctionContextError::InvalidSnapshot)?;
+        let incoming_calls = calls
+            .get("incoming")
+            .and_then(Value::as_array)
+            .ok_or(FunctionContextError::InvalidSnapshot)?;
+        let diagnostics = context
+            .get("diagnostics")
+            .and_then(Value::as_array)
+            .ok_or(FunctionContextError::InvalidSnapshot)?;
+        let diagnostic_codes = summarize_diagnostic_codes(diagnostics)?;
+        let coverage_gaps = context
+            .get("coverage_gaps")
+            .and_then(Value::as_array)
+            .ok_or(FunctionContextError::InvalidSnapshot)?;
+        let coverage_states = summarize_coverage_states(coverage_gaps)?;
+        let derivations = context
+            .get("derivations")
+            .and_then(Value::as_array)
+            .ok_or(FunctionContextError::InvalidSnapshot)?;
+        let body_fact_count = length(body_facts.len());
+        let value = json!({
+            "schema_version": R17_LLM_CONTEXT_VERSION,
+            "profile": R17_LLM_CONTEXT_PROFILE,
+            "authority": "declared_source_only",
+            "model_authority": false,
+            "source": context.get("source").ok_or(FunctionContextError::InvalidSnapshot)?,
+            "focus": {
+                "id": required_string(callable, "id")?,
+                "kind": required_string(callable, "kind")?,
+                "name": required_string(callable, "name")?,
+                "module_path": callable.get("module_path").cloned().unwrap_or(Value::Null),
+                "visibility": callable.get("visibility").cloned().unwrap_or(Value::Null),
+                "owner": owner,
+                "signature": {
+                    "id": required_string(signature, "id")?,
+                    "display": required_string(context, "display_signature")?,
+                    "modifiers": {
+                        "visibility": signature_properties.get("visibility").cloned().unwrap_or(Value::Null),
+                        "async": signature_properties.get("async").cloned().unwrap_or(Value::Null),
+                        "const": signature_properties.get("const").cloned().unwrap_or(Value::Null),
+                        "unsafe": signature_properties.get("unsafe").cloned().unwrap_or(Value::Null),
+                        "abi": signature_properties.get("abi").cloned().unwrap_or(Value::Null),
+                        "generic_parameters": signature_properties.get("generic_parameters").cloned().unwrap_or(Value::Null),
+                        "where_clause": signature_properties.get("where_clause").cloned().unwrap_or(Value::Null),
+                    },
+                    "inputs": inputs,
+                    "output": {
+                        "state": signature_properties.get("return_state").cloned().unwrap_or(Value::Null),
+                        "declared_type": signature_properties.get("return_type").cloned().unwrap_or(Value::Null),
+                    },
+                    "body": {
+                        "state": signature_properties.get("body_state").cloned().unwrap_or(Value::Null),
+                        "digest": signature_properties.get("body_digest").cloned().unwrap_or(Value::Null),
+                        "evidence_id": signature_properties.get("body_evidence_id").cloned().unwrap_or(Value::Null),
+                    }
+                }
+            },
+            "body_facts": body_facts,
+            "calls": {
+                "outgoing": outgoing_calls,
+                "incoming": incoming_calls,
+            },
+            "evidence_summary": {
+                "count": length(evidence.len()),
+                "included": length(evidence_locations.len()),
+                "omitted": length(evidence.len().saturating_sub(evidence_locations.len())),
+                "locations": evidence_locations,
+            },
+            "claim_summary": {
+                "count": length(claims.len()),
+                "states": claim_states,
+            },
+            "uncertainty": {
+                "limitations": context.get("limitations").ok_or(FunctionContextError::InvalidSnapshot)?,
+                "diagnostics": {
+                    "count": length(diagnostics.len()),
+                    "codes": diagnostic_codes,
+                },
+                "coverage_gaps": {
+                    "count": length(coverage_gaps.len()),
+                    "states": coverage_states,
+                },
+                "derivations": {
+                    "count": length(derivations.len()),
+                }
+            },
+            "resource_bounds": {
+                "max_output_bytes_including_lf": MAX_R17_LLM_CONTEXT_OUTPUT_BYTES,
+                "source_context_schema": R17_FUNCTION_CONTEXT_VERSION,
+                "source_counts": {
+                    "parameters": length(parameters.len()),
+                    "body_facts": body_fact_count,
+                    "calls": length(outgoing_calls.len().saturating_add(incoming_calls.len())),
+                    "claims": length(claims.len()),
+                    "evidence": length(evidence.len()),
+                    "diagnostics": length(diagnostics.len()),
+                    "coverage_gaps": length(coverage_gaps.len()),
+                    "derivations": length(derivations.len()),
+                },
+            }
+        });
+        validate_private_fields(&value)?;
+        let projection = Self { value };
+        projection.canonical_stdout()?;
+        Ok(projection)
+    }
+
+    #[must_use]
+    pub const fn value(&self) -> &Value {
+        &self.value
+    }
+
+    /// Serializes the compact projection as canonical JSON followed by one LF.
+    ///
+    /// # Errors
+    ///
+    /// Returns a typed error when serialization fails or exceeds 256 KiB.
+    pub fn canonical_stdout(&self) -> Result<Vec<u8>, FunctionContextError> {
+        let mut bytes =
+            serde_json::to_vec(&self.value).map_err(|_| FunctionContextError::Serialization)?;
+        validate_llm_context_output_bytes(length(bytes.len().saturating_add(1)))?;
+        bytes.push(b'\n');
+        Ok(bytes)
+    }
+}
+
+#[derive(Clone, Debug)]
 pub struct LocalExplorerManifestV10 {
     value: Value,
 }
@@ -832,6 +1056,118 @@ fn optional_non_empty_string(value: Option<&Value>) -> Result<Option<&str>, Func
 
 fn normalized_component(value: &str) -> String {
     value.split_whitespace().collect::<Vec<_>>().join(" ")
+}
+
+fn compact_parameter(parameter: &Value) -> Result<Value, FunctionContextError> {
+    let properties = parameter
+        .get("properties")
+        .and_then(Value::as_object)
+        .ok_or(FunctionContextError::InvalidSnapshot)?;
+    Ok(json!({
+        "id": required_string(parameter, "id")?,
+        "position": parameter.get("ordinal").and_then(Value::as_u64).ok_or(FunctionContextError::InvalidParameterOrdinal)?,
+        "name": required_string(parameter, "name")?,
+        "pattern": properties.get("pattern").cloned().unwrap_or(Value::Null),
+        "declared_type": properties.get("declared_type").cloned().unwrap_or(Value::Null),
+        "receiver_state": properties.get("receiver_state").cloned().unwrap_or(Value::Null),
+        "evidence_ids": compact_evidence_ids(parameter)?,
+    }))
+}
+
+fn compact_body_fact(body_fact: &Value) -> Result<Value, FunctionContextError> {
+    let properties = body_fact
+        .get("properties")
+        .and_then(Value::as_object)
+        .ok_or(FunctionContextError::InvalidSnapshot)?;
+    Ok(json!({
+        "id": required_string(body_fact, "id")?,
+        "kind": required_string(body_fact, "kind")?,
+        "name": required_string(body_fact, "name")?,
+        "position": body_fact.get("ordinal").and_then(Value::as_u64).ok_or(FunctionContextError::InvalidSnapshot)?,
+        "lexical_depth": properties.get("lexical_depth").cloned().unwrap_or(Value::Null),
+        "parent_fact_id": properties.get("parent_fact_id").cloned().unwrap_or(Value::Null),
+        "declared_type": properties.get("declared_type").cloned().unwrap_or(Value::Null),
+        "resolution_state": properties.get("resolution_state").cloned().unwrap_or(Value::Null),
+        "resolved_target_id": properties.get("resolved_target_id").cloned().unwrap_or(Value::Null),
+        "target_spelling": properties.get("target_spelling").cloned().unwrap_or(Value::Null),
+        "evidence_ids": compact_evidence_ids(body_fact)?,
+    }))
+}
+
+fn compact_evidence(evidence: &Value) -> Result<Value, FunctionContextError> {
+    Ok(json!({
+        "id": required_string(evidence, "id")?,
+        "path": required_string(evidence, "path")?,
+        "blob_oid": required_string(evidence, "blob_oid")?,
+        "start_byte": evidence.get("start_byte").and_then(Value::as_u64).ok_or(FunctionContextError::InvalidSnapshot)?,
+        "end_byte": evidence.get("end_byte").and_then(Value::as_u64).ok_or(FunctionContextError::InvalidSnapshot)?,
+    }))
+}
+
+fn compact_evidence_ids(value: &Value) -> Result<Vec<&str>, FunctionContextError> {
+    value
+        .get("evidence_ids")
+        .and_then(Value::as_array)
+        .map_or_else(
+            || Ok(Vec::new()),
+            |identifiers| {
+                identifiers
+                    .iter()
+                    .map(|identifier| {
+                        identifier
+                            .as_str()
+                            .filter(|identifier| !identifier.is_empty())
+                            .ok_or(FunctionContextError::InvalidSnapshot)
+                    })
+                    .collect()
+            },
+        )
+}
+
+fn summarize_claim_states(records: &[Value]) -> Result<Vec<Value>, FunctionContextError> {
+    let mut counts = BTreeMap::<String, u64>::new();
+    for record in records {
+        let count = counts
+            .entry(required_string(record, "state")?.to_owned())
+            .or_default();
+        *count = count.saturating_add(1);
+    }
+    Ok(counts
+        .into_iter()
+        .map(|(state, count)| json!({"state": state, "count": count}))
+        .collect())
+}
+
+fn summarize_diagnostic_codes(records: &[Value]) -> Result<Vec<Value>, FunctionContextError> {
+    let mut counts = BTreeMap::<String, u64>::new();
+    for record in records {
+        let count = counts
+            .entry(required_string(record, "code")?.to_owned())
+            .or_default();
+        *count = count.saturating_add(1);
+    }
+    Ok(counts
+        .into_iter()
+        .map(|(code, count)| json!({"code": code, "count": count}))
+        .collect())
+}
+
+fn summarize_coverage_states(records: &[Value]) -> Result<Vec<Value>, FunctionContextError> {
+    let mut counts = BTreeMap::<(String, String), u64>::new();
+    for record in records {
+        let key = (
+            required_string(record, "capability")?.to_owned(),
+            required_string(record, "state")?.to_owned(),
+        );
+        let count = counts.entry(key).or_default();
+        *count = count.saturating_add(1);
+    }
+    Ok(counts
+        .into_iter()
+        .map(|((capability, state), count)| {
+            json!({"capability": capability, "state": state, "count": count})
+        })
+        .collect())
 }
 
 fn validate_claim_subjects(

@@ -69,14 +69,31 @@ PortableGraph, viewer, revision, semantic hash, and family counts in
 `summary.json`. Each pilot also produces `information-audit.json`, which tests
 that callable inputs and outputs, enum and declared values, bounded evaluated
 constants, call arguments and targets, expression structure, local flow,
-source evidence, and explicit uncertainty remain navigable. The audit reports
-unsupported type resolution, cross-call resolution, side effects, and runtime
-behavior as limitations instead of treating them as facts. Lekton and RustDesk
-use the complete R16 ontology and
-FunctionContextV1 viewer plus the existing benchmark-only 75-second scan
-profile; the standard scan limit remains unchanged. RustDesk retains
+source evidence, and explicit uncertainty remain navigable. It also selects a
+deterministic low-degree callable and writes `llm-context.json` using the
+`rust-llm-context-v1` profile. That compact artifact contains declared inputs
+and output, body facts, named calls, source locations, fact-state summaries,
+and explicit limitations; it performs no model call and sets
+`model_authority` to `false`. The audit reports unsupported type resolution,
+cross-call resolution, side effects, and runtime behavior as limitations
+instead of treating them as facts. Lekton and RustDesk use the complete R16
+ontology and FunctionContextV1 viewer plus the existing benchmark-only
+75-second scan profile; the standard scan limit remains unchanged. RustDesk retains
 `libs/hbb_common` as an unbound repository boundary and never fetches or reads
 its nested source.
+
+To create the compact projection for another exact function or method, use its
+ontology entity ID:
+
+```sh
+noesis query \
+  --store /path/to/pilot/store \
+  --repository-id urn:codenoesis:pilot:lekton:r16 \
+  --documents /path/to/pilot/documents \
+  --id urn:codenoesis:entity:blake3:<digest> \
+  --context-profile rust-llm-context-v1 \
+  --format json
+```
 
 To audit an already generated PortableGraph without repeating extraction:
 

@@ -3401,6 +3401,13 @@ pub(crate) fn claim_value(claim: &WorkspaceClaim) -> Value {
     })
 }
 
+pub(crate) fn claim_subjects<'a>(claims: impl IntoIterator<Item = &'a Value>) -> BTreeSet<&'a str> {
+    claims
+        .into_iter()
+        .filter_map(|claim| claim.get("subject_id").and_then(Value::as_str))
+        .collect()
+}
+
 pub(crate) fn evidence_value(evidence: &WorkspaceEvidence) -> Value {
     json!({
         "id": evidence.id,
@@ -3440,6 +3447,27 @@ fn properties_value(properties: &BTreeMap<String, String>) -> Value {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn claim_subjects_handle_large_repeated_membership() {
+        let claims = (0..80_000)
+            .map(|ordinal| json!({"subject_id": format!("relationship:{ordinal}")}))
+            .chain([
+                json!({"subject_id": "relationship:79999"}),
+                json!({"state": "malformed-claim-without-subject"}),
+            ])
+            .collect::<Vec<_>>();
+
+        let subjects = claim_subjects(claims.iter());
+
+        assert_eq!(subjects.len(), 80_000);
+        assert!(
+            (0..20_000)
+                .all(|ordinal| subjects.contains(format!("relationship:{ordinal}").as_str()))
+        );
+        assert!(subjects.contains("relationship:79999"));
+        assert!(!subjects.contains("relationship:80000"));
+    }
 
     #[test]
     fn oversized_module_documents_split_at_statement_boundaries() {

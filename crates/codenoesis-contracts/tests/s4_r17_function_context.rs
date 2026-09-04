@@ -2,10 +2,11 @@ use codenoesis_contracts::{
     FunctionContextCounts, FunctionContextError, MAX_R16_PORTABLE_GRAPH_BYTES,
     MAX_R17_CONTEXT_OUTPUT_BYTES, MAX_R17_FUNCTION_PARAMETERS, MAX_R17_FUNCTION_SEARCH_RESULTS,
     MAX_R17_LINKED_CLAIMS, MAX_R17_LINKED_EVIDENCE, MAX_R17_LINKED_RELATIONSHIPS,
-    MAX_R17_LINKED_SUBJECTS, MAX_R17_NAVIGATION_HISTORY, MAX_R17_UNCERTAINTY_RECORDS,
-    R17_CONTEXT_PROFILE, R17_EXPLORER_SECURITY_PROFILE, R17_FUNCTION_CONTEXT_VERSION,
+    MAX_R17_LINKED_SUBJECTS, MAX_R17_LLM_CONTEXT_OUTPUT_BYTES, MAX_R17_NAVIGATION_HISTORY,
+    MAX_R17_UNCERTAINTY_RECORDS, R17_CONTEXT_PROFILE, R17_EXPLORER_SECURITY_PROFILE,
+    R17_FUNCTION_CONTEXT_VERSION, R17_LLM_CONTEXT_PROFILE, R17_LLM_CONTEXT_VERSION,
     R17_LOCAL_EXPLORER_VERSION, validate_function_context_limits,
-    validate_function_context_output_bytes,
+    validate_function_context_output_bytes, validate_llm_context_output_bytes,
 };
 
 #[test]
@@ -104,4 +105,24 @@ fn ct_fr_exp_009_additive_contract_values_are_exact() {
     assert_eq!(MAX_R16_PORTABLE_GRAPH_BYTES, 268_435_456);
     assert_eq!(MAX_R17_FUNCTION_SEARCH_RESULTS, 100);
     assert_eq!(MAX_R17_NAVIGATION_HISTORY, 128);
+}
+
+#[test]
+fn ct_fr_ctx_001_llm_projection_is_additive_and_bounded() {
+    assert_eq!(R17_LLM_CONTEXT_PROFILE, "rust-llm-context-v1");
+    assert_eq!(
+        R17_LLM_CONTEXT_VERSION,
+        "codenoesis.llm-function-context/v1"
+    );
+    assert_eq!(MAX_R17_LLM_CONTEXT_OUTPUT_BYTES, 262_144);
+    validate_llm_context_output_bytes(MAX_R17_LLM_CONTEXT_OUTPUT_BYTES)
+        .expect("exact LLM context output maximum must remain accepted");
+    assert!(matches!(
+        validate_llm_context_output_bytes(MAX_R17_LLM_CONTEXT_OUTPUT_BYTES + 1),
+        Err(FunctionContextError::LimitExceeded {
+            limit: "llm_context_output_bytes_including_lf",
+            maximum: MAX_R17_LLM_CONTEXT_OUTPUT_BYTES,
+            observed,
+        }) if observed == MAX_R17_LLM_CONTEXT_OUTPUT_BYTES + 1
+    ));
 }

@@ -37,30 +37,30 @@ use codenoesis_contracts::{
     CodeNoesisErrorV24, CodeNoesisErrorV25, CodeNoesisErrorV26, CodeNoesisErrorV29,
     CodeNoesisErrorV30, DocumentationContractError, FunctionContextError, FunctionContextV1,
     IncrementalRefreshReportError, IncrementalRefreshReportInput, IncrementalRefreshReportV1,
-    K1ContractError, LocalConfigurationError, LocalConfigurationSource,
+    K1ContractError, LlmFunctionContextV1, LocalConfigurationError, LocalConfigurationSource,
     MAX_LOCAL_CONFIGURATION_BYTES, MAX_RELEASE_PROFILE_TEXT_BYTES,
     NestedRepositoryUnavailableReason, PortableGraphV1, PortableGraphV2, PortableGraphV3,
     PortableGraphV4, PortableGraphV5, PortableGraphV6, PortableGraphV7, PortableGraphV8,
     PortableGraphV9, QueryContractError, R8ContractError, R10ContractError, R11ContractError,
     R12_PORTABLE_GRAPH_VERSION, R12ContractError, R13_PORTABLE_GRAPH_VERSION, R13ContractError,
-    R14ContractError, R15ContractError, R16ContractError, R17_CONTEXT_PROFILE, R18_SOURCE_PROFILE,
-    ReleaseProfileError, RepositorySnapshotV2Error, RepositorySnapshotV3,
-    RepositorySnapshotV3Error, RepositorySnapshotV4, RepositorySnapshotV4Error,
-    RepositorySnapshotV5, RepositorySnapshotV5Error, RepositorySnapshotV6,
-    RepositorySnapshotV6Error, RepositorySnapshotV7, RepositorySnapshotV7Error,
-    RepositorySnapshotV8, RepositorySnapshotV8Error, RepositorySnapshotV9,
-    RepositorySnapshotV9Error, RepositorySnapshotV10, RepositorySnapshotV10Error,
-    RepositorySnapshotV11, RepositorySnapshotV11Error, RepositorySnapshotV12,
-    RepositorySnapshotV12Error, RepositorySnapshotV13, RepositorySnapshotV13Error,
-    RepositorySnapshotV14, RepositorySnapshotV14Error, RepositorySnapshotV15,
-    RepositorySnapshotV15Error, RepositorySnapshotV16, RepositorySnapshotV16Error,
-    RepositorySnapshotV17, RepositorySnapshotV17Error, RepositorySnapshotV18,
-    RepositorySnapshotV18Error, SnapshotEnvelopeV1, TrustedSourceError, TrustedSourceSelectionV1,
-    ValidatedS4Head, current_release_profile_v1, generate_documentation_v1,
-    local_configuration_report_v1, local_query_result_v1, local_query_result_v2,
-    local_query_result_v3, local_query_result_v4, local_query_result_v5, local_query_result_v6,
-    local_query_result_v7, local_query_result_v8, local_query_result_v9, local_query_result_v10,
-    local_query_result_v11, local_query_result_v12, local_query_result_v13,
+    R14ContractError, R15ContractError, R16ContractError, R17_CONTEXT_PROFILE,
+    R17_LLM_CONTEXT_PROFILE, R18_SOURCE_PROFILE, ReleaseProfileError, RepositorySnapshotV2Error,
+    RepositorySnapshotV3, RepositorySnapshotV3Error, RepositorySnapshotV4,
+    RepositorySnapshotV4Error, RepositorySnapshotV5, RepositorySnapshotV5Error,
+    RepositorySnapshotV6, RepositorySnapshotV6Error, RepositorySnapshotV7,
+    RepositorySnapshotV7Error, RepositorySnapshotV8, RepositorySnapshotV8Error,
+    RepositorySnapshotV9, RepositorySnapshotV9Error, RepositorySnapshotV10,
+    RepositorySnapshotV10Error, RepositorySnapshotV11, RepositorySnapshotV11Error,
+    RepositorySnapshotV12, RepositorySnapshotV12Error, RepositorySnapshotV13,
+    RepositorySnapshotV13Error, RepositorySnapshotV14, RepositorySnapshotV14Error,
+    RepositorySnapshotV15, RepositorySnapshotV15Error, RepositorySnapshotV16,
+    RepositorySnapshotV16Error, RepositorySnapshotV17, RepositorySnapshotV17Error,
+    RepositorySnapshotV18, RepositorySnapshotV18Error, SnapshotEnvelopeV1, TrustedSourceError,
+    TrustedSourceSelectionV1, ValidatedS4Head, current_release_profile_v1,
+    generate_documentation_v1, local_configuration_report_v1, local_query_result_v1,
+    local_query_result_v2, local_query_result_v3, local_query_result_v4, local_query_result_v5,
+    local_query_result_v6, local_query_result_v7, local_query_result_v8, local_query_result_v9,
+    local_query_result_v10, local_query_result_v11, local_query_result_v12, local_query_result_v13,
     validate_stored_snapshot_semantic_v4, validate_stored_snapshot_semantic_v5,
     validate_stored_snapshot_semantic_v6, validate_stored_snapshot_semantic_v7,
     validate_stored_snapshot_semantic_v8, validate_stored_snapshot_semantic_v9,
@@ -4087,18 +4087,29 @@ fn run_query(arguments: impl IntoIterator<Item = OsString>) -> Result<Vec<u8>, F
             | GeneratedDocsError::Failed => Failure::Query(QueryFailure::CorruptDocuments),
         }
     })?;
-    let stdout = if invocation.context_profile.is_some() {
+    let stdout = if let Some(context_profile) = invocation.context_profile.as_deref() {
         if !constant_query {
             return Err(r16_failure(CodeNoesisErrorV24::invalid_query(), 14));
         }
-        FunctionContextV1::from_validated_v18(
-            &loaded.semantic,
-            &loaded.head,
-            &invocation.requested_id,
-        )
-        .map_err(|error| function_context_contract_failure(&error))?
-        .canonical_stdout()
-        .map_err(|error| function_context_contract_failure(&error))?
+        match context_profile {
+            R17_CONTEXT_PROFILE => FunctionContextV1::from_validated_v18(
+                &loaded.semantic,
+                &loaded.head,
+                &invocation.requested_id,
+            )
+            .map_err(|error| function_context_contract_failure(&error))?
+            .canonical_stdout()
+            .map_err(|error| function_context_contract_failure(&error))?,
+            R17_LLM_CONTEXT_PROFILE => LlmFunctionContextV1::from_validated_v18(
+                &loaded.semantic,
+                &loaded.head,
+                &invocation.requested_id,
+            )
+            .map_err(|error| function_context_contract_failure(&error))?
+            .canonical_stdout()
+            .map_err(|error| function_context_contract_failure(&error))?,
+            _ => return Err(r16_failure(CodeNoesisErrorV24::invalid_query(), 14)),
+        }
     } else if constant_query {
         local_query_result_v13(
             &loaded.semantic,
@@ -7173,7 +7184,9 @@ enum PortableProfile {
 
 impl PortableProfile {
     fn requested(arguments: &[OsString], option: &str) -> Self {
-        if profile_option_requested(arguments, option, R17_CONTEXT_PROFILE) {
+        if profile_option_requested(arguments, option, R17_CONTEXT_PROFILE)
+            || profile_option_requested(arguments, option, R17_LLM_CONTEXT_PROFILE)
+        {
             Self::R17
         } else if r16_profile_requested(arguments) {
             Self::R16
@@ -7725,10 +7738,9 @@ impl QueryInvocation {
         if format.as_deref() != Some("json") {
             return Err(Failure::S4Input(CodeNoesisErrorV5::invalid_query_id()));
         }
-        if context_profile
-            .as_deref()
-            .is_some_and(|profile| profile != R17_CONTEXT_PROFILE)
-        {
+        if context_profile.as_deref().is_some_and(|profile| {
+            !matches!(profile, R17_CONTEXT_PROFILE | R17_LLM_CONTEXT_PROFILE)
+        }) {
             return Err(r16_failure(CodeNoesisErrorV24::invalid_query(), 2));
         }
         Ok(Self {

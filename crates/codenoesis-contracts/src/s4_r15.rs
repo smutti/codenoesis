@@ -31,7 +31,7 @@ use codenoesis_domain::{
 use serde_json::{Map, Value, json};
 
 use super::s1_boundaries::CodeNoesisErrorV9;
-use super::s4::{MAX_QUERY_BYTES, QueryContractError, claim_value, evidence_value};
+use super::s4::{MAX_QUERY_BYTES, QueryContractError, claim_subjects, claim_value, evidence_value};
 use super::s4_r14::{RepositorySnapshotV16, RepositorySnapshotV16Error, local_query_result_v11};
 use super::{
     LimitedVecWriter, PublicationCandidateError, SnapshotEnvelopeV1, publication_candidate,
@@ -1018,6 +1018,7 @@ fn validate_graph_overlay(
     let entities = family_id_set(graph, "entities")?;
     let relationships = family_id_set(graph, "relationships")?;
     let claims = family_id_map(graph, "claims")?;
+    let claim_subjects = claim_subjects(claims.values().copied());
     let evidence = family_id_set(graph, "evidence")?;
     for block in &knowledge.graph.blocks {
         if !entities.contains(&block.id) || !evidence.contains(&block.evidence_id) {
@@ -1030,9 +1031,7 @@ fn validate_graph_overlay(
                 .evidence_ids
                 .iter()
                 .any(|identifier| !evidence.contains(identifier))
-            || !claims.values().any(|claim| {
-                claim.get("subject_id").and_then(Value::as_str) == Some(relationship.id.as_str())
-            })
+            || !claim_subjects.contains(relationship.id.as_str())
         {
             return Err(RepositorySnapshotV17Error::ContractInvalid);
         }

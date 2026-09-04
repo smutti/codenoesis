@@ -1249,6 +1249,26 @@ fn validate_composed_graph(
     let entities = family_id_set(graph, "entities")?;
     let relationships = family_id_map(graph, "relationships")?;
     let claims = family_id_map(graph, "claims")?;
+    let expected_join_claims = knowledge
+        .index
+        .joins
+        .iter()
+        .map(|join| (join.relationship_id.as_str(), json!(join.evidence_ids)))
+        .collect::<BTreeMap<_, _>>();
+    let matching_join_claim_subjects = if expected_join_claims.is_empty() {
+        BTreeSet::new()
+    } else {
+        claims
+            .values()
+            .filter_map(|claim| {
+                let subject_id = claim.get("subject_id").and_then(Value::as_str)?;
+                expected_join_claims
+                    .get(subject_id)
+                    .is_some_and(|expected| claim.get("evidence_ids") == Some(expected))
+                    .then_some(subject_id)
+            })
+            .collect()
+    };
     let evidence = family_id_set(graph, "evidence")?;
     for join in &knowledge.index.joins {
         if !entities.contains(&join.source_callable_id)
@@ -1270,11 +1290,7 @@ fn validate_composed_graph(
                 .evidence_ids
                 .iter()
                 .any(|identifier| !evidence.contains(identifier))
-            || !claims.values().any(|claim| {
-                claim.get("subject_id").and_then(Value::as_str)
-                    == Some(join.relationship_id.as_str())
-                    && claim.get("evidence_ids") == Some(&json!(join.evidence_ids))
-            })
+            || !matching_join_claim_subjects.contains(join.relationship_id.as_str())
         {
             return Err(RepositorySnapshotV15Error::ContractInvalid);
         }
