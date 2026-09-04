@@ -64,6 +64,22 @@ ACTIVE_PATHS = {
     "oracle": "benchmarks/baselines/real-world-rust-stability-v1.json",
     "runner": "scripts/run_real_world_rust_benchmark.py",
 }
+CONFERENCE_SUITE_ID = "rust-public-conference-v1"
+CONFERENCE_RUNNER = [
+    "python3",
+    "scripts/run_public_rust_evaluation.py",
+    "run",
+    "--manifest",
+    "benchmarks/manifest.json",
+    "--suite",
+    CONFERENCE_SUITE_ID,
+]
+CONFERENCE_PATHS = {
+    "corpus": "benchmarks/corpora/public-rust-conference-v1.json",
+    "policy": "benchmarks/policies/public-rust-conference-v1.json",
+    "oracle": "benchmarks/baselines/public-rust-conference-v1.json",
+    "runner": "scripts/run_public_rust_evaluation.py",
+}
 
 
 def load_json(path: Path) -> Any:
@@ -212,8 +228,12 @@ def validate_active_suite_assets(root: Path, manifest: dict[str, Any]) -> list[s
     ]:
         errors.append("active B1 report fields must retain canonical ordering")
     suites = manifest.get("suites")
-    if not isinstance(suites, list) or len(suites) != 1 or not isinstance(suites[0], dict):
-        errors.append("active B1 manifest must contain exactly one suite")
+    if (
+        not isinstance(suites, list)
+        or len(suites) != 2
+        or any(not isinstance(suite, dict) for suite in suites)
+    ):
+        errors.append("active benchmark manifest must contain exactly B1 and conference suites")
         return errors
     suite = suites[0]
     expected_suite = {
@@ -239,6 +259,33 @@ def validate_active_suite_assets(root: Path, manifest: dict[str, Any]) -> list[s
     }
     if suite != expected_suite:
         errors.append("active B1 suite does not match the fixed observational contract")
+    conference_suite = suites[1]
+    expected_conference_suite = {
+        "id": CONFERENCE_SUITE_ID,
+        "description": "Progressive compatibility and ontology-information evaluation over eight pinned public Rust repositories",
+        "corpus": {"id": "public-rust-conference", "version": "1"},
+        "host_profile": "declared-same-host-local-v1",
+        "concurrency": 1,
+        "cache_state": "cold",
+        "enabled_extractors": ["rust-progressive-s1-r16-source-only"],
+        "repetitions": 3,
+        "percentile_method": "nearest-rank",
+        "minimum_success_rate": 1.0,
+        "metrics": [
+            "stage_coverage_basis_points",
+            "wall_time_ns",
+            "exit_code",
+            "stdout_bytes",
+            "stderr_bytes",
+            "semantic_hash",
+            "semantic_projection_sha256",
+            "graph_counts",
+            "ontology_information",
+        ],
+        "runner": CONFERENCE_RUNNER,
+    }
+    if conference_suite != expected_conference_suite:
+        errors.append("conference suite does not match the fixed evaluation contract")
 
     loaded: dict[str, Any] = {}
     for label, relative_path in ACTIVE_PATHS.items():
@@ -436,6 +483,24 @@ def validate_active_suite_assets(root: Path, manifest: dict[str, Any]) -> list[s
             errors.append("active B1 Lekton semantic oracle changed")
         if not isinstance(entries, dict) or entries.get("rustdesk") != expected_rustdesk:
             errors.append("active B1 RustDesk typed oracle changed")
+
+    conference_loaded: dict[str, Any] = {}
+    for label, relative_path in CONFERENCE_PATHS.items():
+        asset_errors, path = validate_regular_asset(root, relative_path, f"conference {label}")
+        errors.extend(asset_errors)
+        if not asset_errors and label != "runner":
+            conference_loaded[label] = path
+    if not errors:
+        try:
+            from run_public_rust_evaluation import load_contracts
+
+            load_contracts(
+                conference_loaded["corpus"],
+                conference_loaded["policy"],
+                conference_loaded["oracle"],
+            )
+        except Exception as error:
+            errors.append(f"conference evaluation contract is invalid: {error}")
     return errors
 
 

@@ -44,6 +44,15 @@ and merged PR #210 provide the active observational benchmark over pinned
 Lekton and RustDesk. It makes no SLO, release, support, cross-host,
 conference-validity, or GA claim.
 
+The public conference corpus extends that evidence with eight independently
+pinned Rust repositories: hyperfine, tower, mio, fd, delta, rustfmt, dioxus,
+and wgpu. Its progressive runner records exact ontology identities and
+reasoning-oriented metrics at each repository's highest supported stage. The
+initial observation completes R16 for three repositories and records five
+distinct typed compatibility gaps without retries or hidden exclusions. See
+[`benchmarks/README.md`](benchmarks/README.md) for pins, metrics, and the
+reproduction command.
+
 Broader language coverage, operations, semantic comparison, and the remaining
 production-readiness slices are still pending.
 
@@ -110,6 +119,31 @@ all unsupported semantic capabilities. Raw source excerpts remain available
 through the separate trusted R18 query, while API contract-versus-
 implementation and semantic-version comparison remain separate S7 reports;
 the audit does not pretend that those facts are embedded in PortableGraphV9.
+
+## Evaluate the broader public Rust corpus
+
+The conference-oriented suite measures progressive stage coverage and ontology
+information over eight additional public repositories. It requires exact local
+clones but performs no clone, fetch, build, or repository execution itself:
+
+```sh
+cargo build -p noesis --release
+python3 scripts/run_public_rust_evaluation.py run \
+  --manifest benchmarks/manifest.json \
+  --suite rust-public-conference-v1 \
+  --corpus benchmarks/corpora/public-rust-conference-v1.json \
+  --policy benchmarks/policies/public-rust-conference-v1.json \
+  --oracle benchmarks/baselines/public-rust-conference-v1.json \
+  --binary target/release/noesis \
+  --repository-root /path/to/public-rust-corpus-v1 \
+  --output benchmarks/results/public-rust-conference-v1-local.json \
+  --host-profile local-machine-v1 \
+  --product-commit 5c3141815415a620cc07c992f2600ce6317c735c
+```
+
+The ignored JSON report retains three cold terminal samples per repository,
+semantic and projection digests, graph and information counts, stage coverage,
+typed gap identities, and sanitized host metadata.
 
 ## Two development tracks
 

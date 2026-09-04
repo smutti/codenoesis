@@ -49,6 +49,43 @@
         "--suite",
         "rust-real-world-stability-v1"
       ]
+    },
+    {
+      "id": "rust-public-conference-v1",
+      "description": "Progressive compatibility and ontology-information evaluation over eight pinned public Rust repositories",
+      "corpus": {
+        "id": "public-rust-conference",
+        "version": "1"
+      },
+      "host_profile": "declared-same-host-local-v1",
+      "concurrency": 1,
+      "cache_state": "cold",
+      "enabled_extractors": [
+        "rust-progressive-s1-r16-source-only"
+      ],
+      "repetitions": 3,
+      "percentile_method": "nearest-rank",
+      "minimum_success_rate": 1.0,
+      "metrics": [
+        "stage_coverage_basis_points",
+        "wall_time_ns",
+        "exit_code",
+        "stdout_bytes",
+        "stderr_bytes",
+        "semantic_hash",
+        "semantic_projection_sha256",
+        "graph_counts",
+        "ontology_information"
+      ],
+      "runner": [
+        "python3",
+        "scripts/run_public_rust_evaluation.py",
+        "run",
+        "--manifest",
+        "benchmarks/manifest.json",
+        "--suite",
+        "rust-public-conference-v1"
+      ]
     }
   ]
 }

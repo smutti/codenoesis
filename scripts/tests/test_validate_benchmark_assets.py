@@ -41,6 +41,10 @@ class BenchmarkAssetValidationTests(unittest.TestCase):
                 ROOT / "scripts" / "run_real_world_rust_benchmark.py",
                 root / "scripts" / "run_real_world_rust_benchmark.py",
             )
+            shutil.copy2(
+                ROOT / "scripts" / "run_public_rust_evaluation.py",
+                root / "scripts" / "run_public_rust_evaluation.py",
+            )
             yield root
 
     @staticmethod
@@ -134,6 +138,14 @@ class BenchmarkAssetValidationTests(unittest.TestCase):
             errors, _ = validate_assets(root)
 
         self.assertTrue(any("active runner is missing" in error for error in errors))
+
+    def test_active_validator_rejects_missing_conference_runner(self) -> None:
+        with self.copied_assets() as root:
+            (root / "scripts" / "run_public_rust_evaluation.py").unlink()
+
+            errors, _ = validate_assets(root)
+
+        self.assertTrue(any("conference runner is missing" in error for error in errors))
 
     def test_active_validator_rejects_corpus_revision_drift(self) -> None:
         with self.copied_assets() as root:

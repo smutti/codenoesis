@@ -61,7 +61,7 @@ class RealWorldRustBenchmarkContractTests(unittest.TestCase):
         self.assertEqual(contract["risk"], "high")
         self.assertEqual(manifest["status"], "active")
         self.assertEqual(manifest["requirements"], ["NFR-PER-001"])
-        self.assertEqual(len(manifest["suites"]), 1)
+        self.assertEqual(len(manifest["suites"]), 2)
         suite = manifest["suites"][0]
         self.assertEqual(suite["id"], contract["suite_id"])
         self.assertEqual(suite["repetitions"], 3)
@@ -79,6 +79,7 @@ class RealWorldRustBenchmarkContractTests(unittest.TestCase):
             )
         )
         self.assertEqual(policy["suite_id"], suite["id"])
+        self.assertEqual(manifest["suites"][1]["id"], "rust-public-conference-v1")
         self.assertEqual(policy["requirements"], ["NFR-PER-001"])
         self.assertFalse(policy["nfr_per_002_claimed"])
         self.assertFalse(policy["cross_host_comparison_allowed"])

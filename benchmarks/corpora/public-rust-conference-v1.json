@@ -1,0 +1,108 @@
+{
+  "schema_version": "codenoesis.public-rust-evaluation-corpus/v1",
+  "id": "public-rust-conference",
+  "version": "1",
+  "selection_method": "purposeful_maximum_variation",
+  "selection_frozen_at": "2026-09-04",
+  "source_mode": "caller_supplied_full_non_shallow_local_clone",
+  "network_allowed": false,
+  "source_vendored": false,
+  "entries": [
+    {
+      "id": "hyperfine",
+      "repository_url": "https://github.com/sharkdp/hyperfine.git",
+      "revision": "f12f3d9f86f3643b3b7deace5e160b1f0f44d2b7",
+      "tree": "d38f1f673ecc339c7024d0ee934d08815663370d",
+      "observed_license": "MIT OR Apache-2.0",
+      "archetype": "single-package-command-line-application",
+      "tree_entries": 78,
+      "rust_source_files": 41,
+      "rust_source_bytes": 198410,
+      "repository_id": "urn:codenoesis:benchmark:hyperfine:conference-v1"
+    },
+    {
+      "id": "tower",
+      "repository_url": "https://github.com/tower-rs/tower.git",
+      "revision": "df06d70dbea345facbffb5881fe8647f53bf424d",
+      "tree": "159fa5fceb64123f4fd5cc31cc3fc2fadeac77be",
+      "observed_license": "MIT",
+      "archetype": "virtual-workspace-async-middleware-library",
+      "tree_entries": 214,
+      "rust_source_files": 133,
+      "rust_source_bytes": 487346,
+      "repository_id": "urn:codenoesis:benchmark:tower:conference-v1"
+    },
+    {
+      "id": "mio",
+      "repository_url": "https://github.com/tokio-rs/mio.git",
+      "revision": "da425f909dd6b86d887da9eaefcb158099b5b165",
+      "tree": "f2eb679bf3a0dcff92d7889322d680e6db02931f",
+      "observed_license": "MIT",
+      "archetype": "cross-platform-systems-io-library",
+      "tree_entries": 107,
+      "rust_source_files": 82,
+      "rust_source_bytes": 681387,
+      "repository_id": "urn:codenoesis:benchmark:mio:conference-v1"
+    },
+    {
+      "id": "fd",
+      "repository_url": "https://github.com/sharkdp/fd.git",
+      "revision": "1765d0817b4e706141115b81c29a5965630e243a",
+      "tree": "960a9d2c06c95ca0df2c8c406e43969715994534",
+      "observed_license": "MIT OR Apache-2.0",
+      "archetype": "single-package-filesystem-command-line-application",
+      "tree_entries": 74,
+      "rust_source_files": 24,
+      "rust_source_bytes": 261335,
+      "repository_id": "urn:codenoesis:benchmark:fd:conference-v1"
+    },
+    {
+      "id": "delta",
+      "repository_url": "https://github.com/dandavison/delta.git",
+      "revision": "9d730c043d40037fa494da0994a68bd6526fafb9",
+      "tree": "4c728aaedc870818b21c69260f9161ec8d17fd14",
+      "observed_license": "MIT",
+      "archetype": "multi-module-terminal-rendering-application",
+      "tree_entries": 230,
+      "rust_source_files": 82,
+      "rust_source_bytes": 1042590,
+      "repository_id": "urn:codenoesis:benchmark:delta:conference-v1"
+    },
+    {
+      "id": "rustfmt",
+      "repository_url": "https://github.com/rust-lang/rustfmt.git",
+      "revision": "2d897e21c73042bbea04640fe21077660367e29f",
+      "tree": "469d39ff2aa951c1fa02e03f2fa270d9636cb1b0",
+      "observed_license": "MIT OR Apache-2.0",
+      "archetype": "compiler-adjacent-formatting-tool",
+      "tree_entries": 2612,
+      "rust_source_files": 2008,
+      "rust_source_bytes": 2799610,
+      "repository_id": "urn:codenoesis:benchmark:rustfmt:conference-v1"
+    },
+    {
+      "id": "dioxus",
+      "repository_url": "https://github.com/DioxusLabs/dioxus.git",
+      "revision": "74a49736c029e0e6f6fc4a79b5def923f0d587b8",
+      "tree": "bbfb6cf8f29e48c845b625eb346e29a59d6514a3",
+      "observed_license": "MIT OR Apache-2.0",
+      "archetype": "large-virtual-workspace-ui-framework",
+      "tree_entries": 1947,
+      "rust_source_files": 878,
+      "rust_source_bytes": 6724384,
+      "repository_id": "urn:codenoesis:benchmark:dioxus:conference-v1"
+    },
+    {
+      "id": "wgpu",
+      "repository_url": "https://github.com/gfx-rs/wgpu.git",
+      "revision": "c268540beee106cec6cada4fc2d506b809ab33e6",
+      "tree": "b2970b2815dd1c7b3cb66cf18903963cac2ff7e5",
+      "observed_license": "MIT OR Apache-2.0",
+      "archetype": "large-virtual-workspace-graphics-stack",
+      "tree_entries": 2822,
+      "rust_source_files": 849,
+      "rust_source_bytes": 14349544,
+      "repository_id": "urn:codenoesis:benchmark:wgpu:conference-v1"
+    }
+  ]
+}
