@@ -779,8 +779,9 @@ The system writes only the current schema and reads the current and immediately 
 - The S4 root-package planner may expand only a final one-component Cargo
   member pattern `prefix/*`, solely by matching committed regular package
   manifests already present in the immutable repository inventory. The
-  planner performs no ambient filesystem discovery and records the additive
-  `glob_expanded_member` provenance without changing entity identities.
+  planner performs no ambient filesystem discovery, preserves the immutable
+  R3 concrete-member encoding and identities, and grounds each projection in
+  root-manifest evidence.
 
 ### Extension model
 

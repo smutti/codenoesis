@@ -645,7 +645,7 @@ impl<'a> Planner<'a> {
                         }
                         members
                             .entry(path)
-                            .or_insert(WorkspaceMemberSource::GlobExpandedMember);
+                            .or_insert(WorkspaceMemberSource::LiteralMember);
                     }
                     if !matched {
                         return Err(invalid_manifest(

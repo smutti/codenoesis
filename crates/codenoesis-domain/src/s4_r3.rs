@@ -52,7 +52,6 @@ impl RootPackageShape {
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub enum WorkspaceMemberSource {
     LiteralMember,
-    GlobExpandedMember,
     ImplicitRootPackage,
     ExplicitRootMember,
 }
@@ -62,7 +61,6 @@ impl WorkspaceMemberSource {
     pub const fn as_str(self) -> &'static str {
         match self {
             Self::LiteralMember => "literal_member",
-            Self::GlobExpandedMember => "glob_expanded_member",
             Self::ImplicitRootPackage => "implicit_root_package",
             Self::ExplicitRootMember => "explicit_root_member",
         }

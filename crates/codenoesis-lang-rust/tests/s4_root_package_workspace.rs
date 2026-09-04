@@ -410,7 +410,7 @@ fn gt_fr_ext_021_trailing_member_pattern_uses_only_committed_inventory() {
             .collect::<Vec<_>>(),
         [
             ("crates/a", WorkspaceMemberSource::LiteralMember),
-            ("crates/b", WorkspaceMemberSource::GlobExpandedMember),
+            ("crates/b", WorkspaceMemberSource::LiteralMember),
             ("tool", WorkspaceMemberSource::LiteralMember),
         ]
     );

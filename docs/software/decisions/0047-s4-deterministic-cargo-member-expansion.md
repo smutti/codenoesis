@@ -31,10 +31,12 @@ shape: a non-empty canonical relative prefix followed by the final component
 when the immutable repository inventory contains the committed regular file
 `<prefix>/<child>/Cargo.toml`. Nested descendants do not match.
 
-The planner sorts concrete paths by UTF-8 bytes and records each expanded
-member as `glob_expanded_member`. An exact literal declaration for the same
-concrete member takes provenance precedence, while duplicate raw declarations
-remain invalid. A literal exclusion removes a pattern-derived match; the
+The planner sorts concrete paths by UTF-8 bytes and projects each expanded path
+through the existing R3 `literal_member` concrete-member representation. The
+root manifest remains its source evidence. An exact literal declaration for
+the same concrete member has the same public representation,
+while duplicate raw declarations remain invalid. A literal exclusion removes
+a pattern-derived match; the
 existing literal-member/exclusion conflict remains a typed failure. A valid
 pattern with zero committed matches fails as `invalid_member_path`.
 
@@ -56,9 +58,9 @@ filesystem read, directory walk, symlink traversal, Git operation, submodule
 fetch, Cargo or rustc invocation, build-script or target execution, network
 request, model call, retry, or best-effort truncation.
 
-The new provenance value is additive and is not an entity-identity input.
-Literal workspaces preserve their existing plans, graph identities, semantic
-bytes, schemas, fixtures, and goldens. Historical Decision 0011 remains the
+No new public enum or schema value is introduced. Literal workspaces preserve
+their existing plans, graph identities, semantic bytes, schemas, fixtures, and
+goldens. Historical Decision 0011 remains the
 literal-only R3 baseline; this decision narrowly extends only the reviewed
 member-planning boundary.
 
