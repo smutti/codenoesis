@@ -29,6 +29,8 @@ use codenoesis_ports::{
 use tree_sitter::{Node, Parser, Tree};
 use unicode_normalization::UnicodeNormalization as _;
 
+use crate::workspace::parse_rust_tree_with_compatibility;
+
 use crate::TreeSitterRustWorkspaceExtractor;
 
 #[derive(Clone)]
@@ -1060,8 +1062,7 @@ pub(crate) fn parse_tree(path: &str, source: &str) -> Result<Tree, RustSemanticE
     parser
         .set_language(&tree_sitter_rust::LANGUAGE.into())
         .map_err(|_| RustSemanticError::ContractInvalid)?;
-    let tree = parser
-        .parse(source, None)
+    let (tree, _) = parse_rust_tree_with_compatibility(&mut parser, source, true)
         .ok_or_else(|| invalid_declaration(path, 0, "source_file"))?;
     if tree.root_node().has_error() {
         let malformed = first_malformed(tree.root_node()).unwrap_or(tree.root_node());

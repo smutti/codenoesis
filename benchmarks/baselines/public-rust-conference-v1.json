@@ -1,7 +1,7 @@
 {
   "schema_version": "codenoesis.public-rust-evaluation-oracle/v1",
   "suite_id": "rust-public-conference-v1",
-  "baseline_product_commit": "095518ec49ede920af90b5c408c58a7ab99fc754",
+  "baseline_product_commit": "8d6ab53406f543356b22c614be64104e4b32c6d7",
   "entries": {
     "hyperfine": {
       "highest_successful_stage": "constant",
@@ -108,14 +108,18 @@
       }
     },
     "wgpu": {
-      "highest_successful_stage": "acquisition",
-      "terminal_stage": "workspace",
+      "highest_successful_stage": "manifest",
+      "terminal_stage": "semantic",
       "outcome": "typed_rejection",
       "exit_code": 11,
-      "error_schema": "codenoesis.error/v5",
-      "error_code": "extraction.unsupported_workspace",
+      "error_schema": "codenoesis.error/v12",
+      "error_code": "extraction.rust_semantic_identity_conflict",
       "error_stage": "extraction",
-      "error_context": {}
+      "error_context": {
+        "member_kind": "rust.module",
+        "normalized_member": "trace",
+        "owner_id": "urn:codenoesis:entity:blake3:81f2f72ebe41dc240136678799aac7ab6dcc7df6e397318561e983ff589abe5d"
+      }
     }
   }
 }

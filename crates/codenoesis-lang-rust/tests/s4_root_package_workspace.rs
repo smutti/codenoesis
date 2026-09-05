@@ -396,6 +396,133 @@ pub struct Stable;
 }
 
 #[test]
+fn gt_fr_ext_023_bare_dollar_macro_token_is_deferred_in_r3() {
+    let inventory = parser_compatibility_inventory(
+        br"macro_rules! with_dollar_sign {
+    ($($body:tt)*) => {
+        macro_rules! __with_dollar_sign { $($body)* }
+        __with_dollar_sign!($);
+    }
+}
+
+pub struct Stable;
+",
+    );
+
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_root_package_workspace_incremental(&inventory, &[], &[])
+        .expect("defer a valid bare dollar token inside an unsupported macro definition");
+    let graph = &extraction.knowledge.knowledge.graph;
+    assert!(
+        graph
+            .entities
+            .iter()
+            .any(|entity| { entity.kind == EntityKind::RustStruct && entity.name == "Stable" })
+    );
+    assert!(
+        graph
+            .coverage
+            .iter()
+            .any(|gap| gap.capability == "rust_unsupported_construct")
+    );
+
+    assert_eq!(
+        TreeSitterRustWorkspaceExtractor::new().extract_workspace(&inventory),
+        Err(codenoesis_domain::s4::WorkspaceError::MalformedSyntax {
+            path: "member/src/lib.rs".to_owned(),
+        }),
+        "the compatibility rule is limited to the tolerant R3 planner"
+    );
+}
+
+#[test]
+fn gt_fr_ext_023_cfg_struct_pattern_field_is_deferred_in_r3() {
+    let inventory = parser_compatibility_inventory(
+        br#"enum State { Error(ErrorState) }
+struct ErrorState { trace_commands: (), error: () }
+
+fn inspect(value: State) {
+    match value {
+        State::Error(ErrorState {
+            #[cfg(feature = "trace")]
+            trace_commands: _,
+            error,
+        }) => { let _ = error; }
+    }
+}
+
+fn inspect_shorthand(value: State) {
+    match value {
+        State::Error(ErrorState {
+            #[cfg(feature = "trace")]
+            trace_commands,
+            error,
+        }) => { let _ = (trace_commands, error); }
+    }
+}
+
+pub struct Stable;
+"#,
+    );
+
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_root_package_workspace_incremental(&inventory, &[], &[])
+        .expect("defer cfg-decorated struct pattern fields in opaque function bodies");
+    let graph = &extraction.knowledge.knowledge.graph;
+    assert!(
+        graph
+            .entities
+            .iter()
+            .any(|entity| { entity.kind == EntityKind::RustStruct && entity.name == "Stable" })
+    );
+    assert!(
+        graph
+            .coverage
+            .iter()
+            .any(|gap| gap.capability == "rust_unsupported_construct")
+    );
+}
+
+#[test]
+fn gt_fr_ext_023_other_malformed_syntax_still_fails_closed() {
+    for source in [
+        b"pub fn broken( {\n".as_slice(),
+        b"pub fn broken() { let value = ; }\n".as_slice(),
+        br#"enum State { Error { trace_commands: () } }
+fn broken(value: State) {
+    match value {
+        State::Error {
+            #[cfg(feature = "trace")]
+            trace_commands: _,
+        } => { let value = ; }
+    }
+}
+"#
+        .as_slice(),
+        b"$\npub struct Decoy;\n".as_slice(),
+    ] {
+        assert_eq!(
+            TreeSitterRustWorkspaceExtractor::new().extract_root_package_workspace_incremental(
+                &synthetic_inventory(vec![
+                    (
+                        "Cargo.toml".to_owned(),
+                        b"[package]\nname=\"root\"\nedition=\"2024\"\n".to_vec(),
+                    ),
+                    ("src/lib.rs".to_owned(), source.to_vec()),
+                ]),
+                &[],
+                &[],
+            ),
+            Err(RootPackageWorkspaceError::Source(
+                codenoesis_domain::s4::WorkspaceError::MalformedSyntax {
+                    path: "src/lib.rs".to_owned(),
+                },
+            ))
+        );
+    }
+}
+
+#[test]
 fn gt_fr_ext_021_trailing_member_pattern_uses_only_committed_inventory() {
     let extraction = TreeSitterRustWorkspaceExtractor::new()
         .extract_root_package_workspace_incremental(&glob_member_inventory(false), &[], &[])
@@ -986,6 +1113,20 @@ fn workspace_edition_files(
         ),
         ("src/lib.rs".to_owned(), b"pub struct Root;\n".to_vec()),
     ]
+}
+
+fn parser_compatibility_inventory(source: &[u8]) -> RepositoryInventory {
+    synthetic_inventory(vec![
+        (
+            "Cargo.toml".to_owned(),
+            b"[workspace]\nmembers=[\"member\"]\nresolver=\"3\"\n".to_vec(),
+        ),
+        (
+            "member/Cargo.toml".to_owned(),
+            b"[package]\nname=\"member\"\nversion=\"0.1.0\"\nedition=\"2024\"\n".to_vec(),
+        ),
+        ("member/src/lib.rs".to_owned(), source.to_vec()),
+    ])
 }
 
 fn target_inventory(binary_counts: &[usize]) -> RepositoryInventory {
