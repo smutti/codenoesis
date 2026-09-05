@@ -98,6 +98,81 @@ impl Client {
 }
 
 #[test]
+fn gt_fr_ext_013_direct_cfg_modules_share_one_logical_owner() {
+    let source = r"
+#[cfg(unix)]
+mod trace {
+    pub struct LockTrace { purpose: &'static str }
+    pub struct Payload(u8);
+
+    impl LockTrace {
+        pub fn enter(purpose: &'static str) { let _ = purpose; }
+        pub fn exit() {}
+    }
+}
+
+#[cfg(windows)]
+mod trace {
+    pub struct LockTrace { private: () }
+    pub struct Payload(String);
+
+    impl LockTrace {
+        pub fn enter(_purpose: &'static str) {}
+        pub fn exit() {}
+    }
+}
+";
+    let extraction = extract_synthetic(source).expect("direct cfg module alternatives");
+    let modules = extraction
+        .knowledge
+        .semantic
+        .graph
+        .legacy_entities
+        .iter()
+        .filter(|entity| {
+            entity.kind == codenoesis_domain::knowledge::EntityKind::RustModule
+                && entity.module_path.as_deref() == Some("crate::trace")
+        })
+        .collect::<Vec<_>>();
+    assert_eq!(modules.len(), 1);
+    assert!(
+        extraction
+            .knowledge
+            .semantic
+            .graph
+            .legacy_entities
+            .iter()
+            .any(|entity| entity.name == "LockTrace")
+    );
+    assert_eq!(extraction.knowledge.graph.index.logical_method_ids.len(), 2);
+    assert_eq!(extraction.knowledge.graph.alternatives.len(), 4);
+    assert!(
+        !extraction
+            .knowledge
+            .semantic
+            .graph
+            .entities
+            .iter()
+            .any(|entity| {
+                entity.kind == codenoesis_domain::s4_r5::RustSemanticEntityKind::Field
+                    && entity.name == "0"
+            })
+    );
+    assert!(
+        extraction
+            .knowledge
+            .graph
+            .alternatives
+            .iter()
+            .all(|alternative| {
+                alternative.properties.compilation_presence
+                    == codenoesis_domain::s4_r5::CompilationPresence::ConditionalUnknown
+                    && alternative.direct_cfg_evidence_ids.len() == 1
+            })
+    );
+}
+
+#[test]
 fn ft_fr_ext_013_unicode_nfc_collisions_fail_typed() {
     let source = "pub struct Client;\nimpl Client {\n#[cfg(unix)]\npub fn caf\u{e9}(&self) {}\n#[cfg(windows)]\npub fn cafe\u{301}(&self) {}\n}\n";
     assert!(matches!(

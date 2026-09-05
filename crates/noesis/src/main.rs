@@ -73,7 +73,7 @@ use codenoesis_contracts::{
 use codenoesis_domain::knowledge::KnowledgeError;
 use codenoesis_domain::s1_boundaries::LOCAL_GITLINKS_V1;
 use codenoesis_domain::s1_boundaries::RepositoryBoundaryError;
-use codenoesis_domain::s1_packed::LOCAL_GIT_SHA1_PACKED_V1;
+use codenoesis_domain::s1_packed::{LOCAL_GIT_SHA1_PACKED_RUST_8M_V1, LOCAL_GIT_SHA1_PACKED_V1};
 use codenoesis_domain::s4::{
     S4_ONTOLOGY_VERSION, S4_TREE_SITTER_EXTRACTOR_VERSION, S4_WORKSPACE_EXTRACTOR_VERSION,
 };
@@ -102,7 +102,8 @@ use codenoesis_domain::storage::{
 };
 use codenoesis_domain::{AcquisitionError, EntryPolicy, RepositoryError, UnsupportedFeature};
 use codenoesis_domain::{
-    InputError, K1OutputCapacityProfile, LOCAL_SNAPSHOT_64M_V1, LOCAL_SNAPSHOT_256M_V1, LimitKind,
+    InputError, K1OutputCapacityProfile, LOCAL_SNAPSHOT_1G_V1, LOCAL_SNAPSHOT_2G_V1,
+    LOCAL_SNAPSHOT_64M_V1, LOCAL_SNAPSHOT_256M_V1, LOCAL_SNAPSHOT_512M_V1, LimitKind,
     RepositoryIdentity, Revision, STANDARD_LOCAL_S1_LIMITS, limit_exceeded,
 };
 use codenoesis_lang_rust::{TreeSitterRustExtractor, TreeSitterRustWorkspaceExtractor};
@@ -128,6 +129,20 @@ enum ScanExecutionLimitProfile {
     #[default]
     Standard,
     RealWorldRustBenchmark75sV1,
+}
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+enum LocalAcquisitionProfile {
+    #[default]
+    Loose,
+    PackedSha1,
+    PackedSha1Rust8M,
+}
+
+impl LocalAcquisitionProfile {
+    const fn is_packed(self) -> bool {
+        !matches!(self, Self::Loose)
+    }
 }
 
 impl ScanExecutionLimitProfile {
@@ -1143,6 +1158,7 @@ fn run_s4_r15(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Ve
         .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
     let repository = invocation.repository.clone();
     let output_capacity_profile = invocation.output_capacity_profile;
+    let cfg_alternatives = invocation.rust_cfg_alternatives_profile;
     let started_at = Instant::now();
     let scan_repository = repository.clone();
     let scan = run_confined_scan(
@@ -1160,7 +1176,15 @@ fn run_s4_r15(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Ve
             );
             ScanService::new(repository_adapter(invocation.packed_sha1))
                 .scan_s4_r15(request, output_capacity_profile, |inventory| {
-                    TreeSitterRustWorkspaceExtractor::new().extract_rust_local_flow(inventory)
+                    let extractor = TreeSitterRustWorkspaceExtractor::new();
+                    if cfg_alternatives {
+                        extractor.extract_rust_local_flow_with_cfg_alternatives_for_snapshot(
+                            inventory,
+                            &[],
+                        )
+                    } else {
+                        extractor.extract_rust_local_flow_for_snapshot(inventory)
+                    }
                 })
                 .map_err(r15_scan_failure)
         },
@@ -1296,6 +1320,7 @@ fn run_s4_r16(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Ve
         .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
     let repository = invocation.repository.clone();
     let output_capacity_profile = invocation.output_capacity_profile;
+    let cfg_alternatives = invocation.rust_cfg_alternatives_profile;
     let scan_wall_milliseconds = invocation.execution_limit_profile.maximum_milliseconds();
     let started_at = Instant::now();
     let scan_repository = repository.clone();
@@ -1314,8 +1339,16 @@ fn run_s4_r16(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Ve
             );
             ScanService::new(repository_adapter(invocation.packed_sha1))
                 .scan_s4_r16(request, output_capacity_profile, |inventory| {
-                    TreeSitterRustWorkspaceExtractor::new()
-                        .extract_rust_constant_evaluation(inventory)
+                    let extractor = TreeSitterRustWorkspaceExtractor::new();
+                    if cfg_alternatives {
+                        extractor
+                            .extract_rust_constant_evaluation_with_cfg_alternatives_for_snapshot(
+                                inventory,
+                                &[],
+                            )
+                    } else {
+                        extractor.extract_rust_constant_evaluation_for_snapshot(inventory)
+                    }
                 })
                 .map_err(r16_scan_failure)
         },
@@ -1456,6 +1489,7 @@ fn run_s4_r14(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Ve
         .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
     let repository = invocation.repository.clone();
     let output_capacity_profile = invocation.output_capacity_profile;
+    let cfg_alternatives = invocation.rust_cfg_alternatives_profile;
     let started_at = Instant::now();
     let scan_repository = repository.clone();
     let scan = run_confined_scan(
@@ -1473,8 +1507,13 @@ fn run_s4_r14(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Ve
             );
             ScanService::new(repository_adapter(invocation.packed_sha1))
                 .scan_s4_r14(request, output_capacity_profile, |inventory| {
-                    TreeSitterRustWorkspaceExtractor::new()
-                        .extract_rust_expression_bindings(inventory)
+                    let extractor = TreeSitterRustWorkspaceExtractor::new();
+                    if cfg_alternatives {
+                        extractor
+                            .extract_rust_expression_bindings_with_cfg_alternatives(inventory, &[])
+                    } else {
+                        extractor.extract_rust_expression_bindings(inventory)
+                    }
                 })
                 .map_err(r14_scan_failure)
         },
@@ -2070,6 +2109,7 @@ fn run_s4_r6(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Vec
         .clone()
         .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
     let repository = invocation.repository.clone();
+    let output_capacity_profile = invocation.output_capacity_profile;
     let started_at = Instant::now();
     let scan_repository = repository.clone();
     let scan = run_confined_scan(
@@ -2092,7 +2132,7 @@ fn run_s4_r6(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Vec
     )
     .map_err(|()| r6_internal_failure())??;
     enforce_scan_deadline(started_at)?;
-    let stdout = serialize_v9(&scan.snapshot)?;
+    let stdout = serialize_v9(&scan.snapshot, output_capacity_profile)?;
     let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
         .is_err_and(|error| error.kind() == std::io::ErrorKind::NotFound);
     let mut rollback = EmptyStoreRollback::new(store.clone(), store_was_absent);
@@ -2138,6 +2178,7 @@ fn run_s4_r6_boundaries(
         .clone()
         .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
     let repository = invocation.repository.clone();
+    let output_capacity_profile = invocation.output_capacity_profile;
     if let Some(canonical_store) = canonical_existing_or_absent_leaf(&store) {
         prepared.reject_overlaps(&canonical_store);
     }
@@ -2173,7 +2214,7 @@ fn run_s4_r6_boundaries(
     )
     .map_err(|()| r6_internal_failure())??;
     enforce_scan_deadline(started_at)?;
-    let stdout = serialize_v9(&scan.snapshot)?;
+    let stdout = serialize_v9(&scan.snapshot, output_capacity_profile)?;
     let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
         .is_err_and(|error| error.kind() == std::io::ErrorKind::NotFound);
     let mut rollback = EmptyStoreRollback::new(store.clone(), store_was_absent);
@@ -2215,6 +2256,7 @@ fn run_s4_r10(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Ve
         .clone()
         .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
     let repository = invocation.repository.clone();
+    let output_capacity_profile = invocation.output_capacity_profile;
     let started_at = Instant::now();
     let scan_repository = repository.clone();
     let scan = run_confined_scan(
@@ -2237,7 +2279,7 @@ fn run_s4_r10(invocation: Invocation, scan_worker: &mut ScanWorker) -> Result<Ve
     )
     .map_err(|()| r10_internal_failure())??;
     enforce_scan_deadline(started_at)?;
-    let stdout = serialize_v12(&scan.snapshot)?;
+    let stdout = serialize_v12(&scan.snapshot, output_capacity_profile)?;
     let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
         .is_err_and(|error| error.kind() == std::io::ErrorKind::NotFound);
     let mut rollback = EmptyStoreRollback::new(store.clone(), store_was_absent);
@@ -2283,6 +2325,7 @@ fn run_s4_r10_boundaries(
         .clone()
         .ok_or(Failure::Input(InputError::InvalidStoreRoot))?;
     let repository = invocation.repository.clone();
+    let output_capacity_profile = invocation.output_capacity_profile;
     if let Some(canonical_store) = canonical_existing_or_absent_leaf(&store) {
         prepared.reject_overlaps(&canonical_store);
     }
@@ -2318,7 +2361,7 @@ fn run_s4_r10_boundaries(
     )
     .map_err(|()| r10_internal_failure())??;
     enforce_scan_deadline(started_at)?;
-    let stdout = serialize_v12(&scan.snapshot)?;
+    let stdout = serialize_v12(&scan.snapshot, output_capacity_profile)?;
     let store_was_absent = fs::symlink_metadata(std::path::Path::new(&store))
         .is_err_and(|error| error.kind() == std::io::ErrorKind::NotFound);
     let mut rollback = EmptyStoreRollback::new(store.clone(), store_was_absent);
@@ -4752,26 +4795,36 @@ fn serialize_v8(snapshot: &RepositorySnapshotV8) -> Result<Vec<u8>, Failure> {
     })
 }
 
-fn serialize_v12(snapshot: &RepositorySnapshotV12) -> Result<Vec<u8>, Failure> {
-    snapshot.canonical_stdout().map_err(|error| match error {
-        RepositorySnapshotV12Error::LimitExceeded(error) => {
-            Failure::Scan(ScanError::Acquisition(error))
-        }
-        RepositorySnapshotV12Error::Serialization(_)
-        | RepositorySnapshotV12Error::ContractInvalid
-        | RepositorySnapshotV12Error::OutputLengthOverflow => r10_internal_failure(),
-    })
+fn serialize_v12(
+    snapshot: &RepositorySnapshotV12,
+    output_capacity_profile: K1OutputCapacityProfile,
+) -> Result<Vec<u8>, Failure> {
+    snapshot
+        .canonical_stdout_with_output_capacity(output_capacity_profile)
+        .map_err(|error| match error {
+            RepositorySnapshotV12Error::LimitExceeded(error) => {
+                Failure::Scan(ScanError::Acquisition(error))
+            }
+            RepositorySnapshotV12Error::Serialization(_)
+            | RepositorySnapshotV12Error::ContractInvalid
+            | RepositorySnapshotV12Error::OutputLengthOverflow => r10_internal_failure(),
+        })
 }
 
-fn serialize_v9(snapshot: &RepositorySnapshotV9) -> Result<Vec<u8>, Failure> {
-    snapshot.canonical_stdout().map_err(|error| match error {
-        RepositorySnapshotV9Error::LimitExceeded(error) => {
-            Failure::Scan(ScanError::Acquisition(error))
-        }
-        RepositorySnapshotV9Error::Serialization(_)
-        | RepositorySnapshotV9Error::ContractInvalid
-        | RepositorySnapshotV9Error::OutputLengthOverflow => r6_internal_failure(),
-    })
+fn serialize_v9(
+    snapshot: &RepositorySnapshotV9,
+    output_capacity_profile: K1OutputCapacityProfile,
+) -> Result<Vec<u8>, Failure> {
+    snapshot
+        .canonical_stdout_with_output_capacity(output_capacity_profile)
+        .map_err(|error| match error {
+            RepositorySnapshotV9Error::LimitExceeded(error) => {
+                Failure::Scan(ScanError::Acquisition(error))
+            }
+            RepositorySnapshotV9Error::Serialization(_)
+            | RepositorySnapshotV9Error::ContractInvalid
+            | RepositorySnapshotV9Error::OutputLengthOverflow => r6_internal_failure(),
+        })
 }
 
 fn serialize_v10(snapshot: &RepositorySnapshotV10) -> Result<Vec<u8>, Failure> {
@@ -6309,11 +6362,11 @@ fn boundary_internal_failure() -> Failure {
     boundary_failure(CodeNoesisErrorV9::internal(), 70)
 }
 
-fn repository_adapter(packed_sha1: bool) -> LocalGitRepository {
-    if packed_sha1 {
-        LocalGitRepository::new_packed_sha1()
-    } else {
-        LocalGitRepository::new()
+fn repository_adapter(profile: LocalAcquisitionProfile) -> LocalGitRepository {
+    match profile {
+        LocalAcquisitionProfile::Loose => LocalGitRepository::new(),
+        LocalAcquisitionProfile::PackedSha1 => LocalGitRepository::new_packed_sha1(),
+        LocalAcquisitionProfile::PackedSha1Rust8M => LocalGitRepository::new_packed_sha1_rust_8m(),
     }
 }
 
@@ -7813,6 +7866,12 @@ fn parse_s4_invocation(arguments: Vec<OsString>) -> Result<Invocation, Invocatio
     if rust_cfg_alternatives_requested(&arguments) {
         return parse_r10_invocation(&arguments);
     }
+    if option_requested(&arguments, "--output-capacity-profile")
+        && option_requested(&arguments, "--rust-framework-profile")
+        && !option_requested(&arguments, "--rust-callable-profile")
+    {
+        return parse_r6_output_invocation(&arguments);
+    }
     if option_requested(&arguments, "--rust-callable-profile")
         || option_requested(&arguments, "--output-capacity-profile")
     {
@@ -7989,11 +8048,17 @@ fn parse_r16_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
         ));
     }
     if execution_limit_profile == ScanExecutionLimitProfile::RealWorldRustBenchmark75sV1
-        && (!invocation.packed_sha1
-            || invocation.output_capacity_profile != K1OutputCapacityProfile::LocalSnapshot256MV1)
+        && (!invocation.packed_sha1.is_packed()
+            || !matches!(
+                invocation.output_capacity_profile,
+                K1OutputCapacityProfile::LocalSnapshot256MV1
+                    | K1OutputCapacityProfile::LocalSnapshot512MV1
+                    | K1OutputCapacityProfile::LocalSnapshot1GV1
+                    | K1OutputCapacityProfile::LocalSnapshot2GV1
+            ))
     {
         return Err(InvocationError::InvalidR16Composition(
-            "benchmark_execution_limit_requires_packed_r16_256m",
+            "benchmark_execution_limit_requires_packed_r16_bounded_output",
         ));
     }
     invocation.rust_constant_profile = true;
@@ -8143,6 +8208,9 @@ fn parse_r14_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
         None => K1OutputCapacityProfile::Standard,
         Some(LOCAL_SNAPSHOT_64M_V1) => K1OutputCapacityProfile::LocalSnapshot64MV1,
         Some(LOCAL_SNAPSHOT_256M_V1) => K1OutputCapacityProfile::LocalSnapshot256MV1,
+        Some(LOCAL_SNAPSHOT_512M_V1) => K1OutputCapacityProfile::LocalSnapshot512MV1,
+        Some(LOCAL_SNAPSHOT_1G_V1) => K1OutputCapacityProfile::LocalSnapshot1GV1,
+        Some(LOCAL_SNAPSHOT_2G_V1) => K1OutputCapacityProfile::LocalSnapshot2GV1,
         Some(_) => {
             return Err(InvocationError::InvalidR14Composition(
                 "valid_output_capacity_profile_required",
@@ -8480,6 +8548,42 @@ fn parse_r10_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
     Ok(invocation)
 }
 
+fn parse_r6_output_invocation(arguments: &[OsString]) -> Result<Invocation, InvocationError> {
+    let mut stripped = arguments.iter().take(2).cloned().collect::<Vec<_>>();
+    let mut output_capacity_profile = None;
+    let mut index = 2;
+    while index < arguments.len() {
+        let flag = &arguments[index];
+        let Some(value) = arguments.get(index + 1) else {
+            return Err(InvocationError::InvalidRustFrameworkComposition(Vec::new()));
+        };
+        if flag == OsStr::new("--output-capacity-profile") {
+            if output_capacity_profile.is_some() {
+                return Err(InvocationError::InvalidRustFrameworkComposition(Vec::new()));
+            }
+            output_capacity_profile = value.to_str().map(str::to_owned);
+        } else {
+            stripped.push(flag.clone());
+            stripped.push(value.clone());
+        }
+        index += 2;
+    }
+    let output_capacity_profile = match output_capacity_profile.as_deref() {
+        Some(LOCAL_SNAPSHOT_64M_V1) => K1OutputCapacityProfile::LocalSnapshot64MV1,
+        Some(LOCAL_SNAPSHOT_256M_V1) => K1OutputCapacityProfile::LocalSnapshot256MV1,
+        Some(LOCAL_SNAPSHOT_512M_V1) => K1OutputCapacityProfile::LocalSnapshot512MV1,
+        Some(LOCAL_SNAPSHOT_1G_V1) => K1OutputCapacityProfile::LocalSnapshot1GV1,
+        Some(LOCAL_SNAPSHOT_2G_V1) => K1OutputCapacityProfile::LocalSnapshot2GV1,
+        _ => return Err(InvocationError::InvalidRustFrameworkComposition(Vec::new())),
+    };
+    let mut invocation = Invocation::parse(stripped, Some("standard-local-s4"))?;
+    if !invocation.rust_framework_profile {
+        return Err(InvocationError::InvalidRustFrameworkComposition(Vec::new()));
+    }
+    invocation.output_capacity_profile = output_capacity_profile;
+    Ok(invocation)
+}
+
 fn parse_k1_invocation(arguments: &[OsString]) -> Result<Invocation, InvocationError> {
     if arguments
         .get(1)
@@ -8611,7 +8715,7 @@ struct Invocation {
     identity: RepositoryIdentity,
     revision: Revision,
     store: Option<OsString>,
-    packed_sha1: bool,
+    packed_sha1: LocalAcquisitionProfile,
     workspace_profile: bool,
     manifest_profile: bool,
     rust_semantic_profile: bool,
@@ -9087,7 +9191,7 @@ impl Invocation {
             ));
         }
         let packed_sha1 = match acquisition_profile.as_deref() {
-            None => false,
+            None => LocalAcquisitionProfile::Loose,
             Some(LOCAL_GIT_SHA1_PACKED_V1)
                 if matches!(
                     required_profile,
@@ -9099,7 +9203,20 @@ impl Invocation {
                     )
                 ) =>
             {
-                true
+                LocalAcquisitionProfile::PackedSha1
+            }
+            Some(LOCAL_GIT_SHA1_PACKED_RUST_8M_V1)
+                if matches!(
+                    required_profile,
+                    Some(
+                        "standard-local-s1"
+                            | "standard-local-s2"
+                            | "standard-local-s3"
+                            | "standard-local-s4"
+                    )
+                ) =>
+            {
+                LocalAcquisitionProfile::PackedSha1Rust8M
             }
             Some(_) => return Err(InvocationError::InvalidAcquisitionProfile),
         };
@@ -9641,11 +9758,34 @@ mod s4_root_argument_tests {
         let Ok(invocation) = parse_s4_invocation(exact.clone()) else {
             panic!("valid B1a selector matrix");
         };
-        assert!(invocation.packed_sha1);
+        assert!(invocation.packed_sha1.is_packed());
         assert!(invocation.rust_constant_profile);
         assert_eq!(
             invocation.execution_limit_profile,
             ScanExecutionLimitProfile::RealWorldRustBenchmark75sV1
+        );
+
+        let mut large_repository = exact.clone();
+        replace_option_value(
+            &mut large_repository,
+            "--acquisition-profile",
+            LOCAL_GIT_SHA1_PACKED_RUST_8M_V1,
+        );
+        replace_option_value(
+            &mut large_repository,
+            "--output-capacity-profile",
+            LOCAL_SNAPSHOT_512M_V1,
+        );
+        let Ok(invocation) = parse_s4_invocation(large_repository) else {
+            panic!("valid bounded large-repository benchmark selector");
+        };
+        assert_eq!(
+            invocation.packed_sha1,
+            LocalAcquisitionProfile::PackedSha1Rust8M
+        );
+        assert_eq!(
+            invocation.output_capacity_profile,
+            K1OutputCapacityProfile::LocalSnapshot512MV1
         );
 
         let mut absent = exact.clone();
@@ -9826,6 +9966,33 @@ mod s4_root_argument_tests {
         let mut non_scan = r14;
         non_scan[1] = OsString::from("query");
         assert!(parse_s4_invocation(non_scan).is_err());
+    }
+
+    #[test]
+    fn conf_fr_cli_001_large_rust_output_profiles_are_stage_bounded() {
+        let mut r14 = r14_256m_arguments();
+        replace_option_value(&mut r14, "--output-capacity-profile", LOCAL_SNAPSHOT_2G_V1);
+        let Ok(r14) = parse_s4_invocation(r14) else {
+            panic!("valid R14 2 GiB selector");
+        };
+        assert!(r14.rust_expression_profile);
+        assert_eq!(
+            r14.output_capacity_profile,
+            K1OutputCapacityProfile::LocalSnapshot2GV1
+        );
+
+        let mut r6 = r14_256m_arguments();
+        remove_option(&mut r6, "--rust-expression-profile");
+        remove_option(&mut r6, "--rust-callable-profile");
+        replace_option_value(&mut r6, "--output-capacity-profile", LOCAL_SNAPSHOT_512M_V1);
+        let Ok(r6) = parse_s4_invocation(r6) else {
+            panic!("valid R6 512 MiB selector");
+        };
+        assert!(r6.rust_framework_profile);
+        assert_eq!(
+            r6.output_capacity_profile,
+            K1OutputCapacityProfile::LocalSnapshot512MV1
+        );
     }
 
     #[test]

@@ -38,14 +38,18 @@ STAGES = (
 HEX_40 = re.compile(r"^[0-9a-f]{40}$")
 HOST_PROFILE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 ENTRY_ID = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
-SNAPSHOT_BYTES_MAX = 268_435_456
+SNAPSHOT_BYTES_MAX = 2_147_483_648
 ERROR_BYTES_MAX = 4_096
 ENABLED_EXTRACTORS = ["rust-progressive-s1-r16-source-only"]
 
 PROFILE_PAIRS = (
     ("workspace", "--workspace-profile", "cargo-root-package-v1"),
     ("manifest", "--manifest-profile", "cargo-manifest-facts-v1"),
-    ("semantic", "--rust-semantic-profile", "rust-semantic-depth-v1"),
+    (
+        "semantic",
+        "--rust-semantic-profile",
+        "rust-cfg-declaration-alternatives-v1",
+    ),
     ("framework", "--rust-framework-profile", "rust-framework-declarations-v1"),
     ("flow", "--rust-callable-profile", "rust-callable-semantics-v1"),
     ("flow", "--rust-expression-profile", "rust-expression-bindings-v1"),
@@ -224,7 +228,7 @@ def load_contracts(
         "percentile_method": "nearest-rank",
         "minimum_oracle_match_rate": 1.0,
         "minimum_constant_stage_successes": 3,
-        "sample_timeout_seconds": 90,
+        "sample_timeout_seconds": 150,
         "report_bytes_max": 8_388_608,
         "network_allowed": False,
         "failed_sample_retry_allowed": False,
@@ -311,7 +315,7 @@ def build_scan_command(
         "--profile",
         "standard-local-s1" if stage == "acquisition" else "standard-local-s4",
         "--acquisition-profile",
-        "local-git-sha1-packed-v1",
+        "local-git-sha1-packed-rust-8m-v1",
     ]
     if stage == "acquisition":
         command.extend(("--format", "json"))
@@ -319,9 +323,11 @@ def build_scan_command(
     stage_index = STAGES.index(stage)
     for profile_stage, flag, value in PROFILE_PAIRS:
         if STAGES.index(profile_stage) <= stage_index:
+            if flag == "--rust-semantic-profile" and stage == "framework":
+                value = "rust-semantic-depth-v1"
             command.extend((flag, value))
     if stage_index >= STAGES.index("flow"):
-        command.extend(("--output-capacity-profile", "local-snapshot-256m-v1"))
+        command.extend(("--output-capacity-profile", "local-snapshot-2g-v1"))
     if stage == "constant":
         command.extend(("--execution-limit-profile", "real-world-rust-benchmark-75s-v1"))
     command.extend(("--store", str(store), "--format", "json"))

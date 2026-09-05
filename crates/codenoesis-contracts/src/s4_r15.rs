@@ -4,10 +4,6 @@ use std::fmt::{self, Display, Formatter};
 use std::path::{Component, Path};
 
 use codenoesis_domain::s1_boundaries::RepositoryBoundaryReport;
-use codenoesis_domain::s4_k1::CallableSemanticsError;
-use codenoesis_domain::s4_r5::RustSemanticError;
-use codenoesis_domain::s4_r6::FrameworkError;
-use codenoesis_domain::s4_r14::ExpressionBindingError;
 use codenoesis_domain::s4_r15::{
     LocalFlowCoverageGap, LocalFlowDerivation, LocalFlowError, LocalFlowIndex, LocalFlowKnowledge,
     LocalFlowRelationship, SyntaxBasicBlock,
@@ -32,7 +28,9 @@ use serde_json::{Map, Value, json};
 
 use super::s1_boundaries::CodeNoesisErrorV9;
 use super::s4::{MAX_QUERY_BYTES, QueryContractError, claim_subjects, claim_value, evidence_value};
-use super::s4_r14::{RepositorySnapshotV16, RepositorySnapshotV16Error, local_query_result_v11};
+use super::s4_r14::{
+    CodeNoesisErrorV21, RepositorySnapshotV16, RepositorySnapshotV16Error, local_query_result_v11,
+};
 use super::{
     LimitedVecWriter, PublicationCandidateError, SnapshotEnvelopeV1, publication_candidate,
     semantic_hash,
@@ -104,24 +102,12 @@ impl CodeNoesisErrorV22 {
     #[must_use]
     pub fn from_local_flow(error: &LocalFlowError) -> Self {
         match error {
-            LocalFlowError::Source(ExpressionBindingError::Source(
-                CallableSemanticsError::Source(FrameworkError::Source(
-                    RustSemanticError::InvalidDeclaration {
-                        path,
-                        start_byte,
-                        declaration_kind,
-                    },
-                )),
-            )) => Self::new(
-                "extraction.invalid_rust_source",
-                "extraction",
-                "invalid rust source",
-                json!({
-                    "path": bounded(path, 1024),
-                    "start_byte": start_byte,
-                    "syntax_kind": bounded(declaration_kind, 128)
-                }),
-            ),
+            LocalFlowError::Source(error) => {
+                let inherited = CodeNoesisErrorV21::from_expression(error);
+                let mut value = inherited.value().clone();
+                value["schema_version"] = Value::String(R15_ERROR_VERSION.to_owned());
+                Self { value }
+            }
             LocalFlowError::InvalidSyntax { path, start_byte } => Self::new(
                 "extraction.local_flow_syntax_unsupported",
                 "extraction",
@@ -170,9 +156,7 @@ impl CodeNoesisErrorV22 {
                 "local-flow extraction limit exceeded",
                 json!({"limit": limit.as_str(), "maximum": maximum, "observed": observed}),
             ),
-            LocalFlowError::Source(_) | LocalFlowError::ContractInvalid => {
-                Self::internal("local_flow_extraction")
-            }
+            LocalFlowError::ContractInvalid => Self::internal("local_flow_extraction"),
         }
     }
 
@@ -391,10 +375,55 @@ impl RepositorySnapshotV17 {
         output_capacity_profile: K1OutputCapacityProfile,
         envelope: SnapshotEnvelopeV1,
     ) -> Result<Self, RepositorySnapshotV17Error> {
-        knowledge
-            .validate()
-            .map_err(|_| RepositorySnapshotV17Error::ContractInvalid)?;
-        let baseline = RepositorySnapshotV16::from_inventory_expression_bindings_and_boundaries(
+        let value = Self::build_value(
+            inventory,
+            knowledge,
+            boundaries,
+            output_capacity_profile,
+            envelope,
+            true,
+            true,
+        )?;
+        Ok(Self {
+            value,
+            output_capacity_profile,
+        })
+    }
+
+    pub(crate) fn value_for_successor(
+        inventory: &RepositoryInventory,
+        knowledge: &LocalFlowKnowledge,
+        boundaries: Option<&RepositoryBoundaryReport>,
+        output_capacity_profile: K1OutputCapacityProfile,
+        envelope: SnapshotEnvelopeV1,
+    ) -> Result<Value, RepositorySnapshotV17Error> {
+        Self::build_value(
+            inventory,
+            knowledge,
+            boundaries,
+            output_capacity_profile,
+            envelope,
+            false,
+            false,
+        )
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn build_value(
+        inventory: &RepositoryInventory,
+        knowledge: &LocalFlowKnowledge,
+        boundaries: Option<&RepositoryBoundaryReport>,
+        output_capacity_profile: K1OutputCapacityProfile,
+        envelope: SnapshotEnvelopeV1,
+        validate: bool,
+        seal: bool,
+    ) -> Result<Value, RepositorySnapshotV17Error> {
+        if validate {
+            knowledge
+                .validate()
+                .map_err(|_| RepositorySnapshotV17Error::ContractInvalid)?;
+        }
+        let mut value = RepositorySnapshotV16::value_for_successor(
             inventory,
             &knowledge.expression,
             boundaries,
@@ -402,7 +431,6 @@ impl RepositorySnapshotV17 {
             envelope,
         )
         .map_err(map_r14_snapshot_error)?;
-        let mut value = baseline.value().clone();
         let semantic = value
             .get_mut("semantic")
             .and_then(Value::as_object_mut)
@@ -459,26 +487,26 @@ impl RepositorySnapshotV17 {
             "knowledge_graph".to_owned(),
             knowledge_graph_v14(&baseline_graph, knowledge)?,
         );
-        let semantic_value = Value::Object(semantic.clone());
-        let root = value
-            .as_object_mut()
-            .ok_or(RepositorySnapshotV17Error::ContractInvalid)?;
-        root.insert(
-            "schema_version".to_owned(),
-            Value::String(R15_SNAPSHOT_VERSION.to_owned()),
-        );
-        root.insert(
-            "semantic_hash".to_owned(),
-            json!({
-                "algorithm": "blake3-256",
-                "value": semantic_hash(SNAPSHOT_V17_HASH_DOMAIN, &semantic_value)
-            }),
-        );
-        publication_candidate(&value).map_err(|_| RepositorySnapshotV17Error::ContractInvalid)?;
-        Ok(Self {
-            value,
-            output_capacity_profile,
-        })
+        if seal {
+            let semantic_value = Value::Object(semantic.clone());
+            let root = value
+                .as_object_mut()
+                .ok_or(RepositorySnapshotV17Error::ContractInvalid)?;
+            root.insert(
+                "schema_version".to_owned(),
+                Value::String(R15_SNAPSHOT_VERSION.to_owned()),
+            );
+            root.insert(
+                "semantic_hash".to_owned(),
+                json!({
+                    "algorithm": "blake3-256",
+                    "value": semantic_hash(SNAPSHOT_V17_HASH_DOMAIN, &semantic_value)
+                }),
+            );
+            publication_candidate(&value)
+                .map_err(|_| RepositorySnapshotV17Error::ContractInvalid)?;
+        }
+        Ok(value)
     }
 
     /// Serializes V17 under its selected bounded output envelope.

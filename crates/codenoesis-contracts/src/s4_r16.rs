@@ -373,7 +373,7 @@ impl RepositorySnapshotV18 {
         knowledge
             .validate()
             .map_err(|_| RepositorySnapshotV18Error::ContractInvalid)?;
-        let baseline = RepositorySnapshotV17::from_inventory_local_flow_and_boundaries(
+        let mut value = RepositorySnapshotV17::value_for_successor(
             inventory,
             &knowledge.local_flow,
             boundaries,
@@ -381,7 +381,6 @@ impl RepositorySnapshotV18 {
             envelope,
         )
         .map_err(map_r15_snapshot_error)?;
-        let mut value = baseline.value().clone();
         let semantic = value
             .get_mut("semantic")
             .and_then(Value::as_object_mut)

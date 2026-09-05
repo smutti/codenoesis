@@ -81,7 +81,7 @@ than popularity as a proxy for compatibility. It covers command-line tools,
 libraries, virtual workspaces, cross-platform systems code, terminal rendering,
 compiler-adjacent code, a UI framework, and a graphics stack:
 
-| Repository | Archetype | Rust files | Rust bytes | Current terminal result |
+| Repository | Archetype | Rust files | Rust bytes | Frozen baseline terminal result |
 |---|---:|---:|---:|---|
 | [hyperfine](https://github.com/sharkdp/hyperfine) | CLI | 41 | 198,410 | R16 success |
 | [tower](https://github.com/tower-rs/tower) | Async middleware workspace | 133 | 487,346 | R16 success |
@@ -97,6 +97,13 @@ frozen in `corpora/public-rust-conference-v1.json`. The suite accepts only full,
 non-shallow local clones whose `HEAD`, tree, and aggregate source metrics match
 that descriptor. It performs no network operation, checkout, build, macro
 expansion, target execution, dependency resolution, or model call.
+
+The current evaluation runner uses the `local-snapshot-2g-v1` output envelope
+and a 150-second sample allowance. The 75-second execution profile still bounds
+the extraction phase; the additional allowance covers deterministic
+serialization and local publication of large valid snapshots. The frozen oracle
+remains a historical baseline: a new outcome or semantic identity requires all
+three retained samples before it can replace that baseline.
 
 Place the eight clones in directories named after their corpus IDs, build the
 release CLI, and run:

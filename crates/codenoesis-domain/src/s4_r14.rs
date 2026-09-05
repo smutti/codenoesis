@@ -1128,6 +1128,7 @@ fn validate_relationship_semantics(
         .iter()
         .map(|entity| (entity.id.as_str(), entity))
         .collect::<BTreeMap<_, _>>();
+    let binding_candidates = binding_candidates(&knowledge.graph.entities);
     let mut has_expression = BTreeMap::<&str, usize>::new();
     let mut contains_expression = BTreeMap::<&str, usize>::new();
     let mut has_argument = BTreeMap::<&str, usize>::new();
@@ -1267,7 +1268,7 @@ fn validate_relationship_semantics(
                 increment(&mut binds_from, source.id.as_str());
             }
             ExpressionRelationshipKind::Reads | ExpressionRelationshipKind::Writes => {
-                validate_access_relationship(relationship, &entities)?;
+                validate_access_relationship(relationship, &entities, &binding_candidates)?;
             }
         }
     }
@@ -1317,6 +1318,7 @@ fn validate_relationship_semantics(
 fn validate_access_relationship(
     relationship: &ExpressionBindingRelationship,
     entities: &BTreeMap<&str, &ExpressionBindingEntity>,
+    binding_candidates: &BindingCandidateIndex<'_>,
 ) -> Result<(), ExpressionBindingError> {
     let source = expression_entity(entities, &relationship.source)
         .ok_or(ExpressionBindingError::AccessResolutionInvalid)?;
@@ -1338,34 +1340,21 @@ fn validate_access_relationship(
     {
         return Err(ExpressionBindingError::AccessResolutionInvalid);
     }
-    let mut candidates = entities
-        .values()
-        .filter_map(|candidate| {
-            let ExpressionEntityProperties::PatternBinding(properties) = &candidate.properties
-            else {
-                return None;
-            };
-            (candidate.callable_id == source.callable_id
-                && candidate.name == target.name
-                && candidate.locator.path == source.locator.path
-                && source.locator.start_byte >= properties.scope_start_byte
-                && source.locator.end_byte <= properties.scope_end_byte)
-                .then_some((*candidate, properties))
-        })
-        .collect::<Vec<_>>();
-    candidates.sort_by_key(|(candidate, properties)| {
-        (
-            properties
-                .scope_end_byte
-                .saturating_sub(properties.scope_start_byte),
-            std::cmp::Reverse(properties.scope_start_byte),
-            candidate.id.as_str(),
-        )
-    });
-    let Some((nearest, nearest_scope)) = candidates.first() else {
+    let Some(candidates) = binding_candidates.get(&(
+        source.callable_id.as_str(),
+        target.name.as_str(),
+        source.locator.path.as_str(),
+    )) else {
         return Err(ExpressionBindingError::AccessResolutionInvalid);
     };
-    if candidates.get(1).is_some_and(|(_, other_scope)| {
+    let mut containing = candidates.iter().filter(|(_, properties)| {
+        source.locator.start_byte >= properties.scope_start_byte
+            && source.locator.end_byte <= properties.scope_end_byte
+    });
+    let Some((nearest, nearest_scope)) = containing.next() else {
+        return Err(ExpressionBindingError::AccessResolutionInvalid);
+    };
+    if containing.next().is_some_and(|(_, other_scope)| {
         other_scope.scope_start_byte == nearest_scope.scope_start_byte
             && other_scope.scope_end_byte == nearest_scope.scope_end_byte
     }) || nearest.id != target.id
@@ -1392,6 +1381,40 @@ fn validate_access_relationship(
         ExpressionRelationshipKind::Reads | ExpressionRelationshipKind::Writes => Ok(()),
         _ => Err(ExpressionBindingError::AccessResolutionInvalid),
     }
+}
+
+type BindingCandidateIndex<'a> = BTreeMap<
+    (&'a str, &'a str, &'a str),
+    Vec<(&'a ExpressionBindingEntity, &'a PatternBindingProperties)>,
+>;
+
+fn binding_candidates(entities: &[ExpressionBindingEntity]) -> BindingCandidateIndex<'_> {
+    let mut index = BindingCandidateIndex::new();
+    for entity in entities {
+        let ExpressionEntityProperties::PatternBinding(properties) = &entity.properties else {
+            continue;
+        };
+        index
+            .entry((
+                entity.callable_id.as_str(),
+                entity.name.as_str(),
+                entity.locator.path.as_str(),
+            ))
+            .or_default()
+            .push((entity, properties));
+    }
+    for candidates in index.values_mut() {
+        candidates.sort_by_key(|(entity, properties)| {
+            (
+                properties
+                    .scope_end_byte
+                    .saturating_sub(properties.scope_start_byte),
+                std::cmp::Reverse(properties.scope_start_byte),
+                entity.id.as_str(),
+            )
+        });
+    }
+    index
 }
 
 fn expression_entity<'a>(

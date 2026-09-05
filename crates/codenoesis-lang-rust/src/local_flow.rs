@@ -9,7 +9,7 @@ use codenoesis_domain::s4_k1::{
 use codenoesis_domain::s4_r3::ExternalWorkspaceBoundary;
 use codenoesis_domain::s4_r14::{
     BindingOrigin, ExpressionBindingEntity, ExpressionBindingError, ExpressionBindingKnowledge,
-    ExpressionEntityKind, ExpressionEntityProperties, ExpressionRelationshipKind,
+    ExpressionEntityProperties, ExpressionRelationshipKind,
 };
 use codenoesis_domain::s4_r15::{
     LocalFlowBlockRole, LocalFlowCoverageGap, LocalFlowDerivation, LocalFlowError,
@@ -39,6 +39,186 @@ struct AccessFact {
     binding_id: String,
     relationship_id: String,
     start: usize,
+    end: usize,
+}
+
+struct ExpressionLookup<'a> {
+    signatures: BTreeMap<(&'a str, usize, usize), &'a CallableSemanticEntity>,
+    controls: BTreeMap<(&'a str, &'a str, usize, usize), &'a CallableSemanticEntity>,
+    expressions: BTreeMap<(&'a str, usize, usize, &'a str), &'a ExpressionBindingEntity>,
+    bindings: BTreeMap<&'a str, Vec<&'a ExpressionBindingEntity>>,
+    parameter_definitions: BTreeMap<&'a str, Vec<(String, String)>>,
+    accesses: BTreeMap<(&'a str, &'static str), Vec<AccessFact>>,
+    unsupported_callables: BTreeSet<&'a str>,
+}
+
+impl<'a> ExpressionLookup<'a> {
+    #[allow(clippy::too_many_lines)]
+    fn new(knowledge: &'a ExpressionBindingKnowledge) -> Self {
+        let callable_evidence = knowledge
+            .callable
+            .graph
+            .evidence
+            .iter()
+            .map(|value| (value.id.as_str(), value))
+            .collect::<BTreeMap<_, _>>();
+        let mut signatures = BTreeMap::new();
+        let mut controls = BTreeMap::new();
+        for entity in &knowledge.callable.graph.entities {
+            for evidence_id in &entity.evidence_ids {
+                let Some(evidence) = callable_evidence.get(evidence_id.as_str()) else {
+                    continue;
+                };
+                let (Ok(start), Ok(end)) = (
+                    usize::try_from(evidence.start_byte),
+                    usize::try_from(evidence.end_byte),
+                ) else {
+                    continue;
+                };
+                match (&entity.kind, &entity.properties) {
+                    (CallableSemanticEntityKind::Signature, _) => {
+                        signatures
+                            .entry((evidence.path.as_str(), start, end))
+                            .or_insert(entity);
+                    }
+                    (
+                        CallableSemanticEntityKind::Control,
+                        CallableSemanticProperties::Control(properties),
+                    ) if properties.control_kind.as_str() == "if" => {
+                        controls
+                            .entry((
+                                entity.subject_id.as_str(),
+                                evidence.path.as_str(),
+                                start,
+                                end,
+                            ))
+                            .or_insert(entity);
+                    }
+                    _ => {}
+                }
+            }
+        }
+
+        let mut expressions = BTreeMap::new();
+        let mut bindings = BTreeMap::<&str, Vec<&ExpressionBindingEntity>>::new();
+        let mut parameter_definitions = BTreeMap::<&str, Vec<(String, String)>>::new();
+        let entity_callables = knowledge
+            .graph
+            .entities
+            .iter()
+            .map(|entity| (entity.id.as_str(), entity.callable_id.as_str()))
+            .collect::<BTreeMap<_, _>>();
+        let entities = knowledge
+            .graph
+            .entities
+            .iter()
+            .map(|entity| (entity.id.as_str(), entity))
+            .collect::<BTreeMap<_, _>>();
+        for entity in &knowledge.graph.entities {
+            match &entity.properties {
+                ExpressionEntityProperties::Expression(properties) => {
+                    let (Ok(start), Ok(end)) = (
+                        usize::try_from(entity.locator.start_byte),
+                        usize::try_from(entity.locator.end_byte),
+                    ) else {
+                        continue;
+                    };
+                    expressions
+                        .entry((
+                            entity.callable_id.as_str(),
+                            start,
+                            end,
+                            properties.syntax_kind.as_str(),
+                        ))
+                        .or_insert(entity);
+                }
+                ExpressionEntityProperties::PatternBinding(properties) => {
+                    bindings
+                        .entry(entity.callable_id.as_str())
+                        .or_default()
+                        .push(entity);
+                    if properties.origin == BindingOrigin::Parameter {
+                        parameter_definitions
+                            .entry(entity.callable_id.as_str())
+                            .or_default()
+                            .push((entity.id.clone(), entity.id.clone()));
+                    }
+                }
+                ExpressionEntityProperties::CallArgument(_) => {}
+            }
+        }
+        for values in bindings.values_mut() {
+            values.sort_by(|left, right| left.id.cmp(&right.id));
+        }
+        for values in parameter_definitions.values_mut() {
+            values.sort_unstable();
+        }
+
+        let mut accesses = BTreeMap::<(&str, &'static str), Vec<AccessFact>>::new();
+        for relationship in &knowledge.graph.relationships {
+            if !matches!(
+                relationship.kind,
+                ExpressionRelationshipKind::Reads | ExpressionRelationshipKind::Writes
+            ) {
+                continue;
+            }
+            let Some(entity) = entities.get(relationship.source.as_str()) else {
+                continue;
+            };
+            let (Ok(start), Ok(end)) = (
+                usize::try_from(entity.locator.start_byte),
+                usize::try_from(entity.locator.end_byte),
+            ) else {
+                continue;
+            };
+            accesses
+                .entry((entity.callable_id.as_str(), relationship.kind.as_str()))
+                .or_default()
+                .push(AccessFact {
+                    expression_id: relationship.source.clone(),
+                    binding_id: relationship.target.clone(),
+                    relationship_id: relationship.id.clone(),
+                    start,
+                    end,
+                });
+        }
+        for values in accesses.values_mut() {
+            values.sort_by(|left, right| {
+                (left.start, left.expression_id.as_str())
+                    .cmp(&(right.start, right.expression_id.as_str()))
+            });
+        }
+
+        let signature_subjects = knowledge
+            .callable
+            .graph
+            .entities
+            .iter()
+            .filter(|entity| entity.kind == CallableSemanticEntityKind::Signature)
+            .map(|entity| entity.subject_id.as_str())
+            .collect::<BTreeSet<_>>();
+        let mut unsupported_callables = BTreeSet::new();
+        for gap in &knowledge.graph.coverage {
+            if !r14_unsupported_capability(&gap.capability) {
+                continue;
+            }
+            if let Some(callable_id) = entity_callables.get(gap.subject_id.as_str()) {
+                unsupported_callables.insert(*callable_id);
+            } else if signature_subjects.contains(gap.subject_id.as_str()) {
+                unsupported_callables.insert(gap.subject_id.as_str());
+            }
+        }
+
+        Self {
+            signatures,
+            controls,
+            expressions,
+            bindings,
+            parameter_definitions,
+            accesses,
+            unsupported_callables,
+        }
+    }
 }
 
 #[derive(Clone)]
@@ -105,6 +285,7 @@ struct CallableBuilder<'a> {
     source: &'a str,
     callable_id: &'a str,
     expression: &'a ExpressionBindingKnowledge,
+    lookup: &'a ExpressionLookup<'a>,
     entity_facts: &'a BTreeMap<String, EntityFact>,
     blocks: Vec<BlockDraft>,
     relationships: BTreeMap<String, LocalFlowRelationship>,
@@ -122,6 +303,7 @@ impl<'a> CallableBuilder<'a> {
         source: &'a str,
         callable_id: &'a str,
         expression: &'a ExpressionBindingKnowledge,
+        lookup: &'a ExpressionLookup<'a>,
         entity_facts: &'a BTreeMap<String, EntityFact>,
     ) -> Self {
         Self {
@@ -133,6 +315,7 @@ impl<'a> CallableBuilder<'a> {
             source,
             callable_id,
             expression,
+            lookup,
             entity_facts,
             blocks: Vec::new(),
             relationships: BTreeMap::new(),
@@ -221,21 +404,17 @@ impl<'a> CallableBuilder<'a> {
         } else {
             alternative_clause
         };
-        if condition.kind() == "let_condition" || consequence.kind() != "block" {
+        if matches!(condition.kind(), "let_condition" | "let_expression")
+            || consequence.kind() != "block"
+        {
             return Ok(ClosedResult::Unsupported);
         }
         let Some(condition_expression) =
-            expression_for_node(self.expression, self.callable_id, condition)
+            expression_for_node(self.lookup, self.callable_id, condition)
         else {
             return Ok(ClosedResult::Unsupported);
         };
-        let Some(control) = control_for_node(
-            &self.expression.callable.graph.entities,
-            &self.expression.callable.graph.evidence,
-            self.callable_id,
-            self.path,
-            node,
-        ) else {
+        let Some(control) = control_for_node(self.lookup, self.callable_id, self.path, node) else {
             return Err(LocalFlowError::AccessMismatch);
         };
         let condition_step = FlowStep {
@@ -244,7 +423,7 @@ impl<'a> CallableBuilder<'a> {
             flow_node_ids: vec![control.id.clone(), condition_expression.id.clone()],
             operation: FlowOperation {
                 reads: accesses_in_span(
-                    self.expression,
+                    self.lookup,
                     self.callable_id,
                     condition.start_byte(),
                     condition.end_byte(),
@@ -323,7 +502,7 @@ impl<'a> CallableBuilder<'a> {
                 return ClosedResult::Unsupported;
             };
             let bindings = bindings_in_pattern(
-                self.expression,
+                self.lookup,
                 self.callable_id,
                 pattern.start_byte(),
                 pattern.end_byte(),
@@ -331,7 +510,7 @@ impl<'a> CallableBuilder<'a> {
             if bindings.len() != 1 {
                 return ClosedResult::Unsupported;
             }
-            let Some(root) = expression_for_node(self.expression, self.callable_id, value) else {
+            let Some(root) = expression_for_node(self.lookup, self.callable_id, value) else {
                 return ClosedResult::Unsupported;
             };
             let binding = bindings[0];
@@ -341,7 +520,7 @@ impl<'a> CallableBuilder<'a> {
                 flow_node_ids: vec![binding.id.clone(), root.id.clone()],
                 operation: FlowOperation {
                     reads: accesses_in_span(
-                        self.expression,
+                        self.lookup,
                         self.callable_id,
                         value.start_byte(),
                         value.end_byte(),
@@ -368,18 +547,18 @@ impl<'a> CallableBuilder<'a> {
         ) {
             return ClosedResult::Unsupported;
         }
-        let Some(root) = expression_for_node(self.expression, self.callable_id, semantic) else {
+        let Some(root) = expression_for_node(self.lookup, self.callable_id, semantic) else {
             return ClosedResult::Unsupported;
         };
         let reads = accesses_in_span(
-            self.expression,
+            self.lookup,
             self.callable_id,
             semantic.start_byte(),
             semantic.end_byte(),
             ExpressionRelationshipKind::Reads,
         );
         let writes = accesses_in_span(
-            self.expression,
+            self.lookup,
             self.callable_id,
             semantic.start_byte(),
             semantic.end_byte(),
@@ -630,7 +809,7 @@ impl TreeSitterRustWorkspaceExtractor {
         let expression = self
             .extract_rust_expression_bindings(inventory)
             .map_err(LocalFlowError::Source)?;
-        Self::extract_local_flow_from_expression(inventory, expression)
+        Self::extract_local_flow_from_expression(inventory, expression, true)
     }
 
     /// Extracts R15 over the exact R12 cfg-alternatives and repository-boundary lineage.
@@ -646,13 +825,45 @@ impl TreeSitterRustWorkspaceExtractor {
         let expression = self
             .extract_rust_expression_bindings_with_cfg_alternatives(inventory, external_boundaries)
             .map_err(LocalFlowError::Source)?;
-        Self::extract_local_flow_from_expression(inventory, expression)
+        Self::extract_local_flow_from_expression(inventory, expression, true)
+    }
+
+    /// Extracts R15 for immediate V17/V18 contract validation.
+    ///
+    /// # Errors
+    ///
+    /// Returns the first inherited R14 or typed extraction failure.
+    pub fn extract_rust_local_flow_for_snapshot(
+        &self,
+        inventory: &RepositoryInventory,
+    ) -> Result<LocalFlowExtraction, LocalFlowError> {
+        let expression = self
+            .extract_rust_expression_bindings(inventory)
+            .map_err(LocalFlowError::Source)?;
+        Self::extract_local_flow_from_expression(inventory, expression, false)
+    }
+
+    /// Extracts cfg-composed R15 for immediate V17/V18 contract validation.
+    ///
+    /// # Errors
+    ///
+    /// Returns the first inherited R12/R14 or typed extraction failure.
+    pub fn extract_rust_local_flow_with_cfg_alternatives_for_snapshot(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+    ) -> Result<LocalFlowExtraction, LocalFlowError> {
+        let expression = self
+            .extract_rust_expression_bindings_with_cfg_alternatives(inventory, external_boundaries)
+            .map_err(LocalFlowError::Source)?;
+        Self::extract_local_flow_from_expression(inventory, expression, false)
     }
 
     #[allow(clippy::too_many_lines)]
     fn extract_local_flow_from_expression(
         inventory: &RepositoryInventory,
         expression: codenoesis_domain::s4_r14::ExpressionBindingExtraction,
+        validate: bool,
     ) -> Result<LocalFlowExtraction, LocalFlowError> {
         let contexts = source_contexts(
             &expression.knowledge.callable.framework.semantic.manifest,
@@ -668,6 +879,7 @@ impl TreeSitterRustWorkspaceExtractor {
         let repository_id = inventory.bound_revision().repository_identity().as_str();
         let commit_oid = inventory.bound_revision().commit_oid().as_str();
         let entity_facts = inherited_entity_facts(&expression.knowledge)?;
+        let lookup = ExpressionLookup::new(&expression.knowledge);
         let mut chunks = Vec::new();
         let mut all_derivations = Vec::new();
         let mut completed_callable_ids = Vec::new();
@@ -698,8 +910,7 @@ impl TreeSitterRustWorkspaceExtractor {
                 };
                 let header_end = body.start_byte();
                 let Some(signature) = signature_for_node(
-                    &expression.knowledge.callable.graph.entities,
-                    &expression.knowledge.callable.graph.evidence,
+                    &lookup,
                     &context.path,
                     callable_node.start_byte(),
                     header_end,
@@ -708,10 +919,8 @@ impl TreeSitterRustWorkspaceExtractor {
                 };
                 let callable_id = signature.subject_id.as_str();
                 let signature_evidence = signature.evidence_ids.clone();
-                let unsupported_r14 =
-                    callable_has_unsupported_r14_coverage(&expression.knowledge, callable_id);
-                let parameter_definitions =
-                    parameter_definitions(&expression.knowledge, callable_id);
+                let unsupported_r14 = callable_has_unsupported_r14_coverage(&lookup, callable_id);
+                let parameter_definitions = parameter_definitions(&lookup, callable_id);
                 let mut builder = CallableBuilder::new(
                     repository_id,
                     commit_oid,
@@ -721,6 +930,7 @@ impl TreeSitterRustWorkspaceExtractor {
                     source,
                     callable_id,
                     &expression.knowledge,
+                    &lookup,
                     &entity_facts,
                 );
                 let complete = if unsupported_r14 {
@@ -755,7 +965,9 @@ impl TreeSitterRustWorkspaceExtractor {
             .saturating_add(u64::try_from(chunks.len()).unwrap_or(u64::MAX));
         let extraction =
             LocalFlowExtraction::from_r14(expression, chunks, graph, parser_invocation_count);
-        extraction.knowledge.validate()?;
+        if validate {
+            extraction.knowledge.validate()?;
+        }
         Ok(extraction)
     }
 }
@@ -792,145 +1004,82 @@ fn declaration_nodes(root: Node<'_>) -> Vec<Node<'_>> {
 }
 
 fn signature_for_node<'a>(
-    entities: &'a [CallableSemanticEntity],
-    evidence: &[WorkspaceEvidence],
+    lookup: &'a ExpressionLookup<'a>,
     path: &str,
     start: usize,
     end: usize,
 ) -> Option<&'a CallableSemanticEntity> {
-    entities.iter().find(|entity| {
-        entity.kind == CallableSemanticEntityKind::Signature
-            && entity.evidence_ids.iter().any(|identifier| {
-                evidence.iter().any(|value| {
-                    value.id == *identifier
-                        && value.path == path
-                        && usize::try_from(value.start_byte).ok() == Some(start)
-                        && usize::try_from(value.end_byte).ok() == Some(end)
-                })
-            })
-    })
+    lookup.signatures.get(&(path, start, end)).copied()
 }
 
 fn control_for_node<'a>(
-    entities: &'a [CallableSemanticEntity],
-    evidence: &[WorkspaceEvidence],
+    lookup: &'a ExpressionLookup<'a>,
     callable_id: &str,
     path: &str,
     node: Node<'_>,
 ) -> Option<&'a CallableSemanticEntity> {
-    entities.iter().find(|entity| {
-        entity.kind == CallableSemanticEntityKind::Control
-            && entity.subject_id == callable_id
-            && matches!(
-                &entity.properties,
-                CallableSemanticProperties::Control(properties) if properties.control_kind.as_str() == "if"
-            )
-            && entity.evidence_ids.iter().any(|identifier| {
-                evidence.iter().any(|value| {
-                    value.id == *identifier
-                        && value.path == path
-                        && usize::try_from(value.start_byte).ok() == Some(node.start_byte())
-                        && usize::try_from(value.end_byte).ok() == Some(node.end_byte())
-                })
-            })
-    })
+    lookup
+        .controls
+        .get(&(callable_id, path, node.start_byte(), node.end_byte()))
+        .copied()
 }
 
 fn parameter_definitions(
-    knowledge: &ExpressionBindingKnowledge,
+    lookup: &ExpressionLookup<'_>,
     callable_id: &str,
 ) -> Vec<(String, String)> {
-    knowledge
-        .graph
-        .entities
-        .iter()
-        .filter_map(|entity| {
-            if entity.callable_id != callable_id {
-                return None;
-            }
-            match &entity.properties {
-                ExpressionEntityProperties::PatternBinding(properties)
-                    if properties.origin == BindingOrigin::Parameter =>
-                {
-                    Some((entity.id.clone(), entity.id.clone()))
-                }
-                _ => None,
-            }
-        })
-        .collect()
+    lookup
+        .parameter_definitions
+        .get(callable_id)
+        .cloned()
+        .unwrap_or_default()
 }
 
 fn bindings_in_pattern<'a>(
-    knowledge: &'a ExpressionBindingKnowledge,
+    lookup: &'a ExpressionLookup<'a>,
     callable_id: &str,
     start: usize,
     end: usize,
 ) -> Vec<&'a ExpressionBindingEntity> {
-    knowledge
-        .graph
-        .entities
-        .iter()
+    lookup
+        .bindings
+        .get(callable_id)
+        .into_iter()
+        .flatten()
+        .copied()
         .filter(|entity| {
-            entity.callable_id == callable_id
-                && entity.kind == ExpressionEntityKind::PatternBinding
-                && usize::try_from(entity.locator.start_byte).is_ok_and(|value| value >= start)
+            usize::try_from(entity.locator.start_byte).is_ok_and(|value| value >= start)
                 && usize::try_from(entity.locator.end_byte).is_ok_and(|value| value <= end)
         })
         .collect()
 }
 
 fn expression_for_node<'a>(
-    knowledge: &'a ExpressionBindingKnowledge,
+    lookup: &'a ExpressionLookup<'a>,
     callable_id: &str,
     node: Node<'_>,
 ) -> Option<&'a ExpressionBindingEntity> {
-    knowledge.graph.entities.iter().find(|entity| {
-        entity.callable_id == callable_id
-            && entity.kind == ExpressionEntityKind::Expression
-            && usize::try_from(entity.locator.start_byte).ok() == Some(node.start_byte())
-            && usize::try_from(entity.locator.end_byte).ok() == Some(node.end_byte())
-            && matches!(
-                &entity.properties,
-                ExpressionEntityProperties::Expression(properties) if properties.syntax_kind == node.kind()
-            )
-    })
+    lookup
+        .expressions
+        .get(&(callable_id, node.start_byte(), node.end_byte(), node.kind()))
+        .copied()
 }
 
 fn accesses_in_span(
-    knowledge: &ExpressionBindingKnowledge,
+    lookup: &ExpressionLookup<'_>,
     callable_id: &str,
     start: usize,
     end: usize,
     kind: ExpressionRelationshipKind,
 ) -> Vec<AccessFact> {
-    let entities = knowledge
-        .graph
-        .entities
-        .iter()
-        .filter(|entity| entity.callable_id == callable_id)
-        .map(|entity| (entity.id.as_str(), entity))
-        .collect::<BTreeMap<_, _>>();
-    let mut accesses = knowledge
-        .graph
-        .relationships
-        .iter()
-        .filter(|relationship| relationship.kind == kind)
-        .filter_map(|relationship| {
-            let entity = entities.get(relationship.source.as_str())?;
-            let entity_start = usize::try_from(entity.locator.start_byte).ok()?;
-            let entity_end = usize::try_from(entity.locator.end_byte).ok()?;
-            (entity_start >= start && entity_end <= end).then(|| AccessFact {
-                expression_id: relationship.source.clone(),
-                binding_id: relationship.target.clone(),
-                relationship_id: relationship.id.clone(),
-                start: entity_start,
-            })
-        })
-        .collect::<Vec<_>>();
-    accesses.sort_by(|left, right| {
-        (left.start, left.expression_id.as_str()).cmp(&(right.start, right.expression_id.as_str()))
-    });
-    accesses
+    lookup
+        .accesses
+        .get(&(callable_id, kind.as_str()))
+        .into_iter()
+        .flatten()
+        .filter(|access| access.start >= start && access.end <= end)
+        .cloned()
+        .collect()
 }
 
 fn inherited_entity_facts(
@@ -962,32 +1111,22 @@ fn insert_entity_fact(
     Ok(())
 }
 
-fn callable_has_unsupported_r14_coverage(
-    knowledge: &ExpressionBindingKnowledge,
-    callable_id: &str,
-) -> bool {
-    let subjects = knowledge
-        .graph
-        .entities
-        .iter()
-        .filter(|entity| entity.callable_id == callable_id)
-        .map(|entity| entity.id.as_str())
-        .chain(std::iter::once(callable_id))
-        .collect::<BTreeSet<_>>();
-    knowledge.graph.coverage.iter().any(|gap| {
-        subjects.contains(gap.subject_id.as_str())
-            && matches!(
-                gap.capability.as_str(),
-                "rust.expression_macro_expansion"
-                    | "rust.expression_closure_capture"
-                    | "rust.expression_nested_callable"
-                    | "rust.pattern_input_unexpanded"
-                    | "rust.pattern_condition_chain"
-                    | "rust.pattern_guard"
-                    | "rust.pattern_binding"
-                    | "rust.lexical_binding_shadowing"
-            )
-    })
+fn callable_has_unsupported_r14_coverage(lookup: &ExpressionLookup<'_>, callable_id: &str) -> bool {
+    lookup.unsupported_callables.contains(callable_id)
+}
+
+fn r14_unsupported_capability(capability: &str) -> bool {
+    matches!(
+        capability,
+        "rust.expression_macro_expansion"
+            | "rust.expression_closure_capture"
+            | "rust.expression_nested_callable"
+            | "rust.pattern_input_unexpanded"
+            | "rust.pattern_condition_chain"
+            | "rust.pattern_guard"
+            | "rust.pattern_binding"
+            | "rust.lexical_binding_shadowing"
+    )
 }
 
 fn contains_forbidden(node: Node<'_>, source: &str) -> bool {
@@ -1010,6 +1149,8 @@ fn contains_forbidden(node: Node<'_>, source: &str) -> bool {
             | "const_block"
             | "macro_invocation"
             | "macro_definition"
+            | "let_condition"
+            | "let_expression"
             | "label"
     ) {
         return true;

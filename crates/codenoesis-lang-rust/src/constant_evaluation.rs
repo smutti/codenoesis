@@ -227,7 +227,7 @@ impl TreeSitterRustWorkspaceExtractor {
         let local_flow = self
             .extract_rust_local_flow(inventory)
             .map_err(ConstantEvaluationError::Source)?;
-        Self::extract_constant_evaluation_from_local_flow(inventory, local_flow)
+        Self::extract_constant_evaluation_from_local_flow(inventory, local_flow, true)
     }
 
     /// Extracts R16 over the exact R12 cfg-alternatives and repository-boundary lineage.
@@ -243,13 +243,48 @@ impl TreeSitterRustWorkspaceExtractor {
         let local_flow = self
             .extract_rust_local_flow_with_cfg_alternatives(inventory, external_boundaries)
             .map_err(ConstantEvaluationError::Source)?;
-        Self::extract_constant_evaluation_from_local_flow(inventory, local_flow)
+        Self::extract_constant_evaluation_from_local_flow(inventory, local_flow, true)
+    }
+
+    /// Extracts R16 for immediate V18 contract validation.
+    ///
+    /// # Errors
+    ///
+    /// Returns the first inherited R15 or typed extraction failure.
+    pub fn extract_rust_constant_evaluation_for_snapshot(
+        &self,
+        inventory: &RepositoryInventory,
+    ) -> Result<ConstantEvaluationExtraction, ConstantEvaluationError> {
+        let local_flow = self
+            .extract_rust_local_flow_for_snapshot(inventory)
+            .map_err(ConstantEvaluationError::Source)?;
+        Self::extract_constant_evaluation_from_local_flow(inventory, local_flow, false)
+    }
+
+    /// Extracts cfg-composed R16 for immediate V18 contract validation.
+    ///
+    /// # Errors
+    ///
+    /// Returns the first inherited R12-R15 or typed extraction failure.
+    pub fn extract_rust_constant_evaluation_with_cfg_alternatives_for_snapshot(
+        &self,
+        inventory: &RepositoryInventory,
+        external_boundaries: &[ExternalWorkspaceBoundary],
+    ) -> Result<ConstantEvaluationExtraction, ConstantEvaluationError> {
+        let local_flow = self
+            .extract_rust_local_flow_with_cfg_alternatives_for_snapshot(
+                inventory,
+                external_boundaries,
+            )
+            .map_err(ConstantEvaluationError::Source)?;
+        Self::extract_constant_evaluation_from_local_flow(inventory, local_flow, false)
     }
 
     #[allow(clippy::too_many_lines)]
     fn extract_constant_evaluation_from_local_flow(
         inventory: &RepositoryInventory,
         local_flow: codenoesis_domain::s4_r15::LocalFlowExtraction,
+        validate: bool,
     ) -> Result<ConstantEvaluationExtraction, ConstantEvaluationError> {
         let contexts = source_contexts(
             &local_flow
@@ -389,7 +424,9 @@ impl TreeSitterRustWorkspaceExtractor {
             graph,
             parser_invocation_count,
         );
-        extraction.knowledge.validate()?;
+        if validate {
+            extraction.knowledge.validate()?;
+        }
         Ok(extraction)
     }
 }

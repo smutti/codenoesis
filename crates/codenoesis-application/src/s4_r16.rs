@@ -146,10 +146,6 @@ where
         .collect::<Vec<_>>();
     let extraction = extractor(inventory, &external_boundaries)
         .map_err(ConstantEvaluationScanError::ConstantEvaluation)?;
-    extraction
-        .knowledge
-        .validate()
-        .map_err(ConstantEvaluationScanError::ConstantEvaluation)?;
     let snapshot = RepositorySnapshotV18::from_inventory_constant_evaluation_and_boundaries(
         inventory,
         &extraction.knowledge,

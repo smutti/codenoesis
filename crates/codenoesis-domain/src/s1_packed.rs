@@ -1,6 +1,8 @@
 use crate::ObjectId;
 
 pub const LOCAL_GIT_SHA1_PACKED_V1: &str = "local-git-sha1-packed-v1";
+pub const LOCAL_GIT_SHA1_PACKED_RUST_8M_V1: &str = "local-git-sha1-packed-rust-8m-v1";
+pub const LOCAL_GIT_SHA1_PACKED_RUST_8M_SINGLE_FILE_BYTES: u64 = 8_388_608;
 
 pub const STANDARD_LOCAL_PACKED_LIMITS: StandardLocalPackedLimits = StandardLocalPackedLimits {
     pack_directory_entries: 512,

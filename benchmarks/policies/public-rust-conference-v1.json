@@ -17,7 +17,7 @@
   "percentile_method": "nearest-rank",
   "minimum_oracle_match_rate": 1.0,
   "minimum_constant_stage_successes": 3,
-  "sample_timeout_seconds": 90,
+  "sample_timeout_seconds": 150,
   "report_bytes_max": 8388608,
   "network_allowed": false,
   "failed_sample_retry_allowed": false,

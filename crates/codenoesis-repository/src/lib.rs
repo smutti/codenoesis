@@ -14,6 +14,7 @@ use codenoesis_domain::s1_boundaries::{
     MAX_GITMODULES_BYTES, NestedAcquisitionProfile, NestedRepositoryAcquisitionError,
     RepositoryBoundaryAcquisitionError, boundary_limit_exceeded, check_boundary_limit,
 };
+use codenoesis_domain::s1_packed::LOCAL_GIT_SHA1_PACKED_RUST_8M_SINGLE_FILE_BYTES;
 use codenoesis_domain::{
     AcquiredFile, AcquiredRepository, AcquisitionError, ActualObjectKind, BoundRevision,
     EntryPolicy, LimitKind, ObjectId, ObjectKind, PathInvalidReason, RegularFileMode,
@@ -27,9 +28,9 @@ use sha1::{Digest, Sha1};
 const S1_INTERNAL_OBJECT_BYTES: usize = 33_554_432;
 const S1_INTERNAL_CONTROL_FILE_BYTES: u64 = 33_554_432;
 
-#[derive(Default)]
 pub struct LocalGitRepository {
     object_database: ObjectDatabaseMode,
+    single_file_bytes: u64,
 }
 
 #[derive(Clone, Copy, Default)]
@@ -44,6 +45,7 @@ impl LocalGitRepository {
     pub const fn new() -> Self {
         Self {
             object_database: ObjectDatabaseMode::LooseOnly,
+            single_file_bytes: STANDARD_LOCAL_S1_LIMITS.single_file_bytes,
         }
     }
 
@@ -51,7 +53,22 @@ impl LocalGitRepository {
     pub const fn new_packed_sha1() -> Self {
         Self {
             object_database: ObjectDatabaseMode::LocalGitSha1PackedV1,
+            single_file_bytes: STANDARD_LOCAL_S1_LIMITS.single_file_bytes,
         }
+    }
+
+    #[must_use]
+    pub const fn new_packed_sha1_rust_8m() -> Self {
+        Self {
+            object_database: ObjectDatabaseMode::LocalGitSha1PackedV1,
+            single_file_bytes: LOCAL_GIT_SHA1_PACKED_RUST_8M_SINGLE_FILE_BYTES,
+        }
+    }
+}
+
+impl Default for LocalGitRepository {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -217,9 +234,9 @@ impl LocalGitRepository {
 
         let bound_revision = BoundRevision::new(identity, commit_oid.clone(), tree_oid.clone());
         let mut state = if collect_boundaries {
-            S1TraversalState::new_boundaries()
+            S1TraversalState::new_boundaries(self.single_file_bytes)
         } else {
-            S1TraversalState::new()
+            S1TraversalState::new(self.single_file_bytes)
         };
         traverse_tree_object(&mut object_database, &tree_oid, &tree, "", 0, &mut state)?;
         object_database.verify_unchanged()?;
@@ -514,6 +531,7 @@ struct S1TraversalState {
     tree_entries: u64,
     regular_files: u64,
     cumulative_file_bytes: u64,
+    single_file_bytes: u64,
     directory_count: u64,
     canonical_paths: BTreeSet<String>,
     files: Vec<AcquiredFile>,
@@ -522,12 +540,13 @@ struct S1TraversalState {
 }
 
 impl S1TraversalState {
-    fn new() -> Self {
+    fn new(single_file_bytes: u64) -> Self {
         Self {
             started_at: Instant::now(),
             tree_entries: 0,
             regular_files: 0,
             cumulative_file_bytes: 0,
+            single_file_bytes,
             directory_count: 0,
             canonical_paths: BTreeSet::new(),
             files: Vec::new(),
@@ -536,10 +555,10 @@ impl S1TraversalState {
         }
     }
 
-    fn new_boundaries() -> Self {
+    fn new_boundaries(single_file_bytes: u64) -> Self {
         Self {
             gitlinks: Some(Vec::new()),
-            ..Self::new()
+            ..Self::new(single_file_bytes)
         }
     }
 
@@ -739,6 +758,7 @@ fn acquire_regular_file(
         &entry.object_id,
         parent_tree_oid,
         state.cumulative_file_bytes,
+        state.single_file_bytes,
         boundary_gitmodules,
     )?;
     if blob.kind != GitObjectKind::Blob {
@@ -749,8 +769,13 @@ fn acquire_regular_file(
         .into());
     }
     let byte_length = u64::try_from(blob.body_size).map_err(|_| RepositoryError::Unexpected)?;
-    if byte_length > STANDARD_LOCAL_S1_LIMITS.single_file_bytes {
-        return Err(limit_exceeded(LimitKind::SingleFileBytes, byte_length).into());
+    if byte_length > state.single_file_bytes {
+        return Err(AcquisitionError::LimitExceeded {
+            limit: LimitKind::SingleFileBytes,
+            maximum: state.single_file_bytes,
+            observed: byte_length,
+        }
+        .into());
     }
     if blob
         .body_prefix
@@ -788,9 +813,10 @@ fn required_regular_blob(
     object_id: &ObjectId,
     referenced_by: &ObjectId,
     cumulative_file_bytes: u64,
+    single_file_bytes: u64,
     boundary_gitmodules: bool,
 ) -> Result<GitObject, RepositoryBoundaryAcquisitionError> {
-    let inherited = s1_blob_body_limit(cumulative_file_bytes);
+    let inherited = s1_blob_body_limit(cumulative_file_bytes, single_file_bytes);
     let boundary_maximum =
         usize::try_from(MAX_GITMODULES_BYTES).expect("R2 gitmodules-byte limit fits usize");
     let boundary_limit_selected = boundary_gitmodules && boundary_maximum < inherited.body_maximum;
@@ -827,7 +853,16 @@ fn required_regular_blob(
             Err(boundary_limit_exceeded(BoundaryLimit::GitmodulesBytes, observed).into())
         }
         Err(ReadObjectError::LimitExceeded { limit, observed }) => {
-            Err(limit_exceeded(limit, observed).into())
+            Err(AcquisitionError::LimitExceeded {
+                limit,
+                maximum: if limit == LimitKind::SingleFileBytes {
+                    single_file_bytes
+                } else {
+                    limit.maximum()
+                },
+                observed,
+            }
+            .into())
         }
         Err(ReadObjectError::Io) => Err(RepositoryError::Unexpected.into()),
         Err(ReadObjectError::Acquisition(error)) => Err(error.into()),
@@ -898,9 +933,8 @@ fn s1_tree_capture_limit() -> usize {
         .expect("S1 canonical-output limit fits usize")
 }
 
-fn s1_blob_capture_limit() -> usize {
-    usize::try_from(STANDARD_LOCAL_S1_LIMITS.single_file_bytes)
-        .expect("S1 single-file limit fits usize")
+fn s1_blob_capture_limit(single_file_bytes: u64) -> usize {
+    usize::try_from(single_file_bytes).expect("S1 single-file limit fits usize")
 }
 
 #[derive(Clone, Copy)]
@@ -910,11 +944,11 @@ struct DeclaredBodyLimit {
     observed_offset: u64,
 }
 
-fn s1_blob_body_limit(cumulative_file_bytes: u64) -> DeclaredBodyLimit {
+fn s1_blob_body_limit(cumulative_file_bytes: u64, single_file_bytes: u64) -> DeclaredBodyLimit {
     let cumulative_remaining = STANDARD_LOCAL_S1_LIMITS
         .cumulative_file_bytes
         .saturating_sub(cumulative_file_bytes);
-    if cumulative_remaining < STANDARD_LOCAL_S1_LIMITS.single_file_bytes {
+    if cumulative_remaining < single_file_bytes {
         DeclaredBodyLimit {
             limit: LimitKind::CumulativeFileBytes,
             body_maximum: usize::try_from(cumulative_remaining)
@@ -924,7 +958,7 @@ fn s1_blob_body_limit(cumulative_file_bytes: u64) -> DeclaredBodyLimit {
     } else {
         DeclaredBodyLimit {
             limit: LimitKind::SingleFileBytes,
-            body_maximum: s1_blob_capture_limit(),
+            body_maximum: s1_blob_capture_limit(single_file_bytes),
             observed_offset: 0,
         }
     }
@@ -1642,7 +1676,7 @@ mod tests {
     fn pt_fr_acq_002_adapter_counters_have_max_and_plus_one() {
         let parent_tree_oid = ObjectId::parse_sha1("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
             .expect("test tree OID");
-        let mut state = S1TraversalState::new();
+        let mut state = S1TraversalState::new(STANDARD_LOCAL_S1_LIMITS.single_file_bytes);
 
         state.tree_entries = STANDARD_LOCAL_S1_LIMITS.tree_entries - 1;
         assert_eq!(state.observe_entry("at-max", &parent_tree_oid), Ok(()));
@@ -1686,9 +1720,12 @@ mod tests {
         let result = read_object_with_capture(
             &git_dir,
             &object_id,
-            s1_blob_capture_limit(),
-            Some(s1_blob_body_limit(0)),
-            s1_blob_capture_limit(),
+            s1_blob_capture_limit(STANDARD_LOCAL_S1_LIMITS.single_file_bytes),
+            Some(s1_blob_body_limit(
+                0,
+                STANDARD_LOCAL_S1_LIMITS.single_file_bytes,
+            )),
+            s1_blob_capture_limit(STANDARD_LOCAL_S1_LIMITS.single_file_bytes),
         );
         assert!(matches!(
             result,
@@ -1698,6 +1735,21 @@ mod tests {
             })
         ));
         fs::remove_dir_all(root).expect("remove object test root");
+    }
+
+    #[test]
+    fn pt_fr_acq_004_rust_8m_blob_limit_is_explicit_and_bounded() {
+        let selected =
+            codenoesis_domain::s1_packed::LOCAL_GIT_SHA1_PACKED_RUST_8M_SINGLE_FILE_BYTES;
+        let declared = s1_blob_body_limit(0, selected);
+        assert_eq!(declared.limit, LimitKind::SingleFileBytes);
+        assert_eq!(declared.body_maximum, 8_388_608);
+        assert_eq!(declared.observed_offset, 0);
+
+        let cumulative =
+            s1_blob_body_limit(STANDARD_LOCAL_S1_LIMITS.cumulative_file_bytes - 1, selected);
+        assert_eq!(cumulative.limit, LimitKind::CumulativeFileBytes);
+        assert_eq!(cumulative.body_maximum, 1);
     }
 
     #[test]

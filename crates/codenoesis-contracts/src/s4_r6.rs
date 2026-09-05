@@ -19,7 +19,7 @@ use codenoesis_domain::storage::{
     StorageError,
 };
 use codenoesis_domain::{
-    AcquisitionError, LimitKind, RepositoryInventory, STANDARD_LOCAL_S1_LIMITS, limit_exceeded,
+    AcquisitionError, K1OutputCapacityProfile, LimitKind, RepositoryInventory,
 };
 use serde_json::{Map, Value, json};
 
@@ -388,7 +388,19 @@ impl RepositorySnapshotV9 {
     ///
     /// Returns a typed serialization or output-limit failure.
     pub fn canonical_stdout(&self) -> Result<Vec<u8>, RepositorySnapshotV9Error> {
-        let maximum = usize::try_from(STANDARD_LOCAL_S1_LIMITS.canonical_output_bytes)
+        self.canonical_stdout_with_output_capacity(K1OutputCapacityProfile::Standard)
+    }
+
+    /// Serializes the complete V9 snapshot under one closed output envelope.
+    ///
+    /// # Errors
+    ///
+    /// Returns a serialization or selected output-limit failure.
+    pub fn canonical_stdout_with_output_capacity(
+        &self,
+        profile: K1OutputCapacityProfile,
+    ) -> Result<Vec<u8>, RepositorySnapshotV9Error> {
+        let maximum = usize::try_from(profile.maximum_bytes())
             .map_err(|_| RepositorySnapshotV9Error::OutputLengthOverflow)?;
         let body_maximum = maximum
             .checked_sub(1)
@@ -396,12 +408,13 @@ impl RepositorySnapshotV9 {
         let mut writer = LimitedVecWriter::new(body_maximum);
         let result = serde_json::to_writer(&mut writer, &self.value);
         if writer.overflowed() {
-            return Err(RepositorySnapshotV9Error::LimitExceeded(limit_exceeded(
-                LimitKind::CanonicalOutputBytes,
-                STANDARD_LOCAL_S1_LIMITS
-                    .canonical_output_bytes
-                    .saturating_add(1),
-            )));
+            return Err(RepositorySnapshotV9Error::LimitExceeded(
+                AcquisitionError::LimitExceeded {
+                    limit: LimitKind::CanonicalOutputBytes,
+                    maximum: profile.maximum_bytes(),
+                    observed: profile.maximum_bytes().saturating_add(1),
+                },
+            ));
         }
         result.map_err(RepositorySnapshotV9Error::Serialization)?;
         let mut bytes = writer.into_inner();

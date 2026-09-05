@@ -146,6 +146,65 @@ fn gt_fr_ext_008_root_membership_and_targets() {
 }
 
 #[test]
+fn gt_fr_ext_008_example_only_root_package_is_explicitly_deferred() {
+    let inventory = synthetic_inventory(vec![
+        (
+            "Cargo.toml".to_owned(),
+            br#"[workspace]
+members = ["member"]
+
+[package]
+name = "examples"
+edition = "2024"
+
+[[example]]
+name = "demo"
+path = "examples/demo.rs"
+"#
+            .to_vec(),
+        ),
+        ("examples/demo.rs".to_owned(), b"fn main() {}\n".to_vec()),
+        (
+            "member/Cargo.toml".to_owned(),
+            b"[package]\nname = \"member\"\nedition = \"2024\"\n".to_vec(),
+        ),
+        (
+            "member/src/lib.rs".to_owned(),
+            b"pub fn stable() {}\n".to_vec(),
+        ),
+    ]);
+
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_root_package_workspace_incremental(&inventory, &[], &[])
+        .expect("defer example-only root package and analyze modeled members");
+    let root = extraction
+        .knowledge
+        .plan
+        .members
+        .iter()
+        .find(|member| member.path == ".")
+        .expect("root package remains visible");
+    assert!(root.crate_ids.is_empty());
+    assert!(
+        extraction
+            .knowledge
+            .knowledge
+            .graph
+            .coverage
+            .iter()
+            .any(|gap| gap.capability == "cargo.target_world_deferred")
+    );
+    assert!(
+        extraction
+            .knowledge
+            .plan
+            .targets
+            .iter()
+            .any(|target| target.member_path == "member")
+    );
+}
+
+#[test]
 fn pt_dr_idn_002_r3_preserves_v2_identity_domains() {
     let inventory = legacy_workspace_inventory();
     let extractor = TreeSitterRustWorkspaceExtractor::new();
@@ -461,6 +520,15 @@ fn inspect_shorthand(value: State) {
     }
 }
 
+fn inspect_let(value: ErrorState) {
+    let ErrorState {
+        #[cfg(feature = "trace")]
+        trace_commands,
+        error,
+    } = value;
+    let _ = (trace_commands, error);
+}
+
 pub struct Stable;
 "#,
     );
@@ -474,6 +542,132 @@ pub struct Stable;
             .entities
             .iter()
             .any(|entity| { entity.kind == EntityKind::RustStruct && entity.name == "Stable" })
+    );
+    assert!(
+        graph
+            .coverage
+            .iter()
+            .any(|gap| gap.capability == "rust_unsupported_construct")
+    );
+}
+
+#[test]
+fn gt_fr_ext_023_unsafe_foreign_block_is_deferred_in_r3() {
+    let inventory = parser_compatibility_inventory(
+        br#"pub struct Stable;
+
+#[cfg(target_os = "ios")]
+unsafe extern "Swift" {
+    pub type Generated;
+}
+"#,
+    );
+
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_root_package_workspace_incremental(&inventory, &[], &[])
+        .expect("defer unsupported unsafe foreign block syntax");
+    let graph = &extraction.knowledge.knowledge.graph;
+    assert!(
+        graph
+            .entities
+            .iter()
+            .any(|entity| entity.kind == EntityKind::RustStruct && entity.name == "Stable")
+    );
+    assert!(
+        graph
+            .coverage
+            .iter()
+            .any(|gap| gap.capability == "rust_unsupported_construct")
+    );
+}
+
+#[test]
+fn gt_fr_ext_023_cfg_return_statement_is_deferred_in_r3() {
+    let inventory = parser_compatibility_inventory(
+        br#"struct State { selected: i32, fallback: i32 }
+
+pub fn selected(value: State) -> i32 {
+    let State {
+        #[cfg(target_os = "linux")]
+        selected,
+        fallback,
+    } = value;
+    let choose = || {
+        #[cfg(target_os = "linux")]
+        return match 1 { 1 => 1, _ => 0 };
+
+        selected + fallback
+    };
+    choose()
+}
+
+pub struct Stable;
+"#,
+    );
+
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_root_package_workspace_incremental(&inventory, &[], &[])
+        .expect("defer unsupported cfg return statement syntax");
+    let graph = &extraction.knowledge.knowledge.graph;
+    assert!(
+        graph
+            .entities
+            .iter()
+            .any(|entity| entity.kind == EntityKind::RustStruct && entity.name == "Stable")
+    );
+    assert!(
+        graph
+            .coverage
+            .iter()
+            .any(|gap| gap.capability == "rust_unsupported_construct")
+    );
+}
+
+#[test]
+fn gt_fr_ext_023_leading_dyn_lifetime_bound_is_deferred_in_r3() {
+    let inventory = parser_compatibility_inventory(
+        b"type Handler = Box<dyn 'static + for<'a> FnMut(&'a str)>;\npub struct Stable;\n",
+    );
+
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_root_package_workspace_incremental(&inventory, &[], &[])
+        .expect("defer unsupported leading dyn lifetime syntax");
+    let graph = &extraction.knowledge.knowledge.graph;
+    assert!(
+        graph
+            .entities
+            .iter()
+            .any(|entity| entity.kind == EntityKind::RustStruct && entity.name == "Stable")
+    );
+    assert!(
+        graph
+            .coverage
+            .iter()
+            .any(|gap| gap.capability == "rust_unsupported_construct")
+    );
+}
+
+#[test]
+fn gt_fr_ext_023_struct_pattern_turbofish_is_deferred_in_r3() {
+    let inventory = parser_compatibility_inventory(
+        br"pub struct Payload<T> { value: T }
+
+pub fn decode(payload: Payload<String>) {
+    let Payload::<String> { value } = payload;
+    let _ = value;
+}
+",
+    );
+
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_root_package_workspace_incremental(&inventory, &[], &[])
+        .expect("defer unsupported struct-pattern turbofish syntax");
+    let graph = &extraction.knowledge.knowledge.graph;
+    assert!(
+        graph
+            .entities
+            .iter()
+            .any(|entity| entity.kind == EntityKind::RustStruct && entity.name == "Payload")
     );
     assert!(
         graph

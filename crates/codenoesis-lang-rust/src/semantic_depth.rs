@@ -179,7 +179,10 @@ impl OwnerCatalog {
 fn closed_cfg_owner_alternative(existing: &OwnerRecord, candidate: &OwnerRecord) -> bool {
     matches!(
         existing.key.kind,
-        EntityKind::RustStruct | EntityKind::RustEnum | EntityKind::RustTrait
+        EntityKind::RustModule
+            | EntityKind::RustStruct
+            | EntityKind::RustEnum
+            | EntityKind::RustTrait
     ) && existing.direct_cfg
         && candidate.direct_cfg
         && existing.id == candidate.id
@@ -229,6 +232,7 @@ struct ChunkBuilder<'a> {
     mode: SemanticExtractionMode,
     method_occurrences: BTreeMap<String, Vec<RustDeclarationAlternative>>,
     method_raw_names: BTreeMap<String, String>,
+    suppressed_uncertain_members: BTreeSet<String>,
     alternative_failure: Option<RustCfgDeclarationAlternativesError>,
 }
 
@@ -254,6 +258,7 @@ impl<'a> ChunkBuilder<'a> {
             mode,
             method_occurrences: BTreeMap::new(),
             method_raw_names: BTreeMap::new(),
+            suppressed_uncertain_members: BTreeSet::new(),
             alternative_failure: None,
         };
         builder.add_evidence(ByteRange {
@@ -373,12 +378,26 @@ impl<'a> ChunkBuilder<'a> {
         self.add_relationship(RelationshipKind::Defines, owner_id, entity.id, evidence_id)
     }
 
+    #[allow(clippy::too_many_lines)]
     fn add_entity(
         &mut self,
         entity: RustSemanticEntity,
         evidence_id: String,
     ) -> Result<(), RustSemanticError> {
+        if self.suppressed_uncertain_members.contains(&entity.id) {
+            return Ok(());
+        }
         if let Some(existing) = self.entities.get(&entity.id).cloned() {
+            if attribute_transformed_method_duplicate(&existing, &entity) {
+                self.suppress_uncertain_member(&entity.id);
+                return Ok(());
+            }
+            if self.mode == SemanticExtractionMode::R10
+                && heterogeneous_cfg_member_duplicate(&existing, &entity)
+            {
+                self.suppress_uncertain_member(&entity.id);
+                return Ok(());
+            }
             if self.mode == SemanticExtractionMode::R10
                 && entity.kind == RustSemanticEntityKind::Method
             {
@@ -394,6 +413,14 @@ impl<'a> ChunkBuilder<'a> {
                 .evidence
                 .get(&evidence_id)
                 .ok_or(RustSemanticError::ContractInvalid)?;
+            if closed_anonymous_constant_occurrence(
+                &existing,
+                &entity,
+                existing_evidence,
+                candidate_evidence,
+            ) {
+                return Ok(());
+            }
             if !closed_cfg_member_alternative(
                 &existing,
                 &entity,
@@ -556,6 +583,26 @@ impl<'a> ChunkBuilder<'a> {
         Ok(())
     }
 
+    fn suppress_uncertain_member(&mut self, identifier: &str) {
+        self.entities.remove(identifier);
+        self.entity_evidence.remove(identifier);
+        self.method_occurrences.remove(identifier);
+        self.suppressed_uncertain_members
+            .insert(identifier.to_owned());
+        let relationship_ids = self
+            .relationships
+            .values()
+            .filter(|relationship| relationship.target == identifier)
+            .map(|relationship| relationship.id.clone())
+            .collect::<BTreeSet<_>>();
+        for relationship_id in &relationship_ids {
+            self.relationships.remove(relationship_id);
+        }
+        self.claims.retain(|_, claim| {
+            claim.subject_id != identifier && !relationship_ids.contains(&claim.subject_id)
+        });
+    }
+
     fn r10_occurrence(
         &mut self,
         method: &RustSemanticEntity,
@@ -686,6 +733,43 @@ fn same_r10_logical_method(existing: &RustSemanticEntity, candidate: &RustSemant
             .any(|attribute| attribute.kind == RustSemanticAttributeKind::Cfg)
 }
 
+fn attribute_transformed_method_duplicate(
+    existing: &RustSemanticEntity,
+    candidate: &RustSemanticEntity,
+) -> bool {
+    existing.kind == RustSemanticEntityKind::Method
+        && candidate.kind == RustSemanticEntityKind::Method
+        && existing.compilation_presence != CompilationPresence::ConditionalUnknown
+        && candidate.compilation_presence != CompilationPresence::ConditionalUnknown
+        && existing
+            .attributes()
+            .iter()
+            .any(|attribute| attribute.kind == RustSemanticAttributeKind::Other)
+        && candidate
+            .attributes()
+            .iter()
+            .any(|attribute| attribute.kind == RustSemanticAttributeKind::Other)
+}
+
+fn heterogeneous_cfg_member_duplicate(
+    existing: &RustSemanticEntity,
+    candidate: &RustSemanticEntity,
+) -> bool {
+    existing.kind != RustSemanticEntityKind::Method
+        && candidate.kind == existing.kind
+        && existing.compilation_presence == CompilationPresence::ConditionalUnknown
+        && candidate.compilation_presence == CompilationPresence::ConditionalUnknown
+        && existing
+            .attributes()
+            .iter()
+            .any(|attribute| attribute.kind == RustSemanticAttributeKind::Cfg)
+        && candidate
+            .attributes()
+            .iter()
+            .any(|attribute| attribute.kind == RustSemanticAttributeKind::Cfg)
+        && member_without_attributes(existing) != member_without_attributes(candidate)
+}
+
 fn closed_cfg_member_alternative(
     existing: &RustSemanticEntity,
     candidate: &RustSemanticEntity,
@@ -702,6 +786,23 @@ fn closed_cfg_member_alternative(
             .attributes()
             .iter()
             .any(|attribute| attribute.kind == RustSemanticAttributeKind::Cfg)
+        && member_without_attributes(existing) == member_without_attributes(candidate)
+        && existing_evidence.path == candidate_evidence.path
+        && existing_evidence.blob_oid == candidate_evidence.blob_oid
+        && (existing_evidence.end_byte <= candidate_evidence.start_byte
+            || candidate_evidence.end_byte <= existing_evidence.start_byte)
+}
+
+fn closed_anonymous_constant_occurrence(
+    existing: &RustSemanticEntity,
+    candidate: &RustSemanticEntity,
+    existing_evidence: &WorkspaceEvidence,
+    candidate_evidence: &WorkspaceEvidence,
+) -> bool {
+    existing.kind == RustSemanticEntityKind::Constant
+        && candidate.kind == RustSemanticEntityKind::Constant
+        && existing.name == "_"
+        && candidate.name == "_"
         && member_without_attributes(existing) == member_without_attributes(candidate)
         && existing_evidence.path == candidate_evidence.path
         && existing_evidence.blob_oid == candidate_evidence.blob_oid
@@ -1520,6 +1621,7 @@ fn process_tuple_fields(
     builder: &mut ChunkBuilder<'_>,
 ) -> Result<(), RustSemanticError> {
     let mut cursor = body.walk();
+    let inherited_cfg = inherited_cfg_attributes(body, source, &context.path)?;
     let mut attributes = Vec::new();
     let mut pending_visibility = RustSemanticVisibility::Private;
     let mut fields = Vec::new();
@@ -1536,6 +1638,12 @@ fn process_tuple_fields(
     enforce_count(RustSemanticLimit::FieldsPerOwner, fields.len())?;
     enforce_count(RustSemanticLimit::TupleFieldsPerOwner, fields.len())?;
     for (index, (field_type, attributes, field_visibility)) in fields.into_iter().enumerate() {
+        let mut effective_attributes = inherited_cfg.clone();
+        effective_attributes.extend(attributes);
+        enforce_count(
+            RustSemanticLimit::OuterAttributesPerDeclaration,
+            effective_attributes.len(),
+        )?;
         let declared_type = bounded_node_text(
             field_type,
             source,
@@ -1543,7 +1651,7 @@ fn process_tuple_fields(
             RustSemanticLimit::DeclaredTypeOrHeaderBytes,
         )?;
         let evidence_id = builder.add_evidence(node_range(field_type))?;
-        let materialized_attributes = builder.materialize_attributes(&attributes)?;
+        let materialized_attributes = builder.materialize_attributes(&effective_attributes)?;
         let tuple_index = u64::try_from(index).map_err(|_| RustSemanticError::ContractInvalid)?;
         let name = tuple_index.to_string();
         let entity = RustSemanticEntity::new_member(
@@ -1556,7 +1664,7 @@ fn process_tuple_fields(
             field_visibility,
             owner_id.to_owned(),
             None,
-            compilation_presence(inherited_presence, &attributes),
+            compilation_presence(inherited_presence, &effective_attributes),
             RustMemberProperties {
                 owner_kind,
                 form: RustSemanticForm::Tuple,
@@ -2103,6 +2211,7 @@ fn attributed_children<'tree>(
     let mut cursor = parent.walk();
     let mut pending = Vec::new();
     let mut values = Vec::new();
+    let inherited_cfg = inherited_cfg_attributes(parent, source, path)?;
     for child in parent.named_children(&mut cursor) {
         match child.kind() {
             "attribute_item" => {
@@ -2114,7 +2223,8 @@ fn attributed_children<'tree>(
             }
             "line_comment" | "block_comment" | "inner_attribute_item" => {}
             _ => {
-                let mut attributes = std::mem::take(&mut pending);
+                let mut attributes = inherited_cfg.clone();
+                attributes.extend(std::mem::take(&mut pending));
                 let mut child_cursor = child.walk();
                 for direct in child.named_children(&mut child_cursor) {
                     if direct.kind() == "attribute_item" {
@@ -2133,6 +2243,52 @@ fn attributed_children<'tree>(
             }
         }
     }
+    Ok(values)
+}
+
+fn inherited_cfg_attributes(
+    parent: Node<'_>,
+    source: &str,
+    path: &str,
+) -> Result<Vec<AttributeDraft>, RustSemanticError> {
+    let mut attributes = BTreeMap::new();
+    let mut ancestor = parent.parent();
+    while let Some(node) = ancestor {
+        if matches!(
+            node.kind(),
+            "mod_item" | "struct_item" | "enum_item" | "trait_item" | "impl_item"
+        ) {
+            let mut candidates = Vec::new();
+            let mut previous = node.prev_named_sibling();
+            while let Some(sibling) = previous {
+                match sibling.kind() {
+                    "attribute_item" => candidates.push(sibling),
+                    "line_comment" | "block_comment" => {}
+                    _ => break,
+                }
+                previous = sibling.prev_named_sibling();
+            }
+            let mut cursor = node.walk();
+            candidates.extend(
+                node.named_children(&mut cursor)
+                    .filter(|child| child.kind() == "attribute_item"),
+            );
+            for candidate in candidates {
+                let attribute = parse_attribute(candidate, source, path)?;
+                if attribute.kind == RustSemanticAttributeKind::Cfg {
+                    attributes
+                        .entry((attribute.span.start, attribute.span.end))
+                        .or_insert(attribute);
+                }
+            }
+        }
+        ancestor = node.parent();
+    }
+    let values = attributes.into_values().collect::<Vec<_>>();
+    enforce_count(
+        RustSemanticLimit::OuterAttributesPerDeclaration,
+        values.len(),
+    )?;
     Ok(values)
 }
 
