@@ -11,6 +11,7 @@ import unittest
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Iterator
+from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -32,11 +33,13 @@ from run_real_world_rust_benchmark import (  # noqa: E402
     RUNNER_VERSION,
     build_scan_command,
     canonical_json_bytes,
+    clean_owned_temporary_root,
     compare_reports,
     ensure_privacy,
     failed_sample_message,
     load_json,
     nearest_rank,
+    owned_temporary_root,
     preflight_repository,
     publish_new_file,
     run_sample,
@@ -564,6 +567,54 @@ class RealWorldRustBenchmarkContractTests(unittest.TestCase):
             message,
         )
         self.assertLessEqual(len(message.encode("utf-8")), 256)
+
+    def test_owned_temporary_root_resolves_symlinked_system_parent(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            parent = Path(temporary).resolve()
+            alias = parent / "system-temp-alias"
+            alias.symlink_to(parent, target_is_directory=True)
+            root = parent / "codenoesis-b1-test"
+            root.mkdir()
+            with mock.patch(
+                "run_real_world_rust_benchmark.tempfile.mkdtemp",
+                return_value=str(alias / root.name),
+            ):
+                owned = owned_temporary_root()
+            try:
+                self.assertEqual(owned, root)
+                self.assertEqual(owned, owned.resolve(strict=True))
+            finally:
+                clean_owned_temporary_root(owned)
+            self.assertFalse(root.exists())
+
+    def test_failed_sample_identity_accepts_only_known_legacy_storage_identity(self) -> None:
+        error = {
+            "code": "storage.unsafe_path",
+            "context": {"path": "/private/secret-canary"},
+            "message": "private-message-canary",
+            "retryable": False,
+            "schema_version": "codenoesis.error/v4",
+            "stage": "storage",
+        }
+        with tempfile.TemporaryDirectory() as temporary:
+            stderr_path = Path(temporary) / "stderr"
+            stderr_path.write_bytes(canonical_json_bytes(error))
+            message = failed_sample_message("lekton", 1, 12, 0, stderr_path)
+            self.assertIn("codenoesis.error/v4|storage.unsafe_path|storage", message)
+            self.assertIn("validation=accepted", message)
+            self.assertNotIn("canary", message)
+            for field, value in (
+                ("code", "storage.private_path"),
+                ("code", "storage.unknown"),
+                ("schema_version", "codenoesis.error/v3"),
+                ("stage", "store"),
+            ):
+                with self.subTest(field=field, value=value):
+                    stderr_path.write_bytes(canonical_json_bytes({**error, field: value}))
+                    self.assertIn(
+                        "product=unparseable",
+                        failed_sample_message("lekton", 1, 12, 0, stderr_path),
+                    )
 
     def test_unparseable_product_error_retains_closed_validation_category(self) -> None:
         canonical = {

@@ -287,6 +287,12 @@ def public_product_error_identity(stderr_path: Path) -> tuple[str, str]:
         or error.get("retryable") is not False
     ):
         return "unparseable", "wrong_shape"
+    # Storage preparation still emits the V4 contract, even for an R16 scan.
+    # Keep this exception exact: arbitrary legacy codes must remain redacted.
+    if (schema, code, stage) == (
+        "codenoesis.error/v4", "storage.unsafe_path", "storage"
+    ):
+        return f"{schema}|{code}|{stage}", "accepted"
     if schema != "codenoesis.error/v24":
         return "unparseable", "unsupported_schema"
     if (
@@ -773,7 +779,9 @@ def parse_rejection_sample(
 
 
 def owned_temporary_root() -> Path:
-    root = Path(tempfile.mkdtemp(prefix="codenoesis-b1-"))
+    # macOS exposes the system temp directory through /var -> /private/var.
+    # The product correctly refuses symlink components in a storage path.
+    root = Path(tempfile.mkdtemp(prefix="codenoesis-b1-")).resolve(strict=True)
     (root / ".codenoesis-b1-owned").write_text(RUNNER_VERSION + "\n", encoding="utf-8")
     return root
 

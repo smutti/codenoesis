@@ -118,12 +118,14 @@ impl RequestedObjectBounds {
             && let Some(limit) = self.declared_body_limit
             && body_size > limit.body_maximum
         {
-            return Err(limit_exceeded(
-                limit.limit,
-                limit
-                    .observed_offset
-                    .saturating_add(u64::try_from(body_size).unwrap_or(u64::MAX)),
-            ));
+            let maximum = limit
+                .observed_offset
+                .saturating_add(u64::try_from(limit.body_maximum).unwrap_or(u64::MAX));
+            return Err(AcquisitionError::LimitExceeded {
+                limit: limit.limit,
+                maximum,
+                observed: maximum.saturating_add(1),
+            });
         }
         if self.body_ceiling.is_some_and(|maximum| body_size > maximum) {
             return Err(object_invalid(object_oid, PackedObjectReason::Size));
@@ -659,10 +661,115 @@ fn packed_error(error: PackedAcquisitionError) -> AcquisitionError {
 
 #[cfg(test)]
 mod tests {
-    use super::{check_delta_depth, object_invalid, verify_object_hash};
+    use std::fs;
+    use std::io::Write as _;
+    use std::time::{SystemTime, UNIX_EPOCH};
+
+    use super::{
+        PackedObjectDatabase, RequestedObjectBounds, check_delta_depth, object_invalid,
+        verify_object_hash,
+    };
     use crate::packed::hash::reviewed_collision_vector;
+    use crate::{GitObjectKind, ReadObjectError, s1_blob_body_limit};
     use codenoesis_domain::s1_packed::PackedObjectReason;
-    use codenoesis_domain::{LimitKind, ObjectId, limit_exceeded};
+    use codenoesis_domain::{AcquisitionError, LimitKind, ObjectId, limit_exceeded};
+    use flate2::{Compression, write::ZlibEncoder};
+
+    #[test]
+    fn pt_fr_acq_004_requested_blob_bounds_report_selected_maximum() {
+        let oid =
+            ObjectId::parse_sha1("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").expect("blob OID");
+        for maximum in [1_024, 4_194_304, 8_388_608] {
+            let bounds = RequestedObjectBounds {
+                declared_body_limit: Some(s1_blob_body_limit(0, maximum)),
+                body_ceiling: None,
+            };
+            assert_eq!(
+                bounds.check(
+                    GitObjectKind::Blob,
+                    usize::try_from(maximum).expect("selected maximum fits usize"),
+                    &oid
+                ),
+                Ok(())
+            );
+            if maximum == 8_388_608 {
+                assert_eq!(bounds.check(GitObjectKind::Blob, 4_194_305, &oid), Ok(()));
+            }
+            for observed in [maximum + 1, maximum + 1_000] {
+                assert_eq!(
+                    bounds.check(
+                        GitObjectKind::Blob,
+                        usize::try_from(observed).expect("observed size fits usize"),
+                        &oid
+                    ),
+                    Err(AcquisitionError::LimitExceeded {
+                        limit: LimitKind::SingleFileBytes,
+                        maximum,
+                        observed: maximum + 1,
+                    })
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn pt_fr_acq_004_requested_blob_bounds_preserve_cumulative_offset() {
+        let oid =
+            ObjectId::parse_sha1("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").expect("blob OID");
+        let maximum = LimitKind::CumulativeFileBytes.maximum();
+        let bounds = RequestedObjectBounds {
+            declared_body_limit: Some(s1_blob_body_limit(maximum - 17, 8_388_608)),
+            body_ceiling: None,
+        };
+        assert_eq!(bounds.check(GitObjectKind::Blob, 17, &oid), Ok(()));
+        for body_size in [18, 1_000, usize::MAX] {
+            assert_eq!(
+                bounds.check(GitObjectKind::Blob, body_size, &oid),
+                Err(AcquisitionError::LimitExceeded {
+                    limit: LimitKind::CumulativeFileBytes,
+                    maximum,
+                    observed: maximum + 1,
+                })
+            );
+        }
+    }
+
+    #[test]
+    fn sec_fr_acq_004_selected_loose_blob_bounds_fail_before_body() {
+        let timestamp = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .expect("clock after epoch")
+            .as_nanos();
+        let root = std::env::temp_dir().join(format!(
+            "codenoesis-packed-blob-bounds-{}-{timestamp}",
+            std::process::id()
+        ));
+        let object_dir = root.join("objects/aa");
+        fs::create_dir_all(&object_dir).expect("create object fanout");
+        let oid =
+            ObjectId::parse_sha1("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").expect("blob OID");
+        let mut database = PackedObjectDatabase::open(&root).expect("open loose-only catalog");
+        for maximum in [1_024, 4_194_304, 8_388_608] {
+            let mut encoder = ZlibEncoder::new(Vec::new(), Compression::default());
+            write!(encoder, "blob {}\0", maximum + 1_000).expect("encode oversized header");
+            fs::write(
+                object_dir.join(&oid.as_str()[2..]),
+                encoder.finish().expect("finish oversized header"),
+            )
+            .expect("write header-only object");
+            let result =
+                database.read_object(&oid, None, Some(s1_blob_body_limit(0, maximum)), None);
+            assert!(matches!(
+                result,
+                Err(ReadObjectError::Acquisition(AcquisitionError::LimitExceeded {
+                    limit: LimitKind::SingleFileBytes,
+                    maximum: reported_maximum,
+                    observed,
+                })) if reported_maximum == maximum && observed == maximum + 1
+            ));
+        }
+        fs::remove_dir_all(root).expect("remove loose object test root");
+    }
 
     #[test]
     fn conf_fr_acq_004_object_sha1_collision_boundary() {

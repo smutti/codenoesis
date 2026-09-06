@@ -173,7 +173,7 @@ mod tests {
     use codenoesis_domain::s1_packed::{
         PackedDeltaReason, PackedObjectDatabaseInvalid, PackedObjectReason,
     };
-    use codenoesis_domain::{LimitKind, ObjectId, limit_exceeded};
+    use codenoesis_domain::{AcquisitionError, LimitKind, ObjectId, limit_exceeded};
 
     #[test]
     fn sec_fr_acq_004_delta_program_accepts_bounded_copy_and_insert() {
@@ -273,7 +273,14 @@ mod tests {
         };
         let error = apply_program(b"", &[0, 5, 5, b'a', b'b', b'c', b'd', b'e'], bounds)
             .expect_err("inherited blob maximum must fail before result allocation");
-        assert_eq!(error, limit_exceeded(LimitKind::SingleFileBytes, 5));
+        assert_eq!(
+            error,
+            AcquisitionError::LimitExceeded {
+                limit: LimitKind::SingleFileBytes,
+                maximum: 4,
+                observed: 5,
+            }
+        );
     }
 
     fn apply_program(

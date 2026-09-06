@@ -2560,10 +2560,9 @@ impl ManifestMap {
                 if end_index + 1 >= lines.len() {
                     break;
                 }
-                let next = source[lines[end_index + 1].start..lines[end_index + 1].end].trim();
-                if next.starts_with('[') {
-                    break;
-                }
+                // The complete manifest was validated above. A bracket on the
+                // next line can still belong to this value (a nested array or
+                // multiline string), so only parsing a complete value ends it.
                 end_index += 1;
             }
             let entry = parsed.ok_or_else(|| {

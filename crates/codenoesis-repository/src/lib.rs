@@ -1,8 +1,9 @@
 //! In-process local Git adapter for the approved S0 and S1 repository subsets.
 
+mod internal_symlinks;
 mod packed;
 
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::ffi::OsStr;
 use std::fs::{self, File};
 use std::io::{self, Read};
@@ -31,6 +32,7 @@ const S1_INTERNAL_CONTROL_FILE_BYTES: u64 = 33_554_432;
 pub struct LocalGitRepository {
     object_database: ObjectDatabaseMode,
     single_file_bytes: u64,
+    internal_symlinks: bool,
 }
 
 #[derive(Clone, Copy, Default)]
@@ -46,6 +48,7 @@ impl LocalGitRepository {
         Self {
             object_database: ObjectDatabaseMode::LooseOnly,
             single_file_bytes: STANDARD_LOCAL_S1_LIMITS.single_file_bytes,
+            internal_symlinks: false,
         }
     }
 
@@ -54,6 +57,7 @@ impl LocalGitRepository {
         Self {
             object_database: ObjectDatabaseMode::LocalGitSha1PackedV1,
             single_file_bytes: STANDARD_LOCAL_S1_LIMITS.single_file_bytes,
+            internal_symlinks: false,
         }
     }
 
@@ -62,6 +66,16 @@ impl LocalGitRepository {
         Self {
             object_database: ObjectDatabaseMode::LocalGitSha1PackedV1,
             single_file_bytes: LOCAL_GIT_SHA1_PACKED_RUST_8M_SINGLE_FILE_BYTES,
+            internal_symlinks: false,
+        }
+    }
+
+    /// Admit bounded internal Git links as metadata, without following host paths.
+    #[must_use]
+    pub const fn new_packed_sha1_internal_symlinks() -> Self {
+        Self {
+            internal_symlinks: true,
+            ..Self::new_packed_sha1_rust_8m()
         }
     }
 }
@@ -238,7 +252,9 @@ impl LocalGitRepository {
         } else {
             S1TraversalState::new(self.single_file_bytes)
         };
+        state.internal_symlinks = self.internal_symlinks;
         traverse_tree_object(&mut object_database, &tree_oid, &tree, "", 0, &mut state)?;
+        let symlinks = internal_symlinks::resolve_all(&state)?;
         object_database.verify_unchanged()?;
         let S1TraversalState {
             directory_count,
@@ -248,7 +264,8 @@ impl LocalGitRepository {
             ..
         } = state;
         Ok(AcquiredRepositoryBoundaries {
-            repository: AcquiredRepository::new(bound_revision, directory_count, files),
+            repository: AcquiredRepository::new(bound_revision, directory_count, files)
+                .with_symlinks(symlinks),
             gitlinks: gitlinks.unwrap_or_default(),
             gitmodules,
         })
@@ -537,6 +554,8 @@ struct S1TraversalState {
     files: Vec<AcquiredFile>,
     gitlinks: Option<Vec<AcquiredGitlink>>,
     gitmodules: Option<AcquiredGitmodules>,
+    internal_symlinks: bool,
+    link_entries: BTreeMap<String, internal_symlinks::Entry>,
 }
 
 impl S1TraversalState {
@@ -552,6 +571,8 @@ impl S1TraversalState {
             files: Vec::new(),
             gitlinks: None,
             gitmodules: None,
+            internal_symlinks: false,
+            link_entries: BTreeMap::new(),
         }
     }
 
@@ -688,22 +709,78 @@ fn traverse_tree_object(
         match entry.mode.as_slice() {
             b"040000" | b"40000" => {
                 state.observe_entry(&path, tree_oid)?;
+                if state.internal_symlinks {
+                    state.link_entries.insert(
+                        path.clone(),
+                        internal_symlinks::Entry::Directory(entry.object_id.clone()),
+                    );
+                }
                 traverse_directory(object_database, tree_oid, &entry, &path, depth, state)?;
             }
             b"100644" | b"100755" => {
                 state.observe_entry(&path, tree_oid)?;
+                if state.internal_symlinks {
+                    state.link_entries.insert(
+                        path.clone(),
+                        internal_symlinks::Entry::File(entry.object_id.clone()),
+                    );
+                }
                 state.observe_regular_path()?;
                 acquire_regular_file(object_database, tree_oid, &entry, path, state)?;
+            }
+            b"120000" if state.internal_symlinks => {
+                state.observe_entry(&path, tree_oid)?;
+                acquire_internal_symlink(object_database, tree_oid, &entry, path, state)?;
             }
             b"120000" => return Err(entry_policy_error(path, EntryPolicy::Symlink).into()),
             b"160000" if state.collects_boundaries() => {
                 state.observe_entry(&path, tree_oid)?;
+                if state.internal_symlinks {
+                    state
+                        .link_entries
+                        .insert(path.clone(), internal_symlinks::Entry::Gitlink);
+                }
                 state.observe_gitlink(path, tree_oid, entry.object_id)?;
             }
             b"160000" => return Err(entry_policy_error(path, EntryPolicy::Gitlink).into()),
             _ => return Err(entry_policy_error(path, EntryPolicy::SpecialFileMode).into()),
         }
     }
+    Ok(())
+}
+
+fn acquire_internal_symlink(
+    object_database: &mut S1ObjectDatabase,
+    parent_tree_oid: &ObjectId,
+    entry: &RawTreeEntry,
+    path: String,
+    state: &mut S1TraversalState,
+) -> Result<(), RepositoryBoundaryAcquisitionError> {
+    let blob = required_regular_blob(
+        object_database,
+        &entry.object_id,
+        parent_tree_oid,
+        state.cumulative_file_bytes,
+        internal_symlinks::MAX_TARGET_BYTES,
+        false,
+    )?;
+    if blob.kind != GitObjectKind::Blob || blob.body_size != blob.body_prefix.len() {
+        return Err(AcquisitionError::RepositoryInconsistent {
+            object_oid: entry.object_id.clone(),
+            expected_kind: ObjectKind::Blob,
+        }
+        .into());
+    }
+    state.observe_file_bytes(
+        u64::try_from(blob.body_size).map_err(|_| RepositoryError::Unexpected)?,
+    )?;
+    state.link_entries.insert(
+        path,
+        internal_symlinks::Entry::Link {
+            blob_oid: entry.object_id.clone(),
+            bytes: blob.body_prefix,
+        },
+    );
     Ok(())
 }
 

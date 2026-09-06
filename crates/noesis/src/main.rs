@@ -123,6 +123,8 @@ static CORRELATION_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 const SCAN_WORKER_STACK_BYTES: usize = 16 * 1024 * 1024;
 const B1A_EXECUTION_LIMIT_PROFILE: &str = "real-world-rust-benchmark-75s-v1";
 const B1A_SCAN_WALL_MILLISECONDS: u64 = 75_000;
+const LOCAL_GIT_SHA1_PACKED_INTERNAL_SYMLINKS_V1: &str =
+    "local-git-sha1-packed-internal-symlinks-v1";
 
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 enum ScanExecutionLimitProfile {
@@ -137,6 +139,7 @@ enum LocalAcquisitionProfile {
     Loose,
     PackedSha1,
     PackedSha1Rust8M,
+    PackedSha1InternalSymlinks,
 }
 
 impl LocalAcquisitionProfile {
@@ -6367,6 +6370,9 @@ fn repository_adapter(profile: LocalAcquisitionProfile) -> LocalGitRepository {
         LocalAcquisitionProfile::Loose => LocalGitRepository::new(),
         LocalAcquisitionProfile::PackedSha1 => LocalGitRepository::new_packed_sha1(),
         LocalAcquisitionProfile::PackedSha1Rust8M => LocalGitRepository::new_packed_sha1_rust_8m(),
+        LocalAcquisitionProfile::PackedSha1InternalSymlinks => {
+            LocalGitRepository::new_packed_sha1_internal_symlinks()
+        }
     }
 }
 
@@ -7966,6 +7972,7 @@ fn parse_s4_invocation(arguments: Vec<OsString>) -> Result<Invocation, Invocatio
     Ok(invocation)
 }
 
+#[allow(clippy::too_many_lines)]
 fn parse_r16_invocation(arguments: &[OsString]) -> Result<Invocation, InvocationError> {
     if arguments
         .get(1)
@@ -7985,6 +7992,7 @@ fn parse_r16_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
     let mut stripped = arguments.iter().take(2).cloned().collect::<Vec<_>>();
     let mut constant_profile = None;
     let mut execution_limit_profile = None;
+    let mut internal_symlinks = false;
     let mut index = 2;
     while index < arguments.len() {
         let flag = &arguments[index];
@@ -8015,6 +8023,12 @@ fn parse_r16_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
                 ));
             };
             execution_limit_profile = Some(value.to_owned());
+        } else if flag == OsStr::new("--acquisition-profile")
+            && value == OsStr::new(LOCAL_GIT_SHA1_PACKED_INTERNAL_SYMLINKS_V1)
+        {
+            internal_symlinks = true;
+            stripped.push(flag.clone());
+            stripped.push(OsString::from(LOCAL_GIT_SHA1_PACKED_RUST_8M_V1));
         } else {
             stripped.push(flag.clone());
             stripped.push(value.clone());
@@ -8060,6 +8074,9 @@ fn parse_r16_invocation(arguments: &[OsString]) -> Result<Invocation, Invocation
         return Err(InvocationError::InvalidR16Composition(
             "benchmark_execution_limit_requires_packed_r16_bounded_output",
         ));
+    }
+    if internal_symlinks {
+        invocation.packed_sha1 = LocalAcquisitionProfile::PackedSha1InternalSymlinks;
     }
     invocation.rust_constant_profile = true;
     invocation.execution_limit_profile = execution_limit_profile;
@@ -9635,6 +9652,10 @@ mod s4_root_argument_tests {
             vec!["--source-profile", "trusted-local-source-v2"],
             vec!["--format", "text"],
             vec!["--acquisition-profile", "unknown"],
+            vec![
+                "--acquisition-profile",
+                "local-git-sha1-packed-internal-symlinks-v1",
+            ],
             vec!["--repository-boundary-profile", "unknown"],
         ] {
             let mut arguments = valid.clone();
@@ -9853,6 +9874,142 @@ mod s4_root_argument_tests {
             invocation.execution_limit_profile,
             ScanExecutionLimitProfile::RealWorldRustBenchmark75sV1
         );
+    }
+
+    #[test]
+    fn gt_fr_acq_001_r16_internal_symlinks_selector_requires_complete_scan() {
+        for semantic_profile in [R5_RUST_SEMANTIC_PROFILE, R10_PROFILE] {
+            for benchmark in [false, true] {
+                let mut arguments = r16_b1a_arguments();
+                replace_option_value(
+                    &mut arguments,
+                    "--acquisition-profile",
+                    "local-git-sha1-packed-internal-symlinks-v1",
+                );
+                replace_option_value(&mut arguments, "--rust-semantic-profile", semantic_profile);
+                if !benchmark {
+                    remove_option(&mut arguments, "--execution-limit-profile");
+                }
+                let Ok(invocation) = parse_s4_invocation(arguments) else {
+                    panic!("complete R16 scan must accept the exact internal symlinks selector");
+                };
+                assert_eq!(
+                    invocation.packed_sha1,
+                    LocalAcquisitionProfile::PackedSha1InternalSymlinks
+                );
+                assert!(invocation.packed_sha1.is_packed());
+                assert!(invocation.rust_constant_profile);
+                assert!(invocation.rust_flow_profile);
+                assert_eq!(
+                    invocation.execution_limit_profile,
+                    if benchmark {
+                        ScanExecutionLimitProfile::RealWorldRustBenchmark75sV1
+                    } else {
+                        ScanExecutionLimitProfile::Standard
+                    }
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn sec_fr_acq_001_internal_symlinks_selector_rejects_incomplete_or_duplicate_profiles() {
+        let mut exact = r16_b1a_arguments();
+        replace_option_value(
+            &mut exact,
+            "--acquisition-profile",
+            "local-git-sha1-packed-internal-symlinks-v1",
+        );
+        for missing in [
+            "--rust-constant-profile",
+            "--rust-flow-profile",
+            "--rust-expression-profile",
+            "--rust-callable-profile",
+            "--rust-framework-profile",
+            "--manifest-profile",
+            "--workspace-profile",
+        ] {
+            let mut incomplete = exact.clone();
+            remove_option(&mut incomplete, "--execution-limit-profile");
+            remove_option(&mut incomplete, missing);
+            assert!(
+                parse_s4_invocation(incomplete).is_err(),
+                "missing {missing}"
+            );
+        }
+        for profile in [
+            "local-git-sha1-packed-internal-symlinks-v1",
+            LOCAL_GIT_SHA1_PACKED_V1,
+            LOCAL_GIT_SHA1_PACKED_RUST_8M_V1,
+            "unknown",
+        ] {
+            let mut duplicate = exact.clone();
+            duplicate.extend([
+                OsString::from("--acquisition-profile"),
+                OsString::from(profile),
+            ]);
+            assert!(
+                parse_s4_invocation(duplicate).is_err(),
+                "duplicate {profile}"
+            );
+        }
+        let mut unknown = exact.clone();
+        replace_option_value(
+            &mut unknown,
+            "--acquisition-profile",
+            "local-git-sha1-packed-internal-symlinks-v2",
+        );
+        assert!(parse_s4_invocation(unknown).is_err());
+        for command in ["refresh", "source"] {
+            let mut wrong_command = exact.clone();
+            wrong_command[1] = OsString::from(command);
+            assert!(parse_s4_invocation(wrong_command).is_err());
+        }
+    }
+
+    #[test]
+    fn sec_fr_acq_001_internal_symlinks_selector_is_rejected_by_legacy_parsers() {
+        for profile in [
+            "standard-local-s1",
+            "standard-local-s2",
+            "standard-local-s3",
+            "standard-local-s4",
+            "standard-local-s5",
+        ] {
+            let mut arguments = [
+                "noesis",
+                "scan",
+                "--repository",
+                ".",
+                "--repository-id",
+                "urn:codenoesis:test:internal-symlinks",
+                "--revision",
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "--profile",
+                profile,
+                "--acquisition-profile",
+                "local-git-sha1-packed-internal-symlinks-v1",
+                "--format",
+                "json",
+            ]
+            .map(OsString::from)
+            .to_vec();
+            if matches!(
+                profile,
+                "standard-local-s3" | "standard-local-s4" | "standard-local-s5"
+            ) {
+                arguments.extend([OsString::from("--store"), OsString::from("store")]);
+            }
+            assert!(matches!(
+                Invocation::parse(arguments.clone(), Some(profile)),
+                Err(InvocationError::InvalidAcquisitionProfile)
+            ));
+            arguments[1] = OsString::from("refresh");
+            assert!(matches!(
+                Invocation::parse_command(arguments, "refresh", Some(profile)),
+                Err(InvocationError::InvalidAcquisitionProfile)
+            ));
+        }
     }
 
     #[test]

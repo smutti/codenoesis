@@ -26,7 +26,8 @@ use codenoesis_domain::storage::{
     StorageError,
 };
 use codenoesis_domain::{
-    AcquisitionError, K1OutputCapacityProfile, LimitKind, RepositoryInventory,
+    AcquiredSymlink, AcquisitionError, K1OutputCapacityProfile, LimitKind, ObjectId,
+    RepositoryIdentity, RepositoryInventory, SymlinkTargetKind,
 };
 use serde_json::{Map, Value, json};
 
@@ -435,7 +436,7 @@ impl RepositorySnapshotV18 {
             .ok_or(RepositorySnapshotV18Error::ContractInvalid)?;
         semantic.insert(
             "knowledge_graph".to_owned(),
-            knowledge_graph_v15(&baseline_graph, knowledge)?,
+            knowledge_graph_v15(&baseline_graph, knowledge, inventory)?,
         );
         let semantic_value = Value::Object(semantic.clone());
         let root = value
@@ -791,6 +792,7 @@ fn extraction_chunks_v15(
 fn knowledge_graph_v15(
     baseline: &Value,
     knowledge: &ConstantEvaluationKnowledge,
+    inventory: &RepositoryInventory,
 ) -> Result<Value, RepositorySnapshotV18Error> {
     let mut value = baseline.clone();
     let object = value
@@ -840,9 +842,331 @@ fn knowledge_graph_v15(
         "coverage",
         knowledge.graph.coverage.iter().map(constant_coverage),
     )?;
+    append_symlink_metadata(inventory, object)?;
     validate_graph_v15(object).map_err(|_| RepositorySnapshotV18Error::ContractInvalid)?;
     insert_semantic_hash(&mut value, GRAPH_V15_HASH_DOMAIN)?;
     Ok(value)
+}
+
+const SYMLINK_PROFILE: &str = "codenoesis.git-internal-symlink/v1";
+const SYMLINK_DIAGNOSTIC_CODE: &str = "acquisition.git_symlink_not_dereferenced";
+const SYMLINK_CAPABILITY: &str = "git_symlink_alias_extraction";
+const SYMLINK_EVIDENCE_PREFIX: &str = "urn:codenoesis:git-symlink-evidence:blake3:";
+const SYMLINK_DIAGNOSTIC_PREFIX: &str = "urn:codenoesis:git-symlink-diagnostic:blake3:";
+const SYMLINK_COVERAGE_PREFIX: &str = "urn:codenoesis:git-symlink-coverage:blake3:";
+
+/// Projects acquisition evidence without turning the link or its target into source copies.
+fn append_symlink_metadata(
+    inventory: &RepositoryInventory,
+    graph: &mut Map<String, Value>,
+) -> Result<(), RepositorySnapshotV18Error> {
+    if inventory.symlinks().is_empty() {
+        return Ok(());
+    }
+    let bound = inventory.bound_revision();
+    let identity = bound.repository_identity().as_str();
+    let commit = bound.commit_oid().as_str();
+    let repository = graph
+        .get("repository")
+        .and_then(Value::as_object)
+        .ok_or(RepositorySnapshotV18Error::ContractInvalid)?;
+    if repository.get("identity").and_then(Value::as_str) != Some(identity)
+        || repository.get("commit_oid").and_then(Value::as_str) != Some(commit)
+    {
+        return Err(RepositorySnapshotV18Error::ContractInvalid);
+    }
+    let mut evidence = Vec::with_capacity(inventory.symlinks().len());
+    let mut diagnostics = Vec::with_capacity(inventory.symlinks().len());
+    let mut coverage = Vec::with_capacity(inventory.symlinks().len());
+    let mut paths = BTreeSet::new();
+    let regular_files = inventory
+        .files()
+        .iter()
+        .map(|file| (file.path(), file.blob_oid()))
+        .collect::<BTreeMap<_, _>>();
+    let symlink_paths = inventory
+        .symlinks()
+        .iter()
+        .map(|link| link.path.as_str())
+        .collect::<BTreeSet<_>>();
+    for link in inventory.symlinks() {
+        if !acquired_symlink_target_valid(link, &regular_files, &symlink_paths)
+            || !paths.insert(link.path.as_str())
+            || regular_files.contains_key(link.path.as_str())
+        {
+            return Err(RepositorySnapshotV18Error::ContractInvalid);
+        }
+        let mut record = json!({
+            "path": link.path,
+            "blob_oid": link.blob_oid.as_str(),
+            "start_byte": 0,
+            "end_byte": link.bytes.len(),
+            "git_symlink": {
+                "profile": SYMLINK_PROFILE,
+                "mode": "120000",
+                "resolved_target": link.resolved_target,
+                "target_oid": link.target_oid.as_str(),
+                "target_kind": match link.target_kind {
+                    SymlinkTargetKind::File => "file",
+                    SymlinkTargetKind::Directory => "directory",
+                }
+            }
+        });
+        let id = symlink_evidence_id(identity, commit, &record);
+        record["id"] = Value::String(id.clone());
+        diagnostics.push(symlink_diagnostic(&id));
+        coverage.push(symlink_coverage(&id));
+        evidence.push(record);
+    }
+    merge_id_array(graph, "evidence", evidence)?;
+    merge_id_array(graph, "diagnostics", diagnostics)?;
+    merge_id_array(graph, "coverage", coverage)?;
+    validate_symlink_metadata(graph, "coverage")
+        .map_err(|_| RepositorySnapshotV18Error::ContractInvalid)
+}
+
+/// Rechecks information available at this boundary. The adapter remains responsible
+/// for link-blob hashing, chain resolution, and directory tree/OID verification.
+fn acquired_symlink_target_valid(
+    link: &AcquiredSymlink,
+    regular_files: &BTreeMap<&str, &ObjectId>,
+    symlink_paths: &BTreeSet<&str>,
+) -> bool {
+    let Ok(target) = std::str::from_utf8(&link.bytes) else {
+        return false;
+    };
+    let resolved = link.resolved_target.as_str();
+    let path_uses_alias = resolved
+        .match_indices('/')
+        .map(|(index, _)| &resolved[..index])
+        .chain(std::iter::once(resolved))
+        .any(|path| symlink_paths.contains(path));
+    let kind_matches = match link.target_kind {
+        SymlinkTargetKind::File => {
+            regular_files
+                .get(resolved)
+                .is_some_and(|oid| **oid == link.target_oid)
+                && !target.ends_with('/')
+        }
+        SymlinkTargetKind::Directory => !regular_files.contains_key(resolved),
+    };
+    !link.bytes.is_empty()
+        && link.bytes.len() <= 1_024
+        && !target.starts_with('/')
+        && !target.contains('\\')
+        && !target.chars().any(char::is_control)
+        && !target
+            .split('/')
+            .next()
+            .is_some_and(|component| component.ends_with(':'))
+        && target
+            .strip_suffix('/')
+            .unwrap_or(target)
+            .split('/')
+            .all(|component| !component.is_empty() && component.len() <= 255)
+        && !path_uses_alias
+        && kind_matches
+}
+
+fn symlink_evidence_id(identity: &str, commit: &str, record: &Value) -> String {
+    let preimage =
+        json!({"repository_identity": identity, "commit_oid": commit, "evidence": record});
+    format!(
+        "{SYMLINK_EVIDENCE_PREFIX}{}",
+        semantic_hash(b"codenoesis.git-internal-symlink.evidence.v1", &preimage)
+    )
+}
+
+fn symlink_diagnostic(evidence_id: &str) -> Value {
+    json!({
+        "id": format!("{SYMLINK_DIAGNOSTIC_PREFIX}{}", semantic_hash(b"codenoesis.git-internal-symlink.diagnostic.v1", &json!(evidence_id))),
+        "code": SYMLINK_DIAGNOSTIC_CODE,
+        "message": "The committed Git symlink target was validated within the same tree. Link traversal and Rust module alias extraction were not performed; regular target source is inventoried only at its committed path.",
+        "evidence_ids": [evidence_id]
+    })
+}
+
+fn symlink_coverage(evidence_id: &str) -> Value {
+    json!({
+        "id": format!("{SYMLINK_COVERAGE_PREFIX}{}", semantic_hash(b"codenoesis.git-internal-symlink.coverage.v1", &json!(evidence_id))),
+        "capability": SYMLINK_CAPABILITY,
+        "state": "unsupported",
+        "evidence_ids": [evidence_id]
+    })
+}
+
+fn record_has_prefix(value: &Value, prefix: &str) -> bool {
+    record_id(value).is_some_and(|id| id.starts_with(prefix))
+}
+
+fn symlink_record_path_valid(path: &str) -> bool {
+    safe_relative_path(path)
+        && path.split('/').count() <= 32
+        && path
+            .split('/')
+            .all(|component| !matches!(component, "." | ".."))
+}
+
+fn exact_fields(value: &Map<String, Value>, expected: &[&str]) -> bool {
+    value.len() == expected.len() && expected.iter().all(|field| value.contains_key(*field))
+}
+
+/// The profile has a closed record shape even though inherited graph families are extensible.
+/// Portable validation checks record integrity and references, not the Git object database.
+fn validate_symlink_metadata(
+    graph: &Map<String, Value>,
+    coverage_family: &str,
+) -> Result<(), R16ContractError> {
+    let evidence = graph
+        .get("evidence")
+        .and_then(Value::as_array)
+        .ok_or(R16ContractError::InvalidProjection)?;
+    let mut expected_diagnostics = BTreeMap::new();
+    let mut expected_coverage = BTreeMap::new();
+    let mut paths = BTreeSet::new();
+    for record in evidence.iter().filter(|value| {
+        value.get("git_symlink").is_some() || record_has_prefix(value, SYMLINK_EVIDENCE_PREFIX)
+    }) {
+        let (path, id) = validate_symlink_evidence(record, graph)?;
+        if !paths.insert(path) {
+            return Err(R16ContractError::InvalidProjection);
+        }
+        let diagnostic = symlink_diagnostic(&id);
+        expected_diagnostics.insert(diagnostic["id"].as_str().unwrap().to_owned(), diagnostic);
+        let coverage = symlink_coverage(&id);
+        expected_coverage.insert(coverage["id"].as_str().unwrap().to_owned(), coverage);
+    }
+    let actual_diagnostics = symlink_family_records(
+        graph,
+        "diagnostics",
+        SYMLINK_DIAGNOSTIC_PREFIX,
+        "code",
+        SYMLINK_DIAGNOSTIC_CODE,
+    )?;
+    let actual_coverage = symlink_family_records(
+        graph,
+        coverage_family,
+        SYMLINK_COVERAGE_PREFIX,
+        "capability",
+        SYMLINK_CAPABILITY,
+    )?;
+    if expected_diagnostics != actual_diagnostics || expected_coverage != actual_coverage {
+        return Err(R16ContractError::InvalidProjection);
+    }
+    Ok(())
+}
+
+fn validate_symlink_evidence<'a>(
+    record: &'a Value,
+    graph: &Map<String, Value>,
+) -> Result<(&'a str, String), R16ContractError> {
+    let object = record
+        .as_object()
+        .ok_or(R16ContractError::InvalidProjection)?;
+    let metadata = object
+        .get("git_symlink")
+        .and_then(Value::as_object)
+        .ok_or(R16ContractError::InvalidProjection)?;
+    let path = object
+        .get("path")
+        .and_then(Value::as_str)
+        .ok_or(R16ContractError::InvalidProjection)?;
+    let resolved = metadata
+        .get("resolved_target")
+        .and_then(Value::as_str)
+        .ok_or(R16ContractError::InvalidProjection)?;
+    let blob = object
+        .get("blob_oid")
+        .and_then(Value::as_str)
+        .ok_or(R16ContractError::InvalidProjection)?;
+    let target = metadata
+        .get("target_oid")
+        .and_then(Value::as_str)
+        .ok_or(R16ContractError::InvalidProjection)?;
+    if !exact_fields(
+        object,
+        &[
+            "id",
+            "path",
+            "blob_oid",
+            "start_byte",
+            "end_byte",
+            "git_symlink",
+        ],
+    ) || !exact_fields(
+        metadata,
+        &[
+            "profile",
+            "mode",
+            "resolved_target",
+            "target_oid",
+            "target_kind",
+        ],
+    ) || metadata.get("profile").and_then(Value::as_str) != Some(SYMLINK_PROFILE)
+        || metadata.get("mode").and_then(Value::as_str) != Some("120000")
+        || !matches!(
+            metadata.get("target_kind").and_then(Value::as_str),
+            Some("file" | "directory")
+        )
+        || !symlink_record_path_valid(path)
+        || !symlink_record_path_valid(resolved)
+        || path == resolved
+        || ObjectId::parse_sha1(blob).is_none()
+        || ObjectId::parse_sha1(target).is_none()
+        || object.get("start_byte").and_then(Value::as_u64) != Some(0)
+        || !object
+            .get("end_byte")
+            .and_then(Value::as_u64)
+            .is_some_and(|end| (1..=1_024).contains(&end))
+    {
+        return Err(R16ContractError::InvalidProjection);
+    }
+    let repository = graph
+        .get("repository")
+        .and_then(Value::as_object)
+        .ok_or(R16ContractError::InvalidProjection)?;
+    let identity = repository
+        .get("identity")
+        .and_then(Value::as_str)
+        .ok_or(R16ContractError::InvalidProjection)?;
+    let commit = repository
+        .get("commit_oid")
+        .and_then(Value::as_str)
+        .ok_or(R16ContractError::InvalidProjection)?;
+    if RepositoryIdentity::parse(identity).is_err() || ObjectId::parse_sha1(commit).is_none() {
+        return Err(R16ContractError::InvalidProjection);
+    }
+    let mut preimage = object.clone();
+    preimage.remove("id");
+    let id = symlink_evidence_id(identity, commit, &Value::Object(preimage));
+    if record_id(record) != Some(id.as_str()) {
+        return Err(R16ContractError::IdentityConflict(id));
+    }
+    Ok((path, id))
+}
+
+fn symlink_family_records(
+    graph: &Map<String, Value>,
+    family: &str,
+    prefix: &str,
+    tag: &str,
+    expected_tag: &str,
+) -> Result<BTreeMap<String, Value>, R16ContractError> {
+    let records = graph
+        .get(family)
+        .and_then(Value::as_array)
+        .ok_or(R16ContractError::InvalidProjection)?;
+    let mut result = BTreeMap::new();
+    for record in records.iter().filter(|value| {
+        record_has_prefix(value, prefix)
+            || value.get(tag).and_then(Value::as_str) == Some(expected_tag)
+    }) {
+        let id = record_id(record).ok_or(R16ContractError::InvalidProjection)?;
+        if result.insert(id.to_owned(), record.clone()).is_some() {
+            return Err(R16ContractError::IdentityConflict(id.to_owned()));
+        }
+    }
+    Ok(result)
 }
 
 fn evaluated_value(value: &EvaluatedValue) -> Value {
@@ -914,6 +1238,7 @@ fn validate_graph_v15(graph: &Map<String, Value>) -> Result<(), R16ContractError
     let evidence_ids = validate_family(graph, "evidence", "id")?;
     validate_family(graph, "diagnostics", "id")?;
     validate_family(graph, "coverage", "id")?;
+    validate_symlink_metadata(graph, "coverage")?;
     for relationship in graph
         .get("relationships")
         .and_then(Value::as_array)
@@ -1321,6 +1646,7 @@ fn validate_portable_value(value: &Value, sha256: R16Sha256) -> Result<(), R16Co
     validate_family(object, "coverage_gaps", "id")?;
     validate_family(object, "documents", "document_id")?;
     validate_family(object, "document_statements", "statement_id")?;
+    validate_symlink_metadata(object, "coverage_gaps")?;
     for relationship in object
         .get("relationships")
         .and_then(Value::as_array)
@@ -2357,4 +2683,287 @@ fn safe_relative_path(value: &str) -> bool {
         && path
             .components()
             .all(|component| matches!(component, Component::Normal(_)))
+}
+
+#[cfg(test)]
+mod symlink_contract_tests {
+    use super::*;
+    use codenoesis_domain::{
+        AcquiredFile, AcquiredRepository, AcquiredSymlink, BoundRevision, ObjectId,
+        RegularFileMode, RepositoryIdentity, SymlinkTargetKind,
+    };
+
+    fn oid(digit: &str) -> ObjectId {
+        ObjectId::parse_sha1(&digit.repeat(40)).unwrap()
+    }
+
+    fn inventory() -> RepositoryInventory {
+        RepositoryInventory::classify(
+            AcquiredRepository::new(
+                BoundRevision::new(
+                    RepositoryIdentity::parse("urn:codenoesis:test:symlink-contract").unwrap(),
+                    oid("a"),
+                    oid("b"),
+                ),
+                1,
+                vec![regular_file(oid("d"))],
+            )
+            .with_symlinks(vec![
+                AcquiredSymlink {
+                    path: "alias.rs".to_owned(),
+                    blob_oid: oid("c"),
+                    bytes: b"src/lib.rs".to_vec(),
+                    resolved_target: "src/lib.rs".to_owned(),
+                    target_oid: oid("d"),
+                    target_kind: SymlinkTargetKind::File,
+                },
+                AcquiredSymlink {
+                    path: "directory-alias".to_owned(),
+                    blob_oid: oid("e"),
+                    bytes: b"src".to_vec(),
+                    resolved_target: "src".to_owned(),
+                    target_oid: oid("f"),
+                    target_kind: SymlinkTargetKind::Directory,
+                },
+            ]),
+        )
+    }
+
+    fn regular_file(blob_oid: ObjectId) -> AcquiredFile {
+        AcquiredFile::new(
+            "src/lib.rs".to_owned(),
+            RegularFileMode::Regular,
+            blob_oid,
+            b"pub fn run() {}".to_vec(),
+        )
+    }
+
+    fn rejects_acquired_links(files: Vec<AcquiredFile>, links: Vec<AcquiredSymlink>) -> bool {
+        let inventory = RepositoryInventory::classify(
+            AcquiredRepository::new(inventory().bound_revision().clone(), 1, files)
+                .with_symlinks(links),
+        );
+        let mut graph = json!({
+            "repository": {"identity": inventory.bound_revision().repository_identity().as_str(), "commit_oid": inventory.bound_revision().commit_oid().as_str()},
+            "evidence": [], "diagnostics": [], "coverage": []
+        });
+        append_symlink_metadata(&inventory, graph.as_object_mut().unwrap()).is_err()
+    }
+
+    #[test]
+    fn sec_fr_acq_002_r16_requires_physical_file_target_identity() {
+        let links = inventory().symlinks().to_vec();
+        assert!(
+            rejects_acquired_links(Vec::new(), links.clone()),
+            "missing physical target"
+        );
+        assert!(
+            rejects_acquired_links(vec![regular_file(oid("b"))], links.clone()),
+            "mismatched target blob"
+        );
+        let mut aliased = links.clone();
+        aliased[0].resolved_target = "directory-alias".to_owned();
+        aliased[0].target_kind = SymlinkTargetKind::Directory;
+        assert!(
+            rejects_acquired_links(vec![regular_file(oid("d"))], aliased),
+            "target is another symlink"
+        );
+        let mut aliased = links;
+        aliased[0].resolved_target = "directory-alias/nested".to_owned();
+        aliased[0].target_kind = SymlinkTargetKind::Directory;
+        assert!(
+            rejects_acquired_links(vec![regular_file(oid("d"))], aliased),
+            "target traverses another symlink"
+        );
+    }
+
+    #[test]
+    fn sec_fr_acq_002_r16_rejects_directory_kind_for_a_physical_file() {
+        let mut links = inventory().symlinks().to_vec();
+        links[0].target_kind = SymlinkTargetKind::Directory;
+        assert!(rejects_acquired_links(vec![regular_file(oid("d"))], links));
+    }
+
+    #[test]
+    fn sec_fr_acq_002_r16_rejects_invalid_raw_target_syntax_before_projection() {
+        for bytes in [
+            b"C:/target".to_vec(),
+            b"src//lib.rs".to_vec(),
+            b"src/lib.rs/".to_vec(),
+            vec![b'a'; 256],
+            b"src/lib.rs\\".to_vec(),
+            b"/src/lib.rs".to_vec(),
+            vec![0xff],
+            Vec::new(),
+            b"src/lib.rs\n".to_vec(),
+        ] {
+            let mut links = inventory().symlinks().to_vec();
+            links[0].bytes = bytes.clone();
+            assert!(
+                rejects_acquired_links(vec![regular_file(oid("d"))], links),
+                "{bytes:?}"
+            );
+        }
+    }
+
+    fn graph() -> Value {
+        let inventory = inventory();
+        let mut graph = json!({
+            "schema_version": R16_GRAPH_VERSION, "ontology_version": R16_ONTOLOGY_VERSION,
+            "repository": {"identity": inventory.bound_revision().repository_identity().as_str(), "commit_oid": inventory.bound_revision().commit_oid().as_str()},
+            "entities": [], "relationships": [], "claims": [], "evidence": [], "diagnostics": [], "coverage": [],
+            "local_flow_index": {},
+            "constant_evaluation_index": {"schema_version": R16_INDEX_VERSION, "rule_version": R16_RULE_VERSION, "evaluated_entity_ids": [], "evaluation_relationship_ids": [], "derivations": []}
+        });
+        append_symlink_metadata(&inventory, graph.as_object_mut().unwrap()).unwrap();
+        graph
+    }
+
+    fn portable(graph: &Value) -> Value {
+        let mut value = json!({
+            "schema_version": R16_PORTABLE_GRAPH_VERSION, "ontology_version": R16_ONTOLOGY_VERSION,
+            "query_contract_version": R16_QUERY_VERSION, "repository": graph["repository"],
+            "source_snapshot": {"schema_version": R16_SNAPSHOT_VERSION, "snapshot_id": "fixture", "semantic_hash": {"algorithm": "blake3-256", "value": "a".repeat(64)}},
+            "projection": {"profile": "codenoesis.lossless-portable-projection/v9", "family_sha256": {}},
+            "entities": graph["entities"], "relationships": graph["relationships"], "claims": graph["claims"],
+            "evidence": graph["evidence"], "diagnostics": graph["diagnostics"], "coverage_gaps": graph["coverage"],
+            "documents": [], "document_statements": [], "local_flow_index": graph["local_flow_index"], "constant_evaluation_index": graph["constant_evaluation_index"]
+        });
+        value["projection"]["family_sha256"] = family_digests(&value, test_hash).unwrap();
+        value
+    }
+
+    fn test_hash(bytes: &[u8]) -> String {
+        blake3::hash(bytes).to_hex().to_string()
+    }
+
+    #[test]
+    fn conf_fr_acq_002_r16_preserves_link_blob_evidence_and_non_dereference_gap() {
+        let graph = graph();
+        validate_graph_v15(graph.as_object().unwrap()).unwrap();
+        assert!(graph["entities"].as_array().unwrap().is_empty());
+        assert_eq!(graph["evidence"].as_array().unwrap().len(), 2);
+        assert_eq!(graph["diagnostics"].as_array().unwrap().len(), 2);
+        assert_eq!(graph["coverage"].as_array().unwrap().len(), 2);
+        let evidence = graph["evidence"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|value| value["path"] == "alias.rs")
+            .unwrap();
+        assert_eq!(evidence["blob_oid"], "c".repeat(40));
+        assert_eq!(evidence["start_byte"], 0);
+        assert_eq!(evidence["end_byte"], 10);
+        assert_eq!(evidence["git_symlink"]["mode"], "120000");
+        assert_eq!(evidence["git_symlink"]["resolved_target"], "src/lib.rs");
+        assert_eq!(evidence["git_symlink"]["target_kind"], "file");
+        assert_eq!(evidence["git_symlink"]["target_oid"], "d".repeat(40));
+        assert_eq!(
+            evidence["git_symlink"]["profile"],
+            "codenoesis.git-internal-symlink/v1"
+        );
+        assert!(
+            !serde_json::to_string(&graph)
+                .unwrap()
+                .contains("source_contents")
+        );
+        let value = portable(&graph);
+        let mut bytes = serde_json::to_vec(&value).unwrap();
+        bytes.push(b'\n');
+        let imported = PortableGraphV9::from_canonical_file(&bytes, test_hash).unwrap();
+        assert_eq!(imported.value()["evidence"], graph["evidence"]);
+        assert_eq!(imported.value()["diagnostics"], graph["diagnostics"]);
+        assert_eq!(imported.value()["coverage_gaps"], graph["coverage"]);
+        assert_eq!(graph, self::graph());
+    }
+
+    #[test]
+    fn sec_fr_acq_002_r16_rejects_forged_or_incomplete_link_records() {
+        for (pointer, replacement) in [
+            ("/evidence/0/git_symlink/mode", json!("100644")),
+            (
+                "/evidence/0/git_symlink/resolved_target",
+                json!("../outside"),
+            ),
+            ("/evidence/0/git_symlink/target_kind", json!("gitlink")),
+            ("/evidence/0/git_symlink/target_oid", json!("bad")),
+            ("/evidence/0/git_symlink/profile", json!("unknown")),
+            ("/evidence/0/end_byte", json!(0)),
+            ("/evidence/0/end_byte", json!(1_025)),
+            ("/evidence/0/start_byte", json!(1)),
+            ("/evidence/0/git_symlink/resolved_target", json!("")),
+            (
+                "/evidence/0/git_symlink/resolved_target",
+                json!("src/./lib.rs"),
+            ),
+            (
+                "/evidence/0/git_symlink/resolved_target",
+                json!("src//lib.rs"),
+            ),
+            (
+                "/evidence/0/git_symlink/resolved_target",
+                json!("x".repeat(256)),
+            ),
+            (
+                "/evidence/0/git_symlink/resolved_target",
+                json!(vec!["a"; 33].join("/")),
+            ),
+            ("/evidence/0/blob_oid", json!("f".repeat(40))),
+            ("/evidence/0/id", json!("forged")),
+            ("/diagnostics/0/evidence_ids", json!(["missing"])),
+            ("/coverage/0/state", json!("complete")),
+            ("/repository/commit_oid", json!("f".repeat(40))),
+        ] {
+            let mut graph = graph();
+            *graph.pointer_mut(pointer).unwrap() = replacement;
+            assert!(
+                validate_graph_v15(graph.as_object().unwrap()).is_err(),
+                "{pointer}"
+            );
+            let value = portable(&graph);
+            assert!(
+                validate_portable_value(&value, test_hash).is_err(),
+                "portable {pointer}"
+            );
+        }
+        for family in ["diagnostics", "coverage"] {
+            let mut graph = graph();
+            graph[family] = json!([]);
+            assert!(
+                validate_graph_v15(graph.as_object().unwrap()).is_err(),
+                "missing {family}"
+            );
+        }
+        let mut graph = graph();
+        graph["evidence"][0]["git_symlink"]["unknown"] = json!(true);
+        assert!(validate_graph_v15(graph.as_object().unwrap()).is_err());
+        let mut graph = self::graph();
+        graph["evidence"] = json!([]);
+        assert!(
+            validate_graph_v15(graph.as_object().unwrap()).is_err(),
+            "orphan link records"
+        );
+        let mut graph = self::graph();
+        graph["evidence"][0]
+            .as_object_mut()
+            .unwrap()
+            .remove("git_symlink");
+        assert!(
+            validate_graph_v15(graph.as_object().unwrap()).is_err(),
+            "removed profile marker"
+        );
+    }
+
+    #[test]
+    fn reg_fr_acq_002_r16_empty_link_projection_is_byte_preserving() {
+        let inventory = RepositoryInventory::classify(AcquiredRepository::new(
+            inventory().bound_revision().clone(),
+            0,
+            Vec::new(),
+        ));
+        let mut graph = json!({"evidence": [], "diagnostics": [], "coverage": []});
+        let baseline = graph.clone();
+        append_symlink_metadata(&inventory, graph.as_object_mut().unwrap()).unwrap();
+        assert_eq!(graph, baseline);
+    }
 }

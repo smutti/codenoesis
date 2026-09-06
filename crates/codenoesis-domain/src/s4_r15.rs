@@ -7,7 +7,7 @@ use crate::s4::{WorkspaceClaim, WorkspaceEvidence, workspace_claim_id};
 use crate::s4_k1::CallableSemanticEntityKind;
 use crate::s4_r14::{
     ExpressionBindingError, ExpressionBindingExtraction, ExpressionBindingKnowledge,
-    ExpressionEntityKind, ExpressionRelationshipKind,
+    ExpressionBindingRelationship, ExpressionEntityKind, ExpressionRelationshipKind,
 };
 use crate::s5::AnalysisCacheEntry;
 
@@ -595,6 +595,10 @@ impl LocalFlowKnowledge {
         if derived_ids != derivation_ids {
             return Err(LocalFlowError::DerivationMismatch);
         }
+        let derivation_lookup = DerivationLookup::new(
+            &self.expression.graph.relationships,
+            &self.graph.relationships,
+        );
         let mut derivation_input_count = 0_usize;
         for derivation in &self.graph.index.derivations {
             derivation_input_count =
@@ -621,7 +625,7 @@ impl LocalFlowKnowledge {
             }
             validate_derivation_semantics(
                 derivation,
-                &self.expression,
+                &derivation_lookup,
                 &self.graph.blocks,
                 &self.graph.relationships,
                 &entity_evidence,
@@ -1227,16 +1231,56 @@ fn validate_local_flow_coverage(
     Ok(())
 }
 
+// Reuse borrowed graph indexes across derivations. Building these per derivation
+// makes validation quadratic in repository size even for independent callables.
+struct DerivationLookup<'a> {
+    inherited: BTreeMap<&'a str, &'a ExpressionBindingRelationship>,
+    local: BTreeMap<&'a str, &'a LocalFlowRelationship>,
+    reads: BTreeMap<&'a str, &'a ExpressionBindingRelationship>,
+    writes: BTreeMap<&'a str, &'a ExpressionBindingRelationship>,
+}
+
+impl<'a> DerivationLookup<'a> {
+    fn new(
+        inherited: &'a [ExpressionBindingRelationship],
+        local: &'a [LocalFlowRelationship],
+    ) -> Self {
+        let mut reads = BTreeMap::new();
+        let mut writes = BTreeMap::new();
+        for relationship in inherited {
+            let index = match relationship.kind {
+                ExpressionRelationshipKind::Reads => &mut reads,
+                ExpressionRelationshipKind::Writes => &mut writes,
+                _ => continue,
+            };
+            // Preserve the first relationship selected by the original scan.
+            index
+                .entry(relationship.source.as_str())
+                .or_insert(relationship);
+        }
+        Self {
+            inherited: inherited
+                .iter()
+                .map(|edge| (edge.id.as_str(), edge))
+                .collect(),
+            local: local.iter().map(|edge| (edge.id.as_str(), edge)).collect(),
+            reads,
+            writes,
+        }
+    }
+}
+
 fn validate_derivation_semantics(
     derivation: &LocalFlowDerivation,
-    expression: &ExpressionBindingKnowledge,
+    lookup: &DerivationLookup<'_>,
     blocks: &[SyntaxBasicBlock],
     relationships: &[LocalFlowRelationship],
     entity_evidence: &BTreeMap<String, Vec<String>>,
 ) -> Result<(), LocalFlowError> {
-    let relationship = relationships
-        .iter()
-        .find(|relationship| relationship.id == derivation.relationship_id)
+    let relationship = lookup
+        .local
+        .get(derivation.relationship_id.as_str())
+        .copied()
         .ok_or(LocalFlowError::DerivationMismatch)?;
     if !derivation
         .input_entity_ids
@@ -1271,7 +1315,7 @@ fn validate_derivation_semantics(
         }
         LocalFlowRelationshipKind::LexicalMustReachesRead
         | LocalFlowRelationshipKind::LexicalMayReachesRead => {
-            validate_lexical_derivation(derivation, relationship, expression, relationships)
+            validate_lexical_derivation(derivation, relationship, lookup)
         }
         _ => Err(LocalFlowError::DerivationMismatch),
     }
@@ -1342,27 +1386,12 @@ fn validate_syntax_derivation(
 fn validate_lexical_derivation(
     derivation: &LocalFlowDerivation,
     relationship: &LocalFlowRelationship,
-    expression: &ExpressionBindingKnowledge,
-    relationships: &[LocalFlowRelationship],
+    lookup: &DerivationLookup<'_>,
 ) -> Result<(), LocalFlowError> {
-    let inherited = expression
-        .graph
-        .relationships
-        .iter()
-        .map(|candidate| (candidate.id.as_str(), candidate))
-        .collect::<BTreeMap<_, _>>();
-    let local = relationships
-        .iter()
-        .map(|candidate| (candidate.id.as_str(), candidate))
-        .collect::<BTreeMap<_, _>>();
-    let read = expression
-        .graph
-        .relationships
-        .iter()
-        .find(|candidate| {
-            candidate.kind == ExpressionRelationshipKind::Reads
-                && candidate.source == relationship.target
-        })
+    let read = lookup
+        .reads
+        .get(relationship.target.as_str())
+        .copied()
         .ok_or(LocalFlowError::AccessMismatch)?;
     if !derivation
         .input_relationship_ids
@@ -1371,10 +1400,7 @@ fn validate_lexical_derivation(
     {
         return Err(LocalFlowError::AccessMismatch);
     }
-    let write = expression.graph.relationships.iter().find(|candidate| {
-        candidate.kind == ExpressionRelationshipKind::Writes
-            && candidate.source == relationship.source
-    });
+    let write = lookup.writes.get(relationship.source.as_str()).copied();
     if write.is_some_and(|write| {
         !derivation
             .input_relationship_ids
@@ -1389,7 +1415,7 @@ fn validate_lexical_derivation(
         .map(String::as_str)
         .collect::<BTreeSet<_>>();
     for identifier in &derivation.input_relationship_ids {
-        if let Some(candidate) = inherited.get(identifier.as_str()) {
+        if let Some(candidate) = lookup.inherited.get(identifier.as_str()) {
             let valid = match candidate.kind {
                 ExpressionRelationshipKind::Reads => {
                     candidate.source == relationship.target && candidate.target == read.target
@@ -1403,7 +1429,7 @@ fn validate_lexical_derivation(
             if !valid {
                 return Err(LocalFlowError::AccessMismatch);
             }
-        } else if let Some(candidate) = local.get(identifier.as_str()) {
+        } else if let Some(candidate) = lookup.local.get(identifier.as_str()) {
             let valid_kind = candidate.kind.is_direct_syntax()
                 || candidate.kind == LocalFlowRelationshipKind::ContainsFlowNode;
             if !valid_kind
@@ -1707,4 +1733,242 @@ pub fn r14_read_relationships(knowledge: &ExpressionBindingKnowledge) -> BTreeMa
         .filter(|relationship| relationship.kind == ExpressionRelationshipKind::Reads)
         .map(|relationship| (relationship.source.as_str(), relationship.target.as_str()))
         .collect()
+}
+
+#[cfg(test)]
+mod validation_tests {
+    use super::*;
+
+    fn block(callable: &str, name: &str, ordinal: u64) -> SyntaxBasicBlock {
+        SyntaxBasicBlock {
+            id: name.to_owned(),
+            callable_id: callable.to_owned(),
+            source_file_id: "source".to_owned(),
+            evidence_id: format!("evidence:{name}"),
+            locator: LocalFlowLocator {
+                path: "src/lib.rs".to_owned(),
+                blob_oid: "a".repeat(40),
+                start_byte: ordinal,
+                end_byte: ordinal + 1,
+            },
+            ordinal,
+            role: LocalFlowBlockRole::Entry,
+            flow_node_ids: vec![format!("node:{name}")],
+        }
+    }
+
+    fn edge(kind: LocalFlowRelationshipKind, source: &str, target: &str) -> LocalFlowRelationship {
+        LocalFlowRelationship::new(kind, source.to_owned(), target.to_owned(), Vec::new())
+    }
+
+    #[test]
+    fn fr_ext_017_lexical_derivations_reject_unrelated_access_and_missing_provenance() {
+        let mut inherited = Vec::new();
+        for index in 0..128 {
+            for (kind, source) in [
+                (ExpressionRelationshipKind::Reads, format!("read:{index}")),
+                (ExpressionRelationshipKind::Writes, format!("write:{index}")),
+            ] {
+                inherited.push(ExpressionBindingRelationship::new(
+                    kind,
+                    source,
+                    format!("binding:{index}"),
+                    Vec::new(),
+                ));
+            }
+        }
+        let relationship = edge(
+            LocalFlowRelationshipKind::LexicalMustReachesRead,
+            "write:0",
+            "read:0",
+        );
+        let membership = edge(
+            LocalFlowRelationshipKind::ContainsFlowNode,
+            "block:0",
+            "write:0",
+        );
+        let unrelated = edge(
+            LocalFlowRelationshipKind::ContainsFlowNode,
+            "block:1",
+            "write:1",
+        );
+        let local = vec![relationship.clone(), membership.clone(), unrelated.clone()];
+        let lookup = DerivationLookup::new(&inherited, &local);
+        let derivation = LocalFlowDerivation::new(
+            relationship.id.clone(),
+            ["block:0", "write:0", "read:0"].map(str::to_owned).to_vec(),
+            vec![
+                inherited[0].id.clone(),
+                inherited[1].id.clone(),
+                membership.id.clone(),
+            ],
+            Vec::new(),
+        );
+        assert_eq!(
+            validate_lexical_derivation(&derivation, &relationship, &lookup),
+            Ok(())
+        );
+        for required in [&inherited[0].id, &inherited[1].id] {
+            let mut candidate = derivation.clone();
+            candidate.input_relationship_ids.retain(|id| id != required);
+            assert_eq!(
+                validate_lexical_derivation(&candidate, &relationship, &lookup),
+                Err(LocalFlowError::AccessMismatch)
+            );
+        }
+        for invalid_access in [&inherited[2].id, &inherited[3].id] {
+            let mut candidate = derivation.clone();
+            candidate
+                .input_relationship_ids
+                .push(invalid_access.clone());
+            assert_eq!(
+                validate_lexical_derivation(&candidate, &relationship, &lookup),
+                Err(LocalFlowError::AccessMismatch)
+            );
+        }
+        for invalid_provenance in [&unrelated.id, &relationship.id, "missing"] {
+            let mut candidate = derivation.clone();
+            candidate
+                .input_relationship_ids
+                .push(invalid_provenance.to_owned());
+            assert_eq!(
+                validate_lexical_derivation(&candidate, &relationship, &lookup),
+                Err(LocalFlowError::DerivationMismatch)
+            );
+        }
+        let missing_read = edge(
+            LocalFlowRelationshipKind::LexicalMustReachesRead,
+            "write:0",
+            "missing",
+        );
+        assert_eq!(
+            validate_lexical_derivation(&derivation, &missing_read, &lookup),
+            Err(LocalFlowError::AccessMismatch)
+        );
+    }
+
+    #[test]
+    fn fr_ext_017_membership_rejects_duplicate_edges_and_wrong_callable_ownership() {
+        let blocks = vec![block("callable:a", "a", 0), block("callable:b", "b", 0)];
+        let mut edges = vec![
+            edge(LocalFlowRelationshipKind::HasSyntaxBlock, "callable:a", "a"),
+            edge(LocalFlowRelationshipKind::ContainsFlowNode, "a", "node:a"),
+            edge(LocalFlowRelationshipKind::HasSyntaxBlock, "callable:b", "b"),
+            edge(LocalFlowRelationshipKind::ContainsFlowNode, "b", "node:b"),
+        ];
+        assert_eq!(validate_block_membership(&blocks, &edges), Ok(()));
+        edges.push(edges[1].clone());
+        assert_eq!(
+            validate_block_membership(&blocks, &edges),
+            Err(LocalFlowError::BlockInvalid)
+        );
+        edges.pop();
+        edges[2].source = "callable:a".to_owned();
+        assert_eq!(
+            validate_block_membership(&blocks, &edges),
+            Err(LocalFlowError::BlockInvalid)
+        );
+    }
+
+    #[test]
+    fn fr_ext_017_disjoint_callable_closures_keep_exact_reachability_and_cycle_errors() {
+        let mut blocks = Vec::new();
+        let mut edges = Vec::new();
+        for index in 0..128 {
+            let callable = format!("callable:{index}");
+            let entry = format!("entry:{index}");
+            let exit = format!("exit:{index}");
+            blocks.push(block(&callable, &entry, 0));
+            blocks.push(block(&callable, &exit, 1));
+            edges.push(edge(LocalFlowRelationshipKind::SyntaxNext, &entry, &exit));
+            edges.push(edge(
+                LocalFlowRelationshipKind::SyntaxReaches,
+                &entry,
+                &exit,
+            ));
+        }
+        assert_eq!(validate_syntax_closure(&blocks, &edges), Ok(()));
+        let last = edges.pop().expect("last closure edge");
+        assert_eq!(
+            validate_syntax_closure(&blocks, &edges),
+            Err(LocalFlowError::ReachabilityMismatch)
+        );
+        edges.push(last);
+        edges.push(edge(
+            LocalFlowRelationshipKind::SyntaxReaches,
+            "entry:0",
+            "exit:1",
+        ));
+        assert_eq!(
+            validate_syntax_closure(&blocks, &edges),
+            Err(LocalFlowError::ReachabilityMismatch)
+        );
+        edges.pop();
+        edges.push(edge(
+            LocalFlowRelationshipKind::SyntaxNext,
+            "exit:0",
+            "entry:0",
+        ));
+        assert_eq!(
+            validate_syntax_closure(&blocks, &edges),
+            Err(LocalFlowError::Cycle)
+        );
+    }
+
+    #[test]
+    fn fr_ext_017_syntax_derivation_requires_both_diamond_paths_and_excludes_other_callables() {
+        let blocks = vec![
+            block("diamond", "entry", 0),
+            block("diamond", "left", 1),
+            block("diamond", "right", 2),
+            block("diamond", "join", 3),
+            block("other", "other_entry", 0),
+            block("other", "other_exit", 1),
+        ];
+        let mut edges = vec![
+            edge(LocalFlowRelationshipKind::SyntaxTrueBranch, "entry", "left"),
+            edge(
+                LocalFlowRelationshipKind::SyntaxFalseBranch,
+                "entry",
+                "right",
+            ),
+            edge(LocalFlowRelationshipKind::SyntaxNext, "left", "join"),
+            edge(LocalFlowRelationshipKind::SyntaxNext, "right", "join"),
+            edge(
+                LocalFlowRelationshipKind::SyntaxNext,
+                "other_entry",
+                "other_exit",
+            ),
+        ];
+        edges.sort_by(|left, right| left.id.cmp(&right.id));
+        let relationship = edge(LocalFlowRelationshipKind::SyntaxReaches, "entry", "join");
+        let mut derivation = LocalFlowDerivation::new(
+            relationship.id.clone(),
+            ["entry", "left", "right", "join"]
+                .map(str::to_owned)
+                .to_vec(),
+            edges
+                .iter()
+                .filter(|edge| edge.source != "other_entry")
+                .map(|edge| edge.id.clone())
+                .collect(),
+            Vec::new(),
+        );
+        assert_eq!(
+            validate_syntax_derivation(&derivation, &relationship, &blocks, &edges),
+            Ok(())
+        );
+        derivation.input_entity_ids.retain(|id| id != "right");
+        assert_eq!(
+            validate_syntax_derivation(&derivation, &relationship, &blocks, &edges),
+            Err(LocalFlowError::DerivationMismatch)
+        );
+        derivation.input_entity_ids.push("right".to_owned());
+        derivation.input_entity_ids.sort();
+        derivation.input_relationship_ids.pop();
+        assert_eq!(
+            validate_syntax_derivation(&derivation, &relationship, &blocks, &edges),
+            Err(LocalFlowError::DerivationMismatch)
+        );
+    }
 }
