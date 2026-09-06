@@ -67,6 +67,12 @@ and only allowlisted schema/code/stage from one canonical product error up to
 echoed. The runner V1 error protocol, report schema, no-retry policy, product,
 corpus, oracle, threshold, timeout, and observational exclusions stay unchanged.
 
+The runner resolves its owned temporary directory before supplying storage
+paths, including macOS system temp paths beneath `/var`. Failed-sample identity
+also recognizes the exact existing `codenoesis.error/v4` storage rejection
+`storage.unsafe_path`; its message and context remain redacted. Neither change
+alters the frozen B1 outcome or semantic comparison.
+
 Issue #209 and Decision 0046 add one closed validation category when the B1c
 typed product identity is opaque, correct historical V2/V3 descendant
 verification, and permit one semantics-neutral private R16 parser extraction
@@ -103,7 +109,8 @@ and a 150-second sample allowance. The 75-second execution profile still bounds
 the extraction phase; the additional allowance covers deterministic
 serialization and local publication of large valid snapshots. The frozen oracle
 remains a historical baseline: a new outcome or semantic identity requires all
-three retained samples before it can replace that baseline.
+three retained samples and explicit semantic review before it can replace that
+baseline. Running a candidate observation never changes the frozen oracle.
 
 Place the eight clones in directories named after their corpus IDs, build the
 release CLI, and run:
@@ -131,6 +138,33 @@ contains raw wall time and stream sizes, exact semantic identities, graph
 counts, callable/signature/parameter coverage, enum and value coverage, calls,
 expressions, bindings, basic blocks, evidence coverage, diagnostics, and
 aggregate stage coverage.
+
+To observe a newer product, add `--candidate-observation`, supply its full
+`--product-commit` SHA, and choose a new output filename. Without this explicit
+flag the runner still requires the historical product SHA and exact frozen
+terminal outcomes. Candidate mode advances through the same stage commands
+until the first typed rejection or R16 completion, then records three fresh
+terminal samples. A rejection before previously successful stage coverage,
+an internal or unrecognized failure, a timeout, an incomplete sample, or
+semantic/error nondeterminism aborts the observation.
+
+Candidate mode alone accepts an explicit `--timeout-seconds 300` (1 through 600
+seconds) for the complete process, including persistence and stdout. It records
+both that allowance and the historical 150-second allowance. The product's
+75-second R16 scan limit is unchanged, and a timeout is never retried. Strict
+historical mode rejects any timeout override.
+
+Candidate reports use `codenoesis.public-rust-candidate-observation-report/v1`
+and always say `candidate_review_required`. They distinguish unchanged outcomes,
+progress to a later stage, changed semantics, and changed typed rejections.
+`extraction_success_rate` (also `success_rate` in this separate report schema)
+counts only repositories that complete R16; `oracle_match_rate` measures exact
+historical identity. A typed rejection remains an extraction failure even when
+the historical oracle matches. Exit zero means that the observation completed,
+not that the candidate or ontology was accepted. Raw rejection context and
+messages are not published: retained context and stderr digests establish exact
+identity across samples. Stage coverage and graph counts remain observational;
+they do not establish precision or completeness of the ontology.
 
 The initial same-host macOS arm64 observation matched all eight oracles. Three
 repositories completed R16 and five failed closed at distinct compatibility

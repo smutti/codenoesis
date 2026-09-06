@@ -70,6 +70,15 @@ The implemented compatibility profile is bounded rather than general:
 
 ## Real-world Rust compatibility target
 
+The Rust v0.1 closure candidate in [Decision 0050](decisions/0050-rust-v01-validation-corrections.md)
+addresses the post-PR #223 WGPU expression failure, repeated R15 validation
+index construction observed on Dioxus, benchmark runner compatibility, and a
+separate safe internal-Git-link metadata profile. The historical 34-profile
+verification pack and frozen public benchmark oracle remain unchanged. Closure
+requires retained candidate corpus measurements and the technical gate; it
+does not grant general Rust or GA status. Kotlin/KMP remains the next extraction
+adapter priority, followed by Java under S8.
+
 This lane expands CodeNoesis from the deliberately narrow S4 fixture profile
 to reusable classes of real-world Rust repositories:
 

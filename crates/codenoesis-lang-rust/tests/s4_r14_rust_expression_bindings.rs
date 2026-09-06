@@ -4,8 +4,9 @@ use std::path::Path;
 use std::sync::{Arc, Barrier};
 
 use codenoesis_domain::s4_r14::{
-    BindingModifier, BindingOrigin, ExpressionBindingError, ExpressionBindingKnowledge,
-    ExpressionEntityKind, ExpressionEntityProperties, ExpressionRelationshipKind, ExpressionRole,
+    BindingModifier, BindingOrigin, ExpressionBindingEntity, ExpressionBindingError,
+    ExpressionBindingGraph, ExpressionBindingKnowledge, ExpressionEntityKind,
+    ExpressionEntityProperties, ExpressionRelationshipKind, ExpressionRole,
 };
 use codenoesis_domain::{
     AcquiredFile, AcquiredRepository, BoundRevision, ObjectId, RegularFileMode, RepositoryIdentity,
@@ -403,6 +404,336 @@ pub fn block_scrutinee(value: i32) -> i32 {
     assert!(extraction.knowledge.graph.coverage.iter().any(|gap| {
         gap.capability == "rust.pattern_input_unexpanded" && gap.state == "unsupported"
     }));
+}
+
+#[test]
+fn gt_fr_ext_016_unexpanded_for_inputs_preserve_supported_facts_and_exact_coverage() {
+    for iterator in [
+        "unsafe { values.get_unchecked(0..1) }",
+        "{ values }",
+        "if condition { values } else { other }",
+        "match condition { true => values, false => other }",
+        "values_iter!(values)",
+    ] {
+        let source = format!(
+            "pub fn iterate(values: &[u8], other: &[u8], condition: bool) {{\n\
+             for entry in {iterator} {{ consume(entry); }}\n\
+             for supported in values.iter() {{ consume(supported); }}\n\
+             }}"
+        );
+        let extraction = TreeSitterRustWorkspaceExtractor::new()
+            .extract_rust_expression_bindings_with_cfg_alternatives(
+                &correction_inventory(&source),
+                &[],
+            )
+            .unwrap_or_else(|error| panic!("extract unexpanded for input {iterator}: {error:?}"));
+        extraction
+            .knowledge
+            .validate()
+            .expect("validate unchanged R14 graph and R12 lineage contracts");
+        let graph = &extraction.knowledge.graph;
+        let start = u64::try_from(source.find(iterator).expect("iterator source span"))
+            .expect("iterator start offset");
+        let end = start + u64::try_from(iterator.len()).expect("iterator byte length");
+        let gaps = graph
+            .coverage
+            .iter()
+            .filter(|gap| gap.capability == "rust.pattern_input_unexpanded")
+            .collect::<Vec<_>>();
+        assert_eq!(gaps.len(), 1, "complete iterator gap for {iterator}");
+        assert_eq!(gaps[0].state, "unsupported");
+        let evidence = graph
+            .evidence
+            .iter()
+            .find(|evidence| {
+                evidence.path == "src/lib.rs"
+                    && evidence.start_byte == start
+                    && evidence.end_byte == end
+            })
+            .expect("gap evidence covers exactly the unsupported iterator");
+        assert_eq!(gaps[0].evidence_ids, vec![evidence.id.clone()]);
+        let owner = extraction
+            .knowledge
+            .callable
+            .graph
+            .entities
+            .iter()
+            .find(|entity| entity.id == gaps[0].subject_id)
+            .expect("gap subject is an inherited callable entity");
+        assert!(matches!(
+            &owner.properties,
+            codenoesis_domain::s4_k1::CallableSemanticProperties::Control(control)
+                if control.control_kind.as_str() == "for"
+        ));
+        assert!(graph.entities.iter().all(|entity| {
+            entity.kind != ExpressionEntityKind::PatternBinding || entity.name != "entry"
+        }));
+        let body_call = expression_id_for(&source, "consume(entry)", graph);
+        assert!(graph.relationships.iter().any(|relationship| {
+            relationship.kind == ExpressionRelationshipKind::RepresentsCallSite
+                && relationship.source == body_call
+        }));
+        let supported = graph
+            .entities
+            .iter()
+            .find(|entity| {
+                entity.kind == ExpressionEntityKind::PatternBinding && entity.name == "supported"
+            })
+            .expect("supported for binding is retained");
+        let supported_input = expression_id_for(&source, "values.iter()", graph);
+        assert!(graph.relationships.iter().any(|relationship| {
+            relationship.kind == ExpressionRelationshipKind::BindsFrom
+                && relationship.source == supported.id
+                && relationship.target == supported_input
+        }));
+        assert!(graph.relationships.iter().any(|relationship| {
+            relationship.kind == ExpressionRelationshipKind::Reads
+                && relationship.target == supported.id
+        }));
+        if iterator.starts_with("unsafe") {
+            let inner_call = expression_id_for(&source, "values.get_unchecked(0..1)", graph);
+            assert!(graph.relationships.iter().any(|relationship| {
+                relationship.kind == ExpressionRelationshipKind::RepresentsCallSite
+                    && relationship.source == inner_call
+            }));
+        }
+    }
+}
+
+#[test]
+fn gt_fr_ext_016_unexpanded_for_shadowing_blocks_outer_accesses_only_in_loop_scope() {
+    for iterator in [
+        "unsafe { let _keep = entry; values.get_unchecked(0..1).iter().copied() }",
+        "{ let _keep = entry; values.iter().copied() }",
+    ] {
+        let source = format!(
+            "pub fn inspect(mut entry: u8, values: &[u8], other: u8) {{\n\
+             for mut entry in {iterator} {{\n\
+                 body_read(entry); entry = other; entry += other;\n\
+                 unrelated_read(other);\n\
+                 for entry in values.iter().copied() {{\n\
+                     nested_read(entry);\n\
+                 }}\n\
+                 {{ let mut entry = other; local_read(entry); entry += other; }}\n\
+             }}\n\
+             after_read(entry); entry += other;\n\
+             }}"
+        );
+        let extraction = TreeSitterRustWorkspaceExtractor::new()
+            .extract_rust_expression_bindings_with_cfg_alternatives(
+                &correction_inventory(&source),
+                &[],
+            )
+            .expect("extract loop shadowing through an unexpanded iterator");
+        extraction
+            .knowledge
+            .validate()
+            .expect("validate R14 lineage");
+        let graph = &extraction.knowledge.graph;
+        let outer = binding_for_origin(graph, "entry", BindingOrigin::Parameter);
+        let after_start = u64::try_from(source.find("after_read").expect("after loop"))
+            .expect("after-loop source offset");
+        let iterator_end = u64::try_from(source.find(iterator).expect("iterator") + iterator.len())
+            .expect("iterator end offset");
+        let accesses = graph
+            .relationships
+            .iter()
+            .filter(|relationship| {
+                relationship.target == outer.id
+                    && matches!(
+                        relationship.kind,
+                        ExpressionRelationshipKind::Reads | ExpressionRelationshipKind::Writes
+                    )
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(
+            accesses.len(),
+            4,
+            "iterator READ and post-loop READS/WRITES may reach the outer parameter"
+        );
+        for access in accesses {
+            let expression = graph
+                .entities
+                .iter()
+                .find(|entity| entity.id == access.source)
+                .expect("access source expression");
+            assert!(
+                expression.locator.end_byte <= iterator_end
+                    || expression.locator.start_byte >= after_start,
+                "loop-body access must not resolve the shadowed outer parameter"
+            );
+        }
+        for origin in [BindingOrigin::For, BindingOrigin::LocalLet] {
+            let inner = binding_for_origin(graph, "entry", origin);
+            let kinds = if origin == BindingOrigin::For {
+                &[ExpressionRelationshipKind::Reads][..]
+            } else {
+                &[
+                    ExpressionRelationshipKind::Reads,
+                    ExpressionRelationshipKind::Writes,
+                ][..]
+            };
+            for &kind in kinds {
+                assert!(
+                    graph.relationships.iter().any(|relationship| {
+                        relationship.target == inner.id && relationship.kind == kind
+                    }),
+                    "supported inner {origin:?} must retain {kind:?}"
+                );
+            }
+        }
+        let other = binding_for_origin(graph, "other", BindingOrigin::Parameter);
+        assert!(
+            graph.relationships.iter().any(|relationship| {
+                relationship.target == other.id
+                    && relationship.kind == ExpressionRelationshipKind::Reads
+                    && graph.entities.iter().any(|entity| {
+                        entity.id == relationship.source && entity.locator.start_byte < after_start
+                    })
+            }),
+            "unrelated outer reads remain valid inside the loop"
+        );
+    }
+}
+
+#[test]
+fn gt_fr_ext_016_opaque_for_patterns_block_outer_resolution_conservatively() {
+    let source = r"
+pub struct Row { entry: u8 }
+pub fn inspect(mut entry: u8, values: &[Row], mut other: u8) {
+    for Row { entry } in { values } {
+        body_read(entry); entry += other; other += 1;
+        let mut local = 1;
+        local_read(local); local += 1;
+    }
+    after_read(entry); entry += other;
+}
+";
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_expression_bindings(&correction_inventory(source))
+        .expect("extract conservative opaque-pattern scope");
+    extraction
+        .knowledge
+        .validate()
+        .expect("validate conservative scope graph");
+    let graph = &extraction.knowledge.graph;
+    let after_start = u64::try_from(source.find("after_read").expect("after loop"))
+        .expect("after-loop source offset");
+    for name in ["entry", "other"] {
+        let outer = binding_for_origin(graph, name, BindingOrigin::Parameter);
+        for relationship in graph.relationships.iter().filter(|relationship| {
+            relationship.target == outer.id
+                && matches!(
+                    relationship.kind,
+                    ExpressionRelationshipKind::Reads | ExpressionRelationshipKind::Writes
+                )
+        }) {
+            let expression = graph
+                .entities
+                .iter()
+                .find(|entity| entity.id == relationship.source)
+                .expect("access expression");
+            assert!(expression.locator.start_byte >= after_start);
+        }
+    }
+    let local = binding_for_origin(graph, "local", BindingOrigin::LocalLet);
+    for kind in [
+        ExpressionRelationshipKind::Reads,
+        ExpressionRelationshipKind::Writes,
+    ] {
+        assert!(
+            graph.relationships.iter().any(|relationship| {
+                relationship.target == local.id && relationship.kind == kind
+            })
+        );
+    }
+    assert!(graph.coverage.iter().any(|gap| {
+        gap.capability == "rust.lexical_binding_shadowing" && gap.state == "unsupported"
+    }));
+}
+
+#[test]
+fn gt_fr_ext_016_unexpanded_control_inputs_respect_pattern_scope_and_fallback_arms() {
+    for statement in [
+        "if let Some(mut entry) = { values.first().copied() } { body_read(entry); entry += 1; } else { outer_fallback(entry); }",
+        "while let Some(mut entry) = { values.first().copied() } { body_read(entry); entry += 1; break; }",
+        "match { values.first().copied() } { Some(mut entry) => { body_read(entry); entry += 1; }, None => outer_fallback(entry) }",
+        "{ let mut entry = { values[0] }; body_read(entry); entry += 1; }",
+        "match { values.first().copied() } { Some(entry) if entry > 0 => body_read(entry), _ => outer_fallback(entry) }",
+        "match values.first().copied() { Some(entry) if entry > 0 => body_read(entry), _ => outer_fallback(entry) }",
+    ] {
+        let source = format!(
+            "pub fn inspect(mut entry: u8, values: &[u8]) {{ {statement} after_read(entry); entry += 1; }}"
+        );
+        let extraction = TreeSitterRustWorkspaceExtractor::new()
+            .extract_rust_expression_bindings_with_cfg_alternatives(
+                &correction_inventory(&source),
+                &[],
+            )
+            .expect("extract unexpanded control input");
+        extraction
+            .knowledge
+            .validate()
+            .expect("validate control input lineage");
+        let graph = &extraction.knowledge.graph;
+        let outer = binding_for_origin(graph, "entry", BindingOrigin::Parameter);
+        let after_start = u64::try_from(source.find("after_read").expect("after control scope"))
+            .expect("after-scope offset");
+        let fallback_start = source.find("outer_fallback(").map(|start| {
+            u64::try_from(start + "outer_fallback(".len()).expect("fallback name offset")
+        });
+        let accesses = graph
+            .relationships
+            .iter()
+            .filter(|relationship| {
+                relationship.target == outer.id
+                    && matches!(
+                        relationship.kind,
+                        ExpressionRelationshipKind::Reads | ExpressionRelationshipKind::Writes
+                    )
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(
+            accesses.len(),
+            3 + usize::from(fallback_start.is_some()),
+            "only fallback/post-scope accesses reach the outer parameter: {statement}"
+        );
+        for access in accesses {
+            let expression = graph
+                .entities
+                .iter()
+                .find(|entity| entity.id == access.source)
+                .expect("outer access source");
+            assert!(
+                expression.locator.start_byte >= after_start
+                    || Some(expression.locator.start_byte) == fallback_start
+            );
+        }
+        if statement.starts_with("{ let") {
+            let local = binding_for_origin(graph, "entry", BindingOrigin::LocalLet);
+            for kind in [
+                ExpressionRelationshipKind::Reads,
+                ExpressionRelationshipKind::Writes,
+            ] {
+                assert!(graph.relationships.iter().any(|relationship| {
+                    relationship.kind == kind && relationship.target == local.id
+                }));
+            }
+        }
+    }
+}
+
+fn binding_for_origin<'a>(
+    graph: &'a ExpressionBindingGraph,
+    name: &str,
+    origin: BindingOrigin,
+) -> &'a ExpressionBindingEntity {
+    graph.entities.iter().find(|entity| {
+        entity.name == name && matches!(
+            &entity.properties,
+            ExpressionEntityProperties::PatternBinding(properties) if properties.origin == origin
+        )
+    }).expect("reviewed lexical binding")
 }
 
 fn extract_fixture(

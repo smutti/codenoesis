@@ -235,6 +235,13 @@ gitlinks, external Git directories, and packed object databases; the explicit
 packed-object deferral made after S0 remains binding. Semantic parsing and
 ontology construction begin in later slices.
 
+Decision [0050](decisions/0050-rust-v01-validation-corrections.md) specifies a
+branch candidate for the separate, opt-in R16 acquisition selector
+`local-git-sha1-packed-internal-symlinks-v1`: bounded internal committed links
+are retained as evidence and explicit alias-extraction gaps, without host-path
+dereference or regular-file duplication. The fixed S1 profile above and existing
+selectors remain unchanged. General symlink/module-alias semantics remain open.
+
 The policy registry is intentionally unchanged in this ratification change. A
 separate protected change may bind these exact four IDs to the full commit on
 `main` containing the byte-identical SRS. Until that change is reviewed and

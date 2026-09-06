@@ -107,6 +107,12 @@ struct BindingDraft {
     source_expression_range: Option<(usize, usize, String)>,
 }
 
+struct UnexpandedBindingScope {
+    names: Option<BTreeSet<String>>,
+    start: usize,
+    end: usize,
+}
+
 struct SourceBuilder<'a> {
     repository_identity: &'a str,
     commit_oid: &'a str,
@@ -119,6 +125,7 @@ struct SourceBuilder<'a> {
     expressions: Vec<ExpressionDraft>,
     arguments: Vec<ExpressionBindingEntity>,
     bindings: Vec<BindingDraft>,
+    unexpanded_binding_scopes: BTreeMap<String, Vec<UnexpandedBindingScope>>,
     relationships: BTreeMap<String, ExpressionBindingRelationship>,
     evidence: BTreeMap<String, WorkspaceEvidence>,
     coverage: BTreeMap<String, ExpressionCoverageGap>,
@@ -148,6 +155,7 @@ impl<'a> SourceBuilder<'a> {
             expressions: Vec::new(),
             arguments: Vec::new(),
             bindings: Vec::new(),
+            unexpanded_binding_scopes: BTreeMap::new(),
             relationships: BTreeMap::new(),
             evidence: BTreeMap::new(),
             coverage: BTreeMap::new(),
@@ -349,6 +357,47 @@ impl<'a> SourceBuilder<'a> {
         })
     }
 
+    fn add_unexpanded_binding_scope(
+        &mut self,
+        callable_id: &str,
+        pattern: Node<'_>,
+        scope: (usize, usize),
+    ) {
+        let mut names = BTreeSet::new();
+        let complete = unexpanded_pattern_names(pattern, self.source, &mut names);
+        self.unexpanded_binding_scopes
+            .entry(callable_id.to_owned())
+            .or_default()
+            .push(UnexpandedBindingScope {
+                names: complete.then_some(names),
+                start: scope.0,
+                end: scope.1,
+            });
+    }
+
+    fn has_unexpanded_shadow(
+        &self,
+        expression: &ExpressionDraft,
+        name: &str,
+        binding: &BindingDraft,
+    ) -> bool {
+        self.unexpanded_binding_scopes
+            .get(&expression.entity.callable_id)
+            .into_iter()
+            .flatten()
+            .any(|scope| {
+                expression.start >= scope.start
+                    && expression.end <= scope.end
+                    && scope
+                        .names
+                        .as_ref()
+                        .is_none_or(|names| names.contains(name))
+                    && !(binding.scope_start >= scope.start
+                        && binding.scope_end <= scope.end
+                        && (binding.scope_start > scope.start || binding.scope_end < scope.end))
+            })
+    }
+
     fn add_access_relationships(&mut self) -> Result<(), ExpressionBindingError> {
         let mut bindings_by_callable_and_name =
             BTreeMap::<(String, String), Vec<&BindingDraft>>::new();
@@ -400,7 +449,8 @@ impl<'a> SourceBuilder<'a> {
                     other.scope_start == binding.scope_start
                         && other.scope_end == binding.scope_end
                         && other.entity.name == binding.entity.name
-                }) {
+                }) || self.has_unexpanded_shadow(expression, name, binding)
+                {
                     coverage.push(ExpressionCoverageGap::unsupported(
                         "rust.lexical_binding_shadowing",
                         expression.entity.id.clone(),
@@ -1049,6 +1099,12 @@ fn collect_body_bindings(
                         builder,
                         output,
                     )?;
+                } else {
+                    builder.add_unexpanded_binding_scope(
+                        callable_id,
+                        pattern,
+                        (body.start_byte(), body.end_byte()),
+                    );
                 }
             } else if let Some(condition) = node.child_by_field_name("condition")
                 && find_let_condition(condition).is_some()
@@ -1090,6 +1146,12 @@ fn collect_body_bindings(
                         builder,
                         output,
                     )?;
+                } else {
+                    builder.add_unexpanded_binding_scope(
+                        callable_id,
+                        pattern,
+                        (body.start_byte(), body.end_byte()),
+                    );
                 }
             } else if let Some(condition) = node.child_by_field_name("condition")
                 && find_let_condition(condition).is_some()
@@ -1102,25 +1164,33 @@ fn collect_body_bindings(
             let pattern = node
                 .child_by_field_name("pattern")
                 .ok_or(ExpressionBindingError::PatternUnsupported)?;
-            let value = expression_key(
-                expressions,
-                node.child_by_field_name("value")
-                    .ok_or(ExpressionBindingError::PatternUnsupported)?,
-            )?;
+            let value_node = node
+                .child_by_field_name("value")
+                .ok_or(ExpressionBindingError::PatternUnsupported)?;
             let body = node
                 .child_by_field_name("body")
                 .ok_or(ExpressionBindingError::BindingScopeInvalid)?;
-            collect_pattern_bindings(
-                pattern,
-                callable_id,
-                &owner.id,
-                BindingOrigin::For,
-                BindingModifier::None,
-                (body.start_byte(), body.end_byte()),
-                Some(value),
-                builder,
-                output,
-            )?;
+            if !selected_expression(value_node) || excluded_identifier_context(value_node) {
+                builder.add_gap("rust.pattern_input_unexpanded", &owner.id, value_node)?;
+                builder.add_unexpanded_binding_scope(
+                    callable_id,
+                    pattern,
+                    (body.start_byte(), body.end_byte()),
+                );
+            } else {
+                let value = expression_key(expressions, value_node)?;
+                collect_pattern_bindings(
+                    pattern,
+                    callable_id,
+                    &owner.id,
+                    BindingOrigin::For,
+                    BindingModifier::None,
+                    (body.start_byte(), body.end_byte()),
+                    Some(value),
+                    builder,
+                    output,
+                )?;
+            }
         }
         "match_expression" => {
             let owner = control_owner(builder, callable_id, node, "match")?;
@@ -1128,28 +1198,38 @@ fn collect_body_bindings(
                 .child_by_field_name("value")
                 .or_else(|| first_expression_child(node))
                 .ok_or(ExpressionBindingError::PatternUnsupported)?;
-            if !selected_expression(scrutinee_node) || excluded_identifier_context(scrutinee_node) {
+            let scrutinee = if !selected_expression(scrutinee_node)
+                || excluded_identifier_context(scrutinee_node)
+            {
                 builder.add_gap("rust.pattern_input_unexpanded", &owner.id, scrutinee_node)?;
+                None
             } else {
-                let scrutinee = expression_key(expressions, scrutinee_node)?;
-                let body = node
-                    .child_by_field_name("body")
+                Some(expression_key(expressions, scrutinee_node)?)
+            };
+            let body = node
+                .child_by_field_name("body")
+                .ok_or(ExpressionBindingError::BindingScopeInvalid)?;
+            let mut cursor = body.walk();
+            for arm in body
+                .named_children(&mut cursor)
+                .filter(|child| child.kind() == "match_arm")
+            {
+                let pattern = arm
+                    .child_by_field_name("pattern")
+                    .ok_or(ExpressionBindingError::PatternUnsupported)?;
+                let value = arm
+                    .child_by_field_name("value")
                     .ok_or(ExpressionBindingError::BindingScopeInvalid)?;
-                let mut cursor = body.walk();
-                for arm in body
-                    .named_children(&mut cursor)
-                    .filter(|child| child.kind() == "match_arm")
-                {
-                    if arm.child_by_field_name("condition").is_some() {
-                        builder.add_gap("rust.pattern_guard", &owner.id, arm)?;
-                        continue;
-                    }
-                    let pattern = arm
-                        .child_by_field_name("pattern")
-                        .ok_or(ExpressionBindingError::PatternUnsupported)?;
-                    let value = arm
-                        .child_by_field_name("value")
-                        .ok_or(ExpressionBindingError::BindingScopeInvalid)?;
+                if let Some(guard) = pattern.child_by_field_name("condition") {
+                    builder.add_gap("rust.pattern_guard", &owner.id, arm)?;
+                    builder.add_unexpanded_binding_scope(
+                        callable_id,
+                        pattern,
+                        (guard.start_byte(), value.end_byte()),
+                    );
+                    continue;
+                }
+                if let Some(scrutinee) = &scrutinee {
                     collect_pattern_bindings(
                         pattern,
                         callable_id,
@@ -1161,6 +1241,12 @@ fn collect_body_bindings(
                         builder,
                         output,
                     )?;
+                } else {
+                    builder.add_unexpanded_binding_scope(
+                        callable_id,
+                        pattern,
+                        (value.start_byte(), value.end_byte()),
+                    );
                 }
             }
         }
@@ -1171,6 +1257,32 @@ fn collect_body_bindings(
         collect_body_bindings(child, callable_id, expressions, builder, output)?;
     }
     Ok(())
+}
+
+fn unexpanded_pattern_names(pattern: Node<'_>, source: &str, names: &mut BTreeSet<String>) -> bool {
+    match pattern.kind() {
+        "identifier" | "self" => {
+            names.insert(normalize(node_text(pattern, source)));
+            true
+        }
+        "_" | "mutable_specifier" | "scoped_identifier" => true,
+        "tuple_struct_pattern" => {
+            let mut cursor = pattern.walk();
+            pattern
+                .named_children(&mut cursor)
+                .skip(1)
+                .all(|child| unexpanded_pattern_names(child, source, names))
+        }
+        "reference_pattern" | "tuple_pattern" | "match_pattern" | "mut_pattern" | "ref_pattern" => {
+            let mut cursor = pattern.walk();
+            pattern
+                .named_children(&mut cursor)
+                .all(|child| unexpanded_pattern_names(child, source, names))
+        }
+        // An opaque pattern might bind names that this profile cannot enumerate.
+        // Its body therefore blocks outer resolution until a supported inner binding wins.
+        _ => false,
+    }
 }
 
 #[allow(clippy::too_many_arguments)]

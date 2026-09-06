@@ -350,11 +350,33 @@ impl AcquiredFile {
     }
 }
 
+/// The ordinary committed entry reached by bounded Git-only link resolution.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum SymlinkTargetKind {
+    File,
+    Directory,
+}
+
+/// A committed link and its verified target, separate from regular source bytes.
+///
+/// The acquiring adapter verifies Git object contents and bounded same-tree resolution.
+/// These public fields retain its result; they do not independently prove directory OIDs.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct AcquiredSymlink {
+    pub path: String,
+    pub blob_oid: ObjectId,
+    pub bytes: Vec<u8>,
+    pub resolved_target: String,
+    pub target_oid: ObjectId,
+    pub target_kind: SymlinkTargetKind,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct AcquiredRepository {
     bound_revision: BoundRevision,
     directory_count: u64,
     files: Vec<AcquiredFile>,
+    symlinks: Vec<AcquiredSymlink>,
 }
 
 impl AcquiredRepository {
@@ -368,7 +390,14 @@ impl AcquiredRepository {
             bound_revision,
             directory_count,
             files,
+            symlinks: Vec::new(),
         }
+    }
+
+    #[must_use]
+    pub fn with_symlinks(mut self, symlinks: Vec<AcquiredSymlink>) -> Self {
+        self.symlinks = symlinks;
+        self
     }
 
     #[must_use]
@@ -577,11 +606,15 @@ pub struct RepositoryInventory {
     bound_revision: BoundRevision,
     directory_count: u64,
     files: Vec<InventoryFile>,
+    symlinks: Vec<AcquiredSymlink>,
 }
 
 impl RepositoryInventory {
     #[must_use]
     pub fn classify(mut acquired: AcquiredRepository) -> Self {
+        acquired
+            .symlinks
+            .sort_by(|left, right| left.path.as_bytes().cmp(right.path.as_bytes()));
         acquired
             .files
             .sort_by(|left, right| left.path.as_bytes().cmp(right.path.as_bytes()));
@@ -595,6 +628,7 @@ impl RepositoryInventory {
             bound_revision: acquired.bound_revision,
             directory_count: acquired.directory_count,
             files,
+            symlinks: acquired.symlinks,
         }
     }
 
@@ -611,6 +645,11 @@ impl RepositoryInventory {
     #[must_use]
     pub fn files(&self) -> &[InventoryFile] {
         &self.files
+    }
+
+    #[must_use]
+    pub fn symlinks(&self) -> &[AcquiredSymlink] {
+        &self.symlinks
     }
 }
 

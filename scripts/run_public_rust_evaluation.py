@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import functools
 import hashlib
 import json
 import math
@@ -24,6 +25,7 @@ from typing import Any, BinaryIO, NoReturn, Sequence
 
 RUNNER_VERSION = "codenoesis.public-rust-evaluation-runner/v1"
 REPORT_SCHEMA = "codenoesis.public-rust-evaluation-report/v1"
+CANDIDATE_REPORT_SCHEMA = "codenoesis.public-rust-candidate-observation-report/v1"
 ERROR_SCHEMA = "codenoesis.public-rust-evaluation-error/v1"
 SUITE_ID = "rust-public-conference-v1"
 STAGES = (
@@ -41,6 +43,30 @@ ENTRY_ID = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
 SNAPSHOT_BYTES_MAX = 2_147_483_648
 ERROR_BYTES_MAX = 4_096
 ENABLED_EXTRACTORS = ["rust-progressive-s1-r16-source-only"]
+HEX_64 = re.compile(r"^[0-9a-f]{64}$")
+CANDIDATE_STAGE_SCHEMAS = dict(zip(STAGES, (
+    "codenoesis.repository-snapshot/v2", "codenoesis.repository-snapshot/v6",
+    "codenoesis.repository-snapshot/v7", "codenoesis.repository-snapshot/v12",
+    "codenoesis.repository-snapshot/v9", "codenoesis.repository-snapshot/v17",
+    "codenoesis.repository-snapshot/v18",
+)))
+CANDIDATE_SEMANTIC_FAMILIES = {
+    "repository": "dict", "configuration": "dict", "pipeline_version": "str",
+    "ontology_version": "str", "extractor_contract_version": "str", "extractor_versions": "list",
+    "evidence_lineage_version": "str", "inventory": "dict",
+}
+CANDIDATE_GRAPH_FAMILIES = ("entities", "relationships", "claims", "evidence", "diagnostics", "coverage")
+# Error lineages reachable by the fixed progressive scan profiles. Their code
+# vocabularies come from versioned local contracts, never from product output.
+CANDIDATE_ERROR_CONTRACTS = {
+    2: "s1", 4: "s3", 5: "s4", 6: "s1", 9: "s1", 10: "s4/r3",
+    11: "s4/r4", 12: "s4/r5", 13: "s4/r6", 16: "s4/k1",
+    17: "s4/r10", 19: "s4/r12", 21: "s4/r14", 22: "s4/r15", 24: "s4/r16",
+}
+CANDIDATE_REJECTION_EXITS = {
+    "input": 2, "acquisition": 10, "extraction": 11,
+    "graph": 11, "storage": 12, "publication": 12,
+}
 
 PROFILE_PAIRS = (
     ("workspace", "--workspace-profile", "cargo-root-package-v1"),
@@ -640,7 +666,12 @@ def parse_success(stdout_path: Path, stderr_path: Path) -> dict[str, Any]:
         "semantic_projection_sha256": sha256_bytes(semantic_projection(snapshot)),
     }
     semantic = snapshot.get("semantic")
+    if isinstance(semantic, dict):
+        parsed["semantic_families"] = {key: type(value).__name__ for key, value in semantic.items()}
     if isinstance(semantic, dict) and isinstance(semantic.get("knowledge_graph"), dict):
+        parsed["graph_families"] = {
+            key: type(value).__name__ for key, value in semantic["knowledge_graph"].items()
+        }
         parsed.update(graph_metrics(snapshot))
     return parsed
 
@@ -655,7 +686,12 @@ def parse_rejection(return_code: int, stdout_path: Path, stderr_path: Path) -> d
         raise EvaluationError("evaluation.oracle_mismatch", "product error is not canonical")
     if set(error) != {"schema_version", "code", "stage", "message", "retryable", "context"}:
         raise EvaluationError("evaluation.oracle_mismatch", "product error fields are invalid")
-    if error.get("retryable") is not False or not isinstance(error.get("context"), dict):
+    if (
+        error.get("retryable") is not False
+        or not isinstance(error.get("context"), dict)
+        or not isinstance(error.get("message"), str)
+        or not 1 <= len(error["message"]) <= 512
+    ):
         raise EvaluationError("evaluation.oracle_mismatch", "product error contract is invalid")
     return {
         "outcome": "typed_rejection",
@@ -664,6 +700,7 @@ def parse_rejection(return_code: int, stdout_path: Path, stderr_path: Path) -> d
         "error_code": error.get("code"),
         "error_stage": error.get("stage"),
         "error_context": error.get("context"),
+        "error_stderr_sha256": sha256_file(stderr_path),
     }
 
 
@@ -726,7 +763,103 @@ def sample_summary(sample: dict[str, Any]) -> dict[str, Any]:
     return {field: sample[field] for field in fields}
 
 
-def evaluate_entry(
+@functools.lru_cache(maxsize=1)
+def candidate_error_codes() -> dict[str, frozenset[str]]:
+    root = Path(__file__).resolve().parents[1] / "tests/specifications"
+    codes = {}
+    for version, directory in CANDIDATE_ERROR_CONTRACTS.items():
+        contract = load_json(root / directory / f"codenoesis-error-v{version}.schema.json")
+        codes[f"codenoesis.error/v{version}"] = set(contract["properties"]["code"]["enum"])
+    # The public Rust contracts wrap earlier typed errors under the active
+    # schema. These source-defined codes are absent from older schema enums.
+    codes["codenoesis.error/v21"].update({
+        "extraction.expression_contract_invalid",
+        "extraction.callable_cfg_alternatives_contract_invalid",
+        "extraction.callable_cfg_alternatives_unsupported",
+    })
+    for version, inherited in ((21, 9), (22, 21), (24, 22)):
+        codes[f"codenoesis.error/v{version}"].update(codes[f"codenoesis.error/v{inherited}"])
+    for version in (21, 22, 24):
+        codes[f"codenoesis.error/v{version}"].add("input.repository_limit_exceeded")
+    return {schema: frozenset(values) for schema, values in codes.items()}
+
+
+def validate_candidate_sample(sample: Any, stage: str, index: int) -> None:
+    if (
+        not isinstance(sample, dict)
+        or sample.get("stage") != stage
+        or type(sample.get("index")) is not int
+        or sample["index"] != index
+        or any(type(sample.get(field)) is not int or sample[field] < 0 for field in (
+            "wall_time_ns", "stdout_bytes", "stderr_bytes", "exit_code"
+        ))
+    ):
+        raise EvaluationError("evaluation.sample_failed", "candidate sample is missing or invalid")
+    if sample.get("outcome") == "success":
+        semantic_families = sample.get("semantic_families", {})
+        graph_families = sample.get("graph_families", {})
+        if (
+            sample["exit_code"] != 0 or sample["stderr_bytes"] != 0 or sample["stdout_bytes"] == 0
+            or sample.get("snapshot_schema") != CANDIDATE_STAGE_SCHEMAS[stage]
+            or not isinstance(semantic_families, dict)
+            or any(semantic_families.get(key) != kind for key, kind in CANDIDATE_SEMANTIC_FAMILIES.items())
+            or any(HEX_64.fullmatch(str(sample.get(field))) is None for field in (
+                "semantic_hash", "semantic_projection_sha256"
+            ))
+            or (stage != "acquisition" and (
+                semantic_families.get("extraction_chunks") != "list"
+                or semantic_families.get("knowledge_graph") != "dict"
+                or not isinstance(graph_families, dict)
+                or any(graph_families.get(key) != "list" for key in CANDIDATE_GRAPH_FAMILIES)
+                or not isinstance(sample.get("counts"), dict)
+                or set(sample["counts"]) != {
+                    "entities", "relationships", "claims", "evidence", "diagnostics",
+                    "coverage", "evaluated_values",
+                }
+                or any(type(count) is not int or count < 0 for count in sample["counts"].values())
+                or not isinstance(sample.get("information"), dict)
+            ))
+        ):
+            raise EvaluationError("evaluation.sample_failed", "candidate success contract is invalid")
+        return
+    schema = sample.get("error_schema")
+    code = sample.get("error_code")
+    error_stage = sample.get("error_stage")
+    expected_exit = (
+        10 if code == "input.repository_limit_exceeded" and error_stage == "input"
+        else CANDIDATE_REJECTION_EXITS.get(error_stage) if isinstance(error_stage, str) else None
+    )
+    if (
+        sample.get("outcome") != "typed_rejection"
+        or not isinstance(schema, str) or not isinstance(code, str) or not isinstance(error_stage, str)
+        or code not in candidate_error_codes().get(schema, ())
+        or error_stage not in CANDIDATE_REJECTION_EXITS
+        or not code.startswith(f"{error_stage}.")
+        or sample["exit_code"] != expected_exit
+        or sample["stdout_bytes"] != 0 or not 0 < sample["stderr_bytes"] <= ERROR_BYTES_MAX
+        or not isinstance(sample.get("error_context"), dict)
+        or HEX_64.fullmatch(str(sample.get("error_stderr_sha256"))) is None
+    ):
+        raise EvaluationError("evaluation.sample_failed", "candidate failure is not a known typed rejection")
+
+
+def candidate_sample_summary(sample: dict[str, Any]) -> dict[str, Any]:
+    summary = sample_summary(sample)
+    if sample["outcome"] == "success":
+        summary["semantic_families"] = sample["semantic_families"]
+        if "graph_families" in sample:
+            summary["graph_families"] = sample["graph_families"]
+    if sample["outcome"] == "typed_rejection":
+        # Retain exact error identity without publishing arbitrary context or
+        # messages from an untrusted repository or product executable.
+        summary["error_context_sha256"] = sha256_bytes(
+            canonical_json_bytes(summary.pop("error_context"))
+        )
+        summary["error_stderr_sha256"] = sample["error_stderr_sha256"]
+    return summary
+
+
+def evaluate_candidate_entry(
     binary: Path,
     repository: Path,
     descriptor: dict[str, Any],
@@ -735,6 +868,79 @@ def evaluate_entry(
     scratch: Path,
     home: Path,
 ) -> dict[str, Any]:
+    if policy.get("repetitions") != 3:
+        raise EvaluationError("evaluation.invalid_contract", "candidate requires three terminal samples")
+    stage_results = []
+    highest = None
+    for stage in STAGES:
+        terminal_sample = run_sample(
+            binary, repository, descriptor, stage, 1, scratch,
+            policy["sample_timeout_seconds"], home,
+        )
+        validate_candidate_sample(terminal_sample, stage, 1)
+        stage_results.append(candidate_sample_summary(terminal_sample))
+        if terminal_sample["outcome"] == "typed_rejection":
+            break
+        highest = stage
+    expected_highest = expected["highest_successful_stage"]
+    if expected_highest is not None and (
+        highest is None or STAGES.index(highest) < STAGES.index(expected_highest)
+    ):
+        raise EvaluationError(
+            "evaluation.regression", "candidate regressed below historical stage coverage",
+            context={"entry": descriptor["id"], "stage": stage},
+        )
+    terminal_samples = [candidate_sample_summary(terminal_sample)]
+    for index in range(2, 4):
+        sample = run_sample(
+            binary, repository, descriptor, stage, index, scratch,
+            policy["sample_timeout_seconds"], home,
+        )
+        validate_candidate_sample(sample, stage, index)
+        if (
+            not terminal_sample_matches(sample, terminal_sample)
+            or sample.get("information") != terminal_sample.get("information")
+            or sample.get("error_stderr_sha256") != terminal_sample.get("error_stderr_sha256")
+        ):
+            raise EvaluationError(
+                "evaluation.nondeterministic", "candidate terminal samples are not deterministic",
+                context={"entry": descriptor["id"], "stage": stage, "sample": index},
+            )
+        terminal_samples.append(candidate_sample_summary(sample))
+    matches = stage == expected["terminal_stage"] and terminal_sample_matches(terminal_sample, expected)
+    progressed = highest is not None and (
+        expected_highest is None or STAGES.index(highest) > STAGES.index(expected_highest)
+    )
+    comparison = (
+        "unchanged" if matches else "progressed_review_required" if progressed
+        else "semantic_change_review_required" if terminal_sample["outcome"] == "success"
+        else "rejection_change_review_required"
+    )
+    report = entry_report(
+        descriptor, highest, stage, terminal_sample["outcome"], stage_results, terminal_samples
+    )
+    report.update({
+        "oracle_match_rate": 1.0 if matches else 0.0,
+        "historical_comparison": comparison,
+        "historical_terminal_stage": expected["terminal_stage"],
+        "historical_terminal_outcome": expected["outcome"],
+    })
+    return report
+
+
+def evaluate_entry(
+    binary: Path,
+    repository: Path,
+    descriptor: dict[str, Any],
+    expected: dict[str, Any],
+    policy: dict[str, Any],
+    scratch: Path,
+    home: Path,
+    *,
+    candidate_observation: bool = False,
+) -> dict[str, Any]:
+    if candidate_observation:
+        return evaluate_candidate_entry(binary, repository, descriptor, expected, policy, scratch, home)
     stage_results = []
     terminal_sample = None
     for stage in STAGES:
@@ -791,6 +997,20 @@ def evaluate_entry(
                 },
             )
         terminal_samples.append(sample_summary(sample))
+    return entry_report(
+        descriptor, expected["highest_successful_stage"], expected["terminal_stage"],
+        expected["outcome"], stage_results, terminal_samples,
+    )
+
+
+def entry_report(
+    descriptor: dict[str, Any],
+    highest: str | None,
+    terminal_stage: str,
+    outcome: str,
+    stage_results: list[dict[str, Any]],
+    terminal_samples: list[dict[str, Any]],
+) -> dict[str, Any]:
     wall_times = [sample["wall_time_ns"] for sample in terminal_samples]
     return {
         "repository_id": descriptor["repository_id"],
@@ -803,9 +1023,9 @@ def evaluate_entry(
             "rust_source_files": descriptor["rust_source_files"],
             "rust_source_bytes": descriptor["rust_source_bytes"],
         },
-        "highest_successful_stage": expected["highest_successful_stage"],
-        "terminal_stage": expected["terminal_stage"],
-        "terminal_outcome": expected["outcome"],
+        "highest_successful_stage": highest,
+        "terminal_stage": terminal_stage,
+        "terminal_outcome": outcome,
         "stage_results": stage_results,
         "terminal_samples": terminal_samples,
         "terminal_percentiles_ns": {
@@ -817,7 +1037,9 @@ def evaluate_entry(
     }
 
 
-def aggregate_report(entries: dict[str, dict[str, Any]]) -> dict[str, Any]:
+def aggregate_report(
+    entries: dict[str, dict[str, Any]], *, candidate_observation: bool = False
+) -> dict[str, Any]:
     stage_entries = {
         entry_id: {"highest_successful_stage": entry["highest_successful_stage"]}
         for entry_id, entry in entries.items()
@@ -835,7 +1057,7 @@ def aggregate_report(entries: dict[str, dict[str, Any]]) -> dict[str, Any]:
         for key, value in first["information"].items():
             if isinstance(value, int) and not key.endswith("basis_points"):
                 information[key] += value
-    return {
+    aggregate = {
         "repositories": len(entries),
         "constant_stage_successes": len(constant_entries),
         "typed_rejections": sum(
@@ -847,6 +1069,15 @@ def aggregate_report(entries: dict[str, dict[str, Any]]) -> dict[str, Any]:
         "constant_stage_graph_totals": dict(sorted(totals.items())),
         "constant_stage_information_totals": dict(sorted(information.items())),
     }
+    if candidate_observation:
+        matches = sum(entry["oracle_match_rate"] == 1.0 for entry in entries.values())
+        aggregate.update({
+            "oracle_matches": matches,
+            "oracle_match_rate": matches / max(1, len(entries)),
+            "extraction_success_rate": len(constant_entries) / max(1, len(entries)),
+            "historical_changes_requiring_review": len(entries) - matches,
+        })
+    return aggregate
 
 
 def host_record(profile: str) -> dict[str, Any]:
@@ -869,8 +1100,12 @@ def validate_manifest(manifest_path: Path) -> dict[str, Any]:
     return manifest
 
 
-def validate_product_commit(product_commit: str, baseline_product_commit: str) -> None:
-    if product_commit != baseline_product_commit:
+def validate_product_commit(
+    product_commit: str, baseline_product_commit: str, *, candidate_observation: bool = False
+) -> None:
+    if not isinstance(product_commit, str) or HEX_40.fullmatch(product_commit) is None:
+        raise EvaluationError("evaluation.invalid_arguments", "invalid product commit")
+    if not candidate_observation and product_commit != baseline_product_commit:
         raise EvaluationError(
             "evaluation.product_mismatch",
             "product commit does not match the frozen oracle baseline",
@@ -916,7 +1151,23 @@ def run_evaluation(arguments: argparse.Namespace) -> dict[str, Any]:
     ensure_directory(output.parent, "output parent")
     validate_manifest(manifest_path)
     corpus, policy, oracle = load_contracts(corpus_path, policy_path, oracle_path)
-    validate_product_commit(arguments.product_commit, oracle["baseline_product_commit"])
+    candidate_observation = getattr(arguments, "candidate_observation", False)
+    timeout_override = getattr(arguments, "timeout_seconds", None)
+    execution_policy = policy
+    if timeout_override is not None:
+        if (
+            not candidate_observation or type(timeout_override) is not int
+            or not 1 <= timeout_override <= 600
+        ):
+            raise EvaluationError(
+                "evaluation.invalid_arguments",
+                "timeout override requires candidate observation and 1 through 600 seconds",
+            )
+        execution_policy = {**policy, "sample_timeout_seconds": timeout_override}
+    validate_product_commit(
+        arguments.product_commit, oracle["baseline_product_commit"],
+        candidate_observation=candidate_observation,
+    )
     home_parent = ensure_directory(output.parent, "output parent")
     with tempfile.TemporaryDirectory(prefix=".codenoesis-evaluation-home-", dir=home_parent) as home_name:
         with tempfile.TemporaryDirectory(prefix=".codenoesis-evaluation-run-", dir=home_parent) as scratch_name:
@@ -936,15 +1187,16 @@ def run_evaluation(arguments: argparse.Namespace) -> dict[str, Any]:
                     repositories[entry_id],
                     descriptor,
                     oracle["entries"][entry_id],
-                    policy,
+                    execution_policy,
                     scratch,
                     home,
+                    candidate_observation=candidate_observation,
                 )
-    aggregate = aggregate_report(entries)
+    aggregate = aggregate_report(entries, candidate_observation=candidate_observation)
     if aggregate["constant_stage_successes"] < policy["minimum_constant_stage_successes"]:
         raise EvaluationError("evaluation.oracle_mismatch", "constant-stage coverage is below policy")
     report = {
-        "schema_version": REPORT_SCHEMA,
+        "schema_version": CANDIDATE_REPORT_SCHEMA if candidate_observation else REPORT_SCHEMA,
         "runner_version": RUNNER_VERSION,
         "suite_id": SUITE_ID,
         "manifest_sha256": sha256_file(manifest_path),
@@ -967,7 +1219,9 @@ def run_evaluation(arguments: argparse.Namespace) -> dict[str, Any]:
         "concurrency": policy["concurrency"],
         "cache_state": policy["cache_state"],
         "percentile_method": policy["percentile_method"],
-        "success_rate": aggregate["oracle_match_rate"],
+        "success_rate": aggregate[
+            "extraction_success_rate" if candidate_observation else "oracle_match_rate"
+        ],
         "stage_order": list(STAGES),
         "entries": entries,
         "aggregate": aggregate,
@@ -980,6 +1234,16 @@ def run_evaluation(arguments: argparse.Namespace) -> dict[str, Any]:
             "model_authority": False,
         },
     }
+    if candidate_observation:
+        report.update({
+            "evaluation_mode": "candidate_observation",
+            "result": "candidate_review_required",
+            "historical_baseline_product_commit": oracle["baseline_product_commit"],
+            "sample_timeout_seconds": execution_policy["sample_timeout_seconds"],
+            "historical_sample_timeout_seconds": policy["sample_timeout_seconds"],
+            "oracle_match_rate": aggregate["oracle_match_rate"],
+            "extraction_success_rate": aggregate["extraction_success_rate"],
+        })
     encoded = canonical_json_bytes(report)
     if len(encoded) > policy["report_bytes_max"]:
         raise EvaluationError("evaluation.limit_exceeded", "evaluation report exceeds byte limit")
@@ -1004,6 +1268,8 @@ def parser() -> FailClosedParser:
     run.add_argument("--output", required=True)
     run.add_argument("--host-profile", required=True)
     run.add_argument("--product-commit", required=True)
+    run.add_argument("--candidate-observation", action="store_true")
+    run.add_argument("--timeout-seconds", type=int)
     return value
 
 
