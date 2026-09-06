@@ -763,22 +763,7 @@ fn acquire_internal_symlink(
         state.cumulative_file_bytes,
         internal_symlinks::MAX_TARGET_BYTES,
         false,
-    )
-    .map_err(|error| match error {
-        RepositoryBoundaryAcquisitionError::Repository(RepositoryError::Acquisition(
-            AcquisitionError::LimitExceeded {
-                limit: LimitKind::SingleFileBytes,
-                observed,
-                ..
-            },
-        )) => AcquisitionError::LimitExceeded {
-            limit: LimitKind::SingleFileBytes,
-            maximum: internal_symlinks::MAX_TARGET_BYTES,
-            observed,
-        }
-        .into(),
-        other => other,
-    })?;
+    )?;
     if blob.kind != GitObjectKind::Blob || blob.body_size != blob.body_prefix.len() {
         return Err(AcquisitionError::RepositoryInconsistent {
             object_oid: entry.object_id.clone(),
