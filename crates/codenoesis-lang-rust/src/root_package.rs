@@ -286,8 +286,7 @@ impl<'a> Planner<'a> {
             let source_path = package
                 .targets
                 .first()
-                .map(|target| target.source_path.clone())
-                .ok_or(RootPackageWorkspaceError::ContractInvalid)?;
+                .map_or_else(|| first_source.clone(), |target| target.source_path.clone());
             for capability in &package.coverage {
                 if coverage_keys.insert((package.manifest_path.clone(), *capability)) {
                     coverage.push(PlannedCoverage {
@@ -550,6 +549,13 @@ impl<'a> Planner<'a> {
                 codenoesis_domain::s4_r3::RootPackageLimit::BinaryRootsPerPackage,
                 u64::try_from(binary_count).unwrap_or(u64::MAX),
             ));
+        }
+        let has_deferred_targets = ["example", "test", "bench"]
+            .iter()
+            .any(|key| table.contains_key(*key));
+        if selected.is_empty() && has_deferred_targets {
+            coverage.insert("cargo.target_world_deferred");
+            return Ok(Vec::new());
         }
         if selected.is_empty() {
             return Err(invalid_manifest(

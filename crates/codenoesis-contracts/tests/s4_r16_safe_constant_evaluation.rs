@@ -7,6 +7,9 @@ use codenoesis_contracts::{
 };
 use codenoesis_domain::knowledge::{ClaimState, ClaimSubjectKind};
 use codenoesis_domain::s4::workspace_claim_id;
+use codenoesis_domain::s4_r12::CallableCfgAlternativesError;
+use codenoesis_domain::s4_r14::ExpressionBindingError;
+use codenoesis_domain::s4_r15::LocalFlowError;
 use codenoesis_domain::s4_r16::{
     ConstantEvaluationError, ConstantEvaluationLimit, evaluated_value_id,
     evaluation_relationship_id,
@@ -196,6 +199,14 @@ fn conf_fr_cli_001_r16_typed_failures_emit_only_error_v24_codes() {
         CodeNoesisErrorV24::invalid_profile("rust-safe-constant-evaluation-v2"),
         CodeNoesisErrorV24::unsupported_composition("repository_boundary_not_supported"),
         CodeNoesisErrorV24::from_constant_evaluation(&ConstantEvaluationError::IdentityConflict),
+        CodeNoesisErrorV24::from_constant_evaluation(&ConstantEvaluationError::Source(
+            LocalFlowError::Source(ExpressionBindingError::CfgAlternatives(
+                CallableCfgAlternativesError::ContractInvalid,
+            )),
+        )),
+        CodeNoesisErrorV24::from_constant_evaluation(&ConstantEvaluationError::Source(
+            LocalFlowError::Source(ExpressionBindingError::ContractInvalid),
+        )),
         CodeNoesisErrorV24::from_constant_evaluation(&ConstantEvaluationError::ValueInvalid),
         CodeNoesisErrorV24::from_constant_evaluation(&ConstantEvaluationError::DependencyInvalid),
         CodeNoesisErrorV24::from_constant_evaluation(&ConstantEvaluationError::DependencyCycle),
@@ -215,6 +226,8 @@ fn conf_fr_cli_001_r16_typed_failures_emit_only_error_v24_codes() {
         "input.invalid_rust_constant_profile",
         "input.unsupported_rust_constant_evaluation_composition",
         "extraction.constant_identity_conflict",
+        "extraction.callable_cfg_alternatives_contract_invalid",
+        "extraction.expression_contract_invalid",
         "extraction.constant_value_invalid",
         "extraction.constant_dependency_invalid",
         "extraction.constant_dependency_cycle",

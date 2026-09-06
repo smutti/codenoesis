@@ -5,6 +5,8 @@ use codenoesis_contracts::{
     R15_LOCAL_EXPLORER_VERSION, R15_ONTOLOGY_VERSION, R15_PORTABLE_GRAPH_VERSION,
     R15_QUERY_VERSION, R15_RULE_VERSION, R15_SNAPSHOT_VERSION, R15ContractError,
 };
+use codenoesis_domain::s4_r12::CallableCfgAlternativesError;
+use codenoesis_domain::s4_r14::ExpressionBindingError;
 use codenoesis_domain::s4_r15::{LocalFlowError, LocalFlowLimit};
 use serde_json::{Map, Value, json};
 
@@ -198,6 +200,12 @@ fn conf_fr_cli_001_r15_typed_failures_emit_only_error_v22_codes() {
         CodeNoesisErrorV22::invalid_profile("rust-local-flow-v2"),
         CodeNoesisErrorV22::unsupported_composition("boundary_profile"),
         CodeNoesisErrorV22::from_local_flow(&LocalFlowError::Cycle),
+        CodeNoesisErrorV22::from_local_flow(&LocalFlowError::Source(
+            ExpressionBindingError::CfgAlternatives(CallableCfgAlternativesError::ContractInvalid),
+        )),
+        CodeNoesisErrorV22::from_local_flow(&LocalFlowError::Source(
+            ExpressionBindingError::ContractInvalid,
+        )),
         CodeNoesisErrorV22::from_local_flow(&LocalFlowError::LimitExceeded {
             limit: LocalFlowLimit::NestedBranches,
             maximum: 64,
@@ -213,6 +221,8 @@ fn conf_fr_cli_001_r15_typed_failures_emit_only_error_v22_codes() {
         "input.invalid_rust_flow_profile",
         "input.unsupported_rust_flow_composition",
         "extraction.local_flow_cycle",
+        "extraction.callable_cfg_alternatives_contract_invalid",
+        "extraction.expression_contract_invalid",
         "extraction.local_flow_limit_exceeded",
         "snapshot.invalid_v17",
         "query.invalid_v17",

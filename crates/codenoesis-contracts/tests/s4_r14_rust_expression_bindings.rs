@@ -5,6 +5,7 @@ use codenoesis_contracts::{
     R14_ONTOLOGY_VERSION, R14_PORTABLE_GRAPH_VERSION, R14_QUERY_VERSION, R14_SNAPSHOT_VERSION,
     R14ContractError,
 };
+use codenoesis_domain::s4_r12::CallableCfgAlternativesError;
 use codenoesis_domain::s4_r14::{ExpressionBindingError, ExpressionBindingLimit};
 use serde_json::{Map, Value, json};
 
@@ -177,6 +178,10 @@ fn conf_fr_cli_001_r14_typed_failures_emit_only_error_v21_codes() {
         CodeNoesisErrorV21::from_expression(&ExpressionBindingError::AccessResolutionInvalid),
         CodeNoesisErrorV21::from_expression(&ExpressionBindingError::CallSiteEvidenceMismatch),
         CodeNoesisErrorV21::from_expression(&ExpressionBindingError::IndexMismatch),
+        CodeNoesisErrorV21::from_expression(&ExpressionBindingError::CfgAlternatives(
+            CallableCfgAlternativesError::ContractInvalid,
+        )),
+        CodeNoesisErrorV21::from_expression(&ExpressionBindingError::ContractInvalid),
         CodeNoesisErrorV21::from_expression(&ExpressionBindingError::LimitExceeded {
             limit: ExpressionBindingLimit::ExpressionDepth,
             maximum: 256,
@@ -341,6 +346,8 @@ fn allowed_error_codes() -> BTreeSet<&'static str> {
         "extraction.access_resolution_invalid",
         "extraction.call_site_evidence_mismatch",
         "extraction.expression_index_mismatch",
+        "extraction.callable_cfg_alternatives_contract_invalid",
+        "extraction.expression_contract_invalid",
         "extraction.expression_limit_exceeded",
         "snapshot.invalid_v16",
         "query.invalid_v16",

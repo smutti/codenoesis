@@ -9,6 +9,7 @@ use codenoesis_domain::s4_r3::R3_WORKSPACE_PROFILE;
 use codenoesis_domain::s4_r4::R4_MANIFEST_PROFILE;
 use codenoesis_domain::s4_r5::{R5_RUST_SEMANTIC_PROFILE, RustSemanticError};
 use codenoesis_domain::s4_r6::{FrameworkError, R6_FRAMEWORK_PROFILE};
+use codenoesis_domain::s4_r12::CallableCfgAlternativesError;
 use codenoesis_domain::s4_r14::{
     ExpressionBindingEntity, ExpressionBindingError, ExpressionBindingKnowledge,
     ExpressionBindingRelationship, ExpressionCoverageGap, ExpressionEntityProperties,
@@ -188,9 +189,21 @@ impl CodeNoesisErrorV21 {
                 "expression extraction limit exceeded",
                 json!({"limit": limit.as_str(), "maximum": maximum, "observed": observed}),
             ),
-            ExpressionBindingError::Source(_)
-            | ExpressionBindingError::CfgAlternatives(_)
-            | ExpressionBindingError::ContractInvalid => Self::internal("expression_extraction"),
+            ExpressionBindingError::CfgAlternatives(
+                CallableCfgAlternativesError::ContractInvalid,
+            ) => Self::extraction(
+                "extraction.callable_cfg_alternatives_contract_invalid",
+                "configuration-alternative callable lineage is invalid",
+            ),
+            ExpressionBindingError::CfgAlternatives(_) => Self::extraction(
+                "extraction.callable_cfg_alternatives_unsupported",
+                "configuration-alternative callable lineage is unsupported",
+            ),
+            ExpressionBindingError::ContractInvalid => Self::extraction(
+                "extraction.expression_contract_invalid",
+                "expression-binding extraction did not satisfy its contract",
+            ),
+            ExpressionBindingError::Source(_) => Self::internal("expression_extraction"),
         }
     }
 
@@ -411,9 +424,55 @@ impl RepositorySnapshotV16 {
         output_capacity_profile: K1OutputCapacityProfile,
         envelope: SnapshotEnvelopeV1,
     ) -> Result<Self, RepositorySnapshotV16Error> {
-        knowledge
-            .validate()
-            .map_err(|_| RepositorySnapshotV16Error::ContractInvalid)?;
+        let value = Self::build_value(
+            inventory,
+            knowledge,
+            boundaries,
+            output_capacity_profile,
+            envelope,
+            true,
+            true,
+        )?;
+        Ok(Self {
+            value,
+            output_capacity_profile,
+        })
+    }
+
+    pub(crate) fn value_for_successor(
+        inventory: &RepositoryInventory,
+        knowledge: &ExpressionBindingKnowledge,
+        boundaries: Option<&RepositoryBoundaryReport>,
+        output_capacity_profile: K1OutputCapacityProfile,
+        envelope: SnapshotEnvelopeV1,
+    ) -> Result<Value, RepositorySnapshotV16Error> {
+        Self::build_value(
+            inventory,
+            knowledge,
+            boundaries,
+            output_capacity_profile,
+            envelope,
+            false,
+            false,
+        )
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    #[allow(clippy::too_many_lines)]
+    fn build_value(
+        inventory: &RepositoryInventory,
+        knowledge: &ExpressionBindingKnowledge,
+        boundaries: Option<&RepositoryBoundaryReport>,
+        output_capacity_profile: K1OutputCapacityProfile,
+        envelope: SnapshotEnvelopeV1,
+        validate: bool,
+        seal: bool,
+    ) -> Result<Value, RepositorySnapshotV16Error> {
+        if validate {
+            knowledge
+                .validate()
+                .map_err(|_| RepositorySnapshotV16Error::ContractInvalid)?;
+        }
         if knowledge.callable_cfg_alternatives.is_none() && boundaries.is_some() {
             return Err(RepositorySnapshotV16Error::ContractInvalid);
         }
@@ -442,9 +501,11 @@ impl RepositorySnapshotV16 {
             .and_then(Value::as_object_mut)
             .ok_or(RepositorySnapshotV16Error::ContractInvalid)?;
         let capacity = match output_capacity_profile {
-            K1OutputCapacityProfile::Standard | K1OutputCapacityProfile::LocalSnapshot256MV1 => {
-                Value::Null
-            }
+            K1OutputCapacityProfile::Standard
+            | K1OutputCapacityProfile::LocalSnapshot256MV1
+            | K1OutputCapacityProfile::LocalSnapshot512MV1
+            | K1OutputCapacityProfile::LocalSnapshot1GV1
+            | K1OutputCapacityProfile::LocalSnapshot2GV1 => Value::Null,
             K1OutputCapacityProfile::LocalSnapshot64MV1 => {
                 Value::String("local-snapshot-64m-v1".to_owned())
             }
@@ -514,24 +575,24 @@ impl RepositorySnapshotV16 {
             "knowledge_graph".to_owned(),
             knowledge_graph_v13(&baseline_graph, knowledge)?,
         );
-        let semantic_value = Value::Object(semantic.clone());
-        let snapshot_hash = semantic_hash(SNAPSHOT_V16_HASH_DOMAIN, &semantic_value);
-        let root = value
-            .as_object_mut()
-            .ok_or(RepositorySnapshotV16Error::ContractInvalid)?;
-        root.insert(
-            "schema_version".to_owned(),
-            Value::String(R14_SNAPSHOT_VERSION.to_owned()),
-        );
-        root.insert(
-            "semantic_hash".to_owned(),
-            json!({"algorithm": "blake3-256", "value": snapshot_hash}),
-        );
-        publication_candidate(&value).map_err(|_| RepositorySnapshotV16Error::ContractInvalid)?;
-        Ok(Self {
-            value,
-            output_capacity_profile,
-        })
+        if seal {
+            let semantic_value = Value::Object(semantic.clone());
+            let snapshot_hash = semantic_hash(SNAPSHOT_V16_HASH_DOMAIN, &semantic_value);
+            let root = value
+                .as_object_mut()
+                .ok_or(RepositorySnapshotV16Error::ContractInvalid)?;
+            root.insert(
+                "schema_version".to_owned(),
+                Value::String(R14_SNAPSHOT_VERSION.to_owned()),
+            );
+            root.insert(
+                "semantic_hash".to_owned(),
+                json!({"algorithm": "blake3-256", "value": snapshot_hash}),
+            );
+            publication_candidate(&value)
+                .map_err(|_| RepositorySnapshotV16Error::ContractInvalid)?;
+        }
+        Ok(value)
     }
 
     /// Serializes V16 under its selected bounded output envelope.

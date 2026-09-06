@@ -115,6 +115,155 @@ fn gt_fr_ext_012_declared_values_are_bounded_and_honest() {
 }
 
 #[test]
+fn gt_fr_ext_012_oversized_declared_value_is_covered_without_retaining_metadata() {
+    let source = format!("pub const LARGE: &str = \"{}\";", "a".repeat(4_097));
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_callable_semantics(&synthetic_inventory(&source))
+        .expect("cover oversized declared value");
+    let entity = extraction
+        .knowledge
+        .graph
+        .entities
+        .iter()
+        .find(|entity| entity.name == "LARGE")
+        .expect("large declared value entity");
+    let CallableSemanticProperties::DeclaredValue(properties) = &entity.properties else {
+        panic!("declared value properties");
+    };
+    assert_eq!(properties.state, DeclaredValueState::ExpressionOnly);
+    assert!(properties.expression_digest.is_none());
+    assert!(properties.expression_byte_length > 4_096);
+    assert!(extraction.knowledge.graph.coverage.iter().any(|gap| {
+        gap.subject_id == entity.id && gap.capability == "rust.expression_metadata_too_large"
+    }));
+}
+
+#[test]
+fn gt_fr_ext_012_attribute_transformed_overloads_remain_explicitly_unmodeled() {
+    let source = r"
+pub struct BindGroup;
+
+impl BindGroup {
+    #[getter]
+    fn label(&self) -> String { String::new() }
+
+    #[setter]
+    fn label(&self, value: String) { let _ = value; }
+}
+";
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_callable_cfg_alternatives(&synthetic_inventory(source), &[])
+        .expect("preserve macro-transformed overload uncertainty through R12");
+    assert!(
+        extraction
+            .knowledge
+            .callable
+            .graph
+            .entities
+            .iter()
+            .all(|entity| {
+                entity.kind != CallableSemanticEntityKind::Signature || entity.name != "label"
+            })
+    );
+    assert!(
+        extraction
+            .knowledge
+            .callable
+            .framework
+            .semantic
+            .graph
+            .coverage
+            .iter()
+            .any(|gap| gap.capability == "rust.attribute_semantics_not_interpreted")
+    );
+}
+
+#[test]
+fn gt_fr_ext_012_cfg_free_function_alternatives_do_not_claim_one_signature() {
+    let source = r#"
+#[cfg(target_os = "ios")]
+#[component]
+fn app(value: String) {}
+
+#[cfg(not(target_os = "ios"))]
+#[component]
+fn app(value: u64) {}
+"#;
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_callable_cfg_alternatives(&synthetic_inventory(source), &[])
+        .expect("preserve free-function cfg uncertainty through R12");
+    assert!(
+        extraction
+            .knowledge
+            .callable
+            .graph
+            .entities
+            .iter()
+            .all(|entity| {
+                entity.kind != CallableSemanticEntityKind::Signature || entity.name != "app"
+            })
+    );
+    assert!(
+        extraction
+            .knowledge
+            .callable
+            .framework
+            .semantic
+            .graph
+            .coverage
+            .iter()
+            .any(|gap| gap.capability == "rust.cfg_presence_unresolved")
+    );
+    let component = extraction
+        .knowledge
+        .callable
+        .framework
+        .graph
+        .declarations
+        .iter()
+        .find(|declaration| declaration.declared_key_or_target.ends_with(" -> app"))
+        .expect("component candidate");
+    assert_eq!(component.evidence_ids.len(), 2);
+}
+
+#[test]
+fn gt_fr_ext_012_repeated_anonymous_constants_do_not_claim_one_value() {
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_callable_cfg_alternatives(
+            &synthetic_inventory("const _: () = ();\nconst _: () = { panic!() };\n"),
+            &[],
+        )
+        .expect("preserve repeated anonymous constant uncertainty through R12");
+    let values = extraction
+        .knowledge
+        .callable
+        .graph
+        .entities
+        .iter()
+        .filter(|entity| entity.kind == CallableSemanticEntityKind::DeclaredValue)
+        .collect::<Vec<_>>();
+    assert_eq!(values.len(), 1);
+    let CallableSemanticProperties::DeclaredValue(properties) = &values[0].properties else {
+        panic!("declared value properties");
+    };
+    assert_eq!(properties.state, DeclaredValueState::Unresolved);
+    assert_eq!(values[0].evidence_ids.len(), 2);
+    assert!(
+        extraction
+            .knowledge
+            .callable
+            .graph
+            .coverage
+            .iter()
+            .any(|gap| {
+                gap.subject_id == values[0].id
+                    && gap.capability
+                        == "rust.anonymous_declared_value_occurrences_not_distinguished"
+            })
+    );
+}
+
+#[test]
 fn gt_fr_ext_012_calls_controls_and_lexical_nesting() {
     let graph = &extract_fixture(0, false).knowledge.graph;
     let counts = entity_counts(graph);
@@ -373,6 +522,27 @@ pub fn classify(value: Option<i32>, enabled: bool) -> i32 {
 
     assert_eq!(controls[&ControlKind::If], 1);
     assert_eq!(controls[&ControlKind::IfLet], 1);
+}
+
+#[test]
+fn gt_fr_ext_014_macro_pattern_input_remains_explicitly_unexpanded() {
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_expression_bindings(&synthetic_inventory(
+            "pub fn inspect() {\n\
+             if let Some(value) = deferred_input!() {\n\
+             let _ = value;\n\
+             }\n\
+             }\n",
+        ))
+        .expect("macro pattern input is a typed coverage gap");
+    assert!(
+        extraction
+            .knowledge
+            .graph
+            .coverage
+            .iter()
+            .any(|gap| { gap.capability == "rust.pattern_input_unexpanded" })
+    );
 }
 
 #[test]

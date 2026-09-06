@@ -285,7 +285,7 @@ impl RootPackageWorkspacePlan {
                 != (member.manifest_path.is_none()
                     && member.crate_ids.is_empty()
                     && member.member_source == WorkspaceMemberSource::LiteralMember)
-                || !external && (member.manifest_path.is_none() || member.crate_ids.is_empty())
+                || !external && member.manifest_path.is_none()
                 || planned_targets.iter().any(|target| {
                     target.member_source != member.member_source
                         || member.manifest_path.as_deref() != Some(target.manifest_path.as_str())

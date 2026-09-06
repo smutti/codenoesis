@@ -231,6 +231,27 @@ impl<'a> SourceBuilder<'a> {
         {
             return Err(ExpressionBindingError::IdentityConflict);
         }
+        let mut expression_ids = BTreeMap::new();
+        for expression in &self.expressions {
+            let key = expression_range_key(
+                &expression.entity.callable_id,
+                expression.start,
+                expression.end,
+                expression_syntax_kind(expression),
+            );
+            if expression_ids
+                .insert(
+                    key,
+                    (
+                        expression.entity.id.clone(),
+                        expression.entity.evidence_id.clone(),
+                    ),
+                )
+                .is_some()
+            {
+                return Err(ExpressionBindingError::IdentityConflict);
+            }
+        }
 
         let mut pending = Vec::new();
         for expression in &self.expressions {
@@ -241,19 +262,17 @@ impl<'a> SourceBuilder<'a> {
                 vec![expression.entity.evidence_id.clone()],
             ));
             if let Some((start, end, kind)) = &expression.parent_range {
-                let parent = self
-                    .expressions
-                    .iter()
-                    .find(|candidate| {
-                        candidate.start == *start
-                            && candidate.end == *end
-                            && expression_syntax_kind(candidate) == kind
-                            && candidate.entity.callable_id == expression.entity.callable_id
-                    })
+                let parent = expression_ids
+                    .get(&expression_range_key(
+                        &expression.entity.callable_id,
+                        *start,
+                        *end,
+                        kind,
+                    ))
                     .ok_or(ExpressionBindingError::ParentInvalid)?;
                 pending.push(ExpressionBindingRelationship::new(
                     ExpressionRelationshipKind::ContainsExpression,
-                    parent.entity.id.clone(),
+                    parent.0.clone(),
                     expression.entity.id.clone(),
                     vec![expression.entity.evidence_id.clone()],
                 ));
@@ -267,24 +286,19 @@ impl<'a> SourceBuilder<'a> {
                 vec![binding.entity.evidence_id.clone()],
             ));
             if let Some((start, end, kind)) = &binding.source_expression_range {
-                let expression = self
-                    .expressions
-                    .iter()
-                    .find(|candidate| {
-                        candidate.start == *start
-                            && candidate.end == *end
-                            && expression_syntax_kind(candidate) == kind
-                            && candidate.entity.callable_id == binding.entity.callable_id
-                    })
+                let expression = expression_ids
+                    .get(&expression_range_key(
+                        &binding.entity.callable_id,
+                        *start,
+                        *end,
+                        kind,
+                    ))
                     .ok_or(ExpressionBindingError::AccessResolutionInvalid)?;
                 pending.push(ExpressionBindingRelationship::new(
                     ExpressionRelationshipKind::BindsFrom,
                     binding.entity.id.clone(),
-                    expression.entity.id.clone(),
-                    vec![
-                        binding.entity.evidence_id.clone(),
-                        expression.entity.evidence_id.clone(),
-                    ],
+                    expression.0.clone(),
+                    vec![binding.entity.evidence_id.clone(), expression.1.clone()],
                 ));
             }
         }
@@ -336,6 +350,17 @@ impl<'a> SourceBuilder<'a> {
     }
 
     fn add_access_relationships(&mut self) -> Result<(), ExpressionBindingError> {
+        let mut bindings_by_callable_and_name =
+            BTreeMap::<(String, String), Vec<&BindingDraft>>::new();
+        for binding in &self.bindings {
+            bindings_by_callable_and_name
+                .entry((
+                    binding.entity.callable_id.clone(),
+                    binding.entity.name.clone(),
+                ))
+                .or_default()
+                .push(binding);
+        }
         let mut coverage = Vec::new();
         let accesses = self
             .expressions
@@ -351,13 +376,12 @@ impl<'a> SourceBuilder<'a> {
                     .token
                     .as_deref()
                     .ok_or(ExpressionBindingError::ContractInvalid)?;
-                let mut candidates = self
-                    .bindings
-                    .iter()
+                let mut candidates = bindings_by_callable_and_name
+                    .get(&(expression.entity.callable_id.clone(), name.to_owned()))
+                    .into_iter()
+                    .flatten()
                     .filter(|binding| {
-                        binding.entity.callable_id == expression.entity.callable_id
-                            && binding.entity.name == name
-                            && expression.start >= binding.scope_start
+                        expression.start >= binding.scope_start
                             && expression.end <= binding.scope_end
                             && expression.entity.locator.path == binding.entity.locator.path
                     })
@@ -639,7 +663,7 @@ fn process_callable(
     if let Some(body) = body {
         let mut expressions = Vec::new();
         collect_expressions(body, &callable_id, builder, &mut expressions)?;
-        assign_roles(body, &mut expressions)?;
+        assign_roles(&mut expressions)?;
         add_call_facts(body, &callable_id, &expressions, builder)?;
         collect_body_bindings(body, &callable_id, &expressions, builder, &mut bindings)?;
         enforce_expression_limit(
@@ -722,7 +746,7 @@ fn collect_expressions(
                         parent.kind().to_owned(),
                     )
                 }),
-            roles: BTreeSet::new(),
+            roles: expression_roles(node),
         });
     }
     let mut cursor = node.walk();
@@ -732,10 +756,7 @@ fn collect_expressions(
     Ok(())
 }
 
-fn assign_roles(
-    body: Node<'_>,
-    expressions: &mut [ExpressionDraft],
-) -> Result<(), ExpressionBindingError> {
+fn assign_roles(expressions: &mut [ExpressionDraft]) -> Result<(), ExpressionBindingError> {
     let ranges = expressions
         .iter()
         .map(|value| ((value.start, value.end), value.entity.id.clone()))
@@ -751,58 +772,8 @@ fn assign_roles(
         })
         .collect::<BTreeMap<_, _>>();
     for expression in expressions {
-        let node = find_node(
-            body,
-            expression.start,
-            expression.end,
-            expression_syntax_kind(expression),
-        )
-        .ok_or(ExpressionBindingError::ParentInvalid)?;
         if expression.parent_range.is_some() {
             expression.roles.insert(ExpressionRole::Nested);
-        }
-        if let Some(parent) = node.parent() {
-            match parent.kind() {
-                "arguments" => {
-                    expression.roles.insert(ExpressionRole::Argument);
-                }
-                "let_declaration" if same_field(parent, "value", node) => {
-                    expression.roles.insert(ExpressionRole::Initializer);
-                }
-                "let_condition" | "match_expression" if same_field(parent, "value", node) => {
-                    expression.roles.insert(ExpressionRole::PatternInput);
-                }
-                "for_expression" if same_field(parent, "value", node) => {
-                    expression.roles.insert(ExpressionRole::Iterator);
-                }
-                "if_expression" | "while_expression" if same_field(parent, "condition", node) => {
-                    expression.roles.insert(ExpressionRole::Condition);
-                }
-                "return_expression" => {
-                    expression.roles.insert(ExpressionRole::ReturnValue);
-                }
-                "block" if last_named_child(parent).is_some_and(|last| same_node(last, node)) => {
-                    expression.roles.insert(ExpressionRole::BodyTail);
-                }
-                _ => {}
-            }
-            if parent.kind() == "call_expression" && same_field(parent, "function", node) {
-                expression.roles.insert(ExpressionRole::Callee);
-            }
-            if matches!(
-                parent.kind(),
-                "assignment_expression" | "compound_assignment_expr"
-            ) {
-                if same_field(parent, "left", node) {
-                    expression.roles.insert(ExpressionRole::AssignmentTarget);
-                }
-                if same_field(parent, "right", node) {
-                    expression.roles.insert(ExpressionRole::AssignmentValue);
-                }
-            }
-            if parent.kind() == "field_expression" && same_field(parent, "value", node) {
-                expression.roles.insert(ExpressionRole::Receiver);
-            }
         }
         let parent_id = expression
             .parent_range
@@ -830,6 +801,57 @@ fn assign_roles(
         properties.roles = expression.roles.iter().copied().collect();
     }
     Ok(())
+}
+
+fn expression_roles(node: Node<'_>) -> BTreeSet<ExpressionRole> {
+    let mut roles = BTreeSet::new();
+    let Some(parent) = node.parent() else {
+        return roles;
+    };
+    match parent.kind() {
+        "arguments" => {
+            roles.insert(ExpressionRole::Argument);
+        }
+        "let_declaration" if same_field(parent, "value", node) => {
+            roles.insert(ExpressionRole::Initializer);
+        }
+        "let_condition" | "let_expression" | "match_expression"
+            if same_field(parent, "value", node) =>
+        {
+            roles.insert(ExpressionRole::PatternInput);
+        }
+        "for_expression" if same_field(parent, "value", node) => {
+            roles.insert(ExpressionRole::Iterator);
+        }
+        "if_expression" | "while_expression" if same_field(parent, "condition", node) => {
+            roles.insert(ExpressionRole::Condition);
+        }
+        "return_expression" => {
+            roles.insert(ExpressionRole::ReturnValue);
+        }
+        "block" if last_named_child(parent).is_some_and(|last| same_node(last, node)) => {
+            roles.insert(ExpressionRole::BodyTail);
+        }
+        _ => {}
+    }
+    if parent.kind() == "call_expression" && same_field(parent, "function", node) {
+        roles.insert(ExpressionRole::Callee);
+    }
+    if matches!(
+        parent.kind(),
+        "assignment_expression" | "compound_assignment_expr"
+    ) {
+        if same_field(parent, "left", node) {
+            roles.insert(ExpressionRole::AssignmentTarget);
+        }
+        if same_field(parent, "right", node) {
+            roles.insert(ExpressionRole::AssignmentValue);
+        }
+    }
+    if parent.kind() == "field_expression" && same_field(parent, "value", node) {
+        roles.insert(ExpressionRole::Receiver);
+    }
+    roles
 }
 
 fn add_call_facts(
@@ -995,68 +1017,82 @@ fn collect_body_bindings(
         }
         "if_expression" => {
             if let Some(condition) = node.child_by_field_name("condition")
-                && condition.kind() == "let_condition"
+                && is_direct_let_condition(condition)
             {
                 let owner = control_owner(builder, callable_id, node, "if_let")?;
                 let pattern = condition
                     .child_by_field_name("pattern")
                     .ok_or(ExpressionBindingError::PatternUnsupported)?;
-                let value = expression_key(
-                    expressions,
-                    condition
-                        .child_by_field_name("value")
-                        .ok_or(ExpressionBindingError::PatternUnsupported)?,
-                )?;
+                let value_node = condition
+                    .child_by_field_name("value")
+                    .ok_or(ExpressionBindingError::PatternUnsupported)?;
+                let value = if selected_expression(value_node)
+                    && !excluded_identifier_context(value_node)
+                {
+                    Some(expression_key(expressions, value_node)?)
+                } else {
+                    builder.add_gap("rust.pattern_input_unexpanded", &owner.id, value_node)?;
+                    None
+                };
                 let body = node
                     .child_by_field_name("consequence")
                     .ok_or(ExpressionBindingError::BindingScopeInvalid)?;
-                collect_pattern_bindings(
-                    pattern,
-                    callable_id,
-                    &owner.id,
-                    BindingOrigin::IfLet,
-                    BindingModifier::None,
-                    (body.start_byte(), body.end_byte()),
-                    Some(value),
-                    builder,
-                    output,
-                )?;
+                if let Some(value) = value {
+                    collect_pattern_bindings(
+                        pattern,
+                        callable_id,
+                        &owner.id,
+                        BindingOrigin::IfLet,
+                        BindingModifier::None,
+                        (body.start_byte(), body.end_byte()),
+                        Some(value),
+                        builder,
+                        output,
+                    )?;
+                }
             } else if let Some(condition) = node.child_by_field_name("condition")
-                && find_named_kind(condition, "let_condition").is_some()
+                && find_let_condition(condition).is_some()
             {
                 builder.add_gap("rust.pattern_condition_chain", callable_id, condition)?;
             }
         }
         "while_expression" => {
             if let Some(condition) = node.child_by_field_name("condition")
-                && condition.kind() == "let_condition"
+                && is_direct_let_condition(condition)
             {
                 let owner = control_owner(builder, callable_id, node, "while_let")?;
                 let pattern = condition
                     .child_by_field_name("pattern")
                     .ok_or(ExpressionBindingError::PatternUnsupported)?;
-                let value = expression_key(
-                    expressions,
-                    condition
-                        .child_by_field_name("value")
-                        .ok_or(ExpressionBindingError::PatternUnsupported)?,
-                )?;
+                let value_node = condition
+                    .child_by_field_name("value")
+                    .ok_or(ExpressionBindingError::PatternUnsupported)?;
+                let value = if selected_expression(value_node)
+                    && !excluded_identifier_context(value_node)
+                {
+                    Some(expression_key(expressions, value_node)?)
+                } else {
+                    builder.add_gap("rust.pattern_input_unexpanded", &owner.id, value_node)?;
+                    None
+                };
                 let body = node
                     .child_by_field_name("body")
                     .ok_or(ExpressionBindingError::BindingScopeInvalid)?;
-                collect_pattern_bindings(
-                    pattern,
-                    callable_id,
-                    &owner.id,
-                    BindingOrigin::WhileLet,
-                    BindingModifier::None,
-                    (body.start_byte(), body.end_byte()),
-                    Some(value),
-                    builder,
-                    output,
-                )?;
+                if let Some(value) = value {
+                    collect_pattern_bindings(
+                        pattern,
+                        callable_id,
+                        &owner.id,
+                        BindingOrigin::WhileLet,
+                        BindingModifier::None,
+                        (body.start_byte(), body.end_byte()),
+                        Some(value),
+                        builder,
+                        output,
+                    )?;
+                }
             } else if let Some(condition) = node.child_by_field_name("condition")
-                && find_named_kind(condition, "let_condition").is_some()
+                && find_let_condition(condition).is_some()
             {
                 builder.add_gap("rust.pattern_condition_chain", callable_id, condition)?;
             }
@@ -1383,6 +1419,15 @@ fn expression_syntax_kind(expression: &ExpressionDraft) -> &str {
     }
 }
 
+fn expression_range_key(
+    callable_id: &str,
+    start: usize,
+    end: usize,
+    kind: &str,
+) -> (String, usize, usize, String) {
+    (callable_id.to_owned(), start, end, kind.to_owned())
+}
+
 fn selected_expression(node: Node<'_>) -> bool {
     SELECTED_EXPRESSION_KINDS.contains(&node.kind())
 }
@@ -1405,6 +1450,7 @@ fn excluded_identifier_context(node: Node<'_>) -> bool {
                 | "self_parameter"
                 | "let_declaration"
                 | "let_condition"
+                | "let_expression"
                 | "for_expression"
                 | "match_arm"
         ) && parent
@@ -1514,30 +1560,17 @@ fn find_named_kind<'tree>(node: Node<'tree>, kind: &str) -> Option<Node<'tree>> 
     None
 }
 
+fn is_direct_let_condition(node: Node<'_>) -> bool {
+    matches!(node.kind(), "let_condition" | "let_expression")
+}
+
+fn find_let_condition(node: Node<'_>) -> Option<Node<'_>> {
+    find_named_kind(node, "let_condition").or_else(|| find_named_kind(node, "let_expression"))
+}
+
 fn last_named_child(node: Node<'_>) -> Option<Node<'_>> {
     let mut cursor = node.walk();
     node.named_children(&mut cursor).last()
-}
-
-fn find_node<'tree>(
-    node: Node<'tree>,
-    start: usize,
-    end: usize,
-    kind: &str,
-) -> Option<Node<'tree>> {
-    if node.start_byte() == start && node.end_byte() == end && node.kind() == kind {
-        return Some(node);
-    }
-    let mut cursor = node.walk();
-    for child in node.named_children(&mut cursor) {
-        if child.start_byte() <= start
-            && child.end_byte() >= end
-            && let Some(found) = find_node(child, start, end, kind)
-        {
-            return Some(found);
-        }
-    }
-    None
 }
 
 fn unique<'a>(values: impl IntoIterator<Item = &'a str>) -> bool {

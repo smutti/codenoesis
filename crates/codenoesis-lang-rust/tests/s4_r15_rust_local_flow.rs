@@ -144,6 +144,10 @@ fn ft_fr_ext_017_loop_and_missing_else_reject_the_whole_callable() {
             "cfg",
             "pub fn direct_cfg(value: i32) -> i32 { #[cfg(test)] value; value }\n",
         ),
+        (
+            "nested_if_let",
+            "pub fn nested_if_let(value: Option<i32>) -> i32 { consume(if let Some(inner) = value { inner } else { 0 }); 0 }\n",
+        ),
     ] {
         let extraction = TreeSitterRustWorkspaceExtractor::new()
             .extract_rust_local_flow(&inventory_with_source(source))

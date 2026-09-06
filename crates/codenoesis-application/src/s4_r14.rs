@@ -146,10 +146,6 @@ where
         .collect::<Vec<_>>();
     let extraction = extractor(inventory, &external_boundaries)
         .map_err(ExpressionBindingsScanError::Expression)?;
-    extraction
-        .knowledge
-        .validate()
-        .map_err(ExpressionBindingsScanError::Expression)?;
     let snapshot = RepositorySnapshotV16::from_inventory_expression_bindings_and_boundaries(
         inventory,
         &extraction.knowledge,

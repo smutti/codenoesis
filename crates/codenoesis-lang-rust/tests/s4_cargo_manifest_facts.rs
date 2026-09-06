@@ -162,6 +162,126 @@ fn gt_fr_ext_009_workspace_inheritance_references_declarations() {
 }
 
 #[test]
+fn gt_fr_ext_009_inline_workspace_inheritance_references_declarations() {
+    let extraction = extract_inventory(&raw_manifest_inventory(
+        "[workspace]\n\
+         [workspace.package]\n\
+         version = \"1.2.3\"\n\
+         edition = \"2024\"\n\
+         \n\
+         [package]\n\
+         name = \"limit-fixture\"\n\
+         version = { workspace = true }\n\
+         edition = { workspace = true }\n\
+         \n\
+         [lib]\n\
+         path = \"src/lib.rs\"\n",
+    ))
+    .expect("inline workspace inheritance is supported");
+    let package_entity = extraction
+        .knowledge
+        .graph
+        .entities
+        .iter()
+        .find(|entity| matches!(entity.properties, CargoEntityProperties::Package(_)))
+        .expect("package declaration");
+    let CargoEntityProperties::Package(package) = &package_entity.properties else {
+        unreachable!("filtered package declaration")
+    };
+    assert_eq!(
+        package
+            .metadata
+            .iter()
+            .filter(|fact| matches!(fact.value, DeclaredValue::WorkspaceReference { .. }))
+            .count(),
+        2
+    );
+    assert!(
+        extraction
+            .knowledge
+            .graph
+            .relationships
+            .iter()
+            .any(|relationship| {
+                relationship.kind == CargoRelationshipKind::ReferencesDeclaration
+                    && relationship.source == package_entity.id
+            })
+    );
+    assert!(extraction.knowledge.graph.coverage.iter().any(|gap| {
+        gap.capability == "cargo.workspace_inheritance_not_materialized"
+            && gap.state == CargoCoverageState::NotResolved
+    }));
+}
+
+#[test]
+fn gt_fr_ext_009_publish_true_is_an_enabled_unrestricted_declaration() {
+    let extraction = extract_inventory(&raw_manifest_inventory(
+        "[package]\n\
+         name = \"limit-fixture\"\n\
+         version = \"0.1.0\"\n\
+         edition = \"2024\"\n\
+         publish = true\n\
+         \n\
+         [lib]\n\
+         path = \"src/lib.rs\"\n",
+    ))
+    .expect("publish true is valid Cargo metadata");
+    let package = extraction
+        .knowledge
+        .graph
+        .entities
+        .iter()
+        .find_map(|entity| match &entity.properties {
+            CargoEntityProperties::Package(properties) => Some(properties),
+            _ => None,
+        })
+        .expect("package declaration");
+    let publish = package
+        .metadata
+        .iter()
+        .find(|fact| fact.field == "publish")
+        .expect("publish metadata");
+    assert_eq!(
+        publish.value,
+        DeclaredValue::Publish {
+            enabled: true,
+            registries: Vec::new(),
+        }
+    );
+}
+
+#[test]
+fn gt_fr_ext_009_package_resolver_is_a_declared_value() {
+    let extraction = extract_inventory(&raw_manifest_inventory(
+        "[package]\n\
+         name = \"limit-fixture\"\n\
+         version = \"0.1.0\"\n\
+         edition = \"2024\"\n\
+         resolver = \"2\"\n\
+         \n\
+         [lib]\n\
+         path = \"src/lib.rs\"\n",
+    ))
+    .expect("package resolver is valid Cargo metadata");
+    let package = extraction
+        .knowledge
+        .graph
+        .entities
+        .iter()
+        .find_map(|entity| match &entity.properties {
+            CargoEntityProperties::Package(properties) => Some(properties),
+            _ => None,
+        })
+        .expect("package declaration");
+    let resolver = package
+        .metadata
+        .iter()
+        .find(|fact| fact.field == "resolver")
+        .expect("resolver metadata");
+    assert_eq!(resolver.value, DeclaredValue::String("2".to_owned()));
+}
+
+#[test]
 fn pt_dr_idn_002_r4_preserves_rust_v3_identity_domains() {
     let r4 = extract_fixture(0, false);
     let plan = &r4.knowledge.workspace.plan;
@@ -325,14 +445,19 @@ fn gt_fr_ext_009_legacy_badges_is_typed_unsupported() {
     );
     assert!(!format!("{:#?}", extraction.knowledge).contains("badge-secret"));
 
-    let nested = manifest_inventory("[badges.service]\nrepository = \"badge-secret\"\n");
-    assert!(matches!(
-        extract_inventory(&nested),
-        Err(CargoManifestFactError::InvalidFact {
-            reason: CargoFactReason::UnsupportedKey,
-            ..
-        })
-    ));
+    let nested = extract_inventory(&manifest_inventory(
+        "[badges.service]\nrepository = \"badge-secret\"\n",
+    ))
+    .expect("nested legacy badges table is typed unsupported");
+    let nested_gap = nested
+        .knowledge
+        .graph
+        .coverage
+        .iter()
+        .find(|gap| gap.capability == "cargo.legacy_badges_unsupported")
+        .expect("nested legacy badges coverage gap");
+    assert_eq!(nested_gap.state, CargoCoverageState::Unsupported);
+    assert!(!format!("{:#?}", nested.knowledge).contains("badge-secret"));
 
     let non_table = raw_manifest_inventory(
         "badges = { service = { repository = \"badge-secret\" } }\n\n[package]\nname = \"limit-fixture\"\nversion = \"0.1.0\"\nedition = \"2024\"\n\n[lib]\npath = \"src/lib.rs\"\n",
@@ -344,6 +469,34 @@ fn gt_fr_ext_009_legacy_badges_is_typed_unsupported() {
             ..
         })
     ));
+}
+
+#[test]
+fn gt_fr_ext_009_nightly_target_field_is_typed_unsupported() {
+    let extraction = extract_inventory(&manifest_inventory(
+        "[[example]]\nname = \"demo\"\npath = \"src/lib.rs\"\ndoc-scrape-examples = true\n",
+    ))
+    .expect("nightly target field is typed unsupported");
+    let graph = &extraction.knowledge.graph;
+    let gap = graph
+        .coverage
+        .iter()
+        .find(|gap| gap.capability == "cargo.target_advanced_fields_unsupported")
+        .expect("target field coverage gap");
+    assert_eq!(gap.state, CargoCoverageState::Unsupported);
+    assert!(graph.diagnostics.iter().any(|diagnostic| {
+        diagnostic.code == "cargo.unsupported_manifest_field"
+            && diagnostic.evidence_ids == gap.evidence_ids
+    }));
+    assert!(graph.entities.iter().any(|entity| {
+        matches!(
+            &entity.properties,
+            codenoesis_domain::s4_r4::CargoEntityProperties::Target(properties)
+                if properties.target_kind.as_str() == "example"
+                    && properties.target_name == "demo"
+                    && properties.source_analysis_state.as_str() == "not_analyzed"
+        )
+    }));
 }
 
 #[test]

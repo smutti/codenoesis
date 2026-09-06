@@ -5,6 +5,7 @@ use std::path::Path;
 use std::thread;
 
 use codenoesis_domain::knowledge::RelationshipKind;
+use codenoesis_domain::s4_r5::CompilationPresence;
 use codenoesis_domain::s4_r6::{
     FrameworkEpistemicState, FrameworkError, FrameworkLimit, FrameworkRole, FrameworkSourceProfile,
     FrameworkTargetBinding, R6_DETERMINISM_PERMUTATIONS, framework_role_counts,
@@ -132,6 +133,31 @@ fn gt_fr_ext_011_attribute_macro_candidates_remain_unresolved() {
             gap.declaration_id == declaration.id
                 && gap.capability == "rust.framework_runtime_not_observed"
         })
+    }));
+}
+
+#[test]
+fn gt_fr_ext_011_homogeneous_cfg_component_alternatives_merge_evidence() {
+    let extraction = extract_source(
+        "#[cfg(target_os = \"ios\")]\n\
+         #[component]\n\
+         fn app(value: String) {}\n\
+         #[cfg(not(target_os = \"ios\"))]\n\
+         #[component]\n\
+         fn app(value: u64) {}\n",
+    )
+    .expect("homogeneous cfg component alternatives are one candidate");
+    let [declaration] = extraction.knowledge.graph.declarations.as_slice() else {
+        panic!("expected one cfg component candidate");
+    };
+    assert_eq!(
+        declaration.compilation_presence,
+        CompilationPresence::ConditionalUnknown
+    );
+    assert_eq!(declaration.evidence_ids.len(), 2);
+    assert_eq!(extraction.knowledge.graph.relationships.len(), 1);
+    assert!(extraction.knowledge.graph.coverage.iter().any(|gap| {
+        gap.declaration_id == declaration.id && gap.capability == "rust.cfg_presence_unresolved"
     }));
 }
 

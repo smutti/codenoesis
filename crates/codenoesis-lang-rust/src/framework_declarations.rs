@@ -215,10 +215,6 @@ impl<'a> ChunkBuilder<'a> {
         draft: DeclarationDraft,
         span: ByteRange,
     ) -> Result<FrameworkDeclaration, FrameworkError> {
-        enforce_count(
-            FrameworkLimit::FrameworkDeclarationsPerSource,
-            self.declarations.len().saturating_add(1),
-        )?;
         let evidence_id = self.add_evidence(span)?;
         let normalized_preimage_sha256 = sha256_hex(&framework_declaration_identity_preimage(
             self.repository_identity,
@@ -246,11 +242,47 @@ impl<'a> ChunkBuilder<'a> {
             draft.target_binding,
             vec![evidence_id.clone()],
         );
-        if self.declarations.contains_key(&declaration.id) {
-            return Err(FrameworkError::IdentityConflict {
-                normalized_preimage_sha256,
-            });
+        if let Some(existing) = self.declarations.get(&declaration.id).cloned() {
+            if !mergeable_cfg_framework_alternatives(&existing, &declaration) {
+                return Err(FrameworkError::IdentityConflict {
+                    normalized_preimage_sha256,
+                });
+            }
+            let mut merged = existing;
+            insert_sorted_unique(&mut merged.evidence_ids, evidence_id.clone());
+            let relationship = WorkspaceRelationship::new(
+                RelationshipKind::Defines,
+                merged.lexical_owner_id.clone(),
+                merged.id.clone(),
+                vec![evidence_id.clone()],
+            );
+            for (subject_kind, subject_id) in [
+                (ClaimSubjectKind::Entity, merged.id.clone()),
+                (ClaimSubjectKind::Relationship, relationship.id),
+            ] {
+                self.add_claim_evidence(subject_kind, subject_id, evidence_id.clone());
+            }
+            self.add_capability(
+                &merged,
+                "rust.framework_runtime_not_observed",
+                evidence_id.clone(),
+                false,
+            )?;
+            for capability in draft.capabilities {
+                self.add_capability(
+                    &merged,
+                    capability.code,
+                    evidence_id.clone(),
+                    capability.diagnostic,
+                )?;
+            }
+            self.declarations.insert(merged.id.clone(), merged.clone());
+            return Ok(merged);
         }
+        enforce_count(
+            FrameworkLimit::FrameworkDeclarationsPerSource,
+            self.declarations.len().saturating_add(1),
+        )?;
         let relationship = WorkspaceRelationship::new(
             RelationshipKind::Defines,
             declaration.lexical_owner_id.clone(),
@@ -261,9 +293,7 @@ impl<'a> ChunkBuilder<'a> {
             (ClaimSubjectKind::Entity, declaration.id.clone()),
             (ClaimSubjectKind::Relationship, relationship.id.clone()),
         ] {
-            let claim =
-                deterministic_framework_claim(subject_kind, subject_id, evidence_id.clone());
-            self.claims.insert(claim.id.clone(), claim);
+            self.add_claim_evidence(subject_kind, subject_id, evidence_id.clone());
         }
         self.relationships
             .insert(relationship.id.clone(), relationship);
@@ -284,6 +314,20 @@ impl<'a> ChunkBuilder<'a> {
         self.declarations
             .insert(declaration.id.clone(), declaration.clone());
         Ok(declaration)
+    }
+
+    fn add_claim_evidence(
+        &mut self,
+        subject_kind: ClaimSubjectKind,
+        subject_id: String,
+        evidence_id: String,
+    ) {
+        let claim = deterministic_framework_claim(subject_kind, subject_id, evidence_id.clone());
+        if let Some(existing) = self.claims.get_mut(&claim.id) {
+            insert_sorted_unique(&mut existing.evidence_ids, evidence_id);
+        } else {
+            self.claims.insert(claim.id.clone(), claim);
+        }
     }
 
     fn add_capability(
@@ -1142,9 +1186,13 @@ fn candidate_rule(
                 role,
                 source_form_identity,
                 key_label,
-                compilation_presence: CompilationPresence::Unconditional,
+                compilation_presence: if has_cfg {
+                    CompilationPresence::ConditionalUnknown
+                } else {
+                    CompilationPresence::Unconditional
+                },
                 capability: "rust.attribute_semantics_not_interpreted",
-                cfg_gap: false,
+                cfg_gap: has_cfg,
             });
         }
     }
@@ -1161,6 +1209,35 @@ fn compact_attribute(value: &str) -> String {
         .chars()
         .filter(|character| !character.is_whitespace())
         .collect()
+}
+
+fn mergeable_cfg_framework_alternatives(
+    left: &FrameworkDeclaration,
+    right: &FrameworkDeclaration,
+) -> bool {
+    left.compilation_presence == CompilationPresence::ConditionalUnknown
+        && right.compilation_presence == CompilationPresence::ConditionalUnknown
+        && left.id == right.id
+        && left.role == right.role
+        && left.crate_id == right.crate_id
+        && left.lexical_owner_id == right.lexical_owner_id
+        && left.source_profile == right.source_profile
+        && left.source_form_identity == right.source_form_identity
+        && left.declared_key_or_target == right.declared_key_or_target
+        && left.epistemic_state == right.epistemic_state
+        && left.method == right.method
+        && left.path == right.path
+        && left.configuration_key == right.configuration_key
+        && left.target_spelling == right.target_spelling
+        && left.local_target_id == right.local_target_id
+        && left.target_binding == right.target_binding
+}
+
+fn insert_sorted_unique(values: &mut Vec<String>, value: String) {
+    if !values.contains(&value) {
+        values.push(value);
+        values.sort_by(|left, right| left.as_bytes().cmp(right.as_bytes()));
+    }
 }
 
 fn attributed_children<'tree>(

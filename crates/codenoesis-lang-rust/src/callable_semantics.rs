@@ -13,8 +13,8 @@ use codenoesis_domain::s4_k1::{
     CallableSemanticsExtraction, CallableSemanticsGraph, CallableSemanticsIndex,
     CallableSemanticsLimit, CallableSignatureProperties, CallableSourceChunk, ControlKind,
     ControlProperties, DeclaredValueProperties, DeclaredValueState, LocalBindingProperties,
-    NormalizedScalarValue, callable_body_fact_id, callable_claim, callable_parameter_id,
-    callable_signature_id, declared_value_id, enforce_limit, k1_digest,
+    MAX_K1_EXPRESSION_METADATA_BYTES, NormalizedScalarValue, callable_body_fact_id, callable_claim,
+    callable_parameter_id, callable_signature_id, declared_value_id, enforce_limit, k1_digest,
 };
 use codenoesis_domain::s4_r3::ExternalWorkspaceBoundary;
 use codenoesis_domain::s4_r5::{
@@ -348,6 +348,13 @@ struct ChunkBuilder<'a> {
     callable_count: usize,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum DeclaredValueMerge {
+    Unique,
+    CfgAlternatives,
+    AnonymousOccurrences,
+}
+
 impl<'a> ChunkBuilder<'a> {
     #[allow(clippy::too_many_arguments)]
     fn new(
@@ -429,10 +436,34 @@ impl<'a> ChunkBuilder<'a> {
         &mut self,
         entity: CallableSemanticEntity,
         direct_cfg: bool,
-    ) -> Result<bool, CallableSemanticsError> {
+    ) -> Result<DeclaredValueMerge, CallableSemanticsError> {
         let identifier = entity.id.clone();
         let existing_is_direct_cfg = self.direct_cfg_declared_values.contains(&identifier);
         if let Some(existing) = self.entities.get_mut(&identifier) {
+            if !direct_cfg
+                && !existing_is_direct_cfg
+                && existing.kind == CallableSemanticEntityKind::DeclaredValue
+                && entity.kind == CallableSemanticEntityKind::DeclaredValue
+                && existing.crate_id == entity.crate_id
+                && existing.module_path == entity.module_path
+                && existing.name == "_"
+                && entity.name == "_"
+                && existing.subject_id == entity.subject_id
+                && existing.ordinal == entity.ordinal
+            {
+                existing.evidence_ids.extend(entity.evidence_ids);
+                existing.evidence_ids.sort();
+                existing.evidence_ids.dedup();
+                existing.properties =
+                    CallableSemanticProperties::DeclaredValue(DeclaredValueProperties {
+                        state: DeclaredValueState::Unresolved,
+                        syntax_kind: None,
+                        expression_digest: None,
+                        expression_byte_length: 0,
+                        normalized: None,
+                    });
+                return Ok(DeclaredValueMerge::AnonymousOccurrences);
+            }
             if !direct_cfg
                 || !existing_is_direct_cfg
                 || existing.kind != CallableSemanticEntityKind::DeclaredValue
@@ -456,13 +487,13 @@ impl<'a> ChunkBuilder<'a> {
                     expression_byte_length: 0,
                     normalized: None,
                 });
-            return Ok(true);
+            return Ok(DeclaredValueMerge::CfgAlternatives);
         }
         self.insert_entity(entity)?;
         if direct_cfg {
             self.direct_cfg_declared_values.insert(identifier);
         }
-        Ok(false)
+        Ok(DeclaredValueMerge::Unique)
     }
 
     fn set_declared_value_gap(
@@ -753,6 +784,11 @@ fn process_scope(
     owner: &ScopeOwner,
     builder: &mut ChunkBuilder<'_>,
 ) -> Result<(), CallableSemanticsError> {
+    let cfg_function_alternatives = if matches!(owner, ScopeOwner::Module { .. }) {
+        direct_cfg_module_function_alternatives(scope, builder.source, builder.path)?
+    } else {
+        BTreeSet::new()
+    };
     let mut cursor = scope.walk();
     for node in scope.named_children(&mut cursor) {
         match node.kind() {
@@ -774,6 +810,10 @@ fn process_scope(
                 }
             }
             "function_item" if matches!(owner, ScopeOwner::Module { .. }) => {
+                let name = normalized_name(node, builder.source, builder.path)?;
+                if cfg_function_alternatives.contains(&name) {
+                    continue;
+                }
                 process_callable(node, module_path, owner, builder)?;
             }
             "trait_item" => {
@@ -817,6 +857,32 @@ fn process_scope(
         }
     }
     Ok(())
+}
+
+fn direct_cfg_module_function_alternatives(
+    scope: Node<'_>,
+    source: &str,
+    path: &str,
+) -> Result<BTreeSet<String>, CallableSemanticsError> {
+    let mut occurrences = BTreeMap::<String, (usize, usize)>::new();
+    let mut cursor = scope.walk();
+    for node in scope
+        .named_children(&mut cursor)
+        .filter(|node| node.kind() == "function_item")
+    {
+        let name = normalized_name(node, source, path)?;
+        let entry = occurrences.entry(name).or_default();
+        entry.0 = entry.0.saturating_add(1);
+        if has_direct_cfg_attribute(node, source) {
+            entry.1 = entry.1.saturating_add(1);
+        }
+    }
+    Ok(occurrences
+        .into_iter()
+        .filter_map(|(name, (total, conditional))| {
+            (total > 1 && total == conditional).then_some(name)
+        })
+        .collect())
 }
 
 fn process_implementation(
@@ -919,6 +985,7 @@ fn process_declared_value(
     process_value_node(node, module_path, owner_id, trait_context_id, kind, builder)
 }
 
+#[allow(clippy::too_many_lines)]
 fn process_value_node(
     node: Node<'_>,
     module_path: &str,
@@ -948,21 +1015,31 @@ fn process_value_node(
     let (state, syntax_kind, expression_digest, expression_byte_length, normalized) =
         if let Some(value_node) = value {
             let text = node_text(value_node, builder.source).trim();
-            enforce_limit(CallableSemanticsLimit::ExpressionMetadataBytes, text.len())?;
-            let normalized = normalized_scalar(text).filter(|value| {
-                !matches!(value, NormalizedScalarValue::String(value) if value.contains("://"))
-            });
-            (
-                if normalized.is_some() {
-                    DeclaredValueState::NormalizedScalar
-                } else {
-                    DeclaredValueState::ExpressionOnly
-                },
-                Some(value_node.kind().to_owned()),
-                Some(k1_digest(text.as_bytes())),
-                u64::try_from(text.len()).unwrap_or(u64::MAX),
-                normalized,
-            )
+            let expression_byte_length = u64::try_from(text.len()).unwrap_or(u64::MAX);
+            if expression_byte_length > MAX_K1_EXPRESSION_METADATA_BYTES {
+                (
+                    DeclaredValueState::ExpressionOnly,
+                    Some(value_node.kind().to_owned()),
+                    None,
+                    expression_byte_length,
+                    None,
+                )
+            } else {
+                let normalized = normalized_scalar(text).filter(|value| {
+                    !matches!(value, NormalizedScalarValue::String(value) if value.contains("://"))
+                });
+                (
+                    if normalized.is_some() {
+                        DeclaredValueState::NormalizedScalar
+                    } else {
+                        DeclaredValueState::ExpressionOnly
+                    },
+                    Some(value_node.kind().to_owned()),
+                    Some(k1_digest(text.as_bytes())),
+                    expression_byte_length,
+                    normalized,
+                )
+            }
         } else {
             (DeclaredValueState::Unresolved, None, None, 0, None)
         };
@@ -984,29 +1061,46 @@ fn process_value_node(
             normalized,
         }),
     };
-    let cfg_alternatives = builder.insert_declared_value_entity(entity, direct_cfg)?;
+    let merge = builder.insert_declared_value_entity(entity, direct_cfg)?;
     builder.add_relationship(CallableRelationship::new(
         CallableRelationshipKind::DeclaresValue,
         declaration_id,
         id.clone(),
         vec![evidence_id.clone()],
     ));
-    if cfg_alternatives {
-        let evidence_ids = builder
-            .entities
-            .get(&id)
-            .map(|entity| entity.evidence_ids.clone())
-            .unwrap_or_default();
-        builder.set_declared_value_gap(
-            "rust.cfg_declared_value_alternatives_not_selected",
-            &id,
-            evidence_ids,
-        );
-    } else {
-        match state {
+    match merge {
+        DeclaredValueMerge::CfgAlternatives => {
+            let evidence_ids = builder
+                .entities
+                .get(&id)
+                .map(|entity| entity.evidence_ids.clone())
+                .unwrap_or_default();
+            builder.set_declared_value_gap(
+                "rust.cfg_declared_value_alternatives_not_selected",
+                &id,
+                evidence_ids,
+            );
+        }
+        DeclaredValueMerge::AnonymousOccurrences => {
+            let evidence_ids = builder
+                .entities
+                .get(&id)
+                .map(|entity| entity.evidence_ids.clone())
+                .unwrap_or_default();
+            builder.set_declared_value_gap(
+                "rust.anonymous_declared_value_occurrences_not_distinguished",
+                &id,
+                evidence_ids,
+            );
+        }
+        DeclaredValueMerge::Unique => match state {
             DeclaredValueState::NormalizedScalar => {}
             DeclaredValueState::ExpressionOnly => builder.set_declared_value_gap(
-                "rust.scalar_value_not_normalized",
+                if expression_byte_length > MAX_K1_EXPRESSION_METADATA_BYTES {
+                    "rust.expression_metadata_too_large"
+                } else {
+                    "rust.scalar_value_not_normalized"
+                },
                 &id,
                 vec![evidence_id.clone()],
             ),
@@ -1015,7 +1109,7 @@ fn process_value_node(
                 &id,
                 vec![evidence_id.clone()],
             ),
-        }
+        },
     }
     Ok(())
 }
@@ -1031,6 +1125,50 @@ fn has_direct_cfg_attribute(node: Node<'_>, source: &str) -> bool {
             .filter(|character| !character.is_whitespace())
             .collect::<String>();
         if compact.starts_with("#[cfg(") && compact.ends_with(")]") {
+            return true;
+        }
+        sibling = attribute.prev_named_sibling();
+    }
+    false
+}
+
+fn has_attribute_transformed_overload(node: Node<'_>, source: &str) -> bool {
+    if !has_direct_non_cfg_attribute(node, source) {
+        return false;
+    }
+    let Some(name) = node.child_by_field_name("name") else {
+        return false;
+    };
+    let Some(parent) = node.parent() else {
+        return false;
+    };
+    let mut cursor = parent.walk();
+    parent.named_children(&mut cursor).any(|candidate| {
+        candidate.id() != node.id()
+            && matches!(
+                candidate.kind(),
+                "function_item" | "function_signature_item"
+            )
+            && candidate
+                .child_by_field_name("name")
+                .is_some_and(|candidate_name| {
+                    node_text(candidate_name, source) == node_text(name, source)
+                })
+            && has_direct_non_cfg_attribute(candidate, source)
+    })
+}
+
+fn has_direct_non_cfg_attribute(node: Node<'_>, source: &str) -> bool {
+    let mut sibling = node.prev_named_sibling();
+    while let Some(attribute) = sibling {
+        if attribute.kind() != "attribute_item" {
+            break;
+        }
+        let compact = node_text(attribute, source)
+            .chars()
+            .filter(|character| !character.is_whitespace())
+            .collect::<String>();
+        if !(compact.starts_with("#[cfg(") && compact.ends_with(")]")) {
             return true;
         }
         sibling = attribute.prev_named_sibling();
@@ -1081,11 +1219,12 @@ fn process_callable(
             .values()
             .any(|value| value == &callable_id);
     if !callable_known {
-        return if matches!(owner, ScopeOwner::Module { .. }) {
-            Ok(())
-        } else {
-            Err(CallableSemanticsError::ContractInvalid)
-        };
+        if !matches!(owner, ScopeOwner::Module { .. })
+            && !has_attribute_transformed_overload(node, builder.source)
+        {
+            return Err(CallableSemanticsError::ContractInvalid);
+        }
+        return Ok(());
     }
     builder.callable_count = builder
         .callable_count
@@ -1591,8 +1730,9 @@ fn control_kind(kind: &str, node: Node<'_>, source: &str) -> Option<ControlKind>
     let condition_contains_let = || {
         node.child_by_field_name("condition")
             .is_some_and(|condition| {
-                condition.kind() == "let_condition"
+                matches!(condition.kind(), "let_condition" | "let_expression")
                     || has_named_descendant(condition, "let_condition")
+                    || has_named_descendant(condition, "let_expression")
             })
     };
     match kind {

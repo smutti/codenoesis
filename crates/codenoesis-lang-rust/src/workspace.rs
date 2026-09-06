@@ -1771,9 +1771,8 @@ fn parser_compatibility_source(root: Node<'_>, source: &str) -> Option<String> {
     loop {
         let node = cursor.node();
         if node.is_missing() {
-            return None;
-        }
-        if node.is_error() {
+            parser_error_ranges.push((node.start_byte(), node.end_byte()));
+        } else if node.is_error() {
             parser_error_ranges.push((node.start_byte(), node.end_byte()));
             if is_bare_dollar_in_macro_definition(node, source) {
                 deferred_ranges.push((node.start_byte(), node.end_byte()));
@@ -1798,6 +1797,12 @@ fn parser_compatibility_source(root: Node<'_>, source: &str) -> Option<String> {
                             )
                         }),
                 );
+                let foreign_ranges = unsafe_extern_block_ranges(source);
+                deferred_ranges.extend(foreign_ranges.iter().copied());
+                let cfg_return_ranges = cfg_return_statement_ranges(source);
+                deferred_ranges.extend(cfg_return_ranges.iter().copied());
+                deferred_ranges.extend(leading_dyn_lifetime_bound_ranges(source));
+                deferred_ranges.extend(struct_pattern_turbofish_ranges(source));
                 if deferred_ranges.is_empty() {
                     return None;
                 }
@@ -1809,9 +1814,304 @@ fn parser_compatibility_source(root: Node<'_>, source: &str) -> Option<String> {
                         }
                     }
                 }
+                for (start, end) in foreign_ranges.into_iter().chain(cfg_return_ranges) {
+                    const PLACEHOLDER: &[u8] = b"compile_error!{};";
+                    if end.saturating_sub(start) >= PLACEHOLDER.len() {
+                        compatibility_source[start..start + PLACEHOLDER.len()]
+                            .copy_from_slice(PLACEHOLDER);
+                    }
+                }
                 return String::from_utf8(compatibility_source).ok();
             }
         }
+    }
+}
+
+fn unsafe_extern_block_ranges(source: &str) -> Vec<(usize, usize)> {
+    let bytes = source.as_bytes();
+    let mut ranges = Vec::new();
+    let mut search_start = 0;
+    while let Some(relative_start) = source[search_start..].find("unsafe") {
+        let start = search_start + relative_start;
+        let end = start + "unsafe".len();
+        let left_boundary = start == 0
+            || bytes
+                .get(start - 1)
+                .is_none_or(|byte| !is_rust_identifier_continue(*byte));
+        let right_boundary = bytes
+            .get(end)
+            .is_none_or(|byte| !is_rust_identifier_continue(*byte));
+        let mut cursor = end;
+        while bytes.get(cursor).is_some_and(u8::is_ascii_whitespace) {
+            cursor += 1;
+        }
+        let extern_end = cursor.saturating_add("extern".len());
+        let followed_by_extern = source.get(cursor..extern_end) == Some("extern")
+            && bytes
+                .get(extern_end)
+                .is_none_or(|byte| !is_rust_identifier_continue(*byte));
+        if left_boundary
+            && right_boundary
+            && followed_by_extern
+            && let Some(open) = source.get(extern_end..).and_then(|tail| tail.find('{'))
+            && let Some(block_end) = matching_unsafe_extern_block_end(bytes, extern_end + open)
+        {
+            ranges.push((preceding_attribute_start(source, start), block_end));
+            search_start = block_end;
+            continue;
+        }
+        search_start = end;
+    }
+    ranges
+}
+
+fn leading_dyn_lifetime_bound_ranges(source: &str) -> Vec<(usize, usize)> {
+    let bytes = source.as_bytes();
+    let mut ranges = Vec::new();
+    let mut search_start = 0;
+    while let Some(relative_start) = source[search_start..].find("dyn") {
+        let dyn_start = search_start + relative_start;
+        let dyn_end = dyn_start + "dyn".len();
+        let left_boundary = dyn_start == 0
+            || bytes
+                .get(dyn_start - 1)
+                .is_none_or(|byte| !is_rust_identifier_continue(*byte));
+        let right_boundary = bytes
+            .get(dyn_end)
+            .is_none_or(|byte| !is_rust_identifier_continue(*byte));
+        let mut cursor = dyn_end;
+        while bytes.get(cursor).is_some_and(u8::is_ascii_whitespace) {
+            cursor += 1;
+        }
+        let lifetime_start = cursor;
+        if bytes.get(cursor) == Some(&b'\'') {
+            cursor += 1;
+            let name_start = cursor;
+            while bytes
+                .get(cursor)
+                .is_some_and(|byte| is_rust_identifier_continue(*byte))
+            {
+                cursor += 1;
+            }
+            while bytes.get(cursor).is_some_and(u8::is_ascii_whitespace) {
+                cursor += 1;
+            }
+            if left_boundary
+                && right_boundary
+                && cursor > name_start
+                && bytes.get(cursor) == Some(&b'+')
+            {
+                ranges.push((lifetime_start, cursor + 1));
+            }
+        }
+        search_start = dyn_end;
+    }
+    ranges
+}
+
+fn cfg_return_statement_ranges(source: &str) -> Vec<(usize, usize)> {
+    let bytes = source.as_bytes();
+    let mut ranges = Vec::new();
+    let mut search_start = 0;
+    while let Some(relative_start) = source[search_start..].find("#[cfg(") {
+        let start = search_start + relative_start;
+        let Some(attribute_end) = cfg_attribute_end(bytes, start) else {
+            search_start = start + 1;
+            continue;
+        };
+        let mut cursor = attribute_end;
+        while bytes.get(cursor).is_some_and(u8::is_ascii_whitespace) {
+            cursor += 1;
+        }
+        let keyword_end = cursor.saturating_add("return".len());
+        if source.get(cursor..keyword_end) == Some("return")
+            && bytes
+                .get(keyword_end)
+                .is_none_or(|byte| !is_rust_identifier_continue(*byte))
+            && let Some(statement_end) = rust_statement_end(bytes, keyword_end)
+        {
+            ranges.push((start, statement_end));
+            search_start = statement_end;
+            continue;
+        }
+        search_start = attribute_end;
+    }
+    ranges
+}
+
+fn struct_pattern_turbofish_ranges(source: &str) -> Vec<(usize, usize)> {
+    let bytes = source.as_bytes();
+    let mut ranges = Vec::new();
+    let mut search_start = 0;
+    while let Some(relative_start) = source[search_start..].find("::<") {
+        let start = search_start + relative_start;
+        let mut cursor = start + "::".len();
+        let mut angle_depth = 0_u64;
+        while let Some(byte) = bytes.get(cursor).copied() {
+            match byte {
+                b'<' => angle_depth = angle_depth.saturating_add(1),
+                b'>' => {
+                    if angle_depth == 0 {
+                        break;
+                    }
+                    angle_depth -= 1;
+                    if angle_depth == 0 {
+                        cursor += 1;
+                        break;
+                    }
+                }
+                _ => {}
+            }
+            cursor += 1;
+        }
+        let end = cursor;
+        while bytes.get(cursor).is_some_and(u8::is_ascii_whitespace) {
+            cursor += 1;
+        }
+        let statement_start = source[..start]
+            .rfind([';', '}'])
+            .map_or(0, |index| index + 1);
+        let inside_let_pattern = source[statement_start..start]
+            .split(|character: char| !character.is_alphanumeric() && character != '_')
+            .any(|token| token == "let");
+        if angle_depth == 0 && bytes.get(cursor) == Some(&b'{') && inside_let_pattern {
+            ranges.push((start, end));
+        }
+        search_start = start + "::<".len();
+    }
+    ranges
+}
+
+fn rust_statement_end(bytes: &[u8], start: usize) -> Option<usize> {
+    let mut cursor = start;
+    let mut parentheses = 0_u64;
+    let mut brackets = 0_u64;
+    let mut braces = 0_u64;
+    let mut line_comment = false;
+    let mut block_comment_depth = 0_u64;
+    let mut string = false;
+    let mut escaped = false;
+    while cursor < bytes.len() {
+        if line_comment {
+            if bytes[cursor] == b'\n' {
+                line_comment = false;
+            }
+            cursor += 1;
+            continue;
+        }
+        if block_comment_depth > 0 {
+            if bytes.get(cursor..cursor + 2) == Some(b"/*") {
+                block_comment_depth = block_comment_depth.saturating_add(1);
+                cursor += 2;
+            } else if bytes.get(cursor..cursor + 2) == Some(b"*/") {
+                block_comment_depth = block_comment_depth.saturating_sub(1);
+                cursor += 2;
+            } else {
+                cursor += 1;
+            }
+            continue;
+        }
+        if string {
+            if escaped {
+                escaped = false;
+            } else if bytes[cursor] == b'\\' {
+                escaped = true;
+            } else if bytes[cursor] == b'"' {
+                string = false;
+            }
+            cursor += 1;
+            continue;
+        }
+        if bytes.get(cursor..cursor + 2) == Some(b"//") {
+            line_comment = true;
+            cursor += 2;
+            continue;
+        }
+        if bytes.get(cursor..cursor + 2) == Some(b"/*") {
+            block_comment_depth = 1;
+            cursor += 2;
+            continue;
+        }
+        match bytes[cursor] {
+            b'"' => string = true,
+            b'(' => parentheses = parentheses.saturating_add(1),
+            b')' => parentheses = parentheses.checked_sub(1)?,
+            b'[' => brackets = brackets.saturating_add(1),
+            b']' => brackets = brackets.checked_sub(1)?,
+            b'{' => braces = braces.saturating_add(1),
+            b'}' => braces = braces.checked_sub(1)?,
+            b';' if parentheses == 0 && brackets == 0 && braces == 0 => {
+                return Some(cursor + 1);
+            }
+            _ => {}
+        }
+        cursor += 1;
+    }
+    None
+}
+
+fn matching_unsafe_extern_block_end(bytes: &[u8], open: usize) -> Option<usize> {
+    let mut depth = 0_u64;
+    let mut cursor = open;
+    let mut line_comment = false;
+    let mut block_comment_depth = 0_u64;
+    while cursor < bytes.len() {
+        if line_comment {
+            if bytes[cursor] == b'\n' {
+                line_comment = false;
+            }
+            cursor += 1;
+            continue;
+        }
+        if block_comment_depth > 0 {
+            if bytes.get(cursor..cursor + 2) == Some(b"/*") {
+                block_comment_depth = block_comment_depth.saturating_add(1);
+                cursor += 2;
+            } else if bytes.get(cursor..cursor + 2) == Some(b"*/") {
+                block_comment_depth = block_comment_depth.saturating_sub(1);
+                cursor += 2;
+            } else {
+                cursor += 1;
+            }
+            continue;
+        }
+        if bytes.get(cursor..cursor + 2) == Some(b"//") {
+            line_comment = true;
+            cursor += 2;
+            continue;
+        }
+        if bytes.get(cursor..cursor + 2) == Some(b"/*") {
+            block_comment_depth = 1;
+            cursor += 2;
+            continue;
+        }
+        match bytes[cursor] {
+            b'{' => depth = depth.saturating_add(1),
+            b'}' => {
+                depth = depth.checked_sub(1)?;
+                if depth == 0 {
+                    return Some(cursor + 1);
+                }
+            }
+            _ => {}
+        }
+        cursor += 1;
+    }
+    None
+}
+
+fn preceding_attribute_start(source: &str, item_start: usize) -> usize {
+    let mut start = source[..item_start]
+        .rfind('\n')
+        .map_or(0, |index| index + 1);
+    loop {
+        let preceding = source[..start].trim_end_matches(['\n', '\r']);
+        let line_start = preceding.rfind('\n').map_or(0, |index| index + 1);
+        let line = preceding[line_start..].trim();
+        if !(line.starts_with("#[") && line.ends_with(']')) {
+            return start;
+        }
+        start = line_start;
     }
 }
 
@@ -1823,6 +2123,9 @@ fn cfg_attribute_participates_in_parser_error(
     if parser_error_ranges.iter().any(|(error_start, error_end)| {
         error_start <= &candidate_start && &candidate_end <= error_end
     }) {
+        return true;
+    }
+    if cfg_attribute_is_inside_let_pattern(source, candidate_start) {
         return true;
     }
     let bytes = source.as_bytes();
@@ -1843,6 +2146,18 @@ fn cfg_attribute_participates_in_parser_error(
         && parser_error_ranges
             .iter()
             .any(|(error_start, _)| *error_start == field_start)
+}
+
+fn cfg_attribute_is_inside_let_pattern(source: &str, candidate_start: usize) -> bool {
+    let Some(pattern_open) = source[..candidate_start].rfind('{') else {
+        return false;
+    };
+    let statement_start = source[..pattern_open]
+        .rfind([';', '}'])
+        .map_or(0, |index| index + 1);
+    source[statement_start..pattern_open]
+        .split(|character: char| !character.is_alphanumeric() && character != '_')
+        .any(|token| token == "let")
 }
 
 fn cfg_pattern_field_attribute_ranges(source: &str) -> Vec<(usize, usize)> {

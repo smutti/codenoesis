@@ -51,6 +51,16 @@ pub fn choose(value: i32, flag: bool) -> i32 {
 }
 ";
 const CFG_OWNER_ALTERNATIVES_SOURCE: &str = r#"
+#[cfg(unix)]
+pub mod conditional {
+    pub struct UnixOnly;
+}
+
+#[cfg(windows)]
+pub mod conditional {
+    pub struct WindowsOnly;
+}
+
 #[cfg(feature = "desktop")]
 pub struct ConditionalOwner;
 
@@ -338,6 +348,7 @@ fn gt_fr_ext_010_cfg_owner_alternatives_preserve_uncertainty() {
     let graph = &extraction.knowledge.graph;
 
     for (kind, name) in [
+        (EntityKind::RustModule, "conditional"),
         (EntityKind::RustStruct, "ConditionalOwner"),
         (EntityKind::RustEnum, "ConditionalEnum"),
         (EntityKind::RustTrait, "ConditionalTrait"),
@@ -367,13 +378,21 @@ fn gt_fr_ext_010_cfg_owner_alternatives_preserve_uncertainty() {
         }));
     }
 
+    for name in ["UnixOnly", "WindowsOnly"] {
+        assert!(graph.legacy_entities.iter().any(|entity| {
+            entity.kind == EntityKind::RustStruct
+                && entity.name == name
+                && entity.module_path.as_deref() == Some("crate::conditional")
+        }));
+    }
+
     let cfg_evidence_ids = graph
         .diagnostics
         .iter()
         .filter(|diagnostic| diagnostic.code == "rust.cfg_presence_unresolved")
         .flat_map(|diagnostic| diagnostic.evidence_ids.iter().cloned())
         .collect::<BTreeSet<_>>();
-    assert_eq!(cfg_evidence_ids.len(), 6);
+    assert_eq!(cfg_evidence_ids.len(), 8);
     let evidence_ids = graph
         .evidence
         .iter()
@@ -434,6 +453,65 @@ fn gt_fr_ext_010_cfg_member_alternatives_merge_attribute_evidence() {
             .diagnostics
             .iter()
             .filter(|diagnostic| diagnostic.code == "rust.cfg_presence_unresolved")
+            .count(),
+        2
+    );
+}
+
+#[test]
+fn gt_fr_ext_010_attribute_transformed_overloads_are_covered_not_guessed() {
+    let source = r"
+pub struct BindGroup;
+
+impl BindGroup {
+    #[getter]
+    fn label(&self) -> String { String::new() }
+
+    #[setter]
+    fn label(&self, value: String) { let _ = value; }
+}
+";
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_semantic_depth_incremental(&synthetic_inventory(source), &[], &[])
+        .expect("attribute-transformed overload coverage");
+    assert!(
+        !extraction.knowledge.graph.entities.iter().any(|entity| {
+            entity.kind == RustSemanticEntityKind::Method && entity.name == "label"
+        })
+    );
+    assert!(extraction.knowledge.graph.coverage.iter().any(|gap| {
+        gap.capability == "rust.attribute_semantics_not_interpreted"
+            && gap.state
+                == capability_state("rust.attribute_semantics_not_interpreted")
+                    .expect("known attribute coverage state")
+    }));
+}
+
+#[test]
+fn gt_fr_ext_010_repeated_anonymous_constants_are_covered_without_conflict() {
+    let source = "const _: () = ();\nconst _: () = ();\n";
+    let extraction = TreeSitterRustWorkspaceExtractor::new()
+        .extract_rust_semantic_depth_incremental(&synthetic_inventory(source), &[], &[])
+        .expect("repeated anonymous constants");
+    assert_eq!(
+        extraction
+            .knowledge
+            .graph
+            .entities
+            .iter()
+            .filter(|entity| {
+                entity.kind == RustSemanticEntityKind::Constant && entity.name == "_"
+            })
+            .count(),
+        1
+    );
+    assert_eq!(
+        extraction
+            .knowledge
+            .graph
+            .coverage
+            .iter()
+            .filter(|gap| gap.capability == "rust.value_not_evaluated")
             .count(),
         2
     );
@@ -507,12 +585,6 @@ fn sec_fr_ext_010_cfg_owner_alternative_boundary_failures_remain_typed() {
             "#[cfg(feature = \"desktop\")] pub struct Repeated;\n#[cfg(not(feature = \"desktop\"))] struct Repeated;\n",
             "rust.struct",
             "Repeated",
-        ),
-        (
-            "module alternatives",
-            "#[cfg(feature = \"desktop\")] mod repeated {}\n#[cfg(not(feature = \"desktop\"))] mod repeated {}\n",
-            "rust.module",
-            "repeated",
         ),
         (
             "duplicate member preimage",

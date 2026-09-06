@@ -144,10 +144,6 @@ where
         .collect::<Vec<_>>();
     let extraction =
         extractor(inventory, &external_boundaries).map_err(LocalFlowScanError::LocalFlow)?;
-    extraction
-        .knowledge
-        .validate()
-        .map_err(LocalFlowScanError::LocalFlow)?;
     let snapshot = RepositorySnapshotV17::from_inventory_local_flow_and_boundaries(
         inventory,
         &extraction.knowledge,

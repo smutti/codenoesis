@@ -80,7 +80,7 @@ fn conf_fr_cli_001_benchmark_execution_limit_compositions_fail_closed() {
                 "--execution-limit-profile",
                 BENCHMARK_EXECUTION_LIMIT_PROFILE,
             ],
-            "benchmark_execution_limit_requires_packed_r16_256m",
+            "benchmark_execution_limit_requires_packed_r16_bounded_output",
         ),
         (
             vec![
@@ -91,7 +91,7 @@ fn conf_fr_cli_001_benchmark_execution_limit_compositions_fail_closed() {
                 "--execution-limit-profile",
                 BENCHMARK_EXECUTION_LIMIT_PROFILE,
             ],
-            "benchmark_execution_limit_requires_packed_r16_256m",
+            "benchmark_execution_limit_requires_packed_r16_bounded_output",
         ),
     ] {
         assert_typed_rejection(&options, expected_reason);

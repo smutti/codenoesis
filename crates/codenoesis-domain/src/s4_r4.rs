@@ -1172,7 +1172,8 @@ fn valid_coverage(capability: &str, state: CargoCoverageState) -> bool {
                 | "cargo.lint_configuration_unsupported"
                 | "cargo.package_metadata_table_unsupported"
                 | "cargo.profile_tables_unsupported"
-                | "cargo.replace_table_unsupported",
+                | "cargo.replace_table_unsupported"
+                | "cargo.target_advanced_fields_unsupported",
             CargoCoverageState::Unsupported
         )
     )

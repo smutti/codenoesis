@@ -46,6 +46,7 @@ const METADATA_FIELDS: &[&str] = &[
     "autoexamples",
     "autotests",
     "autobenches",
+    "resolver",
 ];
 
 const WORKSPACE_INHERITABLE_FIELDS: &[&str] = &[
@@ -376,9 +377,16 @@ impl<'a> ManifestFactBuilder<'a> {
             if field == "name" || field == "build" {
                 continue;
             }
-            if entry.key_path.len() == 2 && entry.key_path[1] == "workspace" {
+            let inline_workspace_reference = entry.key_path.len() == 1
+                && entry.value.as_table().is_some_and(|table| {
+                    table.len() == 1
+                        && table.get("workspace").and_then(toml::Value::as_bool) == Some(true)
+                });
+            let dotted_workspace_reference =
+                entry.key_path.len() == 2 && entry.key_path[1] == "workspace";
+            if dotted_workspace_reference || inline_workspace_reference {
                 if !WORKSPACE_INHERITABLE_FIELDS.contains(&field)
-                    || entry.value.as_bool() != Some(true)
+                    || dotted_workspace_reference && entry.value.as_bool() != Some(true)
                 {
                     return Err(invalid_fact(
                         CargoFactReason::MalformedValue,
@@ -558,7 +566,7 @@ impl<'a> ManifestFactBuilder<'a> {
     ) -> Result<DeclaredValue, CargoManifestFactError> {
         match field {
             "version" | "edition" | "rust-version" | "description" | "license" | "default-run"
-            | "links" => value
+            | "links" | "resolver" => value
                 .as_str()
                 .map(|value| checked_string(value, CargoFactLimit::DeclarationStringBytes))
                 .transpose()?
@@ -605,9 +613,9 @@ impl<'a> ManifestFactBuilder<'a> {
                 Ok(DeclaredValue::StringArray(values))
             }
             "publish" => {
-                if value.as_bool() == Some(false) {
+                if let Some(enabled) = value.as_bool() {
                     Ok(DeclaredValue::Publish {
-                        enabled: false,
+                        enabled,
                         registries: Vec::new(),
                     })
                 } else if value.is_array() {
@@ -710,6 +718,7 @@ impl<'a> ManifestFactBuilder<'a> {
                         | "test"
                         | "harness"
                         | "edition"
+                        | "doc-scrape-examples"
                 ) {
                     return Err(invalid_fact(
                         CargoFactReason::UnsupportedKey,
@@ -718,6 +727,27 @@ impl<'a> ManifestFactBuilder<'a> {
                         static_field(field),
                     ));
                 }
+            }
+            if let Some(entry) = fields.get("doc-scrape-examples") {
+                if entry.value.as_bool().is_none() {
+                    return Err(invalid_fact(
+                        CargoFactReason::MalformedValue,
+                        manifest_path,
+                        CargoFactKind::Target,
+                        Some("doc-scrape-examples"),
+                    ));
+                }
+                let evidence_id = self.add_evidence(file, entry.span);
+                self.add_diagnostic(
+                    "cargo.unsupported_manifest_field",
+                    "Cargo manifest field is outside the selected declaration subset",
+                    vec![evidence_id.clone()],
+                )?;
+                self.add_gap(
+                    "cargo.target_advanced_fields_unsupported",
+                    CargoCoverageState::Unsupported,
+                    vec![evidence_id],
+                );
             }
             let declared_path = fields
                 .get("path")
@@ -1964,7 +1994,7 @@ impl<'a> ManifestFactBuilder<'a> {
     ) -> Result<(), CargoManifestFactError> {
         for section in &map.sections {
             let capability = match section.path.as_slice() {
-                [value] if value == "badges" => Some("cargo.legacy_badges_unsupported"),
+                [first, ..] if first == "badges" => Some("cargo.legacy_badges_unsupported"),
                 [first, ..] if first == "profile" => Some("cargo.profile_tables_unsupported"),
                 [first, ..] if first == "lints" => Some("cargo.lint_configuration_unsupported"),
                 [first, second, ..] if first == "workspace" && second == "lints" => {
@@ -2033,7 +2063,9 @@ impl<'a> ManifestFactBuilder<'a> {
                     {
                         true
                     }
-                    [first, ..] if matches!(first.as_str(), "profile" | "lints" | "replace") => {
+                    [first, ..]
+                        if matches!(first.as_str(), "badges" | "profile" | "lints" | "replace") =>
+                    {
                         true
                     }
                     [first, second, ..]
@@ -3340,6 +3372,7 @@ fn static_field(field: &str) -> Option<&'static str> {
         "readme" => Some("readme"),
         "registry" => Some("registry"),
         "repository" => Some("repository"),
+        "resolver" => Some("resolver"),
         "rev" => Some("rev"),
         "rust-version" => Some("rust-version"),
         "tag" => Some("tag"),
