@@ -16,6 +16,12 @@ This decision grants no general Rust, release, support, SLO, or GA claim.
 
 ## Expression and validation corrections
 
+R4 manifest source mapping retains multiline nested arrays and strings inside
+uninterpreted `package.metadata` values. A continuation line beginning with `[`
+does not become a new table while the validated TOML value remains incomplete.
+The metadata still emits its existing diagnostic and coverage gap; dependency
+tables following it retain their exact source evidence.
+
 An R14 `for` iterator whose node kind is outside the selected expression profile
 uses the existing `rust.pattern_input_unexpanded` diagnostic and coverage gap.
 Its exact evidence and loop owner remain visible. Supported inner expressions
@@ -58,6 +64,9 @@ resolved target must be a non-root regular file or directory in that same tree.
 Resolution is bounded to 32 link expansions, 32 resolved path components,
 1,024 path bytes, and 255 bytes per component. Tree-entry, cumulative-byte, and
 acquisition-time limits still apply; link blobs contribute to the byte budget.
+Packed-object size rejection reports the selected limit (including the 8 MiB
+regular-file profile and 1,024-byte link target cap), with bounded observed
+size. The admission predicate and cumulative-byte limit are unchanged.
 
 Cycles, dangling links, root aliases, Gitlink crossings, unsafe targets, and
 unsupported forms fail closed with a typed acquisition error. Oversized target

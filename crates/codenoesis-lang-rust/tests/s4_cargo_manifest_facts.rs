@@ -251,6 +251,69 @@ fn gt_fr_ext_009_publish_true_is_an_enabled_unrestricted_declaration() {
 }
 
 #[test]
+fn gt_fr_ext_009_multiline_metadata_brackets_preserve_unsupported_table_evidence() {
+    for value in [
+        "assets = [\n    [\"src/lib.rs\", \"share/\", \"644\"],\n]\n",
+        "description = \"\"\"\n[not.a.table]\ntext\n\"\"\"\n",
+        "description = '''\n[not.a.table]\ntext\n'''\n",
+    ] {
+        let header = "[package.metadata.deb]";
+        let manifest = format!(
+            "[package]\nname = \"metadata-fixture\"\nversion = \"0.1.0\"\nedition = \"2024\"\n\n{header}\n{value}\n[dependencies]\nmarker = \"1\"\n"
+        );
+        let evidence_text = |start, end| {
+            manifest[usize::try_from(start).expect("small fixture start")
+                ..usize::try_from(end).expect("small fixture end")]
+                .trim()
+        };
+        let extraction = extract_inventory(&raw_manifest_inventory(&manifest))
+            .expect("valid multiline metadata remains an unsupported table, not malformed TOML");
+        let graph = &extraction.knowledge.graph;
+        let gaps = graph
+            .coverage
+            .iter()
+            .filter(|gap| gap.capability == "cargo.package_metadata_table_unsupported")
+            .collect::<Vec<_>>();
+        assert_eq!(gaps.len(), 1);
+        assert_eq!(gaps[0].state, CargoCoverageState::Unsupported);
+        assert_eq!(gaps[0].evidence_ids.len(), 1);
+        let evidence = graph
+            .evidence
+            .iter()
+            .find(|evidence| evidence.id == gaps[0].evidence_ids[0])
+            .expect("metadata gap has source evidence");
+        assert_eq!(evidence.path, "Cargo.toml");
+        assert_eq!(
+            evidence_text(evidence.start_byte, evidence.end_byte),
+            header
+        );
+        assert_eq!(
+            graph
+                .diagnostics
+                .iter()
+                .filter(|diagnostic| {
+                    diagnostic.code == "cargo.unsupported_manifest_family"
+                        && diagnostic.evidence_ids == gaps[0].evidence_ids
+                })
+                .count(),
+            1
+        );
+        let dependency = graph
+            .entities
+            .iter()
+            .find(|entity| {
+                matches!(&entity.properties, CargoEntityProperties::Dependency(properties)
+                    if properties.declared_name == "marker")
+            })
+            .expect("the next real table remains a separate dependency declaration");
+        assert!(graph.evidence.iter().any(|evidence| {
+            evidence.id == dependency.properties.evidence_id()
+                && evidence_text(evidence.start_byte, evidence.end_byte) == "marker = \"1\""
+        }));
+    }
+}
+
+#[test]
 fn gt_fr_ext_009_package_resolver_is_a_declared_value() {
     let extraction = extract_inventory(&raw_manifest_inventory(
         "[package]\n\
