@@ -72,20 +72,20 @@ impl KotlinWorkspaceExtractor for TreeSitterKotlinWorkspaceExtractor {
 }
 
 fn conventional_membership(path: &str, modules: &BTreeSet<String>) -> Option<(String, String)> {
-    modules
-        .iter()
-        .filter_map(|module| {
-            let prefix = if module.is_empty() {
-                "src/".to_owned()
-            } else {
-                format!("{module}/src/")
-            };
-            let relative = path.strip_prefix(&prefix)?;
-            let (set, relative) = relative.split_once('/')?;
-            (!set.is_empty() && relative.starts_with("kotlin/"))
-                .then(|| (module.clone(), set.to_owned()))
+    path.match_indices("src/")
+        .filter_map(|(offset, _)| {
+            if offset > 0 && path.as_bytes()[offset - 1] != b'/' {
+                return None;
+            }
+            let module = if offset == 0 { "" } else { &path[..offset - 1] };
+            if !modules.contains(module) {
+                return None;
+            }
+            let (set, relative) = path[offset + 4..].split_once('/')?;
+            (!set.is_empty() && relative.starts_with("kotlin/")).then_some((module, set))
         })
         .max_by_key(|(module, _)| module.len())
+        .map(|(module, set)| (module.to_owned(), set.to_owned()))
 }
 
 /// Extracts declarations and exact byte/line locations from one UTF-8 Kotlin file.
@@ -244,5 +244,37 @@ fn span(node: Node<'_>) -> SourceSpan {
         end_byte: node.end_byte(),
         start_line: node.start_position().row as u64 + 1,
         end_line: node.end_position().row as u64 + 1,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::conventional_membership;
+    use std::collections::BTreeSet;
+    #[test]
+    fn fr_ext_025_membership_uses_components_and_nearest_committed_build_root() {
+        let modules = BTreeSet::from([
+            String::new(),
+            "shared".to_owned(),
+            "shared/src/commonMain/kotlin/nested".to_owned(),
+        ]);
+        assert_eq!(
+            conventional_membership("src/main/kotlin/Main.kt", &modules),
+            Some((String::new(), "main".to_owned()))
+        );
+        assert_eq!(
+            conventional_membership(
+                "shared/src/commonMain/kotlin/nested/src/jvmMain/kotlin/Inner.kt",
+                &modules
+            ),
+            Some((
+                "shared/src/commonMain/kotlin/nested".to_owned(),
+                "jvmMain".to_owned()
+            ))
+        );
+        assert_eq!(
+            conventional_membership("shared/not-src/commonMain/kotlin/Fake.kt", &modules),
+            None
+        );
     }
 }

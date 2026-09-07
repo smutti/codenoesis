@@ -59,12 +59,18 @@ impl KotlinSnapshot {
     }
 }
 
+struct ClaimProjection {
+    row: Value,
+    evidence: BTreeSet<String>,
+}
+
 struct Builder<'a> {
     inventory: &'a RepositoryInventory,
+    files: BTreeMap<&'a str, &'a codenoesis_domain::InventoryFile>,
     entities: BTreeMap<String, Value>,
     relationships: BTreeMap<String, Value>,
     evidence: BTreeMap<String, Value>,
-    claims: BTreeMap<String, Value>,
+    claims: BTreeMap<String, ClaimProjection>,
     coverage: Vec<Value>,
     declarations: BTreeMap<(usize, usize), (String, String)>,
 }
@@ -72,6 +78,11 @@ impl<'a> Builder<'a> {
     fn new(inventory: &'a RepositoryInventory) -> Self {
         Self {
             inventory,
+            files: inventory
+                .files()
+                .iter()
+                .map(|file| (file.path(), file))
+                .collect(),
             entities: BTreeMap::new(),
             relationships: BTreeMap::new(),
             evidence: BTreeMap::new(),
@@ -122,13 +133,9 @@ impl<'a> Builder<'a> {
             codenoesis_domain::knowledge::ClaimState::DeterministicFact.as_str()
         };
         let id = self.id("claim", &json!([subject_kind, subject]));
-        let mut references: BTreeSet<String> = evidence.iter().map(|e| (*e).to_owned()).collect();
-        if let Some(existing) = self.claims.get(&id)
-            && let Some(previous) = existing["evidence_ids"].as_array()
-        {
-            references.extend(previous.iter().filter_map(Value::as_str).map(str::to_owned));
-        }
-        self.claims.insert(id.clone(),json!({"id":id,"subject_kind":subject_kind,"subject_id":subject,"state":state,"evidence_ids":references,"rule":domain::PROFILE}));
+        self.claims.entry(id.clone()).or_insert_with(||ClaimProjection {
+            row:json!({"id":id,"subject_kind":subject_kind,"subject_id":subject,"state":state,"rule":domain::PROFILE}),evidence:BTreeSet::new()
+        }).evidence.extend(evidence.iter().map(|e|(*e).to_owned()));
     }
     fn relationship(
         &mut self,
@@ -150,24 +157,18 @@ impl<'a> Builder<'a> {
         path: &str,
         span: Option<SourceSpan>,
     ) -> Result<String, KotlinError> {
-        let file = self
-            .inventory
-            .files()
-            .iter()
-            .find(|f| f.path() == path)
-            .ok_or(KotlinError::InvalidContract)?;
+        let file = self.files.get(path).ok_or(KotlinError::InvalidContract)?;
         let bytes = file.bytes();
-        let (start, end, start_line, end_line) = span.map_or(
-            (
-                0,
-                bytes.len(),
-                1,
-                bytes.split(|b| *b == b'\n').count() as u64,
-            ),
-            |s| (s.start_byte, s.end_byte, s.start_line, s.end_line),
+        let (start, end) = span.map_or((0, bytes.len()), |s| (s.start_byte, s.end_byte));
+        let id = self.id("evidence", &json!([path, start, end]));
+        if self.evidence.contains_key(&id) {
+            return Ok(id);
+        }
+        let (start_line, end_line) = span.map_or_else(
+            || (1, bytes.split(|b| *b == b'\n').count() as u64),
+            |s| (s.start_line, s.end_line),
         );
         let excerpt = bytes.get(start..end).ok_or(KotlinError::InvalidContract)?;
-        let id = self.id("evidence", &json!([path, start, end]));
         let bound = self.inventory.bound_revision();
         self.evidence.insert(id.clone(),json!({"id":id,"repository_identity":bound.repository_identity().as_str(),"commit_oid":bound.commit_oid().as_str(),"path":path,"blob_oid":file.blob_oid().as_str(),"start_byte":start,"end_byte":end,"start_line":start_line,"end_line":end_line,"excerpt_blake3":blake3::hash(excerpt).to_hex().to_string()}));
         Ok(id)
@@ -349,7 +350,7 @@ impl<'a> Builder<'a> {
         }
         self.coverage.sort_by_key(Value::to_string);
         let mut graph = json!({"schema_version":domain::GRAPH_VERSION,"ontology_version":domain::ONTOLOGY_VERSION,
-            "entities":self.entities.into_values().collect::<Vec<_>>(),"relationships":self.relationships.into_values().collect::<Vec<_>>(),"claims":self.claims.into_values().collect::<Vec<_>>(),"evidence":self.evidence.into_values().collect::<Vec<_>>(),"coverage":self.coverage,"diagnostics":[]});
+            "entities":self.entities.into_values().collect::<Vec<_>>(),"relationships":self.relationships.into_values().collect::<Vec<_>>(),"claims":self.claims.into_values().map(|mut claim| {claim.row["evidence_ids"]=json!(claim.evidence);claim.row}).collect::<Vec<_>>(),"evidence":self.evidence.into_values().collect::<Vec<_>>(),"coverage":self.coverage,"diagnostics":[]});
         graph["semantic_hash"] = hash(domain::GRAPH_HASH_DOMAIN, &graph);
         Ok(graph)
     }
