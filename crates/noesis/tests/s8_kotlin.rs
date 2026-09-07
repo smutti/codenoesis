@@ -1,28 +1,24 @@
+mod support;
+
 use serde_json::Value;
 use std::{
     fs,
     path::PathBuf,
     process::{Command, Output},
 };
+use support::s4_r8::{R8TestRoot, canonical_temp_root};
 
 struct Fixture {
-    root: PathBuf,
+    root: R8TestRoot,
     repository: PathBuf,
     store: PathBuf,
     commit: String,
 }
 impl Fixture {
     fn new() -> Self {
-        let root = std::env::temp_dir().join(format!(
-            "codenoesis-kotlin-{}-{}",
-            std::process::id(),
-            std::time::SystemTime::now()
-                .duration_since(std::time::UNIX_EPOCH)
-                .unwrap()
-                .as_nanos()
-        ));
-        fs::create_dir(&root).unwrap();
-        let root = fs::canonicalize(root).unwrap();
+        // Use the same validated authority as the inherited output contract.
+        // Windows canonicalization introduces a verbatim path outside that profile.
+        let root = canonical_temp_root();
         let repository = root.join("repository");
         fs::create_dir(&repository).unwrap();
         let files = [
@@ -96,7 +92,7 @@ impl Fixture {
     fn run(&self, command: &str, args: &[&str]) -> Output {
         let mut invocation = Command::new(env!("CARGO_BIN_EXE_noesis"));
         invocation
-            .current_dir(&self.root)
+            .current_dir(self.root.as_os_str())
             .arg(command)
             .args(["--kotlin-profile", "kotlin-kmp-declarations-v1"]);
         if command != "explore" {
@@ -114,11 +110,6 @@ impl Fixture {
         invocation.args(args).output().unwrap()
     }
 }
-impl Drop for Fixture {
-    fn drop(&mut self) {
-        let _ = fs::remove_dir_all(&self.root);
-    }
-}
 fn success(output: &Output) -> Value {
     assert!(
         output.status.success(),
@@ -126,6 +117,30 @@ fn success(output: &Output) -> Value {
         String::from_utf8_lossy(&output.stderr)
     );
     serde_json::from_slice(&output.stdout).unwrap()
+}
+
+#[cfg(windows)]
+#[test]
+fn sec_fr_ext_025_export_rejects_windows_verbatim_output() {
+    let fixture = Fixture::new();
+    success(&fixture.run("scan", &[]));
+    let root = fs::canonicalize(&*fixture.root).unwrap();
+    assert!(matches!(
+        root.components().next(),
+        Some(std::path::Component::Prefix(prefix))
+            if matches!(prefix.kind(), std::path::Prefix::VerbatimDisk(_))
+    ));
+    let output = root.join("verbatim-output");
+    let result = fixture.run("export", &["--output", output.to_str().unwrap()]);
+    assert!(!result.status.success());
+    assert!(result.stdout.is_empty());
+    assert!(!output.exists());
+    let error: Value = serde_json::from_slice(&result.stderr).unwrap();
+    assert_eq!(error["schema_version"], "codenoesis.kotlin-error/v1");
+    assert_eq!(
+        error["code"],
+        "artifact.invalid_or_unsafe_kotlin_projection"
+    );
 }
 
 #[test]

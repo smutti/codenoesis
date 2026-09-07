@@ -67,6 +67,22 @@ Final release binary SHA-256: `775737a81516083965c29584d2a8c0eb8bbcca3e5dbb10473
 Final medians: basic `0.098` s; Compose template `0.118` s. Counts, source
 coverage and limitations in the first table are unchanged.
 
+## Windows fixture correction
+
+The first [Windows CI execution](https://github.com/smutti/codenoesis/actions/runs/34102827743/job/101680960236)
+on `7fabebf1260de7b32b97cc00b79969187ae1666d` failed at Kotlin export with
+`artifact.invalid_or_unsafe_kotlin_projection`. The new fixture canonicalized
+its temporary root to a Windows verbatim path, outside the inherited output
+path profile. Existing Rust export fixtures already use a validated Windows
+authority helper to avoid that unsupported spelling and temporary-root aliases.
+
+The Kotlin fixture now reuses that helper. The ontology oracle and every
+success assertion are unchanged; a Windows-only negative test also requires
+verbatim output to fail with the typed error before destination creation.
+This is a test-environment correction, with no production or benchmark binary
+change. The original failed run remains evidence; final-head CI must independently
+pass instead of retrying the failed head as acceptable evidence.
+
 ## Reproduction
 
 Use full Git clones at the two immutable pins in
