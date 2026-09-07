@@ -1,16 +1,16 @@
 # Kotlin/KMP v0.1 validation
 
 The bounded S8 candidate was measured on clean source commit
-`ce473e0197f02e737f52533e4a1920fdd5712742`, with the pinned Rust toolchain and a
+`77bcf940af0e5af705fb5202c5cb543a54caf18f`, with the pinned Rust toolchain and a
 release build. Binary SHA-256:
-`4f11a16b6e097645c5ef4b449899ad2194f657fd2716c2904865571ec14ff298`.
-The [machine-readable report](evidence/kotlin-kmp-v01/benchmark.json) retains
+`52c105d925d161cca6c0215dcb655e81aad6fe9bcf23dea6fb57e71baf54bfdc`.
+The [machine-readable report](evidence/kotlin-kmp-v01/benchmark-77bcf94.json) retains
 all six attempts, exact repository pins, artifact hashes and environment.
 
 | Public sample | Successful runs | Kotlin files / parser gaps | Declarations | Entities / relationships | Median whole-process time | Range |
 |---|---:|---:|---:|---:|---:|---:|
-| Kotlin/kmp-basic-sample | 3/3 | 10 / 0 | 23 | 94 / 93 | 0.101 s | 0.095–0.505 s |
-| JetBrains/compose-multiplatform-template | 3/3 | 7 / 0 | 13 | 70 / 65 | 0.114 s | 0.113–0.115 s |
+| Kotlin/kmp-basic-sample | 3/3 | 10 / 0 | 23 | 94 / 93 | 0.095 s | 0.093–0.599 s |
+| JetBrains/compose-multiplatform-template | 3/3 | 7 / 0 | 13 | 70 / 65 | 0.119 s | 0.117–0.120 s |
 
 Both samples are Apache-2.0. The JetBrains template is archived. Semantic hashes
 are identical across all three repetitions of each repository. Every sample
@@ -45,7 +45,7 @@ are checked automatically. Interactive browser verification was **not run**:
 the browser security policy rejected the local `file://` URL. No alternate
 browser surface or local server was used to bypass that restriction.
 
-## Final performance correction check
+## Performance correction check
 
 Source commit `84745de4856e25502a4aa7da4d85076fb4990887` indexes candidate
 names and source paths once, caches repeated evidence spans and accumulates
@@ -57,15 +57,18 @@ links and a duplicate actual that must affect only its own source set. It
 completed in 0.04 s locally; this is a focused test observation, not an SLO.
 The path-membership regression checks root, nested and misleading path segments.
 
-All six final public scans succeeded with **exactly the same semantic hashes**
-as the initial observations. The intermediate candidate-index measurements are
-also retained; no attempt was discarded. See
-[final observations](evidence/kotlin-kmp-v01/benchmark-84745de.json) and
+All six public scans at that commit succeeded with **exactly the same semantic
+hashes** as the [initial observations](evidence/kotlin-kmp-v01/benchmark.json).
+The intermediate candidate-index measurements are also retained; no attempt was
+discarded. See
+[performance correction observations](evidence/kotlin-kmp-v01/benchmark-84745de.json) and
 [intermediate observations](evidence/kotlin-kmp-v01/benchmark-d3b30b3.json).
 
-Final release binary SHA-256: `775737a81516083965c29584d2a8c0eb8bbcca3e5dbb10473c96e6e4ca2947cc`.
-Final medians: basic `0.098` s; Compose template `0.118` s. Counts, source
-coverage and limitations in the first table are unchanged.
+Release binary SHA-256 at that commit: `775737a81516083965c29584d2a8c0eb8bbcca3e5dbb10473c96e6e4ca2947cc`.
+Medians at that commit: basic `0.098` s; Compose template `0.118` s.
+The latest viewer correction was measured again in the first table: all six
+semantic hashes remain identical. All 24 observations across four source
+commits are retained; counts, source coverage and limitations are unchanged.
 
 ## Windows fixture correction
 
