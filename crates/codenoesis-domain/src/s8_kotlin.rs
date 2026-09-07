@@ -1,5 +1,6 @@
 //! Source-only Kotlin/KMP facts. No compiler or effective Gradle claims.
 use crate::s7::SourceSpan;
+use std::collections::BTreeMap;
 
 pub const PROFILE: &str = "kotlin-kmp-declarations-v1";
 pub const SNAPSHOT_VERSION: &str = "codenoesis.repository-snapshot/v19";
@@ -88,76 +89,159 @@ pub struct KotlinWorkspace {
     pub java_files: Vec<String>,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct DeclarationLocation {
     pub source: usize,
     pub declaration: usize,
 }
 
+type CandidateGroup<'a> = Vec<(DeclarationLocation, &'a KotlinSource, &'a Declaration)>;
+
 impl KotlinWorkspace {
-    /// Finds a unique syntactic expect candidate for one actual declaration.
+    /// Indexes unique syntactic expect candidates once for the complete workspace.
     /// This never establishes compiler actualization or source-set visibility.
     #[must_use]
-    pub fn expect_candidate(&self, actual: DeclarationLocation) -> Option<DeclarationLocation> {
-        let actual_source = self.sources.get(actual.source)?;
-        let actual_extraction = actual_source.extraction.as_ref()?;
-        let actual_decl = actual_extraction.declarations.get(actual.declaration)?;
-        if !actual_decl.is_actual
-            || actual_decl.is_expect
-            || !actual_decl.owner.is_empty()
-            || actual_decl.kind == DeclarationKind::TypeAlias
-            || actual_source.module.is_none()
-            || actual_source.source_set.is_none()
-        {
-            return None;
-        }
-        let mut candidates = Vec::new();
+    pub fn expect_candidates(&self) -> BTreeMap<DeclarationLocation, DeclarationLocation> {
+        let mut groups: BTreeMap<(&str, &str, &str, DeclarationKind), CandidateGroup<'_>> =
+            BTreeMap::new();
         for (source_index, source) in self.sources.iter().enumerate() {
-            let Some(extraction) = &source.extraction else {
+            let (Some(module), Some(_), Some(extraction)) =
+                (&source.module, &source.source_set, &source.extraction)
+            else {
                 continue;
             };
-            if source.module != actual_source.module
-                || extraction.package != actual_extraction.package
-            {
-                continue;
-            }
             for (declaration_index, declaration) in extraction.declarations.iter().enumerate() {
-                if declaration.name != actual_decl.name
-                    || declaration.kind != actual_decl.kind
-                    || !declaration.owner.is_empty()
-                {
+                if !declaration.owner.is_empty() || declaration.kind == DeclarationKind::TypeAlias {
                     continue;
                 }
-                if source.source_set == actual_source.source_set {
-                    if source_index != actual.source || declaration_index != actual.declaration {
-                        return None;
-                    }
-                } else if declaration.is_expect {
-                    // Multiple overloads remain ambiguous even if one signature happens to match.
-                    candidates.push((
+                groups
+                    .entry((
+                        module,
+                        &extraction.package,
+                        &declaration.name,
+                        declaration.kind,
+                    ))
+                    .or_default()
+                    .push((
                         DeclarationLocation {
                             source: source_index,
                             declaration: declaration_index,
                         },
+                        source,
                         declaration,
                     ));
-                }
             }
         }
-        if candidates.len() != 1 {
-            return None;
+        let mut matches = BTreeMap::new();
+        for group in groups.into_values() {
+            match_group(&group, &mut matches);
         }
-        let (location, candidate) = candidates[0];
-        if candidate.is_actual {
-            return None;
+        matches
+    }
+}
+
+fn match_group(
+    group: &CandidateGroup<'_>,
+    matches: &mut BTreeMap<DeclarationLocation, DeclarationLocation>,
+) {
+    let mut expected = group
+        .iter()
+        .filter(|(_, _, declaration)| declaration.is_expect);
+    let Some((expect_location, expect_source, expect_declaration)) = expected.next() else {
+        return;
+    };
+    // Multiple overloads remain ambiguous even if one signature happens to match.
+    if expected.next().is_some() || expect_declaration.is_actual {
+        return;
+    }
+    let mut counts: BTreeMap<Option<&str>, usize> = BTreeMap::new();
+    for (_, source, _) in group {
+        *counts.entry(source.source_set.as_deref()).or_default() += 1;
+    }
+    for (location, source, declaration) in group {
+        if !declaration.is_actual
+            || declaration.is_expect
+            || source.source_set == expect_source.source_set
+            || counts[&source.source_set.as_deref()] != 1
+        {
+            continue;
         }
         if matches!(
-            actual_decl.kind,
+            declaration.kind,
             DeclarationKind::Function | DeclarationKind::Property
-        ) && actual_decl.signature != candidate.signature
+        ) && declaration.signature != expect_declaration.signature
         {
-            return None;
+            continue;
         }
-        Some(location)
+        matches.insert(*location, *expect_location);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    fn source(set: &str, expect: bool, count: usize) -> KotlinSource {
+        let declarations = (0..count)
+            .map(|index| Declaration {
+                name: format!("name{index}"),
+                owner: String::new(),
+                kind: DeclarationKind::Function,
+                signature: format!("fun name{index} ()"),
+                is_expect: expect,
+                is_actual: !expect,
+                span: SourceSpan {
+                    start_byte: 0,
+                    end_byte: 1,
+                    start_line: 1,
+                    end_line: 1,
+                },
+            })
+            .collect();
+        KotlinSource {
+            path: format!("{set}.kt"),
+            blob_oid: String::new(),
+            byte_length: 1,
+            module: Some("shared".to_owned()),
+            source_set: Some(set.to_owned()),
+            extraction: Some(SourceExtraction {
+                declarations,
+                ..SourceExtraction::default()
+            }),
+        }
+    }
+    #[test]
+    fn fr_ext_025_many_names_and_duplicate_actuals_keep_candidate_boundaries() {
+        let mut workspace = KotlinWorkspace {
+            sources: vec![
+                source("commonMain", true, 6000),
+                source("jvmMain", false, 6000),
+                source("iosMain", false, 6000),
+            ],
+            ..KotlinWorkspace::default()
+        };
+        let initial = workspace.expect_candidates();
+        assert_eq!(initial.len(), 12_000);
+        let duplicate = workspace.sources[1]
+            .extraction
+            .as_ref()
+            .unwrap()
+            .declarations[0]
+            .clone();
+        workspace.sources[1]
+            .extraction
+            .as_mut()
+            .unwrap()
+            .declarations
+            .push(duplicate);
+        let candidates = workspace.expect_candidates();
+        assert_eq!(candidates.len(), 11_999);
+        assert!(!candidates.contains_key(&DeclarationLocation {
+            source: 1,
+            declaration: 0
+        }));
+        assert!(candidates.contains_key(&DeclarationLocation {
+            source: 2,
+            declaration: 0
+        }));
     }
 }

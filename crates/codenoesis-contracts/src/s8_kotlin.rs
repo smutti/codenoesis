@@ -203,6 +203,7 @@ impl<'a> Builder<'a> {
         for (index, source) in workspace.sources.iter().enumerate() {
             self.source(index, source)?;
         }
+        let candidates = workspace.expect_candidates();
         let mut matched_expects = BTreeSet::new();
         for (source_index, source) in workspace.sources.iter().enumerate() {
             let Some(extraction) = &source.extraction else {
@@ -214,7 +215,7 @@ impl<'a> Builder<'a> {
                 }
                 let (actual_id, actual_evidence) =
                     self.declarations[&(source_index, index)].clone();
-                if let Some(candidate) = workspace.expect_candidate(DeclarationLocation {
+                if let Some(candidate) = candidates.get(&DeclarationLocation {
                     source: source_index,
                     declaration: index,
                 }) {
