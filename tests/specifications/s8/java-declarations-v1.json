@@ -1,0 +1,183 @@
+{
+  "schema_version": "codenoesis.java-declaration-oracle/v1",
+  "requirement": "FR-EXT-026",
+  "declaration_fields": [
+    "path",
+    "kind",
+    "name",
+    "owner"
+  ],
+  "declarations": [
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaClass",
+      "name": "Library",
+      "owner": ""
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaField",
+      "name": "name",
+      "owner": "Library"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaField",
+      "name": "first",
+      "owner": "Library"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaField",
+      "name": "second",
+      "owner": "Library"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaConstructor",
+      "name": "Library",
+      "owner": "Library"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaMethod",
+      "name": "convert",
+      "owner": "Library"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaMethod",
+      "name": "run",
+      "owner": "Library"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaMethod",
+      "name": "overloaded",
+      "owner": "Library"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaMethod",
+      "name": "overloaded",
+      "owner": "Library"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaInterface",
+      "name": "Nested",
+      "owner": "Library"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaMethod",
+      "name": "label",
+      "owner": "Library.Nested"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaEnum",
+      "name": "Status",
+      "owner": "Library"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaEnumConstant",
+      "name": "READY",
+      "owner": "Library.Status"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaEnumConstant",
+      "name": "BUSY",
+      "owner": "Library.Status"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaField",
+      "name": "code",
+      "owner": "Library.Status"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaRecord",
+      "name": "Pair",
+      "owner": "Library"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaRecordComponent",
+      "name": "left",
+      "owner": "Library.Pair"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaRecordComponent",
+      "name": "right",
+      "owner": "Library.Pair"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaConstructor",
+      "name": "Pair",
+      "owner": "Library.Pair"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaAnnotationType",
+      "name": "Marker",
+      "owner": "Library"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaAnnotationElement",
+      "name": "value",
+      "owner": "Library.Marker"
+    },
+    {
+      "path": "src/main/java/example/Library.java",
+      "kind": "JavaClass",
+      "name": "Base",
+      "owner": ""
+    },
+    {
+      "path": "gradle-module/src/test/java/example/LibraryTest.java",
+      "kind": "JavaClass",
+      "name": "LibraryTest",
+      "owner": ""
+    },
+    {
+      "path": "gradle-module/src/test/java/example/LibraryTest.java",
+      "kind": "JavaMethod",
+      "name": "check",
+      "owner": "LibraryTest"
+    },
+    {
+      "path": "custom/Outside.java",
+      "kind": "JavaRecord",
+      "name": "Outside",
+      "owner": ""
+    },
+    {
+      "path": "custom/Outside.java",
+      "kind": "JavaRecordComponent",
+      "name": "value",
+      "owner": "Outside"
+    }
+  ],
+  "nested_declaration_edges": 22,
+  "overload_signatures": [
+    "public void overloaded(int value)",
+    "public void overloaded(String value)"
+  ],
+  "gap_reasons": [
+    "build_configuration_and_source_visibility_not_evaluated",
+    "compiler_resolution_runtime_and_generated_members_not_extracted",
+    "local_and_anonymous_declarations_not_extracted",
+    "unassigned_source_root",
+    "java_syntax_not_accepted_by_pinned_parser",
+    "java_unicode_escape_preprocessing_not_supported",
+    "java_module_descriptor_boundary",
+    "kotlin_source_boundary"
+  ]
+}

@@ -2,7 +2,7 @@
   "schema_version": "codenoesis.local-release-policy/v1",
   "reviewed_on": "2026-08-14",
   "owner": "@smutti",
-  "cargo_lock_sha256": "434cc5e8e38a4c57f35990431d4682974b6cae94893860e1948c8f7cc21ffbca",
+  "cargo_lock_sha256": "280cb4ba363b7294802ea0892a36b72e97d112d6e0fe71ef0a5bc5a03c79e66f",
   "supported_targets": [
     "aarch64-apple-darwin",
     "x86_64-pc-windows-msvc",
@@ -1081,6 +1081,23 @@
       "review_evidence": "issue-186 exact locked source lexical inventory",
       "reviewed_rust_files": 6,
       "reviewed_unsafe_tokens": 242,
+      "expires_on": "2026-11-14"
+    },
+    {
+      "id": "unsafe-tree-sitter-java-0-23-5",
+      "package": "tree-sitter-java",
+      "version": "0.23.5",
+      "targets": [
+        "aarch64-apple-darwin",
+        "x86_64-pc-windows-msvc",
+        "x86_64-unknown-linux-gnu"
+      ],
+      "scope": "local-release-candidate-build-input",
+      "rationale": "Pinned MIT Java grammar FFI exposes the shipped generated parser to the existing tree-sitter runtime; no target repository build or new privilege.",
+      "owner": "@smutti",
+      "review_evidence": "docs/software/java-v01-dependency-review.md",
+      "reviewed_rust_files": 2,
+      "reviewed_unsafe_tokens": 1,
       "expires_on": "2026-11-14"
     },
     {

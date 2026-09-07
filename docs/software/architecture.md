@@ -1027,3 +1027,15 @@ unknown. The CLI uses the confined scan worker and existing guarded artifact
 publication. The offline viewer has an embedded validated payload and no
 network, server or automatic browser launch. This candidate becomes effective
 after maintainer merge and does not implement the remaining S8 languages.
+
+## S8 Java declaration candidate
+
+[Decision 0052](decisions/0052-s8-java-declarations.md) adds the source-only
+`JavaWorkspaceExtractor` port and exact `tree-sitter-java 0.23.5` adapter. Its
+v20 snapshot and Java v1 ontology/projections reuse the immutable CAS/store and
+confined scan/publication boundaries without a migration. Named nesting is
+observed structure, record components are distinct from generated members, and
+multi-field statements retain distinct occurrence identities with shared source
+evidence. Maven/Gradle modules are path conventions only. Unicode preprocessing,
+JPMS, unsupported compilation-unit forms and Kotlin interop remain explicit
+boundaries. See [the profile](java-v01.md) and [dependency review](java-v01-dependency-review.md).

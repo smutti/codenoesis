@@ -55,6 +55,12 @@ cfg-module identity boundary. See
 [`benchmarks/README.md`](benchmarks/README.md) for pins, metrics, and the
 reproduction command.
 
+Kotlin/KMP static declarations merged in PR #225; see the
+[bounded Kotlin profile](docs/software/kotlin-kmp-v01.md). The next candidate is
+[Java static declarations](docs/software/java-v01.md), with a separate ontology,
+source evidence and offline projections. These profiles do not execute builds
+or provide compiler type resolution.
+
 Broader language coverage, operations, semantic comparison, and the remaining
 production-readiness slices are still pending.
 

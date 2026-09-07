@@ -349,11 +349,12 @@ limited only by technical capacity.
 
 ## Polyglot adapter lane
 
-The first P1 Kotlin/KMP vertical is now the FR-EXT-025 / Decision 0051 branch
-candidate: committed declaration ontology, conventional module/source-set
+The first P1 Kotlin/KMP vertical merged in PR #225 (FR-EXT-025 / Decision 0051): committed declaration ontology, conventional module/source-set
 membership, explicit expect/actual candidates and offline projections. See
-[kotlin-kmp-v01.md](kotlin-kmp-v01.md) for its exact boundaries. Java follows
-this bounded vertical; the remaining language roadmap is unchanged.
+[kotlin-kmp-v01.md](kotlin-kmp-v01.md) for its exact boundaries. The next branch
+candidate is Java static declarations (FR-EXT-026 / Decision 0052), described in
+[java-v01.md](java-v01.md). Compiler resolution and cross-language reconciliation
+remain later work; the remaining language roadmap is unchanged.
 
 The normative SRS currently assigns Java, JavaScript/TypeScript, and C/C++ to
 `S8`. The following requested adapters are proposed additions to the roadmap.

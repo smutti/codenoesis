@@ -323,6 +323,16 @@ pub trait RustProviderSourceExtractor {
     ) -> Result<ProviderSourceExtraction, SourceExtractionError>;
 }
 
+pub trait JavaWorkspaceExtractor {
+    /// Extracts bounded committed Java syntax without executing target builds.
+    /// # Errors
+    /// Returns typed encoding, source, capacity or unsupported-input failures.
+    fn extract_java_workspace(
+        &self,
+        inventory: &codenoesis_domain::RepositoryInventory,
+    ) -> Result<codenoesis_domain::s8_java::JavaWorkspace, codenoesis_domain::s8_java::JavaError>;
+}
+
 pub trait KotlinWorkspaceExtractor {
     /// Extracts committed Kotlin syntax without executing the target build.
     /// # Errors
