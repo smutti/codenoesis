@@ -1,0 +1,74 @@
+[
+  {
+    "repository": "rest-service",
+    "command": [
+      "/Users/smutti/Documents/personal/codenoesis-worktrees/java-v01-20260907/target/release/noesis",
+      "export",
+      "--java-profile",
+      "java-declarations-v1",
+      "--store",
+      "/Users/smutti/Documents/personal/codenoesis-evidence/java-v01-20260907/public-release-e6e690b/rest-service-1-store",
+      "--repository-identity",
+      "urn:codenoesis:repository:java-rest-service",
+      "--output",
+      "/Users/smutti/Documents/personal/codenoesis-evidence/java-v01-20260907/public-release-e6e690b/rest-service-export"
+    ],
+    "exit_code": 0,
+    "seconds": 0.04770437499999999,
+    "stdout_sha256": "141c9341f4c616ecccb8d390223d10c734a99e264f29151eb2232473721a525b",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "repository": "rest-service",
+    "command": [
+      "/Users/smutti/Documents/personal/codenoesis-worktrees/java-v01-20260907/target/release/noesis",
+      "explore",
+      "--java-profile",
+      "java-declarations-v1",
+      "--input",
+      "/Users/smutti/Documents/personal/codenoesis-evidence/java-v01-20260907/public-release-e6e690b/rest-service-export/portable-graph.json",
+      "--output",
+      "/Users/smutti/Documents/personal/codenoesis-evidence/java-v01-20260907/public-release-e6e690b/rest-service-viewer"
+    ],
+    "exit_code": 0,
+    "seconds": 0.029030834000000005,
+    "stdout_sha256": "21e31dc5bf85b0f0625a17a8ef4b712a25de4226545f8091530a89a6e0d41792",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "repository": "junit-examples",
+    "command": [
+      "/Users/smutti/Documents/personal/codenoesis-worktrees/java-v01-20260907/target/release/noesis",
+      "export",
+      "--java-profile",
+      "java-declarations-v1",
+      "--store",
+      "/Users/smutti/Documents/personal/codenoesis-evidence/java-v01-20260907/public-release-e6e690b/junit-examples-1-store",
+      "--repository-identity",
+      "urn:codenoesis:repository:java-junit-examples",
+      "--output",
+      "/Users/smutti/Documents/personal/codenoesis-evidence/java-v01-20260907/public-release-e6e690b/junit-examples-export"
+    ],
+    "exit_code": 0,
+    "seconds": 0.08703408299999998,
+    "stdout_sha256": "641b72736a924b0f748dd3d6f0980b808ba7f5897343fdfa735bbdf9f9d4c9db",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "repository": "junit-examples",
+    "command": [
+      "/Users/smutti/Documents/personal/codenoesis-worktrees/java-v01-20260907/target/release/noesis",
+      "explore",
+      "--java-profile",
+      "java-declarations-v1",
+      "--input",
+      "/Users/smutti/Documents/personal/codenoesis-evidence/java-v01-20260907/public-release-e6e690b/junit-examples-export/portable-graph.json",
+      "--output",
+      "/Users/smutti/Documents/personal/codenoesis-evidence/java-v01-20260907/public-release-e6e690b/junit-examples-viewer"
+    ],
+    "exit_code": 0,
+    "seconds": 0.04917808400000001,
+    "stdout_sha256": "660d59925cbd7e2e91b03b61b255fed3e8b592df000b8b412f853d8d7fe640a2",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

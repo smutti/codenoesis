@@ -15,8 +15,8 @@ including the slower first Spring scan, are retained. No warm-up was discarded.
 | junit-team/junit-examples | 197 | 479 | 595 | 53 | 0.297 | 0.290–0.315 | 3/3, semantic hash stable |
 
 Pins and licenses: [manifest](../../tests/specifications/s8/java-public-v1.json).
-Complete [scan observations](../../benchmarks/results/java-v01-public-2026-09-07.json)
-and [export/viewer observations](../../benchmarks/results/java-v01-projections-2026-09-07.json).
+Complete [scan observations](evidence/java-v01-public-2026-09-07.json)
+and [export/viewer observations](evidence/java-v01-projections-2026-09-07.json).
 Raw stdout/stderr and local stores are retained outside Git in the output paths
 recorded by these reports. Only metrics and hashes are committed; source repositories
 and generated source projections are not redistributed in this change.
