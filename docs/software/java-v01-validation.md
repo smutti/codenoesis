@@ -68,3 +68,20 @@ generation checks are distinct from interactive visual acceptance.
 
 Agent: Codex / GPT-6; run `java-v01-20260907`. Cost/token telemetry unavailable.
 Manual merge remains with the maintainer. The original dirty checkout is preserved.
+
+
+## Bundle integrity correction
+
+The first complete local gate on `4492d6f732a9363d3a5ec99d7a1064e53666451f`
+passed all 792 Rust tests and seven of eight commands. The Python suite ran
+426 tests and failed exactly `test_contract_bundle_is_complete_and_self_excluding`:
+the G8 bundle still pinned the pre-Java supply-chain policy digest. See the
+[retained gate report](evidence/java-v01-gate-4492d6f.json) and
+[original Python log](evidence/java-v01-gate-4492d6f-python.log).
+
+The correction updates only the policy file digest and aggregate bundle digest;
+all other bundle members, expected release outputs, test assertions and policy
+semantics stay intact. The policy change itself is the already reviewed exact
+Java grammar dependency plus lock digest. No production extraction changes were
+needed, so the clean source-head benchmark remains applicable. The complete
+gate must pass again on the corrected review head.
