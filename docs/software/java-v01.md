@@ -100,3 +100,6 @@ The corpus directory contains full local clones named `rest-service` and
 `junit-examples` with the manifest commits available. The runner executes only
 CodeNoesis, retains all three attempts and rejects incomplete or unstable runs.
 No wrapper, target build, compiler or public accuracy oracle is invoked.
+
+The first retained [validation observation](java-v01-validation.md) records corpus
+counts, exact hashes, fixture accuracy boundaries and checks not run.
