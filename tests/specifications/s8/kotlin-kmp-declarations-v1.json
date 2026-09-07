@@ -1,0 +1,21 @@
+{
+  "schema_version": "codenoesis.kotlin-fixture-oracle/v1",
+  "requirement": "FR-EXT-025",
+  "fixture": "crates/noesis/tests/s8_kotlin.rs::Fixture",
+  "declarations": [
+    ["custom/Extra.kt", "KotlinObject", "Extra", ""],
+    ["decoy/src/jvmMain/kotlin/demo/Decoy.kt", "KotlinFunction", "platformName", ""],
+    ["shared/src/commonMain/kotlin/demo/Common.kt", "KotlinClass", "Greeting", ""],
+    ["shared/src/commonMain/kotlin/demo/Common.kt", "KotlinClass", "Platform", ""],
+    ["shared/src/commonMain/kotlin/demo/Common.kt", "KotlinFunction", "overloaded", ""],
+    ["shared/src/commonMain/kotlin/demo/Common.kt", "KotlinFunction", "overloaded", ""],
+    ["shared/src/commonMain/kotlin/demo/Common.kt", "KotlinFunction", "platformName", ""],
+    ["shared/src/commonMain/kotlin/demo/Common.kt", "KotlinProperty", "text", "Greeting"],
+    ["shared/src/jvmMain/kotlin/demo/Jvm.kt", "KotlinClass", "Platform", ""],
+    ["shared/src/jvmMain/kotlin/demo/Jvm.kt", "KotlinFunction", "overloaded", ""],
+    ["shared/src/jvmMain/kotlin/demo/Jvm.kt", "KotlinFunction", "platformName", ""]
+  ],
+  "expect_actual_candidates": 2,
+  "candidate_state": "Unknown",
+  "oracle_origin": "hand-authored from source fixture before corpus measurement"
+}

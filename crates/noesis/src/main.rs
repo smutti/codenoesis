@@ -5,6 +5,7 @@ mod federation;
 mod impact;
 mod impact_git;
 mod impact_source;
+mod kotlin;
 mod repository_boundaries;
 
 use std::collections::BTreeMap;
@@ -235,6 +236,7 @@ fn main() -> ExitCode {
     drop(configuration);
     let g1_requested = bootstrap.g1_requested;
     let arguments = bootstrap.arguments;
+    let kotlin_requested = kotlin::requested(&arguments);
     let profile_requested = arguments.get(1).is_some_and(|value| value == "profile");
     let source_requested = arguments.get(1).is_some_and(|value| value == "source");
     let impact_source_requested = impact_source::requested(&arguments);
@@ -289,7 +291,8 @@ fn main() -> ExitCode {
     let framework_requested = option_requested(&arguments, "--rust-framework-profile");
     let r7_requested = option_requested(&arguments, "--compiler-index-profile")
         || option_requested(&arguments, "--compiler-index-binding");
-    let mut scan_worker = if k1_scan_requested
+    let mut scan_worker = if kotlin_requested
+        || k1_scan_requested
         || r7_requested
         || framework_requested
         || r10_scan_requested
@@ -303,7 +306,9 @@ fn main() -> ExitCode {
         None
     };
     if noesis::install_s0_security_boundary().is_err() {
-        return if impact_source_requested || impact_git_requested {
+        return if kotlin_requested {
+            kotlin::security_failure()
+        } else if impact_source_requested || impact_git_requested {
             emit_internal_error_v30()
         } else if source_requested {
             emit_internal_error_v29()
@@ -312,6 +317,9 @@ fn main() -> ExitCode {
         } else {
             emit_internal_error_v1()
         };
+    }
+    if kotlin_requested {
+        return kotlin::entry(&arguments, scan_worker.as_mut());
     }
     let s4_requested = requested_profile(&arguments, "standard-local-s4");
     let s3_requested = requested_profile(&arguments, "standard-local-s3");

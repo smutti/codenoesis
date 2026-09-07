@@ -1013,3 +1013,17 @@ Before `1.0`, the implementation must include:
 6. **Hardening:** complete security, fuzz, chaos, performance, restore, and multi-repository pilot gates before `1.0`.
 
 No milestone is considered complete solely because code exists: its artifact contracts, failure modes, observability, security controls, tests, and operational documentation must pass the corresponding acceptance gate.
+
+## S8 Kotlin/KMP declaration candidate
+
+[Decision 0051](decisions/0051-s8-kotlin-kmp-declarations.md) adds a bounded,
+source-only Kotlin adapter behind the inward-owned `KotlinWorkspaceExtractor`
+port. The application publishes its v19 snapshot through the existing immutable
+local store. A separate Kotlin ontology and projection namespace preserves all
+Rust contracts and the earlier S7 Kotlin client capability. Module/source-set
+membership is a committed path convention; Gradle execution, effective project
+configuration, types, source-set visibility and compiler actualization remain
+unknown. The CLI uses the confined scan worker and existing guarded artifact
+publication. The offline viewer has an embedded validated payload and no
+network, server or automatic browser launch. This candidate becomes effective
+after maintainer merge and does not implement the remaining S8 languages.

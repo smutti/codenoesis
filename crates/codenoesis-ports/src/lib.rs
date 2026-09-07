@@ -323,6 +323,19 @@ pub trait RustProviderSourceExtractor {
     ) -> Result<ProviderSourceExtraction, SourceExtractionError>;
 }
 
+pub trait KotlinWorkspaceExtractor {
+    /// Extracts committed Kotlin syntax without executing the target build.
+    /// # Errors
+    /// Returns a typed source, capacity, or unsupported-input failure.
+    fn extract_kotlin_workspace(
+        &self,
+        inventory: &codenoesis_domain::RepositoryInventory,
+    ) -> Result<
+        codenoesis_domain::s8_kotlin::KotlinWorkspace,
+        codenoesis_domain::s8_kotlin::KotlinError,
+    >;
+}
+
 pub trait KotlinClientSourceExtractor {
     /// Extracts the closed direct JSON-access facts for one selected Kotlin call path.
     ///
