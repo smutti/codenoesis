@@ -53,9 +53,10 @@ pub fn publish(
         .replace('&', "\\u0026")
         .replace('<', "\\u003c")
         .replace('>', "\\u003e");
-    let html = include_str!("../../assets/s8/kotlin/index.html")
-        .replace("__KOTLIN_PAYLOAD__", &payload)
-        .into_bytes();
+    let html = viewer_html(
+        include_bytes!("../../assets/s8/kotlin/index.html"),
+        &payload,
+    )?;
     let manifest = json!({"schema_version":"codenoesis.kotlin-explorer/v1","snapshot_id":portable["payload"]["snapshot_id"],"files":[
         {"path":"index.html","sha256":super::sha256(&html),"byte_length":html.len()},
         {"path":"portable-graph.json","sha256":super::sha256(bytes),"byte_length":bytes.len()}],"network":"disabled","auto_open":false});
@@ -70,4 +71,32 @@ pub fn publish(
         ],
     )?;
     Ok(manifest)
+}
+
+fn viewer_html(template: &[u8], payload: &str) -> Result<Vec<u8>, PortableExplorerError> {
+    let template =
+        super::normalize_checkout_text(template).ok_or(PortableExplorerError::Internal)?;
+    let template = std::str::from_utf8(&template).map_err(|_| PortableExplorerError::Internal)?;
+    Ok(template.replace("__KOTLIN_PAYLOAD__", payload).into_bytes())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::viewer_html;
+
+    #[test]
+    fn pt_fr_ext_025_viewer_bytes_are_identical_for_lf_and_crlf_checkouts() {
+        let checked_out = include_bytes!("../../assets/s8/kotlin/index.html");
+        let lf = super::super::normalize_checkout_text(checked_out).unwrap();
+        let crlf = std::str::from_utf8(&lf).unwrap().replace('\n', "\r\n");
+        let payload = r#"{"entities":[]}"#;
+        let expected = viewer_html(&lf, payload).unwrap();
+        assert_eq!(viewer_html(crlf.as_bytes(), payload).unwrap(), expected);
+        assert!(!expected.contains(&b'\r'));
+        assert!(
+            !std::str::from_utf8(&expected)
+                .unwrap()
+                .contains("__KOTLIN_PAYLOAD__")
+        );
+    }
 }

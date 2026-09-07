@@ -196,6 +196,7 @@ fn e2e_fr_ext_025_scan_store_query_export_offline_viewer() {
         ],
     ));
     let html = fs::read_to_string(viewer.join("index.html")).unwrap();
+    assert!(!html.contains('\r'));
     assert!(html.contains("Content-Security-Policy"));
     assert!(html.contains("Greeting"));
     let mut corrupt = fs::read(&input).unwrap();

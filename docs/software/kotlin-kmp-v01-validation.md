@@ -79,9 +79,15 @@ authority helper to avoid that unsupported spelling and temporary-root aliases.
 The Kotlin fixture now reuses that helper. The ontology oracle and every
 success assertion are unchanged; a Windows-only negative test also requires
 verbatim output to fail with the typed error before destination creation.
-This is a test-environment correction, with no production or benchmark binary
-change. The original failed run remains evidence; final-head CI must independently
-pass instead of retrying the failed head as acceptable evidence.
+The fixture correction does not change extraction or the ontology oracle. The
+original failed run remains evidence; final-head CI must independently pass
+instead of retrying the failed head as acceptable evidence.
+
+The Kotlin HTML publisher also now uses the existing Rust viewer's checkout-text
+normalizer. A regression renders the real asset from both LF and CRLF bytes and
+requires identical output; the end-to-end viewer check requires LF output on
+every platform. This preserves HTML and manifest byte identity across checkout
+line endings without changing extracted ontology semantics.
 
 ## Reproduction
 
