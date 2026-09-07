@@ -61,3 +61,41 @@ time, source/declaration/relationship/gap counts and semantic-hash stability.
 Fixture precision and recall use a hand-authored source oracle; public corpus
 counts measure coverage and repeatability, not semantic accuracy. No baseline is
 regenerated to hide a failure. Java is the next separate vertical.
+
+## Commands and projections
+
+Every command requires the explicit Kotlin selector. Other language selectors,
+extra flags and duplicate flags are rejected. Scan uses the standard packed
+SHA-1 acquisition profile; optional Rust acquisition/capacity profiles do not
+compose with this first Kotlin profile.
+
+```sh
+noesis scan --profile standard-local-s8 \
+  --kotlin-profile kotlin-kmp-declarations-v1 \
+  --repository /absolute/path/to/repository \
+  --repository-identity urn:codenoesis:repository:example \
+  --revision FULL_COMMIT_SHA --store /absolute/path/to/store
+noesis query --kotlin-profile kotlin-kmp-declarations-v1 \
+  --store /absolute/path/to/store \
+  --repository-identity urn:codenoesis:repository:example --search Platform
+noesis docs --kotlin-profile kotlin-kmp-declarations-v1 \
+  --store /absolute/path/to/store \
+  --repository-identity urn:codenoesis:repository:example
+noesis export --kotlin-profile kotlin-kmp-declarations-v1 \
+  --store /absolute/path/to/store \
+  --repository-identity urn:codenoesis:repository:example \
+  --output /absolute/path/to/export
+noesis explore --kotlin-profile kotlin-kmp-declarations-v1 \
+  --input /absolute/path/to/export/portable-graph.json \
+  --output /absolute/path/to/viewer
+```
+
+Query returns at most 100 matches and reports total count and truncation. Docs
+returns a canonical JSON projection of statements, entities, relationships,
+evidence and gaps. Export creates a marker-owned portable package. Explore
+validates that package and produces `index.html`, the exact portable graph and
+a manifest with SHA-256 hashes. The HTML contains its validated payload and can
+be opened offline; it does not load arbitrary files or external resources.
+
+The first [validation report](kotlin-kmp-v01-validation.md) records public sample
+measurements and distinguishes fixture accuracy from public corpus coverage.

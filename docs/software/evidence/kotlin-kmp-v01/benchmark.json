@@ -1,0 +1,241 @@
+{
+  "schema_version": "codenoesis.kotlin-benchmark-observation/v1",
+  "binary_sha256": "4f11a16b6e097645c5ef4b449899ad2194f657fd2716c2904865571ec14ff298",
+  "product_head": "ce473e0197f02e737f52533e4a1920fdd5712742",
+  "product_dirty": false,
+  "environment": {
+    "os": "macOS-26.5.2-arm64-arm-64bit",
+    "architecture": "arm64"
+  },
+  "accuracy": "not measured on public repositories; hand-authored fixture oracle is separate",
+  "samples": [
+    {
+      "repository": "Kotlin/kmp-basic-sample",
+      "revision": "83e1d17070878ce1ded5936b789bff515aa63e7f",
+      "repeat": 1,
+      "exit_code": 0,
+      "seconds": 0.505176417,
+      "stdout_bytes": 183346,
+      "stdout_sha256": "56060161550736a16a5f97bed1003f1e6a56aa70c503f7f542f6f47f83eb5527",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "semantic_hash": "e44564449099f6ee8872de70ba1cd041e5925e21a23f1c210cc8481f4dc3c031",
+      "entities": 94,
+      "entity_kinds": {
+        "GradleBuildFile": 4,
+        "GradleModule": 2,
+        "KotlinClass": 8,
+        "KotlinFunction": 11,
+        "KotlinImport": 41,
+        "KotlinInterface": 1,
+        "KotlinPackage": 7,
+        "KotlinProperty": 3,
+        "KotlinSourceFile": 10,
+        "KotlinSourceSet": 7
+      },
+      "relationships": 93,
+      "claims": 187,
+      "evidence": 78,
+      "gaps": 2,
+      "gap_reasons": {
+        "compiler_types_calls_inheritance_runtime_and_generated_sources_not_extracted": 1,
+        "gradle_configuration_and_source_set_visibility_not_evaluated": 1
+      },
+      "syntax_gap_paths": [],
+      "candidate_relationships": 2
+    },
+    {
+      "repository": "Kotlin/kmp-basic-sample",
+      "revision": "83e1d17070878ce1ded5936b789bff515aa63e7f",
+      "repeat": 2,
+      "exit_code": 0,
+      "seconds": 0.0953792080000001,
+      "stdout_bytes": 183346,
+      "stdout_sha256": "3604a815011e9e6bd8b5b1584d77efe419185d8b1f3b83ed2506a3d623d2caa4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "semantic_hash": "e44564449099f6ee8872de70ba1cd041e5925e21a23f1c210cc8481f4dc3c031",
+      "entities": 94,
+      "entity_kinds": {
+        "GradleBuildFile": 4,
+        "GradleModule": 2,
+        "KotlinClass": 8,
+        "KotlinFunction": 11,
+        "KotlinImport": 41,
+        "KotlinInterface": 1,
+        "KotlinPackage": 7,
+        "KotlinProperty": 3,
+        "KotlinSourceFile": 10,
+        "KotlinSourceSet": 7
+      },
+      "relationships": 93,
+      "claims": 187,
+      "evidence": 78,
+      "gaps": 2,
+      "gap_reasons": {
+        "compiler_types_calls_inheritance_runtime_and_generated_sources_not_extracted": 1,
+        "gradle_configuration_and_source_set_visibility_not_evaluated": 1
+      },
+      "syntax_gap_paths": [],
+      "candidate_relationships": 2
+    },
+    {
+      "repository": "Kotlin/kmp-basic-sample",
+      "revision": "83e1d17070878ce1ded5936b789bff515aa63e7f",
+      "repeat": 3,
+      "exit_code": 0,
+      "seconds": 0.10096487500000006,
+      "stdout_bytes": 183346,
+      "stdout_sha256": "59f4b7040b4aabe1ef20c067c75f2af5b3199b6f58ccc3eab089cfcf86f5d1ed",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "semantic_hash": "e44564449099f6ee8872de70ba1cd041e5925e21a23f1c210cc8481f4dc3c031",
+      "entities": 94,
+      "entity_kinds": {
+        "GradleBuildFile": 4,
+        "GradleModule": 2,
+        "KotlinClass": 8,
+        "KotlinFunction": 11,
+        "KotlinImport": 41,
+        "KotlinInterface": 1,
+        "KotlinPackage": 7,
+        "KotlinProperty": 3,
+        "KotlinSourceFile": 10,
+        "KotlinSourceSet": 7
+      },
+      "relationships": 93,
+      "claims": 187,
+      "evidence": 78,
+      "gaps": 2,
+      "gap_reasons": {
+        "compiler_types_calls_inheritance_runtime_and_generated_sources_not_extracted": 1,
+        "gradle_configuration_and_source_set_visibility_not_evaluated": 1
+      },
+      "syntax_gap_paths": [],
+      "candidate_relationships": 2
+    },
+    {
+      "repository": "JetBrains/compose-multiplatform-template",
+      "revision": "7acca3fe58ae19c8f61d4b315f2998cb69be0dce",
+      "repeat": 1,
+      "exit_code": 0,
+      "seconds": 0.11523870799999991,
+      "stdout_bytes": 127659,
+      "stdout_sha256": "39bf7744037b1a096f49216c4b8b773078cf7c24a8c18b2808b098c1fa67a1d0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "semantic_hash": "7876e264e064ac4f008ec949d1cc2b49ccf5f435809c58e024b98dfdd2a92254",
+      "entities": 70,
+      "entity_kinds": {
+        "GradleBuildFile": 5,
+        "GradleModule": 3,
+        "KotlinClass": 1,
+        "KotlinFunction": 12,
+        "KotlinImport": 28,
+        "KotlinPackage": 7,
+        "KotlinSourceFile": 7,
+        "KotlinSourceSet": 7
+      },
+      "relationships": 65,
+      "claims": 135,
+      "evidence": 53,
+      "gaps": 2,
+      "gap_reasons": {
+        "compiler_types_calls_inheritance_runtime_and_generated_sources_not_extracted": 1,
+        "gradle_configuration_and_source_set_visibility_not_evaluated": 1
+      },
+      "syntax_gap_paths": [],
+      "candidate_relationships": 3
+    },
+    {
+      "repository": "JetBrains/compose-multiplatform-template",
+      "revision": "7acca3fe58ae19c8f61d4b315f2998cb69be0dce",
+      "repeat": 2,
+      "exit_code": 0,
+      "seconds": 0.11289574999999996,
+      "stdout_bytes": 127659,
+      "stdout_sha256": "cfbf7f2e91842056b187c31cbda144f3ddeb9353a8c74daa9e4084e2aa880d67",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "semantic_hash": "7876e264e064ac4f008ec949d1cc2b49ccf5f435809c58e024b98dfdd2a92254",
+      "entities": 70,
+      "entity_kinds": {
+        "GradleBuildFile": 5,
+        "GradleModule": 3,
+        "KotlinClass": 1,
+        "KotlinFunction": 12,
+        "KotlinImport": 28,
+        "KotlinPackage": 7,
+        "KotlinSourceFile": 7,
+        "KotlinSourceSet": 7
+      },
+      "relationships": 65,
+      "claims": 135,
+      "evidence": 53,
+      "gaps": 2,
+      "gap_reasons": {
+        "compiler_types_calls_inheritance_runtime_and_generated_sources_not_extracted": 1,
+        "gradle_configuration_and_source_set_visibility_not_evaluated": 1
+      },
+      "syntax_gap_paths": [],
+      "candidate_relationships": 3
+    },
+    {
+      "repository": "JetBrains/compose-multiplatform-template",
+      "revision": "7acca3fe58ae19c8f61d4b315f2998cb69be0dce",
+      "repeat": 3,
+      "exit_code": 0,
+      "seconds": 0.11417241700000003,
+      "stdout_bytes": 127659,
+      "stdout_sha256": "f2c3e7c86a53460d0f24772efe4e04d4fc7fa7670e8bdaf20dc55a9517e0c2c8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "semantic_hash": "7876e264e064ac4f008ec949d1cc2b49ccf5f435809c58e024b98dfdd2a92254",
+      "entities": 70,
+      "entity_kinds": {
+        "GradleBuildFile": 5,
+        "GradleModule": 3,
+        "KotlinClass": 1,
+        "KotlinFunction": 12,
+        "KotlinImport": 28,
+        "KotlinPackage": 7,
+        "KotlinSourceFile": 7,
+        "KotlinSourceSet": 7
+      },
+      "relationships": 65,
+      "claims": 135,
+      "evidence": 53,
+      "gaps": 2,
+      "gap_reasons": {
+        "compiler_types_calls_inheritance_runtime_and_generated_sources_not_extracted": 1,
+        "gradle_configuration_and_source_set_visibility_not_evaluated": 1
+      },
+      "syntax_gap_paths": [],
+      "candidate_relationships": 3
+    }
+  ],
+  "summary": [
+    {
+      "name": "basic",
+      "repository": "Kotlin/kmp-basic-sample",
+      "revision": "83e1d17070878ce1ded5936b789bff515aa63e7f",
+      "license": "Apache-2.0",
+      "archived": false,
+      "successes": 3,
+      "repetitions": 3,
+      "semantic_hash_stable": true,
+      "median_seconds": 0.10096487500000006,
+      "min_seconds": 0.0953792080000001,
+      "max_seconds": 0.505176417
+    },
+    {
+      "name": "compose-template",
+      "repository": "JetBrains/compose-multiplatform-template",
+      "revision": "7acca3fe58ae19c8f61d4b315f2998cb69be0dce",
+      "license": "Apache-2.0",
+      "archived": true,
+      "successes": 3,
+      "repetitions": 3,
+      "semantic_hash_stable": true,
+      "median_seconds": 0.11417241700000003,
+      "min_seconds": 0.11289574999999996,
+      "max_seconds": 0.11523870799999991
+    }
+  ],
+  "raw_report_sha256": "3a97471a71860b6cf1ea788a242aed6f5dceb5e5f1c9df2246f65ba25c8de647",
+  "reproduce": "python3 scripts/run_kotlin_kmp_benchmark.py --binary target/release/noesis --corpus <pinned-full-git-clones> --output <new-evidence-directory>"
+}
