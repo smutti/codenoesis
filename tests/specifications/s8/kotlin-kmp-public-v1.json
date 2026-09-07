@@ -1,0 +1,8 @@
+{
+  "schema_version": "codenoesis.kotlin-public-corpus/v1",
+  "repetitions": 3,
+  "repositories": [
+    {"name":"basic","repository":"Kotlin/kmp-basic-sample","revision":"83e1d17070878ce1ded5936b789bff515aa63e7f","license":"Apache-2.0","archived":false},
+    {"name":"compose-template","repository":"JetBrains/compose-multiplatform-template","revision":"7acca3fe58ae19c8f61d4b315f2998cb69be0dce","license":"Apache-2.0","archived":true}
+  ]
+}

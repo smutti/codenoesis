@@ -1,3 +1,5 @@
+pub mod workspace;
+
 use codenoesis_domain::s7::{
     ClientFieldExtraction, ClientPresenceAssumption, ClientSourceExtraction, S7Limit,
     SourceExtractionError, SourceSpan,

@@ -27,6 +27,7 @@ mod s5;
 mod s6;
 mod s7;
 mod s7_r19;
+pub mod s8_kotlin;
 
 pub use g0::*;
 pub use g1::*;
@@ -591,6 +592,7 @@ fn publication_candidate(value: &Value) -> Result<PublicationCandidate, Publicat
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V16
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V17
             | codenoesis_domain::storage::SNAPSHOT_SCHEMA_VERSION_V18
+            | codenoesis_domain::s8_kotlin::SNAPSHOT_VERSION
     );
     let semantic = required_field(value, "semantic", "semantic")?;
     let repository = required_field(semantic, "repository", "semantic.repository")?;

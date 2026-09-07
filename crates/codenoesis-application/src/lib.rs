@@ -20,6 +20,7 @@ mod s5;
 mod s6;
 mod s7;
 mod s7_r19;
+pub mod s8_kotlin;
 
 pub use s1_boundaries::{
     BoundaryScanError, PreparedNestedRepositoryRoot, RepositoryBoundaryScanInput,

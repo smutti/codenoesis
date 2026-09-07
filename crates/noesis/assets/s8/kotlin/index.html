@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZsfsBzPmQ89Z7fET2bws4v7yoWiNeODDpoiCSb7RfaQ='; style-src 'sha256-SIjN97WqpVRi/WCKyioxTTeJfdzcCZBuV/BK9act/c4='; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+<title>CodeNoesis · Kotlin/KMP</title>
+<style>
+:root{color-scheme:light dark;font-family:system-ui,sans-serif;background:#10151e;color:#e1e8f2}body{margin:0 auto;max-width:1440px;padding:32px}h1{font-size:28px;margin:0}header p{color:#aabbd0;max-width:85ch}input,select,button{font:inherit;background:#192433;color:inherit;border:1px solid #45617c;border-radius:5px;padding:9px}input{min-width:240px}nav{display:flex;gap:12px;flex-wrap:wrap;margin:24px 0}main{display:grid;grid-template-columns:minmax(260px,1fr) minmax(320px,2fr);gap:24px}section{background:#15202d;padding:20px;border:1px solid #2a3c50;border-radius:8px}#results{list-style:none;padding:0;max-height:65vh;overflow:auto}#results button{text-align:left;width:100%;margin:3px 0;border-color:transparent}#results button:hover,#results button:focus{border-color:#83c8ff}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px}small{color:#aabbd0}#status{overflow-wrap:anywhere}details{margin-top:20px}@media(max-width:760px){body{padding:16px}main{grid-template-columns:1fr}input{min-width:0}}
+</style></head><body>
+<header><h1>Kotlin/KMP source ontology</h1><p>Committed declarations and their source evidence. Module membership follows paths. Gradle configuration and types are unresolved; expect/actual links are candidates.</p><small id="status"></small></header>
+<nav aria-label="Filter declarations"><input id="search" type="search" maxlength="256" placeholder="Search declarations or paths" aria-label="Search"><select id="kind" aria-label="Entity kind"><option value="">All kinds</option></select><select id="set" aria-label="Source set"><option value="">All source sets</option></select></nav>
+<main><section><h2>Entities</h2><small id="count"></small><ul id="results"></ul></section><section><h2 id="selection">Select an entity</h2><pre id="properties"></pre><h3>Source evidence</h3><pre id="evidence"></pre><h3>Relationships</h3><div id="edges"></div></section></main>
+<details><summary id="gap-count">Coverage gaps</summary><pre id="gaps"></pre></details>
+<script id="data" type="application/json">__KOTLIN_PAYLOAD__</script>
+<script>
+'use strict';
+(() => {
+  const byId = id => document.getElementById(id);
+  const payload = JSON.parse(byId('data').textContent);
+  const graph = payload.semantic.knowledge_graph;
+  const entities = new Map(graph.entities.map(e => [e.id,e]));
+  const evidence = new Map(graph.evidence.map(e => [e.id,e]));
+  const claims = new Map();
+  const edges = new Map();
+  for (const claim of graph.claims) {
+    if (!claims.has(claim.subject_id)) claims.set(claim.subject_id,[]);
+    claims.get(claim.subject_id).push(claim);
+  }
+  for (const edge of graph.relationships) for (const id of [edge.source,edge.target]) {
+    if (!edges.has(id)) edges.set(id,[]);
+    edges.get(id).push(edge);
+  }
+  const fill = (id,values) => { for (const value of [...new Set(values)].filter(Boolean).sort()) {
+    const option = document.createElement('option'); option.value=value;option.textContent=value;byId(id).append(option);
+  }};
+  fill('kind',graph.entities.map(e=>e.kind)); fill('set',graph.entities.map(e=>e.properties.source_set));
+  byId('status').textContent=payload.semantic.repository.identity+' · '+payload.semantic.repository.commit_oid;
+  byId('gap-count').textContent=graph.coverage.length+' coverage gaps';
+  byId('gaps').textContent=JSON.stringify(graph.coverage.slice(0,1000),null,2)+(graph.coverage.length>1000?'\nFirst 1,000 gaps; all are available in portable-graph.json.':'');
+  function select(id) {
+    const entity=entities.get(id); if (!entity) return;
+    byId('selection').textContent=entity.kind+' · '+entity.name;
+    byId('properties').textContent=JSON.stringify(entity,null,2);
+    const refs=[...new Set((claims.get(id)||[]).flatMap(c=>c.evidence_ids))];
+    byId('evidence').textContent=JSON.stringify(refs.slice(0,100).map(r=>evidence.get(r)),null,2);
+    byId('edges').replaceChildren();
+    for (const edge of (edges.get(id)||[]).slice(0,100)) {
+      const other=entities.get(edge.source===id?edge.target:edge.source);
+      const button=document.createElement('button'); button.textContent=edge.kind+' ['+edge.state+'] → '+other.name;
+      button.addEventListener('click',()=>select(other.id)); byId('edges').append(button,document.createElement('br'));
+    }
+  }
+  function render() {
+    const text=byId('search').value.toLowerCase(),kind=byId('kind').value,set=byId('set').value;
+    const matches=graph.entities.filter(e=>(!kind||e.kind===kind)&&(!set||e.properties.source_set===set)&&(e.name+' '+(e.properties.path||'')).toLowerCase().includes(text));
+    byId('count').textContent=matches.length+' matches · showing first 100'; byId('results').replaceChildren();
+    for (const entity of matches.slice(0,100)) {
+      const li=document.createElement('li'),button=document.createElement('button');button.textContent=entity.name+' · '+entity.kind;
+      button.addEventListener('click',()=>select(entity.id));li.append(button);byId('results').append(li);
+    }
+  }
+  byId('search').addEventListener('input',render);byId('kind').addEventListener('change',render);byId('set').addEventListener('change',render);render();
+})();
+</script></body></html>

@@ -512,6 +512,7 @@ pub fn snapshot_hash_domain(snapshot_schema_version: &str) -> Option<&'static st
         SNAPSHOT_SCHEMA_VERSION_V16 => Some(SNAPSHOT_HASH_DOMAIN_V16),
         SNAPSHOT_SCHEMA_VERSION_V17 => Some(SNAPSHOT_HASH_DOMAIN_V17),
         SNAPSHOT_SCHEMA_VERSION_V18 => Some(SNAPSHOT_HASH_DOMAIN_V18),
+        crate::s8_kotlin::SNAPSHOT_VERSION => Some(crate::s8_kotlin::SNAPSHOT_HASH_DOMAIN),
         _ => None,
     }
 }
@@ -534,6 +535,7 @@ pub fn graph_hash_domain(snapshot_schema_version: &str) -> Option<&'static str> 
         SNAPSHOT_SCHEMA_VERSION_V16 => Some(GRAPH_HASH_DOMAIN_V13),
         SNAPSHOT_SCHEMA_VERSION_V17 => Some(GRAPH_HASH_DOMAIN_V14),
         SNAPSHOT_SCHEMA_VERSION_V18 => Some(GRAPH_HASH_DOMAIN_V15),
+        crate::s8_kotlin::SNAPSHOT_VERSION => Some(crate::s8_kotlin::GRAPH_HASH_DOMAIN),
         _ => None,
     }
 }
@@ -556,6 +558,7 @@ pub fn extraction_hash_domain(snapshot_schema_version: &str) -> Option<&'static 
         SNAPSHOT_SCHEMA_VERSION_V16 => Some(EXTRACTION_HASH_DOMAIN_V13),
         SNAPSHOT_SCHEMA_VERSION_V17 => Some(EXTRACTION_HASH_DOMAIN_V14),
         SNAPSHOT_SCHEMA_VERSION_V18 => Some(EXTRACTION_HASH_DOMAIN_V15),
+        crate::s8_kotlin::SNAPSHOT_VERSION => Some(crate::s8_kotlin::EXTRACTION_HASH_DOMAIN),
         _ => None,
     }
 }

@@ -1,3 +1,5 @@
+pub mod kotlin;
+
 use std::collections::BTreeSet;
 use std::ffi::OsStr;
 use std::fs::{self, File, Metadata, OpenOptions};
@@ -2696,6 +2698,8 @@ impl OwnedFile {
 
 #[derive(Clone, Copy, Eq, PartialEq)]
 enum OutputKind {
+    KotlinPortable,
+    KotlinExplorer,
     Portable,
     Explorer,
     K1Portable,
@@ -2720,6 +2724,8 @@ enum OutputKind {
 impl OutputKind {
     const fn marker(self) -> &'static str {
         match self {
+            Self::KotlinPortable => ".codenoesis-kotlin-portable-v1",
+            Self::KotlinExplorer => ".codenoesis-kotlin-explorer-v1",
             Self::Portable => R8_PORTABLE_MARKER,
             Self::Explorer => R8_EXPLORER_MARKER,
             Self::K1Portable => K1_PORTABLE_MARKER,
@@ -2744,6 +2750,12 @@ impl OutputKind {
 
     const fn marker_bytes(self) -> &'static [u8] {
         match self {
+            Self::KotlinPortable => {
+                b"{\"schema_version\":\"codenoesis.kotlin-portable-marker/v1\"}\n"
+            }
+            Self::KotlinExplorer => {
+                b"{\"schema_version\":\"codenoesis.kotlin-explorer-marker/v1\"}\n"
+            }
             Self::Portable => PORTABLE_MARKER_BYTES,
             Self::Explorer => EXPLORER_MARKER_BYTES,
             Self::K1Portable => K1_PORTABLE_MARKER_BYTES,
@@ -2768,6 +2780,13 @@ impl OutputKind {
 
     fn allowed_names(self) -> BTreeSet<&'static str> {
         match self {
+            Self::KotlinPortable => BTreeSet::from([self.marker(), "portable-graph.json"]),
+            Self::KotlinExplorer => BTreeSet::from([
+                self.marker(),
+                "portable-graph.json",
+                "index.html",
+                "explorer-manifest.json",
+            ]),
             Self::Portable => BTreeSet::from([R8_PORTABLE_MARKER, "portable-graph.json"]),
             Self::Explorer => BTreeSet::from([
                 R8_EXPLORER_MARKER,
