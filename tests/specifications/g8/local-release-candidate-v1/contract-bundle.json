@@ -15,7 +15,7 @@
     },
     {
       "path": "supply-chain/local-release-policy-v1.json",
-      "sha256": "1dc9a2a18743a696ad26bdec542c797033fa2df27fc1869fb8f0b84f77d1c1a2"
+      "sha256": "1b6451f2ccd6660ffe0f7660798eb212ac224a9fe4930d641c13b65728da01ae"
     },
     {
       "path": "tests/specifications/g8/local-release-candidate-v1/codenoesis-error-v28.schema.json",
@@ -102,5 +102,5 @@
       "sha256": "9adc846b1846a2b90e2389389aa3c203d388db5305fe6b663d3d37a794318ed2"
     }
   ],
-  "bundle_sha256": "d873dd891a47fd3b70bc967eb0f52882542f0324cea2faafc248702cfb587672"
+  "bundle_sha256": "d8adc11df9f2fb31acf0af9d7852106c31e582f00d1ac0bb2b70471458c18c9c"
 }

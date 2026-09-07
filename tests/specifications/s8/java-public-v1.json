@@ -1,0 +1,20 @@
+{
+  "schema_version": "codenoesis.java-public-corpus/v1",
+  "repetitions": 3,
+  "repositories": [
+    {
+      "name": "rest-service",
+      "repository": "spring-guides/gs-rest-service",
+      "revision": "3f4cef01152596c19bc4d37939409358812b1421",
+      "license": "Apache-2.0",
+      "archived": false
+    },
+    {
+      "name": "junit-examples",
+      "repository": "junit-team/junit-examples",
+      "revision": "01b09e8d9eea02a4e0981291c7cb62ebd851263d",
+      "license": "EPL-2.0",
+      "archived": false
+    }
+  ]
+}

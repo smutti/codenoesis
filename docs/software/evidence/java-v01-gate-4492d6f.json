@@ -1,0 +1,118 @@
+{
+  "schema_version": "codenoesis.java-validation-observation/v1",
+  "head": "4492d6f732a9363d3a5ec99d7a1064e53666451f",
+  "environment": {
+    "os": "macOS-26.5.2-arm64-arm-64bit",
+    "architecture": "arm64",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)"
+  },
+  "checks": [
+    {
+      "command": [
+        "actionlint",
+        "-no-color"
+      ],
+      "exit_code": 0,
+      "seconds": 0.08983775000000001,
+      "log": "/Users/smutti/Documents/personal/codenoesis-evidence/java-v01-20260907/gate-4492d6f7/1.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 1.704028667,
+      "log": "/Users/smutti/Documents/personal/codenoesis-evidence/java-v01-20260907/gate-4492d6f7/2.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit_code": 0,
+      "seconds": 0.16456766700000003,
+      "log": "/Users/smutti/Documents/personal/codenoesis-evidence/java-v01-20260907/gate-4492d6f7/3.log",
+      "log_sha256": "abfd9f54d4cee59e45626e0843397abf91493767ea6a9c6cb4e9ee3145ab9576"
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--locked"
+      ],
+      "exit_code": 0,
+      "seconds": 271.89740583400004,
+      "log": "/Users/smutti/Documents/personal/codenoesis-evidence/java-v01-20260907/gate-4492d6f7/4.log",
+      "log_sha256": "4e43013c1aca86dbc451c74d467b71eab6994aba47f5399ac655f4da6dd2f1e1"
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--doc",
+        "--all-features",
+        "--locked"
+      ],
+      "exit_code": 0,
+      "seconds": 1.3445010830000115,
+      "log": "/Users/smutti/Documents/personal/codenoesis-evidence/java-v01-20260907/gate-4492d6f7/5.log",
+      "log_sha256": "15b1a83983650bcd18a75678c37e027fc35fef6bd8418b0ad57229ed5fd42a51"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts/tests",
+        "-p",
+        "test_*.py"
+      ],
+      "exit_code": 1,
+      "seconds": 21.276628332999962,
+      "log": "/Users/smutti/Documents/personal/codenoesis-evidence/java-v01-20260907/gate-4492d6f7/6.log",
+      "log_sha256": "d916e42b743452898577dafc6ec0aa8ce7682537f742a964190d8d3f09008425"
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/validate_benchmark_assets.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.0309011669999677,
+      "log": "/Users/smutti/Documents/personal/codenoesis-evidence/java-v01-20260907/gate-4492d6f7/7.log",
+      "log_sha256": "4aba903d8a258ce085b91dfff1837fd7e8267f322e091d4ff9cc6bccfa6e787b"
+    },
+    {
+      "command": [
+        "cargo",
+        "bench",
+        "--workspace",
+        "--all-features",
+        "--no-run",
+        "--locked"
+      ],
+      "exit_code": 0,
+      "seconds": 4.63347104099995,
+      "log": "/Users/smutti/Documents/personal/codenoesis-evidence/java-v01-20260907/gate-4492d6f7/8.log",
+      "log_sha256": "e9d0daad2f87a236eb47c5f7891eba04c3676200b60500875b73d70f5b0f862d"
+    }
+  ]
+}
