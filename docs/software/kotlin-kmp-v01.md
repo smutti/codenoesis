@@ -21,9 +21,11 @@ This deliberately supports conventional roots even when settings use plugins
 or dynamically compute includes. Custom roots remain unassigned with a gap.
 
 Every source declaration retains repository identity, immutable revision, blob
-OID, byte span, line span and an excerpt digest. Nested type members are retained;
+OID, byte span, line span and an excerpt digest. Named members in ordinary class/object bodies are retained;
 function-local declarations and initializer bodies are outside this profile.
-Primary constructor `val`/`var` parameters are properties. Signature text is
+Primary constructor `val`/`var` parameters are properties. Unnamed companion
+bodies, secondary constructors, enum entries and non-Gradle Kotlin scripts are
+outside this first declaration profile. Signature text is
 declared syntax, not a resolved type. No calls, inheritance resolution, overload
 resolution, Java extraction, generated source discovery or runtime claims.
 

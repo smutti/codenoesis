@@ -45,6 +45,28 @@ are checked automatically. Interactive browser verification was **not run**:
 the browser security policy rejected the local `file://` URL. No alternate
 browser surface or local server was used to bypass that restriction.
 
+## Final performance correction check
+
+Source commit `84745de4856e25502a4aa7da4d85076fb4990887` indexes candidate
+names and source paths once, caches repeated evidence spans and accumulates
+claim evidence before serialization. It removes repeated whole-workspace scans
+and growing-array copies without changing the public ontology result.
+
+The synthetic domain regression covers 18,000 declarations, 12,000 candidate
+links and a duplicate actual that must affect only its own source set. It
+completed in 0.04 s locally; this is a focused test observation, not an SLO.
+The path-membership regression checks root, nested and misleading path segments.
+
+All six final public scans succeeded with **exactly the same semantic hashes**
+as the initial observations. The intermediate candidate-index measurements are
+also retained; no attempt was discarded. See
+[final observations](evidence/kotlin-kmp-v01/benchmark-84745de.json) and
+[intermediate observations](evidence/kotlin-kmp-v01/benchmark-d3b30b3.json).
+
+Final release binary SHA-256: `775737a81516083965c29584d2a8c0eb8bbcca3e5dbb10473c96e6e4ca2947cc`.
+Final medians: basic `0.098` s; Compose template `0.118` s. Counts, source
+coverage and limitations in the first table are unchanged.
+
 ## Reproduction
 
 Use full Git clones at the two immutable pins in
