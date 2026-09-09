@@ -66,9 +66,12 @@ def validate_corpus(corpus):
 
 def command_for(binary, repository, store, entry):
     identity = '--repository-id' if entry['language'] == 'rust' else '--repository-identity'
-    return [str(binary), 'scan', '--repository', str(repository), identity,
+    command = [str(binary), 'scan', '--repository', str(repository), identity,
             entry['repository_id'], '--revision', entry['revision'],
-            *entry['scan_arguments'], '--store', str(store), '--format', 'json']
+            *entry['scan_arguments'], '--store', str(store)]
+    if entry['language'] == 'rust':
+        command.extend(['--format', 'json'])
+    return command
 
 
 def preflight(repository, entry, home):

@@ -37,6 +37,9 @@ class LocalReadinessBenchmarkTests(unittest.TestCase):
             self.assertEqual(c[c.index('--revision') + 1], e['revision'])
             self.assertEqual(c[c.index('--store') + 1], '/fresh')
             if e['language'] == 'rust': self.assertIn('rust-safe-constant-evaluation-v1', c)
+            else:
+                # S8 adapters always emit JSON and intentionally reject a format selector.
+                self.assertNotIn('--format', c)
 
     def test_typed_rejection_is_repeatable_but_not_extraction_success(self):
         samples = [dict(outcome='typed_rejection', wall_time_ns=n,
