@@ -64,7 +64,14 @@ class RealWorldRustBenchmarkContractTests(unittest.TestCase):
         self.assertEqual(contract["risk"], "high")
         self.assertEqual(manifest["status"], "active")
         self.assertEqual(manifest["requirements"], ["NFR-PER-001"])
-        self.assertEqual(len(manifest["suites"]), 2)
+        self.assertEqual(
+            [suite["id"] for suite in manifest["suites"]],
+            [
+                "rust-real-world-stability-v1",
+                "rust-public-conference-v1",
+                "local-readiness-v1",
+            ],
+        )
         suite = manifest["suites"][0]
         self.assertEqual(suite["id"], contract["suite_id"])
         self.assertEqual(suite["repetitions"], 3)

@@ -16,6 +16,9 @@ def identity(sample):
 def compare(report, baseline):
     differences = []
     if (baseline.get('schema_version') != 'codenoesis.local-readiness-baseline/v1'
+            or report.get('schema_version') != 'codenoesis.local-readiness-observation/v1'
+            or type(report.get('concurrency')) is not int or report['concurrency'] != 1
+            or type(report.get('repetitions')) is not int or report['repetitions'] != 3
             or report.get('status') != 'candidate_review_required' or report.get('binary_unchanged') is not True
             or baseline.get('review_status') != 'candidate_pending_independent_review'):
         differences.append('incomplete observation or unsupported baseline authority')
@@ -28,9 +31,11 @@ def compare(report, baseline):
         differences.append('missing, extra or duplicate repository entries')
     for name in sorted(observed.keys() & expected.keys()):
         entry, reference = observed[name], expected[name]
-        if (any(entry.get(k) != reference.get(k) for k in ('revision', 'tree'))
+        if (any(entry.get(k) != reference.get(k) for k in ('revision', 'tree', 'language', 'cohort'))
                 or entry.get('summary', {}).get('deterministic') is not True
                 or len(entry.get('samples', [])) != 3
+                or [sample.get('repeat') for sample in entry['samples']] != [1, 2, 3]
+                or any(type(sample.get('repeat')) is not int for sample in entry['samples'])
                 or any(identity(sample) != reference['identity'] for sample in entry['samples'])):
             differences.append(name + ': source, outcome, semantics or determinism changed')
     return {'schema_version': 'codenoesis.local-readiness-comparison/v1',
