@@ -1,0 +1,885 @@
+{
+  "schema_version": "codenoesis.ontology-quality-oracle/v1",
+  "review_status": "candidate_pending_independent_review",
+  "authorship": "Codex source-authored expectations; not copied from snapshots",
+  "corpus_exposure": "development_exposed",
+  "scope": "Exhaustive selected entity kinds in named files; public Rust surface, direct declaration identity, selected syntax properties, induced relationships among selected facts. No compiler or whole-repository accuracy claim.",
+  "cases": [
+    {
+      "id": "hyperfine",
+      "language": "rust",
+      "revision": "f12f3d9f86f3643b3b7deace5e160b1f0f44d2b7",
+      "tree": "d38f1f673ecc339c7024d0ee934d08815663370d",
+      "repository_id": "urn:codenoesis:benchmark:hyperfine:conference-v1",
+      "files": [
+        {
+          "path": "src/util/min_max.rs",
+          "sha256": "f0b7c8dc5e6d50a85497dae48cf7cf2bf247e9c22b10f7c71b7a7c22def18ff6"
+        }
+      ],
+      "kinds": [
+        "rust.callable_signature",
+        "rust.function",
+        "rust.parameter"
+      ],
+      "property_keys": {
+        "rust.callable_signature": [
+          "return_type"
+        ],
+        "rust.parameter": [
+          "declared_type"
+        ]
+      },
+      "public_rust_surface": true,
+      "facts": [
+        {
+          "fact": {
+            "path": "src/util/min_max.rs",
+            "kind": "rust.function",
+            "name": "max",
+            "owner": ""
+          },
+          "anchor": "pub fn max(vals: &[f64]) -> f64",
+          "start_byte": 42,
+          "end_byte": 73
+        },
+        {
+          "fact": {
+            "path": "src/util/min_max.rs",
+            "kind": "rust.callable_signature",
+            "name": "max",
+            "owner": "max",
+            "return_type": "f64"
+          },
+          "anchor": "pub fn max(vals: &[f64]) -> f64",
+          "start_byte": 42,
+          "end_byte": 73
+        },
+        {
+          "fact": {
+            "path": "src/util/min_max.rs",
+            "kind": "rust.parameter",
+            "name": "vals",
+            "owner": "max",
+            "declared_type": "&[f64]"
+          },
+          "anchor": "vals: &[f64]",
+          "start_byte": 53,
+          "end_byte": 65
+        },
+        {
+          "fact": {
+            "path": "src/util/min_max.rs",
+            "kind": "rust.function",
+            "name": "min",
+            "owner": ""
+          },
+          "anchor": "pub fn min(vals: &[f64]) -> f64",
+          "start_byte": 215,
+          "end_byte": 246
+        },
+        {
+          "fact": {
+            "path": "src/util/min_max.rs",
+            "kind": "rust.callable_signature",
+            "name": "min",
+            "owner": "min",
+            "return_type": "f64"
+          },
+          "anchor": "pub fn min(vals: &[f64]) -> f64",
+          "start_byte": 215,
+          "end_byte": 246
+        },
+        {
+          "fact": {
+            "path": "src/util/min_max.rs",
+            "kind": "rust.parameter",
+            "name": "vals",
+            "owner": "min",
+            "declared_type": "&[f64]"
+          },
+          "anchor": "vals: &[f64]",
+          "start_byte": 226,
+          "end_byte": 238
+        }
+      ],
+      "relationship_kinds": [
+        "HAS_PARAMETER",
+        "HAS_SIGNATURE"
+      ],
+      "relationships": [
+        {
+          "kind": "HAS_SIGNATURE",
+          "source": {
+            "path": "src/util/min_max.rs",
+            "kind": "rust.function",
+            "name": "max",
+            "owner": ""
+          },
+          "target": {
+            "path": "src/util/min_max.rs",
+            "kind": "rust.callable_signature",
+            "name": "max",
+            "owner": "max",
+            "return_type": "f64"
+          },
+          "state": ""
+        },
+        {
+          "kind": "HAS_PARAMETER",
+          "source": {
+            "path": "src/util/min_max.rs",
+            "kind": "rust.callable_signature",
+            "name": "max",
+            "owner": "max",
+            "return_type": "f64"
+          },
+          "target": {
+            "path": "src/util/min_max.rs",
+            "kind": "rust.parameter",
+            "name": "vals",
+            "owner": "max",
+            "declared_type": "&[f64]"
+          },
+          "state": ""
+        },
+        {
+          "kind": "HAS_SIGNATURE",
+          "source": {
+            "path": "src/util/min_max.rs",
+            "kind": "rust.function",
+            "name": "min",
+            "owner": ""
+          },
+          "target": {
+            "path": "src/util/min_max.rs",
+            "kind": "rust.callable_signature",
+            "name": "min",
+            "owner": "min",
+            "return_type": "f64"
+          },
+          "state": ""
+        },
+        {
+          "kind": "HAS_PARAMETER",
+          "source": {
+            "path": "src/util/min_max.rs",
+            "kind": "rust.callable_signature",
+            "name": "min",
+            "owner": "min",
+            "return_type": "f64"
+          },
+          "target": {
+            "path": "src/util/min_max.rs",
+            "kind": "rust.parameter",
+            "name": "vals",
+            "owner": "min",
+            "declared_type": "&[f64]"
+          },
+          "state": ""
+        }
+      ],
+      "negatives": [
+        {
+          "path": "src/util/min_max.rs",
+          "kind": "rust.function",
+          "name": "partial_cmp",
+          "owner": ""
+        }
+      ]
+    },
+    {
+      "id": "mio",
+      "language": "rust",
+      "revision": "da425f909dd6b86d887da9eaefcb158099b5b165",
+      "tree": "f2eb679bf3a0dcff92d7889322d680e6db02931f",
+      "repository_id": "urn:codenoesis:benchmark:mio:conference-v1",
+      "files": [
+        {
+          "path": "src/token.rs",
+          "sha256": "31be1c8634260e78f20beb152a318d75d0de1065b591a209b73a71f7caed8aa2"
+        }
+      ],
+      "kinds": [
+        "rust.function",
+        "rust.struct"
+      ],
+      "property_keys": {},
+      "public_rust_surface": true,
+      "facts": [
+        {
+          "fact": {
+            "path": "src/token.rs",
+            "kind": "rust.struct",
+            "name": "Token",
+            "owner": ""
+          },
+          "anchor": "pub struct Token(pub usize);",
+          "start_byte": 5041,
+          "end_byte": 5069
+        }
+      ],
+      "relationship_kinds": [],
+      "relationships": [],
+      "negatives": [
+        {
+          "path": "src/token.rs",
+          "kind": "rust.function",
+          "name": "main",
+          "owner": ""
+        }
+      ]
+    },
+    {
+      "id": "java-rest-service",
+      "language": "java",
+      "revision": "3f4cef01152596c19bc4d37939409358812b1421",
+      "tree": "10269cc2a76402a811f11190a99d1e85999a1020",
+      "repository_id": "urn:codenoesis:repository:java-rest-service",
+      "files": [
+        {
+          "path": "complete/src/main/java/com/example/restservice/Greeting.java",
+          "sha256": "ab53924d8e8a58c41a302bc1515922dc3b71cd1e4b67986ef5fcdc3a36bdbf81"
+        },
+        {
+          "path": "complete/src/main/java/com/example/restservice/GreetingController.java",
+          "sha256": "ac8984576f74c759e814ac281257e21388427573c451ffe5b7f7824138e0348a"
+        },
+        {
+          "path": "complete/src/main/java/com/example/restservice/RestServiceApplication.java",
+          "sha256": "e6360019b0faf92d77e4f27307c92b11e4414500f33c32e23138345c179890e8"
+        }
+      ],
+      "kinds": [
+        "JavaClass",
+        "JavaField",
+        "JavaMethod",
+        "JavaRecord",
+        "JavaRecordComponent"
+      ],
+      "property_keys": {},
+      "public_rust_surface": false,
+      "facts": [
+        {
+          "fact": {
+            "path": "complete/src/main/java/com/example/restservice/Greeting.java",
+            "kind": "JavaRecord",
+            "name": "Greeting",
+            "owner": ""
+          },
+          "anchor": "public record Greeting(long id, String content)",
+          "start_byte": 34,
+          "end_byte": 81
+        },
+        {
+          "fact": {
+            "path": "complete/src/main/java/com/example/restservice/Greeting.java",
+            "kind": "JavaRecordComponent",
+            "name": "id",
+            "owner": "Greeting"
+          },
+          "anchor": "long id",
+          "start_byte": 57,
+          "end_byte": 64
+        },
+        {
+          "fact": {
+            "path": "complete/src/main/java/com/example/restservice/Greeting.java",
+            "kind": "JavaRecordComponent",
+            "name": "content",
+            "owner": "Greeting"
+          },
+          "anchor": "String content",
+          "start_byte": 66,
+          "end_byte": 80
+        },
+        {
+          "fact": {
+            "path": "complete/src/main/java/com/example/restservice/GreetingController.java",
+            "kind": "JavaClass",
+            "name": "GreetingController",
+            "owner": ""
+          },
+          "anchor": "public class GreetingController",
+          "start_byte": 282,
+          "end_byte": 313
+        },
+        {
+          "fact": {
+            "path": "complete/src/main/java/com/example/restservice/GreetingController.java",
+            "kind": "JavaField",
+            "name": "template",
+            "owner": "GreetingController"
+          },
+          "anchor": "private static final String template = \"Hello, %s!\";",
+          "start_byte": 319,
+          "end_byte": 371
+        },
+        {
+          "fact": {
+            "path": "complete/src/main/java/com/example/restservice/GreetingController.java",
+            "kind": "JavaField",
+            "name": "counter",
+            "owner": "GreetingController"
+          },
+          "anchor": "private final AtomicLong counter = new AtomicLong();",
+          "start_byte": 374,
+          "end_byte": 426
+        },
+        {
+          "fact": {
+            "path": "complete/src/main/java/com/example/restservice/GreetingController.java",
+            "kind": "JavaMethod",
+            "name": "greeting",
+            "owner": "GreetingController"
+          },
+          "anchor": "public Greeting greeting(@RequestParam(defaultValue = \"World\") String name)",
+          "start_byte": 457,
+          "end_byte": 532
+        },
+        {
+          "fact": {
+            "path": "complete/src/main/java/com/example/restservice/RestServiceApplication.java",
+            "kind": "JavaClass",
+            "name": "RestServiceApplication",
+            "owner": ""
+          },
+          "anchor": "public class RestServiceApplication",
+          "start_byte": 178,
+          "end_byte": 213
+        },
+        {
+          "fact": {
+            "path": "complete/src/main/java/com/example/restservice/RestServiceApplication.java",
+            "kind": "JavaMethod",
+            "name": "main",
+            "owner": "RestServiceApplication"
+          },
+          "anchor": "public static void main(String[] args)",
+          "start_byte": 219,
+          "end_byte": 257
+        }
+      ],
+      "relationship_kinds": [
+        "CONTAINS_DECLARATION"
+      ],
+      "relationships": [
+        {
+          "kind": "CONTAINS_DECLARATION",
+          "source": {
+            "path": "complete/src/main/java/com/example/restservice/Greeting.java",
+            "kind": "JavaRecord",
+            "name": "Greeting",
+            "owner": ""
+          },
+          "target": {
+            "path": "complete/src/main/java/com/example/restservice/Greeting.java",
+            "kind": "JavaRecordComponent",
+            "name": "id",
+            "owner": "Greeting"
+          },
+          "state": "Observed"
+        },
+        {
+          "kind": "CONTAINS_DECLARATION",
+          "source": {
+            "path": "complete/src/main/java/com/example/restservice/Greeting.java",
+            "kind": "JavaRecord",
+            "name": "Greeting",
+            "owner": ""
+          },
+          "target": {
+            "path": "complete/src/main/java/com/example/restservice/Greeting.java",
+            "kind": "JavaRecordComponent",
+            "name": "content",
+            "owner": "Greeting"
+          },
+          "state": "Observed"
+        },
+        {
+          "kind": "CONTAINS_DECLARATION",
+          "source": {
+            "path": "complete/src/main/java/com/example/restservice/GreetingController.java",
+            "kind": "JavaClass",
+            "name": "GreetingController",
+            "owner": ""
+          },
+          "target": {
+            "path": "complete/src/main/java/com/example/restservice/GreetingController.java",
+            "kind": "JavaField",
+            "name": "template",
+            "owner": "GreetingController"
+          },
+          "state": "Observed"
+        },
+        {
+          "kind": "CONTAINS_DECLARATION",
+          "source": {
+            "path": "complete/src/main/java/com/example/restservice/GreetingController.java",
+            "kind": "JavaClass",
+            "name": "GreetingController",
+            "owner": ""
+          },
+          "target": {
+            "path": "complete/src/main/java/com/example/restservice/GreetingController.java",
+            "kind": "JavaField",
+            "name": "counter",
+            "owner": "GreetingController"
+          },
+          "state": "Observed"
+        },
+        {
+          "kind": "CONTAINS_DECLARATION",
+          "source": {
+            "path": "complete/src/main/java/com/example/restservice/GreetingController.java",
+            "kind": "JavaClass",
+            "name": "GreetingController",
+            "owner": ""
+          },
+          "target": {
+            "path": "complete/src/main/java/com/example/restservice/GreetingController.java",
+            "kind": "JavaMethod",
+            "name": "greeting",
+            "owner": "GreetingController"
+          },
+          "state": "Observed"
+        },
+        {
+          "kind": "CONTAINS_DECLARATION",
+          "source": {
+            "path": "complete/src/main/java/com/example/restservice/RestServiceApplication.java",
+            "kind": "JavaClass",
+            "name": "RestServiceApplication",
+            "owner": ""
+          },
+          "target": {
+            "path": "complete/src/main/java/com/example/restservice/RestServiceApplication.java",
+            "kind": "JavaMethod",
+            "name": "main",
+            "owner": "RestServiceApplication"
+          },
+          "state": "Observed"
+        }
+      ],
+      "negatives": [
+        {
+          "path": "complete/src/main/java/com/example/restservice/Greeting.java",
+          "kind": "JavaMethod",
+          "name": "toString",
+          "owner": "Greeting"
+        },
+        {
+          "path": "complete/src/main/java/com/example/restservice/Greeting.java",
+          "kind": "JavaMethod",
+          "name": "equals",
+          "owner": "Greeting"
+        }
+      ]
+    },
+    {
+      "id": "java-junit-examples",
+      "language": "java",
+      "revision": "01b09e8d9eea02a4e0981291c7cb62ebd851263d",
+      "tree": "423284226a9e51f28ed88126cd8f3128f72b0530",
+      "repository_id": "urn:codenoesis:repository:java-junit-examples",
+      "files": [
+        {
+          "path": "junit-jupiter-starter-gradle/src/main/java/com/example/project/Calculator.java",
+          "sha256": "a0d0e92f9028555243f34469e896b9a95b30447bc64d04e4c1ae88185389d3ad"
+        },
+        {
+          "path": "junit-jupiter-starter-bazel/src/main/java/com/example/project/Calculator.java",
+          "sha256": "a0d0e92f9028555243f34469e896b9a95b30447bc64d04e4c1ae88185389d3ad"
+        }
+      ],
+      "kinds": [
+        "JavaClass",
+        "JavaMethod"
+      ],
+      "property_keys": {},
+      "public_rust_surface": false,
+      "facts": [
+        {
+          "fact": {
+            "path": "junit-jupiter-starter-gradle/src/main/java/com/example/project/Calculator.java",
+            "kind": "JavaClass",
+            "name": "Calculator",
+            "owner": ""
+          },
+          "anchor": "public class Calculator",
+          "start_byte": 345,
+          "end_byte": 368
+        },
+        {
+          "fact": {
+            "path": "junit-jupiter-starter-gradle/src/main/java/com/example/project/Calculator.java",
+            "kind": "JavaMethod",
+            "name": "add",
+            "owner": "Calculator"
+          },
+          "anchor": "public int add(int a, int b)",
+          "start_byte": 373,
+          "end_byte": 401
+        },
+        {
+          "fact": {
+            "path": "junit-jupiter-starter-bazel/src/main/java/com/example/project/Calculator.java",
+            "kind": "JavaClass",
+            "name": "Calculator",
+            "owner": ""
+          },
+          "anchor": "public class Calculator",
+          "start_byte": 345,
+          "end_byte": 368
+        },
+        {
+          "fact": {
+            "path": "junit-jupiter-starter-bazel/src/main/java/com/example/project/Calculator.java",
+            "kind": "JavaMethod",
+            "name": "add",
+            "owner": "Calculator"
+          },
+          "anchor": "public int add(int a, int b)",
+          "start_byte": 373,
+          "end_byte": 401
+        }
+      ],
+      "relationship_kinds": [
+        "CONTAINS_DECLARATION"
+      ],
+      "relationships": [
+        {
+          "kind": "CONTAINS_DECLARATION",
+          "source": {
+            "path": "junit-jupiter-starter-gradle/src/main/java/com/example/project/Calculator.java",
+            "kind": "JavaClass",
+            "name": "Calculator",
+            "owner": ""
+          },
+          "target": {
+            "path": "junit-jupiter-starter-gradle/src/main/java/com/example/project/Calculator.java",
+            "kind": "JavaMethod",
+            "name": "add",
+            "owner": "Calculator"
+          },
+          "state": "Observed"
+        },
+        {
+          "kind": "CONTAINS_DECLARATION",
+          "source": {
+            "path": "junit-jupiter-starter-bazel/src/main/java/com/example/project/Calculator.java",
+            "kind": "JavaClass",
+            "name": "Calculator",
+            "owner": ""
+          },
+          "target": {
+            "path": "junit-jupiter-starter-bazel/src/main/java/com/example/project/Calculator.java",
+            "kind": "JavaMethod",
+            "name": "add",
+            "owner": "Calculator"
+          },
+          "state": "Observed"
+        }
+      ],
+      "negatives": []
+    },
+    {
+      "id": "kotlin-basic",
+      "language": "kotlin",
+      "revision": "83e1d17070878ce1ded5936b789bff515aa63e7f",
+      "tree": "4f3535c4d18cbf72499fed4c7f9cf42d5ec79b81",
+      "repository_id": "urn:codenoesis:repository:kotlin-basic",
+      "files": [
+        {
+          "path": "shared/src/commonMain/kotlin/com/jetbrains/basicsample/Greeting.kt",
+          "sha256": "e658d5c7a372eac58c8220a438ad4c9360d230d4b90c3cfeafedbfceb13a27b4"
+        },
+        {
+          "path": "shared/src/commonMain/kotlin/com/jetbrains/basicsample/Platform.kt",
+          "sha256": "7fe82383106e7bda50dade53a7beace0d496b055ccfda1453f1a950fc1fbcfc5"
+        },
+        {
+          "path": "shared/src/androidMain/kotlin/com/jetbrains/basicsample/Platform.android.kt",
+          "sha256": "1d99308cddf5674d3998281ea248b16043be79aaf3a906ce3819201db9b801f9"
+        }
+      ],
+      "kinds": [
+        "KotlinClass",
+        "KotlinFunction",
+        "KotlinInterface",
+        "KotlinProperty"
+      ],
+      "property_keys": {
+        "KotlinClass": [
+          "actual",
+          "expect"
+        ],
+        "KotlinFunction": [
+          "actual",
+          "expect"
+        ],
+        "KotlinInterface": [
+          "actual",
+          "expect"
+        ],
+        "KotlinProperty": [
+          "actual",
+          "expect"
+        ]
+      },
+      "public_rust_surface": false,
+      "facts": [
+        {
+          "fact": {
+            "path": "shared/src/commonMain/kotlin/com/jetbrains/basicsample/Greeting.kt",
+            "kind": "KotlinClass",
+            "name": "Greeting",
+            "owner": "",
+            "expect": false,
+            "actual": false
+          },
+          "anchor": "class Greeting",
+          "start_byte": 35,
+          "end_byte": 49
+        },
+        {
+          "fact": {
+            "path": "shared/src/commonMain/kotlin/com/jetbrains/basicsample/Greeting.kt",
+            "kind": "KotlinFunction",
+            "name": "greeting",
+            "owner": "Greeting",
+            "expect": false,
+            "actual": false
+          },
+          "anchor": "fun greeting(): String",
+          "start_byte": 56,
+          "end_byte": 78
+        },
+        {
+          "fact": {
+            "path": "shared/src/commonMain/kotlin/com/jetbrains/basicsample/Platform.kt",
+            "kind": "KotlinInterface",
+            "name": "Platform",
+            "owner": "",
+            "expect": false,
+            "actual": false
+          },
+          "anchor": "interface Platform",
+          "start_byte": 35,
+          "end_byte": 53
+        },
+        {
+          "fact": {
+            "path": "shared/src/commonMain/kotlin/com/jetbrains/basicsample/Platform.kt",
+            "kind": "KotlinProperty",
+            "name": "platform",
+            "owner": "Platform",
+            "expect": false,
+            "actual": false
+          },
+          "anchor": "val platform: String",
+          "start_byte": 60,
+          "end_byte": 80
+        },
+        {
+          "fact": {
+            "path": "shared/src/commonMain/kotlin/com/jetbrains/basicsample/Platform.kt",
+            "kind": "KotlinFunction",
+            "name": "getPlatform",
+            "owner": "",
+            "expect": true,
+            "actual": false
+          },
+          "anchor": "expect fun getPlatform(): Platform",
+          "start_byte": 84,
+          "end_byte": 118
+        },
+        {
+          "fact": {
+            "path": "shared/src/androidMain/kotlin/com/jetbrains/basicsample/Platform.android.kt",
+            "kind": "KotlinClass",
+            "name": "AndroidPlatform",
+            "owner": "",
+            "expect": false,
+            "actual": false
+          },
+          "anchor": "class AndroidPlatform : Platform",
+          "start_byte": 60,
+          "end_byte": 92
+        },
+        {
+          "fact": {
+            "path": "shared/src/androidMain/kotlin/com/jetbrains/basicsample/Platform.android.kt",
+            "kind": "KotlinProperty",
+            "name": "platform",
+            "owner": "AndroidPlatform",
+            "expect": false,
+            "actual": false
+          },
+          "anchor": "override val platform: String",
+          "start_byte": 99,
+          "end_byte": 128
+        },
+        {
+          "fact": {
+            "path": "shared/src/androidMain/kotlin/com/jetbrains/basicsample/Platform.android.kt",
+            "kind": "KotlinFunction",
+            "name": "getPlatform",
+            "owner": "",
+            "expect": false,
+            "actual": true
+          },
+          "anchor": "actual fun getPlatform(): Platform",
+          "start_byte": 169,
+          "end_byte": 203
+        }
+      ],
+      "relationship_kinds": [
+        "EXPECT_ACTUAL_CANDIDATE"
+      ],
+      "relationships": [
+        {
+          "kind": "EXPECT_ACTUAL_CANDIDATE",
+          "source": {
+            "path": "shared/src/commonMain/kotlin/com/jetbrains/basicsample/Platform.kt",
+            "kind": "KotlinFunction",
+            "name": "getPlatform",
+            "owner": "",
+            "expect": true,
+            "actual": false
+          },
+          "target": {
+            "path": "shared/src/androidMain/kotlin/com/jetbrains/basicsample/Platform.android.kt",
+            "kind": "KotlinFunction",
+            "name": "getPlatform",
+            "owner": "",
+            "expect": false,
+            "actual": true
+          },
+          "state": "Unknown"
+        }
+      ],
+      "negatives": []
+    },
+    {
+      "id": "kotlin-compose-template",
+      "language": "kotlin",
+      "revision": "7acca3fe58ae19c8f61d4b315f2998cb69be0dce",
+      "tree": "9633b5b5eb6ff6fb1053a8815c304053be5ca025",
+      "repository_id": "urn:codenoesis:repository:kotlin-compose-template",
+      "files": [
+        {
+          "path": "shared/src/commonMain/kotlin/App.kt",
+          "sha256": "0f8d19c91c4b7ebc15e6601343912840afbf06c32d4e18751a102cd2aa194cb0"
+        },
+        {
+          "path": "shared/src/desktopMain/kotlin/main.desktop.kt",
+          "sha256": "090131cc7b921b72204ccf351b3ae1cd6755990b4b968363123e8efa79205eb4"
+        }
+      ],
+      "kinds": [
+        "KotlinFunction"
+      ],
+      "property_keys": {
+        "KotlinFunction": [
+          "actual",
+          "expect"
+        ]
+      },
+      "public_rust_surface": false,
+      "facts": [
+        {
+          "fact": {
+            "path": "shared/src/commonMain/kotlin/App.kt",
+            "kind": "KotlinFunction",
+            "name": "App",
+            "owner": "",
+            "expect": false,
+            "actual": false
+          },
+          "anchor": "fun App()",
+          "start_byte": 779,
+          "end_byte": 788
+        },
+        {
+          "fact": {
+            "path": "shared/src/commonMain/kotlin/App.kt",
+            "kind": "KotlinFunction",
+            "name": "getPlatformName",
+            "owner": "",
+            "expect": true,
+            "actual": false
+          },
+          "anchor": "expect fun getPlatformName(): String",
+          "start_byte": 1489,
+          "end_byte": 1525
+        },
+        {
+          "fact": {
+            "path": "shared/src/desktopMain/kotlin/main.desktop.kt",
+            "kind": "KotlinFunction",
+            "name": "getPlatformName",
+            "owner": "",
+            "expect": false,
+            "actual": true
+          },
+          "anchor": "actual fun getPlatformName(): String",
+          "start_byte": 103,
+          "end_byte": 139
+        },
+        {
+          "fact": {
+            "path": "shared/src/desktopMain/kotlin/main.desktop.kt",
+            "kind": "KotlinFunction",
+            "name": "MainView",
+            "owner": "",
+            "expect": false,
+            "actual": false
+          },
+          "anchor": "fun MainView()",
+          "start_byte": 165,
+          "end_byte": 179
+        },
+        {
+          "fact": {
+            "path": "shared/src/desktopMain/kotlin/main.desktop.kt",
+            "kind": "KotlinFunction",
+            "name": "AppPreview",
+            "owner": "",
+            "expect": false,
+            "actual": false
+          },
+          "anchor": "fun AppPreview()",
+          "start_byte": 210,
+          "end_byte": 226
+        }
+      ],
+      "relationship_kinds": [
+        "EXPECT_ACTUAL_CANDIDATE"
+      ],
+      "relationships": [
+        {
+          "kind": "EXPECT_ACTUAL_CANDIDATE",
+          "source": {
+            "path": "shared/src/commonMain/kotlin/App.kt",
+            "kind": "KotlinFunction",
+            "name": "getPlatformName",
+            "owner": "",
+            "expect": true,
+            "actual": false
+          },
+          "target": {
+            "path": "shared/src/desktopMain/kotlin/main.desktop.kt",
+            "kind": "KotlinFunction",
+            "name": "getPlatformName",
+            "owner": "",
+            "expect": false,
+            "actual": true
+          },
+          "state": "Unknown"
+        }
+      ],
+      "negatives": []
+    }
+  ]
+}
