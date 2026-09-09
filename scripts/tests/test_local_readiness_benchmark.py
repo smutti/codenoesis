@@ -21,12 +21,15 @@ class LocalReadinessBenchmarkTests(unittest.TestCase):
         self.assertEqual(sum(e['cohort'] == 'boundary' for e in self.corpus['entries']), 3)
 
     def test_reject_duplicate_unpinned_or_mutating_arguments(self):
-        for mutation in ('duplicate', 'revision', 'command', 'repetitions'):
+        for mutation in ('duplicate', 'revision', 'command', 'repetitions', 'boolean', 'root', 'entry'):
             value = copy.deepcopy(self.corpus)
             if mutation == 'duplicate': value['entries'].append(value['entries'][0])
             if mutation == 'revision': value['entries'][0]['revision'] = 'main'
             if mutation == 'command': value['entries'][0]['scan_arguments'] += ['--store', '/tmp/reused']
             if mutation == 'repetitions': value['repetitions'] = 0
+            if mutation == 'boolean': value['concurrency'] = True
+            if mutation == 'root': value = []
+            if mutation == 'entry': value['entries'][0] = []
             with self.subTest(mutation=mutation), self.assertRaises(ValueError):
                 runner.validate_corpus(value)
 

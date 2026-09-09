@@ -27,6 +27,77 @@ change, network analysis, migration, signing, release or server implementation
 is part of this package. Benchmark and oracle data require semantic review in
 the pull request; passing infrastructure tests cannot supply that review.
 
+## Measured result on main 399ee12
+
+The corrected campaign completed 60/60 planned samples: 51 successful extractions
+and nine typed rejections. All 20 repositories have three identical semantic or
+error identities. The 17 extraction-cohort repositories all succeeded (100%);
+the complete exploratory corpus extraction rate is 17/20 (85%).
+
+| Repository | Outcome (3 repeats) | Entities | Relationships | Median / p95 seconds |
+|---|---|---:|---:|---:|
+| hyperfine | success | 4446 | 7722 | 2.398 / 2.544 |
+| tower | success | 362 | 484 | 0.621 / 0.673 |
+| mio | success | 416 | 648 | 0.570 / 0.570 |
+| fd | success | 5681 | 10128 | 2.736 / 2.923 |
+| delta | success | 18614 | 32641 | 9.584 / 9.650 |
+| rustfmt | success | 48693 | 88640 | 23.722 / 24.241 |
+| dioxus | success | 181854 | 323068 | 119.958 / 128.557 |
+| wgpu | success | 181272 | 314443 | 118.293 / 119.923 |
+| lekton | success | 26146 | 43643 | 12.909 / 13.377 |
+| rustdesk | success | 31300 | 55854 | 19.435 / 20.422 |
+| ripgrep | success | 44363 | 75836 | 21.022 / 21.554 |
+| serde | typed_rejection | — | — | 0.605 / 0.613 |
+| axum | typed_rejection | — | — | 0.375 / 0.381 |
+| hyper | success | 2047 | 3004 | 1.825 / 2.084 |
+| alacritty | typed_rejection | — | — | 0.483 / 0.501 |
+| starship | success | 32359 | 56551 | 18.716 / 18.869 |
+| kotlin-basic | success | 94 | 93 | 0.145 / 0.148 |
+| kotlin-compose-template | success | 70 | 65 | 0.144 / 0.153 |
+| java-rest-service | success | 58 | 59 | 0.148 / 0.153 |
+| java-junit-examples | success | 479 | 595 | 0.322 / 0.361 |
+
+Serde retains the implicit-test-only Cargo target boundary; Axum retains the
+prefix-glob workspace boundary; Alacritty exceeds the selected 8 MiB regular-file
+limit. These are failed extractions, not successful ontology results.
+
+The quality seed matches 33/33 entities and 14/14 relationships, with zero extra
+or missing selected facts and 4/4 hard negatives absent. All 33 entity anchors
+are covered by evidence in the correct Git blob; 10 spans equal the anchor
+exactly. Larger spans can correctly include declaration bodies or attributes.
+These are candidate-oracle agreement scores; independent accuracy remains null.
+
+Source: `399ee12b31a5d0c4fb1b3a59e7badb012e81a0d2`.
+Measured binary SHA-256: `a2c0c90db688e88498d60257535a44ecc98b865956a4c5bb516e6e1a66d15982`.
+Executed runner: commit `abdeb2d717f7a2daba77dc4266cd81bea4fbe8e7`.
+Later runner edits tighten input validation and remove an unused import; the
+measured commands, corpus and product binary are unchanged. The complete final
+technical gate is reported against the final pull-request head.
+
+Host: macOS arm64, non-exclusive; sequential samples, fresh product stores and
+uncontrolled OS caches. Concurrent diagnostic/read-only tooling is not excluded
+from host activity. These durations include CLI persistence/stdout; they are
+not a controlled performance comparison, peak-memory result or tail SLO.
+
+The first campaign exited 2 after 52 attempts: all 48 Rust attempts completed,
+but the new runner passed an unsupported format selector to four JVM commands.
+Eight JVM slots remained unattempted. That failed report and all streams remain
+retained. After correcting the runner, the entire 60-sample corpus was rerun in
+a new directory. The failed campaign is not reclassified as passing.
+
+Reviewable evidence:
+
+- [Complete corrected observation](evidence/local-readiness-v1/public-main-399ee12.json).
+- [Preserved first failed campaign](evidence/local-readiness-v1/first-run-failed.json).
+- [Source-oracle quality report](evidence/local-readiness-v1/ontology-quality-main-399ee12.json).
+- [Candidate identity comparison](evidence/local-readiness-v1/comparison-main-399ee12.json).
+- [Build, raw-log hashes and local evidence index](evidence/local-readiness-v1/evidence-index.json).
+
+The runtime, Cargo manifests/lock, toolchain and historical benchmark oracles
+are unchanged. Raw source snapshots/stores remain local and are not published
+as CI artifacts; committed JSON reports carry exact sample commands and stream
+digests. Independent source review, holdout and Local GA acceptance remain open.
+
 ## Reproduction
 
 Build with the pinned toolchain from a clean worktree and retain the build log.

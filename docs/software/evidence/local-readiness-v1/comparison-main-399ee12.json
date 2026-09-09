@@ -1,0 +1,8 @@
+{
+  "schema_version": "codenoesis.local-readiness-comparison/v1",
+  "status": "candidate_identity_match",
+  "ga_accepted": false,
+  "accuracy_certified": false,
+  "performance_gate": "not evaluated: non-exclusive host and uncontrolled caches",
+  "differences": []
+}

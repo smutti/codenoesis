@@ -45,7 +45,7 @@ class BenchmarkAssetValidationTests(unittest.TestCase):
                 ROOT / "scripts" / "run_public_rust_evaluation.py",
                 root / "scripts" / "run_public_rust_evaluation.py",
             )
-            for name in ('run_local_readiness_benchmark.py', 'score_ontology_quality.py'):
+            for name in ('run_local_readiness_benchmark.py', 'score_ontology_quality.py', 'compare_local_readiness.py'):
                 shutil.copy2(ROOT / 'scripts' / name, root / 'scripts' / name)
             yield root
 
@@ -167,6 +167,15 @@ class BenchmarkAssetValidationTests(unittest.TestCase):
             (root / 'benchmarks/corpora/local-readiness-v1.json').unlink()
             errors, _ = validate_assets(root)
             self.assertTrue(any('local readiness corpus is missing' in e for e in errors))
+
+    def test_local_readiness_baseline_cannot_drop_a_boundary_failure(self) -> None:
+        with self.copied_assets() as root:
+            path = root / 'benchmarks/baselines/local-readiness-v1.candidate.json'
+            baseline = json.loads(path.read_text())
+            baseline['entries'] = [e for e in baseline['entries'] if e['id'] != 'serde']
+            self.write_json(path, baseline)
+            errors, _ = validate_assets(root)
+            self.assertTrue(any('complete corpus exactly' in e for e in errors))
 
     def test_active_validator_rejects_corpus_revision_drift(self) -> None:
         with self.copied_assets() as root:

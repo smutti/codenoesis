@@ -34,7 +34,8 @@ def compare_facts(expected, actual):
 
 
 def validate_oracle(oracle):
-    if (oracle.get('schema_version') != 'codenoesis.ontology-quality-oracle/v1'
+    if (not isinstance(oracle, dict)
+            or oracle.get('schema_version') != 'codenoesis.ontology-quality-oracle/v1'
             or oracle.get('review_status') != 'candidate_pending_independent_review'
             or oracle.get('corpus_exposure') != 'development_exposed'
             or not isinstance(oracle.get('cases'), list) or not oracle['cases']):
@@ -106,7 +107,7 @@ def score_case(case, graph, sources):
     rows = []
     for item in case['facts']:
         fact, start, end = item['fact'], item['start_byte'], item['end_byte']
-        matches = [i for i, found in normalized.items() if found == fact]
+        matches = [i for i, found in normalized.items() if key(found) == key(fact)]
         data = sources[fact['path']]
         oid = hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest()
         valid = []
@@ -122,7 +123,8 @@ def score_case(case, graph, sources):
                      'matches': len(matches), 'evidence_covers_anchor': bool(valid),
                      'evidence_exact_anchor': any(e['start_byte'] == start and e['end_byte'] == end for e in valid),
                      'evidence_spans': sorted({(e['start_byte'], e['end_byte']) for e in valid})})
-    negatives = [{'fact': f, 'absent': f not in actual} for f in case['negatives']]
+    actual_keys = set(map(key, actual))
+    negatives = [{'fact': f, 'absent': key(f) not in actual_keys} for f in case['negatives']]
     return {'id': case['id'], 'language': case['language'],
             'entities': compare_facts(expected, actual),
             'entities_by_kind': {k: compare_facts([f for f in expected if f['kind'] == k],

@@ -298,14 +298,16 @@ def validate_active_suite_assets(root: Path, manifest: dict[str, Any]) -> list[s
         'repetitions': 3, 'percentile_method': 'nearest-rank',
         'minimum_success_rate': 0.85,
         'metrics': ['wall_time_ns', 'exit_code', 'stdout_bytes', 'semantic_hash',
-                    'semantic_projection_sha256', 'extraction_success_rate', 'determinism'],
+                    'semantic_projection_sha256', 'success_rate', 'determinism'],
         'runner': ['python3', 'scripts/run_local_readiness_benchmark.py']
     }:
         errors.append('local readiness suite does not match its observational contract')
     readiness_assets = {
         'corpus': 'benchmarks/corpora/local-readiness-v1.json',
         'quality oracle': 'benchmarks/oracles/ontology-quality-v1.json',
+        'candidate baseline': 'benchmarks/baselines/local-readiness-v1.candidate.json',
         'runner': 'scripts/run_local_readiness_benchmark.py',
+        'comparison': 'scripts/compare_local_readiness.py',
         'quality scorer': 'scripts/score_ontology_quality.py',
     }
     readiness_values = {}
@@ -329,6 +331,25 @@ def validate_active_suite_assets(root: Path, manifest: dict[str, Any]) -> list[s
             for case in readiness_values['quality oracle']['cases']:
                 if any(case[k] != entries[case['id']][k] for k in ('revision', 'tree', 'repository_id', 'language')):
                     raise ValueError('quality oracle and corpus source identities differ')
+        if {'corpus', 'candidate baseline'} <= readiness_values.keys():
+            import hashlib
+            baseline = readiness_values['candidate baseline']
+            corpus = readiness_values['corpus']
+            if (baseline.get('schema_version') != 'codenoesis.local-readiness-baseline/v1'
+                    or baseline.get('review_status') != 'candidate_pending_independent_review'
+                    or baseline.get('corpus_sha256') != hashlib.sha256(
+                        (root / readiness_assets['corpus']).read_bytes()).hexdigest()):
+                raise ValueError('invalid baseline scope or candidate authority')
+            expected = {e['id']: e for e in corpus['entries']}
+            observed = {e['id']: e for e in baseline['entries']}
+            if set(expected) != set(observed) or len(observed) != len(baseline['entries']):
+                raise ValueError('baseline must cover the complete corpus exactly')
+            for name, entry in expected.items():
+                reference = observed[name]
+                outcome = 'success' if entry['cohort'] == 'extraction' else 'typed_rejection'
+                if (any(entry[k] != reference[k] for k in ('revision', 'tree', 'language', 'cohort'))
+                        or reference['identity'].get('outcome') != outcome):
+                    raise ValueError('baseline identity or extraction cohort changed: ' + name)
     except (ValueError, KeyError, TypeError) as error:
         errors.append('local readiness assets invalid: ' + str(error))
 

@@ -16,7 +16,8 @@ class LocalReadinessComparisonTests(unittest.TestCase):
                  'summary': {'deterministic': True, 'extraction_successes': 3}}
         report = {'status': 'candidate_review_required', 'binary_unchanged': True,
                   'corpus_sha256': 'e' * 64, 'entries': [entry]}
-        baseline = {'review_status': 'candidate_pending_independent_review',
+        baseline = {'schema_version': 'codenoesis.local-readiness-baseline/v1',
+                    'review_status': 'candidate_pending_independent_review',
                     'corpus_sha256': 'e' * 64,
                     'entries': [{'id': 'one', 'revision': 'c' * 40, 'tree': 'd' * 40,
                                  'identity': identity(sample)}]}

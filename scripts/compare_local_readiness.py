@@ -15,7 +15,8 @@ def identity(sample):
 
 def compare(report, baseline):
     differences = []
-    if (report.get('status') != 'candidate_review_required' or report.get('binary_unchanged') is not True
+    if (baseline.get('schema_version') != 'codenoesis.local-readiness-baseline/v1'
+            or report.get('status') != 'candidate_review_required' or report.get('binary_unchanged') is not True
             or baseline.get('review_status') != 'candidate_pending_independent_review'):
         differences.append('incomplete observation or unsupported baseline authority')
     if report.get('corpus_sha256') != baseline.get('corpus_sha256'):

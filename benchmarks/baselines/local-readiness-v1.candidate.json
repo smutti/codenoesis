@@ -1,0 +1,429 @@
+{
+  "schema_version": "codenoesis.local-readiness-baseline/v1",
+  "review_status": "candidate_pending_independent_review",
+  "product_commit": "399ee12b31a5d0c4fb1b3a59e7badb012e81a0d2",
+  "binary_sha256": "a2c0c90db688e88498d60257535a44ecc98b865956a4c5bb516e6e1a66d15982",
+  "corpus_sha256": "5d4313eba3efed67a2cd45dcbd82a243e8320a3fe05367d65f21c7d00e9d7a08",
+  "observation_sha256": "bd97675777af2aa4e0d1507deb358337baa718a4ed46699e38b34244c1e19d4c",
+  "executed_runner_commit": "abdeb2d717f7a2daba77dc4266cd81bea4fbe8e7",
+  "minimum_extraction_success_rate": 0.85,
+  "performance_acceptance": "not ratified; non-exclusive mixed-cache observation",
+  "entries": [
+    {
+      "id": "hyperfine",
+      "language": "rust",
+      "revision": "f12f3d9f86f3643b3b7deace5e160b1f0f44d2b7",
+      "tree": "d38f1f673ecc339c7024d0ee934d08815663370d",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v18",
+        "semantic_hash": "c02928e499862ac099cf9e0e51eee15728d89e2ed0766631061773928c9675b1",
+        "semantic_projection_sha256": "b35cf5df8c4686d31ca54da33f443de388df0a4019c0ec704f6ddc9d2ada89df",
+        "counts": {
+          "entities": 4446,
+          "relationships": 7722,
+          "claims": 12168,
+          "evidence": 3523,
+          "diagnostics": 643,
+          "coverage": 1559,
+          "evaluated_values": 0
+        }
+      }
+    },
+    {
+      "id": "tower",
+      "language": "rust",
+      "revision": "df06d70dbea345facbffb5881fe8647f53bf424d",
+      "tree": "159fa5fceb64123f4fd5cc31cc3fc2fadeac77be",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v18",
+        "semantic_hash": "24dbcaa19ba6cb01cf8a47f7b5227faf234d23e048c76a049891782cc675fd0f",
+        "semantic_projection_sha256": "93ef2d6bf1890887fbb10f661d135398ccd600fcf7288dd6d1e0b1184df917ba",
+        "counts": {
+          "entities": 362,
+          "relationships": 484,
+          "claims": 846,
+          "evidence": 444,
+          "diagnostics": 118,
+          "coverage": 332,
+          "evaluated_values": 0
+        }
+      }
+    },
+    {
+      "id": "mio",
+      "language": "rust",
+      "revision": "da425f909dd6b86d887da9eaefcb158099b5b165",
+      "tree": "f2eb679bf3a0dcff92d7889322d680e6db02931f",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v18",
+        "semantic_hash": "b02994f60b1204896717629f02de664c94f8599e7f05543d9b7dacf61d83a1de",
+        "semantic_projection_sha256": "7908a75b73b7a215cfbe4afdc87bed781dfceb589f4ce844cc48e881d6d6ef18",
+        "counts": {
+          "entities": 416,
+          "relationships": 648,
+          "claims": 1064,
+          "evidence": 490,
+          "diagnostics": 114,
+          "coverage": 343,
+          "evaluated_values": 5
+        }
+      }
+    },
+    {
+      "id": "fd",
+      "language": "rust",
+      "revision": "1765d0817b4e706141115b81c29a5965630e243a",
+      "tree": "960a9d2c06c95ca0df2c8c406e43969715994534",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v18",
+        "semantic_hash": "17c1b3d805db3a62ac0c30aeebf5d931b799be56f4365ccfcb1ca72d90f0b1bc",
+        "semantic_projection_sha256": "89f156c0d8d5fa8602914b556bf8f3de58851bd2157a8c8e829daa384d20eebe",
+        "counts": {
+          "entities": 5681,
+          "relationships": 10128,
+          "claims": 15809,
+          "evidence": 4885,
+          "diagnostics": 825,
+          "coverage": 2192,
+          "evaluated_values": 8
+        }
+      }
+    },
+    {
+      "id": "delta",
+      "language": "rust",
+      "revision": "9d730c043d40037fa494da0994a68bd6526fafb9",
+      "tree": "4c728aaedc870818b21c69260f9161ec8d17fd14",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v18",
+        "semantic_hash": "962ab9a6ba3ae7cf16b3ad1283eb3f7ee08e3d77940f0878d3c331b6599413b0",
+        "semantic_projection_sha256": "2b8e40f7bde5d20bbe5ae09282d458940874fc09f94c421ff8e52b0b08008617",
+        "counts": {
+          "entities": 18614,
+          "relationships": 32641,
+          "claims": 51255,
+          "evidence": 16030,
+          "diagnostics": 2384,
+          "coverage": 6680,
+          "evaluated_values": 0
+        }
+      }
+    },
+    {
+      "id": "rustfmt",
+      "language": "rust",
+      "revision": "2d897e21c73042bbea04640fe21077660367e29f",
+      "tree": "469d39ff2aa951c1fa02e03f2fa270d9636cb1b0",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v18",
+        "semantic_hash": "cea4d4fbabdf0e8d508d9f78668e4238a62c42d05a8b2851427363d33c167f37",
+        "semantic_projection_sha256": "6a3d48025d8ba240c63316c3c276f75ea68d71690ec077fc0e1b9b765c13d7d6",
+        "counts": {
+          "entities": 48693,
+          "relationships": 88640,
+          "claims": 137333,
+          "evidence": 39728,
+          "diagnostics": 5248,
+          "coverage": 12979,
+          "evaluated_values": 2
+        }
+      }
+    },
+    {
+      "id": "dioxus",
+      "language": "rust",
+      "revision": "74a49736c029e0e6f6fc4a79b5def923f0d587b8",
+      "tree": "bbfb6cf8f29e48c845b625eb346e29a59d6514a3",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v18",
+        "semantic_hash": "d34621434abf4365ec5b2611da928919cd2ad8ee98774b504a58dc0b9f631dc2",
+        "semantic_projection_sha256": "f98fc794d3b680c46068e158e6ca307fb332989938a8bd8563933aaf060acfbc",
+        "counts": {
+          "entities": 181854,
+          "relationships": 323068,
+          "claims": 504922,
+          "evidence": 157761,
+          "diagnostics": 24175,
+          "coverage": 71811,
+          "evaluated_values": 13
+        }
+      }
+    },
+    {
+      "id": "wgpu",
+      "language": "rust",
+      "revision": "c268540beee106cec6cada4fc2d506b809ab33e6",
+      "tree": "b2970b2815dd1c7b3cb66cf18903963cac2ff7e5",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v18",
+        "semantic_hash": "6df20ad6a33d9bfb18252493d91b658de95cac4fcb3ea1be39140ba692ff7acb",
+        "semantic_projection_sha256": "d34d2fa27b7728cdd892f93bea4f7112201864e09821d5d287baf347e0f74621",
+        "counts": {
+          "entities": 181272,
+          "relationships": 314443,
+          "claims": 495715,
+          "evidence": 158436,
+          "diagnostics": 21283,
+          "coverage": 61044,
+          "evaluated_values": 43
+        }
+      }
+    },
+    {
+      "id": "lekton",
+      "language": "rust",
+      "revision": "247b8f42fb045db41166d70a276a41c2e079b6eb",
+      "tree": "55ba428493a4ffae86ba492422a049f46d567a30",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v18",
+        "semantic_hash": "1c7be345c41de6f6e5e306c5b19e2541907c59f734107ba11b0e2f190cdba079",
+        "semantic_projection_sha256": "13c94e9c43d2a62d3e7572e629e94913e3c6ee79c43b407c4c5a5888be416b8a",
+        "counts": {
+          "entities": 26146,
+          "relationships": 43643,
+          "claims": 69789,
+          "evidence": 24522,
+          "diagnostics": 4211,
+          "coverage": 13188,
+          "evaluated_values": 8
+        }
+      }
+    },
+    {
+      "id": "rustdesk",
+      "language": "rust",
+      "revision": "d412d198720aa56f6cfed2dfad262e8fb1322fb7",
+      "tree": "df8d4c292c9d256a445480eb878e507df3de1dc4",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v18",
+        "semantic_hash": "cfa1e0a32f9dc15602c30c0c90d6301f479304399ef1209235d75104aba0940a",
+        "semantic_projection_sha256": "976608f92048572471b5c417510ee1130c7062c56603223535514f8ae067be9e",
+        "counts": {
+          "entities": 31300,
+          "relationships": 55854,
+          "claims": 87154,
+          "evidence": 27171,
+          "diagnostics": 4076,
+          "coverage": 10672,
+          "evaluated_values": 26
+        }
+      }
+    },
+    {
+      "id": "ripgrep",
+      "language": "rust",
+      "revision": "3fce3b5bb0236da2df6d99672afb8a719642eca7",
+      "tree": "856ed9162d23416ee7dc5f4389975b54ca062f60",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v18",
+        "semantic_hash": "4965a5dca8f675117d2091a14017cb73bce3732916bfd123a47be6c32508c27c",
+        "semantic_projection_sha256": "bf21a10eef8cbd6e415b3663ab21c0e39fa2521e52d4e9c55ffcca3ae7e1f4ba",
+        "counts": {
+          "entities": 44363,
+          "relationships": 75836,
+          "claims": 120199,
+          "evidence": 41515,
+          "diagnostics": 5463,
+          "coverage": 21686,
+          "evaluated_values": 0
+        }
+      }
+    },
+    {
+      "id": "serde",
+      "language": "rust",
+      "revision": "a874a1b1bb1cc16cf5ee3b1b7b527af5705742bb",
+      "tree": "35d01a21414c206ac4b7b1d109863e1aaea04c9f",
+      "cohort": "boundary",
+      "identity": {
+        "outcome": "typed_rejection",
+        "error_schema": "codenoesis.error/v24",
+        "error_code": "extraction.callable_cfg_alternatives_unsupported",
+        "error_stage": "extraction",
+        "error_stderr_sha256": "fad00189672885878331497a362dbc3f5c8c089b90e9a873995191c437663170"
+      }
+    },
+    {
+      "id": "axum",
+      "language": "rust",
+      "revision": "194030d7d0c9395cd98c172d1cfd08777332d7b2",
+      "tree": "3a2c27b54c843eb916f9d878f5478854667697cd",
+      "cohort": "boundary",
+      "identity": {
+        "outcome": "typed_rejection",
+        "error_schema": "codenoesis.error/v24",
+        "error_code": "extraction.callable_cfg_alternatives_unsupported",
+        "error_stage": "extraction",
+        "error_stderr_sha256": "fad00189672885878331497a362dbc3f5c8c089b90e9a873995191c437663170"
+      }
+    },
+    {
+      "id": "hyper",
+      "language": "rust",
+      "revision": "4f36f33a28709f93d693bc9f942b93b54d7032a4",
+      "tree": "794abe43322de432eb06f5ac266e1b3ca959d1c5",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v18",
+        "semantic_hash": "062321093af374c882aa13a55e2151c7a2e7045e95cce43df9b764d6535ff745",
+        "semantic_projection_sha256": "80c27021f16020c525f047f73900b6f99504f38752800739153b21ae7ad6bb10",
+        "counts": {
+          "entities": 2047,
+          "relationships": 3004,
+          "claims": 5051,
+          "evidence": 2187,
+          "diagnostics": 459,
+          "coverage": 1548,
+          "evaluated_values": 0
+        }
+      }
+    },
+    {
+      "id": "alacritty",
+      "language": "rust",
+      "revision": "d692748d3f61253ebe9f5094320120d22f6a046f",
+      "tree": "409f446108553d0a1f8f6f50c77f5efa551f6bf7",
+      "cohort": "boundary",
+      "identity": {
+        "outcome": "typed_rejection",
+        "error_schema": "codenoesis.error/v24",
+        "error_code": "input.repository_limit_exceeded",
+        "error_stage": "input",
+        "error_stderr_sha256": "d997107a897d3ca264c9ea727840b728a30f2a374ae3af76bae107602a74e2e4"
+      }
+    },
+    {
+      "id": "starship",
+      "language": "rust",
+      "revision": "5e9ee97059bd68c94188f6cd816308c4af6922bf",
+      "tree": "33c8c620f7706d6bc9086ac6a7ae46b506c35f0f",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v18",
+        "semantic_hash": "123177cb478bacbe3f88db9b36ae628e420a8c120803012b739ac3d34620ffe7",
+        "semantic_projection_sha256": "e7798d164a51ae87c86fb52e8ae8d6dc07582714a2c89616b442964836097ddb",
+        "counts": {
+          "entities": 32359,
+          "relationships": 56551,
+          "claims": 88910,
+          "evidence": 28551,
+          "diagnostics": 5518,
+          "coverage": 12579,
+          "evaluated_values": 1
+        }
+      }
+    },
+    {
+      "id": "kotlin-basic",
+      "language": "kotlin",
+      "revision": "83e1d17070878ce1ded5936b789bff515aa63e7f",
+      "tree": "4f3535c4d18cbf72499fed4c7f9cf42d5ec79b81",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v19",
+        "semantic_hash": "e44564449099f6ee8872de70ba1cd041e5925e21a23f1c210cc8481f4dc3c031",
+        "semantic_projection_sha256": "7a6b46561ab88cf1b90121be83e8dac65a920bfce963569962a7c0c8f5c8a66c",
+        "counts": {
+          "entities": 94,
+          "relationships": 93,
+          "claims": 187,
+          "evidence": 78,
+          "diagnostics": 0,
+          "coverage": 2,
+          "evaluated_values": 0
+        }
+      }
+    },
+    {
+      "id": "kotlin-compose-template",
+      "language": "kotlin",
+      "revision": "7acca3fe58ae19c8f61d4b315f2998cb69be0dce",
+      "tree": "9633b5b5eb6ff6fb1053a8815c304053be5ca025",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v19",
+        "semantic_hash": "7876e264e064ac4f008ec949d1cc2b49ccf5f435809c58e024b98dfdd2a92254",
+        "semantic_projection_sha256": "478532b6e0a02c418b348f35c7b9fb726f8f19c58eabf607688b92dec42dd8ea",
+        "counts": {
+          "entities": 70,
+          "relationships": 65,
+          "claims": 135,
+          "evidence": 53,
+          "diagnostics": 0,
+          "coverage": 2,
+          "evaluated_values": 0
+        }
+      }
+    },
+    {
+      "id": "java-rest-service",
+      "language": "java",
+      "revision": "3f4cef01152596c19bc4d37939409358812b1421",
+      "tree": "10269cc2a76402a811f11190a99d1e85999a1020",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v20",
+        "semantic_hash": "e13634ab7dcdf794802619f650fe6e874662d5629e79a6b1eee11e64a53e35da",
+        "semantic_projection_sha256": "c111373714c27297e38abb2715fe7202874f5ed1e050f49f7cf87b7c0969e9ae",
+        "counts": {
+          "entities": 58,
+          "relationships": 59,
+          "claims": 117,
+          "evidence": 54,
+          "diagnostics": 0,
+          "coverage": 9,
+          "evaluated_values": 0
+        }
+      }
+    },
+    {
+      "id": "java-junit-examples",
+      "language": "java",
+      "revision": "01b09e8d9eea02a4e0981291c7cb62ebd851263d",
+      "tree": "423284226a9e51f28ed88126cd8f3128f72b0530",
+      "cohort": "extraction",
+      "identity": {
+        "outcome": "success",
+        "snapshot_schema": "codenoesis.repository-snapshot/v20",
+        "semantic_hash": "efdb48aef45445755832b659393468ea0e439b52d77f556d237fa5f2035ae9cf",
+        "semantic_projection_sha256": "08ee8608ed70bb849a384c7a3524da1dbb29a8fe2d8c694f7359d3b9974d4904",
+        "counts": {
+          "entities": 479,
+          "relationships": 595,
+          "claims": 1074,
+          "evidence": 483,
+          "diagnostics": 0,
+          "coverage": 53,
+          "evaluated_values": 0
+        }
+      }
+    }
+  ]
+}

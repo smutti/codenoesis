@@ -57,6 +57,15 @@ class OntologyQualityTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             score_case(case, graph, {'src/A.java': b'class B {}'})
 
+    def test_boolean_properties_are_not_equal_to_integer_properties(self):
+        case, graph, sources = self.fixture()
+        case['property_keys'] = {'JavaClass': ['flag']}
+        case['facts'][0]['fact']['flag'] = True
+        graph['entities'][0]['properties']['flag'] = 1
+        result = score_case(case, graph, sources)
+        self.assertEqual(result['entities']['tp'], 0)
+        self.assertEqual(result['rows'][0]['matches'], 0)
+
     def test_review_page_escapes_untrusted_source_and_has_no_script(self):
         case, graph, sources = self.fixture()
         result = score_case(case, graph, sources)

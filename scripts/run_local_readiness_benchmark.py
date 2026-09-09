@@ -9,7 +9,6 @@ from pathlib import Path
 import platform
 import re
 import statistics
-import subprocess
 import sys
 import time
 
@@ -36,8 +35,10 @@ def write_json(path, value):
 
 
 def validate_corpus(corpus):
-    if (corpus.get('schema_version') != 'codenoesis.local-readiness-corpus/v1'
+    if (not isinstance(corpus, dict)
+            or corpus.get('schema_version') != 'codenoesis.local-readiness-corpus/v1'
             or corpus.get('repetitions') != 3 or corpus.get('concurrency') != 1
+            or type(corpus.get('concurrency')) is not int
             or corpus.get('cache_state') != 'mixed' or corpus.get('network_allowed') is not False
             or corpus.get('percentile_method') != 'nearest-rank'
             or type(corpus.get('timeout_seconds')) is not int
@@ -46,6 +47,8 @@ def validate_corpus(corpus):
         raise ValueError('invalid fixed observation protocol')
     seen = set()
     for entry in corpus['entries']:
+        if not isinstance(entry, dict):
+            raise ValueError('corpus entry must be an object')
         identifier = entry.get('id', '')
         arguments = entry.get('scan_arguments')
         if (not re.fullmatch(r'[a-z0-9][a-z0-9-]{0,63}', identifier) or identifier in seen
@@ -150,11 +153,12 @@ def run(args):
     corpus = json.loads(args.corpus.read_text(encoding='utf-8'))
     validate_corpus(corpus)
     locations = json.loads(args.repositories.read_text(encoding='utf-8'))
-    if set(locations) != {e['id'] for e in corpus['entries']}:
+    if (not isinstance(locations, dict) or not all(isinstance(p, str) for p in locations.values())
+            or set(locations) != {e['id'] for e in corpus['entries']}):
         raise ValueError('repository map must cover the complete corpus exactly')
     build = json.loads(args.build_record.read_text(encoding='utf-8'))
     binary = args.binary.resolve(strict=True)
-    if (build.get('schema_version') != 'codenoesis.benchmark-build/v1'
+    if (not isinstance(build, dict) or build.get('schema_version') != 'codenoesis.benchmark-build/v1'
             or build.get('source_dirty') is not False
             or not re.fullmatch(r'[0-9a-f]{40}', build.get('product_commit', ''))
             or build.get('binary_sha256') != public.sha256_file(binary)):
@@ -228,7 +232,7 @@ def main():
     parser.add_argument('--host-profile', required=True)
     try:
         return run(parser.parse_args())
-    except (ValueError, OSError, public.EvaluationError) as error:
+    except (ValueError, KeyError, TypeError, OSError, public.EvaluationError) as error:
         print(json.dumps({'error': 'benchmark.invalid_or_incomplete_run', 'detail': str(error)}), file=sys.stderr)
         return 2
 

@@ -111,7 +111,7 @@
         "stdout_bytes",
         "semantic_hash",
         "semantic_projection_sha256",
-        "extraction_success_rate",
+        "success_rate",
         "determinism"
       ],
       "runner": [
