@@ -1,13 +1,22 @@
 # Benchmark contracts
 
 This directory defines the reproducibility contract for CodeNoesis performance
-and real-repository compatibility evidence. `manifest.json` selects two
-observational Rust suites with versioned descriptors, policies, semantic
+and real-repository compatibility evidence. `manifest.json` selects three
+observational suites with versioned descriptors, policies, semantic
 oracles, deterministic runners, raw samples, and same-host constraints:
 
 - `rust-real-world-stability-v1` measures the pinned Lekton/RustDesk pilot;
 - `rust-public-conference-v1` evaluates progressive extraction and ontology
-  information over eight additional pinned public repositories.
+  information over eight additional pinned public repositories;
+- `local-readiness-v1` runs complete profiles over 16 Rust and four Java/Kotlin
+  repositories using one recorded binary, with a distinct candidate baseline.
+
+For current cross-language observations and the source-oracle scorer, use the
+[Local GA benchmark v1 protocol](../docs/software/local-ga-benchmark-v1.md).
+It includes exact commands, failure semantics and a source → expected → extracted
+review page. The historical commands below and Java/Kotlin v1 entry points
+remain available to reproduce their existing report contracts. Existing B1 and
+progressive oracles are unchanged; the new baseline is a review candidate.
 
 Existing CI validates the committed contracts and compiles Rust benchmark
 targets; it does not clone, fetch, or execute external repositories.

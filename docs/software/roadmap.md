@@ -309,6 +309,12 @@ single-PR vertical package as its implementation.
 
 ### Production-readiness sequencing
 
+The [Local GA benchmark v1 package](local-ga-benchmark-v1.md) consolidates current
+Rust/JVM observations on one binary and adds a source-oracle scorer. Its
+[measurable candidate criteria](local-ga-candidate-criteria.md) separate current
+evidence from pending holdout, capacity, lifecycle, platform and pilot gates.
+It does not promote the runtime to supported or GA status.
+
 - The matching LocalExplorerV3-V9 correction blocks advertising those browser
   journeys as usable and precedes the next new product capability.
 - `G0` starts before the next public compatibility or interface contract.

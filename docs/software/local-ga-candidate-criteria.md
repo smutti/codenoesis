@@ -1,0 +1,28 @@
+# Measurable Local GA candidate criteria
+
+These are reviewable candidate exit criteria for the existing Local GA gate,
+not a release approval or new contractual SLO. Runtime profiles remain
+experimental. The scope owner selects the exact advertised profiles and targets
+before claiming readiness; optional excluded capabilities remain experimental.
+
+| Gate | Measurable candidate criterion | Required evidence / present gap |
+|---|---|---|
+| Scope and provenance | Every advertised capability has an exact CLI profile, schema/ontology versions, platform, resource limits, support owner and exclusions. Every report names source SHA and binary/archive digest. | Current package pins the observation binary and 20 inputs. G0 registry and the final advertised support matrix still need consolidation. |
+| Extraction and determinism | 3/3 successful extractions with identical semantic projections for **every advertised supported corpus entry**, with no internal failure, timeout, discarded sample or partial publication. Boundary cases must give the reviewed typed failure and stay in the overall extraction denominator. | The v1 exploratory corpus declares 17 extraction cases and three boundary cases. Its 85% overall reference floor is observational; Local GA requires 100% within whatever supported scope is advertised. |
+| Ontology conformance | Zero missing or extra facts in the reviewed exact source oracle, correct selected property values and relationship endpoints/states; all expected facts have matching Git blob provenance covering the source anchor. Report exact-span coverage separately. | This package supplies a candidate oracle for 33 entities and 14 relationships over 12 files. Independent source review is pending; file-level evidence must not be presented as exact declaration spans. |
+| Generalization | A repository-disjoint holdout with independent labels covers every advertised entity/relation family, ambiguous cases and hard negatives. Report TP/FP/FN, precision/recall and abstention by family, language and repository; no empty denominator is scored as 100%. | Missing. This v1 corpus is development-exposed. Holdout size, sampling, confidence intervals and family-specific thresholds require review before NFR-PER-002 or a broad accuracy claim. Zero unsupported factual claims is the target for the exact conformance set. |
+| Useful user journeys | Every advertised CLI/viewer journey completes against the exact artifact: scan, navigate to evidence, query, docs, export, reopen offline and incremental/cold equivalence where advertised. Every asserted impact path has valid evidence; decoy clients remain negative. | Existing automated profile tests provide part of this evidence. End-user browser journeys and a task-quality corpus remain outstanding. |
+| Capacity | Every claimed performance result records host, concurrency, cache state, enabled extractors, all attempted samples and percentile method. For each supported size tier, record peak RSS, output/store bytes and scan/query latency; test product limits at maximum and maximum-plus-one. | v1 measures whole-process wall time and stream bytes with fresh stores. Controlled cold/warm trials, peak RSS, soak/load and ratified per-tier latency/resource targets remain open under OD-SLO-001. Three observations cannot establish tail SLOs. |
+| Install and compatibility | Install, verify, start, update and exact rollback all pass on each advertised target using the exact candidate archive. Every supported persisted format reopens or takes an explicit documented migration path. No hidden updater or undeclared system mutation. | G1/G2 provide bounded bundles and exact preflight transitions. General schema migration and distribution acceptance remain open. |
+| Recovery | Kill, disk-full, corrupt-object and interrupted-publication cases retain the last valid state or return a typed error. Backup/restore recreates the expected snapshot identities and query/export results. Recovery time and data-loss bounds are recorded for the declared local profile. | Atomic local storage exists; the full local lifecycle and restore evidence still need completion. Server RPO/RTO is a separate scope. |
+| Platform security | Each advertised platform passes its stated acquisition confinement, malicious-input, path/link, no-target-execution and no-analysis-network guarantees. Every exception has an owner and bounded scope. | Linux has normative seccomp/Landlock evidence; macOS/Windows functional CI does not demonstrate equivalent confinement. |
+| Artifact integrity and support | The exact archive verifies with matching SBOM/provenance and accepted supply-chain findings. No unresolved release-blocking security finding. At least two pilot users other than the implementation author complete the advertised journeys; rollback, vulnerability contact, support window and known limits have named owners. | Existing experimental carrier/provenance is a foundation. Independent artifact acceptance, pilot results and the final support/release decision remain open. |
+
+No aggregate score can hide a failing advertised capability. A failure changes
+the supported scope only through an explicit review; it is never removed from
+the exploratory report. Passing the source-oracle scorer or matching a baseline
+does not automatically satisfy release, performance, security or support gates.
+
+The next evidence expansion is an independently reviewed holdout and controlled
+capacity run, followed by exact-artifact pilot acceptance. REST/MCP, durable
+server jobs, tenancy and server recovery remain in the separate Server GA lane.

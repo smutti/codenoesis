@@ -6,7 +6,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts'))
-from score_ontology_quality import compare_facts, score_case, validate_oracle
+from score_ontology_quality import compare_facts, render_html, score_case, validate_oracle
 
 
 class OntologyQualityTests(unittest.TestCase):
@@ -56,6 +56,15 @@ class OntologyQualityTests(unittest.TestCase):
         case, graph, sources = self.fixture()
         with self.assertRaises(ValueError):
             score_case(case, graph, {'src/A.java': b'class B {}'})
+
+    def test_review_page_escapes_untrusted_source_and_has_no_script(self):
+        case, graph, sources = self.fixture()
+        result = score_case(case, graph, sources)
+        result['rows'][0]['anchor'] = '<script>alert("source")</script>'
+        page = render_html({'product_commit': 'a' * 40, 'cases': [result]})
+        self.assertIn('&lt;script&gt;', page)
+        self.assertNotIn('<script>', page)
+        self.assertIn('Content-Security-Policy', page)
 
     def test_wrong_relation_endpoint_and_unknown_state_do_not_match(self):
         expected = [dict(kind='EXPECT_ACTUAL_CANDIDATE', source='a', target='b', state='Unknown')]

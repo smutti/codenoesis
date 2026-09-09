@@ -5,6 +5,14 @@ public evaluation, and pinned Lekton/RustDesk pilots. They measure regression,
 robustness, emitted facts, repeatability, and performance. They do not establish
 source-level precision or recall for the entire ontology.
 
+The [Local GA benchmark package v1](local-ga-benchmark-v1.md) adds a complete-
+profile, one-binary observation across Rust, Kotlin and Java, a separately
+versioned candidate baseline, and an executable source-oracle scorer. Its seed
+contains 33 entities and 14 relationships across 12 files in six repositories.
+Expectations remain pending independent review and the corpus is development-
+exposed; its scores are candidate agreement, not independently validated
+accuracy. Historical Rust oracles remain unchanged.
+
 For newer binaries, use the explicit candidate observation documented in
 [benchmarks/README.md](../../benchmarks/README.md). Its report separates extraction
 success from historical oracle agreement. A typed rejection is a failed

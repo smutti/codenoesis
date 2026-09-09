@@ -147,6 +147,8 @@ def render_html(report):
         '<h1>Ontology quality: source → expectation → extraction</h1>',
         '<p>Candidate oracle, pending independent review. Development-exposed corpus. '
         'Agreement on selected facts; no whole-ontology accuracy or GA claim.</p>',
+        '<p>Evidence must cover the source anchor in the correct Git blob. '
+        'Exact-anchor equality describes the span size: a larger declaration span can also be correct.</p>',
         '<p>Product commit: <code>' + escape(report['product_commit']) + '</code></p>']
     for case in report['cases']:
         pieces.append('<h2>' + escape(case['id']) + '</h2><p>' + escape(case['entities']) + '</p>')

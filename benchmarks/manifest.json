@@ -86,6 +86,38 @@
         "--suite",
         "rust-public-conference-v1"
       ]
+    },
+    {
+      "id": "local-readiness-v1",
+      "description": "One-binary complete-profile observation over 16 Rust and four JVM repositories",
+      "corpus": {
+        "id": "local-readiness",
+        "version": "1"
+      },
+      "host_profile": "declared-same-host-local-v1",
+      "concurrency": 1,
+      "cache_state": "mixed",
+      "enabled_extractors": [
+        "rust-r16-source-only",
+        "kotlin-kmp-declarations-v1",
+        "java-declarations-v1"
+      ],
+      "repetitions": 3,
+      "percentile_method": "nearest-rank",
+      "minimum_success_rate": 0.85,
+      "metrics": [
+        "wall_time_ns",
+        "exit_code",
+        "stdout_bytes",
+        "semantic_hash",
+        "semantic_projection_sha256",
+        "extraction_success_rate",
+        "determinism"
+      ],
+      "runner": [
+        "python3",
+        "scripts/run_local_readiness_benchmark.py"
+      ]
     }
   ]
 }

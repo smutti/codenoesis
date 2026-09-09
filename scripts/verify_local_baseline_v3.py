@@ -694,17 +694,6 @@ def resolved_catalog(
     return resolved
 
 
-def profile_projection(profile: dict[str, Any]) -> dict[str, Any]:
-    return {
-        "id": profile["id"],
-        "slice": profile["slice"],
-        "requirements": profile["requirements"],
-        "implementation_prs": profile["implementation_prs"],
-        "oracle_paths": profile["oracle_paths"],
-        "evidence_paths": profile["evidence_paths"],
-    }
-
-
 def validate_profiles(
     root: Path,
     resolved: list[dict[str, Any]],
