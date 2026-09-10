@@ -1,0 +1,103 @@
+{
+  "product_commit": "399ee12b31a5d0c4fb1b3a59e7badb012e81a0d2",
+  "executed_runner_commit": "abdeb2d717f7a2daba77dc4266cd81bea4fbe8e7",
+  "binary_sha256": "a2c0c90db688e88498d60257535a44ecc98b865956a4c5bb516e6e1a66d15982",
+  "raw_evidence_directory": "/Users/smutti/Documents/personal/codenoesis-evidence/local-ga-benchmark-v1-20260909",
+  "raw_streams": "retained locally; not committed or published as CI artifacts",
+  "source_runtime_changes": "none; crates, Cargo manifests/lock and pinned toolchain unchanged from measured main",
+  "campaigns": [
+    {
+      "directory": "public-main-399ee12",
+      "exit_code": 2,
+      "planned": 60,
+      "attempted": 52,
+      "reason": "new runner incorrectly added --format json to JSON-only JVM commands; all original streams retained"
+    },
+    {
+      "directory": "public-main-399ee12-corrected",
+      "exit_code": 0,
+      "planned": 60,
+      "attempted": 60,
+      "reason": "complete corpus rerun after correcting the JVM command contract"
+    }
+  ],
+  "diagnostic_scans": {
+    "directory": "jvm-command-diagnostic",
+    "attempted": 4,
+    "outcome": "four successful S8 command checks; separate from corpus repetitions"
+  },
+  "agent": "Codex",
+  "model": "GPT-6 session identity",
+  "cost": "not available",
+  "browser_check": {
+    "url": "http://127.0.0.1:8844/review-current.html",
+    "result": "page rendered and relationship detail disclosure expanded; diagnostic data using the same binary",
+    "scope": "quality review page only; not all product offline viewer journeys"
+  },
+  "artifacts": {
+    "build-main-399ee12.json": {
+      "sha256": "582989f8afc88d3abd9f8f0185afcba2c33ee6a4b241f8d6d465bcfa97e26718",
+      "bytes": 771
+    },
+    "first-run-failed.json": {
+      "sha256": "866c04ef8527c5b94978cee1a9f23daba6447c1cc494153d24575bee0cc5be96",
+      "bytes": 245377
+    },
+    "public-main-399ee12.json": {
+      "sha256": "bd97675777af2aa4e0d1507deb358337baa718a4ed46699e38b34244c1e19d4c",
+      "bytes": 276611
+    },
+    "build-main.log": {
+      "local_path": "/Users/smutti/Documents/personal/codenoesis-evidence/local-ga-benchmark-v1-20260909/build-main.log",
+      "sha256": "dacd3a955f624ae264d54ec3c6d9eb906ceb7ff6ae9a789ca02ab4176317c560",
+      "bytes": 4856
+    },
+    "runner-red.log": {
+      "local_path": "/Users/smutti/Documents/personal/codenoesis-evidence/local-ga-benchmark-v1-20260909/runner-red.log",
+      "sha256": "2543a50c3d88df8fbb973fac653c3159cab5637bee799f2305b4a63eb4fb887c",
+      "bytes": 1120
+    },
+    "quality-red.log": {
+      "local_path": "/Users/smutti/Documents/personal/codenoesis-evidence/local-ga-benchmark-v1-20260909/quality-red.log",
+      "sha256": "158ef82edcfe56b395fefa5fccd2a851f735a4699c6acdfd265b28f64edc60f3",
+      "bytes": 1117
+    },
+    "jvm-command-red.log": {
+      "local_path": "/Users/smutti/Documents/personal/codenoesis-evidence/local-ga-benchmark-v1-20260909/jvm-command-red.log",
+      "sha256": "5894bf0cfc70880c786a3d032bb9abbc5c09a85a14d26a297bd89116fc9f051d",
+      "bytes": 1030
+    },
+    "baseline-asset-red.log": {
+      "local_path": "/Users/smutti/Documents/personal/codenoesis-evidence/local-ga-benchmark-v1-20260909/baseline-asset-red.log",
+      "sha256": "bd03a67a370f84bee1814748015d7f766cda809449f43f5b05255257bcb18215",
+      "bytes": 141
+    },
+    "cleanup-v3-tests.log": {
+      "local_path": "/Users/smutti/Documents/personal/codenoesis-evidence/local-ga-benchmark-v1-20260909/cleanup-v3-tests.log",
+      "sha256": "8f3dfd0cea395ad0add7174096a32210faa35a1be11d4ba1761b8f32db89e50b",
+      "bytes": 112
+    },
+    "public-run.log": {
+      "local_path": "/Users/smutti/Documents/personal/codenoesis-evidence/local-ga-benchmark-v1-20260909/public-run.log",
+      "sha256": "adf95b6b30002466949a677923a6b4ef6d10df8e531ff83cfe0cd22fe0cb4d89",
+      "bytes": 1577
+    },
+    "public-run-corrected.log": {
+      "local_path": "/Users/smutti/Documents/personal/codenoesis-evidence/local-ga-benchmark-v1-20260909/public-run-corrected.log",
+      "sha256": "7f789c3200a6f2d664db336e5fad417e9c81aa265331490296ae23fe7d25703d",
+      "bytes": 1851
+    },
+    "comparison-main-399ee12.json": {
+      "sha256": "61fa3203f64490ce00b519d475a16da1c5afaedb73b16b74a6714b7e7278c725",
+      "bytes": 266
+    },
+    "ontology-quality-main-399ee12.json": {
+      "sha256": "689b33ec130344aed30129d829a8864e46dfc693f8cec5bc4daab97e7948d37b",
+      "bytes": 970032
+    }
+  },
+  "quality_review_html": {
+    "local_path": "/Users/smutti/Documents/personal/codenoesis-evidence/local-ga-benchmark-v1-20260909/quality-main-399ee12/review.html",
+    "sha256": "c3e7e45e0395001e20a205300fcbc18d195eb205900aa477590f5eba8eaaa29a"
+  }
+}

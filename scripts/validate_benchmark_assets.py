@@ -230,10 +230,10 @@ def validate_active_suite_assets(root: Path, manifest: dict[str, Any]) -> list[s
     suites = manifest.get("suites")
     if (
         not isinstance(suites, list)
-        or len(suites) != 2
+        or len(suites) != 3
         or any(not isinstance(suite, dict) for suite in suites)
     ):
-        errors.append("active benchmark manifest must contain exactly B1 and conference suites")
+        errors.append("active benchmark manifest must contain exactly B1, conference and local readiness suites")
         return errors
     suite = suites[0]
     expected_suite = {
@@ -286,6 +286,72 @@ def validate_active_suite_assets(root: Path, manifest: dict[str, Any]) -> list[s
     }
     if conference_suite != expected_conference_suite:
         errors.append("conference suite does not match the fixed evaluation contract")
+
+    readiness = suites[2]
+    if readiness != {
+        'id': 'local-readiness-v1',
+        'description': 'One-binary complete-profile observation over 16 Rust and four JVM repositories',
+        'corpus': {'id': 'local-readiness', 'version': '1'},
+        'host_profile': 'declared-same-host-local-v1', 'concurrency': 1,
+        'cache_state': 'mixed', 'enabled_extractors': [
+            'rust-r16-source-only', 'kotlin-kmp-declarations-v1', 'java-declarations-v1'],
+        'repetitions': 3, 'percentile_method': 'nearest-rank',
+        'minimum_success_rate': 0.85,
+        'metrics': ['wall_time_ns', 'exit_code', 'stdout_bytes', 'semantic_hash',
+                    'semantic_projection_sha256', 'success_rate', 'determinism'],
+        'runner': ['python3', 'scripts/run_local_readiness_benchmark.py']
+    }:
+        errors.append('local readiness suite does not match its observational contract')
+    readiness_assets = {
+        'corpus': 'benchmarks/corpora/local-readiness-v1.json',
+        'quality oracle': 'benchmarks/oracles/ontology-quality-v1.json',
+        'candidate baseline': 'benchmarks/baselines/local-readiness-v1.candidate.json',
+        'runner': 'scripts/run_local_readiness_benchmark.py',
+        'comparison': 'scripts/compare_local_readiness.py',
+        'quality scorer': 'scripts/score_ontology_quality.py',
+    }
+    readiness_values = {}
+    for label, relative_path in readiness_assets.items():
+        asset_errors, path = validate_regular_asset(root, relative_path, 'local readiness ' + label)
+        errors.extend(asset_errors)
+        if not asset_errors and path.suffix == '.json':
+            try:
+                readiness_values[label] = load_json(path)
+            except ValueError as error:
+                errors.append(str(error))
+    try:
+        from run_local_readiness_benchmark import validate_corpus
+        from score_ontology_quality import validate_oracle
+        if 'corpus' in readiness_values:
+            validate_corpus(readiness_values['corpus'])
+        if 'quality oracle' in readiness_values:
+            validate_oracle(readiness_values['quality oracle'])
+        if {'corpus', 'quality oracle'} <= readiness_values.keys():
+            entries = {e['id']: e for e in readiness_values['corpus']['entries']}
+            for case in readiness_values['quality oracle']['cases']:
+                if any(case[k] != entries[case['id']][k] for k in ('revision', 'tree', 'repository_id', 'language')):
+                    raise ValueError('quality oracle and corpus source identities differ')
+        if {'corpus', 'candidate baseline'} <= readiness_values.keys():
+            import hashlib
+            baseline = readiness_values['candidate baseline']
+            corpus = readiness_values['corpus']
+            if (baseline.get('schema_version') != 'codenoesis.local-readiness-baseline/v1'
+                    or baseline.get('review_status') != 'candidate_pending_independent_review'
+                    or baseline.get('corpus_sha256') != hashlib.sha256(
+                        (root / readiness_assets['corpus']).read_bytes()).hexdigest()):
+                raise ValueError('invalid baseline scope or candidate authority')
+            expected = {e['id']: e for e in corpus['entries']}
+            observed = {e['id']: e for e in baseline['entries']}
+            if set(expected) != set(observed) or len(observed) != len(baseline['entries']):
+                raise ValueError('baseline must cover the complete corpus exactly')
+            for name, entry in expected.items():
+                reference = observed[name]
+                outcome = 'success' if entry['cohort'] == 'extraction' else 'typed_rejection'
+                if (any(entry[k] != reference[k] for k in ('revision', 'tree', 'language', 'cohort'))
+                        or reference['identity'].get('outcome') != outcome):
+                    raise ValueError('baseline identity or extraction cohort changed: ' + name)
+    except (ValueError, KeyError, TypeError) as error:
+        errors.append('local readiness assets invalid: ' + str(error))
 
     loaded: dict[str, Any] = {}
     for label, relative_path in ACTIVE_PATHS.items():

@@ -45,6 +45,8 @@ class BenchmarkAssetValidationTests(unittest.TestCase):
                 ROOT / "scripts" / "run_public_rust_evaluation.py",
                 root / "scripts" / "run_public_rust_evaluation.py",
             )
+            for name in ('run_local_readiness_benchmark.py', 'score_ontology_quality.py', 'compare_local_readiness.py'):
+                shutil.copy2(ROOT / 'scripts' / name, root / 'scripts' / name)
             yield root
 
     @staticmethod
@@ -146,6 +148,34 @@ class BenchmarkAssetValidationTests(unittest.TestCase):
             errors, _ = validate_assets(root)
 
         self.assertTrue(any("conference runner is missing" in error for error in errors))
+
+    def test_local_readiness_oracle_cannot_drift_or_certify_itself(self) -> None:
+        for mutation in ('revision', 'review_status'):
+            with self.subTest(mutation=mutation), self.copied_assets() as root:
+                path = root / 'benchmarks/oracles/ontology-quality-v1.json'
+                oracle = json.loads(path.read_text())
+                if mutation == 'revision':
+                    oracle['cases'][0]['revision'] = '0' * 40
+                else:
+                    oracle['review_status'] = 'independently_approved'
+                self.write_json(path, oracle)
+                errors, _ = validate_assets(root)
+                self.assertTrue(any('local readiness' in error for error in errors))
+
+    def test_local_readiness_corpus_cannot_be_missing(self) -> None:
+        with self.copied_assets() as root:
+            (root / 'benchmarks/corpora/local-readiness-v1.json').unlink()
+            errors, _ = validate_assets(root)
+            self.assertTrue(any('local readiness corpus is missing' in e for e in errors))
+
+    def test_local_readiness_baseline_cannot_drop_a_boundary_failure(self) -> None:
+        with self.copied_assets() as root:
+            path = root / 'benchmarks/baselines/local-readiness-v1.candidate.json'
+            baseline = json.loads(path.read_text())
+            baseline['entries'] = [e for e in baseline['entries'] if e['id'] != 'serde']
+            self.write_json(path, baseline)
+            errors, _ = validate_assets(root)
+            self.assertTrue(any('complete corpus exactly' in e for e in errors))
 
     def test_active_validator_rejects_corpus_revision_drift(self) -> None:
         with self.copied_assets() as root:
