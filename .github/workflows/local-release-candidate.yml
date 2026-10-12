@@ -76,7 +76,7 @@ jobs:
           done
 
       - name: Upload immutable supply evidence
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: local-release-supply-${{ github.sha }}
           path: ${{ runner.temp }}/supply
@@ -128,7 +128,7 @@ jobs:
           "$extracted/bin/noesis" --config "$extracted/etc/codenoesis/config.json" \
             profile --id local-experimental-r17 --format json
       - name: Upload Linux candidate
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: candidate-linux-${{ github.sha }}
           path: ${{ runner.temp }}/candidate
@@ -180,7 +180,7 @@ jobs:
           "$extracted/bin/noesis" --config "$extracted/etc/codenoesis/config.json" \
             profile --id local-experimental-r17 --format json
       - name: Upload macOS candidate
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: candidate-macos-${{ github.sha }}
           path: ${{ runner.temp }}/candidate
@@ -236,7 +236,7 @@ jobs:
             profile --id local-experimental-r17 --format json
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Upload Windows candidate
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: candidate-windows-${{ github.sha }}
           path: ${{ runner.temp }}/candidate
@@ -284,7 +284,7 @@ jobs:
           cp -R intermediate/. retained/
           cp "${{ steps.provenance.outputs.bundle-path }}" retained/attestation.jsonl
       - name: Upload retained candidates and offline bundle
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: local-release-candidates-${{ github.sha }}
           path: retained
